@@ -1,0 +1,93 @@
+image: docker:latest
+
+variables:
+  DOCKER_DRIVER: overlay2
+  DOCKER_TEST_IMAGE: ${CI_REGISTRY_IMAGE}:_${CI_COMMIT_REF_NAME}
+  DOCKER_DEV_IMAGE: ${CI_REGISTRY_IMAGE}:dev
+  DOCKER_PROD_IMAGE: ${CI_REGISTRY_IMAGE}:prod
+  GIT_STRATEGY: none
+
+services:
+- docker:dind
+
+stages:
+- quality
+- build
+- test
+- publish
+- deploy
+
+flake8:
+  image: python:3.6-alpine3.6
+  stage: quality
+  variables:
+    GIT_DEPTH: 5
+    GIT_STRATEGY: fetch
+  script:
+  - pip install flake8
+  - flake8 server
+
+build:
+  stage: build
+  variables:
+    GIT_DEPTH: 5
+    GIT_STRATEGY: fetch
+  script:
+  - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN registry.gitlab.com
+  - docker build -t $DOCKER_TEST_IMAGE .
+  - docker push $DOCKER_TEST_IMAGE
+
+test:
+  image: $DOCKER_TEST_IMAGE
+  stage: test
+  variables:
+    DJANGO_ENV: 'test'
+  services:
+  - postgres
+  script:
+  - cd /var/www
+  - pip install coverage
+  - coverage run manage.py test -v 2 --debug-mode
+  - coverage report -m > coverage.log
+  - cat coverage.log | tail -n 1
+  - mv coverage.* $CI_PROJECT_DIR
+  coverage: '/TOTAL.+ ([0-9]{1,3}%)/'
+  artifacts:
+    paths:
+    - coverage.log
+    - coverage.dat
+
+publish-dev:
+  stage: publish
+  script:
+  - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN registry.gitlab.com
+  - docker pull $DOCKER_TEST_IMAGE
+  - docker tag $DOCKER_TEST_IMAGE $DOCKER_DEV_IMAGE
+  - docker push $DOCKER_DEV_IMAGE
+  only:
+  - master
+
+publish-prod:
+  stage: publish
+  script:
+  - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN registry.gitlab.com
+  - docker pull $DOCKER_TEST_IMAGE
+  - docker tag $DOCKER_TEST_IMAGE $DOCKER_PROD_IMAGE
+  - docker push $DOCKER_PROD_IMAGE
+  only:
+  - prod
+
+deploy-dev:
+  image: slapshin1988/ssh-agent
+  stage: deploy
+  variables:
+    SSH_PRIVATE_KEY: $SSH_DEV_PRIVATE_KEY
+  script:
+  - ssh deploy@${DEV_HOST} "/opt/deploy/deploy.sh"
+  environment:
+    name: dev
+    url: http://${DEV_HOST}/admin/
+  only:
+  - master
+  when:
+    manual

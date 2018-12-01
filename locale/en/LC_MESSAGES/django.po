@@ -1,0 +1,75 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2018-11-23 06:51+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: server/apps/users/apps.py:8 server/apps/users/models.py:41
+msgid "VN__USERS"
+msgstr "Users"
+
+#: server/apps/users/models.py:10
+msgid "VN__USERS_MUST_HAVE_AN_LOGIN"
+msgstr ""
+
+#: server/apps/users/models.py:30
+msgid "VN__LOGIN"
+msgstr "Login"
+
+#: server/apps/users/models.py:31
+msgid "HT__LOGIN"
+msgstr "Login"
+
+#: server/apps/users/models.py:32
+msgid "VN__IS_STAFF"
+msgstr "Is Staff"
+
+#: server/apps/users/models.py:33
+msgid "HT__IS_STAFF"
+msgstr "Is Staff"
+
+#: server/apps/users/models.py:34
+msgid "VN__IS_ACTIVE"
+msgstr "Is Active"
+
+#: server/apps/users/models.py:34
+msgid "HT__IS_ACTIVE"
+msgstr "Is Active"
+
+#: server/apps/users/models.py:40
+msgid "VN__USER"
+msgstr "User"
+
+#: server/apps/users/models.py:54
+msgid "VN__TOKEN"
+msgstr "Token"
+
+#: server/apps/users/models.py:55
+msgid "VN__TOKENS"
+msgstr "Tokens"
+
+#: server/settings/components/internationalization.py:16
+msgid "MESSAGE__ENGLISH"
+msgstr "English"
+
+#: server/urls.py:8
+msgid "VN__ADMIN_DASHBOARD"
+msgstr "Admin Dashboard"
+
+#: server/urls.py:10
+msgid "VN__API"
+msgstr "API"
