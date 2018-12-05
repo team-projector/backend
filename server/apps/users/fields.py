@@ -10,4 +10,5 @@ class PermissionSelectMultipleField(forms.ModelMultipleChoiceField):
     def __init__(self, queryset=None, *args, **kwargs):
         if queryset is None:
             queryset = Permission.objects.all()
+
         super().__init__(queryset, *args, **kwargs)

@@ -12,6 +12,7 @@ django-rest-swagger = "==2.1.2"
 django-cors-headers = "*"
 django-split-settings = "*"
 django-model-utils = "*"
+python-gitlab = "*"
 
 [dev-packages]
 "flake8" = "*"
