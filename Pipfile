@@ -13,6 +13,9 @@ django-cors-headers = "*"
 django-split-settings = "*"
 django-model-utils = "*"
 python-gitlab = "*"
+celery = "*"
+flower = "*"
+redis="==2.10.6"
 
 [dev-packages]
 "flake8" = "*"

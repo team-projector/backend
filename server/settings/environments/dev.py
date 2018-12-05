@@ -15,3 +15,5 @@ DATABASES = {
 }
 
 SECRET_KEY = 'secret.key'
+
+CELERY_TASK_ALWAYS_EAGER = True
