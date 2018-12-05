@@ -35,4 +35,3 @@ class Command(BaseCommand):
 
         for issue in project.issues.list(updated_after=timezone.now() - timedelta(minutes=5)):
             print(issue)
-

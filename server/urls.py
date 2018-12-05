@@ -10,6 +10,8 @@ admin.site.site_header = _('VN__ADMIN_DASHBOARD')
 schema_view = get_swagger_view(title=_('VN__API'))
 
 urlpatterns = [
-                  path('admin/', admin.site.urls),
-                  path('api/docs/', schema_view),
-              ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    path('admin/', admin.site.urls),
+    path('api/docs/', schema_view)
+]
+
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
