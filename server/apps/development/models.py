@@ -1,3 +1,4 @@
+from django.contrib.postgres.fields import ArrayField
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
@@ -41,11 +42,17 @@ class Issue(GitlabEntityMixin):
     time_estimate = models.PositiveIntegerField(null=True, verbose_name=_('VN__TIME_ESTIMATE'),
                                                 help_text=_('HT__TIME_ESTIMATE'))
 
-    time_spend = models.PositiveIntegerField(null=True, verbose_name=_('VN__TIME_SPEND'),
-                                             help_text=_('HT__TIME_SPEND'))
+    total_time_spent = models.PositiveIntegerField(null=True, verbose_name=_('VN__TOTAL_TIME_SPENT'),
+                                                   help_text=_('HT__TOTAL_TIME_SPENT'))
 
     employee = models.ForeignKey(User, models.SET_NULL, null=True, blank=True, verbose_name=_('VN__EMPLOYEE'),
                                  help_text=_('HT__EMPLOYEE'))
+
+    state = models.CharField(max_length=255, null=True, blank=True, verbose_name=_('VN__STATE'),
+                             help_text=_('HT__STATE'))
+
+    labels = ArrayField(models.CharField(max_length=255, blank=True), null=True, blank=True,
+                        verbose_name=_('VN__LABELS'), help_text=_('HT__LABELS'))
 
     def __str__(self):
         return self.title

@@ -13,7 +13,7 @@ class ProjectGroupAdmin(BaseModelAdmin):
 
 @admin.register(Project)
 class ProjectAdmin(BaseModelAdmin):
-    list_display = ('title', 'gitlab_url', 'gitlab_last_sync')
+    list_display = ('title', 'group', 'gitlab_url', 'gitlab_last_sync')
     search_fields = ('title',)
     autocomplete_fields = ('group',)
 
