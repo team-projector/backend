@@ -23,3 +23,5 @@ DATABASES = {
         'PORT': os.getenv('DJANGO_DATABASE_PORT', '5432')
     }
 }
+
+GITLAB_TOKEN = os.getenv('DJANGO_GITLAB_TOKEN')

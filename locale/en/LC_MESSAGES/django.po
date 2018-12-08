@@ -3,12 +3,11 @@
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-11-23 06:51+0000\n"
+"POT-Creation-Date: 2018-12-08 17:08+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,13 +17,119 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
+#: server/apps/core/db/mixins.py:6
+msgid "VN__GITLAB_ID"
+msgstr "GitLab id"
+
+#: server/apps/core/db/mixins.py:6
+msgid "HT__GITLAB_ID"
+msgstr "GitLab id"
+
+#: server/apps/core/db/mixins.py:7
+msgid "VN__GITLAB_URL"
+msgstr "GitLab URL"
+
+#: server/apps/core/db/mixins.py:7
+msgid "HT__GITLAB_URL"
+msgstr "GitLab URL"
+
+#: server/apps/core/db/mixins.py:8
+msgid "VN__GITLAB_LAST_SYNC"
+msgstr "GitLab last sync"
+
+#: server/apps/core/db/mixins.py:9
+msgid "HT__GITLAB_LAST_SYNC"
+msgstr "GitLab last sync"
+
+#: server/apps/development/apps.py:8
+msgid "VN__DEVELOPMENT"
+msgstr "Development"
+
+#: server/apps/development/models.py:9 server/apps/development/models.py:23
+#: server/apps/development/models.py:37
+msgid "VN__TITLE"
+msgstr "Title"
+
+#: server/apps/development/models.py:9 server/apps/development/models.py:23
+#: server/apps/development/models.py:37
+msgid "HT__TITLE"
+msgstr "Title"
+
+#: server/apps/development/models.py:10
+msgid "VN__PARENT"
+msgstr "Parent"
+
+#: server/apps/development/models.py:11
+msgid "HT__PARENT"
+msgstr "Parent"
+
+#: server/apps/development/models.py:17
+msgid "VN__PROJECT_GROUP"
+msgstr "Project group"
+
+#: server/apps/development/models.py:18
+msgid "VN__PROJECT_GROUPS"
+msgstr "Project groups"
+
+#: server/apps/development/models.py:25
+msgid "VN__GROUP"
+msgstr "Group"
+
+#: server/apps/development/models.py:25
+msgid "HT__GROUP"
+msgstr "Group"
+
+#: server/apps/development/models.py:31 server/apps/development/models.py:39
+msgid "VN__PROJECT"
+msgstr "Project"
+
+#: server/apps/development/models.py:32
+msgid "VN__PROJECTS"
+msgstr "Projects"
+
+#: server/apps/development/models.py:39
+msgid "HT__PROJECT"
+msgstr "Project"
+
+#: server/apps/development/models.py:41
+msgid "VN__TIME_ESTIMATE"
+msgstr "Estimate time"
+
+#: server/apps/development/models.py:42
+msgid "HT__TIME_ESTIMATE"
+msgstr "Estimate time"
+
+#: server/apps/development/models.py:44
+msgid "VN__TIME_SPEND"
+msgstr "Spend time"
+
+#: server/apps/development/models.py:45
+msgid "HT__TIME_SPEND"
+msgstr "Spend time"
+
+#: server/apps/development/models.py:47
+msgid "VN__EMPLOYEE"
+msgstr "Employee"
+
+#: server/apps/development/models.py:48
+msgid "HT__EMPLOYEE"
+msgstr "Employee"
+
+#: server/apps/development/models.py:54
+msgid "VN__ISSUE"
+msgstr "Issue"
+
+#: server/apps/development/models.py:55
+msgid "VN__ISSUES"
+msgstr "Issues"
+
 #: server/apps/users/apps.py:8 server/apps/users/models.py:41
 msgid "VN__USERS"
 msgstr "Users"
 
 #: server/apps/users/models.py:10
-msgid "VN__USERS_MUST_HAVE_AN_LOGIN"
-msgstr ""
+msgid "VN__USER_MUST_HAVE_A_LOGIN"
+msgstr "User must have a login"
 
 #: server/apps/users/models.py:30
 msgid "VN__LOGIN"

@@ -22,16 +22,20 @@ class Command(BaseCommand):
 
         project = gl.projects.get(PROJECT_ID)
 
+        print(project)
+        print('-' * 10)
         # for issue in project.issues.list(all=True)[:1]:
         #     print(f'issue {issue}:')
         #     for note in issue.notes.list(all=True):
         #         print(f'-- {note}')
         #
-        # for event in project.events.list(target_type='note', all=True):
-        #     print(event)
+        for event in project.events.list(all=True):
+            print(event)
 
         # for issue in gl.issues.list(updated_after=timezone.now() - timedelta(minutes=5)):
         #     print(issue)
+
+        print('-' * 10)
 
         for issue in project.issues.list(updated_after=timezone.now() - timedelta(minutes=5)):
             print(issue)

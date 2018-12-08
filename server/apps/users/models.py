@@ -7,7 +7,7 @@ from rest_framework.authtoken.models import Token as BaseToken
 class CustomUserManager(BaseUserManager):
     def create_user(self, login, password=None, **kwargs):
         if not login:
-            raise ValueError(_('VN__USERS_MUST_HAVE_AN_LOGIN'))
+            raise ValueError(_('VN__USER_MUST_HAVE_A_LOGIN'))
 
         user = self.model(login=login, **kwargs)
 
