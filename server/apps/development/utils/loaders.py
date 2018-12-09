@@ -29,7 +29,7 @@ def load_groups() -> None:
 
     gl = get_gitlab_client()
 
-    gl_groups = gl.groups.list(as_list=False)
+    gl_groups = gl.groups.list(all=True)
     gl_groups_map = {g.id: g for g in gl_groups}
 
     while gl_groups:

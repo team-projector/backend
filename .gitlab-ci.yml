@@ -89,5 +89,3 @@ deploy-dev:
     url: http://${DEV_HOST}/admin/
   only:
   - master
-  when:
-    manual
