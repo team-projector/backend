@@ -91,13 +91,14 @@ def load_users() -> None:
         gl_project = gl.projects.get(id=project.gl_id)
 
         for gl_member in gl_project.members.all(as_list=False):
-            user, created = User.objects.update_or_create(gl_id=gl_member['id'],
-                                                          defaults={
-                                                              'login': gl_member['username'],
-                                                              'gl_avatar': gl_member['avatar_url'],
-                                                              'gl_url': gl_member['web_url'],
-                                                              'gl_last_sync': timezone.now()
-                                                          })
+            user, created = User.objects.update_or_create(
+                gl_id=gl_member['id'],
+                defaults={
+                    'login': gl_member['username'],
+                    'gl_avatar': gl_member['avatar_url'],
+                    'gl_url': gl_member['web_url'],
+                    'gl_last_sync': timezone.now()
+                })
 
             if created:
                 user.is_active = False
