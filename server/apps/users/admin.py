@@ -20,7 +20,6 @@ class UserAdmin(UserAdmin):
     list_filter = ('is_active', 'is_staff', 'is_active')
     ordering = ('login',)
     sortable_by = ()
-    fieldsets = ()
     autocomplete_fields = ('groups',)
     search_fields = ('login',)
     add_fieldsets = (
@@ -31,8 +30,14 @@ class UserAdmin(UserAdmin):
     )
 
     exclude = ('user_permissions',)
-    fields = (
-        'login', 'groups', 'is_superuser', 'is_staff', 'is_active', 'last_login'
+    fieldsets = (
+        (None, {
+            'fields': ('login', 'groups', 'is_superuser', 'is_staff', 'is_active', 'last_login')
+        }),
+        ('gitlab', {
+            'fields': ('gl_avatar', 'gl_id', 'gl_url', 'gl_last_sync')
+        })
+
     )
     readonly_fields = ('last_login',)
 

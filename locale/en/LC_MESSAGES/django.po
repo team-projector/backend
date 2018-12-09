@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-12-08 18:43+0000\n"
+"POT-Creation-Date: 2018-12-09 21:07+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,27 +17,27 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: server/apps/core/db/mixins.py:6
+#: server/apps/core/db/mixins.py:6 server/apps/users/models.py:39
 msgid "VN__GITLAB_ID"
 msgstr "GitLab id"
 
-#: server/apps/core/db/mixins.py:6
+#: server/apps/core/db/mixins.py:6 server/apps/users/models.py:40
 msgid "HT__GITLAB_ID"
 msgstr "GitLab id"
 
-#: server/apps/core/db/mixins.py:7
+#: server/apps/core/db/mixins.py:7 server/apps/users/models.py:41
 msgid "VN__GITLAB_URL"
 msgstr "GitLab URL"
 
-#: server/apps/core/db/mixins.py:7
+#: server/apps/core/db/mixins.py:7 server/apps/users/models.py:41
 msgid "HT__GITLAB_URL"
 msgstr "GitLab URL"
 
-#: server/apps/core/db/mixins.py:8
+#: server/apps/core/db/mixins.py:8 server/apps/users/models.py:42
 msgid "VN__GITLAB_LAST_SYNC"
 msgstr "GitLab last sync"
 
-#: server/apps/core/db/mixins.py:9
+#: server/apps/core/db/mixins.py:9 server/apps/users/models.py:43
 msgid "HT__GITLAB_LAST_SYNC"
 msgstr "GitLab last sync"
 
@@ -139,7 +139,7 @@ msgstr "Issue"
 msgid "VN__ISSUES"
 msgstr "Issues"
 
-#: server/apps/users/apps.py:8 server/apps/users/models.py:41
+#: server/apps/users/apps.py:8 server/apps/users/models.py:51
 msgid "VN__USERS"
 msgstr "Users"
 
@@ -171,15 +171,23 @@ msgstr "Is Active"
 msgid "HT__IS_ACTIVE"
 msgstr "Is Active"
 
-#: server/apps/users/models.py:40
+#: server/apps/users/models.py:36
+msgid "VN__GITLAB_AVATAR"
+msgstr "GitLab avatar"
+
+#: server/apps/users/models.py:37
+msgid "HT__GITLAB_AVATAR"
+msgstr "GitLab avatar"
+
+#: server/apps/users/models.py:50
 msgid "VN__USER"
 msgstr "User"
 
-#: server/apps/users/models.py:54
+#: server/apps/users/models.py:64
 msgid "VN__TOKEN"
 msgstr "Token"
 
-#: server/apps/users/models.py:55
+#: server/apps/users/models.py:65
 msgid "VN__TOKENS"
 msgstr "Tokens"
 

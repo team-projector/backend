@@ -32,6 +32,16 @@ class User(AbstractBaseUser, PermissionsMixin):
     is_staff = models.BooleanField(default=True, verbose_name=_('VN__IS_STAFF'),
                                    help_text=_('HT__IS_STAFF'))
     is_active = models.BooleanField(default=True, verbose_name=_('VN__IS_ACTIVE'), help_text=_('HT__IS_ACTIVE'))
+
+    gl_avatar = models.URLField(null=True, blank=True, verbose_name=_('VN__GITLAB_AVATAR'),
+                                help_text=_('HT__GITLAB_AVATAR'), unique=True)
+
+    gl_id = models.PositiveIntegerField(null=True, blank=True, verbose_name=_('VN__GITLAB_ID'),
+                                        help_text=_('HT__GITLAB_ID'))
+    gl_url = models.URLField(null=True, blank=True, verbose_name=_('VN__GITLAB_URL'), help_text=_('HT__GITLAB_URL'))
+    gl_last_sync = models.DateTimeField(null=True, blank=True, verbose_name=_('VN__GITLAB_LAST_SYNC'),
+                                        help_text=_('HT__GITLAB_LAST_SYNC'))
+
     USERNAME_FIELD = 'login'
 
     objects = CustomUserManager()
