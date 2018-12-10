@@ -1,11 +1,11 @@
 import json
 
-from django.utils import dateparse
 from django.views.decorators.csrf import csrf_exempt
 from requests import Response
 
 from apps.development.models import Issue, Project
 from apps.users.models import User
+
 
 @csrf_exempt
 def gl_webhook(request):
