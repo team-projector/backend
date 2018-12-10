@@ -14,13 +14,10 @@ def load_groups() -> None:
             if not parent and gl_group.parent_id in gl_groups_map:
                 parent = load_group(gl_groups_map[gl_group.parent_id])
 
-        group, _ = ProjectGroup.objects.update_or_create(gl_id=gl_group.id,
-                                                         defaults={
-                                                             'parent': parent,
-                                                             'title': gl_group.name,
-                                                             'gl_url': gl_group.web_url,
-                                                             'gl_last_sync': timezone.now()
-                                                         })
+        group, _ = ProjectGroup.objects.sync_gitlab(gl_id=gl_group.id,
+                                                    gl_url=gl_group.web_url,
+                                                    parent=parent,
+                                                    title=gl_group.name)
 
         gl_groups.remove(gl_group)
 
@@ -41,16 +38,13 @@ def load_projects() -> None:
     gl = get_gitlab_client()
 
     for group in ProjectGroup.objects.all():
-        gl_group = gl.groups.get(id=group.gitlab_id)
+        gl_group = gl.groups.get(id=group.gl_id)
 
         for gl_project in gl_group.projects.list(all=True):
-            project, _ = Project.objects.update_or_create(gl_id=gl_project.id,
-                                                          defaults={
-                                                              'group': group,
-                                                              'title': gl_project.name,
-                                                              'gl_url': gl_project.web_url,
-                                                              'gl_last_sync': timezone.now()
-                                                          })
+            project, _ = Project.objects.sync_gitlab(gl_id=gl_project.id,
+                                                     gl_url=gl_project.web_url,
+                                                     group=group,
+                                                     title=gl_project.name)
 
             print(f'Project "{project}" is synced')
 
@@ -63,22 +57,21 @@ def load_issues() -> None:
         gl_project = gl.projects.get(id=project.gl_id)
 
         for gl_issue in gl_project.issues.list(as_list=False):
+
+            # TODO recheck after dynamic sync
             employee = None
             if gl_issue.assignee:
                 employee = User.objects.filter(gl_id=gl_issue.assignee['id']).first()
 
-            issue, _ = Issue.objects.update_or_create(gl_id=gl_issue.id,
-                                                      defaults={
-                                                          'project': project,
-                                                          'title': gl_issue.title,
-                                                          'total_time_spent': gl_issue.time_stats()['total_time_spent'],
-                                                          'time_estimate': gl_issue.time_stats()['time_estimate'],
-                                                          'state': gl_issue.state,
-                                                          'labels': gl_issue.labels,
-                                                          'gl_url': gl_issue.web_url,
-                                                          'gl_last_sync': timezone.now(),
-                                                          'employee': employee
-                                                      })
+            issue, _ = Issue.objects.sync_gitlab(gl_id=gl_issue.id,
+                                                 project=project,
+                                                 title=gl_issue.title,
+                                                 total_time_spent=gl_issue.time_stats()['total_time_spent'],
+                                                 time_estimate=gl_issue.time_stats()['time_estimate'],
+                                                 state=gl_issue.state,
+                                                 labels=gl_issue.labels,
+                                                 gl_url=gl_issue.web_url,
+                                                 employee=employee)
 
             print(f'Issue "{issue}" is synced')
 

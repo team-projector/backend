@@ -1,8 +1,11 @@
 SITE_ID = 1
+SITE_DOMAIN = 'https://6423533b.ngrok.io'
 
 DEBUG = True
 
 LANGUAGE_CODE = 'en'
+
+ALLOWED_HOSTS = ['*']
 
 DATABASES = {
     'default': {

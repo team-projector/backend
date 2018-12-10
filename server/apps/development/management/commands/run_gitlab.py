@@ -35,7 +35,8 @@ class Command(BaseCommand):
         # for issue in gl.issues.list(updated_after=timezone.now() - timedelta(minutes=5)):
         #     print(issue)
 
-        print('-' * 10)
+        # print('-' * 10)
+        #
 
-        for issue in project.issues.list(updated_after=timezone.now() - timedelta(minutes=5)):
+        for issue in project.issues.list(updated_after=timezone.now() - timedelta(minutes=60)):
             print(issue)
