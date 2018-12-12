@@ -1,6 +1,7 @@
 from datetime import datetime
 
 from django.conf import settings
+from django.urls import reverse
 from django.utils import timezone
 from django.utils.timezone import make_aware
 from gitlab.v4.objects import Group as GlGroup, Project as GlProject, ProjectIssue as GlProjectIssue
@@ -62,7 +63,7 @@ def load_projects() -> None:
 def check_project_webhooks(gl_project: GlProject):
     hooks = gl_project.hooks.list()
 
-    webhook_url = f'https://{settings.SITE_DOMAIN}/gl-webhook'
+    webhook_url = f'https://{settings.SITE_DOMAIN}{reverse("gl-webhook")}'
 
     if any(hook.url == webhook_url for hook in hooks):
         return
@@ -78,7 +79,7 @@ def load_issues() -> None:
         load_project_issues(project)
 
 
-def load_project_issues(project: Project, ) -> None:
+def load_project_issues(project: Project) -> None:
     gl = get_gitlab_client()
 
     print(f'Syncing project {project} issues')
