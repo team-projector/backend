@@ -1,9 +1,15 @@
+from datetime import datetime
+
+from django.conf import settings
 from django.utils import timezone
-from gitlab.v4.objects import Group as GlGroup, ProjectIssue as GlProjectIssue
+from django.utils.timezone import make_aware
+from gitlab.v4.objects import Group as GlGroup, Project as GlProject, ProjectIssue as GlProjectIssue
 
 from apps.core.gitlab import get_gitlab_client
 from apps.development.models import Issue, Project, ProjectGroup
 from apps.users.models import User
+
+GITLAB_DATETIME_FORMAT = '%Y-%m-%dT%H:%M:%S.%fZ'
 
 
 def load_groups() -> None:
@@ -47,7 +53,24 @@ def load_projects() -> None:
                                                      full_title=gl_project.name_with_namespace,
                                                      title=gl_project.name)
 
+            if settings.GITLAB_CHECK_WEBHOOKS:
+                check_project_webhooks(gl.projects.get(gl_project.id))
+
             print(f'Project "{project}" is synced')
+
+
+def check_project_webhooks(gl_project: GlProject):
+    hooks = gl_project.hooks.list()
+
+    webhook_url = f'https://{settings.SITE_DOMAIN}/gl-webhook'
+
+    if any(hook.url == webhook_url for hook in hooks):
+        return
+
+    gl_project.hooks.create({
+        'url': webhook_url,
+        'issues_events': True
+    })
 
 
 def load_issues() -> None:
@@ -80,6 +103,7 @@ def load_project_issue(project: Project, gl_issue: GlProjectIssue):
                                          state=gl_issue.state,
                                          labels=gl_issue.labels,
                                          gl_url=gl_issue.web_url,
+                                         created_at=parse_date(gl_issue.created_at),
                                          employee=employee)
 
     print(f'Issue "{issue}" is synced')
@@ -105,3 +129,7 @@ def load_user(user_id: int) -> User:
         user.save()
 
     return user
+
+
+def parse_date(s: str) -> datetime:
+    return make_aware(datetime.strptime(s, GITLAB_DATETIME_FORMAT))

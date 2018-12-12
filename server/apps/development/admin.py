@@ -20,6 +20,8 @@ class ProjectAdmin(BaseModelAdmin):
 
 @admin.register(Issue)
 class IssueAdmin(BaseModelAdmin):
-    list_display = ('title', 'employee', 'gl_url', 'gl_last_sync')
+    list_display = ('title', 'employee', 'created_at', 'gl_url', 'gl_last_sync')
     search_fields = ('title',)
+    list_filter = ('project',)
+    sortable_by = ('gl_last_sync', 'created_at')
     autocomplete_fields = ('project', 'employee')

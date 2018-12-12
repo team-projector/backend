@@ -44,7 +44,7 @@ class Project(GitlabEntityMixin):
     class Meta:
         verbose_name = _('VN__PROJECT')
         verbose_name_plural = _('VN__PROJECTS')
-        ordering = ('title',)
+        ordering = ('full_title', 'title')
 
 
 class Issue(GitlabEntityMixin):

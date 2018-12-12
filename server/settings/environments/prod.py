@@ -3,7 +3,7 @@ import os
 DEBUG = True
 
 SITE_ID = 1
-SITE_DOMAIN = os.getenv('DJANGO_SITE_DOMAIN')
+SITE_DOMAIN = os.getenv('SITE_DOMAIN')
 
 USE_TZ = True
 TIME_ZONE = 'Europe/Moscow'
@@ -26,3 +26,4 @@ DATABASES = {
 }
 
 GITLAB_TOKEN = os.getenv('DJANGO_GITLAB_TOKEN')
+GITLAB_CHECK_WEBHOOKS = True

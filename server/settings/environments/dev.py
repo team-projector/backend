@@ -1,5 +1,5 @@
 SITE_ID = 1
-SITE_DOMAIN = 'https://6423533b.ngrok.io'
+SITE_DOMAIN = 'tp.junte.it'
 
 DEBUG = True
 
@@ -22,3 +22,4 @@ SECRET_KEY = 'secret.key'
 CELERY_TASK_ALWAYS_EAGER = True
 
 GITLAB_TOKEN = 'M6wM1-ZeeCPzPm4Z9PzS'
+GITLAB_CHECK_WEBHOOKS = True
