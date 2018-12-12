@@ -30,6 +30,9 @@ class Project(GitlabEntityMixin):
     group = models.ForeignKey(ProjectGroup, models.SET_NULL, null=True, blank=True,
                               verbose_name=_('VN__GROUP'), help_text=_('HT__GROUP'))
 
+    gl_last_issues_sync = models.DateTimeField(null=True, blank=True, verbose_name=_('VN__GITLAB_LAST_ISSUES_SYNC'),
+                                               help_text=_('HT__GITLAB_LAST_ISSUES_SYNC'))
+
     objects = ProjectManager()
 
     def __str__(self):
