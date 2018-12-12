@@ -1,4 +1,5 @@
 from datetime import datetime
+from typing import Optional
 
 from django.conf import settings
 from django.urls import reverse
@@ -79,23 +80,27 @@ def load_issues() -> None:
         load_project_issues(project)
 
 
-def load_project_issues(project: Project) -> None:
+def load_project_issues(project: Project, full_reload: bool = False) -> None:
     gl = get_gitlab_client()
 
     print(f'Syncing project {project} issues')
     gl_project = gl.projects.get(id=project.gl_id)
 
-    for gl_issue in gl_project.issues.list(as_list=False):
+    args = {
+        'as_list': False
+    }
+
+    if not full_reload and project.gl_last_issues_sync:
+        args['updated_after'] = project.gl_last_issues_sync
+
+    project.gl_last_issues_sync = timezone.now()
+    project.save(update_fields=['gl_last_issues_sync'])
+
+    for gl_issue in gl_project.issues.list(**args):
         load_project_issue(project, gl_issue)
 
 
 def load_project_issue(project: Project, gl_issue: GlProjectIssue):
-    employee = None
-    if gl_issue.assignee:
-        employee = User.objects.filter(gl_id=gl_issue.assignee['id']).first()
-        if not employee:
-            employee = load_user(gl_issue.assignee['id'])
-
     issue, _ = Issue.objects.sync_gitlab(gl_id=gl_issue.id,
                                          project=project,
                                          title=gl_issue.title,
@@ -105,9 +110,22 @@ def load_project_issue(project: Project, gl_issue: GlProjectIssue):
                                          labels=gl_issue.labels,
                                          gl_url=gl_issue.web_url,
                                          created_at=parse_date(gl_issue.created_at),
-                                         employee=employee)
+                                         employee=extract_user_from_data(gl_issue.assignee))
 
     print(f'Issue "{issue}" is synced')
+
+
+def extract_user_from_data(data: dict) -> Optional[User]:
+    if not data:
+        return
+
+    user_id = data['id']
+
+    user = User.objects.filter(gl_id=user_id).first()
+    if not user:
+        user = load_user(user_id)
+
+    return user
 
 
 def load_user(user_id: int) -> User:

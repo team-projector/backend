@@ -1,5 +1,3 @@
-from celery import chain
-
 from apps.core.gitlab import get_gitlab_client
 from apps.development.models import Project
 from apps.development.utils.loaders import load_groups, load_project_issue, load_project_issues, load_projects
@@ -8,17 +6,10 @@ from celery_app import app
 
 @app.task
 def sync() -> None:
-    chain(sync_groups.s(), sync_projects.s(), sync_issues.s())()
-
-
-@app.task
-def sync_groups() -> None:
     load_groups()
-
-
-@app.task
-def sync_projects() -> None:
     load_projects()
+
+    sync_issues.delay()
 
 
 @app.task
