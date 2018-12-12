@@ -20,17 +20,17 @@ class Command(BaseCommand):
         # for project in group.projects.list():
         #     print(project)
 
-        project = gl.projects.get(PROJECT_ID)
-
-        print(project)
-        print('-' * 10)
-        # for issue in project.issues.list(all=True)[:1]:
-        #     print(f'issue {issue}:')
-        #     for note in issue.notes.list(all=True):
-        #         print(f'-- {note}')
+        # project = gl.projects.get(PROJECT_ID)
         #
-        for event in project.events.list(all=True):
-            print(event)
+        # print(project)
+        # print('-' * 10)
+        # # for issue in project.issues.list(all=True)[:1]:
+        # #     print(f'issue {issue}:')
+        # #     for note in issue.notes.list(all=True):
+        # #         print(f'-- {note}')
+        # #
+        # for event in project.events.list(all=True):
+        #     print(event)
 
         # for issue in gl.issues.list(updated_after=timezone.now() - timedelta(minutes=5)):
         #     print(issue)
@@ -38,5 +38,11 @@ class Command(BaseCommand):
         # print('-' * 10)
         #
 
-        for issue in project.issues.list(updated_after=timezone.now() - timedelta(minutes=60)):
-            print(issue)
+
+        #
+        # for issue in project.issues.list(updated_after=timezone.now() - timedelta(minutes=60)):
+        #     print(issue)
+
+        project = gl.projects.get(id=9419749)
+        issue = project.issues.get(10)
+        t = 9

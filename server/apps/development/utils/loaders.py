@@ -1,5 +1,5 @@
 from django.utils import timezone
-from gitlab.v4.objects import Group as GitLabGroup
+from gitlab.v4.objects import Group as GlGroup, ProjectIssue as GlProjectIssue
 
 from apps.core.gitlab import get_gitlab_client
 from apps.development.models import Issue, Project, ProjectGroup
@@ -7,7 +7,7 @@ from apps.users.models import User
 
 
 def load_groups() -> None:
-    def load_group(gl_group: GitLabGroup) -> ProjectGroup:
+    def load_group(gl_group: GlGroup) -> ProjectGroup:
         parent = None
         if gl_group.parent_id:
             parent = ProjectGroup.objects.filter(gl_id=gl_group.parent_id).first()
@@ -57,49 +57,50 @@ def load_issues() -> None:
 def load_project_issues(project: Project, ) -> None:
     gl = get_gitlab_client()
 
-    print(f'Syncing project {project}... issues')
+    print(f'Syncing project {project} issues')
     gl_project = gl.projects.get(id=project.gl_id)
 
     for gl_issue in gl_project.issues.list(as_list=False):
-
-        # TODO recheck after dynamic sync
-        employee = None
-        if gl_issue.assignee:
-            employee = User.objects.filter(gl_id=gl_issue.assignee['id']).first()
-
-        issue, _ = Issue.objects.sync_gitlab(gl_id=gl_issue.id,
-                                             project=project,
-                                             title=gl_issue.title,
-                                             total_time_spent=gl_issue.time_stats()['total_time_spent'],
-                                             time_estimate=gl_issue.time_stats()['time_estimate'],
-                                             state=gl_issue.state,
-                                             labels=gl_issue.labels,
-                                             gl_url=gl_issue.web_url,
-                                             employee=employee)
-
-        print(f'Issue "{issue}" is synced')
+        load_project_issue(project, gl_issue)
 
 
-def load_users() -> None:
+def load_project_issue(project: Project, gl_issue: GlProjectIssue):
+    employee = None
+    if gl_issue.assignee:
+        employee = User.objects.filter(gl_id=gl_issue.assignee['id']).first()
+        if not employee:
+            employee = load_user(gl_issue.assignee['id'])
+
+    issue, _ = Issue.objects.sync_gitlab(gl_id=gl_issue.id,
+                                         project=project,
+                                         title=gl_issue.title,
+                                         total_time_spent=gl_issue.time_stats()['total_time_spent'],
+                                         time_estimate=gl_issue.time_stats()['time_estimate'],
+                                         state=gl_issue.state,
+                                         labels=gl_issue.labels,
+                                         gl_url=gl_issue.web_url,
+                                         employee=employee)
+
+    print(f'Issue "{issue}" is synced')
+
+
+def load_user(user_id: int) -> User:
     gl = get_gitlab_client()
 
-    for project in Project.objects.all():
-        print(f'Syncing project "{project}..." members')
-        gl_project = gl.projects.get(id=project.gl_id)
+    gl_user = gl.users.get(user_id)
 
-        for gl_member in gl_project.members.all(as_list=False):
-            user, created = User.objects.update_or_create(
-                gl_id=gl_member['id'],
-                defaults={
-                    'login': gl_member['username'],
-                    'gl_avatar': gl_member['avatar_url'],
-                    'gl_url': gl_member['web_url'],
-                    'gl_last_sync': timezone.now()
-                })
+    user, created = User.objects.update_or_create(
+        gl_id=gl_user.id,
+        defaults={
+            'login': gl_user.username,
+            'gl_avatar': gl_user.avatar_url,
+            'gl_url': gl_user.web_url,
+            'gl_last_sync': timezone.now()
+        })
 
-            if created:
-                user.is_active = False
-                user.is_staff = False
-                user.save()
+    if created:
+        user.is_active = False
+        user.is_staff = False
+        user.save()
 
-            print(f'User "{user}" is synced')
+    return user

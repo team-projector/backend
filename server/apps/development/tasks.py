@@ -1,7 +1,8 @@
 from celery import chain
 
+from apps.core.gitlab import get_gitlab_client
 from apps.development.models import Project
-from apps.development.utils.loaders import load_groups, load_project_issues, load_projects
+from apps.development.utils.loaders import load_groups, load_project_issue, load_project_issues, load_projects
 from celery_app import app
 
 
@@ -30,3 +31,14 @@ def sync_issues() -> None:
 def sync_project_issues(project_id: int) -> None:
     project = Project.objects.get(id=project_id)
     load_project_issues(project)
+
+
+@app.task
+def sync_project_issue(project_id: int, iid: int) -> None:
+    project = Project.objects.get(gl_id=project_id)
+
+    gl = get_gitlab_client()
+    gl_project = gl.projects.get(project_id)
+    gl_issue = gl_project.issues.get(iid)
+
+    load_project_issue(project, gl_issue)
