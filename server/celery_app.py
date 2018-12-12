@@ -16,4 +16,6 @@ app.autodiscover_tasks(lambda: settings.INSTALLED_APPS)
 
 @app.on_after_finalize.connect
 def setup_periodic_tasks(sender, **kwargs):
-    pass
+    from apps.development.tasks import sync
+
+    sender.add_periodic_task(60 * 10, sync.s(), name='gitlab sync')

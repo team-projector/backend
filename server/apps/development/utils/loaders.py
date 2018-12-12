@@ -50,30 +50,34 @@ def load_projects() -> None:
 
 
 def load_issues() -> None:
+    for project in Project.objects.all():
+        load_project_issues(project)
+
+
+def load_project_issues(project: Project, ) -> None:
     gl = get_gitlab_client()
 
-    for project in Project.objects.all():
-        print(f'Syncing project {project}... issues')
-        gl_project = gl.projects.get(id=project.gl_id)
+    print(f'Syncing project {project}... issues')
+    gl_project = gl.projects.get(id=project.gl_id)
 
-        for gl_issue in gl_project.issues.list(as_list=False):
+    for gl_issue in gl_project.issues.list(as_list=False):
 
-            # TODO recheck after dynamic sync
-            employee = None
-            if gl_issue.assignee:
-                employee = User.objects.filter(gl_id=gl_issue.assignee['id']).first()
+        # TODO recheck after dynamic sync
+        employee = None
+        if gl_issue.assignee:
+            employee = User.objects.filter(gl_id=gl_issue.assignee['id']).first()
 
-            issue, _ = Issue.objects.sync_gitlab(gl_id=gl_issue.id,
-                                                 project=project,
-                                                 title=gl_issue.title,
-                                                 total_time_spent=gl_issue.time_stats()['total_time_spent'],
-                                                 time_estimate=gl_issue.time_stats()['time_estimate'],
-                                                 state=gl_issue.state,
-                                                 labels=gl_issue.labels,
-                                                 gl_url=gl_issue.web_url,
-                                                 employee=employee)
+        issue, _ = Issue.objects.sync_gitlab(gl_id=gl_issue.id,
+                                             project=project,
+                                             title=gl_issue.title,
+                                             total_time_spent=gl_issue.time_stats()['total_time_spent'],
+                                             time_estimate=gl_issue.time_stats()['time_estimate'],
+                                             state=gl_issue.state,
+                                             labels=gl_issue.labels,
+                                             gl_url=gl_issue.web_url,
+                                             employee=employee)
 
-            print(f'Issue "{issue}" is synced')
+        print(f'Issue "{issue}" is synced')
 
 
 def load_users() -> None:
