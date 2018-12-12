@@ -25,13 +25,21 @@ class ProjectGroup(GitlabEntityMixin):
 
 class Project(GitlabEntityMixin):
     title = models.CharField(max_length=255, verbose_name=_('VN__TITLE'), help_text=_('HT__TITLE'))
+    full_title = models.CharField(max_length=255, null=True, blank=True, verbose_name=_('VN__FULL_TITLE'),
+                                  help_text=_('HT__FULL_TITLE'))
     group = models.ForeignKey(ProjectGroup, models.SET_NULL, null=True, blank=True,
                               verbose_name=_('VN__GROUP'), help_text=_('HT__GROUP'))
 
     objects = ProjectManager()
 
     def __str__(self):
-        return self.title
+        return self.full_title or self.title
+
+    def save(self, *args, **kwargs):
+        if not self.full_title:
+            self.full_title = self.title
+
+        super().save(*args, **kwargs)
 
     class Meta:
         verbose_name = _('VN__PROJECT')
