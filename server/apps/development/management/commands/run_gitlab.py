@@ -1,8 +1,5 @@
-from datetime import timedelta
-
 import gitlab
 from django.core.management.base import BaseCommand
-from django.utils import timezone
 
 GROUP_ID = 4018796
 PROJECT_ID = 9419749
@@ -38,11 +35,10 @@ class Command(BaseCommand):
         # print('-' * 10)
         #
 
-
         #
         # for issue in project.issues.list(updated_after=timezone.now() - timedelta(minutes=60)):
         #     print(issue)
 
-        project = gl.projects.get(id=9419749)
-        issue = project.issues.get(10)
-        t = 9
+        # project = gl.projects.get(id=9419749)
+        # issue = project.issues.get(10)
+        # t = 9
