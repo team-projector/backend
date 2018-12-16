@@ -47,6 +47,11 @@ class Command(BaseCommand):
             'num_format': '#,##0',
         })
 
+        month_format = workbook.add_format({
+            'num_format': 'mm/yy',
+            'align': 'center',
+        })
+
         data = list(self.load_data())
 
         start_date = min(data, key=lambda i: i['month'])['month']
@@ -63,8 +68,10 @@ class Command(BaseCommand):
             curr_date += relativedelta(months=+1)
 
         for d in dates:
-            worksheet.write(0, last_col, d.strftime('%d/%m/%y'))
+            worksheet.write(0, last_col, d.strftime('%m/%y'), month_format)
             last_col += 1
+
+        worksheet.freeze_panes(1, 0)
 
         current_row = 1
 
@@ -85,10 +92,12 @@ class Command(BaseCommand):
 
                     for track in track_data:
                         hours = track['spent_time'] / (60 * 60)
-                        worksheet.write_number(current_row,
-                                               dates.index(track['month']) + 1,
-                                               int(Decimal(hours) * employee.hour_rate),
-                                               track_format)
+                        salary = int(Decimal(hours) * employee.hour_rate)
+                        if salary:
+                            worksheet.write_number(current_row,
+                                                   dates.index(track['month']) + 1,
+                                                   salary,
+                                                   track_format)
 
                     worksheet.write(current_row,
                                     last_col,
