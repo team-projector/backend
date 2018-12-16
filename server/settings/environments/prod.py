@@ -5,7 +5,6 @@ DEBUG = True
 SITE_ID = 1
 SITE_DOMAIN = os.getenv('SITE_DOMAIN')
 
-USE_TZ = True
 TIME_ZONE = 'Europe/Moscow'
 
 LANGUAGE_CODE = 'en'

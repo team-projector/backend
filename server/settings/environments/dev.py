@@ -3,6 +3,8 @@ SITE_DOMAIN = 'tp.junte.it'
 
 DEBUG = True
 
+USE_TZ = False
+
 LANGUAGE_CODE = 'en'
 
 ALLOWED_HOSTS = ['*']

@@ -16,6 +16,8 @@ python-gitlab = "*"
 celery = "*"
 flower = "*"
 redis="==2.10.6"
+xlsxwriter = "*"
+python-dateutil = "*"
 
 [dev-packages]
 "flake8" = "*"

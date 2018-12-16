@@ -2,6 +2,7 @@ PROJECT_APPS = [
     'apps.core',
     'apps.users',
     'apps.development',
+    'apps.payroll',
 ]
 
 DJANGO_APPS = [

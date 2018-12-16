@@ -34,8 +34,11 @@ class UserAdmin(UserAdmin):
         (None, {
             'fields': ('login', 'groups', 'is_superuser', 'is_staff', 'is_active', 'last_login')
         }),
-        ('gitlab', {
+        ('GitLab', {
             'fields': ('gl_avatar', 'gl_id', 'gl_url', 'gl_last_sync')
+        }),
+        ('Costs', {
+            'fields': ('hour_rate',)
         })
 
     )

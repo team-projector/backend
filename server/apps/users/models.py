@@ -29,6 +29,9 @@ class CustomUserManager(BaseUserManager):
 class User(AbstractBaseUser, PermissionsMixin):
     login = models.CharField(max_length=150, null=True, blank=True, verbose_name=_('VN__LOGIN'),
                              help_text=_('HT__LOGIN'), unique=True)
+
+    hour_rate = models.DecimalField(default=0, decimal_places=2, max_digits=10,
+                                    verbose_name=_('VN__HOUR_RATE'), help_text=_('HT__HOUR_RATE'))
     is_staff = models.BooleanField(default=True, verbose_name=_('VN__IS_STAFF'),
                                    help_text=_('HT__IS_STAFF'))
     is_active = models.BooleanField(default=True, verbose_name=_('VN__IS_ACTIVE'), help_text=_('HT__IS_ACTIVE'))

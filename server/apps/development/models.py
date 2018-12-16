@@ -9,6 +9,8 @@ from apps.users.models import User
 
 class ProjectGroup(GitlabEntityMixin):
     title = models.CharField(max_length=255, verbose_name=_('VN__TITLE'), help_text=_('HT__TITLE'))
+    full_title = models.CharField(max_length=255, null=True, blank=True, verbose_name=_('VN__FULL_TITLE'),
+                                  help_text=_('HT__FULL_TITLE'))
     parent = models.ForeignKey('self', models.CASCADE, null=True, blank=True, verbose_name=_('VN__PARENT'),
                                help_text=_('HT__PARENT'))
 

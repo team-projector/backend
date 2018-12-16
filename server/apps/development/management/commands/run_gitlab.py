@@ -17,15 +17,12 @@ class Command(BaseCommand):
         # for project in group.projects.list():
         #     print(project)
 
-        # project = gl.projects.get(PROJECT_ID)
+        project = gl.projects.get(PROJECT_ID)
+        issue = project.issues.get(10)
+
+        for note in issue.notes.list(all=True):
+            print(f'-- {note}')
         #
-        # print(project)
-        # print('-' * 10)
-        # # for issue in project.issues.list(all=True)[:1]:
-        # #     print(f'issue {issue}:')
-        # #     for note in issue.notes.list(all=True):
-        # #         print(f'-- {note}')
-        # #
         # for event in project.events.list(all=True):
         #     print(event)
 

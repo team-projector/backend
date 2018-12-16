@@ -25,7 +25,8 @@ def load_groups() -> None:
         group, _ = ProjectGroup.objects.sync_gitlab(gl_id=gl_group.id,
                                                     gl_url=gl_group.web_url,
                                                     parent=parent,
-                                                    title=gl_group.name)
+                                                    title=gl_group.name,
+                                                    full_title=gl_group.full_name)
 
         gl_groups.remove(gl_group)
 
