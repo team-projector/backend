@@ -86,6 +86,6 @@ deploy-dev:
   - ssh deploy@${DEV_HOST} "/opt/deploy/deploy.sh"
   environment:
     name: dev
-    url: http://${DEV_HOST}/admin/
+    url: https://${DEV_HOST}/admin/
   only:
   - master
