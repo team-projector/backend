@@ -18,6 +18,7 @@ VENDOR_APPS = [
     'rest_framework',
     'rest_framework_swagger',
     'corsheaders',
+    'admin_auto_filters',
 ]
 
 INSTALLED_APPS = VENDOR_APPS + DJANGO_APPS + PROJECT_APPS
