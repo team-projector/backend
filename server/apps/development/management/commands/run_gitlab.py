@@ -17,9 +17,9 @@ class Command(BaseCommand):
         # for project in group.projects.list():
         #     print(project)
 
-        project = gl.projects.get(9419749)
-        labels = project.labels.list(all=True)
-        t = 9
+        # project = gl.projects.get(9419749)
+        # labels = project.labels.list(all=True)
+        # t = 9
 
         # for note in issue.notes.list(all=True):
         #     print(f'-- {note}')
