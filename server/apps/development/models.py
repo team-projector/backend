@@ -1,4 +1,3 @@
-from django.contrib.postgres.fields import ArrayField
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
@@ -52,6 +51,14 @@ class Project(GitlabEntityMixin):
         ordering = ('full_title', 'title')
 
 
+class Label(models.Model):
+    title = models.CharField(max_length=255, verbose_name=_('VN__TITLE'), help_text=_('HT__TITLE'))
+    color = models.CharField(max_length=10, verbose_name=_('VN__COLOR'), help_text=_('HT__COLOR'))
+
+    def __str__(self):
+        return self.title
+
+
 class Issue(GitlabEntityMixin):
     title = models.CharField(max_length=255, verbose_name=_('VN__TITLE'), help_text=_('HT__TITLE'))
     project = models.ForeignKey(Project, models.SET_NULL, null=True, blank=True,
@@ -69,10 +76,9 @@ class Issue(GitlabEntityMixin):
     state = models.CharField(max_length=255, null=True, blank=True, verbose_name=_('VN__STATE'),
                              help_text=_('HT__STATE'))
 
-    labels = ArrayField(models.CharField(max_length=255, blank=True), null=True, blank=True,
-                        verbose_name=_('VN__LABELS'), help_text=_('HT__LABELS'))
-
     created_at = models.DateTimeField(null=True, blank=True)
+
+    labels = models.ManyToManyField(Label, related_name='issues', blank=True)
 
     objects = IssueManager()
 

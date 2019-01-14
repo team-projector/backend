@@ -32,4 +32,4 @@ def sync_project_issue(project_id: int, iid: int) -> None:
     gl_project = gl.projects.get(project_id)
     gl_issue = gl_project.issues.get(iid)
 
-    load_project_issue(project, gl_issue)
+    load_project_issue(project, gl_project, gl_issue)

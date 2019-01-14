@@ -2,12 +2,18 @@ from admin_auto_filters.filters import AutocompleteFilter
 from django.contrib import admin
 
 from apps.core.admin.base import BaseModelAdmin
-from apps.development.models import Issue, Project, ProjectGroup
+from apps.development.models import Issue, Label, Project, ProjectGroup
 
 
 class ProjectFilter(AutocompleteFilter):
     title = 'Project'
     field_name = 'project'
+
+
+@admin.register(Label)
+class LabelAdmin(BaseModelAdmin):
+    list_display = ('title', 'color')
+    search_fields = ('title',)
 
 
 @admin.register(ProjectGroup)

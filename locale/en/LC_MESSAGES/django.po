@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-12-16 22:21+0300\n"
+"POT-Creation-Date: 2019-01-14 22:19+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -45,113 +45,113 @@ msgstr "GitLab last sync"
 msgid "VN__DEVELOPMENT"
 msgstr "Development"
 
-#: server/apps/development/models.py:11 server/apps/development/models.py:29
-#: server/apps/development/models.py:56
+#: server/apps/development/models.py:10 server/apps/development/models.py:28
+#: server/apps/development/models.py:55 server/apps/development/models.py:63
 msgid "VN__TITLE"
 msgstr "Title"
 
-#: server/apps/development/models.py:11 server/apps/development/models.py:29
-#: server/apps/development/models.py:56
+#: server/apps/development/models.py:10 server/apps/development/models.py:28
+#: server/apps/development/models.py:55 server/apps/development/models.py:63
 msgid "HT__TITLE"
 msgstr "Title"
 
-#: server/apps/development/models.py:12 server/apps/development/models.py:30
+#: server/apps/development/models.py:11 server/apps/development/models.py:29
 msgid "VN__FULL_TITLE"
 msgstr "Full title"
 
-#: server/apps/development/models.py:13 server/apps/development/models.py:31
+#: server/apps/development/models.py:12 server/apps/development/models.py:30
 msgid "HT__FULL_TITLE"
 msgstr "Full title"
 
-#: server/apps/development/models.py:14
+#: server/apps/development/models.py:13
 msgid "VN__PARENT"
 msgstr "Parent"
 
-#: server/apps/development/models.py:15
+#: server/apps/development/models.py:14
 msgid "HT__PARENT"
 msgstr "Parent"
 
-#: server/apps/development/models.py:23
+#: server/apps/development/models.py:22
 msgid "VN__PROJECT_GROUP"
 msgstr "Project group"
 
-#: server/apps/development/models.py:24
+#: server/apps/development/models.py:23
 msgid "VN__PROJECT_GROUPS"
 msgstr "Project groups"
 
-#: server/apps/development/models.py:33
+#: server/apps/development/models.py:32
 msgid "VN__GROUP"
 msgstr "Group"
 
-#: server/apps/development/models.py:33
+#: server/apps/development/models.py:32
 msgid "HT__GROUP"
 msgstr "Group"
 
-#: server/apps/development/models.py:35
+#: server/apps/development/models.py:34
 msgid "VN__GITLAB_LAST_ISSUES_SYNC"
 msgstr "GitLab issues last sync"
 
-#: server/apps/development/models.py:36
+#: server/apps/development/models.py:35
 msgid "HT__GITLAB_LAST_ISSUES_SYNC"
 msgstr "GitLab issues last sync"
 
-#: server/apps/development/models.py:50 server/apps/development/models.py:58
+#: server/apps/development/models.py:49 server/apps/development/models.py:65
 msgid "VN__PROJECT"
 msgstr "Project"
 
-#: server/apps/development/models.py:51
+#: server/apps/development/models.py:50
 msgid "VN__PROJECTS"
 msgstr "Projects"
 
-#: server/apps/development/models.py:58
+#: server/apps/development/models.py:56
+msgid "VN__COLOR"
+msgstr "Color"
+
+#: server/apps/development/models.py:56
+msgid "HT__COLOR"
+msgstr "Color"
+
+#: server/apps/development/models.py:65
 msgid "HT__PROJECT"
 msgstr "Project"
 
-#: server/apps/development/models.py:60
+#: server/apps/development/models.py:67
 msgid "VN__TIME_ESTIMATE"
 msgstr "Estimate time"
 
-#: server/apps/development/models.py:61
+#: server/apps/development/models.py:68
 msgid "HT__TIME_ESTIMATE"
 msgstr "Estimate time"
 
-#: server/apps/development/models.py:63
+#: server/apps/development/models.py:70
 msgid "VN__TOTAL_TIME_SPENT"
 msgstr "Total spent time"
 
-#: server/apps/development/models.py:64
+#: server/apps/development/models.py:71
 msgid "HT__TOTAL_TIME_SPENT"
 msgstr "Total spent time"
 
-#: server/apps/development/models.py:66 server/apps/payroll/models.py:14
+#: server/apps/development/models.py:73 server/apps/payroll/models.py:14
 msgid "VN__EMPLOYEE"
 msgstr "Employee"
 
-#: server/apps/development/models.py:67 server/apps/payroll/models.py:15
+#: server/apps/development/models.py:74 server/apps/payroll/models.py:15
 msgid "HT__EMPLOYEE"
 msgstr "Employee"
 
-#: server/apps/development/models.py:69
+#: server/apps/development/models.py:76
 msgid "VN__STATE"
 msgstr "State"
 
-#: server/apps/development/models.py:70
+#: server/apps/development/models.py:77
 msgid "HT__STATE"
 msgstr "State"
 
-#: server/apps/development/models.py:73
-msgid "VN__LABELS"
-msgstr "Labels"
-
-#: server/apps/development/models.py:73
-msgid "HT__LABELS"
-msgstr "Labels"
-
-#: server/apps/development/models.py:83
+#: server/apps/development/models.py:89
 msgid "VN__ISSUE"
 msgstr "Issue"
 
-#: server/apps/development/models.py:84
+#: server/apps/development/models.py:90
 msgid "VN__ISSUES"
 msgstr "Issues"
 
@@ -242,3 +242,9 @@ msgstr "Admin Dashboard"
 #: server/urls.py:10
 msgid "VN__API"
 msgstr "API"
+
+#~ msgid "VN__LABELS"
+#~ msgstr "Labels"
+
+#~ msgid "HT__LABELS"
+#~ msgstr "Labels"

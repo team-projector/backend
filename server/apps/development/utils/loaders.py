@@ -8,7 +8,7 @@ from django.utils.timezone import make_aware
 from gitlab.v4.objects import Group as GlGroup, Project as GlProject, ProjectIssue as GlProjectIssue
 
 from apps.core.gitlab import get_gitlab_client
-from apps.development.models import Issue, Project, ProjectGroup
+from apps.development.models import Issue, Label, Project, ProjectGroup
 from apps.users.models import User
 
 GITLAB_DATETIME_FORMAT = '%Y-%m-%dT%H:%M:%S.%fZ'
@@ -62,7 +62,7 @@ def load_projects() -> None:
             print(f'Project "{project}" is synced')
 
 
-def check_project_webhooks(gl_project: GlProject):
+def check_project_webhooks(gl_project: GlProject) -> None:
     hooks = gl_project.hooks.list()
 
     webhook_url = f'https://{settings.SITE_DOMAIN}{reverse("gl-webhook")}'
@@ -76,9 +76,9 @@ def check_project_webhooks(gl_project: GlProject):
     })
 
 
-def load_issues() -> None:
+def load_issues(full_reload: bool = False) -> None:
     for project in Project.objects.all():
-        load_project_issues(project)
+        load_project_issues(project, full_reload)
 
 
 def load_project_issues(project: Project, full_reload: bool = False) -> None:
@@ -98,22 +98,44 @@ def load_project_issues(project: Project, full_reload: bool = False) -> None:
     project.save(update_fields=['gl_last_issues_sync'])
 
     for gl_issue in gl_project.issues.list(**args):
-        load_project_issue(project, gl_issue)
+        load_project_issue(project, gl_project, gl_issue)
 
 
-def load_project_issue(project: Project, gl_issue: GlProjectIssue):
+def load_project_issue(project: Project, gl_project: GlProject, gl_issue: GlProjectIssue) -> None:
     issue, _ = Issue.objects.sync_gitlab(gl_id=gl_issue.id,
                                          project=project,
                                          title=gl_issue.title,
                                          total_time_spent=gl_issue.time_stats()['total_time_spent'],
                                          time_estimate=gl_issue.time_stats()['time_estimate'],
                                          state=gl_issue.state,
-                                         labels=gl_issue.labels,
                                          gl_url=gl_issue.web_url,
                                          created_at=parse_date(gl_issue.created_at),
                                          employee=extract_user_from_data(gl_issue.assignee))
 
+    load_issue_labels(issue, gl_project, gl_issue)
+
     print(f'Issue "{issue}" is synced')
+
+
+def load_issue_labels(issue: Issue, gl_project: GlProject, gl_issue: GlProjectIssue) -> None:
+    project_labels = getattr(gl_project, '_cache_labels', None)
+    if project_labels is None:
+        project_labels = gl_project.labels.list(all=True)
+        setattr(gl_project, '_cache_labels', project_labels)
+
+    labels = []
+
+    for label_title in gl_issue.labels:
+        label = Label.objects.filter(title=label_title).first()
+        if not label:
+            gl_label = next((x for x in project_labels if x.name == label_title), None)
+            if gl_label:
+                label = Label.objects.create(title=label_title, color=gl_label.color)
+
+        if label:
+            labels.append(label)
+
+    issue.labels.set(labels)
 
 
 def extract_user_from_data(data: dict) -> Optional[User]:
