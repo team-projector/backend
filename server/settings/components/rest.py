@@ -3,7 +3,7 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.IsAuthenticated',
     ],
     'DEFAULT_AUTHENTICATION_CLASSES': [
-        'apps.core.rest.expiring_token.ExpiringTokenAuthentication'
+        'apps.users.rest.authentication.TokenAuthentication'
     ],
     'DEFAULT_RENDERER_CLASSES': [
         'rest_framework.renderers.JSONRenderer',
@@ -15,4 +15,4 @@ REST_FRAMEWORK = {
     'SEARCH_PARAM': 'q'
 }
 
-REST_FRAMEWORK_TOKEN_EXPIRE_MINUTES = 60 * 24
+REST_FRAMEWORK_TOKEN_EXPIRE = 60 * 24  # mins

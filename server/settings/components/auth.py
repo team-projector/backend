@@ -17,9 +17,6 @@ AUTH_USER_MODEL = 'users.User'
 
 ACCOUNT_USER_MODEL_USERNAME_FIELD = 'login'
 
-LOGIN_REDIRECT_URL = '/admin/'
-
-
 AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
 ]

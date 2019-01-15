@@ -11,6 +11,7 @@ schema_view = get_swagger_view(title=_('VN__API'))
 
 urlpatterns = [
     path('api/', include('apps.development.rest.urls')),
+    path('api/', include('apps.users.rest.urls')),
     path('api/docs/', schema_view),
     path('admin/', admin.site.urls),
 ]
