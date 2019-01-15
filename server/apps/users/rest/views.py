@@ -28,7 +28,6 @@ class LoginView(GenericAPIView):
 
 class LogoutView(APIView):
     def post(self, request):
-        request.auth.marked_for_delete = timezone.now()
-        request.auth.save()
+        request.auth.delete()
 
         return Response()

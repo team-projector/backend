@@ -4,7 +4,8 @@ import sys
 from django.db import transaction
 from rest_framework.test import APITestCase
 
-from apps.users.models import Token, User
+from apps.users.models import User
+from apps.users.utils.token import create_user_token
 
 USER_LOGIN = 'test_test'
 USER_PASSWORD = '1234560'
@@ -57,23 +58,15 @@ class BaseTestMixin:
         return f
 
 
-class BaseAPITest(BaseTestMixin,
-                  APITestCase):
-
-    def create_user_token(self, user=None):
-        if not user:
-            user = self.user
-
-        return Token.objects.create(user=user)
-
-    def set_credentials(self, token=None, user=None):
+class BaseAPITest(BaseTestMixin, APITestCase):
+    def set_credentials(self, user=None, token=None):
         if not user:
             user = self.user
 
         if token is None:
-            token = self.create_user_token(user)
+            token = create_user_token(user)
 
-        self.client.credentials(HTTP_AUTHORIZATION=f'Token {token.key}')
+        self.client.credentials(HTTP_AUTHORIZATION=f'Bearer {token.key}')
 
     def add_client_header(self, key, value):
         self.client._credentials[key] = value
