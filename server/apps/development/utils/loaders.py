@@ -5,7 +5,9 @@ from django.conf import settings
 from django.urls import reverse
 from django.utils import timezone
 from django.utils.timezone import make_aware
+from gitlab import GitlabGetError
 from gitlab.v4.objects import Group as GlGroup, Project as GlProject, ProjectIssue as GlProjectIssue
+from rest_framework import status
 
 from apps.core.gitlab import get_gitlab_client
 from apps.development.models import Issue, Label, Project, ProjectGroup
@@ -45,11 +47,19 @@ def load_groups() -> None:
 
 
 def load_projects() -> None:
+    for group in ProjectGroup.objects.all():
+        load_group_projects(group)
+
+
+def load_group_projects(group: ProjectGroup) -> None:
     gl = get_gitlab_client()
 
-    for group in ProjectGroup.objects.all():
+    try:
         gl_group = gl.groups.get(id=group.gl_id)
-
+    except GitlabGetError as e:
+        if e.response_code != status.HTTP_404_NOT_FOUND:
+            raise
+    else:
         for gl_project in gl_group.projects.list(all=True):
             project, _ = Project.objects.sync_gitlab(gl_id=gl_project.id,
                                                      gl_url=gl_project.web_url,
@@ -79,11 +89,11 @@ def check_project_webhooks(gl_project: GlProject) -> None:
 
 def load_issues(full_reload: bool = False) -> None:
     for project in Project.objects.all():
-        # TODO improve
         try:
             load_project_issues(project, full_reload)
-        except:
-            pass
+        except GitlabGetError as e:
+            if e.response_code != status.HTTP_404_NOT_FOUND:
+                raise
 
 
 def load_project_issues(project: Project, full_reload: bool = False) -> None:

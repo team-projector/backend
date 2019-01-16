@@ -1,6 +1,8 @@
 import gitlab
 from django.core.management.base import BaseCommand
 
+from apps.development.models import Project
+
 GROUP_ID = 4018796
 PROJECT_ID = 9419749
 
@@ -20,9 +22,12 @@ class Command(BaseCommand):
         # for project in group.projects.list():
         #     print(project)
 
-        # project = Project.objects.get(gl_id=9419749)
+        # project = Project.objects.get(gl_id=94197492)
         #
-        # # project = gl.projects.get(9419749)
+        try:
+            project = gl.projects.get(9419749321321)
+        except gitlab.GitlabGetError as e:
+            t = 0
         #
         # load_project_issues(project, True)
         # labels = project.labels.list(all=True)
