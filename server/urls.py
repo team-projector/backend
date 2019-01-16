@@ -11,11 +11,11 @@ from apps.development.rest.views import gl_webhook
 admin.site.site_header = _('VN__ADMIN_DASHBOARD')
 
 urlpatterns = [
-    path('api', include((get_module_url_patterns(
+    path('api/', include((get_module_url_patterns(
         'apps.users.rest.urls',
         'apps.development.rest.urls',
     ), 'urls'), namespace='api')),
-    path('api/docs/', get_swagger_view(title=_('VN__API')), name='swagger'),
+    path('api/docs/', get_swagger_view(title='API'), name='swagger'),
     path('admin/', admin.site.urls),
     path('gl-webhook', gl_webhook, name='gl-webhook'),
 ]

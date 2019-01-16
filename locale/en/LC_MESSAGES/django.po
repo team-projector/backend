@@ -243,8 +243,3 @@ msgstr "Admin Dashboard"
 msgid "VN__API"
 msgstr "API"
 
-#~ msgid "VN__LABELS"
-#~ msgstr "Labels"
-
-#~ msgid "HT__LABELS"
-#~ msgstr "Labels"

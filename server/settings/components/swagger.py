@@ -13,7 +13,7 @@ SWAGGER_SETTINGS = {
     'DOC_EXPANSION': None,
     'APIS_SORTER': None,
     'OPERATIONS_SORTER': None,
-    'JSON_EDITOR': False,
+    'JSON_EDITOR': True,
     'SHOW_REQUEST_HEADERS': False,
     'SUPPORTED_SUBMIT_METHODS': [
         'get',

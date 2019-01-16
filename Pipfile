@@ -20,6 +20,8 @@ xlsxwriter = "*"
 python-dateutil = "*"
 django-admin-autocomplete-filter = "*"
 django-extensions = "*"
+factory-boy = "*"
+django-filter = "*"
 
 [dev-packages]
 "flake8" = "*"
