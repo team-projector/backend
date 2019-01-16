@@ -15,6 +15,7 @@ DJANGO_APPS = [
 ]
 
 VENDOR_APPS = [
+    'django_extensions',
     'rest_framework',
     'rest_framework_swagger',
     'corsheaders',

@@ -1,9 +1,11 @@
-from django.urls import path
+from django.urls import include, path
 
-from .views import gl_webhook
+from .views import MeIssues
 
-appname = 'development'
+app_name = 'development'
 
 urlpatterns = [
-    path('gl-webhook', gl_webhook, name='gl-webhook')
+    path('me/', include(([
+                             path('issues', MeIssues.as_view(), name='issues'),
+                         ], app_name), namespace='me'))
 ]

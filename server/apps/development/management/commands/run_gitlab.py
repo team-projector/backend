@@ -1,6 +1,9 @@
 import gitlab
 from django.core.management.base import BaseCommand
 
+from apps.development.models import Project
+from apps.development.utils.loaders import load_project_issues
+
 GROUP_ID = 4018796
 PROJECT_ID = 9419749
 
@@ -10,6 +13,9 @@ class Command(BaseCommand):
         gl = gitlab.Gitlab('https://www.gitlab.com', private_token='M6wM1-ZeeCPzPm4Z9PzS')
         gl.auth()
 
+        # t = load_module_from_app('apps.users', 'models')
+        # t = 9
+
         # for group in gl.groups.list(all=True):
         #     print(group)
 
@@ -17,9 +23,13 @@ class Command(BaseCommand):
         # for project in group.projects.list():
         #     print(project)
 
+        project = Project.objects.get(gl_id=9419749)
+
         # project = gl.projects.get(9419749)
+
+        load_project_issues(project, True)
         # labels = project.labels.list(all=True)
-        # t = 9
+        t = 9
 
         # for note in issue.notes.list(all=True):
         #     print(f'-- {note}')

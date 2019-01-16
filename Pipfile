@@ -19,6 +19,7 @@ redis="==2.10.6"
 xlsxwriter = "*"
 python-dateutil = "*"
 django-admin-autocomplete-filter = "*"
+django-extensions = "*"
 
 [dev-packages]
 "flake8" = "*"

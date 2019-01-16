@@ -5,15 +5,19 @@ from django.urls import include, path
 from django.utils.translation import gettext_lazy as _
 from rest_framework_swagger.views import get_swagger_view
 
+from apps.core.utils.modules import get_module_url_patterns
+from apps.development.rest.views import gl_webhook
+
 admin.site.site_header = _('VN__ADMIN_DASHBOARD')
 
-schema_view = get_swagger_view(title=_('VN__API'))
-
 urlpatterns = [
-    path('api/', include('apps.development.rest.urls')),
-    path('api/', include('apps.users.rest.urls')),
-    path('api/docs/', schema_view),
+    path('api', include((get_module_url_patterns(
+        'apps.users.rest.urls',
+        'apps.development.rest.urls',
+    ), 'urls'), namespace='api')),
+    path('api/docs/', get_swagger_view(title=_('VN__API')), name='swagger'),
     path('admin/', admin.site.urls),
+    path('gl-webhook', gl_webhook, name='gl-webhook'),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

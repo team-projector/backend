@@ -2,6 +2,7 @@ import json
 
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
+from rest_framework.generics import GenericAPIView
 
 from apps.development.tasks import sync_project_issue
 
@@ -15,3 +16,6 @@ def gl_webhook(request):
     sync_project_issue.delay(body['project']['id'], body['object_attributes']['iid'])
 
     return HttpResponse()
+
+class MeIssues(GenericAPIView):
+    pass

@@ -78,6 +78,8 @@ class Issue(GitlabEntityMixin):
 
     created_at = models.DateTimeField(null=True, blank=True)
 
+    due_date = models.DateField(null=True, blank=True)
+
     labels = models.ManyToManyField(Label, related_name='issues', blank=True)
 
     objects = IssueManager()

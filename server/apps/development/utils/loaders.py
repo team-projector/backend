@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import date, datetime
 from typing import Optional
 
 from django.conf import settings
@@ -12,6 +12,7 @@ from apps.development.models import Issue, Label, Project, ProjectGroup
 from apps.users.models import User
 
 GITLAB_DATETIME_FORMAT = '%Y-%m-%dT%H:%M:%S.%fZ'
+GITLAB_DATE_FORMAT = '%Y-%m-%d'
 
 
 def load_groups() -> None:
@@ -102,14 +103,16 @@ def load_project_issues(project: Project, full_reload: bool = False) -> None:
 
 
 def load_project_issue(project: Project, gl_project: GlProject, gl_issue: GlProjectIssue) -> None:
+    time_stats = gl_issue.time_stats()
     issue, _ = Issue.objects.sync_gitlab(gl_id=gl_issue.id,
                                          project=project,
                                          title=gl_issue.title,
-                                         total_time_spent=gl_issue.time_stats()['total_time_spent'],
-                                         time_estimate=gl_issue.time_stats()['time_estimate'],
+                                         total_time_spent=time_stats['total_time_spent'],
+                                         time_estimate=time_stats['time_estimate'],
                                          state=gl_issue.state,
+                                         due_date=parse_date(gl_issue.due_date),
                                          gl_url=gl_issue.web_url,
-                                         created_at=parse_date(gl_issue.created_at),
+                                         created_at=parse_date_time(gl_issue.created_at),
                                          employee=extract_user_from_data(gl_issue.assignee))
 
     load_issue_labels(issue, gl_project, gl_issue)
@@ -173,5 +176,15 @@ def load_user(user_id: int) -> User:
     return user
 
 
-def parse_date(s: str) -> datetime:
+def parse_date_time(s: str) -> Optional[datetime]:
+    if not s:
+        return None
+
     return make_aware(datetime.strptime(s, GITLAB_DATETIME_FORMAT))
+
+
+def parse_date(s: str) -> Optional[date]:
+    if not s:
+        return None
+
+    return make_aware(datetime.strptime(s, GITLAB_DATE_FORMAT)).date()
