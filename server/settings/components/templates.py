@@ -1,4 +1,10 @@
-from server.settings.components.paths import PROJECT_TEMPLATES
+from os.path import join
+
+from settings.components.paths import PROJECT_ROOT
+
+PROJECT_TEMPLATES = [
+    join(PROJECT_ROOT, 'templates'),
+]
 
 TEMPLATES = [
     {

@@ -1,6 +1,11 @@
 import os
 
-from server.settings.components.paths import LOGGING_PATH
+from server import BASE_DIR
+
+LOGGING_PATH = BASE_DIR.joinpath('logs')
+
+if not os.path.exists(LOGGING_PATH):
+    os.makedirs(LOGGING_PATH)
 
 LOGGING = {
     'version': 1,
