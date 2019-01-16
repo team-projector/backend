@@ -66,7 +66,7 @@ def load_projects() -> None:
 def check_project_webhooks(gl_project: GlProject) -> None:
     hooks = gl_project.hooks.list()
 
-    webhook_url = f'https://{settings.SITE_DOMAIN}{reverse("gl-webhook")}'
+    webhook_url = f'https://{settings.SITE_DOMAIN}{reverse("api:gl-webhook")}'
 
     if any(hook.url == webhook_url for hook in hooks):
         return
