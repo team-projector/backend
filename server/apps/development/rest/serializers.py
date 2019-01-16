@@ -13,9 +13,7 @@ class LabelSerializer(serializers.ModelSerializer):
 class IssueCardSerializer(serializers.ModelSerializer):
     labels = LabelSerializer(many=True)
     project = LinkSerializer()
-    dueDate = serializers.DateField(source='due_date')
-    timeEstimate = serializers.IntegerField(source='time_estimate')
 
     class Meta:
         model = Issue
-        fields = ('id', 'title', 'labels', 'project', 'dueDate', 'state', 'timeEstimate')
+        fields = ('id', 'title', 'labels', 'project', 'due_date', 'state', 'time_estimate')

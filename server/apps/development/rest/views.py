@@ -23,7 +23,7 @@ def gl_webhook(request):
 
 class MeIssues(generics.ListAPIView):
     serializer_class = IssueCardSerializer
-    queryset = Issue.objects
+    queryset = Issue.objects.all()
     filter_backends = (filters.OrderingFilter, filters.SearchFilter, DjangoFilterBackend)
 
     search_fields = ('title',)
