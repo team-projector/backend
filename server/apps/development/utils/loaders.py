@@ -79,7 +79,11 @@ def check_project_webhooks(gl_project: GlProject) -> None:
 
 def load_issues(full_reload: bool = False) -> None:
     for project in Project.objects.all():
-        load_project_issues(project, full_reload)
+        # TODO improve
+        try:
+            load_project_issues(project, full_reload)
+        except:
+            pass
 
 
 def load_project_issues(project: Project, full_reload: bool = False) -> None:
