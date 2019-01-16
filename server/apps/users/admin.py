@@ -1,5 +1,5 @@
 from django.contrib import admin
-from django.contrib.auth.admin import UserAdmin
+from django.contrib.auth.admin import UserAdmin as DjUserAdmin
 from django.contrib.auth.forms import AdminPasswordChangeForm
 from django.contrib.auth.models import Group
 from django.utils.html import format_html
@@ -12,7 +12,7 @@ admin.site.unregister(Group)
 
 
 @admin.register(User)
-class UserAdmin(UserAdmin):
+class UserAdmin(DjUserAdmin):
     model = User
     list_display = (
         'login', 'last_login', 'is_active', 'is_staff', 'change_password_link'

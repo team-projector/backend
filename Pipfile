@@ -27,6 +27,7 @@ django-filter = "*"
 "flake8" = "*"
 pytest-django = "*"
 ipython = "*"
+mypy = "*"
 
 [requires]
 python_version = "3.6"
