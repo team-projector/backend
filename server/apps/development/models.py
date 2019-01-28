@@ -100,8 +100,8 @@ class Issue(Notable,
     time_estimate = models.PositiveIntegerField(null=True, verbose_name=_('VN__TIME_ESTIMATE'),
                                                 help_text=_('HT__TIME_ESTIMATE'))
 
-    total_time_spent = models.PositiveIntegerField(null=True, verbose_name=_('VN__TOTAL_TIME_SPENT'),
-                                                   help_text=_('HT__TOTAL_TIME_SPENT'))
+    total_spent = models.PositiveIntegerField(null=True, verbose_name=_('VN__TOTAL_SPENT'),
+                                                   help_text=_('HT__TOTAL_SPENT'))
 
     employee = models.ForeignKey(User, models.SET_NULL, null=True, blank=True, verbose_name=_('VN__EMPLOYEE'),
                                  help_text=_('HT__EMPLOYEE'))
