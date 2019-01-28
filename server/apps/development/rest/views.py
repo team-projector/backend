@@ -3,8 +3,9 @@ import json
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework import filters, generics
+from rest_framework import filters, mixins
 
+from apps.core.rest.views import BaseGenericViewSet
 from .serializers import IssueCardSerializer
 from ..models import Issue
 from ..tasks import sync_project_issue
@@ -21,15 +22,16 @@ def gl_webhook(request):
     return HttpResponse()
 
 
-class MeIssues(generics.ListAPIView):
-    serializer_class = IssueCardSerializer
+class IssuesViewset(mixins.ListModelMixin,
+                    BaseGenericViewSet):
+    serializer_classes = {
+        'list': IssueCardSerializer
+    }
+
     queryset = Issue.objects.all()
     filter_backends = (filters.OrderingFilter, filters.SearchFilter, DjangoFilterBackend)
 
     search_fields = ('title',)
-    filter_fields = ('state', 'due_date')
+    filter_fields = ('state', 'due_date', 'employee')
     ordering_fields = ('due_date', 'title', 'created_at')
     ordering = ('due_date',)
-
-    def filter_queryset(self, queryset):
-        return super().filter_queryset(queryset).filter(employee=self.request.user)
