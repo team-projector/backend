@@ -28,8 +28,8 @@ class MeIssues(generics.ListAPIView):
 
     search_fields = ('title',)
     filter_fields = ('state', 'due_date')
-    ordering_fields = ('due_date', 'title')
-    ordering = ('due_date', 'created_at')
+    ordering_fields = ('due_date', 'title', 'created_at')
+    ordering = ('due_date',)
 
     def filter_queryset(self, queryset):
         return super().filter_queryset(queryset).filter(employee=self.request.user)

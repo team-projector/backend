@@ -1,20 +1,16 @@
-from datetime import date, datetime
 from typing import Optional
 
 from django.conf import settings
 from django.urls import reverse
 from django.utils import timezone
-from django.utils.timezone import make_aware
 from gitlab import GitlabGetError
 from gitlab.v4.objects import Group as GlGroup, Project as GlProject, ProjectIssue as GlProjectIssue
 from rest_framework import status
 
 from apps.core.gitlab import get_gitlab_client
-from apps.development.models import Issue, Label, Project, ProjectGroup
 from apps.users.models import User
-
-GITLAB_DATETIME_FORMAT = '%Y-%m-%dT%H:%M:%S.%fZ'
-GITLAB_DATE_FORMAT = '%Y-%m-%d'
+from .parsers import parse_date, parse_datetime
+from ..models import Issue, Label, Note, Project, ProjectGroup
 
 
 def load_groups() -> None:
@@ -126,10 +122,11 @@ def load_project_issue(project: Project, gl_project: GlProject, gl_issue: GlProj
                                          state=gl_issue.state,
                                          due_date=parse_date(gl_issue.due_date),
                                          gl_url=gl_issue.web_url,
-                                         created_at=parse_date_time(gl_issue.created_at),
+                                         created_at=parse_datetime(gl_issue.created_at),
                                          employee=extract_user_from_data(gl_issue.assignee))
 
     load_issue_labels(issue, gl_project, gl_issue)
+    load_issue_notes(issue, gl_issue)
 
     print(f'Issue "{issue}" is synced')
 
@@ -153,6 +150,11 @@ def load_issue_labels(issue: Issue, gl_project: GlProject, gl_issue: GlProjectIs
             labels.append(label)
 
     issue.labels.set(labels)
+
+
+def load_issue_notes(issue: Issue, gl_issue: GlProjectIssue) -> None:
+    for gl_note in gl_issue.notes.list(as_list=False, system=True):
+        Note.objects.sync_gitlab(gl_note, issue)
 
 
 def extract_user_from_data(data: dict) -> Optional[User]:
@@ -188,17 +190,3 @@ def load_user(user_id: int) -> User:
         user.save()
 
     return user
-
-
-def parse_date_time(s: str) -> Optional[datetime]:
-    if not s:
-        return None
-
-    return make_aware(datetime.strptime(s, GITLAB_DATETIME_FORMAT))
-
-
-def parse_date(s: str) -> Optional[date]:
-    if not s:
-        return None
-
-    return make_aware(datetime.strptime(s, GITLAB_DATE_FORMAT)).date()

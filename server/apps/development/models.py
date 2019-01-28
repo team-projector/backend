@@ -1,9 +1,14 @@
+from django.contrib.contenttypes.fields import GenericForeignKey
+from django.contrib.contenttypes.models import ContentType
+from django.contrib.postgres.fields import JSONField
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
 from apps.core.db.mixins import GitlabEntityMixin
-from apps.development.db.managers import IssueManager, ProjectGroupManager, ProjectManager
+from apps.core.db.utils import Choices
 from apps.users.models import User
+from .db.managers import IssueManager, NoteManager, ProjectGroupManager, ProjectManager
+from .db.mixins import Notable
 
 
 class ProjectGroup(GitlabEntityMixin):
@@ -59,7 +64,35 @@ class Label(models.Model):
         return self.title
 
 
-class Issue(GitlabEntityMixin):
+class Note(models.Model):
+    TYPE = Choices(
+        ('time_spend', 'Time spend'),
+        ('reset_spend', 'Reset spend')
+    )
+
+    object_id = models.IntegerField()
+    content_object = GenericForeignKey()
+    content_type = models.ForeignKey(ContentType, models.CASCADE)
+
+    gl_id = models.PositiveIntegerField(verbose_name=_('VN__GITLAB_ID'), help_text=_('HT__GITLAB_ID'))
+
+    user = models.ForeignKey(User, models.SET_NULL, null=True, blank=True, verbose_name=_('VN__EMPLOYEE'),
+                             help_text=_('HT__EMPLOYEE'))
+
+    created_at = models.DateTimeField(null=True, blank=True)
+
+    type = models.CharField(choices=TYPE, max_length=20, verbose_name=_('VN__TYPE'), help_text=_('HT__TYPE'))
+
+    data = JSONField()
+
+    objects = NoteManager()
+
+    def __str__(self):
+        return f'{self.user}: {self.type}'
+
+
+class Issue(Notable,
+            GitlabEntityMixin):
     title = models.CharField(max_length=255, verbose_name=_('VN__TITLE'), help_text=_('HT__TITLE'))
     project = models.ForeignKey(Project, models.SET_NULL, null=True, blank=True,
                                 verbose_name=_('VN__PROJECT'), help_text=_('HT__PROJECT'))

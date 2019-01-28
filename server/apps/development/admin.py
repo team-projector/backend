@@ -2,7 +2,7 @@ from admin_auto_filters.filters import AutocompleteFilter
 from django.contrib import admin
 
 from apps.core.admin.base import BaseModelAdmin
-from apps.development.models import Issue, Label, Project, ProjectGroup
+from apps.development.models import Issue, Label, Note, Project, ProjectGroup
 
 
 class ProjectFilter(AutocompleteFilter):
@@ -33,10 +33,15 @@ class ProjectAdmin(BaseModelAdmin):
 @admin.register(Issue)
 class IssueAdmin(BaseModelAdmin):
     list_display = ('title', 'employee', 'created_at', 'gl_url', 'gl_last_sync')
-    search_fields = ('title',)
+    search_fields = ('title', 'gl_id')
     list_filter = (ProjectFilter,)
     sortable_by = ('gl_last_sync', 'created_at')
     autocomplete_fields = ('project', 'employee')
 
     class Media:
         pass
+
+
+@admin.register(Note)
+class NoteAdmin(BaseModelAdmin):
+    list_display = ('type', 'created_at', 'user')
