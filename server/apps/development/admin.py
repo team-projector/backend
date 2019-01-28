@@ -1,13 +1,18 @@
 from admin_auto_filters.filters import AutocompleteFilter
 from django.contrib import admin
 
-from apps.core.admin.base import BaseModelAdmin
+from apps.core.admin.base import BaseGenericStackedInline, BaseModelAdmin
 from apps.development.models import Issue, Label, Note, Project, ProjectGroup
 
 
 class ProjectFilter(AutocompleteFilter):
     title = 'Project'
     field_name = 'project'
+
+
+class NoteInline(BaseGenericStackedInline):
+    model = Note
+    autocomplete_fields = ('user',)
 
 
 @admin.register(Label)
@@ -33,10 +38,11 @@ class ProjectAdmin(BaseModelAdmin):
 @admin.register(Issue)
 class IssueAdmin(BaseModelAdmin):
     list_display = ('title', 'employee', 'created_at', 'gl_url', 'gl_last_sync')
-    search_fields = ('title', 'gl_id')
     list_filter = (ProjectFilter,)
+    search_fields = ('title', 'gl_id')
     sortable_by = ('gl_last_sync', 'created_at')
     autocomplete_fields = ('project', 'employee')
+    inlines = (NoteInline,)
 
     class Media:
         pass

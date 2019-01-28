@@ -1,5 +1,6 @@
 from django import forms
 from django.contrib import admin
+from django.contrib.contenttypes.admin import GenericStackedInline, GenericTabularInline
 
 
 class BaseModelAdmin(admin.ModelAdmin):
@@ -12,6 +13,16 @@ class BaseStackedInline(admin.StackedInline):
 
 
 class BaseTabularInline(admin.TabularInline):
+    extra = 0
+    show_change_link = True
+
+
+class BaseGenericStackedInline(GenericStackedInline):
+    extra = 0
+    show_change_link = True
+
+
+class BaseGenericTabularInline(GenericTabularInline):
     extra = 0
     show_change_link = True
 
