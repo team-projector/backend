@@ -15,7 +15,7 @@ admin.site.unregister(Group)
 class UserAdmin(DjUserAdmin):
     model = User
     list_display = (
-        'login', 'last_login', 'is_active', 'is_staff', 'change_password_link'
+        'login', 'name', 'last_login', 'is_active', 'is_staff', 'change_password_link'
     )
     list_filter = ('is_active', 'is_staff', 'is_active')
     ordering = ('login',)

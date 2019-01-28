@@ -170,6 +170,11 @@ def extract_user_from_data(data: dict) -> Optional[User]:
     return user
 
 
+def update_users() -> None:
+    for user in User.objects.filter(gl_id__isnull=False):
+        load_user(user.gl_id)
+
+
 def load_user(user_id: int) -> User:
     gl = get_gitlab_client()
 
@@ -179,6 +184,7 @@ def load_user(user_id: int) -> User:
         gl_id=gl_user.id,
         defaults={
             'login': gl_user.username,
+            'name': gl_user.name,
             'gl_avatar': gl_user.avatar_url,
             'gl_url': gl_user.web_url,
             'gl_last_sync': timezone.now()
@@ -188,5 +194,7 @@ def load_user(user_id: int) -> User:
         user.is_active = False
         user.is_staff = False
         user.save()
+
+    print(f'Issue "{user}" is synced')
 
     return user

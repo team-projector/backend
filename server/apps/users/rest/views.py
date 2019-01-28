@@ -5,7 +5,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from apps.users.utils.token import create_user_token
-from .serializers import LoginSerializer, TokenSerializer
+from .serializers import LoginSerializer, TokenSerializer, UserSerializer
 
 
 class LoginView(GenericAPIView):
@@ -31,3 +31,10 @@ class LogoutView(APIView):
         request.auth.delete()
 
         return Response()
+
+
+class MeUserView(GenericAPIView):
+    serializer_class = UserSerializer
+
+    def get(self, request):
+        return Response(self.get_serializer(request.user).data)

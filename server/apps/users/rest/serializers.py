@@ -4,7 +4,7 @@ from rest_framework import serializers
 from rest_framework.exceptions import AuthenticationFailed
 
 from apps.users.rest.authentication import TokenAuthentication
-from ..models import Token
+from ..models import Token, User
 
 
 class LoginSerializer(serializers.Serializer):
@@ -43,3 +43,9 @@ class TokenSerializer(serializers.ModelSerializer):
     class Meta:
         model = Token
         fields = ('token', 'type')
+
+
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ('id', 'name', 'login', 'hour_rate', 'gl_avatar', 'gl_url')
