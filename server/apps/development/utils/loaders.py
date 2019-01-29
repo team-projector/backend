@@ -117,7 +117,7 @@ def load_project_issue(project: Project, gl_project: GlProject, gl_issue: GlProj
     issue, _ = Issue.objects.sync_gitlab(gl_id=gl_issue.id,
                                          project=project,
                                          title=gl_issue.title,
-                                         total_spent=time_stats['total_time_spent'],
+                                         total_time_spent=time_stats['total_time_spent'],
                                          time_estimate=time_stats['time_estimate'],
                                          state=gl_issue.state,
                                          due_date=parse_date(gl_issue.due_date),

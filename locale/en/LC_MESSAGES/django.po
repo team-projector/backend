@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-01-28 18:14+0300\n"
+"POT-Creation-Date: 2019-01-29 11:39+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -152,11 +152,11 @@ msgid "HT__TIME_ESTIMATE"
 msgstr "Estimate time"
 
 #: server/apps/development/models.py:103
-msgid "VN__TOTAL_SPENT"
+msgid "VN__TOTAL_TIME_SPENT"
 msgstr "Total spent time"
 
 #: server/apps/development/models.py:104
-msgid "HT__TOTAL_SPENT"
+msgid "HT__TOTAL_TIME_SPENT"
 msgstr "Total spent time"
 
 #: server/apps/development/models.py:109
@@ -275,5 +275,3 @@ msgstr "English"
 msgid "VN__ADMIN_DASHBOARD"
 msgstr "Admin Dashboard"
 
-#~ msgid "VN__API"
-#~ msgstr "API"

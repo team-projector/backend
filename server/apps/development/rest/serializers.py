@@ -16,4 +16,4 @@ class IssueCardSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Issue
-        fields = ('id', 'title', 'labels', 'project', 'due_date', 'state', 'time_estimate', 'total_spent')
+        fields = ('id', 'title', 'labels', 'project', 'due_date', 'state', 'time_estimate', 'total_time_spent')
