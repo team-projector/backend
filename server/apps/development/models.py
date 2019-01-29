@@ -4,7 +4,6 @@ from django.contrib.postgres.fields import JSONField
 from django.db import models
 from django.db.models import Max
 from django.utils.functional import cached_property
-from django.utils.timezone import make_aware
 from django.utils.translation import gettext_lazy as _
 
 from apps.core.db.mixins import GitlabEntityMixin
@@ -139,5 +138,4 @@ class Issue(Notable,
 
     @cached_property
     def last_note_date(self):
-        last_created = self.notes.aggregate(last_created=Max('created_at'))['last_created']
-        return make_aware(last_created) if last_created else None
+        return self.notes.aggregate(last_created=Max('created_at'))['last_created']
