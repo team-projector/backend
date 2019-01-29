@@ -1,6 +1,7 @@
 from datetime import date, datetime, timedelta
 
 from django.test import TestCase
+from django.utils import timezone
 
 from apps.core.utils.objects import dict2obj
 from apps.development.models import Note
@@ -126,3 +127,47 @@ class LoadNotesTests(TestCase):
         }), self.issue)
 
         self.assertEqual(Note.objects.count(), 2)
+
+    def test_load_spend_has_prior(self):
+        Note.objects.create(
+            gl_id=3,
+            content_object=self.issue,
+            user=self.user,
+            created_at=timezone.now() - timedelta(hours=1),
+            data={}
+        )
+
+        self.assertEqual(Note.objects.count(), 1)
+
+        Note.objects.sync_gitlab(dict2obj({
+            'id': 2,
+            'body': f'added 1h 1m of time spent at {date.today():{GITLAB_DATE_FORMAT}}',
+            'created_at': datetime.strftime(datetime.now(), GITLAB_DATETIME_FORMAT),
+            'author': {
+                'id': self.user.gl_id
+            }
+        }), self.issue)
+
+        self.assertEqual(Note.objects.count(), 2)
+
+    def test_load_spend_has_after(self):
+        Note.objects.create(
+            gl_id=3,
+            content_object=self.issue,
+            user=self.user,
+            created_at=timezone.now(),
+            data={}
+        )
+
+        self.assertEqual(Note.objects.count(), 1)
+
+        Note.objects.sync_gitlab(dict2obj({
+            'id': 2,
+            'body': f'added 1h 1m of time spent at {date.today():{GITLAB_DATE_FORMAT}}',
+            'created_at': datetime.strftime(timezone.now() - timedelta(hours=1), GITLAB_DATETIME_FORMAT),
+            'author': {
+                'id': self.user.gl_id
+            }
+        }), self.issue)
+
+        self.assertEqual(Note.objects.count(), 1)

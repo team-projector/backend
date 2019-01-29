@@ -2,6 +2,9 @@ from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.postgres.fields import JSONField
 from django.db import models
+from django.db.models import Max
+from django.utils.functional import cached_property
+from django.utils.timezone import make_aware
 from django.utils.translation import gettext_lazy as _
 
 from apps.core.db.mixins import GitlabEntityMixin
@@ -20,13 +23,13 @@ class ProjectGroup(GitlabEntityMixin):
 
     objects = ProjectGroupManager()
 
-    def __str__(self):
-        return self.title
-
     class Meta:
         verbose_name = _('VN__PROJECT_GROUP')
         verbose_name_plural = _('VN__PROJECT_GROUPS')
         ordering = ('title',)
+
+    def __str__(self):
+        return self.title
 
 
 class Project(GitlabEntityMixin):
@@ -41,6 +44,11 @@ class Project(GitlabEntityMixin):
 
     objects = ProjectManager()
 
+    class Meta:
+        verbose_name = _('VN__PROJECT')
+        verbose_name_plural = _('VN__PROJECTS')
+        ordering = ('full_title', 'title')
+
     def __str__(self):
         return self.full_title or self.title
 
@@ -50,15 +58,14 @@ class Project(GitlabEntityMixin):
 
         super().save(*args, **kwargs)
 
-    class Meta:
-        verbose_name = _('VN__PROJECT')
-        verbose_name_plural = _('VN__PROJECTS')
-        ordering = ('full_title', 'title')
-
 
 class Label(models.Model):
     title = models.CharField(max_length=255, verbose_name=_('VN__TITLE'), help_text=_('HT__TITLE'))
     color = models.CharField(max_length=10, verbose_name=_('VN__COLOR'), help_text=_('HT__COLOR'))
+
+    class Meta:
+        verbose_name = _('VN__LABEL')
+        verbose_name_plural = _('VN__LABELS')
 
     def __str__(self):
         return self.title
@@ -86,6 +93,11 @@ class Note(models.Model):
     data = JSONField()
 
     objects = NoteManager()
+
+    class Meta:
+        verbose_name = _('VN__NOTE')
+        verbose_name_plural = _('VN__NOTES')
+        ordering = ('-created_at',)
 
     def __str__(self):
         return f'{self.user}: {self.type}'
@@ -117,10 +129,15 @@ class Issue(Notable,
 
     objects = IssueManager()
 
-    def __str__(self):
-        return self.title
-
     class Meta:
         verbose_name = _('VN__ISSUE')
         verbose_name_plural = _('VN__ISSUES')
         ordering = ('-created_at',)
+
+    def __str__(self):
+        return self.title
+
+    @cached_property
+    def last_note_date(self):
+        last_created = self.notes.aggregate(last_created=Max('created_at'))['last_created']
+        return make_aware(last_created) if last_created else None

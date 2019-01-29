@@ -29,13 +29,16 @@ class NoteManager(models.Manager):
         from ..utils.notes import read_note
         from ..utils.parsers import parse_datetime
 
-        note = issue.notes.filter(gl_id=gl_note.id).first()
-        if note:
-            return note
+        if issue.last_note_date and issue.last_note_date > parse_datetime(gl_note.created_at):
+            return
 
         parse_data = read_note(gl_note)
         if not parse_data:
             return
+
+        note = issue.notes.filter(gl_id=gl_note.id).first()
+        if note:
+            return note
 
         return self.create(
             gl_id=gl_note.id,
