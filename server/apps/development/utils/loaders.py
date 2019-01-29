@@ -156,6 +156,8 @@ def load_issue_notes(issue: Issue, gl_issue: GlProjectIssue) -> None:
     for gl_note in gl_issue.notes.list(as_list=False, system=True):
         Note.objects.sync_gitlab(gl_note, issue)
 
+    issue.adjust_notes_spent()
+
 
 def extract_user_from_data(data: dict) -> Optional[User]:
     if not data:

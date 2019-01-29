@@ -1,3 +1,5 @@
+from collections import defaultdict
+
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.postgres.fields import JSONField
@@ -139,3 +141,15 @@ class Issue(Notable,
     @cached_property
     def last_note_date(self):
         return self.notes.aggregate(last_created=Max('created_at'))['last_created']
+
+    def adjust_notes_spent(self):
+        users_spents = defaultdict(int)
+
+        for note in self.notes.all().order_by('created_at'):
+            if note.type == Note.TYPE.reset_spend:
+                note.data['spent'] = -users_spents[note.user_id]
+                note.save()
+
+                users_spents[note.user_id] = 0
+            elif note.type == Note.TYPE.time_spend:
+                users_spents[note.user_id] += note.data['spent']

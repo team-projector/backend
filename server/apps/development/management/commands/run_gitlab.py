@@ -43,9 +43,9 @@ class Command(BaseCommand):
 
         load_issue_notes(issue, gl_issue)
 
-        # for gl_note in gl_issue.notes.list(as_list=False, system=True):
-        #     # Note.objects.sync_gitlab(gl_note, issue)
-        #     print(f'-- {gl_note}')
+        for gl_note in gl_issue.notes.list(as_list=False, system=True, sort='asc'):
+            # Note.objects.sync_gitlab(gl_note, issue)
+            print(f'-- {gl_note}')
 
         # merge_request = project.mergerequests.get(id=1)
         #
