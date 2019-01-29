@@ -123,4 +123,4 @@ class Issue(Notable,
     class Meta:
         verbose_name = _('VN__ISSUE')
         verbose_name_plural = _('VN__ISSUES')
-        ordering = ('title',)
+        ordering = ('-created_at',)
