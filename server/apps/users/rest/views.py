@@ -1,14 +1,16 @@
 from django.utils import timezone
-from rest_framework.generics import GenericAPIView
+from rest_framework import mixins
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
+from apps.core.rest.views import BaseGenericAPIView, BaseGenericViewSet, LinksViewMixin
+from apps.users.models import User
 from apps.users.utils.token import create_user_token
 from .serializers import LoginSerializer, TokenSerializer, UserSerializer
 
 
-class LoginView(GenericAPIView):
+class LoginView(BaseGenericAPIView):
     permission_classes = (AllowAny,)
     serializer_class = LoginSerializer
 
@@ -33,8 +35,17 @@ class LogoutView(APIView):
         return Response()
 
 
-class MeUserView(GenericAPIView):
+class MeUserView(BaseGenericAPIView):
     serializer_class = UserSerializer
 
     def get(self, request):
         return Response(self.get_serializer(request.user).data)
+
+
+class UsersViewset(LinksViewMixin,
+                   mixins.RetrieveModelMixin,
+                   BaseGenericViewSet):
+    queryset = User.objects.filter(is_active=True)
+    serializer_classes = {
+        'retrieve': UserSerializer
+    }

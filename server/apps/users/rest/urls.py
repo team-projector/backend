@@ -1,11 +1,12 @@
 from django.urls import include, path
-from rest_framework.routers import DefaultRouter
 
-from apps.users.rest.views import LoginView, LogoutView, MeUserView
+from apps.core.rest.routers import AppRouter
+from apps.users.rest.views import LoginView, LogoutView, MeUserView, UsersViewset
 
 app_name = 'users'
 
-router = DefaultRouter(trailing_slash=False)
+router = AppRouter()
+router.register('users', UsersViewset, basename='users')
 
 urlpatterns = [
     path('login', LoginView.as_view(), name='login'),
@@ -14,5 +15,5 @@ urlpatterns = [
         [
             path('user', MeUserView.as_view(), name='user')
         ], app_name), namespace='me')),
-    path('', include(router.urls)),
+    *router.urls
 ]
