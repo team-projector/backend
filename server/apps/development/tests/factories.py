@@ -45,9 +45,10 @@ class IssueFactory(factory.django.DjangoModelFactory):
         model = Issue
 
 
-class NoteFactory(factory.django.DjangoModelFactory):
+class IssueNoteFactory(factory.django.DjangoModelFactory):
     gl_id = factory.Faker('random_int', min=0, max=9999)
     created_at = factory.Faker('date_time_this_year', before_now=True, after_now=False, tzinfo=pytz.UTC)
+    content_object = factory.SubFactory(IssueFactory)
     data = {}
 
     class Meta:

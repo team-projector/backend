@@ -1,3 +1,4 @@
+import datetime
 import os
 import sys
 
@@ -54,6 +55,7 @@ class BaseTestMixin:
     def open_asset(self, filename, mode='rb', encoding=None):
         module_path = os.path.abspath(sys.modules[self.__module__].__file__)
         f = open(os.path.join(os.path.dirname(module_path), 'assets', filename), mode, encoding=encoding)
+
         self.opened_files.append(f)
         return f
 
@@ -73,3 +75,7 @@ class BaseAPITest(BaseTestMixin, APITestCase):
 
     def clear_client_headers(self):
         self.client._credentials = {}
+
+    @staticmethod
+    def format_date(date: datetime) -> str:
+        return date.strftime('%Y-%m-%d')
