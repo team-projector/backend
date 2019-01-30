@@ -1,7 +1,7 @@
 import factory
 import pytz
 
-from apps.development.models import Issue, Label, Project, ProjectGroup
+from apps.development.models import Issue, Label, Note, Project, ProjectGroup
 
 
 class ProjectGroupFactory(factory.django.DjangoModelFactory):
@@ -43,3 +43,12 @@ class IssueFactory(factory.django.DjangoModelFactory):
     created_at = factory.Faker('date_time_this_year', before_now=True, after_now=False, tzinfo=pytz.UTC)
     gl_id = factory.Faker('random_int', min=0, max=999)
     gl_url = factory.Faker('url')
+
+
+class NoteFactory(factory.django.DjangoModelFactory):
+    class Meta:
+        model = Note
+
+    gl_id = factory.Faker('random_int', min=0, max=9999)
+    created_at = factory.Faker('date_time_this_year', before_now=True, after_now=False, tzinfo=pytz.UTC)
+    data = {}

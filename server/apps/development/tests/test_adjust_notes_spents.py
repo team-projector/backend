@@ -1,11 +1,10 @@
-import random
 from datetime import timedelta
 
 from django.test import TestCase
 from django.utils import timezone
 
 from apps.development.models import Note
-from apps.development.tests.factories import IssueFactory
+from apps.development.tests.factories import IssueFactory, NoteFactory
 from apps.users.models import User
 
 
@@ -86,13 +85,8 @@ class AdjustNotesSpentTests(TestCase):
         self.assertEqual(reset_3.data['spent'], -timedelta(hours=5).total_seconds())
 
     def create_note(self, note_type, created_at, spent: timedelta = None, user=None):
-        data = {'spent': spent.total_seconds()} if spent else {}
-
-        return Note.objects.create(
-            gl_id=random.randint(0, 9999999),
-            type=note_type,
-            created_at=created_at,
-            user=user or self.user,
-            content_object=self.issue,
-            data=data,
-        )
+        return NoteFactory.create(type=note_type,
+                                  created_at=created_at,
+                                  user=user or self.user,
+                                  content_object=self.issue,
+                                  data={'spent': spent.total_seconds()} if spent else {})
