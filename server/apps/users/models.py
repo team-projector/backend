@@ -1,29 +1,9 @@
-from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
+from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 from rest_framework.authtoken.models import Token as BaseToken
 
-
-class CustomUserManager(BaseUserManager):
-    def create_user(self, login, password=None, **kwargs):
-        if not login:
-            raise ValueError(_('VN__USER_MUST_HAVE_A_LOGIN'))
-
-        user = self.model(login=login, **kwargs)
-
-        user.set_password(password)
-        user.save(using=self._db)
-        return user
-
-    def create_superuser(self, login, password):
-        user = self.create_user(
-            login,
-            password=password
-        )
-        user.is_admin = True
-        user.is_superuser = True
-        user.save(using=self._db)
-        return user
+from apps.users.db.managers import CustomUserManager
 
 
 class User(AbstractBaseUser, PermissionsMixin):
@@ -55,6 +35,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     class Meta:
         verbose_name = _('VN__USER')
         verbose_name_plural = _('VN__USERS')
+        ordering = ('login',)
 
     def __str__(self):
         return self.login

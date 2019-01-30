@@ -4,6 +4,8 @@ from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
+from apps.core.rest.views import BaseGenericViewSet, LinksViewMixin
+from apps.users.models import User
 from apps.users.utils.token import create_user_token
 from .serializers import LoginSerializer, TokenSerializer, UserSerializer
 
@@ -38,3 +40,8 @@ class MeUserView(GenericAPIView):
 
     def get(self, request):
         return Response(self.get_serializer(request.user).data)
+
+
+class UsersViewset(LinksViewMixin,
+                   BaseGenericViewSet):
+    queryset = User.objects.filter(is_active=True)

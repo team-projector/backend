@@ -10,5 +10,5 @@ router.register('issues', IssuesViewset, basename='issues')
 
 urlpatterns = [
     path('gl-webhook', gl_webhook, name='gl-webhook'),
-    *router.urls,
+    *router.urls
 ]
