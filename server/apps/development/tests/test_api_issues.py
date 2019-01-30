@@ -96,28 +96,16 @@ class ApiIssuesTests(BaseAPITest):
         issue = IssueFactory.create(employee=self.user)
 
         IssueNoteFactory.create(type=Note.TYPE.time_spend,
-                           created_at=timezone.now() - timedelta(hours=4),
-                           user=self.user,
-                           content_object=issue,
-                           data={'spent': int(timedelta(hours=5).total_seconds())})
+                                created_at=timezone.now() - timedelta(hours=4),
+                                user=self.user,
+                                content_object=issue,
+                                data={'spent': int(timedelta(hours=5).total_seconds())})
 
         IssueNoteFactory.create(type=Note.TYPE.time_spend,
-                           created_at=timezone.now() - timedelta(hours=2),
-                           user=self.user,
-                           content_object=issue,
-                           data={'spent': -int(timedelta(hours=1).total_seconds())})
-
-        # issue_2 = IssueFactory.create(employee=self.user)
-        # IssueNoteFactory.create(type=Note.TYPE.time_spend,
-        #                    created_at=timezone.now() - timedelta(hours=4),
-        #                    user=self.user,
-        #                    content_object=issue_2,
-        #                    data={'spent': timedelta(hours=1).total_seconds()})
-        #
-        # IssueNoteFactory.create(type=Note.TYPE.reset_spend,
-        #                    created_at=timezone.now() - timedelta(hours=4),
-        #                    user=self.user,
-        #                    content_object=issue_2)
+                                created_at=timezone.now() - timedelta(hours=2),
+                                user=self.user,
+                                content_object=issue,
+                                data={'spent': -int(timedelta(hours=1).total_seconds())})
 
         issue.adjust_notes_spent()
 
@@ -135,22 +123,22 @@ class ApiIssuesTests(BaseAPITest):
         issue = IssueFactory.create(employee=self.user)
 
         IssueNoteFactory.create(type=Note.TYPE.time_spend,
-                           created_at=timezone.now() - timedelta(hours=4),
-                           user=self.user,
-                           content_object=issue,
-                           data={'spent': int(timedelta(hours=5).total_seconds())})
+                                created_at=timezone.now() - timedelta(hours=4),
+                                user=self.user,
+                                content_object=issue,
+                                data={'spent': int(timedelta(hours=5).total_seconds())})
 
         IssueNoteFactory.create(type=Note.TYPE.time_spend,
-                           created_at=timezone.now() - timedelta(hours=4),
-                           user=self.user,
-                           content_object=issue,
-                           data={'spent': int(timedelta(hours=1).total_seconds())})
+                                created_at=timezone.now() - timedelta(hours=4),
+                                user=self.user,
+                                content_object=issue,
+                                data={'spent': int(timedelta(hours=1).total_seconds())})
 
         IssueNoteFactory.create(type=Note.TYPE.time_spend,
-                           created_at=timezone.now() - timedelta(hours=2),
-                           user=user_2,
-                           content_object=issue,
-                           data={'spent': -int(timedelta(hours=1).total_seconds())})
+                                created_at=timezone.now() - timedelta(hours=2),
+                                user=user_2,
+                                content_object=issue,
+                                data={'spent': -int(timedelta(hours=1).total_seconds())})
 
         issue.adjust_notes_spent()
 
@@ -166,27 +154,27 @@ class ApiIssuesTests(BaseAPITest):
         issue = IssueFactory.create(employee=self.user)
 
         IssueNoteFactory.create(type=Note.TYPE.time_spend,
-                           created_at=timezone.now() - timedelta(hours=4),
-                           user=self.user,
-                           content_object=issue,
-                           data={'spent': int(timedelta(hours=5).total_seconds())})
+                                created_at=timezone.now() - timedelta(hours=4),
+                                user=self.user,
+                                content_object=issue,
+                                data={'spent': int(timedelta(hours=5).total_seconds())})
 
         IssueNoteFactory.create(type=Note.TYPE.time_spend,
-                           created_at=timezone.now() - timedelta(hours=4),
-                           user=self.user,
-                           content_object=issue,
-                           data={'spent': int(timedelta(hours=1).total_seconds())})
+                                created_at=timezone.now() - timedelta(hours=4),
+                                user=self.user,
+                                content_object=issue,
+                                data={'spent': int(timedelta(hours=1).total_seconds())})
 
         IssueNoteFactory.create(type=Note.TYPE.reset_spend,
-                           created_at=timezone.now() - timedelta(hours=2),
-                           user=self.user,
-                           content_object=issue)
+                                created_at=timezone.now() - timedelta(hours=2),
+                                user=self.user,
+                                content_object=issue)
 
         IssueNoteFactory.create(type=Note.TYPE.time_spend,
-                           created_at=timezone.now() - timedelta(hours=1),
-                           user=self.user,
-                           content_object=issue,
-                           data={'spent': int(timedelta(hours=1).total_seconds())})
+                                created_at=timezone.now() - timedelta(hours=1),
+                                user=self.user,
+                                content_object=issue,
+                                data={'spent': int(timedelta(hours=1).total_seconds())})
 
         issue.adjust_notes_spent()
 

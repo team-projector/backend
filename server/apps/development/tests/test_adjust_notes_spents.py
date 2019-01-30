@@ -86,7 +86,7 @@ class AdjustNotesSpentTests(TestCase):
 
     def create_note(self, note_type, created_at, spent: timedelta = None, user=None):
         return IssueNoteFactory.create(type=note_type,
-                                  created_at=created_at,
-                                  user=user or self.user,
-                                  content_object=self.issue,
-                                  data={'spent': spent.total_seconds()} if spent else {})
+                                       created_at=created_at,
+                                       user=user or self.user,
+                                       content_object=self.issue,
+                                       data={'spent': spent.total_seconds()} if spent else {})
