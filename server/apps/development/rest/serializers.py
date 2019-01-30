@@ -4,6 +4,7 @@ from django.db.models.functions import Cast
 from rest_framework import serializers
 
 from apps.core.rest.serializers import LinkSerializer
+from apps.users.models import User
 from ..models import Issue, Label
 
 
@@ -28,3 +29,19 @@ class IssueCardSerializer(serializers.ModelSerializer):
         return instance.notes.filter(user=self.context['request'].user) \
             .annotate(spent=Cast(KeyTextTransform('spent', 'data'), IntegerField())) \
             .aggregate(total_spent=Sum('spent'))['total_spent']
+
+
+class MetricsParamsSerializer(serializers.Serializer):
+    user = serializers.PrimaryKeyRelatedField(queryset=User.objects.all())
+    start = serializers.DateField()
+    end = serializers.DateField()
+    group = serializers.CharField()
+
+
+class MetricSerializer(serializers.Serializer):
+    start = serializers.DateField()
+    end = serializers.DateField()
+    time_spent = serializers.IntegerField()
+    time_estimate = serializers.IntegerField()
+    efficiency = serializers.FloatField()
+    earnings = serializers.IntegerField()

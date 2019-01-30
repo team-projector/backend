@@ -5,7 +5,7 @@ from rest_framework import status
 
 from apps.core.tests.base import BaseAPITest
 from apps.development.models import Note
-from apps.development.tests.factories import IssueFactory, NoteFactory
+from apps.development.tests.factories import IssueFactory, IssueNoteFactory
 from apps.users.models import User
 
 
@@ -95,26 +95,26 @@ class ApiIssuesTests(BaseAPITest):
     def test_with_spends(self):
         issue = IssueFactory.create(employee=self.user)
 
-        NoteFactory.create(type=Note.TYPE.time_spend,
+        IssueNoteFactory.create(type=Note.TYPE.time_spend,
                            created_at=timezone.now() - timedelta(hours=4),
                            user=self.user,
                            content_object=issue,
                            data={'spent': int(timedelta(hours=5).total_seconds())})
 
-        NoteFactory.create(type=Note.TYPE.time_spend,
+        IssueNoteFactory.create(type=Note.TYPE.time_spend,
                            created_at=timezone.now() - timedelta(hours=2),
                            user=self.user,
                            content_object=issue,
                            data={'spent': -int(timedelta(hours=1).total_seconds())})
 
         # issue_2 = IssueFactory.create(employee=self.user)
-        # NoteFactory.create(type=Note.TYPE.time_spend,
+        # IssueNoteFactory.create(type=Note.TYPE.time_spend,
         #                    created_at=timezone.now() - timedelta(hours=4),
         #                    user=self.user,
         #                    content_object=issue_2,
         #                    data={'spent': timedelta(hours=1).total_seconds()})
         #
-        # NoteFactory.create(type=Note.TYPE.reset_spend,
+        # IssueNoteFactory.create(type=Note.TYPE.reset_spend,
         #                    created_at=timezone.now() - timedelta(hours=4),
         #                    user=self.user,
         #                    content_object=issue_2)
@@ -134,19 +134,19 @@ class ApiIssuesTests(BaseAPITest):
 
         issue = IssueFactory.create(employee=self.user)
 
-        NoteFactory.create(type=Note.TYPE.time_spend,
+        IssueNoteFactory.create(type=Note.TYPE.time_spend,
                            created_at=timezone.now() - timedelta(hours=4),
                            user=self.user,
                            content_object=issue,
                            data={'spent': int(timedelta(hours=5).total_seconds())})
 
-        NoteFactory.create(type=Note.TYPE.time_spend,
+        IssueNoteFactory.create(type=Note.TYPE.time_spend,
                            created_at=timezone.now() - timedelta(hours=4),
                            user=self.user,
                            content_object=issue,
                            data={'spent': int(timedelta(hours=1).total_seconds())})
 
-        NoteFactory.create(type=Note.TYPE.time_spend,
+        IssueNoteFactory.create(type=Note.TYPE.time_spend,
                            created_at=timezone.now() - timedelta(hours=2),
                            user=user_2,
                            content_object=issue,
@@ -165,24 +165,24 @@ class ApiIssuesTests(BaseAPITest):
     def test_with_spends_reset(self):
         issue = IssueFactory.create(employee=self.user)
 
-        NoteFactory.create(type=Note.TYPE.time_spend,
+        IssueNoteFactory.create(type=Note.TYPE.time_spend,
                            created_at=timezone.now() - timedelta(hours=4),
                            user=self.user,
                            content_object=issue,
                            data={'spent': int(timedelta(hours=5).total_seconds())})
 
-        NoteFactory.create(type=Note.TYPE.time_spend,
+        IssueNoteFactory.create(type=Note.TYPE.time_spend,
                            created_at=timezone.now() - timedelta(hours=4),
                            user=self.user,
                            content_object=issue,
                            data={'spent': int(timedelta(hours=1).total_seconds())})
 
-        NoteFactory.create(type=Note.TYPE.reset_spend,
+        IssueNoteFactory.create(type=Note.TYPE.reset_spend,
                            created_at=timezone.now() - timedelta(hours=2),
                            user=self.user,
                            content_object=issue)
 
-        NoteFactory.create(type=Note.TYPE.time_spend,
+        IssueNoteFactory.create(type=Note.TYPE.time_spend,
                            created_at=timezone.now() - timedelta(hours=1),
                            user=self.user,
                            content_object=issue,

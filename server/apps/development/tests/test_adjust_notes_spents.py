@@ -4,7 +4,7 @@ from django.test import TestCase
 from django.utils import timezone
 
 from apps.development.models import Note
-from apps.development.tests.factories import IssueFactory, NoteFactory
+from apps.development.tests.factories import IssueFactory, IssueNoteFactory
 from apps.users.models import User
 
 
@@ -85,7 +85,7 @@ class AdjustNotesSpentTests(TestCase):
         self.assertEqual(reset_3.data['spent'], -timedelta(hours=5).total_seconds())
 
     def create_note(self, note_type, created_at, spent: timedelta = None, user=None):
-        return NoteFactory.create(type=note_type,
+        return IssueNoteFactory.create(type=note_type,
                                   created_at=created_at,
                                   user=user or self.user,
                                   content_object=self.issue,
