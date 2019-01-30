@@ -21,12 +21,6 @@ LOGGING = {
             'class': 'logging.StreamHandler',
             'formatter': 'standard',
         },
-        'file': {
-            'level': 'DEBUG',
-            'class': 'logging.FileHandler',
-            'filename': os.path.join(LOGGING_PATH, 'log.txt'),
-            'formatter': 'standard',
-        },
     },
     'loggers': {
         'django': {
@@ -34,9 +28,8 @@ LOGGING = {
             'level': 'INFO',
             'propagate': False,
         },
-
         'app': {
-            'handlers': ['file', 'console'],
+            'handlers': ['console'],
             'level': 'DEBUG',
             'propagate': True,
         },

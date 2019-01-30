@@ -1,6 +1,11 @@
 from datetime import datetime
 from typing import Iterable
 
+from django.contrib.postgres.fields.jsonb import KeyTextTransform
+from django.db.models import IntegerField, Sum
+from django.db.models.functions import Cast, TruncDay
+
+from apps.development.models import Note
 from apps.users.models import User
 
 
@@ -21,4 +26,25 @@ class MetricsCalculator:
         self.group = group
 
     def calculate(self) -> Iterable[Metric]:
-        return []
+        metrics = []
+
+        for spend in self._get_spends():
+            metric = Metric()
+            metric.start = spend['day'].date()
+            metric.end = spend['day'].date()
+            metric.time_spent = spend['period_spent']
+
+            metrics.append(metric)
+
+        return sorted(metrics, key=lambda x: x.start)
+
+    def _get_spends(self):
+        return Note.objects.filter(created_at__range=(self.start, self.end)) \
+            .annotate(spent=Cast(KeyTextTransform('spent', 'data'), IntegerField()),
+                      # month=TruncMonth('created_at'),
+                      day=TruncDay('created_at'),
+                      # week=TruncWeek('created_at')
+                      ) \
+            .values('day') \
+            .annotate(period_spent=Sum('spent')) \
+            .order_by()
