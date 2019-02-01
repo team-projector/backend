@@ -47,9 +47,6 @@ class MetricsCalculator:
         return sorted(metrics, key=lambda x: x.start)
 
     def _get_spends(self):
-        for note in Note.objects.filter(created_at__range=(self.start, self.end)):
-            print(f'{note} -> {note.data["spent"]}')
-
         return Note.objects.filter(user=self.user, created_at__range=(self.start, self.end)) \
             .annotate(spent=Cast(KeyTextTransform('spent', 'data'), IntegerField()),
                       # month=TruncMonth('created_at'),
