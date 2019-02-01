@@ -18,6 +18,14 @@ class Metric:
     earnings = None
 
 
+class BaseGrouper:
+    pass
+
+
+class DaysGrouper(BaseGrouper):
+    pass
+
+
 class MetricsCalculator:
     def __init__(self, user: User, start: datetime, end: datetime, group: str):
         self.user = user
@@ -39,7 +47,10 @@ class MetricsCalculator:
         return sorted(metrics, key=lambda x: x.start)
 
     def _get_spends(self):
-        return Note.objects.filter(created_at__range=(self.start, self.end)) \
+        for note in Note.objects.filter(created_at__range=(self.start, self.end)):
+            print(f'{note} -> {note.data["spent"]}')
+
+        return Note.objects.filter(user=self.user, created_at__range=(self.start, self.end)) \
             .annotate(spent=Cast(KeyTextTransform('spent', 'data'), IntegerField()),
                       # month=TruncMonth('created_at'),
                       day=TruncDay('created_at'),
