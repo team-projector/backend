@@ -43,6 +43,7 @@ class NoteManager(models.Manager):
         return self.create(
             gl_id=gl_note.id,
             type=parse_data.type,
+            body=gl_note.body,
             created_at=parse_datetime(gl_note.created_at),
             user=extract_user_from_data(gl_note.author),
             content_object=issue,

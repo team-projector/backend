@@ -1,11 +1,10 @@
 from datetime import datetime
 from typing import Iterable
 
-from django.contrib.postgres.fields.jsonb import KeyTextTransform
-from django.db.models import IntegerField, Sum
-from django.db.models.functions import Cast, TruncDay
+from django.db.models import Sum
+from django.db.models.functions import TruncDay
 
-from apps.development.models import Note
+from apps.payroll.models import SpentTime
 from apps.users.models import User
 
 
@@ -19,11 +18,18 @@ class Metric:
 
 
 class BaseGrouper:
-    pass
+    group = None
+
+    def setup_queryset(self, queryset):
+        raise NotImplementedError
 
 
 class DaysGrouper(BaseGrouper):
-    pass
+    group = 'day'
+
+
+class WeekGrouper(BaseGrouper):
+    group = 'week'
 
 
 class MetricsCalculator:
@@ -47,12 +53,14 @@ class MetricsCalculator:
         return sorted(metrics, key=lambda x: x.start)
 
     def _get_spends(self):
-        return Note.objects.filter(user=self.user, created_at__range=(self.start, self.end)) \
-            .annotate(spent=Cast(KeyTextTransform('spent', 'data'), IntegerField()),
-                      # month=TruncMonth('created_at'),
-                      day=TruncDay('created_at'),
-                      # week=TruncWeek('created_at')
-                      ) \
+        return SpentTime.objects.filter(employee=self.user, date__range=(self.start, self.end)) \
+            .annotate(day=TruncDay('date')) \
             .values('day') \
-            .annotate(period_spent=Sum('spent')) \
+            .annotate(period_spent=Sum('time_spent')) \
             .order_by()
+
+    @staticmethod
+    def _get_grouper(group: str) -> BaseGrouper:
+        return next(grouper_class()
+                    for grouper_class in BaseGrouper.__subclasses__()
+                    if grouper_class.group == group)

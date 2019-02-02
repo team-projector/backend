@@ -10,9 +10,10 @@ from django.utils.translation import gettext_lazy as _
 
 from apps.core.db.mixins import GitlabEntityMixin
 from apps.core.db.utils import Choices
+from apps.payroll.db.mixins import SpentTimesMixin
 from apps.users.models import User
 from .db.managers import IssueManager, NoteManager, ProjectGroupManager, ProjectManager
-from .db.mixins import Notable
+from .db.mixins import NotableMixin
 
 
 class ProjectGroup(GitlabEntityMixin):
@@ -89,6 +90,8 @@ class Note(models.Model):
 
     created_at = models.DateTimeField(null=True, blank=True)
 
+    body = models.TextField(null=True)
+
     type = models.CharField(choices=TYPE, max_length=20, verbose_name=_('VN__TYPE'), help_text=_('HT__TYPE'))
 
     data = JSONField()
@@ -104,7 +107,8 @@ class Note(models.Model):
         return f'{self.user}: {self.type}'
 
 
-class Issue(Notable,
+class Issue(NotableMixin,
+            SpentTimesMixin,
             GitlabEntityMixin):
     title = models.CharField(max_length=255, verbose_name=_('VN__TITLE'), help_text=_('HT__TITLE'))
     project = models.ForeignKey(Project, models.SET_NULL, null=True, blank=True,
@@ -142,14 +146,26 @@ class Issue(Notable,
     def last_note_date(self):
         return self.notes.aggregate(last_created=Max('created_at'))['last_created']
 
-    def adjust_notes_spent(self):
+    def adjust_spent_times(self):
+        from apps.payroll.models import SpentTime
+
         users_spents = defaultdict(int)
 
         for note in self.notes.all().order_by('created_at'):
-            if note.type == Note.TYPE.reset_spend:
-                note.data['spent'] = -users_spents[note.user_id]
-                note.save()
+            time_spent = 0
 
+            if note.type == Note.TYPE.reset_spend:
+                time_spent = -users_spents[note.user_id]
                 users_spents[note.user_id] = 0
             elif note.type == Note.TYPE.time_spend:
+                time_spent = note.data['spent']
                 users_spents[note.user_id] += note.data['spent']
+
+            if SpentTime.objects.filter(note=note).exists():
+                continue
+
+            SpentTime.objects.create(date=note.created_at,
+                                     employee=note.user,
+                                     time_spent=time_spent,
+                                     note=note,
+                                     base=self)

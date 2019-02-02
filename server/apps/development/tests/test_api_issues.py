@@ -107,7 +107,7 @@ class ApiIssuesTests(BaseAPITest):
                                 content_object=issue,
                                 data={'spent': -int(timedelta(hours=1).total_seconds())})
 
-        issue.adjust_notes_spent()
+        issue.adjust_spent_times()
 
         self.set_credentials()
         response = self.client.get('/api/issues')
@@ -140,7 +140,7 @@ class ApiIssuesTests(BaseAPITest):
                                 content_object=issue,
                                 data={'spent': -int(timedelta(hours=1).total_seconds())})
 
-        issue.adjust_notes_spent()
+        issue.adjust_spent_times()
 
         self.set_credentials()
         response = self.client.get('/api/issues')
@@ -176,7 +176,7 @@ class ApiIssuesTests(BaseAPITest):
                                 content_object=issue,
                                 data={'spent': int(timedelta(hours=1).total_seconds())})
 
-        issue.adjust_notes_spent()
+        issue.adjust_spent_times()
 
         self.set_credentials()
         response = self.client.get('/api/issues')

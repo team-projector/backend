@@ -49,7 +49,7 @@ NoteReadResult = namedtuple('NoteReadResult', ['type', 'data'])
 
 
 def parse_spend(s: str) -> int:
-    # spec https://docs.gitlab.com/ee/workflow/time_tracking.html
+    # specs https://docs.gitlab.com/ee/workflow/time_tracking.html
     s = s or ''
     s = s.strip()
 

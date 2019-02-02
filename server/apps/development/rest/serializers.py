@@ -1,6 +1,4 @@
-from django.contrib.postgres.fields.jsonb import KeyTextTransform
-from django.db.models import IntegerField, Sum
-from django.db.models.functions import Cast
+from django.db.models import Sum
 from rest_framework import serializers
 
 from apps.core.rest.serializers import LinkSerializer
@@ -26,9 +24,8 @@ class IssueCardSerializer(serializers.ModelSerializer):
         )
 
     def get_time_spent(self, instance):
-        return instance.notes.filter(user=self.context['request'].user) \
-            .annotate(spent=Cast(KeyTextTransform('spent', 'data'), IntegerField())) \
-            .aggregate(total_spent=Sum('spent'))['total_spent']
+        return instance.time_spents.filter(employee=self.context['request'].user) \
+            .aggregate(total_spent=Sum('time_spent'))['total_spent']
 
 
 class MetricsParamsSerializer(serializers.Serializer):

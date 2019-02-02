@@ -52,3 +52,4 @@ class IssueAdmin(BaseModelAdmin):
 @admin.register(Note)
 class NoteAdmin(BaseModelAdmin):
     list_display = ('type', 'created_at', 'user')
+    search_fields = ('user__login',)

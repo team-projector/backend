@@ -17,9 +17,11 @@ class LoadNotesTests(TestCase):
         self.user = User.objects.create_user(login='user', gl_id=10)
 
     def test_load_spend_added(self):
+        body = f'added 1h 1m of time spent at {date.today():{GITLAB_DATE_FORMAT}}'
+
         Note.objects.sync_gitlab(dict2obj({
             'id': 2,
-            'body': f'added 1h 1m of time spent at {date.today():{GITLAB_DATE_FORMAT}}',
+            'body': body,
             'created_at': datetime.strftime(datetime.now(), GITLAB_DATETIME_FORMAT),
             'author': {
                 'id': self.user.gl_id
@@ -32,12 +34,14 @@ class LoadNotesTests(TestCase):
         self.assertEqual(note.gl_id, 2)
         self.assertEqual(note.user, self.user)
         self.assertEqual(note.type, Note.TYPE.time_spend)
+        self.assertEqual(note.body, body)
         self.assertEqual(note.data['spent'], timedelta(hours=1, minutes=1).total_seconds())
 
     def test_load_spend_subtracted(self):
+        body = f'subtracted 1h 1m of time spent at {date.today():{GITLAB_DATE_FORMAT}}'
         Note.objects.sync_gitlab(dict2obj({
             'id': 2,
-            'body': f'subtracted 1h 1m of time spent at {date.today():{GITLAB_DATE_FORMAT}}',
+            'body': body,
             'created_at': datetime.strftime(datetime.now(), GITLAB_DATETIME_FORMAT),
             'author': {
                 'id': self.user.gl_id
@@ -49,6 +53,7 @@ class LoadNotesTests(TestCase):
         note = Note.objects.first()
         self.assertEqual(note.gl_id, 2)
         self.assertEqual(note.user, self.user)
+        self.assertEqual(note.body, body)
         self.assertEqual(note.type, Note.TYPE.time_spend)
         self.assertEqual(note.data['spent'], -timedelta(hours=1, minutes=1).total_seconds())
 
@@ -67,6 +72,7 @@ class LoadNotesTests(TestCase):
         note = Note.objects.first()
         self.assertEqual(note.gl_id, 2)
         self.assertEqual(note.user, self.user)
+        self.assertEqual(note.body, SPEND_RESET_MESSAGE)
         self.assertEqual(note.type, Note.TYPE.reset_spend)
         self.assertEqual(note.data, {})
 
