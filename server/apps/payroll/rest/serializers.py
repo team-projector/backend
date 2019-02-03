@@ -16,7 +16,7 @@ class MetricSerializer(serializers.Serializer):
     start = serializers.DateField()
     end = serializers.DateField()
     time_spent = serializers.IntegerField()
-    time_estimate = serializers.IntegerField()
+    loading = serializers.IntegerField()
     efficiency = serializers.FloatField()
     earnings = serializers.IntegerField()
 
