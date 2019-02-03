@@ -77,5 +77,9 @@ class BaseAPITest(BaseTestMixin, APITestCase):
         self.client._credentials = {}
 
     @staticmethod
-    def format_date(date: datetime) -> str:
-        return date.strftime('%Y-%m-%d')
+    def format_date(d: datetime) -> str:
+        return d.strftime('%Y-%m-%d')
+
+    @staticmethod
+    def parse_date(s: str) -> datetime:
+        return datetime.datetime.strptime(s, '%Y-%m-%d')

@@ -14,9 +14,15 @@ class ApiMetricsDaysTests(BaseAPITest):
     def setUp(self):
         super().setUp()
 
-        self.issue = IssueFactory.create()
+        self.issue = IssueFactory.create(employee=self.user)
 
     def test_simple(self):
+        self.issue.time_estimate = timedelta(hours=10).total_seconds()
+        self.issue.total_time_spent = timedelta(hours=1).total_seconds()
+        self.issue.state = 'opened'
+        self.issue.due_date = timezone.now() + timedelta(days=1)
+        self.issue.save()
+
         self._create_spent_time(timezone.now() - timedelta(days=2, hours=5), timedelta(hours=2))
         self._create_spent_time(timezone.now() - timedelta(days=1), timedelta(hours=4))
         self._create_spent_time(timezone.now() - timedelta(days=1, hours=5), -timedelta(hours=3))
@@ -36,11 +42,16 @@ class ApiMetricsDaysTests(BaseAPITest):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(len(response.data), (end - start).days + 1)
 
-        self._check_metrics(response.data, {
-            timezone.now() - timedelta(days=2): timedelta(hours=2),
-            timezone.now() - timedelta(days=1): timedelta(hours=1),
-            timezone.now() + timedelta(days=1): timedelta(hours=3)
-        })
+        self._check_metrics(response.data,
+                            {
+                                timezone.now() - timedelta(days=2): timedelta(hours=2),
+                                timezone.now() - timedelta(days=1): timedelta(hours=1),
+                                timezone.now() + timedelta(days=1): timedelta(hours=3)
+                            },
+                            {
+                                timezone.now(): timedelta(hours=8),
+                                timezone.now() + timedelta(days=1): timedelta(hours=1),
+                            })
 
     def test_not_in_range(self):
         self._create_spent_time(timezone.now() - timedelta(days=5, hours=5), timedelta(hours=2))
@@ -101,12 +112,29 @@ class ApiMetricsDaysTests(BaseAPITest):
                                             base=self.issue,
                                             time_spent=spent.total_seconds())
 
-    def _check_metrics(self, metrics, spents: Dict[datetime, timedelta]):
-        for metric in metrics:
-            if metric['start'] in spents:
-                self._check_metric(metric, metric['start'], spents[metric['start']])
+    def _check_metrics(self, metrics, spents: Dict[datetime, timedelta], loadings: Dict[datetime, timedelta] = None):
+        if not loadings:
+            loadings = {}
 
-    def _check_metric(self, metric, day: datetime, spent: timedelta):
-        self.assertEqual(metric['start'], metric['end'])
-        self.assertEqual(metric['end'], self.format_date(day))
-        self.assertEqual(metric['time_spent'], spent.total_seconds())
+        spents = {
+            self.format_date(d): time.total_seconds()
+            for d, time in spents.items()
+        }
+
+        loadings = {
+            self.format_date(d): time.total_seconds()
+            for d, time in loadings.items()
+        }
+
+        for metric in metrics:
+            self.assertEqual(metric['start'], metric['end'])
+
+            if metric['start'] in spents:
+                self.assertEqual(metric['time_spent'], spents[metric['start']])
+            else:
+                self.assertEqual(metric['time_spent'], 0)
+
+            if metric['start'] in loadings:
+                self.assertEqual(metric['loading'], loadings[metric['start']])
+            else:
+                self.assertEqual(metric['loading'], 0)
