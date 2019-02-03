@@ -13,6 +13,7 @@ urlpatterns = [
     path('api/', include((get_module_url_patterns(
         'apps.users.rest.urls',
         'apps.development.rest.urls',
+        'apps.payroll.rest.urls',
     ), 'urls'), namespace='api')),
     path('api/docs/', get_swagger_view(title='API'), name='swagger'),
     path('admin/', admin.site.urls),
