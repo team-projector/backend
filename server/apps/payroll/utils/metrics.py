@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 from typing import Iterable
 
 from django.db.models import Sum
@@ -42,36 +42,32 @@ class BaseMetricsCalculator:
         raise NotImplementedError
 
 
+DAY_STEP = timedelta(days=1)
+
+
 class DayMetricsCalculator(BaseMetricsCalculator):
     def calculate(self) -> Iterable[Metric]:
         metrics = []
 
-        # step = timedelta(days=1)
-        #
-        # spents = list(self._get_spents())
-        #
-        # current = self.start
-        # while current <= self.end:
-        #     metric = Metric()
-        #
-        #     spent = next(i for i in spents if i['day'].date() == current)
-        #     metric.start, metric.end = self.grouper.get_period(spent)
-        #     if spent
-        #
-        #     metric.time_spent = spent['period_spent']
-        #
-        #     metrics.append(metric)
-        #
-        #     current += step
+        spents = {
+            spent['day'].date(): spent
+            for spent in self.get_spents()
+        }
 
-        for spent in self.get_spents():
+        current = self.start
+        while current <= self.end:
             metric = Metric()
-            metric.start = metric.end = spent['day'].date()
-            metric.time_spent = spent['period_spent']
+            metric.start = metric.end = current
+
+            if current in spents:
+                spent = spents[current]
+                metric.time_spent = spent['period_spent']
 
             metrics.append(metric)
 
-        return sorted(metrics, key=lambda x: x.start)
+            current += DAY_STEP
+
+        return metrics
 
     def modify_queryset(self, queryset):
         return queryset.annotate(day=TruncDay('date')).values('day')
