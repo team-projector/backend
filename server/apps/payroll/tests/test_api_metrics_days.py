@@ -4,11 +4,17 @@ from django.utils import timezone
 from rest_framework import status
 
 from apps.core.tests.base import BaseAPITest
+from apps.development.tests.factories import IssueFactory
 from apps.payroll.tests.factories import IssueSpentTimeFactory
 from apps.users.tests.factories import UserFactory
 
 
 class ApiMetricsDaysTests(BaseAPITest):
+    def setUp(self):
+        super().setUp()
+
+        self.issue = IssueFactory.create()
+
     def test_simple(self):
         self._create_spent_time(timezone.now() - timedelta(days=2, hours=5), timedelta(hours=2))
         self._create_spent_time(timezone.now() - timedelta(days=1), timedelta(hours=4))
@@ -76,6 +82,7 @@ class ApiMetricsDaysTests(BaseAPITest):
     def _create_spent_time(self, date, spent: timedelta = None, user=None):
         return IssueSpentTimeFactory.create(date=date,
                                             employee=user or self.user,
+                                            base=self.issue,
                                             time_spent=spent.total_seconds())
 
     def _check_metric(self, metric, day: datetime, spent: timedelta):

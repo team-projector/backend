@@ -7,14 +7,14 @@ from apps.core.utils.rest import parse_query_params
 from .filters import SpentTimeFilter
 from .serializers import MetricSerializer, MetricsParamsSerializer, TimeExpenseSerializer
 from ..models import SpentTime
-from ..utils.metrics import MetricsCalculator
+from ..utils.metrics import create_calculator
 
 
 class MetricsView(BaseGenericAPIView):
     def get(self, request):
         params = parse_query_params(request, MetricsParamsSerializer)
 
-        calculator = MetricsCalculator(params['user'], params['start'], params['end'], params['group'])
+        calculator = create_calculator(params['user'], params['start'], params['end'], params['group'])
         metrics = calculator.calculate()
 
         return Response(MetricSerializer(metrics, many=True).data)

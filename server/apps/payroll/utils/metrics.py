@@ -19,61 +19,64 @@ class Metric:
     earnings = None
 
 
-class BaseGrouper:
-    group = None
-
-    def modify_queryset(self, queryset):
-        raise NotImplementedError
-
-    def get_period(self, spend):
-        raise NotImplementedError
-
-
-class DaysGrouper(BaseGrouper):
-    group = 'day'
-
-    def modify_queryset(self, queryset):
-        return queryset.annotate(day=TruncDay('date')).values('day')
-
-    def get_period(self, spend):
-        return spend['day'].date(), spend['day'].date()
-
-
-class WeekGrouper(BaseGrouper):
-    group = 'week'
-
-
-class MetricsCalculator:
-    def __init__(self, user: User, start: datetime, end: datetime, group: str):
+class BaseMetricsCalculator:
+    def __init__(self, user: User, start: datetime, end: datetime):
         self.user = user
         self.start = start
         self.end = end
-        self.grouper = self._get_grouper(group)
 
     def calculate(self) -> Iterable[Metric]:
-        metrics = []
+        raise NotImplementedError
 
-        for spend in self._get_spends():
-            metric = Metric()
-            metric.start, metric.end = self.grouper.get_period(spend)
-            metric.time_spent = spend['period_spent']
-
-            metrics.append(metric)
-
-        return sorted(metrics, key=lambda x: x.start)
-
-    def _get_spends(self):
+    def get_spents(self):
         queryset = SpentTime.objects.filter(employee=self.user,
                                             date__range=(
                                                 make_aware(date2datetime(self.start)),
                                                 make_aware(date2datetime(self.end))
                                             ))
-        queryset = self.grouper.modify_queryset(queryset)
+        queryset = self.modify_queryset(queryset)
 
         return queryset.annotate(period_spent=Sum('time_spent')).order_by()
 
-    @staticmethod
-    def _get_grouper(group: str) -> BaseGrouper:
-        return next(grouper_class()
-                    for grouper_class in BaseGrouper.__subclasses__()
-                    if grouper_class.group == group)
+    def modify_queryset(self, queryset):
+        raise NotImplementedError
+
+
+class DayMetricsCalculator(BaseMetricsCalculator):
+    def calculate(self) -> Iterable[Metric]:
+        metrics = []
+
+        # step = timedelta(days=1)
+        #
+        # spents = list(self._get_spents())
+        #
+        # current = self.start
+        # while current <= self.end:
+        #     metric = Metric()
+        #
+        #     spent = next(i for i in spents if i['day'].date() == current)
+        #     metric.start, metric.end = self.grouper.get_period(spent)
+        #     if spent
+        #
+        #     metric.time_spent = spent['period_spent']
+        #
+        #     metrics.append(metric)
+        #
+        #     current += step
+
+        for spent in self.get_spents():
+            metric = Metric()
+            metric.start = metric.end = spent['day'].date()
+            metric.time_spent = spent['period_spent']
+
+            metrics.append(metric)
+
+        return sorted(metrics, key=lambda x: x.start)
+
+    def modify_queryset(self, queryset):
+        return queryset.annotate(day=TruncDay('date')).values('day')
+
+
+def create_calculator(user: User, start: datetime, end: datetime, group: str):
+    if group == 'day':
+        return DayMetricsCalculator(user, start, end)
