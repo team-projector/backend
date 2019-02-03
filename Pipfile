@@ -22,6 +22,8 @@ django-admin-autocomplete-filter = "*"
 django-extensions = "*"
 factory-boy = "*"
 django-filter = "*"
+social-auth-core = "*"
+social-auth-app-django = "*"
 
 [dev-packages]
 "flake8" = "*"
