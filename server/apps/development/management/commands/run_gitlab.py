@@ -10,6 +10,9 @@ PROJECT_ID = 9419749
 
 class Command(BaseCommand):
     def handle(self, *args, **options):
+        self.action()
+
+    def action(self):
         gl = gitlab.Gitlab('https://www.gitlab.com', private_token='M6wM1-ZeeCPzPm4Z9PzS')
         gl.auth()
 

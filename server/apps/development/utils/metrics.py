@@ -20,12 +20,21 @@ class Metric:
 class BaseGrouper:
     group = None
 
-    def setup_queryset(self, queryset):
+    def modify_queryset(self, queryset):
+        raise NotImplementedError
+
+    def get_period(self, spend):
         raise NotImplementedError
 
 
 class DaysGrouper(BaseGrouper):
     group = 'day'
+
+    def modify_queryset(self, queryset):
+        return queryset.annotate(day=TruncDay('date')).values('day')
+
+    def get_period(self, spend):
+        return spend['day'].date(), spend['day'].date()
 
 
 class WeekGrouper(BaseGrouper):
@@ -37,15 +46,14 @@ class MetricsCalculator:
         self.user = user
         self.start = start
         self.end = end
-        self.group = group
+        self.grouper = self._get_grouper(group)
 
     def calculate(self) -> Iterable[Metric]:
         metrics = []
 
         for spend in self._get_spends():
             metric = Metric()
-            metric.start = spend['day'].date()
-            metric.end = spend['day'].date()
+            metric.start, metric.end = self.grouper.get_period(spend)
             metric.time_spent = spend['period_spent']
 
             metrics.append(metric)
@@ -53,11 +61,12 @@ class MetricsCalculator:
         return sorted(metrics, key=lambda x: x.start)
 
     def _get_spends(self):
-        return SpentTime.objects.filter(employee=self.user, date__range=(self.start, self.end)) \
-            .annotate(day=TruncDay('date')) \
-            .values('day') \
-            .annotate(period_spent=Sum('time_spent')) \
-            .order_by()
+        queryset = SpentTime.objects.filter(employee=self.user,
+                                            date__range=(self.start, self.end))
+
+        queryset = self.grouper.modify_queryset(queryset)
+
+        return queryset.annotate(period_spent=Sum('time_spent')).order_by()
 
     @staticmethod
     def _get_grouper(group: str) -> BaseGrouper:
