@@ -68,7 +68,7 @@ class ApiIssuesTests(BaseAPITest):
 
         self.set_credentials()
         response = self.client.get('/api/issues', {
-            'due_date': timezone.now().date().isoformat()
+            'due_date': self.format_date(timezone.now())
         })
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -84,7 +84,7 @@ class ApiIssuesTests(BaseAPITest):
 
         self.set_credentials()
         response = self.client.get('/api/issues', {
-            'due_date': timezone.now().date().isoformat(),
+            'due_date': self.format_date(timezone.now()),
             'state': 'opened'
         })
 

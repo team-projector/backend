@@ -22,7 +22,7 @@ class SpentTime(Timestamps):
 
     note = models.OneToOneField(Note, models.SET_NULL, null=True, blank=True, related_name='time_spend')
 
-    salary = models.DecimalField(default=0, decimal_places=2, max_digits=10)
+    earnings = models.DecimalField(default=0, decimal_places=2, max_digits=10)
 
     def __str__(self):
         return f'{self.employee} [{self.base}]: {self.time_spent}'
