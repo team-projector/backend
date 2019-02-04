@@ -20,7 +20,8 @@ class IssueCardSerializer(serializers.ModelSerializer):
     class Meta:
         model = Issue
         fields = (
-            'id', 'title', 'labels', 'project', 'due_date', 'state', 'time_estimate', 'total_time_spent', 'time_spent'
+            'id', 'title', 'labels', 'project', 'due_date', 'state', 'time_estimate', 'total_time_spent', 'time_spent',
+            'gl_url'
         )
 
     def get_time_spent(self, instance):

@@ -46,6 +46,8 @@ class TokenSerializer(serializers.ModelSerializer):
 
 
 class UserSerializer(serializers.ModelSerializer):
+    avatar = serializers.URLField(source='gl_avatar')
+
     class Meta:
         model = User
-        fields = ('id', 'name', 'login', 'hour_rate', 'gl_avatar', 'gl_url')
+        fields = ('id', 'name', 'login', 'hour_rate', 'avatar', 'gl_url')
