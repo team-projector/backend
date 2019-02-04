@@ -11,7 +11,7 @@ class User(AbstractBaseUser, PermissionsMixin):
                              help_text=_('HT__LOGIN'), unique=True)
     name = models.CharField(max_length=150, null=True, blank=True, verbose_name=_('VN__NAME'),
                             help_text=_('HT__NAME'), unique=True)
-    email = models.CharField(max_length=150, null=True, blank=True, verbose_name=_('VN__LOGIN'),
+    email = models.EmailField(max_length=150, null=True, blank=True, verbose_name=_('VN__LOGIN'),
                              help_text=_('HT__LOGIN'), unique=True)
     hour_rate = models.DecimalField(default=0, decimal_places=2, max_digits=10,
                                     verbose_name=_('VN__HOUR_RATE'), help_text=_('HT__HOUR_RATE'))
