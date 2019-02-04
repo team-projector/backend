@@ -104,7 +104,7 @@ class Note(models.Model):
     class Meta:
         verbose_name = _('VN__NOTE')
         verbose_name_plural = _('VN__NOTES')
-        ordering = ('-created_at',)
+        ordering = ('created_at',)
 
     def __str__(self):
         return f'{self.user}: {self.type}'
