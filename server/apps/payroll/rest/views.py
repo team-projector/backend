@@ -4,7 +4,6 @@ from rest_framework.response import Response
 
 from apps.core.rest.views import BaseGenericAPIView, BaseGenericViewSet
 from apps.core.utils.rest import parse_query_params
-from .filters import SpentTimeFilter
 from .serializers import MetricSerializer, MetricsParamsSerializer, TimeExpenseSerializer
 from ..models import SpentTime
 from ..utils.metrics import create_calculator
@@ -25,4 +24,4 @@ class TimeExpensesView(mixins.ListModelMixin,
     queryset = SpentTime.objects.all()
     filter_backends = (DjangoFilterBackend,)
     serializer_class = TimeExpenseSerializer
-    filterset_class = SpentTimeFilter
+    filter_fields = ('employee', 'date')

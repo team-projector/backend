@@ -9,7 +9,7 @@ from rest_framework import status
 
 from apps.core.gitlab import get_gitlab_client
 from apps.users.models import User
-from .parsers import parse_date, parse_datetime
+from .parsers import parse_gl_date, parse_gl_datetime
 from ..models import Issue, Label, Note, Project, ProjectGroup
 
 
@@ -120,9 +120,9 @@ def load_project_issue(project: Project, gl_project: GlProject, gl_issue: GlProj
                                          total_time_spent=time_stats['total_time_spent'],
                                          time_estimate=time_stats['time_estimate'],
                                          state=gl_issue.state,
-                                         due_date=parse_date(gl_issue.due_date),
+                                         due_date=parse_gl_date(gl_issue.due_date),
                                          gl_url=gl_issue.web_url,
-                                         created_at=parse_datetime(gl_issue.created_at),
+                                         created_at=parse_gl_datetime(gl_issue.created_at),
                                          employee=extract_user_from_data(gl_issue.assignee))
 
     load_issue_labels(issue, gl_project, gl_issue)

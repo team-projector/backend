@@ -81,5 +81,5 @@ class BaseAPITest(BaseTestMixin, APITestCase):
         return d.strftime('%Y-%m-%d')
 
     @staticmethod
-    def parse_date(s: str) -> datetime:
+    def parse_gl_date(s: str) -> datetime:
         return datetime.datetime.strptime(s, '%Y-%m-%d')
