@@ -1,4 +1,5 @@
 from django.conf import settings
+from django.conf.urls import url
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import include, path
@@ -17,6 +18,7 @@ urlpatterns = [
     ), 'urls'), namespace='api')),
     path('api/docs/', get_swagger_view(title='API'), name='swagger'),
     path('admin/', admin.site.urls),
+    url('api/', include('social_django.urls', namespace='social'))
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
