@@ -1,7 +1,5 @@
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponseBadRequest
 from django.utils import timezone
-from rest_framework import status
-from rest_framework.response import Response
 from social_core.backends.gitlab import GitLabOAuth2
 from social_core.utils import handle_http_errors
 
@@ -15,10 +13,7 @@ class CustomGitLabOAuth2(GitLabOAuth2):
         user = super().auth_complete(*args, **kwargs)
 
         if not user:
-            return Response(
-                {'errors': {'token': 'Invalid token'}},
-                status=status.HTTP_400_BAD_REQUEST,
-            )
+            return HttpResponseBadRequest('Invalid token')
 
         token = create_user_token(user)
 
