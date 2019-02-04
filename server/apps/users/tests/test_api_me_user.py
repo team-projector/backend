@@ -15,4 +15,4 @@ class MeUserTests(BaseAPITest):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data['id'], self.user.id)
         self.assertEqual(response.data['name'], self.user.name)
-        self.assertEqual(response.data['gl_avatar'], self.user.gl_avatar)
+        self.assertEqual(response.data['avatar'], self.user.gl_avatar)

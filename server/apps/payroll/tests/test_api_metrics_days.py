@@ -14,8 +14,7 @@ class ApiMetricsDaysTests(BaseAPITest):
     def setUp(self):
         super().setUp()
 
-        self.issue = IssueFactory.create(employee=self.user,
-                                         due_date=timezone.now())
+        self.issue = IssueFactory.create(employee=self.user, due_date=timezone.now())
 
     def test_simple(self):
         self.issue.time_estimate = timedelta(hours=10).total_seconds()
@@ -55,6 +54,11 @@ class ApiMetricsDaysTests(BaseAPITest):
                             })
 
     def test_not_in_range(self):
+        self.issue.time_estimate = 0
+        self.issue.total_time_spent = 0
+        self.issue.state = 'opened'
+        self.issue.save()
+
         self._create_spent_time(timezone.now() - timedelta(days=5, hours=5), timedelta(hours=2))
         self._create_spent_time(timezone.now() - timedelta(days=1), timedelta(hours=4))
         self._create_spent_time(timezone.now() - timedelta(days=1, hours=5), -timedelta(hours=3))
@@ -80,6 +84,11 @@ class ApiMetricsDaysTests(BaseAPITest):
         })
 
     def test_another_user(self):
+        self.issue.time_estimate = 0
+        self.issue.total_time_spent = 0
+        self.issue.state = 'opened'
+        self.issue.save()
+
         another_user = UserFactory.create()
 
         self._create_spent_time(timezone.now() - timedelta(days=2, hours=5), timedelta(hours=2))
