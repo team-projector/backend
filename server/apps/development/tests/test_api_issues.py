@@ -99,13 +99,19 @@ class ApiIssuesTests(BaseAPITest):
                                 created_at=timezone.now() - timedelta(hours=4),
                                 user=self.user,
                                 content_object=issue,
-                                data={'spent': int(timedelta(hours=5).total_seconds())})
+                                data={
+                                    'spent': int(timedelta(hours=5).total_seconds()),
+                                    'date': (timezone.now() - timedelta(hours=4)).date()
+                                })
 
         IssueNoteFactory.create(type=Note.TYPE.time_spend,
                                 created_at=timezone.now() - timedelta(hours=2),
                                 user=self.user,
                                 content_object=issue,
-                                data={'spent': -int(timedelta(hours=1).total_seconds())})
+                                data={
+                                    'spent': -int(timedelta(hours=1).total_seconds()),
+                                    'date': (timezone.now() - timedelta(hours=2)).date()
+                                })
 
         issue.adjust_spent_times()
 
@@ -126,19 +132,28 @@ class ApiIssuesTests(BaseAPITest):
                                 created_at=timezone.now() - timedelta(hours=4),
                                 user=self.user,
                                 content_object=issue,
-                                data={'spent': int(timedelta(hours=5).total_seconds())})
+                                data={
+                                    'spent': int(timedelta(hours=5).total_seconds()),
+                                    'date': (timezone.now() - timedelta(hours=4)).date()
+                                })
 
         IssueNoteFactory.create(type=Note.TYPE.time_spend,
                                 created_at=timezone.now() - timedelta(hours=4),
                                 user=self.user,
                                 content_object=issue,
-                                data={'spent': int(timedelta(hours=1).total_seconds())})
+                                data={
+                                    'spent': int(timedelta(hours=1).total_seconds()),
+                                    'date': (timezone.now() - timedelta(hours=4)).date()
+                                })
 
         IssueNoteFactory.create(type=Note.TYPE.time_spend,
                                 created_at=timezone.now() - timedelta(hours=2),
                                 user=user_2,
                                 content_object=issue,
-                                data={'spent': -int(timedelta(hours=1).total_seconds())})
+                                data={
+                                    'spent': -int(timedelta(hours=1).total_seconds()),
+                                    'date': (timezone.now() - timedelta(hours=2)).date()
+                                })
 
         issue.adjust_spent_times()
 
@@ -157,13 +172,19 @@ class ApiIssuesTests(BaseAPITest):
                                 created_at=timezone.now() - timedelta(hours=4),
                                 user=self.user,
                                 content_object=issue,
-                                data={'spent': int(timedelta(hours=5).total_seconds())})
+                                data={
+                                    'spent': int(timedelta(hours=5).total_seconds()),
+                                    'date': (timezone.now() - timedelta(hours=4)).date()
+                                })
 
         IssueNoteFactory.create(type=Note.TYPE.time_spend,
                                 created_at=timezone.now() - timedelta(hours=4),
                                 user=self.user,
                                 content_object=issue,
-                                data={'spent': int(timedelta(hours=1).total_seconds())})
+                                data={
+                                    'spent': int(timedelta(hours=1).total_seconds()),
+                                    'date': (timezone.now() - timedelta(hours=4)).date()
+                                })
 
         IssueNoteFactory.create(type=Note.TYPE.reset_spend,
                                 created_at=timezone.now() - timedelta(hours=2),
@@ -174,7 +195,10 @@ class ApiIssuesTests(BaseAPITest):
                                 created_at=timezone.now() - timedelta(hours=1),
                                 user=self.user,
                                 content_object=issue,
-                                data={'spent': int(timedelta(hours=1).total_seconds())})
+                                data={
+                                    'spent': int(timedelta(hours=1).total_seconds()),
+                                    'date': (timezone.now() - timedelta(hours=1)).date()
+                                })
 
         issue.adjust_spent_times()
 

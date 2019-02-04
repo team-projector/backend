@@ -3,13 +3,15 @@ from django.contrib.contenttypes.models import ContentType
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
-from apps.core.db.mixins import Timestamps
 from apps.development.models import Note
 from apps.users.models import User
 
 
-class SpentTime(Timestamps):
-    date = models.DateTimeField(null=True)
+class SpentTime(models.Model):
+    created_at = models.DateTimeField(null=True, blank=True)
+    updated_at = models.DateTimeField(null=True, blank=True)
+
+    date = models.DateField(null=True)
 
     time_spent = models.IntegerField(verbose_name=_('VN__TIME_SPENT'), help_text=_('HT__TIME_SPENT'))
 

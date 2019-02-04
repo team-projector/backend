@@ -3,6 +3,7 @@ from collections import defaultdict
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.postgres.fields import JSONField
+from django.core.serializers.json import DjangoJSONEncoder
 from django.db import models
 from django.db.models import Max
 from django.utils.functional import cached_property
@@ -10,6 +11,7 @@ from django.utils.translation import gettext_lazy as _
 
 from apps.core.db.mixins import GitlabEntityMixin
 from apps.core.db.utils import Choices
+from apps.development.utils.parsers import parse_date
 from apps.payroll.db.mixins import SpentTimesMixin
 from apps.users.models import User
 from .db.managers import IssueManager, NoteManager, ProjectGroupManager, ProjectManager
@@ -89,12 +91,13 @@ class Note(models.Model):
                              help_text=_('HT__EMPLOYEE'))
 
     created_at = models.DateTimeField(null=True, blank=True)
+    updated_at = models.DateTimeField(null=True, blank=True)
 
     body = models.TextField(null=True)
 
     type = models.CharField(choices=TYPE, max_length=20, verbose_name=_('VN__TYPE'), help_text=_('HT__TYPE'))
 
-    data = JSONField()
+    data = JSONField(encoder=DjangoJSONEncoder)
 
     objects = NoteManager()
 
@@ -153,18 +156,23 @@ class Issue(NotableMixin,
 
         for note in self.notes.all().order_by('created_at'):
             time_spent = 0
+            note_date = note.created_at.date()
 
             if note.type == Note.TYPE.reset_spend:
                 time_spent = -users_spents[note.user_id]
                 users_spents[note.user_id] = 0
             elif note.type == Note.TYPE.time_spend:
                 time_spent = note.data['spent']
+                note_date = parse_date(note.data['date'])
+
                 users_spents[note.user_id] += note.data['spent']
 
             if SpentTime.objects.filter(note=note).exists():
                 continue
 
-            SpentTime.objects.create(date=note.created_at,
+            SpentTime.objects.create(date=note_date,
+                                     created_at=note.created_at,
+                                     updated_at=note.updated_at,
                                      employee=note.user,
                                      time_spent=time_spent,
                                      note=note,

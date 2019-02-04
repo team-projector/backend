@@ -53,7 +53,7 @@ class DayMetricsCalculator(BaseMetricsCalculator):
         metrics = []
 
         spents = {
-            spent['day'].date(): spent
+            spent['day']: spent
             for spent in self.get_spents()
         }
 

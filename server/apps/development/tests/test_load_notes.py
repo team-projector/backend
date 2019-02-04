@@ -17,12 +17,15 @@ class LoadNotesTests(TestCase):
         self.user = User.objects.create_user(login='user', gl_id=10)
 
     def test_load_spend_added(self):
-        body = f'added 1h 1m of time spent at {date.today():{GITLAB_DATE_FORMAT}}'
+        note_date = date.today()
+
+        body = f'added 1h 1m of time spent at {note_date:{GITLAB_DATE_FORMAT}}'
 
         Note.objects.sync_gitlab(dict2obj({
             'id': 2,
             'body': body,
             'created_at': datetime.strftime(datetime.now(), GITLAB_DATETIME_FORMAT),
+            'updated_at': datetime.strftime(datetime.now(), GITLAB_DATETIME_FORMAT),
             'author': {
                 'id': self.user.gl_id
             }
@@ -36,13 +39,17 @@ class LoadNotesTests(TestCase):
         self.assertEqual(note.type, Note.TYPE.time_spend)
         self.assertEqual(note.body, body)
         self.assertEqual(note.data['spent'], timedelta(hours=1, minutes=1).total_seconds())
+        self.assertEqual(note.data['date'], note_date.strftime(GITLAB_DATE_FORMAT))
 
     def test_load_spend_subtracted(self):
-        body = f'subtracted 1h 1m of time spent at {date.today():{GITLAB_DATE_FORMAT}}'
+        note_date = date.today()
+
+        body = f'subtracted 1h 1m of time spent at {note_date:{GITLAB_DATE_FORMAT}}'
         Note.objects.sync_gitlab(dict2obj({
             'id': 2,
             'body': body,
             'created_at': datetime.strftime(datetime.now(), GITLAB_DATETIME_FORMAT),
+            'updated_at': datetime.strftime(datetime.now(), GITLAB_DATETIME_FORMAT),
             'author': {
                 'id': self.user.gl_id
             }
@@ -56,12 +63,14 @@ class LoadNotesTests(TestCase):
         self.assertEqual(note.body, body)
         self.assertEqual(note.type, Note.TYPE.time_spend)
         self.assertEqual(note.data['spent'], -timedelta(hours=1, minutes=1).total_seconds())
+        self.assertEqual(note.data['date'], note_date.strftime(GITLAB_DATE_FORMAT))
 
     def test_load_spend_reset(self):
         Note.objects.sync_gitlab(dict2obj({
             'id': 2,
             'body': SPEND_RESET_MESSAGE,
             'created_at': datetime.strftime(datetime.now(), GITLAB_DATETIME_FORMAT),
+            'updated_at': datetime.strftime(datetime.now(), GITLAB_DATETIME_FORMAT),
             'author': {
                 'id': self.user.gl_id
             }
@@ -81,6 +90,7 @@ class LoadNotesTests(TestCase):
             'id': 2,
             'body': 'bla',
             'created_at': datetime.strftime(datetime.now(), GITLAB_DATETIME_FORMAT),
+            'updated_at': datetime.strftime(datetime.now(), GITLAB_DATETIME_FORMAT),
             'author': {
                 'id': self.user.gl_id
             }
@@ -102,6 +112,7 @@ class LoadNotesTests(TestCase):
             'id': 2,
             'body': f'added 1h 1m of time spent at {date.today():{GITLAB_DATE_FORMAT}}',
             'created_at': datetime.strftime(datetime.now(), GITLAB_DATETIME_FORMAT),
+            'updated_at': datetime.strftime(datetime.now(), GITLAB_DATETIME_FORMAT),
             'author': {
                 'id': self.user.gl_id
             }
@@ -127,6 +138,7 @@ class LoadNotesTests(TestCase):
             'id': 2,
             'body': f'added 1h 1m of time spent at {date.today():{GITLAB_DATE_FORMAT}}',
             'created_at': datetime.strftime(datetime.now(), GITLAB_DATETIME_FORMAT),
+            'updated_at': datetime.strftime(datetime.now(), GITLAB_DATETIME_FORMAT),
             'author': {
                 'id': self.user.gl_id
             }
@@ -149,6 +161,7 @@ class LoadNotesTests(TestCase):
             'id': 2,
             'body': f'added 1h 1m of time spent at {date.today():{GITLAB_DATE_FORMAT}}',
             'created_at': datetime.strftime(datetime.now(), GITLAB_DATETIME_FORMAT),
+            'updated_at': datetime.strftime(datetime.now(), GITLAB_DATETIME_FORMAT),
             'author': {
                 'id': self.user.gl_id
             }
@@ -171,6 +184,7 @@ class LoadNotesTests(TestCase):
             'id': 2,
             'body': f'added 1h 1m of time spent at {date.today():{GITLAB_DATE_FORMAT}}',
             'created_at': datetime.strftime(timezone.now() - timedelta(hours=1), GITLAB_DATETIME_FORMAT),
+            'updated_at': datetime.strftime(datetime.now(), GITLAB_DATETIME_FORMAT),
             'author': {
                 'id': self.user.gl_id
             }
