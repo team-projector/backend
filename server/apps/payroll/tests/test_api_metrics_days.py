@@ -14,7 +14,8 @@ class ApiMetricsDaysTests(BaseAPITest):
     def setUp(self):
         super().setUp()
 
-        self.issue = IssueFactory.create(employee=self.user)
+        self.issue = IssueFactory.create(employee=self.user,
+                                         due_date=timezone.now())
 
     def test_simple(self):
         self.issue.time_estimate = timedelta(hours=10).total_seconds()
