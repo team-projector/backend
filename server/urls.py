@@ -18,7 +18,7 @@ urlpatterns = [
     ), 'urls'), namespace='api')),
     path('api/docs/', get_swagger_view(title='API'), name='swagger'),
     path('admin/', admin.site.urls),
-    url('api/', include('social_django.urls', namespace='social'))
+    url('api/', include('apps.users.social_urls', namespace='social'))
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
