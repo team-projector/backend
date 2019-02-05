@@ -91,11 +91,14 @@ class DayMetricsCalculator(BaseMetricsCalculator):
         if not active_issues:
             return
 
+        metric.loading = metric.time_spent
+
         deadline_issues = [
             issue
             for issue in active_issues
             if issue['due_date'] and issue['due_date'] <= metric.start
         ]
+
         for issue in deadline_issues:
             metric.loading += issue['remaining']
             active_issues.remove(issue)
