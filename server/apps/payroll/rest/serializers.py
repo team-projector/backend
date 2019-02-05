@@ -19,6 +19,7 @@ class MetricSerializer(serializers.Serializer):
     loading = serializers.IntegerField()
     efficiency = serializers.FloatField()
     earnings = serializers.IntegerField()
+    issues = serializers.IntegerField()
 
 
 class TimeExpenseSerializer(serializers.ModelSerializer):

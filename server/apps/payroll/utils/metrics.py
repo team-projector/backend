@@ -4,9 +4,7 @@ from typing import Iterable, List
 from django.db.models import F, Sum
 from django.db.models.functions import TruncDay
 from django.utils import timezone
-from django.utils.timezone import make_aware
 
-from apps.core.utils.date import date2datetime
 from apps.development.models import Issue
 from apps.payroll.models import SpentTime
 from apps.users.models import User
@@ -19,6 +17,7 @@ class Metric:
     loading = 0
     efficiency = 0
     earnings = 0
+    issues = 0
 
 
 class BaseMetricsCalculator:
@@ -32,10 +31,7 @@ class BaseMetricsCalculator:
 
     def get_spents(self):
         queryset = SpentTime.objects.filter(employee=self.user,
-                                            date__range=(
-                                                make_aware(date2datetime(self.start)),
-                                                make_aware(date2datetime(self.end))
-                                            ))
+                                            date__range=(self.start, self.end))
         queryset = self.modify_queryset(queryset)
 
         return queryset.annotate(period_spent=Sum('time_spent')).order_by()
@@ -72,6 +68,7 @@ class DayMetricsCalculator(BaseMetricsCalculator):
             metrics.append(metric)
 
             metric.start = metric.end = current
+            metric.issues = Issue.objects.filter(employee=self.user, due_date=current).count()
 
             if current in spents:
                 spent = spents[current]

@@ -47,10 +47,11 @@ class ApiMetricsDaysTests(BaseAPITest):
                                 timezone.now() - timedelta(days=2): timedelta(hours=2),
                                 timezone.now() - timedelta(days=1): timedelta(hours=1),
                                 timezone.now() + timedelta(days=1): timedelta(hours=3)
-                            },
-                            {
+                            }, {
                                 timezone.now(): timedelta(hours=8),
                                 timezone.now() + timedelta(days=1): timedelta(hours=1),
+                            }, {
+                                timezone.now() + timedelta(days=1): 1
                             })
 
     def test_not_in_range(self):
@@ -78,10 +79,13 @@ class ApiMetricsDaysTests(BaseAPITest):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(len(response.data), (end - start).days + 1)
 
-        self._check_metrics(response.data, {
-            timezone.now() - timedelta(days=1): timedelta(hours=1),
-            timezone.now() + timedelta(days=1): timedelta(hours=3)
-        })
+        self._check_metrics(response.data,
+                            {
+                                timezone.now() - timedelta(days=1): timedelta(hours=1),
+                                timezone.now() + timedelta(days=1): timedelta(hours=3)
+                            }, {}, {
+                                timezone.now(): 1
+                            })
 
     def test_another_user(self):
         self.issue.time_estimate = 0
@@ -111,10 +115,13 @@ class ApiMetricsDaysTests(BaseAPITest):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(len(response.data), (end - start).days + 1)
 
-        self._check_metrics(response.data, {
-            timezone.now() - timedelta(days=2): timedelta(hours=2),
-            timezone.now() - timedelta(days=1): -timedelta(hours=3)
-        })
+        self._check_metrics(response.data,
+                            {
+                                timezone.now() - timedelta(days=2): timedelta(hours=2),
+                                timezone.now() - timedelta(days=1): -timedelta(hours=3)
+                            }, {}, {
+                                timezone.now(): 1
+                            })
 
     def _create_spent_time(self, date, spent: timedelta = None, user=None):
         return IssueSpentTimeFactory.create(date=date,
@@ -122,9 +129,10 @@ class ApiMetricsDaysTests(BaseAPITest):
                                             base=self.issue,
                                             time_spent=spent.total_seconds())
 
-    def _check_metrics(self, metrics, spents: Dict[datetime, timedelta], loadings: Dict[datetime, timedelta] = None):
-        if not loadings:
-            loadings = {}
+    def _check_metrics(self, metrics,
+                       spents: Dict[datetime, timedelta],
+                       loadings: Dict[datetime, timedelta],
+                       issues_counts: Dict[datetime, int]):
 
         spents = {
             self.format_date(d): time.total_seconds()
@@ -134,6 +142,11 @@ class ApiMetricsDaysTests(BaseAPITest):
         loadings = {
             self.format_date(d): time.total_seconds()
             for d, time in loadings.items()
+        }
+
+        issues_counts = {
+            self.format_date(d): count
+            for d, count in issues_counts.items()
         }
 
         for metric in metrics:
@@ -148,3 +161,8 @@ class ApiMetricsDaysTests(BaseAPITest):
                 self.assertEqual(metric['loading'], loadings[metric['start']])
             else:
                 self.assertEqual(metric['loading'], 0)
+
+            if metric['start'] in issues_counts:
+                self.assertEqual(metric['issues'], issues_counts[metric['start']])
+            else:
+                self.assertEqual(metric['issues'], 0)
