@@ -3,6 +3,7 @@ from django.utils import timezone
 from social_core.backends.gitlab import GitLabOAuth2
 from social_core.utils import handle_http_errors
 
+from apps.users.models import User
 from apps.users.rest.serializers import TokenSerializer
 from apps.users.utils.token import create_user_token
 
@@ -24,3 +25,7 @@ class CustomGitLabOAuth2(GitLabOAuth2):
 
     def get_redirect_uri(self, state=None):
         return self.setting('REDIRECT_URI')
+
+    def authenticate(self, *args, **kwargs):
+        return User.objects.filter(login=kwargs['response']['username']).first()
+
