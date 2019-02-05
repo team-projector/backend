@@ -21,3 +21,6 @@ class CustomGitLabOAuth2(GitLabOAuth2):
         user.save(update_fields=['last_login'])
 
         return JsonResponse(TokenSerializer(token).data)
+
+    def get_redirect_uri(self, state=None):
+        return self.setting('REDIRECT_URI')
