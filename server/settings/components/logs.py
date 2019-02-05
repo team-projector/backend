@@ -1,12 +1,3 @@
-import os
-
-from server import BASE_DIR
-
-LOGGING_PATH = BASE_DIR.joinpath('logs')
-
-if not os.path.exists(LOGGING_PATH):
-    os.makedirs(LOGGING_PATH)
-
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
@@ -28,10 +19,10 @@ LOGGING = {
             'level': 'INFO',
             'propagate': False,
         },
-        'app': {
+        'apps': {
             'handlers': ['console'],
             'level': 'DEBUG',
-            'propagate': True,
+            'propagate': False,
         },
     },
 }

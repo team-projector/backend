@@ -1,3 +1,4 @@
+import logging
 from typing import Optional
 
 from django.conf import settings
@@ -11,6 +12,8 @@ from apps.core.gitlab import get_gitlab_client
 from apps.users.models import User
 from .parsers import parse_gl_date, parse_gl_datetime
 from ..models import Issue, Label, Note, Project, ProjectGroup
+
+logger = logging.getLogger(__name__)
 
 
 def load_groups() -> None:
@@ -29,7 +32,7 @@ def load_groups() -> None:
 
         gl_groups.remove(gl_group)
 
-        print(f'Group "{group}" is synced')
+        logger.info(f'Group "{group}" is synced')
 
         return group
 
@@ -66,7 +69,7 @@ def load_group_projects(group: ProjectGroup) -> None:
             if settings.GITLAB_CHECK_WEBHOOKS:
                 check_project_webhooks(gl.projects.get(gl_project.id))
 
-            print(f'Project "{project}" is synced')
+            logger.info(f'Project "{project}" is synced')
 
 
 def check_project_webhooks(gl_project: GlProject) -> None:
@@ -95,7 +98,7 @@ def load_issues(full_reload: bool = False) -> None:
 def load_project_issues(project: Project, full_reload: bool = False) -> None:
     gl = get_gitlab_client()
 
-    print(f'Syncing project {project} issues')
+    logger.info(f'Syncing project {project} issues')
     gl_project = gl.projects.get(id=project.gl_id)
 
     args = {
@@ -128,7 +131,7 @@ def load_project_issue(project: Project, gl_project: GlProject, gl_issue: GlProj
     load_issue_labels(issue, gl_project, gl_issue)
     load_issue_notes(issue, gl_issue)
 
-    print(f'Issue "{issue}" is synced')
+    logger.info(f'Issue "{issue}" is synced')
 
 
 def load_issue_labels(issue: Issue, gl_project: GlProject, gl_issue: GlProjectIssue) -> None:
@@ -197,6 +200,6 @@ def load_user(user_id: int) -> User:
         user.is_staff = False
         user.save()
 
-    print(f'Issue "{user}" is synced')
+    logger.info(f'User "{user}" is synced')
 
     return user
