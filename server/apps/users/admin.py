@@ -15,7 +15,7 @@ admin.site.unregister(Group)
 class UserAdmin(DjUserAdmin):
     model = User
     list_display = (
-        'login', 'name', 'last_login', 'is_active', 'is_staff', 'change_password_link'
+        'login', 'name', 'email', 'last_login', 'is_active', 'is_staff', 'change_password_link'
     )
     list_filter = ('is_active', 'is_staff', 'is_active')
     ordering = ('login',)
@@ -32,7 +32,7 @@ class UserAdmin(DjUserAdmin):
     exclude = ('user_permissions',)
     fieldsets = (
         (None, {
-            'fields': ('login', 'groups', 'is_superuser', 'is_staff', 'is_active', 'last_login')
+            'fields': ('login', 'email', 'groups', 'is_superuser', 'is_staff', 'is_active', 'last_login')
         }),
         ('GitLab', {
             'fields': ('gl_avatar', 'gl_id', 'gl_url', 'gl_last_sync')
