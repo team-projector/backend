@@ -2,7 +2,7 @@ from datetime import date, datetime, timedelta
 from typing import Iterable, List
 
 from django.conf import settings
-from django.db.models import F, Sum
+from django.db.models import Count, F, Sum
 from django.db.models.functions import TruncDay
 from django.utils import timezone
 
@@ -15,6 +15,7 @@ class Metric:
     start = None
     end = None
     time_spent = 0
+    time_estimate = 0
     loading = 0
     efficiency = 0
     earnings = 0
@@ -69,7 +70,13 @@ class DayMetricsCalculator(BaseMetricsCalculator):
             metrics.append(metric)
 
             metric.start = metric.end = current
-            metric.issues = Issue.objects.filter(employee=self.user, due_date=current).count()
+            deadline_stats = Issue.objects.filter(employee=self.user, due_date=current) \
+                .exclude(state='closed') \
+                .aggregate(issues_count=Count('*'),
+                           total_time_estimate=Sum('time_estimate'))
+
+            metric.issues = deadline_stats['issues_count']
+            metric.time_estimate = deadline_stats['total_time_estimate'] or 0
 
             if current in spents:
                 spent = spents[current]

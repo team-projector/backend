@@ -55,6 +55,8 @@ class ApiMetricsDaysTests(BaseAPITest):
                                 timezone.now() + timedelta(days=1): timedelta(hours=1),
                             }, {
                                 timezone.now() + timedelta(days=1): 1
+                            }, {
+                                timezone.now() + timedelta(days=1): timedelta(hours=15)
                             })
 
     def test_loading_day_already_has_spends(self):
@@ -98,6 +100,8 @@ class ApiMetricsDaysTests(BaseAPITest):
                                 timezone.now() + timedelta(days=1): timedelta(hours=6),
                             }, {
                                 timezone.now(): 1,
+                            }, {
+                                timezone.now(): timedelta(hours=4),
                             })
 
     def test_not_in_range(self):
@@ -131,7 +135,7 @@ class ApiMetricsDaysTests(BaseAPITest):
                                 timezone.now() + timedelta(days=1): timedelta(hours=3)
                             }, {}, {
                                 timezone.now(): 1
-                            })
+                            }, {})
 
     def test_another_user(self):
         self.issue.time_estimate = 0
@@ -167,7 +171,7 @@ class ApiMetricsDaysTests(BaseAPITest):
                                 timezone.now() - timedelta(days=1): -timedelta(hours=3)
                             }, {}, {
                                 timezone.now(): 1
-                            })
+                            }, {})
 
     def _create_spent_time(self, date, spent: timedelta = None, user=None, issue=None):
         return IssueSpentTimeFactory.create(date=date,
@@ -178,7 +182,8 @@ class ApiMetricsDaysTests(BaseAPITest):
     def _check_metrics(self, metrics,
                        spents: Dict[datetime, timedelta],
                        loadings: Dict[datetime, timedelta],
-                       issues_counts: Dict[datetime, int]):
+                       issues_counts: Dict[datetime, int],
+                       time_estimates: Dict[datetime, timedelta]):
 
         spents = {
             self.format_date(d): time
@@ -188,6 +193,11 @@ class ApiMetricsDaysTests(BaseAPITest):
         loadings = {
             self.format_date(d): time
             for d, time in loadings.items()
+        }
+
+        time_estimates = {
+            self.format_date(d): time
+            for d, time in time_estimates.items()
         }
 
         issues_counts = {
@@ -209,6 +219,18 @@ class ApiMetricsDaysTests(BaseAPITest):
                                  f'bad spent for {metric["start"]}: '
                                  f'expected - 0, '
                                  f'actual - {timedelta(seconds=metric["time_spent"])}')
+
+            if metric['start'] in time_estimates:
+                self.assertEqual(metric['time_estimate'],
+                                 time_estimates[metric['start']].total_seconds(),
+                                 f'bad time_estimate for {metric["start"]}: '
+                                 f'expected - {time_estimates[metric["start"]]}, '
+                                 f'actual - {timedelta(seconds=metric["time_estimate"])}')
+            else:
+                self.assertEqual(metric['time_estimate'], 0,
+                                 f'bad time_estimate for {metric["start"]}: '
+                                 f'expected - 0, '
+                                 f'actual - {timedelta(seconds=metric["time_estimate"])}')
 
             if metric['start'] in loadings:
                 self.assertEqual(metric['loading'],

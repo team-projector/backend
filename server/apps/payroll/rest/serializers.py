@@ -20,6 +20,7 @@ class MetricSerializer(serializers.Serializer):
     efficiency = serializers.FloatField()
     earnings = serializers.IntegerField()
     issues = serializers.IntegerField()
+    time_estimate = serializers.IntegerField()
 
 
 class TimeExpenseSerializer(serializers.ModelSerializer):
