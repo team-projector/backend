@@ -1,6 +1,7 @@
-from datetime import datetime, timedelta
+from datetime import date, datetime, timedelta
 from typing import Iterable, List
 
+from django.conf import settings
 from django.db.models import F, Sum
 from django.db.models.functions import TruncDay
 from django.utils import timezone
@@ -74,14 +75,19 @@ class DayMetricsCalculator(BaseMetricsCalculator):
                 spent = spents[current]
                 metric.time_spent = spent['period_spent']
 
-            if current >= now:
+            if self._is_apply_loading(current, now):
                 self._update_loading(metric, active_issues)
 
             current += DAY_STEP
 
         return metrics
 
-    def _update_loading(self, metric: Metric, active_issues: List[dict]):
+    @staticmethod
+    def _is_apply_loading(day: date, now: date) -> bool:
+        return day >= now and day.weekday() not in settings.TP_WEEKENDS_DAYS
+
+    @staticmethod
+    def _update_loading(metric: Metric, active_issues: List[dict]) -> None:
         if not active_issues:
             return
 

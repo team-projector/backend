@@ -1,6 +1,7 @@
 from datetime import datetime, timedelta
 from typing import Dict
 
+from django.test import override_settings
 from django.utils import timezone
 from rest_framework import status
 
@@ -10,6 +11,7 @@ from apps.payroll.tests.factories import IssueSpentTimeFactory
 from apps.users.tests.factories import UserFactory
 
 
+@override_settings(TP_WEEKENDS_DAYS=[])
 class ApiMetricsDaysTests(BaseAPITest):
     def setUp(self):
         super().setUp()

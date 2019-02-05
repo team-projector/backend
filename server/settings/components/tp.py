@@ -1,0 +1,1 @@
+TP_WEEKENDS_DAYS = [5, 6]
