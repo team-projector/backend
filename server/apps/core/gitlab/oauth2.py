@@ -27,4 +27,5 @@ class CustomGitLabOAuth2(GitLabOAuth2):
         return self.setting('REDIRECT_URI')
 
     def authenticate(self, *args, **kwargs):
-        return User.objects.filter(login=kwargs['response']['username']).first()
+        if 'response' in kwargs:
+            return User.objects.filter(login=kwargs['response']['username']).first()
