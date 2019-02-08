@@ -1,7 +1,10 @@
+from typing import Iterable
+
 from django.db.models import Sum
 from rest_framework import serializers
 
 from apps.core.rest.serializers import LinkSerializer
+from apps.development.utils.problems.issues import checkers
 from apps.users.models import User
 from ..models import Issue, Label
 
@@ -29,17 +32,20 @@ class IssueCardSerializer(serializers.ModelSerializer):
             .aggregate(total_spent=Sum('time_spent'))['total_spent']
 
 
-class MetricsParamsSerializer(serializers.Serializer):
+class ProblemsParamsSerializer(serializers.Serializer):
     user = serializers.PrimaryKeyRelatedField(queryset=User.objects.all())
-    start = serializers.DateField()
-    end = serializers.DateField()
-    group = serializers.CharField()
 
 
-class MetricSerializer(serializers.Serializer):
-    start = serializers.DateField()
-    end = serializers.DateField()
-    time_spent = serializers.IntegerField()
-    time_estimate = serializers.IntegerField()
-    efficiency = serializers.FloatField()
-    earnings = serializers.IntegerField()
+class IssueProblemSerializer(serializers.Serializer):
+    def to_representation(self, instance):
+        return {
+            'problems': self._get_problems(instance),
+            'issue': IssueCardSerializer(instance, context=self.context).data
+        }
+
+    def _get_problems(self, instance) -> Iterable[str]:
+        return [
+            checker.problem_code
+            for checker in checkers
+            if getattr(instance, checker.annotate_field)
+        ]

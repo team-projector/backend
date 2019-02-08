@@ -4,9 +4,11 @@ from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import filters, mixins
+from rest_framework.decorators import action
 
 from apps.core.rest.views import BaseGenericViewSet
-from .serializers import IssueCardSerializer
+from apps.development.utils.problems.issues import IssueProblemsChecker
+from .serializers import IssueCardSerializer, IssueProblemSerializer
 from ..models import Issue
 from ..tasks import sync_project_issue
 
@@ -35,3 +37,19 @@ class IssuesViewset(mixins.ListModelMixin,
     filter_fields = ('state', 'due_date', 'employee')
     ordering_fields = ('due_date', 'title', 'created_at')
     ordering = ('due_date',)
+
+    def filter_queryset(self, queryset):
+        queryset = super().filter_queryset(queryset)
+
+        if self.action == 'problems':
+            checker = IssueProblemsChecker()
+            queryset = checker.check(queryset)
+
+        return queryset
+
+    @action(detail=False,
+            filter_backends=(DjangoFilterBackend,),
+            filter_fields=('employee',),
+            serializer_class=IssueProblemSerializer)
+    def problems(self, request):
+        return self.list(request)
