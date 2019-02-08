@@ -92,7 +92,7 @@ class ApiIssuesTests(BaseAPITest):
     def test_empty_due_day_but_another_user(self):
         user_2 = UserFactory.create()
         IssueFactory.create_batch(2, employee=self.user, due_date=timezone.now())
-        problem_issue = IssueFactory.create(employee=user_2)
+        IssueFactory.create(employee=user_2)
 
         self.set_credentials()
         response = self.client.get('/api/issues/problems', {
@@ -101,4 +101,3 @@ class ApiIssuesTests(BaseAPITest):
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data['count'], 0)
-
