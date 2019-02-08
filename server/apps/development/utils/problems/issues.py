@@ -62,13 +62,15 @@ class IssueProblemsChecker:
 
         return queryset
 
-    def _filter_queryset(self, queryset):
+    @staticmethod
+    def _filter_queryset(queryset):
         return queryset.filter(reduce(or_, [
             Q(**{checker.annotate_field: True})
             for checker in checkers
         ]))
 
-    def _annotate_queryset(self, queryset):
+    @staticmethod
+    def _annotate_queryset(queryset):
         for checker in checkers:
             queryset = checker.setup_queryset(queryset)
 
