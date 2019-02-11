@@ -126,6 +126,8 @@ def load_project_issue(project: Project, gl_project: GlProject, gl_issue: GlProj
                                          due_date=parse_gl_date(gl_issue.due_date),
                                          gl_url=gl_issue.web_url,
                                          created_at=parse_gl_datetime(gl_issue.created_at),
+                                         updated_at=parse_gl_datetime(gl_issue.updated_at),
+                                         closed_at=parse_gl_datetime(gl_issue.closed_at),
                                          employee=extract_user_from_data(gl_issue.assignee))
 
     load_issue_labels(issue, gl_project, gl_issue)

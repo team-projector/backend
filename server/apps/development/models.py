@@ -130,6 +130,8 @@ class Issue(NotableMixin,
                              help_text=_('HT__STATE'))
 
     created_at = models.DateTimeField(null=True, blank=True)
+    updated_at = models.DateTimeField(null=True, blank=True)
+    closed_at = models.DateTimeField(null=True, blank=True)
 
     due_date = models.DateField(null=True, blank=True)
 

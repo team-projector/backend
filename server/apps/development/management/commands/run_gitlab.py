@@ -2,7 +2,6 @@ import gitlab
 from django.core.management.base import BaseCommand
 
 from apps.development.models import Issue
-from apps.development.utils.loaders import load_issue_notes
 
 GROUP_ID = 4018796
 PROJECT_ID = 9419749
@@ -40,15 +39,15 @@ class Command(BaseCommand):
 
         gl_project = gl.projects.get(9419749)
         gl_issue = gl_project.issues.get(id=27)
-        issue = Issue.objects.get(gl_id=gl_issue.id)
+        Issue.objects.get(gl_id=gl_issue.id)
 
         print(f'-- {gl_issue}')
 
-        load_issue_notes(issue, gl_issue)
-
-        for gl_note in gl_issue.notes.list(as_list=False, system=True, sort='asc'):
-            # Note.objects.sync_gitlab(gl_note, issue)
-            print(f'-- {gl_note}')
+        # load_issue_notes(issue, gl_issue)
+        #
+        # for gl_note in gl_issue.notes.list(as_list=False, system=True, sort='asc'):
+        #     # Note.objects.sync_gitlab(gl_note, issue)
+        #     print(f'-- {gl_note}')
 
         # merge_request = project.mergerequests.get(id=1)
         #
