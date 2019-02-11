@@ -1,52 +1,19 @@
-from datetime import date, datetime, timedelta
+from datetime import date, timedelta
 from typing import Iterable, List
 
 from django.conf import settings
-from django.db.models import Count, F, Sum
+from django.db.models import Count, Sum
 from django.db.models.functions import TruncDay
 from django.utils import timezone
 
 from apps.development.models import Issue
-from apps.payroll.models import SpentTime
-from apps.users.models import User
-
-
-class Metric:
-    start = None
-    end = None
-    time_spent = 0
-    time_estimate = 0
-    loading = 0
-    efficiency = 0
-    earnings = 0
-    issues = 0
-
-
-class BaseMetricsCalculator:
-    def __init__(self, user: User, start: datetime, end: datetime):
-        self.user = user
-        self.start = start
-        self.end = end
-
-    def calculate(self) -> Iterable[Metric]:
-        raise NotImplementedError
-
-    def get_spents(self):
-        queryset = SpentTime.objects.filter(employee=self.user,
-                                            date__range=(self.start, self.end))
-        queryset = self.modify_queryset(queryset)
-
-        return queryset.annotate(period_spent=Sum('time_spent')).order_by()
-
-    def modify_queryset(self, queryset):
-        raise NotImplementedError
-
+from .base import Metric, MetricsCalculator
 
 DAY_STEP = timedelta(days=1)
 MAX_DAY_LOADING = timedelta(hours=8).total_seconds()
 
 
-class DayMetricsCalculator(BaseMetricsCalculator):
+class DayMetricsCalculator(MetricsCalculator):
     def calculate(self) -> Iterable[Metric]:
         metrics = []
 
@@ -58,12 +25,7 @@ class DayMetricsCalculator(BaseMetricsCalculator):
         current = self.start
         now = timezone.now().date()
 
-        active_issues = list(Issue.objects.annotate(remaining=F('time_estimate') - F('total_time_spent'))
-                             .filter(employee=self.user, remaining__gt=0)
-                             .exclude(state='closed')
-                             .values('id', 'due_date', 'remaining')) \
-            if now > self.start \
-            else []
+        active_issues = self.get_active_issues() if now > self.start else []
 
         while current <= self.end:
             metric = Metric()
@@ -126,8 +88,3 @@ class DayMetricsCalculator(BaseMetricsCalculator):
 
     def modify_queryset(self, queryset):
         return queryset.annotate(day=TruncDay('date')).values('day')
-
-
-def create_calculator(user: User, start: datetime, end: datetime, group: str):
-    if group == 'day':
-        return DayMetricsCalculator(user, start, end)
