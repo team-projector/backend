@@ -19,6 +19,18 @@ class ApiMetricsDaysTests(BaseAPITest):
 
         self.issue = IssueFactory.create(employee=self.user, due_date=timezone.now())
 
+    def test_bad_group(self):
+        self.set_credentials()
+
+        response = self.client.get('/api/metrics', {
+            'user': self.user.id,
+            'start': timezone.now() - timedelta(days=5),
+            'end': timezone.now() + timedelta(days=5),
+            'group': 'days'
+        })
+
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
     def test_simple(self):
         self._create_spent_time(timezone.now() - timedelta(days=4), timedelta(hours=3))
         self._create_spent_time(timezone.now() - timedelta(days=2, hours=5), timedelta(hours=2))
