@@ -152,7 +152,7 @@ class Issue(NotableMixin,
     @property
     def time_remains(self):
         if self.time_estimate is not None and self.total_time_spent is not None:
-            return self.time_estimate - self.total_time_spent
+            return max(self.time_estimate - self.total_time_spent, 0)
 
     def adjust_spent_times(self):
         from apps.payroll.models import SpentTime
