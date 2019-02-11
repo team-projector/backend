@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import date
 from typing import Iterable
 
 from django.db.models import F, Sum
@@ -20,7 +20,7 @@ class Metric:
 
 
 class MetricsCalculator:
-    def __init__(self, user: User, start: datetime, end: datetime):
+    def __init__(self, user: User, start: date, end: date):
         self.user = user
         self.start = start
         self.end = end

@@ -11,3 +11,7 @@ def next_weekday(d: date, weekday: int) -> date:
         days_ahead += 7
 
     return d + timedelta(days_ahead)
+
+
+def begin_of_week(d: date) -> date:
+    return d - timedelta(days=d.weekday() % 6)
