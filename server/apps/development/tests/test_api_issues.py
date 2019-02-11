@@ -126,6 +126,31 @@ class ApiIssuesTests(BaseAPITest):
         self.assertEqual(response.data['results'][0]['time_spent'], timedelta(hours=4).total_seconds())
         self.assertEqual(response.data['results'][0]['time_remains'], timedelta(hours=1).total_seconds())
 
+    def test_with_negative_remains(self):
+        issue = IssueFactory.create(employee=self.user,
+                                    time_estimate=int(timedelta(hours=4).total_seconds()),
+                                    total_time_spent=int(timedelta(hours=5).total_seconds()))
+
+        IssueNoteFactory.create(type=Note.TYPE.time_spend,
+                                created_at=timezone.now() - timedelta(hours=4),
+                                user=self.user,
+                                content_object=issue,
+                                data={
+                                    'spent': int(timedelta(hours=5).total_seconds()),
+                                    'date': (timezone.now() - timedelta(hours=4)).date()
+                                })
+
+        issue.adjust_spent_times()
+
+        self.set_credentials()
+        response = self.client.get('/api/issues')
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data['count'], 1)
+
+        self.assertEqual(response.data['results'][0]['time_spent'], timedelta(hours=5).total_seconds())
+        self.assertEqual(response.data['results'][0]['time_remains'], 0)
+
     def test_with_spends_users_mix(self):
         user_2 = User.objects.create_user(login='user 2', gl_id=11)
 
