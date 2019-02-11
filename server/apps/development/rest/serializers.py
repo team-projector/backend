@@ -1,4 +1,4 @@
-from typing import Iterable
+from typing import Dict, Iterable
 
 from django.db.models import Sum
 from rest_framework import serializers
@@ -24,7 +24,7 @@ class IssueCardSerializer(serializers.ModelSerializer):
         model = Issue
         fields = (
             'id', 'title', 'labels', 'project', 'due_date', 'state', 'time_estimate', 'total_time_spent', 'time_spent',
-            'gl_url'
+            'gl_url', 'time_remains'
         )
 
     def get_time_spent(self, instance):
@@ -37,7 +37,7 @@ class ProblemsParamsSerializer(serializers.Serializer):
 
 
 class IssueProblemSerializer(serializers.Serializer):
-    def to_representation(self, instance):
+    def to_representation(self, instance) -> Dict:
         return {
             'problems': self._get_problems(instance),
             'issue': IssueCardSerializer(instance, context=self.context).data

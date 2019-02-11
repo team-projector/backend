@@ -149,6 +149,11 @@ class Issue(NotableMixin,
     def last_note_date(self):
         return self.notes.aggregate(last_created=Max('created_at'))['last_created']
 
+    @property
+    def time_remains(self):
+        if self.time_estimate is not None and self.total_time_spent is not None:
+            return self.time_estimate - self.total_time_spent
+
     def adjust_spent_times(self):
         from apps.payroll.models import SpentTime
 
