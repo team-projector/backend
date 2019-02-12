@@ -18,13 +18,12 @@ stages:
   - deploy
 
 quality:
-  image: python:3.6-jessie
+  image: junte/python-quality
   stage: quality
   variables:
     GIT_DEPTH: 5
     GIT_STRATEGY: fetch
   script:
-    - pip install flake8 mypy
     - make quality
 
 build:
