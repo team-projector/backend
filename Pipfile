@@ -30,6 +30,7 @@ social-auth-app-django = "*"
 pytest-django = "*"
 ipython = "*"
 mypy = "*"
+xenon = "==0.5.4"
 
 [requires]
 python_version = "3.6"

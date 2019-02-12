@@ -4,9 +4,10 @@ flake8:
 mypy:
 	@mypy server
 
-quality: flake8 mypy
+xenon:
+	@xenon --max-absolute A --max-modules A --max-average A  -e "*/migrations/*,*/tests/*,*/management/commands/*"  apps
+
+check_quality: flake8 mypy xenon
 
 makemessages:
 	@./manage.py makemessages --ignore=.venv/* -l en
-
-
