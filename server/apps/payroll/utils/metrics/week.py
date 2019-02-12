@@ -1,7 +1,7 @@
 from datetime import date, timedelta
 from typing import Iterable, List
 
-from django.db.models import Avg, Count, F, FloatField, Sum
+from django.db.models import Avg, Count, F, FloatField, QuerySet, Sum
 from django.db.models.functions import Cast, TruncWeek
 from django.utils.timezone import make_aware
 
@@ -37,10 +37,10 @@ class WeekMetricsCalculator(MetricsCalculator):
 
         return metrics
 
-    def modify_queryset(self, queryset):
+    def modify_queryset(self, queryset: QuerySet) -> QuerySet:
         return queryset.annotate(week=TruncWeek('date')).values('week')
 
-    def _adjust_deadlines(self, metric: Metric):
+    def _adjust_deadlines(self, metric: Metric) -> None:
         issues_stats = Issue.objects.filter(employee=self.user, due_date__range=(metric.start, metric.end)) \
             .exclude(state='closed') \
             .aggregate(issues_count=Count('*'),
@@ -49,7 +49,7 @@ class WeekMetricsCalculator(MetricsCalculator):
         metric.issues = issues_stats['issues_count']
         metric.time_estimate = issues_stats['total_time_estimate'] or 0
 
-    def _adjust_efficiency(self, metric: Metric):
+    def _adjust_efficiency(self, metric: Metric) -> None:
         issues_stats = Issue.objects.filter(employee=self.user,
                                             closed_at__range=(
                                                 make_aware(date2datetime(metric.start)),

@@ -60,7 +60,7 @@ def parse_spend(s: str) -> int:
     if not s:
         return 0
 
-    bag = defaultdict(int)
+    bag: DefaultDict[str, int] = defaultdict(int)
 
     for part in s.split(' '):
         m = RE_SPEND_PART.match(part)
@@ -83,7 +83,7 @@ class SpendAddedParser(BaseNoteParser):
 
         m = RE_SPEND.match(gl_note.body)
         if not m:
-            return
+            return None
 
         spent = parse_spend(m.group('spent'))
         if m.group('action') == 'subtracted':

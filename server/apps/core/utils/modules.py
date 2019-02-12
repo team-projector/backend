@@ -2,7 +2,7 @@ from importlib import import_module
 from typing import Iterable, List
 
 
-def get_module_url_patterns(*modules: Iterable[str]) -> Iterable:
+def get_module_url_patterns(*modules: str) -> Iterable:
     patterns: List = []
 
     for module in modules:

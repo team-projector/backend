@@ -1,4 +1,5 @@
 from collections import defaultdict
+from typing import DefaultDict
 
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
@@ -56,7 +57,7 @@ class Project(GitlabEntityMixin):
     def __str__(self):
         return self.full_title or self.title
 
-    def save(self, *args, **kwargs):
+    def save(self, *args, **kwargs) -> None:
         if not self.full_title:
             self.full_title = self.title
 
@@ -156,10 +157,10 @@ class Issue(NotableMixin,
         if self.time_estimate is not None and self.total_time_spent is not None:
             return max(self.time_estimate - self.total_time_spent, 0)
 
-    def adjust_spent_times(self):
+    def adjust_spent_times(self) -> None:
         from apps.payroll.models import SpentTime
 
-        users_spents = defaultdict(int)
+        users_spents: DefaultDict[int, int] = defaultdict(int)
 
         for note in self.notes.all().order_by('created_at'):
             time_spent = 0

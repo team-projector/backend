@@ -18,14 +18,15 @@ stages:
   - deploy
 
 flake8:
-  image: python:3.6-alpine3.6
+  image: python:3.6-jessie
   stage: quality
   variables:
     GIT_DEPTH: 5
     GIT_STRATEGY: fetch
   script:
-    - pip install flake8
+    - pip install flake8 mypy
     - flake8 server
+    - mypy server
 
 build:
   stage: build
