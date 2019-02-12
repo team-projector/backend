@@ -8,6 +8,7 @@ from rest_framework import status
 
 from apps.core.tests.base import BaseAPITest
 from apps.core.utils.date import begin_of_week
+from apps.development.models import STATE_OPENED, STATE_CLOSED
 from apps.development.tests.factories import IssueFactory
 from apps.development.utils.parsers import parse_date
 from apps.payroll.tests.factories import IssueSpentTimeFactory
@@ -31,7 +32,7 @@ class ApiMetricsWeeksTests(BaseAPITest):
 
         self.issue.time_estimate = timedelta(hours=15).total_seconds()
         self.issue.total_time_spent = self.issue.time_spents.aggregate(spent=Sum('time_spent'))['spent']
-        self.issue.state = 'opened'
+        self.issue.state = STATE_OPENED
         self.issue.due_date = monday + timedelta(days=1)
         self.issue.save()
 
@@ -68,7 +69,7 @@ class ApiMetricsWeeksTests(BaseAPITest):
 
         self.issue.time_estimate = timedelta(hours=15).total_seconds()
         self.issue.total_time_spent = self.issue.time_spents.aggregate(spent=Sum('time_spent'))['spent']
-        self.issue.state = 'closed'
+        self.issue.state = STATE_CLOSED
         self.issue.due_date = monday + timedelta(days=1)
         self.issue.closed_at = monday + timedelta(days=1)
         self.issue.save()
@@ -104,7 +105,7 @@ class ApiMetricsWeeksTests(BaseAPITest):
 
         self.issue.time_estimate = timedelta(hours=15).total_seconds()
         self.issue.total_time_spent = self.issue.time_spents.aggregate(spent=Sum('time_spent'))['spent']
-        self.issue.state = 'opened'
+        self.issue.state = STATE_OPENED
         self.issue.due_date = monday + timedelta(days=2)
         self.issue.save()
 
@@ -142,7 +143,7 @@ class ApiMetricsWeeksTests(BaseAPITest):
 
         self.issue.time_estimate = timedelta(hours=15).total_seconds()
         self.issue.total_time_spent = self.issue.time_spents.aggregate(spent=Sum('time_spent'))['spent']
-        self.issue.state = 'opened'
+        self.issue.state = STATE_OPENED
         self.issue.due_date = monday + timedelta(days=1)
         self.issue.save()
 
@@ -181,7 +182,7 @@ class ApiMetricsWeeksTests(BaseAPITest):
 
         self.issue.time_estimate = timedelta(hours=15).total_seconds()
         self.issue.total_time_spent = self.issue.time_spents.aggregate(spent=Sum('time_spent'))['spent']
-        self.issue.state = 'opened'
+        self.issue.state = STATE_OPENED
         self.issue.due_date = monday + timedelta(days=1)
         self.issue.save()
 
@@ -211,7 +212,7 @@ class ApiMetricsWeeksTests(BaseAPITest):
     def test_many_issues(self):
         monday = begin_of_week(timezone.now().date())
         another_issue = IssueFactory.create(employee=self.user,
-                                            state='opened',
+                                            state=STATE_OPENED,
                                             due_date=monday + timedelta(days=4),
                                             total_time_spent=timedelta(hours=3).total_seconds(),
                                             time_estimate=timedelta(hours=10).total_seconds())
@@ -223,7 +224,7 @@ class ApiMetricsWeeksTests(BaseAPITest):
 
         self.issue.time_estimate = timedelta(hours=15).total_seconds()
         self.issue.total_time_spent = self.issue.time_spents.aggregate(spent=Sum('time_spent'))['spent']
-        self.issue.state = 'opened'
+        self.issue.state = STATE_OPENED
         self.issue.due_date = monday + timedelta(days=1)
         self.issue.save()
 

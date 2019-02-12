@@ -3,7 +3,7 @@ from typing import Any, Dict, Iterable, List, Optional
 
 from django.db.models import F, QuerySet, Sum
 
-from apps.development.models import Issue
+from apps.development.models import Issue, STATE_CLOSED
 from apps.payroll.models import SpentTime
 from apps.users.models import User
 
@@ -41,5 +41,5 @@ class MetricsCalculator:
     def get_active_issues(self) -> List[Dict[str, Any]]:
         return list(Issue.objects.annotate(remaining=F('time_estimate') - F('total_time_spent'))
                     .filter(employee=self.user, remaining__gt=0)
-                    .exclude(state='closed')
+                    .exclude(state=STATE_CLOSED)
                     .values('id', 'due_date', 'remaining'))

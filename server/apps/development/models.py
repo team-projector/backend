@@ -111,6 +111,10 @@ class Note(models.Model):
         return f'{self.user}: {self.type}'
 
 
+STATE_CLOSED = 'closed'
+STATE_OPENED = 'opened'
+
+
 class Issue(NotableMixin,
             SpentTimesMixin,
             GitlabEntityMixin):

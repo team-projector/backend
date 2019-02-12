@@ -6,7 +6,7 @@ from django.db.models.functions import Cast, TruncWeek
 from django.utils.timezone import make_aware
 
 from apps.core.utils.date import begin_of_week, date2datetime
-from apps.development.models import Issue
+from apps.development.models import Issue, STATE_CLOSED
 from .base import Metric, MetricsCalculator
 
 WEEK_STEP = timedelta(weeks=1)
@@ -42,7 +42,7 @@ class WeekMetricsCalculator(MetricsCalculator):
 
     def _adjust_deadlines(self, metric: Metric) -> None:
         issues_stats = Issue.objects.filter(employee=self.user, due_date__range=(metric.start, metric.end)) \
-            .exclude(state='closed') \
+            .exclude(state=STATE_CLOSED) \
             .aggregate(issues_count=Count('*'),
                        total_time_estimate=Sum('time_estimate'))
 
@@ -55,7 +55,7 @@ class WeekMetricsCalculator(MetricsCalculator):
                                                 make_aware(date2datetime(metric.start)),
                                                 make_aware(date2datetime(metric.end))
                                             ),
-                                            state='closed') \
+                                            state=STATE_CLOSED) \
             .annotate(efficiency=Cast(F('total_time_spent'), FloatField()) / Cast(F('time_estimate'), FloatField())) \
             .aggregate(avg_efficiency=Avg('efficiency'))
 

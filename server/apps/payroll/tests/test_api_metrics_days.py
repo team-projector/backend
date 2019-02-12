@@ -7,6 +7,7 @@ from django.utils import timezone
 from rest_framework import status
 
 from apps.core.tests.base import BaseAPITest
+from apps.development.models import STATE_OPENED
 from apps.development.tests.factories import IssueFactory
 from apps.payroll.tests.factories import IssueSpentTimeFactory
 from apps.users.tests.factories import UserFactory
@@ -39,7 +40,7 @@ class ApiMetricsDaysTests(BaseAPITest):
 
         self.issue.time_estimate = timedelta(hours=15).total_seconds()
         self.issue.total_time_spent = self.issue.time_spents.aggregate(spent=Sum('time_spent'))['spent']
-        self.issue.state = 'opened'
+        self.issue.state = STATE_OPENED
         self.issue.due_date = timezone.now() + timedelta(days=1)
         self.issue.save()
 
@@ -73,7 +74,7 @@ class ApiMetricsDaysTests(BaseAPITest):
 
     def test_loading_day_already_has_spends(self):
         issue_2 = IssueFactory.create(employee=self.user,
-                                      state='opened',
+                                      state=STATE_OPENED,
                                       total_time_spent=timedelta(hours=3).total_seconds(),
                                       time_estimate=timedelta(hours=10).total_seconds())
 
@@ -83,7 +84,7 @@ class ApiMetricsDaysTests(BaseAPITest):
 
         self.issue.time_estimate = timedelta(hours=4).total_seconds()
         self.issue.total_time_spent = timedelta(hours=3).total_seconds()
-        self.issue.state = 'opened'
+        self.issue.state = STATE_OPENED
         self.issue.due_date = timezone.now()
         self.issue.save()
 
@@ -119,7 +120,7 @@ class ApiMetricsDaysTests(BaseAPITest):
     def test_not_in_range(self):
         self.issue.time_estimate = 0
         self.issue.total_time_spent = 0
-        self.issue.state = 'opened'
+        self.issue.state = STATE_OPENED
         self.issue.save()
 
         self._create_spent_time(timezone.now() - timedelta(days=5, hours=5), timedelta(hours=2))
@@ -152,7 +153,7 @@ class ApiMetricsDaysTests(BaseAPITest):
     def test_another_user(self):
         self.issue.time_estimate = 0
         self.issue.total_time_spent = 0
-        self.issue.state = 'opened'
+        self.issue.state = STATE_OPENED
         self.issue.save()
 
         another_user = UserFactory.create()

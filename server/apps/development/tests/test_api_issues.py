@@ -4,7 +4,7 @@ from django.utils import timezone
 from rest_framework import status
 
 from apps.core.tests.base import BaseAPITest
-from apps.development.models import Note
+from apps.development.models import Note, STATE_OPENED, STATE_CLOSED
 from apps.development.tests.factories import IssueFactory, IssueNoteFactory
 from apps.users.models import User
 
@@ -48,12 +48,12 @@ class ApiIssuesTests(BaseAPITest):
         self.assertEqual(response.data['results'][0]['id'], issue.id)
 
     def test_filter_by_state(self):
-        IssueFactory.create(employee=self.user, state='opened')
-        issue = IssueFactory.create(employee=self.user, state='closed')
+        IssueFactory.create(employee=self.user, state=STATE_OPENED)
+        issue = IssueFactory.create(employee=self.user, state=STATE_CLOSED)
 
         self.set_credentials()
         response = self.client.get('/api/issues', {
-            'state': 'closed'
+            'state': STATE_CLOSED
         })
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -62,7 +62,7 @@ class ApiIssuesTests(BaseAPITest):
 
     def test_filter_by_due_date(self):
         now = timezone.now()
-        issue = IssueFactory.create(employee=self.user, state='opened', due_date=now)
+        issue = IssueFactory.create(employee=self.user, state=STATE_OPENED, due_date=now)
         IssueFactory.create(employee=self.user, due_date=now + timedelta(days=1))
         IssueFactory.create(employee=self.user, due_date=now - timedelta(days=1))
 
@@ -77,15 +77,15 @@ class ApiIssuesTests(BaseAPITest):
 
     def test_filter_by_due_date_and_state(self):
         now = timezone.now()
-        issue = IssueFactory.create(employee=self.user, state='opened', due_date=now)
-        IssueFactory.create(employee=self.user, state='closed', due_date=now + timedelta(days=1))
-        IssueFactory.create(employee=self.user, state='closed', due_date=now - timedelta(days=1))
-        IssueFactory.create(employee=self.user, state='opened', due_date=now - timedelta(days=1))
+        issue = IssueFactory.create(employee=self.user, state=STATE_OPENED, due_date=now)
+        IssueFactory.create(employee=self.user, state=STATE_CLOSED, due_date=now + timedelta(days=1))
+        IssueFactory.create(employee=self.user, state=STATE_CLOSED, due_date=now - timedelta(days=1))
+        IssueFactory.create(employee=self.user, state=STATE_OPENED, due_date=now - timedelta(days=1))
 
         self.set_credentials()
         response = self.client.get('/api/issues', {
             'due_date': self.format_date(timezone.now()),
-            'state': 'opened'
+            'state': STATE_OPENED
         })
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)

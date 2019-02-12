@@ -6,7 +6,7 @@ from django.db.models import Count, QuerySet, Sum
 from django.db.models.functions import TruncDay
 from django.utils import timezone
 
-from apps.development.models import Issue
+from apps.development.models import Issue, STATE_CLOSED
 from .base import Metric, MetricsCalculator
 
 DAY_STEP = timedelta(days=1)
@@ -33,7 +33,7 @@ class DayMetricsCalculator(MetricsCalculator):
 
             metric.start = metric.end = current
             deadline_stats = Issue.objects.filter(employee=self.user, due_date=current) \
-                .exclude(state='closed') \
+                .exclude(state=STATE_CLOSED) \
                 .aggregate(issues_count=Count('*'),
                            total_time_estimate=Sum('time_estimate'))
 

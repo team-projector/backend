@@ -77,7 +77,7 @@ publish-dev:
     - prod
 
 deploy-dev:
-  image: slapshin1988/ssh-agent
+  image: junte/ssh-agent
   stage: deploy
   variables:
     SSH_PRIVATE_KEY: $SSH_DEV_PRIVATE_KEY
