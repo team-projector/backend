@@ -5,8 +5,7 @@ from rest_framework import status
 
 from apps.core.tests.base import BaseAPITest
 from apps.development.tests.factories import IssueFactory
-from apps.development.utils.problems.issues import (PROBLEM_EMPTY_DUE_DAY, PROBLEM_EMPTY_ESTIMATE,
-                                                    PROBLEM_OVERDUE_DUE_DAY)
+from apps.development.utils.problems.issues import PROBLEM_EMPTY_DUE_DAY, PROBLEM_EMPTY_ESTIMATE, PROBLEM_OVER_DUE_DAY
 from apps.users.tests.factories import UserFactory
 
 
@@ -41,7 +40,7 @@ class ApiIssuesTests(BaseAPITest):
 
         issue = response.data['results'][0]
         self.assertEqual(issue['issue']['id'], problem_issue.id)
-        self.assertEqual(issue['problems'], [PROBLEM_OVERDUE_DUE_DAY])
+        self.assertEqual(issue['problems'], [PROBLEM_OVER_DUE_DAY])
 
     def test_empty_estimate(self):
         IssueFactory.create_batch(2, employee=self.user, due_date=timezone.now())

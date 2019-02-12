@@ -1,4 +1,6 @@
-from rest_framework import generics, viewsets
+from typing import Dict
+
+from rest_framework import generics, serializers, viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
@@ -6,7 +8,7 @@ from .serializers import LinkSerializer
 
 
 class BaseGenericAPIView(generics.GenericAPIView):
-    serializer_classes = {}
+    serializer_classes: Dict[str, serializers.Serializer] = {}
 
     def get_serializer_class(self):
         return self.serializer_classes[self.request.method] \
@@ -15,7 +17,7 @@ class BaseGenericAPIView(generics.GenericAPIView):
 
 
 class BaseGenericViewSet(viewsets.GenericViewSet):
-    serializer_classes = {}
+    serializer_classes: Dict[str, serializers.Serializer] = {}
 
     def get_serializer_class(self):
         return self.serializer_classes[self.action] \

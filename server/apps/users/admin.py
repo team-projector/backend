@@ -47,8 +47,8 @@ class UserAdmin(DjUserAdmin):
     def change_password_link(self, obj):
         return format_html(f'<a href="{obj.id}/password/">change password</a>')
 
-    change_password_link.short_description = 'Change password link'
-    change_password_link.allow_tags = True
+    change_password_link.short_description = 'Change password link'  # type: ignore
+    change_password_link.allow_tags = True  # type: ignore
 
     change_password_form = AdminPasswordChangeForm
 

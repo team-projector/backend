@@ -2,7 +2,7 @@ from datetime import date, timedelta
 from typing import Iterable, List
 
 from django.conf import settings
-from django.db.models import Count, Sum
+from django.db.models import Count, QuerySet, Sum
 from django.db.models.functions import TruncDay
 from django.utils import timezone
 
@@ -86,5 +86,5 @@ class DayMetricsCalculator(MetricsCalculator):
             if not issue['remaining']:
                 active_issues.remove(issue)
 
-    def modify_queryset(self, queryset):
+    def modify_queryset(self, queryset: QuerySet) -> QuerySet:
         return queryset.annotate(day=TruncDay('date')).values('day')

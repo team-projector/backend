@@ -166,7 +166,7 @@ def load_issue_notes(issue: Issue, gl_issue: GlProjectIssue) -> None:
 
 def extract_user_from_data(data: dict) -> Optional[User]:
     if not data:
-        return
+        return None
 
     user_id = data['id']
 

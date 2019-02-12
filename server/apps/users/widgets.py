@@ -1,3 +1,5 @@
+from typing import Any, Dict, List
+
 from django import forms
 from django.conf import settings
 
@@ -6,8 +8,8 @@ DEFAULT_PERMISSIONS = ['add', 'change', 'delete']
 
 class PermissionSelectMultipleWidget(forms.CheckboxSelectMultiple):
     template_name = 'users/widgets/permissions.html'
-    custom_permission_types = []
-    groups_permissions = []
+    custom_permission_types: List[str] = []
+    groups_permissions: List[str] = []
 
     def get_context(self, name, value, attrs):
         if value is None:
@@ -24,7 +26,7 @@ class PermissionSelectMultipleWidget(forms.CheckboxSelectMultiple):
 
     def get_table(self):
         table = []
-        row = None
+        row: Dict[str, Any] = {}
         last_app = None
         last_model = None
 
@@ -52,9 +54,12 @@ class PermissionSelectMultipleWidget(forms.CheckboxSelectMultiple):
             # each row represents one model with its permissions categorized by type
             is_app_or_model_different = last_model != model_class or last_app != app
             if is_app_or_model_different:
-                row = dict(model=model_verbose_name, model_class=model_class, app=app, permissions={})
+                row = dict(model=model_verbose_name,
+                           model_class=model_class,
+                           app=app,
+                           permissions={})
 
-            row['permissions'][permission_type] = permission
+                row['permissions'][permission_type] = permission
 
             if is_app_or_model_different:
                 table.append(row)

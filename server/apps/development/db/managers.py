@@ -1,30 +1,32 @@
+from typing import Any, Tuple
+
 from django.db import models
 from django.utils import timezone
 
 
 class ProjectGroupManager(models.Manager):
-    def sync_gitlab(self, gl_id, **kwargs):
+    def sync_gitlab(self, gl_id, **kwargs) -> Tuple[Any, bool]:
         kwargs['gl_last_sync'] = timezone.now()
 
         return self.update_or_create(gl_id=gl_id, defaults=kwargs)
 
 
 class ProjectManager(models.Manager):
-    def sync_gitlab(self, gl_id, **kwargs):
+    def sync_gitlab(self, gl_id, **kwargs) -> Tuple[Any, bool]:
         kwargs['gl_last_sync'] = timezone.now()
 
         return self.update_or_create(gl_id=gl_id, defaults=kwargs)
 
 
 class IssueManager(models.Manager):
-    def sync_gitlab(self, gl_id, **kwargs):
+    def sync_gitlab(self, gl_id, **kwargs) -> Tuple[Any, bool]:
         kwargs['gl_last_sync'] = timezone.now()
 
         return self.update_or_create(gl_id=gl_id, defaults=kwargs)
 
 
 class NoteManager(models.Manager):
-    def sync_gitlab(self, gl_note, issue):
+    def sync_gitlab(self, gl_note, issue) -> Any:
         from ..utils.loaders import extract_user_from_data
         from ..utils.notes import read_note
         from ..utils.parsers import parse_gl_datetime
