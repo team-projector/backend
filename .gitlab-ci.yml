@@ -17,7 +17,7 @@ stages:
   - publish
   - deploy
 
-flake8:
+quality:
   image: python:3.6-jessie
   stage: quality
   variables:
@@ -25,8 +25,7 @@ flake8:
     GIT_STRATEGY: fetch
   script:
     - pip install flake8 mypy
-    - flake8 server
-    - mypy server
+    - make quality
 
 build:
   stage: build
