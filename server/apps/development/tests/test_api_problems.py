@@ -4,6 +4,7 @@ from django.utils import timezone
 from rest_framework import status
 
 from apps.core.tests.base import BaseAPITest
+from apps.development.models import STATE_CLOSED
 from apps.development.tests.factories import IssueFactory
 from apps.development.utils.problems.issues import PROBLEM_EMPTY_DUE_DAY, PROBLEM_EMPTY_ESTIMATE, PROBLEM_OVER_DUE_DAY
 from apps.users.tests.factories import UserFactory
@@ -26,6 +27,18 @@ class ApiIssuesTests(BaseAPITest):
         self.assertEqual(issue['issue']['id'], problem_issue.id)
         self.assertEqual(issue['problems'], [PROBLEM_EMPTY_DUE_DAY])
 
+    def test_empty_due_day_but_closed(self):
+        IssueFactory.create_batch(2, employee=self.user, due_date=timezone.now())
+        IssueFactory.create(employee=self.user, state=STATE_CLOSED)
+
+        self.set_credentials()
+        response = self.client.get('/api/issues/problems', {
+            'employee': self.user.id
+        })
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data['count'], 0)
+
     def test_overdue_due_day(self):
         IssueFactory.create_batch(2, employee=self.user, due_date=timezone.now())
         problem_issue = IssueFactory.create(employee=self.user, due_date=timezone.now() - timedelta(days=1))
@@ -41,6 +54,20 @@ class ApiIssuesTests(BaseAPITest):
         issue = response.data['results'][0]
         self.assertEqual(issue['issue']['id'], problem_issue.id)
         self.assertEqual(issue['problems'], [PROBLEM_OVER_DUE_DAY])
+
+    def test_overdue_due_day_but_closed(self):
+        IssueFactory.create_batch(2, employee=self.user, due_date=timezone.now())
+        IssueFactory.create(employee=self.user,
+                            due_date=timezone.now() - timedelta(days=1),
+                            state=STATE_CLOSED)
+
+        self.set_credentials()
+        response = self.client.get('/api/issues/problems', {
+            'employee': self.user.id
+        })
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data['count'], 0)
 
     def test_empty_estimate(self):
         IssueFactory.create_batch(2, employee=self.user, due_date=timezone.now())

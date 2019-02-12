@@ -5,6 +5,8 @@ from typing import ClassVar, Optional
 from django.db.models import Case, NullBooleanField, Q, QuerySet, When
 from django.utils import timezone
 
+from apps.development.models import STATE_OPENED
+
 PROBLEM_EMPTY_DUE_DAY = 'empty_due_date'
 PROBLEM_OVER_DUE_DAY = 'over_due_date'
 PROBLEM_EMPTY_ESTIMATE = 'empty_estimate'
@@ -31,15 +33,15 @@ class EmptyDueDateProblemChecker(BaseProblemChecker):
     problem_code = PROBLEM_EMPTY_DUE_DAY
 
     def get_condition(self) -> When:
-        return When(due_date__isnull=True, then=True)
+        return When(Q(due_date__isnull=True, state=STATE_OPENED), then=True)
 
 
 class OverdueDueDateProblemChecker(BaseProblemChecker):
-    annotate_field = 'problem_overdue_due_date'
+    annotate_field = 'problem_over_due_date'
     problem_code = PROBLEM_OVER_DUE_DAY
 
     def get_condition(self) -> When:
-        return When(due_date__lt=timezone.now(), then=True)
+        return When(Q(due_date__lt=timezone.now(), state=STATE_OPENED), then=True)
 
 
 class EmptyEstimateProblemChecker(BaseProblemChecker):
