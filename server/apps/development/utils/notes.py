@@ -1,7 +1,7 @@
 import re
 from collections import defaultdict, namedtuple
 from datetime import timedelta
-from typing import DefaultDict, Dict, Optional, Pattern
+from typing import DefaultDict, Optional, Pattern
 
 from apps.development.utils.parsers import parse_gl_date
 
