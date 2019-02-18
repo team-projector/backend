@@ -28,4 +28,4 @@ RUN apt-get update \
 
 EXPOSE 8080
 
-CMD ["/bin/bash", "deploy/run.sh"]
+CMD ["/bin/bash", "docker/server/run.sh"]
