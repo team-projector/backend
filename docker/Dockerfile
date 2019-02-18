@@ -1,8 +1,16 @@
 FROM python:3.6-slim
 
-RUN mkdir -p /var/www
+ENV PYTHONFAULTHANDLER=1 \
+  PYTHONUNBUFFERED=1 \
+  PYTHONHASHSEED=random \
+  PIP_NO_CACHE_DIR=off \
+  PIP_DEFAULT_TIMEOUT=100 \
+  PIPENV_HIDE_EMOJIS=true \
+  PIPENV_COLORBLIND=true \
+  PIPENV_NOSPIN=true \
+  C_FORCE_ROOT=true
 
-ENV C_FORCE_ROOT=true
+RUN mkdir -p /var/www
 
 COPY . /var/www
 WORKDIR /var/www
@@ -14,9 +22,9 @@ RUN apt-get update \
     && export DJANGO_ENV=build \
     && python manage.py collectstatic --noinput --verbosity 0 \
     && django-admin compilemessages \
+
     && chown -R www-data:www-data /var/lib/nginx \
-    && cp deploy/nginx.conf /etc/nginx/nginx.conf \
-    && cp deploy/uwsgi_params /etc/nginx/uwsgi_params
+    && cp docker/nginx/* /etc/nginx
 
 EXPOSE 8080
 

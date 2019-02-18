@@ -1,1 +1,3 @@
-TP_WEEKENDS_DAYS = [5, 6]
+import calendar
+
+TP_WEEKENDS_DAYS = (calendar.SATURDAY, calendar.SUNDAY)

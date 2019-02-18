@@ -1,32 +1,27 @@
-import os
+from settings import config
 
-DEBUG = True
+SECRET_KEY = config('DJANGO_SECRET_KEY')
+DOMAIN_NAME = config('DOMAIN_NAME')
 
-SITE_ID = 1
-SITE_DOMAIN = os.getenv('SITE_DOMAIN')
-
-TIME_ZONE = 'Europe/Moscow'
-
-LANGUAGE_CODE = 'en'
-
-SECRET_KEY = os.getenv('DJANGO_SECRET_KEY')
-
-ALLOWED_HOSTS = os.getenv('DJANGO_ALLOWED_HOSTS').split(',')
+ALLOWED_HOSTS = [DOMAIN_NAME]
 
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.getenv('DJANGO_DATABASE_NAME'),
-        'USER': os.getenv('DJANGO_DATABASE_USER'),
-        'PASSWORD': os.getenv('DJANGO_DATABASE_PASSWORD'),
-        'HOST': os.getenv('DJANGO_DATABASE_HOST'),
-        'PORT': os.getenv('DJANGO_DATABASE_PORT', '5432')
-    }
+        'NAME': config('POSTGRES_DB'),
+        'USER': config('POSTGRES_USER'),
+        'PASSWORD': config('POSTGRES_PASSWORD'),
+        'HOST': config('DJANGO_DATABASE_HOST'),
+        'PORT': config('DJANGO_DATABASE_PORT', cast=int, default=5432),
+        'CONN_MAX_AGE': config('CONN_MAX_AGE', cast=int, default=60),
+    },
 }
 
-GITLAB_TOKEN = os.getenv('DJANGO_GITLAB_TOKEN')
-GITLAB_CHECK_WEBHOOKS = True
+STATIC_ROOT = '/var/www/server/static'
+MEDIA_ROOT = '/var/www/server/media'
 
-SOCIAL_AUTH_GITLAB_KEY = os.getenv('SOCIAL_AUTH_GITLAB_KEY')
-SOCIAL_AUTH_GITLAB_SECRET = os.getenv('SOCIAL_AUTH_GITLAB_SECRET')
-SOCIAL_AUTH_GITLAB_REDIRECT_URI = 'https://teamprojector.com/signup/login'
+GITLAB_TOKEN = config('DJANGO_GITLAB_TOKEN')
+
+SOCIAL_AUTH_GITLAB_KEY = config('SOCIAL_AUTH_GITLAB_KEY')
+SOCIAL_AUTH_GITLAB_SECRET = config('SOCIAL_AUTH_GITLAB_SECRET')
+SOCIAL_AUTH_GITLAB_REDIRECT_URI = f'https://{config("DOMAIN_NAME")}/signup/login'

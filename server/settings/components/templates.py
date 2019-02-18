@@ -1,15 +1,11 @@
-from os.path import join
-
-from settings.components.paths import PROJECT_ROOT
-
-PROJECT_TEMPLATES = [
-    join(PROJECT_ROOT, 'templates'),
-]
+from server import BASE_DIR
 
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': PROJECT_TEMPLATES,
+        'DIRS': [
+            BASE_DIR.joinpath('server', 'templates'),
+        ],
         'OPTIONS': {
             'context_processors': [
                 'django.template.context_processors.debug',

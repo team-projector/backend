@@ -1,8 +1,6 @@
-import os
-
 from django.utils.translation import gettext_lazy as _
 
-from server.settings.components.paths import PROJECT_ROOT
+from server import BASE_DIR
 
 USE_I18N = True
 USE_L10N = True
@@ -17,5 +15,5 @@ LANGUAGES = [
 ]
 
 LOCALE_PATHS = [
-    os.path.join(PROJECT_ROOT, 'locale')
+    BASE_DIR.joinpath('locale')
 ]

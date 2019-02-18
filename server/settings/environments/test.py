@@ -1,12 +1,4 @@
-DEBUG = False
-
-SECRET_KEY = 'test.secret.key'
-
-TIME_ZONE = 'UTC'
-
-LANGUAGE_CODE = 'en'
-
-ALLOWED_HOSTS = ['*']
+SECRET_KEY = 'test.key'
 
 DATABASES = {
     'default': {

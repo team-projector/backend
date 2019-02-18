@@ -24,6 +24,7 @@ factory-boy = "*"
 django-filter = "*"
 social-auth-core = "*"
 social-auth-app-django = "*"
+python-decouple = "*"
 
 [dev-packages]
 "flake8" = "*"
