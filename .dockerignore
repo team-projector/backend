@@ -1,3 +1,5 @@
-venv
+.venv
+.my_py
 *.pyc
 *.mo
+.git
