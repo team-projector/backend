@@ -1,13 +1,3 @@
-from server.settings.components.celery import CELERY_BROKER_URL
-
-SITE_ID = 1
-
-DEBUG = True
-
-LANGUAGE_CODE = 'en'
-
-SECRET_KEY = '*'
-
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
@@ -18,7 +8,6 @@ DATABASES = {
     }
 }
 
-REDIS_CONNECTION_STRING = CELERY_BROKER_URL
 
 SOCIAL_AUTH_GITLAB_KEY = '*'
 SOCIAL_AUTH_GITLAB_SECRET = '*'

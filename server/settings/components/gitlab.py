@@ -1,3 +1,5 @@
-GITLAB_HOST = 'https://www.gitlab.com'
+from settings import config
+
+GITLAB_HOST = config('DJANGO_GITLAB_HOST', default='https://www.gitlab.com')
+GITLAB_CHECK_WEBHOOKS = config('DJANGO_GITLAB_CHECK_WEBHOOKS', default=False, cast=bool)
 GITLAB_TOKEN = None
-GITLAB_CHECK_WEBHOOKS = False
