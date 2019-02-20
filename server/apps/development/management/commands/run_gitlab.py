@@ -1,7 +1,11 @@
+import timeit
+
 import gitlab
 from django.core.management.base import BaseCommand
+import time
 
-from apps.development.models import Issue
+from apps.development.models import Project
+from apps.development.utils.loaders import check_project_deleted_issues
 
 GROUP_ID = 4018796
 PROJECT_ID = 9419749
@@ -38,10 +42,20 @@ class Command(BaseCommand):
         # load_project_issues(Project.objects.get(gl_id=9419749))
 
         gl_project = gl.projects.get(9419749)
-        gl_issue = gl_project.issues.get(id=27)
-        Issue.objects.get(gl_id=gl_issue.id)
+        # gl_project = gl.projects.get(3673718)
+        project = Project.objects.get(gl_id=gl_project.id)
 
-        print(f'-- {gl_issue}')
+        check_project_deleted_issues(project, gl_project)
+        #
+        # ids = set()
+        #
+        # start_time = time.time()
+        # for gl_issue in gl_project.issues.list(as_list=False):
+        #     ids.add(gl_issue.id)
+
+        # print(ids)
+        #
+        # print(f'--- {time.time() - start_time} secs ---')
 
         # load_issue_notes(issue, gl_issue)
         #

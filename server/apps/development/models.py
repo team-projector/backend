@@ -119,7 +119,7 @@ class Issue(NotableMixin,
             SpentTimesMixin,
             GitlabEntityMixin):
     title = models.CharField(max_length=255, verbose_name=_('VN__TITLE'), help_text=_('HT__TITLE'))
-    project = models.ForeignKey(Project, models.SET_NULL, null=True, blank=True,
+    project = models.ForeignKey(Project, models.SET_NULL, null=True, blank=True, related_name='issues',
                                 verbose_name=_('VN__PROJECT'), help_text=_('HT__PROJECT'))
 
     time_estimate = models.PositiveIntegerField(null=True, verbose_name=_('VN__TIME_ESTIMATE'),

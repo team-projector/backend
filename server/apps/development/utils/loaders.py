@@ -95,10 +95,12 @@ def load_issues(full_reload: bool = False) -> None:
                 raise
 
 
-def load_project_issues(project: Project, full_reload: bool = False) -> None:
+def load_project_issues(project: Project,
+                        full_reload: bool = False,
+                        check_deleted: bool = True) -> None:
     gl = get_gitlab_client()
 
-    logger.info(f'Syncing project {project} issues')
+    logger.info(f'Syncing project "{project}" issues')
     gl_project = gl.projects.get(id=project.gl_id)
 
     args = {
@@ -114,17 +116,47 @@ def load_project_issues(project: Project, full_reload: bool = False) -> None:
     for gl_issue in gl_project.issues.list(**args):
         load_project_issue(project, gl_project, gl_issue)
 
+    if check_deleted:
+        check_project_deleted_issues(project, gl_project)
+
+
+def check_projects_deleted_issues():
+    gl = get_gitlab_client()
+
+    for project in Project.objects.all():
+        try:
+            gl_project = gl.projects.get(id=project.gl_id)
+
+            check_project_deleted_issues(project, gl_project)
+        except GitlabGetError as e:
+            if e.response_code != status.HTTP_404_NOT_FOUND:
+                raise
+
+
+def check_project_deleted_issues(project: Project, gl_project: GlProject) -> None:
+    gl_issues = set()
+    for gl_issue in gl_project.issues.list(as_list=False):
+        gl_issues.add(gl_issue.id)
+
+    issues = set(project.issues.values_list('gl_id', flat=True))
+
+    diff = issues - gl_issues
+
+    project.issues.filter(gl_id__in=diff).delete()
+
+    logger.info(f'Project "{project}" deleted issues ckecked: removed {len(diff)} issues')
+
 
 def load_project_issue(project: Project, gl_project: GlProject, gl_issue: GlProjectIssue) -> None:
     time_stats = gl_issue.time_stats()
     issue, _ = Issue.objects.sync_gitlab(gl_id=gl_issue.id,
+                                         gl_url=gl_issue.web_url,
                                          project=project,
                                          title=gl_issue.title,
                                          total_time_spent=time_stats['total_time_spent'],
                                          time_estimate=time_stats['time_estimate'],
                                          state=gl_issue.state,
                                          due_date=parse_gl_date(gl_issue.due_date),
-                                         gl_url=gl_issue.web_url,
                                          created_at=parse_gl_datetime(gl_issue.created_at),
                                          updated_at=parse_gl_datetime(gl_issue.updated_at),
                                          closed_at=parse_gl_datetime(gl_issue.closed_at),
