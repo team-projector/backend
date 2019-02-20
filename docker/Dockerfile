@@ -10,10 +10,8 @@ ENV PYTHONFAULTHANDLER=1 \
   PIPENV_NOSPIN=true \
   C_FORCE_ROOT=true
 
-RUN mkdir -p /var/www
-
-COPY . /var/www
 WORKDIR /var/www
+COPY . /var/www
 
 RUN apt-get update \
     && apt-get install -y gcc binutils libproj-dev gettext nginx \
@@ -22,10 +20,7 @@ RUN apt-get update \
     && export DJANGO_ENV=build \
     && python manage.py collectstatic --noinput --verbosity 0 \
     && django-admin compilemessages \
-
     && chown -R www-data:www-data /var/lib/nginx \
     && cp docker/nginx/* /etc/nginx
-
-EXPOSE 8080
 
 CMD ["/bin/bash", "docker/server/run.sh"]
