@@ -59,7 +59,7 @@ class ApiMetricsWeeksTests(BaseAPITest):
                                 monday: timedelta(hours=15)
                             }, {})
 
-    def test_efficiency(self):
+    def test_efficiency_more_1(self):
         monday = begin_of_week(timezone.now().date())
 
         self._create_spent_time(monday + timedelta(days=4), timedelta(hours=3))
@@ -92,7 +92,43 @@ class ApiMetricsWeeksTests(BaseAPITest):
                             {
                                 monday: timedelta(hours=6)
                             }, {}, {}, {
-                                monday: self.issue.total_time_spent / self.issue.time_estimate
+                                monday: self.issue.time_estimate / self.issue.total_time_spent
+                            })
+
+    def test_efficiency_less_1(self):
+        monday = begin_of_week(timezone.now().date())
+
+        self._create_spent_time(monday + timedelta(days=4), timedelta(hours=3))
+        self._create_spent_time(monday + timedelta(days=2, hours=5), timedelta(hours=2))
+        self._create_spent_time(monday + timedelta(days=1), timedelta(hours=4))
+        self._create_spent_time(monday + timedelta(days=1, hours=5), -timedelta(hours=3))
+
+        self.issue.time_estimate = timedelta(hours=3).total_seconds()
+        self.issue.total_time_spent = self.issue.time_spents.aggregate(spent=Sum('time_spent'))['spent']
+        self.issue.state = STATE_CLOSED
+        self.issue.due_date = monday + timedelta(days=1)
+        self.issue.closed_at = monday + timedelta(days=1)
+        self.issue.save()
+
+        self.set_credentials()
+        start = monday - timedelta(days=5)
+        end = monday + timedelta(days=5)
+
+        response = self.client.get('/api/metrics', {
+            'user': self.user.id,
+            'start': self.format_date(start),
+            'end': self.format_date(end),
+            'group': 'week'
+        })
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(response.data), 2)
+
+        self._check_metrics(response.data,
+                            {
+                                monday: timedelta(hours=6)
+                            }, {}, {}, {
+                                monday: self.issue.time_estimate / self.issue.total_time_spent
                             })
 
     def test_efficiency_zero_estimate(self):
