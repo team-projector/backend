@@ -55,7 +55,8 @@ class WeekMetricsCalculator(MetricsCalculator):
                                                 make_aware(date2datetime(metric.start)),
                                                 make_aware(date2datetime(metric.end))
                                             ),
-                                            state=STATE_CLOSED) \
+                                            state=STATE_CLOSED,
+                                            time_estimate__gt=0) \
             .annotate(efficiency=Cast(F('total_time_spent'), FloatField()) / Cast(F('time_estimate'), FloatField())) \
             .aggregate(avg_efficiency=Avg('efficiency'))
 
