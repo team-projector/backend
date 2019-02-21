@@ -129,6 +129,32 @@ class ApiMetricsWeeksTests(BaseAPITest):
                                 monday: timedelta(hours=6)
                             }, {}, {}, {})
 
+    def test_efficiency_zero_spend(self):
+        monday = begin_of_week(timezone.now().date())
+
+        self.issue.time_estimate = timedelta(hours=2).total_seconds()
+        self.issue.total_time_spent = 0
+        self.issue.state = STATE_CLOSED
+        self.issue.due_date = monday + timedelta(days=1)
+        self.issue.closed_at = monday + timedelta(days=1)
+        self.issue.save()
+
+        self.set_credentials()
+        start = monday - timedelta(days=5)
+        end = monday + timedelta(days=5)
+
+        response = self.client.get('/api/metrics', {
+            'user': self.user.id,
+            'start': self.format_date(start),
+            'end': self.format_date(end),
+            'group': 'week'
+        })
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(response.data), 2)
+
+        self._check_metrics(response.data, {}, {}, {}, {})
+
     def test_many_weeks(self):
         monday = begin_of_week(timezone.now().date())
 
