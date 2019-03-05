@@ -14,12 +14,13 @@ RUN apt-get update \
     && apt-get install -y gcc binutils libproj-dev gettext nginx \
     && chown -R www-data:www-data /var/lib/nginx \
     && pip install pipenv \
-    && pipenv install --system --deploy \
+
 
 WORKDIR /var/www
 COPY . /var/www
 
 RUN export DJANGO_ENV=build \
+    && pipenv install --system --deploy \
     && python manage.py collectstatic --noinput --verbosity 0 \
     && django-admin compilemessages \
     && cp docker/nginx/* /etc/nginx
