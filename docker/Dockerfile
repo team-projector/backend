@@ -13,8 +13,7 @@ ENV PYTHONFAULTHANDLER=1 \
 RUN apt-get update \
     && apt-get install -y gcc binutils libproj-dev gettext nginx \
     && chown -R www-data:www-data /var/lib/nginx \
-    && pip install pipenv \
-
+    && pip install pipenv
 
 WORKDIR /var/www
 COPY . /var/www
