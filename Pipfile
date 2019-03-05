@@ -26,6 +26,7 @@ social-auth-core = "*"
 social-auth-app-django = "*"
 python-decouple = "*"
 django-health-check = "*"
+tornado = "==5.*"
 
 [dev-packages]
 "flake8" = "*"
