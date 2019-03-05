@@ -25,6 +25,7 @@ django-filter = "*"
 social-auth-core = "*"
 social-auth-app-django = "*"
 python-decouple = "*"
+django-health-check = "*"
 
 [dev-packages]
 "flake8" = "*"

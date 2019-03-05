@@ -18,6 +18,11 @@ INSTALLED_APPS = (
     'corsheaders',
     'admin_auto_filters',
     'social_django',
+    'health_check',
+    'health_check.db',
+    'health_check.cache',
+    'health_check.storage',
+    'health_check.contrib.celery',
 
     # apps
     'apps.core',

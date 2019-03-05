@@ -16,9 +16,10 @@ urlpatterns = [
         'apps.development.rest.urls',
         'apps.payroll.rest.urls',
     ), 'urls'), namespace='api')),
+    path('api/', include('apps.users.social_urls', namespace='social')),
     path('api/docs/', get_swagger_view(title='API'), name='swagger'),
     path('admin/', admin.site.urls),
-    url('api/', include('apps.users.social_urls', namespace='social'))
+    path('ht/', include('health_check.urls')),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
