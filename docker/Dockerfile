@@ -10,17 +10,18 @@ ENV PYTHONFAULTHANDLER=1 \
   PIPENV_NOSPIN=true \
   C_FORCE_ROOT=true
 
+RUN apt-get update \
+    && apt-get install -y gcc binutils libproj-dev gettext nginx \
+    && chown -R www-data:www-data /var/lib/nginx \
+    && pip install pipenv \
+    && pipenv install --system --deploy \
+
 WORKDIR /var/www
 COPY . /var/www
 
-RUN apt-get update \
-    && apt-get install -y gcc binutils libproj-dev gettext nginx \
-    && pip install pipenv \
-    && pipenv install --system --deploy \
-    && export DJANGO_ENV=build \
+RUN export DJANGO_ENV=build \
     && python manage.py collectstatic --noinput --verbosity 0 \
     && django-admin compilemessages \
-    && chown -R www-data:www-data /var/lib/nginx \
     && cp docker/nginx/* /etc/nginx
 
 CMD ["/bin/bash", "docker/server/run.sh"]
