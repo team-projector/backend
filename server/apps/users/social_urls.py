@@ -12,9 +12,9 @@ app_name = 'social'
 
 urlpatterns = [
     # authentication / association
-    path('login/<slug:backend>', views.auth, name='begin'),
-    path('complete/<slug:backend>', social_views.complete, name='complete'),
+    path('login/<slug:backend>/', views.auth, name='begin'),
+    path('complete/<slug:backend>/', social_views.complete, name='complete'),
     # disconnection
-    path('disconnect/<slug:backend>', views.disconnect, name='disconnect'),
-    path('disconnect/<slug:backend>/<int:association_id>', views.disconnect, name='disconnect_individual'),
+    path('disconnect/<slug:backend>/', views.disconnect, name='disconnect'),
+    path('disconnect/<slug:backend>/<int:association_id>/', views.disconnect, name='disconnect_individual'),
 ]
