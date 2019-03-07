@@ -70,7 +70,42 @@ class ApiMetricsDaysTests(BaseAPITest):
                                 timezone.now() + timedelta(days=1): 1
                             }, {
                                 timezone.now() + timedelta(days=1): timedelta(hours=15)
+                            }, {
+                                timezone.now() + timedelta(days=1):
+                                    timedelta(seconds=self.issue.time_estimate - self.issue.total_time_spent)
                             })
+
+    def test_negative_remains(self):
+        self._create_spent_time(timezone.now() - timedelta(days=4), timedelta(hours=3))
+
+        self.issue.time_estimate = timedelta(hours=2).total_seconds()
+        self.issue.total_time_spent = self.issue.time_spents.aggregate(spent=Sum('time_spent'))['spent']
+        self.issue.state = STATE_OPENED
+        self.issue.due_date = timezone.now() + timedelta(days=1)
+        self.issue.save()
+
+        self.set_credentials()
+        start = timezone.now() - timedelta(days=5)
+        end = timezone.now() + timedelta(days=5)
+
+        response = self.client.get('/api/metrics', {
+            'user': self.user.id,
+            'start': self.format_date(start),
+            'end': self.format_date(end),
+            'group': 'day'
+        })
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(response.data), (end - start).days + 1)
+
+        self._check_metrics(response.data,
+                            {
+                                timezone.now() - timedelta(days=4): timedelta(hours=3),
+                            }, {}, {
+                                timezone.now() + timedelta(days=1): 1
+                            }, {
+                                timezone.now() + timedelta(days=1): timedelta(hours=2)
+                            }, {})
 
     def test_loading_day_already_has_spends(self):
         issue_2 = IssueFactory.create(employee=self.user,
@@ -82,8 +117,8 @@ class ApiMetricsDaysTests(BaseAPITest):
         self._create_spent_time(timezone.now(), timedelta(hours=2), issue=issue_2)
         self._create_spent_time(timezone.now(), timedelta(hours=3))
 
-        self.issue.time_estimate = timedelta(hours=4).total_seconds()
-        self.issue.total_time_spent = timedelta(hours=3).total_seconds()
+        self.issue.time_estimate = int(timedelta(hours=4).total_seconds())
+        self.issue.total_time_spent = int(timedelta(hours=3).total_seconds())
         self.issue.state = STATE_OPENED
         self.issue.due_date = timezone.now()
         self.issue.save()
@@ -115,6 +150,9 @@ class ApiMetricsDaysTests(BaseAPITest):
                                 timezone.now(): 1,
                             }, {
                                 timezone.now(): timedelta(hours=4),
+                            }, {
+                                timezone.now(): timedelta(
+                                    seconds=self.issue.time_estimate - self.issue.total_time_spent)
                             })
 
     def test_not_in_range(self):
@@ -148,7 +186,7 @@ class ApiMetricsDaysTests(BaseAPITest):
                                 timezone.now() + timedelta(days=1): timedelta(hours=3)
                             }, {}, {
                                 timezone.now(): 1
-                            }, {})
+                            }, {}, {})
 
     def test_another_user(self):
         self.issue.time_estimate = 0
@@ -184,7 +222,7 @@ class ApiMetricsDaysTests(BaseAPITest):
                                 timezone.now() - timedelta(days=1): -timedelta(hours=3)
                             }, {}, {
                                 timezone.now(): 1
-                            }, {})
+                            }, {}, {})
 
     def _create_spent_time(self, date, spent: timedelta = None, user=None, issue=None):
         return IssueSpentTimeFactory.create(date=date,
@@ -196,68 +234,44 @@ class ApiMetricsDaysTests(BaseAPITest):
                        spents: Dict[datetime, timedelta],
                        loadings: Dict[datetime, timedelta],
                        issues_counts: Dict[datetime, int],
-                       time_estimates: Dict[datetime, timedelta]):
+                       time_estimates: Dict[datetime, timedelta],
+                       time_remains: Dict[datetime, timedelta]):
 
-        spents = {
-            self.format_date(d): time
-            for d, time in spents.items()
-        }
-
-        loadings = {
-            self.format_date(d): time
-            for d, time in loadings.items()
-        }
-
-        time_estimates = {
-            self.format_date(d): time
-            for d, time in time_estimates.items()
-        }
-
-        issues_counts = {
-            self.format_date(d): count
-            for d, count in issues_counts.items()
-        }
+        spents = self._prepare_metrics(spents)
+        loadings = self._prepare_metrics(loadings)
+        time_estimates = self._prepare_metrics(time_estimates)
+        issues_counts = self._prepare_metrics(issues_counts)
+        time_remains = self._prepare_metrics(time_remains)
 
         for metric in metrics:
             self.assertEqual(metric['start'], metric['end'])
 
-            if metric['start'] in spents:
-                self.assertEqual(metric['time_spent'],
-                                 spents[metric['start']].total_seconds(),
-                                 f'bad spent for {metric["start"]}: '
-                                 f'expected - {spents[metric["start"]]}, '
-                                 f'actual - {timedelta(seconds=metric["time_spent"])}')
-            else:
-                self.assertEqual(metric['time_spent'], 0,
-                                 f'bad spent for {metric["start"]}: '
-                                 f'expected - 0, '
-                                 f'actual - {timedelta(seconds=metric["time_spent"])}')
-
-            if metric['start'] in time_estimates:
-                self.assertEqual(metric['time_estimate'],
-                                 time_estimates[metric['start']].total_seconds(),
-                                 f'bad time_estimate for {metric["start"]}: '
-                                 f'expected - {time_estimates[metric["start"]]}, '
-                                 f'actual - {timedelta(seconds=metric["time_estimate"])}')
-            else:
-                self.assertEqual(metric['time_estimate'], 0,
-                                 f'bad time_estimate for {metric["start"]}: '
-                                 f'expected - 0, '
-                                 f'actual - {timedelta(seconds=metric["time_estimate"])}')
-
-            if metric['start'] in loadings:
-                self.assertEqual(metric['loading'],
-                                 loadings[metric['start']].total_seconds(),
-                                 f'bad loading for {metric["start"]}: '
-                                 f'expected - {loadings[metric["start"]]}, '
-                                 f'actual - {timedelta(seconds=metric["loading"])}')
-            else:
-                self.assertEqual(metric['loading'], 0,
-                                 f'bad loading for {metric["start"]}: '
-                                 f'expected - 0, '
-                                 f'actual - {timedelta(seconds=metric["loading"])}')
+            self._check_metric(metric, 'time_spent', spents)
+            self._check_metric(metric, 'time_estimate', time_estimates)
+            self._check_metric(metric, 'loading', loadings)
+            self._check_metric(metric, 'time_remains', time_remains)
 
             if metric['start'] in issues_counts:
                 self.assertEqual(metric['issues'], issues_counts[metric['start']])
             else:
                 self.assertEqual(metric['issues'], 0)
+
+    def _prepare_metrics(self, metrics):
+        return {
+            self.format_date(d): time
+            for d, time in metrics.items()
+        }
+
+    def _check_metric(self, metric, metric_name, values):
+        if metric['start'] in values:
+            self.assertEqual(metric[metric_name],
+                             values[metric['start']].total_seconds(),
+                             f'bad {metric_name} for {metric["start"]}: '
+                             f'expected - {values[metric["start"]]}, '
+                             f'actual - {timedelta(seconds=metric[metric_name])}')
+        else:
+            self.assertEqual(metric[metric_name],
+                             0,
+                             f'bad {metric_name} for {metric["start"]}: '
+                             f'expected - 0, '
+                             f'actual - {timedelta(seconds=metric[metric_name])}')

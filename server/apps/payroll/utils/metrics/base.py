@@ -13,6 +13,7 @@ class Metric:
     end: Optional[date] = None
     time_spent: int = 0
     time_estimate: int = 0
+    time_remains: int = 0
     loading: int = 0
     efficiency: float = 0
     earnings: float = 0

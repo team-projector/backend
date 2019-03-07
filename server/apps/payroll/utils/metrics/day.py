@@ -2,7 +2,7 @@ from datetime import date, timedelta
 from typing import Iterable, List
 
 from django.conf import settings
-from django.db.models import Count, QuerySet, Sum
+from django.db.models import Case, Count, F, IntegerField, QuerySet, Sum, Value, When
 from django.db.models.functions import TruncDay
 from django.utils import timezone
 
@@ -32,13 +32,20 @@ class DayMetricsCalculator(MetricsCalculator):
             metrics.append(metric)
 
             metric.start = metric.end = current
-            deadline_stats = Issue.objects.filter(employee=self.user, due_date=current) \
+            deadline_stats = Issue.objects \
+                .annotate(time_remains=Case(When(time_estimate__gt=F('total_time_spent'),
+                                                 then=F('time_estimate') - F('total_time_spent')),
+                                            default=Value(0),
+                                            output_field=IntegerField())) \
+                .filter(employee=self.user, due_date=current) \
                 .exclude(state=STATE_CLOSED) \
                 .aggregate(issues_count=Count('*'),
-                           total_time_estimate=Sum('time_estimate'))
+                           total_time_estimate=Sum('time_estimate'),
+                           total_time_remains=Sum('time_remains'))
 
             metric.issues = deadline_stats['issues_count']
             metric.time_estimate = deadline_stats['total_time_estimate'] or 0
+            metric.time_remains = deadline_stats['total_time_remains'] or 0
 
             if current in spents:
                 spent = spents[current]

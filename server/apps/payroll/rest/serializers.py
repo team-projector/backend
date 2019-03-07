@@ -21,6 +21,7 @@ class MetricSerializer(serializers.Serializer):
     earnings = serializers.IntegerField()
     issues = serializers.IntegerField()
     time_estimate = serializers.IntegerField()
+    time_remains = serializers.IntegerField()
 
 
 class TimeExpenseSerializer(serializers.ModelSerializer):
