@@ -24,7 +24,7 @@ class IssueCardSerializer(serializers.ModelSerializer):
         model = Issue
         fields = (
             'id', 'title', 'labels', 'project', 'due_date', 'state', 'time_estimate', 'total_time_spent', 'time_spent',
-            'gl_url', 'time_remains'
+            'gl_url', 'time_remains', 'efficiency'
         )
 
     def get_time_spent(self, instance):

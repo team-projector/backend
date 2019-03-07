@@ -1,5 +1,5 @@
 from collections import defaultdict
-from typing import DefaultDict
+from typing import DefaultDict, Optional
 
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
@@ -157,9 +157,14 @@ class Issue(NotableMixin,
         return self.notes.aggregate(last_created=Max('created_at'))['last_created']
 
     @property
-    def time_remains(self):
+    def time_remains(self) -> Optional[int]:
         if self.time_estimate is not None and self.total_time_spent is not None:
             return max(self.time_estimate - self.total_time_spent, 0)
+
+    @property
+    def efficiency(self) -> Optional[float]:
+        if self.total_time_spent and self.time_estimate:
+            return self.time_estimate / self.total_time_spent
 
     def adjust_spent_times(self) -> None:
         from apps.payroll.models import SpentTime
