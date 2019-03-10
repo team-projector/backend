@@ -22,6 +22,6 @@ RUN apt-get update \
     && python manage.py collectstatic --noinput --verbosity 0 \
     && django-admin compilemessages \
     && cp docker/nginx/* /etc/nginx \
-    && apt-get purge git gcc
+    && apt-get remove --purge -y git gcc
 
 CMD ["/bin/bash", "docker/server/run.sh"]
