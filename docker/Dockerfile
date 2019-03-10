@@ -23,6 +23,6 @@ RUN apt update \
     && django-admin compilemessages \
     && cp docker/nginx/* /etc/nginx \
     && apt remove --purge -y git gcc \
-    && apt autoremove
+    && apt autoremove -y
 
 CMD ["/bin/bash", "docker/server/run.sh"]
