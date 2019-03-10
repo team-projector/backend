@@ -14,4 +14,4 @@ def next_weekday(d: date, weekday: int) -> date:
 
 
 def begin_of_week(d: date) -> date:
-    return d - timedelta(days=d.weekday() % 6)
+    return d - timedelta(days=d.weekday() % 7)
