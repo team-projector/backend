@@ -1,12 +1,22 @@
+from bitfield import BitField
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 from rest_framework.authtoken.models import Token as BaseToken
 
+from apps.core.db.utils import Choices
 from apps.users.db.managers import CustomUserManager
 
 
 class User(AbstractBaseUser, PermissionsMixin):
+    ROLES = Choices(
+        ('developer', _('CH_DEVELOPER')),
+        ('team_leader', _('CH_TEAM_LEADER')),
+        ('project_manager', _('CH_PROJECT_MANAGER')),
+        ('customer', _('CH_CUSTOMER')),
+        ('shareholder', _('CH_SHAREHOLDER')),
+    )
+
     login = models.CharField(max_length=150, null=True, blank=True, verbose_name=_('VN__LOGIN'),
                              help_text=_('HT__LOGIN'), unique=True)
     name = models.CharField(max_length=150, null=True, blank=True, verbose_name=_('VN__NAME'),
@@ -15,6 +25,9 @@ class User(AbstractBaseUser, PermissionsMixin):
                               help_text=_('HT__LOGIN'), unique=True)
     hour_rate = models.DecimalField(default=0, decimal_places=2, max_digits=10,
                                     verbose_name=_('VN__HOUR_RATE'), help_text=_('HT__HOUR_RATE'))
+
+    roles = BitField(flags=ROLES, default=0)
+
     is_staff = models.BooleanField(default=True, verbose_name=_('VN__IS_STAFF'),
                                    help_text=_('HT__IS_STAFF'))
     is_active = models.BooleanField(default=True, verbose_name=_('VN__IS_ACTIVE'), help_text=_('HT__IS_ACTIVE'))

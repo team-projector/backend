@@ -1,3 +1,5 @@
+from bitfield import BitField
+from bitfield.forms import BitFieldCheckboxSelectMultiple
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as DjUserAdmin
 from django.contrib.auth.forms import AdminPasswordChangeForm
@@ -13,7 +15,9 @@ admin.site.unregister(Group)
 
 @admin.register(User)
 class UserAdmin(DjUserAdmin):
-    model = User
+    formfield_overrides = {
+        BitField: {'widget': BitFieldCheckboxSelectMultiple},
+    }
     list_display = (
         'login', 'name', 'email', 'last_login', 'is_active', 'is_staff', 'change_password_link'
     )
@@ -32,7 +36,7 @@ class UserAdmin(DjUserAdmin):
     exclude = ('user_permissions',)
     fieldsets = (
         (None, {
-            'fields': ('login', 'email', 'groups', 'is_superuser', 'is_staff', 'is_active', 'last_login')
+            'fields': ('login', 'email', 'roles', 'is_superuser', 'is_staff', 'is_active', 'last_login')
         }),
         ('GitLab', {
             'fields': ('gl_avatar', 'gl_id', 'gl_url', 'gl_last_sync')

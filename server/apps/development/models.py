@@ -1,3 +1,4 @@
+import datetime
 from collections import defaultdict
 from typing import DefaultDict, Optional
 
@@ -153,7 +154,7 @@ class Issue(NotableMixin,
         return self.title
 
     @cached_property
-    def last_note_date(self):
+    def last_note_date(self) -> datetime:
         return self.notes.aggregate(last_created=Max('created_at'))['last_created']
 
     @property

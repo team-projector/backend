@@ -1,3 +1,4 @@
+from bitfield.rest.fields import BitField
 from django.contrib.auth import authenticate
 from django.utils.translation import gettext_lazy as _
 from rest_framework import serializers
@@ -47,6 +48,7 @@ class TokenSerializer(serializers.ModelSerializer):
 
 class UserSerializer(serializers.ModelSerializer):
     avatar = serializers.URLField(source='gl_avatar')
+    roles = BitField()
 
     def to_representation(self, instance):
         data = super(UserSerializer, self).to_representation(instance)
@@ -54,4 +56,4 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ('id', 'name', 'login', 'hour_rate', 'avatar', 'gl_url')
+        fields = ('id', 'name', 'login', 'hour_rate', 'avatar', 'gl_url', 'roles')
