@@ -13,8 +13,8 @@ ENV PYTHONFAULTHANDLER=1 \
 WORKDIR /var/www
 COPY . /var/www
 
-RUN apt-get update \
-    && apt-get install -y gcc binutils libproj-dev gettext nginx git \
+RUN apt update \
+    && apt install -y gcc binutils libproj-dev gettext nginx git \
     && chown -R www-data:www-data /var/lib/nginx \
     && pip install pipenv \
     && export DJANGO_ENV=build \
@@ -22,6 +22,7 @@ RUN apt-get update \
     && python manage.py collectstatic --noinput --verbosity 0 \
     && django-admin compilemessages \
     && cp docker/nginx/* /etc/nginx \
-    && apt-get remove --purge -y git gcc
+    && apt remove --purge -y git gcc \
+    && apt autoremove
 
 CMD ["/bin/bash", "docker/server/run.sh"]
