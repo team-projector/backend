@@ -1,4 +1,4 @@
-import datetime
+from datetime import datetime
 from collections import defaultdict
 from typing import DefaultDict, Optional
 
