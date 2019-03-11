@@ -1,7 +1,8 @@
-from datetime import datetime
 from collections import defaultdict
+from datetime import datetime
 from typing import DefaultDict, Optional
 
+from bitfield import BitField
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.postgres.fields import JSONField
@@ -18,6 +19,39 @@ from apps.payroll.db.mixins import SpentTimesMixin
 from apps.users.models import User
 from .db.managers import IssueManager, NoteManager, ProjectGroupManager, ProjectManager
 from .db.mixins import NotableMixin
+
+
+class Team(models.Model):
+    title = models.CharField(max_length=255, verbose_name=_('VN__TITLE'), help_text=_('HT__TITLE'), unique=True)
+
+    class Meta:
+        verbose_name = _('VN__TEAM')
+        verbose_name_plural = _('VN__TEAMS')
+        ordering = ('title',)
+
+    def __str__(self):
+        return self.title
+
+
+class TeamMember(models.Model):
+    ROLES = Choices(
+        ('leader', _('CH_LEADER')),
+        ('developer', _('CH_DEVELOPER')),
+    )
+
+    team = models.ForeignKey(Team, models.CASCADE, related_name='members', verbose_name=_('VN__TEAM'),
+                             help_text=_('HT__TEAM'))
+    user = models.ForeignKey(User, models.CASCADE, verbose_name=_('VN__USER'), help_text=_('HT__USER'))
+    roles = BitField(flags=ROLES, default=0)
+
+    class Meta:
+        verbose_name = _('VN__TEAM_MEMBER')
+        verbose_name_plural = _('VN__TEAM_MEMBERS')
+        ordering = ('team', 'user')
+        unique_together = ('team', 'user')
+
+    def __str__(self):
+        return f'{self.team}: {self.user}'
 
 
 class ProjectGroup(GitlabEntityMixin):
@@ -89,8 +123,8 @@ class Note(models.Model):
 
     gl_id = models.PositiveIntegerField(verbose_name=_('VN__GITLAB_ID'), help_text=_('HT__GITLAB_ID'))
 
-    user = models.ForeignKey(User, models.SET_NULL, null=True, blank=True, verbose_name=_('VN__EMPLOYEE'),
-                             help_text=_('HT__EMPLOYEE'))
+    user = models.ForeignKey(User, models.SET_NULL, null=True, blank=True, verbose_name=_('VN__USER'),
+                             help_text=_('HT__USER'))
 
     created_at = models.DateTimeField(null=True, blank=True)
     updated_at = models.DateTimeField(null=True, blank=True)

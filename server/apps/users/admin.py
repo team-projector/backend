@@ -1,5 +1,4 @@
-from bitfield import BitField
-from bitfield.forms import BitFieldCheckboxSelectMultiple
+from admin_auto_filters.filters import AutocompleteFilter
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as DjUserAdmin
 from django.contrib.auth.forms import AdminPasswordChangeForm
@@ -7,6 +6,7 @@ from django.contrib.auth.models import Group
 from django.utils.html import format_html
 
 from apps.core.admin.base import BaseModelAdmin
+from apps.core.admin.mixins import AdminFormFieldsOverridesMixin
 from .forms import GroupAdminForm
 from .models import User
 
@@ -14,10 +14,8 @@ admin.site.unregister(Group)
 
 
 @admin.register(User)
-class UserAdmin(DjUserAdmin):
-    formfield_overrides = {
-        BitField: {'widget': BitFieldCheckboxSelectMultiple},
-    }
+class UserAdmin(AdminFormFieldsOverridesMixin,
+                DjUserAdmin):
     list_display = (
         'login', 'name', 'email', 'last_login', 'is_active', 'is_staff', 'change_password_link'
     )
@@ -62,3 +60,8 @@ class GroupAdmin(BaseModelAdmin):
     list_display = ('name',)
     form = GroupAdminForm
     search_fields = ('name',)
+
+
+class UserFilter(AutocompleteFilter):
+    title = 'User'
+    field_name = 'user'

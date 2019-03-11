@@ -2,27 +2,37 @@ from django import forms
 from django.contrib import admin
 from django.contrib.contenttypes.admin import GenericStackedInline, GenericTabularInline
 
+from apps.core.admin.mixins import AdminFormFieldsOverridesMixin
 
-class BaseModelAdmin(admin.ModelAdmin):
+
+class BaseModelAdmin(AdminFormFieldsOverridesMixin,
+                     admin.ModelAdmin):
     list_per_page = 20
 
+    class Media:
+        pass
 
-class BaseStackedInline(admin.StackedInline):
+
+class BaseStackedInline(AdminFormFieldsOverridesMixin,
+                        admin.StackedInline):
     extra = 0
     show_change_link = True
 
 
-class BaseTabularInline(admin.TabularInline):
+class BaseTabularInline(AdminFormFieldsOverridesMixin,
+                        admin.TabularInline):
     extra = 0
     show_change_link = True
 
 
-class BaseGenericStackedInline(GenericStackedInline):
+class BaseGenericStackedInline(AdminFormFieldsOverridesMixin,
+                               GenericStackedInline):
     extra = 0
     show_change_link = True
 
 
-class BaseGenericTabularInline(GenericTabularInline):
+class BaseGenericTabularInline(AdminFormFieldsOverridesMixin,
+                               GenericTabularInline):
     extra = 0
     show_change_link = True
 

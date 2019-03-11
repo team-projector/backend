@@ -1,8 +1,9 @@
 from admin_auto_filters.filters import AutocompleteFilter
 from django.contrib import admin
 
-from apps.core.admin.base import BaseGenericStackedInline, BaseModelAdmin
-from apps.development.models import Issue, Label, Note, Project, ProjectGroup
+from apps.core.admin.base import BaseGenericStackedInline, BaseModelAdmin, BaseStackedInline, BaseTabularInline
+from apps.users.admin import UserFilter
+from .models import Issue, Label, Note, Project, ProjectGroup, Team, TeamMember
 
 
 class ProjectFilter(AutocompleteFilter):
@@ -10,9 +11,35 @@ class ProjectFilter(AutocompleteFilter):
     field_name = 'project'
 
 
+class TeamFilter(AutocompleteFilter):
+    title = 'Team'
+    field_name = 'team'
+
+
 class NoteInline(BaseGenericStackedInline):
     model = Note
     autocomplete_fields = ('user',)
+
+
+class TeamMemberInline(BaseTabularInline):
+
+    model = TeamMember
+    autocomplete_fields = ('user',)
+
+
+@admin.register(Team)
+class TeamAdmin(BaseModelAdmin):
+    list_display = ('title',)
+    search_fields = ('title',)
+    inlines = (TeamMemberInline,)
+
+
+@admin.register(TeamMember)
+class TeamMemberAdmin(BaseModelAdmin):
+    list_display = ('team', 'user')
+    search_fields = ('team', 'user')
+    list_filter = (TeamFilter, UserFilter)
+    autocomplete_fields = ('team', 'user')
 
 
 @admin.register(Label)
@@ -44,9 +71,6 @@ class IssueAdmin(BaseModelAdmin):
     ordering = ('-gl_last_sync',)
     autocomplete_fields = ('project', 'employee')
     inlines = (NoteInline,)
-
-    class Media:
-        pass
 
 
 @admin.register(Note)
