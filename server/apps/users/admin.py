@@ -34,7 +34,7 @@ class UserAdmin(AdminFormFieldsOverridesMixin,
     exclude = ('user_permissions',)
     fieldsets = (
         (None, {
-            'fields': ('login', 'email', 'roles', 'is_superuser', 'is_staff', 'is_active', 'last_login')
+            'fields': ('login', 'email', 'name', 'roles', 'is_superuser', 'is_staff', 'is_active', 'last_login')
         }),
         ('GitLab', {
             'fields': ('gl_avatar', 'gl_id', 'gl_url', 'gl_last_sync')
