@@ -1,12 +1,14 @@
 from typing import Dict, Iterable
 
+from bitfield.rest.fields import BitField
 from django.db.models import Sum
 from rest_framework import serializers
 
 from apps.core.rest.serializers import LinkSerializer
 from apps.development.utils.problems.issues import checkers
 from apps.users.models import User
-from ..models import Issue, Label
+from apps.users.rest.serializers import UserCardSerializer
+from ..models import Issue, Label, Team, TeamMember
 
 
 class LabelSerializer(serializers.ModelSerializer):
@@ -32,6 +34,21 @@ class IssueCardSerializer(serializers.ModelSerializer):
             .aggregate(total_spent=Sum('time_spent'))['total_spent']
 
 
+class TeamCardSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Team
+        fields = ('id', 'title')
+
+
+class TeamMemberCardSerializer(serializers.ModelSerializer):
+    roles = BitField()
+    user = UserCardSerializer()
+
+    class Meta:
+        model = TeamMember
+        fields = ('id', 'user', 'roles')
+
+
 class ProblemsParamsSerializer(serializers.Serializer):
     user = serializers.PrimaryKeyRelatedField(queryset=User.objects.all())
 
@@ -49,3 +66,8 @@ class IssueProblemSerializer(serializers.Serializer):
             for checker in checkers
             if getattr(instance, checker.annotate_field)
         ]
+
+
+class TeamMemberFilterSerializer(serializers.Serializer):
+    user = serializers.PrimaryKeyRelatedField(queryset=User.objects.all(), required=False, allow_null=True)
+    roles = BitField(required=False, allow_null=True, model=TeamMember)

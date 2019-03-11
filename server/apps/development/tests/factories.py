@@ -1,7 +1,7 @@
 import factory
 import pytz
 
-from apps.development.models import Issue, Label, Note, Project, ProjectGroup, STATE_OPENED
+from apps.development.models import Issue, Label, Note, Project, ProjectGroup, STATE_OPENED, Team, TeamMember
 
 
 class ProjectGroupFactory(factory.django.DjangoModelFactory):
@@ -53,3 +53,15 @@ class IssueNoteFactory(factory.django.DjangoModelFactory):
 
     class Meta:
         model = Note
+
+
+class TeamFactory(factory.django.DjangoModelFactory):
+    title = factory.Faker('text', max_nb_chars=200)
+
+    class Meta:
+        model = Team
+
+
+class TeamMemberFactory(factory.django.DjangoModelFactory):
+    class Meta:
+        model = TeamMember

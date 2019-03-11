@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "d072da616c5f13959fd4876d30e85f091a5cd55f407d2a1f66f62e97bb51814c"
+            "sha256": "e701e0282e0dde8d5f6583573ca6c851f2514f36086105f9625bac5741a58c5d"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -99,7 +99,7 @@
         "django-bitfield": {
             "editable": true,
             "git": "https://github.com/Junte/django-bitfield.git",
-            "ref": "a2e518dd5e8c4c04c59fc6287ba99f071baf1d53"
+            "ref": "1a96057f3e77b5fa16ce9e506c688b19d0358709"
         },
         "django-cors-headers": {
             "hashes": [

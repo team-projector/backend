@@ -50,10 +50,15 @@ class UserSerializer(serializers.ModelSerializer):
     avatar = serializers.URLField(source='gl_avatar')
     roles = BitField()
 
-    def to_representation(self, instance):
-        data = super(UserSerializer, self).to_representation(instance)
-        return data
-
     class Meta:
         model = User
         fields = ('id', 'name', 'login', 'hour_rate', 'avatar', 'gl_url', 'roles')
+
+
+class UserCardSerializer(serializers.ModelSerializer):
+    avatar = serializers.URLField(source='gl_avatar')
+    roles = BitField()
+
+    class Meta:
+        model = User
+        fields = ('id', 'name', 'avatar', 'roles')
