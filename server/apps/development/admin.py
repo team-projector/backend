@@ -1,7 +1,7 @@
 from admin_auto_filters.filters import AutocompleteFilter
 from django.contrib import admin
 
-from apps.core.admin.base import BaseGenericStackedInline, BaseModelAdmin, BaseStackedInline, BaseTabularInline
+from apps.core.admin.base import BaseGenericStackedInline, BaseModelAdmin, BaseTabularInline
 from apps.users.admin import UserFilter
 from .models import Issue, Label, Note, Project, ProjectGroup, Team, TeamMember
 
@@ -22,7 +22,6 @@ class NoteInline(BaseGenericStackedInline):
 
 
 class TeamMemberInline(BaseTabularInline):
-
     model = TeamMember
     autocomplete_fields = ('user',)
 
