@@ -9,8 +9,8 @@ from rest_framework.decorators import action
 from apps.core.rest.views import BaseGenericViewSet
 from apps.development.rest.filters import TeamMemberFilterBackend
 from apps.development.utils.problems.issues import IssueProblemsChecker
-from .serializers import IssueCardSerializer, IssueProblemSerializer, TeamCardSerializer
-from ..models import Issue, Team
+from .serializers import IssueCardSerializer, IssueProblemSerializer, TeamCardSerializer, TeamMemberCardSerializer
+from ..models import Issue, Team, TeamMember
 from ..tasks import sync_project_issue
 
 
@@ -63,3 +63,12 @@ class TeamsViewset(mixins.ListModelMixin,
     search_fields = ('title',)
     filter_backends = (filters.OrderingFilter, filters.SearchFilter, DjangoFilterBackend, TeamMemberFilterBackend)
     ordering_fields = ('title',)
+
+
+class TeamMembersViewset(mixins.ListModelMixin,
+                         BaseGenericViewSet):
+    serializer_class = TeamMemberCardSerializer
+    queryset = TeamMember.objects.all()
+
+    def filter_queryset(self, queryset):
+        return queryset.filter(team_id=self.kwargs['team_pk'])
