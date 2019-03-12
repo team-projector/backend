@@ -14,7 +14,7 @@ WORKDIR /var/www
 COPY . /var/www
 
 RUN apt update \
-    && apt install -y gcc binutils libproj-dev gettext nginx git \
+    && apt install -y gcc binutils gettext nginx git \
     && chown -R www-data:www-data /var/lib/nginx \
     && pip install pipenv \
     && export DJANGO_ENV=build \
