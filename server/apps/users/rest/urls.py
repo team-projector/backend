@@ -14,6 +14,6 @@ urlpatterns = [
     path('me/', include((
         [
             path('user', MeUserView.as_view(), name='user')
-        ], app_name), namespace='me')),
+        ], app_name), 'me')),
     *router.urls
 ]

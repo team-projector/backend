@@ -4,9 +4,9 @@ from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import mixins
 from rest_framework.response import Response
 
-from apps.core.rest.views import BaseGenericAPIView, BaseGenericViewSet
+from apps.core.rest.views import BaseGenericAPIView
 from apps.core.utils.rest import parse_query_params
-from .serializers import UserMetricSerializer, UserMetricsParamsSerializer, TimeExpenseSerializer
+from .serializers import TimeExpenseSerializer, UserMetricSerializer, UserMetricsParamsSerializer
 from ..models import SpentTime
 from ..utils.metrics.user import create_calculator
 
@@ -25,8 +25,16 @@ class UserMetricsView(BaseGenericAPIView):
 
 
 class TimeExpensesView(mixins.ListModelMixin,
-                       BaseGenericViewSet):
+                       BaseGenericAPIView):
     queryset = SpentTime.objects.all()
     filter_backends = (DjangoFilterBackend,)
     serializer_class = TimeExpenseSerializer
-    filter_fields = ('user', 'date')
+    filter_fields = ('date',)
+
+    def filter_queryset(self, queryset):
+        queryset = super().filter_queryset(queryset)
+        user = get_object_or_404(User.objects, pk=self.kwargs['user_pk'])
+        return queryset.filter(user=user)
+
+    def get(self, request, *args, **kwargs):
+        return self.list(request, *args, **kwargs)

@@ -1,14 +1,14 @@
-from django.urls import path
+from django.urls import path, include
 
-from apps.core.rest.routers import AppRouter
-from .views import UserMetricsView, TimeExpensesView
+from .views import TimeExpensesView, UserMetricsView
 
 app_name = 'payroll'
 
-router = AppRouter()
-router.register('time-expenses', TimeExpensesView, basename='time-expenses')
-
 urlpatterns = [
-    path('users/<int:user_pk>/metrics', UserMetricsView.as_view(), name='user-metrics'),
-    *router.urls
+    path('users/<int:user_pk>/', include((
+        [
+            path('metrics', UserMetricsView.as_view(), name='metrics'),
+            path('time-expenses', TimeExpensesView.as_view(),
+                 name='time-expenses'),
+        ], app_name), 'users'))
 ]

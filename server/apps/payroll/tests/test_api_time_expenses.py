@@ -34,7 +34,7 @@ class ApiTimeExpensesTests(BaseAPITest):
                                                time_spent=int(timedelta(minutes=10).total_seconds()))
 
         self.set_credentials()
-        response = self.client.get('/api/time-expenses')
+        response = self.client.get(f'/api/users/{self.user.id}/time-expenses')
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self._check_time_expences(response.data, [spend_1, spend_2, spend_3, spend_4])
@@ -65,9 +65,7 @@ class ApiTimeExpensesTests(BaseAPITest):
                                                time_spent=int(timedelta(minutes=10).total_seconds()))
 
         self.set_credentials()
-        response = self.client.get('/api/time-expenses', {
-            'user': user_2.id
-        })
+        response = self.client.get(f'/api/users/{user_2.id}/time-expenses')
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self._check_time_expences(response.data, [spend_2, spend_4])
@@ -96,7 +94,7 @@ class ApiTimeExpensesTests(BaseAPITest):
                                                time_spent=int(timedelta(minutes=10).total_seconds()))
 
         self.set_credentials()
-        response = self.client.get('/api/time-expenses', {
+        response = self.client.get(f'/api/users/{self.user.id}/time-expenses', {
             'date': self.format_date(timezone.now())
         })
 
