@@ -164,7 +164,7 @@ class Issue(NotableMixin,
                                                    help_text=_('HT__TOTAL_TIME_SPENT'))
 
     user = models.ForeignKey(User, models.SET_NULL, null=True, blank=True, verbose_name=_('VN__USER'),
-                                 help_text=_('HT__USER'))
+                             help_text=_('HT__USER'))
 
     state = models.CharField(max_length=255, null=True, blank=True, verbose_name=_('VN__STATE'),
                              help_text=_('HT__STATE'))
