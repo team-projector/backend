@@ -123,10 +123,10 @@ class Command(BaseCommand):
 
     def load_data(self):
         return Issue.objects.annotate(month=TruncMonth('created_at')) \
-            .filter(employee__isnull=False, month__isnull=False) \
-            .values('month', 'project', 'employee') \
+            .filter(user__isnull=False, month__isnull=False) \
+            .values('month', 'project', 'user') \
             .annotate(spent_time=Sum('total_time_spent')) \
-            .order_by('project', 'employee', 'month')
+            .order_by('project', 'user', 'month')
 
     def get_project(self, id):
         if id not in self.project_cache:

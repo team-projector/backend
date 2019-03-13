@@ -50,7 +50,7 @@ class IssueCardSerializer(serializers.ModelSerializer):
         return IssueMetricsSerializer(dict2obj(metrics)).data
 
     def get_time_spent(self, instance):
-        return instance.time_spents.filter(employee=self.context['request'].user) \
+        return instance.time_spents.filter(user=self.context['request'].user) \
             .aggregate(total_spent=Sum('time_spent'))['total_spent']
 
 

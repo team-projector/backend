@@ -163,8 +163,8 @@ class Issue(NotableMixin,
     total_time_spent = models.PositiveIntegerField(null=True, verbose_name=_('VN__TOTAL_TIME_SPENT'),
                                                    help_text=_('HT__TOTAL_TIME_SPENT'))
 
-    employee = models.ForeignKey(User, models.SET_NULL, null=True, blank=True, verbose_name=_('VN__EMPLOYEE'),
-                                 help_text=_('HT__EMPLOYEE'))
+    user = models.ForeignKey(User, models.SET_NULL, null=True, blank=True, verbose_name=_('VN__USER'),
+                                 help_text=_('HT__USER'))
 
     state = models.CharField(max_length=255, null=True, blank=True, verbose_name=_('VN__STATE'),
                              help_text=_('HT__STATE'))
@@ -225,7 +225,7 @@ class Issue(NotableMixin,
             SpentTime.objects.create(date=note_date,
                                      created_at=note.created_at,
                                      updated_at=note.updated_at,
-                                     employee=note.user,
+                                     user=note.user,
                                      time_spent=time_spent,
                                      note=note,
                                      base=self)

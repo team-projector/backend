@@ -35,7 +35,7 @@ class IssuesViewset(mixins.ListModelMixin,
     filter_backends = (filters.OrderingFilter, filters.SearchFilter, DjangoFilterBackend)
 
     search_fields = ('title',)
-    filter_fields = ('state', 'due_date', 'employee')
+    filter_fields = ('state', 'due_date', 'user')
     ordering_fields = ('due_date', 'title', 'created_at')
     ordering = ('due_date',)
 
@@ -50,7 +50,7 @@ class IssuesViewset(mixins.ListModelMixin,
 
     @action(detail=False,
             filter_backends=(DjangoFilterBackend,),
-            filter_fields=('employee',),
+            filter_fields=('user',),
             serializer_class=IssueProblemSerializer)
     def problems(self, request):
         return self.list(request)

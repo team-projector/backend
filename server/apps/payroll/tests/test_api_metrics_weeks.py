@@ -20,7 +20,7 @@ class ApiMetricsWeeksTests(BaseAPITest):
     def setUp(self):
         super().setUp()
 
-        self.issue = IssueFactory.create(employee=self.user, due_date=timezone.now())
+        self.issue = IssueFactory.create(user=self.user, due_date=timezone.now())
 
     def test_simple(self):
         monday = begin_of_week(timezone.now().date())
@@ -299,7 +299,7 @@ class ApiMetricsWeeksTests(BaseAPITest):
 
     def test_many_issues(self):
         monday = begin_of_week(timezone.now().date())
-        another_issue = IssueFactory.create(employee=self.user,
+        another_issue = IssueFactory.create(user=self.user,
                                             state=STATE_OPENED,
                                             due_date=monday + timedelta(days=4),
                                             total_time_spent=timedelta(hours=3).total_seconds(),
@@ -343,7 +343,7 @@ class ApiMetricsWeeksTests(BaseAPITest):
 
     def _create_spent_time(self, date, spent: timedelta = None, user=None, issue=None):
         return IssueSpentTimeFactory.create(date=date,
-                                            employee=user or self.user,
+                                            user=user or self.user,
                                             base=issue or self.issue,
                                             time_spent=spent.total_seconds())
 

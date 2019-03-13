@@ -15,8 +15,7 @@ class SpentTime(models.Model):
 
     time_spent = models.IntegerField(verbose_name=_('VN__TIME_SPENT'), help_text=_('HT__TIME_SPENT'))
 
-    employee = models.ForeignKey(User, models.CASCADE, verbose_name=_('VN__EMPLOYEE'),
-                                 help_text=_('HT__EMPLOYEE'))
+    user = models.ForeignKey(User, models.CASCADE, verbose_name=_('VN__USER'), help_text=_('HT__USER'))
 
     content_type = models.ForeignKey(ContentType, models.CASCADE)
     object_id = models.PositiveIntegerField()
@@ -27,7 +26,7 @@ class SpentTime(models.Model):
     earnings = models.DecimalField(default=0, decimal_places=2, max_digits=10)
 
     def __str__(self):
-        return f'{self.employee} [{self.base}]: {self.time_spent}'
+        return f'{self.user} [{self.base}]: {self.time_spent}'
 
     class Meta:
         verbose_name = _('VN__SPENT_TIME')

@@ -63,12 +63,12 @@ class ProjectAdmin(BaseModelAdmin):
 
 @admin.register(Issue)
 class IssueAdmin(BaseModelAdmin):
-    list_display = ('title', 'employee', 'created_at', 'gl_url', 'gl_last_sync')
+    list_display = ('title', 'user', 'created_at', 'gl_url', 'gl_last_sync')
     list_filter = (ProjectFilter,)
     search_fields = ('title', 'gl_id')
     sortable_by = ('gl_last_sync', 'created_at')
     ordering = ('-gl_last_sync',)
-    autocomplete_fields = ('project', 'employee')
+    autocomplete_fields = ('project', 'user')
     inlines = (NoteInline,)
 
 

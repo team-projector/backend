@@ -41,7 +41,7 @@ class WeekMetricsCalculator(MetricsCalculator):
         return queryset.annotate(week=TruncWeek('date')).values('week')
 
     def _adjust_deadlines(self, metric: UserMetric) -> None:
-        issues_stats = Issue.objects.filter(employee=self.user, due_date__range=(metric.start, metric.end)) \
+        issues_stats = Issue.objects.filter(user=self.user, due_date__range=(metric.start, metric.end)) \
             .exclude(state=STATE_CLOSED) \
             .aggregate(issues_count=Count('*'),
                        total_time_estimate=Sum('time_estimate'))
@@ -50,7 +50,7 @@ class WeekMetricsCalculator(MetricsCalculator):
         metric.time_estimate = issues_stats['total_time_estimate'] or 0
 
     def _adjust_efficiency(self, metric: UserMetric) -> None:
-        issues_stats = Issue.objects.filter(employee=self.user,
+        issues_stats = Issue.objects.filter(user=self.user,
                                             closed_at__range=(
                                                 make_aware(date2datetime(metric.start)),
                                                 make_aware(date2datetime(metric.end))

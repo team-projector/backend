@@ -29,4 +29,4 @@ class TimeExpensesView(mixins.ListModelMixin,
     queryset = SpentTime.objects.all()
     filter_backends = (DjangoFilterBackend,)
     serializer_class = TimeExpenseSerializer
-    filter_fields = ('employee', 'date')
+    filter_fields = ('user', 'date')

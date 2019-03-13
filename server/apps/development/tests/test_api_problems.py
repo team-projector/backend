@@ -12,12 +12,12 @@ from apps.users.tests.factories import UserFactory
 
 class ApiIssuesTests(BaseAPITest):
     def test_empty_due_day(self):
-        IssueFactory.create_batch(2, employee=self.user, due_date=timezone.now())
-        problem_issue = IssueFactory.create(employee=self.user)
+        IssueFactory.create_batch(2, user=self.user, due_date=timezone.now())
+        problem_issue = IssueFactory.create(user=self.user)
 
         self.set_credentials()
         response = self.client.get('/api/issues/problems', {
-            'employee': self.user.id
+            'user': self.user.id
         })
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -28,24 +28,24 @@ class ApiIssuesTests(BaseAPITest):
         self.assertEqual(issue['problems'], [PROBLEM_EMPTY_DUE_DAY])
 
     def test_empty_due_day_but_closed(self):
-        IssueFactory.create_batch(2, employee=self.user, due_date=timezone.now())
-        IssueFactory.create(employee=self.user, state=STATE_CLOSED)
+        IssueFactory.create_batch(2, user=self.user, due_date=timezone.now())
+        IssueFactory.create(user=self.user, state=STATE_CLOSED)
 
         self.set_credentials()
         response = self.client.get('/api/issues/problems', {
-            'employee': self.user.id
+            'user': self.user.id
         })
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data['count'], 0)
 
     def test_overdue_due_day(self):
-        IssueFactory.create_batch(2, employee=self.user, due_date=timezone.now())
-        problem_issue = IssueFactory.create(employee=self.user, due_date=timezone.now() - timedelta(days=1))
+        IssueFactory.create_batch(2, user=self.user, due_date=timezone.now())
+        problem_issue = IssueFactory.create(user=self.user, due_date=timezone.now() - timedelta(days=1))
 
         self.set_credentials()
         response = self.client.get('/api/issues/problems', {
-            'employee': self.user.id
+            'user': self.user.id
         })
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -56,26 +56,26 @@ class ApiIssuesTests(BaseAPITest):
         self.assertEqual(issue['problems'], [PROBLEM_OVER_DUE_DAY])
 
     def test_overdue_due_day_but_closed(self):
-        IssueFactory.create_batch(2, employee=self.user, due_date=timezone.now())
-        IssueFactory.create(employee=self.user,
+        IssueFactory.create_batch(2, user=self.user, due_date=timezone.now())
+        IssueFactory.create(user=self.user,
                             due_date=timezone.now() - timedelta(days=1),
                             state=STATE_CLOSED)
 
         self.set_credentials()
         response = self.client.get('/api/issues/problems', {
-            'employee': self.user.id
+            'user': self.user.id
         })
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data['count'], 0)
 
     def test_empty_estimate(self):
-        IssueFactory.create_batch(2, employee=self.user, due_date=timezone.now())
-        problem_issue = IssueFactory.create(employee=self.user, due_date=timezone.now(), time_estimate=None)
+        IssueFactory.create_batch(2, user=self.user, due_date=timezone.now())
+        problem_issue = IssueFactory.create(user=self.user, due_date=timezone.now(), time_estimate=None)
 
         self.set_credentials()
         response = self.client.get('/api/issues/problems', {
-            'employee': self.user.id
+            'user': self.user.id
         })
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -86,12 +86,12 @@ class ApiIssuesTests(BaseAPITest):
         self.assertEqual(issue['problems'], [PROBLEM_EMPTY_ESTIMATE])
 
     def test_two_errors_per_issue(self):
-        IssueFactory.create_batch(2, employee=self.user, due_date=timezone.now())
-        problem_issue = IssueFactory.create(employee=self.user, time_estimate=None)
+        IssueFactory.create_batch(2, user=self.user, due_date=timezone.now())
+        problem_issue = IssueFactory.create(user=self.user, time_estimate=None)
 
         self.set_credentials()
         response = self.client.get('/api/issues/problems', {
-            'employee': self.user.id
+            'user': self.user.id
         })
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -101,9 +101,9 @@ class ApiIssuesTests(BaseAPITest):
         self.assertEqual(issue['issue']['id'], problem_issue.id)
         self.assertEqual(set(issue['problems']), {PROBLEM_EMPTY_ESTIMATE, PROBLEM_EMPTY_DUE_DAY})
 
-    def test_no_employee_filter(self):
-        IssueFactory.create_batch(2, employee=self.user, due_date=timezone.now())
-        problem_issue = IssueFactory.create(employee=self.user, time_estimate=None)
+    def test_no_user_filter(self):
+        IssueFactory.create_batch(2, user=self.user, due_date=timezone.now())
+        problem_issue = IssueFactory.create(user=self.user, time_estimate=None)
 
         self.set_credentials()
         response = self.client.get('/api/issues/problems')
@@ -117,12 +117,12 @@ class ApiIssuesTests(BaseAPITest):
 
     def test_empty_due_day_but_another_user(self):
         user_2 = UserFactory.create()
-        IssueFactory.create_batch(2, employee=self.user, due_date=timezone.now())
-        IssueFactory.create(employee=user_2)
+        IssueFactory.create_batch(2, user=self.user, due_date=timezone.now())
+        IssueFactory.create(user=user_2)
 
         self.set_credentials()
         response = self.client.get('/api/issues/problems', {
-            'employee': self.user.id
+            'user': self.user.id
         })
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)

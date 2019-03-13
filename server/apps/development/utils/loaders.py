@@ -160,7 +160,7 @@ def load_project_issue(project: Project, gl_project: GlProject, gl_issue: GlProj
                                          created_at=parse_gl_datetime(gl_issue.created_at),
                                          updated_at=parse_gl_datetime(gl_issue.updated_at),
                                          closed_at=parse_gl_datetime(gl_issue.closed_at),
-                                         employee=extract_user_from_data(gl_issue.assignee))
+                                         user=extract_user_from_data(gl_issue.assignee))
 
     load_issue_labels(issue, gl_project, gl_issue)
     load_issue_notes(issue, gl_issue)

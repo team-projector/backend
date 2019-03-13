@@ -37,7 +37,7 @@ class DayMetricsCalculator(MetricsCalculator):
                                                  then=F('time_estimate') - F('total_time_spent')),
                                             default=Value(0),
                                             output_field=IntegerField())) \
-                .filter(employee=self.user, due_date=current) \
+                .filter(user=self.user, due_date=current) \
                 .exclude(state=STATE_CLOSED) \
                 .aggregate(issues_count=Count('*'),
                            total_time_estimate=Sum('time_estimate'),

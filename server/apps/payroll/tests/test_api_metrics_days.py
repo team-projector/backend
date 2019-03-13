@@ -18,7 +18,7 @@ class ApiMetricsDaysTests(BaseAPITest):
     def setUp(self):
         super().setUp()
 
-        self.issue = IssueFactory.create(employee=self.user, due_date=timezone.now())
+        self.issue = IssueFactory.create(user=self.user, due_date=timezone.now())
 
     def test_bad_group(self):
         self.set_credentials()
@@ -105,7 +105,7 @@ class ApiMetricsDaysTests(BaseAPITest):
                             }, {})
 
     def test_loading_day_already_has_spends(self):
-        issue_2 = IssueFactory.create(employee=self.user,
+        issue_2 = IssueFactory.create(user=self.user,
                                       state=STATE_OPENED,
                                       total_time_spent=timedelta(hours=3).total_seconds(),
                                       time_estimate=timedelta(hours=10).total_seconds())
@@ -220,7 +220,7 @@ class ApiMetricsDaysTests(BaseAPITest):
 
     def _create_spent_time(self, date, spent: timedelta = None, user=None, issue=None):
         return IssueSpentTimeFactory.create(date=date,
-                                            employee=user or self.user,
+                                            user=user or self.user,
                                             base=issue or self.issue,
                                             time_spent=spent.total_seconds())
 

@@ -30,7 +30,7 @@ class MetricsCalculator:
         raise NotImplementedError
 
     def get_spents(self) -> QuerySet:
-        queryset = SpentTime.objects.filter(employee=self.user,
+        queryset = SpentTime.objects.filter(user=self.user,
                                             date__range=(self.start, self.end))
         queryset = self.modify_queryset(queryset)
 
@@ -41,6 +41,6 @@ class MetricsCalculator:
 
     def get_active_issues(self) -> List[Dict[str, Any]]:
         return list(Issue.objects.annotate(remaining=F('time_estimate') - F('total_time_spent'))
-                    .filter(employee=self.user, remaining__gt=0)
+                    .filter(user=self.user, remaining__gt=0)
                     .exclude(state=STATE_CLOSED)
                     .values('id', 'due_date', 'remaining'))

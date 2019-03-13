@@ -14,22 +14,22 @@ class ApiTimeExpensesTests(BaseAPITest):
         issue = IssueFactory.create()
 
         spend_1 = IssueSpentTimeFactory.create(date=timezone.now() - timedelta(hours=4),
-                                               employee=self.user,
+                                               user=self.user,
                                                base=issue,
                                                time_spent=int(timedelta(hours=5).total_seconds()))
 
         spend_2 = IssueSpentTimeFactory.create(date=timezone.now() - timedelta(hours=2),
-                                               employee=self.user,
+                                               user=self.user,
                                                base=issue,
                                                time_spent=int(timedelta(hours=2).total_seconds()))
 
         spend_3 = IssueSpentTimeFactory.create(date=timezone.now() - timedelta(hours=3),
-                                               employee=self.user,
+                                               user=self.user,
                                                base=issue,
                                                time_spent=int(timedelta(hours=4).total_seconds()))
 
         spend_4 = IssueSpentTimeFactory.create(date=timezone.now() - timedelta(hours=1),
-                                               employee=self.user,
+                                               user=self.user,
                                                base=issue,
                                                time_spent=int(timedelta(minutes=10).total_seconds()))
 
@@ -45,28 +45,28 @@ class ApiTimeExpensesTests(BaseAPITest):
         issue = IssueFactory.create()
 
         IssueSpentTimeFactory.create(date=timezone.now() - timedelta(hours=4),
-                                     employee=self.user,
+                                     user=self.user,
                                      base=issue,
                                      time_spent=int(timedelta(hours=5).total_seconds()))
 
         spend_2 = IssueSpentTimeFactory.create(date=timezone.now() - timedelta(hours=2),
-                                               employee=user_2,
+                                               user=user_2,
                                                base=issue,
                                                time_spent=int(timedelta(hours=2).total_seconds()))
 
         IssueSpentTimeFactory.create(date=timezone.now() - timedelta(hours=3),
-                                     employee=self.user,
+                                     user=self.user,
                                      base=issue,
                                      time_spent=int(timedelta(hours=4).total_seconds()))
 
         spend_4 = IssueSpentTimeFactory.create(date=timezone.now() - timedelta(hours=1),
-                                               employee=user_2,
+                                               user=user_2,
                                                base=issue,
                                                time_spent=int(timedelta(minutes=10).total_seconds()))
 
         self.set_credentials()
         response = self.client.get('/api/time-expenses', {
-            'employee': user_2.id
+            'user': user_2.id
         })
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -76,22 +76,22 @@ class ApiTimeExpensesTests(BaseAPITest):
         issue = IssueFactory.create()
 
         IssueSpentTimeFactory.create(date=timezone.now() - timedelta(weeks=1, hours=1),
-                                     employee=self.user,
+                                     user=self.user,
                                      base=issue,
                                      time_spent=int(timedelta(hours=5).total_seconds()))
 
         spend_2 = IssueSpentTimeFactory.create(date=timezone.now() - timedelta(hours=2),
-                                               employee=self.user,
+                                               user=self.user,
                                                base=issue,
                                                time_spent=int(timedelta(hours=2).total_seconds()))
 
         IssueSpentTimeFactory.create(date=timezone.now() - timedelta(days=1, hours=1),
-                                     employee=self.user,
+                                     user=self.user,
                                      base=issue,
                                      time_spent=int(timedelta(hours=4).total_seconds()))
 
         spend_4 = IssueSpentTimeFactory.create(date=timezone.now() - timedelta(hours=1),
-                                               employee=self.user,
+                                               user=self.user,
                                                base=issue,
                                                time_spent=int(timedelta(minutes=10).total_seconds()))
 
