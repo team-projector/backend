@@ -362,52 +362,16 @@ class ApiMetricsWeeksTests(BaseAPITest):
                        time_estimates: Dict[date, timedelta],
                        efficiencies: Dict[date, float]):
 
-        spents = {
-            self.format_date(d): time
-            for d, time in spents.items()
-        }
-
-        time_estimates = {
-            self.format_date(d): time
-            for d, time in time_estimates.items()
-        }
-
-        issues_counts = {
-            self.format_date(d): count
-            for d, count in issues_counts.items()
-        }
-
-        efficiencies = {
-            self.format_date(d): ef
-            for d, ef in efficiencies.items()
-        }
+        spents = self._prepare_metrics(spents)
+        time_estimates = self._prepare_metrics(time_estimates)
+        issues_counts = self._prepare_metrics(issues_counts)
+        efficiencies = self._prepare_metrics(efficiencies)
 
         for metric in metrics:
             self.assertEqual(metric['end'], self.format_date(parse_date(metric['start']) + timedelta(weeks=1)))
 
-            if metric['start'] in spents:
-                self.assertEqual(metric['time_spent'],
-                                 spents[metric['start']].total_seconds(),
-                                 f'bad spent for {metric["start"]}: '
-                                 f'expected - {spents[metric["start"]]}, '
-                                 f'actual - {timedelta(seconds=metric["time_spent"])}')
-            else:
-                self.assertEqual(metric['time_spent'], 0,
-                                 f'bad spent for {metric["start"]}: '
-                                 f'expected - 0, '
-                                 f'actual - {timedelta(seconds=metric["time_spent"])}')
-
-            if metric['start'] in time_estimates:
-                self.assertEqual(metric['time_estimate'],
-                                 time_estimates[metric['start']].total_seconds(),
-                                 f'bad time_estimate for {metric["start"]}: '
-                                 f'expected - {time_estimates[metric["start"]]}, '
-                                 f'actual - {timedelta(seconds=metric["time_estimate"])}')
-            else:
-                self.assertEqual(metric['time_estimate'], 0,
-                                 f'bad time_estimate for {metric["start"]}: '
-                                 f'expected - 0, '
-                                 f'actual - {timedelta(seconds=metric["time_estimate"])}')
+            self._check_metric(metric, 'time_spent', spents)
+            self._check_metric(metric, 'time_estimate', time_estimates)
 
             if metric['start'] in efficiencies:
                 self.assertEqual(metric['efficiency'],
@@ -422,6 +386,26 @@ class ApiMetricsWeeksTests(BaseAPITest):
                                  f'actual - {metric["efficiency"]}')
 
             if metric['start'] in issues_counts:
-                self.assertEqual(metric['issues'], issues_counts[metric['start']])
+                self.assertEqual(metric['issues_count'], issues_counts[metric['start']])
             else:
-                self.assertEqual(metric['issues'], 0)
+                self.assertEqual(metric['issues_count'], 0)
+
+    def _prepare_metrics(self, metrics):
+        return {
+            self.format_date(d): time
+            for d, time in metrics.items()
+        }
+
+    def _check_metric(self, metric, metric_name, values):
+        if metric['start'] in values:
+            self.assertEqual(metric[metric_name],
+                             values[metric['start']].total_seconds(),
+                             f'bad {metric_name} for {metric["start"]}: '
+                             f'expected - {values[metric["start"]]}, '
+                             f'actual - {timedelta(seconds=metric[metric_name])}')
+        else:
+            self.assertEqual(metric[metric_name],
+                             0,
+                             f'bad {metric_name} for {metric["start"]}: '
+                             f'expected - 0, '
+                             f'actual - {timedelta(seconds=metric[metric_name])}')

@@ -7,13 +7,13 @@ from django.utils.timezone import make_aware
 
 from apps.core.utils.date import begin_of_week, date2datetime
 from apps.development.models import Issue, STATE_CLOSED
-from .base import Metric, MetricsCalculator
+from .base import UserMetric, MetricsCalculator
 
 WEEK_STEP = timedelta(weeks=1)
 
 
 class WeekMetricsCalculator(MetricsCalculator):
-    def calculate(self) -> Iterable[Metric]:
+    def calculate(self) -> Iterable[UserMetric]:
         metrics = []
 
         spents = {
@@ -22,7 +22,7 @@ class WeekMetricsCalculator(MetricsCalculator):
         }
 
         for week in self._get_weeks():
-            metric = Metric()
+            metric = UserMetric()
             metrics.append(metric)
 
             metric.start = week
@@ -40,16 +40,16 @@ class WeekMetricsCalculator(MetricsCalculator):
     def modify_queryset(self, queryset: QuerySet) -> QuerySet:
         return queryset.annotate(week=TruncWeek('date')).values('week')
 
-    def _adjust_deadlines(self, metric: Metric) -> None:
+    def _adjust_deadlines(self, metric: UserMetric) -> None:
         issues_stats = Issue.objects.filter(employee=self.user, due_date__range=(metric.start, metric.end)) \
             .exclude(state=STATE_CLOSED) \
             .aggregate(issues_count=Count('*'),
                        total_time_estimate=Sum('time_estimate'))
 
-        metric.issues = issues_stats['issues_count']
+        metric.issues_count = issues_stats['issues_count']
         metric.time_estimate = issues_stats['total_time_estimate'] or 0
 
-    def _adjust_efficiency(self, metric: Metric) -> None:
+    def _adjust_efficiency(self, metric: UserMetric) -> None:
         issues_stats = Issue.objects.filter(employee=self.user,
                                             closed_at__range=(
                                                 make_aware(date2datetime(metric.start)),

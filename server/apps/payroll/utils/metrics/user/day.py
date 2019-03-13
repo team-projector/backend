@@ -7,14 +7,14 @@ from django.db.models.functions import TruncDay
 from django.utils import timezone
 
 from apps.development.models import Issue, STATE_CLOSED
-from .base import Metric, MetricsCalculator
+from .base import UserMetric, MetricsCalculator
 
 DAY_STEP = timedelta(days=1)
 MAX_DAY_LOADING = timedelta(hours=8).total_seconds()
 
 
 class DayMetricsCalculator(MetricsCalculator):
-    def calculate(self) -> Iterable[Metric]:
+    def calculate(self) -> Iterable[UserMetric]:
         metrics = []
 
         spents = {
@@ -28,7 +28,7 @@ class DayMetricsCalculator(MetricsCalculator):
         active_issues = self.get_active_issues() if now > self.start else []
 
         while current <= self.end:
-            metric = Metric()
+            metric = UserMetric()
             metrics.append(metric)
 
             metric.start = metric.end = current
@@ -43,7 +43,7 @@ class DayMetricsCalculator(MetricsCalculator):
                            total_time_estimate=Sum('time_estimate'),
                            total_time_remains=Sum('time_remains'))
 
-            metric.issues = deadline_stats['issues_count']
+            metric.issues_count = deadline_stats['issues_count']
             metric.time_estimate = deadline_stats['total_time_estimate'] or 0
             metric.time_remains = deadline_stats['total_time_remains'] or 0
 
@@ -63,7 +63,7 @@ class DayMetricsCalculator(MetricsCalculator):
         return day >= now and day.weekday() not in settings.TP_WEEKENDS_DAYS
 
     @staticmethod
-    def _update_loading(metric: Metric, active_issues: List[dict]) -> None:
+    def _update_loading(metric: UserMetric, active_issues: List[dict]) -> None:
         if not active_issues:
             return
 
