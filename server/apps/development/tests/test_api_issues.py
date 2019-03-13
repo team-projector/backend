@@ -4,7 +4,7 @@ from django.utils import timezone
 from rest_framework import status
 
 from apps.core.tests.base import BaseAPITest
-from apps.development.models import Note, STATE_OPENED, STATE_CLOSED
+from apps.development.models import Note, STATE_CLOSED, STATE_OPENED
 from apps.development.tests.factories import IssueFactory, IssueNoteFactory
 from apps.users.models import User
 
@@ -18,6 +18,26 @@ class ApiIssuesTests(BaseAPITest):
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data['count'], 5)
+
+    def test_list_with_metrics(self):
+        IssueFactory.create_batch(5, employee=self.user)
+
+        self.set_credentials()
+        response = self.client.get('/api/issues', {'metrics': 'true'})
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data['count'], 5)
+        self.assertTrue(all(item['metrics'] is not None for item in response.data['results']))
+
+    def test_list_without_metrics(self):
+        IssueFactory.create_batch(5, employee=self.user)
+
+        self.set_credentials()
+        response = self.client.get('/api/issues', {'metrics': 'false'})
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data['count'], 5)
+        self.assertTrue(all(item['metrics'] is None for item in response.data['results']))
 
     def test_search(self):
         issue = IssueFactory.create(title='create', employee=self.user)
@@ -118,13 +138,13 @@ class ApiIssuesTests(BaseAPITest):
         issue.adjust_spent_times()
 
         self.set_credentials()
-        response = self.client.get('/api/issues')
+        response = self.client.get('/api/issues', {'metrics': 'true'})
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data['count'], 1)
 
         self.assertEqual(response.data['results'][0]['time_spent'], timedelta(hours=4).total_seconds())
-        self.assertEqual(response.data['results'][0]['time_remains'], timedelta(hours=1).total_seconds())
+        self.assertEqual(response.data['results'][0]['metrics']['remains'], timedelta(hours=1).total_seconds())
 
     def test_with_negative_remains(self):
         issue = IssueFactory.create(employee=self.user,
@@ -143,13 +163,13 @@ class ApiIssuesTests(BaseAPITest):
         issue.adjust_spent_times()
 
         self.set_credentials()
-        response = self.client.get('/api/issues')
+        response = self.client.get('/api/issues', {'metrics': 'true'})
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data['count'], 1)
 
         self.assertEqual(response.data['results'][0]['time_spent'], timedelta(hours=5).total_seconds())
-        self.assertEqual(response.data['results'][0]['time_remains'], 0)
+        self.assertEqual(response.data['results'][0]['metrics']['remains'], 0)
 
     def test_with_spends_users_mix(self):
         user_2 = User.objects.create_user(login='user 2', gl_id=11)
