@@ -1,3 +1,5 @@
+from django.contrib.auth import get_user_model
+from django.shortcuts import get_object_or_404
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import mixins
 from rest_framework.response import Response
@@ -8,12 +10,15 @@ from .serializers import UserMetricSerializer, UserMetricsParamsSerializer, Time
 from ..models import SpentTime
 from ..utils.metrics.user import create_calculator
 
+User = get_user_model()
+
 
 class UserMetricsView(BaseGenericAPIView):
-    def get(self, request):
+    def get(self, request, user_pk):
+        user = get_object_or_404(User.objects, pk=user_pk)
         params = parse_query_params(request, UserMetricsParamsSerializer)
 
-        calculator = create_calculator(params['user'], params['start'], params['end'], params['group'])
+        calculator = create_calculator(user, params['start'], params['end'], params['group'])
         metrics = calculator.calculate()
 
         return Response(UserMetricSerializer(metrics, many=True).data)

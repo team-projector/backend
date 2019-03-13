@@ -9,7 +9,6 @@ router = AppRouter()
 router.register('time-expenses', TimeExpensesView, basename='time-expenses')
 
 urlpatterns = [
-    path('metrics', UserMetricsView.as_view(), name='metrics'),
     path('users/<int:user_pk>/metrics', UserMetricsView.as_view(), name='user-metrics'),
     *router.urls
 ]

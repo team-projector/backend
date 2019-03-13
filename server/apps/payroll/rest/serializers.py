@@ -2,11 +2,9 @@ from rest_framework import serializers
 
 from apps.development.rest.serializers import IssueCardSerializer
 from apps.payroll.models import SpentTime
-from apps.users.models import User
 
 
 class UserMetricsParamsSerializer(serializers.Serializer):
-    user = serializers.PrimaryKeyRelatedField(queryset=User.objects.all())
     start = serializers.DateField()
     end = serializers.DateField()
     group = serializers.CharField()

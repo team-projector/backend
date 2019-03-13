@@ -40,8 +40,7 @@ class ApiMetricsWeeksTests(BaseAPITest):
         start = monday - timedelta(days=5)
         end = monday + timedelta(days=5)
 
-        response = self.client.get('/api/metrics', {
-            'user': self.user.id,
+        response = self.client.get(f'/api/users/{self.user.id}/metrics', {
             'start': self.format_date(start),
             'end': self.format_date(end),
             'group': 'week'
@@ -78,8 +77,7 @@ class ApiMetricsWeeksTests(BaseAPITest):
         start = monday - timedelta(days=5)
         end = monday + timedelta(days=5)
 
-        response = self.client.get('/api/metrics', {
-            'user': self.user.id,
+        response = self.client.get(f'/api/users/{self.user.id}/metrics', {
             'start': self.format_date(start),
             'end': self.format_date(end),
             'group': 'week'
@@ -114,8 +112,7 @@ class ApiMetricsWeeksTests(BaseAPITest):
         start = monday - timedelta(days=5)
         end = monday + timedelta(days=5)
 
-        response = self.client.get('/api/metrics', {
-            'user': self.user.id,
+        response = self.client.get(f'/api/users/{self.user.id}/metrics', {
             'start': self.format_date(start),
             'end': self.format_date(end),
             'group': 'week'
@@ -150,8 +147,7 @@ class ApiMetricsWeeksTests(BaseAPITest):
         start = monday - timedelta(days=5)
         end = monday + timedelta(days=5)
 
-        response = self.client.get('/api/metrics', {
-            'user': self.user.id,
+        response = self.client.get(f'/api/users/{self.user.id}/metrics', {
             'start': self.format_date(start),
             'end': self.format_date(end),
             'group': 'week'
@@ -179,8 +175,7 @@ class ApiMetricsWeeksTests(BaseAPITest):
         start = monday - timedelta(days=5)
         end = monday + timedelta(days=5)
 
-        response = self.client.get('/api/metrics', {
-            'user': self.user.id,
+        response = self.client.get(f'/api/users/{self.user.id}/metrics', {
             'start': self.format_date(start),
             'end': self.format_date(end),
             'group': 'week'
@@ -209,8 +204,7 @@ class ApiMetricsWeeksTests(BaseAPITest):
         start = monday - timedelta(days=5)
         end = monday + timedelta(days=5)
 
-        response = self.client.get('/api/metrics', {
-            'user': self.user.id,
+        response = self.client.get(f'/api/users/{self.user.id}/metrics', {
             'start': self.format_date(start),
             'end': self.format_date(end),
             'group': 'week'
@@ -247,8 +241,7 @@ class ApiMetricsWeeksTests(BaseAPITest):
         start = monday
         end = monday + timedelta(weeks=1, days=5)
 
-        response = self.client.get('/api/metrics', {
-            'user': self.user.id,
+        response = self.client.get(f'/api/users/{self.user.id}/metrics', {
             'start': self.format_date(start),
             'end': self.format_date(end),
             'group': 'week'
@@ -286,8 +279,7 @@ class ApiMetricsWeeksTests(BaseAPITest):
         start = monday - timedelta(days=5)
         end = monday + timedelta(days=5)
 
-        response = self.client.get('/api/metrics', {
-            'user': self.user.id,
+        response = self.client.get(f'/api/users/{self.user.id}/metrics', {
             'start': self.format_date(start),
             'end': self.format_date(end),
             'group': 'week'
@@ -331,8 +323,7 @@ class ApiMetricsWeeksTests(BaseAPITest):
         start = monday - timedelta(days=5)
         end = monday + timedelta(days=5)
 
-        response = self.client.get('/api/metrics', {
-            'user': self.user.id,
+        response = self.client.get(f'/api/users/{self.user.id}/metrics', {
             'start': self.format_date(start),
             'end': self.format_date(end),
             'group': 'week'
