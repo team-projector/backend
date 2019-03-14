@@ -5,13 +5,6 @@ from apps.users.admin import UserFilter
 from .models import SpentTime, Salary, Payroll, Bonus, Penalty, Payment
 
 
-@admin.register(SpentTime)
-class SpentTimeAdmin(BaseModelAdmin):
-    list_display = ('user', 'date', 'content_type', 'object_id', 'time_spent')
-    search_fields = ('user',)
-    autocomplete_fields = ('note', 'user')
-
-
 @admin.register(Salary)
 class SalaryAdmin(BaseModelAdmin):
     list_display = ('user', 'created_by', 'created_at', 'total', 'payed')
@@ -26,6 +19,13 @@ class PayrollAdmin(BaseModelAdmin):
     list_filter = (UserFilter,)
     search_fields = ('user',)
     autocomplete_fields = ('user', 'created_by', 'salary')
+
+
+@admin.register(SpentTime)
+class SpentTimeAdmin(BaseModelAdmin):
+    list_display = ('user', 'created_at', 'date', 'content_type', 'object_id', 'time_spent')
+    search_fields = ('user',)
+    autocomplete_fields = ('note', 'user')
 
 
 @admin.register(Bonus)

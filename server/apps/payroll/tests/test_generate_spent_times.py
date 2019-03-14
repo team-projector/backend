@@ -96,9 +96,6 @@ class AdjustSpentTimesTests(TestCase):
         for note in self.issue.notes.all().order_by('created_at'):
             spent_time = SpentTime.objects.filter(note=note).first()
 
-            self.assertEqual(spent_time.updated_at, note.updated_at)
-            self.assertEqual(spent_time.created_at, note.created_at)
-
             self.assertIsNotNone(spent_time)
 
             if note.type == Note.TYPE.reset_spend:

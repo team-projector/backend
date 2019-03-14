@@ -224,8 +224,7 @@ class Issue(NotableMixin,
                 continue
 
             SpentTime.objects.create(date=note_date,
-                                     created_at=note.created_at,
-                                     updated_at=note.updated_at,
+                                     created_by=note.user,
                                      user=note.user,
                                      time_spent=time_spent,
                                      note=note,

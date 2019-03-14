@@ -11,38 +11,10 @@ from apps.development.models import Note
 User = get_user_model()
 
 
-class SpentTime(models.Model):
-    created_at = models.DateTimeField(null=True, blank=True)
-    updated_at = models.DateTimeField(null=True, blank=True)
-
-    date = models.DateField(null=True)
-
-    rate = models.FloatField(null=True, verbose_name=_('VN__RATE'), help_text=_('HT__RATE'))
-    time_spent = models.IntegerField(verbose_name=_('VN__TIME_SPENT'), help_text=_('HT__TIME_SPENT'))
-
-    user = models.ForeignKey(User, models.CASCADE, verbose_name=_('VN__USER'), help_text=_('HT__USER'))
-
-    content_type = models.ForeignKey(ContentType, models.CASCADE)
-    object_id = models.PositiveIntegerField()
-    base = GenericForeignKey()
-
-    note = models.OneToOneField(Note, models.SET_NULL, null=True, blank=True, related_name='time_spend')
-
-    earnings = models.DecimalField(default=0, decimal_places=2, max_digits=10)
-
-    def __str__(self):
-        return f'{self.user} [{self.base}]: {self.time_spent}'
-
-    class Meta:
-        verbose_name = _('VN__SPENT_TIME')
-        verbose_name_plural = _('VN__SPENT_TIMES')
-        ordering = ('-date',)
-
-
 class Payroll(Timestamps):
     created_by = models.ForeignKey(User, models.CASCADE, verbose_name=_('VN__CREATED_BY'),
                                    help_text=_('HT__CREATED_BY'))
-    sum = MoneyField(verbose_name=_('VN__SUM'), help_text=_('HT__SUM'))
+    sum = MoneyField(default=0, verbose_name=_('VN__SUM'), help_text=_('HT__SUM'))
     salary = models.ForeignKey('Salary', models.SET_NULL, null=True, blank=True, related_name='+',
                                verbose_name=_('VN__SALARY'), help_text=_('HT__SALARY'))
 
@@ -56,6 +28,31 @@ class Payroll(Timestamps):
         verbose_name = _('VN__PAYROLL')
         verbose_name_plural = _('VN__PAYROLLS')
         ordering = ('-created_at',)
+
+
+class SpentTime(Payroll):
+    date = models.DateField(null=True)
+
+    rate = models.FloatField(null=True, verbose_name=_('VN__RATE'), help_text=_('HT__RATE'))
+    time_spent = models.IntegerField(verbose_name=_('VN__TIME_SPENT'), help_text=_('HT__TIME_SPENT'))
+
+    content_type = models.ForeignKey(ContentType, models.CASCADE)
+    object_id = models.PositiveIntegerField()
+    base = GenericForeignKey()
+
+    note = models.OneToOneField(Note, models.SET_NULL, null=True, blank=True, related_name='time_spend')
+
+    def __str__(self):
+        return f'{self.user} [{self.base}]: {self.time_spent}'
+
+    def save(self, *args, **kwargs):
+        self.created_by = self.user
+        super().save(*args, **kwargs)
+
+    class Meta:
+        verbose_name = _('VN__SPENT_TIME')
+        verbose_name_plural = _('VN__SPENT_TIMES')
+        ordering = ('-date',)
 
 
 class Bonus(Payroll):

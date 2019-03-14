@@ -41,4 +41,4 @@ class TimeExpenseSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = SpentTime
-        fields = ('id', 'created_at', 'updated_at', 'date', 'time_spent', 'earnings')
+        fields = ('id', 'created_at', 'updated_at', 'date', 'time_spent')

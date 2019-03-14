@@ -76,21 +76,25 @@ class ApiTimeExpensesTests(BaseAPITest):
 
         IssueSpentTimeFactory.create(date=timezone.now() - timedelta(weeks=1, hours=1),
                                      user=self.user,
+                                     created_by=self.user,
                                      base=issue,
                                      time_spent=int(timedelta(hours=5).total_seconds()))
 
         spend_2 = IssueSpentTimeFactory.create(date=timezone.now() - timedelta(hours=2),
                                                user=self.user,
+                                               created_by=self.user,
                                                base=issue,
                                                time_spent=int(timedelta(hours=2).total_seconds()))
 
         IssueSpentTimeFactory.create(date=timezone.now() - timedelta(days=1, hours=1),
                                      user=self.user,
+                                     created_by=self.user,
                                      base=issue,
                                      time_spent=int(timedelta(hours=4).total_seconds()))
 
         spend_4 = IssueSpentTimeFactory.create(date=timezone.now() - timedelta(hours=1),
                                                user=self.user,
+                                               created_by=self.user,
                                                base=issue,
                                                time_spent=int(timedelta(minutes=10).total_seconds()))
 
@@ -168,4 +172,3 @@ class ApiTimeExpensesTests(BaseAPITest):
             expense['date'] = spend.date
             expense['issue']['id'] = spend.base.id
             expense['time_spent'] = spend.time_spent
-            expense['earnings'] = spend.earnings
