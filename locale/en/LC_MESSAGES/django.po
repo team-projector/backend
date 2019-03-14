@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-03-11 17:17+0300\n"
+"POT-Creation-Date: 2019-03-14 18:10+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,12 +17,12 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: server/apps/core/db/mixins.py:6 server/apps/development/models.py:124
+#: server/apps/core/db/mixins.py:6 server/apps/development/models.py:125
 #: server/apps/users/models.py:38
 msgid "VN__GITLAB_ID"
 msgstr "GitLab id"
 
-#: server/apps/core/db/mixins.py:6 server/apps/development/models.py:124
+#: server/apps/core/db/mixins.py:6 server/apps/development/models.py:125
 #: server/apps/users/models.py:39
 msgid "HT__GITLAB_ID"
 msgstr "GitLab id"
@@ -47,7 +47,7 @@ msgstr "GitLab last sync"
 msgid "VN__DEVELOPMENT"
 msgstr "Development"
 
-#: server/apps/development/db/mixins.py:7 server/apps/development/models.py:142
+#: server/apps/development/db/mixins.py:7 server/apps/development/models.py:143
 msgid "VN__NOTES"
 msgstr "Notes"
 
@@ -55,15 +55,15 @@ msgstr "Notes"
 msgid "HT__NOTES"
 msgstr "Notes"
 
-#: server/apps/development/models.py:25 server/apps/development/models.py:58
-#: server/apps/development/models.py:76 server/apps/development/models.py:103
-#: server/apps/development/models.py:156
+#: server/apps/development/models.py:25 server/apps/development/models.py:59
+#: server/apps/development/models.py:77 server/apps/development/models.py:104
+#: server/apps/development/models.py:157
 msgid "VN__TITLE"
 msgstr "Title"
 
-#: server/apps/development/models.py:25 server/apps/development/models.py:58
-#: server/apps/development/models.py:76 server/apps/development/models.py:103
-#: server/apps/development/models.py:156
+#: server/apps/development/models.py:25 server/apps/development/models.py:59
+#: server/apps/development/models.py:77 server/apps/development/models.py:104
+#: server/apps/development/models.py:157
 msgid "HT__TITLE"
 msgstr "Title"
 
@@ -87,144 +87,140 @@ msgstr "Developer"
 msgid "HT__TEAM"
 msgstr "Team"
 
-#: server/apps/development/models.py:44 server/apps/development/models.py:126
+#: server/apps/development/models.py:44 server/apps/development/models.py:127
+#: server/apps/development/models.py:167 server/apps/payroll/models.py:23
+#: server/apps/payroll/models.py:49 server/apps/payroll/models.py:90
 #: server/apps/users/models.py:49
 msgid "VN__USER"
 msgstr "User"
 
-#: server/apps/development/models.py:44 server/apps/development/models.py:127
+#: server/apps/development/models.py:45 server/apps/development/models.py:128
+#: server/apps/development/models.py:168 server/apps/payroll/models.py:23
+#: server/apps/payroll/models.py:50 server/apps/payroll/models.py:90
 msgid "HT__USER"
 msgstr "User"
 
-#: server/apps/development/models.py:48
+#: server/apps/development/models.py:49
 msgid "VN__TEAM_MEMBER"
 msgstr "Team member"
 
-#: server/apps/development/models.py:49
+#: server/apps/development/models.py:50
 msgid "VN__TEAM_MEMBERS"
 msgstr "Team members"
 
-#: server/apps/development/models.py:59 server/apps/development/models.py:77
+#: server/apps/development/models.py:60 server/apps/development/models.py:78
 msgid "VN__FULL_TITLE"
 msgstr "Full title"
 
-#: server/apps/development/models.py:60 server/apps/development/models.py:78
+#: server/apps/development/models.py:61 server/apps/development/models.py:79
 msgid "HT__FULL_TITLE"
 msgstr "Full title"
 
-#: server/apps/development/models.py:61
+#: server/apps/development/models.py:62
 msgid "VN__PARENT"
 msgstr "Parent"
 
-#: server/apps/development/models.py:62
+#: server/apps/development/models.py:63
 msgid "HT__PARENT"
 msgstr "Parent"
 
-#: server/apps/development/models.py:67
+#: server/apps/development/models.py:68
 msgid "VN__PROJECT_GROUP"
 msgstr "Project group"
 
-#: server/apps/development/models.py:68
+#: server/apps/development/models.py:69
 msgid "VN__PROJECT_GROUPS"
 msgstr "Project groups"
 
-#: server/apps/development/models.py:80
+#: server/apps/development/models.py:81
 msgid "VN__GROUP"
 msgstr "Group"
 
-#: server/apps/development/models.py:80
+#: server/apps/development/models.py:81
 msgid "HT__GROUP"
 msgstr "Group"
 
-#: server/apps/development/models.py:82
+#: server/apps/development/models.py:83
 msgid "VN__GITLAB_LAST_ISSUES_SYNC"
 msgstr "GitLab issues last sync"
 
-#: server/apps/development/models.py:83
+#: server/apps/development/models.py:84
 msgid "HT__GITLAB_LAST_ISSUES_SYNC"
 msgstr "GitLab issues last sync"
 
-#: server/apps/development/models.py:88 server/apps/development/models.py:158
+#: server/apps/development/models.py:89 server/apps/development/models.py:159
 msgid "VN__PROJECT"
 msgstr "Project"
 
-#: server/apps/development/models.py:89
+#: server/apps/development/models.py:90
 msgid "VN__PROJECTS"
 msgstr "Projects"
 
-#: server/apps/development/models.py:104
+#: server/apps/development/models.py:105
 msgid "VN__COLOR"
 msgstr "Color"
 
-#: server/apps/development/models.py:104
+#: server/apps/development/models.py:105
 msgid "HT__COLOR"
 msgstr "Color"
 
-#: server/apps/development/models.py:107
+#: server/apps/development/models.py:108
 msgid "VN__LABEL"
 msgstr "Label"
 
-#: server/apps/development/models.py:108
+#: server/apps/development/models.py:109
 msgid "VN__LABELS"
 msgstr "Labels"
 
-#: server/apps/development/models.py:134
+#: server/apps/development/models.py:135
 msgid "VN__TYPE"
 msgstr "Type"
 
-#: server/apps/development/models.py:134
+#: server/apps/development/models.py:135
 msgid "HT__TYPE"
 msgstr "Type"
 
-#: server/apps/development/models.py:141
+#: server/apps/development/models.py:142
 msgid "VN__NOTE"
 msgstr "Note"
 
-#: server/apps/development/models.py:158
+#: server/apps/development/models.py:159
 msgid "HT__PROJECT"
 msgstr "Project"
 
-#: server/apps/development/models.py:160
+#: server/apps/development/models.py:161
 msgid "VN__TIME_ESTIMATE"
 msgstr "Estimate time"
 
-#: server/apps/development/models.py:161
+#: server/apps/development/models.py:162
 msgid "HT__TIME_ESTIMATE"
 msgstr "Estimate time"
 
-#: server/apps/development/models.py:163
+#: server/apps/development/models.py:164
 msgid "VN__TOTAL_TIME_SPENT"
 msgstr "Total spent time"
 
-#: server/apps/development/models.py:164
+#: server/apps/development/models.py:165
 msgid "HT__TOTAL_TIME_SPENT"
 msgstr "Total spent time"
 
-#: server/apps/development/models.py:166 server/apps/payroll/models.py:18
-msgid "VN__EMPLOYEE"
-msgstr "Employee"
-
-#: server/apps/development/models.py:167 server/apps/payroll/models.py:19
-msgid "HT__EMPLOYEE"
-msgstr "Employee"
-
-#: server/apps/development/models.py:169
+#: server/apps/development/models.py:170
 msgid "VN__STATE"
 msgstr "State"
 
-#: server/apps/development/models.py:170
+#: server/apps/development/models.py:171
 msgid "HT__STATE"
 msgstr "State"
 
-#: server/apps/development/models.py:183
+#: server/apps/development/models.py:184
 msgid "VN__ISSUE"
 msgstr "Issue"
 
-#: server/apps/development/models.py:184
+#: server/apps/development/models.py:185
 msgid "VN__ISSUES"
 msgstr "Issues"
 
-#: server/apps/payroll/apps.py:8
+#: server/apps/payroll/apps.py:8 server/apps/payroll/models.py:56
 msgid "VN__PAYROLL"
 msgstr "Payroll"
 
@@ -236,17 +232,145 @@ msgstr "Time spents"
 msgid "HT__TIME_SPENTS"
 msgstr "Time spents"
 
-#: server/apps/payroll/models.py:16
+#: server/apps/payroll/models.py:20
+msgid "VN__RATE"
+msgstr "Rate"
+
+#: server/apps/payroll/models.py:20
+msgid "HT__RATE"
+msgstr "Rate"
+
+#: server/apps/payroll/models.py:21
 msgid "VN__TIME_SPENT"
 msgstr "Spent time"
 
-#: server/apps/payroll/models.py:16
+#: server/apps/payroll/models.py:21
 msgid "HT__TIME_SPENT"
 msgstr "Spent time"
 
-#: server/apps/payroll/models.py:33 server/apps/payroll/models.py:34
+#: server/apps/payroll/models.py:37
 msgid "VN__SPENT_TIME"
 msgstr "Spent time"
+
+#: server/apps/payroll/models.py:38
+msgid "VN__SPENT_TIMES"
+msgstr "Spent times"
+
+#: server/apps/payroll/models.py:43 server/apps/payroll/models.py:87
+msgid "VN__CREATED_BY"
+msgstr "Created by"
+
+#: server/apps/payroll/models.py:44 server/apps/payroll/models.py:88
+msgid "HT__CREATED_BY"
+msgstr "Created by"
+
+#: server/apps/payroll/models.py:45 server/apps/payroll/models.py:101
+msgid "VN__SUM"
+msgstr "Sum"
+
+#: server/apps/payroll/models.py:45 server/apps/payroll/models.py:101
+msgid "HT__SUM"
+msgstr "Sum"
+
+#: server/apps/payroll/models.py:47 server/apps/payroll/models.py:110
+msgid "VN__SALARY"
+msgstr "Salary"
+
+#: server/apps/payroll/models.py:47
+msgid "HT__SALARY"
+msgstr "Salary"
+
+#: server/apps/payroll/models.py:57
+msgid "VN__PAYROLLS"
+msgstr "Payrolls"
+
+#: server/apps/payroll/models.py:62 server/apps/payroll/models.py:71
+msgid "VN__DESCRIPTION"
+msgstr "Description"
+
+#: server/apps/payroll/models.py:62 server/apps/payroll/models.py:71
+msgid "HT__DESCRIPTION"
+msgstr "Description"
+
+#: server/apps/payroll/models.py:65 server/apps/payroll/models.py:100
+msgid "VN__BONUS"
+msgstr "Bonus"
+
+#: server/apps/payroll/models.py:66
+msgid "VN__BONUSES"
+msgstr "Bonuses"
+
+#: server/apps/payroll/models.py:74
+msgid "VN__PENALTY"
+msgstr "Penalty"
+
+#: server/apps/payroll/models.py:75
+msgid "VN__PENALTIES"
+msgstr "Penalties"
+
+#: server/apps/payroll/models.py:81
+msgid "VN__PAYMENT"
+msgstr "Payment"
+
+#: server/apps/payroll/models.py:82
+msgid "VN__PAYMENTS"
+msgstr "Payments"
+
+#: server/apps/payroll/models.py:92
+msgid "VN__PERIOD_FROM"
+msgstr "Period from"
+
+#: server/apps/payroll/models.py:93
+msgid "HT__PERIOD_FROM"
+msgstr "Period from"
+
+#: server/apps/payroll/models.py:94
+msgid "VN__PERIOD_TO"
+msgstr "Period to"
+
+#: server/apps/payroll/models.py:95
+msgid "HT__PERIOD_TO"
+msgstr "Period to"
+
+#: server/apps/payroll/models.py:97
+msgid "VN__CHARGED_TIME"
+msgstr "Charged time"
+
+#: server/apps/payroll/models.py:97
+msgid "HT__CHARGED_TIME"
+msgstr "Charged time"
+
+#: server/apps/payroll/models.py:99
+msgid "VN__TAXES"
+msgstr "Taxes"
+
+#: server/apps/payroll/models.py:99
+msgid "HT__TAXES"
+msgstr "Taxes"
+
+#: server/apps/payroll/models.py:100
+msgid "HT__BONUS"
+msgstr "Bonus"
+
+#: server/apps/payroll/models.py:102
+msgid "VN__TOTAL"
+msgstr "Total"
+
+#: server/apps/payroll/models.py:102
+msgid "HT__TOTAL"
+msgstr "Total"
+
+#: server/apps/payroll/models.py:104
+msgid "VN__PAYED"
+msgstr "Payed"
+
+#: server/apps/payroll/models.py:104
+msgid "HT__PAYED"
+msgstr "Payed"
+
+#: server/apps/payroll/models.py:111
+msgid "VN__SALARIES"
+msgstr "Salaries"
 
 #: server/apps/users/apps.py:8 server/apps/users/models.py:50
 msgid "VN__USERS"
@@ -348,6 +472,6 @@ msgstr ""
 msgid "MESSAGE__ENGLISH"
 msgstr "English"
 
-#: server/urls.py:10
+#: server/urls.py:12
 msgid "VN__ADMIN_DASHBOARD"
 msgstr "Admin Dashboard"
