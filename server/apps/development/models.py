@@ -41,7 +41,8 @@ class TeamMember(models.Model):
 
     team = models.ForeignKey(Team, models.CASCADE, related_name='members', verbose_name=_('VN__TEAM'),
                              help_text=_('HT__TEAM'))
-    user = models.ForeignKey(User, models.CASCADE, verbose_name=_('VN__USER'), help_text=_('HT__USER'))
+    user = models.ForeignKey(User, models.CASCADE, related_name='team_members', verbose_name=_('VN__USER'),
+                             help_text=_('HT__USER'))
     roles = BitField(flags=ROLES, default=0)
 
     class Meta:

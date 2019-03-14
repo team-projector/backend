@@ -29,7 +29,7 @@ urlpatterns = [
         'apps.payroll.rest.urls',
     ), 'urls'), namespace='api')),
     path('api/', include('apps.users.social_urls', namespace='social')),
-    re_path(r'^/api/swagger(?P<format>\.json|\.yaml)$', schema_view.without_ui(cache_timeout=0), name='swagger-json'),
+    re_path(r'^api/swagger(?P<format>\.json|\.yaml)$', schema_view.without_ui(cache_timeout=0), name='swagger-json'),
     path('api/swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
     path('api/redoc/', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
     path('admin/', admin.site.urls),
