@@ -10,12 +10,14 @@ from apps.development.models import Note
 
 User = get_user_model()
 
+SECONDS_IN_HOUR = 60 * 60
+
 
 class Payroll(Timestamps):
     created_by = models.ForeignKey(User, models.CASCADE, verbose_name=_('VN__CREATED_BY'),
                                    help_text=_('HT__CREATED_BY'))
     sum = MoneyField(default=0, verbose_name=_('VN__SUM'), help_text=_('HT__SUM'))
-    salary = models.ForeignKey('Salary', models.SET_NULL, null=True, blank=True, related_name='+',
+    salary = models.ForeignKey('Salary', models.SET_NULL, null=True, blank=True, related_name='payrolls',
                                verbose_name=_('VN__SALARY'), help_text=_('HT__SALARY'))
 
     user = models.ForeignKey(User, models.CASCADE, related_name='+', verbose_name=_('VN__USER'),
@@ -47,7 +49,14 @@ class SpentTime(Payroll):
 
     def save(self, *args, **kwargs):
         self.created_by = self.user
+        self.rate = self.user.hour_rate
+
+        self._adjust_sum()
+
         super().save(*args, **kwargs)
+
+    def _adjust_sum(self):
+        self.sum = self.time_spent / SECONDS_IN_HOUR * self.rate
 
     class Meta:
         verbose_name = _('VN__SPENT_TIME')
@@ -91,12 +100,13 @@ class Salary(Timestamps):
     period_to = models.DateField(null=True, blank=True, verbose_name=_('VN__PERIOD_TO'),
                                  help_text=_('HT__PERIOD_TO'))
 
-    charged_time = models.IntegerField(verbose_name=_('VN__CHARGED_TIME'), help_text=_('HT__CHARGED_TIME'))
+    charged_time = models.IntegerField(default=0, verbose_name=_('VN__CHARGED_TIME'), help_text=_('HT__CHARGED_TIME'))
 
-    taxes = MoneyField(verbose_name=_('VN__TAXES'), help_text=_('HT__TAXES'))
-    bonus = MoneyField(verbose_name=_('VN__BONUS'), help_text=_('HT__BONUS'))
-    sum = MoneyField(verbose_name=_('VN__SUM'), help_text=_('HT__SUM'))
-    total = MoneyField(verbose_name=_('VN__TOTAL'), help_text=_('HT__TOTAL'))
+    taxes = MoneyField(default=0, verbose_name=_('VN__TAXES'), help_text=_('HT__TAXES'))
+    bonus = MoneyField(default=0, verbose_name=_('VN__BONUS'), help_text=_('HT__BONUS'))
+    penalty = MoneyField(default=0, verbose_name=_('VN__PENALTY'), help_text=_('HT__PENALTY'))
+    sum = MoneyField(default=0, verbose_name=_('VN__SUM'), help_text=_('HT__SUM'))
+    total = MoneyField(default=0, verbose_name=_('VN__TOTAL'), help_text=_('HT__TOTAL'))
 
     payed = models.BooleanField(default=False, verbose_name=_('VN__PAYED'), help_text=_('HT__PAYED'))
 

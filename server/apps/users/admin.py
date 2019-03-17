@@ -40,7 +40,7 @@ class UserAdmin(AdminFormFieldsOverridesMixin,
             'fields': ('gl_avatar', 'gl_id', 'gl_url', 'gl_last_sync')
         }),
         ('Costs', {
-            'fields': ('hour_rate',)
+            'fields': ('hour_rate', 'taxes')
         })
 
     )

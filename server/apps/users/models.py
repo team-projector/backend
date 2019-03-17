@@ -23,8 +23,9 @@ class User(AbstractBaseUser, PermissionsMixin):
                             help_text=_('HT__NAME'), unique=True)
     email = models.EmailField(max_length=150, null=True, blank=True, verbose_name=_('VN__EMAIL'),
                               help_text=_('HT__EMAIL'), unique=True)
-    hour_rate = models.DecimalField(default=0, decimal_places=2, max_digits=10,
-                                    verbose_name=_('VN__HOUR_RATE'), help_text=_('HT__HOUR_RATE'))
+    hour_rate = models.FloatField(default=0, verbose_name=_('VN__HOUR_RATE'), help_text=_('HT__HOUR_RATE'))
+
+    taxes = models.FloatField(default=0, verbose_name=_('VN__TAXES'), help_text=_('HT__TAXES'))
 
     roles = BitField(flags=ROLES, default=0)
 
