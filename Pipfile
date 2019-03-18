@@ -28,6 +28,7 @@ python-decouple = "*"
 django-health-check = "*"
 tornado = "==5.*"
 django-bitfield = {git = "https://github.com/Junte/django-bitfield.git#v1.9.5",editable = true}
+django-admin-tools = {git = "https://github.com/Junte/django-admin-tools.git"}
 
 [dev-packages]
 "flake8" = "*"

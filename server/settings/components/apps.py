@@ -1,4 +1,10 @@
 INSTALLED_APPS = (
+
+    'admin_tools',
+    'admin_tools.theming',
+    'admin_tools.menu',
+    'admin_tools.dashboard',
+
     # Default django apps:
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -7,6 +13,7 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
 
     # django-admin:
+
     'django.contrib.admin',
     'django.contrib.admindocs',
 

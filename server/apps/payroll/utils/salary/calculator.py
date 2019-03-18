@@ -1,9 +1,12 @@
+from contextlib import suppress
 from datetime import date
 
 from django.db import transaction
-from django.db.models import Sum
+from django.db.models import Q, Sum
 
-from apps.payroll.models import User, Salary, Payroll, SpentTime, Penalty, Bonus
+from apps.development.models import STATE_CLOSED
+from apps.payroll.exceptions import EmptySalaryException
+from apps.payroll.models import Bonus, Penalty, Salary, SpentTime, User
 
 
 class SalaryCalculator:
@@ -11,6 +14,11 @@ class SalaryCalculator:
         self.initiator = initiator
         self.period_from = period_from
         self.period_to = period_to
+
+    def generate_bulk(self):
+        for user in User.objects.all():
+            with suppress(EmptySalaryException):
+                self.generate(user)
 
     @transaction.atomic
     def generate(self, user: User) -> Salary:
@@ -21,7 +29,9 @@ class SalaryCalculator:
             period_to=self.period_to
         )
 
-        Payroll.objects.filter(salary__isnull=True, user=user).update(salary=salary)
+        locked = self._lock_payrolls(user, salary)
+        if locked == 0:
+            raise EmptySalaryException
 
         spent_data = SpentTime.objects \
             .filter(salary=salary) \
@@ -43,3 +53,15 @@ class SalaryCalculator:
         salary.save()
 
         return salary
+
+    @staticmethod
+    def _lock_payrolls(user: User, salary: Salary) -> int:
+        locked = Penalty.objects.filter(salary__isnull=True, user=user).update(salary=salary)
+        locked += Bonus.objects.filter(salary__isnull=True, user=user).update(salary=salary)
+
+        locked += SpentTime.objects \
+            .filter(salary__isnull=True, user=user) \
+            .filter(Q(issues__state=STATE_CLOSED)) \
+            .update(salary=salary)
+
+        return locked

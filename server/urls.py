@@ -23,6 +23,7 @@ schema_view = get_schema_view(
 )
 
 urlpatterns = [
+    path('ht/', include('health_check.urls')),
     path('api/', include((get_module_url_patterns(
         'apps.users.rest.urls',
         'apps.development.rest.urls',
@@ -32,8 +33,9 @@ urlpatterns = [
     re_path(r'^api/swagger(?P<format>\.json|\.yaml)$', schema_view.without_ui(cache_timeout=0), name='swagger-json'),
     path('api/swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
     path('api/redoc/', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
+
+    path('admin_tools/', include('admin_tools.urls')),
     path('admin/', admin.site.urls),
-    path('ht/', include('health_check.urls')),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

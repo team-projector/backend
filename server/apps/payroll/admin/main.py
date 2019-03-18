@@ -1,8 +1,8 @@
 from django.contrib import admin
 
 from apps.core.admin.base import BaseModelAdmin
-from apps.users.admin import UserFilter
-from .models import SpentTime, Salary, Payroll, Bonus, Penalty, Payment
+from apps.users.admin.filters import UserFilter
+from ..models import Bonus, Payment, Payroll, Penalty, Salary, SpentTime
 
 
 @admin.register(Salary)

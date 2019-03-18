@@ -4,8 +4,8 @@ from django.utils.translation import gettext_lazy as _
 
 
 class SpentTimesMixin(models.Model):
-    time_spents = GenericRelation('payroll.SpentTime', verbose_name=_('VN__TIME_SPENTS'),
-                                  help_text=_('HT__TIME_SPENTS'))
+    time_spents = GenericRelation('payroll.SpentTime', related_query_name='%(class)ss',
+                                  verbose_name=_('VN__TIME_SPENTS'), help_text=_('HT__TIME_SPENTS'))
 
     class Meta:
         abstract = True

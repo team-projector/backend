@@ -1,29 +1,10 @@
-from admin_auto_filters.filters import AutocompleteFilter
 from django.contrib import admin
 
-from apps.core.admin.base import BaseGenericStackedInline, BaseModelAdmin, BaseTabularInline
-from apps.users.admin import UserFilter
-from .models import Issue, Label, Note, Project, ProjectGroup, Team, TeamMember
-
-
-class ProjectFilter(AutocompleteFilter):
-    title = 'Project'
-    field_name = 'project'
-
-
-class TeamFilter(AutocompleteFilter):
-    title = 'Team'
-    field_name = 'team'
-
-
-class NoteInline(BaseGenericStackedInline):
-    model = Note
-    autocomplete_fields = ('user',)
-
-
-class TeamMemberInline(BaseTabularInline):
-    model = TeamMember
-    autocomplete_fields = ('user',)
+from apps.core.admin.base import BaseModelAdmin
+from apps.users.admin.filters import UserFilter
+from .filters import ProjectFilter, TeamFilter
+from .inlines import NoteInline, TeamMemberInline
+from ..models import Issue, Label, Note, Project, ProjectGroup, Team, TeamMember
 
 
 @admin.register(Team)

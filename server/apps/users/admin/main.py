@@ -1,4 +1,3 @@
-from admin_auto_filters.filters import AutocompleteFilter
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as DjUserAdmin
 from django.contrib.auth.forms import AdminPasswordChangeForm
@@ -8,7 +7,7 @@ from django.utils.html import format_html
 from apps.core.admin.base import BaseModelAdmin
 from apps.core.admin.mixins import AdminFormFieldsOverridesMixin
 from .forms import GroupAdminForm
-from .models import User
+from ..models import User
 
 admin.site.unregister(Group)
 
@@ -60,8 +59,3 @@ class GroupAdmin(BaseModelAdmin):
     list_display = ('name',)
     form = GroupAdminForm
     search_fields = ('name',)
-
-
-class UserFilter(AutocompleteFilter):
-    title = 'User'
-    field_name = 'user'
