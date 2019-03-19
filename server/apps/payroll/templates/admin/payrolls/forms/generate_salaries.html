@@ -1,0 +1,21 @@
+{% extends "admin/base_site.html" %}
+{% load i18n static %}
+
+{% block extrastyle %}
+  {{ block.super }}
+  <link rel="stylesheet" type="text/css" href="{% static "admin/css/forms.css" %}">
+  <script type="text/javascript" src="{% url 'admin:jsi18n' %}"></script>
+  {{ form.media }}
+{% endblock %}
+
+{% block content %}
+  <form action="{% url "admin:generate-salaries" %}" method="post">
+    {% csrf_token %}
+    <div>
+      {% for fieldset in adminform %}
+        {% include "admin/includes/fieldset.html" %}
+      {% endfor %}
+    </div>
+    <input type="submit" value="Generate">
+  </form>
+{% endblock %}

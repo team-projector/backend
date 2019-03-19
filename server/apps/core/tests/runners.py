@@ -19,7 +19,6 @@ def cleanup_tests(suite):
     suite._tests = [t for t in suite._tests if not skip_test(t)]
 
 
-# HACK
 def skip_test(test_case):
     def is_excluded_test_case(test_case) -> bool:
         return any(bool(re_exclude.match(test_case._testMethodName)) for re_exclude in RE_EXCLUDE_PATHS)

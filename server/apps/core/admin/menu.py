@@ -10,10 +10,8 @@ class AdminMenu(Menu):
             items.AppList(title='Applications'),
             items.MenuItem('Management', children=[
                 items.MenuItem('Job queue', '/admin/flower/'),
-
             ]),
-            items.MenuItem('Utils',
-                           children=[
-                               # items.MenuItem('Generate salaries', reverse('admin:salaries:generate')),
-                           ]),
+            items.MenuItem('Utils', children=[
+                items.MenuItem('Generate salaries', reverse('admin:generate-salaries')),
+            ]),
         ]
