@@ -7,12 +7,12 @@ from django.utils.timezone import make_aware
 
 from apps.core.utils.date import begin_of_week, date2datetime
 from apps.development.models import Issue, STATE_CLOSED
-from .base import MetricsCalculator, UserProgressMetrics
+from .base import ProgressMetricsCalculator, UserProgressMetrics
 
 WEEK_STEP = timedelta(weeks=1)
 
 
-class WeekMetricsCalculator(MetricsCalculator):
+class WeekMetricsCalculator(ProgressMetricsCalculator):
     def calculate(self) -> Iterable[UserProgressMetrics]:
         metrics = []
 

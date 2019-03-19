@@ -7,13 +7,13 @@ from django.db.models.functions import TruncDay
 from django.utils import timezone
 
 from apps.development.models import Issue, STATE_CLOSED
-from .base import MetricsCalculator, UserProgressMetrics
+from .base import ProgressMetricsCalculator, UserProgressMetrics
 
 DAY_STEP = timedelta(days=1)
 MAX_DAY_LOADING = timedelta(hours=8).total_seconds()
 
 
-class DayMetricsCalculator(MetricsCalculator):
+class DayMetricsCalculator(ProgressMetricsCalculator):
     def calculate(self) -> Iterable[UserProgressMetrics]:
         metrics = []
 

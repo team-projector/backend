@@ -21,7 +21,7 @@ class UserProgressMetrics:
     paid: float = 0
 
 
-class MetricsCalculator:
+class ProgressMetricsCalculator:
     def __init__(self, user: User, start: date, end: date):
         self.user = user
         self.start = start
