@@ -13,7 +13,7 @@ class UserMetrics:
     issues_opened_count: int = 0
 
 
-class MetricsCalculator:
+class UserMetricsCalculator:
     def calculate(self, user: User) -> UserMetrics:
         metrics = UserMetrics()
 

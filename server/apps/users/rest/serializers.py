@@ -4,6 +4,7 @@ from django.utils.translation import gettext_lazy as _
 from rest_framework import serializers
 from rest_framework.exceptions import AuthenticationFailed
 
+from apps.payroll.utils.metrics.user import UserMetricsCalculator
 from apps.users.rest.authentication import TokenAuthentication
 from ..models import Token, User
 
@@ -46,19 +47,42 @@ class TokenSerializer(serializers.ModelSerializer):
         fields = ('token', 'type')
 
 
-class UserSerializer(serializers.ModelSerializer):
+class UserMetricsSerializer(serializers.Serializer):
+    payroll_closed = serializers.FloatField()
+    payroll_opened = serializers.FloatField()
+    bonus = serializers.FloatField()
+    penalty = serializers.FloatField()
+    issues_opened_count = serializers.IntegerField()
+
+
+class UserMetricsMixin:
+    def get_metrics(self, instance):
+        if self.context['request'].query_params.get('metrics', 'false') == 'false':
+            return None
+
+        calculator = UserMetricsCalculator()
+        metrics = calculator.calculate(instance)
+
+        return UserMetricsSerializer(metrics).data
+
+
+class UserSerializer(UserMetricsMixin,
+                     serializers.ModelSerializer):
+    metrics = serializers.SerializerMethodField()
     avatar = serializers.URLField(source='gl_avatar')
     roles = BitField()
 
     class Meta:
         model = User
-        fields = ('id', 'name', 'login', 'hour_rate', 'avatar', 'gl_url', 'roles')
+        fields = ('id', 'name', 'login', 'hour_rate', 'avatar', 'gl_url', 'roles', 'metrics')
 
 
-class UserCardSerializer(serializers.ModelSerializer):
+class UserCardSerializer(UserMetricsMixin,
+                         serializers.ModelSerializer):
+    metrics = serializers.SerializerMethodField()
     avatar = serializers.URLField(source='gl_avatar')
     roles = BitField()
 
     class Meta:
         model = User
-        fields = ('id', 'name', 'avatar', 'roles')
+        fields = ('id', 'name', 'avatar', 'roles', 'metrics')

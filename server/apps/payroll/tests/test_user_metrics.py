@@ -5,7 +5,7 @@ from django.test import TestCase
 from apps.development.models import STATE_CLOSED, STATE_OPENED
 from apps.development.tests.factories import IssueFactory
 from apps.payroll.tests.factories import BonusFactory, IssueSpentTimeFactory, PenaltyFactory, SalaryFactory
-from apps.payroll.utils.metrics.user import MetricsCalculator, User, UserMetrics
+from apps.payroll.utils.metrics.user import User, UserMetrics, UserMetricsCalculator
 from apps.users.tests.factories import UserFactory
 
 
@@ -15,7 +15,7 @@ class UserMetricsTests(TestCase):
 
         self.user = User.objects.create_user(login='user', hour_rate=100)
 
-        self.calculator = MetricsCalculator()
+        self.calculator = UserMetricsCalculator()
 
     def test_issues_opened_count(self):
         IssueFactory.create_batch(10, user=self.user)
