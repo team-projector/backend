@@ -1,4 +1,5 @@
 from datetime import timedelta
+from decimal import Decimal
 
 from django.test import TestCase
 from django.utils import timezone
@@ -34,6 +35,8 @@ class GenerateSalariesTests(TestCase):
         self.assertEqual(salary.sum, self.user.hour_rate * 4)
         self.assertEqual(salary.penalty, 0)
         self.assertEqual(salary.bonus, 0)
+        self.assertEqual(salary.taxes, 0)
+
         self.assertEqual(salary.sum, salary.total)
 
         self.assertEqual(Payroll.objects.filter(salary=salary).count(), 3)
@@ -62,6 +65,7 @@ class GenerateSalariesTests(TestCase):
         self.assertEqual(salary.sum, self.user.hour_rate * 4)
         self.assertEqual(salary.penalty, penalty.sum)
         self.assertEqual(salary.bonus, 0)
+        self.assertEqual(salary.taxes, 0)
         self.assertEqual(salary.total, salary.sum - penalty.sum)
 
         self.assertEqual(Payroll.objects.filter(salary=salary).count(), 4)
@@ -81,11 +85,12 @@ class GenerateSalariesTests(TestCase):
         self.assertEqual(salary.sum, self.user.hour_rate * 4)
         self.assertEqual(salary.bonus, bonus.sum)
         self.assertEqual(salary.penalty, 0)
+        self.assertEqual(salary.taxes, 0)
         self.assertEqual(salary.total, salary.sum + bonus.sum)
 
         self.assertEqual(Payroll.objects.filter(salary=salary).count(), 4)
 
-    def test_with_bonus_penalty(self):
+    def test_complex(self):
         issue = IssueFactory.create(state=STATE_CLOSED)
 
         IssueSpentTimeFactory.create(user=self.user, base=issue, time_spent=timedelta(hours=1).total_seconds())
@@ -101,6 +106,7 @@ class GenerateSalariesTests(TestCase):
         self.assertEqual(salary.sum, self.user.hour_rate * 4)
         self.assertEqual(salary.bonus, bonus.sum)
         self.assertEqual(salary.penalty, penalty.sum)
+        self.assertEqual(salary.taxes, 0)
 
         self.assertEqual(salary.total, salary.sum + bonus.sum - penalty.sum)
         self.assertEqual(Payroll.objects.filter(salary=salary).count(), 5)
@@ -124,6 +130,7 @@ class GenerateSalariesTests(TestCase):
         self.assertEqual(salary.sum, self.user.hour_rate * 5)
         self.assertEqual(salary.bonus, bonus.sum)
         self.assertEqual(salary.penalty, 0)
+        self.assertEqual(salary.taxes, 0)
         self.assertEqual(salary.total, salary.sum + bonus.sum)
 
         self.assertEqual(Payroll.objects.filter(salary=salary).count(), 2)
@@ -145,6 +152,7 @@ class GenerateSalariesTests(TestCase):
         self.assertEqual(salary.charged_time, timedelta(hours=5).total_seconds())
         self.assertEqual(salary.sum, self.user.hour_rate * 5)
         self.assertEqual(salary.bonus, 0)
+        self.assertEqual(salary.taxes, 0)
         self.assertEqual(salary.penalty, penalty.sum)
         self.assertEqual(salary.total, salary.sum - penalty.sum)
 
@@ -164,6 +172,31 @@ class GenerateSalariesTests(TestCase):
         self.assertEqual(salary.sum, self.user.hour_rate * 3)
         self.assertEqual(salary.bonus, 0)
         self.assertEqual(salary.penalty, 0)
+        self.assertEqual(salary.taxes, 0)
         self.assertEqual(salary.total, salary.sum)
 
         self.assertEqual(Payroll.objects.filter(salary=salary).count(), 2)
+
+    def test_taxes(self):
+        self.user.taxes = 0.3
+        self.user.save()
+
+        issue = IssueFactory.create(state=STATE_CLOSED)
+
+        IssueSpentTimeFactory.create(user=self.user, base=issue, time_spent=timedelta(hours=1).total_seconds())
+        IssueSpentTimeFactory.create(user=self.user, base=issue, time_spent=-timedelta(hours=2).total_seconds())
+        IssueSpentTimeFactory.create(user=self.user, base=issue, time_spent=timedelta(hours=5).total_seconds())
+
+        bonus = BonusFactory.create(user=self.user)
+        penalty = PenaltyFactory.create(user=self.user, sum=100)
+
+        salary = self.calculator.generate(self.user)
+
+        self.assertEqual(salary.charged_time, timedelta(hours=4).total_seconds())
+        self.assertEqual(salary.sum, self.user.hour_rate * 4)
+        self.assertEqual(salary.bonus, bonus.sum)
+        self.assertEqual(salary.penalty, penalty.sum)
+        self.assertEqual(salary.total, salary.sum + bonus.sum - penalty.sum)
+        self.assertEqual(salary.taxes, salary.total * Decimal.from_float(self.user.taxes))
+
+        self.assertEqual(Payroll.objects.filter(salary=salary).count(), 5)

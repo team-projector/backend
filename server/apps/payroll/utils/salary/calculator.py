@@ -1,5 +1,6 @@
 from contextlib import suppress
 from datetime import date
+from decimal import Decimal
 
 from django.db import transaction
 from django.db.models import Q, Sum
@@ -50,6 +51,10 @@ class SalaryCalculator:
                         .aggregate(total_sum=Sum('sum'))['total_sum'] or 0)
 
         salary.total = salary.sum + salary.bonus - salary.penalty
+
+        if user.taxes:
+            salary.taxes = salary.total * Decimal.from_float(user.taxes)
+
         salary.save()
 
         return salary
