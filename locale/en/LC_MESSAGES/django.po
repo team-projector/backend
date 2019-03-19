@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-03-17 20:29+0300\n"
+"POT-Creation-Date: 2019-03-19 17:11+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -223,7 +223,7 @@ msgstr "Issues"
 msgid "VN__PAYROLL"
 msgstr "Payroll"
 
-#: server/apps/payroll/db/mixins.py:7
+#: server/apps/payroll/db/mixins.py:8
 msgid "VN__TIME_SPENTS"
 msgstr "Time spents"
 
@@ -247,7 +247,7 @@ msgstr "Sum"
 msgid "HT__SUM"
 msgstr "Sum"
 
-#: server/apps/payroll/models.py:21 server/apps/payroll/models.py:117
+#: server/apps/payroll/models.py:21 server/apps/payroll/models.py:119
 msgid "VN__SALARY"
 msgstr "Salary"
 
@@ -371,7 +371,15 @@ msgstr "Payed"
 msgid "HT__PAYED"
 msgstr "Payed"
 
-#: server/apps/payroll/models.py:118
+#: server/apps/payroll/models.py:113
+msgid "VN__COMMENTS"
+msgstr "Comments"
+
+#: server/apps/payroll/models.py:113
+msgid "HT__COMMENTS"
+msgstr "Comments"
+
+#: server/apps/payroll/models.py:120
 msgid "VN__SALARIES"
 msgstr "Salaries"
 

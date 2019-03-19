@@ -110,6 +110,8 @@ class Salary(Timestamps):
 
     payed = models.BooleanField(default=False, verbose_name=_('VN__PAYED'), help_text=_('HT__PAYED'))
 
+    comments = models.TextField(null=True, blank=True, verbose_name=_('VN__COMMENTS'), help_text=_('HT__COMMENTS'))
+
     def __str__(self):
         return f'{self.user} [{self.created_at}]: {self.sum}'
 
