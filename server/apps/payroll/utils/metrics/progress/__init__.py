@@ -6,7 +6,7 @@ from .day import DayMetricsCalculator
 from .week import WeekMetricsCalculator
 
 
-def create_calculator(user: User, start: datetime, end: datetime, group: str) -> MetricsCalculator:
+def create_progress_calculator(user: User, start: datetime, end: datetime, group: str) -> MetricsCalculator:
     if group == 'day':
         return DayMetricsCalculator(user, start, end)
     elif group == 'week':

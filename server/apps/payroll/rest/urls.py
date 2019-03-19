@@ -1,13 +1,13 @@
-from django.urls import path, include
+from django.urls import include, path
 
-from .views import TimeExpensesView, UserMetricsView
+from .views import TimeExpensesView, UserProgressMetricsView
 
 app_name = 'payroll'
 
 urlpatterns = [
     path('users/<int:user_pk>/', include((
         [
-            path('metrics', UserMetricsView.as_view(), name='metrics'),
+            path('progress-metrics', UserProgressMetricsView.as_view(), name='progress-metrics'),
             path('time-expenses', TimeExpensesView.as_view(),
                  name='time-expenses'),
         ], app_name), 'users'))

@@ -8,14 +8,14 @@ from rest_framework.response import Response
 from apps.core.rest.views import BaseGenericAPIView
 from apps.core.utils.rest import parse_query_params
 from apps.payroll.rest.permissions import CanViewUserMetrics
-from .serializers import TimeExpenseSerializer, UserMetricSerializer, UserMetricsParamsSerializer
+from .serializers import TimeExpenseSerializer, UserProgressMetricsParamsSerializer, UserProgressMetricsSerializer
 from ..models import SpentTime
-from ..utils.metrics.user import create_calculator
+from ..utils.metrics.progress import create_progress_calculator
 
 User = get_user_model()
 
 
-class UserMetricsView(BaseGenericAPIView):
+class UserProgressMetricsView(BaseGenericAPIView):
     permission_classes = (permissions.IsAuthenticated, CanViewUserMetrics)
 
     @cached_property
@@ -26,12 +26,12 @@ class UserMetricsView(BaseGenericAPIView):
         return user
 
     def get(self, request, **kwargs):
-        params = parse_query_params(request, UserMetricsParamsSerializer)
+        params = parse_query_params(request, UserProgressMetricsParamsSerializer)
 
-        calculator = create_calculator(self.user, params['start'], params['end'], params['group'])
+        calculator = create_progress_calculator(self.user, params['start'], params['end'], params['group'])
         metrics = calculator.calculate()
 
-        return Response(UserMetricSerializer(metrics, many=True).data)
+        return Response(UserProgressMetricsSerializer(metrics, many=True).data)
 
 
 class TimeExpensesView(mixins.ListModelMixin,

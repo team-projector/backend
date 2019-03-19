@@ -4,22 +4,23 @@ from apps.development.rest.serializers import IssueCardSerializer
 from apps.payroll.models import SpentTime
 
 
-class UserMetricsParamsSerializer(serializers.Serializer):
+class UserProgressMetricsParamsSerializer(serializers.Serializer):
     start = serializers.DateField()
     end = serializers.DateField()
     group = serializers.CharField()
 
 
-class UserMetricSerializer(serializers.Serializer):
+class UserProgressMetricsSerializer(serializers.Serializer):
     start = serializers.DateField()
     end = serializers.DateField()
+    time_estimate = serializers.IntegerField()
     time_spent = serializers.IntegerField()
+    time_remains = serializers.IntegerField()
+    issues_count = serializers.IntegerField()
     loading = serializers.IntegerField()
     efficiency = serializers.FloatField()
-    earnings = serializers.IntegerField()
-    issues_count = serializers.IntegerField()
-    time_estimate = serializers.IntegerField()
-    time_remains = serializers.IntegerField()
+    earnings = serializers.FloatField()
+    paid = serializers.FloatField()
 
 
 class TimeExpenseSerializer(serializers.ModelSerializer):

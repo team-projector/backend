@@ -23,7 +23,7 @@ class ApiMetricsDaysTests(BaseAPITest):
     def test_bad_group(self):
         self.set_credentials()
 
-        response = self.client.get(f'/api/users/{self.user.id}/metrics', {
+        response = self.client.get(f'/api/users/{self.user.id}/progress-metrics', {
             'start': timezone.now() - timedelta(days=5),
             'end': timezone.now() + timedelta(days=5),
             'group': 'days'
@@ -47,7 +47,7 @@ class ApiMetricsDaysTests(BaseAPITest):
         start = timezone.now() - timedelta(days=5)
         end = timezone.now() + timedelta(days=5)
 
-        response = self.client.get(f'/api/users/{self.user.id}/metrics', {
+        response = self.client.get(f'/api/users/{self.user.id}/progress-metrics', {
             'start': self.format_date(start),
             'end': self.format_date(end),
             'group': 'day'
@@ -86,7 +86,7 @@ class ApiMetricsDaysTests(BaseAPITest):
         start = timezone.now() - timedelta(days=5)
         end = timezone.now() + timedelta(days=5)
 
-        response = self.client.get(f'/api/users/{self.user.id}/metrics', {
+        response = self.client.get(f'/api/users/{self.user.id}/progress-metrics', {
             'start': self.format_date(start),
             'end': self.format_date(end),
             'group': 'day'
@@ -127,7 +127,7 @@ class ApiMetricsDaysTests(BaseAPITest):
         start = timezone.now() - timedelta(days=5)
         end = timezone.now() + timedelta(days=5)
 
-        response = self.client.get(f'/api/users/{self.user.id}/metrics', {
+        response = self.client.get(f'/api/users/{self.user.id}/progress-metrics', {
             'start': self.format_date(start),
             'end': self.format_date(end),
             'group': 'day'
@@ -166,7 +166,7 @@ class ApiMetricsDaysTests(BaseAPITest):
         end = timezone.now() + timedelta(days=3)
 
         self.set_credentials()
-        response = self.client.get(f'/api/users/{self.user.id}/metrics', {
+        response = self.client.get(f'/api/users/{self.user.id}/progress-metrics', {
             'start': self.format_date(start),
             'end': self.format_date(end),
             'group': 'day'
@@ -201,7 +201,7 @@ class ApiMetricsDaysTests(BaseAPITest):
         end = timezone.now() + timedelta(days=5)
 
         self.set_credentials()
-        response = self.client.get(f'/api/users/{self.user.id}/metrics', {
+        response = self.client.get(f'/api/users/{self.user.id}/progress-metrics', {
             'start': self.format_date(start),
             'end': self.format_date(end),
             'group': 'day'
@@ -220,7 +220,7 @@ class ApiMetricsDaysTests(BaseAPITest):
 
     def test_permissions_self(self):
         self.set_credentials()
-        response = self.client.get(f'/api/users/{self.user.id}/metrics', {
+        response = self.client.get(f'/api/users/{self.user.id}/progress-metrics', {
             'start': self.format_date(timezone.now() - timedelta(days=5)),
             'end': self.format_date(timezone.now() - timedelta(days=5)),
             'group': 'day'
@@ -232,7 +232,7 @@ class ApiMetricsDaysTests(BaseAPITest):
         user_2 = self.create_user('user_2@mail.com')
 
         self.set_credentials()
-        response = self.client.get(f'/api/users/{user_2.id}/metrics', {
+        response = self.client.get(f'/api/users/{user_2.id}/progress-metrics', {
             'start': self.format_date(timezone.now() - timedelta(days=5)),
             'end': self.format_date(timezone.now() - timedelta(days=5)),
             'group': 'day'
@@ -254,7 +254,7 @@ class ApiMetricsDaysTests(BaseAPITest):
                                  roles=TeamMember.roles.developer)
 
         self.set_credentials()
-        response = self.client.get(f'/api/users/{user_2.id}/metrics', {
+        response = self.client.get(f'/api/users/{user_2.id}/progress-metrics', {
             'start': self.format_date(timezone.now() - timedelta(days=5)),
             'end': self.format_date(timezone.now() - timedelta(days=5)),
             'group': 'day'
@@ -274,7 +274,7 @@ class ApiMetricsDaysTests(BaseAPITest):
                                  roles=TeamMember.roles.developer)
 
         self.set_credentials()
-        response = self.client.get(f'/api/users/{user_2.id}/metrics', {
+        response = self.client.get(f'/api/users/{user_2.id}/progress-metrics', {
             'start': self.format_date(timezone.now() - timedelta(days=5)),
             'end': self.format_date(timezone.now() - timedelta(days=5)),
             'group': 'day'
@@ -286,7 +286,7 @@ class ApiMetricsDaysTests(BaseAPITest):
         user_2 = self.create_user('user_2@mail.com')
 
         self.set_credentials()
-        response = self.client.get(f'/api/users/{user_2.id}/metrics', {
+        response = self.client.get(f'/api/users/{user_2.id}/progress-metrics', {
             'start': self.format_date(timezone.now() - timedelta(days=5)),
             'end': self.format_date(timezone.now() - timedelta(days=5)),
             'group': 'day'

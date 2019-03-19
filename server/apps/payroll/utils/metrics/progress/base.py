@@ -8,7 +8,7 @@ from apps.payroll.models import SpentTime
 from apps.users.models import User
 
 
-class UserMetric:
+class UserProgressMetrics:
     start: Optional[date] = None
     end: Optional[date] = None
     time_spent: int = 0
@@ -16,8 +16,9 @@ class UserMetric:
     time_remains: int = 0
     loading: int = 0
     efficiency: float = 0
-    earnings: float = 0
     issues_count: int = 0
+    earnings: float = 0
+    paid: float = 0
 
 
 class MetricsCalculator:
@@ -26,7 +27,7 @@ class MetricsCalculator:
         self.start = start
         self.end = end
 
-    def calculate(self) -> Iterable[UserMetric]:
+    def calculate(self) -> Iterable[UserProgressMetrics]:
         raise NotImplementedError
 
     def get_spents(self) -> QuerySet:

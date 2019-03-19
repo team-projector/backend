@@ -7,14 +7,14 @@ from django.db.models.functions import TruncDay
 from django.utils import timezone
 
 from apps.development.models import Issue, STATE_CLOSED
-from .base import UserMetric, MetricsCalculator
+from .base import MetricsCalculator, UserProgressMetrics
 
 DAY_STEP = timedelta(days=1)
 MAX_DAY_LOADING = timedelta(hours=8).total_seconds()
 
 
 class DayMetricsCalculator(MetricsCalculator):
-    def calculate(self) -> Iterable[UserMetric]:
+    def calculate(self) -> Iterable[UserProgressMetrics]:
         metrics = []
 
         spents = {
@@ -28,7 +28,7 @@ class DayMetricsCalculator(MetricsCalculator):
         active_issues = self.get_active_issues() if now > self.start else []
 
         while current <= self.end:
-            metric = UserMetric()
+            metric = UserProgressMetrics()
             metrics.append(metric)
 
             metric.start = metric.end = current
@@ -63,7 +63,7 @@ class DayMetricsCalculator(MetricsCalculator):
         return day >= now and day.weekday() not in settings.TP_WEEKENDS_DAYS
 
     @staticmethod
-    def _update_loading(metric: UserMetric, active_issues: List[dict]) -> None:
+    def _update_loading(metric: UserProgressMetrics, active_issues: List[dict]) -> None:
         if not active_issues:
             return
 
