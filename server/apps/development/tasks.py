@@ -5,7 +5,7 @@ from apps.development.utils.loaders import load_groups, load_project_issue, \
 from celery_app import app
 
 
-@app.task
+@app.task(exchange='low_priority')
 def sync() -> None:
     load_groups()
     load_projects()
@@ -13,13 +13,13 @@ def sync() -> None:
     sync_issues.delay()
 
 
-@app.task
+@app.task(exchange='low_priority')
 def sync_issues() -> None:
     for project_id in Project.objects.values_list('id', flat=True):
         sync_project_issues.delay(project_id)
 
 
-@app.task
+@app.task(exchange='low_priority')
 def sync_project_issues(project_id: int) -> None:
     project = Project.objects.get(id=project_id)
 
