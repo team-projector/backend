@@ -18,3 +18,12 @@ class CanViewUserMetrics(permissions.BasePermission):
         return user.team_members \
             .annotate(is_team_leader=Exists(user_team_leader)) \
             .filter(is_team_leader=True).exists()
+
+
+class CanViewEmbeddedUserMetrics(CanViewUserMetrics):
+    def has_object_permission(self, request, view, user):
+        show_metrics = request.query_params.get('metrics', 'false') != 'false'
+        if not show_metrics:
+            return True
+
+        return super().has_object_permission(request, view, user)

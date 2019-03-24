@@ -4,6 +4,14 @@ from apps.development.rest.serializers import IssueCardSerializer
 from apps.payroll.models import SpentTime
 
 
+class UserMetricsSerializer(serializers.Serializer):
+    payroll_closed = serializers.FloatField()
+    payroll_opened = serializers.FloatField()
+    bonus = serializers.FloatField()
+    penalty = serializers.FloatField()
+    issues_opened_count = serializers.IntegerField()
+
+
 class UserProgressMetricsParamsSerializer(serializers.Serializer):
     start = serializers.DateField()
     end = serializers.DateField()

@@ -4,7 +4,7 @@ from django.utils.translation import gettext_lazy as _
 from rest_framework import serializers
 from rest_framework.exceptions import AuthenticationFailed
 
-from apps.payroll.utils.metrics.user import UserMetricsCalculator
+from apps.payroll.rest.mixins import UserMetricsMixin
 from apps.users.rest.authentication import TokenAuthentication
 from ..models import Token, User
 
@@ -45,25 +45,6 @@ class TokenSerializer(serializers.ModelSerializer):
     class Meta:
         model = Token
         fields = ('token', 'type')
-
-
-class UserMetricsSerializer(serializers.Serializer):
-    payroll_closed = serializers.FloatField()
-    payroll_opened = serializers.FloatField()
-    bonus = serializers.FloatField()
-    penalty = serializers.FloatField()
-    issues_opened_count = serializers.IntegerField()
-
-
-class UserMetricsMixin:
-    def get_metrics(self, instance):
-        if self.context['request'].query_params.get('metrics', 'false') == 'false':
-            return None
-
-        calculator = UserMetricsCalculator()
-        metrics = calculator.calculate(instance)
-
-        return UserMetricsSerializer(metrics).data
 
 
 class UserSerializer(UserMetricsMixin,

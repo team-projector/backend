@@ -1,10 +1,11 @@
 from django.utils import timezone
 from rest_framework import mixins
-from rest_framework.permissions import AllowAny
+from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from apps.core.rest.views import BaseGenericAPIView, BaseGenericViewSet, LinksViewMixin
+from apps.payroll.rest.permissions import CanViewEmbeddedUserMetrics
 from apps.users.models import User
 from apps.users.utils.token import create_user_token
 from .serializers import LoginSerializer, TokenSerializer, UserSerializer
@@ -45,6 +46,8 @@ class MeUserView(BaseGenericAPIView):
 class UsersViewset(LinksViewMixin,
                    mixins.RetrieveModelMixin,
                    BaseGenericViewSet):
+    permission_classes = (IsAuthenticated, CanViewEmbeddedUserMetrics)
+
     queryset = User.objects.filter(is_active=True)
     serializer_classes = {
         'retrieve': UserSerializer

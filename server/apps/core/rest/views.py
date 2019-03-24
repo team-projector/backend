@@ -11,18 +11,18 @@ class BaseGenericAPIView(generics.GenericAPIView):
     serializer_classes: Dict[str, serializers.Serializer] = {}
 
     def get_serializer_class(self):
-        return self.serializer_classes[self.request.method] \
-            if self.request.method in self.serializer_classes \
-            else super().get_serializer_class()
+        return (self.serializer_classes[self.request.method]
+                if self.request.method in self.serializer_classes
+                else super().get_serializer_class())
 
 
 class BaseGenericViewSet(viewsets.GenericViewSet):
     serializer_classes: Dict[str, serializers.Serializer] = {}
 
     def get_serializer_class(self):
-        return self.serializer_classes[self.action] \
-            if self.action in self.serializer_classes \
-            else super().get_serializer_class()
+        return (self.serializer_classes[self.action]
+                if self.action in self.serializer_classes
+                else super().get_serializer_class())
 
 
 class LinksViewMixin:
