@@ -1,12 +1,13 @@
 from datetime import date, timedelta
 from typing import Iterable, List
 
-from django.db.models import Avg, Count, F, FloatField, QuerySet, Sum
+from django.db.models import Avg, Case, Count, F, FloatField, Q, QuerySet, Sum, When
 from django.db.models.functions import Cast, TruncWeek
 from django.utils.timezone import make_aware
 
 from apps.core.utils.date import begin_of_week, date2datetime
-from apps.development.models import Issue, STATE_CLOSED
+from apps.development.models import Issue, STATE_CLOSED, STATE_OPENED
+from apps.payroll.models import SpentTime
 from .base import ProgressMetricsCalculator, UserProgressMetrics
 
 WEEK_STEP = timedelta(weeks=1)
@@ -30,6 +31,7 @@ class WeekMetricsCalculator(ProgressMetricsCalculator):
 
             self._adjust_deadlines(metric)
             self._adjust_efficiency(metric)
+            self._adjust_payrolls(metric)
 
             if week in spents:
                 spent = spents[week]
@@ -62,6 +64,28 @@ class WeekMetricsCalculator(ProgressMetricsCalculator):
             .aggregate(avg_efficiency=Avg('efficiency'))
 
         metric.efficiency = issues_stats['avg_efficiency'] or 0
+
+    def _adjust_payrolls(self, metric: UserProgressMetrics) -> None:
+        data = SpentTime.objects \
+            .filter(user=self.user,
+                    date__gte=metric.start,
+                    date__lt=metric.end) \
+            .annotate(payroll_opened=Case(When(Q(salary__isnull=True) & Q(issues__state=STATE_OPENED), then=F('sum')),
+                                          default=0,
+                                          output_field=FloatField()),
+                      payroll_closed=Case(When(Q(salary__isnull=True) & Q(issues__state=STATE_CLOSED), then=F('sum')),
+                                          default=0,
+                                          output_field=FloatField()),
+                      paid=Case(When(salary__isnull=False, then=F('sum')),
+                                default=0,
+                                output_field=FloatField())) \
+            .aggregate(total_payroll_opened=Sum('payroll_opened'),
+                       total_payroll_closed=Sum('payroll_closed'),
+                       total_paid=Sum('paid'))
+
+        metric.payroll_opened = data['total_payroll_opened'] or 0
+        metric.payroll_closed = data['total_payroll_closed'] or 0
+        metric.paid = data['total_paid'] or 0
 
     def _get_weeks(self) -> List[date]:
         ret: List[date] = []
