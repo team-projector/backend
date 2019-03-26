@@ -7,6 +7,7 @@ from rest_framework import serializers
 from apps.core.rest.serializers import LinkSerializer
 from apps.core.utils.objects import dict2obj
 from apps.development.utils.problems.issues import checkers
+from apps.payroll.models import SpentTime
 from apps.users.models import User
 from apps.users.rest.serializers import UserCardSerializer
 from ..models import Issue, Label, Team, TeamMember
@@ -21,7 +22,8 @@ class LabelSerializer(serializers.ModelSerializer):
 class IssueMetricsSerializer(serializers.Serializer):
     remains = serializers.IntegerField()
     efficiency = serializers.FloatField()
-    earnings = serializers.IntegerField()
+    payroll = serializers.FloatField()
+    paid = serializers.FloatField()
 
 
 class IssueCardSerializer(serializers.ModelSerializer):
@@ -41,10 +43,13 @@ class IssueCardSerializer(serializers.ModelSerializer):
         if self.context['request'].query_params.get('metrics', 'false') == 'false':
             return None
 
+        payroll = SpentTime.objects.filter(issues__id=instance.id).aggregate_payrolls()
+
         metrics = {
             'remains': instance.time_remains,
             'efficiency': instance.efficiency,
-            'earnings': None
+            'payroll': payroll['total_payroll_opened'] + payroll['total_payroll_closed'],
+            'paid': payroll['total_paid'],
         }
 
         return IssueMetricsSerializer(dict2obj(metrics)).data
