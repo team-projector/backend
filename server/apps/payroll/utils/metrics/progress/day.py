@@ -7,6 +7,7 @@ from django.db.models.functions import TruncDay
 from django.utils import timezone
 
 from apps.development.models import Issue, STATE_CLOSED
+from apps.payroll.models import SpentTime
 from .base import ProgressMetricsCalculator, UserProgressMetrics
 
 DAY_STEP = timedelta(days=1)
@@ -54,6 +55,8 @@ class DayMetricsCalculator(ProgressMetricsCalculator):
             if self._is_apply_loading(current, now):
                 self._update_loading(metric, active_issues)
 
+            self._update_payrolls(metric)
+
             current += DAY_STEP
 
         return metrics
@@ -92,6 +95,14 @@ class DayMetricsCalculator(ProgressMetricsCalculator):
             issue['remaining'] -= loading
             if not issue['remaining']:
                 active_issues.remove(issue)
+
+    def _update_payrolls(self, metric: UserProgressMetrics) -> None:
+        data = SpentTime.objects \
+            .filter(user=self.user, date=metric.start).aggregate_payrolls()
+
+        metric.payroll_opened = data['total_payroll_opened'] or 0
+        metric.payroll_closed = data['total_payroll_closed'] or 0
+        metric.paid = data['total_paid'] or 0
 
     def modify_queryset(self, queryset: QuerySet) -> QuerySet:
         return queryset.annotate(day=TruncDay('date')).values('day')

@@ -7,6 +7,7 @@ from django.utils.translation import gettext_lazy as _
 from apps.core.db.fields import MoneyField
 from apps.core.db.mixins import Timestamps
 from apps.development.models import Note
+from apps.payroll.db.managers import SpentTimeManager
 
 User = get_user_model()
 
@@ -43,6 +44,8 @@ class SpentTime(Payroll):
     base = GenericForeignKey()
 
     note = models.OneToOneField(Note, models.SET_NULL, null=True, blank=True, related_name='time_spend')
+
+    objects = SpentTimeManager()
 
     def __str__(self):
         return f'{self.user} [{self.base}]: {self.time_spent}'
