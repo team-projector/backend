@@ -9,7 +9,7 @@ from rest_framework import status
 from apps.core.tests.base import BaseAPITest
 from apps.core.utils.date import begin_of_week
 from apps.development.models import STATE_CLOSED, STATE_OPENED, TeamMember
-from apps.development.tests.factories import IssueFactory, TeamMemberFactory, TeamFactory
+from apps.development.tests.factories import IssueFactory, TeamFactory, TeamMemberFactory
 from apps.development.utils.parsers import parse_date
 from apps.payroll.tests.factories import IssueSpentTimeFactory
 from apps.users.tests.factories import UserFactory
@@ -89,7 +89,11 @@ class ApiMetricsWeeksTests(BaseAPITest):
         self._check_metrics(response.data,
                             {
                                 monday: timedelta(hours=6)
-                            }, {}, {}, {
+                            }, {
+                                monday: 1
+                            }, {
+                                monday: timedelta(hours=15)
+                            }, {
                                 monday: self.issue.time_estimate / self.issue.total_time_spent
                             })
 
@@ -124,7 +128,11 @@ class ApiMetricsWeeksTests(BaseAPITest):
         self._check_metrics(response.data,
                             {
                                 monday: timedelta(hours=6)
-                            }, {}, {}, {
+                            }, {
+                                monday: 1
+                            }, {
+                                monday: timedelta(hours=3)
+                            }, {
                                 monday: self.issue.time_estimate / self.issue.total_time_spent
                             })
 
@@ -159,7 +167,9 @@ class ApiMetricsWeeksTests(BaseAPITest):
         self._check_metrics(response.data,
                             {
                                 monday: timedelta(hours=6)
-                            }, {}, {}, {})
+                            }, {
+                                monday: 1
+                            }, {}, {})
 
     def test_efficiency_zero_spend(self):
         monday = begin_of_week(timezone.now().date())
@@ -184,7 +194,13 @@ class ApiMetricsWeeksTests(BaseAPITest):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(len(response.data), 2)
 
-        self._check_metrics(response.data, {}, {}, {}, {})
+        self._check_metrics(response.data,
+                            {},
+                            {
+                                monday: 1
+                            }, {
+                                monday: timedelta(hours=2)
+                            }, {})
 
     def test_many_weeks(self):
         monday = begin_of_week(timezone.now().date())

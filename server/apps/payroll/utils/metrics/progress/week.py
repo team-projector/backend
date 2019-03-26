@@ -46,7 +46,6 @@ class WeekMetricsCalculator(ProgressMetricsCalculator):
         issues_stats = Issue.objects.filter(user=self.user,
                                             due_date__gte=metric.start,
                                             due_date__lt=metric.end) \
-            .exclude(state=STATE_CLOSED) \
             .aggregate(issues_count=Count('*'),
                        total_time_estimate=Sum('time_estimate'))
 
