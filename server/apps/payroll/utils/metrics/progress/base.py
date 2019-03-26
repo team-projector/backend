@@ -17,8 +17,7 @@ class UserProgressMetrics:
     loading: int = 0
     efficiency: float = 0
     issues_count: int = 0
-    payroll_closed: float = 0
-    payroll_opened: float = 0
+    payroll: float = 0
     paid: float = 0
 
 

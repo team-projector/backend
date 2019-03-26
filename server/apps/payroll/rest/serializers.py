@@ -27,8 +27,7 @@ class UserProgressMetricsSerializer(serializers.Serializer):
     issues_count = serializers.IntegerField()
     loading = serializers.IntegerField()
     efficiency = serializers.FloatField()
-    payroll_closed = serializers.FloatField()
-    payroll_opened = serializers.FloatField()
+    payroll = serializers.FloatField()
     paid = serializers.FloatField()
 
 

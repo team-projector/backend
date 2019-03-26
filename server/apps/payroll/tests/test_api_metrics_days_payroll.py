@@ -49,8 +49,6 @@ class ApiMetricsDaysPayrollTests(BaseAPITest):
 
         self._check_metrics(response.data,
                             {
-                                monday: 0
-                            }, {
                                 monday: 3 * self.user.hour_rate,
                                 monday + timedelta(days=1): self.user.hour_rate,
                                 monday + timedelta(days=2): 2 * self.user.hour_rate
@@ -87,8 +85,6 @@ class ApiMetricsDaysPayrollTests(BaseAPITest):
 
         self._check_metrics(response.data,
                             {
-                                monday: 0
-                            }, {
                                 monday: 0
                             }, {
                                 monday: 3 * self.user.hour_rate,
@@ -128,8 +124,6 @@ class ApiMetricsDaysPayrollTests(BaseAPITest):
                                 monday + timedelta(days=2): 2 * self.user.hour_rate
                             }, {
                                 monday: 0
-                            }, {
-                                monday: 0
                             })
 
     def test_complex(self):
@@ -166,9 +160,7 @@ class ApiMetricsDaysPayrollTests(BaseAPITest):
 
         self._check_metrics(response.data,
                             {
-                                monday: 4 * self.user.hour_rate,
-                            }, {
-                                monday: 2 * self.user.hour_rate,
+                                monday: 6 * self.user.hour_rate,
                                 monday + timedelta(days=1): 4 * self.user.hour_rate,
                                 monday + timedelta(days=2): 2 * self.user.hour_rate,
                             }, {
@@ -183,19 +175,16 @@ class ApiMetricsDaysPayrollTests(BaseAPITest):
                                             time_spent=spent.total_seconds())
 
     def _check_metrics(self, metrics,
-                       payroll_closed: Dict[date, float],
-                       payroll_opened: Dict[date, float],
+                       payroll: Dict[date, float],
                        paid: Dict[date, float]):
 
-        payroll_closed = self._prepare_metrics(payroll_closed)
-        payroll_opened = self._prepare_metrics(payroll_opened)
+        payroll = self._prepare_metrics(payroll)
         paid = self._prepare_metrics(paid)
 
         for metric in metrics:
             self.assertEqual(metric['start'], metric['end'])
 
-            self._check_metric(metric, 'payroll_closed', payroll_closed)
-            self._check_metric(metric, 'payroll_opened', payroll_opened)
+            self._check_metric(metric, 'payroll', payroll)
             self._check_metric(metric, 'paid', paid)
 
     def _prepare_metrics(self, metrics):

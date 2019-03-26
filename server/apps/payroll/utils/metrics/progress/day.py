@@ -100,8 +100,7 @@ class DayMetricsCalculator(ProgressMetricsCalculator):
         data = SpentTime.objects \
             .filter(user=self.user, date=metric.start).aggregate_payrolls()
 
-        metric.payroll_opened = data['total_payroll_opened'] or 0
-        metric.payroll_closed = data['total_payroll_closed'] or 0
+        metric.payroll = data['total_payroll'] or 0
         metric.paid = data['total_paid'] or 0
 
     def modify_queryset(self, queryset: QuerySet) -> QuerySet:

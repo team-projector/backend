@@ -71,8 +71,7 @@ class WeekMetricsCalculator(ProgressMetricsCalculator):
                     date__gte=metric.start,
                     date__lt=metric.end).aggregate_payrolls()
 
-        metric.payroll_opened = data['total_payroll_opened'] or 0
-        metric.payroll_closed = data['total_payroll_closed'] or 0
+        metric.payroll = data['total_payroll'] or 0
         metric.paid = data['total_paid'] or 0
 
     def _get_weeks(self) -> List[date]:
