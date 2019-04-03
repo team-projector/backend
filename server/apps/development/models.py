@@ -12,7 +12,7 @@ from django.db.models import Max
 from django.utils.functional import cached_property
 from django.utils.translation import gettext_lazy as _
 
-from apps.core.db.mixins import GitlabEntityMixin
+from apps.core.db.mixins import GitlabEntityMixin, Timestamps
 from apps.core.db.utils import Choices
 from apps.development.utils.parsers import parse_date
 from apps.payroll.db.mixins import SpentTimesMixin
@@ -229,3 +229,35 @@ class Issue(NotableMixin,
                                      time_spent=time_spent,
                                      note=note,
                                      base=self)
+
+
+class Milestone(GitlabEntityMixin,
+                Timestamps):
+    title = models.CharField(
+        max_length=255,
+        verbose_name=_('VN__TITLE'),
+        help_text=_('HT__TITLE')
+    )
+    description = models.TextField(
+        verbose_name=_('VN__DESCRIPTION'),
+        help_text=_('HT__DESCRIPTION')
+    )
+    start_date = models.DateField(
+        null=True,
+        blank=True
+    )
+    due_date = models.DateField(
+        null=True,
+        blank=True
+    )
+    budget = models.DecimalField(
+        default=0,
+        max_digits=12,
+        decimal_places=2,
+        verbose_name=_('VN__BUDGET'),
+        help_text=_('HT__BUDGET')
+    )
+
+    owner = GenericForeignKey()
+    content_type = models.ForeignKey(ContentType, models.CASCADE)
+    object_id = models.PositiveIntegerField()
