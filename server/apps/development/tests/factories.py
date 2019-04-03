@@ -1,7 +1,7 @@
 import factory
 import pytz
 
-from apps.development.models import Issue, Label, Note, Project, ProjectGroup, STATE_OPENED, Team, TeamMember
+from apps.development.models import Issue, Label, Note, Project, ProjectGroup, STATE_OPENED, Team, TeamMember, Milestone
 
 
 class ProjectGroupFactory(factory.django.DjangoModelFactory):
@@ -53,6 +53,14 @@ class IssueNoteFactory(factory.django.DjangoModelFactory):
 
     class Meta:
         model = Note
+
+
+class MilestoneFactory(factory.django.DjangoModelFactory):
+    gl_id = factory.Faker('random_int', min=0, max=9999)
+    owner = factory.SubFactory(ProjectGroupFactory)
+
+    class Meta:
+        model = Milestone
 
 
 class TeamFactory(factory.django.DjangoModelFactory):

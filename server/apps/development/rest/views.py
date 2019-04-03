@@ -10,8 +10,9 @@ from rest_framework.decorators import action
 from apps.core.rest.views import BaseGenericViewSet
 from apps.development.rest.filters import TeamMemberFilterBackend
 from apps.development.utils.problems.issues import IssueProblemsChecker
-from .serializers import IssueCardSerializer, IssueProblemSerializer, TeamCardSerializer, TeamMemberCardSerializer
-from ..models import Issue, Team, TeamMember
+from .serializers import IssueCardSerializer, IssueProblemSerializer, TeamCardSerializer, TeamMemberCardSerializer, \
+    MilestoneCardSerializer
+from ..models import Issue, Team, TeamMember, Milestone
 from ..tasks import sync_project_issue
 
 logger = logging.getLogger(__name__)
@@ -80,3 +81,12 @@ class TeamMembersViewset(mixins.ListModelMixin,
 
     def filter_queryset(self, queryset):
         return queryset.filter(team_id=self.kwargs['team_pk'])
+
+
+class MilestoneViewset(mixins.ListModelMixin,
+                       BaseGenericViewSet):
+    serializer_classes = {
+        'list': MilestoneCardSerializer
+    }
+
+    queryset = Milestone.objects.all()

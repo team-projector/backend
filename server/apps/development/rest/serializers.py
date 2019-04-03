@@ -10,7 +10,7 @@ from apps.development.utils.problems.issues import checkers
 from apps.payroll.models import SpentTime
 from apps.users.models import User
 from apps.users.rest.serializers import UserCardSerializer
-from ..models import Issue, Label, Team, TeamMember
+from ..models import Issue, Label, Team, TeamMember, Milestone
 
 
 class LabelSerializer(serializers.ModelSerializer):
@@ -96,3 +96,9 @@ class IssueProblemSerializer(serializers.Serializer):
 class TeamMemberFilterSerializer(serializers.Serializer):
     user = serializers.PrimaryKeyRelatedField(queryset=User.objects.all(), required=False, allow_null=True)
     roles = BitField(required=False, allow_null=True, model=TeamMember)
+
+
+class MilestoneCardSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Milestone
+        fields = ('id',)
