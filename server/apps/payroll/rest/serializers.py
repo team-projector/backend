@@ -1,7 +1,7 @@
 from rest_framework import serializers
 
 from apps.development.rest.serializers import IssueCardSerializer
-from apps.payroll.models import SpentTime
+from apps.payroll.models import Salary, SpentTime
 
 
 class UserMetricsSerializer(serializers.Serializer):
@@ -51,3 +51,10 @@ class TimeExpenseSerializer(serializers.ModelSerializer):
     class Meta:
         model = SpentTime
         fields = ('id', 'created_at', 'updated_at', 'date', 'time_spent')
+
+
+class SalarySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Salary
+        fields = ('id', 'charged_time', 'payed', 'bonus', 'created_at', 'period_to', 'taxes', 'penalty', 'period_from',
+                  'sum', 'total')
