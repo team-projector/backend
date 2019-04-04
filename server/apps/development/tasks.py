@@ -1,7 +1,9 @@
 from apps.core.gitlab import get_gitlab_client
 from apps.development.models import Project, ProjectGroup
-from apps.development.utils.loaders import load_project_issue, \
-    load_project_issues, load_group_milestones, load_gl_project_milestones, load_groups, load_projects
+from apps.development.utils.loaders import (
+    load_project_issue, load_group_milestones, load_gl_project_milestones, load_groups,
+    load_projects,
+    load_project_issues)
 from celery_app import app
 
 
