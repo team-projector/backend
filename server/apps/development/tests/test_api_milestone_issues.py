@@ -27,3 +27,4 @@ class ApiMilestoneIssuesTests(BaseAPITest):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data['count'], 1)
         self.assertEqual(response.data['results'][0]['id'], issue.id)
+        self.assertEqual(response.data['results'][0]['milestone']['id'], self.milestone.id)

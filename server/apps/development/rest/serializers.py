@@ -31,12 +31,13 @@ class IssueCardSerializer(serializers.ModelSerializer):
     project = LinkSerializer()
     time_spent = serializers.SerializerMethodField()
     metrics = serializers.SerializerMethodField()
+    milestone = LinkSerializer(source='issue_milestone')
 
     class Meta:
         model = Issue
         fields = (
             'id', 'title', 'labels', 'project', 'due_date', 'state', 'time_estimate', 'total_time_spent', 'time_spent',
-            'gl_url', 'metrics'
+            'gl_url', 'metrics', 'milestone'
         )
 
     def get_metrics(self, instance: Issue):
