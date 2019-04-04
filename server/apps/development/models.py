@@ -252,11 +252,15 @@ class Milestone(GitlabEntityMixin,
     )
     start_date = models.DateField(
         null=True,
-        blank=True
+        blank=True,
+        verbose_name=_('VN__START_DATE'),
+        help_text=_('HT__START_DATE')
     )
     due_date = models.DateField(
         null=True,
-        blank=True
+        blank=True,
+        verbose_name=_('VN__DUE_DATE'),
+        help_text=_('HT__DUE_DATE')
     )
     budget = models.DecimalField(
         default=0,
