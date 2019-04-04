@@ -3,7 +3,7 @@ from datetime import datetime
 from typing import DefaultDict, Optional
 
 from bitfield import BitField
-from django.contrib.contenttypes.fields import GenericForeignKey
+from django.contrib.contenttypes.fields import GenericForeignKey, GenericRelation
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.postgres.fields import JSONField
 from django.core.serializers.json import DjangoJSONEncoder
@@ -62,6 +62,8 @@ class ProjectGroup(GitlabEntityMixin):
     parent = models.ForeignKey('self', models.CASCADE, null=True, blank=True, verbose_name=_('VN__PARENT'),
                                help_text=_('HT__PARENT'))
 
+    milestones = GenericRelation('Milestone', related_query_name='project_group')
+
     objects = ProjectGroupManager()
 
     class Meta:
@@ -82,6 +84,8 @@ class Project(GitlabEntityMixin):
 
     gl_last_issues_sync = models.DateTimeField(null=True, blank=True, verbose_name=_('VN__GITLAB_LAST_ISSUES_SYNC'),
                                                help_text=_('HT__GITLAB_LAST_ISSUES_SYNC'))
+
+    milestones = GenericRelation('Milestone', related_query_name='project')
 
     objects = ProjectManager()
 

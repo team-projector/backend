@@ -1,5 +1,6 @@
 import factory
 import pytz
+from django.contrib.contenttypes.models import ContentType
 
 from apps.development.models import Issue, Label, Note, Project, ProjectGroup, STATE_OPENED, Team, TeamMember, Milestone
 
@@ -57,7 +58,26 @@ class IssueNoteFactory(factory.django.DjangoModelFactory):
 
 class MilestoneFactory(factory.django.DjangoModelFactory):
     gl_id = factory.Faker('random_int', min=0, max=9999)
+
     owner = factory.SubFactory(ProjectGroupFactory)
+    object_id = factory.SelfAttribute('owner.id')
+    content_type = factory.LazyAttribute(
+        lambda o: ContentType.objects.get_for_model(o.owner))
+
+    class Meta:
+        abstract = True
+        exclude = ['content_object']
+
+
+class ProjectGroupMilestoneFactory(MilestoneFactory):
+    owner = factory.SubFactory(ProjectGroupFactory)
+
+    class Meta:
+        model = Milestone
+
+
+class ProjectMilestoneFactory(MilestoneFactory):
+    owner = factory.SubFactory(ProjectFactory)
 
     class Meta:
         model = Milestone

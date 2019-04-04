@@ -54,7 +54,7 @@ class IssueCardSerializer(serializers.ModelSerializer):
 
         return IssueMetricsSerializer(dict2obj(metrics)).data
 
-    def get_time_spent(self, instance):
+    def get_time_spent(self, instance: Issue):
         return instance.time_spents.filter(user=self.context['request'].user) \
             .aggregate(total_spent=Sum('time_spent'))['total_spent']
 
@@ -98,7 +98,21 @@ class TeamMemberFilterSerializer(serializers.Serializer):
     roles = BitField(required=False, allow_null=True, model=TeamMember)
 
 
+class MilestoneMetricsSerializer(serializers.Serializer):
+    time_estimate = serializers.SerializerMethodField()
+    time_spent = serializers.SerializerMethodField()
+    time_remains = serializers.SerializerMethodField()
+    issues_count = serializers.SerializerMethodField()
+    efficiency = serializers.SerializerMethodField()
+    salary = serializers.SerializerMethodField()
+
+
 class MilestoneCardSerializer(serializers.ModelSerializer):
+    metrics = serializers.SerializerMethodField()
+
+    def get_metrics(self, instance):
+        pass
+
     class Meta:
         model = Milestone
-        fields = ('id',)
+        fields = ('id', 'title', 'start_date', 'due_date', 'metrics')
