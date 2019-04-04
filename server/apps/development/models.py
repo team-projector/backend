@@ -182,6 +182,10 @@ class Issue(NotableMixin,
 
     labels = models.ManyToManyField(Label, related_name='issues', blank=True)
 
+    issue_milestone = GenericForeignKey()
+    content_type = models.ForeignKey(ContentType, models.CASCADE, null=True)
+    object_id = models.PositiveIntegerField(null=True)
+
     objects = IssueManager()
 
     class Meta:
@@ -261,6 +265,8 @@ class Milestone(GitlabEntityMixin,
         verbose_name=_('VN__BUDGET'),
         help_text=_('HT__BUDGET')
     )
+
+    issues = GenericRelation(Issue, related_query_name='milestone')
 
     owner = GenericForeignKey()
     content_type = models.ForeignKey(ContentType, models.CASCADE)

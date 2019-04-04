@@ -119,3 +119,20 @@ class ProjectMilestonesViewset(mixins.ListModelMixin,
 
     def filter_queryset(self, queryset):
         return super().filter_queryset(queryset.filter(project=self.project))
+
+
+class MilestoneIssuesViewset(mixins.ListModelMixin, BaseGenericViewSet):
+    permission_classes = (permissions.IsAuthenticated,)
+
+    serializer_classes = {
+        'list': IssueCardSerializer
+    }
+
+    queryset = Issue.objects.all()
+
+    @cached_property
+    def milestone(self):
+        return get_object_or_404(Milestone.objects, pk=self.kwargs['milestone_pk'])
+
+    def filter_queryset(self, queryset):
+        return super().filter_queryset(queryset.filter(milestone=self.milestone))
