@@ -5,32 +5,32 @@ from apps.development.models import Milestone, Issue
 
 
 class MilestoneMetrics:
-  time_estimate: int = 0
-  time_spent: int = 0
-  time_remains: int = 0
-  issues_count: int = 0
-  efficiency: float = 0.0
-  salary: float = 0.0
+    time_estimate: int = 0
+    time_spent: int = 0
+    time_remains: int = 0
+    issues_count: int = 0
+    efficiency: float = 0.0
+    salary: float = 0.0
 
 
 class MilestoneMetricsCalculator:
-  def __init__(self, milestone: Milestone):
-    self.milestone = milestone
+    def __init__(self, milestone: Milestone):
+      self.milestone = milestone
 
-  def calculate(self) -> MilestoneMetrics:
-    metrics = MilestoneMetrics()
+    def calculate(self) -> MilestoneMetrics:
+      metrics = MilestoneMetrics()
 
-    stat = Issue.objects.filter(
-      content_type=ContentType.objects.get_for_model(Milestone),
-      object_id=self.milestone.id,
-    ).aggregate(
-      issues_count=Count('*'),
-      time_estimate=Sum('time_estimate'),
-      time_spent=Sum('total_time_spent')
-    )
-    metrics.time_estimate = stat['time_estimate']
-    metrics.time_spent = stat['time_spent']
-    metrics.time_remains = stat['time_estimate'] - stat['time_spent']
-    metrics.issues_count = stat['issues_count']
+      stat = Issue.objects.filter(
+        content_type=ContentType.objects.get_for_model(Milestone),
+        object_id=self.milestone.id,
+      ).aggregate(
+        issues_count=Count('*'),
+        time_estimate=Sum('time_estimate'),
+        time_spent=Sum('total_time_spent')
+      )
+      metrics.time_estimate = stat['time_estimate']
+      metrics.time_spent = stat['time_spent']
+      metrics.time_remains = stat['time_estimate'] - stat['time_spent']
+      metrics.issues_count = stat['issues_count']
 
-    return metrics
+      return metrics
