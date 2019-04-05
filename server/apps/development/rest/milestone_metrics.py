@@ -21,12 +21,12 @@ class MilestoneMetricsCalculator:
         metrics = MilestoneMetrics()
 
         stat = Issue.objects.filter(
-          content_type=ContentType.objects.get_for_model(Milestone),
-          object_id=self.milestone.id,
+            content_type=ContentType.objects.get_for_model(Milestone),
+            object_id=self.milestone.id,
         ).aggregate(
-          issues_count=Count('*'),
-          time_estimate=Sum('time_estimate'),
-          time_spent=Sum('total_time_spent')
+            issues_count=Count('*'),
+            time_estimate=Sum('time_estimate'),
+            time_spent=Sum('total_time_spent')
         )
         metrics.time_estimate = stat['time_estimate']
         metrics.time_spent = stat['time_spent']
