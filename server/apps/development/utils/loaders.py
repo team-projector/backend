@@ -251,9 +251,9 @@ def load_user(user_id: int) -> User:
     return user
 
 
-def load_group_milestones(group_id: int) -> None:
+def load_group_milestones(project_group_id, gl_group_id: int) -> None:
     gl = get_gitlab_client()
-    group = gl.groups.get(group_id)
+    group = gl.groups.get(gl_group_id)
 
     for gl_milestone in group.milestones.list():
         Milestone.objects.update_or_create(
@@ -262,7 +262,7 @@ def load_group_milestones(group_id: int) -> None:
             title=gl_milestone.title,
             description=gl_milestone.description,
             content_type=ContentType.objects.get_for_model(ProjectGroup),
-            object_id=group_id,
+            object_id=project_group_id,
             start_date=parse_gl_date(gl_milestone.start_date),
             due_date=parse_gl_date(gl_milestone.due_date),
             created_at=parse_gl_datetime(gl_milestone.created_at),
@@ -270,9 +270,9 @@ def load_group_milestones(group_id: int) -> None:
         )
 
 
-def load_gl_project_milestones(project_id: int) -> None:
+def load_gl_project_milestones(project_id, gl_project_id: int) -> None:
     gl = get_gitlab_client()
-    gl_project = gl.projects.get(project_id)
+    gl_project = gl.projects.get(gl_project_id)
 
     for gl_milestone in gl_project.milestones.list():
         Milestone.objects.update_or_create(

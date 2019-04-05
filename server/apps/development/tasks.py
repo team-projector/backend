@@ -32,13 +32,13 @@ def sync_projects_milestones() -> None:
 @app.task(queue='low_priority')
 def load_project_group_milestones(project_group_id: int) -> None:
     group = ProjectGroup.objects.get(id=project_group_id)
-    load_group_milestones(group.gl_id)
+    load_group_milestones(project_group_id, group.gl_id)
 
 
 @app.task(queue='low_priority')
 def load_project_milestones(project_id: int) -> None:
     project = Project.objects.get(id=project_id)
-    load_gl_project_milestones(project.gl_id)
+    load_gl_project_milestones(project_id, project.gl_id)
 
 
 @app.task(queue='low_priority')
