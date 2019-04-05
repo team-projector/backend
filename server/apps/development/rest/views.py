@@ -86,10 +86,12 @@ class TeamMembersViewset(mixins.ListModelMixin,
 
 
 class ProjectGroupMilestonesViewset(mixins.ListModelMixin,
+                                    mixins.RetrieveModelMixin,
                                     BaseGenericViewSet):
     permission_classes = (permissions.IsAuthenticated,)
 
     serializer_classes = {
+        'retrieve': MilestoneCardSerializer,
         'list': MilestoneCardSerializer
     }
 

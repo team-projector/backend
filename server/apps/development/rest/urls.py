@@ -8,7 +8,7 @@ app_name = 'development'
 
 router = AppRouter()
 router.register('issues', IssuesViewset, basename='issues')
-router.register(r'^project-groups/(?P<project_group_pk>\d+)/milestones$', ProjectGroupMilestonesViewset,
+router.register(r'^project-groups/(?P<project_group_pk>\d+)/milestones', ProjectGroupMilestonesViewset,
                 basename='project-group-milestones')
 router.register(r'^projects/(?P<project_pk>\d+)/milestones$', ProjectMilestonesViewset,
                 basename='project-milestones')

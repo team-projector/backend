@@ -50,7 +50,6 @@ def sync_issues() -> None:
 @app.task(queue='low_priority')
 def sync_project_issues(project_id: int) -> None:
     project = Project.objects.get(id=project_id)
-
     load_project_issues(project)
 
 

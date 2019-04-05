@@ -6,6 +6,7 @@ from rest_framework import serializers
 
 from apps.core.rest.serializers import LinkSerializer
 from apps.core.utils.objects import dict2obj
+from apps.development.rest.milestone_metrics import MilestoneMetricsCalculator
 from apps.development.utils.problems.issues import checkers
 from apps.payroll.models import SpentTime
 from apps.users.models import User
@@ -100,19 +101,21 @@ class TeamMemberFilterSerializer(serializers.Serializer):
 
 
 class MilestoneMetricsSerializer(serializers.Serializer):
-    time_estimate = serializers.SerializerMethodField()
-    time_spent = serializers.SerializerMethodField()
-    time_remains = serializers.SerializerMethodField()
-    issues_count = serializers.SerializerMethodField()
-    efficiency = serializers.SerializerMethodField()
-    salary = serializers.SerializerMethodField()
+    time_estimate = serializers.IntegerField()
+    time_spent = serializers.IntegerField()
+    time_remains = serializers.IntegerField()
+    issues_count = serializers.IntegerField()
+    efficiency = serializers.DecimalField(max_digits=12, decimal_places=2)
+    salary = serializers.DecimalField(max_digits=12, decimal_places=2)
 
 
 class MilestoneCardSerializer(serializers.ModelSerializer):
     metrics = serializers.SerializerMethodField()
 
-    def get_metrics(self, instance):
-        pass
+    @staticmethod
+    def get_metrics(instance):
+        metrics = MilestoneMetricsCalculator(instance).calculate()
+        return MilestoneMetricsSerializer(metrics).data
 
     class Meta:
         model = Milestone
