@@ -15,22 +15,22 @@ class MilestoneMetrics:
 
 class MilestoneMetricsCalculator:
     def __init__(self, milestone: Milestone):
-      self.milestone = milestone
+        self.milestone = milestone
 
     def calculate(self) -> MilestoneMetrics:
-      metrics = MilestoneMetrics()
+        metrics = MilestoneMetrics()
 
-      stat = Issue.objects.filter(
-        content_type=ContentType.objects.get_for_model(Milestone),
-        object_id=self.milestone.id,
-      ).aggregate(
-        issues_count=Count('*'),
-        time_estimate=Sum('time_estimate'),
-        time_spent=Sum('total_time_spent')
-      )
-      metrics.time_estimate = stat['time_estimate']
-      metrics.time_spent = stat['time_spent']
-      metrics.time_remains = stat['time_estimate'] - stat['time_spent']
-      metrics.issues_count = stat['issues_count']
+        stat = Issue.objects.filter(
+          content_type=ContentType.objects.get_for_model(Milestone),
+          object_id=self.milestone.id,
+        ).aggregate(
+          issues_count=Count('*'),
+          time_estimate=Sum('time_estimate'),
+          time_spent=Sum('total_time_spent')
+        )
+        metrics.time_estimate = stat['time_estimate']
+        metrics.time_spent = stat['time_spent']
+        metrics.time_remains = stat['time_estimate'] - stat['time_spent']
+        metrics.issues_count = stat['issues_count']
 
-      return metrics
+        return metrics
