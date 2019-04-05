@@ -149,18 +149,30 @@ def check_project_deleted_issues(project: Project, gl_project: GlProject) -> Non
 
 def load_project_issue(project: Project, gl_project: GlProject, gl_issue: GlProjectIssue) -> None:
     time_stats = gl_issue.time_stats()
-    issue, _ = Issue.objects.sync_gitlab(gl_id=gl_issue.id,
-                                         gl_url=gl_issue.web_url,
-                                         project=project,
-                                         title=gl_issue.title,
-                                         total_time_spent=time_stats['total_time_spent'],
-                                         time_estimate=time_stats['time_estimate'],
-                                         state=gl_issue.state,
-                                         due_date=parse_gl_date(gl_issue.due_date),
-                                         created_at=parse_gl_datetime(gl_issue.created_at),
-                                         updated_at=parse_gl_datetime(gl_issue.updated_at),
-                                         closed_at=parse_gl_datetime(gl_issue.closed_at),
-                                         user=extract_user_from_data(gl_issue.assignee))
+
+    params = {
+        'gl_id': gl_issue.id,
+        'gl_url': gl_issue.web_url,
+        'project': project,
+        'title': gl_issue.title,
+        'total_time_spent': time_stats['total_time_spent'],
+        'time_estimate': time_stats['time_estimate'],
+        'state': gl_issue.state,
+        'due_date': parse_gl_date(gl_issue.due_date),
+        'created_at': parse_gl_datetime(gl_issue.created_at),
+        'updated_at': parse_gl_datetime(gl_issue.updated_at),
+        'closed_at': parse_gl_datetime(gl_issue.closed_at),
+        'user': extract_user_from_data(gl_issue.assignee)
+    }
+
+    if gl_issue.milestone:
+        milestone = Milestone.objects.filter(gl_id=gl_issue.milestone['id']).first()
+
+        if milestone:
+            params['content_type'] = ContentType.objects.get_for_model(Milestone)
+            params['object_id'] = milestone.id
+
+    issue, _ = Issue.objects.sync_gitlab(**params)
 
     load_issue_labels(issue, gl_project, gl_issue)
     load_issue_notes(issue, gl_issue)

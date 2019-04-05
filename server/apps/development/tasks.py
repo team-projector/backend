@@ -17,7 +17,7 @@ def sync() -> None:
     sync_issues.delay()
 
 
-@app.task
+@app.task(queue='low_priority')
 def sync_groups_milestones() -> None:
     for project_group_id in ProjectGroup.objects.all().values_list('id', flat=True):
         load_project_group_milestones.delay(project_group_id)

@@ -158,21 +158,31 @@ STATE_OPENED = 'opened'
 class Issue(NotableMixin,
             SpentTimesMixin,
             GitlabEntityMixin):
-    title = models.CharField(max_length=255, verbose_name=_('VN__TITLE'), help_text=_('HT__TITLE'))
-    project = models.ForeignKey(Project, models.SET_NULL, null=True, blank=True, related_name='issues',
-                                verbose_name=_('VN__PROJECT'), help_text=_('HT__PROJECT'))
+    title = models.CharField(
+        max_length=255,
+        verbose_name=_('VN__TITLE'),
+        help_text=_('HT__TITLE')
+    )
 
-    time_estimate = models.PositiveIntegerField(null=True, verbose_name=_('VN__TIME_ESTIMATE'),
-                                                help_text=_('HT__TIME_ESTIMATE'))
+    time_estimate = models.PositiveIntegerField(
+        null=True,
+        verbose_name=_('VN__TIME_ESTIMATE'),
+        help_text=_('HT__TIME_ESTIMATE')
+    )
 
-    total_time_spent = models.PositiveIntegerField(null=True, verbose_name=_('VN__TOTAL_TIME_SPENT'),
-                                                   help_text=_('HT__TOTAL_TIME_SPENT'))
+    total_time_spent = models.PositiveIntegerField(
+        null=True,
+        verbose_name=_('VN__TOTAL_TIME_SPENT'),
+        help_text=_('HT__TOTAL_TIME_SPENT')
+    )
 
-    user = models.ForeignKey(User, models.SET_NULL, null=True, blank=True, verbose_name=_('VN__USER'),
-                             help_text=_('HT__USER'))
-
-    state = models.CharField(max_length=255, null=True, blank=True, verbose_name=_('VN__STATE'),
-                             help_text=_('HT__STATE'))
+    state = models.CharField(
+        max_length=255,
+        null=True,
+        blank=True,
+        verbose_name=_('VN__STATE'),
+        help_text=_('HT__STATE')
+    )
 
     created_at = models.DateTimeField(null=True, blank=True)
     updated_at = models.DateTimeField(null=True, blank=True)
@@ -180,8 +190,32 @@ class Issue(NotableMixin,
 
     due_date = models.DateField(null=True, blank=True)
 
-    labels = models.ManyToManyField(Label, related_name='issues', blank=True)
+    labels = models.ManyToManyField(
+        Label,
+        related_name='issues',
+        blank=True
+    )
 
+    project = models.ForeignKey(
+        Project,
+        models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='issues',
+        verbose_name=_('VN__PROJECT'),
+        help_text=_('HT__PROJECT')
+    )
+
+    user = models.ForeignKey(
+        User,
+        models.SET_NULL,
+        null=True,
+        blank=True,
+        verbose_name=_('VN__USER'),
+        help_text=_('HT__USER')
+    )
+
+    # Link to Milestone
     issue_milestone = GenericForeignKey()
     content_type = models.ForeignKey(ContentType, models.CASCADE, null=True)
     object_id = models.PositiveIntegerField(null=True)
@@ -272,6 +306,7 @@ class Milestone(GitlabEntityMixin,
 
     issues = GenericRelation(Issue, related_query_name='milestone')
 
+    # Link to ProjectGroup or Project
     owner = GenericForeignKey()
     content_type = models.ForeignKey(ContentType, models.CASCADE)
     object_id = models.PositiveIntegerField()
