@@ -1,5 +1,6 @@
 from django.contrib.contenttypes.models import ContentType
 from django.db.models import Count, Sum
+from django.db.models.functions import Coalesce
 
 from apps.development.models import Milestone, Issue
 
@@ -25,12 +26,13 @@ class MilestoneMetricsCalculator:
             object_id=self.milestone.id,
         ).aggregate(
             issues_count=Count('*'),
-            time_estimate=Sum('time_estimate'),
-            time_spent=Sum('total_time_spent')
+            time_estimate=Coalesce(Sum('time_estimate'), 0),
+            time_spent=Coalesce(Sum('total_time_spent'), 0)
         )
-        metrics.time_estimate = stat['time_estimate']
-        metrics.time_spent = stat['time_spent']
-        metrics.time_remains = stat['time_estimate'] - stat['time_spent']
-        metrics.issues_count = stat['issues_count']
+        if stat:
+            metrics.time_estimate = stat['time_estimate']
+            metrics.time_spent = stat['time_spent']
+            metrics.time_remains = stat['time_estimate'] - stat['time_spent']
+            metrics.issues_count = stat['issues_count']
 
         return metrics
