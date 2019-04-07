@@ -14,11 +14,16 @@ WORKDIR /var/www
 COPY . /var/www
 
 RUN apt update \
-    && apt install -y gcc binutils gettext nginx git \
+    && apt install -y gcc \
+                      binutils \
+                      gettext \
+                      nginx \
+                      git \
     && chown -R www-data:www-data /var/lib/nginx \
-    && pip install pipenv \
+    && pip install poetry \
     && export DJANGO_ENV=build \
-    && pipenv install --system --deploy \
+    && poetry config settings.virtualenvs.create false \
+    && poetry install --no-dev --no-interaction --no-ansi \
     && python manage.py collectstatic --noinput --verbosity 0 \
     && django-admin compilemessages \
     && cp docker/nginx/* /etc/nginx \
