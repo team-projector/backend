@@ -1,9 +1,11 @@
-[[source]]
-url = "https://pypi.python.org/simple"
-verify_ssl = true
-name = "pypi"
+[tool.poetry]
+name = "team-projector"
+version = "0.1.0"
+description = ""
+authors = ["junte"]
 
-[packages]
+[tool.poetry.dependencies]
+python = "^3.6"
 "psycopg2-binary" = "*"
 Django = "*"
 uWSGI = "*"
@@ -13,7 +15,7 @@ django-cors-headers = "*"
 django-split-settings = "*"
 django-model-utils = "*"
 python-gitlab = "*"
-celery = "==4.1.*"
+celery = "4.1.*"
 flower = "*"
 redis = "*"
 xlsxwriter = "*"
@@ -26,16 +28,17 @@ social-auth-core = "*"
 social-auth-app-django = "*"
 python-decouple = "*"
 django-health-check = "*"
-tornado = "==5.*"
-django-bitfield = {git = "https://github.com/Junte/django-bitfield.git#v1.9.5",editable = true}
+tornado = "5.*"
+django-bitfield = {git = "https://github.com/Junte/django-bitfield.git", tag="v1.9.5"}
 django-admin-tools = {git = "https://github.com/Junte/django-admin-tools.git"}
 
-[dev-packages]
+[tool.poetry.dev-dependencies]
 "flake8" = "*"
 pytest-django = "*"
 ipython = "*"
 mypy = "*"
-xenon = "==0.5.4"
+xenon = "0.5.4"
 
-[requires]
-python_version = "3.6"
+[build-system]
+requires = ["poetry>=0.12"]
+build-backend = "poetry.masonry.api"
