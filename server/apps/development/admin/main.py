@@ -1,8 +1,9 @@
 from django.contrib import admin
 
 from apps.core.admin.base import BaseModelAdmin
+from apps.development.admin.filters import TeamFilter
 from apps.users.admin.filters import UserFilter
-from .filters import ProjectFilter, TeamFilter
+from .filters import ProjectFilter
 from .inlines import NoteInline, TeamMemberInline
 from ..models import Issue, Label, Note, Project, ProjectGroup, Team, TeamMember
 
