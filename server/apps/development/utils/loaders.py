@@ -2,6 +2,7 @@ import logging
 from typing import Optional
 
 from django.conf import settings
+from django.contrib.contenttypes.models import ContentType
 from django.urls import reverse
 from django.utils import timezone
 from gitlab import GitlabGetError
@@ -11,7 +12,7 @@ from rest_framework import status
 from apps.core.gitlab import get_gitlab_client
 from apps.users.models import User
 from .parsers import parse_gl_date, parse_gl_datetime
-from ..models import Issue, Label, Note, Project, ProjectGroup
+from ..models import Issue, Label, Note, Project, ProjectGroup, Milestone
 
 logger = logging.getLogger(__name__)
 
@@ -37,7 +38,6 @@ def load_groups() -> None:
         return group
 
     gl = get_gitlab_client()
-
     gl_groups = gl.groups.list(all=True)
     gl_groups_map = {g.id: g for g in gl_groups}
 
@@ -149,18 +149,30 @@ def check_project_deleted_issues(project: Project, gl_project: GlProject) -> Non
 
 def load_project_issue(project: Project, gl_project: GlProject, gl_issue: GlProjectIssue) -> None:
     time_stats = gl_issue.time_stats()
-    issue, _ = Issue.objects.sync_gitlab(gl_id=gl_issue.id,
-                                         gl_url=gl_issue.web_url,
-                                         project=project,
-                                         title=gl_issue.title,
-                                         total_time_spent=time_stats['total_time_spent'],
-                                         time_estimate=time_stats['time_estimate'],
-                                         state=gl_issue.state,
-                                         due_date=parse_gl_date(gl_issue.due_date),
-                                         created_at=parse_gl_datetime(gl_issue.created_at),
-                                         updated_at=parse_gl_datetime(gl_issue.updated_at),
-                                         closed_at=parse_gl_datetime(gl_issue.closed_at),
-                                         user=extract_user_from_data(gl_issue.assignee))
+
+    params = {
+        'gl_id': gl_issue.id,
+        'gl_url': gl_issue.web_url,
+        'project': project,
+        'title': gl_issue.title,
+        'total_time_spent': time_stats['total_time_spent'],
+        'time_estimate': time_stats['time_estimate'],
+        'state': gl_issue.state,
+        'due_date': parse_gl_date(gl_issue.due_date),
+        'created_at': parse_gl_datetime(gl_issue.created_at),
+        'updated_at': parse_gl_datetime(gl_issue.updated_at),
+        'closed_at': parse_gl_datetime(gl_issue.closed_at),
+        'user': extract_user_from_data(gl_issue.assignee)
+    }
+
+    if gl_issue.milestone:
+        milestone = Milestone.objects.filter(gl_id=gl_issue.milestone['id']).first()
+
+        if milestone:
+            params['content_type'] = ContentType.objects.get_for_model(Milestone)
+            params['object_id'] = milestone.id
+
+    issue, _ = Issue.objects.sync_gitlab(**params)
 
     load_issue_labels(issue, gl_project, gl_issue)
     load_issue_notes(issue, gl_issue)
@@ -237,3 +249,41 @@ def load_user(user_id: int) -> User:
     logger.info(f'User "{user}" is synced')
 
     return user
+
+
+def load_group_milestones(project_group_id, gl_group_id: int) -> None:
+    gl = get_gitlab_client()
+    group = gl.groups.get(gl_group_id)
+
+    for gl_milestone in group.milestones.list():
+        Milestone.objects.update_or_create(
+            gl_id=gl_milestone.id,
+            gl_url=gl_milestone.web_url,
+            title=gl_milestone.title,
+            description=gl_milestone.description,
+            content_type=ContentType.objects.get_for_model(ProjectGroup),
+            object_id=project_group_id,
+            start_date=parse_gl_date(gl_milestone.start_date),
+            due_date=parse_gl_date(gl_milestone.due_date),
+            created_at=parse_gl_datetime(gl_milestone.created_at),
+            updated_at=parse_gl_datetime(gl_milestone.updated_at),
+        )
+
+
+def load_gl_project_milestones(project_id, gl_project_id: int) -> None:
+    gl = get_gitlab_client()
+    gl_project = gl.projects.get(gl_project_id)
+
+    for gl_milestone in gl_project.milestones.list():
+        Milestone.objects.update_or_create(
+            gl_id=gl_milestone.id,
+            gl_url=gl_milestone.web_url,
+            title=gl_milestone.title,
+            description=gl_milestone.description,
+            content_type=ContentType.objects.get_for_model(Project),
+            object_id=project_id,
+            start_date=parse_gl_date(gl_milestone.start_date),
+            due_date=parse_gl_date(gl_milestone.due_date),
+            created_at=parse_gl_datetime(gl_milestone.created_at),
+            updated_at=parse_gl_datetime(gl_milestone.updated_at),
+        )

@@ -31,6 +31,7 @@ django-health-check = "*"
 tornado = "5.*"
 django-bitfield = {git = "https://github.com/Junte/django-bitfield.git", tag="v1.9.5"}
 django-admin-tools = {git = "https://github.com/Junte/django-admin-tools.git"}
+"flake8" = "*"
 
 [tool.poetry.dev-dependencies]
 "flake8" = "*"

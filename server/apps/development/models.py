@@ -3,7 +3,7 @@ from datetime import datetime
 from typing import DefaultDict, Optional
 
 from bitfield import BitField
-from django.contrib.contenttypes.fields import GenericForeignKey
+from django.contrib.contenttypes.fields import GenericForeignKey, GenericRelation
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.postgres.fields import JSONField
 from django.core.serializers.json import DjangoJSONEncoder
@@ -12,7 +12,7 @@ from django.db.models import Max
 from django.utils.functional import cached_property
 from django.utils.translation import gettext_lazy as _
 
-from apps.core.db.mixins import GitlabEntityMixin
+from apps.core.db.mixins import GitlabEntityMixin, Timestamps
 from apps.core.db.utils import Choices
 from apps.development.utils.parsers import parse_date
 from apps.payroll.db.mixins import SpentTimesMixin
@@ -37,6 +37,7 @@ class TeamMember(models.Model):
     ROLES = Choices(
         ('leader', _('CH_LEADER')),
         ('developer', _('CH_DEVELOPER')),
+        ('project_manager', _('CH_PM')),
     )
 
     team = models.ForeignKey(Team, models.CASCADE, related_name='members', verbose_name=_('VN__TEAM'),
@@ -62,6 +63,8 @@ class ProjectGroup(GitlabEntityMixin):
     parent = models.ForeignKey('self', models.CASCADE, null=True, blank=True, verbose_name=_('VN__PARENT'),
                                help_text=_('HT__PARENT'))
 
+    milestones = GenericRelation('Milestone', related_query_name='project_group')
+
     objects = ProjectGroupManager()
 
     class Meta:
@@ -82,6 +85,8 @@ class Project(GitlabEntityMixin):
 
     gl_last_issues_sync = models.DateTimeField(null=True, blank=True, verbose_name=_('VN__GITLAB_LAST_ISSUES_SYNC'),
                                                help_text=_('HT__GITLAB_LAST_ISSUES_SYNC'))
+
+    milestones = GenericRelation('Milestone', related_query_name='project')
 
     objects = ProjectManager()
 
@@ -154,21 +159,31 @@ STATE_OPENED = 'opened'
 class Issue(NotableMixin,
             SpentTimesMixin,
             GitlabEntityMixin):
-    title = models.CharField(max_length=255, verbose_name=_('VN__TITLE'), help_text=_('HT__TITLE'))
-    project = models.ForeignKey(Project, models.SET_NULL, null=True, blank=True, related_name='issues',
-                                verbose_name=_('VN__PROJECT'), help_text=_('HT__PROJECT'))
+    title = models.CharField(
+        max_length=255,
+        verbose_name=_('VN__TITLE'),
+        help_text=_('HT__TITLE')
+    )
 
-    time_estimate = models.PositiveIntegerField(null=True, verbose_name=_('VN__TIME_ESTIMATE'),
-                                                help_text=_('HT__TIME_ESTIMATE'))
+    time_estimate = models.PositiveIntegerField(
+        null=True,
+        verbose_name=_('VN__TIME_ESTIMATE'),
+        help_text=_('HT__TIME_ESTIMATE')
+    )
 
-    total_time_spent = models.PositiveIntegerField(null=True, verbose_name=_('VN__TOTAL_TIME_SPENT'),
-                                                   help_text=_('HT__TOTAL_TIME_SPENT'))
+    total_time_spent = models.PositiveIntegerField(
+        null=True,
+        verbose_name=_('VN__TOTAL_TIME_SPENT'),
+        help_text=_('HT__TOTAL_TIME_SPENT')
+    )
 
-    user = models.ForeignKey(User, models.SET_NULL, null=True, blank=True, verbose_name=_('VN__USER'),
-                             help_text=_('HT__USER'))
-
-    state = models.CharField(max_length=255, null=True, blank=True, verbose_name=_('VN__STATE'),
-                             help_text=_('HT__STATE'))
+    state = models.CharField(
+        max_length=255,
+        null=True,
+        blank=True,
+        verbose_name=_('VN__STATE'),
+        help_text=_('HT__STATE')
+    )
 
     created_at = models.DateTimeField(null=True, blank=True)
     updated_at = models.DateTimeField(null=True, blank=True)
@@ -176,7 +191,35 @@ class Issue(NotableMixin,
 
     due_date = models.DateField(null=True, blank=True)
 
-    labels = models.ManyToManyField(Label, related_name='issues', blank=True)
+    labels = models.ManyToManyField(
+        Label,
+        related_name='issues',
+        blank=True
+    )
+
+    project = models.ForeignKey(
+        Project,
+        models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='issues',
+        verbose_name=_('VN__PROJECT'),
+        help_text=_('HT__PROJECT')
+    )
+
+    user = models.ForeignKey(
+        User,
+        models.SET_NULL,
+        null=True,
+        blank=True,
+        verbose_name=_('VN__USER'),
+        help_text=_('HT__USER')
+    )
+
+    # Link to Milestone
+    issue_milestone = GenericForeignKey()
+    content_type = models.ForeignKey(ContentType, models.CASCADE, null=True)
+    object_id = models.PositiveIntegerField(null=True)
 
     objects = IssueManager()
 
@@ -229,3 +272,42 @@ class Issue(NotableMixin,
                                      time_spent=time_spent,
                                      note=note,
                                      base=self)
+
+
+class Milestone(GitlabEntityMixin,
+                Timestamps):
+    title = models.CharField(
+        max_length=255,
+        verbose_name=_('VN__TITLE'),
+        help_text=_('HT__TITLE')
+    )
+    description = models.TextField(
+        verbose_name=_('VN__DESCRIPTION'),
+        help_text=_('HT__DESCRIPTION')
+    )
+    start_date = models.DateField(
+        null=True,
+        blank=True,
+        verbose_name=_('VN__START_DATE'),
+        help_text=_('HT__START_DATE')
+    )
+    due_date = models.DateField(
+        null=True,
+        blank=True,
+        verbose_name=_('VN__DUE_DATE'),
+        help_text=_('HT__DUE_DATE')
+    )
+    budget = models.DecimalField(
+        default=0,
+        max_digits=12,
+        decimal_places=2,
+        verbose_name=_('VN__BUDGET'),
+        help_text=_('HT__BUDGET')
+    )
+
+    issues = GenericRelation(Issue, related_query_name='milestone')
+
+    # Link to ProjectGroup or Project
+    owner = GenericForeignKey()
+    content_type = models.ForeignKey(ContentType, models.CASCADE)
+    object_id = models.PositiveIntegerField()

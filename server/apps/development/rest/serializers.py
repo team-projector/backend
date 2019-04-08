@@ -6,11 +6,12 @@ from rest_framework import serializers
 
 from apps.core.rest.serializers import LinkSerializer
 from apps.core.utils.objects import dict2obj
+from apps.development.rest.milestone_metrics import MilestoneMetricsCalculator
 from apps.development.utils.problems.issues import checkers
 from apps.payroll.models import SpentTime
 from apps.users.models import User
 from apps.users.rest.serializers import UserCardSerializer
-from ..models import Issue, Label, Team, TeamMember
+from ..models import Issue, Label, Team, TeamMember, Milestone
 
 
 class LabelSerializer(serializers.ModelSerializer):
@@ -31,12 +32,13 @@ class IssueCardSerializer(serializers.ModelSerializer):
     project = LinkSerializer()
     time_spent = serializers.SerializerMethodField()
     metrics = serializers.SerializerMethodField()
+    milestone = LinkSerializer(source='issue_milestone')
 
     class Meta:
         model = Issue
         fields = (
             'id', 'title', 'labels', 'project', 'due_date', 'state', 'time_estimate', 'total_time_spent', 'time_spent',
-            'gl_url', 'metrics'
+            'gl_url', 'metrics', 'milestone'
         )
 
     def get_metrics(self, instance: Issue):
@@ -54,7 +56,7 @@ class IssueCardSerializer(serializers.ModelSerializer):
 
         return IssueMetricsSerializer(dict2obj(metrics)).data
 
-    def get_time_spent(self, instance):
+    def get_time_spent(self, instance: Issue):
         return instance.time_spents.filter(user=self.context['request'].user) \
             .aggregate(total_spent=Sum('time_spent'))['total_spent']
 
@@ -96,3 +98,25 @@ class IssueProblemSerializer(serializers.Serializer):
 class TeamMemberFilterSerializer(serializers.Serializer):
     user = serializers.PrimaryKeyRelatedField(queryset=User.objects.all(), required=False, allow_null=True)
     roles = BitField(required=False, allow_null=True, model=TeamMember)
+
+
+class MilestoneMetricsSerializer(serializers.Serializer):
+    time_estimate = serializers.IntegerField()
+    time_spent = serializers.IntegerField()
+    time_remains = serializers.IntegerField()
+    issues_count = serializers.IntegerField()
+    efficiency = serializers.FloatField()
+    salary = serializers.FloatField()
+
+
+class MilestoneCardSerializer(serializers.ModelSerializer):
+    metrics = serializers.SerializerMethodField()
+
+    @staticmethod
+    def get_metrics(instance):
+        metrics = MilestoneMetricsCalculator(instance).calculate()
+        return MilestoneMetricsSerializer(metrics).data
+
+    class Meta:
+        model = Milestone
+        fields = ('id', 'title', 'start_date', 'due_date', 'metrics')
