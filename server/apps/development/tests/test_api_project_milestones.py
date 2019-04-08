@@ -1,12 +1,16 @@
 from rest_framework import status
 
 from apps.core.tests.base import BaseAPITest
-from apps.development.tests.factories import ProjectFactory, ProjectMilestoneFactory
+from apps.development.models import TeamMember
+from apps.development.tests.factories import ProjectFactory, ProjectMilestoneFactory, TeamFactory, TeamMemberFactory
 
 
 class ApiMilestonesTests(BaseAPITest):
     def setUp(self):
         super().setUp()
+
+        team = TeamFactory.create()
+        TeamMemberFactory.create(team=team, user=self.user, roles=TeamMember.roles.project_manager)
 
         self.project = ProjectFactory.create()
 

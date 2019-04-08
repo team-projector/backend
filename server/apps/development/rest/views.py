@@ -6,10 +6,11 @@ from django.shortcuts import get_object_or_404
 from django.utils.functional import cached_property
 from django.views.decorators.csrf import csrf_exempt
 from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework import filters, mixins, permissions
+from rest_framework import filters, mixins
 from rest_framework.decorators import action
 
 from apps.core.rest.views import BaseGenericViewSet
+from apps.development.rest import permissions
 from apps.development.rest.filters import TeamMemberFilterBackend
 from apps.development.utils.problems.issues import IssueProblemsChecker
 from .serializers import IssueCardSerializer, IssueProblemSerializer, TeamCardSerializer, TeamMemberCardSerializer, \
@@ -88,7 +89,7 @@ class TeamMembersViewset(mixins.ListModelMixin,
 class ProjectGroupMilestonesViewset(mixins.ListModelMixin,
                                     mixins.RetrieveModelMixin,
                                     BaseGenericViewSet):
-    permission_classes = (permissions.IsAuthenticated,)
+    permission_classes = (permissions.IsProjectManager,)
 
     serializer_classes = {
         'retrieve': MilestoneCardSerializer,
@@ -107,7 +108,7 @@ class ProjectGroupMilestonesViewset(mixins.ListModelMixin,
 
 class ProjectMilestonesViewset(mixins.ListModelMixin,
                                BaseGenericViewSet):
-    permission_classes = (permissions.IsAuthenticated,)
+    permission_classes = (permissions.IsProjectManager,)
 
     serializer_classes = {
         'list': MilestoneCardSerializer
@@ -124,7 +125,7 @@ class ProjectMilestonesViewset(mixins.ListModelMixin,
 
 
 class MilestoneIssuesViewset(mixins.ListModelMixin, BaseGenericViewSet):
-    permission_classes = (permissions.IsAuthenticated,)
+    permission_classes = (permissions.IsProjectManager,)
 
     serializer_classes = {
         'list': IssueCardSerializer

@@ -37,6 +37,7 @@ class TeamMember(models.Model):
     ROLES = Choices(
         ('leader', _('CH_LEADER')),
         ('developer', _('CH_DEVELOPER')),
+        ('project_manager', _('CH_PM')),
     )
 
     team = models.ForeignKey(Team, models.CASCADE, related_name='members', verbose_name=_('VN__TEAM'),
