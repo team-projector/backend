@@ -5,12 +5,14 @@ from apps.development.models import TeamMember
 
 
 class IsProjectManager(permissions.BasePermission):
-    message = 'You can\'t view user metrics'
+    message = 'You can\'t view milestone metrics'
 
     def has_permission(self, request, view):
-        project_manager = TeamMember.objects.filter(team_id=OuterRef('team_id'),
-                                                    roles=TeamMember.roles.project_manager,
-                                                    user=request.user)
+        project_manager = TeamMember.objects.filter(
+            team_id=OuterRef('team_id'),
+            roles=TeamMember.roles.project_manager,
+            user=request.user
+        )
 
         return request.user.team_members \
             .annotate(is_pm=Exists(project_manager)) \

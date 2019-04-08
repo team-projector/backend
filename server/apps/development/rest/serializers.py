@@ -105,8 +105,8 @@ class MilestoneMetricsSerializer(serializers.Serializer):
     time_spent = serializers.IntegerField()
     time_remains = serializers.IntegerField()
     issues_count = serializers.IntegerField()
-    efficiency = serializers.DecimalField(max_digits=12, decimal_places=2)
-    salary = serializers.DecimalField(max_digits=12, decimal_places=2)
+    efficiency = serializers.FloatField()
+    salary = serializers.FloatField()
 
 
 class MilestoneCardSerializer(serializers.ModelSerializer):
