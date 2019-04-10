@@ -5,7 +5,7 @@ from apps.development.admin.filters import TeamFilter
 from apps.users.admin.filters import UserFilter
 from .filters import ProjectFilter
 from .inlines import NoteInline, TeamMemberInline
-from ..models import Issue, Label, Note, Project, ProjectGroup, Team, TeamMember
+from ..models import Issue, Label, Note, Project, ProjectGroup, Team, TeamMember, Milestone
 
 
 @admin.register(Team)
@@ -58,3 +58,9 @@ class IssueAdmin(BaseModelAdmin):
 class NoteAdmin(BaseModelAdmin):
     list_display = ('type', 'created_at', 'user')
     search_fields = ('user__login',)
+
+
+@admin.register(Milestone)
+class MilestoneAdmin(BaseModelAdmin):
+    list_display = ('id', 'title', 'start_date', 'due_date', 'budget')
+    search_fields = ('title',)

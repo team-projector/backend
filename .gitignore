@@ -9,3 +9,4 @@ env
 run/
 *.mo
 dev.py
+venv
