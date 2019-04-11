@@ -85,7 +85,7 @@ msgstr "Developer"
 
 #: server/apps/development/models.py:40
 msgid "CH_PM"
-msgstr ""
+msgstr "Project manager"
 
 #: server/apps/development/models.py:44
 msgid "HT__TEAM"
@@ -234,38 +234,26 @@ msgid "HT__DESCRIPTION"
 msgstr "Description"
 
 #: server/apps/development/models.py:291
-#, fuzzy
-#| msgid "VN__STATE"
 msgid "VN__START_DATE"
 msgstr "Start Date"
 
 #: server/apps/development/models.py:292
-#, fuzzy
-#| msgid "HT__STATE"
 msgid "HT__START_DATE"
 msgstr "Start Date"
 
 #: server/apps/development/models.py:297
-#, fuzzy
-#| msgid "VN__HOUR_RATE"
 msgid "VN__DUE_DATE"
 msgstr "Due Date"
 
 #: server/apps/development/models.py:298
-#, fuzzy
-#| msgid "HT__HOUR_RATE"
 msgid "HT__DUE_DATE"
 msgstr "Due Date"
 
 #: server/apps/development/models.py:304
-#, fuzzy
-#| msgid "VN__BONUSES"
 msgid "VN__BUDGET"
 msgstr "Budget"
 
 #: server/apps/development/models.py:305
-#, fuzzy
-#| msgid "HT__USER"
 msgid "HT__BUDGET"
 msgstr "Budget"
 
