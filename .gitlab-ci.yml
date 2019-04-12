@@ -48,15 +48,14 @@ test:
     - pip install coverage
     - coverage run manage.py test -v 2 --debug-mode
     - coverage report -m > coverage.log
-    - coverage html -d coverage_html
     - cat coverage.log | tail -n 1
+    - coverage html -d ${CI_PROJECT_DIR}/coverage_html
     - mv coverage.* $CI_PROJECT_DIR
   coverage: '/TOTAL.+ ([0-9]{1,3}%)/'
   artifacts:
     paths:
       - coverage_html
       - coverage.log
-      - coverage.dat
 
 publish-dev:
   stage: publish
