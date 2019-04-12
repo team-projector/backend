@@ -48,6 +48,7 @@ test:
     - pip install coverage
     - coverage run manage.py test -v 2 --debug-mode
     - coverage report -m > coverage.log
+    - coverage html -d coverage_html
     - cat coverage.log | tail -n 1
     - mv coverage.* $CI_PROJECT_DIR
   coverage: '/TOTAL.+ ([0-9]{1,3}%)/'

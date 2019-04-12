@@ -39,6 +39,7 @@ pytest-django = "*"
 ipython = "*"
 mypy = "*"
 xenon = "0.5.4"
+coverage = "^4.5"
 
 [build-system]
 requires = ["poetry>=0.12"]
