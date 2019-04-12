@@ -57,19 +57,6 @@ test:
       - coverage
       - coverage.log
 
-pages:
-  stage: publish
-  dependencies:
-    - test
-  script:
-    - mv coverage/ public/
-  artifacts:
-    paths:
-      - public
-    expire_in: 30 days
-  only:
-    - master
-
 publish-dev:
   stage: publish
   dependencies: []
