@@ -2,10 +2,10 @@ from datetime import timedelta
 
 from rest_framework import status
 
-from apps.core.tests.base import BaseAPITest
 from apps.development.models import STATE_OPENED
-from apps.development.tests.factories import IssueFactory
-from apps.payroll.tests.factories import IssueSpentTimeFactory, SalaryFactory
+from tests.base import BaseAPITest
+from tests.test_development.factories import IssueFactory
+from tests.test_payroll.factories import IssueSpentTimeFactory, SalaryFactory
 
 
 class ApiIssuesMetricsTests(BaseAPITest):

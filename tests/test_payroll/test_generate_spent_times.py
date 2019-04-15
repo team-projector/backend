@@ -5,7 +5,7 @@ from django.test import TestCase
 from django.utils import timezone
 
 from apps.development.models import Note
-from apps.development.tests.factories import IssueFactory, IssueNoteFactory
+from tests.test_development.factories import IssueFactory, IssueNoteFactory
 from apps.development.utils.parsers import parse_date
 from apps.payroll.models import SpentTime
 from apps.users.models import User

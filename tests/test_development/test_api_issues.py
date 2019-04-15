@@ -1,7 +1,7 @@
 from rest_framework import status
 
-from apps.core.tests.base import BaseAPITest
-from apps.development.tests.factories import IssueFactory
+from tests.base import BaseAPITest
+from tests.test_development.factories import IssueFactory
 
 
 class ApiIssuesTests(BaseAPITest):

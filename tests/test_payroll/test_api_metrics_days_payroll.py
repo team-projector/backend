@@ -5,16 +5,15 @@ from django.test import override_settings
 from django.utils import timezone
 from rest_framework import status
 
-from apps.core.tests.base import BaseAPITest
+from tests.base import BaseAPITest
 from apps.core.utils.date import begin_of_week
 from apps.development.models import STATE_CLOSED, STATE_OPENED
-from apps.development.tests.factories import IssueFactory
-from apps.development.utils.parsers import parse_date
-from apps.payroll.tests.factories import IssueSpentTimeFactory, SalaryFactory
+from tests.test_development.factories import IssueFactory
+from tests.test_payroll.factories import IssueSpentTimeFactory, SalaryFactory
 
 
 @override_settings(TP_WEEKENDS_DAYS=[])
-class ApiMetricsWeeksPayrollTests(BaseAPITest):
+class ApiMetricsDaysPayrollTests(BaseAPITest):
     def setUp(self):
         super().setUp()
 
@@ -42,7 +41,7 @@ class ApiMetricsWeeksPayrollTests(BaseAPITest):
         response = self.client.get(f'/api/users/{self.user.id}/progress-metrics', {
             'start': self.format_date(start),
             'end': self.format_date(end),
-            'group': 'week'
+            'group': 'day'
         })
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -50,7 +49,9 @@ class ApiMetricsWeeksPayrollTests(BaseAPITest):
 
         self._check_metrics(response.data,
                             {
-                                monday: 6 * self.user.hour_rate
+                                monday: 3 * self.user.hour_rate,
+                                monday + timedelta(days=1): self.user.hour_rate,
+                                monday + timedelta(days=2): 2 * self.user.hour_rate
                             }, {
                                 monday: 0
                             })
@@ -76,7 +77,7 @@ class ApiMetricsWeeksPayrollTests(BaseAPITest):
         response = self.client.get(f'/api/users/{self.user.id}/progress-metrics', {
             'start': self.format_date(start),
             'end': self.format_date(end),
-            'group': 'week'
+            'group': 'day'
         })
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -86,7 +87,9 @@ class ApiMetricsWeeksPayrollTests(BaseAPITest):
                             {
                                 monday: 0
                             }, {
-                                monday: 6 * self.user.hour_rate
+                                monday: 3 * self.user.hour_rate,
+                                monday + timedelta(days=1): self.user.hour_rate,
+                                monday + timedelta(days=2): 2 * self.user.hour_rate
                             })
 
     def test_closed(self):
@@ -108,7 +111,7 @@ class ApiMetricsWeeksPayrollTests(BaseAPITest):
         response = self.client.get(f'/api/users/{self.user.id}/progress-metrics', {
             'start': self.format_date(start),
             'end': self.format_date(end),
-            'group': 'week'
+            'group': 'day'
         })
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -116,7 +119,9 @@ class ApiMetricsWeeksPayrollTests(BaseAPITest):
 
         self._check_metrics(response.data,
                             {
-                                monday: 6 * self.user.hour_rate
+                                monday: 3 * self.user.hour_rate,
+                                monday + timedelta(days=1): self.user.hour_rate,
+                                monday + timedelta(days=2): 2 * self.user.hour_rate
                             }, {
                                 monday: 0
                             })
@@ -147,7 +152,7 @@ class ApiMetricsWeeksPayrollTests(BaseAPITest):
         response = self.client.get(f'/api/users/{self.user.id}/progress-metrics', {
             'start': self.format_date(start),
             'end': self.format_date(end),
-            'group': 'week'
+            'group': 'day'
         })
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -155,9 +160,11 @@ class ApiMetricsWeeksPayrollTests(BaseAPITest):
 
         self._check_metrics(response.data,
                             {
-                                monday: 12 * self.user.hour_rate
+                                monday: 6 * self.user.hour_rate,
+                                monday + timedelta(days=1): 4 * self.user.hour_rate,
+                                monday + timedelta(days=2): 2 * self.user.hour_rate,
                             }, {
-                                monday: 3 * self.user.hour_rate
+                                monday + timedelta(days=1): 3 * self.user.hour_rate,
                             })
 
     def _create_spent_time(self, date, spent: timedelta = None, user=None, issue=None, salary=None):
@@ -175,7 +182,7 @@ class ApiMetricsWeeksPayrollTests(BaseAPITest):
         paid = self._prepare_metrics(paid)
 
         for metric in metrics:
-            self.assertEqual(metric['end'], self.format_date(parse_date(metric['start']) + timedelta(weeks=1)))
+            self.assertEqual(metric['start'], metric['end'])
 
             self._check_metric(metric, 'payroll', payroll)
             self._check_metric(metric, 'paid', paid)

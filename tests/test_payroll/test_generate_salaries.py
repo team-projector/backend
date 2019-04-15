@@ -5,13 +5,13 @@ from django.test import TestCase
 from django.utils import timezone
 
 from apps.development.models import STATE_CLOSED, STATE_OPENED
-from apps.development.tests.factories import IssueFactory
+from tests.test_development.factories import IssueFactory
 from apps.payroll.exceptions import EmptySalaryException
 from apps.payroll.models import Payroll, Salary
-from apps.payroll.tests.factories import BonusFactory, IssueSpentTimeFactory, PenaltyFactory, SalaryFactory
+from tests.test_payroll.factories import BonusFactory, IssueSpentTimeFactory, PenaltyFactory, SalaryFactory
 from apps.payroll.utils.salary.calculator import SalaryCalculator
 from apps.users.models import User
-from apps.users.tests.factories import UserFactory
+from tests.test_users.factories import UserFactory
 
 
 class GenerateSalariesTests(TestCase):

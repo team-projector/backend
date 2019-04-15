@@ -4,9 +4,9 @@ from django.conf import settings
 from django.utils import timezone
 from rest_framework import status
 
-from apps.core.tests.base import BaseAPITest
 from apps.users.models import Token
 from apps.users.utils.token import create_user_token
+from tests.base import BaseAPITest
 
 
 class LogoutTests(BaseAPITest):

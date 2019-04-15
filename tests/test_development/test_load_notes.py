@@ -5,7 +5,7 @@ from django.utils import timezone
 
 from apps.core.utils.objects import dict2obj
 from apps.development.models import Note
-from apps.development.tests.factories import IssueFactory
+from tests.test_development.factories import IssueFactory
 from apps.development.utils.notes import SPEND_RESET_MESSAGE
 from apps.development.utils.parsers import GITLAB_DATETIME_FORMAT, GITLAB_DATE_FORMAT
 from apps.users.models import User
