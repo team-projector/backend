@@ -3,10 +3,10 @@ from datetime import timedelta
 from django.test import TestCase
 
 from apps.development.models import STATE_CLOSED, STATE_OPENED
-from apps.development.tests.factories import IssueFactory
-from apps.payroll.tests.factories import BonusFactory, IssueSpentTimeFactory, PenaltyFactory, SalaryFactory
+from tests.test_development.factories import IssueFactory
+from tests.test_payroll.factories import BonusFactory, IssueSpentTimeFactory, PenaltyFactory, SalaryFactory
 from apps.payroll.utils.metrics.user import User, UserMetrics, UserMetricsCalculator
-from apps.users.tests.factories import UserFactory
+from tests.test_users.factories import UserFactory
 
 
 class UserMetricsTests(TestCase):

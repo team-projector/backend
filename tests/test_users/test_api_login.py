@@ -1,7 +1,7 @@
 from rest_framework import status
 
-from apps.core.tests.base import BaseAPITest, USER_PASSWORD
 from apps.users.models import Token
+from tests.base import BaseAPITest, USER_PASSWORD
 
 
 class LoginTests(BaseAPITest):
