@@ -344,6 +344,11 @@ class Milestone(GitlabEntityMixin,
     content_type = models.ForeignKey(ContentType, models.CASCADE)
     object_id = models.PositiveIntegerField()
 
+    class Meta:
+        verbose_name = _('VN__MILESTONE')
+        verbose_name_plural = _('VN__MILESTONES')
+        ordering = ('-created_at',)
+
 
 class Epic(Timestamps):
     title = models.CharField(
@@ -379,3 +384,8 @@ class Epic(Timestamps):
         Milestone,
         models.CASCADE,
     )
+
+    class Meta:
+        verbose_name = _('VN__EPIC')
+        verbose_name_plural = _('VN__EPICS')
+        ordering = ('-created_at',)
