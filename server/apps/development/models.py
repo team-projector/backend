@@ -357,6 +357,8 @@ class Epic(Timestamps):
         help_text=_('HT__TITLE')
     )
     description = models.TextField(
+        null=True,
+        blank=True,
         verbose_name=_('VN__DESCRIPTION'),
         help_text=_('HT__DESCRIPTION')
     )

@@ -122,9 +122,25 @@ class MilestoneCardSerializer(serializers.ModelSerializer):
         fields = ('id', 'title', 'start_date', 'due_date', 'metrics')
 
 
+class EpicSerializer(serializers.ModelSerializer):
+    milestone = LinkSerializer()
+
+    class Meta:
+        model = Epic
+        fields = ('id', 'title', 'start_date', 'due_date', 'milestone')
+
+
 class EpicCardSerializer(serializers.ModelSerializer):
     milestone = LinkSerializer()
 
     class Meta:
         model = Epic
         fields = ('id', 'title', 'start_date', 'due_date', 'milestone')
+
+
+class EpicUpdateSerializer(serializers.ModelSerializer):
+    milestone = serializers.PrimaryKeyRelatedField(queryset=Milestone.objects)
+
+    class Meta:
+        model = Epic
+        fields = ('title', 'description', 'start_date', 'due_date', 'milestone')
