@@ -169,8 +169,7 @@ def load_project_issue(project: Project, gl_project: GlProject, gl_issue: GlProj
         milestone = Milestone.objects.filter(gl_id=gl_issue.milestone['id']).first()
 
         if milestone:
-            params['content_type'] = ContentType.objects.get_for_model(Milestone)
-            params['object_id'] = milestone.id
+            params['milestone'] = milestone
 
     issue, _ = Issue.objects.sync_gitlab(**params)
 
