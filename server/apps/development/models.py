@@ -56,6 +56,28 @@ class TeamMember(models.Model):
         return f'{self.team}: {self.user}'
 
 
+class ProjectMember(Timestamps):
+    ROLE = Choices(
+        ('developer', _('CH_DEVELOPER')),
+        ('team_leader', _('CH_TEAM_LEADER')),
+        ('project_manager', _('CH_PM')),
+        ('customer', _('CH_CUSTOMER')),
+    )
+
+    user = models.ForeignKey(User, models.CASCADE)
+    role = models.CharField(choices=ROLE, max_length=20, verbose_name=_('VN__ROLE'), help_text=_('HT__ROLE'))
+
+    # Link to ProjectGroup or Project
+    owner = GenericForeignKey()
+    content_type = models.ForeignKey(ContentType, models.CASCADE, null=True)
+    object_id = models.PositiveIntegerField(null=True)
+
+    class Meta:
+        verbose_name = _('VN__PROJECT_MEMBER')
+        verbose_name_plural = _('VN__PROJECT_MEMBERS')
+        unique_together = ('user', 'role', 'object_id')
+
+
 class ProjectGroup(GitlabEntityMixin):
     title = models.CharField(max_length=255, verbose_name=_('VN__TITLE'), help_text=_('HT__TITLE'))
     full_title = models.CharField(max_length=255, null=True, blank=True, verbose_name=_('VN__FULL_TITLE'),
@@ -64,6 +86,7 @@ class ProjectGroup(GitlabEntityMixin):
                                help_text=_('HT__PARENT'))
 
     milestones = GenericRelation('Milestone', related_query_name='project_group')
+    members = GenericRelation(ProjectMember, related_query_name='project_group')
 
     objects = ProjectGroupManager()
 
@@ -87,6 +110,7 @@ class Project(GitlabEntityMixin):
                                                help_text=_('HT__GITLAB_LAST_ISSUES_SYNC'))
 
     milestones = GenericRelation('Milestone', related_query_name='project')
+    members = GenericRelation(ProjectMember, related_query_name='project')
 
     objects = ProjectManager()
 

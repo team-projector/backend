@@ -1,5 +1,5 @@
 from apps.core.admin.base import BaseGenericStackedInline, BaseTabularInline
-from ..models import Note, TeamMember
+from ..models import Note, TeamMember, ProjectMember
 
 
 class NoteInline(BaseGenericStackedInline):
