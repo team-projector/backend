@@ -2,7 +2,7 @@ from django.urls import path
 
 from apps.core.rest.routers import AppRouter
 from .views import IssuesViewset, gl_webhook, TeamsViewset, TeamMembersViewset, ProjectGroupMilestonesViewset, \
-    ProjectMilestonesViewset, MilestoneIssuesViewset
+    ProjectMilestonesViewset, MilestoneIssuesViewset, MilestoneEpicsViewset
 
 app_name = 'development'
 
@@ -14,6 +14,8 @@ router.register(r'^projects/(?P<project_pk>\d+)/milestones$', ProjectMilestonesV
                 basename='project-milestones')
 router.register(r'^milestones/(?P<milestone_pk>\d+)/issues$', MilestoneIssuesViewset,
                 basename='milestone-issues')
+router.register(r'^milestones/(?P<milestone_pk>\d+)/epics', MilestoneEpicsViewset,
+                basename='epics-issues')
 router.register(r'^teams/(?P<team_pk>\d+)/members$', TeamMembersViewset, basename='team-members')
 router.register('teams', TeamsViewset, basename='teams')
 

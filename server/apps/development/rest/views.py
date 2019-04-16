@@ -14,8 +14,8 @@ from apps.development.rest import permissions
 from apps.development.rest.filters import TeamMemberFilterBackend
 from apps.development.utils.problems.issues import IssueProblemsChecker
 from .serializers import IssueCardSerializer, IssueProblemSerializer, TeamCardSerializer, TeamMemberCardSerializer, \
-    MilestoneCardSerializer
-from ..models import Issue, Team, TeamMember, Milestone, ProjectGroup, Project
+    MilestoneCardSerializer, EpicCardSerializer
+from ..models import Issue, Team, TeamMember, Milestone, ProjectGroup, Project, Epic
 from ..tasks import sync_project_issue
 
 logger = logging.getLogger(__name__)
@@ -132,6 +132,23 @@ class MilestoneIssuesViewset(mixins.ListModelMixin, BaseGenericViewSet):
     }
 
     queryset = Issue.objects.all()
+
+    @cached_property
+    def milestone(self):
+        return get_object_or_404(Milestone.objects, pk=self.kwargs['milestone_pk'])
+
+    def filter_queryset(self, queryset):
+        return super().filter_queryset(queryset.filter(milestone=self.milestone))
+
+
+class MilestoneEpicsViewset(mixins.ListModelMixin, BaseGenericViewSet):
+    permission_classes = (permissions.IsProjectManager,)
+
+    serializer_classes = {
+        'list': EpicCardSerializer
+    }
+
+    queryset = Epic.objects.all()
 
     @cached_property
     def milestone(self):
