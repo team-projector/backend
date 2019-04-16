@@ -1,7 +1,7 @@
 from rest_framework import status
 
-from apps.core.tests.base import BaseAPITest
 from apps.users.models import User
+from tests.base import BaseAPITest
 
 
 class MeUserTests(BaseAPITest):

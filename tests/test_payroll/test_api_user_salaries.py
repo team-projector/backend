@@ -1,9 +1,9 @@
 from rest_framework import status
 
-from apps.core.tests.base import BaseAPITest
+from tests.base import BaseAPITest
 from apps.development.models import TeamMember
-from apps.development.tests.factories import TeamFactory, TeamMemberFactory
-from apps.payroll.tests.factories import SalaryFactory
+from tests.test_development.factories import TeamFactory, TeamMemberFactory
+from tests.test_payroll.factories import SalaryFactory
 from apps.payroll.utils.metrics.user import User
 
 

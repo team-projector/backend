@@ -6,11 +6,11 @@ from django.test import override_settings
 from django.utils import timezone
 from rest_framework import status
 
-from apps.core.tests.base import BaseAPITest
 from apps.development.models import STATE_OPENED, TeamMember
-from apps.development.tests.factories import IssueFactory, TeamFactory, TeamMemberFactory
-from apps.payroll.tests.factories import IssueSpentTimeFactory
-from apps.users.tests.factories import UserFactory
+from tests.base import BaseAPITest
+from tests.test_development.factories import IssueFactory, TeamFactory, TeamMemberFactory
+from tests.test_payroll.factories import IssueSpentTimeFactory
+from tests.test_users.factories import UserFactory
 
 
 @override_settings(TP_WEEKENDS_DAYS=[])

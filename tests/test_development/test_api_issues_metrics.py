@@ -3,10 +3,10 @@ from datetime import timedelta
 from django.utils import timezone
 from rest_framework import status
 
-from apps.core.tests.base import BaseAPITest
 from apps.development.models import Note, STATE_CLOSED, STATE_OPENED
-from apps.development.tests.factories import IssueFactory, IssueNoteFactory
 from apps.users.models import User
+from tests.base import BaseAPITest
+from tests.test_development.factories import IssueFactory, IssueNoteFactory
 
 
 class ApiIssuesMetricsTests(BaseAPITest):

@@ -1,9 +1,9 @@
 import factory
 import pytz
 
-from apps.development.tests.factories import IssueFactory
+from tests.test_development.factories import IssueFactory
 from apps.payroll.models import SpentTime, Penalty, Bonus, Salary
-from apps.users.tests.factories import UserFactory
+from tests.test_users.factories import UserFactory
 
 
 class IssueSpentTimeFactory(factory.django.DjangoModelFactory):

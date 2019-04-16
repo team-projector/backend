@@ -1,8 +1,8 @@
 from rest_framework import status
 
-from apps.core.tests.base import BaseAPITest
+from tests.base import BaseAPITest
 from apps.development.models import TeamMember
-from apps.development.tests.factories import ProjectGroupFactory, ProjectGroupMilestoneFactory, TeamMemberFactory, \
+from tests.test_development.factories import ProjectGroupFactory, ProjectGroupMilestoneFactory, TeamMemberFactory, \
     TeamFactory
 
 

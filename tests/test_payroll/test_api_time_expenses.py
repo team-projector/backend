@@ -3,11 +3,11 @@ from datetime import timedelta
 from django.utils import timezone
 from rest_framework import status
 
-from apps.core.tests.base import BaseAPITest
+from tests.base import BaseAPITest
 from apps.development.models import TeamMember
-from apps.development.tests.factories import IssueFactory, TeamMemberFactory, TeamFactory
-from apps.payroll.tests.factories import IssueSpentTimeFactory
-from apps.users.tests.factories import UserFactory
+from tests.test_development.factories import IssueFactory, TeamMemberFactory, TeamFactory
+from tests.test_payroll.factories import IssueSpentTimeFactory
+from tests.test_users.factories import UserFactory
 
 
 class ApiTimeExpensesTests(BaseAPITest):
