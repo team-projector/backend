@@ -66,7 +66,7 @@ class IssueFactory(GitlabFieldMixin):
     created_at = factory.Faker('date_time_this_year', before_now=True, after_now=False, tzinfo=pytz.UTC)
     state = STATE_OPENED
 
-    issue_milestone = factory.SubFactory(ProjectGroupMilestoneFactory)
+    milestone = factory.SubFactory(ProjectGroupMilestoneFactory)
 
     class Meta:
         model = Issue

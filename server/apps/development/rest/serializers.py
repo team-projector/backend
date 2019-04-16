@@ -32,7 +32,7 @@ class IssueCardSerializer(serializers.ModelSerializer):
     project = LinkSerializer()
     time_spent = serializers.SerializerMethodField()
     metrics = serializers.SerializerMethodField()
-    milestone = LinkSerializer(source='issue_milestone')
+    milestone = LinkSerializer()
 
     class Meta:
         model = Issue

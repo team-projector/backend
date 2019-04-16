@@ -22,7 +22,7 @@ class ApiMilestoneIssuesTests(BaseAPITest):
         self.assertEqual(response.data['count'], 0)
 
     def test_list(self):
-        issue = IssueFactory.create(issue_milestone=self.milestone)
+        issue = IssueFactory.create(milestone=self.milestone)
         IssueFactory.create_batch(5)
 
         self.set_credentials()
