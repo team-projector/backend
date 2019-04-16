@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-04-16 12:06+0300\n"
+"POT-Creation-Date: 2019-04-16 12:59+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -121,28 +121,20 @@ msgid "CH_CUSTOMER"
 msgstr "Customer"
 
 #: server/apps/development/models.py:68
-#, fuzzy
-#| msgid "VN__RATE"
 msgid "VN__ROLE"
 msgstr "Rate"
 
 #: server/apps/development/models.py:68
-#, fuzzy
-#| msgid "HT__RATE"
 msgid "HT__ROLE"
 msgstr "Rate"
 
 #: server/apps/development/models.py:76
-#, fuzzy
-#| msgid "VN__PROJECT"
 msgid "VN__PROJECT_MEMBER"
-msgstr "Project"
+msgstr "Project Members"
 
 #: server/apps/development/models.py:77
-#, fuzzy
-#| msgid "VN__PROJECTS"
 msgid "VN__PROJECT_MEMBERS"
-msgstr "Projects"
+msgstr "Project Members"
 
 #: server/apps/development/models.py:83 server/apps/development/models.py:104
 msgid "VN__FULL_TITLE"
