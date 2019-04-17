@@ -17,7 +17,7 @@ from apps.core.db.utils import Choices
 from apps.development.utils.parsers import parse_date
 from apps.payroll.db.mixins import SpentTimesMixin
 from apps.users.models import User
-from .db.managers import IssueManager, NoteManager, ProjectGroupManager, ProjectManager
+from .db.managers import IssueManager, NoteManager, ProjectGroupManager, ProjectManager, MilestoneManager
 from .db.mixins import NotableMixin
 
 
@@ -343,6 +343,8 @@ class Milestone(GitlabEntityMixin,
     owner = GenericForeignKey()
     content_type = models.ForeignKey(ContentType, models.CASCADE)
     object_id = models.PositiveIntegerField()
+
+    objects = MilestoneManager()
 
     class Meta:
         verbose_name = _('VN__MILESTONE')
