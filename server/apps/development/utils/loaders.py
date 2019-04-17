@@ -152,6 +152,7 @@ def load_project_issue(project: Project, gl_project: GlProject, gl_issue: GlProj
 
     params = {
         'gl_id': gl_issue.id,
+        'gl_iid': gl_issue.iid,
         'gl_url': gl_issue.web_url,
         'project': project,
         'title': gl_issue.title,
@@ -257,6 +258,7 @@ def load_group_milestones(project_group_id, gl_group_id: int) -> None:
     for gl_milestone in group.milestones.list():
         Milestone.objects.update_or_create(
             gl_id=gl_milestone.id,
+            gl_iid=gl_milestone.iid,
             gl_url=gl_milestone.web_url,
             title=gl_milestone.title,
             description=gl_milestone.description,
@@ -276,6 +278,7 @@ def load_gl_project_milestones(project_id, gl_project_id: int) -> None:
     for gl_milestone in gl_project.milestones.list():
         Milestone.objects.update_or_create(
             gl_id=gl_milestone.id,
+            gl_iid=gl_milestone.iid,
             gl_url=gl_milestone.web_url,
             title=gl_milestone.title,
             description=gl_milestone.description,
