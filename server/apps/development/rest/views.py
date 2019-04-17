@@ -9,13 +9,14 @@ from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import filters, mixins
 from rest_framework.decorators import action
 
+from apps.core.rest.mixins.views import CreateModelMixin, UpdateModelMixin
 from apps.core.rest.views import BaseGenericViewSet
 from apps.development.rest import permissions
 from apps.development.rest.filters import TeamMemberFilterBackend
 from apps.development.utils.problems.issues import IssueProblemsChecker
 from .serializers import IssueCardSerializer, IssueProblemSerializer, TeamCardSerializer, TeamMemberCardSerializer, \
-    MilestoneCardSerializer
-from ..models import Issue, Team, TeamMember, Milestone, ProjectGroup, Project
+    MilestoneCardSerializer, EpicCardSerializer, EpicUpdateSerializer, EpicSerializer
+from ..models import Issue, Team, TeamMember, Milestone, ProjectGroup, Project, Epic
 from ..tasks import sync_project_issue
 
 logger = logging.getLogger(__name__)
@@ -139,3 +140,38 @@ class MilestoneIssuesViewset(mixins.ListModelMixin, BaseGenericViewSet):
 
     def filter_queryset(self, queryset):
         return super().filter_queryset(queryset.filter(milestone=self.milestone))
+
+
+class MilestoneEpicsViewset(mixins.ListModelMixin, BaseGenericViewSet):
+    permission_classes = (permissions.IsProjectManager,)
+
+    serializer_classes = {
+        'list': EpicCardSerializer
+    }
+
+    queryset = Epic.objects.all()
+
+    @cached_property
+    def milestone(self):
+        return get_object_or_404(Milestone.objects, pk=self.kwargs['milestone_pk'])
+
+    def filter_queryset(self, queryset):
+        return super().filter_queryset(queryset.filter(milestone=self.milestone))
+
+
+class EpicsViewset(CreateModelMixin,
+                   UpdateModelMixin,
+                   BaseGenericViewSet):
+    permission_classes = (permissions.IsProjectManager,)
+
+    serializer_classes = {
+        'create': EpicSerializer,
+        'update': EpicSerializer,
+        'partial_update': EpicSerializer,
+    }
+    update_serializer_class = EpicUpdateSerializer
+
+    queryset = Epic.objects.all()
+
+    def filter_queryset(self, queryset):
+        return super().filter_queryset(queryset)

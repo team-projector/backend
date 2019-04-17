@@ -20,9 +20,21 @@ class BaseGenericViewSet(viewsets.GenericViewSet):
     serializer_classes: Dict[str, serializers.Serializer] = {}
 
     def get_serializer_class(self):
-        return (self.serializer_classes[self.action]
-                if self.action in self.serializer_classes
-                else super().get_serializer_class())
+        return self.serializer_classes[self.action] \
+            if self.action in self.serializer_classes \
+            else super().get_serializer_class()
+
+    def get_update_serializer(self, request, instance=None, *args, **kwargs):
+        assert self.update_serializer_class is not None, \
+            f'"{self.__class__.__name__}" should include a `update_serializer_class` attribute'
+
+        params = {
+            'context': self.get_serializer_context(),
+            'data': request.data,
+            'partial': kwargs.pop('partial', False)
+        }
+
+        return self.update_serializer_class(instance, *args, **params)
 
 
 class LinksViewMixin:

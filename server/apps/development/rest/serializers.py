@@ -11,7 +11,7 @@ from apps.development.utils.problems.issues import checkers
 from apps.payroll.models import SpentTime
 from apps.users.models import User
 from apps.users.rest.serializers import UserCardSerializer
-from ..models import Issue, Label, Team, TeamMember, Milestone
+from ..models import Issue, Label, Team, TeamMember, Milestone, Epic
 
 
 class LabelSerializer(serializers.ModelSerializer):
@@ -32,7 +32,7 @@ class IssueCardSerializer(serializers.ModelSerializer):
     project = LinkSerializer()
     time_spent = serializers.SerializerMethodField()
     metrics = serializers.SerializerMethodField()
-    milestone = LinkSerializer(source='issue_milestone')
+    milestone = LinkSerializer()
 
     class Meta:
         model = Issue
@@ -120,3 +120,27 @@ class MilestoneCardSerializer(serializers.ModelSerializer):
     class Meta:
         model = Milestone
         fields = ('id', 'title', 'start_date', 'due_date', 'metrics')
+
+
+class EpicSerializer(serializers.ModelSerializer):
+    milestone = LinkSerializer()
+
+    class Meta:
+        model = Epic
+        fields = ('id', 'title', 'start_date', 'due_date', 'milestone')
+
+
+class EpicCardSerializer(serializers.ModelSerializer):
+    milestone = LinkSerializer()
+
+    class Meta:
+        model = Epic
+        fields = ('id', 'title', 'start_date', 'due_date', 'milestone')
+
+
+class EpicUpdateSerializer(serializers.ModelSerializer):
+    milestone = serializers.PrimaryKeyRelatedField(queryset=Milestone.objects)
+
+    class Meta:
+        model = Epic
+        fields = ('title', 'description', 'start_date', 'due_date', 'milestone')
