@@ -351,6 +351,9 @@ class Milestone(GitlabEntityMixin,
         verbose_name_plural = _('VN__MILESTONES')
         ordering = ('-created_at',)
 
+    def __str__(self):
+        return f'{self.title} ({self.owner})'
+
 
 class Epic(Timestamps):
     title = models.CharField(
