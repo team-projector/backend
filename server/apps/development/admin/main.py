@@ -50,7 +50,7 @@ class IssueAdmin(BaseModelAdmin):
     search_fields = ('title', 'gl_id')
     sortable_by = ('gl_last_sync', 'created_at')
     ordering = ('-gl_last_sync',)
-    autocomplete_fields = ('project', 'user')
+    autocomplete_fields = ('project', 'user', 'milestone')
     inlines = (NoteInline,)
 
 
