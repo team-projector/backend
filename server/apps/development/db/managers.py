@@ -25,6 +25,13 @@ class IssueManager(models.Manager):
         return self.update_or_create(gl_id=gl_id, defaults=kwargs)
 
 
+class MilestoneManager(models.Manager):
+    def sync_gitlab(self, gl_id, **kwargs) -> Tuple[Any, bool]:
+        kwargs['gl_last_sync'] = timezone.now()
+
+        return self.update_or_create(gl_id=gl_id, defaults=kwargs)
+
+
 class NoteManager(models.Manager):
     def sync_gitlab(self, gl_note, issue) -> Any:
         from ..utils.loaders import extract_user_from_data
