@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-04-16 16:54+0300\n"
+"POT-Creation-Date: 2019-04-17 14:37+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -27,19 +27,29 @@ msgstr "GitLab ID"
 msgid "HT__GITLAB_ID"
 msgstr "GitLab ID"
 
-#: server/apps/core/db/mixins.py:13 server/apps/users/models.py:41
+#: server/apps/core/db/mixins.py:13
+msgid "VN__GITLAB_INTERNAL_ID"
+msgstr "GitLab Internal ID"
+
+#: server/apps/core/db/mixins.py:14
+#, fuzzy
+#| msgid "HT__GITLAB_ID"
+msgid "HT__GITLAB_INTERNAL_ID"
+msgstr "GitLab ID"
+
+#: server/apps/core/db/mixins.py:18 server/apps/users/models.py:41
 msgid "VN__GITLAB_URL"
 msgstr "GitLab URL"
 
-#: server/apps/core/db/mixins.py:14 server/apps/users/models.py:41
+#: server/apps/core/db/mixins.py:19 server/apps/users/models.py:41
 msgid "HT__GITLAB_URL"
 msgstr "GitLab URL"
 
-#: server/apps/core/db/mixins.py:19 server/apps/users/models.py:42
+#: server/apps/core/db/mixins.py:24 server/apps/users/models.py:42
 msgid "VN__GITLAB_LAST_SYNC"
 msgstr "GitLab last sync"
 
-#: server/apps/core/db/mixins.py:20 server/apps/users/models.py:43
+#: server/apps/core/db/mixins.py:25 server/apps/users/models.py:43
 msgid "HT__GITLAB_LAST_SYNC"
 msgstr "GitLab last sync"
 
@@ -58,14 +68,14 @@ msgstr "Notes"
 #: server/apps/development/models.py:25 server/apps/development/models.py:91
 #: server/apps/development/models.py:112 server/apps/development/models.py:142
 #: server/apps/development/models.py:197 server/apps/development/models.py:315
-#: server/apps/development/models.py:356
+#: server/apps/development/models.py:358
 msgid "VN__TITLE"
 msgstr "Title"
 
 #: server/apps/development/models.py:25 server/apps/development/models.py:91
 #: server/apps/development/models.py:112 server/apps/development/models.py:142
 #: server/apps/development/models.py:198 server/apps/development/models.py:316
-#: server/apps/development/models.py:357
+#: server/apps/development/models.py:359
 msgid "HT__TITLE"
 msgstr "Title"
 
@@ -250,53 +260,53 @@ msgstr "Issue"
 msgid "VN__ISSUES"
 msgstr "Issues"
 
-#: server/apps/development/models.py:319 server/apps/development/models.py:360
+#: server/apps/development/models.py:319 server/apps/development/models.py:364
 #: server/apps/payroll/models.py:71 server/apps/payroll/models.py:80
 msgid "VN__DESCRIPTION"
 msgstr "Description"
 
-#: server/apps/development/models.py:320 server/apps/development/models.py:361
+#: server/apps/development/models.py:320 server/apps/development/models.py:365
 #: server/apps/payroll/models.py:71 server/apps/payroll/models.py:80
 msgid "HT__DESCRIPTION"
 msgstr "Description"
 
-#: server/apps/development/models.py:325 server/apps/development/models.py:366
+#: server/apps/development/models.py:325 server/apps/development/models.py:370
 msgid "VN__START_DATE"
 msgstr "Start Date"
 
-#: server/apps/development/models.py:326 server/apps/development/models.py:367
+#: server/apps/development/models.py:326 server/apps/development/models.py:371
 msgid "HT__START_DATE"
 msgstr "Start Date"
 
-#: server/apps/development/models.py:331 server/apps/development/models.py:372
+#: server/apps/development/models.py:331 server/apps/development/models.py:376
 msgid "VN__DUE_DATE"
 msgstr "Due Date"
 
-#: server/apps/development/models.py:332 server/apps/development/models.py:373
+#: server/apps/development/models.py:332 server/apps/development/models.py:377
 msgid "HT__DUE_DATE"
 msgstr "Due Date"
 
-#: server/apps/development/models.py:338 server/apps/development/models.py:379
+#: server/apps/development/models.py:338 server/apps/development/models.py:383
 msgid "VN__BUDGET"
 msgstr "Budget"
 
-#: server/apps/development/models.py:339 server/apps/development/models.py:380
+#: server/apps/development/models.py:339 server/apps/development/models.py:384
 msgid "HT__BUDGET"
 msgstr "Budget"
 
-#: server/apps/development/models.py:348
+#: server/apps/development/models.py:350
 msgid "VN__MILESTONE"
 msgstr "Milestone"
 
-#: server/apps/development/models.py:349
+#: server/apps/development/models.py:351
 msgid "VN__MILESTONES"
 msgstr "Milestones"
 
-#: server/apps/development/models.py:389
+#: server/apps/development/models.py:393
 msgid "VN__EPIC"
 msgstr "Epic"
 
-#: server/apps/development/models.py:390
+#: server/apps/development/models.py:394
 msgid "VN__EPICS"
 msgstr "Epics"
 
