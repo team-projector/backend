@@ -5,7 +5,7 @@ from apps.development.models import TeamMember
 
 
 class IsProjectManager(permissions.BasePermission):
-    message = 'You can\'t view milestone metrics'
+    message = 'You can\'t view project manager resources'
 
     def has_permission(self, request, view):
         project_manager = TeamMember.objects.filter(

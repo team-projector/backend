@@ -2,7 +2,8 @@ import factory
 import pytz
 from django.contrib.contenttypes.models import ContentType
 
-from apps.development.models import Issue, Label, Note, Project, ProjectGroup, STATE_OPENED, Team, TeamMember, Milestone
+from apps.development.models import Issue, Label, Note, Project, ProjectGroup, STATE_OPENED, Team, TeamMember, \
+    Milestone, Epic
 
 
 class GitlabFieldMixin(factory.django.DjangoModelFactory):
@@ -65,7 +66,7 @@ class IssueFactory(GitlabFieldMixin):
     created_at = factory.Faker('date_time_this_year', before_now=True, after_now=False, tzinfo=pytz.UTC)
     state = STATE_OPENED
 
-    issue_milestone = factory.SubFactory(ProjectGroupMilestoneFactory)
+    milestone = factory.SubFactory(ProjectGroupMilestoneFactory)
 
     class Meta:
         model = Issue
@@ -91,3 +92,8 @@ class TeamFactory(factory.django.DjangoModelFactory):
 class TeamMemberFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = TeamMember
+
+
+class EpicFactory(factory.django.DjangoModelFactory):
+    class Meta:
+        model = Epic
