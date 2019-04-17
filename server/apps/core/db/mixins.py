@@ -8,6 +8,11 @@ class GitlabEntityMixin(models.Model):
         verbose_name=_('VN__GITLAB_ID'),
         help_text=_('HT__GITLAB_ID')
     )
+    gl_iid = models.PositiveIntegerField(
+        null=True,
+        verbose_name=_('VN__GITLAB_INTERNAL_ID'),
+        help_text=_('HT__GITLAB_INTERNAL_ID')
+    )
     gl_url = models.URLField(
         unique=True,
         verbose_name=_('VN__GITLAB_URL'),
