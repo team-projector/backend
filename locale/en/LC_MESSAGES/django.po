@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-04-17 14:37+0300\n"
+"POT-Creation-Date: 2019-04-17 14:39+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -32,10 +32,8 @@ msgid "VN__GITLAB_INTERNAL_ID"
 msgstr "GitLab Internal ID"
 
 #: server/apps/core/db/mixins.py:14
-#, fuzzy
-#| msgid "HT__GITLAB_ID"
 msgid "HT__GITLAB_INTERNAL_ID"
-msgstr "GitLab ID"
+msgstr "GitLab Internal ID"
 
 #: server/apps/core/db/mixins.py:18 server/apps/users/models.py:41
 msgid "VN__GITLAB_URL"
