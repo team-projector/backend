@@ -390,6 +390,7 @@ class Epic(Timestamps):
     milestone = models.ForeignKey(
         Milestone,
         models.CASCADE,
+        related_name='epic'
     )
 
     class Meta:
