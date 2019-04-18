@@ -175,3 +175,20 @@ class EpicsViewset(CreateModelMixin,
 
     def filter_queryset(self, queryset):
         return super().filter_queryset(queryset)
+
+
+class EpicIssuesViewset(mixins.ListModelMixin, BaseGenericViewSet):
+    permission_classes = (permissions.IsProjectManager,)
+
+    serializer_classes = {
+        'list': IssueCardSerializer
+    }
+
+    queryset = Issue.objects.all()
+
+    @cached_property
+    def epic(self):
+        return get_object_or_404(Epic.objects, pk=self.kwargs['epic_pk'])
+
+    def filter_queryset(self, queryset):
+        return super().filter_queryset(queryset.filter(milestone__epic=self.epic))
