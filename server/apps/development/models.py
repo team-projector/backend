@@ -12,7 +12,7 @@ from django.db.models import Max
 from django.utils.functional import cached_property
 from django.utils.translation import gettext_lazy as _
 
-from apps.core.db.mixins import GitlabEntityMixin, Timestamps
+from apps.core.db.mixins import GitlabEntityMixin, Timestamps, GitlabInternalIdMixin
 from apps.core.db.utils import Choices
 from apps.development.utils.parsers import parse_date
 from apps.payroll.db.mixins import SpentTimesMixin
@@ -191,7 +191,8 @@ STATE_OPENED = 'opened'
 
 class Issue(NotableMixin,
             SpentTimesMixin,
-            GitlabEntityMixin):
+            GitlabEntityMixin,
+            GitlabInternalIdMixin):
     title = models.CharField(
         max_length=255,
         verbose_name=_('VN__TITLE'),
@@ -309,6 +310,7 @@ class Issue(NotableMixin,
 
 
 class Milestone(GitlabEntityMixin,
+                GitlabInternalIdMixin,
                 Timestamps):
     title = models.CharField(
         max_length=255,
