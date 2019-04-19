@@ -2,10 +2,12 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as DjUserAdmin
 from django.contrib.auth.forms import AdminPasswordChangeForm
 from django.contrib.auth.models import Group
+from django.http import HttpResponseRedirect
 from django.utils.html import format_html
 
 from apps.core.admin.base import BaseModelAdmin
 from apps.core.admin.mixins import AdminFormFieldsOverridesMixin
+from apps.development.tasks import sync_user
 from .forms import GroupAdminForm
 from ..models import User
 
@@ -52,6 +54,17 @@ class UserAdmin(AdminFormFieldsOverridesMixin,
     change_password_link.allow_tags = True  # type: ignore
 
     change_password_form = AdminPasswordChangeForm
+
+    change_form_template = 'admin/change_form_sync.html'
+
+    def response_change(self, request, obj):
+        if '_force_sync' in request.POST:
+            sync_user.delay(obj.gl_id)
+            self.message_user(request, f'User "{obj}" is syncing')
+            return HttpResponseRedirect('.')
+        else:
+            return super().response_change(request, obj)
+
 
 
 @admin.register(Group)

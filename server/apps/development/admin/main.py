@@ -1,7 +1,9 @@
 from django.contrib import admin
+from django.http import HttpResponseRedirect
 
 from apps.core.admin.base import BaseModelAdmin
 from apps.development.admin.filters import TeamFilter
+from apps.development.tasks import sync_project_issue, sync_project, sync_project_group
 from apps.users.admin.filters import UserFilter
 from .filters import ProjectFilter
 from .inlines import NoteInline, TeamMemberInline
@@ -34,6 +36,15 @@ class ProjectGroupAdmin(BaseModelAdmin):
     list_display = ('title', 'parent', 'gl_url', 'gl_last_sync')
     search_fields = ('title',)
     autocomplete_fields = ('parent',)
+    change_form_template = 'admin/change_form_sync.html'
+
+    def response_change(self, request, obj):
+        if '_force_sync' in request.POST:
+            sync_project_group.delay(obj.gl_id, obj.parent_id)
+            self.message_user(request, f'Project group "{obj}" is syncing')
+            return HttpResponseRedirect('.')
+        else:
+            return super().response_change(request, obj)
 
 
 @admin.register(Project)
@@ -41,6 +52,15 @@ class ProjectAdmin(BaseModelAdmin):
     list_display = ('title', 'group', 'gl_url', 'gl_last_sync')
     search_fields = ('title',)
     autocomplete_fields = ('group',)
+    change_form_template = 'admin/change_form_sync.html'
+
+    def response_change(self, request, obj):
+        if '_force_sync' in request.POST:
+            sync_project.delay(obj.group, obj.gl_id, obj.id)
+            self.message_user(request, f'Project "{obj}" is syncing')
+            return HttpResponseRedirect('.')
+        else:
+            return super().response_change(request, obj)
 
 
 @admin.register(Issue)
@@ -52,6 +72,15 @@ class IssueAdmin(BaseModelAdmin):
     ordering = ('-gl_last_sync',)
     autocomplete_fields = ('project', 'user', 'milestone')
     inlines = (NoteInline,)
+    change_form_template = 'admin/change_form_sync.html'
+
+    def response_change(self, request, obj):
+        if '_force_sync' in request.POST:
+            sync_project_issue.delay(obj.project.gl_id, obj.gl_iid)
+            self.message_user(request, f'Issue "{obj}" is syncing')
+            return HttpResponseRedirect('.')
+        else:
+            return super().response_change(request, obj)
 
 
 @admin.register(Note)
