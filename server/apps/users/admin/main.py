@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as DjUserAdmin
 from django.contrib.auth.forms import AdminPasswordChangeForm
 from django.contrib.auth.models import Group
-from django.http import HttpResponseRedirect
+from apps.core.admin.mixins import ForceSyncEntityMixin
 from django.utils.html import format_html
 
 from apps.core.admin.base import BaseModelAdmin
@@ -16,6 +16,7 @@ admin.site.unregister(Group)
 
 @admin.register(User)
 class UserAdmin(AdminFormFieldsOverridesMixin,
+                ForceSyncEntityMixin,
                 DjUserAdmin):
     list_display = (
         'login', 'name', 'email', 'hour_rate', 'last_login', 'is_active', 'is_staff', 'change_password_link'
@@ -55,16 +56,8 @@ class UserAdmin(AdminFormFieldsOverridesMixin,
 
     change_password_form = AdminPasswordChangeForm
 
-    change_form_template = 'admin/change_form_sync.html'
-
-    def response_change(self, request, obj):
-        if '_force_sync' in request.POST:
-            sync_user.delay(obj.gl_id)
-            self.message_user(request, f'User "{obj}" is syncing')
-            return HttpResponseRedirect('.')
-        else:
-            return super().response_change(request, obj)
-
+    def sync_handler(self, obj):
+        sync_user.delay(obj.gl_id)
 
 
 @admin.register(Group)

@@ -39,7 +39,7 @@ def load_groups() -> None:
         load_group(gl_groups[0])
 
 
-def load_single_group(gl_group: GlGroup, parent: ProjectGroup) -> ProjectGroup:
+def load_single_group(gl_group: GlGroup, parent: Optional[ProjectGroup]) -> ProjectGroup:
     group, _ = ProjectGroup.objects.sync_gitlab(gl_id=gl_group.id,
                                                 gl_url=gl_group.web_url,
                                                 parent=parent,

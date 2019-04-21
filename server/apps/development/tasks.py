@@ -65,7 +65,7 @@ def sync_project_issue(project_id: int, iid: int) -> None:
 
 
 @app.task
-def sync_project_group(gl_id: int, parent_id: int) -> None:
+def sync_project_group(gl_id: int) -> None:
     gl = get_gitlab_client()
     gl_group = gl.groups.get(id=gl_id)
 
@@ -83,7 +83,6 @@ def sync_project(group: ProjectGroup, gl_id: int, project_id: int) -> None:
 
     load_single_project(gl, group, gl_project)
     load_project_milestones(project_id)
-    # sync_project_issues.delay(project_id)
 
 
 @app.task
