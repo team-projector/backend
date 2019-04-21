@@ -10,4 +10,3 @@ run/
 *.mo
 dev.py
 venv
-docker-compose.yml
