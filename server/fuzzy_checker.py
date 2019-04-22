@@ -12,13 +12,17 @@ class FuzzyChecker:
     file_pattern = '*.po'
     fuzzy_reg = r'(#\W*fuzzy$)'
 
-    def __init__(self):
-        self.set_options()
+    def __init__(self, sys_arg=None):
+        self.set_options(sys_arg)
+
+    def __str__(self):
+        return f'Fuzzy checker: {self.path}'
 
     def run(self):
         return self._run()
 
     def _run(self):
+        self.log(f'Root path: {self.path}')
         files = self.get_files()
 
         if not files:
@@ -59,7 +63,7 @@ class FuzzyChecker:
             return
 
         self.has_error = True
-        self.log(f'{file_path}:{index}: {line.strip()}', True)
+        self.log(f'{file_path}:{index} -> {line.strip()}', True)
 
     def has_match(self, source):
         return bool(re.search(self.fuzzy_reg, source, flags=re.M))
@@ -68,8 +72,11 @@ class FuzzyChecker:
         if self.show_log or force:
             print(value)
 
-    def set_options(self):
-        opts, _ = getopt.getopt(sys.argv[1:], 'l', ['path='])
+    def set_options(self, sys_arg):
+        if not sys_arg:
+            return
+
+        opts, _ = getopt.getopt(sys_arg, 'l', ['path='])
         for k, v in opts:
             if k == '--path' and v:
                 self.path = v
@@ -77,11 +84,10 @@ class FuzzyChecker:
                 self.show_log = True
 
         self.path = os.path.abspath(self.path)
-        self.log(f'Root path: {self.path}')
 
 
 def main():
-    sys.exit(FuzzyChecker().run())
+    sys.exit(FuzzyChecker(sys.argv[1:]).run())
 
 
 if __name__ == "__main__":
