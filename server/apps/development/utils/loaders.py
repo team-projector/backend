@@ -5,7 +5,7 @@ from django.conf import settings
 from django.contrib.contenttypes.models import ContentType
 from django.urls import reverse
 from django.utils import timezone
-from gitlab import GitlabGetError
+from gitlab import GitlabGetError, Gitlab
 from gitlab.v4.objects import Group as GlGroup, Project as GlProject, ProjectIssue as GlProjectIssue
 from rest_framework import status
 
@@ -25,15 +25,9 @@ def load_groups() -> None:
             if not parent and gl_group.parent_id in gl_groups_map:
                 parent = load_group(gl_groups_map[gl_group.parent_id])
 
-        group, _ = ProjectGroup.objects.sync_gitlab(gl_id=gl_group.id,
-                                                    gl_url=gl_group.web_url,
-                                                    parent=parent,
-                                                    title=gl_group.name,
-                                                    full_title=gl_group.full_name)
+        group = load_single_group(gl_group, parent)
 
         gl_groups.remove(gl_group)
-
-        logger.info(f'Group "{group}" is synced')
 
         return group
 
@@ -43,6 +37,18 @@ def load_groups() -> None:
 
     while gl_groups:
         load_group(gl_groups[0])
+
+
+def load_single_group(gl_group: GlGroup, parent: Optional[ProjectGroup]) -> ProjectGroup:
+    group, _ = ProjectGroup.objects.sync_gitlab(gl_id=gl_group.id,
+                                                gl_url=gl_group.web_url,
+                                                parent=parent,
+                                                title=gl_group.name,
+                                                full_title=gl_group.full_name)
+
+    logger.info(f'Group "{group}" is synced')
+
+    return group
 
 
 def load_projects() -> None:
@@ -60,16 +66,20 @@ def load_group_projects(group: ProjectGroup) -> None:
             raise
     else:
         for gl_project in gl_group.projects.list(all=True):
-            project, _ = Project.objects.sync_gitlab(gl_id=gl_project.id,
-                                                     gl_url=gl_project.web_url,
-                                                     group=group,
-                                                     full_title=gl_project.name_with_namespace,
-                                                     title=gl_project.name)
+            load_project(gl, group, gl_project)
 
-            if settings.GITLAB_CHECK_WEBHOOKS:
-                check_project_webhooks(gl.projects.get(gl_project.id))
 
-            logger.info(f'Project "{project}" is synced')
+def load_project(gl: Gitlab, group: ProjectGroup, gl_project: GlProject) -> None:
+    project, _ = Project.objects.sync_gitlab(gl_id=gl_project.id,
+                                             gl_url=gl_project.web_url,
+                                             group=group,
+                                             full_title=gl_project.name_with_namespace,
+                                             title=gl_project.name)
+
+    if settings.GITLAB_CHECK_WEBHOOKS:
+        check_project_webhooks(gl.projects.get(gl_project.id))
+
+    logger.info(f'Project "{project}" is synced')
 
 
 def check_project_webhooks(gl_project: GlProject) -> None:
