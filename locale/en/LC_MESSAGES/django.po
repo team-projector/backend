@@ -361,13 +361,10 @@ msgid "VN__TIME_SPENT"
 msgstr "Spent time"
 
 #: server/apps/payroll/models.py:40
-#fuzzy
 msgid "HT__TIME_SPENT"
 msgstr "Spent time"
 
 #: server/apps/payroll/models.py:47
-#, fuzzy
-#| msgid "VN__NOTE"
 msgid "VN__NOTEZ"
 msgstr "Note"
 
