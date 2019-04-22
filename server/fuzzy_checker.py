@@ -36,8 +36,8 @@ class FuzzyChecker:
             found_files.extend(glob.glob(os.path.join(os.path.abspath(root), self.file_pattern)))
 
         message = 'Found files:\n' if found_files else 'Files not found'
-        files = '\n'.join(found_files)
-        self.log(f'{message}{files}')
+        files_to_str = '\n'.join(found_files)
+        self.log(f'{message}{files_to_str}')
 
         return found_files
 
