@@ -13,14 +13,31 @@ SECONDS_IN_HOUR = 60 * 60
 class SpentTime(Payroll):
     date = models.DateField(null=True)
 
-    rate = models.FloatField(null=True, verbose_name=_('VN__RATE'), help_text=_('HT__RATE'))
-    time_spent = models.IntegerField(verbose_name=_('VN__TIME_SPENT'), help_text=_('HT__TIME_SPENT'))
+    rate = models.FloatField(
+        null=True,
+        verbose_name=_('VN__RATE'),
+        help_text=_('HT__RATE')
+    )
 
-    content_type = models.ForeignKey(ContentType, models.CASCADE)
+    time_spent = models.IntegerField(
+        verbose_name=_('VN__TIME_SPENT'),
+        help_text=_('HT__TIME_SPENT')
+    )
+
+    content_type = models.ForeignKey(
+        ContentType,
+        models.CASCADE
+    )
     object_id = models.PositiveIntegerField()
     base = GenericForeignKey()
 
-    note = models.OneToOneField(Note, models.SET_NULL, null=True, blank=True, related_name='time_spend')
+    note = models.OneToOneField(
+        Note,
+        models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='time_spend'
+    )
 
     objects = SpentTimeManager()
 
