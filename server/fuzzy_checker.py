@@ -12,27 +12,24 @@ class FuzzyChecker:
     file_pattern = '*.po'
     fuzzy_reg = r'(#\W*fuzzy$)'
 
-    def __init__(self, sys_arg=None):
+    def __init__(self, sys_arg: list = None) -> None:
         self.set_options(sys_arg)
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f'Fuzzy checker: {self.path}'
 
     def run(self) -> bool:
         return bool(self._run())
 
-    def _run(self):
+    def _run(self) -> bool:
         self.log(f'Root path: {self.path}')
         files = self.get_files()
-
-        if not files:
-            return
 
         self.check_files(files)
 
         return self.has_error
 
-    def get_files(self):
+    def get_files(self) -> list:
         found_files = []
         for root, dirs, files in os.walk(os.path.normpath(self.path)):
             found_files.extend(glob.glob(os.path.join(os.path.abspath(root), self.file_pattern)))
@@ -43,11 +40,11 @@ class FuzzyChecker:
 
         return found_files
 
-    def check_files(self, files):
+    def check_files(self, files) -> None:
         for file in files:
             self.check_file(file)
 
-    def check_file(self, file_path):
+    def check_file(self, file_path) -> None:
         self.log(f'Checking: {file_path}')
         with open(file_path, 'r') as f:
             content = f.readlines()
@@ -58,21 +55,21 @@ class FuzzyChecker:
             for i, line in enumerate(content):
                 self.check_line(line, i + 1, file_path)
 
-    def check_line(self, line, index, file_path):
+    def check_line(self, line, index, file_path) -> None:
         if not self.has_match(line):
             return
 
         self.has_error = True
         self.log(f'{file_path}:{index} -> {line.strip()}', True)
 
-    def has_match(self, source):
+    def has_match(self, source: str) -> bool:
         return bool(re.search(self.fuzzy_reg, source, flags=re.M))
 
-    def log(self, value, force=False):
+    def log(self, value: str, force: bool = False):
         if self.show_log or force:
             print(value)
 
-    def set_options(self, sys_arg):
+    def set_options(self, sys_arg: list) -> None:
         if not sys_arg:
             return
 
