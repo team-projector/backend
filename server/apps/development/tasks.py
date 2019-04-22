@@ -3,7 +3,7 @@ from apps.development.models import Project, ProjectGroup
 from apps.development.utils.loaders import (
     load_project_issue, load_group_milestones, load_gl_project_milestones, load_groups,
     load_projects,
-    load_project_issues, load_user, load_single_project, load_single_group)
+    load_project_issues, load_user, load_project, load_single_group)
 from celery_app import app
 
 
@@ -81,7 +81,7 @@ def sync_project(group: ProjectGroup, gl_id: int, project_id: int) -> None:
     gl = get_gitlab_client()
     gl_project = gl.projects.get(gl_id)
 
-    load_single_project(gl, group, gl_project)
+    load_project(gl, group, gl_project)
     load_project_milestones(project_id)
 
 

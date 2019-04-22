@@ -66,10 +66,10 @@ def load_group_projects(group: ProjectGroup) -> None:
             raise
     else:
         for gl_project in gl_group.projects.list(all=True):
-            load_single_project(gl, group, gl_project)
+            load_project(gl, group, gl_project)
 
 
-def load_single_project(gl: Gitlab, group: ProjectGroup, gl_project: GlProject) -> None:
+def load_project(gl: Gitlab, group: ProjectGroup, gl_project: GlProject) -> None:
     project, _ = Project.objects.sync_gitlab(gl_id=gl_project.id,
                                              gl_url=gl_project.web_url,
                                              group=group,
