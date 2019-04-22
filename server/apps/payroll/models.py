@@ -43,7 +43,8 @@ class SpentTime(Payroll):
     object_id = models.PositiveIntegerField()
     base = GenericForeignKey()
 
-    note = models.OneToOneField(Note, models.SET_NULL, null=True, blank=True, related_name='time_spend')
+    note = models.OneToOneField(Note, models.SET_NULL, null=True, blank=True, related_name='time_spend',
+                                verbose_name=_('VN__NOTEZ'))
 
     objects = SpentTimeManager()
 

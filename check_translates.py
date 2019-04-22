@@ -16,10 +16,7 @@ class FuzzyChecker:
         self.set_options()
 
     def run(self):
-        try:
-            self._run()
-        except:
-            return 1
+        return self._run()
 
     def _run(self):
         files = self.get_files()
@@ -29,8 +26,7 @@ class FuzzyChecker:
 
         self.check_files(files)
 
-        if self.has_error:
-            raise Exception()
+        return self.has_error
 
     def get_files(self):
         found_files = []
