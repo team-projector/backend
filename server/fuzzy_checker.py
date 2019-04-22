@@ -18,8 +18,8 @@ class FuzzyChecker:
     def __str__(self):
         return f'Fuzzy checker: {self.path}'
 
-    def run(self):
-        return self._run()
+    def run(self) -> bool:
+        return bool(self._run())
 
     def _run(self):
         self.log(f'Root path: {self.path}')
@@ -86,7 +86,7 @@ class FuzzyChecker:
         self.path = os.path.abspath(self.path)
 
 
-def main():
+def main() -> None:
     sys.exit(FuzzyChecker(sys.argv[1:]).run())
 
 
