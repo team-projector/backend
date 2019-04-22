@@ -2,10 +2,12 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as DjUserAdmin
 from django.contrib.auth.forms import AdminPasswordChangeForm
 from django.contrib.auth.models import Group
+from apps.core.admin.mixins import ForceSyncEntityMixin
 from django.utils.html import format_html
 
 from apps.core.admin.base import BaseModelAdmin
 from apps.core.admin.mixins import AdminFormFieldsOverridesMixin
+from apps.development.tasks import sync_user
 from .forms import GroupAdminForm
 from ..models import User
 
@@ -14,6 +16,7 @@ admin.site.unregister(Group)
 
 @admin.register(User)
 class UserAdmin(AdminFormFieldsOverridesMixin,
+                ForceSyncEntityMixin,
                 DjUserAdmin):
     list_display = (
         'login', 'name', 'email', 'hour_rate', 'last_login', 'is_active', 'is_staff', 'change_password_link'
@@ -52,6 +55,9 @@ class UserAdmin(AdminFormFieldsOverridesMixin,
     change_password_link.allow_tags = True  # type: ignore
 
     change_password_form = AdminPasswordChangeForm
+
+    def sync_handler(self, obj):
+        sync_user.delay(obj.gl_id)
 
 
 @admin.register(Group)

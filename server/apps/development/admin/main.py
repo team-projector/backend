@@ -1,7 +1,9 @@
 from django.contrib import admin
 
 from apps.core.admin.base import BaseModelAdmin
+from apps.core.admin.mixins import ForceSyncEntityMixin
 from apps.development.admin.filters import TeamFilter
+from apps.development.tasks import sync_project_issue, sync_project, sync_project_group
 from apps.users.admin.filters import UserFilter
 from .filters import ProjectFilter
 from .inlines import NoteInline, TeamMemberInline
@@ -30,21 +32,27 @@ class LabelAdmin(BaseModelAdmin):
 
 
 @admin.register(ProjectGroup)
-class ProjectGroupAdmin(BaseModelAdmin):
+class ProjectGroupAdmin(ForceSyncEntityMixin, BaseModelAdmin):
     list_display = ('title', 'parent', 'gl_url', 'gl_last_sync')
     search_fields = ('title',)
     autocomplete_fields = ('parent',)
 
+    def sync_handler(self, obj):
+        sync_project_group.delay(obj.gl_id)
+
 
 @admin.register(Project)
-class ProjectAdmin(BaseModelAdmin):
+class ProjectAdmin(ForceSyncEntityMixin, BaseModelAdmin):
     list_display = ('title', 'group', 'gl_url', 'gl_last_sync')
     search_fields = ('title',)
     autocomplete_fields = ('group',)
 
+    def sync_handler(self, obj):
+        sync_project.delay(obj.group, obj.gl_id, obj.id)
+
 
 @admin.register(Issue)
-class IssueAdmin(BaseModelAdmin):
+class IssueAdmin(ForceSyncEntityMixin, BaseModelAdmin):
     list_display = ('title', 'user', 'created_at', 'gl_url', 'gl_last_sync')
     list_filter = (ProjectFilter,)
     search_fields = ('title', 'gl_id')
@@ -52,6 +60,9 @@ class IssueAdmin(BaseModelAdmin):
     ordering = ('-gl_last_sync',)
     autocomplete_fields = ('project', 'user', 'milestone')
     inlines = (NoteInline,)
+
+    def sync_handler(self, obj):
+        sync_project_issue.delay(obj.project.gl_id, obj.gl_iid)
 
 
 @admin.register(Note)
