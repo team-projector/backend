@@ -3,6 +3,7 @@ import glob
 import os
 import re
 import sys
+from typing import List, Optional
 
 
 class FuzzyChecker:
@@ -12,7 +13,7 @@ class FuzzyChecker:
     file_pattern = '*.po'
     fuzzy_reg = r'(#\W*fuzzy$)'
 
-    def __init__(self, sys_arg: list = None) -> None:
+    def __init__(self, sys_arg: Optional[List[str]]) -> None:
         self.set_options(sys_arg)
 
     def __str__(self) -> str:
@@ -29,7 +30,7 @@ class FuzzyChecker:
 
         return self.has_error
 
-    def get_files(self) -> list:
+    def get_files(self) -> List[str]:
         found_files = []
         for root, dirs, files in os.walk(os.path.normpath(self.path)):
             found_files.extend(glob.glob(os.path.join(os.path.abspath(root), self.file_pattern)))
@@ -69,7 +70,7 @@ class FuzzyChecker:
         if self.show_log or force:
             print(value)
 
-    def set_options(self, sys_arg: list) -> None:
+    def set_options(self, sys_arg: Optional[List[str]]) -> None:
         if not sys_arg:
             return
 
