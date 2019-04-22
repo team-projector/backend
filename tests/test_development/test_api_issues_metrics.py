@@ -3,7 +3,8 @@ from datetime import timedelta
 from django.utils import timezone
 from rest_framework import status
 
-from apps.development.models import Note, STATE_CLOSED, STATE_OPENED
+from apps.development.models import Note
+from apps.development.models.issue import STATE_CLOSED, STATE_OPENED
 from apps.users.models import User
 from tests.base import BaseAPITest
 from tests.test_development.factories import IssueFactory, IssueNoteFactory

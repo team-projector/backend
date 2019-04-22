@@ -6,7 +6,7 @@ from django.db.models.functions import Cast, TruncWeek
 from django.utils.timezone import make_aware
 
 from apps.core.utils.date import begin_of_week, date2datetime
-from apps.development.models import Issue, STATE_CLOSED
+from apps.development.models.issue import Issue, STATE_CLOSED
 from apps.payroll.models import SpentTime
 from .base import ProgressMetricsCalculator, UserProgressMetrics
 
