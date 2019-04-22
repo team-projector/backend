@@ -8,11 +8,13 @@ class GitlabEntityMixin(models.Model):
         verbose_name=_('VN__GITLAB_ID'),
         help_text=_('HT__GITLAB_ID')
     )
+
     gl_url = models.URLField(
         unique=True,
         verbose_name=_('VN__GITLAB_URL'),
         help_text=_('HT__GITLAB_URL')
     )
+
     gl_last_sync = models.DateTimeField(
         null=True,
         blank=True,

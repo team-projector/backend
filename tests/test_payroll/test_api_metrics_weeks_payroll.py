@@ -5,11 +5,11 @@ from django.test import override_settings
 from django.utils import timezone
 from rest_framework import status
 
-from tests.base import BaseAPITest
 from apps.core.utils.date import begin_of_week
-from apps.development.models import STATE_CLOSED, STATE_OPENED
-from tests.test_development.factories import IssueFactory
+from apps.development.models.issue import STATE_CLOSED, STATE_OPENED
 from apps.development.utils.parsers import parse_date
+from tests.base import BaseAPITest
+from tests.test_development.factories import IssueFactory
 from tests.test_payroll.factories import IssueSpentTimeFactory, SalaryFactory
 
 

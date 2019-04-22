@@ -4,13 +4,13 @@ from decimal import Decimal
 from django.test import TestCase
 from django.utils import timezone
 
-from apps.development.models import STATE_CLOSED, STATE_OPENED
-from tests.test_development.factories import IssueFactory
+from apps.development.models.issue import STATE_CLOSED, STATE_OPENED
 from apps.payroll.exceptions import EmptySalaryException
 from apps.payroll.models import Payroll, Salary
-from tests.test_payroll.factories import BonusFactory, IssueSpentTimeFactory, PenaltyFactory, SalaryFactory
 from apps.payroll.utils.salary.calculator import SalaryCalculator
 from apps.users.models import User
+from tests.test_development.factories import IssueFactory
+from tests.test_payroll.factories import BonusFactory, IssueSpentTimeFactory, PenaltyFactory, SalaryFactory
 from tests.test_users.factories import UserFactory
 
 

@@ -2,8 +2,11 @@ import factory
 import pytz
 from django.contrib.contenttypes.models import ContentType
 
-from apps.development.models import Issue, Label, Note, Project, ProjectGroup, STATE_OPENED, Team, TeamMember, \
-    Milestone, Epic
+from apps.development.models import (
+    Issue, Label, Note, Project, ProjectGroup, Team, TeamMember, Milestone, Epic
+)
+
+from apps.development.models.issue import STATE_OPENED
 
 
 class GitlabFieldMixin(factory.django.DjangoModelFactory):
