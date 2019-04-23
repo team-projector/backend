@@ -13,7 +13,7 @@ class FuzzyChecker:
     file_pattern = '*.po'
     fuzzy_reg = r'(#\W*fuzzy$)'
 
-    def __init__(self, sys_arg: Optional[List[str]]) -> None:
+    def __init__(self, sys_arg: Optional[List[str]] = None) -> None:
         self.set_options(sys_arg)
 
     def __str__(self) -> str:
@@ -70,7 +70,7 @@ class FuzzyChecker:
         if self.show_log or force:
             print(value)
 
-    def set_options(self, sys_arg: Optional[List[str]]) -> None:
+    def set_options(self, sys_arg: Optional[List[str]] = None) -> None:
         if not sys_arg:
             return
 
