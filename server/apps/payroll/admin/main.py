@@ -7,7 +7,7 @@ from apps.core.admin.base import BaseModelAdmin
 from apps.payroll.admin.forms import GenerateSalariesForm
 from apps.payroll.utils.salary.calculator import SalaryCalculator
 from apps.users.admin.filters import UserFilter
-from ..models import Bonus, Payment, Payroll, Penalty, Salary, SpentTime
+from ..models import Bonus, Payment, Payroll, Penalty, Salary, SpentTime, WorkBreak
 
 
 @admin.register(Salary)
@@ -83,3 +83,19 @@ class PaymentAdmin(BaseModelAdmin):
     list_filter = (UserFilter,)
     search_fields = ('user',)
     autocomplete_fields = ('user', 'created_by', 'salary')
+
+
+@admin.register(WorkBreak)
+class WorkBreakAdmin(BaseModelAdmin):
+    list_display = ('user', 'reason', 'date_from', 'date_to', 'approve_state')
+    list_filter = (UserFilter,)
+    search_fields = ('user',)
+    autocomplete_fields = ('user', 'approved_by')
+    fieldsets = (
+        (None, {
+            'fields': ('user', 'reason', 'date_from', 'date_to', 'comment')
+        }),
+        ('Approve status', {
+            'fields': ('approve_state', 'approved_at', 'approved_by', 'decline_reason')
+        })
+    )

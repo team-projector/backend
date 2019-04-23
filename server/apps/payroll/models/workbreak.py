@@ -2,11 +2,12 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 
 from apps.core.db.utils import Choices
+from apps.core.db.mixins import Timestamps
 from apps.payroll.db.mixins import ApprovedMixin
 from apps.users.models import User
 
 
-class WorkBreak(ApprovedMixin):
+class WorkBreak(ApprovedMixin, Timestamps):
     WORK_BREAK_REASONS = Choices(
         ('dayoff', _('CH_DAYOFF')),
         ('vacation', _('CH_VACATION')),
@@ -50,4 +51,4 @@ class WorkBreak(ApprovedMixin):
         ordering = ('-date_from',)
 
     def __str__(self):
-        return f'{self.user} : {self.reason}'
+        return f'{self.user}: {self.reason} ({self.date_from} - {self.date_to})'
