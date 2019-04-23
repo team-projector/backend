@@ -5,7 +5,7 @@ from typing import ClassVar, Optional
 from django.db.models import Case, NullBooleanField, Q, QuerySet, When
 from django.utils import timezone
 
-from apps.development.models import STATE_OPENED
+from apps.development.models.issue import STATE_OPENED
 
 PROBLEM_EMPTY_DUE_DAY = 'empty_due_date'
 PROBLEM_OVER_DUE_DAY = 'over_due_date'

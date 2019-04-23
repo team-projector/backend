@@ -1,6 +1,6 @@
 from django.db.models import Sum
 
-from apps.development.models import Issue, STATE_CLOSED, STATE_OPENED
+from apps.development.models.issue import Issue, STATE_CLOSED, STATE_OPENED
 from apps.payroll.models import Bonus, Penalty, SpentTime
 from apps.users.models import User
 

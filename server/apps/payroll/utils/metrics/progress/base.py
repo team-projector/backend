@@ -3,7 +3,7 @@ from typing import Any, Dict, Iterable, List, Optional
 
 from django.db.models import F, QuerySet, Sum
 
-from apps.development.models import Issue, STATE_CLOSED
+from apps.development.models.issue import Issue, STATE_CLOSED
 from apps.payroll.models import SpentTime
 from apps.users.models import User
 

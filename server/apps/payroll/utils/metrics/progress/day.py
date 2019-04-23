@@ -6,7 +6,7 @@ from django.db.models import Case, Count, F, IntegerField, Q, QuerySet, Sum, Val
 from django.db.models.functions import TruncDay
 from django.utils import timezone
 
-from apps.development.models import Issue, STATE_CLOSED
+from apps.development.models.issue import Issue, STATE_CLOSED
 from apps.payroll.models import SpentTime
 from .base import ProgressMetricsCalculator, UserProgressMetrics
 

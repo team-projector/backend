@@ -6,7 +6,8 @@ from django.test import override_settings
 from django.utils import timezone
 from rest_framework import status
 
-from apps.development.models import STATE_OPENED, TeamMember
+from apps.development.models import TeamMember
+from apps.development.models.issue import STATE_OPENED
 from tests.base import BaseAPITest
 from tests.test_development.factories import IssueFactory, TeamFactory, TeamMemberFactory
 from tests.test_payroll.factories import IssueSpentTimeFactory
