@@ -33,7 +33,7 @@ class ApprovedMixin(models.Model):
         help_text=_('HT__APPROVE_STATE')
     )
 
-    approved_at = models.DateField(
+    approved_at = models.DateTimeField(
         null=True,
         blank=True,
         verbose_name=_('VN__APPROVED_AT'),

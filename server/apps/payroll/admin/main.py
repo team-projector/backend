@@ -87,13 +87,13 @@ class PaymentAdmin(BaseModelAdmin):
 
 @admin.register(WorkBreak)
 class WorkBreakAdmin(BaseModelAdmin):
-    list_display = ('user', 'reason', 'date_from', 'date_to', 'approve_state')
+    list_display = ('user', 'reason', 'from_date', 'to_date', 'approve_state')
     list_filter = (UserFilter,)
     search_fields = ('user',)
     autocomplete_fields = ('user', 'approved_by')
     fieldsets = (
         (None, {
-            'fields': ('user', 'reason', 'date_from', 'date_to', 'comment')
+            'fields': ('user', 'reason', 'from_date', 'to_date', 'comment')
         }),
         ('Approve status', {
             'fields': ('approve_state', 'approved_at', 'approved_by', 'decline_reason')

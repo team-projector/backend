@@ -22,12 +22,12 @@ class WorkBreak(ApprovedMixin, Timestamps):
         help_text=_('HT__USER')
     )
 
-    date_from = models.DateField(
+    from_date = models.DateTimeField(
         verbose_name=_('VN__DATE_FROM'),
         help_text=_('HT__DATE_FROM')
     )
 
-    date_to = models.DateField(
+    to_date = models.DateTimeField(
         verbose_name=_('VN__DATE_TO'),
         help_text=_('HT__DATE_TO')
     )
@@ -48,7 +48,7 @@ class WorkBreak(ApprovedMixin, Timestamps):
     class Meta:
         verbose_name = _('VN__WORKBREAK')
         verbose_name_plural = _('VN__WORKBREAKS')
-        ordering = ('-date_from',)
+        ordering = ('-from_date',)
 
     def __str__(self):
-        return f'{self.user}: {self.reason} ({self.date_from} - {self.date_to})'
+        return f'{self.user}: {self.reason} ({self.from_date} - {self.to_date})'
