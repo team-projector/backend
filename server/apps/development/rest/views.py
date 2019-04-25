@@ -15,7 +15,7 @@ from apps.development.rest import permissions
 from apps.development.rest.filters import TeamMemberFilterBackend
 from apps.development.utils.problems.issues import IssueProblemsChecker
 from .serializers import IssueCardSerializer, IssueProblemSerializer, TeamCardSerializer, TeamMemberCardSerializer, \
-    MilestoneCardSerializer, EpicCardSerializer, EpicUpdateSerializer, EpicSerializer
+    MilestoneCardSerializer, EpicCardSerializer, EpicUpdateSerializer, EpicSerializer, IssueUpdateSerializer
 from ..models import Issue, Team, TeamMember, Milestone, ProjectGroup, Project, Epic
 from ..tasks import sync_project_issue
 
@@ -39,10 +39,14 @@ def gl_webhook(request):
 
 
 class IssuesViewset(mixins.ListModelMixin,
+                    UpdateModelMixin,
                     BaseGenericViewSet):
     serializer_classes = {
-        'list': IssueCardSerializer
+        'list': IssueCardSerializer,
+        'update': IssueCardSerializer,
+        'partial_update': IssueCardSerializer,
     }
+    update_serializer_class = IssueUpdateSerializer
 
     queryset = Issue.objects.all()
     filter_backends = (filters.OrderingFilter, filters.SearchFilter, DjangoFilterBackend)
@@ -125,7 +129,8 @@ class ProjectMilestonesViewset(mixins.ListModelMixin,
         return super().filter_queryset(queryset.filter(project=self.project))
 
 
-class MilestoneIssuesViewset(mixins.ListModelMixin, BaseGenericViewSet):
+class MilestoneIssuesViewset(mixins.ListModelMixin,
+                             BaseGenericViewSet):
     permission_classes = (permissions.IsProjectManager,)
 
     serializer_classes = {
@@ -142,7 +147,8 @@ class MilestoneIssuesViewset(mixins.ListModelMixin, BaseGenericViewSet):
         return super().filter_queryset(queryset.filter(milestone=self.milestone))
 
 
-class MilestoneEpicsViewset(mixins.ListModelMixin, BaseGenericViewSet):
+class MilestoneEpicsViewset(mixins.ListModelMixin,
+                            BaseGenericViewSet):
     permission_classes = (permissions.IsProjectManager,)
 
     serializer_classes = {
