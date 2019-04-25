@@ -29,7 +29,7 @@ social-auth-app-django = "*"
 python-decouple = "*"
 django-health-check = "*"
 tornado = "5.*"
-django-bitfield = {git = "https://github.com/Junte/django-bitfield.git", tag="v1.9.5"}
+jnt-django-bitfield = "*"
 django-admin-tools = {git = "https://github.com/Junte/django-admin-tools.git"}
 "flake8" = "*"
 
