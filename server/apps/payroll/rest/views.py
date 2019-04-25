@@ -2,14 +2,12 @@ from django.contrib.auth import get_user_model
 from django.shortcuts import get_object_or_404
 from django.utils.functional import cached_property
 from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework import filters, mixins, permissions
+from rest_framework import mixins, permissions
 from rest_framework.response import Response
-from rest_framework.decorators import action
 
 from apps.core.rest.views import BaseGenericAPIView, BaseGenericViewSet
 from apps.core.rest.mixins.views import CreateModelMixin, UpdateModelMixin
 from apps.core.utils.rest import parse_query_params
-from apps.development.models import TeamMember
 from apps.payroll.rest.permissions import CanViewUserMetrics
 from .serializers import SalarySerializer, TimeExpenseSerializer, UserProgressMetricsParamsSerializer, \
     UserProgressMetricsSerializer, WorkBreakSerializer, WorkBreakCardSerializer, WorkBreakUpdateSerializer
