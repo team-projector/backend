@@ -31,10 +31,9 @@ django-health-check = "*"
 tornado = "5.*"
 jnt-django-bitfield = "*"
 django-admin-tools = {git = "https://github.com/Junte/django-admin-tools.git"}
-"flake8" = "*"
 
 [tool.poetry.dev-dependencies]
-"flake8" = "*"
+flake8 = "*"
 ipython = "*"
 mypy = "*"
 xenon = "0.5.4"
