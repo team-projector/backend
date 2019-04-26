@@ -1,7 +1,6 @@
 from typing import Any, Dict, List, Tuple
 
 from django import forms
-from django.conf import settings
 
 DEFAULT_PERMISSIONS = ('add', 'change', 'delete', 'view')
 
