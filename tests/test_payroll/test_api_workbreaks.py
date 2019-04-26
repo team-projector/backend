@@ -1,7 +1,9 @@
 from rest_framework import status
 
+from apps.development.models import TeamMember
 from apps.payroll.utils.metrics.user import User
 from tests.base import BaseAPITest
+from tests.test_development.factories import TeamFactory, TeamMemberFactory
 from tests.test_payroll.factories import WorkBreakFactory
 
 
@@ -72,3 +74,72 @@ class WorkBreaksTests(BaseAPITest):
         response = self.client.delete(f'/api/work-breaks/{work_break.id}')
 
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+
+    def test_decline_by_teamlead(self):
+        user_2 = self.create_user('user_2@mail.com')
+        data = {'decline_reason': 'work'}
+
+        team = TeamFactory.create()
+
+        TeamMemberFactory.create(team=team,
+                                 user=self.user,
+                                 roles=TeamMember.roles.developer | TeamMember.roles.leader)
+
+        TeamMemberFactory.create(team=team,
+                                 user=user_2,
+                                 roles=TeamMember.roles.developer)
+
+        work_break = WorkBreakFactory.create(user=user_2)
+
+        self.set_credentials()
+
+        response = self.client.post(f'/api/work-breaks/{work_break.id}/decline', data)
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data['approve_state'], 'decline')
+        self.assertEqual(response.data['approved_by']['id'], self.user.id)
+        self.assertEqual(response.data['decline_reason'], data['decline_reason'])
+
+    def test_decline_by_bad_user(self):
+        user_2 = self.create_user('user_2@mail.com')
+        data = {'decline_reason': 'work'}
+        work_break = WorkBreakFactory.create(user=user_2)
+
+        self.set_credentials()
+
+        response = self.client.post(f'/api/work-breaks/{work_break.id}/decline', data)
+
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+    def test_approve_by_teamlead(self):
+        user_2 = self.create_user('user_2@mail.com')
+
+        team = TeamFactory.create()
+
+        TeamMemberFactory.create(team=team,
+                                 user=self.user,
+                                 roles=TeamMember.roles.developer | TeamMember.roles.leader)
+
+        TeamMemberFactory.create(team=team,
+                                 user=user_2,
+                                 roles=TeamMember.roles.developer)
+
+        work_break = WorkBreakFactory.create(user=user_2)
+
+        self.set_credentials()
+
+        response = self.client.post(f'/api/work-breaks/{work_break.id}/approve')
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data['approve_state'], 'approved')
+        self.assertEqual(response.data['approved_by']['id'], self.user.id)
+
+    def test_approve_by_bad_user(self):
+        user_2 = self.create_user('user_2@mail.com')
+        work_break = WorkBreakFactory.create(user=user_2)
+
+        self.set_credentials()
+
+        response = self.client.post(f'/api/work-breaks/{work_break.id}/approve')
+
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)

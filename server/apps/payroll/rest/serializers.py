@@ -75,17 +75,8 @@ class WorkBreakSerializer(serializers.ModelSerializer):
                   'to_date', 'id', 'user')
 
 
-class WorkBreakCardSerializer(serializers.ModelSerializer):
+class WorkBreakCardSerializer(WorkBreakSerializer):
     approved_by = LinkSerializer()
-    user = LinkSerializer()
-    approved_at = serializers.DateTimeField(format="%Y-%m-%d %H:%M:%S")
-    from_date = serializers.DateTimeField(format="%Y-%m-%d %H:%M:%S")
-    to_date = serializers.DateTimeField(format="%Y-%m-%d %H:%M:%S")
-
-    class Meta:
-        model = WorkBreak
-        fields = ('approve_state', 'approved_by', 'approved_at', 'decline_reason', 'comment', 'from_date', 'reason',
-                  'to_date', 'id', 'user')
 
 
 class WorkBreakUpdateSerializer(serializers.ModelSerializer):

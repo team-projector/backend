@@ -1,13 +1,16 @@
 from django.contrib.auth import get_user_model
 from django.shortcuts import get_object_or_404
 from django.utils.functional import cached_property
+from django.utils import timezone
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import mixins, permissions
+from rest_framework.decorators import action
 from rest_framework.response import Response
 
 from apps.core.rest.views import BaseGenericAPIView, BaseGenericViewSet
 from apps.core.rest.mixins.views import CreateModelMixin, UpdateModelMixin
 from apps.core.utils.rest import parse_query_params
+from apps.development.rest.permissions import IsTeamLeader
 from apps.payroll.rest.permissions import CanViewUserMetrics
 from .serializers import SalarySerializer, TimeExpenseSerializer, UserProgressMetricsParamsSerializer, \
     UserProgressMetricsSerializer, WorkBreakSerializer, WorkBreakCardSerializer, WorkBreakUpdateSerializer
@@ -118,5 +121,42 @@ class WorkBreaksViewset(mixins.ListModelMixin,
     ordering_fields = ('from_date',)
     ordering = ('from_date',)
 
+    def get_permissions(self):
+        if self.action in ['decline', 'approve', 'approving']:
+            return [permissions.IsAuthenticated(), IsTeamLeader()]
+        return super().get_permissions()
+
     def filter_queryset(self, queryset):
         return super().filter_queryset(queryset)
+
+    @action(detail=True,
+            methods=['post'],
+            serializer_class=WorkBreakSerializer)
+    def decline(self, request, pk=None):
+        instance = self.get_object()
+
+        instance.approve_state = 'decline'
+        instance.approved_by = User.objects.get(id=request.user.id)
+        instance.approved_at = timezone.now()
+
+        serializer = self.get_serializer(instance, data=request.data, partial=True)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+
+        return Response(serializer.data)
+
+    @action(detail=True,
+            methods=['post'],
+            serializer_class=WorkBreakSerializer,)
+    def approve(self, request, pk=None):
+        instance = self.get_object()
+
+        instance.approve_state = 'approved'
+        instance.approved_by = User.objects.get(id=request.user.id)
+        instance.approved_at = timezone.now()
+
+        serializer = self.get_serializer(instance, data=request.data, partial=True)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+
+        return Response(serializer.data)
