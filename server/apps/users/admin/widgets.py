@@ -29,9 +29,6 @@ class PermissionSelectMultipleWidget(forms.CheckboxSelectMultiple):
         row: Dict[str, Any] = {}
 
         for permission in self.choices.queryset.select_related('content_type').all():
-            if f'apps.{permission.content_type.app_label}' not in settings.PROJECT_APPS:
-                continue
-
             row, created = self._update_or_create_permission_row(permission, row)
             if created:
                 table.append(row)
