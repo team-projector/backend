@@ -1,9 +1,13 @@
 from typing import Dict, Iterable
 
+from actstream.models import Action
 from bitfield.rest.fields import BitField
+from django.apps import apps as django_apps
 from django.db.models import Sum
 from rest_framework import serializers
 
+from apps.core.activity.verbs import ACTION_GITLAB_WEBHOOK_TRIGGERED, ACTION_GITLAB_CALL_API
+from apps.core.db.mixins import GitlabEntityMixin
 from apps.core.rest.serializers import LinkSerializer
 from apps.core.utils.objects import dict2obj
 from apps.development.rest.milestone_metrics import MilestoneMetricsCalculator
@@ -144,3 +148,59 @@ class EpicUpdateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Epic
         fields = ('title', 'description', 'start_date', 'due_date', 'milestone')
+
+
+class GitlabStatusSerializer(serializers.Serializer):
+    services = serializers.SerializerMethodField()
+    status = serializers.SerializerMethodField()
+    last_issues = serializers.SerializerMethodField()
+    last_sync = serializers.SerializerMethodField()
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self._last_webhook = None
+        self._last_api = None
+
+    def get_services(self, *args):
+        self.fill_services()
+        return {
+            'api': self._last_api,
+            'web_hooks': self._last_webhook,
+        }
+
+    def get_status(self, *args):
+        self.fill_services()
+        # TODO: need discuss
+
+        status_map = {
+            0: 'down',
+            1: 'delay',
+            2: 'up'
+        }
+
+        return status_map[bool(self._last_api) + bool(self._last_webhook)]
+
+    def get_last_issues(self, request):
+        issues = Issue.objects.order_by('-updated_at')[:10]
+        return IssueCardSerializer(issues, many=True, context=self.context).data
+
+    @staticmethod
+    def get_last_sync(*args):
+        querysets = [
+            x.objects.filter(gl_last_sync__isnull=False).values('gl_last_sync') for x in django_apps.get_models() if
+            issubclass(x, GitlabEntityMixin)
+        ]
+        value = querysets[0].union(*querysets[1:]).order_by('-gl_last_sync').first() or {}
+        return value.get('gl_last_sync')
+
+    def fill_services(self):
+        field_maps = {
+            '_last_webhook': ACTION_GITLAB_WEBHOOK_TRIGGERED,
+            '_last_api': ACTION_GITLAB_CALL_API
+        }
+
+        for key, value in field_maps.items():
+            if not getattr(self, key):
+                action = Action.objects.filter(verb=value).order_by('-timestamp').first()
+                if action:
+                    setattr(self, key, action.timestamp)

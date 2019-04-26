@@ -9,7 +9,9 @@ from gitlab import GitlabGetError, Gitlab
 from gitlab.v4.objects import Group as GlGroup, Project as GlProject, ProjectIssue as GlProjectIssue
 from rest_framework import status
 
+from apps.core.activity.verbs import ACTION_GITLAB_CALL_API
 from apps.core.gitlab import get_gitlab_client
+from apps.core.tasks import add_action
 from apps.users.models import User
 from .parsers import parse_gl_date, parse_gl_datetime
 from ..models import Issue, Label, Note, Project, ProjectGroup, Milestone
@@ -61,6 +63,7 @@ def load_group_projects(group: ProjectGroup) -> None:
 
     try:
         gl_group = gl.groups.get(id=group.gl_id)
+        add_action.delay(None, verb=ACTION_GITLAB_CALL_API)
     except GitlabGetError as e:
         if e.response_code != status.HTTP_404_NOT_FOUND:
             raise
@@ -113,6 +116,8 @@ def load_project_issues(project: Project,
     logger.info(f'Syncing project "{project}" issues')
     gl_project = gl.projects.get(id=project.gl_id)
 
+    add_action.delay(None, verb=ACTION_GITLAB_CALL_API)
+
     args = {
         'as_list': False
     }
@@ -136,6 +141,8 @@ def check_projects_deleted_issues():
     for project in Project.objects.all():
         try:
             gl_project = gl.projects.get(id=project.gl_id)
+
+            add_action.delay(None, verb=ACTION_GITLAB_CALL_API)
 
             check_project_deleted_issues(project, gl_project)
         except GitlabGetError as e:
@@ -241,6 +248,8 @@ def load_user(user_id: int) -> User:
 
     gl_user = gl.users.get(user_id)
 
+    add_action.delay(None, verb=ACTION_GITLAB_CALL_API)
+
     user, created = User.objects.update_or_create(
         gl_id=gl_user.id,
         defaults={
@@ -265,6 +274,8 @@ def load_group_milestones(project_group_id, gl_group_id: int) -> None:
     gl = get_gitlab_client()
     group = gl.groups.get(gl_group_id)
 
+    add_action.delay(None, verb=ACTION_GITLAB_CALL_API)
+
     for gl_milestone in group.milestones.list():
         params = {
             'gl_id': gl_milestone.id,
@@ -285,6 +296,8 @@ def load_group_milestones(project_group_id, gl_group_id: int) -> None:
 def load_gl_project_milestones(project_id, gl_project_id: int) -> None:
     gl = get_gitlab_client()
     gl_project = gl.projects.get(gl_project_id)
+
+    add_action.delay(None, verb=ACTION_GITLAB_CALL_API)
 
     for gl_milestone in gl_project.milestones.list():
         params = {
