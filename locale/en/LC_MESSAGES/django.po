@@ -116,11 +116,11 @@ msgstr "User"
 
 #: server/apps/development/models.py:50
 msgid "VN__TEAM_MEMBER"
-msgstr "Team member"
+msgstr "Team Member"
 
 #: server/apps/development/models.py:51
 msgid "VN__TEAM_MEMBERS"
-msgstr "Team members"
+msgstr "Team Members"
 
 #: server/apps/development/models.py:62 server/apps/users/models.py:14
 msgid "CH_TEAM_LEADER"
