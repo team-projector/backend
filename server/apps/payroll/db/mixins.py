@@ -6,6 +6,11 @@ from apps.core.db.utils import Choices
 from apps.users.models import User
 
 
+CREATED = 'created'
+APPROVED = 'approved'
+DECLINED = 'declined'
+
+
 class SpentTimesMixin(models.Model):
     time_spents = GenericRelation(
         'payroll.SpentTime',
@@ -20,9 +25,9 @@ class SpentTimesMixin(models.Model):
 
 class ApprovedMixin(models.Model):
     APPROVED_STATES = Choices(
-        ('created', _('CH_CREATED')),
-        ('approved', _('CH_APPROVED')),
-        ('declined', _('CH_DECLINED')),
+        (CREATED, _('CH_CREATED')),
+        (APPROVED, _('CH_APPROVED')),
+        (DECLINED, _('CH_DECLINED')),
     )
 
     approve_state = models.CharField(

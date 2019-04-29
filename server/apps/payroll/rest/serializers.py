@@ -1,5 +1,4 @@
-from django.conf import settings
-
+from django.utils import timezone
 from rest_framework import serializers
 
 from apps.core.rest.serializers import LinkSerializer
@@ -60,29 +59,53 @@ class TimeExpenseSerializer(serializers.ModelSerializer):
 class SalarySerializer(serializers.ModelSerializer):
     class Meta:
         model = Salary
-        fields = ('id', 'charged_time', 'payed', 'bonus', 'created_at', 'period_to', 'taxes', 'penalty', 'period_from',
-                  'sum', 'total')
+        fields = (
+            'id', 'charged_time', 'payed', 'bonus', 'created_at', 'period_to', 'taxes', 'penalty', 'period_from',
+            'sum', 'total'
+        )
 
 
 class WorkBreakSerializer(serializers.ModelSerializer):
     approved_by = UserCardSerializer()
     user = LinkSerializer()
-    approved_at = serializers.DateTimeField(format=settings.DATETIME_FORMAT)
-    from_date = serializers.DateTimeField(format=settings.DATETIME_FORMAT)
-    to_date = serializers.DateTimeField(format=settings.DATETIME_FORMAT)
+    approved_at = serializers.DateTimeField()
+    from_date = serializers.DateTimeField()
+    to_date = serializers.DateTimeField()
 
     class Meta:
         model = WorkBreak
-        fields = ('approve_state', 'approved_by', 'approved_at', 'decline_reason', 'comment', 'from_date', 'reason',
-                  'to_date', 'id', 'user')
+        fields = (
+            'approve_state', 'approved_by', 'approved_at', 'decline_reason', 'comment', 'from_date', 'reason',
+            'to_date', 'id', 'user'
+        )
 
 
 class WorkBreakCardSerializer(WorkBreakSerializer):
     approved_by = LinkSerializer()
 
 
+class WorkBreakApproveSerializer(WorkBreakSerializer):
+    approved_by = LinkSerializer()
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.request = self.context['request']
+
+    def update(self, instance, validated_data):
+        instance.approve_state = validated_data.get('approve_state', instance.approve_state)
+        instance.approved_by = self.request.user
+        instance.approved_at = timezone.now()
+        if 'decline_reason' in self.request.data:
+            instance.decline_reason = self.request.data['decline_reason']
+        instance.save()
+
+        return instance
+
+
 class WorkBreakUpdateSerializer(serializers.ModelSerializer):
     class Meta:
         model = WorkBreak
-        fields = ('approve_state', 'approved_by', 'approved_at', 'decline_reason', 'comment', 'from_date', 'reason',
-                  'to_date', 'id', 'user')
+        fields = (
+            'approve_state', 'approved_by', 'approved_at', 'decline_reason', 'comment', 'from_date', 'reason',
+            'to_date', 'id', 'user'
+        )

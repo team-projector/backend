@@ -1,6 +1,8 @@
 from rest_framework import status
 
 from apps.development.models import TeamMember
+from apps.payroll.db.mixins import CREATED, DECLINED, APPROVED
+from apps.payroll.models.workbreak import DAYOFF, VACATION
 from apps.payroll.utils.metrics.user import User
 from tests.base import BaseAPITest
 from tests.test_development.factories import TeamFactory, TeamMemberFactory
@@ -15,7 +17,7 @@ class WorkBreaksTests(BaseAPITest):
 
     def get_data(self):
         return {
-            "reason": "dayoff",
+            "reason": DAYOFF,
             "comment": "Comment text",
             "from_date": "2019-04-27T17:33:26+03:00",
             "user": self.user.id,
@@ -24,7 +26,7 @@ class WorkBreaksTests(BaseAPITest):
 
     def get_update_data(self):
         return {
-            "reason": "vacation",
+            "reason": VACATION,
             "comment": "Comment text",
             "from_date": "2019-04-27T17:33:26+03:00",
             "user": self.user.id,
@@ -54,7 +56,7 @@ class WorkBreaksTests(BaseAPITest):
         response = self.client.post('/api/work-breaks', data)
 
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-        self.assertEqual(response.data['approve_state'], 'created')
+        self.assertEqual(response.data['approve_state'], CREATED)
 
     def test_update(self):
         work_break = WorkBreakFactory.create(user=self.user)
@@ -90,7 +92,7 @@ class WorkBreaksTests(BaseAPITest):
                                  roles=TeamMember.roles.developer)
 
         WorkBreakFactory.create_batch(5, user=user_2)
-        WorkBreakFactory.create_batch(4, user=user_2, approve_state='approved')
+        WorkBreakFactory.create_batch(4, user=user_2, approve_state=APPROVED)
         WorkBreakFactory.create_batch(3, user=user_3)
 
         self.set_credentials()
@@ -135,9 +137,9 @@ class WorkBreaksTests(BaseAPITest):
                                  roles=TeamMember.roles.developer)
 
         WorkBreakFactory.create_batch(5, user=user_2)
-        WorkBreakFactory.create_batch(4, user=user_2, approve_state='approved')
+        WorkBreakFactory.create_batch(4, user=user_2, approve_state=APPROVED)
         WorkBreakFactory.create_batch(5, user=user_3)
-        WorkBreakFactory.create_batch(4, user=user_3, approve_state='approved')
+        WorkBreakFactory.create_batch(4, user=user_3, approve_state=APPROVED)
 
         self.set_credentials()
 
@@ -167,7 +169,7 @@ class WorkBreaksTests(BaseAPITest):
         response = self.client.post(f'/api/work-breaks/{work_break.id}/decline', data)
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data['approve_state'], 'decline')
+        self.assertEqual(response.data['approve_state'], DECLINED)
         self.assertEqual(response.data['approved_by']['id'], self.user.id)
         self.assertEqual(response.data['decline_reason'], data['decline_reason'])
 
@@ -202,7 +204,7 @@ class WorkBreaksTests(BaseAPITest):
         response = self.client.post(f'/api/work-breaks/{work_break.id}/approve')
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data['approve_state'], 'approved')
+        self.assertEqual(response.data['approve_state'], APPROVED)
         self.assertEqual(response.data['approved_by']['id'], self.user.id)
 
     def test_approve_by_bad_user(self):

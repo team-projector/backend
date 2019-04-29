@@ -1,7 +1,7 @@
 from django.contrib.auth import get_user_model
+from django.db.models import OuterRef, Exists
 from django.shortcuts import get_object_or_404
 from django.utils.functional import cached_property
-from django.utils import timezone
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import mixins, permissions
 from rest_framework.decorators import action
@@ -13,8 +13,10 @@ from apps.core.utils.rest import parse_query_params
 from apps.development.models import TeamMember
 from apps.development.rest.permissions import IsTeamLeader
 from apps.payroll.rest.permissions import CanViewUserMetrics
+from apps.payroll.db.mixins import CREATED, APPROVED, DECLINED
 from .serializers import SalarySerializer, TimeExpenseSerializer, UserProgressMetricsParamsSerializer, \
-    UserProgressMetricsSerializer, WorkBreakSerializer, WorkBreakCardSerializer, WorkBreakUpdateSerializer
+    UserProgressMetricsSerializer, WorkBreakSerializer, WorkBreakCardSerializer, WorkBreakUpdateSerializer, \
+    WorkBreakApproveSerializer
 from ..models import Salary, SpentTime, WorkBreak
 from ..utils.metrics.progress import create_progress_calculator
 
@@ -130,38 +132,42 @@ class WorkBreaksViewset(mixins.ListModelMixin,
     @action(detail=False,
             serializer_class=WorkBreakCardSerializer)
     def approving(self, request):
-        teams_ids = list(TeamMember.objects.filter(user=request.user,
-                                                   roles=TeamMember.roles.leader).values_list('team', flat=True))
-        users_ids = set(TeamMember.objects.filter(team__in=teams_ids).values_list('user', flat=True))
-        users_ids.discard(request.user.id)
+        teams = TeamMember.objects.filter(user=request.user,
+                                          roles=TeamMember.roles.leader).values_list('team', flat=True)
+        subquery = User.objects.filter(team_members__team__in=teams,
+                                       team_members__roles=TeamMember.roles.developer,
+                                       id=OuterRef('user_id'))
 
-        queryset = self.get_queryset().filter(user__in=users_ids, approve_state='created')
+        queryset = self.get_queryset().annotate(user_is_team_member=Exists(subquery)).filter(
+            user_is_team_member=True,
+            approve_state=CREATED
+        )
         page = self.paginate_queryset(queryset)
         serializer = self.get_serializer(page, many=True)
 
         return self.get_paginated_response(serializer.data)
 
     @action(detail=True,
-            methods=['post'],
-            serializer_class=WorkBreakSerializer)
+            methods=['post'])
     def decline(self, request, pk=None):
-        serializer = self.get_serializer_from_instance(request, approve_state='decline')
+        instance = self.get_object()
+        serializer = self._get_approve_serialzer(instance, approve_state=DECLINED)
+
         return Response(serializer.data)
 
     @action(detail=True,
-            methods=['post'],
-            serializer_class=WorkBreakSerializer,)
+            methods=['post'])
     def approve(self, request, pk=None):
-        serializer = self.get_serializer_from_instance(request, approve_state='approved')
+        instance = self.get_object()
+        serializer = self._get_approve_serialzer(instance, approve_state=APPROVED)
+
         return Response(serializer.data)
 
-    def get_serializer_from_instance(self, request, approve_state):
-        instance = self.get_object()
-        instance.approve_state = approve_state
-        instance.approved_by = User.objects.get(id=request.user.id)
-        instance.approved_at = timezone.now()
-
-        serializer = self.get_serializer(instance, data=request.data, partial=True)
+    def _get_approve_serialzer(self, instance, approve_state):
+        serializer = WorkBreakApproveSerializer(instance,
+                                                context=self.get_serializer_context(),
+                                                data={'approve_state': approve_state},
+                                                partial=True)
         serializer.is_valid(raise_exception=True)
         serializer.save()
 

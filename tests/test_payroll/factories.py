@@ -1,8 +1,10 @@
 import factory
 import pytz
+import random
 
-from tests.test_development.factories import IssueFactory
 from apps.payroll.models import SpentTime, Penalty, Bonus, Salary, WorkBreak
+from apps.payroll.models.workbreak import DAYOFF, VACATION, DISEASE
+from tests.test_development.factories import IssueFactory
 from tests.test_users.factories import UserFactory
 
 
@@ -41,7 +43,7 @@ class SalaryFactory(factory.django.DjangoModelFactory):
 
 class WorkBreakFactory(factory.django.DjangoModelFactory):
     user = factory.SubFactory(UserFactory)
-    reason = 'dayoff'
+    reason = random.choice((DAYOFF, VACATION, DISEASE))
     from_date = factory.Faker('date_time_this_year', before_now=True, after_now=False, tzinfo=pytz.UTC)
     to_date = factory.Faker('date_time_this_year', before_now=False, after_now=True, tzinfo=pytz.UTC)
     comment = factory.Faker('text', max_nb_chars=200)
