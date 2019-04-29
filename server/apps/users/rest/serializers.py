@@ -67,3 +67,12 @@ class UserCardSerializer(UserMetricsMixin,
     class Meta:
         model = User
         fields = ('id', 'name', 'avatar', 'roles', 'metrics')
+
+
+class ParticipantCardSerializer(serializers.ModelSerializer):
+    avatar = serializers.URLField(source='gl_avatar')
+    roles = BitField()
+
+    class Meta:
+        model = User
+        fields = ('id', 'name', 'avatar', 'roles')

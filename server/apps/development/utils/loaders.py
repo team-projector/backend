@@ -186,6 +186,7 @@ def load_project_issue(project: Project, gl_project: GlProject, gl_issue: GlProj
 
     load_issue_labels(issue, gl_project, gl_issue)
     load_issue_notes(issue, gl_issue)
+    load_issue_participants(issue, gl_issue)
 
     logger.info(f'Issue "{issue}" is synced')
 
@@ -216,6 +217,16 @@ def load_issue_notes(issue: Issue, gl_issue: GlProjectIssue) -> None:
         Note.objects.sync_gitlab(gl_note, issue)
 
     issue.adjust_spent_times()
+
+
+def load_issue_participants(issue: Issue, gl_issue: GlProjectIssue) -> None:
+    def get_user(gl_id: int) -> User:
+        return User.objects.filter(gl_id=gl_id).first() or load_user(gl_id)
+
+    users = [get_user(x['id']) for x in gl_issue.participants()]
+
+    if set(users) != set(issue.participants.all()):
+        issue.participants.set(users)
 
 
 def extract_user_from_data(data: dict) -> Optional[User]:
