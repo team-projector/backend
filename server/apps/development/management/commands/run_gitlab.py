@@ -5,7 +5,7 @@ from django.core.management.base import BaseCommand
 import time
 
 from apps.development.models import Project
-from apps.development.utils.loaders import check_project_deleted_issues
+from apps.development.services.loaders import check_project_deleted_issues
 
 GROUP_ID = 4018796
 PROJECT_ID = 9419749

@@ -5,7 +5,7 @@ from django.utils import timezone
 from rest_framework import status
 
 from apps.users.models import Token
-from apps.users.utils.token import create_user_token
+from apps.users.services.token import create_user_token
 from tests.base import BaseAPITest
 
 

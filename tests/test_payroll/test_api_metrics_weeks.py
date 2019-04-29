@@ -9,7 +9,7 @@ from rest_framework import status
 from apps.core.utils.date import begin_of_week
 from apps.development.models import TeamMember
 from apps.development.models.issue import STATE_CLOSED, STATE_OPENED
-from apps.development.utils.parsers import parse_date
+from apps.development.services.parsers import parse_date
 from tests.base import BaseAPITest
 from tests.test_development.factories import IssueFactory, TeamFactory, TeamMemberFactory
 from tests.test_payroll.factories import IssueSpentTimeFactory

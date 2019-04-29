@@ -1,4 +1,4 @@
-from apps.payroll.utils.metrics.user import UserMetricsCalculator
+from apps.payroll.services.metrics.user import UserMetricsCalculator
 
 
 class UserMetricsMixin:

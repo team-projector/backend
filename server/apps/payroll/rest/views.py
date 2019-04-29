@@ -12,7 +12,7 @@ from .serializers import (
     SalarySerializer, TimeExpenseSerializer, UserProgressMetricsParamsSerializer, UserProgressMetricsSerializer
 )
 from ..models import Salary, SpentTime
-from ..utils.metrics.progress import create_progress_calculator
+from ..services.metrics.progress import create_progress_calculator
 
 User = get_user_model()
 

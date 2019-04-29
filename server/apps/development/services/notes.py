@@ -3,7 +3,7 @@ from collections import defaultdict, namedtuple
 from datetime import timedelta
 from typing import DefaultDict, Optional, Pattern
 
-from apps.development.utils.parsers import parse_gl_date
+from apps.development.services.parsers import parse_gl_date
 
 RE_SPEND: Pattern = re.compile(
     r'^(?P<action>(added|subtracted)) (?P<spent>.+) of time spent at (?P<date>\d{4}-\d{2}-\d{2})$'

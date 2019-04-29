@@ -2,10 +2,10 @@ from apps.core.activity.verbs import ACTION_GITLAB_CALL_API
 from apps.core.tasks import add_action
 from apps.core.gitlab import get_gitlab_client
 from apps.development.models import Project, ProjectGroup
-from apps.development.utils.loaders import (
+from apps.development.services.loaders import (
     load_project_issue, load_group_milestones, load_gl_project_milestones, load_groups,
-    load_projects,
-    load_project_issues, load_user, load_project, load_single_group)
+    load_projects, load_project_issues, load_user, load_project, load_single_group
+)
 from celery_app import app
 
 

@@ -5,10 +5,10 @@ from django.test import TestCase
 from django.utils import timezone
 
 from apps.development.models import Note
-from tests.test_development.factories import IssueFactory, IssueNoteFactory
-from apps.development.utils.parsers import parse_date
+from apps.development.services.parsers import parse_date
 from apps.payroll.models import SpentTime
 from apps.users.models import User
+from tests.test_development.factories import IssueFactory, IssueNoteFactory
 
 
 class AdjustSpentTimesTests(TestCase):

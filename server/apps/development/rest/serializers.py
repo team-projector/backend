@@ -11,7 +11,7 @@ from apps.core.db.mixins import GitlabEntityMixin
 from apps.core.rest.serializers import LinkSerializer
 from apps.core.utils.objects import dict2obj
 from apps.development.rest.milestone_metrics import MilestoneMetricsCalculator
-from apps.development.utils.problems.issues import checkers
+from apps.development.services.problems.issues import checkers
 from apps.payroll.models import SpentTime
 from apps.users.models import User
 from apps.users.rest.serializers import UserCardSerializer

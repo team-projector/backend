@@ -16,7 +16,7 @@ from apps.core.rest.views import BaseGenericViewSet, BaseGenericAPIView
 from apps.core.tasks import add_action
 from apps.development.rest import permissions
 from apps.development.rest.filters import TeamMemberFilterBackend
-from apps.development.utils.problems.issues import IssueProblemsChecker
+from apps.development.services.problems.issues import IssueProblemsChecker
 from .serializers import (
     IssueCardSerializer, IssueProblemSerializer, TeamCardSerializer, TeamMemberCardSerializer, IssueUpdateSerializer,
     MilestoneCardSerializer, EpicCardSerializer, EpicUpdateSerializer, EpicSerializer, GitlabStatusSerializer
