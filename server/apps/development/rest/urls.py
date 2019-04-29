@@ -1,9 +1,11 @@
 from django.urls import path
 
 from apps.core.rest.routers import AppRouter
-from .views import IssuesViewset, gl_webhook, TeamsViewset, TeamMembersViewset, ProjectGroupMilestonesViewset, \
-    ProjectMilestonesViewset, MilestoneIssuesViewset, MilestoneEpicsViewset, EpicsViewset, EpicIssuesViewset, \
+from .views import (
+    IssuesViewset, gl_webhook, TeamsViewset, TeamMembersViewset, ProjectGroupMilestonesViewset,
+    ProjectMilestonesViewset, MilestoneIssuesViewset, MilestoneEpicsViewset, EpicsViewset, EpicIssuesViewset,
     GitlabStatusView
+)
 
 app_name = 'development'
 

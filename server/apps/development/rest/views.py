@@ -17,9 +17,10 @@ from apps.core.tasks import add_action
 from apps.development.rest import permissions
 from apps.development.rest.filters import TeamMemberFilterBackend
 from apps.development.utils.problems.issues import IssueProblemsChecker
-from .serializers import IssueCardSerializer, IssueProblemSerializer, TeamCardSerializer, TeamMemberCardSerializer, \
-    IssueUpdateSerializer, MilestoneCardSerializer, EpicCardSerializer, EpicUpdateSerializer, EpicSerializer, \
-    GitlabStatusSerializer
+from .serializers import (
+    IssueCardSerializer, IssueProblemSerializer, TeamCardSerializer, TeamMemberCardSerializer, IssueUpdateSerializer,
+    MilestoneCardSerializer, EpicCardSerializer, EpicUpdateSerializer, EpicSerializer, GitlabStatusSerializer
+)
 from ..models import Issue, Team, TeamMember, Milestone, ProjectGroup, Project, Epic
 from ..tasks import sync_project_issue
 
