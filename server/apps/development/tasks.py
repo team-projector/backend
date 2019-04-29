@@ -11,11 +11,11 @@ from celery_app import app
 
 @app.task(queue='low_priority')
 def sync() -> None:
-    # load_groups()
-    # sync_groups_milestones.delay()
-    #
-    # load_projects()
-    # sync_projects_milestones.delay()
+    load_groups()
+    sync_groups_milestones.delay()
+
+    load_projects()
+    sync_projects_milestones.delay()
     sync_issues.delay()
 
 
