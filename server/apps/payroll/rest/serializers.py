@@ -1,3 +1,5 @@
+from django.conf import settings
+
 from rest_framework import serializers
 
 from apps.core.rest.serializers import LinkSerializer
@@ -65,9 +67,9 @@ class SalarySerializer(serializers.ModelSerializer):
 class WorkBreakSerializer(serializers.ModelSerializer):
     approved_by = UserCardSerializer()
     user = LinkSerializer()
-    approved_at = serializers.DateTimeField(format="%Y-%m-%d %H:%M:%S")
-    from_date = serializers.DateTimeField(format="%Y-%m-%d %H:%M:%S")
-    to_date = serializers.DateTimeField(format="%Y-%m-%d %H:%M:%S")
+    approved_at = serializers.DateTimeField(format=settings.DATETIME_FORMAT)
+    from_date = serializers.DateTimeField(format=settings.DATETIME_FORMAT)
+    to_date = serializers.DateTimeField(format=settings.DATETIME_FORMAT)
 
     class Meta:
         model = WorkBreak

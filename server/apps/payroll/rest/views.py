@@ -10,6 +10,7 @@ from rest_framework.response import Response
 from apps.core.rest.views import BaseGenericAPIView, BaseGenericViewSet
 from apps.core.rest.mixins.views import CreateModelMixin, UpdateModelMixin
 from apps.core.utils.rest import parse_query_params
+from apps.development.models import TeamMember
 from apps.development.rest.permissions import IsTeamLeader
 from apps.payroll.rest.permissions import CanViewUserMetrics
 from .serializers import SalarySerializer, TimeExpenseSerializer, UserProgressMetricsParamsSerializer, \
@@ -126,32 +127,37 @@ class WorkBreaksViewset(mixins.ListModelMixin,
             return [permissions.IsAuthenticated(), IsTeamLeader()]
         return super().get_permissions()
 
-    def filter_queryset(self, queryset):
-        return super().filter_queryset(queryset)
+    @action(detail=False,
+            serializer_class=WorkBreakCardSerializer)
+    def approving(self, request):
+        teams_ids = list(TeamMember.objects.filter(user=request.user,
+                                                   roles=TeamMember.roles.leader).values_list('team', flat=True))
+        users_ids = set(TeamMember.objects.filter(team__in=teams_ids).values_list('user', flat=True))
+        users_ids.discard(request.user.id)
+
+        queryset = self.get_queryset().filter(user__in=users_ids, approve_state='created')
+        page = self.paginate_queryset(queryset)
+        serializer = self.get_serializer(page, many=True)
+
+        return self.get_paginated_response(serializer.data)
 
     @action(detail=True,
             methods=['post'],
             serializer_class=WorkBreakSerializer)
     def decline(self, request, pk=None):
-        instance = self.get_object()
-
-        instance.approve_state = 'decline'
-        instance.approved_by = User.objects.get(id=request.user.id)
-        instance.approved_at = timezone.now()
-
-        serializer = self.get_serializer(instance, data=request.data, partial=True)
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
-
+        serializer = self.get_serializer_from_instance(request, approve_state='decline')
         return Response(serializer.data)
 
     @action(detail=True,
             methods=['post'],
             serializer_class=WorkBreakSerializer,)
     def approve(self, request, pk=None):
-        instance = self.get_object()
+        serializer = self.get_serializer_from_instance(request, approve_state='approved')
+        return Response(serializer.data)
 
-        instance.approve_state = 'approved'
+    def get_serializer_from_instance(self, request, approve_state):
+        instance = self.get_object()
+        instance.approve_state = approve_state
         instance.approved_by = User.objects.get(id=request.user.id)
         instance.approved_at = timezone.now()
 
@@ -159,4 +165,4 @@ class WorkBreaksViewset(mixins.ListModelMixin,
         serializer.is_valid(raise_exception=True)
         serializer.save()
 
-        return Response(serializer.data)
+        return serializer

@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
@@ -51,4 +52,5 @@ class WorkBreak(ApprovedMixin, Timestamps):
         ordering = ('-from_date',)
 
     def __str__(self):
-        return f'{self.user}: {self.reason} ({self.from_date} - {self.to_date})'
+        return f'{self.user}: {self.reason} ' \
+            f'({self.from_date.strftime(settings.DATETIME_FORMAT)} - {self.to_date.strftime(settings.DATETIME_FORMAT)})'
