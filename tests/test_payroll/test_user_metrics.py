@@ -3,7 +3,7 @@ from datetime import timedelta
 from django.test import TestCase
 
 from apps.development.models.issue import STATE_CLOSED, STATE_OPENED
-from apps.payroll.utils.metrics.user import User, UserMetrics, UserMetricsCalculator
+from apps.payroll.services.metrics.user import User, UserMetrics, UserMetricsCalculator
 from tests.test_development.factories import IssueFactory
 from tests.test_payroll.factories import BonusFactory, IssueSpentTimeFactory, PenaltyFactory, SalaryFactory
 from tests.test_users.factories import UserFactory

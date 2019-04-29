@@ -5,7 +5,7 @@ from social_core.utils import handle_http_errors
 
 from apps.users.models import User
 from apps.users.rest.serializers import TokenSerializer
-from apps.users.utils.token import create_user_token
+from apps.users.services.token import create_user_token
 
 
 class CustomGitLabOAuth2(GitLabOAuth2):

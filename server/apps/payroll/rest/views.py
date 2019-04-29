@@ -8,10 +8,11 @@ from rest_framework.response import Response
 from apps.core.rest.views import BaseGenericAPIView
 from apps.core.utils.rest import parse_query_params
 from apps.payroll.rest.permissions import CanViewUserMetrics
-from .serializers import SalarySerializer, TimeExpenseSerializer, UserProgressMetricsParamsSerializer, \
-    UserProgressMetricsSerializer
+from .serializers import (
+    SalarySerializer, TimeExpenseSerializer, UserProgressMetricsParamsSerializer, UserProgressMetricsSerializer
+)
 from ..models import Salary, SpentTime
-from ..utils.metrics.progress import create_progress_calculator
+from ..services.metrics.progress import create_progress_calculator
 
 User = get_user_model()
 

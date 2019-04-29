@@ -178,6 +178,14 @@ sqlparse = "*"
 
 [[package]]
 category = "main"
+description = "Generate generic activity streams from the actions on your site. Users can follow any actors' activities for personalized streams."
+name = "django-activity-stream"
+optional = false
+python-versions = "*"
+version = "0.7.0"
+
+[[package]]
+category = "main"
 description = "A simple Django app to render list filters in django admin using autocomplete widget"
 name = "django-admin-autocomplete-filter"
 optional = false
@@ -393,7 +401,7 @@ description = "IPython: Productive Interactive Computing"
 name = "ipython"
 optional = false
 python-versions = ">=3.5"
-version = "7.4.0"
+version = "7.5.0"
 
 [package.dependencies]
 appnope = "*"
@@ -1086,7 +1094,7 @@ python-versions = "*"
 version = "1.1.7"
 
 [metadata]
-content-hash = "3e05ed4a3a0911f89ac47779408cb709cc91f93a0a9d53f3d9a1e4535d3e0457"
+content-hash = "dce88b3b5d5381f9d14bd6203b65b4bc26c5ee23da5467a2044ebf539ec0b749"
 python-versions = "^3.6"
 
 [metadata.hashes]
@@ -1109,6 +1117,7 @@ coverage = ["0c5fe441b9cfdab64719f24e9684502a59432df7570521563d7b1aff27ac755f", 
 decorator = ["86156361c50488b84a3f148056ea716ca587df2f0de1d34750d35c21312725de", "f069f3a01830ca754ba5258fde2278454a0b5b79e0d7f5c13b3b97e57d4acff6"]
 defusedxml = ["6687150770438374ab581bb7a1b327a847dd9c5749e396102de3fad4e8a3ef93", "f684034d135af4c6cbb949b8a4d2ed61634515257a67299e5f940fbaa34377f5"]
 django = ["7c3543e4fb070d14e10926189a7fcf42ba919263b7473dceaefce34d54e8a119", "a2814bffd1f007805b19194eb0b9a331933b82bd5da1c3ba3d7b7ba16e06dc4b"]
+django-activity-stream = ["4d356d640e6298c559c861bf05f63f4e0e0bffa95005f7253ebca788555a64cf"]
 django-admin-autocomplete-filter = ["54296f334f1642b59086feee5375d8dcf92cb0c545502738942735b6cca2d8af", "7f60555cc05953df9255024135510f677a2aedfa12c2182ca080119011c36f18"]
 django-cors-headers = ["1ccedec2973087be9d73f96d58c4f6660c823efc0385581e13efb77f060d0e02", "fb44f6b9f10de847919305c3f0d38fcfbadfe0dd5cf1c866f37df66ad0dda1bb"]
 django-extensions = ["109004f80b6f45ad1f56addaa59debca91d94aa0dc1cb19678b9364b4fe9b6f4", "307766e5e6c1caffe76c5d99239d8115d14ae3f7cab2cd991fcffd763dad904b"]
@@ -1129,7 +1138,7 @@ flower = ["7f45acb297ab7cf3dd40140816143a2588f6938dbd70b8c46b59c7d8d1e93d55"]
 idna = ["c357b3f628cf53ae2c4c05627ecc484553142ca23264e593d327bcde5e9c3407", "ea8b7f6188e6fa117537c3df7da9fc686d485087abf6ac197f9c46432f7e4a3c"]
 imagesize = ["3f349de3eb99145973fefb7dbe38554414e5c30abd0c8e4b970a7c9d09f3a1d8", "f3832918bc3c66617f92e35f5d70729187676313caa60c187eb0f28b8fe5e3b5"]
 inflection = ["18ea7fb7a7d152853386523def08736aa8c32636b047ade55f7578c4edeb16ca"]
-ipython = ["b038baa489c38f6d853a3cfc4c635b0cda66f2864d136fe8f40c1a6e334e2a6b", "f5102c1cd67e399ec8ea66bcebe6e3968ea25a8977e53f012963e5affeb1fe38"]
+ipython = ["54c5a8aa1eadd269ac210b96923688ccf01ebb2d0f21c18c3c717909583579a8", "e840810029224b56cd0d9e7719dc3b39cf84d577f8ac686547c8ba7a06eeab26"]
 ipython-genutils = ["72dd37233799e619666c9f639a9da83c34013a73e8bbc79a7a6348d93c61fab8", "eb2e116e75ecef9d4d228fdc66af54269afa26ab4463042e33785b887c628ba8"]
 itypes = ["c6e77bb9fd68a4bfeb9d958fea421802282451a25bac4913ec94db82a899c073"]
 jedi = ["2bb0603e3506f708e792c7f4ad8fc2a7a9d9c2d292a358fbbd58da531695595b", "2c6bcd9545c7d6440951b12b44d373479bf18123a401a52025cf98563fbd826c"]

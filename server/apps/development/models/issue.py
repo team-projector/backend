@@ -8,13 +8,13 @@ from django.utils.functional import cached_property
 from django.utils.translation import gettext_lazy as _
 
 from apps.core.db.mixins import GitlabEntityMixin, GitlabInternalIdMixin
-from apps.development.utils.parsers import parse_date
+from apps.development.services.parsers import parse_date
 from apps.payroll.db.mixins import SpentTimesMixin
 from apps.users.models import User
+from .epic import Epic
 from .label import Label
 from .note import Note
 from .project import Project
-from .epic import Epic
 from ..db.managers import IssueManager
 from ..db.mixins import NotableMixin
 

@@ -1,10 +1,10 @@
 from rest_framework import status
 
-from tests.base import BaseAPITest
 from apps.development.models import TeamMember
+from apps.payroll.services.metrics.user import User
+from tests.base import BaseAPITest
 from tests.test_development.factories import TeamFactory, TeamMemberFactory
 from tests.test_payroll.factories import SalaryFactory
-from apps.payroll.utils.metrics.user import User
 
 
 class UserSalariesTests(BaseAPITest):
