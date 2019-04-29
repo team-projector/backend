@@ -31,6 +31,8 @@ django-health-check = "*"
 tornado = "5.*"
 jnt-django-bitfield = "*"
 jnt-django-admin-tools = "*"
+django-activity-stream = "*"
+
 
 [tool.poetry.dev-dependencies]
 flake8 = "*"

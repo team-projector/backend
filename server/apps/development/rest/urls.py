@@ -1,8 +1,11 @@
 from django.urls import path
 
 from apps.core.rest.routers import AppRouter
-from .views import IssuesViewset, gl_webhook, TeamsViewset, TeamMembersViewset, ProjectGroupMilestonesViewset, \
-    ProjectMilestonesViewset, MilestoneIssuesViewset, MilestoneEpicsViewset, EpicsViewset, EpicIssuesViewset
+from .views import (
+    IssuesViewset, gl_webhook, TeamsViewset, TeamMembersViewset, ProjectGroupMilestonesViewset,
+    ProjectMilestonesViewset, MilestoneIssuesViewset, MilestoneEpicsViewset, EpicsViewset, EpicIssuesViewset,
+    GitlabStatusView
+)
 
 app_name = 'development'
 
@@ -23,6 +26,7 @@ router.register(r'^teams/(?P<team_pk>\d+)/members$', TeamMembersViewset, basenam
 router.register('teams', TeamsViewset, basename='teams')
 
 urlpatterns = [
+    path('gitlab/status', GitlabStatusView.as_view(), name='gitlab-status'),
     path('gl-webhook', gl_webhook, name='gl-webhook'),
     *router.urls
 ]

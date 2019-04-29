@@ -2,8 +2,9 @@ from rest_framework import status
 
 from tests.base import BaseAPITest
 from apps.development.models import TeamMember
-from tests.test_development.factories import ProjectGroupMilestoneFactory, IssueFactory, TeamFactory, TeamMemberFactory, \
-    EpicFactory
+from tests.test_development.factories import (
+    ProjectGroupMilestoneFactory, IssueFactory, TeamFactory, TeamMemberFactory, EpicFactory
+)
 
 
 class ApiEpicIssuesTests(BaseAPITest):
