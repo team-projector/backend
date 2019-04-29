@@ -14,6 +14,7 @@ from apps.users.models import User
 from .label import Label
 from .note import Note
 from .project import Project
+from .epic import Epic
 from ..db.managers import IssueManager
 from ..db.mixins import NotableMixin
 
@@ -100,6 +101,13 @@ class Issue(NotableMixin,
         'Milestone',
         models.CASCADE,
         null=True,
+    )
+
+    epic = models.ForeignKey(
+        Epic,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True
     )
 
     participants = models.ManyToManyField(
