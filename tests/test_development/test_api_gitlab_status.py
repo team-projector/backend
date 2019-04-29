@@ -19,8 +19,8 @@ class GitlabStatusTests(BaseAPITest):
         project.gl_last_sync = timezone.now() + timedelta(minutes=2)
         project.save()
 
-        add_action.delay(self.user, verb=ACTION_GITLAB_WEBHOOK_TRIGGERED)
-        add_action.delay(self.user, verb=ACTION_GITLAB_CALL_API)
+        add_action.delay(sender_id=self.user.id, verb=ACTION_GITLAB_WEBHOOK_TRIGGERED)
+        add_action.delay(sender_id=self.user.id, verb=ACTION_GITLAB_CALL_API)
 
         self.set_credentials()
 

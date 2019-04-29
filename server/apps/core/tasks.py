@@ -5,8 +5,9 @@ from celery_app import app
 
 
 @app.task(queue='low_priority')
-def add_action(sender, **kwargs) -> None:
+def add_action(**kwargs) -> None:
     # TODO: need default sender
-    sender = sender or User.objects.filter(is_superuser=True).order_by('id').first()
+    sender_id = kwargs.pop('sender_id', None)
+    sender = User.objects.get(id=sender_id) if sender_id else User.objects.order_by('id').first()
 
     action.send(sender, **kwargs)
