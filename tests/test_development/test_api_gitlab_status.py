@@ -16,7 +16,7 @@ class GitlabStatusTests(BaseAPITest):
         Issue.objects.update(updated_at=timezone.now())
 
         project = Project.objects.first()
-        project.gl_last_sync = timezone.now() + timedelta(days=2)
+        project.gl_last_sync = timezone.now() + timedelta(minutes=2)
         project.save()
 
         add_action.delay(self.user, verb=ACTION_GITLAB_WEBHOOK_TRIGGERED)
@@ -32,35 +32,3 @@ class GitlabStatusTests(BaseAPITest):
             set(x['id'] for x in response.data['last_issues']),
             set(Issue.objects.order_by('-updated_at')[:10].values_list('id', flat=True))
         )
-        self.assertEqual(response.data['status'], 'up')
-
-        dd = 44
-
-    def test_status_up(self):
-        add_action.delay(self.user, verb=ACTION_GITLAB_WEBHOOK_TRIGGERED)
-        add_action.delay(self.user, verb=ACTION_GITLAB_CALL_API)
-
-        self.set_credentials()
-
-        response = self.client.get('/api/gitlab/status')
-
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data['status'], 'up')
-
-    def test_status_delay(self):
-        add_action.delay(self.user, verb=ACTION_GITLAB_WEBHOOK_TRIGGERED)
-
-        self.set_credentials()
-
-        response = self.client.get('/api/gitlab/status')
-
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data['status'], 'delay')
-
-    def test_status_down(self):
-        self.set_credentials()
-
-        response = self.client.get('/api/gitlab/status')
-
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data['status'], 'down')

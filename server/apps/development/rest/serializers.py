@@ -161,7 +161,6 @@ class EpicUpdateSerializer(serializers.ModelSerializer):
 
 class GitlabStatusSerializer(serializers.Serializer):
     services = serializers.SerializerMethodField()
-    status = serializers.SerializerMethodField()
     last_issues = serializers.SerializerMethodField()
     last_sync = serializers.SerializerMethodField()
 
@@ -176,18 +175,6 @@ class GitlabStatusSerializer(serializers.Serializer):
             'api': self._last_api,
             'web_hooks': self._last_webhook,
         }
-
-    def get_status(self, *args):
-        self.fill_services()
-        # TODO: need discuss
-
-        status_map = {
-            0: 'down',
-            1: 'delay',
-            2: 'up'
-        }
-
-        return status_map[bool(self._last_api) + bool(self._last_webhook)]
 
     def get_last_issues(self, request):
         issues = Issue.objects.order_by('-updated_at')[:10]
