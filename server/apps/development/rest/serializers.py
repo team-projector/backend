@@ -14,7 +14,7 @@ from apps.development.rest.milestone_metrics import MilestoneMetricsCalculator
 from apps.development.services.problems.issues import checkers
 from apps.payroll.models import SpentTime
 from apps.users.models import User
-from apps.users.rest.serializers import UserCardSerializer
+from apps.users.rest.serializers import UserCardSerializer, ParticipantCardSerializer
 from ..models import Issue, Label, Team, TeamMember, Milestone, Epic
 
 
@@ -38,12 +38,13 @@ class IssueCardSerializer(serializers.ModelSerializer):
     metrics = serializers.SerializerMethodField()
     milestone = LinkSerializer()
     epic = LinkSerializer()
+    participants = ParticipantCardSerializer(many=True)
 
     class Meta:
         model = Issue
         fields = (
             'id', 'title', 'labels', 'project', 'due_date', 'state', 'time_estimate', 'total_time_spent', 'time_spent',
-            'gl_url', 'metrics', 'milestone', 'epic'
+            'gl_url', 'metrics', 'milestone', 'epic', 'participants'
         )
 
     def get_metrics(self, instance: Issue):

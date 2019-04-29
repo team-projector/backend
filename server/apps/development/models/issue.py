@@ -110,6 +110,12 @@ class Issue(NotableMixin,
         blank=True
     )
 
+    participants = models.ManyToManyField(
+        User,
+        blank=True,
+        related_name='participant_issues',
+    )
+
     objects = IssueManager()
 
     class Meta:

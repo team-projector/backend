@@ -58,7 +58,7 @@ class IssueAdmin(ForceSyncEntityMixin, BaseModelAdmin):
     search_fields = ('title', 'gl_id')
     sortable_by = ('gl_last_sync', 'created_at')
     ordering = ('-gl_last_sync',)
-    autocomplete_fields = ('project', 'user', 'milestone')
+    autocomplete_fields = ('project', 'user', 'milestone', 'epic', 'labels', 'participants')
     inlines = (NoteInline,)
 
     def sync_handler(self, obj):
