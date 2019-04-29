@@ -37,12 +37,13 @@ class IssueCardSerializer(serializers.ModelSerializer):
     time_spent = serializers.SerializerMethodField()
     metrics = serializers.SerializerMethodField()
     milestone = LinkSerializer()
+    epic = LinkSerializer()
 
     class Meta:
         model = Issue
         fields = (
             'id', 'title', 'labels', 'project', 'due_date', 'state', 'time_estimate', 'total_time_spent', 'time_spent',
-            'gl_url', 'metrics', 'milestone'
+            'gl_url', 'metrics', 'milestone', 'epic'
         )
 
     def get_metrics(self, instance: Issue):
@@ -63,6 +64,14 @@ class IssueCardSerializer(serializers.ModelSerializer):
     def get_time_spent(self, instance: Issue):
         return instance.time_spents.filter(user=self.context['request'].user) \
             .aggregate(total_spent=Sum('time_spent'))['total_spent']
+
+
+class IssueUpdateSerializer(serializers.ModelSerializer):
+    epic = serializers.PrimaryKeyRelatedField(queryset=Epic.objects.all())
+
+    class Meta:
+        model = Issue
+        fields = ('epic',)
 
 
 class TeamCardSerializer(serializers.ModelSerializer):
