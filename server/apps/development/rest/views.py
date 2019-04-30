@@ -8,14 +8,19 @@ from django.views.decorators.csrf import csrf_exempt
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import filters, mixins
 from rest_framework.decorators import action
+from rest_framework.response import Response
 
+from apps.core.activity.verbs import ACTION_GITLAB_WEBHOOK_TRIGGERED
 from apps.core.rest.mixins.views import CreateModelMixin, UpdateModelMixin
-from apps.core.rest.views import BaseGenericViewSet
+from apps.core.rest.views import BaseGenericViewSet, BaseGenericAPIView
+from apps.core.tasks import add_action
 from apps.development.rest import permissions
 from apps.development.rest.filters import TeamMemberFilterBackend
-from apps.development.utils.problems.issues import IssueProblemsChecker
-from .serializers import IssueCardSerializer, IssueProblemSerializer, TeamCardSerializer, TeamMemberCardSerializer, \
-    MilestoneCardSerializer, EpicCardSerializer, EpicUpdateSerializer, EpicSerializer
+from apps.development.services.problems.issues import IssueProblemsChecker
+from .serializers import (
+    IssueCardSerializer, IssueProblemSerializer, TeamCardSerializer, TeamMemberCardSerializer, IssueUpdateSerializer,
+    MilestoneCardSerializer, EpicCardSerializer, EpicUpdateSerializer, EpicSerializer, GitlabStatusSerializer
+)
 from ..models import Issue, Team, TeamMember, Milestone, ProjectGroup, Project, Epic
 from ..tasks import sync_project_issue
 
@@ -34,15 +39,20 @@ def gl_webhook(request):
     sync_project_issue.delay(project_id, issue_id)
 
     logger.info(f'gitlab webhook was triggered: project_id = {project_id}, issue_id = {issue_id}')
+    add_action.delay(sender_id=request.user.id, verb=ACTION_GITLAB_WEBHOOK_TRIGGERED)
 
     return HttpResponse()
 
 
 class IssuesViewset(mixins.ListModelMixin,
+                    UpdateModelMixin,
                     BaseGenericViewSet):
     serializer_classes = {
-        'list': IssueCardSerializer
+        'list': IssueCardSerializer,
+        'update': IssueCardSerializer,
+        'partial_update': IssueCardSerializer,
     }
+    update_serializer_class = IssueUpdateSerializer
 
     queryset = Issue.objects.all()
     filter_backends = (filters.OrderingFilter, filters.SearchFilter, DjangoFilterBackend)
@@ -125,7 +135,8 @@ class ProjectMilestonesViewset(mixins.ListModelMixin,
         return super().filter_queryset(queryset.filter(project=self.project))
 
 
-class MilestoneIssuesViewset(mixins.ListModelMixin, BaseGenericViewSet):
+class MilestoneIssuesViewset(mixins.ListModelMixin,
+                             BaseGenericViewSet):
     permission_classes = (permissions.IsProjectManager,)
 
     serializer_classes = {
@@ -142,7 +153,8 @@ class MilestoneIssuesViewset(mixins.ListModelMixin, BaseGenericViewSet):
         return super().filter_queryset(queryset.filter(milestone=self.milestone))
 
 
-class MilestoneEpicsViewset(mixins.ListModelMixin, BaseGenericViewSet):
+class MilestoneEpicsViewset(mixins.ListModelMixin,
+                            BaseGenericViewSet):
     permission_classes = (permissions.IsProjectManager,)
 
     serializer_classes = {
@@ -192,3 +204,10 @@ class EpicIssuesViewset(mixins.ListModelMixin, BaseGenericViewSet):
 
     def filter_queryset(self, queryset):
         return super().filter_queryset(queryset.filter(milestone__epic=self.epic))
+
+
+class GitlabStatusView(BaseGenericAPIView):
+    serializer_class = GitlabStatusSerializer
+
+    def get(self, request):
+        return Response(self.get_serializer(request).data)

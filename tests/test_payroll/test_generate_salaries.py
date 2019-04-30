@@ -7,7 +7,7 @@ from django.utils import timezone
 from apps.development.models.issue import STATE_CLOSED, STATE_OPENED
 from apps.payroll.exceptions import EmptySalaryException
 from apps.payroll.models import Payroll, Salary
-from apps.payroll.utils.salary.calculator import SalaryCalculator
+from apps.payroll.services.salary.calculator import SalaryCalculator
 from apps.users.models import User
 from tests.test_development.factories import IssueFactory
 from tests.test_payroll.factories import BonusFactory, IssueSpentTimeFactory, PenaltyFactory, SalaryFactory

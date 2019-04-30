@@ -34,9 +34,9 @@ class MilestoneManager(models.Manager):
 
 class NoteManager(models.Manager):
     def sync_gitlab(self, gl_note, issue) -> Any:
-        from ..utils.loaders import extract_user_from_data
-        from ..utils.notes import read_note
-        from ..utils.parsers import parse_gl_datetime
+        from ..services.loaders import extract_user_from_data
+        from ..services.notes import read_note
+        from ..services.parsers import parse_gl_datetime
 
         if issue.last_note_date and issue.last_note_date > parse_gl_datetime(gl_note.created_at):
             return

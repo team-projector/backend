@@ -7,7 +7,7 @@ from rest_framework.views import APIView
 from apps.core.rest.views import BaseGenericAPIView, BaseGenericViewSet, LinksViewMixin
 from apps.payroll.rest.permissions import CanViewEmbeddedUserMetrics
 from apps.users.models import User
-from apps.users.utils.token import create_user_token
+from apps.users.services.token import create_user_token
 from .serializers import LoginSerializer, TokenSerializer, UserSerializer
 
 

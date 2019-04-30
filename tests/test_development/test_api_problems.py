@@ -4,7 +4,9 @@ from django.utils import timezone
 from rest_framework import status
 
 from apps.development.models.issue import STATE_CLOSED
-from apps.development.utils.problems.issues import PROBLEM_EMPTY_DUE_DAY, PROBLEM_EMPTY_ESTIMATE, PROBLEM_OVER_DUE_DAY
+from apps.development.services.problems.issues import (
+    PROBLEM_EMPTY_DUE_DAY, PROBLEM_EMPTY_ESTIMATE, PROBLEM_OVER_DUE_DAY
+)
 from tests.base import BaseAPITest
 from tests.test_development.factories import IssueFactory
 from tests.test_users.factories import UserFactory

@@ -5,7 +5,7 @@ from django.urls import path, reverse
 
 from apps.core.admin.base import BaseModelAdmin
 from apps.payroll.admin.forms import GenerateSalariesForm
-from apps.payroll.utils.salary.calculator import SalaryCalculator
+from apps.payroll.services.salary.calculator import SalaryCalculator
 from apps.users.admin.filters import UserFilter
 from ..models import Bonus, Payment, Payroll, Penalty, Salary, SpentTime, WorkBreak
 
