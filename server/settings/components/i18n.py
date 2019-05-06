@@ -17,5 +17,3 @@ LANGUAGES = [
 LOCALE_PATHS = [
     BASE_DIR.joinpath('locale')
 ]
-
-DATETIME_FORMAT = '%Y-%m-%d %H:%M:%S'
