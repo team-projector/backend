@@ -3,7 +3,7 @@ from rest_framework import status
 from apps.development.models import TeamMember
 from apps.payroll.db.mixins import CREATED, DECLINED, APPROVED
 from apps.payroll.models.workbreak import DAYOFF, VACATION
-from apps.payroll.utils.metrics.user import User
+from tests.test_users.factories import UserFactory
 from tests.base import BaseAPITest
 from tests.test_development.factories import TeamFactory, TeamMemberFactory
 from tests.test_payroll.factories import WorkBreakFactory
@@ -13,7 +13,7 @@ class WorkBreaksTests(BaseAPITest):
     def setUp(self):
         super().setUp()
 
-        self.user = User.objects.create_user(login='user')
+        self.user = UserFactory.create()
 
     def get_data(self):
         return {

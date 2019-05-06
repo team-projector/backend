@@ -14,8 +14,10 @@ from apps.development.models import TeamMember
 from apps.development.rest.permissions import IsTeamLeader
 from apps.payroll.rest.permissions import CanViewUserMetrics
 from apps.payroll.db.mixins import CREATED, APPROVED, DECLINED
+from apps.payroll.models import WorkBreak
 from .serializers import (
-    SalarySerializer, TimeExpenseSerializer, UserProgressMetricsParamsSerializer, UserProgressMetricsSerializer
+    SalarySerializer, TimeExpenseSerializer, UserProgressMetricsParamsSerializer, UserProgressMetricsSerializer,
+    WorkBreakSerializer, WorkBreakCardSerializer, WorkBreakApproveSerializer, WorkBreakUpdateSerializer
 )
 from ..models import Salary, SpentTime
 from ..services.metrics.progress import create_progress_calculator
