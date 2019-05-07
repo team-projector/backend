@@ -13,11 +13,12 @@ from apps.core.utils.rest import parse_query_params
 from apps.development.models import TeamMember
 from apps.development.rest.permissions import IsTeamLeader
 from apps.payroll.rest.permissions import CanViewUserMetrics
-from apps.payroll.db.mixins import CREATED, APPROVED, DECLINED
+from apps.payroll.db.mixins import CREATED
 from apps.payroll.models import WorkBreak
 from .serializers import (
     SalarySerializer, TimeExpenseSerializer, UserProgressMetricsParamsSerializer, UserProgressMetricsSerializer,
-    WorkBreakSerializer, WorkBreakCardSerializer, WorkBreakApproveSerializer, WorkBreakUpdateSerializer
+    WorkBreakSerializer, WorkBreakCardSerializer, WorkBreakApproveSerializer, WorkBreakDeclineSerializer,
+    WorkBreakUpdateSerializer
 )
 from ..models import Salary, SpentTime
 from ..services.metrics.progress import create_progress_calculator
@@ -115,7 +116,7 @@ class WorkBreaksViewset(mixins.ListModelMixin,
 
     serializer_classes = {
         'create': WorkBreakSerializer,
-        'update': WorkBreakUpdateSerializer,
+        'update': WorkBreakSerializer,
         'retrieve': WorkBreakSerializer,
         'destroy': WorkBreakSerializer,
     }
@@ -150,27 +151,31 @@ class WorkBreaksViewset(mixins.ListModelMixin,
         return self.get_paginated_response(serializer.data)
 
     @action(detail=True,
-            methods=['post'])
+            methods=['post'],
+            serializer_class=WorkBreakDeclineSerializer)
     def decline(self, request, pk=None):
         instance = self.get_object()
-        serializer = self._get_approve_serialzer(instance, approve_state=DECLINED)
+
+        serializer = self.get_serializer(instance,
+                                         context=self.get_serializer_context(),
+                                         data=request.data,
+                                         partial=True)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
 
         return Response(serializer.data)
 
     @action(detail=True,
-            methods=['post'])
+            methods=['post'],
+            serializer_class=WorkBreakApproveSerializer)
     def approve(self, request, pk=None):
         instance = self.get_object()
-        serializer = self._get_approve_serialzer(instance, approve_state=APPROVED)
 
-        return Response(serializer.data)
-
-    def _get_approve_serialzer(self, instance, approve_state):
-        serializer = WorkBreakApproveSerializer(instance,
-                                                context=self.get_serializer_context(),
-                                                data={'approve_state': approve_state},
-                                                partial=True)
+        serializer = self.get_serializer(instance,
+                                         context=self.get_serializer_context(),
+                                         data=request.data,
+                                         partial=True)
         serializer.is_valid(raise_exception=True)
         serializer.save()
 
-        return serializer
+        return Response(serializer.data)

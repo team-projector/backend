@@ -1,8 +1,10 @@
 from django.utils import timezone
+from django.utils.translation import gettext_lazy as _
 from rest_framework import serializers
 
 from apps.core.rest.serializers import LinkSerializer
 from apps.development.rest.serializers import IssueCardSerializer
+from apps.payroll.db.mixins import APPROVED, DECLINED
 from apps.payroll.models import Salary, SpentTime, WorkBreak
 from apps.users.rest.serializers import UserCardSerializer
 
@@ -85,18 +87,31 @@ class WorkBreakCardSerializer(WorkBreakSerializer):
 
 
 class WorkBreakApproveSerializer(WorkBreakSerializer):
-    approved_by = LinkSerializer()
+    def update(self, instance, validated_data):
+        instance.approve_state = APPROVED
+        instance.approved_by = self.context['request'].user
+        instance.approved_at = timezone.now()
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.request = self.context['request']
+        instance.save()
+
+        return instance
+
+
+class WorkBreakDeclineSerializer(WorkBreakSerializer):
+    decline_reason = serializers.CharField(required=True, allow_null=False)
+
+    def validate(self, attrs):
+        if 'decline_reason' not in attrs:
+            raise serializers.ValidationError(_('MESSAGE_DECLINE_REASON_FIELD_IS_REQUIRED'))
+
+        return attrs
 
     def update(self, instance, validated_data):
-        instance.approve_state = validated_data.get('approve_state', instance.approve_state)
-        instance.approved_by = self.request.user
+        instance.approve_state = DECLINED
+        instance.approved_by = self.context['request'].user
         instance.approved_at = timezone.now()
-        if 'decline_reason' in self.request.data:
-            instance.decline_reason = self.request.data['decline_reason']
+        instance.decline_reason = validated_data.get('decline_reason', instance.decline_reason)
+
         instance.save()
 
         return instance

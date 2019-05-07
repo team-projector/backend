@@ -184,6 +184,49 @@ class WorkBreaksTests(BaseAPITest):
 
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
+    def test_decline_without_decline_reason(self):
+        user_2 = self.create_user('user_2@mail.com')
+
+        team = TeamFactory.create()
+
+        TeamMemberFactory.create(team=team,
+                                 user=self.user,
+                                 roles=TeamMember.roles.developer | TeamMember.roles.leader)
+
+        TeamMemberFactory.create(team=team,
+                                 user=user_2,
+                                 roles=TeamMember.roles.developer)
+
+        work_break = WorkBreakFactory.create(user=user_2)
+
+        self.set_credentials()
+
+        response = self.client.post(f'/api/work-breaks/{work_break.id}/decline')
+
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_decline_with_blank_decline_reason(self):
+        user_2 = self.create_user('user_2@mail.com')
+        data = {'decline_reason': ''}
+
+        team = TeamFactory.create()
+
+        TeamMemberFactory.create(team=team,
+                                 user=self.user,
+                                 roles=TeamMember.roles.developer | TeamMember.roles.leader)
+
+        TeamMemberFactory.create(team=team,
+                                 user=user_2,
+                                 roles=TeamMember.roles.developer)
+
+        work_break = WorkBreakFactory.create(user=user_2)
+
+        self.set_credentials()
+
+        response = self.client.post(f'/api/work-breaks/{work_break.id}/decline', data)
+
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
     def test_approve_by_teamlead(self):
         user_2 = self.create_user('user_2@mail.com')
 
