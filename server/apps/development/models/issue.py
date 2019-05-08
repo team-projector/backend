@@ -101,6 +101,7 @@ class Issue(NotableMixin,
         'Milestone',
         models.CASCADE,
         null=True,
+        blank=True,
     )
 
     epic = models.ForeignKey(
