@@ -6,7 +6,7 @@ from apps.development.admin.filters import TeamFilter
 from apps.development.tasks import sync_project_issue, sync_project, sync_project_group
 from apps.users.admin.filters import UserFilter
 from .filters import ProjectFilter
-from .inlines import NoteInline, TeamMemberInline
+from .inlines import NoteInline, TeamMemberInline, ProjectMemberInline
 from ..models import Issue, Label, Note, Project, ProjectGroup, Team, TeamMember, Milestone, ProjectMember, Epic
 
 
@@ -36,6 +36,7 @@ class ProjectGroupAdmin(ForceSyncEntityMixin, BaseModelAdmin):
     list_display = ('title', 'parent', 'gl_url', 'gl_last_sync')
     search_fields = ('title',)
     autocomplete_fields = ('parent',)
+    inlines = (ProjectMemberInline,)
 
     def sync_handler(self, obj):
         sync_project_group.delay(obj.gl_id)
@@ -46,6 +47,7 @@ class ProjectAdmin(ForceSyncEntityMixin, BaseModelAdmin):
     list_display = ('title', 'group', 'gl_url', 'gl_last_sync')
     search_fields = ('title',)
     autocomplete_fields = ('group',)
+    inlines = (ProjectMemberInline,)
 
     def sync_handler(self, obj):
         sync_project.delay(obj.group, obj.gl_id, obj.id)
