@@ -14,3 +14,4 @@ class TeamMemberInline(BaseTabularInline):
 
 class ProjectMemberInline(BaseGenericTabularInline):
     model = ProjectMember
+    autocomplete_fields = ('user',)
