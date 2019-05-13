@@ -4,7 +4,7 @@ from apps.core.rest.routers import AppRouter
 from .views import (
     IssuesViewset, gl_webhook, TeamsViewset, TeamMembersViewset, ProjectGroupMilestonesViewset,
     ProjectMilestonesViewset, MilestoneIssuesViewset, MilestoneEpicsViewset, EpicsViewset, EpicIssuesViewset,
-    GitlabStatusView
+    GitlabStatusView, MilestonesViewset
 )
 
 app_name = 'development'
@@ -24,6 +24,7 @@ router.register(r'^milestones/(?P<milestone_pk>\d+)/epics', MilestoneEpicsViewse
                 basename='epics-issues')
 router.register(r'^teams/(?P<team_pk>\d+)/members$', TeamMembersViewset, basename='team-members')
 router.register('teams', TeamsViewset, basename='teams')
+router.register('milestones', MilestonesViewset, basename='milestones')
 
 urlpatterns = [
     path('gitlab/status', GitlabStatusView.as_view(), name='gitlab-status'),

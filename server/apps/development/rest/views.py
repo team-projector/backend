@@ -211,3 +211,14 @@ class GitlabStatusView(BaseGenericAPIView):
 
     def get(self, request):
         return Response(self.get_serializer(request).data)
+
+
+class MilestonesViewset(mixins.ListModelMixin,
+                        BaseGenericViewSet):
+    permission_classes = (permissions.IsProjectManager,)
+
+    serializer_classes = {
+        'list': MilestoneCardSerializer
+    }
+
+    queryset = Milestone.objects.all()
