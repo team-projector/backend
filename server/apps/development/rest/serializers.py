@@ -12,6 +12,7 @@ from apps.core.rest.serializers import LinkSerializer
 from apps.core.utils.objects import dict2obj
 from apps.development.rest.milestone_metrics import MilestoneMetricsCalculator
 from apps.development.services.problems.issues import checkers
+from apps.development.services.metrics.milestones import common
 from apps.payroll.models import SpentTime
 from apps.users.models import User
 from apps.users.rest.serializers import UserCardSerializer, ParticipantCardSerializer
@@ -203,15 +204,27 @@ class GitlabStatusSerializer(serializers.Serializer):
                     setattr(self, key, action.timestamp)
 
 
-class MilestoneAllProjectProjectGroupCardSerializer(serializers.ModelSerializer):
+class MilestoneCommonMetricsSerializer(serializers.Serializer):
+    salary = serializers.FloatField()
+    time_remains = serializers.IntegerField()
+    profit = serializers.IntegerField()
+    issues_closed_count = serializers.IntegerField()
+    time_spent = serializers.IntegerField()
+    efficiency = serializers.FloatField()
+    issues_opened_count: serializers.IntegerField()
+    time_estimate = serializers.IntegerField()
+    budget_remains = serializers.IntegerField()
+
+
+class MilestoneCommonCardSerializer(serializers.ModelSerializer):
     metrics = serializers.SerializerMethodField()
 
     def get_metrics(self, instance):
         if self.context['request'].query_params.get('metrics', 'false') == 'false':
             return None
 
-        metrics = MilestoneMetricsCalculator(instance).calculate()
-        return MilestoneMetricsSerializer(metrics).data
+        metrics = common.MilestoneCommonMetricsCalculator(instance).calculate()
+        return MilestoneCommonMetricsSerializer(metrics).data
 
     class Meta:
         model = Milestone

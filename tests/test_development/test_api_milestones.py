@@ -1,3 +1,4 @@
+from django.utils import timezone
 from rest_framework import status
 
 from apps.development.models import TeamMember
@@ -29,7 +30,39 @@ class ApiMilestonesTests(BaseAPITest):
         self.assertEqual(response.data['count'], 1)
         self.assertEqual(response.data['results'][0]['id'], milestone.id)
 
-    def test_list_metrics_is_none(self):
+    def test_list_param_active_false(self):
+        ProjectGroupMilestoneFactory.create()
+
+        self.set_credentials()
+        response = self.client.get('/api/milestones')
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data['count'], 1)
+
+        response = self.client.get('/api/milestones', {'active': 'false'})
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data['count'], 1)
+
+    def test_list_active(self):
+        milestone = ProjectGroupMilestoneFactory.create(start_date=timezone.now() - timezone.timedelta(days=3),
+                                                        due_date=timezone.now() + timezone.timedelta(days=2))
+        ProjectGroupMilestoneFactory.create()
+        ProjectGroupMilestoneFactory.create(start_date=timezone.now() - timezone.timedelta(days=6))
+        ProjectGroupMilestoneFactory.create(due_date=timezone.now() + timezone.timedelta(days=6))
+        ProjectGroupMilestoneFactory.create(start_date=timezone.now() - timezone.timedelta(days=3),
+                                            due_date=timezone.now() - timezone.timedelta(days=1))
+        ProjectGroupMilestoneFactory.create(start_date=timezone.now() + timezone.timedelta(days=1),
+                                            due_date=timezone.now() + timezone.timedelta(days=4))
+
+        self.set_credentials()
+        response = self.client.get('/api/milestones', {'active': 'true'})
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data['count'], 1)
+        self.assertEqual(response.data['results'][0]['id'], milestone.id)
+
+    def test_list_param_metrics_false(self):
         ProjectGroupMilestoneFactory.create()
 
         self.set_credentials()
@@ -45,16 +78,8 @@ class ApiMilestonesTests(BaseAPITest):
         self.assertEqual(response.data['count'], 1)
         self.assertFalse(response.data['results'][0]['metrics'])
 
-    def test_list_metrics_empty(self):
+    def test_list_with_metrics(self):
         milestone = ProjectGroupMilestoneFactory.create()
-        metrics = {
-            'time_estimate': 0,
-            'time_spent': 0,
-            'time_remains': 0,
-            'issues_count': 0,
-            'efficiency': 0.0,
-            'salary': 0.0
-        }
 
         self.set_credentials()
         response = self.client.get('/api/milestones', {'metrics': 'true'})
@@ -62,4 +87,4 @@ class ApiMilestonesTests(BaseAPITest):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data['count'], 1)
         self.assertEqual(response.data['results'][0]['id'], milestone.id)
-        self.assertEqual(response.data['results'][0]['metrics'], metrics)
+        self.assertTrue(all(item['metrics'] is not None for item in response.data['results']))

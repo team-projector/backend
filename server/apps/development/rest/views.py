@@ -15,12 +15,12 @@ from apps.core.rest.mixins.views import CreateModelMixin, UpdateModelMixin
 from apps.core.rest.views import BaseGenericViewSet, BaseGenericAPIView
 from apps.core.tasks import add_action
 from apps.development.rest import permissions
-from apps.development.rest.filters import TeamMemberFilterBackend
+from apps.development.rest.filters import TeamMemberFilterBackend, MilestoneCommonFilterBackend
 from apps.development.services.problems.issues import IssueProblemsChecker
 from .serializers import (
     IssueCardSerializer, IssueProblemSerializer, TeamCardSerializer, TeamMemberCardSerializer, IssueUpdateSerializer,
     MilestoneCardSerializer, EpicCardSerializer, EpicUpdateSerializer, EpicSerializer, GitlabStatusSerializer,
-    MilestoneAllProjectProjectGroupCardSerializer
+    MilestoneCommonCardSerializer
 )
 from ..models import Issue, Team, TeamMember, Milestone, ProjectGroup, Project, Epic
 from ..tasks import sync_project_issue
@@ -219,7 +219,8 @@ class MilestonesViewset(mixins.ListModelMixin,
     permission_classes = (permissions.IsProjectManager,)
 
     serializer_classes = {
-        'list': MilestoneAllProjectProjectGroupCardSerializer
+        'list': MilestoneCommonCardSerializer
     }
 
     queryset = Milestone.objects.all()
+    filter_backends = (MilestoneCommonFilterBackend,)
