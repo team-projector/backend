@@ -11,7 +11,7 @@ from apps.core.db.mixins import GitlabEntityMixin, GitlabInternalIdMixin
 from apps.development.services.parsers import parse_date
 from apps.payroll.db.mixins import SpentTimesMixin
 from apps.users.models import User
-from .epic import Epic
+from .feature import Feature
 from .label import Label
 from .note import Note
 from .project import Project
@@ -104,8 +104,8 @@ class Issue(NotableMixin,
         blank=True,
     )
 
-    epic = models.ForeignKey(
-        Epic,
+    feature = models.ForeignKey(
+        Feature,
         on_delete=models.SET_NULL,
         null=True,
         blank=True
