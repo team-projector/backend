@@ -201,3 +201,18 @@ class GitlabStatusSerializer(serializers.Serializer):
                 action = Action.objects.filter(verb=value).order_by('-timestamp').first()
                 if action:
                     setattr(self, key, action.timestamp)
+
+
+class MilestoneAllProjectProjectGroupCardSerializer(serializers.ModelSerializer):
+    metrics = serializers.SerializerMethodField()
+
+    def get_metrics(self, instance):
+        if self.context['request'].query_params.get('metrics', 'false') == 'false':
+            return None
+
+        metrics = MilestoneMetricsCalculator(instance).calculate()
+        return MilestoneMetricsSerializer(metrics).data
+
+    class Meta:
+        model = Milestone
+        fields = ('id', 'title', 'start_date', 'due_date', 'metrics')

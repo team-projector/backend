@@ -19,7 +19,8 @@ from apps.development.rest.filters import TeamMemberFilterBackend
 from apps.development.services.problems.issues import IssueProblemsChecker
 from .serializers import (
     IssueCardSerializer, IssueProblemSerializer, TeamCardSerializer, TeamMemberCardSerializer, IssueUpdateSerializer,
-    MilestoneCardSerializer, EpicCardSerializer, EpicUpdateSerializer, EpicSerializer, GitlabStatusSerializer
+    MilestoneCardSerializer, EpicCardSerializer, EpicUpdateSerializer, EpicSerializer, GitlabStatusSerializer,
+    MilestoneAllProjectProjectGroupCardSerializer
 )
 from ..models import Issue, Team, TeamMember, Milestone, ProjectGroup, Project, Epic
 from ..tasks import sync_project_issue
@@ -218,7 +219,7 @@ class MilestonesViewset(mixins.ListModelMixin,
     permission_classes = (permissions.IsProjectManager,)
 
     serializer_classes = {
-        'list': MilestoneCardSerializer
+        'list': MilestoneAllProjectProjectGroupCardSerializer
     }
 
     queryset = Milestone.objects.all()
