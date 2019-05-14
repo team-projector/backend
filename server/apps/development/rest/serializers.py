@@ -211,7 +211,7 @@ class MilestoneCommonMetricsSerializer(serializers.Serializer):
     issues_closed_count = serializers.IntegerField()
     time_spent = serializers.IntegerField()
     efficiency = serializers.FloatField()
-    issues_opened_count: serializers.IntegerField()
+    issues_opened_count = serializers.IntegerField()
     time_estimate = serializers.IntegerField()
     budget_remains = serializers.IntegerField()
 
