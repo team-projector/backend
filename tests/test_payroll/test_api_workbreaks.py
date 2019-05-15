@@ -17,20 +17,20 @@ class WorkBreaksTests(BaseAPITest):
 
     def get_data(self):
         return {
-            "reason": DAYOFF,
-            "comment": "Comment text",
-            "from_date": "2019-04-27T17:33:26+03:00",
-            "user": self.user.id,
-            "to_date": "2019-04-27T17:33:26+03:00"
+            'reason': DAYOFF,
+            'comment': 'Comment text',
+            'from_date': '2019-04-27T17:33:26+03:00',
+            'user': self.user.id,
+            'to_date': '2019-04-27T17:33:26+03:00'
         }
 
     def get_update_data(self):
         return {
-            "reason": VACATION,
-            "comment": "Comment text",
-            "from_date": "2019-04-27T17:33:26+03:00",
-            "user": self.user.id,
-            "to_date": "2019-04-27T17:33:26+03:00"
+            'reason': VACATION,
+            'comment': 'Comment text',
+            'from_date': '2019-04-27T17:33:26+03:00',
+            'user': self.user.id,
+            'to_date': '2019-04-27T17:33:26+03:00'
         }
 
     def test_retrieve(self):
@@ -111,7 +111,8 @@ class WorkBreaksTests(BaseAPITest):
 
         response = self.client.get(f'/api/work-breaks/approving')
 
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data['count'], 0)
 
     def test_approving_list_teamlead_few_teams(self):
         user_2 = self.create_user('user_2@mail.com')
