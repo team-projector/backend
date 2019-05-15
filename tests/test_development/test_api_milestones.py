@@ -30,7 +30,7 @@ class ApiMilestonesTests(BaseAPITest):
         self.assertEqual(response.data['count'], 1)
         self.assertEqual(response.data['results'][0]['id'], milestone.id)
 
-    def test_list_param_active_false(self):
+    def test_list_filter_active(self):
         ProjectGroupMilestoneFactory.create()
 
         self.set_credentials()
@@ -44,10 +44,8 @@ class ApiMilestonesTests(BaseAPITest):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data['count'], 1)
 
-    def test_list_active(self):
         milestone = ProjectGroupMilestoneFactory.create(start_date=timezone.now() - timezone.timedelta(days=3),
                                                         due_date=timezone.now() + timezone.timedelta(days=2))
-        ProjectGroupMilestoneFactory.create()
         ProjectGroupMilestoneFactory.create(start_date=timezone.now() - timezone.timedelta(days=6))
         ProjectGroupMilestoneFactory.create(due_date=timezone.now() + timezone.timedelta(days=6))
         ProjectGroupMilestoneFactory.create(start_date=timezone.now() - timezone.timedelta(days=3),
@@ -62,7 +60,7 @@ class ApiMilestonesTests(BaseAPITest):
         self.assertEqual(response.data['count'], 1)
         self.assertEqual(response.data['results'][0]['id'], milestone.id)
 
-    def test_list_param_metrics_false(self):
+    def test_list_without_metrics(self):
         ProjectGroupMilestoneFactory.create()
 
         self.set_credentials()
