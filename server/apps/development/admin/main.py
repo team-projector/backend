@@ -6,8 +6,8 @@ from apps.development.admin.filters import TeamFilter
 from apps.development.tasks import sync_project_issue, sync_project, sync_project_group
 from apps.users.admin.filters import UserFilter
 from .filters import ProjectFilter
-from .inlines import NoteInline, TeamMemberInline
-from ..models import Issue, Label, Note, Project, ProjectGroup, Team, TeamMember, Milestone, ProjectMember, Epic
+from .inlines import NoteInline, TeamMemberInline, ProjectMemberInline
+from ..models import Issue, Label, Note, Project, ProjectGroup, Team, TeamMember, Milestone, ProjectMember, Feature
 
 
 @admin.register(Team)
@@ -36,6 +36,7 @@ class ProjectGroupAdmin(ForceSyncEntityMixin, BaseModelAdmin):
     list_display = ('title', 'parent', 'gl_url', 'gl_last_sync')
     search_fields = ('title',)
     autocomplete_fields = ('parent',)
+    inlines = (ProjectMemberInline,)
 
     def sync_handler(self, obj):
         sync_project_group.delay(obj.gl_id)
@@ -46,6 +47,7 @@ class ProjectAdmin(ForceSyncEntityMixin, BaseModelAdmin):
     list_display = ('title', 'group', 'gl_url', 'gl_last_sync')
     search_fields = ('title',)
     autocomplete_fields = ('group',)
+    inlines = (ProjectMemberInline,)
 
     def sync_handler(self, obj):
         sync_project.delay(obj.group, obj.gl_id, obj.id)
@@ -58,7 +60,7 @@ class IssueAdmin(ForceSyncEntityMixin, BaseModelAdmin):
     search_fields = ('title', 'gl_id')
     sortable_by = ('gl_last_sync', 'created_at')
     ordering = ('-gl_last_sync',)
-    autocomplete_fields = ('project', 'user', 'milestone', 'epic', 'labels', 'participants')
+    autocomplete_fields = ('project', 'user', 'milestone', 'feature', 'labels', 'participants')
     inlines = (NoteInline,)
 
     def sync_handler(self, obj):
@@ -83,7 +85,7 @@ class ProjectMemberAdmin(BaseModelAdmin):
     search_fields = ('user', 'role')
 
 
-@admin.register(Epic)
-class EpicAdmin(BaseModelAdmin):
+@admin.register(Feature)
+class FeatureAdmin(BaseModelAdmin):
     list_display = ('id', 'title', 'start_date', 'due_date', 'budget')
     search_fields = ('title',)

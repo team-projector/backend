@@ -3,7 +3,7 @@ import pytz
 from django.contrib.contenttypes.models import ContentType
 
 from apps.development.models import (
-    Issue, Label, Note, Project, ProjectGroup, Team, TeamMember, Milestone, Epic
+    Issue, Label, Note, Project, ProjectGroup, Team, TeamMember, Milestone, Feature
 )
 
 from apps.development.models.issue import STATE_OPENED
@@ -97,6 +97,6 @@ class TeamMemberFactory(factory.django.DjangoModelFactory):
         model = TeamMember
 
 
-class EpicFactory(factory.django.DjangoModelFactory):
+class FeatureFactory(factory.django.DjangoModelFactory):
     class Meta:
-        model = Epic
+        model = Feature

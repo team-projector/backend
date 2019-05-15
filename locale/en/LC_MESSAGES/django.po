@@ -220,84 +220,13 @@ msgstr "Milestone"
 msgid "VN__MILESTONES"
 msgstr "Milestones"
 
-#: server/apps/development/models/note.py:52
-msgid "VN__TYPE"
-msgstr "Type"
+#: server/apps/development/models.py:397
+msgid "VN__FEATURE"
+msgstr "Feature"
 
-#: server/apps/development/models/note.py:53
-msgid "HT__TYPE"
-msgstr "Type"
-
-#: server/apps/development/models/note.py:61
-msgid "VN__NOTE"
-msgstr "Note"
-
-#: server/apps/development/models/project.py:21
-#: server/apps/development/models/project_group.py:21
-msgid "VN__FULL_TITLE"
-msgstr "Full title"
-
-#: server/apps/development/models/project.py:22
-#: server/apps/development/models/project_group.py:22
-msgid "HT__FULL_TITLE"
-msgstr "Full title"
-
-#: server/apps/development/models/project.py:29
-msgid "VN__GROUP"
-msgstr "Group"
-
-#: server/apps/development/models/project.py:30
-msgid "HT__GROUP"
-msgstr "Group"
-
-#: server/apps/development/models/project.py:36
-msgid "VN__GITLAB_LAST_ISSUES_SYNC"
-msgstr "GitLab issues last sync"
-
-#: server/apps/development/models/project.py:37
-msgid "HT__GITLAB_LAST_ISSUES_SYNC"
-msgstr "GitLab issues last sync"
-
-#: server/apps/development/models/project.py:53
-msgid "VN__PROJECTS"
-msgstr "Projects"
-
-#: server/apps/development/models/project_group.py:30
-msgid "VN__PARENT"
-msgstr "Parent"
-
-#: server/apps/development/models/project_group.py:31
-msgid "HT__PARENT"
-msgstr "Parent"
-
-#: server/apps/development/models/project_group.py:46
-msgid "VN__PROJECT_GROUP"
-msgstr "Project group"
-
-#: server/apps/development/models/project_group.py:47
-msgid "VN__PROJECT_GROUPS"
-msgstr "Project groups"
-
-#: server/apps/development/models/project_member.py:13
-#: server/apps/development/models/team_member.py:13
-#: server/apps/users/models/user.py:12
-msgid "CH_DEVELOPER"
-msgstr "Developer"
-
-#: server/apps/development/models/project_member.py:14
-#: server/apps/users/models/user.py:13
-msgid "CH_TEAM_LEADER"
-msgstr "Team leader"
-
-#: server/apps/development/models/project_member.py:15
-#: server/apps/development/models/team_member.py:14
-msgid "CH_PM"
-msgstr "Project manager"
-
-#: server/apps/development/models/project_member.py:16
-#: server/apps/users/models/user.py:15
-msgid "CH_CUSTOMER"
-msgstr "Customer"
+#: server/apps/development/models.py:398
+msgid "VN__FEATURES"
+msgstr "Features"
 
 #: server/apps/development/models/project_member.py:27
 msgid "VN__ROLE"
