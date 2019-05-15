@@ -17,6 +17,11 @@ class Migration(migrations.Migration):
             field=models.IntegerField(),
         ),
         migrations.RenameModel('Epic', 'Feature'),
+        migrations.AlterModelOptions(
+            name='feature',
+            options={'ordering': ('-created_at',), 'verbose_name': 'VN__FEATURE',
+                     'verbose_name_plural': 'VN__FEATURES'},
+        ),
         migrations.AlterField(
             model_name='Issue',
             name='epic',
