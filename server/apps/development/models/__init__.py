@@ -1,4 +1,4 @@
-from .epic import Epic
+from .feature import Feature
 from .issue import Issue
 from .label import Label
 from .milestone import Milestone

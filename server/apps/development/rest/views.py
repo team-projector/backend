@@ -19,9 +19,9 @@ from apps.development.rest.filters import TeamMemberFilterBackend
 from apps.development.services.problems.issues import IssueProblemsChecker
 from .serializers import (
     IssueCardSerializer, IssueProblemSerializer, TeamCardSerializer, TeamMemberCardSerializer, IssueUpdateSerializer,
-    MilestoneCardSerializer, EpicCardSerializer, EpicUpdateSerializer, EpicSerializer, GitlabStatusSerializer
+    MilestoneCardSerializer, FeatureCardSerializer, FeatureUpdateSerializer, FeatureSerializer, GitlabStatusSerializer
 )
-from ..models import Issue, Team, TeamMember, Milestone, ProjectGroup, Project, Epic
+from ..models import Issue, Team, TeamMember, Milestone, ProjectGroup, Project, Feature
 from ..tasks import sync_project_issue
 
 logger = logging.getLogger(__name__)
@@ -153,15 +153,15 @@ class MilestoneIssuesViewset(mixins.ListModelMixin,
         return super().filter_queryset(queryset.filter(milestone=self.milestone))
 
 
-class MilestoneEpicsViewset(mixins.ListModelMixin,
-                            BaseGenericViewSet):
+class MilestoneFeaturesViewset(mixins.ListModelMixin,
+                               BaseGenericViewSet):
     permission_classes = (permissions.IsProjectManager,)
 
     serializer_classes = {
-        'list': EpicCardSerializer
+        'list': FeatureCardSerializer
     }
 
-    queryset = Epic.objects.all()
+    queryset = Feature.objects.all()
 
     @cached_property
     def milestone(self):
@@ -171,25 +171,25 @@ class MilestoneEpicsViewset(mixins.ListModelMixin,
         return super().filter_queryset(queryset.filter(milestone=self.milestone))
 
 
-class EpicsViewset(CreateModelMixin,
-                   UpdateModelMixin,
-                   BaseGenericViewSet):
+class FeaturesViewset(CreateModelMixin,
+                      UpdateModelMixin,
+                      BaseGenericViewSet):
     permission_classes = (permissions.IsProjectManager,)
 
     serializer_classes = {
-        'create': EpicSerializer,
-        'update': EpicSerializer,
-        'partial_update': EpicSerializer,
+        'create': FeatureSerializer,
+        'update': FeatureSerializer,
+        'partial_update': FeatureSerializer,
     }
-    update_serializer_class = EpicUpdateSerializer
+    update_serializer_class = FeatureUpdateSerializer
 
-    queryset = Epic.objects.all()
+    queryset = Feature.objects.all()
 
     def filter_queryset(self, queryset):
         return super().filter_queryset(queryset)
 
 
-class EpicIssuesViewset(mixins.ListModelMixin, BaseGenericViewSet):
+class FeatureIssuesViewset(mixins.ListModelMixin, BaseGenericViewSet):
     permission_classes = (permissions.IsProjectManager,)
 
     serializer_classes = {
@@ -199,11 +199,11 @@ class EpicIssuesViewset(mixins.ListModelMixin, BaseGenericViewSet):
     queryset = Issue.objects.all()
 
     @cached_property
-    def epic(self):
-        return get_object_or_404(Epic.objects, pk=self.kwargs['epic_pk'])
+    def feature(self):
+        return get_object_or_404(Feature.objects, pk=self.kwargs['feature_pk'])
 
     def filter_queryset(self, queryset):
-        return super().filter_queryset(queryset.filter(milestone__epic=self.epic))
+        return super().filter_queryset(queryset.filter(milestone__feature=self.feature))
 
 
 class GitlabStatusView(BaseGenericAPIView):

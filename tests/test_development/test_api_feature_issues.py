@@ -3,11 +3,11 @@ from rest_framework import status
 from tests.base import BaseAPITest
 from apps.development.models import TeamMember
 from tests.test_development.factories import (
-    ProjectGroupMilestoneFactory, IssueFactory, TeamFactory, TeamMemberFactory, EpicFactory
+    ProjectGroupMilestoneFactory, IssueFactory, TeamFactory, TeamMemberFactory, FeatureFactory
 )
 
 
-class ApiEpicIssuesTests(BaseAPITest):
+class ApiFeatureIssuesTests(BaseAPITest):
     def setUp(self):
         super().setUp()
 
@@ -15,11 +15,11 @@ class ApiEpicIssuesTests(BaseAPITest):
         TeamMemberFactory.create(team=team, user=self.user, roles=TeamMember.roles.project_manager)
 
         self.milestone = ProjectGroupMilestoneFactory.create()
-        self.epic = EpicFactory.create(milestone=self.milestone)
+        self.feature = FeatureFactory.create(milestone=self.milestone)
 
     def test_empty_list(self):
         self.set_credentials()
-        response = self.client.get(f'/api/epics/{self.epic.id}/issues')
+        response = self.client.get(f'/api/features/{self.feature.id}/issues')
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data['count'], 0)
@@ -29,7 +29,7 @@ class ApiEpicIssuesTests(BaseAPITest):
         IssueFactory.create_batch(5)
 
         self.set_credentials()
-        response = self.client.get(f'/api/epics/{self.epic.id}/issues')
+        response = self.client.get(f'/api/features/{self.feature.id}/issues')
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data['count'], 1)
