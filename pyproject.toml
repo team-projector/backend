@@ -6,7 +6,7 @@ authors = ["junte"]
 
 [tool.poetry.dependencies]
 python = "^3.6"
-"psycopg2-binary" = "*"
+psycopg2-binary = "*"
 Django = "*"
 uWSGI = "*"
 djangorestframework = "*"
