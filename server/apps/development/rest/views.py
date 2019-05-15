@@ -154,7 +154,7 @@ class MilestoneIssuesViewset(mixins.ListModelMixin,
 
 
 class MilestoneFeaturesViewset(mixins.ListModelMixin,
-                            BaseGenericViewSet):
+                               BaseGenericViewSet):
     permission_classes = (permissions.IsProjectManager,)
 
     serializer_classes = {
@@ -172,8 +172,8 @@ class MilestoneFeaturesViewset(mixins.ListModelMixin,
 
 
 class FeaturesViewset(CreateModelMixin,
-                   UpdateModelMixin,
-                   BaseGenericViewSet):
+                      UpdateModelMixin,
+                      BaseGenericViewSet):
     permission_classes = (permissions.IsProjectManager,)
 
     serializer_classes = {
