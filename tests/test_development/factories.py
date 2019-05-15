@@ -98,5 +98,9 @@ class TeamMemberFactory(factory.django.DjangoModelFactory):
 
 
 class FeatureFactory(factory.django.DjangoModelFactory):
+    title = factory.Faker('text', max_nb_chars=200)
+    budget = factory.Faker('random_int')
+    milestone = factory.SubFactory(ProjectGroupMilestoneFactory)
+
     class Meta:
         model = Feature
