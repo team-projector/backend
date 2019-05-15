@@ -42,11 +42,13 @@ def load_groups() -> None:
 
 
 def load_single_group(gl_group: GlGroup, parent: Optional[ProjectGroup]) -> ProjectGroup:
-    group, _ = ProjectGroup.objects.sync_gitlab(gl_id=gl_group.id,
-                                                gl_url=gl_group.web_url,
-                                                parent=parent,
-                                                title=gl_group.name,
-                                                full_title=gl_group.full_name)
+    group, _ = ProjectGroup.objects.sync_gitlab(
+        gl_id=gl_group.id,
+        gl_url=gl_group.web_url,
+        parent=parent,
+        title=gl_group.name,
+        full_title=gl_group.full_name
+    )
 
     logger.info(f'Group "{group}" is synced')
 
@@ -73,11 +75,13 @@ def load_group_projects(group: ProjectGroup) -> None:
 
 
 def load_project(gl: Gitlab, group: ProjectGroup, gl_project: GlProject) -> None:
-    project, _ = Project.objects.sync_gitlab(gl_id=gl_project.id,
-                                             gl_url=gl_project.web_url,
-                                             group=group,
-                                             full_title=gl_project.name_with_namespace,
-                                             title=gl_project.name)
+    project, _ = Project.objects.sync_gitlab(
+        gl_id=gl_project.id,
+        gl_url=gl_project.web_url,
+        group=group,
+        full_title=gl_project.name_with_namespace,
+        title=gl_project.name
+    )
 
     if settings.GITLAB_CHECK_WEBHOOKS:
         check_project_webhooks(gl.projects.get(gl_project.id))
