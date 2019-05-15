@@ -34,3 +34,5 @@ class ApiIssuesTests(BaseAPITest):
         self.assertEqual(response.data['start_date'], data['start_date'])
         self.assertEqual(response.data['due_date'], data['due_date'])
         self.assertEqual(response.data['milestone']['id'], data['milestone'])
+
+        esponse = self.client.patch(f'/api/features', {})
