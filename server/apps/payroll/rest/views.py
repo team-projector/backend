@@ -89,7 +89,7 @@ class TimeExpensesView(mixins.ListModelMixin,
 class UserWorkBreaksView(mixins.ListModelMixin,
                          BaseGenericAPIView):
     queryset = WorkBreak.objects.all()
-    permission_classes = (permissions.IsAuthenticated, CanManageWorkbeaks)
+    permission_classes = (permissions.IsAuthenticated, CanViewUserMetrics)
     serializer_class = WorkBreakCardSerializer
 
     @cached_property
