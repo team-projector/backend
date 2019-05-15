@@ -5,7 +5,7 @@ from apps.core.db.mixins import Timestamps
 from .milestone import Milestone
 
 
-class Epic(Timestamps):
+class Feature(Timestamps):
     title = models.CharField(
         max_length=255,
         verbose_name=_('VN__TITLE'),
@@ -44,10 +44,10 @@ class Epic(Timestamps):
     milestone = models.ForeignKey(
         Milestone,
         models.CASCADE,
-        related_name='epic'
+        related_name='feature'
     )
 
     class Meta:
-        verbose_name = _('VN__EPIC')
-        verbose_name_plural = _('VN__EPICS')
+        verbose_name = _('VN__FEATURE')
+        verbose_name_plural = _('VN__FEATURES')
         ordering = ('-created_at',)

@@ -301,12 +301,12 @@ msgid "VN__MILESTONES"
 msgstr "Milestones"
 
 #: server/apps/development/models.py:397
-msgid "VN__EPIC"
-msgstr "Epic"
+msgid "VN__FEATURE"
+msgstr "Feature"
 
 #: server/apps/development/models.py:398
-msgid "VN__EPICS"
-msgstr "Epics"
+msgid "VN__FEATURES"
+msgstr "Features"
 
 #: server/apps/payroll/apps.py:8 server/apps/payroll/models.py:31
 msgid "VN__PAYROLL"

@@ -3,16 +3,16 @@ from django.urls import path
 from apps.core.rest.routers import AppRouter
 from .views import (
     IssuesViewset, gl_webhook, TeamsViewset, TeamMembersViewset, ProjectGroupMilestonesViewset,
-    ProjectMilestonesViewset, MilestoneIssuesViewset, MilestoneEpicsViewset, EpicsViewset, EpicIssuesViewset,
-    GitlabStatusView, MilestonesViewset
+    ProjectMilestonesViewset, MilestoneIssuesViewset, MilestoneFeaturesViewset, FeaturesViewset, FeatureIssuesViewset,
+    GitlabStatusView
 )
 
 app_name = 'development'
 
 router = AppRouter()
-router.register('epics', EpicsViewset, basename='epics')
+router.register('features', FeaturesViewset, basename='features')
 router.register('issues', IssuesViewset, basename='issues')
-router.register(r'^epics/(?P<epic_pk>\d+)/issues$', EpicIssuesViewset,
+router.register(r'^features/(?P<feature_pk>\d+)/issues$', FeatureIssuesViewset,
                 basename='milestone-issues')
 router.register(r'^project-groups/(?P<project_group_pk>\d+)/milestones', ProjectGroupMilestonesViewset,
                 basename='project-group-milestones')
@@ -20,11 +20,10 @@ router.register(r'^projects/(?P<project_pk>\d+)/milestones$', ProjectMilestonesV
                 basename='project-milestones')
 router.register(r'^milestones/(?P<milestone_pk>\d+)/issues$', MilestoneIssuesViewset,
                 basename='milestone-issues')
-router.register(r'^milestones/(?P<milestone_pk>\d+)/epics', MilestoneEpicsViewset,
-                basename='epics-issues')
+router.register(r'^milestones/(?P<milestone_pk>\d+)/features', MilestoneFeaturesViewset,
+                basename='features-issues')
 router.register(r'^teams/(?P<team_pk>\d+)/members$', TeamMembersViewset, basename='team-members')
 router.register('teams', TeamsViewset, basename='teams')
-router.register('milestones', MilestonesViewset, basename='milestones')
 
 urlpatterns = [
     path('gitlab/status', GitlabStatusView.as_view(), name='gitlab-status'),

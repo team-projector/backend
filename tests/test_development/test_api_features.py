@@ -16,15 +16,15 @@ class ApiIssuesTests(BaseAPITest):
 
     def get_data(self):
         return {
-            'title': 'Epic 1',
+            'title': 'Feature 1',
             'milestone': self.milestone.id,
         }
 
-    def test_epic_create(self):
+    def test_feature_create(self):
         data = self.get_data()
 
         self.set_credentials()
-        response = self.client.post(f'/api/epics', data)
+        response = self.client.post(f'/api/features', data)
 
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(response.data['title'], data['title'])

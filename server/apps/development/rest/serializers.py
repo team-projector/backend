@@ -16,7 +16,7 @@ from apps.development.services.metrics.milestones import common
 from apps.payroll.models import SpentTime
 from apps.users.models import User
 from apps.users.rest.serializers import UserCardSerializer, ParticipantCardSerializer
-from ..models import Issue, Label, Team, TeamMember, Milestone, Epic
+from ..models import Issue, Label, Team, TeamMember, Milestone, Feature
 
 
 class LabelSerializer(serializers.ModelSerializer):
@@ -38,14 +38,14 @@ class IssueCardSerializer(serializers.ModelSerializer):
     time_spent = serializers.SerializerMethodField()
     metrics = serializers.SerializerMethodField()
     milestone = LinkSerializer()
-    epic = LinkSerializer()
+    feature = LinkSerializer()
     participants = ParticipantCardSerializer(many=True)
 
     class Meta:
         model = Issue
         fields = (
             'id', 'title', 'labels', 'project', 'due_date', 'state', 'time_estimate', 'total_time_spent', 'time_spent',
-            'gl_url', 'metrics', 'milestone', 'epic', 'participants'
+            'gl_url', 'metrics', 'milestone', 'feature', 'participants'
         )
 
     def get_metrics(self, instance: Issue):
@@ -69,11 +69,11 @@ class IssueCardSerializer(serializers.ModelSerializer):
 
 
 class IssueUpdateSerializer(serializers.ModelSerializer):
-    epic = serializers.PrimaryKeyRelatedField(queryset=Epic.objects.all())
+    feature = serializers.PrimaryKeyRelatedField(queryset=Feature.objects.all())
 
     class Meta:
         model = Issue
-        fields = ('epic',)
+        fields = ('feature',)
 
 
 class TeamCardSerializer(serializers.ModelSerializer):
@@ -137,27 +137,27 @@ class MilestoneCardSerializer(serializers.ModelSerializer):
         fields = ('id', 'title', 'start_date', 'due_date', 'metrics')
 
 
-class EpicSerializer(serializers.ModelSerializer):
+class FeatureSerializer(serializers.ModelSerializer):
     milestone = LinkSerializer()
 
     class Meta:
-        model = Epic
+        model = Feature
         fields = ('id', 'title', 'start_date', 'due_date', 'milestone')
 
 
-class EpicCardSerializer(serializers.ModelSerializer):
+class FeatureCardSerializer(serializers.ModelSerializer):
     milestone = LinkSerializer()
 
     class Meta:
-        model = Epic
+        model = Feature
         fields = ('id', 'title', 'start_date', 'due_date', 'milestone')
 
 
-class EpicUpdateSerializer(serializers.ModelSerializer):
+class FeatureUpdateSerializer(serializers.ModelSerializer):
     milestone = serializers.PrimaryKeyRelatedField(queryset=Milestone.objects)
 
     class Meta:
-        model = Epic
+        model = Feature
         fields = ('title', 'description', 'start_date', 'due_date', 'milestone')
 
 
