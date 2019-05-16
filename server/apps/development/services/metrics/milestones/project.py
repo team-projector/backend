@@ -13,7 +13,7 @@ class MilestoneMetrics:
     salary: float = 0.0
 
 
-class MilestoneMetricsCalculator:
+class ProjectMilestoneMetricsCalculator:
     def __init__(self, milestone: Milestone):
         self.milestone = milestone
 

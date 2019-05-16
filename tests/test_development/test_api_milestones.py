@@ -32,33 +32,28 @@ class ApiMilestonesTests(BaseAPITest):
 
     def test_list_filter_active(self):
         ProjectGroupMilestoneFactory.create()
+        milestone_1 = ProjectGroupMilestoneFactory.create(start_date=timezone.now() - timezone.timedelta(days=3),
+                                                          due_date=timezone.now() + timezone.timedelta(days=2))
+        milestone_2 = ProjectGroupMilestoneFactory.create(start_date=timezone.now() - timezone.timedelta(days=3),
+                                                          due_date=timezone.now() - timezone.timedelta(days=2))
 
         self.set_credentials()
         response = self.client.get('/api/milestones')
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data['count'], 3)
+
+        response = self.client.get('/api/milestones', {'active': 'true'})
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data['count'], 1)
+        self.assertIn(milestone_1.id, [x['id'] for x in response.data['results']])
 
         response = self.client.get('/api/milestones', {'active': 'false'})
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data['count'], 1)
-
-        milestone = ProjectGroupMilestoneFactory.create(start_date=timezone.now() - timezone.timedelta(days=3),
-                                                        due_date=timezone.now() + timezone.timedelta(days=2))
-        ProjectGroupMilestoneFactory.create(start_date=timezone.now() - timezone.timedelta(days=6))
-        ProjectGroupMilestoneFactory.create(due_date=timezone.now() + timezone.timedelta(days=6))
-        ProjectGroupMilestoneFactory.create(start_date=timezone.now() - timezone.timedelta(days=3),
-                                            due_date=timezone.now() - timezone.timedelta(days=1))
-        ProjectGroupMilestoneFactory.create(start_date=timezone.now() + timezone.timedelta(days=1),
-                                            due_date=timezone.now() + timezone.timedelta(days=4))
-
-        self.set_credentials()
-        response = self.client.get('/api/milestones', {'active': 'true'})
-
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data['count'], 1)
-        self.assertEqual(response.data['results'][0]['id'], milestone.id)
+        self.assertIn(milestone_2.id, [x['id'] for x in response.data['results']])
 
     def test_list_without_metrics(self):
         ProjectGroupMilestoneFactory.create()

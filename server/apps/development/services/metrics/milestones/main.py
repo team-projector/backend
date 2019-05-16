@@ -17,7 +17,7 @@ class MilestoneMetrics:
     time_spent: int = 0
 
 
-class MilestoneCommonMetricsCalculator:
+class MilestoneMetricsCalculator:
     def __init__(self, milestone: Milestone):
         self.milestone = milestone
 

@@ -20,12 +20,15 @@ class TeamMemberFilterBackend(filters.BaseFilterBackend):
         return queryset
 
 
-class MilestoneCommonFilterBackend(filters.BaseFilterBackend):
+class MilestoneActiveFiler(filters.BaseFilterBackend):
     def filter_queryset(self, request, queryset, view):
         active_param = request.GET.get('active')
 
         if active_param and active_param == 'true':
             queryset = queryset.filter(start_date__lte=timezone.now().date(),
                                        due_date__gte=timezone.now().date())
+        elif active_param and active_param == 'false':
+            queryset = queryset.filter(start_date__lt=timezone.now().date(),
+                                       due_date__lt=timezone.now().date())
 
         return queryset
