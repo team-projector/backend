@@ -204,7 +204,7 @@ class FeatureIssuesViewset(mixins.ListModelMixin, BaseGenericViewSet):
         return get_object_or_404(Feature.objects, pk=self.kwargs['feature_pk'])
 
     def filter_queryset(self, queryset):
-        return super().filter_queryset(queryset.filter(milestone__feature=self.feature))
+        return super().filter_queryset(queryset.filter(feature=self.feature))
 
 
 class GitlabStatusView(BaseGenericAPIView):
