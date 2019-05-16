@@ -1,3 +1,5 @@
+from distutils.util import strtobool
+
 from django.db.models import OuterRef, Exists
 from django.utils import timezone
 from rest_framework import filters
@@ -24,11 +26,10 @@ class MilestoneActiveFiler(filters.BaseFilterBackend):
     def filter_queryset(self, request, queryset, view):
         active_param = request.GET.get('active')
 
-        if active_param and active_param == 'true':
-            queryset = queryset.filter(start_date__lte=timezone.now().date(),
-                                       due_date__gte=timezone.now().date())
-        elif active_param and active_param == 'false':
-            queryset = queryset.filter(start_date__lt=timezone.now().date(),
-                                       due_date__lt=timezone.now().date())
+        if not active_param:
+            return queryset
 
-        return queryset
+        return queryset.filter(start_date__lte=timezone.now().date(),
+                               due_date__gte=timezone.now().date()) if strtobool(active_param) \
+            else queryset.filter(start_date__lt=timezone.now().date(),
+                                 due_date__lt=timezone.now().date())
