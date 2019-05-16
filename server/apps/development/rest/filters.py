@@ -29,7 +29,9 @@ class MilestoneActiveFiler(filters.BaseFilterBackend):
         if not active_param:
             return queryset
 
-        return queryset.filter(start_date__lte=timezone.now().date(),
-                               due_date__gte=timezone.now().date()) if strtobool(active_param) \
-            else queryset.filter(start_date__lt=timezone.now().date(),
-                                 due_date__lt=timezone.now().date())
+        if strtobool(active_param):
+            return queryset.filter(start_date__lte=timezone.now().date(),
+                                   due_date__gte=timezone.now().date())
+
+        return queryset.filter(start_date__lt=timezone.now().date(),
+                               due_date__lt=timezone.now().date())
