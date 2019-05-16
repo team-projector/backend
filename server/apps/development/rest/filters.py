@@ -1,4 +1,7 @@
+from distutils.util import strtobool
+
 from django.db.models import OuterRef, Exists
+from django.utils import timezone
 from rest_framework import filters
 
 from apps.core.utils.rest import parse_query_params
@@ -17,3 +20,18 @@ class TeamMemberFilterBackend(filters.BaseFilterBackend):
             queryset = queryset.annotate(member_exists=Exists(team_members)).filter(member_exists=True)
 
         return queryset
+
+
+class MilestoneActiveFiler(filters.BaseFilterBackend):
+    def filter_queryset(self, request, queryset, view):
+        active_param = request.GET.get('active')
+
+        if not active_param:
+            return queryset
+
+        if strtobool(active_param):
+            return queryset.filter(start_date__lte=timezone.now().date(),
+                                   due_date__gte=timezone.now().date())
+
+        return queryset.filter(start_date__lt=timezone.now().date(),
+                               due_date__lt=timezone.now().date())

@@ -15,11 +15,12 @@ from apps.core.rest.mixins.views import CreateModelMixin, UpdateModelMixin
 from apps.core.rest.views import BaseGenericViewSet, BaseGenericAPIView
 from apps.core.tasks import add_action
 from apps.development.rest import permissions
-from apps.development.rest.filters import TeamMemberFilterBackend
+from apps.development.rest.filters import TeamMemberFilterBackend, MilestoneActiveFiler
 from apps.development.services.problems.issues import IssueProblemsChecker
 from .serializers import (
     IssueCardSerializer, IssueProblemSerializer, TeamCardSerializer, TeamMemberCardSerializer, IssueUpdateSerializer,
-    MilestoneCardSerializer, FeatureCardSerializer, FeatureUpdateSerializer, FeatureSerializer, GitlabStatusSerializer
+    ProjectMilestoneCardSerializer, FeatureCardSerializer, FeatureUpdateSerializer, FeatureSerializer,
+    GitlabStatusSerializer, MilestoneCardSerializer
 )
 from ..models import Issue, Team, TeamMember, Milestone, ProjectGroup, Project, Feature
 from ..tasks import sync_project_issue
@@ -103,8 +104,8 @@ class ProjectGroupMilestonesViewset(mixins.ListModelMixin,
     permission_classes = (permissions.IsProjectManager,)
 
     serializer_classes = {
-        'retrieve': MilestoneCardSerializer,
-        'list': MilestoneCardSerializer
+        'retrieve': ProjectMilestoneCardSerializer,
+        'list': ProjectMilestoneCardSerializer
     }
 
     queryset = Milestone.objects.all()
@@ -122,7 +123,7 @@ class ProjectMilestonesViewset(mixins.ListModelMixin,
     permission_classes = (permissions.IsProjectManager,)
 
     serializer_classes = {
-        'list': MilestoneCardSerializer
+        'list': ProjectMilestoneCardSerializer
     }
 
     queryset = Milestone.objects.all()
@@ -211,3 +212,15 @@ class GitlabStatusView(BaseGenericAPIView):
 
     def get(self, request):
         return Response(self.get_serializer(request).data)
+
+
+class MilestonesViewset(mixins.ListModelMixin,
+                        BaseGenericViewSet):
+    permission_classes = (permissions.IsProjectManager,)
+
+    serializer_classes = {
+        'list': MilestoneCardSerializer
+    }
+
+    queryset = Milestone.objects.all()
+    filter_backends = (MilestoneActiveFiler,)
