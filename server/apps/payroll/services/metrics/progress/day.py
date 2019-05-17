@@ -33,15 +33,22 @@ class DayMetricsCalculator(ProgressMetricsCalculator):
             metrics.append(metric)
 
             metric.start = metric.end = current
-            deadline_stats = Issue.objects \
-                .annotate(time_remains=Case(When(Q(time_estimate__gt=F('total_time_spent')) & ~Q(state=STATE_CLOSED),
-                                                 then=F('time_estimate') - F('total_time_spent')),
-                                            default=Value(0),
-                                            output_field=IntegerField())) \
-                .filter(user=self.user, due_date=current) \
-                .aggregate(issues_count=Count('*'),
-                           total_time_estimate=Sum('time_estimate'),
-                           total_time_remains=Sum('time_remains'))
+            deadline_stats = Issue.objects.annotate(
+                time_remains=Case(
+                    When(
+                        Q(time_estimate__gt=F('total_time_spent')) & ~Q(state=STATE_CLOSED),
+                        then=F('time_estimate') - F('total_time_spent')),
+                    default=Value(0),
+                    output_field=IntegerField()
+                )
+            ).filter(
+                user=self.user,
+                due_date=current
+            ).aggregate(
+                issues_count=Count('*'),
+                total_time_estimate=Sum('time_estimate'),
+                total_time_remains=Sum('time_remains')
+            )
 
             metric.issues_count = deadline_stats['issues_count']
             metric.time_estimate = deadline_stats['total_time_estimate'] or 0
