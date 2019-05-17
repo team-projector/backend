@@ -13,7 +13,7 @@ from apps.core.activity.verbs import ACTION_GITLAB_CALL_API
 from apps.core.gitlab import get_gitlab_client
 from apps.core.tasks import add_action
 from apps.users.models import User
-from .parsers import parse_gl_date, parse_gl_datetime
+from .parsers import parse_gl_date, parse_gl_datetime, parse_state_merged
 from ..models import Issue, Label, Note, Project, ProjectGroup, Milestone
 
 logger = logging.getLogger(__name__)
@@ -184,7 +184,8 @@ def load_project_issue(project: Project, gl_project: GlProject, gl_issue: GlProj
         'created_at': parse_gl_datetime(gl_issue.created_at),
         'updated_at': parse_gl_datetime(gl_issue.updated_at),
         'closed_at': parse_gl_datetime(gl_issue.closed_at),
-        'user': extract_user_from_data(gl_issue.assignee)
+        'user': extract_user_from_data(gl_issue.assignee),
+        'is_merged': parse_state_merged(gl_issue.closed_by())
     }
 
     if gl_issue.milestone:
