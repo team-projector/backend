@@ -96,7 +96,6 @@ class WorkBreakApproveSerializer(serializers.Serializer):
         instance.approve_state = APPROVED
         instance.approved_by = self.context['request'].user
         instance.approved_at = timezone.now()
-
         instance.save()
 
         return instance
@@ -110,7 +109,6 @@ class WorkBreakDeclineSerializer(serializers.Serializer):
         instance.approved_by = self.context['request'].user
         instance.approved_at = timezone.now()
         instance.decline_reason = validated_data.get('decline_reason', instance.decline_reason)
-
         instance.save()
 
         return instance
