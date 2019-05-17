@@ -19,8 +19,8 @@ class WorkBreaksTests(BaseAPITest):
         return {
             'reason': DAYOFF,
             'comment': 'Comment text',
-            'from_date': '2019-04-27T17:33:26+03:00',
             'user': self.user.id,
+            'from_date': '2019-04-27T17:33:26+03:00',
             'to_date': '2019-04-27T17:33:26+03:00'
         }
 
@@ -28,8 +28,8 @@ class WorkBreaksTests(BaseAPITest):
         return {
             'reason': VACATION,
             'comment': 'Comment text',
-            'from_date': '2019-04-27T17:33:26+03:00',
             'user': self.user.id,
+            'from_date': '2019-04-27T17:33:26+03:00',
             'to_date': '2019-04-27T17:33:26+03:00'
         }
 
@@ -58,6 +58,39 @@ class WorkBreaksTests(BaseAPITest):
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(response.data['approve_state'], CREATED)
 
+    def test_create_by_teamlead(self):
+        user_2 = self.create_user('user_2@mail.com')
+
+        team = TeamFactory.create()
+
+        TeamMemberFactory.create(team=team,
+                                 user=self.user,
+                                 roles=TeamMember.roles.developer | TeamMember.roles.leader)
+
+        TeamMemberFactory.create(team=team,
+                                 user=user_2,
+                                 roles=TeamMember.roles.developer)
+
+        data = self.get_data()
+        data['user'] = user_2.id
+
+        self.set_credentials()
+        response = self.client.post('/api/work-breaks', data)
+
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(response.data['approve_state'], CREATED)
+
+    def test_create_by_bad_user(self):
+        user_2 = self.create_user('user_2@mail.com')
+
+        data = self.get_data()
+        data['user'] = user_2.id
+
+        self.set_credentials()
+        response = self.client.post('/api/work-breaks', data)
+
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
     def test_update(self):
         work_break = WorkBreakFactory.create(user=self.user)
         update_data = self.get_update_data()
@@ -68,6 +101,40 @@ class WorkBreaksTests(BaseAPITest):
 
         self.assertEqual(response.data['reason'], update_data['reason'])
 
+    def test_update_by_teamlead(self):
+        user_2 = self.create_user('user_2@mail.com')
+
+        team = TeamFactory.create()
+
+        TeamMemberFactory.create(team=team,
+                                 user=self.user,
+                                 roles=TeamMember.roles.developer | TeamMember.roles.leader)
+
+        TeamMemberFactory.create(team=team,
+                                 user=user_2,
+                                 roles=TeamMember.roles.developer)
+
+        work_break = WorkBreakFactory.create(user=user_2)
+        update_data = self.get_update_data()
+        update_data['user'] = user_2.id
+
+        self.set_credentials()
+        response = self.client.put(f'/api/work-breaks/{work_break.id}', update_data)
+
+        self.assertEqual(response.data['reason'], update_data['reason'])
+
+    def test_update_by_bad_user(self):
+        user_2 = self.create_user('user_2@mail.com')
+
+        work_break = WorkBreakFactory.create(user=user_2)
+        update_data = self.get_update_data()
+        update_data['user'] = user_2.id
+
+        self.set_credentials()
+        response = self.client.put(f'/api/work-breaks/{work_break.id}', update_data)
+
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
     def test_delete(self):
         work_break = WorkBreakFactory.create(user=self.user)
 
@@ -76,6 +143,36 @@ class WorkBreaksTests(BaseAPITest):
         response = self.client.delete(f'/api/work-breaks/{work_break.id}')
 
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+
+    def test_delete_by_teamlead(self):
+        user_2 = self.create_user('user_2@mail.com')
+
+        team = TeamFactory.create()
+
+        TeamMemberFactory.create(team=team,
+                                 user=self.user,
+                                 roles=TeamMember.roles.developer | TeamMember.roles.leader)
+
+        TeamMemberFactory.create(team=team,
+                                 user=user_2,
+                                 roles=TeamMember.roles.developer)
+
+        work_break = WorkBreakFactory.create(user=user_2)
+
+        self.set_credentials()
+        response = self.client.delete(f'/api/work-breaks/{work_break.id}')
+
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+
+    def test_delete_by_bad_user(self):
+        user_2 = self.create_user('user_2@mail.com')
+
+        work_break = WorkBreakFactory.create(user=user_2)
+
+        self.set_credentials()
+        response = self.client.delete(f'/api/work-breaks/{work_break.id}')
+
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_approving_list_teamlead(self):
         user_2 = self.create_user('user_2@mail.com')
@@ -174,6 +271,17 @@ class WorkBreaksTests(BaseAPITest):
         self.assertEqual(response.data['approved_by']['id'], self.user.id)
         self.assertEqual(response.data['decline_reason'], data['decline_reason'])
 
+    def test_decline_by_current_user(self):
+        data = {'decline_reason': 'work'}
+
+        work_break = WorkBreakFactory.create(user=self.user)
+
+        self.set_credentials()
+
+        response = self.client.post(f'/api/work-breaks/{work_break.id}/decline', data)
+
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
     def test_decline_by_bad_user(self):
         user_2 = self.create_user('user_2@mail.com')
         data = {'decline_reason': 'work'}
@@ -250,6 +358,15 @@ class WorkBreaksTests(BaseAPITest):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data['approve_state'], APPROVED)
         self.assertEqual(response.data['approved_by']['id'], self.user.id)
+
+    def test_approve_by_current_user(self):
+        work_break = WorkBreakFactory.create(user=self.user)
+
+        self.set_credentials()
+
+        response = self.client.post(f'/api/work-breaks/{work_break.id}/approve')
+
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_approve_by_bad_user(self):
         user_2 = self.create_user('user_2@mail.com')

@@ -1,12 +1,17 @@
+from django.contrib.auth import get_user_model
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from rest_framework import serializers
 
 from apps.core.rest.serializers import LinkSerializer
 from apps.development.rest.serializers import IssueCardSerializer
+from apps.development.models import TeamMember
 from apps.payroll.db.mixins import APPROVED, DECLINED
 from apps.payroll.models import Salary, SpentTime, WorkBreak
 from apps.users.rest.serializers import UserCardSerializer
+
+
+User = get_user_model()
 
 
 class UserMetricsSerializer(serializers.Serializer):
@@ -86,7 +91,7 @@ class WorkBreakCardSerializer(WorkBreakSerializer):
     approved_by = LinkSerializer()
 
 
-class WorkBreakApproveSerializer(WorkBreakSerializer):
+class WorkBreakApproveSerializer(serializers.Serializer):
     def update(self, instance, validated_data):
         instance.approve_state = APPROVED
         instance.approved_by = self.context['request'].user
@@ -97,14 +102,8 @@ class WorkBreakApproveSerializer(WorkBreakSerializer):
         return instance
 
 
-class WorkBreakDeclineSerializer(WorkBreakSerializer):
+class WorkBreakDeclineSerializer(serializers.Serializer):
     decline_reason = serializers.CharField(required=True, allow_null=False)
-
-    def validate(self, attrs):
-        if 'decline_reason' not in attrs:
-            raise serializers.ValidationError(_('MESSAGE_DECLINE_REASON_FIELD_IS_REQUIRED'))
-
-        return attrs
 
     def update(self, instance, validated_data):
         instance.approve_state = DECLINED
@@ -118,9 +117,21 @@ class WorkBreakDeclineSerializer(WorkBreakSerializer):
 
 
 class WorkBreakUpdateSerializer(serializers.ModelSerializer):
+
+    def validate_user(self, user):
+
+        teams = TeamMember.objects.filter(user=self.context['request'].user,
+                                          roles=TeamMember.roles.leader).values_list('team', flat=True)
+
+        if user == self.context['request'].user or User.objects.filter(team_members__team__in=teams,
+                                                                       team_members__roles=TeamMember.roles.developer,
+                                                                       id=user.id).exists():
+            return user
+
+        raise serializers.ValidationError(_('MESSAGE_USER_CAN_NOT_MANAGE_CURRENT_WORKBREAK'))
+
     class Meta:
         model = WorkBreak
         fields = (
-            'approve_state', 'approved_by', 'approved_at', 'decline_reason', 'comment', 'from_date', 'reason',
-            'to_date', 'id', 'user'
+            'comment', 'from_date', 'reason', 'to_date', 'user'
         )

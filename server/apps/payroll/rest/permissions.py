@@ -30,7 +30,23 @@ class CanViewEmbeddedUserMetrics(CanViewUserMetrics):
 
 
 class CanManageWorkbeaks(permissions.BasePermission):
-    message = 'You can\'t view user workbreaks'
+    message = 'You can\'t manage user workbreaks'
+
+    def has_object_permission(self, request, view, workbreak):
+        if workbreak.user == request.user:
+            return True
+
+        team_leader = TeamMember.objects.filter(team_id=OuterRef('team_id'),
+                                                roles=TeamMember.roles.leader,
+                                                user=request.user)
+
+        return request.user.team_members \
+            .annotate(is_team_leader=Exists(team_leader)) \
+            .filter(is_team_leader=True).exists()
+
+
+class CanApproveDeclineWorkbeaks(permissions.BasePermission):
+    message = 'You can\'t approve or decline user workbreaks'
 
     def has_object_permission(self, request, view, obj):
         team_leader = TeamMember.objects.filter(team_id=OuterRef('team_id'),
