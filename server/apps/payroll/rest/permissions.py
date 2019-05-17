@@ -1,7 +1,11 @@
+from django.contrib.auth import get_user_model
 from django.db.models import Exists, OuterRef
 from rest_framework import permissions
 
 from apps.development.models import TeamMember
+
+
+User = get_user_model()
 
 
 class CanViewUserMetrics(permissions.BasePermission):
@@ -29,28 +33,27 @@ class CanViewEmbeddedUserMetrics(CanViewUserMetrics):
         return super().has_object_permission(request, view, user)
 
 
-class CanManageWorkbeaks(permissions.BasePermission):
+class CanManageWorkbreaks(permissions.BasePermission):
     message = 'You can\'t manage user workbreaks'
 
     def has_object_permission(self, request, view, workbreak):
         if workbreak.user == request.user:
             return True
 
-        return is_user_teamlead(request)
+        return is_user_teamlead(request, workbreak.user)
 
 
-class CanApproveDeclineWorkbeaks(permissions.BasePermission):
+class CanApproveDeclineWorkbreaks(permissions.BasePermission):
     message = 'You can\'t approve or decline user workbreaks'
 
     def has_object_permission(self, request, view, workbreak):
-        return is_user_teamlead(request)
+        return is_user_teamlead(request, workbreak.user)
 
 
-def is_user_teamlead(request):
-    team_leader = TeamMember.objects.filter(team_id=OuterRef('team_id'),
-                                            roles=TeamMember.roles.leader,
-                                            user=request.user)
+def is_user_teamlead(request, user):
+    teams = TeamMember.objects.filter(user=request.user,
+                                      roles=TeamMember.roles.leader).values_list('team', flat=True)
 
-    return request.user.team_members \
-        .annotate(is_team_leader=Exists(team_leader)) \
-        .filter(is_team_leader=True).exists()
+    return User.objects.filter(team_members__team__in=teams,
+                               team_members__roles=TeamMember.roles.developer,
+                               id=user.id).exists()
