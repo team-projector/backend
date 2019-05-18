@@ -11,13 +11,34 @@ class CanViewUserMetrics(permissions.BasePermission):
         if user == request.user:
             return True
 
-        user_team_leader = TeamMember.objects.filter(team_id=OuterRef('team_id'),
-                                                     roles=TeamMember.roles.leader,
-                                                     user=request.user)
+        user_team_leader = TeamMember.objects.filter(
+            team_id=OuterRef('team_id'),
+            roles=TeamMember.roles.leader,
+            user=request.user
+        )
 
-        return user.team_members \
-            .annotate(is_team_leader=Exists(user_team_leader)) \
-            .filter(is_team_leader=True).exists()
+        return user.team_members.annotate(
+            is_team_leader=Exists(user_team_leader)
+        ).filter(
+            is_team_leader=True
+        ).exists()
+
+
+class CanViewTeamMetrics(permissions.BasePermission):
+    message = 'You can\'t view team metrics'
+
+    def has_object_permission(self, request, view, team):
+        user_team_leader = TeamMember.objects.filter(
+            team_id=OuterRef('team_id'),
+            roles=TeamMember.roles.leader,
+            user=request.user
+        )
+
+        return team.members.annotate(
+            is_team_leader=Exists(user_team_leader)
+        ).filter(
+            is_team_leader=True
+        ).exists()
 
 
 class CanViewEmbeddedUserMetrics(CanViewUserMetrics):

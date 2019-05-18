@@ -10,7 +10,7 @@ from apps.core.utils.date import begin_of_week
 from apps.development.models import TeamMember
 from apps.development.models.issue import STATE_CLOSED, STATE_OPENED
 from apps.development.services.parsers import parse_date
-from tests.base import BaseAPITest
+from tests.base import BaseAPITest, format_date
 from tests.test_development.factories import IssueFactory, TeamFactory, TeamMemberFactory
 from tests.test_payroll.factories import IssueSpentTimeFactory
 from tests.test_users.factories import UserFactory
@@ -42,8 +42,8 @@ class ApiMetricsWeeksTests(BaseAPITest):
         end = monday + timedelta(days=5)
 
         response = self.client.get(f'/api/users/{self.user.id}/progress-metrics', {
-            'start': self.format_date(start),
-            'end': self.format_date(end),
+            'start': format_date(start),
+            'end': format_date(end),
             'group': 'week'
         })
 
@@ -79,8 +79,8 @@ class ApiMetricsWeeksTests(BaseAPITest):
         end = monday + timedelta(days=5)
 
         response = self.client.get(f'/api/users/{self.user.id}/progress-metrics', {
-            'start': self.format_date(start),
-            'end': self.format_date(end),
+            'start': format_date(start),
+            'end': format_date(end),
             'group': 'week'
         })
 
@@ -118,8 +118,8 @@ class ApiMetricsWeeksTests(BaseAPITest):
         end = monday + timedelta(days=5)
 
         response = self.client.get(f'/api/users/{self.user.id}/progress-metrics', {
-            'start': self.format_date(start),
-            'end': self.format_date(end),
+            'start': format_date(start),
+            'end': format_date(end),
             'group': 'week'
         })
 
@@ -157,8 +157,8 @@ class ApiMetricsWeeksTests(BaseAPITest):
         end = monday + timedelta(days=5)
 
         response = self.client.get(f'/api/users/{self.user.id}/progress-metrics', {
-            'start': self.format_date(start),
-            'end': self.format_date(end),
+            'start': format_date(start),
+            'end': format_date(end),
             'group': 'week'
         })
 
@@ -187,8 +187,8 @@ class ApiMetricsWeeksTests(BaseAPITest):
         end = monday + timedelta(days=5)
 
         response = self.client.get(f'/api/users/{self.user.id}/progress-metrics', {
-            'start': self.format_date(start),
-            'end': self.format_date(end),
+            'start': format_date(start),
+            'end': format_date(end),
             'group': 'week'
         })
 
@@ -222,8 +222,8 @@ class ApiMetricsWeeksTests(BaseAPITest):
         end = monday + timedelta(days=5)
 
         response = self.client.get(f'/api/users/{self.user.id}/progress-metrics', {
-            'start': self.format_date(start),
-            'end': self.format_date(end),
+            'start': format_date(start),
+            'end': format_date(end),
             'group': 'week'
         })
 
@@ -259,8 +259,8 @@ class ApiMetricsWeeksTests(BaseAPITest):
         end = monday + timedelta(weeks=1, days=5)
 
         response = self.client.get(f'/api/users/{self.user.id}/progress-metrics', {
-            'start': self.format_date(start),
-            'end': self.format_date(end),
+            'start': format_date(start),
+            'end': format_date(end),
             'group': 'week'
         })
 
@@ -297,8 +297,8 @@ class ApiMetricsWeeksTests(BaseAPITest):
         end = monday + timedelta(days=5)
 
         response = self.client.get(f'/api/users/{self.user.id}/progress-metrics', {
-            'start': self.format_date(start),
-            'end': self.format_date(end),
+            'start': format_date(start),
+            'end': format_date(end),
             'group': 'week'
         })
 
@@ -341,8 +341,8 @@ class ApiMetricsWeeksTests(BaseAPITest):
         end = monday + timedelta(days=5)
 
         response = self.client.get(f'/api/users/{self.user.id}/progress-metrics', {
-            'start': self.format_date(start),
-            'end': self.format_date(end),
+            'start': format_date(start),
+            'end': format_date(end),
             'group': 'week'
         })
 
@@ -361,8 +361,8 @@ class ApiMetricsWeeksTests(BaseAPITest):
     def test_permissions_self(self):
         self.set_credentials()
         response = self.client.get(f'/api/users/{self.user.id}/progress-metrics', {
-            'start': self.format_date(timezone.now() - timedelta(days=5)),
-            'end': self.format_date(timezone.now() - timedelta(days=5)),
+            'start': format_date(timezone.now() - timedelta(days=5)),
+            'end': format_date(timezone.now() - timedelta(days=5)),
             'group': 'week'
         })
 
@@ -373,8 +373,8 @@ class ApiMetricsWeeksTests(BaseAPITest):
 
         self.set_credentials()
         response = self.client.get(f'/api/users/{user_2.id}/progress-metrics', {
-            'start': self.format_date(timezone.now() - timedelta(days=5)),
-            'end': self.format_date(timezone.now() - timedelta(days=5)),
+            'start': format_date(timezone.now() - timedelta(days=5)),
+            'end': format_date(timezone.now() - timedelta(days=5)),
             'group': 'week'
         })
 
@@ -395,8 +395,8 @@ class ApiMetricsWeeksTests(BaseAPITest):
 
         self.set_credentials()
         response = self.client.get(f'/api/users/{user_2.id}/progress-metrics', {
-            'start': self.format_date(timezone.now() - timedelta(days=5)),
-            'end': self.format_date(timezone.now() - timedelta(days=5)),
+            'start': format_date(timezone.now() - timedelta(days=5)),
+            'end': format_date(timezone.now() - timedelta(days=5)),
             'group': 'week'
         })
 
@@ -415,8 +415,8 @@ class ApiMetricsWeeksTests(BaseAPITest):
 
         self.set_credentials()
         response = self.client.get(f'/api/users/{user_2.id}/progress-metrics', {
-            'start': self.format_date(timezone.now() - timedelta(days=5)),
-            'end': self.format_date(timezone.now() - timedelta(days=5)),
+            'start': format_date(timezone.now() - timedelta(days=5)),
+            'end': format_date(timezone.now() - timedelta(days=5)),
             'group': 'week'
         })
 
@@ -427,8 +427,8 @@ class ApiMetricsWeeksTests(BaseAPITest):
 
         self.set_credentials()
         response = self.client.get(f'/api/users/{user_2.id}/progress-metrics', {
-            'start': self.format_date(timezone.now() - timedelta(days=5)),
-            'end': self.format_date(timezone.now() - timedelta(days=5)),
+            'start': format_date(timezone.now() - timedelta(days=5)),
+            'end': format_date(timezone.now() - timedelta(days=5)),
             'group': 'week'
         })
 
@@ -452,7 +452,7 @@ class ApiMetricsWeeksTests(BaseAPITest):
         efficiencies = self._prepare_metrics(efficiencies)
 
         for metric in metrics:
-            self.assertEqual(metric['end'], self.format_date(parse_date(metric['start']) + timedelta(weeks=1)))
+            self.assertEqual(metric['end'], format_date(parse_date(metric['start']) + timedelta(weeks=1)))
 
             self._check_metric(metric, 'time_spent', spents)
             self._check_metric(metric, 'time_estimate', time_estimates)
@@ -476,7 +476,7 @@ class ApiMetricsWeeksTests(BaseAPITest):
 
     def _prepare_metrics(self, metrics):
         return {
-            self.format_date(d): time
+            format_date(d): time
             for d, time in metrics.items()
         }
 

@@ -7,7 +7,7 @@ from rest_framework import status
 
 from apps.core.utils.date import begin_of_week
 from apps.development.models.issue import STATE_CLOSED, STATE_OPENED
-from tests.base import BaseAPITest
+from tests.base import BaseAPITest, format_date
 from tests.test_development.factories import IssueFactory
 from tests.test_payroll.factories import IssueSpentTimeFactory, SalaryFactory
 
@@ -39,8 +39,8 @@ class ApiMetricsDaysPayrollTests(BaseAPITest):
         end = monday + timedelta(days=5)
 
         response = self.client.get(f'/api/users/{self.user.id}/progress-metrics', {
-            'start': self.format_date(start),
-            'end': self.format_date(end),
+            'start': format_date(start),
+            'end': format_date(end),
             'group': 'day'
         })
 
@@ -75,8 +75,8 @@ class ApiMetricsDaysPayrollTests(BaseAPITest):
         end = monday + timedelta(days=5)
 
         response = self.client.get(f'/api/users/{self.user.id}/progress-metrics', {
-            'start': self.format_date(start),
-            'end': self.format_date(end),
+            'start': format_date(start),
+            'end': format_date(end),
             'group': 'day'
         })
 
@@ -109,8 +109,8 @@ class ApiMetricsDaysPayrollTests(BaseAPITest):
         end = monday + timedelta(days=5)
 
         response = self.client.get(f'/api/users/{self.user.id}/progress-metrics', {
-            'start': self.format_date(start),
-            'end': self.format_date(end),
+            'start': format_date(start),
+            'end': format_date(end),
             'group': 'day'
         })
 
@@ -150,8 +150,8 @@ class ApiMetricsDaysPayrollTests(BaseAPITest):
         end = monday + timedelta(days=5)
 
         response = self.client.get(f'/api/users/{self.user.id}/progress-metrics', {
-            'start': self.format_date(start),
-            'end': self.format_date(end),
+            'start': format_date(start),
+            'end': format_date(end),
             'group': 'day'
         })
 
@@ -189,7 +189,7 @@ class ApiMetricsDaysPayrollTests(BaseAPITest):
 
     def _prepare_metrics(self, metrics):
         return {
-            self.format_date(d): time
+            format_date(d): time
             for d, time in metrics.items()
         }
 

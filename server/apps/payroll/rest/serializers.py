@@ -18,6 +18,12 @@ class UserProgressMetricsParamsSerializer(serializers.Serializer):
     group = serializers.CharField()
 
 
+class TeamProgressMetricsParamsSerializer(serializers.Serializer):
+    start = serializers.DateField()
+    end = serializers.DateField()
+    group = serializers.CharField()
+
+
 class UserProgressMetricsSerializer(serializers.Serializer):
     start = serializers.DateField()
     end = serializers.DateField()
@@ -29,6 +35,11 @@ class UserProgressMetricsSerializer(serializers.Serializer):
     efficiency = serializers.FloatField()
     payroll = serializers.FloatField()
     paid = serializers.FloatField()
+
+
+class TeamMemberProgressMetricsSerializer(serializers.Serializer):
+    user = serializers.IntegerField()
+    metrics = UserProgressMetricsSerializer(many=True)
 
 
 class TimeExpenseSerializer(serializers.ModelSerializer):

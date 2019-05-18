@@ -1,6 +1,6 @@
 from django.urls import include, path
 
-from .views import TimeExpensesView, UserProgressMetricsView, UserSalariesView
+from .views import TeamProgressMetricsView, TimeExpensesView, UserProgressMetricsView, UserSalariesView
 
 app_name = 'payroll'
 
@@ -11,5 +11,9 @@ urlpatterns = [
             path('salaries', UserSalariesView.as_view(), name='salaries'),
             path('time-expenses', TimeExpensesView.as_view(),
                  name='time-expenses'),
-        ], app_name), 'users'))
+        ], app_name), 'users')),
+    path('teams/<int:team_pk>/', include((
+        [
+            path('progress-metrics', TeamProgressMetricsView.as_view(), name='progress-metrics'),
+        ], app_name), 'teams'))
 ]
