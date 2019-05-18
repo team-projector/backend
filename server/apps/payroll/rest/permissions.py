@@ -1,7 +1,11 @@
+from django.contrib.auth import get_user_model
 from django.db.models import Exists, OuterRef
 from rest_framework import permissions
 
 from apps.development.models import TeamMember
+
+
+User = get_user_model()
 
 
 class CanViewUserMetrics(permissions.BasePermission):
@@ -27,3 +31,29 @@ class CanViewEmbeddedUserMetrics(CanViewUserMetrics):
             return True
 
         return super().has_object_permission(request, view, user)
+
+
+class CanManageWorkbreaks(permissions.BasePermission):
+    message = 'You can\'t manage user workbreaks'
+
+    def has_object_permission(self, request, view, workbreak):
+        if workbreak.user == request.user:
+            return True
+
+        return is_user_teamlead(request, workbreak.user)
+
+
+class CanApproveDeclineWorkbreaks(permissions.BasePermission):
+    message = 'You can\'t approve or decline user workbreaks'
+
+    def has_object_permission(self, request, view, workbreak):
+        return is_user_teamlead(request, workbreak.user)
+
+
+def is_user_teamlead(request, user):
+    teams = TeamMember.objects.filter(user=request.user,
+                                      roles=TeamMember.roles.leader).values_list('team', flat=True)
+
+    return User.objects.filter(team_members__team__in=teams,
+                               team_members__roles=TeamMember.roles.developer,
+                               id=user.id).exists()
