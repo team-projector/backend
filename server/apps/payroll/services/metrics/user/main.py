@@ -11,6 +11,8 @@ class UserMetrics:
     bonus: float = 0
     penalty: float = 0
     issues_opened_count: int = 0
+    issues_closed_spent: float = 0
+    issues_opened_spent: float = 0
 
 
 class UserMetricsCalculator:
@@ -22,6 +24,8 @@ class UserMetricsCalculator:
         metrics.penalty = self._get_penalty(user)
         metrics.payroll_opened = self._get_payroll_opened(user)
         metrics.payroll_closed = self._get_payroll_closed(user)
+        metrics.issues_closed_spent = self._get_issues_closed_spent(user)
+        metrics.issues_opened_spent = self._get_issues_opened_spent(user)
 
         return metrics
 
@@ -52,3 +56,15 @@ class UserMetricsCalculator:
         return (SpentTime.objects
                 .filter(salary__isnull=True, user=user, issues__state=STATE_CLOSED)
                 .aggregate(total_sum=Sum('sum'))['total_sum'] or 0)
+
+    @staticmethod
+    def _get_issues_closed_spent(user: User) -> float:
+        return (SpentTime.objects
+                .filter(salary__isnull=True, user=user, issues__state=STATE_CLOSED)
+                .aggregate(total_time_spent=Sum('time_spent'))['total_time_spent'] or 0)
+
+    @staticmethod
+    def _get_issues_opened_spent(user: User) -> float:
+        return (SpentTime.objects
+                .filter(salary__isnull=True, user=user, issues__state=STATE_OPENED)
+                .aggregate(total_time_spent=Sum('time_spent'))['total_time_spent'] or 0)

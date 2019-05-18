@@ -1,20 +1,26 @@
 from django.contrib.auth import get_user_model
+from django.db.models import Exists, OuterRef
 from django.shortcuts import get_object_or_404
 from django.utils.functional import cached_property
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import mixins, permissions
+from rest_framework.decorators import action
 from rest_framework.response import Response
 
-from apps.core.rest.views import BaseGenericAPIView
+from apps.core.rest.mixins.views import CreateModelMixin, UpdateModelMixin
+from apps.core.rest.views import BaseGenericAPIView, BaseGenericViewSet
 from apps.core.utils.rest import parse_query_params
-from apps.development.models import Team
-from apps.payroll.rest.permissions import CanViewTeamMetrics, CanViewUserMetrics
+from apps.development.models import Team, TeamMember
+from apps.payroll.db.mixins import CREATED
+from apps.payroll.models import WorkBreak
+from apps.payroll.rest.permissions import CanApproveDeclineWorkbreaks, CanManageWorkbreaks, CanViewTeamMetrics, \
+    CanViewUserMetrics
 from apps.payroll.services.metrics.progress.team import calculate_team_progress_metrics
 from apps.payroll.services.metrics.progress.user import calculate_user_progress_metrics
-from .serializers import (
-    SalarySerializer, TeamMemberProgressMetricsSerializer, TeamProgressMetricsParamsSerializer,
-    TimeExpenseSerializer, UserProgressMetricsParamsSerializer, UserProgressMetricsSerializer
-)
+from .serializers import (SalarySerializer, TeamMemberProgressMetricsSerializer, TeamProgressMetricsParamsSerializer,
+                          TimeExpenseSerializer, UserProgressMetricsParamsSerializer, UserProgressMetricsSerializer,
+                          WorkBreakApproveSerializer, WorkBreakCardSerializer, WorkBreakDeclineSerializer,
+                          WorkBreakSerializer, WorkBreakUpdateSerializer)
 from ..models import Salary, SpentTime
 
 User = get_user_model()
@@ -106,3 +112,93 @@ class TimeExpensesView(mixins.ListModelMixin,
 
     def get(self, request, *args, **kwargs):
         return self.list(request, *args, **kwargs)
+
+
+class UserWorkBreaksView(mixins.ListModelMixin,
+                         BaseGenericAPIView):
+    queryset = WorkBreak.objects.all()
+    permission_classes = (permissions.IsAuthenticated, CanViewUserMetrics)
+    serializer_class = WorkBreakCardSerializer
+
+    @cached_property
+    def user(self):
+        user = get_object_or_404(User.objects, pk=self.kwargs['user_pk'])
+        self.check_object_permissions(self.request, user)
+        return user
+
+    def filter_queryset(self, queryset):
+        return super().filter_queryset(queryset).filter(user=self.user)
+
+    def get(self, request, *args, **kwargs):
+        return self.list(request, *args, **kwargs)
+
+
+class WorkBreaksViewset(mixins.ListModelMixin,
+                        CreateModelMixin,
+                        UpdateModelMixin,
+                        mixins.RetrieveModelMixin,
+                        mixins.DestroyModelMixin,
+                        BaseGenericViewSet):
+    permission_classes = (permissions.IsAuthenticated, CanManageWorkbreaks)
+
+    serializer_classes = {
+        'create': WorkBreakSerializer,
+        'update': WorkBreakSerializer,
+        'retrieve': WorkBreakSerializer,
+        'destroy': WorkBreakSerializer,
+    }
+    update_serializer_class = WorkBreakUpdateSerializer
+
+    queryset = WorkBreak.objects.all()
+
+    ordering_fields = ('from_date',)
+    ordering = ('from_date',)
+
+    @action(detail=False,
+            serializer_class=WorkBreakCardSerializer,
+            permission_classes=(permissions.IsAuthenticated, CanApproveDeclineWorkbreaks))
+    def approving(self, request):
+        teams = TeamMember.objects.filter(user=request.user,
+                                          roles=TeamMember.roles.leader).values_list('team', flat=True)
+        subquery = User.objects.filter(team_members__team__in=teams,
+                                       team_members__roles=TeamMember.roles.developer,
+                                       id=OuterRef('user_id'))
+
+        queryset = self.get_queryset().annotate(user_is_team_member=Exists(subquery)).filter(
+            user_is_team_member=True,
+            approve_state=CREATED
+        )
+        page = self.paginate_queryset(queryset)
+        serializer = self.get_serializer(page, many=True)
+
+        return self.get_paginated_response(serializer.data)
+
+    @action(detail=True,
+            methods=['post'],
+            serializer_class=WorkBreakDeclineSerializer,
+            permission_classes=(permissions.IsAuthenticated, CanApproveDeclineWorkbreaks))
+    def decline(self, request, pk=None):
+        instance = self.get_object()
+
+        serializer = self.get_serializer(instance,
+                                         context=self.get_serializer_context(),
+                                         data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+
+        return Response(WorkBreakSerializer(instance, context=self.get_serializer_context()).data)
+
+    @action(detail=True,
+            methods=['post'],
+            serializer_class=WorkBreakApproveSerializer,
+            permission_classes=(permissions.IsAuthenticated, CanApproveDeclineWorkbreaks))
+    def approve(self, request, pk=None):
+        instance = self.get_object()
+
+        serializer = self.get_serializer(instance,
+                                         context=self.get_serializer_context(),
+                                         data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+
+        return Response(WorkBreakSerializer(instance, context=self.get_serializer_context()).data)
