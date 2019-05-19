@@ -117,6 +117,8 @@ class Issue(NotableMixin,
         related_name='participant_issues',
     )
 
+    is_merged = models.BooleanField(default=False)
+
     objects = IssueManager()
 
     class Meta:

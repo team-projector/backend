@@ -15,12 +15,12 @@ from apps.core.rest.mixins.views import CreateModelMixin, UpdateModelMixin
 from apps.core.rest.views import BaseGenericViewSet, BaseGenericAPIView
 from apps.core.tasks import add_action
 from apps.development.rest import permissions
-from apps.development.rest.filters import TeamMemberFilterBackend, MilestoneActiveFiler
+from apps.development.rest.filters import TeamMemberFilterBackend, MilestoneActiveFiler, IssueStatusUrlFiler
 from apps.development.services.problems.issues import IssueProblemsChecker
 from .serializers import (
     IssueCardSerializer, IssueProblemSerializer, TeamCardSerializer, TeamMemberCardSerializer, IssueUpdateSerializer,
     ProjectMilestoneCardSerializer, FeatureCardSerializer, FeatureUpdateSerializer, FeatureSerializer,
-    GitlabStatusSerializer, MilestoneCardSerializer
+    GitlabStatusSerializer, MilestoneCardSerializer, GitlabIssieStatusSerializer
 )
 from ..models import Issue, Team, TeamMember, Milestone, ProjectGroup, Project, Feature
 from ..tasks import sync_project_issue
@@ -226,19 +226,11 @@ class MilestonesViewset(mixins.ListModelMixin,
     filter_backends = (MilestoneActiveFiler,)
 
 
-class TeamIssueProblemsViewset(mixins.ListModelMixin,
-                               BaseGenericViewSet):
-    serializer_classes = {
-        'list': IssueProblemSerializer
-    }
-    queryset = Issue.objects
-    filter_backends = (DjangoFilterBackend,)
-    filter_fields = ('user',)
+class GitlabIssueStatusView(BaseGenericAPIView):
+    serializer_class = GitlabIssieStatusSerializer
+    queryset = Issue.objects.all()
+    filter_backends = (IssueStatusUrlFiler,)
 
-    def filter_queryset(self, queryset):
-        queryset = super().filter_queryset(queryset).filter(user__team_members__team_id=self.kwargs['team_pk'])
-
-        checker = IssueProblemsChecker()
-        queryset = checker.check(queryset)
-
-        return queryset
+    def get(self, request, format=None):
+        queryset = self.filter_queryset(self.get_queryset())
+        return Response(self.get_serializer(queryset, many=True).data)
