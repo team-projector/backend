@@ -229,3 +229,9 @@ class MilestoneCardSerializer(serializers.ModelSerializer):
     class Meta:
         model = Milestone
         fields = ('id', 'title', 'start_date', 'due_date', 'metrics')
+
+
+class GitlabIssieStatusSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Issue
+        fields = ('id', 'title', 'state', 'is_merged')
