@@ -224,3 +224,19 @@ class MilestonesViewset(mixins.ListModelMixin,
 
     queryset = Milestone.objects.all()
     filter_backends = (MilestoneActiveFiler,)
+
+
+class TeamIssuesViewset(mixins.ListModelMixin,
+                        BaseGenericViewSet):
+    serializer_classes = {
+        'list': IssueCardSerializer
+    }
+    queryset = Issue.objects
+    filter_backends = (filters.SearchFilter, DjangoFilterBackend)
+
+    search_fields = ('title',)
+    filter_fields = ('state', 'due_date', 'user')
+    ordering_fields = ('due_date', 'title', 'created_at')
+
+    def filter_queryset(self, queryset):
+        return super().filter_queryset(queryset).filter(user__team_members__team_id=self.kwargs['team_pk'])
