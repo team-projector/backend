@@ -224,3 +224,19 @@ class MilestonesViewset(mixins.ListModelMixin,
 
     queryset = Milestone.objects.all()
     filter_backends = (MilestoneActiveFiler,)
+
+
+class TeamIssueProblemsViewset(mixins.ListModelMixin,
+                               BaseGenericViewSet):
+    serializer_class = IssueProblemSerializer
+    queryset = Issue.objects
+    filter_backends = (DjangoFilterBackend,)
+    filter_fields = ('user',)
+
+    def filter_queryset(self, queryset):
+        queryset = super().filter_queryset(queryset).filter(user__team_members__team_id=self.kwargs['team_pk'])
+
+        checker = IssueProblemsChecker()
+        queryset = checker.check(queryset)
+
+        return queryset
