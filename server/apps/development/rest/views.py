@@ -234,3 +234,21 @@ class GitlabIssueStatusView(BaseGenericAPIView):
     def get(self, request, format=None):
         queryset = self.filter_queryset(self.get_queryset())
         return Response(self.get_serializer(queryset, many=True).data)
+
+
+class TeamIssueProblemsViewset(mixins.ListModelMixin,
+                               BaseGenericViewSet):
+    serializer_classes = {
+        'list': IssueProblemSerializer
+    }
+    queryset = Issue.objects
+    filter_backends = (DjangoFilterBackend,)
+    filter_fields = ('user',)
+
+    def filter_queryset(self, queryset):
+        queryset = super().filter_queryset(queryset).filter(user__team_members__team_id=self.kwargs['team_pk'])
+
+        checker = IssueProblemsChecker()
+        queryset = checker.check(queryset)
+
+        return queryset
