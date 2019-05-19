@@ -3,7 +3,7 @@ from collections import defaultdict, namedtuple
 from datetime import timedelta
 from typing import DefaultDict, Optional, Pattern
 
-from apps.development.services.parsers import parse_gl_date
+from apps.development.services.gitlab.parsers import parse_gl_date
 
 RE_SPEND: Pattern = re.compile(
     r'^(?P<action>(added|subtracted)) (?P<spent>.+) of time spent at (?P<date>\d{4}-\d{2}-\d{2})$'
@@ -24,7 +24,8 @@ def minutes_handler(bag: DefaultDict[str, int], val: int) -> None:
     bag['minutes'] += val
 
 
-def hours_handler(bag: DefaultDict[str, int], val: int) -> None:
+def hours_handler(bag: DefaultDict[str, int],
+                  val: int) -> None:
     bag['hours'] += val
 
 
@@ -79,7 +80,7 @@ class BaseNoteParser:
 
 class SpendAddedParser(BaseNoteParser):
     def parse(self, gl_note) -> Optional[NoteReadResult]:
-        from ..models import Note
+        from ...models import Note
 
         m = RE_SPEND.match(gl_note.body)
         if not m:
@@ -99,7 +100,7 @@ class SpendAddedParser(BaseNoteParser):
 
 class SpendResetParser(BaseNoteParser):
     def parse(self, gl_note) -> Optional[NoteReadResult]:
-        from ..models import Note
+        from ...models import Note
 
         if gl_note.body == SPEND_RESET_MESSAGE:
             return NoteReadResult(Note.TYPE.reset_spend, {})

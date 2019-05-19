@@ -15,17 +15,22 @@ from tests.test_users.factories import UserFactory
 
 
 @override_settings(TP_WEEKENDS_DAYS=[])
-class ApiMetricsDaysTests(CheckUserProgressMetricsMixin,
-                          BaseAPITest):
+class ApiTeamMetricsDaysTests(CheckUserProgressMetricsMixin,
+                              BaseAPITest):
     def setUp(self):
         super().setUp()
 
-        self.issue = IssueFactory.create(user=self.user, due_date=timezone.now())
+        self.developer = UserFactory.create()
+        self.issue = IssueFactory.create(user=self.developer, due_date=timezone.now())
+
+        self.team = TeamFactory.create()
+        TeamMemberFactory.create(team=self.team, user=self.developer, roles=TeamMember.roles.developer)
+        TeamMemberFactory.create(team=self.team, user=self.user, roles=TeamMember.roles.leader)
 
     def test_bad_group(self):
         self.set_credentials()
 
-        response = self.client.get(f'/api/users/{self.user.id}/progress-metrics', {
+        response = self.client.get(f'/api/teams/{self.team.id}/progress-metrics', {
             'start': timezone.now() - timedelta(days=5),
             'end': timezone.now() + timedelta(days=5),
             'group': 'days'
@@ -49,16 +54,21 @@ class ApiMetricsDaysTests(CheckUserProgressMetricsMixin,
         start = timezone.now() - timedelta(days=5)
         end = timezone.now() + timedelta(days=5)
 
-        response = self.client.get(f'/api/users/{self.user.id}/progress-metrics', {
+        response = self.client.get(f'/api/teams/{self.team.id}/progress-metrics', {
             'start': format_date(start),
             'end': format_date(end),
             'group': 'day'
         })
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(len(response.data), (end - start).days + 1)
 
-        self._check_metrics(response.data,
+        self.assertEqual(len(response.data), 2)
+
+        developer_metrics = next(item for item in response.data if item['user'] == self.developer.id)
+
+        self.assertEqual(developer_metrics['user'], self.developer.id)
+        self.assertEqual(len(developer_metrics['metrics']), (end - start).days + 1)
+        self._check_metrics(developer_metrics['metrics'],
                             {
                                 timezone.now() - timedelta(days=4): timedelta(hours=3),
                                 timezone.now() - timedelta(days=2): timedelta(hours=2),
@@ -88,16 +98,22 @@ class ApiMetricsDaysTests(CheckUserProgressMetricsMixin,
         start = timezone.now() - timedelta(days=5)
         end = timezone.now() + timedelta(days=5)
 
-        response = self.client.get(f'/api/users/{self.user.id}/progress-metrics', {
+        response = self.client.get(f'/api/teams/{self.team.id}/progress-metrics', {
             'start': format_date(start),
             'end': format_date(end),
             'group': 'day'
         })
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(len(response.data), (end - start).days + 1)
 
-        self._check_metrics(response.data,
+        self.assertEqual(len(response.data), 2)
+
+        developer_metrics = next(item for item in response.data if item['user'] == self.developer.id)
+
+        self.assertEqual(developer_metrics['user'], self.developer.id)
+        self.assertEqual(len(developer_metrics['metrics']), (end - start).days + 1)
+
+        self._check_metrics(developer_metrics['metrics'],
                             {
                                 timezone.now() - timedelta(days=4): timedelta(hours=3),
                             }, {}, {
@@ -107,7 +123,7 @@ class ApiMetricsDaysTests(CheckUserProgressMetricsMixin,
                             }, {})
 
     def test_loading_day_already_has_spends(self):
-        issue_2 = IssueFactory.create(user=self.user,
+        issue_2 = IssueFactory.create(user=self.developer,
                                       state=STATE_OPENED,
                                       total_time_spent=timedelta(hours=3).total_seconds(),
                                       time_estimate=timedelta(hours=10).total_seconds())
@@ -129,16 +145,20 @@ class ApiMetricsDaysTests(CheckUserProgressMetricsMixin,
         start = timezone.now() - timedelta(days=5)
         end = timezone.now() + timedelta(days=5)
 
-        response = self.client.get(f'/api/users/{self.user.id}/progress-metrics', {
+        response = self.client.get(f'/api/teams/{self.team.id}/progress-metrics', {
             'start': format_date(start),
             'end': format_date(end),
             'group': 'day'
         })
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(len(response.data), (end - start).days + 1)
+        self.assertEqual(len(response.data), 2)
+        developer_metrics = next(item for item in response.data if item['user'] == self.developer.id)
 
-        self._check_metrics(response.data,
+        self.assertEqual(developer_metrics['user'], self.developer.id)
+        self.assertEqual(len(developer_metrics['metrics']), (end - start).days + 1)
+
+        self._check_metrics(developer_metrics['metrics'],
                             {
                                 timezone.now(): timedelta(hours=6)
                             }, {
@@ -168,16 +188,19 @@ class ApiMetricsDaysTests(CheckUserProgressMetricsMixin,
         end = timezone.now() + timedelta(days=3)
 
         self.set_credentials()
-        response = self.client.get(f'/api/users/{self.user.id}/progress-metrics', {
+        response = self.client.get(f'/api/teams/{self.team.id}/progress-metrics', {
             'start': format_date(start),
             'end': format_date(end),
             'group': 'day'
         })
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(len(response.data), (end - start).days + 1)
+        developer_metrics = next(item for item in response.data if item['user'] == self.developer.id)
 
-        self._check_metrics(response.data,
+        self.assertEqual(developer_metrics['user'], self.developer.id)
+        self.assertEqual(len(developer_metrics['metrics']), (end - start).days + 1)
+
+        self._check_metrics(developer_metrics['metrics'],
                             {
                                 timezone.now() - timedelta(days=1): timedelta(hours=1),
                                 timezone.now() + timedelta(days=1): timedelta(hours=3)
@@ -185,7 +208,7 @@ class ApiMetricsDaysTests(CheckUserProgressMetricsMixin,
                                 timezone.now(): 1
                             }, {}, {})
 
-    def test_another_user(self):
+    def test_another_user_not_in_team(self):
         self.issue.time_estimate = 0
         self.issue.total_time_spent = 0
         self.issue.state = STATE_OPENED
@@ -203,92 +226,116 @@ class ApiMetricsDaysTests(CheckUserProgressMetricsMixin,
         end = timezone.now() + timedelta(days=5)
 
         self.set_credentials()
-        response = self.client.get(f'/api/users/{self.user.id}/progress-metrics', {
+        response = self.client.get(f'/api/teams/{self.team.id}/progress-metrics', {
             'start': format_date(start),
             'end': format_date(end),
             'group': 'day'
         })
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(len(response.data), (end - start).days + 1)
+        self.assertEqual(len(response.data), 2)
+        self.assertFalse(any(item['user'] == another_user.id for item in response.data))
 
-        self._check_metrics(response.data,
-                            {
-                                timezone.now() - timedelta(days=2): timedelta(hours=2),
-                                timezone.now() - timedelta(days=1): -timedelta(hours=3)
-                            }, {}, {
-                                timezone.now(): 1
-                            }, {}, {})
+    def test_another_user_in_team(self):
+        another_user = UserFactory.create()
+        TeamMemberFactory.create(team=self.team, user=another_user, roles=TeamMember.roles.developer)
 
-    def test_permissions_self(self):
+        self._create_spent_time(timezone.now() - timedelta(days=2, hours=5), timedelta(hours=2))
+        self._create_spent_time(timezone.now() - timedelta(days=1), timedelta(hours=4),
+                                user=another_user)
+        self._create_spent_time(timezone.now() - timedelta(days=1, hours=5), -timedelta(hours=3))
+        self._create_spent_time(timezone.now() + timedelta(days=1), timedelta(hours=3), user=another_user)
+
+        self.issue.time_estimate = timedelta(hours=4).total_seconds()
+        self.issue.total_time_spent = 0
+        self.issue.state = STATE_OPENED
+        self.issue.save()
+        self.issue.save()
+
+        start = timezone.now() - timedelta(days=5)
+        end = timezone.now() + timedelta(days=5)
+
         self.set_credentials()
-        response = self.client.get(f'/api/users/{self.user.id}/progress-metrics', {
+        response = self.client.get(f'/api/teams/{self.team.id}/progress-metrics', {
+            'start': format_date(start),
+            'end': format_date(end),
+            'group': 'day'
+        })
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(response.data), 3)
+
+        developer_metrics = next(item for item in response.data if item['user'] == self.developer.id)
+
+        self.assertEqual(len(developer_metrics['metrics']), (end - start).days + 1)
+
+        self._check_metrics(developer_metrics['metrics'],
+                            {
+                                timezone.now() - timedelta(days=2, hours=5): timedelta(hours=2),
+                                timezone.now() - timedelta(days=1, hours=5): -timedelta(hours=3),
+                            }, {
+                                timezone.now(): timedelta(hours=4),
+                            }, {
+                                timezone.now(): 1,
+                            }, {
+                                timezone.now(): timedelta(hours=4),
+                            }, {
+                                timezone.now(): timedelta(hours=4),
+                            })
+
+        developer_metrics = next(item for item in response.data if item['user'] == another_user.id)
+
+        self.assertEqual(len(developer_metrics['metrics']), (end - start).days + 1)
+
+        self._check_metrics(developer_metrics['metrics'],
+                            {
+                                timezone.now() - timedelta(days=1, hours=5): timedelta(hours=4),
+                                timezone.now() + timedelta(days=1): timedelta(hours=3),
+                            }, {}, {}, {}, {})
+
+    def test_permissions_leader(self):
+        self.set_credentials()
+
+        response = self.client.get(f'/api/teams/{self.team.id}/progress-metrics', {
             'start': format_date(timezone.now() - timedelta(days=5)),
             'end': format_date(timezone.now() - timedelta(days=5)),
             'group': 'day'
         })
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_permissions_developer(self):
+        self.set_credentials(self.developer)
+
+        response = self.client.get(f'/api/teams/{self.team.id}/progress-metrics', {
+            'start': format_date(timezone.now() - timedelta(days=5)),
+            'end': format_date(timezone.now() - timedelta(days=5)),
+            'group': 'day'
+        })
+
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_permissions_another_user(self):
         user_2 = self.create_user('user_2@mail.com')
 
-        self.set_credentials()
-        response = self.client.get(f'/api/users/{user_2.id}/progress-metrics', {
+        self.set_credentials(user_2)
+        response = self.client.get(f'/api/teams/{self.team.id}/progress-metrics', {
             'start': format_date(timezone.now() - timedelta(days=5)),
             'end': format_date(timezone.now() - timedelta(days=5)),
             'group': 'day'
         })
 
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
-
-    def test_permissions_another_user_but_team_lead(self):
-        user_2 = self.create_user('user_2@mail.com')
-
-        team = TeamFactory.create()
-
-        TeamMemberFactory.create(team=team,
-                                 user=self.user,
-                                 roles=TeamMember.roles.developer | TeamMember.roles.leader)
-
-        TeamMemberFactory.create(team=team,
-                                 user=user_2,
-                                 roles=TeamMember.roles.developer)
-
-        self.set_credentials()
-        response = self.client.get(f'/api/users/{user_2.id}/progress-metrics', {
-            'start': format_date(timezone.now() - timedelta(days=5)),
-            'end': format_date(timezone.now() - timedelta(days=5)),
-            'group': 'day'
-        })
-
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_permissions_another_user_but_another_team_lead(self):
-        user_2 = self.create_user('user_2@mail.com')
+        another_team_lead = self.create_user('user_2@mail.com')
 
         TeamMemberFactory.create(team=TeamFactory.create(),
-                                 user=self.user,
-                                 roles=TeamMember.roles.developer | TeamMember.roles.leader)
+                                 user=another_team_lead,
+                                 roles=TeamMember.roles.leader)
 
-        TeamMemberFactory.create(team=TeamFactory.create(),
-                                 user=user_2,
-                                 roles=TeamMember.roles.developer)
-
-        self.set_credentials()
-        response = self.client.get(f'/api/users/{user_2.id}/progress-metrics', {
-            'start': format_date(timezone.now() - timedelta(days=5)),
-            'end': format_date(timezone.now() - timedelta(days=5)),
-            'group': 'day'
-        })
-
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
-
-    def test_permissions_another_user_but_team_developer(self):
-        user_2 = self.create_user('user_2@mail.com')
-
-        self.set_credentials()
-        response = self.client.get(f'/api/users/{user_2.id}/progress-metrics', {
+        self.set_credentials(another_team_lead)
+        response = self.client.get(f'/api/teams/{self.team.id}/progress-metrics', {
             'start': format_date(timezone.now() - timedelta(days=5)),
             'end': format_date(timezone.now() - timedelta(days=5)),
             'group': 'day'
@@ -298,6 +345,6 @@ class ApiMetricsDaysTests(CheckUserProgressMetricsMixin,
 
     def _create_spent_time(self, date, spent: timedelta = None, user=None, issue=None):
         return IssueSpentTimeFactory.create(date=date,
-                                            user=user or self.user,
+                                            user=user or self.developer,
                                             base=issue or self.issue,
                                             time_spent=spent.total_seconds())

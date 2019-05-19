@@ -6,7 +6,7 @@ from rest_framework import status
 from apps.development.models import Note
 from apps.development.models.issue import STATE_CLOSED, STATE_OPENED
 from apps.users.models import User
-from tests.base import BaseAPITest
+from tests.base import BaseAPITest, format_date
 from tests.test_development.factories import IssueFactory, IssueNoteFactory
 
 
@@ -80,7 +80,7 @@ class ApiIssuesMetricsTests(BaseAPITest):
 
         self.set_credentials()
         response = self.client.get('/api/issues', {
-            'due_date': self.format_date(timezone.now())
+            'due_date': format_date(timezone.now())
         })
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -96,7 +96,7 @@ class ApiIssuesMetricsTests(BaseAPITest):
 
         self.set_credentials()
         response = self.client.get('/api/issues', {
-            'due_date': self.format_date(timezone.now()),
+            'due_date': format_date(timezone.now()),
             'state': STATE_OPENED
         })
 

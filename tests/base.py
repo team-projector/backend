@@ -76,10 +76,10 @@ class BaseAPITest(BaseTestMixin, APITestCase):
     def clear_client_headers(self):
         self.client._credentials = {}
 
-    @staticmethod
-    def format_date(d: datetime) -> str:
-        return d.strftime('%Y-%m-%d')
 
-    @staticmethod
-    def parse_gl_date(s: str) -> datetime:
-        return datetime.datetime.strptime(s, '%Y-%m-%d')
+def format_date(d: datetime) -> str:
+    return d.strftime('%Y-%m-%d')
+
+
+def parse_gl_date(s: str) -> datetime:
+    return datetime.datetime.strptime(s, '%Y-%m-%d')

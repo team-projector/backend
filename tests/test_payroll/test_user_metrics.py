@@ -101,7 +101,8 @@ class UserMetricsTests(TestCase):
 
         metrics = self.calculator.calculate(self.user)
 
-        self._check_metrics(metrics, payroll_opened=self.user.hour_rate * 4)
+        self._check_metrics(metrics, payroll_opened=self.user.hour_rate * 4,
+                            issues_opened_spent=timedelta(hours=4).total_seconds())
 
     def test_payroll_opened_has_salary(self):
         issue = IssueFactory.create(state=STATE_OPENED)
@@ -113,7 +114,8 @@ class UserMetricsTests(TestCase):
 
         metrics = self.calculator.calculate(self.user)
 
-        self._check_metrics(metrics, payroll_opened=self.user.hour_rate * 7)
+        self._check_metrics(metrics, payroll_opened=self.user.hour_rate * 7,
+                            issues_opened_spent=timedelta(hours=7).total_seconds())
 
     def test_payroll_opened_has_closed(self):
         issue = IssueFactory.create(state=STATE_CLOSED)
@@ -127,7 +129,9 @@ class UserMetricsTests(TestCase):
 
         self._check_metrics(metrics,
                             payroll_opened=self.user.hour_rate * 5,
-                            payroll_closed=self.user.hour_rate * 6)
+                            issues_opened_spent=timedelta(hours=5).total_seconds(),
+                            payroll_closed=self.user.hour_rate * 6,
+                            issues_closed_spent=timedelta(hours=6).total_seconds())
 
     def test_payroll_opened_another_user(self):
         issue = IssueFactory.create(state=STATE_OPENED)
@@ -140,7 +144,8 @@ class UserMetricsTests(TestCase):
 
         metrics = self.calculator.calculate(self.user)
 
-        self._check_metrics(metrics, payroll_opened=self.user.hour_rate * 5)
+        self._check_metrics(metrics, payroll_opened=self.user.hour_rate * 5,
+                            issues_opened_spent=timedelta(hours=5).total_seconds())
 
     def test_payroll_closed(self):
         issue = IssueFactory.create(state=STATE_CLOSED)
@@ -151,7 +156,8 @@ class UserMetricsTests(TestCase):
 
         metrics = self.calculator.calculate(self.user)
 
-        self._check_metrics(metrics, payroll_closed=self.user.hour_rate * 4)
+        self._check_metrics(metrics, payroll_closed=self.user.hour_rate * 4,
+                            issues_closed_spent=timedelta(hours=4).total_seconds())
 
     def test_payroll_closed_has_salary(self):
         issue = IssueFactory.create(state=STATE_CLOSED)
@@ -163,7 +169,8 @@ class UserMetricsTests(TestCase):
 
         metrics = self.calculator.calculate(self.user)
 
-        self._check_metrics(metrics, payroll_closed=self.user.hour_rate * 7)
+        self._check_metrics(metrics, payroll_closed=self.user.hour_rate * 7,
+                            issues_closed_spent=timedelta(hours=7).total_seconds())
 
     def test_payroll_opened_has_opened(self):
         issue = IssueFactory.create(state=STATE_OPENED)
@@ -177,7 +184,9 @@ class UserMetricsTests(TestCase):
 
         self._check_metrics(metrics,
                             payroll_closed=self.user.hour_rate * 5,
-                            payroll_opened=self.user.hour_rate * 6)
+                            issues_closed_spent=timedelta(hours=5).total_seconds(),
+                            payroll_opened=self.user.hour_rate * 6,
+                            issues_opened_spent=timedelta(hours=6).total_seconds())
 
     def test_payroll_closed_another_user(self):
         issue = IssueFactory.create(state=STATE_CLOSED)
@@ -190,7 +199,8 @@ class UserMetricsTests(TestCase):
 
         metrics = self.calculator.calculate(self.user)
 
-        self._check_metrics(metrics, payroll_closed=self.user.hour_rate * 5)
+        self._check_metrics(metrics, payroll_closed=self.user.hour_rate * 5,
+                            issues_closed_spent=timedelta(hours=5).total_seconds())
 
     def test_complex(self):
         bonuses = BonusFactory.create_batch(10, user=self.user)
@@ -209,16 +219,22 @@ class UserMetricsTests(TestCase):
                             bonus=sum(bonus.sum for bonus in bonuses),
                             penalty=sum(penalty.sum for penalty in penalties),
                             payroll_closed=self.user.hour_rate * 5,
-                            payroll_opened=self.user.hour_rate * 6)
+                            issues_closed_spent=timedelta(hours=5).total_seconds(),
+                            payroll_opened=self.user.hour_rate * 6,
+                            issues_opened_spent=timedelta(hours=6).total_seconds())
 
     def _check_metrics(self, metrics: UserMetrics,
                        issues_opened_count=0,
                        bonus=0,
                        penalty=0,
                        payroll_opened=0,
-                       payroll_closed=0):
+                       payroll_closed=0,
+                       issues_closed_spent=0.0,
+                       issues_opened_spent=0.0):
         self.assertEqual(metrics.bonus, bonus)
         self.assertEqual(metrics.penalty, penalty)
         self.assertEqual(metrics.issues_opened_count, issues_opened_count)
         self.assertEqual(metrics.payroll_opened, payroll_opened)
         self.assertEqual(metrics.payroll_closed, payroll_closed)
+        self.assertEqual(metrics.issues_closed_spent, issues_closed_spent)
+        self.assertEqual(metrics.issues_opened_spent, issues_opened_spent)
