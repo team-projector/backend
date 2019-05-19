@@ -45,7 +45,7 @@ class IssueCardSerializer(serializers.ModelSerializer):
         model = Issue
         fields = (
             'id', 'title', 'labels', 'project', 'due_date', 'state', 'time_estimate', 'total_time_spent', 'time_spent',
-            'gl_url', 'metrics', 'milestone', 'feature', 'participants'
+            'gl_url', 'metrics', 'milestone', 'feature', 'participants', 'gl_last_sync', 'gl_id'
         )
 
     def get_metrics(self, instance: Issue):
