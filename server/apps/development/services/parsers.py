@@ -3,7 +3,6 @@ from typing import Optional
 
 GITLAB_DATETIME_FORMAT = '%Y-%m-%dT%H:%M:%S.%fZ'
 GITLAB_DATE_FORMAT = '%Y-%m-%d'
-STATE_MERGED = 'merged'
 
 
 def parse_date(s: str, fmt='%Y-%m-%d') -> Optional[date]:
@@ -11,12 +10,3 @@ def parse_date(s: str, fmt='%Y-%m-%d') -> Optional[date]:
         return None
 
     return datetime.strptime(s, fmt).date()
-
-
-def parse_state_merged(l: list) -> bool:
-    if not l:
-        return False
-
-    states = [x.get('state') for x in l]
-
-    return True if STATE_MERGED in states else False
