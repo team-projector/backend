@@ -228,7 +228,9 @@ class MilestonesViewset(mixins.ListModelMixin,
 
 class TeamIssueProblemsViewset(mixins.ListModelMixin,
                                BaseGenericViewSet):
-    serializer_class = IssueProblemSerializer
+    serializer_classes = {
+        'list': IssueProblemSerializer
+    }
     queryset = Issue.objects
     filter_backends = (DjangoFilterBackend,)
     filter_fields = ('user',)
