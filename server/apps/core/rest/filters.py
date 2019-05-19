@@ -7,6 +7,6 @@ class FilterParamUrlSerializer(serializers.Serializer):
 
     def validate_url(self, value):
         if settings.GITLAB_HOST not in value:
-            raise serializers.ValidationError("invalid url param")
+            raise serializers.ValidationError('invalid url param')
 
         return value
