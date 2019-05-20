@@ -272,6 +272,8 @@ class SalariesTimeExpensesViewSet(mixins.ListModelMixin,
         'list': TimeExpenseSerializer,
     }
     queryset = SpentTime.objects.all()
+    filter_backends = (filters.OrderingFilter,)
+    ordering_fields = ('date',)
 
     @cached_property
     def salary(self):
