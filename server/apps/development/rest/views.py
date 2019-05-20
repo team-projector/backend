@@ -204,7 +204,7 @@ class FeatureIssuesViewset(mixins.ListModelMixin, BaseGenericViewSet):
         return get_object_or_404(Feature.objects, pk=self.kwargs['feature_pk'])
 
     def filter_queryset(self, queryset):
-        return super().filter_queryset(queryset.filter(milestone__feature=self.feature))
+        return super().filter_queryset(queryset.filter(feature=self.feature))
 
 
 class GitlabStatusView(BaseGenericAPIView):
@@ -236,17 +236,19 @@ class GitlabIssueStatusView(BaseGenericAPIView):
         return Response(self.get_serializer(queryset, many=True).data)
 
 
-class TeamIssuesViewset(mixins.ListModelMixin,
-                        BaseGenericViewSet):
+class TeamIssueProblemsViewset(mixins.ListModelMixin,
+                               BaseGenericViewSet):
     serializer_classes = {
-        'list': IssueCardSerializer
+        'list': IssueProblemSerializer
     }
     queryset = Issue.objects
-    filter_backends = (filters.SearchFilter, DjangoFilterBackend)
-
-    search_fields = ('title',)
-    filter_fields = ('state', 'due_date', 'user')
-    ordering_fields = ('due_date', 'title', 'created_at')
+    filter_backends = (DjangoFilterBackend,)
+    filter_fields = ('user',)
 
     def filter_queryset(self, queryset):
-        return super().filter_queryset(queryset).filter(user__team_members__team_id=self.kwargs['team_pk'])
+        queryset = super().filter_queryset(queryset).filter(user__team_members__team_id=self.kwargs['team_pk'])
+
+        checker = IssueProblemsChecker()
+        queryset = checker.check(queryset)
+
+        return queryset
