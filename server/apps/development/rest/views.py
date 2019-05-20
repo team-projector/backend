@@ -24,8 +24,6 @@ from .serializers import (
 )
 from ..models import Issue, Team, TeamMember, Milestone, ProjectGroup, Project, Feature
 from ..tasks import sync_project_issue
-from apps.payroll.models import Salary
-from apps.payroll.rest.serializers import SalarySerializer
 
 logger = logging.getLogger(__name__)
 
@@ -238,10 +236,19 @@ class GitlabIssueStatusView(BaseGenericAPIView):
         return Response(self.get_serializer(queryset, many=True).data)
 
 
-class SalariesViewSet(mixins.RetrieveModelMixin,
-                      BaseGenericViewSet):
-    permission_classes = (permissions.IsProjectManager,)
+class TeamIssueProblemsViewset(mixins.ListModelMixin,
+                               BaseGenericViewSet):
     serializer_classes = {
-        'retrieve': SalarySerializer,
+        'list': IssueProblemSerializer
     }
-    queryset = Salary.objects.all()
+    queryset = Issue.objects
+    filter_backends = (DjangoFilterBackend,)
+    filter_fields = ('user',)
+
+    def filter_queryset(self, queryset):
+        queryset = super().filter_queryset(queryset).filter(user__team_members__team_id=self.kwargs['team_pk'])
+
+        checker = IssueProblemsChecker()
+        queryset = checker.check(queryset)
+
+        return queryset
