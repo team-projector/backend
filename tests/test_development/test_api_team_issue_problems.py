@@ -67,6 +67,12 @@ class ApiTeamIssuesProblemsTests(BaseAPITest):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data['count'], 2)
 
+    def test_list_not_found(self):
+        self.set_credentials()
+        response = self.client.get(f'/api/teams/{self.team.id - 1}/problems')
+
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
     def test_empty_due_day(self):
         IssueFactory.create_batch(2, user=self.user, due_date=timezone.now())
         problem_issue = IssueFactory.create(user=self.user)
