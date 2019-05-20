@@ -35,7 +35,7 @@ class SalariesTests(BaseAPITest):
 
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
-    def test_retrieve_another_user_role(self):
+    def test_retrieve_another_user(self):
         user_2 = UserFactory.create()
         TeamMemberFactory.create(team=self.team, user=user_2)
 

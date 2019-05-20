@@ -4,6 +4,7 @@ from apps.development.models import TeamMember
 from tests.base import BaseAPITest
 from tests.test_development.factories import TeamFactory, TeamMemberFactory
 from tests.test_payroll.factories import SalaryFactory, IssueSpentTimeFactory
+from tests.test_users.factories import UserFactory
 
 
 class SalariesTests(BaseAPITest):
@@ -18,6 +19,15 @@ class SalariesTests(BaseAPITest):
         response = self.client.get('/api/salaries/1/time-expenses')
 
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
+    def test_list_another_user_not_pm(self):
+        user_2 = UserFactory.create()
+        salary = SalaryFactory.create(user=user_2)
+
+        self.set_credentials(user=user_2)
+        response = self.client.get(f'/api/salaries/{salary.id}/time-expenses')
+
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_list(self):
         salary_1 = SalaryFactory.create(user=self.user)
