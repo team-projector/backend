@@ -24,6 +24,8 @@ from .serializers import (
 )
 from ..models import Issue, Team, TeamMember, Milestone, ProjectGroup, Project, Feature
 from ..tasks import sync_project_issue
+from apps.payroll.models import Salary, SpentTime
+from apps.payroll.rest.serializers import SalarySerializer, TimeExpenseSerializer
 
 logger = logging.getLogger(__name__)
 
@@ -252,3 +254,28 @@ class TeamIssueProblemsViewset(mixins.ListModelMixin,
         queryset = checker.check(queryset)
 
         return queryset
+
+
+class SalariesViewSet(mixins.RetrieveModelMixin,
+                      BaseGenericViewSet):
+    permission_classes = (permissions.IsProjectManager,)
+    serializer_classes = {
+        'retrieve': SalarySerializer,
+    }
+    queryset = Salary.objects.all()
+
+
+class SalariesTimeExpensesViewSet(mixins.ListModelMixin,
+                                  BaseGenericViewSet):
+    permission_classes = (permissions.IsProjectManager,)
+    serializer_classes = {
+        'list': TimeExpenseSerializer,
+    }
+    queryset = SpentTime.objects.all()
+
+    @cached_property
+    def salary(self):
+        return get_object_or_404(Salary.objects, pk=self.kwargs['salary_pk'])
+
+    def filter_queryset(self, queryset):
+        return super().filter_queryset(queryset).filter(salary=self.salary)
