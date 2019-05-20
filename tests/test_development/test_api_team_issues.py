@@ -7,14 +7,67 @@ from tests.test_development.factories import IssueFactory, TeamFactory, TeamMemb
 from tests.test_users.factories import UserFactory
 
 
-class ApiMilestoneIssuesTests(BaseAPITest):
+class ApiTeamIssuesTests(BaseAPITest):
     def setUp(self):
         super().setUp()
 
         self.team = TeamFactory.create()
         TeamMemberFactory.create(team=self.team, user=self.user, roles=TeamMember.roles.project_manager)
 
-    def test_empty_list(self):
+    def test_permissions(self):
+        developer = UserFactory.create()
+        team_leader = UserFactory.create()
+        project_manager = UserFactory.create()
+
+        team_1 = TeamFactory.create()
+        team_2 = TeamFactory.create()
+
+        TeamMemberFactory.create(team=team_1, user=developer)
+        TeamMemberFactory.create(team=team_2, user=developer)
+        TeamMemberFactory.create(team=team_1, user=team_leader, roles=TeamMember.roles.leader)
+        TeamMemberFactory.create(team=team_1, user=project_manager, roles=TeamMember.roles.project_manager)
+        TeamMemberFactory.create(team=team_2, user=project_manager, roles=TeamMember.roles.project_manager)
+
+        IssueFactory.create(user=developer)
+        IssueFactory.create(user=team_leader)
+        IssueFactory.create(user=project_manager)
+
+        self.set_credentials(developer)
+        response = self.client.get(f'/api/teams/{team_1.id}/issues')
+
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(response.data['detail'], 'You can\'t view project manager or team leader resources')
+
+        response = self.client.get(f'/api/teams/{team_2.id}/issues')
+
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+        self.set_credentials(team_leader)
+        response = self.client.get(f'/api/teams/{team_1.id}/issues')
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data['count'], 3)
+
+        response = self.client.get(f'/api/teams/{team_2.id}/issues')
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+        self.set_credentials(project_manager)
+        response = self.client.get(f'/api/teams/{team_1.id}/issues')
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data['count'], 3)
+
+        response = self.client.get(f'/api/teams/{team_2.id}/issues')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data['count'], 2)
+
+    def test_list_not_found(self):
+        self.set_credentials()
+        response = self.client.get(f'/api/teams/{self.team.id - 1}/issues')
+
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
+    def test_list_empty(self):
         self.set_credentials()
         response = self.client.get(f'/api/teams/{self.team.id}/issues')
 
@@ -47,8 +100,7 @@ class ApiMilestoneIssuesTests(BaseAPITest):
 
         response = self.client.get(f'/api/teams/{team_2.id}/issues')
 
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data['count'], 4)
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_list_one_team_filter_by_user(self):
         issue_1 = IssueFactory.create(user=self.user)

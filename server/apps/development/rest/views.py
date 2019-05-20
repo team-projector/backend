@@ -238,6 +238,7 @@ class GitlabIssueStatusView(BaseGenericAPIView):
 
 class TeamIssueProblemsViewset(mixins.ListModelMixin,
                                BaseGenericViewSet):
+    permission_classes = (permissions.IsProjectManagerOrTeamLeader,)
     serializer_classes = {
         'list': IssueProblemSerializer
     }
@@ -245,10 +246,41 @@ class TeamIssueProblemsViewset(mixins.ListModelMixin,
     filter_backends = (DjangoFilterBackend,)
     filter_fields = ('user',)
 
+    @cached_property
+    def team(self):
+        team = get_object_or_404(Team.objects, pk=self.kwargs['team_pk'])
+        self.check_object_permissions(self.request, team)
+
+        return team
+
     def filter_queryset(self, queryset):
-        queryset = super().filter_queryset(queryset).filter(user__team_members__team_id=self.kwargs['team_pk'])
+        queryset = super().filter_queryset(queryset).filter(user__team_members__team=self.team)
 
         checker = IssueProblemsChecker()
         queryset = checker.check(queryset)
 
         return queryset
+
+
+class TeamIssuesViewset(mixins.ListModelMixin,
+                        BaseGenericViewSet):
+    permission_classes = (permissions.IsProjectManagerOrTeamLeader,)
+    serializer_classes = {
+        'list': IssueCardSerializer
+    }
+    queryset = Issue.objects
+    filter_backends = (filters.SearchFilter, DjangoFilterBackend)
+
+    search_fields = ('title',)
+    filter_fields = ('state', 'due_date', 'user')
+    ordering_fields = ('due_date', 'title', 'created_at')
+
+    @cached_property
+    def team(self):
+        team = get_object_or_404(Team.objects, pk=self.kwargs['team_pk'])
+        self.check_object_permissions(self.request, team)
+
+        return team
+
+    def filter_queryset(self, queryset):
+        return super().filter_queryset(queryset).filter(user__team_members__team=self.team)
