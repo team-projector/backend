@@ -109,3 +109,43 @@ class ApiTeamsTests(BaseAPITest):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data['count'], 1)
         self.assertEqual(response.data['results'][0]['id'], team.id)
+
+    def test_members_count(self):
+        team_1 = TeamFactory.create()
+        team_2 = TeamFactory.create()
+        team_3 = TeamFactory.create()
+
+        user_1 = UserFactory.create()
+        user_2 = UserFactory.create()
+        user_3 = UserFactory.create()
+        user_4 = UserFactory.create()
+
+        TeamMemberFactory.create(user=user_1, team=team_1)
+        TeamMemberFactory.create(user=user_2, team=team_1)
+        TeamMemberFactory.create(user=user_3, team=team_1)
+        TeamMemberFactory.create(user=user_3, team=team_2)
+        TeamMemberFactory.create(user=user_4, team=team_2)
+
+        self.set_credentials()
+        response = self.client.get('/api/teams')
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data['count'], 3)
+        self.assertIn((team_1.id, 3), [(x['id'], x['members_count']) for x in response.data['results']])
+        self.assertIn((team_2.id, 2), [(x['id'], x['members_count']) for x in response.data['results']])
+        self.assertIn((team_3.id, 0), [(x['id'], x['members_count']) for x in response.data['results']])
+
+    def test_team_member(self):
+        team = TeamFactory.create()
+
+        TeamMemberFactory.create(user=self.user, team=team, roles=TeamMember.roles.leader)
+
+        self.set_credentials()
+        response = self.client.get('/api/teams')
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data['count'], 1)
+        self.assertEqual(response.data['results'][0]['title'], team.title)
+        self.assertEqual(response.data['results'][0]['members_count'], 1)
+        self.assertEqual(response.data['results'][0]['members'][0]['user']['id'], self.user.id)
+        self.assertEqual(response.data['results'][0]['members'][0]['roles'][0], 'leader')
