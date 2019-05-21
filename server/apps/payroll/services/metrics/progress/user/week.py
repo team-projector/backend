@@ -41,37 +41,47 @@ class WeekMetricsCalculator(ProgressMetricsCalculator):
         return metrics
 
     def modify_queryset(self, queryset: QuerySet) -> QuerySet:
-        return queryset.annotate(week=TruncWeek('date')).values('week')
+        return queryset.annotate(
+            week=TruncWeek('date')
+        ).values('week')
 
     def _update_deadlines(self, metric: UserProgressMetrics) -> None:
-        issues_stats = Issue.objects.filter(user=self.user,
-                                            due_date__gte=metric.start,
-                                            due_date__lt=metric.end) \
-            .aggregate(issues_count=Count('*'),
-                       total_time_estimate=Sum('time_estimate'))
+        issues_stats = Issue.objects.filter(
+            user=self.user,
+            due_date__gte=metric.start,
+            due_date__lt=metric.end
+        ).aggregate(
+            issues_count=Count('*'),
+            total_time_estimate=Sum('time_estimate')
+        )
 
         metric.issues_count = issues_stats['issues_count']
         metric.time_estimate = issues_stats['total_time_estimate'] or 0
 
     def _update_efficiency(self, metric: UserProgressMetrics) -> None:
-        issues_stats = Issue.objects.filter(user=self.user,
-                                            closed_at__range=(
-                                                make_aware(date2datetime(metric.start)),
-                                                make_aware(date2datetime(metric.end))
-                                            ),
-                                            state=STATE_CLOSED,
-                                            total_time_spent__gt=0,
-                                            time_estimate__gt=0) \
-            .annotate(efficiency=Cast(F('time_estimate'), FloatField()) / Cast(F('total_time_spent'), FloatField())) \
-            .aggregate(avg_efficiency=Avg('efficiency'))
+        issues_stats = Issue.objects.filter(
+            user=self.user,
+            closed_at__range=(
+                make_aware(date2datetime(metric.start)),
+                make_aware(date2datetime(metric.end))
+            ),
+            state=STATE_CLOSED,
+            total_time_spent__gt=0,
+            time_estimate__gt=0
+        ).annotate(
+            efficiency=Cast(F('time_estimate'), FloatField()) / Cast(F('total_time_spent'), FloatField())
+        ).aggregate(
+            avg_efficiency=Avg('efficiency')
+        )
 
         metric.efficiency = issues_stats['avg_efficiency'] or 0
 
     def _update_payrolls(self, metric: UserProgressMetrics) -> None:
-        data = SpentTime.objects \
-            .filter(user=self.user,
-                    date__gte=metric.start,
-                    date__lt=metric.end).aggregate_payrolls()
+        data = SpentTime.objects.filter(
+            user=self.user,
+            date__gte=metric.start,
+            date__lt=metric.end
+        ).aggregate_payrolls()
 
         metric.payroll = data['total_payroll'] or 0
         metric.paid = data['total_paid'] or 0

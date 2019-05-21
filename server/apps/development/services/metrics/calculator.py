@@ -36,6 +36,7 @@ class IssuesContainerCalculator:
         metrics.issues_opened_count = stats['issues_opened_count']
         metrics.time_estimate = stats['time_estimate']
         metrics.time_remains = stats['time_estimate'] - stats['time_spent']
+        metrics.efficiency = stats['time_estimate'] / stats['time_spent']
         metrics.time_spent = stats['time_spent']
         metrics.issues_count = stats['issues_count']
 
