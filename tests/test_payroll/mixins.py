@@ -13,7 +13,8 @@ class CheckUserProgressMetricsMixin(testcases.TestCase):
                        loadings: Dict[datetime, timedelta],
                        issues_counts: Dict[datetime, int],
                        time_estimates: Dict[datetime, timedelta],
-                       time_remains: Dict[datetime, timedelta]):
+                       time_remains: Dict[datetime, timedelta],
+                       planned_work_hours: int = 8):
         spents = self._prepare_metrics(spents)
         loadings = self._prepare_metrics(loadings)
         time_estimates = self._prepare_metrics(time_estimates)
@@ -22,6 +23,7 @@ class CheckUserProgressMetricsMixin(testcases.TestCase):
 
         for metric in metrics:
             self.assertEqual(metric['start'], metric['end'])
+            self.assertEqual(metric['planned_work_hours'], planned_work_hours)
 
             self._check_metric(metric, 'time_spent', spents)
             self._check_metric(metric, 'time_estimate', time_estimates)
