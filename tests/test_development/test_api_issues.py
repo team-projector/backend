@@ -1,7 +1,6 @@
 from rest_framework import status
 
 from tests.base import BaseAPITest
-from tests.test_development.factories import IssueFactory
 from tests.test_users.factories import UserFactory
 from tests.test_development.factories import IssueFactory, FeatureFactory, ProjectGroupMilestoneFactory
 
@@ -62,3 +61,18 @@ class ApiIssuesTests(BaseAPITest):
         self.assertEqual(response.data['count'], 1)
         self.assertEqual(set(x['id'] for x in response.data['results'][0]['participants']),
                          set(x.id for x in users))
+
+    def test_show_users(self):
+        user_2 = UserFactory.create()
+        IssueFactory.create(user=user_2)
+        IssueFactory.create(user=self.user)
+
+        self.set_credentials()
+        response = self.client.get('/api/issues')
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data['count'], 2)
+        self.assertIn((self.user.id, self.user.login),
+                      [(x['user']['id'], x['user']['presentation']) for x in response.data['results']])
+        self.assertIn((user_2.id, user_2.login),
+                      [(x['user']['id'], x['user']['presentation']) for x in response.data['results']])
