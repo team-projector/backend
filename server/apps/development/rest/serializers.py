@@ -76,12 +76,6 @@ class IssueUpdateSerializer(serializers.ModelSerializer):
         fields = ('feature',)
 
 
-class TeamCardSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Team
-        fields = ('id', 'title')
-
-
 class TeamMemberCardSerializer(serializers.ModelSerializer):
     roles = BitField()
     user = UserCardSerializer()
@@ -89,6 +83,19 @@ class TeamMemberCardSerializer(serializers.ModelSerializer):
     class Meta:
         model = TeamMember
         fields = ('id', 'user', 'roles')
+
+
+class TeamCardSerializer(serializers.ModelSerializer):
+    members_count = serializers.SerializerMethodField()
+    members = TeamMemberCardSerializer(many=True)
+
+    @staticmethod
+    def get_members_count(instance):
+        return instance.members.count()
+
+    class Meta:
+        model = Team
+        fields = ('id', 'title', 'members_count', 'members')
 
 
 class ProblemsParamsSerializer(serializers.Serializer):
