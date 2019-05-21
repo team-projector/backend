@@ -33,6 +33,8 @@ class DayMetricsCalculator(ProgressMetricsCalculator):
             metrics.append(metric)
 
             metric.start = metric.end = current
+            metric.planned_work_hours = self.user.daily_work_hours
+
             deadline_stats = Issue.objects.annotate(
                 time_remains=Case(
                     When(

@@ -47,6 +47,7 @@ class UserProgressMetricsSerializer(serializers.Serializer):
     efficiency = serializers.FloatField()
     payroll = serializers.FloatField()
     paid = serializers.FloatField()
+    planned_work_hours = serializers.IntegerField()
 
 
 class TeamMemberProgressMetricsSerializer(serializers.Serializer):
