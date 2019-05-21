@@ -12,7 +12,6 @@ from apps.core.rest.serializers import LinkSerializer
 from apps.core.utils.objects import dict2obj
 from apps.development.services.problems.issues import checkers
 from apps.development.services.metrics.milestones.main import MilestoneMetricsCalculator
-from apps.development.services.metrics.milestones.project import ProjectMilestoneMetricsCalculator
 from apps.payroll.models import SpentTime
 from apps.users.models import User
 from apps.users.rest.serializers import UserCardSerializer, ParticipantCardSerializer
@@ -123,28 +122,6 @@ class TeamMemberFilterSerializer(serializers.Serializer):
     roles = BitField(required=False, allow_null=True, model=TeamMember)
 
 
-class ProjectMilestoneMetricsSerializer(serializers.Serializer):
-    time_estimate = serializers.IntegerField()
-    time_spent = serializers.IntegerField()
-    time_remains = serializers.IntegerField()
-    issues_count = serializers.IntegerField()
-    efficiency = serializers.FloatField()
-    salary = serializers.FloatField()
-
-
-class ProjectMilestoneCardSerializer(serializers.ModelSerializer):
-    metrics = serializers.SerializerMethodField()
-
-    @staticmethod
-    def get_metrics(instance):
-        metrics = ProjectMilestoneMetricsCalculator(instance).calculate()
-        return ProjectMilestoneMetricsSerializer(metrics).data
-
-    class Meta:
-        model = Milestone
-        fields = ('id', 'title', 'start_date', 'due_date', 'metrics')
-
-
 class FeatureSerializer(serializers.ModelSerializer):
     milestone = LinkSerializer()
 
@@ -231,6 +208,19 @@ class MilestoneCardSerializer(serializers.ModelSerializer):
         if self.context['request'].query_params.get('metrics', 'false') == 'false':
             return None
 
+        metrics = MilestoneMetricsCalculator(instance).calculate()
+        return MilestoneMetricsSerializer(metrics).data
+
+    class Meta:
+        model = Milestone
+        fields = ('id', 'title', 'start_date', 'due_date', 'metrics')
+
+
+class ProjectMilestoneCardSerializer(serializers.ModelSerializer):
+    metrics = serializers.SerializerMethodField()
+
+    @staticmethod
+    def get_metrics(instance):
         metrics = MilestoneMetricsCalculator(instance).calculate()
         return MilestoneMetricsSerializer(metrics).data
 

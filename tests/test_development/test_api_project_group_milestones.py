@@ -33,3 +33,13 @@ class ApiMilestonesTests(BaseAPITest):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data['count'], 1)
         self.assertEqual(response.data['results'][0]['id'], project_group_milestone.id)
+
+    def test_metrics(self):
+        ProjectGroupMilestoneFactory.create(owner=self.project_group)
+
+        self.set_credentials()
+        response = self.client.get(f'/api/project-groups/{self.project_group.id}/milestones')
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data['count'], 1)
+        self.assertTrue(all(item['metrics'] is not None for item in response.data['results']))
