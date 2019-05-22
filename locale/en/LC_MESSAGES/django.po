@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-05-22 18:55+0300\n"
+"POT-Creation-Date: 2019-05-22 22:09+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -523,27 +523,43 @@ msgstr "Comments"
 msgid "VN__SALARIES"
 msgstr "Salaries"
 
-#: server/apps/payroll/models/spent_time.py:18
+#: server/apps/payroll/models/spent_time.py:19
+msgid "VN__CUSTOMER_SUM"
+msgstr "Customer sum"
+
+#: server/apps/payroll/models/spent_time.py:20
+msgid "HT__CUSTOMER_SUM"
+msgstr "Customer sum"
+
+#: server/apps/payroll/models/spent_time.py:25
 msgid "VN__RATE"
 msgstr "Rate"
 
-#: server/apps/payroll/models/spent_time.py:19
+#: server/apps/payroll/models/spent_time.py:26
 msgid "HT__RATE"
 msgstr "Rate"
 
-#: server/apps/payroll/models/spent_time.py:23
+#: server/apps/payroll/models/spent_time.py:31
+msgid "VN__CUSTOMER_RATE"
+msgstr "Customer rate"
+
+#: server/apps/payroll/models/spent_time.py:32
+msgid "HT__CUSTOMER_RATE"
+msgstr "Customer rate"
+
+#: server/apps/payroll/models/spent_time.py:36
 msgid "VN__TIME_SPENT"
 msgstr "Spent time"
 
-#: server/apps/payroll/models/spent_time.py:24
+#: server/apps/payroll/models/spent_time.py:37
 msgid "HT__TIME_SPENT"
 msgstr "Spent time"
 
-#: server/apps/payroll/models/spent_time.py:59
+#: server/apps/payroll/models/spent_time.py:74
 msgid "VN__SPENT_TIME"
 msgstr "Spent time"
 
-#: server/apps/payroll/models/spent_time.py:60
+#: server/apps/payroll/models/spent_time.py:75
 msgid "VN__SPENT_TIMES"
 msgstr "Spent times"
 
