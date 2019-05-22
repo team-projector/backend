@@ -108,7 +108,8 @@ class Issue(NotableMixin,
         Feature,
         on_delete=models.SET_NULL,
         null=True,
-        blank=True
+        blank=True,
+        related_name='issues'
     )
 
     participants = models.ManyToManyField(
