@@ -15,6 +15,7 @@ class IssuesContainerMetrics:
     issues_opened_count: int = 0
     efficiency: float = 0.0
     payroll: float = 0.0
+    customer_payroll: float = 0.0
 
 
 class IssuesContainerCalculator:
@@ -44,10 +45,12 @@ class IssuesContainerCalculator:
             metrics.issues_count = stats['issues_count']
 
         payroll = SpentTime.objects.for_issues(issues).aggregate(
-            total_sum=Coalesce(Sum('sum'), 0)
+            total_sum=Coalesce(Sum('sum'), 0),
+            total_customer_sum=Coalesce(Sum('customer_sum'), 0),
         )
 
         metrics.payroll = payroll['total_sum']
+        metrics.customer_payroll = payroll['total_customer_sum']
 
     def filter_issues(self, queryset: QuerySet) -> QuerySet:
         raise NotImplementedError

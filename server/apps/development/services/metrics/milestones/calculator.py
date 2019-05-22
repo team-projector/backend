@@ -25,5 +25,6 @@ class MilestoneMetricsCalculator(IssuesContainerCalculator):
 
         if metrics.budget:
             metrics.profit = metrics.budget - metrics.payroll
+            metrics.budget_remains = metrics.budget - metrics.customer_payroll
 
         return metrics
