@@ -8,6 +8,7 @@ from apps.development.services.problems.issues import (
     PROBLEM_EMPTY_DUE_DAY, PROBLEM_EMPTY_ESTIMATE, PROBLEM_OVER_DUE_DAY
 )
 from tests.base import BaseAPITest
+from apps.development.models import TeamMember
 from tests.test_development.factories import TeamFactory, TeamMemberFactory, IssueFactory
 from tests.test_users.factories import UserFactory
 
@@ -17,7 +18,60 @@ class ApiTeamIssuesProblemsTests(BaseAPITest):
         super().setUp()
 
         self.team = TeamFactory.create()
-        TeamMemberFactory.create(user=self.user, team=self.team)
+        TeamMemberFactory.create(user=self.user, team=self.team, roles=TeamMember.roles.project_manager)
+
+    def test_permissions(self):
+        developer = UserFactory.create()
+        team_leader = UserFactory.create()
+        project_manager = UserFactory.create()
+
+        team_1 = TeamFactory.create()
+        team_2 = TeamFactory.create()
+
+        TeamMemberFactory.create(team=team_1, user=developer)
+        TeamMemberFactory.create(team=team_2, user=developer)
+        TeamMemberFactory.create(team=team_1, user=team_leader, roles=TeamMember.roles.leader)
+        TeamMemberFactory.create(team=team_1, user=project_manager, roles=TeamMember.roles.project_manager)
+        TeamMemberFactory.create(team=team_2, user=project_manager, roles=TeamMember.roles.project_manager)
+
+        IssueFactory.create(user=developer)
+        IssueFactory.create(user=team_leader)
+        IssueFactory.create(user=project_manager)
+
+        self.set_credentials(developer)
+        response = self.client.get(f'/api/teams/{team_1.id}/problems')
+
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(response.data['detail'], 'You can\'t view project manager or team leader resources')
+
+        response = self.client.get(f'/api/teams/{team_2.id}/problems')
+
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+        self.set_credentials(team_leader)
+        response = self.client.get(f'/api/teams/{team_1.id}/problems')
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data['count'], 3)
+
+        response = self.client.get(f'/api/teams/{team_2.id}/problems')
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+        self.set_credentials(project_manager)
+        response = self.client.get(f'/api/teams/{team_1.id}/problems')
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data['count'], 3)
+
+        response = self.client.get(f'/api/teams/{team_2.id}/problems')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data['count'], 2)
+
+    def test_list_not_found(self):
+        self.set_credentials()
+        response = self.client.get(f'/api/teams/{self.team.id - 1}/problems')
+
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
     def test_empty_due_day(self):
         IssueFactory.create_batch(2, user=self.user, due_date=timezone.now())
@@ -142,7 +196,7 @@ class ApiTeamIssuesProblemsTests(BaseAPITest):
         TeamMemberFactory.create(user=user_2, team=team_2)
 
         issue_1 = IssueFactory.create(user=self.user)
-        issue_2 = IssueFactory.create(user=user_2)
+        IssueFactory.create(user=user_2)
 
         self.set_credentials()
         response = self.client.get(f'/api/teams/{self.team.id}/problems')
@@ -153,9 +207,7 @@ class ApiTeamIssuesProblemsTests(BaseAPITest):
 
         response = self.client.get(f'/api/teams/{team_2.id}/problems')
 
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data['count'], 1)
-        self.assertEqual(response.data['results'][0]['issue']['id'], issue_2.id)
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_empty_due_day_one_team(self):
         user_2 = UserFactory.create()
