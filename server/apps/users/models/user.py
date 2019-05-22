@@ -101,6 +101,8 @@ class User(AbstractBaseUser, PermissionsMixin):
         help_text=_('HT__GITLAB_LAST_SYNC')
     )
 
+    daily_work_hours = models.PositiveIntegerField(default=8)
+
     USERNAME_FIELD = 'login'
 
     objects = CustomUserManager()

@@ -19,6 +19,7 @@ class UserProgressMetrics:
     issues_count: int = 0
     payroll: float = 0
     paid: float = 0
+    planned_work_hours: int = 0
 
 
 class ProgressMetricsCalculator:

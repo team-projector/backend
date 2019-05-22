@@ -12,17 +12,17 @@ from rest_framework.response import Response
 
 from apps.core.activity.verbs import ACTION_GITLAB_WEBHOOK_TRIGGERED
 from apps.core.rest.mixins.views import CreateModelMixin, UpdateModelMixin
-from apps.core.rest.views import BaseGenericViewSet, BaseGenericAPIView
+from apps.core.rest.views import BaseGenericAPIView, BaseGenericViewSet
 from apps.core.tasks import add_action
 from apps.development.rest import permissions
-from apps.development.rest.filters import TeamMemberFilterBackend, MilestoneActiveFiler, IssueStatusUrlFiler
+from apps.development.rest.filters import IssueStatusUrlFiler, MilestoneActiveFiler, TeamMemberFilterBackend
 from apps.development.services.problems.issues import IssueProblemsChecker
 from .serializers import (
-    IssueCardSerializer, IssueProblemSerializer, TeamCardSerializer, TeamMemberCardSerializer, IssueUpdateSerializer,
-    ProjectMilestoneCardSerializer, FeatureCardSerializer, FeatureUpdateSerializer, FeatureSerializer,
-    GitlabStatusSerializer, MilestoneCardSerializer, GitlabIssieStatusSerializer
+    FeatureCardSerializer, FeatureSerializer, FeatureUpdateSerializer, GitlabIssieStatusSerializer,
+    GitlabStatusSerializer, IssueCardSerializer, IssueProblemSerializer, IssueUpdateSerializer, MilestoneCardSerializer,
+    TeamCardSerializer, TeamMemberCardSerializer
 )
-from ..models import Issue, Team, TeamMember, Milestone, ProjectGroup, Project, Feature
+from ..models import Feature, Issue, Milestone, Team, TeamMember
 from ..tasks import sync_project_issue
 
 logger = logging.getLogger(__name__)
@@ -96,44 +96,6 @@ class TeamMembersViewset(mixins.ListModelMixin,
 
     def filter_queryset(self, queryset):
         return queryset.filter(team_id=self.kwargs['team_pk'])
-
-
-class ProjectGroupMilestonesViewset(mixins.ListModelMixin,
-                                    mixins.RetrieveModelMixin,
-                                    BaseGenericViewSet):
-    permission_classes = (permissions.IsProjectManager,)
-
-    serializer_classes = {
-        'retrieve': ProjectMilestoneCardSerializer,
-        'list': ProjectMilestoneCardSerializer
-    }
-
-    queryset = Milestone.objects.all()
-
-    @cached_property
-    def project_group(self):
-        return get_object_or_404(ProjectGroup.objects, pk=self.kwargs['project_group_pk'])
-
-    def filter_queryset(self, queryset):
-        return super().filter_queryset(queryset.filter(project_group=self.project_group))
-
-
-class ProjectMilestonesViewset(mixins.ListModelMixin,
-                               BaseGenericViewSet):
-    permission_classes = (permissions.IsProjectManager,)
-
-    serializer_classes = {
-        'list': ProjectMilestoneCardSerializer
-    }
-
-    queryset = Milestone.objects.all()
-
-    @cached_property
-    def project(self):
-        return get_object_or_404(Project.objects, pk=self.kwargs['project_pk'])
-
-    def filter_queryset(self, queryset):
-        return super().filter_queryset(queryset.filter(project=self.project))
 
 
 class MilestoneIssuesViewset(mixins.ListModelMixin,

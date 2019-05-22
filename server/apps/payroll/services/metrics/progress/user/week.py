@@ -28,6 +28,7 @@ class WeekMetricsCalculator(ProgressMetricsCalculator):
 
             metric.start = week
             metric.end = week + timedelta(weeks=1)
+            metric.planned_work_hours = self.user.daily_work_hours
 
             self._update_deadlines(metric)
             self._update_efficiency(metric)
