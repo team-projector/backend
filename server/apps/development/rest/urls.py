@@ -3,7 +3,7 @@ from django.urls import path
 from apps.core.rest.routers import AppRouter
 from .views import (
     FeatureIssuesViewset, FeaturesViewset, GitlabIssueStatusView, GitlabStatusView, IssuesViewset,
-    MilestoneFeaturesViewset, MilestoneIssuesViewset, MilestonesViewset, TeamIssueProblemsViewset,
+    MilestoneFeaturesViewset, MilestoneIssuesViewset, MilestonesViewset, TeamIssuesViewset, TeamIssueProblemsViewset,
     TeamMembersViewset, TeamsViewset, gl_webhook
 )
 
@@ -18,6 +18,7 @@ router.register(r'^milestones/(?P<milestone_pk>\d+)/issues$', MilestoneIssuesVie
                 basename='milestone-issues')
 router.register(r'^milestones/(?P<milestone_pk>\d+)/features', MilestoneFeaturesViewset,
                 basename='features-issues')
+router.register(r'^teams/(?P<team_pk>\d+)/issues$', TeamIssuesViewset, basename='team-issues')
 router.register(r'^teams/(?P<team_pk>\d+)/members$', TeamMembersViewset, basename='team-members')
 router.register(r'^teams/(?P<team_pk>\d+)/problems$', TeamIssueProblemsViewset, basename='team-problems')
 router.register('teams', TeamsViewset, basename='teams')
