@@ -2,10 +2,7 @@ import factory
 import pytz
 from django.contrib.contenttypes.models import ContentType
 
-from apps.development.models import (
-    Issue, Label, Note, Project, ProjectGroup, Team, TeamMember, Milestone, Feature
-)
-
+from apps.development.models import (Feature, Issue, Label, Milestone, Note, Project, ProjectGroup, Team, TeamMember)
 from apps.development.models.issue import STATE_OPENED
 
 
@@ -39,8 +36,8 @@ class ProjectFactory(GitlabFieldMixin):
 class MilestoneFactory(GitlabFieldMixin):
     owner = factory.SubFactory(ProjectGroupFactory)
     object_id = factory.SelfAttribute('owner.id')
-    content_type = factory.LazyAttribute(
-        lambda o: ContentType.objects.get_for_model(o.owner))
+    content_type = factory.LazyAttribute(lambda o: ContentType.objects.get_for_model(o.owner))
+    gl_id = factory.Sequence(lambda i: i)
 
     class Meta:
         abstract = True
@@ -68,8 +65,7 @@ class IssueFactory(GitlabFieldMixin):
     total_time_spent = factory.Faker('random_int')
     created_at = factory.Faker('date_time_this_year', before_now=True, after_now=False, tzinfo=pytz.UTC)
     state = STATE_OPENED
-
-    milestone = factory.SubFactory(ProjectGroupMilestoneFactory)
+    gl_id = factory.Sequence(lambda i: i)
 
     class Meta:
         model = Issue
