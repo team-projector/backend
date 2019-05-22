@@ -6,6 +6,7 @@ from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import mixins, permissions
 from rest_framework.decorators import action
 from rest_framework.response import Response
+from rest_framework import filters
 
 from apps.core.rest.mixins.views import CreateModelMixin, UpdateModelMixin
 from apps.core.rest.views import BaseGenericAPIView, BaseGenericViewSet
@@ -15,6 +16,7 @@ from apps.payroll.db.mixins import CREATED
 from apps.payroll.models import WorkBreak
 from apps.payroll.rest.permissions import CanApproveDeclineWorkbreaks, CanManageWorkbreaks, CanViewTeamMetrics, \
     CanViewUserMetrics
+from apps.development.rest.permissions import IsProjectManager
 from apps.payroll.services.metrics.progress.team import calculate_team_progress_metrics
 from apps.payroll.services.metrics.progress.user import calculate_user_progress_metrics
 from .serializers import (SalarySerializer, TeamMemberProgressMetricsSerializer, TeamProgressMetricsParamsSerializer,
@@ -202,3 +204,30 @@ class WorkBreaksViewset(mixins.ListModelMixin,
         serializer.save()
 
         return Response(WorkBreakSerializer(instance, context=self.get_serializer_context()).data)
+
+
+class SalariesViewSet(mixins.RetrieveModelMixin,
+                      BaseGenericViewSet):
+    permission_classes = (IsProjectManager,)
+    serializer_classes = {
+        'retrieve': SalarySerializer,
+    }
+    queryset = Salary.objects.all()
+
+
+class SalariesTimeExpensesViewSet(mixins.ListModelMixin,
+                                  BaseGenericViewSet):
+    permission_classes = (IsProjectManager,)
+    serializer_classes = {
+        'list': TimeExpenseSerializer,
+    }
+    queryset = SpentTime.objects.all()
+    filter_backends = (filters.OrderingFilter,)
+    ordering_fields = ('date',)
+
+    @cached_property
+    def salary(self):
+        return get_object_or_404(Salary.objects, pk=self.kwargs['salary_pk'])
+
+    def filter_queryset(self, queryset):
+        return super().filter_queryset(queryset).filter(salary=self.salary)
