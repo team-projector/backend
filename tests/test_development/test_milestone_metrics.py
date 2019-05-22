@@ -29,7 +29,7 @@ class MilestoneMetricsTests(TestCase):
 
         self.assertEqual(metrics.budget, self.milestone.budget)
         self.assertEqual(metrics.payroll, 2000)
-        self.assertEqual(metrics.budget_remains, 8000)
+        self.assertEqual(metrics.profit, 8000)
 
     def test_payrolls_no_spents(self):
         IssueFactory.create(user=self.user, milestone=self.milestone)
@@ -40,14 +40,14 @@ class MilestoneMetricsTests(TestCase):
 
         self.assertEqual(metrics.budget, self.milestone.budget)
         self.assertEqual(metrics.payroll, 0)
-        self.assertEqual(metrics.budget_remains, self.milestone.budget)
+        self.assertEqual(metrics.profit, self.milestone.budget)
 
     def test_payrolls_no_issues(self):
         metrics = get_milestone_metrics(self.milestone)
 
         self.assertEqual(metrics.budget, self.milestone.budget)
         self.assertEqual(metrics.payroll, 0)
-        self.assertEqual(metrics.budget_remains, self.milestone.budget)
+        self.assertEqual(metrics.profit, self.milestone.budget)
 
     def test_payrolls_no_budget(self):
         self.milestone.budget = 0
@@ -57,4 +57,4 @@ class MilestoneMetricsTests(TestCase):
 
         self.assertEqual(metrics.budget, self.milestone.budget)
         self.assertEqual(metrics.payroll, 0)
-        self.assertEqual(metrics.budget_remains, self.milestone.budget)
+        self.assertEqual(metrics.profit, self.milestone.budget)

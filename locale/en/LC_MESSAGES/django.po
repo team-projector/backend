@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-05-21 11:26+0300\n"
+"POT-Creation-Date: 2019-05-22 18:55+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,28 +18,28 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: server/apps/core/db/mixins.py:8 server/apps/development/models/note.py:24
-#: server/apps/users/models/user.py:86
+#: server/apps/users/models/user.py:92
 msgid "VN__GITLAB_ID"
 msgstr "GitLab ID"
 
 #: server/apps/core/db/mixins.py:9 server/apps/development/models/note.py:25
-#: server/apps/users/models/user.py:87
+#: server/apps/users/models/user.py:93
 msgid "HT__GITLAB_ID"
 msgstr "GitLab ID"
 
-#: server/apps/core/db/mixins.py:14 server/apps/users/models/user.py:93
+#: server/apps/core/db/mixins.py:14 server/apps/users/models/user.py:99
 msgid "VN__GITLAB_URL"
 msgstr "GitLab URL"
 
-#: server/apps/core/db/mixins.py:15 server/apps/users/models/user.py:94
+#: server/apps/core/db/mixins.py:15 server/apps/users/models/user.py:100
 msgid "HT__GITLAB_URL"
 msgstr "GitLab URL"
 
-#: server/apps/core/db/mixins.py:21 server/apps/users/models/user.py:100
+#: server/apps/core/db/mixins.py:21 server/apps/users/models/user.py:106
 msgid "VN__GITLAB_LAST_SYNC"
 msgstr "GitLab last sync"
 
-#: server/apps/core/db/mixins.py:22 server/apps/users/models/user.py:101
+#: server/apps/core/db/mixins.py:22 server/apps/users/models/user.py:107
 msgid "HT__GITLAB_LAST_SYNC"
 msgstr "GitLab last sync"
 
@@ -175,7 +175,7 @@ msgstr "Project"
 #: server/apps/payroll/models/payroll.py:39
 #: server/apps/payroll/models/salary.py:23
 #: server/apps/payroll/models/workbreak.py:26
-#: server/apps/users/models/user.py:109
+#: server/apps/users/models/user.py:117
 msgid "VN__USER"
 msgstr "User"
 
@@ -479,11 +479,11 @@ msgstr "Charged time"
 msgid "HT__CHARGED_TIME"
 msgstr "Charged time"
 
-#: server/apps/payroll/models/salary.py:49 server/apps/users/models/user.py:54
+#: server/apps/payroll/models/salary.py:49 server/apps/users/models/user.py:60
 msgid "VN__TAXES"
 msgstr "Taxes"
 
-#: server/apps/payroll/models/salary.py:50 server/apps/users/models/user.py:55
+#: server/apps/payroll/models/salary.py:50 server/apps/users/models/user.py:61
 msgid "HT__TAXES"
 msgstr "Taxes"
 
@@ -599,11 +599,11 @@ msgstr "Workbreak"
 msgid "VN__WORKBREAKS"
 msgstr "Workbreaks"
 
-#: server/apps/payroll/rest/serializers.py:142
+#: server/apps/payroll/rest/serializers.py:143
 msgid "MESSAGE_USER_CAN_NOT_MANAGE_CURRENT_WORKBREAK"
 msgstr "User can't manage current workbreak"
 
-#: server/apps/users/apps.py:8 server/apps/users/models/user.py:110
+#: server/apps/users/apps.py:8 server/apps/users/models/user.py:118
 msgid "VN__USERS"
 msgstr "Users"
 
@@ -653,33 +653,41 @@ msgstr "Email"
 
 #: server/apps/users/models/user.py:48
 msgid "VN__HOUR_RATE"
-msgstr "Hour rate"
+msgstr "Hour rate, ₽"
 
 #: server/apps/users/models/user.py:49
 msgid "HT__HOUR_RATE"
-msgstr "Hour rate"
+msgstr "Hour rate, ₽"
 
-#: server/apps/users/models/user.py:65
+#: server/apps/users/models/user.py:54
+msgid "VN__CUSTOMER_HOUR_RATE"
+msgstr "Customer hour rate, $"
+
+#: server/apps/users/models/user.py:55
+msgid "HT__CUSTOMER_HOUR_RATE"
+msgstr "Customer hour rate, $"
+
+#: server/apps/users/models/user.py:71
 msgid "VN__IS_STAFF"
 msgstr "Is Staff"
 
-#: server/apps/users/models/user.py:66
+#: server/apps/users/models/user.py:72
 msgid "HT__IS_STAFF"
 msgstr "Is Staff"
 
-#: server/apps/users/models/user.py:71
+#: server/apps/users/models/user.py:77
 msgid "VN__IS_ACTIVE"
 msgstr "Is Active"
 
-#: server/apps/users/models/user.py:72
+#: server/apps/users/models/user.py:78
 msgid "HT__IS_ACTIVE"
 msgstr "Is Active"
 
-#: server/apps/users/models/user.py:79
+#: server/apps/users/models/user.py:85
 msgid "VN__GITLAB_AVATAR"
 msgstr "GitLab avatar"
 
-#: server/apps/users/models/user.py:80
+#: server/apps/users/models/user.py:86
 msgid "HT__GITLAB_AVATAR"
 msgstr "GitLab avatar"
 

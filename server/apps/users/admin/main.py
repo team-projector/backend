@@ -2,11 +2,10 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as DjUserAdmin
 from django.contrib.auth.forms import AdminPasswordChangeForm
 from django.contrib.auth.models import Group
-from apps.core.admin.mixins import ForceSyncEntityMixin
 from django.utils.html import format_html
 
 from apps.core.admin.base import BaseModelAdmin
-from apps.core.admin.mixins import AdminFormFieldsOverridesMixin
+from apps.core.admin.mixins import AdminFormFieldsOverridesMixin, ForceSyncEntityMixin
 from apps.development.tasks import sync_user
 from .forms import GroupAdminForm
 from ..models import User
@@ -42,7 +41,7 @@ class UserAdmin(AdminFormFieldsOverridesMixin,
             'fields': ('gl_avatar', 'gl_id', 'gl_url', 'gl_last_sync')
         }),
         ('Costs', {
-            'fields': ('hour_rate', 'taxes', 'daily_work_hours')
+            'fields': ('hour_rate', 'customer_hour_rate', 'taxes', 'daily_work_hours')
         })
 
     )
