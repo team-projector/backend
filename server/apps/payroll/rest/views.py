@@ -14,9 +14,8 @@ from apps.core.utils.rest import parse_query_params
 from apps.development.models import Team, TeamMember
 from apps.payroll.db.mixins import CREATED
 from apps.payroll.models import WorkBreak
-from apps.payroll.rest.permissions import CanApproveDeclineWorkbreaks, CanManageWorkbreaks, CanViewTeamMetrics, \
-    CanViewUserMetrics
-from apps.development.rest.permissions import IsProjectManager
+from apps.payroll.rest.permissions import (
+    CanApproveDeclineWorkbreaks, CanManageWorkbreaks, CanViewTeamMetrics, CanViewUserMetrics, CanViewSalaries)
 from apps.payroll.services.metrics.progress.team import calculate_team_progress_metrics
 from apps.payroll.services.metrics.progress.user import calculate_user_progress_metrics
 from .serializers import (SalarySerializer, TeamMemberProgressMetricsSerializer, TeamProgressMetricsParamsSerializer,
@@ -208,16 +207,26 @@ class WorkBreaksViewset(mixins.ListModelMixin,
 
 class SalariesViewSet(mixins.RetrieveModelMixin,
                       BaseGenericViewSet):
-    permission_classes = (IsProjectManager,)
+    permission_classes = (CanViewSalaries,)
     serializer_classes = {
         'retrieve': SalarySerializer,
     }
     queryset = Salary.objects.all()
 
+    @cached_property
+    def salary(self):
+        salary = get_object_or_404(Salary.objects, pk=self.kwargs['pk'])
+        self.check_object_permissions(self.request, salary)
+
+        return salary
+
+    def filter_queryset(self, queryset):
+        return super().filter_queryset(queryset).filter(pk=self.salary.pk)
+
 
 class SalariesTimeExpensesViewSet(mixins.ListModelMixin,
                                   BaseGenericViewSet):
-    permission_classes = (IsProjectManager,)
+    permission_classes = (CanViewSalaries,)
     serializer_classes = {
         'list': TimeExpenseSerializer,
     }
@@ -227,7 +236,10 @@ class SalariesTimeExpensesViewSet(mixins.ListModelMixin,
 
     @cached_property
     def salary(self):
-        return get_object_or_404(Salary.objects, pk=self.kwargs['salary_pk'])
+        salary = get_object_or_404(Salary.objects, pk=self.kwargs['salary_pk'])
+        self.check_object_permissions(self.request, salary)
+
+        return salary
 
     def filter_queryset(self, queryset):
         return super().filter_queryset(queryset).filter(salary=self.salary)
