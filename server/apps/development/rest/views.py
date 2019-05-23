@@ -197,7 +197,7 @@ class GitlabIssueStatusView(BaseGenericAPIView):
 
     def get(self, request, format=None):
         queryset = self.filter_queryset(self.get_queryset())
-        return Response(self.get_serializer(queryset, many=True).data)
+        return Response(self.get_serializer(queryset.first()).data)
 
 
 class TeamIssueProblemsViewset(mixins.ListModelMixin,
