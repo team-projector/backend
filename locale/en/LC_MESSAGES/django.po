@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-05-22 22:09+0300\n"
+"POT-Creation-Date: 2019-05-23 16:40+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -67,6 +67,7 @@ msgstr "Notes"
 #: server/apps/development/models/feature.py:11
 #: server/apps/development/models/issue.py:31
 #: server/apps/development/models/label.py:8
+#: server/apps/development/models/merge_request.py:32
 #: server/apps/development/models/milestone.py:15
 #: server/apps/development/models/project.py:14
 #: server/apps/development/models/project_group.py:13
@@ -77,6 +78,7 @@ msgstr "Title"
 #: server/apps/development/models/feature.py:12
 #: server/apps/development/models/issue.py:32
 #: server/apps/development/models/label.py:9
+#: server/apps/development/models/merge_request.py:33
 #: server/apps/development/models/milestone.py:16
 #: server/apps/development/models/project.py:15
 #: server/apps/development/models/project_group.py:14
@@ -137,39 +139,48 @@ msgid "VN__FEATURES"
 msgstr "Features"
 
 #: server/apps/development/models/issue.py:37
+#: server/apps/development/models/merge_request.py:38
 msgid "VN__TIME_ESTIMATE"
 msgstr "Estimate time"
 
 #: server/apps/development/models/issue.py:38
+#: server/apps/development/models/merge_request.py:39
 msgid "HT__TIME_ESTIMATE"
 msgstr "Estimate time"
 
 #: server/apps/development/models/issue.py:43
+#: server/apps/development/models/merge_request.py:44
 msgid "VN__TOTAL_TIME_SPENT"
 msgstr "Total spent time"
 
 #: server/apps/development/models/issue.py:44
+#: server/apps/development/models/merge_request.py:45
 msgid "HT__TOTAL_TIME_SPENT"
 msgstr "Total spent time"
 
 #: server/apps/development/models/issue.py:51
+#: server/apps/development/models/merge_request.py:52
 msgid "VN__STATE"
 msgstr "State"
 
 #: server/apps/development/models/issue.py:52
+#: server/apps/development/models/merge_request.py:53
 msgid "HT__STATE"
 msgstr "State"
 
 #: server/apps/development/models/issue.py:87
-#: server/apps/development/models/project.py:52
+#: server/apps/development/models/merge_request.py:83
+#: server/apps/development/models/project.py:59
 msgid "VN__PROJECT"
 msgstr "Project"
 
 #: server/apps/development/models/issue.py:88
+#: server/apps/development/models/merge_request.py:84
 msgid "HT__PROJECT"
 msgstr "Project"
 
 #: server/apps/development/models/issue.py:96
+#: server/apps/development/models/merge_request.py:92
 #: server/apps/development/models/note.py:33
 #: server/apps/development/models/team_member.py:27
 #: server/apps/payroll/models/payroll.py:39
@@ -180,6 +191,7 @@ msgid "VN__USER"
 msgstr "User"
 
 #: server/apps/development/models/issue.py:97
+#: server/apps/development/models/merge_request.py:93
 #: server/apps/development/models/note.py:34
 #: server/apps/development/models/team_member.py:28
 #: server/apps/payroll/models/payroll.py:40
@@ -211,6 +223,16 @@ msgstr "Label"
 #: server/apps/development/models/label.py:20
 msgid "VN__LABELS"
 msgstr "Labels"
+
+#: server/apps/development/models/merge_request.py:111
+msgid "VN__MERGE_REQUEST"
+msgstr "Merge Request"
+
+#: server/apps/development/models/merge_request.py:112
+#, fuzzy
+#| msgid "VN__TIME_SPENTS"
+msgid "VN__MERGE_REQUESTS"
+msgstr "Merge Requests"
 
 #: server/apps/development/models/milestone.py:52
 msgid "VN__MILESTONE"
@@ -258,7 +280,19 @@ msgstr "GitLab last issues sync"
 msgid "HT__GITLAB_LAST_ISSUES_SYNC"
 msgstr "GitLab last issues sync"
 
-#: server/apps/development/models/project.py:53
+#: server/apps/development/models/project.py:43
+#, fuzzy
+#| msgid "VN__GITLAB_LAST_SYNC"
+msgid "VN__GITLAB_MERGE_REQUESTS_SYNC"
+msgstr "GitLab last sync"
+
+#: server/apps/development/models/project.py:44
+#, fuzzy
+#| msgid "HT__GITLAB_LAST_SYNC"
+msgid "HT__MERGE_REQUESTS_SYNC"
+msgstr "GitLab last sync"
+
+#: server/apps/development/models/project.py:60
 msgid "VN__PROJECTS"
 msgstr "Projects"
 

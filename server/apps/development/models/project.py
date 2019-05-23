@@ -37,6 +37,13 @@ class Project(GitlabEntityMixin):
         help_text=_('HT__GITLAB_LAST_ISSUES_SYNC')
     )
 
+    gl_last_merge_requests_sync = models.DateTimeField(
+        null=True,
+        blank=True,
+        verbose_name=_('VN__GITLAB_MERGE_REQUESTS_SYNC'),
+        help_text=_('HT__MERGE_REQUESTS_SYNC')
+    )
+
     milestones = GenericRelation(
         'Milestone',
         related_query_name='project'

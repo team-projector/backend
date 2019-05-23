@@ -1,8 +1,8 @@
 from django.core.management.base import BaseCommand
 
-from apps.development.services.gitlab.users import update_users
+from apps.development.services.gitlab.merge_requests import load_merge_requests
 
 
 class Command(BaseCommand):
     def handle(self, *args, **options):
-        update_users()
+        load_merge_requests(True)
