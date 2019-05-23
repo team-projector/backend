@@ -156,6 +156,7 @@ class GitlabStatusSerializer(serializers.Serializer):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+
         self._last_webhook = None
         self._last_api = None
 

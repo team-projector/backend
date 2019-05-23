@@ -11,7 +11,6 @@ class GitlabIssueStatusTests(BaseAPITest):
         self.issue = IssueFactory.create(title='Issue 1', gl_url='https://www.gitlab.com/test/issues/1')
 
     def test_gl_url_not_valid(self):
-        self.set_credentials()
         response = self.client.get('/api/gitlab/issue/status')
 
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
@@ -24,7 +23,6 @@ class GitlabIssueStatusTests(BaseAPITest):
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_gl_url_not_found(self):
-        self.set_credentials()
         params = {
             'url': 'https://www.gitlab.com/test/issues/2'
         }
@@ -34,8 +32,6 @@ class GitlabIssueStatusTests(BaseAPITest):
         self.assertFalse(response.data)
 
     def test_retrieve(self):
-        self.set_credentials()
-
         params = {
             'url': 'https://www.gitlab.com/test/issues/1'
         }
