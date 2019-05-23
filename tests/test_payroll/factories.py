@@ -11,6 +11,8 @@ from tests.test_users.factories import UserFactory
 class IssueSpentTimeFactory(factory.django.DjangoModelFactory):
     created_at = factory.Faker('date_time_this_year', before_now=True, after_now=False, tzinfo=pytz.UTC)
     base = factory.SubFactory(IssueFactory)
+    rate = factory.Faker('random_int')
+    time_spent = factory.Faker('random_int')
 
     class Meta:
         model = SpentTime

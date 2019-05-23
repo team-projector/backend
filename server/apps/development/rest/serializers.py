@@ -207,6 +207,7 @@ class IssuesContainerMetrics(serializers.Serializer):
     issues_opened_count = serializers.IntegerField()
     efficiency = serializers.FloatField()
     payroll = serializers.FloatField()
+    customer_payroll = serializers.FloatField()
 
 
 class MilestoneMetricsSerializer(IssuesContainerMetrics):

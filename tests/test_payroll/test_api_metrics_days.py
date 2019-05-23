@@ -297,7 +297,9 @@ class ApiMetricsDaysTests(CheckUserProgressMetricsMixin,
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
     def _create_spent_time(self, date, spent: timedelta = None, user=None, issue=None):
-        return IssueSpentTimeFactory.create(date=date,
-                                            user=user or self.user,
-                                            base=issue or self.issue,
-                                            time_spent=spent.total_seconds())
+        return IssueSpentTimeFactory.create(
+            date=date,
+            user=user or self.user,
+            base=issue or self.issue,
+            time_spent=spent.total_seconds()
+        )

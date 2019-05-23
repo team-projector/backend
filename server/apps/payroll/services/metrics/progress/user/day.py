@@ -105,11 +105,13 @@ class DayMetricsCalculator(ProgressMetricsCalculator):
                 active_issues.remove(issue)
 
     def _update_payrolls(self, metric: UserProgressMetrics) -> None:
-        data = SpentTime.objects \
-            .filter(user=self.user, date=metric.start).aggregate_payrolls()
+        data = SpentTime.objects.filter(
+            user=self.user,
+            date=metric.start
+        ).aggregate_payrolls()
 
-        metric.payroll = data['total_payroll'] or 0
-        metric.paid = data['total_paid'] or 0
+        metric.payroll = data['total_payroll']
+        metric.paid = data['total_paid']
 
     def modify_queryset(self, queryset: QuerySet) -> QuerySet:
         return queryset.annotate(day=TruncDay('date')).values('day')

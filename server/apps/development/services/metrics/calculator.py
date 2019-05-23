@@ -3,6 +3,7 @@ from django.db.models.functions import Coalesce
 
 from apps.development.models import Issue
 from apps.development.models.issue import STATE_CLOSED, STATE_OPENED
+from apps.payroll.models import SpentTime
 
 
 class IssuesContainerMetrics:
@@ -14,6 +15,7 @@ class IssuesContainerMetrics:
     issues_opened_count: int = 0
     efficiency: float = 0.0
     payroll: float = 0.0
+    customer_payroll: float = 0.0
 
 
 class IssuesContainerCalculator:
@@ -29,15 +31,26 @@ class IssuesContainerCalculator:
             issues_count=Count('*'),
         )
 
-        if not stats:
-            return
+        if stats:
+            metrics.issues_closed_count = stats['issues_closed_count']
+            metrics.issues_opened_count = stats['issues_opened_count']
+            metrics.time_estimate = stats['time_estimate']
+            metrics.time_remains = stats['time_estimate'] - stats['time_spent']
 
-        metrics.issues_closed_count = stats['issues_closed_count']
-        metrics.issues_opened_count = stats['issues_opened_count']
-        metrics.time_estimate = stats['time_estimate']
-        metrics.time_remains = stats['time_estimate'] - stats['time_spent']
-        metrics.time_spent = stats['time_spent']
-        metrics.issues_count = stats['issues_count']
+            if stats['time_spent']:
+                metrics.efficiency = stats['time_estimate'] / stats['time_spent']
+
+            metrics.time_spent = stats['time_spent']
+            metrics.issues_count = stats['issues_count']
+            metrics.issues_count = stats['issues_count']
+
+        payroll = SpentTime.objects.for_issues(issues).aggregate(
+            total_sum=Coalesce(Sum('sum'), 0),
+            total_customer_sum=Coalesce(Sum('customer_sum'), 0),
+        )
+
+        metrics.payroll = payroll['total_sum']
+        metrics.customer_payroll = payroll['total_customer_sum']
 
     def filter_issues(self, queryset: QuerySet) -> QuerySet:
         raise NotImplementedError

@@ -5,8 +5,9 @@ from ..calculator import IssuesContainerCalculator, IssuesContainerMetrics
 
 
 class MilestoneMetrics(IssuesContainerMetrics):
-    budget_remains: int = 0
-    profit: int = 0
+    budget: float = 0
+    budget_remains: float = 0
+    profit: float = 0
 
 
 class MilestoneMetricsCalculator(IssuesContainerCalculator):
@@ -20,5 +21,10 @@ class MilestoneMetricsCalculator(IssuesContainerCalculator):
         metrics = MilestoneMetrics()
 
         self.fill_issues_metrics(metrics)
+        metrics.budget = self.milestone.budget
+
+        if metrics.budget:
+            metrics.profit = metrics.budget - metrics.payroll
+            metrics.budget_remains = metrics.budget - metrics.customer_payroll
 
         return metrics

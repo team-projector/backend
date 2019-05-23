@@ -49,6 +49,12 @@ class User(AbstractBaseUser, PermissionsMixin):
         help_text=_('HT__HOUR_RATE')
     )
 
+    customer_hour_rate = models.FloatField(
+        default=0,
+        verbose_name=_('VN__CUSTOMER_HOUR_RATE'),
+        help_text=_('HT__CUSTOMER_HOUR_RATE')
+    )
+
     taxes = models.FloatField(
         default=0,
         verbose_name=_('VN__TAXES'),
