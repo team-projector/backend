@@ -9,6 +9,7 @@ from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import filters, mixins
 from rest_framework.decorators import action
 from rest_framework.response import Response
+from rest_framework.permissions import AllowAny
 
 from apps.core.activity.verbs import ACTION_GITLAB_WEBHOOK_TRIGGERED
 from apps.core.rest.mixins.views import CreateModelMixin, UpdateModelMixin
@@ -189,6 +190,7 @@ class MilestonesViewset(mixins.ListModelMixin,
 
 
 class GitlabIssueStatusView(BaseGenericAPIView):
+    permission_classes = (AllowAny,)
     serializer_class = GitlabIssieStatusSerializer
     queryset = Issue.objects.all()
     filter_backends = (IssueStatusUrlFiler,)
