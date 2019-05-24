@@ -186,7 +186,8 @@ class MilestonesViewset(mixins.ListModelMixin,
     }
 
     queryset = Milestone.objects.all()
-    filter_backends = (MilestoneActiveFiler,)
+    filter_backends = (filters.OrderingFilter, MilestoneActiveFiler,)
+    ordering = ('-due_date',)
 
 
 class GitlabIssueStatusView(BaseGenericAPIView):

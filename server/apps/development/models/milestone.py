@@ -6,6 +6,9 @@ from django.utils.translation import gettext_lazy as _
 from apps.core.db.mixins import GitlabEntityMixin, GitlabInternalIdMixin, Timestamps
 from ..db.managers import MilestoneManager
 
+STATE_ACTIVE = 'active'
+STATE_OPENED = 'opened'
+
 
 class Milestone(GitlabEntityMixin,
                 GitlabInternalIdMixin,
@@ -24,6 +27,13 @@ class Milestone(GitlabEntityMixin,
         blank=True,
         verbose_name=_('VN__START_DATE'),
         help_text=_('HT__START_DATE')
+    )
+    state = models.CharField(
+        max_length=255,
+        null=True,
+        blank=True,
+        verbose_name=_('VN__STATE'),
+        help_text=_('HT__STATE')
     )
     due_date = models.DateField(
         null=True,
