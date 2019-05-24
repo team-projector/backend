@@ -5,8 +5,7 @@ from rest_framework import filters
 
 from apps.core.rest.filters import FilterParamUrlSerializer
 from apps.core.utils.rest import parse_query_params
-from apps.development.models import TeamMember
-from apps.development.models.milestone import STATE_ACTIVE, STATE_OPENED
+from apps.development.models import TeamMember, Milestone
 from apps.development.rest.serializers import TeamMemberFilterSerializer
 
 
@@ -31,9 +30,9 @@ class MilestoneActiveFiler(filters.BaseFilterBackend):
             return queryset
 
         if strtobool(active_param):
-            return queryset.filter(state=STATE_ACTIVE)
+            return queryset.filter(state=Milestone.STATE.active)
 
-        return queryset.filter(state=STATE_OPENED)
+        return queryset.filter(state=Milestone.STATE.closed)
 
 
 class IssueStatusUrlFiler(filters.BaseFilterBackend):

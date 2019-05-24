@@ -51,7 +51,7 @@ class ApiMilestonesTests(BaseAPITest):
 
     def test_list_filter_active(self):
         milestone_1 = ProjectGroupMilestoneFactory.create(state='active')
-        milestone_2 = ProjectGroupMilestoneFactory.create(state='opened')
+        milestone_2 = ProjectGroupMilestoneFactory.create(state='closed')
         ProjectGroupMilestoneFactory.create_batch(3)
 
         self.set_credentials()
