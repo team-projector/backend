@@ -8,7 +8,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import filters, mixins
 from rest_framework.decorators import action
-from rest_framework.permissions import AllowAny
+from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 
 from apps.core.activity.verbs import ACTION_GITLAB_WEBHOOK_TRIGGERED
@@ -101,7 +101,7 @@ class TeamMembersViewset(mixins.ListModelMixin,
 
 class MilestoneIssuesViewset(mixins.ListModelMixin,
                              BaseGenericViewSet):
-    permission_classes = (permissions.IsProjectManager,)
+    permission_classes = (permissions.IsProjectManager, IsAuthenticated)
 
     serializer_classes = {
         'list': IssueCardSerializer
@@ -119,7 +119,7 @@ class MilestoneIssuesViewset(mixins.ListModelMixin,
 
 class MilestoneFeaturesViewset(mixins.ListModelMixin,
                                BaseGenericViewSet):
-    permission_classes = (permissions.IsProjectManager,)
+    permission_classes = (permissions.IsProjectManager, IsAuthenticated)
 
     serializer_classes = {
         'list': FeatureCardSerializer
@@ -138,7 +138,7 @@ class MilestoneFeaturesViewset(mixins.ListModelMixin,
 class FeaturesViewset(CreateModelMixin,
                       UpdateModelMixin,
                       BaseGenericViewSet):
-    permission_classes = (permissions.IsProjectManager,)
+    permission_classes = (permissions.IsProjectManager, IsAuthenticated)
 
     serializer_classes = {
         'create': FeatureSerializer,
@@ -154,7 +154,7 @@ class FeaturesViewset(CreateModelMixin,
 
 
 class FeatureIssuesViewset(mixins.ListModelMixin, BaseGenericViewSet):
-    permission_classes = (permissions.IsProjectManager,)
+    permission_classes = (permissions.IsProjectManager, IsAuthenticated)
 
     serializer_classes = {
         'list': IssueCardSerializer
