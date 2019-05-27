@@ -47,13 +47,13 @@ class SalariesTests(BaseAPITest):
         self.assertEqual(response.data['id'], salary.id)
         self.assertEqual(response.data['charged_time'], self.data['charged_time'])
         self.assertEqual(response.data['payed'], self.data['payed'])
-        self.assertEqual(response.data['bonus'], str(self.data['bonus']))
+        self.assertEqual(float(response.data['bonus']), self.data['bonus'])
         self.assertEqual(response.data['period_to'], str(self.data['period_to']))
-        self.assertEqual(response.data['taxes'], str(self.data['taxes']))
-        self.assertEqual(response.data['penalty'], str(self.data['penalty']))
+        self.assertEqual(float(response.data['taxes']), self.data['taxes'])
+        self.assertEqual(float(response.data['penalty']), self.data['penalty'])
         self.assertEqual(response.data['period_from'], str(self.data['period_from']))
-        self.assertEqual(response.data['sum'], str(self.data['sum']))
-        self.assertEqual(response.data['total'], str(self.data['total']))
+        self.assertEqual(float(response.data['sum']), self.data['sum'])
+        self.assertEqual(float(response.data['total']), self.data['total'])
         self.assertIsNotNone(response.data['created_at'])
 
     def test_permissions(self):

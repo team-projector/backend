@@ -46,7 +46,7 @@ class ApiMilestonesTests(BaseAPITest):
         self.assertEqual(response.data['results'][0]['due_date'], str(self.data['due_date']))
         self.assertEqual(response.data['results'][0]['owner']['id'], milestone.owner.id)
         self.assertEqual(response.data['results'][0]['owner']['presentation'], milestone.owner.title)
-        self.assertEqual(response.data['results'][0]['budget'], str(self.data['budget']))
+        self.assertEqual(response.data['results'][0]['budget'], self.data['budget'])
         self.assertEqual(response.data['results'][0]['state'], self.data['state'])
 
     def test_list_filter_active(self):
