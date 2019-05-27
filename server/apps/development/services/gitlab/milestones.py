@@ -30,7 +30,8 @@ def load_group_milestones(project_group_id: int,
             start_date=parse_gl_date(gl_milestone.start_date),
             due_date=parse_gl_date(gl_milestone.due_date),
             created_at=parse_gl_datetime(gl_milestone.created_at),
-            updated_at=parse_gl_datetime(gl_milestone.updated_at)
+            updated_at=parse_gl_datetime(gl_milestone.updated_at),
+            state=gl_milestone.state
         )
 
 
@@ -53,5 +54,6 @@ def load_gl_project_milestones(project_id: int,
             start_date=parse_gl_date(gl_milestone.start_date),
             due_date=parse_gl_date(gl_milestone.due_date),
             created_at=parse_gl_datetime(gl_milestone.created_at),
-            updated_at=parse_gl_datetime(gl_milestone.updated_at)
+            updated_at=parse_gl_datetime(gl_milestone.updated_at),
+            state=gl_milestone.state
         )

@@ -75,7 +75,7 @@ class NoteAdmin(BaseModelAdmin):
 
 @admin.register(Milestone)
 class MilestoneAdmin(BaseModelAdmin):
-    list_display = ('id', 'title', 'start_date', 'due_date', 'budget')
+    list_display = ('id', 'title', 'start_date', 'due_date', 'budget', 'state')
     search_fields = ('title',)
 
 

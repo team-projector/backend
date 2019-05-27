@@ -212,6 +212,7 @@ class MilestoneMetricsSerializer(IssuesContainerMetrics):
 
 class MilestoneCardSerializer(serializers.ModelSerializer):
     metrics = serializers.SerializerMethodField()
+    owner = LinkSerializer()
 
     def get_metrics(self, instance):
         if self.context['request'].query_params.get('metrics', 'false') == 'false':
@@ -221,7 +222,7 @@ class MilestoneCardSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Milestone
-        fields = ('id', 'title', 'start_date', 'due_date', 'metrics')
+        fields = ('id', 'title', 'start_date', 'due_date', 'metrics', 'owner', 'budget', 'state')
 
 
 class GitlabIssieStatusSerializer(serializers.ModelSerializer):

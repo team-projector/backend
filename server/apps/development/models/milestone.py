@@ -4,12 +4,18 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 
 from apps.core.db.mixins import GitlabEntityMixin, GitlabInternalIdMixin, Timestamps
+from apps.core.db.utils import Choices
 from ..db.managers import MilestoneManager
 
 
 class Milestone(GitlabEntityMixin,
                 GitlabInternalIdMixin,
                 Timestamps):
+    STATE = Choices(
+        ('active', 'active'),
+        ('closed', 'closed')
+    )
+
     title = models.CharField(
         max_length=255,
         verbose_name=_('VN__TITLE'),
@@ -24,6 +30,14 @@ class Milestone(GitlabEntityMixin,
         blank=True,
         verbose_name=_('VN__START_DATE'),
         help_text=_('HT__START_DATE')
+    )
+    state = models.CharField(
+        choices=STATE,
+        max_length=20,
+        null=True,
+        blank=True,
+        verbose_name=_('VN__STATE'),
+        help_text=_('HT__STATE')
     )
     due_date = models.DateField(
         null=True,
