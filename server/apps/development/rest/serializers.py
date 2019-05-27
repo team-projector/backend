@@ -39,7 +39,7 @@ class IssueCardSerializer(serializers.ModelSerializer):
     milestone = LinkSerializer()
     feature = LinkSerializer()
     participants = ParticipantCardSerializer(many=True)
-    user = LinkSerializer()
+    user = UserCardSerializer()
 
     class Meta:
         model = Issue
