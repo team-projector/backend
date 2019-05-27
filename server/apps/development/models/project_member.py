@@ -11,7 +11,6 @@ from apps.users.models import User
 class ProjectMember(Timestamps):
     ROLE = Choices(
         ('developer', _('CH_DEVELOPER')),
-        ('team_leader', _('CH_TEAM_LEADER')),
         ('project_manager', _('CH_PM')),
         ('customer', _('CH_CUSTOMER')),
     )
