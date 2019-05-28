@@ -45,7 +45,7 @@ class ProjectGroupAdmin(ForceSyncEntityMixin, BaseModelAdmin):
 @admin.register(Project)
 class ProjectAdmin(ForceSyncEntityMixin, BaseModelAdmin):
     list_display = ('title', 'group', 'gl_url', 'gl_last_sync')
-    search_fields = ('title',)
+    search_fields = ('title', 'group__title', 'gl_url')
     autocomplete_fields = ('group',)
     inlines = (ProjectMemberInline,)
 
