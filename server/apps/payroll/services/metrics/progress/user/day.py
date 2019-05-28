@@ -18,17 +18,18 @@ class DayMetricsCalculator(ProgressMetricsCalculator):
     def calculate(self) -> Iterable[UserProgressMetrics]:
         metrics = []
 
-        spents = {
-            spent['day']: spent
-            for spent in self.get_spents()
-        }
-
         current = self.start
         now = timezone.now().date()
 
         active_issues = self.get_active_issues() if now > self.start else []
 
+        time_spents = {
+            spent['day']: spent
+            for spent in self.get_time_spents()
+        }
+
         due_day_stats = self._get_due_day_stats()
+        payrols_stats = self._get_payrolls_stats()
 
         while current <= self.end:
             metric = UserProgressMetrics()
@@ -38,19 +39,22 @@ class DayMetricsCalculator(ProgressMetricsCalculator):
             metric.planned_work_hours = self.user.daily_work_hours
 
             if current in due_day_stats:
-                current_stats = due_day_stats[current]
-                metric.issues_count = current_stats['issues_count']
-                metric.time_estimate = current_stats['total_time_estimate']
-                metric.time_remains = current_stats['total_time_remains']
+                current_progress = due_day_stats[current]
+                metric.issues_count = current_progress['issues_count']
+                metric.time_estimate = current_progress['total_time_estimate']
+                metric.time_remains = current_progress['total_time_remains']
 
-            if current in spents:
-                spent = spents[current]
+            if current in time_spents:
+                spent = time_spents[current]
                 metric.time_spent = spent['period_spent']
+
+            if current in payrols_stats:
+                current_payrolls = payrols_stats[current]
+                metric.payroll = current_payrolls['total_payroll']
+                metric.paid = current_payrolls['total_paid']
 
             if self._is_apply_loading(current, now):
                 self._update_loading(metric, active_issues)
-
-            self._update_payrolls(metric)
 
             current += DAY_STEP
 
@@ -100,8 +104,10 @@ class DayMetricsCalculator(ProgressMetricsCalculator):
         metric.payroll = data['total_payroll']
         metric.paid = data['total_paid']
 
-    def modify_queryset(self, queryset: QuerySet) -> QuerySet:
-        return queryset.annotate(day=TruncDay('date')).values('day')
+    def modify_time_spents_queryset(self, queryset: QuerySet) -> QuerySet:
+        return queryset.annotate(
+            day=TruncDay('date')
+        ).values('day')
 
     def _get_due_day_stats(self) -> dict:
         queryset = Issue.objects.annotate(
@@ -126,5 +132,23 @@ class DayMetricsCalculator(ProgressMetricsCalculator):
 
         return {
             stats['due_date_truncated']: stats
+            for stats in queryset
+        }
+
+    def _get_payrolls_stats(self) -> dict:
+        queryset = SpentTime.objects.annotate(
+            date_truncated=TruncDay('date')
+        ).annotate_payrolls().filter(
+            user=self.user,
+            date_truncated__isnull=False
+        ).values(
+            'date_truncated'
+        ).annotate(
+            total_payroll=Coalesce(Sum('payroll'), 0),
+            total_paid=Coalesce(Sum('paid'), 0)
+        ).order_by()
+
+        return {
+            stats['date_truncated']: stats
             for stats in queryset
         }

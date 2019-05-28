@@ -168,11 +168,13 @@ class ApiMetricsDaysPayrollTests(BaseAPITest):
                             })
 
     def _create_spent_time(self, date, spent: timedelta = None, user=None, issue=None, salary=None):
-        return IssueSpentTimeFactory.create(date=date,
-                                            user=user or self.user,
-                                            base=issue or self.issue,
-                                            salary=salary,
-                                            time_spent=spent.total_seconds())
+        return IssueSpentTimeFactory.create(
+            date=date,
+            user=user or self.user,
+            base=issue or self.issue,
+            salary=salary,
+            time_spent=spent.total_seconds()
+        )
 
     def _check_metrics(self, metrics,
                        payroll: Dict[date, float],

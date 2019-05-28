@@ -19,7 +19,7 @@ class WeekMetricsCalculator(ProgressMetricsCalculator):
 
         spents = {
             spent['week']: spent
-            for spent in self.get_spents()
+            for spent in self.get_time_spents()
         }
 
         for week in self._get_weeks():
@@ -40,7 +40,7 @@ class WeekMetricsCalculator(ProgressMetricsCalculator):
 
         return metrics
 
-    def modify_queryset(self, queryset: QuerySet) -> QuerySet:
+    def modify_time_spents_queryset(self, queryset: QuerySet) -> QuerySet:
         return queryset.annotate(
             week=TruncWeek('date')
         ).values('week')
