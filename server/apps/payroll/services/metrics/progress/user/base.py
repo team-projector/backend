@@ -31,16 +31,17 @@ class ProgressMetricsCalculator:
     def calculate(self) -> Iterable[UserProgressMetrics]:
         raise NotImplementedError
 
-    def get_spents(self) -> QuerySet:
+    def get_time_spents(self) -> QuerySet:
         queryset = SpentTime.objects.filter(
             user=self.user,
             date__range=(self.start, self.end)
         )
-        queryset = self.modify_queryset(queryset)
+        queryset = self.modify_time_spents_queryset(queryset)
+        queryset = queryset.annotate(period_spent=Sum('time_spent')).order_by()
 
-        return queryset.annotate(period_spent=Sum('time_spent')).order_by()
+        return queryset
 
-    def modify_queryset(self, queryset: QuerySet):
+    def modify_time_spents_queryset(self, queryset: QuerySet):
         raise NotImplementedError
 
     def get_active_issues(self) -> List[Dict[str, Any]]:

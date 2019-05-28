@@ -57,7 +57,7 @@ class IssueCardSerializer(serializers.ModelSerializer):
         metrics = {
             'remains': instance.time_remains,
             'efficiency': instance.efficiency,
-            'payroll': payroll['total_payroll'] or 0,
+            'payroll': payroll['total_payroll'],
             'paid': payroll['total_paid'],
         }
 
