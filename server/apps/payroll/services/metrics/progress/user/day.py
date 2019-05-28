@@ -3,7 +3,7 @@ from typing import Iterable, List
 
 from django.conf import settings
 from django.db.models import Case, Count, F, IntegerField, Q, QuerySet, Sum, Value, When
-from django.db.models.functions import TruncDay
+from django.db.models.functions import Coalesce, TruncDay
 from django.utils import timezone
 
 from apps.development.models.issue import Issue, STATE_CLOSED
@@ -28,6 +28,8 @@ class DayMetricsCalculator(ProgressMetricsCalculator):
 
         active_issues = self.get_active_issues() if now > self.start else []
 
+        due_day_stats = self._get_due_day_stats()
+
         while current <= self.end:
             metric = UserProgressMetrics()
             metrics.append(metric)
@@ -35,26 +37,11 @@ class DayMetricsCalculator(ProgressMetricsCalculator):
             metric.start = metric.end = current
             metric.planned_work_hours = self.user.daily_work_hours
 
-            deadline_stats = Issue.objects.annotate(
-                time_remains=Case(
-                    When(
-                        Q(time_estimate__gt=F('total_time_spent')) & ~Q(state=STATE_CLOSED),
-                        then=F('time_estimate') - F('total_time_spent')),
-                    default=Value(0),
-                    output_field=IntegerField()
-                )
-            ).filter(
-                user=self.user,
-                due_date=current
-            ).aggregate(
-                issues_count=Count('*'),
-                total_time_estimate=Sum('time_estimate'),
-                total_time_remains=Sum('time_remains')
-            )
-
-            metric.issues_count = deadline_stats['issues_count']
-            metric.time_estimate = deadline_stats['total_time_estimate'] or 0
-            metric.time_remains = deadline_stats['total_time_remains'] or 0
+            if current in due_day_stats:
+                current_stats = due_day_stats[current]
+                metric.issues_count = current_stats['issues_count']
+                metric.time_estimate = current_stats['total_time_estimate']
+                metric.time_remains = current_stats['total_time_remains']
 
             if current in spents:
                 spent = spents[current]
@@ -115,3 +102,29 @@ class DayMetricsCalculator(ProgressMetricsCalculator):
 
     def modify_queryset(self, queryset: QuerySet) -> QuerySet:
         return queryset.annotate(day=TruncDay('date')).values('day')
+
+    def _get_due_day_stats(self) -> dict:
+        queryset = Issue.objects.annotate(
+            due_date_truncated=TruncDay('due_date'),
+            time_remains=Case(
+                When(
+                    Q(time_estimate__gt=F('total_time_spent')) & ~Q(state=STATE_CLOSED),
+                    then=F('time_estimate') - F('total_time_spent')),
+                default=Value(0),
+                output_field=IntegerField()
+            ),
+        ).filter(
+            user=self.user,
+            due_date_truncated__isnull=False
+        ).values(
+            'due_date_truncated'
+        ).annotate(
+            issues_count=Count('*'),
+            total_time_estimate=Coalesce(Sum('time_estimate'), 0),
+            total_time_remains=Coalesce(Sum('time_remains'), 0)
+        ).order_by()
+
+        return {
+            stats['due_date_truncated']: stats
+            for stats in queryset
+        }

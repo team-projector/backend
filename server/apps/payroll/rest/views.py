@@ -1,6 +1,8 @@
 from django.contrib.auth import get_user_model
+from django.db import connection
 from django.db.models import Exists, OuterRef
 from django.shortcuts import get_object_or_404
+from django.test.utils import CaptureQueriesContext
 from django.utils.functional import cached_property
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import mixins, permissions
@@ -40,12 +42,14 @@ class UserProgressMetricsView(BaseGenericAPIView):
     def get(self, request, **kwargs):
         params = parse_query_params(request, UserProgressMetricsParamsSerializer)
 
-        metrics = calculate_user_progress_metrics(
-            self.user,
-            params['start'],
-            params['end'],
-            params['group']
-        )
+        with CaptureQueriesContext(connection) as context:
+            metrics = calculate_user_progress_metrics(
+                self.user,
+                params['start'],
+                params['end'],
+                params['group']
+            )
+        print(f'total queries count: {context.final_queries - context.initial_queries}')
 
         return Response(UserProgressMetricsSerializer(metrics, many=True).data)
 

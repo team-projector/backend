@@ -2,7 +2,7 @@ from datetime import date, timedelta
 from typing import Iterable, List
 
 from django.db.models import Avg, Count, F, FloatField, QuerySet, Sum
-from django.db.models.functions import Cast, TruncWeek
+from django.db.models.functions import Cast, Coalesce, TruncWeek
 from django.utils.timezone import make_aware
 
 from apps.core.utils.date import begin_of_week, date2datetime
@@ -52,11 +52,11 @@ class WeekMetricsCalculator(ProgressMetricsCalculator):
             due_date__lt=metric.end
         ).aggregate(
             issues_count=Count('*'),
-            total_time_estimate=Sum('time_estimate')
+            total_time_estimate=Coalesce(Sum('time_estimate'), 0)
         )
 
         metric.issues_count = issues_stats['issues_count']
-        metric.time_estimate = issues_stats['total_time_estimate'] or 0
+        metric.time_estimate = issues_stats['total_time_estimate']
 
     def _update_efficiency(self, metric: UserProgressMetrics) -> None:
         issues_stats = Issue.objects.filter(
@@ -71,10 +71,10 @@ class WeekMetricsCalculator(ProgressMetricsCalculator):
         ).annotate(
             efficiency=Cast(F('time_estimate'), FloatField()) / Cast(F('total_time_spent'), FloatField())
         ).aggregate(
-            avg_efficiency=Avg('efficiency')
+            avg_efficiency=Coalesce(Avg('efficiency'), 0)
         )
 
-        metric.efficiency = issues_stats['avg_efficiency'] or 0
+        metric.efficiency = issues_stats['avg_efficiency']
 
     def _update_payrolls(self, metric: UserProgressMetrics) -> None:
         data = SpentTime.objects.filter(
@@ -83,8 +83,8 @@ class WeekMetricsCalculator(ProgressMetricsCalculator):
             date__lt=metric.end
         ).aggregate_payrolls()
 
-        metric.payroll = data['total_payroll'] or 0
-        metric.paid = data['total_paid'] or 0
+        metric.payroll = data['total_payroll']
+        metric.paid = data['total_paid']
 
     def _get_weeks(self) -> List[date]:
         ret: List[date] = []
