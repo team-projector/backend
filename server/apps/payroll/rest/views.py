@@ -42,14 +42,12 @@ class UserProgressMetricsView(BaseGenericAPIView):
     def get(self, request, **kwargs):
         params = parse_query_params(request, UserProgressMetricsParamsSerializer)
 
-        with CaptureQueriesContext(connection) as context:
-            metrics = calculate_user_progress_metrics(
-                self.user,
-                params['start'],
-                params['end'],
-                params['group']
-            )
-        print(f'total queries count: {context.final_queries - context.initial_queries}')
+        metrics = calculate_user_progress_metrics(
+            self.user,
+            params['start'],
+            params['end'],
+            params['group']
+        )
 
         return Response(UserProgressMetricsSerializer(metrics, many=True).data)
 
