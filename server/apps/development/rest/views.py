@@ -41,7 +41,7 @@ def gl_webhook(request):
     sync_project_issue.delay(project_id, issue_id)
 
     logger.info(f'gitlab webhook was triggered: project_id = {project_id}, issue_id = {issue_id}')
-    add_action.delay(sender_id=request.user.id, verb=ACTION_GITLAB_WEBHOOK_TRIGGERED)
+    add_action.delay(verb=ACTION_GITLAB_WEBHOOK_TRIGGERED)
 
     return HttpResponse()
 
