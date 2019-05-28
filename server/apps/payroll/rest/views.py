@@ -1,14 +1,11 @@
 from django.contrib.auth import get_user_model
-from django.db import connection
 from django.db.models import Exists, OuterRef
 from django.shortcuts import get_object_or_404
-from django.test.utils import CaptureQueriesContext
 from django.utils.functional import cached_property
 from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework import mixins, permissions
+from rest_framework import filters, mixins, permissions
 from rest_framework.decorators import action
 from rest_framework.response import Response
-from rest_framework import filters
 
 from apps.core.rest.mixins.views import CreateModelMixin, UpdateModelMixin
 from apps.core.rest.views import BaseGenericAPIView, BaseGenericViewSet
@@ -17,13 +14,16 @@ from apps.development.models import Team, TeamMember
 from apps.payroll.db.mixins import CREATED
 from apps.payroll.models import WorkBreak
 from apps.payroll.rest.permissions import (
-    CanApproveDeclineWorkbreaks, CanManageWorkbreaks, CanViewTeamMetrics, CanViewUserMetrics, CanViewSalaries)
+    CanApproveDeclineWorkbreaks, CanManageWorkbreaks, CanViewSalaries, CanViewTeamMetrics, CanViewUserMetrics
+)
 from apps.payroll.services.metrics.progress.team import calculate_team_progress_metrics
 from apps.payroll.services.metrics.progress.user import calculate_user_progress_metrics
-from .serializers import (SalarySerializer, TeamMemberProgressMetricsSerializer, TeamProgressMetricsParamsSerializer,
-                          TimeExpenseSerializer, UserProgressMetricsParamsSerializer, UserProgressMetricsSerializer,
-                          WorkBreakApproveSerializer, WorkBreakCardSerializer, WorkBreakDeclineSerializer,
-                          WorkBreakSerializer, WorkBreakUpdateSerializer)
+from .serializers import (
+    SalarySerializer, TeamMemberProgressMetricsSerializer, TeamProgressMetricsParamsSerializer,
+    TimeExpenseSerializer, UserProgressMetricsParamsSerializer, UserProgressMetricsSerializer,
+    WorkBreakApproveSerializer, WorkBreakCardSerializer, WorkBreakDeclineSerializer,
+    WorkBreakSerializer, WorkBreakUpdateSerializer
+)
 from ..models import Salary, SpentTime
 
 User = get_user_model()
