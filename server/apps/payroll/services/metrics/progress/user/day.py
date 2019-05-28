@@ -11,7 +11,6 @@ from apps.payroll.models import SpentTime
 from .base import ProgressMetricsCalculator, UserProgressMetrics
 
 DAY_STEP = timedelta(days=1)
-MAX_DAY_LOADING = timedelta(hours=8).total_seconds()
 
 
 class DayMetricsCalculator(ProgressMetricsCalculator):
@@ -64,8 +63,7 @@ class DayMetricsCalculator(ProgressMetricsCalculator):
     def _is_apply_loading(day: date, now: date) -> bool:
         return day >= now and day.weekday() not in settings.TP_WEEKENDS_DAYS
 
-    @staticmethod
-    def _update_loading(metric: UserProgressMetrics, active_issues: List[dict]) -> None:
+    def _update_loading(self, metric: UserProgressMetrics, active_issues: List[dict]) -> None:
         if not active_issues:
             return
 
@@ -81,11 +79,11 @@ class DayMetricsCalculator(ProgressMetricsCalculator):
             metric.loading += issue['remaining']
             active_issues.remove(issue)
 
-        if metric.loading > MAX_DAY_LOADING:
+        if metric.loading > self.max_day_loading:
             return
 
         for issue in active_issues[:]:
-            available_time = MAX_DAY_LOADING - metric.loading
+            available_time = self.max_day_loading - metric.loading
 
             loading = min(available_time, issue['remaining'])
 
@@ -94,15 +92,6 @@ class DayMetricsCalculator(ProgressMetricsCalculator):
             issue['remaining'] -= loading
             if not issue['remaining']:
                 active_issues.remove(issue)
-
-    def _update_payrolls(self, metric: UserProgressMetrics) -> None:
-        data = SpentTime.objects.filter(
-            user=self.user,
-            date=metric.start
-        ).aggregate_payrolls()
-
-        metric.payroll = data['total_payroll']
-        metric.paid = data['total_paid']
 
     def modify_time_spents_queryset(self, queryset: QuerySet) -> QuerySet:
         return queryset.annotate(
