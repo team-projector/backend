@@ -18,6 +18,7 @@ from apps.core.tasks import add_action
 from apps.development.rest import permissions
 from apps.development.rest.filters import IssueStatusUrlFiler, MilestoneActiveFiler, TeamMemberFilterBackend
 from apps.development.services.problems.issues import IssueProblemsChecker
+from apps.development.services.status.gitlab import get_gitlab_sync_status
 from .serializers import (
     FeatureCardSerializer, FeatureSerializer, FeatureUpdateSerializer, GitlabIssieStatusSerializer,
     GitlabStatusSerializer, IssueCardSerializer, IssueProblemSerializer, IssueUpdateSerializer, MilestoneCardSerializer,
@@ -174,7 +175,9 @@ class GitlabStatusView(BaseGenericAPIView):
     serializer_class = GitlabStatusSerializer
 
     def get(self, request):
-        return Response(self.get_serializer(request).data)
+        status = get_gitlab_sync_status()
+
+        return Response(self.get_serializer(status).data)
 
 
 class MilestonesViewset(mixins.ListModelMixin,
