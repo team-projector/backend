@@ -97,6 +97,12 @@ class TeamCardSerializer(serializers.ModelSerializer):
         fields = ('id', 'title', 'members_count', 'members')
 
 
+class TeamSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Team
+        fields = ('id', 'title')
+
+
 class ProblemsParamsSerializer(serializers.Serializer):
     user = serializers.PrimaryKeyRelatedField(queryset=User.objects.all())
 
