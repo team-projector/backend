@@ -1,3 +1,3 @@
-from .project_filter import ProjectFilter
-from .milestone_filter import MilestoneFilter
-from .team_filter import TeamFilter
+from .milestone import MilestoneFilter
+from .project import ProjectFilter
+from .team import TeamFilter

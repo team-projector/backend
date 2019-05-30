@@ -4,7 +4,7 @@ from django.shortcuts import redirect, render
 from django.urls import path, reverse
 
 from apps.core.admin.base import BaseModelAdmin
-from apps.payroll.admin.forms import GenerateSalariesForm
+from apps.payroll.admin.forms import GenerateSalaryForm
 from apps.payroll.services.salary.calculator import SalaryCalculator
 from apps.users.admin.filters import UserFilter
 from ..models import Bonus, Payment, Payroll, Penalty, Salary, SpentTime, WorkBreak
@@ -26,7 +26,7 @@ class SalaryAdmin(BaseModelAdmin):
 
     def generate_salaries(self, request):
         if request.method == 'POST':
-            form = GenerateSalariesForm(request.POST)
+            form = GenerateSalaryForm(request.POST)
             if form.is_valid():
                 calculator = SalaryCalculator(request.user,
                                               form.cleaned_data['period_from'],
@@ -35,7 +35,7 @@ class SalaryAdmin(BaseModelAdmin):
 
                 return redirect(reverse('admin:payroll_salary_changelist'))
         else:
-            form = GenerateSalariesForm()
+            form = GenerateSalaryForm()
 
         context = self.admin_site.each_context(request)
         context['title'] = 'Generate salaries'
