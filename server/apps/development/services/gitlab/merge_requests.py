@@ -10,7 +10,7 @@ from apps.core.gitlab import get_gitlab_client
 from apps.core.tasks import add_action
 from .parsers import parse_gl_datetime
 from .users import extract_user_from_data
-from ...models import Label, MergeRequest, Milestone, Note, Project, Issue
+from ...models import Label, MergeRequest, Milestone, Note, Project
 
 logger = logging.getLogger(__name__)
 
@@ -25,8 +25,7 @@ def load_merge_requests(full_reload: bool = False) -> None:
 
 
 def load_project_merge_requests(project: Project,
-                                full_reload: bool = False,
-                                check_deleted: bool = True) -> None:
+                                full_reload: bool = False) -> None:
     gl = get_gitlab_client()
 
     logger.info(f'Syncing project "{project}" merge_requests')
@@ -38,47 +37,14 @@ def load_project_merge_requests(project: Project,
         'as_list': False
     }
 
-    if not full_reload and project.gl_last_issues_sync:
-        args['updated_after'] = project.gl_last_issues_sync
+    if not full_reload and project.gl_last_merge_requests_sync:
+        args['updated_after'] = project.gl_last_merge_requests_sync
 
-    project.gl_last_issues_sync = timezone.now()
-    project.save(update_fields=['gl_last_issues_sync'])
+    project.gl_last_merge_requests_sync = timezone.now()
+    project.save(update_fields=['gl_last_merge_requests_sync'])
 
     for gl_merge_request in gl_project.mergerequests.list(**args):
         load_project_merge_request(project, gl_project, gl_merge_request)
-
-    if check_deleted:
-        check_project_deleted_issues(project, gl_project)
-
-
-def check_projects_deleted_issues() -> None:
-    gl = get_gitlab_client()
-
-    for project in Project.objects.all():
-        try:
-            gl_project = gl.projects.get(id=project.gl_id)
-
-            add_action.delay(verb=ACTION_GITLAB_CALL_API)
-
-            check_project_deleted_issues(project, gl_project)
-        except GitlabGetError as e:
-            if e.response_code != status.HTTP_404_NOT_FOUND:
-                raise
-
-
-def check_project_deleted_issues(project: Project,
-                                 gl_project: GlProject) -> None:
-    gl_issues = set()
-    for gl_issue in gl_project.issues.list(as_list=False):
-        gl_issues.add(gl_issue.id)
-
-    issues = set(project.issues.values_list('gl_id', flat=True))
-
-    diff = issues - gl_issues
-
-    project.issues.filter(gl_id__in=diff).delete()
-
-    logger.info(f'Project "{project}" deleted issues ckecked: removed {len(diff)} issues')
 
 
 def load_project_merge_request(project: Project,
@@ -106,11 +72,6 @@ def load_project_merge_request(project: Project,
 
         if milestone:
             params['milestone'] = milestone
-
-    issue = Issue.objects.filter(gl_id=gl_merge_request.issue['id']).first()
-
-    if issue:
-        params['issue'] = issue
 
     merge_request, _ = MergeRequest.objects.sync_gitlab(**params)
 

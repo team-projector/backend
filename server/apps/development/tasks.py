@@ -6,6 +6,7 @@ from .models import Project, ProjectGroup
 from .services.gitlab.groups import load_groups, load_single_group
 from .services.gitlab.issues import load_project_issue, load_project_issues
 from .services.gitlab.milestones import load_gl_project_milestones, load_group_milestones
+from .services.gitlab.merge_requests import load_project_merge_request
 from .services.gitlab.projects import load_project, load_projects
 from .services.gitlab.users import load_user
 
@@ -98,3 +99,17 @@ def sync_project(group: ProjectGroup, gl_id: int, project_id: int) -> None:
 @app.task
 def sync_user(gl_id: int) -> None:
     load_user(gl_id)
+
+
+@app.task
+def sync_project_merge_request(project_id: int, iid: int) -> None:
+    project = Project.objects.get(gl_id=project_id)
+
+    gl = get_gitlab_client()
+    gl_project = gl.projects.get(project_id)
+
+    add_action.delay(verb=ACTION_GITLAB_CALL_API)
+
+    gl_merge_request = gl_project.mergerequests.get(iid)
+
+    load_project_merge_request(project, gl_project, gl_merge_request)

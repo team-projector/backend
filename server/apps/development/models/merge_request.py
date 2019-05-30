@@ -8,25 +8,27 @@ from django.utils.functional import cached_property
 from django.utils.translation import gettext_lazy as _
 
 from apps.core.db.mixins import GitlabEntityMixin, GitlabInternalIdMixin
+from apps.core.db.utils import Choices
 from apps.development.services.parsers import parse_date
 from apps.payroll.db.mixins import SpentTimesMixin
 from apps.users.models import User
-from .issue import Issue
 from .label import Label
 from .note import Note
 from .project import Project
 from ..db.managers import MergeRequestManager
 from ..db.mixins import NotableMixin
 
-STATE_CLOSED = 'closed'
-STATE_MERGED = 'merged'
-STATE_OPENED = 'opened'
-
 
 class MergeRequest(NotableMixin,
                    SpentTimesMixin,
                    GitlabEntityMixin,
                    GitlabInternalIdMixin):
+    STATE = Choices(
+        ('closed', 'closed'),
+        ('merged', 'merged'),
+        ('opened', 'opened')
+    )
+
     title = models.CharField(
         max_length=255,
         verbose_name=_('VN__TITLE'),
@@ -46,6 +48,7 @@ class MergeRequest(NotableMixin,
     )
 
     state = models.CharField(
+        choices=STATE,
         max_length=255,
         null=True,
         blank=True,
@@ -98,11 +101,6 @@ class MergeRequest(NotableMixin,
         models.CASCADE,
         null=True,
         blank=True,
-    )
-
-    issue = models.ForeignKey(
-        Issue,
-        models.CASCADE
     )
 
     objects = MergeRequestManager()

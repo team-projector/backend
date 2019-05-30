@@ -3,7 +3,7 @@ from django.contrib import admin
 from apps.core.admin.base import BaseModelAdmin
 from apps.core.admin.mixins import ForceSyncEntityMixin
 from apps.development.admin.filters import TeamFilter
-from apps.development.tasks import sync_project_issue, sync_project, sync_project_group
+from apps.development.tasks import sync_project_issue, sync_project, sync_project_group, sync_project_merge_request
 from apps.users.admin.filters import UserFilter
 from .filters import ProjectFilter
 from .inlines import NoteInline, TeamMemberInline, ProjectMemberInline
@@ -93,11 +93,14 @@ class FeatureAdmin(BaseModelAdmin):
 
 
 @admin.register(MergeRequest)
-class MergeRequestAdmin(BaseModelAdmin):
-    list_display = ('title', 'user', 'created_at', 'gl_url', 'gl_last_sync')
+class MergeRequestAdmin(ForceSyncEntityMixin, BaseModelAdmin):
+    list_display = ('title', 'user', 'state', 'created_at', 'gl_last_sync')
     list_filter = (ProjectFilter,)
     search_fields = ('title', 'gl_id')
     sortable_by = ('gl_last_sync', 'created_at')
     ordering = ('-gl_last_sync',)
     autocomplete_fields = ('project', 'user', 'milestone', 'labels')
     inlines = (NoteInline,)
+
+    def sync_handler(self, obj):
+        sync_project_merge_request.delay(obj.project.gl_id, obj.gl_iid)
