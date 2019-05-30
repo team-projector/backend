@@ -27,22 +27,8 @@ class IssueMetricsSerializer(serializers.Serializer):
     paid = serializers.FloatField()
 
 
-class IssueCardSerializer(serializers.ModelSerializer):
-    labels = LabelSerializer(many=True)
-    project = LinkSerializer()
-    time_spent = serializers.SerializerMethodField()
+class IssueMetricsMixin(serializers.ModelSerializer):
     metrics = serializers.SerializerMethodField()
-    milestone = LinkSerializer()
-    feature = LinkSerializer()
-    participants = ParticipantCardSerializer(many=True)
-    user = UserCardSerializer()
-
-    class Meta:
-        model = Issue
-        fields = (
-            'id', 'title', 'labels', 'project', 'due_date', 'state', 'time_estimate', 'total_time_spent', 'time_spent',
-            'gl_url', 'metrics', 'milestone', 'feature', 'participants', 'gl_last_sync', 'gl_id', 'user'
-        )
 
     def get_metrics(self, instance: Issue):
         if self.context['request'].query_params.get('metrics', 'false') == 'false':
@@ -65,6 +51,44 @@ class IssueCardSerializer(serializers.ModelSerializer):
         ).aggregate(
             total_spent=Sum('time_spent')
         )['total_spent']
+
+
+class IssueSerializer(IssueMetricsMixin,
+                      serializers.ModelSerializer):
+    labels = LabelSerializer(many=True)
+    project = LinkSerializer()
+    time_spent = serializers.SerializerMethodField()
+
+    milestone = LinkSerializer()
+    feature = LinkSerializer()
+    participants = ParticipantCardSerializer(many=True)
+    user = UserCardSerializer()
+
+    class Meta:
+        model = Issue
+        fields = (
+            'id', 'title', 'labels', 'project', 'due_date', 'state', 'time_estimate', 'total_time_spent', 'time_spent',
+            'gl_url', 'metrics', 'milestone', 'feature', 'participants', 'gl_last_sync', 'gl_id', 'user'
+        )
+
+
+class IssueCardSerializer(IssueMetricsMixin,
+                          serializers.ModelSerializer):
+    labels = LabelSerializer(many=True)
+    project = LinkSerializer()
+    time_spent = serializers.SerializerMethodField()
+
+    milestone = LinkSerializer()
+    feature = LinkSerializer()
+    participants = ParticipantCardSerializer(many=True)
+    user = UserCardSerializer()
+
+    class Meta:
+        model = Issue
+        fields = (
+            'id', 'title', 'labels', 'project', 'due_date', 'state', 'time_estimate', 'total_time_spent', 'time_spent',
+            'gl_url', 'metrics', 'milestone', 'feature', 'participants', 'gl_last_sync', 'gl_id', 'user'
+        )
 
 
 class IssueUpdateSerializer(serializers.ModelSerializer):

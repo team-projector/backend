@@ -19,11 +19,10 @@ from apps.development.rest import permissions
 from apps.development.rest.filters import IssueStatusUrlFiler, MilestoneActiveFiler, TeamMemberFilterBackend
 from apps.development.services.problems.issues import IssueProblemsChecker
 from apps.development.services.status.gitlab import get_gitlab_sync_status
-from .serializers import (
-    FeatureCardSerializer, FeatureSerializer, FeatureUpdateSerializer, GitlabIssieStatusSerializer,
-    GitlabStatusSerializer, IssueCardSerializer, IssueProblemSerializer, IssueUpdateSerializer, MilestoneCardSerializer,
-    TeamSerializer, TeamCardSerializer, TeamMemberCardSerializer
-)
+from .serializers import (FeatureCardSerializer, FeatureSerializer, FeatureUpdateSerializer,
+                          GitlabIssieStatusSerializer, GitlabStatusSerializer, IssueCardSerializer,
+                          IssueProblemSerializer, IssueSerializer, IssueUpdateSerializer, MilestoneCardSerializer,
+                          TeamCardSerializer, TeamMemberCardSerializer, TeamSerializer)
 from ..models import Feature, Issue, Milestone, Team, TeamMember
 from ..tasks import sync_project_issue
 
@@ -47,10 +46,12 @@ def gl_webhook(request):
     return HttpResponse()
 
 
-class IssuesViewset(mixins.ListModelMixin,
+class IssuesViewset(mixins.RetrieveModelMixin,
+                    mixins.ListModelMixin,
                     UpdateModelMixin,
                     BaseGenericViewSet):
     serializer_classes = {
+        'retrieve': IssueSerializer,
         'list': IssueCardSerializer,
         'update': IssueCardSerializer,
         'partial_update': IssueCardSerializer,
