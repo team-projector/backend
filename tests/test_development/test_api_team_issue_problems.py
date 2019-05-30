@@ -3,13 +3,14 @@ from datetime import timedelta
 from django.utils import timezone
 from rest_framework import status
 
+from apps.development.models import TeamMember
 from apps.development.models.issue import STATE_CLOSED
 from apps.development.services.problems.issues import (
     PROBLEM_EMPTY_DUE_DAY, PROBLEM_EMPTY_ESTIMATE, PROBLEM_OVER_DUE_DAY
 )
+from apps.users.models import User
 from tests.base import BaseAPITest
-from apps.development.models import TeamMember
-from tests.test_development.factories import TeamFactory, TeamMemberFactory, IssueFactory
+from tests.test_development.factories import IssueFactory, TeamFactory, TeamMemberFactory
 from tests.test_users.factories import UserFactory
 
 
@@ -17,8 +18,11 @@ class ApiTeamIssuesProblemsTests(BaseAPITest):
     def setUp(self):
         super().setUp()
 
+        self.user.roles = User.roles.team_leader
+        self.user.save()
+
         self.team = TeamFactory.create()
-        TeamMemberFactory.create(user=self.user, team=self.team, roles=TeamMember.roles.project_manager)
+        TeamMemberFactory.create(user=self.user, team=self.team, roles=TeamMember.roles.leader)
 
     def test_permissions(self):
         developer = UserFactory.create()
@@ -42,30 +46,10 @@ class ApiTeamIssuesProblemsTests(BaseAPITest):
         response = self.client.get(f'/api/teams/{team_1.id}/problems')
 
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
-        self.assertEqual(response.data['detail'], 'You can\'t view project manager or team leader resources')
 
         response = self.client.get(f'/api/teams/{team_2.id}/problems')
 
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
-
-        self.set_credentials(team_leader)
-        response = self.client.get(f'/api/teams/{team_1.id}/problems')
-
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data['count'], 3)
-
-        response = self.client.get(f'/api/teams/{team_2.id}/problems')
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
-
-        self.set_credentials(project_manager)
-        response = self.client.get(f'/api/teams/{team_1.id}/problems')
-
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data['count'], 3)
-
-        response = self.client.get(f'/api/teams/{team_2.id}/problems')
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data['count'], 2)
 
     def test_list_not_found(self):
         self.set_credentials()
