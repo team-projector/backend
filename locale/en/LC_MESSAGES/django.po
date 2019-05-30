@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-05-22 22:09+0300\n"
+"POT-Creation-Date: 2019-05-30 18:08+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -67,7 +67,8 @@ msgstr "Notes"
 #: server/apps/development/models/feature.py:11
 #: server/apps/development/models/issue.py:31
 #: server/apps/development/models/label.py:8
-#: server/apps/development/models/milestone.py:15
+#: server/apps/development/models/merge_request.py:34
+#: server/apps/development/models/milestone.py:21
 #: server/apps/development/models/project.py:14
 #: server/apps/development/models/project_group.py:13
 #: server/apps/development/models/team.py:8
@@ -77,7 +78,8 @@ msgstr "Title"
 #: server/apps/development/models/feature.py:12
 #: server/apps/development/models/issue.py:32
 #: server/apps/development/models/label.py:9
-#: server/apps/development/models/milestone.py:16
+#: server/apps/development/models/merge_request.py:35
+#: server/apps/development/models/milestone.py:22
 #: server/apps/development/models/project.py:15
 #: server/apps/development/models/project_group.py:14
 #: server/apps/development/models/team.py:9
@@ -85,46 +87,46 @@ msgid "HT__TITLE"
 msgstr "Title"
 
 #: server/apps/development/models/feature.py:18
-#: server/apps/development/models/milestone.py:19
+#: server/apps/development/models/milestone.py:27
 #: server/apps/payroll/models/bonus.py:9
 #: server/apps/payroll/models/penalty.py:9
 msgid "VN__DESCRIPTION"
 msgstr "Description"
 
 #: server/apps/development/models/feature.py:19
-#: server/apps/development/models/milestone.py:20
+#: server/apps/development/models/milestone.py:28
 #: server/apps/payroll/models/bonus.py:10
 #: server/apps/payroll/models/penalty.py:10
 msgid "HT__DESCRIPTION"
 msgstr "Description"
 
 #: server/apps/development/models/feature.py:25
-#: server/apps/development/models/milestone.py:25
+#: server/apps/development/models/milestone.py:33
 msgid "VN__START_DATE"
 msgstr "Start Date"
 
 #: server/apps/development/models/feature.py:26
-#: server/apps/development/models/milestone.py:26
+#: server/apps/development/models/milestone.py:34
 msgid "HT__START_DATE"
 msgstr "Start Date"
 
 #: server/apps/development/models/feature.py:32
-#: server/apps/development/models/milestone.py:31
+#: server/apps/development/models/milestone.py:47
 msgid "VN__DUE_DATE"
 msgstr "Due Date"
 
 #: server/apps/development/models/feature.py:33
-#: server/apps/development/models/milestone.py:32
+#: server/apps/development/models/milestone.py:48
 msgid "HT__DUE_DATE"
 msgstr "Due Date"
 
 #: server/apps/development/models/feature.py:40
-#: server/apps/development/models/milestone.py:38
+#: server/apps/development/models/milestone.py:54
 msgid "VN__BUDGET"
 msgstr "Budget"
 
 #: server/apps/development/models/feature.py:41
-#: server/apps/development/models/milestone.py:39
+#: server/apps/development/models/milestone.py:55
 msgid "HT__BUDGET"
 msgstr "Budget"
 
@@ -137,41 +139,51 @@ msgid "VN__FEATURES"
 msgstr "Features"
 
 #: server/apps/development/models/issue.py:37
+#: server/apps/development/models/merge_request.py:40
 msgid "VN__TIME_ESTIMATE"
 msgstr "Estimate time"
 
 #: server/apps/development/models/issue.py:38
+#: server/apps/development/models/merge_request.py:41
 msgid "HT__TIME_ESTIMATE"
 msgstr "Estimate time"
 
 #: server/apps/development/models/issue.py:43
+#: server/apps/development/models/merge_request.py:46
 msgid "VN__TOTAL_TIME_SPENT"
 msgstr "Total spent time"
 
 #: server/apps/development/models/issue.py:44
+#: server/apps/development/models/merge_request.py:47
 msgid "HT__TOTAL_TIME_SPENT"
 msgstr "Total spent time"
 
 #: server/apps/development/models/issue.py:51
+#: server/apps/development/models/merge_request.py:55
+#: server/apps/development/models/milestone.py:41
 msgid "VN__STATE"
 msgstr "State"
 
 #: server/apps/development/models/issue.py:52
+#: server/apps/development/models/merge_request.py:56
+#: server/apps/development/models/milestone.py:42
 msgid "HT__STATE"
 msgstr "State"
 
 #: server/apps/development/models/issue.py:87
-#: server/apps/development/models/project.py:52
+#: server/apps/development/models/merge_request.py:86
+#: server/apps/development/models/project.py:59
 msgid "VN__PROJECT"
 msgstr "Project"
 
 #: server/apps/development/models/issue.py:88
+#: server/apps/development/models/merge_request.py:87
 msgid "HT__PROJECT"
 msgstr "Project"
 
 #: server/apps/development/models/issue.py:96
 #: server/apps/development/models/note.py:33
-#: server/apps/development/models/team_member.py:27
+#: server/apps/development/models/team_member.py:26
 #: server/apps/payroll/models/payroll.py:39
 #: server/apps/payroll/models/salary.py:23
 #: server/apps/payroll/models/workbreak.py:26
@@ -181,7 +193,7 @@ msgstr "User"
 
 #: server/apps/development/models/issue.py:97
 #: server/apps/development/models/note.py:34
-#: server/apps/development/models/team_member.py:28
+#: server/apps/development/models/team_member.py:27
 #: server/apps/payroll/models/payroll.py:40
 #: server/apps/payroll/models/salary.py:24
 #: server/apps/payroll/models/workbreak.py:27
@@ -212,11 +224,35 @@ msgstr "Label"
 msgid "VN__LABELS"
 msgstr "Labels"
 
-#: server/apps/development/models/milestone.py:52
+#: server/apps/development/models/merge_request.py:96
+msgid "VN__ASSIGNEE"
+msgstr "Assignee"
+
+#: server/apps/development/models/merge_request.py:97
+msgid "HT__ASSIGNEE"
+msgstr "Assignee"
+
+#: server/apps/development/models/merge_request.py:106
+msgid "VN__AUTHOR"
+msgstr "Author"
+
+#: server/apps/development/models/merge_request.py:107
+msgid "HT__AUTHOR"
+msgstr "Author"
+
+#: server/apps/development/models/merge_request.py:120
+msgid "VN__MERGE_REQUEST"
+msgstr "Merge Request"
+
+#: server/apps/development/models/merge_request.py:121
+msgid "VN__MERGE_REQUESTS"
+msgstr "Merge Requests"
+
+#: server/apps/development/models/milestone.py:68
 msgid "VN__MILESTONE"
 msgstr "Milestone"
 
-#: server/apps/development/models/milestone.py:53
+#: server/apps/development/models/milestone.py:69
 msgid "VN__MILESTONES"
 msgstr "Milestones"
 
@@ -258,7 +294,19 @@ msgstr "GitLab last issues sync"
 msgid "HT__GITLAB_LAST_ISSUES_SYNC"
 msgstr "GitLab last issues sync"
 
-#: server/apps/development/models/project.py:53
+#: server/apps/development/models/project.py:43
+#, fuzzy
+#| msgid "VN__GITLAB_LAST_SYNC"
+msgid "VN__GITLAB_MERGE_REQUESTS_SYNC"
+msgstr "GitLab last sync"
+
+#: server/apps/development/models/project.py:44
+#, fuzzy
+#| msgid "HT__GITLAB_LAST_SYNC"
+msgid "HT__MERGE_REQUESTS_SYNC"
+msgstr "GitLab last sync"
+
+#: server/apps/development/models/project.py:60
 msgid "VN__PROJECTS"
 msgstr "Projects"
 
@@ -285,38 +333,32 @@ msgid "CH_DEVELOPER"
 msgstr "Developer"
 
 #: server/apps/development/models/project_member.py:14
-#: server/apps/users/models/user.py:13
-msgid "CH_TEAM_LEADER"
-msgstr "Team leader"
-
-#: server/apps/development/models/project_member.py:15
-#: server/apps/development/models/team_member.py:14
 msgid "CH_PM"
 msgstr "Project manager"
 
-#: server/apps/development/models/project_member.py:16
+#: server/apps/development/models/project_member.py:15
 #: server/apps/users/models/user.py:15
 msgid "CH_CUSTOMER"
 msgstr "Customer"
 
-#: server/apps/development/models/project_member.py:27
+#: server/apps/development/models/project_member.py:26
 msgid "VN__ROLE"
 msgstr "Role"
 
-#: server/apps/development/models/project_member.py:28
+#: server/apps/development/models/project_member.py:27
 msgid "HT__ROLE"
 msgstr "Role"
 
-#: server/apps/development/models/project_member.py:40
+#: server/apps/development/models/project_member.py:39
 msgid "VN__PROJECT_MEMBER"
 msgstr "Project Members"
 
-#: server/apps/development/models/project_member.py:41
+#: server/apps/development/models/project_member.py:40
 msgid "VN__PROJECT_MEMBERS"
 msgstr "Project Members"
 
 #: server/apps/development/models/team.py:14
-#: server/apps/development/models/team_member.py:20
+#: server/apps/development/models/team_member.py:19
 msgid "VN__TEAM"
 msgstr "Team"
 
@@ -328,15 +370,15 @@ msgstr "Teams"
 msgid "CH_LEADER"
 msgstr "Team leader"
 
-#: server/apps/development/models/team_member.py:21
+#: server/apps/development/models/team_member.py:20
 msgid "HT__TEAM"
 msgstr "Team"
 
-#: server/apps/development/models/team_member.py:37
+#: server/apps/development/models/team_member.py:36
 msgid "VN__TEAM_MEMBER"
 msgstr "Team Member"
 
-#: server/apps/development/models/team_member.py:38
+#: server/apps/development/models/team_member.py:37
 msgid "VN__TEAM_MEMBERS"
 msgstr "Team Members"
 
@@ -623,7 +665,7 @@ msgstr "User can't manage current workbreak"
 msgid "VN__USERS"
 msgstr "Users"
 
-#: server/apps/users/db/managers.py:8
+#: server/apps/users/db/managers.py:10
 msgid "VN__USER_MUST_HAVE_A_LOGIN"
 msgstr "User must have a login"
 
@@ -634,6 +676,10 @@ msgstr "Token"
 #: server/apps/users/models/token.py:16
 msgid "VN__TOKENS"
 msgstr "Tokens"
+
+#: server/apps/users/models/user.py:13
+msgid "CH_TEAM_LEADER"
+msgstr "Team leader"
 
 #: server/apps/users/models/user.py:14
 msgid "CH_PROJECT_MANAGER"
