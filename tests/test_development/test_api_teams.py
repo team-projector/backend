@@ -151,16 +151,15 @@ class ApiTeamsTests(BaseAPITest):
         self.assertEqual(response.data['results'][0]['members'][0]['roles'][0], 'leader')
 
     def test_retrieve(self):
-        self.set_credentials()
-
-        response = self.client.get('/api/teams/1')
-
-        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
-
         team = TeamFactory.create()
 
+        self.set_credentials()
         response = self.client.get(f'/api/teams/{team.id}')
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data['id'], team.id)
         self.assertEqual(response.data['title'], team.title)
+
+        response = self.client.get(f'/api/teams/{team.id + 1}')
+
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
