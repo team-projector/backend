@@ -1,18 +1,17 @@
 from django.utils import timezone
 from rest_framework import status
 
-from apps.development.models import TeamMember
+from apps.users.models import User
 from tests.base import BaseAPITest
-from tests.test_development.factories import (ProjectGroupMilestoneFactory, TeamMemberFactory, TeamFactory,
-                                              FeatureFactory)
+from tests.test_development.factories import (FeatureFactory, ProjectGroupMilestoneFactory)
 
 
 class ApiIssuesTests(BaseAPITest):
     def setUp(self):
         super().setUp()
 
-        team = TeamFactory.create()
-        TeamMemberFactory.create(team=team, user=self.user, roles=TeamMember.roles.project_manager)
+        self.user.roles = User.roles.project_manager
+        self.user.save()
 
         self.milestone = ProjectGroupMilestoneFactory.create()
 

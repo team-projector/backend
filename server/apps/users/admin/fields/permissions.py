@@ -2,7 +2,7 @@ from django import forms
 from django.contrib.auth.models import Permission
 from django.db.models import QuerySet
 
-from .widgets import PermissionSelectMultipleWidget
+from ..widgets import PermissionSelectMultipleWidget
 
 
 class PermissionSelectMultipleField(forms.ModelMultipleChoiceField):

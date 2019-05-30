@@ -70,4 +70,4 @@ class Milestone(GitlabEntityMixin,
         ordering = ('-created_at',)
 
     def __str__(self):
-        return f'{self.title} ({self.owner})'
+        return f'{self.owner.title} / {self.title}'

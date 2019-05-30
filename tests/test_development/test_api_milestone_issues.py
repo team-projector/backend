@@ -1,16 +1,16 @@
 from rest_framework import status
 
+from apps.users.models import User
 from tests.base import BaseAPITest
-from apps.development.models import TeamMember
-from tests.test_development.factories import ProjectGroupMilestoneFactory, IssueFactory, TeamFactory, TeamMemberFactory
+from tests.test_development.factories import IssueFactory, ProjectGroupMilestoneFactory
 
 
 class ApiMilestoneIssuesTests(BaseAPITest):
     def setUp(self):
         super().setUp()
 
-        team = TeamFactory.create()
-        TeamMemberFactory.create(team=team, user=self.user, roles=TeamMember.roles.project_manager)
+        self.user.roles = User.roles.project_manager
+        self.user.save()
 
         self.milestone = ProjectGroupMilestoneFactory.create()
 

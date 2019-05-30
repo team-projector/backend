@@ -1,8 +1,9 @@
 from rest_framework import status
 
-from tests.base import BaseAPITest
 from apps.development.models import TeamMember
 from apps.development.models.issue import STATE_CLOSED, STATE_OPENED
+from apps.users.models import User
+from tests.base import BaseAPITest
 from tests.test_development.factories import IssueFactory, TeamFactory, TeamMemberFactory
 from tests.test_users.factories import UserFactory
 
@@ -11,13 +12,15 @@ class ApiTeamIssuesTests(BaseAPITest):
     def setUp(self):
         super().setUp()
 
+        self.user.roles = User.roles.team_leader
+        self.user.save()
+
         self.team = TeamFactory.create()
-        TeamMemberFactory.create(team=self.team, user=self.user, roles=TeamMember.roles.project_manager)
+        TeamMemberFactory.create(team=self.team, user=self.user, roles=TeamMember.roles.leader)
 
     def test_permissions(self):
         developer = UserFactory.create()
-        team_leader = UserFactory.create()
-        project_manager = UserFactory.create()
+        team_leader = UserFactory.create(roles=User.roles.team_leader)
 
         team_1 = TeamFactory.create()
         team_2 = TeamFactory.create()
@@ -25,18 +28,14 @@ class ApiTeamIssuesTests(BaseAPITest):
         TeamMemberFactory.create(team=team_1, user=developer)
         TeamMemberFactory.create(team=team_2, user=developer)
         TeamMemberFactory.create(team=team_1, user=team_leader, roles=TeamMember.roles.leader)
-        TeamMemberFactory.create(team=team_1, user=project_manager, roles=TeamMember.roles.project_manager)
-        TeamMemberFactory.create(team=team_2, user=project_manager, roles=TeamMember.roles.project_manager)
 
         IssueFactory.create(user=developer)
         IssueFactory.create(user=team_leader)
-        IssueFactory.create(user=project_manager)
 
         self.set_credentials(developer)
         response = self.client.get(f'/api/teams/{team_1.id}/issues')
 
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
-        self.assertEqual(response.data['detail'], 'You can\'t view project manager or team leader resources')
 
         response = self.client.get(f'/api/teams/{team_2.id}/issues')
 
@@ -46,20 +45,10 @@ class ApiTeamIssuesTests(BaseAPITest):
         response = self.client.get(f'/api/teams/{team_1.id}/issues')
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data['count'], 3)
+        self.assertEqual(response.data['count'], 2)
 
         response = self.client.get(f'/api/teams/{team_2.id}/issues')
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
-
-        self.set_credentials(project_manager)
-        response = self.client.get(f'/api/teams/{team_1.id}/issues')
-
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data['count'], 3)
-
-        response = self.client.get(f'/api/teams/{team_2.id}/issues')
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data['count'], 2)
 
     def test_list_not_found(self):
         self.set_credentials()
