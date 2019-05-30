@@ -87,13 +87,24 @@ class MergeRequest(NotableMixin,
         help_text=_('HT__PROJECT')
     )
 
-    user = models.ForeignKey(
+    assignee = models.ForeignKey(
         User,
         models.SET_NULL,
+        related_name='assignee_merge_requests',
         null=True,
         blank=True,
-        verbose_name=_('VN__USER'),
-        help_text=_('HT__USER')
+        verbose_name=_('VN__ASSIGNEE'),
+        help_text=_('HT__ASSIGNEE')
+    )
+
+    author = models.ForeignKey(
+        User,
+        models.SET_NULL,
+        related_name='author_merge_requests',
+        null=True,
+        blank=True,
+        verbose_name=_('VN__AUTHOR'),
+        help_text=_('HT__AUTHOR')
     )
 
     milestone = models.ForeignKey(

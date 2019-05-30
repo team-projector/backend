@@ -64,7 +64,8 @@ def load_project_merge_request(project: Project,
         'created_at': parse_gl_datetime(gl_merge_request.created_at),
         'updated_at': parse_gl_datetime(gl_merge_request.updated_at),
         'closed_at': parse_gl_datetime(gl_merge_request.closed_at),
-        'user': extract_user_from_data(gl_merge_request.author),
+        'assignee': extract_user_from_data(gl_merge_request.assignee),
+        'author': extract_user_from_data(gl_merge_request.author),
     }
 
     if gl_merge_request.milestone:

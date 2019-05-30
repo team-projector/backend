@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-05-30 14:05+0300\n"
+"POT-Creation-Date: 2019-05-30 18:08+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -182,9 +182,8 @@ msgid "HT__PROJECT"
 msgstr "Project"
 
 #: server/apps/development/models/issue.py:96
-#: server/apps/development/models/merge_request.py:95
 #: server/apps/development/models/note.py:33
-#: server/apps/development/models/team_member.py:27
+#: server/apps/development/models/team_member.py:26
 #: server/apps/payroll/models/payroll.py:39
 #: server/apps/payroll/models/salary.py:23
 #: server/apps/payroll/models/workbreak.py:26
@@ -193,9 +192,8 @@ msgid "VN__USER"
 msgstr "User"
 
 #: server/apps/development/models/issue.py:97
-#: server/apps/development/models/merge_request.py:96
 #: server/apps/development/models/note.py:34
-#: server/apps/development/models/team_member.py:28
+#: server/apps/development/models/team_member.py:27
 #: server/apps/payroll/models/payroll.py:40
 #: server/apps/payroll/models/salary.py:24
 #: server/apps/payroll/models/workbreak.py:27
@@ -226,11 +224,27 @@ msgstr "Label"
 msgid "VN__LABELS"
 msgstr "Labels"
 
-#: server/apps/development/models/merge_request.py:109
+#: server/apps/development/models/merge_request.py:96
+msgid "VN__ASSIGNEE"
+msgstr "Assignee"
+
+#: server/apps/development/models/merge_request.py:97
+msgid "HT__ASSIGNEE"
+msgstr "Assignee"
+
+#: server/apps/development/models/merge_request.py:106
+msgid "VN__AUTHOR"
+msgstr "Author"
+
+#: server/apps/development/models/merge_request.py:107
+msgid "HT__AUTHOR"
+msgstr "Author"
+
+#: server/apps/development/models/merge_request.py:120
 msgid "VN__MERGE_REQUEST"
 msgstr "Merge Request"
 
-#: server/apps/development/models/merge_request.py:110
+#: server/apps/development/models/merge_request.py:121
 msgid "VN__MERGE_REQUESTS"
 msgstr "Merge Requests"
 
@@ -319,7 +333,6 @@ msgid "CH_DEVELOPER"
 msgstr "Developer"
 
 #: server/apps/development/models/project_member.py:14
-#: server/apps/development/models/team_member.py:14
 msgid "CH_PM"
 msgstr "Project manager"
 
@@ -345,7 +358,7 @@ msgid "VN__PROJECT_MEMBERS"
 msgstr "Project Members"
 
 #: server/apps/development/models/team.py:14
-#: server/apps/development/models/team_member.py:20
+#: server/apps/development/models/team_member.py:19
 msgid "VN__TEAM"
 msgstr "Team"
 
@@ -357,15 +370,15 @@ msgstr "Teams"
 msgid "CH_LEADER"
 msgstr "Team leader"
 
-#: server/apps/development/models/team_member.py:21
+#: server/apps/development/models/team_member.py:20
 msgid "HT__TEAM"
 msgstr "Team"
 
-#: server/apps/development/models/team_member.py:37
+#: server/apps/development/models/team_member.py:36
 msgid "VN__TEAM_MEMBER"
 msgstr "Team Member"
 
-#: server/apps/development/models/team_member.py:38
+#: server/apps/development/models/team_member.py:37
 msgid "VN__TEAM_MEMBERS"
 msgstr "Team Members"
 
