@@ -107,7 +107,7 @@ class TeamMembersViewset(mixins.ListModelMixin,
 
 class MilestoneIssuesViewset(mixins.ListModelMixin,
                              BaseGenericViewSet):
-    permission_classes = (permissions.IsProjectManager, IsAuthenticated)
+    permission_classes = (IsAuthenticated, permissions.IsProjectManager)
 
     serializer_classes = {
         'list': IssueCardSerializer
@@ -125,7 +125,7 @@ class MilestoneIssuesViewset(mixins.ListModelMixin,
 
 class MilestoneFeaturesViewset(mixins.ListModelMixin,
                                BaseGenericViewSet):
-    permission_classes = (permissions.IsProjectManager, IsAuthenticated)
+    permission_classes = (IsAuthenticated, permissions.IsProjectManager)
 
     serializer_classes = {
         'list': FeatureCardSerializer
@@ -144,7 +144,7 @@ class MilestoneFeaturesViewset(mixins.ListModelMixin,
 class FeaturesViewset(CreateModelMixin,
                       UpdateModelMixin,
                       BaseGenericViewSet):
-    permission_classes = (permissions.IsProjectManager, IsAuthenticated)
+    permission_classes = (IsAuthenticated, permissions.IsProjectManager)
 
     serializer_classes = {
         'create': FeatureSerializer,
@@ -155,12 +155,9 @@ class FeaturesViewset(CreateModelMixin,
 
     queryset = Feature.objects.all()
 
-    def filter_queryset(self, queryset):
-        return super().filter_queryset(queryset)
-
 
 class FeatureIssuesViewset(mixins.ListModelMixin, BaseGenericViewSet):
-    permission_classes = (permissions.IsProjectManager, IsAuthenticated)
+    permission_classes = (IsAuthenticated, permissions.IsProjectManager)
 
     serializer_classes = {
         'list': IssueCardSerializer
@@ -187,7 +184,7 @@ class GitlabStatusView(BaseGenericAPIView):
 
 class MilestonesViewset(mixins.ListModelMixin,
                         BaseGenericViewSet):
-    permission_classes = (permissions.IsProjectManager,)
+    permission_classes = (IsAuthenticated, permissions.IsProjectManager,)
 
     serializer_classes = {
         'list': MilestoneCardSerializer
@@ -211,7 +208,7 @@ class GitlabIssueStatusView(BaseGenericAPIView):
 
 class TeamIssueProblemsViewset(mixins.ListModelMixin,
                                BaseGenericViewSet):
-    permission_classes = (permissions.IsProjectManagerOrTeamLeader,)
+    permission_classes = (IsAuthenticated, permissions.IsTeamLeader)
     serializer_classes = {
         'list': IssueProblemSerializer
     }
@@ -237,7 +234,7 @@ class TeamIssueProblemsViewset(mixins.ListModelMixin,
 
 class TeamIssuesViewset(mixins.ListModelMixin,
                         BaseGenericViewSet):
-    permission_classes = (permissions.IsProjectManagerOrTeamLeader,)
+    permission_classes = (IsAuthenticated, permissions.IsTeamLeader,)
     serializer_classes = {
         'list': IssueCardSerializer
     }
