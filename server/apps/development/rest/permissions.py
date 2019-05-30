@@ -5,22 +5,14 @@ from apps.development.models import TeamMember
 
 
 class IsProjectManager(permissions.BasePermission):
-    message = 'You can\'t view project manager resources'
+    message = 'Only project managers can view project resources'
 
     def has_permission(self, request, view):
-        project_manager = TeamMember.objects.filter(
-            team_id=OuterRef('team_id'),
-            roles=TeamMember.roles.project_manager,
-            user=request.user
-        )
-
-        return request.user.team_members \
-            .annotate(is_pm=Exists(project_manager)) \
-            .filter(is_pm=True).exists()
+        return request.user.roles.project_manager
 
 
 class IsTeamLeader(permissions.BasePermission):
-    message = 'Only team leader can view team\'s resources'
+    message = 'Only team leader can view team resources'
 
     def has_permission(self, request, view):
         return request.user.roles.team_leader
