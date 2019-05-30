@@ -1,9 +1,8 @@
 from rest_framework import status
 
-from apps.development.models import TeamMember
 from apps.users.models import User
 from tests.base import BaseAPITest
-from tests.test_development.factories import (FeatureFactory, IssueFactory, TeamFactory, TeamMemberFactory)
+from tests.test_development.factories import (FeatureFactory, IssueFactory)
 from tests.test_payroll.factories import IssueSpentTimeFactory
 
 
@@ -13,9 +12,6 @@ class ApiFeatureIssuesTests(BaseAPITest):
 
         self.user.roles = User.roles.project_manager
         self.user.save()
-
-        team = TeamFactory.create()
-        TeamMemberFactory.create(team=team, user=self.user, roles=TeamMember.roles.project_manager)
 
     def test_not_found(self):
         self.set_credentials()

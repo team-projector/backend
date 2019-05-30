@@ -35,8 +35,6 @@ class ApiTeamIssuesProblemsTests(BaseAPITest):
         TeamMemberFactory.create(team=team_1, user=developer)
         TeamMemberFactory.create(team=team_2, user=developer)
         TeamMemberFactory.create(team=team_1, user=team_leader, roles=TeamMember.roles.leader)
-        TeamMemberFactory.create(team=team_1, user=project_manager, roles=TeamMember.roles.project_manager)
-        TeamMemberFactory.create(team=team_2, user=project_manager, roles=TeamMember.roles.project_manager)
 
         IssueFactory.create(user=developer)
         IssueFactory.create(user=team_leader)
