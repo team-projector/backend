@@ -55,18 +55,13 @@ class ProjectAdmin(ForceSyncEntityMixin, BaseModelAdmin):
 
 @admin.register(Issue)
 class IssueAdmin(ForceSyncEntityMixin, BaseModelAdmin):
-    list_display = ('title', 'user', 'milestone_display', 'state', 'created_at', 'gl_last_sync')
+    list_display = ('title', 'user', 'milestone', 'state', 'created_at', 'gl_last_sync')
     list_filter = (ProjectFilter, MilestoneFilter, 'state')
     search_fields = ('title', 'gl_id')
     sortable_by = ('gl_last_sync', 'created_at')
     ordering = ('-gl_last_sync',)
     autocomplete_fields = ('project', 'user', 'milestone', 'feature', 'labels', 'participants')
     inlines = (NoteInline,)
-
-    def milestone_display(self, obj):
-        return f'{obj.milestone.owner.title} / {obj.milestone.title}'
-
-    milestone_display.short_description = 'milestone'
 
     def sync_handler(self, obj):
         sync_project_issue.delay(obj.project.gl_id, obj.gl_iid)
