@@ -22,7 +22,7 @@ from apps.development.services.status.gitlab import get_gitlab_sync_status
 from .serializers import (
     FeatureCardSerializer, FeatureSerializer, FeatureUpdateSerializer, GitlabIssieStatusSerializer,
     GitlabStatusSerializer, IssueCardSerializer, IssueProblemSerializer, IssueUpdateSerializer, MilestoneCardSerializer,
-    TeamCardSerializer, TeamMemberCardSerializer
+    TeamSerializer, TeamCardSerializer, TeamMemberCardSerializer
 )
 from ..models import Feature, Issue, Milestone, Team, TeamMember
 from ..tasks import sync_project_issue
@@ -83,8 +83,12 @@ class IssuesViewset(mixins.ListModelMixin,
 
 
 class TeamsViewset(mixins.ListModelMixin,
+                   mixins.RetrieveModelMixin,
                    BaseGenericViewSet):
-    serializer_class = TeamCardSerializer
+    serializer_classes = {
+        'list': TeamCardSerializer,
+        'retrieve': TeamSerializer,
+    }
     queryset = Team.objects.all()
     search_fields = ('title',)
     filter_backends = (filters.OrderingFilter, filters.SearchFilter, DjangoFilterBackend, TeamMemberFilterBackend)
