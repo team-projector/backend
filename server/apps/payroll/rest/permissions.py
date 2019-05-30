@@ -71,6 +71,26 @@ class CanApproveDeclineWorkbreaks(permissions.BasePermission):
         return is_user_teamlead(request, workbreak.user)
 
 
+class CanViewSalaries(permissions.BasePermission):
+    message = 'You can\'t view user salaries'
+
+    def has_object_permission(self, request, view, salary):
+        if salary.user == request.user:
+            return True
+
+        user_team_leader = TeamMember.objects.filter(
+            team_id=OuterRef('team_id'),
+            roles=TeamMember.roles.leader,
+            user=request.user
+        )
+
+        return salary.user.team_members.annotate(
+            is_team_leader=Exists(user_team_leader)
+        ).filter(
+            is_team_leader=True
+        ).exists()
+
+
 def is_user_teamlead(request, user):
     teams = TeamMember.objects.filter(user=request.user,
                                       roles=TeamMember.roles.leader).values_list('team', flat=True)

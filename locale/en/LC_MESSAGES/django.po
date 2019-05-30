@@ -335,11 +335,11 @@ msgstr "Customer"
 
 #: server/apps/development/models/project_member.py:27
 msgid "VN__ROLE"
-msgstr "Rate"
+msgstr "Role"
 
 #: server/apps/development/models/project_member.py:28
 msgid "HT__ROLE"
-msgstr "Rate"
+msgstr "Role"
 
 #: server/apps/development/models/project_member.py:40
 msgid "VN__PROJECT_MEMBER"

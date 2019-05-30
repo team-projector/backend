@@ -1,13 +1,12 @@
 from distutils.util import strtobool
 
-from django.db.models import OuterRef, Exists
-from django.utils import timezone
+from django.db.models import Exists, OuterRef
 from rest_framework import filters
 
-from apps.core.utils.rest import parse_query_params
-from apps.development.models import TeamMember
-from apps.development.rest.serializers import TeamMemberFilterSerializer
 from apps.core.rest.filters import FilterParamUrlSerializer
+from apps.core.utils.rest import parse_query_params
+from apps.development.models import TeamMember, Milestone
+from apps.development.rest.serializers import TeamMemberFilterSerializer
 
 
 class TeamMemberFilterBackend(filters.BaseFilterBackend):
@@ -31,11 +30,9 @@ class MilestoneActiveFiler(filters.BaseFilterBackend):
             return queryset
 
         if strtobool(active_param):
-            return queryset.filter(start_date__lte=timezone.now().date(),
-                                   due_date__gte=timezone.now().date())
+            return queryset.filter(state=Milestone.STATE.active)
 
-        return queryset.filter(start_date__lt=timezone.now().date(),
-                               due_date__lt=timezone.now().date())
+        return queryset.filter(state=Milestone.STATE.closed)
 
 
 class IssueStatusUrlFiler(filters.BaseFilterBackend):

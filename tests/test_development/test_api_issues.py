@@ -72,7 +72,4 @@ class ApiIssuesTests(BaseAPITest):
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data['count'], 2)
-        self.assertIn((self.user.id, self.user.login),
-                      [(x['user']['id'], x['user']['presentation']) for x in response.data['results']])
-        self.assertIn((user_2.id, user_2.login),
-                      [(x['user']['id'], x['user']['presentation']) for x in response.data['results']])
+        self.assertEqual(set(x['user']['id'] for x in response.data['results']), {self.user.id, user_2.id})

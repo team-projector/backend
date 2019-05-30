@@ -1,7 +1,8 @@
-from datetime import date
+from datetime import date, timedelta
 from typing import Any, Dict, Iterable, List, Optional
 
 from django.db.models import F, QuerySet, Sum
+from django.utils.functional import cached_property
 
 from apps.development.models.issue import Issue, STATE_CLOSED
 from apps.payroll.models import SpentTime
@@ -28,19 +29,24 @@ class ProgressMetricsCalculator:
         self.start = start
         self.end = end
 
+    @cached_property
+    def max_day_loading(self):
+        return timedelta(hours=self.user.daily_work_hours).total_seconds()
+
     def calculate(self) -> Iterable[UserProgressMetrics]:
         raise NotImplementedError
 
-    def get_spents(self) -> QuerySet:
+    def get_time_spents(self) -> QuerySet:
         queryset = SpentTime.objects.filter(
             user=self.user,
             date__range=(self.start, self.end)
         )
-        queryset = self.modify_queryset(queryset)
+        queryset = self.modify_time_spents_queryset(queryset)
+        queryset = queryset.annotate(period_spent=Sum('time_spent')).order_by()
 
-        return queryset.annotate(period_spent=Sum('time_spent')).order_by()
+        return queryset
 
-    def modify_queryset(self, queryset: QuerySet):
+    def modify_time_spents_queryset(self, queryset: QuerySet):
         raise NotImplementedError
 
     def get_active_issues(self) -> List[Dict[str, Any]]:
