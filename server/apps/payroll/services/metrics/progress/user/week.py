@@ -130,8 +130,7 @@ class WeekMetricsCalculator(ProgressMetricsCalculator):
             week=TruncWeek('date')
         ).annotate_payrolls().filter(
             user=self.user,
-            date__gte=self.start,
-            date__lt=self.end,
+            date__range=(self.start, self.end),
             week__isnull=False
         ).values(
             'week'
