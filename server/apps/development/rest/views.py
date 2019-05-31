@@ -197,7 +197,7 @@ class MilestonesViewset(mixins.ListModelMixin,
 
 class MilestoneIssuesOrphanViewset(mixins.ListModelMixin,
                                    BaseGenericViewSet):
-    permission_classes = (permissions.IsProjectManager,)
+    permission_classes = (IsAuthenticated, permissions.IsProjectManager)
 
     serializer_classes = {
         'list': IssueCardSerializer
