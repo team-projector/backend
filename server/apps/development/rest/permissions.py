@@ -29,3 +29,11 @@ class IsTeamLeader(permissions.BasePermission):
         ).filter(
             is_team_leader=True
         ).exists()
+
+
+class CanSpendTime(permissions.BasePermission):
+    message = 'You can\'t spend time'
+
+    def has_object_permission(self, request, view, issue):
+        if issue.user == request.user:
+            return True

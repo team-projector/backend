@@ -19,10 +19,11 @@ from apps.development.rest import permissions
 from apps.development.rest.filters import IssueStatusUrlFiler, MilestoneActiveFiler, TeamMemberFilterBackend
 from apps.development.services.problems.issues import IssueProblemsChecker
 from apps.development.services.status.gitlab import get_gitlab_sync_status
+from apps.development.services.spent_time.gitlab import add_spent_time
 from .serializers import (FeatureCardSerializer, FeatureSerializer, FeatureUpdateSerializer,
                           GitlabIssieStatusSerializer, GitlabStatusSerializer, IssueCardSerializer,
                           IssueProblemSerializer, IssueSerializer, IssueUpdateSerializer, MilestoneCardSerializer,
-                          TeamCardSerializer, TeamMemberCardSerializer, TeamSerializer)
+                          TeamCardSerializer, TeamMemberCardSerializer, TeamSerializer, GitlabSpendTimeSerializer)
 from ..models import Feature, Issue, Milestone, Team, TeamMember
 from ..tasks import sync_project_issue
 
@@ -76,11 +77,25 @@ class IssuesViewset(mixins.RetrieveModelMixin,
         return queryset
 
     @action(detail=False,
-            filter_backends=(DjangoFilterBackend,),
-            filter_fields=('user',),
-            serializer_class=IssueProblemSerializer)
+            serializer_class=IssueSerializer)
     def problems(self, request):
         return self.list(request)
+
+    @action(
+        detail=True,
+        methods=['post'],
+        serializer_class=IssueSerializer,
+        permission_classes=(permissions.CanSpendTime,)
+    )
+    def spend(self, request, pk=None):
+        issue = self.get_object()
+        self.check_object_permissions(self.request, issue)
+
+        time_serializer = GitlabSpendTimeSerializer(data=request.data)
+        time_serializer.is_valid(raise_exception=True)
+
+        add_spent_time(issue.project.gl_id, issue.gl_iid, time_serializer.validated_data['time'])
+        return self.retrieve(request)
 
 
 class TeamsViewset(mixins.ListModelMixin,

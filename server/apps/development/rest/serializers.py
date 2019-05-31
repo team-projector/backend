@@ -223,3 +223,7 @@ class GitlabIssieStatusSerializer(serializers.ModelSerializer):
     class Meta:
         model = Issue
         fields = ('id', 'title', 'state', 'is_merged')
+
+
+class GitlabSpendTimeSerializer(serializers.Serializer):
+    time = serializers.IntegerField()
