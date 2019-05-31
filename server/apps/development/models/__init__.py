@@ -1,6 +1,7 @@
 from .feature import Feature
 from .issue import Issue
 from .label import Label
+from .merge_request import MergeRequest
 from .milestone import Milestone
 from .note import Note
 from .project import Project

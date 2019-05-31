@@ -2,12 +2,13 @@ from django.contrib import admin
 
 from apps.core.admin.base import BaseModelAdmin
 from apps.core.admin.mixins import ForceSyncEntityMixin
-from apps.development.admin.filters import TeamFilter
-from apps.development.tasks import sync_project_issue, sync_project, sync_project_group
+from apps.development.admin.filters import TeamFilter, MilestoneFilter
+from apps.development.tasks import sync_project_issue, sync_project, sync_project_group, sync_project_merge_request
 from apps.users.admin.filters import UserFilter
 from .filters import ProjectFilter
 from .inlines import NoteInline, TeamMemberInline, ProjectMemberInline
-from ..models import Issue, Label, Note, Project, ProjectGroup, Team, TeamMember, Milestone, ProjectMember, Feature
+from ..models import (
+    Issue, Label, Note, Project, ProjectGroup, Team, TeamMember, Milestone, ProjectMember, Feature, MergeRequest)
 
 
 @admin.register(Team)
@@ -45,7 +46,7 @@ class ProjectGroupAdmin(ForceSyncEntityMixin, BaseModelAdmin):
 @admin.register(Project)
 class ProjectAdmin(ForceSyncEntityMixin, BaseModelAdmin):
     list_display = ('title', 'group', 'gl_url', 'gl_last_sync')
-    search_fields = ('title',)
+    search_fields = ('title', 'group__title', 'gl_url')
     autocomplete_fields = ('group',)
     inlines = (ProjectMemberInline,)
 
@@ -55,8 +56,8 @@ class ProjectAdmin(ForceSyncEntityMixin, BaseModelAdmin):
 
 @admin.register(Issue)
 class IssueAdmin(ForceSyncEntityMixin, BaseModelAdmin):
-    list_display = ('title', 'user', 'created_at', 'gl_url', 'gl_last_sync')
-    list_filter = (ProjectFilter,)
+    list_display = ('title', 'user', 'milestone', 'state', 'created_at', 'gl_last_sync')
+    list_filter = (ProjectFilter, MilestoneFilter, 'state')
     search_fields = ('title', 'gl_id')
     sortable_by = ('gl_last_sync', 'created_at')
     ordering = ('-gl_last_sync',)
@@ -75,7 +76,7 @@ class NoteAdmin(BaseModelAdmin):
 
 @admin.register(Milestone)
 class MilestoneAdmin(BaseModelAdmin):
-    list_display = ('id', 'title', 'start_date', 'due_date', 'budget')
+    list_display = ('id', 'title', 'start_date', 'due_date', 'budget', 'state')
     search_fields = ('title',)
 
 
@@ -89,3 +90,17 @@ class ProjectMemberAdmin(BaseModelAdmin):
 class FeatureAdmin(BaseModelAdmin):
     list_display = ('id', 'title', 'start_date', 'due_date', 'budget')
     search_fields = ('title',)
+
+
+@admin.register(MergeRequest)
+class MergeRequestAdmin(ForceSyncEntityMixin, BaseModelAdmin):
+    list_display = ('title', 'assignee', 'author', 'state', 'created_at', 'gl_last_sync')
+    list_filter = (ProjectFilter,)
+    search_fields = ('title', 'gl_id')
+    sortable_by = ('gl_last_sync', 'created_at')
+    ordering = ('-gl_last_sync',)
+    autocomplete_fields = ('project', 'assignee', 'author', 'milestone', 'labels')
+    inlines = (NoteInline,)
+
+    def sync_handler(self, obj):
+        sync_project_merge_request.delay(obj.project.gl_id, obj.gl_iid)

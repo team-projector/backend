@@ -13,7 +13,6 @@ class SalariesTests(BaseAPITest):
         super().setUp()
 
         self.team = TeamFactory.create()
-        TeamMemberFactory.create(team=self.team, user=self.user, roles=TeamMember.roles.project_manager)
 
     @property
     def data(self):
@@ -30,36 +29,15 @@ class SalariesTests(BaseAPITest):
         }
 
     def test_retrieve_not_found(self):
+        TeamMemberFactory.create(team=self.team, user=self.user)
+
         self.set_credentials()
         response = self.client.get('/api/salaries/1')
 
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
-    def test_retrieve_another_user(self):
-        user_2 = UserFactory.create()
-        TeamMemberFactory.create(team=self.team, user=user_2)
-
-        salary_1 = SalaryFactory.create(user=self.user)
-        salary_2 = SalaryFactory.create(user=user_2)
-
-        self.set_credentials()
-        response = self.client.get(f'/api/salaries/{salary_1.id}')
-
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data['id'], salary_1.id)
-
-        response = self.client.get(f'/api/salaries/{salary_2.id}')
-
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data['id'], salary_2.id)
-
-        self.set_credentials(user_2)
-        response = self.client.get(f'/api/salaries/{salary_2.id}')
-
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
-        self.assertEqual(response.data['detail'], 'You can\'t view project manager resources')
-
     def test_retrieve(self):
+        TeamMemberFactory.create(team=self.team, user=self.user)
         salary = SalaryFactory.create(user=self.user, **self.data)
 
         self.set_credentials()
@@ -69,11 +47,51 @@ class SalariesTests(BaseAPITest):
         self.assertEqual(response.data['id'], salary.id)
         self.assertEqual(response.data['charged_time'], self.data['charged_time'])
         self.assertEqual(response.data['payed'], self.data['payed'])
-        self.assertEqual(response.data['bonus'], str(self.data['bonus']))
+        self.assertEqual(float(response.data['bonus']), self.data['bonus'])
         self.assertEqual(response.data['period_to'], str(self.data['period_to']))
-        self.assertEqual(response.data['taxes'], str(self.data['taxes']))
-        self.assertEqual(response.data['penalty'], str(self.data['penalty']))
+        self.assertEqual(float(response.data['taxes']), self.data['taxes'])
+        self.assertEqual(float(response.data['penalty']), self.data['penalty'])
         self.assertEqual(response.data['period_from'], str(self.data['period_from']))
-        self.assertEqual(response.data['sum'], str(self.data['sum']))
-        self.assertEqual(response.data['total'], str(self.data['total']))
+        self.assertEqual(float(response.data['sum']), self.data['sum'])
+        self.assertEqual(float(response.data['total']), self.data['total'])
         self.assertIsNotNone(response.data['created_at'])
+
+    def test_permissions(self):
+        developer = UserFactory.create()
+        TeamMemberFactory.create(team=self.team, user=developer)
+        salary_developer = SalaryFactory.create(user=developer)
+
+        developer_another_team = UserFactory.create()
+        TeamMemberFactory.create(team=TeamFactory.create(), user=developer_another_team)
+        salary_developer_another = SalaryFactory.create(user=developer_another_team)
+
+        team_leader = UserFactory.create()
+        TeamMemberFactory.create(team=self.team, user=team_leader, roles=TeamMember.roles.leader)
+        salary_team_leader = SalaryFactory.create(user=team_leader)
+
+        self.set_credentials(developer)
+        response = self.client.get(f'/api/salaries/{salary_developer.id}')
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data['id'], salary_developer.id)
+
+        response = self.client.get(f'/api/salaries/{salary_team_leader.id}')
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(response.data['detail'], 'You can\'t view user salaries')
+
+        response = self.client.get(f'/api/salaries/{salary_developer_another.id}')
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+        self.set_credentials(team_leader)
+        response = self.client.get(f'/api/salaries/{salary_developer.id}')
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data['id'], salary_developer.id)
+
+        response = self.client.get(f'/api/salaries/{salary_team_leader.id}')
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data['id'], salary_team_leader.id)
+
+        response = self.client.get(f'/api/salaries/{salary_developer_another.id}')
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)

@@ -1,8 +1,7 @@
-from django.http import HttpResponseRedirect
-from django.contrib.admin.options import BaseModelAdmin
-
 from bitfield import BitField
 from bitfield.forms import BitFieldCheckboxSelectMultiple
+from django.contrib.admin.options import BaseModelAdmin
+from django.http import HttpResponseRedirect
 
 
 class AdminFormFieldsOverridesMixin:

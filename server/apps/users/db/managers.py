@@ -1,4 +1,6 @@
+from django.conf import settings
 from django.contrib.auth.base_user import BaseUserManager
+from django.utils.functional import cached_property
 from django.utils.translation import gettext_lazy as _
 
 
@@ -22,3 +24,7 @@ class CustomUserManager(BaseUserManager):
         user.is_superuser = True
         user.save(using=self._db)
         return user
+
+    @cached_property
+    def system_user(self):
+        return self.get(login=settings.TP_SYSTEM_USER_LOGIN)

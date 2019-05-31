@@ -1,8 +1,8 @@
 from rest_framework import status
 
 from tests.base import BaseAPITest
+from tests.test_development.factories import FeatureFactory, IssueFactory, ProjectGroupMilestoneFactory
 from tests.test_users.factories import UserFactory
-from tests.test_development.factories import IssueFactory, FeatureFactory, ProjectGroupMilestoneFactory
 
 
 class ApiIssuesTests(BaseAPITest):
@@ -14,6 +14,23 @@ class ApiIssuesTests(BaseAPITest):
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data['count'], 5)
+
+    def test_retrieve(self):
+        issue = IssueFactory.create(user=self.user)
+
+        self.set_credentials()
+        response = self.client.get(f'/api/issues/{issue.id}')
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data['id'], issue.id)
+
+    def test_retrieve_not_found(self):
+        issue = IssueFactory.create(user=self.user)
+
+        self.set_credentials()
+        response = self.client.get(f'/api/issues/{issue.id + 1}')
+
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
     def test_update_issue_feature(self):
         issue = IssueFactory.create()
@@ -72,7 +89,4 @@ class ApiIssuesTests(BaseAPITest):
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data['count'], 2)
-        self.assertIn((self.user.id, self.user.login),
-                      [(x['user']['id'], x['user']['presentation']) for x in response.data['results']])
-        self.assertIn((user_2.id, user_2.login),
-                      [(x['user']['id'], x['user']['presentation']) for x in response.data['results']])
+        self.assertEqual(set(x['user']['id'] for x in response.data['results']), {self.user.id, user_2.id})

@@ -8,6 +8,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import filters, mixins
 from rest_framework.decorators import action
+from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 
 from apps.core.activity.verbs import ACTION_GITLAB_WEBHOOK_TRIGGERED
@@ -17,11 +18,11 @@ from apps.core.tasks import add_action
 from apps.development.rest import permissions
 from apps.development.rest.filters import IssueStatusUrlFiler, MilestoneActiveFiler, TeamMemberFilterBackend
 from apps.development.services.problems.issues import IssueProblemsChecker
-from .serializers import (
-    FeatureCardSerializer, FeatureSerializer, FeatureUpdateSerializer, GitlabIssieStatusSerializer,
-    GitlabStatusSerializer, IssueCardSerializer, IssueProblemSerializer, IssueUpdateSerializer, MilestoneCardSerializer,
-    TeamCardSerializer, TeamMemberCardSerializer
-)
+from apps.development.services.status.gitlab import get_gitlab_sync_status
+from .serializers import (FeatureCardSerializer, FeatureSerializer, FeatureUpdateSerializer,
+                          GitlabIssieStatusSerializer, GitlabStatusSerializer, IssueCardSerializer,
+                          IssueProblemSerializer, IssueSerializer, IssueUpdateSerializer, MilestoneCardSerializer,
+                          TeamCardSerializer, TeamMemberCardSerializer, TeamSerializer)
 from ..models import Feature, Issue, Milestone, Team, TeamMember
 from ..tasks import sync_project_issue
 
@@ -40,15 +41,17 @@ def gl_webhook(request):
     sync_project_issue.delay(project_id, issue_id)
 
     logger.info(f'gitlab webhook was triggered: project_id = {project_id}, issue_id = {issue_id}')
-    add_action.delay(sender_id=request.user.id, verb=ACTION_GITLAB_WEBHOOK_TRIGGERED)
+    add_action.delay(verb=ACTION_GITLAB_WEBHOOK_TRIGGERED)
 
     return HttpResponse()
 
 
-class IssuesViewset(mixins.ListModelMixin,
+class IssuesViewset(mixins.RetrieveModelMixin,
+                    mixins.ListModelMixin,
                     UpdateModelMixin,
                     BaseGenericViewSet):
     serializer_classes = {
+        'retrieve': IssueSerializer,
         'list': IssueCardSerializer,
         'update': IssueCardSerializer,
         'partial_update': IssueCardSerializer,
@@ -81,8 +84,12 @@ class IssuesViewset(mixins.ListModelMixin,
 
 
 class TeamsViewset(mixins.ListModelMixin,
+                   mixins.RetrieveModelMixin,
                    BaseGenericViewSet):
-    serializer_class = TeamCardSerializer
+    serializer_classes = {
+        'list': TeamCardSerializer,
+        'retrieve': TeamSerializer,
+    }
     queryset = Team.objects.all()
     search_fields = ('title',)
     filter_backends = (filters.OrderingFilter, filters.SearchFilter, DjangoFilterBackend, TeamMemberFilterBackend)
@@ -100,7 +107,7 @@ class TeamMembersViewset(mixins.ListModelMixin,
 
 class MilestoneIssuesViewset(mixins.ListModelMixin,
                              BaseGenericViewSet):
-    permission_classes = (permissions.IsProjectManager,)
+    permission_classes = (IsAuthenticated, permissions.IsProjectManager)
 
     serializer_classes = {
         'list': IssueCardSerializer
@@ -118,7 +125,7 @@ class MilestoneIssuesViewset(mixins.ListModelMixin,
 
 class MilestoneFeaturesViewset(mixins.ListModelMixin,
                                BaseGenericViewSet):
-    permission_classes = (permissions.IsProjectManager,)
+    permission_classes = (IsAuthenticated, permissions.IsProjectManager)
 
     serializer_classes = {
         'list': FeatureCardSerializer
@@ -137,7 +144,7 @@ class MilestoneFeaturesViewset(mixins.ListModelMixin,
 class FeaturesViewset(CreateModelMixin,
                       UpdateModelMixin,
                       BaseGenericViewSet):
-    permission_classes = (permissions.IsProjectManager,)
+    permission_classes = (IsAuthenticated, permissions.IsProjectManager)
 
     serializer_classes = {
         'create': FeatureSerializer,
@@ -148,12 +155,9 @@ class FeaturesViewset(CreateModelMixin,
 
     queryset = Feature.objects.all()
 
-    def filter_queryset(self, queryset):
-        return super().filter_queryset(queryset)
-
 
 class FeatureIssuesViewset(mixins.ListModelMixin, BaseGenericViewSet):
-    permission_classes = (permissions.IsProjectManager,)
+    permission_classes = (IsAuthenticated, permissions.IsProjectManager)
 
     serializer_classes = {
         'list': IssueCardSerializer
@@ -173,19 +177,22 @@ class GitlabStatusView(BaseGenericAPIView):
     serializer_class = GitlabStatusSerializer
 
     def get(self, request):
-        return Response(self.get_serializer(request).data)
+        status = get_gitlab_sync_status()
+
+        return Response(self.get_serializer(status).data)
 
 
 class MilestonesViewset(mixins.ListModelMixin,
                         BaseGenericViewSet):
-    permission_classes = (permissions.IsProjectManager,)
+    permission_classes = (IsAuthenticated, permissions.IsProjectManager,)
 
     serializer_classes = {
         'list': MilestoneCardSerializer
     }
 
     queryset = Milestone.objects.all()
-    filter_backends = (MilestoneActiveFiler,)
+    filter_backends = (filters.OrderingFilter, MilestoneActiveFiler,)
+    ordering = ('-due_date',)
 
 
 class MilestoneIssuesOrphanViewset(mixins.ListModelMixin,
@@ -207,18 +214,19 @@ class MilestoneIssuesOrphanViewset(mixins.ListModelMixin,
 
 
 class GitlabIssueStatusView(BaseGenericAPIView):
+    permission_classes = (AllowAny,)
     serializer_class = GitlabIssieStatusSerializer
     queryset = Issue.objects.all()
     filter_backends = (IssueStatusUrlFiler,)
 
     def get(self, request, format=None):
         queryset = self.filter_queryset(self.get_queryset())
-        return Response(self.get_serializer(queryset, many=True).data)
+        return Response(self.get_serializer(queryset.first()).data)
 
 
 class TeamIssueProblemsViewset(mixins.ListModelMixin,
                                BaseGenericViewSet):
-    permission_classes = (permissions.IsProjectManagerOrTeamLeader,)
+    permission_classes = (IsAuthenticated, permissions.IsTeamLeader)
     serializer_classes = {
         'list': IssueProblemSerializer
     }
@@ -244,7 +252,7 @@ class TeamIssueProblemsViewset(mixins.ListModelMixin,
 
 class TeamIssuesViewset(mixins.ListModelMixin,
                         BaseGenericViewSet):
-    permission_classes = (permissions.IsProjectManagerOrTeamLeader,)
+    permission_classes = (IsAuthenticated, permissions.IsTeamLeader,)
     serializer_classes = {
         'list': IssueCardSerializer
     }
