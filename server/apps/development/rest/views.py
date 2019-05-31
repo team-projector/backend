@@ -195,6 +195,24 @@ class MilestonesViewset(mixins.ListModelMixin,
     ordering = ('-due_date',)
 
 
+class MilestoneIssuesOrphanViewset(mixins.ListModelMixin,
+                                   BaseGenericViewSet):
+    permission_classes = (IsAuthenticated, permissions.IsProjectManager)
+
+    serializer_classes = {
+        'list': IssueCardSerializer
+    }
+
+    queryset = Issue.objects.all()
+
+    @cached_property
+    def milestone(self):
+        return get_object_or_404(Milestone.objects, pk=self.kwargs['milestone_pk'])
+
+    def filter_queryset(self, queryset):
+        return super().filter_queryset(queryset.filter(milestone=self.milestone, feature__isnull=True))
+
+
 class GitlabIssueStatusView(BaseGenericAPIView):
     permission_classes = (AllowAny,)
     serializer_class = GitlabIssieStatusSerializer

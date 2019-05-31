@@ -7,6 +7,7 @@ from rest_framework import serializers
 from apps.core.rest.serializers import LinkSerializer
 from apps.core.utils.objects import dict2obj
 from apps.development.services.metrics.milestones import get_milestone_metrics
+from apps.development.services.metrics.feature import get_feature_metrics
 from apps.development.services.problems.issues import checkers
 from apps.payroll.models import SpentTime
 from apps.users.models import User
@@ -161,10 +162,15 @@ class FeatureSerializer(serializers.ModelSerializer):
 
 class FeatureCardSerializer(serializers.ModelSerializer):
     milestone = LinkSerializer()
+    issues = IssueCardSerializer(many=True)
+    metrics = serializers.SerializerMethodField()
+
+    def get_metrics(self, instance):
+        return IssuesContainerMetrics(get_feature_metrics(instance)).data
 
     class Meta:
         model = Feature
-        fields = ('id', 'title', 'start_date', 'due_date', 'milestone')
+        fields = ('id', 'title', 'start_date', 'due_date', 'milestone', 'metrics', 'issues')
 
 
 class FeatureUpdateSerializer(serializers.ModelSerializer):
