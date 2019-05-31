@@ -77,16 +77,16 @@ class IssuesViewset(mixins.RetrieveModelMixin,
         return queryset
 
     @action(detail=False,
-            serializer_class=IssueSerializer)
+            filter_backends=(DjangoFilterBackend,),
+            filter_fields=('user',),
+            serializer_class=IssueProblemSerializer)
     def problems(self, request):
         return self.list(request)
 
-    @action(
-        detail=True,
-        methods=['post'],
-        serializer_class=IssueSerializer,
-        permission_classes=(permissions.CanSpendTime,)
-    )
+    @action(detail=True,
+            methods=['post'],
+            serializer_class=IssueSerializer,
+            permission_classes=(permissions.CanSpendTime,))
     def spend(self, request, pk=None):
         issue = self.get_object()
         self.check_object_permissions(self.request, issue)

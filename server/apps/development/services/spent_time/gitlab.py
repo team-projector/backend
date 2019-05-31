@@ -11,7 +11,7 @@ GITLAB_SPEND_TIME_FORMAT = '%-Hh%-Mm'
 
 
 def gl_time_spend_format(seconds: int) -> str:
-    # TODO: reset time
+    # TODO: reset is negative seconds?
     return time.strftime(GITLAB_SPEND_TIME_FORMAT, time.gmtime(seconds)) if seconds > 0 else ''
 
 

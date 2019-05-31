@@ -226,4 +226,5 @@ class GitlabIssieStatusSerializer(serializers.ModelSerializer):
 
 
 class GitlabSpendTimeSerializer(serializers.Serializer):
+    # TODO: reset is negative seconds?
     time = serializers.IntegerField()
