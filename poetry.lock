@@ -347,6 +347,17 @@ tornado = ">=4.2.0,<6.0.0"
 
 [[package]]
 category = "main"
+description = "HTTP client mock for Python"
+name = "httpretty"
+optional = false
+python-versions = "*"
+version = "0.9.6"
+
+[package.dependencies]
+six = "*"
+
+[[package]]
+category = "main"
 description = "Internationalized Domain Names in Applications (IDNA)"
 name = "idna"
 optional = false
@@ -934,7 +945,7 @@ python-versions = ">=2.7"
 version = "0.5.1"
 
 [metadata]
-content-hash = "5b938d6623a55a6a154323bd0de30778c3aa5d7f375975a5596fdb9e1e6b96ad"
+content-hash = "103a7e64068b86f2e7fb4ec67853365425a991ab51b8ff301f9fca8f38b0d4b1"
 python-versions = "^3.6"
 
 [metadata.hashes]
@@ -972,6 +983,7 @@ factory-boy = ["728df59b372c9588b83153facf26d3d28947fc750e8e3c95cefa9bed0e6394ee
 faker = ["1c0a5e7bb54d2c54569986a27124715c83899e592d8d61d4e372dbff6c699573", "60477f757a80f665bbe1fb3d1cfe5d205ec7b99d5240114de7b27b4c25d236ca"]
 flake8 = ["859996073f341f2670741b51ec1e67a01da142831aa1fdc6242dbf88dffbe661", "a796a115208f5c03b18f332f7c11729812c8c3ded6c46319c59b53efd3819da8"]
 flower = ["7f45acb297ab7cf3dd40140816143a2588f6938dbd70b8c46b59c7d8d1e93d55"]
+httpretty = ["01b52d45077e702eda491f4fe75328d3468fd886aed5dcc530003e7b2b5939dc"]
 idna = ["c357b3f628cf53ae2c4c05627ecc484553142ca23264e593d327bcde5e9c3407", "ea8b7f6188e6fa117537c3df7da9fc686d485087abf6ac197f9c46432f7e4a3c"]
 importlib-metadata = ["027cfc6524613de726789072f95d2e4cc64dd1dee8096d42d13f2ead5bd302f5", "0d05199e1f0b1a8707a1b9c46476d4a49807fb56cb1b0737db1d37feb42fe31d"]
 inflection = ["18ea7fb7a7d152853386523def08736aa8c32636b047ade55f7578c4edeb16ca"]

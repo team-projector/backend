@@ -225,6 +225,5 @@ class GitlabIssieStatusSerializer(serializers.ModelSerializer):
         fields = ('id', 'title', 'state', 'is_merged')
 
 
-class GitlabSpendTimeSerializer(serializers.Serializer):
-    # TODO: reset is negative seconds?
-    time = serializers.IntegerField()
+class GitlabAddSpentTimeSerializer(serializers.Serializer):
+    time = serializers.IntegerField(min_value=1)
