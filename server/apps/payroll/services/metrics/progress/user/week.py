@@ -1,7 +1,7 @@
 from datetime import date, timedelta
 from typing import Iterable, List
 
-from django.db.models import Avg, Count, F, FloatField, QuerySet, Sum
+from django.db.models import Count, F, FloatField, QuerySet, Sum
 from django.db.models.functions import Cast, Coalesce, TruncWeek
 from django.utils.timezone import make_aware
 
@@ -101,7 +101,6 @@ class WeekMetricsCalculator(ProgressMetricsCalculator):
 
     def _get_efficiency_stats(self) -> dict:
         queryset = Issue.objects.annotate(
-            efficiency=Cast(F('time_estimate'), FloatField()) / Cast(F('total_time_spent'), FloatField()),
             week=TruncWeek('due_date')
         ).filter(
             user=self.user,
@@ -116,7 +115,9 @@ class WeekMetricsCalculator(ProgressMetricsCalculator):
         ).values(
             'week'
         ).annotate(
-            avg_efficiency=Coalesce(Avg('efficiency'), 0)
+            avg_efficiency=Coalesce(
+                Cast(Sum(F('time_estimate')), FloatField()) / Cast(Sum(F('total_time_spent')), FloatField()),
+                0)
         ).order_by()
 
         return {
@@ -129,8 +130,7 @@ class WeekMetricsCalculator(ProgressMetricsCalculator):
             week=TruncWeek('date')
         ).annotate_payrolls().filter(
             user=self.user,
-            date__gte=self.start,
-            date__lt=self.end,
+            date__range=(self.start, self.end),
             week__isnull=False
         ).values(
             'week'
