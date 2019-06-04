@@ -104,6 +104,8 @@ def load_project_issue(project: Project,
         'is_merged': parse_state_merged(gl_issue.closed_by())
     }
 
+    params['milestone'] = None
+
     if gl_issue.milestone:
         milestone = Milestone.objects.filter(gl_id=gl_issue.milestone['id']).first()
 
