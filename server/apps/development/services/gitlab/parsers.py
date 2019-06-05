@@ -26,6 +26,4 @@ def parse_state_merged(l: list) -> bool:
     if not l:
         return False
 
-    states = [x.get('state') for x in l]
-
-    return True if STATE_MERGED in states else False
+    return any(item.get('state') == STATE_MERGED for item in l)
