@@ -5,7 +5,7 @@ from rest_framework import status
 
 from apps.users.models import User
 from tests.base import BaseAPITest
-from tests.test_development.factories import ProjectGroupMilestoneFactory
+from tests.test_development.factories import ProjectMilestoneFactory, ProjectGroupMilestoneFactory
 
 
 class ApiMilestonesTests(BaseAPITest):
@@ -41,13 +41,24 @@ class ApiMilestonesTests(BaseAPITest):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data['count'], 1)
         self.assertEqual(response.data['results'][0]['id'], milestone.id)
+        self.assertEqual(response.data['results'][0]['gl_id'], milestone.gl_id)
+        self.assertEqual(response.data['results'][0]['gl_last_sync'], milestone.gl_last_sync)
+        self.assertEqual(response.data['results'][0]['gl_url'], milestone.gl_url)
         self.assertEqual(response.data['results'][0]['title'], self.data['title'])
         self.assertEqual(response.data['results'][0]['start_date'], str(self.data['start_date']))
         self.assertEqual(response.data['results'][0]['due_date'], str(self.data['due_date']))
-        self.assertEqual(response.data['results'][0]['owner']['id'], milestone.owner.id)
-        self.assertEqual(response.data['results'][0]['owner']['presentation'], milestone.owner.title)
         self.assertEqual(response.data['results'][0]['budget'], self.data['budget'])
         self.assertEqual(response.data['results'][0]['state'], self.data['state'])
+
+    def test_list_project_group(self):
+        milestone_1 = ProjectMilestoneFactory.create()
+        milestone_2 = ProjectGroupMilestoneFactory.create()
+
+        self.set_credentials()
+        response = self.client.get('/api/milestones')
+
+        self._check_project_group(milestone_1, response.data['results'])
+        self._check_project_group(milestone_2, response.data['results'])
 
     def test_list_filter_active(self):
         milestone_1 = ProjectGroupMilestoneFactory.create(state='active')
@@ -110,3 +121,10 @@ class ApiMilestonesTests(BaseAPITest):
         self.assertEqual(response.data['results'][1]['id'], milestone_2.id)
         self.assertEqual(response.data['results'][2]['id'], milestone_1.id)
         self.assertEqual(response.data['results'][3]['id'], milestone_3.id)
+
+    def _check_project_group(self, milestone, results):
+        self.assertIn(milestone.id, [x['id'] for x in results])
+        self.assertIn(milestone.owner.id, [x['owner']['id'] for x in results])
+        self.assertIn(milestone.owner.gl_id, [x['owner']['gl_id'] for x in results])
+        self.assertIn(milestone.owner.gl_last_sync, [x['owner']['gl_last_sync'] for x in results])
+        self.assertIn(milestone.owner.title, [x['owner']['title'] for x in results])

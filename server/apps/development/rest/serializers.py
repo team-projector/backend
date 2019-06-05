@@ -12,7 +12,7 @@ from apps.development.services.problems.issues import checkers
 from apps.payroll.models import SpentTime
 from apps.users.models import User
 from apps.users.rest.serializers import ParticipantCardSerializer, UserCardSerializer
-from ..models import Feature, Issue, Label, Milestone, Team, TeamMember
+from ..models import Feature, Issue, Label, Milestone, Team, TeamMember, Project, ProjectGroup
 
 
 class LabelSerializer(serializers.ModelSerializer):
@@ -206,7 +206,7 @@ class MilestoneMetricsSerializer(IssuesContainerMetrics):
 
 class MilestoneCardSerializer(serializers.ModelSerializer):
     metrics = serializers.SerializerMethodField()
-    owner = LinkSerializer()
+    owner = serializers.SerializerMethodField()
 
     def get_metrics(self, instance):
         if self.context['request'].query_params.get('metrics', 'false') == 'false':
@@ -214,12 +214,31 @@ class MilestoneCardSerializer(serializers.ModelSerializer):
 
         return MilestoneMetricsSerializer(get_milestone_metrics(instance)).data
 
+    def get_owner(self, instance):
+        if instance.content_type.model_class() == Project:
+            return ProjectCardSerializer(instance.owner, context=self.context).data
+        elif instance.content_type.model_class() == ProjectGroup:
+            return ProjectGroupCardSerializer(instance.owner, context=self.context).data
+
     class Meta:
         model = Milestone
-        fields = ('id', 'title', 'start_date', 'due_date', 'metrics', 'owner', 'budget', 'state')
+        fields = ('id', 'gl_id', 'gl_last_sync', 'gl_url', 'title', 'start_date', 'due_date', 'metrics', 'owner',
+                  'budget', 'state')
 
 
 class GitlabIssieStatusSerializer(serializers.ModelSerializer):
     class Meta:
         model = Issue
         fields = ('id', 'title', 'state', 'is_merged')
+
+
+class ProjectCardSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Project
+        fields = ('id', 'gl_id', 'gl_last_sync', 'gl_url', 'title')
+
+
+class ProjectGroupCardSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ProjectGroup
+        fields = ('id', 'gl_id', 'gl_last_sync', 'gl_url', 'title')
