@@ -10,9 +10,8 @@ from .views import (
 app_name = 'development'
 
 router = AppRouter()
-router.register('issues', IssuesViewset, basename='issues')
-
 router.register('features', FeaturesViewset, basename='features')
+router.register('issues', IssuesViewset, basename='issues')
 router.register(r'^features/(?P<feature_pk>\d+)/issues$', FeatureIssuesViewset,
                 basename='milestone-issues')
 
