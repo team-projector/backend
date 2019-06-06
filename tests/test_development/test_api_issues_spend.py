@@ -1,6 +1,7 @@
 import httpretty
 
 from rest_framework import status
+from django.test import override_settings
 
 from tests.base import BaseAPITest
 from tests.test_development.mocks import BaseGitlabMockTests
@@ -9,6 +10,7 @@ from tests.test_development.factories import IssueFactory, ProjectFactory
 ONE_MINUTE = 60
 
 
+@override_settings(GITLAB_TOKEN='GITLAB_TOKEN')
 class ApiIssuesSpendTests(BaseAPITest, BaseGitlabMockTests):
     @httpretty.activate
     def test_not_allowed(self):
