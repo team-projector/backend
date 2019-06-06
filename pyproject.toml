@@ -32,6 +32,7 @@ xlsxwriter = "*"
 tornado = "5.*"
 uWSGI = "*"
 kombu = "4.3"
+httpretty = "^0.9.6"
 
 [tool.poetry.dev-dependencies]
 pytest = "*"
