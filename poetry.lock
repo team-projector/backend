@@ -346,7 +346,7 @@ pytz = "*"
 tornado = ">=4.2.0,<6.0.0"
 
 [[package]]
-category = "main"
+category = "dev"
 description = "HTTP client mock for Python"
 name = "httpretty"
 optional = false
@@ -945,7 +945,7 @@ python-versions = ">=2.7"
 version = "0.5.1"
 
 [metadata]
-content-hash = "103a7e64068b86f2e7fb4ec67853365425a991ab51b8ff301f9fca8f38b0d4b1"
+content-hash = "e6e871a3caad76f6c93ce1675eb8cc092fe53152ea2ee51b87deaf82f8ef3f52"
 python-versions = "^3.6"
 
 [metadata.hashes]
