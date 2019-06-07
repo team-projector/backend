@@ -20,6 +20,7 @@ class ApiIssuesSpendTests(BaseAPITest, BaseGitlabMockTests):
     @httpretty.activate
     def test_not_allowed(self):
         project = ProjectFactory.create()
+
         issue = IssueFactory.create(user=self.user, project=project)
 
         self._registry_gl_urls(project.gl_id, issue.gl_iid)
@@ -28,8 +29,6 @@ class ApiIssuesSpendTests(BaseAPITest, BaseGitlabMockTests):
         response = self.client.get(f'/api/issues/{issue.id}/spend', {'time': ONE_MINUTE})
 
         self.assertEqual(response.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
-
-        self.disable_url()
 
     @httpretty.activate
     def test_not_found(self):
@@ -43,8 +42,6 @@ class ApiIssuesSpendTests(BaseAPITest, BaseGitlabMockTests):
 
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
-        self.disable_url()
-
     @httpretty.activate
     def test_post_without_body(self):
         project = ProjectFactory.create()
@@ -57,8 +54,6 @@ class ApiIssuesSpendTests(BaseAPITest, BaseGitlabMockTests):
 
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(response.data['time'][0], 'This field is required.')
-
-        self.disable_url()
 
     @httpretty.activate
     def test_bad_time(self):
@@ -76,8 +71,6 @@ class ApiIssuesSpendTests(BaseAPITest, BaseGitlabMockTests):
 
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
-        self.disable_url()
-
     @httpretty.activate
     def test_spend(self):
         project = ProjectFactory.create()
@@ -92,8 +85,6 @@ class ApiIssuesSpendTests(BaseAPITest, BaseGitlabMockTests):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data['id'], issue.id)
         self.assertEqual(response.data['title'], issue.title)
-
-        self.disable_url()
 
     def _registry_gl_urls(self, project_id: int, issue_id: int) -> None:
         self.registry_user()

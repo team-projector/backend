@@ -1,8 +1,8 @@
 import datetime
 import os
 import sys
-import httpretty
 
+import httpretty
 from django.db import transaction
 from rest_framework.test import APITestCase
 
@@ -80,17 +80,12 @@ class BaseAPITest(BaseTestMixin, APITestCase):
 
 class HttpPrettyTests:
     def registry_get_url(self, url, status, body=None):
-        httpretty.enable()
         self._register_head_url(url, status=status, body=body)
         self._register_get_url(url, status=status, body=body)
 
     def registry_post_url(self, url, status, body=None):
         httpretty.enable()
         self._register_post_url(url, status=status, body=body)
-
-    @staticmethod
-    def disable_url():
-        httpretty.disable()
 
     @staticmethod
     def _register_head_url(url, **kwargs):
