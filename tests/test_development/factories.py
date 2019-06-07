@@ -37,7 +37,6 @@ class MilestoneFactory(GitlabFieldMixin):
     owner = factory.SubFactory(ProjectGroupFactory)
     object_id = factory.SelfAttribute('owner.id')
     content_type = factory.LazyAttribute(lambda o: ContentType.objects.get_for_model(o.owner))
-    gl_id = factory.Sequence(lambda i: i)
 
     class Meta:
         abstract = True
@@ -59,13 +58,13 @@ class ProjectMilestoneFactory(MilestoneFactory):
 
 
 class IssueFactory(GitlabFieldMixin):
+    gl_iid = factory.Sequence(lambda i: i)
     title = factory.Faker('text', max_nb_chars=200)
     project = factory.SubFactory(ProjectFactory)
     time_estimate = factory.Faker('random_int')
     total_time_spent = factory.Faker('random_int')
     created_at = factory.Faker('date_time_this_year', before_now=True, after_now=False, tzinfo=pytz.UTC)
     state = STATE_OPENED
-    gl_id = factory.Sequence(lambda i: i)
 
     class Meta:
         model = Issue
@@ -100,3 +99,41 @@ class FeatureFactory(factory.django.DjangoModelFactory):
 
     class Meta:
         model = Feature
+
+
+def gl_user_factory() -> dict:
+    """/user"""
+    return {
+        'id': 1,
+        'name': 'User Test',
+        'username': 'test_user',
+        'state': 'active',
+    }
+
+
+def gl_project_factory(project_id: int) -> dict:
+    """/projects/<project_id>"""
+    return {
+        'id': project_id,
+        'description': 'Project Test',
+        'name': 'Project Test',
+    }
+
+
+def gl_project_issues_factory(project_id: int, issue_id: int) -> dict:
+    """/projects/<project_id>/issues"""
+    return {
+        'id': 1,
+        'iid': issue_id,
+        'project_id': project_id,
+    }
+
+
+def gl_issue_add_spent_time_factory() -> dict:
+    """projects/<project_id>/issues/<issue_id>/add_spent_time"""
+    return {
+        'time_estimate': 60,
+        'total_time_spent': 60,
+        'human_time_estimate': '1m',
+        'human_total_time_spent': '1m'
+    }

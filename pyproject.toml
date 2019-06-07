@@ -42,6 +42,7 @@ factory-boy = "*"
 flake8 = "*"
 ipython = "*"
 mypy = "*"
+httpretty = "^0.9.6"
 
 [build-system]
 requires = ["poetry>=0.12"]
