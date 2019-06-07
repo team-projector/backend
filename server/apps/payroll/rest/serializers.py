@@ -140,7 +140,7 @@ class WorkBreakUpdateSerializer(serializers.ModelSerializer):
                                                                        id=user.id).exists():
             return user
 
-        raise serializers.ValidationError(_('MESSAGE_USER_CAN_NOT_MANAGE_CURRENT_WORKBREAK'))
+        raise serializers.ValidationError(_('MSG_USER_CAN_NOT_MANAGE_CURRENT_WORKBREAK'))
 
     class Meta:
         model = WorkBreak
