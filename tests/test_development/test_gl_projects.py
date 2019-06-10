@@ -4,10 +4,10 @@ from django.conf import settings
 from django.test import override_settings
 
 from apps.core.gitlab import get_gitlab_client
-from apps.development.services.gitlab.projects import load_project, load_group_projects
+from apps.development.services.gitlab.projects import load_project, load_group_projects, load_projects
 from apps.development.models import Project
 
-from tests.test_development.mocks import GlMocker
+from tests.test_development.mocks import registry_get_gl_url
 from tests.test_development.factories import ProjectGroupFactory
 from tests.test_development.factories_gitlab import AttrDict, GlUserFactory, GlGroupFactory, GlProjectFactory
 
@@ -20,8 +20,7 @@ def test_load_project(db):
     group = ProjectGroupFactory.create()
     gl_project = AttrDict(GlProjectFactory())
 
-    mocker = GlMocker()
-    mocker.registry_get_gl_url('https://gitlab.com/api/v4/user', GlUserFactory())
+    registry_get_gl_url('https://gitlab.com/api/v4/user', GlUserFactory())
 
     gl = get_gitlab_client()
 
@@ -31,28 +30,57 @@ def test_load_project(db):
 
     _check_project(project, gl_project, group)
 
-    mocker.disable_url()
-
 
 @override_settings(GITLAB_TOKEN='GITLAB_TOKEN')
 @httpretty.activate
-def test_load_project(db):
+def test_load_group_projects(db):
     assert settings.GITLAB_CHECK_WEBHOOKS is False
 
     gl_group = AttrDict(GlGroupFactory())
     group = ProjectGroupFactory.create(gl_id=gl_group.id)
 
-    mocker = GlMocker()
-    mocker.registry_get_gl_url('https://gitlab.com/api/v4/user', GlUserFactory())
-    mocker.registry_get_gl_url(f'https://gitlab.com/api/v4/groups/{group.gl_id}', gl_group)
+    gl_project_1 = AttrDict(GlProjectFactory())
+    gl_project_2 = AttrDict(GlProjectFactory())
+
+    registry_get_gl_url('https://gitlab.com/api/v4/user', GlUserFactory())
+    registry_get_gl_url(f'https://gitlab.com/api/v4/groups/{gl_group.id}', gl_group)
+    registry_get_gl_url(f'https://gitlab.com/api/v4/groups/{gl_group.id}/projects', [gl_project_1, gl_project_2])
 
     load_group_projects(group)
 
-    project = Project.objects.first()
+    project = Project.objects.get(gl_id=gl_project_1.id)
+    _check_project(project, gl_project_1, group)
 
-    _check_project(project, None, group)
+    project = Project.objects.get(gl_id=gl_project_2.id)
+    _check_project(project, gl_project_2, group)
 
-    mocker.disable_url()
+
+@override_settings(GITLAB_TOKEN='GITLAB_TOKEN')
+@httpretty.activate
+def test_load_projects(db):
+    assert settings.GITLAB_CHECK_WEBHOOKS is False
+
+    gl_group_1 = AttrDict(GlGroupFactory())
+    group_1 = ProjectGroupFactory.create(gl_id=gl_group_1.id)
+    gl_group_2 = AttrDict(GlGroupFactory())
+    group_2 = ProjectGroupFactory.create(gl_id=gl_group_2.id)
+
+    gl_project_1 = AttrDict(GlProjectFactory())
+    gl_project_2 = AttrDict(GlProjectFactory())
+
+    registry_get_gl_url('https://gitlab.com/api/v4/user', GlUserFactory())
+    registry_get_gl_url(f'https://gitlab.com/api/v4/groups/{gl_group_1.id}', gl_group_1)
+    registry_get_gl_url(f'https://gitlab.com/api/v4/groups/{gl_group_1.id}/projects', [gl_project_1])
+    registry_get_gl_url(f'https://gitlab.com/api/v4/groups/{gl_group_2.id}', gl_group_2)
+    registry_get_gl_url(f'https://gitlab.com/api/v4/groups/{gl_group_2.id}/projects', [gl_project_2])
+
+    load_projects()
+
+    project = Project.objects.get(gl_id=gl_project_1.id)
+    _check_project(project, gl_project_1, group_1)
+
+    project = Project.objects.get(gl_id=gl_project_2.id)
+    _check_project(project, gl_project_2, group_2)
 
 
 def _check_project(project, gl_project, group=None):

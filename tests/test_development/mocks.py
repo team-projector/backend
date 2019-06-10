@@ -1,25 +1,24 @@
 import json
+import httpretty
 
 from rest_framework import status
 
-from tests.base import HttpPrettyTests
+
+def registry_get_gl_url(url: str, factory: dict) -> None:
+    def request_callback(request, uri, response_headers):
+        response_headers['Content-Type'] = 'application/json'
+        data = json.dumps(factory)
+
+        return [status.HTTP_200_OK, response_headers, data]
+
+    httpretty.register_uri(httpretty.GET, url, body=request_callback)
 
 
-class GlMocker(HttpPrettyTests):
-    def registry_get_gl_url(self, url: str, factory: dict) -> None:
-        def request_callback(request, uri, response_headers):
-            response_headers['Content-Type'] = 'application/json'
-            data = json.dumps(factory)
+def registry_post_gl_url(self, url: str, factory: dict) -> None:
+    def request_callback(request, uri, response_headers):
+        response_headers['Content-Type'] = 'application/json'
+        data = json.dumps(factory)
 
-            return [status.HTTP_200_OK, response_headers, data]
+        return [status.HTTP_200_OK, response_headers, data]
 
-        self.registry_get_url(url, status.HTTP_200_OK, body=request_callback)
-
-    def registry_post_gl_url(self, url: str, factory: dict) -> None:
-        def request_callback(request, uri, response_headers):
-            response_headers['Content-Type'] = 'application/json'
-            data = json.dumps(factory)
-
-            return [status.HTTP_200_OK, response_headers, data]
-
-        self.registry_post_url(url, status.HTTP_200_OK, body=request_callback)
+    httpretty.register_uri(httpretty.POST, url,  body=request_callback)
