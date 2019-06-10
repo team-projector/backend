@@ -3,6 +3,7 @@ from typing import Dict, Iterable
 from bitfield.rest.fields import BitField
 from django.db.models import Sum
 from rest_framework import serializers
+from typing import Optional, Type
 
 from apps.core.rest.serializers import LinkSerializer
 from apps.core.utils.objects import dict2obj
@@ -215,7 +216,7 @@ class MilestoneCardSerializer(serializers.ModelSerializer):
         return MilestoneMetricsSerializer(get_milestone_metrics(instance)).data
 
     def get_owner(self, instance):
-        serializer_class = serializers.ModelSerializer
+        serializer_class = Optional[Type[serializers.ModelSerializer]]
 
         if instance.content_type.model_class() == Project:
             serializer_class = ProjectCardSerializer
