@@ -215,7 +215,7 @@ class MilestoneCardSerializer(serializers.ModelSerializer):
         return MilestoneMetricsSerializer(get_milestone_metrics(instance)).data
 
     def get_owner(self, instance):
-        serializer_class = None
+        serializer_class = serializers.ModelSerializer
 
         if instance.content_type.model_class() == Project:
             serializer_class = ProjectCardSerializer
