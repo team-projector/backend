@@ -2,7 +2,7 @@ from datetime import date, timedelta
 from typing import Iterable, List
 
 from django.conf import settings
-from django.db.models import Case, Count, F, IntegerField, Q, QuerySet, Sum, Value, When
+from django.db.models import Case, Count, F, IntegerField, Q, Sum, Value, When
 from django.db.models.functions import Coalesce, TruncDay
 from django.utils import timezone
 
@@ -20,13 +20,9 @@ class DayMetricsCalculator(ProgressMetricsCalculator):
         current = self.start
         now = timezone.now().date()
 
-        active_issues = self.get_active_issues() if now > self.start else []
+        active_issues = self.get_active_issues() if now >= self.start else []
 
-        time_spents = {
-            spent['day']: spent
-            for spent in self.get_time_spents()
-        }
-
+        time_spents = self._get_time_spents()
         due_day_stats = self._get_due_day_stats()
         payrols_stats = self._get_payrolls_stats()
 
@@ -60,7 +56,8 @@ class DayMetricsCalculator(ProgressMetricsCalculator):
         return metrics
 
     @staticmethod
-    def _is_apply_loading(day: date, now: date) -> bool:
+    def _is_apply_loading(day: date,
+                          now: date) -> bool:
         return day >= now and day.weekday() not in settings.TP_WEEKENDS_DAYS
 
     def _update_loading(self, metric: UserProgressMetrics, active_issues: List[dict]) -> None:
@@ -93,10 +90,23 @@ class DayMetricsCalculator(ProgressMetricsCalculator):
             if not issue['remaining']:
                 active_issues.remove(issue)
 
-    def modify_time_spents_queryset(self, queryset: QuerySet) -> QuerySet:
-        return queryset.annotate(
+    def _get_time_spents(self) -> dict:
+        queryset = SpentTime.objects.annotate(
             day=TruncDay('date')
-        ).values('day')
+        ).filter(
+            user=self.user,
+            date__range=(self.start, self.end),
+            day__isnull=False
+        ).values(
+            'day'
+        ).annotate(
+            period_spent=Sum('time_spent')
+        ).order_by()
+
+        return {
+            stats['day']: stats
+            for stats in queryset
+        }
 
     def _get_due_day_stats(self) -> dict:
         queryset = Issue.objects.annotate(

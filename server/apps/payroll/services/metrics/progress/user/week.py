@@ -1,7 +1,7 @@
 from datetime import date, timedelta
 from typing import Iterable, List
 
-from django.db.models import Count, F, FloatField, QuerySet, Sum
+from django.db.models import Count, F, FloatField, Sum
 from django.db.models.functions import Cast, Coalesce, TruncWeek
 from django.utils.timezone import make_aware
 
@@ -17,11 +17,7 @@ class WeekMetricsCalculator(ProgressMetricsCalculator):
     def calculate(self) -> Iterable[UserProgressMetrics]:
         metrics = []
 
-        time_spents = {
-            spent['week']: spent
-            for spent in self.get_time_spents()
-        }
-
+        time_spents = self._get_time_spents()
         deadline_stats = self._get_deadlines_stats()
         efficiency_stats = self._get_efficiency_stats()
         payrolls_stats = self._get_payrolls_stats()
@@ -54,30 +50,23 @@ class WeekMetricsCalculator(ProgressMetricsCalculator):
 
         return metrics
 
-    def modify_time_spents_queryset(self, queryset: QuerySet) -> QuerySet:
-        return queryset.annotate(
+    def _get_time_spents(self) -> dict:
+        queryset = SpentTime.objects.annotate(
             week=TruncWeek('date')
-        ).values('week')
-
-    def _update_payrolls(self, metric: UserProgressMetrics) -> None:
-        data = SpentTime.objects.filter(
+        ).filter(
             user=self.user,
-            date__gte=metric.start,
-            date__lt=metric.end
-        ).aggregate_payrolls()
+            date__range=(self.start, self.end),
+            week__isnull=False
+        ).values(
+            'week'
+        ).annotate(
+            period_spent=Sum('time_spent')
+        ).order_by()
 
-        metric.payroll = data['total_payroll']
-        metric.paid = data['total_paid']
-
-    def _get_weeks(self) -> List[date]:
-        ret: List[date] = []
-        current = self.start
-
-        while current <= self.end:
-            ret.append(begin_of_week(current))
-            current += WEEK_STEP
-
-        return ret
+        return {
+            stats['week']: stats
+            for stats in queryset
+        }
 
     def _get_deadlines_stats(self) -> dict:
         queryset = Issue.objects.annotate(
@@ -143,3 +132,13 @@ class WeekMetricsCalculator(ProgressMetricsCalculator):
             stats['week']: stats
             for stats in queryset
         }
+
+    def _get_weeks(self) -> List[date]:
+        ret: List[date] = []
+        current = self.start
+
+        while current <= self.end:
+            ret.append(begin_of_week(current))
+            current += WEEK_STEP
+
+        return ret
