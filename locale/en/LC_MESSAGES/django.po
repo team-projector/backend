@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-05-30 18:08+0300\n"
+"POT-Creation-Date: 2019-06-07 16:26+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -187,7 +187,7 @@ msgstr "Project"
 #: server/apps/payroll/models/payroll.py:39
 #: server/apps/payroll/models/salary.py:23
 #: server/apps/payroll/models/workbreak.py:26
-#: server/apps/users/models/user.py:117
+#: server/apps/users/models/user.py:125
 msgid "VN__USER"
 msgstr "User"
 
@@ -200,11 +200,11 @@ msgstr "User"
 msgid "HT__USER"
 msgstr "User"
 
-#: server/apps/development/models/issue.py:125
+#: server/apps/development/models/issue.py:126
 msgid "VN__ISSUE"
 msgstr "Issue"
 
-#: server/apps/development/models/issue.py:126
+#: server/apps/development/models/issue.py:127
 msgid "VN__ISSUES"
 msgstr "Issues"
 
@@ -295,16 +295,12 @@ msgid "HT__GITLAB_LAST_ISSUES_SYNC"
 msgstr "GitLab last issues sync"
 
 #: server/apps/development/models/project.py:43
-#, fuzzy
-#| msgid "VN__GITLAB_LAST_SYNC"
 msgid "VN__GITLAB_MERGE_REQUESTS_SYNC"
-msgstr "GitLab last sync"
+msgstr "GitLab merge requests sync"
 
 #: server/apps/development/models/project.py:44
-#, fuzzy
-#| msgid "HT__GITLAB_LAST_SYNC"
 msgid "HT__MERGE_REQUESTS_SYNC"
-msgstr "GitLab last sync"
+msgstr "GitLab merge requests sync"
 
 #: server/apps/development/models/project.py:60
 msgid "VN__PROJECTS"
@@ -381,6 +377,10 @@ msgstr "Team Member"
 #: server/apps/development/models/team_member.py:37
 msgid "VN__TEAM_MEMBERS"
 msgstr "Team Members"
+
+#: server/apps/development/rest/views.py:93
+msgid "MSG_PLEASE_PROVIDE_PERSONAL_GL_TOKEN"
+msgstr "Please fill personal gitlab token in profile"
 
 #: server/apps/payroll/apps.py:8 server/apps/payroll/models/payroll.py:47
 msgid "VN__PAYROLL"
@@ -658,10 +658,10 @@ msgid "VN__WORKBREAKS"
 msgstr "Workbreaks"
 
 #: server/apps/payroll/rest/serializers.py:143
-msgid "MESSAGE_USER_CAN_NOT_MANAGE_CURRENT_WORKBREAK"
+msgid "MSG_USER_CAN_NOT_MANAGE_CURRENT_WORKBREAK"
 msgstr "User can't manage current workbreak"
 
-#: server/apps/users/apps.py:8 server/apps/users/models/user.py:118
+#: server/apps/users/apps.py:8 server/apps/users/models/user.py:126
 msgid "VN__USERS"
 msgstr "Users"
 
@@ -753,16 +753,24 @@ msgstr "GitLab avatar"
 msgid "HT__GITLAB_AVATAR"
 msgstr "GitLab avatar"
 
+#: server/apps/users/models/user.py:114
+msgid "VN__PERSONAL_GITLAB_TOKEN"
+msgstr "Personal gitlab token"
+
+#: server/apps/users/models/user.py:115
+msgid "HT__PERSONAL_GITLAB_TOKEN"
+msgstr "Personal gitlab token"
+
 #: server/apps/users/rest/serializers.py:26
-msgid "MESSAGE_UNABLE_TO_LOGIN_WITH_PROVIDED_CREDENTIALS"
+msgid "MSG_UNABLE_TO_LOGIN_WITH_PROVIDED_CREDENTIALS"
 msgstr "Unable login with provided credentials"
 
 #: server/apps/users/rest/serializers.py:28
-msgid "MESSAGE_MUST_INCLUDE_LOGIN_AND_PASSWORD"
+msgid "MSG_MUST_INCLUDE_LOGIN_AND_PASSWORD"
 msgstr "Must include login and password"
 
 #: server/settings/components/i18n.py:14
-msgid "MESSAGE__ENGLISH"
+msgid "MSG__ENGLISH"
 msgstr "English"
 
 #: server/templates/admin/submit_line.html:4

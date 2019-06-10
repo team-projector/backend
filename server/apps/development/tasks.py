@@ -99,11 +99,13 @@ def sync_project_group(gl_id: int) -> None:
 
 
 @app.task
-def sync_project(group: ProjectGroup, gl_id: int, project_id: int) -> None:
+def sync_project(group_id: int, gl_id: int, project_id: int) -> None:
     gl = get_gitlab_client()
     gl_project = gl.projects.get(gl_id)
 
     add_action.delay(verb=ACTION_GITLAB_CALL_API)
+
+    group = ProjectGroup.objects.get(id=group_id)
 
     load_project(gl, group, gl_project)
     load_project_milestones(project_id)

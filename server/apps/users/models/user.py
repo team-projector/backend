@@ -4,7 +4,7 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 
 from apps.core.db.utils import Choices
-from apps.users.db.managers import CustomUserManager
+from apps.users.db.managers import UserManager
 
 
 class User(AbstractBaseUser, PermissionsMixin):
@@ -107,11 +107,19 @@ class User(AbstractBaseUser, PermissionsMixin):
         help_text=_('HT__GITLAB_LAST_SYNC')
     )
 
+    gl_token = models.CharField(
+        max_length=128,
+        null=True,
+        blank=True,
+        verbose_name=_('VN__PERSONAL_GITLAB_TOKEN'),
+        help_text=_('HT__PERSONAL_GITLAB_TOKEN')
+    )
+
     daily_work_hours = models.PositiveIntegerField(default=8)
 
     USERNAME_FIELD = 'login'
 
-    objects = CustomUserManager()
+    objects = UserManager()
 
     class Meta:
         verbose_name = _('VN__USER')

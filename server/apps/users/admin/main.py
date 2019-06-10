@@ -38,7 +38,7 @@ class UserAdmin(AdminFormFieldsOverridesMixin,
             'fields': ('login', 'email', 'name', 'roles', 'is_superuser', 'is_staff', 'is_active', 'last_login')
         }),
         ('GitLab', {
-            'fields': ('gl_avatar', 'gl_id', 'gl_url', 'gl_last_sync')
+            'fields': ('gl_avatar', 'gl_id', 'gl_url', 'gl_last_sync', 'gl_token')
         }),
         ('Costs', {
             'fields': ('hour_rate', 'customer_hour_rate', 'taxes', 'daily_work_hours')
