@@ -2,37 +2,66 @@ import httpretty
 
 from django.conf import settings
 from django.test import override_settings
-from django.test import TestCase
 
 from apps.core.gitlab import get_gitlab_client
-from apps.development.services.gitlab.projects import load_project
+from apps.development.services.gitlab.projects import load_project, load_group_projects
 from apps.development.models import Project
 
-from tests.test_development.mocks import BaseGitlabMockTests
+from tests.test_development.mocks import GlMocker
 from tests.test_development.factories import ProjectGroupFactory
-from tests.test_development.factories_gitlab import GlProjectFactory
+from tests.test_development.factories_gitlab import AttrDict, GlUserFactory, GlGroupFactory, GlProjectFactory
 
 
 @override_settings(GITLAB_TOKEN='GITLAB_TOKEN')
-class GlProjectsTests(TestCase, BaseGitlabMockTests):
-    @httpretty.activate
-    def test_load_project(self):
-        self.assertFalse(settings.GITLAB_CHECK_WEBHOOKS)
+@httpretty.activate
+def test_load_project(db):
+    assert settings.GITLAB_CHECK_WEBHOOKS is False
 
-        self.registry_user()
+    group = ProjectGroupFactory.create()
+    gl_project = AttrDict(GlProjectFactory())
 
-        gl = get_gitlab_client()
-        group = ProjectGroupFactory()
-        gl_project = GlProjectFactory.stub()
+    mocker = GlMocker()
+    mocker.registry_get_gl_url('https://gitlab.com/api/v4/user', GlUserFactory())
 
-        load_project(gl, group, gl_project)
+    gl = get_gitlab_client()
 
-        project = Project.objects.first()
+    load_project(gl, group, gl_project)
 
-        self.assertTrue(project.gl_id, gl_project.id)
-        self.assertTrue(project.gl_url, gl_project.web_url)
-        self.assertTrue(project.full_title, gl_project.name_with_namespace)
-        self.assertTrue(project.title, gl_project.name)
-        self.assertTrue(project.group, group)
+    project = Project.objects.first()
 
-        self.disable_url()
+    _check_project(project, gl_project, group)
+
+    mocker.disable_url()
+
+
+@override_settings(GITLAB_TOKEN='GITLAB_TOKEN')
+@httpretty.activate
+def test_load_project(db):
+    assert settings.GITLAB_CHECK_WEBHOOKS is False
+
+    gl_group = AttrDict(GlGroupFactory())
+    group = ProjectGroupFactory.create(gl_id=gl_group.id)
+
+    mocker = GlMocker()
+    mocker.registry_get_gl_url('https://gitlab.com/api/v4/user', GlUserFactory())
+    mocker.registry_get_gl_url(f'https://gitlab.com/api/v4/groups/{group.gl_id}', gl_group)
+
+    load_group_projects(group)
+
+    project = Project.objects.first()
+
+    _check_project(project, None, group)
+
+    mocker.disable_url()
+
+
+def _check_project(project, gl_project, group=None):
+    assert project.gl_id == gl_project.id
+    assert project.gl_url == gl_project.web_url
+    assert project.title == gl_project.name
+    assert project.full_title == gl_project.name_with_namespace
+
+    if not group:
+        assert project.group is None
+    else:
+        assert project.group == group
