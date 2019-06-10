@@ -217,6 +217,9 @@ class MilestoneCardSerializer(serializers.ModelSerializer):
     def get_owner(self, instance):
         serializer_class = self._get_serializer_class(instance.content_type.model_class())
 
+        if not serializer_class:
+            return
+
         data = serializer_class(instance.owner, context=self.context).data
         data['__type__'] = serializer_class.Meta.model.__name__
 
