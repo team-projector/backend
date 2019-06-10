@@ -1,17 +1,22 @@
 import httpretty
-
-from rest_framework import status
 from django.test import override_settings
+from rest_framework import status
 
 from tests.base import BaseAPITest
-from tests.test_development.mocks import BaseGitlabMockTests
 from tests.test_development.factories import IssueFactory, ProjectFactory
+from tests.test_development.mocks import BaseGitlabMockTests
 
 ONE_MINUTE = 60
 
 
 @override_settings(GITLAB_TOKEN='GITLAB_TOKEN')
 class ApiIssuesSpendTests(BaseAPITest, BaseGitlabMockTests):
+    def setUp(self):
+        super().setUp()
+
+        self.user.gl_token = 'token'
+        self.user.save()
+
     @httpretty.activate
     def test_not_allowed(self):
         project = ProjectFactory.create()
@@ -48,25 +53,10 @@ class ApiIssuesSpendTests(BaseAPITest, BaseGitlabMockTests):
         self._registry_gl_urls(project.gl_id, issue.gl_iid)
 
         self.set_credentials()
-        response = self.client.post(f'/api/issues/{issue.id }/spend')
+        response = self.client.post(f'/api/issues/{issue.id}/spend')
 
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(response.data['time'][0], 'This field is required.')
-
-        self.disable_url()
-
-    @httpretty.activate
-    def test_permissions(self):
-        project = ProjectFactory.create()
-        issue = IssueFactory.create(project=project)
-
-        self._registry_gl_urls(project.gl_id, issue.gl_iid)
-
-        self.set_credentials()
-        response = self.client.post(f'/api/issues/{issue.id}/spend', {'time': ONE_MINUTE})
-
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
-        self.assertEqual(response.data['detail'], 'You can\'t add spent time')
 
         self.disable_url()
 

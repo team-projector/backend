@@ -6,8 +6,8 @@ from rest_framework import serializers
 
 from apps.core.rest.serializers import LinkSerializer
 from apps.core.utils.objects import dict2obj
-from apps.development.services.metrics.milestones import get_milestone_metrics
 from apps.development.services.metrics.feature import get_feature_metrics
+from apps.development.services.metrics.milestones import get_milestone_metrics
 from apps.development.services.problems.issues import checkers
 from apps.payroll.models import SpentTime
 from apps.users.models import User

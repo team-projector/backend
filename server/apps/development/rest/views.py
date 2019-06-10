@@ -4,10 +4,12 @@ import logging
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
 from django.utils.functional import cached_property
+from django.utils.translation import gettext_lazy as _
 from django.views.decorators.csrf import csrf_exempt
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import filters, mixins
 from rest_framework.decorators import action
+from rest_framework.exceptions import ValidationError
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 
@@ -17,13 +19,13 @@ from apps.core.rest.views import BaseGenericAPIView, BaseGenericViewSet
 from apps.core.tasks import add_action
 from apps.development.rest import permissions
 from apps.development.rest.filters import IssueStatusUrlFiler, MilestoneActiveFiler, TeamMemberFilterBackend
+from apps.development.services.gitlab.spent_time import add_spent_time
 from apps.development.services.problems.issues import IssueProblemsChecker
 from apps.development.services.status.gitlab import get_gitlab_sync_status
-from apps.development.services.gitlab.spent_time import add_spent_time
 from .serializers import (FeatureCardSerializer, FeatureSerializer, FeatureUpdateSerializer,
-                          GitlabIssieStatusSerializer, GitlabStatusSerializer, IssueCardSerializer,
-                          IssueProblemSerializer, IssueSerializer, IssueUpdateSerializer, MilestoneCardSerializer,
-                          TeamCardSerializer, TeamMemberCardSerializer, TeamSerializer, GitlabAddSpentTimeSerializer)
+                          GitlabAddSpentTimeSerializer, GitlabIssieStatusSerializer, GitlabStatusSerializer,
+                          IssueCardSerializer, IssueProblemSerializer, IssueSerializer, IssueUpdateSerializer,
+                          MilestoneCardSerializer, TeamCardSerializer, TeamMemberCardSerializer, TeamSerializer)
 from ..models import Feature, Issue, Milestone, Team, TeamMember
 from ..tasks import sync_project_issue
 
@@ -85,17 +87,23 @@ class IssuesViewset(mixins.RetrieveModelMixin,
 
     @action(detail=True,
             methods=['post'],
-            serializer_class=IssueSerializer,
-            permission_classes=(permissions.CanAddSpentTime,))
-    def spend(self, request, pk=None):
+            serializer_class=IssueSerializer)
+    def spend(self, request, **kwargs):
+        if not request.user.gl_token:
+            raise ValidationError(_('MSG_PLEASE_PROVIDE_PERSONAL_GL_TOKEN'))
+
         issue = self.get_object()
-        self.check_object_permissions(self.request, issue)
 
         time_serializer = GitlabAddSpentTimeSerializer(data=request.data)
         time_serializer.is_valid(raise_exception=True)
 
-        add_spent_time(issue.project.gl_id, issue.gl_iid, time_serializer.validated_data['time'])
-        return self.retrieve(request)
+        add_spent_time(
+            request.user,
+            issue,
+            time_serializer.validated_data['time']
+        )
+
+        return Response(self.get_serializer(issue).data)
 
 
 class TeamsViewset(mixins.ListModelMixin,
