@@ -59,6 +59,8 @@ class ApiMilestonesTests(BaseAPITest):
 
         self._check_project_group(milestone_1, response.data['results'])
         self._check_project_group(milestone_2, response.data['results'])
+        self.assertIn('Project', [x['owner']['__type__'] for x in response.data['results']])
+        self.assertIn('ProjectGroup', [x['owner']['__type__'] for x in response.data['results']])
 
     def test_list_filter_active(self):
         milestone_1 = ProjectGroupMilestoneFactory.create(state='active')

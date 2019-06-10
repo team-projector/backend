@@ -215,10 +215,17 @@ class MilestoneCardSerializer(serializers.ModelSerializer):
         return MilestoneMetricsSerializer(get_milestone_metrics(instance)).data
 
     def get_owner(self, instance):
+        serializer_class = None
+
         if instance.content_type.model_class() == Project:
-            return ProjectCardSerializer(instance.owner, context=self.context).data
+            serializer_class = ProjectCardSerializer
         elif instance.content_type.model_class() == ProjectGroup:
-            return ProjectGroupCardSerializer(instance.owner, context=self.context).data
+            serializer_class = ProjectGroupCardSerializer
+
+        data = serializer_class(instance.owner, context=self.context).data
+        data['__type__'] = serializer_class.Meta.model.__name__
+
+        return data
 
     class Meta:
         model = Milestone
