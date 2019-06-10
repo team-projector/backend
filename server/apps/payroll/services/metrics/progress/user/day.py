@@ -20,7 +20,7 @@ class DayMetricsCalculator(ProgressMetricsCalculator):
         current = self.start
         now = timezone.now().date()
 
-        active_issues = self.get_active_issues() if now > self.start else []
+        active_issues = self.get_active_issues() if now >= self.start else []
 
         time_spents = {
             spent['day']: spent
@@ -60,7 +60,8 @@ class DayMetricsCalculator(ProgressMetricsCalculator):
         return metrics
 
     @staticmethod
-    def _is_apply_loading(day: date, now: date) -> bool:
+    def _is_apply_loading(day: date,
+                          now: date) -> bool:
         return day >= now and day.weekday() not in settings.TP_WEEKENDS_DAYS
 
     def _update_loading(self, metric: UserProgressMetrics, active_issues: List[dict]) -> None:
@@ -93,7 +94,8 @@ class DayMetricsCalculator(ProgressMetricsCalculator):
             if not issue['remaining']:
                 active_issues.remove(issue)
 
-    def modify_time_spents_queryset(self, queryset: QuerySet) -> QuerySet:
+    def modify_time_spents_queryset(self,
+                                    queryset: QuerySet) -> QuerySet:
         return queryset.annotate(
             day=TruncDay('date')
         ).values('day')
