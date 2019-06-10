@@ -5,9 +5,9 @@ from django.test import override_settings
 from apps.development.services.gitlab.groups import load_single_group, load_groups
 from apps.development.models import ProjectGroup
 
-from tests.test_development.mocks import GlMocker
 from tests.test_development.factories import ProjectGroupFactory
 from tests.test_development.factories_gitlab import AttrDict, GlUserFactory, GlGroupFactory
+from tests.test_development.mocks import registry_get_gl_url
 
 
 def test_load_single_group(db):
@@ -33,9 +33,8 @@ def test_load_groups(db):
     gl_group_1 = AttrDict(GlGroupFactory())
     gl_group_2 = AttrDict(GlGroupFactory(parent_id=gl_group_1.id))
 
-    mocker = GlMocker()
-    mocker.registry_get_gl_url('https://gitlab.com/api/v4/user', GlUserFactory())
-    mocker.registry_get_gl_url('https://gitlab.com/api/v4/groups', [gl_group_1, gl_group_2])
+    registry_get_gl_url('https://gitlab.com/api/v4/user', GlUserFactory())
+    registry_get_gl_url('https://gitlab.com/api/v4/groups', [gl_group_1, gl_group_2])
 
     load_groups()
 
@@ -44,8 +43,6 @@ def test_load_groups(db):
 
     group_2 = ProjectGroup.objects.get(gl_id=gl_group_2.id)
     _check_group(group_2, gl_group_2, group_1)
-
-    mocker.disable_url()
 
 
 def _check_group(group, gl_group, parent=None):

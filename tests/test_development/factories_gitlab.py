@@ -37,6 +37,10 @@ class GlUserFactory(factory.DictFactory):
     state = 'active'
 
 
+class GlHookFactory(factory.DictFactory):
+    url = factory.Faker('url')
+
+
 class AttrDict(dict):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

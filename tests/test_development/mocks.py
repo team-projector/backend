@@ -14,11 +14,11 @@ def registry_get_gl_url(url: str, factory: dict) -> None:
     httpretty.register_uri(httpretty.GET, url, body=request_callback)
 
 
-def registry_post_gl_url(self, url: str, factory: dict) -> None:
+def registry_post_gl_url(url: str, factory: dict) -> None:
     def request_callback(request, uri, response_headers):
         response_headers['Content-Type'] = 'application/json'
         data = json.dumps(factory)
 
         return [status.HTTP_200_OK, response_headers, data]
 
-    httpretty.register_uri(httpretty.POST, url,  body=request_callback)
+    httpretty.register_uri(httpretty.POST, url, body=request_callback)
