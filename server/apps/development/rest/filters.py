@@ -7,7 +7,7 @@ from rest_framework import filters
 from apps.core.rest.filters import FilterParamUrlSerializer
 from apps.core.utils.rest import parse_query_params
 from apps.development.models import TeamMember, Milestone
-from apps.development.rest.serializers import TeamMemberFilterSerializer
+from apps.development.rest.serializers import TeamMemberFilterSerializer, RolesFilterSerializer
 
 
 class TeamMemberFilterBackend(filters.BaseFilterBackend):
@@ -30,7 +30,7 @@ class TeamMemberRoleFilterBackend(filters.BaseFilterBackend):
         if param_roles:
             roles = self.parse_list(param_roles)
 
-            return queryset.filter(self.get_query_filter_roles(roles))
+            return queryset.filter(self._get_filter_roles(roles))
 
         return queryset
 
@@ -39,16 +39,14 @@ class TeamMemberRoleFilterBackend(filters.BaseFilterBackend):
         return l.split(',')
 
     @staticmethod
-    def get_query_filter_roles(roles):
-        map_roles = {
-            'leader': TeamMember.roles.leader,
-            'developer': TeamMember.roles.developer,
-            'watcher': TeamMember.roles.watcher,
-        }
-
+    def _get_filter_roles(roles):
         filter_roles = Q()
+
         for role in roles:
-            filter_roles |= Q(roles=map_roles.get(role))
+            serializer = RolesFilterSerializer(data={'roles': [role]})
+            serializer.is_valid(raise_exception=True)
+
+            filter_roles |= Q(roles=serializer.validated_data['roles'])
 
         return filter_roles
 

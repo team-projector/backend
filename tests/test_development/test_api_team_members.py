@@ -61,3 +61,8 @@ class ApiTeamMembersTests(BaseAPITest):
         self.assertEqual(response.data['count'], 2)
         self.assertIn(member_2.id, [x['id'] for x in response.data['results']])
         self.assertIn(member_3.id, [x['id'] for x in response.data['results']])
+
+        response = self.client.get(f'/api/teams/{self.team.id}/members', {'roles': 'watcher,test'})
+
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response.data['roles'][0], 'Unknown choice: test')

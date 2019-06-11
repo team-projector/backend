@@ -258,3 +258,12 @@ class ProjectGroupCardSerializer(serializers.ModelSerializer):
     class Meta:
         model = ProjectGroup
         fields = ('id', 'gl_id', 'gl_last_sync', 'gl_url', 'title')
+
+
+class RoleBitField(BitField):
+    def get_value(self, dictionary):
+        return dictionary.get(self.field_name)
+
+
+class RolesFilterSerializer(serializers.Serializer):
+    roles = RoleBitField(required=False, allow_null=True, model=TeamMember)
