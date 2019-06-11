@@ -18,7 +18,8 @@ from apps.core.rest.mixins.views import CreateModelMixin, UpdateModelMixin
 from apps.core.rest.views import BaseGenericAPIView, BaseGenericViewSet
 from apps.core.tasks import add_action
 from apps.development.rest import permissions
-from apps.development.rest.filters import IssueStatusUrlFiler, MilestoneActiveFiler, TeamMemberFilterBackend
+from apps.development.rest.filters import (
+    IssueStatusUrlFiler, MilestoneActiveFiler, TeamMemberFilterBackend, TeamMemberRoleFilterBackend)
 from apps.development.services.gitlab.spent_time import add_spent_time
 from apps.development.services.problems.issues import IssueProblemsChecker
 from apps.development.services.status.gitlab import get_gitlab_sync_status
@@ -123,9 +124,14 @@ class TeamMembersViewset(mixins.ListModelMixin,
                          BaseGenericViewSet):
     serializer_class = TeamMemberCardSerializer
     queryset = TeamMember.objects.all()
+    filter_backends = (DjangoFilterBackend, TeamMemberRoleFilterBackend)
+
+    @cached_property
+    def team(self):
+        return get_object_or_404(Team.objects, pk=self.kwargs['team_pk'])
 
     def filter_queryset(self, queryset):
-        return queryset.filter(team_id=self.kwargs['team_pk'])
+        return super().filter_queryset(queryset).filter(team=self.team)
 
 
 class MilestoneIssuesViewset(mixins.ListModelMixin,
