@@ -64,17 +64,32 @@ class GlProjectMilestoneFactory(factory.DictFactory):
     state = 'active'
 
 
-class GlProjectsIssueFactory(factory.DictFactory):
-    id = factory.Faker('random_int')
-    iid = factory.Faker('random_int')
-    project_id = factory.Faker('random_int')
-
-
 class GlUserFactory(factory.DictFactory):
     id = factory.Faker('random_int')
     name = factory.Sequence(lambda n: f'User {n}')
     username = factory.Sequence(lambda n: f'user_name{n}')
     state = 'active'
+
+
+class GlProjectsIssueFactory(factory.DictFactory):
+    id = factory.Faker('random_int')
+    iid = factory.Faker('random_int')
+    web_url = factory.Faker('url')
+    title = factory.Sequence(lambda n: f'Issue {n}')
+    project_id = factory.Faker('random_int')
+    state = 'opened'
+    due_date = gl_format_date(datetime.now())
+    created_at = gl_format_datetime(datetime.now())
+    updated_at = gl_format_datetime(datetime.now())
+    closed_at = gl_format_datetime(datetime.now())
+    assignee = factory.SubFactory(GlUserFactory)
+    milestone = None
+    labels = []
+
+
+class GlIssueTimeStats(factory.DictFactory):
+    total_time_spent = factory.Faker('random_int')
+    time_estimate = factory.Faker('random_int')
 
 
 class GlHookFactory(factory.DictFactory):
