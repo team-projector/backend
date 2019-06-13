@@ -62,6 +62,12 @@ class ApiTeamMembersTests(BaseAPITest):
         self.assertIn(member_2.id, [x['id'] for x in response.data['results']])
         self.assertIn(member_3.id, [x['id'] for x in response.data['results']])
 
+        response = self.client.get(f'/api/teams/{self.team.id}/members', {'roles': 'watcher'})
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data['count'], 1)
+        self.assertIn(member_3.id, [x['id'] for x in response.data['results']])
+
         response = self.client.get(f'/api/teams/{self.team.id}/members', {'roles': 'watcher,test'})
 
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
