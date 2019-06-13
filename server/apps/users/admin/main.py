@@ -1,7 +1,9 @@
+from admin_tools.decorators import admin_field
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as DjUserAdmin
 from django.contrib.auth.forms import AdminPasswordChangeForm
 from django.contrib.auth.models import Group
+from django.urls import reverse
 from django.utils.html import format_html
 
 from apps.core.admin.base import BaseModelAdmin
@@ -38,7 +40,7 @@ class UserAdmin(AdminFormFieldsOverridesMixin,
             'fields': ('login', 'email', 'name', 'roles', 'is_superuser', 'is_staff', 'is_active', 'last_login')
         }),
         ('GitLab', {
-            'fields': ('gl_avatar', 'gl_id', 'gl_url', 'gl_last_sync')
+            'fields': ('gl_avatar', 'gl_id', 'gl_url', 'gl_last_sync', 'gl_token')
         }),
         ('Costs', {
             'fields': ('hour_rate', 'customer_hour_rate', 'taxes', 'daily_work_hours')
@@ -46,14 +48,14 @@ class UserAdmin(AdminFormFieldsOverridesMixin,
 
     )
     readonly_fields = ('last_login',)
-
-    def change_password_link(self, obj):
-        return format_html(f'<a href="{obj.id}/password/">change password</a>')
-
-    change_password_link.short_description = 'Change password link'  # type: ignore
-    change_password_link.allow_tags = True  # type: ignore
-
     change_password_form = AdminPasswordChangeForm
+
+    @admin_field('Change password')
+    def change_password_link(self, obj):
+        return format_html(
+            '<a href="{}">change password</a>',
+            reverse('admin:auth_user_password_change', kwargs={'id': obj.pk})
+        )
 
     def sync_handler(self, obj):
         sync_user.delay(obj.gl_id)

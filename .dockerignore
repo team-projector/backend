@@ -3,3 +3,9 @@
 *.pyc
 *.mo
 .git
+.gitlab-ci.yml
+.gitignore
+.editorconfig
+README.md
+Makefile
+.dockerignore

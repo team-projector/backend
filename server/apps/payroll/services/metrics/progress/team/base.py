@@ -31,5 +31,6 @@ class ProgressMetricsCalculator:
 
         return metrics
 
-    def calculate_user_metrics(self, user: User) -> Iterable[UserProgressMetrics]:
+    def calculate_user_metrics(self,
+                               user: User) -> Iterable[UserProgressMetrics]:
         raise NotImplementedError

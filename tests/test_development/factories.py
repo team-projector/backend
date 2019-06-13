@@ -37,7 +37,6 @@ class MilestoneFactory(GitlabFieldMixin):
     owner = factory.SubFactory(ProjectGroupFactory)
     object_id = factory.SelfAttribute('owner.id')
     content_type = factory.LazyAttribute(lambda o: ContentType.objects.get_for_model(o.owner))
-    gl_id = factory.Sequence(lambda i: i)
 
     class Meta:
         abstract = True
@@ -59,13 +58,13 @@ class ProjectMilestoneFactory(MilestoneFactory):
 
 
 class IssueFactory(GitlabFieldMixin):
+    gl_iid = factory.Sequence(lambda i: i)
     title = factory.Faker('text', max_nb_chars=200)
     project = factory.SubFactory(ProjectFactory)
     time_estimate = factory.Faker('random_int')
     total_time_spent = factory.Faker('random_int')
     created_at = factory.Faker('date_time_this_year', before_now=True, after_now=False, tzinfo=pytz.UTC)
     state = STATE_OPENED
-    gl_id = factory.Sequence(lambda i: i)
 
     class Meta:
         model = Issue

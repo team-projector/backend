@@ -3,11 +3,12 @@ from collections import defaultdict, namedtuple
 from datetime import timedelta
 from typing import DefaultDict, Optional, Pattern
 
-from apps.development.services.gitlab.parsers import parse_gl_date
+from apps.development.services.gitlab.parsers import parse_gl_date, parse_gl_datetime
 
-RE_SPEND: Pattern = re.compile(
+RE_SPEND_FULL: Pattern = re.compile(
     r'^(?P<action>(added|subtracted)) (?P<spent>.+) of time spent at (?P<date>\d{4}-\d{2}-\d{2})$'
 )
+RE_SPEND_SHORT: Pattern = re.compile(r'^(?P<action>(added|subtracted)) (?P<spent>.+) of time spent$')
 RE_SPEND_PART: Pattern = re.compile(r'(?P<value>\d+)(?P<part>(mo|w|d|h|m|s))')
 SPEND_RESET_MESSAGE = 'removed time spent'
 
@@ -82,7 +83,7 @@ class SpendAddedParser(BaseNoteParser):
     def parse(self, gl_note) -> Optional[NoteReadResult]:
         from ...models import Note
 
-        m = RE_SPEND.match(gl_note.body)
+        m = RE_SPEND_FULL.match(gl_note.body) or RE_SPEND_SHORT.match(gl_note.body)
         if not m:
             return None
 
@@ -93,7 +94,8 @@ class SpendAddedParser(BaseNoteParser):
         return NoteReadResult(
             Note.TYPE.time_spend, {
                 'spent': spent,
-                'date': parse_gl_date(m.group('date'))
+                'date': parse_gl_date(m.group('date')) if m.lastgroup == 'date'
+                else parse_gl_datetime(gl_note.created_at)
             }
         )
 

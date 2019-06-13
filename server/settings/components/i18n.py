@@ -11,7 +11,7 @@ TIME_ZONE = 'Europe/Moscow'
 LANGUAGE_CODE = 'en'
 
 LANGUAGES = [
-    ('en', _('MESSAGE__ENGLISH')),
+    ('en', _('MSG__ENGLISH')),
 ]
 
 LOCALE_PATHS = [

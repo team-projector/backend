@@ -53,7 +53,7 @@ class ProjectAdmin(ForceSyncEntityMixin, BaseModelAdmin):
     inlines = (ProjectMemberInline,)
 
     def sync_handler(self, obj):
-        sync_project.delay(obj.group, obj.gl_id, obj.id)
+        sync_project.delay(obj.group.id, obj.gl_id, obj.id)
 
 
 @admin.register(Issue)
