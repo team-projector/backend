@@ -3,7 +3,7 @@ from collections import defaultdict, namedtuple
 from datetime import timedelta
 from typing import DefaultDict, Optional, Pattern
 
-from apps.development.services.gitlab.parsers import parse_gl_date
+from apps.development.services.gitlab.parsers import parse_gl_date, parse_gl_datetime
 
 RE_SPEND_FULL: Pattern = re.compile(
     r'^(?P<action>(added|subtracted)) (?P<spent>.+) of time spent at (?P<date>\d{4}-\d{2}-\d{2})$'
@@ -95,7 +95,7 @@ class SpendAddedParser(BaseNoteParser):
             Note.TYPE.time_spend, {
                 'spent': spent,
                 'date': parse_gl_date(m.group('date')) if m.lastgroup == 'date'
-                else parse_gl_date(gl_note.created_at).date()
+                else parse_gl_datetime(gl_note.created_at).date()
             }
         )
 
