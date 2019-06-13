@@ -26,8 +26,8 @@ from .serializers import (FeatureCardSerializer, FeatureSerializer, FeatureUpdat
                           GitlabAddSpentTimeSerializer, GitlabIssieStatusSerializer, GitlabStatusSerializer,
                           IssueCardSerializer, IssueProblemSerializer, IssueSerializer, IssueUpdateSerializer,
                           MilestoneCardSerializer, TeamCardSerializer, TeamMemberCardSerializer, TeamSerializer)
-from ..models import Feature, Issue, Milestone, Team, TeamMember
-from ..tasks import sync_project_issue
+from ..models import Feature, Issue, Milestone, Team, TeamMember, Project, ProjectGroup
+from ..tasks import sync_project_issue, sync_project_milestone, sync_group_milestone
 
 logger = logging.getLogger(__name__)
 
@@ -104,6 +104,16 @@ class IssuesViewset(mixins.RetrieveModelMixin,
         )
 
         return Response(self.get_serializer(issue).data)
+
+    @action(detail=True,
+            methods=['post'],
+            serializer_class=IssueSerializer,
+            permission_classes=(IsAuthenticated,))
+    def sync(self, request, pk=None):
+        issue = self.get_object()
+        sync_project_issue.delay(issue.project.gl_id, issue.gl_iid)
+
+        return Response(self.get_serializer(self.get_object()).data)
 
 
 class TeamsViewset(mixins.ListModelMixin,
@@ -216,6 +226,20 @@ class MilestonesViewset(mixins.ListModelMixin,
     queryset = Milestone.objects.all()
     filter_backends = (filters.OrderingFilter, MilestoneActiveFiler,)
     ordering = ('-due_date',)
+
+    @action(detail=True,
+            methods=['post'],
+            serializer_class=MilestoneCardSerializer,
+            permission_classes=(IsAuthenticated,))
+    def sync(self, request, pk=None):
+        milestone = self.get_object()
+
+        if milestone.content_type.model_class() == Project:
+            sync_project_milestone.delay(milestone.owner.gl_id, milestone.gl_id)
+        elif milestone.content_type.model_class() == ProjectGroup:
+            sync_group_milestone.delay(milestone.owner.gl_id, milestone.gl_id)
+
+        return Response(self.get_serializer(self.get_object()).data)
 
 
 class MilestoneIssuesOrphanViewset(mixins.ListModelMixin,
