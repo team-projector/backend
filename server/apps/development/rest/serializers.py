@@ -1,7 +1,7 @@
-from typing import Dict, Iterable
+from typing import Dict, Iterable, Optional, Type
 
 from bitfield.rest.fields import BitField
-from django.db.models import Sum
+from django.db.models import Sum, Model
 from rest_framework import serializers
 
 from apps.core.rest.serializers import LinkSerializer
@@ -12,7 +12,7 @@ from apps.development.services.problems.issues import checkers
 from apps.payroll.models import SpentTime
 from apps.users.models import User
 from apps.users.rest.serializers import ParticipantCardSerializer, UserCardSerializer
-from ..models import Feature, Issue, Label, Milestone, Team, TeamMember
+from ..models import Feature, Issue, Label, Milestone, Project, ProjectGroup, Team, TeamMember
 
 
 class LabelSerializer(serializers.ModelSerializer):
@@ -206,7 +206,7 @@ class MilestoneMetricsSerializer(IssuesContainerMetrics):
 
 class MilestoneCardSerializer(serializers.ModelSerializer):
     metrics = serializers.SerializerMethodField()
-    owner = LinkSerializer()
+    owner = serializers.SerializerMethodField()
 
     def get_metrics(self, instance):
         if self.context['request'].query_params.get('metrics', 'false') == 'false':
@@ -214,9 +214,28 @@ class MilestoneCardSerializer(serializers.ModelSerializer):
 
         return MilestoneMetricsSerializer(get_milestone_metrics(instance)).data
 
+    def get_owner(self, instance):
+        serializer_class = self._get_serializer_class(instance.content_type.model_class())
+
+        if not serializer_class:
+            return
+
+        data = serializer_class(instance.owner, context=self.context).data
+        data['__type__'] = serializer_class.Meta.model.__name__
+
+        return data
+
+    @staticmethod
+    def _get_serializer_class(model_class: Optional[Type[Model]]) -> Optional[Type[serializers.ModelSerializer]]:
+        if model_class == Project:
+            return ProjectCardSerializer
+        elif model_class == ProjectGroup:
+            return ProjectGroupCardSerializer
+
     class Meta:
         model = Milestone
-        fields = ('id', 'title', 'start_date', 'due_date', 'metrics', 'owner', 'budget', 'state')
+        fields = ('id', 'gl_id', 'gl_last_sync', 'gl_url', 'title', 'start_date', 'due_date', 'metrics', 'owner',
+                  'budget', 'state')
 
 
 class GitlabIssieStatusSerializer(serializers.ModelSerializer):
@@ -227,3 +246,24 @@ class GitlabIssieStatusSerializer(serializers.ModelSerializer):
 
 class GitlabAddSpentTimeSerializer(serializers.Serializer):
     time = serializers.IntegerField(min_value=1)
+
+
+class ProjectCardSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Project
+        fields = ('id', 'gl_id', 'gl_last_sync', 'gl_url', 'title')
+
+
+class ProjectGroupCardSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ProjectGroup
+        fields = ('id', 'gl_id', 'gl_last_sync', 'gl_url', 'title')
+
+
+class RoleBitField(BitField):
+    def get_value(self, dictionary):
+        return dictionary.get(self.field_name)
+
+
+class RolesFilterSerializer(serializers.Serializer):
+    roles = RoleBitField(required=False, allow_null=True, model=TeamMember)

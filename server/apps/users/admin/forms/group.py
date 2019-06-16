@@ -1,7 +1,7 @@
+from admin_tools.fields import PermissionSelectMultipleField
 from django.contrib.auth.models import Group
 
 from apps.core.admin.base import BaseModelForm
-from ..fields import PermissionSelectMultipleField
 
 
 class GroupAdminForm(BaseModelForm):

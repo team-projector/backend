@@ -7,3 +7,5 @@
 .gitignore
 .editorconfig
 README.md
+Makefile
+.dockerignore

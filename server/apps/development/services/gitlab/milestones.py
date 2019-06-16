@@ -37,6 +37,38 @@ def load_gl_project_milestones(project_id: int,
     add_action.delay(verb=ACTION_GITLAB_CALL_API)
 
 
+def load_project_milestone(project: Project,
+                           project_id: int,
+                           milestone_id: int) -> None:
+    gl = get_gitlab_client()
+    gl_project = gl.projects.get(project_id)
+
+    add_action.delay(verb=ACTION_GITLAB_CALL_API)
+
+    gl_milestone = gl_project.milestones.get(milestone_id)
+
+    Milestone.objects.sync_gitlab(
+        owner=project,
+        **_build_parameters(gl_milestone)
+    )
+
+
+def load_group_milestone(group: ProjectGroup,
+                         group_id: int,
+                         milestone_id: int) -> None:
+    gl = get_gitlab_client()
+    gl_group = gl.groups.get(group_id)
+
+    add_action.delay(verb=ACTION_GITLAB_CALL_API)
+
+    gl_milestone = gl_group.milestones.get(milestone_id)
+
+    Milestone.objects.sync_gitlab(
+        owner=group,
+        **_build_parameters(gl_milestone)
+    )
+
+
 def _build_parameters(gl_milestone) -> dict:
     return {
         'gl_id': gl_milestone.id,

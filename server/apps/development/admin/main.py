@@ -3,7 +3,9 @@ from django.contrib import admin
 from apps.core.admin.base import BaseModelAdmin
 from apps.core.admin.mixins import ForceSyncEntityMixin
 from apps.development.admin.filters import TeamFilter, MilestoneFilter
-from apps.development.tasks import sync_project_issue, sync_project, sync_project_group, sync_project_merge_request
+from apps.development.tasks import (
+    sync_project_issue, sync_project, sync_project_group, sync_project_merge_request, sync_project_milestone,
+    sync_group_milestone)
 from apps.users.admin.filters import UserFilter
 from .filters import ProjectFilter
 from .inlines import NoteInline, TeamMemberInline, ProjectMemberInline
@@ -75,9 +77,15 @@ class NoteAdmin(BaseModelAdmin):
 
 
 @admin.register(Milestone)
-class MilestoneAdmin(BaseModelAdmin):
+class MilestoneAdmin(ForceSyncEntityMixin, BaseModelAdmin):
     list_display = ('id', 'title', 'start_date', 'due_date', 'budget', 'state')
     search_fields = ('title',)
+
+    def sync_handler(self, obj):
+        if obj.content_type.model_class() == Project:
+            sync_project_milestone.delay(obj.owner.gl_id, obj.gl_id)
+        elif obj.content_type.model_class() == ProjectGroup:
+            sync_group_milestone.delay(obj.owner.gl_id, obj.gl_id)
 
 
 @admin.register(ProjectMember)

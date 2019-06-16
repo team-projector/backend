@@ -6,7 +6,7 @@ from apps.users.rest.views import LoginView, LogoutView, MeUserView, UsersViewse
 app_name = 'users'
 
 router = AppRouter()
-router.register('users', UsersViewset, basename='users')
+router.register('users', UsersViewset, 'users')
 
 urlpatterns = [
     path('login', LoginView.as_view(), name='login'),

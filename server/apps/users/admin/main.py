@@ -1,15 +1,15 @@
+from admin_tools.decorators import admin_field
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as DjUserAdmin
 from django.contrib.auth.forms import AdminPasswordChangeForm
 from django.contrib.auth.models import Group
-from django.shortcuts import redirect
+from django.urls import reverse
 from django.utils.html import format_html
 
 from apps.core.admin.base import BaseModelAdmin
 from apps.core.admin.mixins import AdminFormFieldsOverridesMixin, ForceSyncEntityMixin
 from apps.development.tasks import sync_user
 from .forms import GroupAdminForm
-from .filters import UserActiveFilter
 from ..models import User
 
 admin.site.unregister(Group)
@@ -22,7 +22,7 @@ class UserAdmin(AdminFormFieldsOverridesMixin,
     list_display = (
         'login', 'name', 'email', 'hour_rate', 'last_login', 'is_active', 'is_staff', 'change_password_link'
     )
-    list_filter = (UserActiveFilter, 'is_staff')
+    list_filter = ('is_active', 'is_staff', 'is_active')
     ordering = ('login',)
     sortable_by = ()
     autocomplete_fields = ('groups',)
@@ -48,23 +48,17 @@ class UserAdmin(AdminFormFieldsOverridesMixin,
 
     )
     readonly_fields = ('last_login',)
-
-    def change_password_link(self, obj):
-        return format_html(f'<a href="{obj.id}/password/">change password</a>')
-
-    change_password_link.short_description = 'Change password link'  # type: ignore
-    change_password_link.allow_tags = True  # type: ignore
-
     change_password_form = AdminPasswordChangeForm
+
+    @admin_field('Change password')
+    def change_password_link(self, obj):
+        return format_html(
+            '<a href="{}">change password</a>',
+            reverse('admin:auth_user_password_change', kwargs={'id': obj.pk})
+        )
 
     def sync_handler(self, obj):
         sync_user.delay(obj.gl_id)
-
-    def changelist_view(self, request, extra_context=None):
-        if not len(request.GET):
-            return redirect(f'{request.path}?is_active=yes')
-
-        return super().changelist_view(request, extra_context)
 
 
 @admin.register(Group)

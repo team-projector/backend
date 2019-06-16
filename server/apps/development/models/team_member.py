@@ -11,6 +11,7 @@ class TeamMember(models.Model):
     ROLES = Choices(
         ('leader', _('CH_LEADER')),
         ('developer', _('CH_DEVELOPER')),
+        ('watcher', _('CH_WATCHER')),
     )
 
     team = models.ForeignKey(

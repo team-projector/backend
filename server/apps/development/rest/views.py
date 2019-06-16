@@ -18,7 +18,8 @@ from apps.core.rest.mixins.views import CreateModelMixin, UpdateModelMixin
 from apps.core.rest.views import BaseGenericAPIView, BaseGenericViewSet
 from apps.core.tasks import add_action
 from apps.development.rest import permissions
-from apps.development.rest.filters import IssueStatusUrlFiler, MilestoneActiveFiler, TeamMemberFilterBackend
+from apps.development.rest.filters import (
+    IssueStatusUrlFiler, MilestoneActiveFiler, TeamMemberFilterBackend, TeamMemberRoleFilterBackend)
 from apps.development.services.gitlab.spent_time import add_spent_time
 from apps.development.services.problems.issues import IssueProblemsChecker
 from apps.development.services.status.gitlab import get_gitlab_sync_status
@@ -26,8 +27,8 @@ from .serializers import (FeatureCardSerializer, FeatureSerializer, FeatureUpdat
                           GitlabAddSpentTimeSerializer, GitlabIssieStatusSerializer, GitlabStatusSerializer,
                           IssueCardSerializer, IssueProblemSerializer, IssueSerializer, IssueUpdateSerializer,
                           MilestoneCardSerializer, TeamCardSerializer, TeamMemberCardSerializer, TeamSerializer)
-from ..models import Feature, Issue, Milestone, Team, TeamMember
-from ..tasks import sync_project_issue
+from ..models import Feature, Issue, Milestone, Team, TeamMember, Project, ProjectGroup
+from ..tasks import sync_project_issue, sync_project_milestone, sync_group_milestone
 
 logger = logging.getLogger(__name__)
 
@@ -105,6 +106,16 @@ class IssuesViewset(mixins.RetrieveModelMixin,
 
         return Response(self.get_serializer(issue).data)
 
+    @action(detail=True,
+            methods=['post'],
+            serializer_class=IssueSerializer,
+            permission_classes=(IsAuthenticated,))
+    def sync(self, request, pk=None):
+        issue = self.get_object()
+        sync_project_issue.delay(issue.project.gl_id, issue.gl_iid)
+
+        return Response(self.get_serializer(self.get_object()).data)
+
 
 class TeamsViewset(mixins.ListModelMixin,
                    mixins.RetrieveModelMixin,
@@ -123,9 +134,14 @@ class TeamMembersViewset(mixins.ListModelMixin,
                          BaseGenericViewSet):
     serializer_class = TeamMemberCardSerializer
     queryset = TeamMember.objects.all()
+    filter_backends = (DjangoFilterBackend, TeamMemberRoleFilterBackend)
+
+    @cached_property
+    def team(self):
+        return get_object_or_404(Team.objects, pk=self.kwargs['team_pk'])
 
     def filter_queryset(self, queryset):
-        return queryset.filter(team_id=self.kwargs['team_pk'])
+        return super().filter_queryset(queryset).filter(team=self.team)
 
 
 class MilestoneIssuesViewset(mixins.ListModelMixin,
@@ -216,6 +232,20 @@ class MilestonesViewset(mixins.ListModelMixin,
     queryset = Milestone.objects.all()
     filter_backends = (filters.OrderingFilter, MilestoneActiveFiler,)
     ordering = ('-due_date',)
+
+    @action(detail=True,
+            methods=['post'],
+            serializer_class=MilestoneCardSerializer,
+            permission_classes=(IsAuthenticated,))
+    def sync(self, request, pk=None):
+        milestone = self.get_object()
+
+        if milestone.content_type.model_class() == Project:
+            sync_project_milestone.delay(milestone.owner.gl_id, milestone.gl_id)
+        elif milestone.content_type.model_class() == ProjectGroup:
+            sync_group_milestone.delay(milestone.owner.gl_id, milestone.gl_id)
+
+        return Response(self.get_serializer(self.get_object()).data)
 
 
 class MilestoneIssuesOrphanViewset(mixins.ListModelMixin,

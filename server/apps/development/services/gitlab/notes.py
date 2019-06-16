@@ -95,7 +95,7 @@ class SpendAddedParser(BaseNoteParser):
             Note.TYPE.time_spend, {
                 'spent': spent,
                 'date': parse_gl_date(m.group('date')) if m.lastgroup == 'date'
-                else parse_gl_datetime(gl_note.created_at)
+                else parse_gl_datetime(gl_note.created_at).date()
             }
         )
 

@@ -2,17 +2,16 @@ from django.urls import include, path
 
 from apps.core.rest.routers import AppRouter
 from .views import (
-    TeamProgressMetricsView, TimeExpensesView, UserProgressMetricsView, UserSalariesView,
-    UserWorkBreaksView, WorkBreaksViewset, SalariesViewSet, SalariesTimeExpensesViewSet
+    SalariesTimeExpensesViewSet, SalariesViewSet, TeamProgressMetricsView, TimeExpensesView,
+    UserProgressMetricsView, UserSalariesView, UserWorkBreaksView, WorkBreaksViewset
 )
 
 app_name = 'payroll'
 
 router = AppRouter()
-router.register('work-breaks', WorkBreaksViewset, basename='work-breaks')
-router.register('salaries', SalariesViewSet, basename='salaries')
-router.register(r'^salaries/(?P<salary_pk>\d+)/time-expenses$', SalariesTimeExpensesViewSet,
-                basename='salaries-time-expenses')
+router.register('work-breaks', WorkBreaksViewset, 'work-breaks')
+router.register('salaries', SalariesViewSet, 'salaries')
+router.register(r'^salaries/(?P<salary_pk>\d+)/time-expenses$', SalariesTimeExpensesViewSet, 'salaries-time-expenses')
 
 urlpatterns = [
     path('users/<int:user_pk>/', include((
