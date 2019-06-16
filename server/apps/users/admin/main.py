@@ -2,12 +2,14 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as DjUserAdmin
 from django.contrib.auth.forms import AdminPasswordChangeForm
 from django.contrib.auth.models import Group
+from django.shortcuts import redirect
 from django.utils.html import format_html
 
 from apps.core.admin.base import BaseModelAdmin
 from apps.core.admin.mixins import AdminFormFieldsOverridesMixin, ForceSyncEntityMixin
 from apps.development.tasks import sync_user
 from .forms import GroupAdminForm
+from .filters import UserActiveFilter
 from ..models import User
 
 admin.site.unregister(Group)
@@ -20,7 +22,7 @@ class UserAdmin(AdminFormFieldsOverridesMixin,
     list_display = (
         'login', 'name', 'email', 'hour_rate', 'last_login', 'is_active', 'is_staff', 'change_password_link'
     )
-    list_filter = ('is_active', 'is_staff', 'is_active')
+    list_filter = (UserActiveFilter, 'is_staff')
     ordering = ('login',)
     sortable_by = ()
     autocomplete_fields = ('groups',)
@@ -57,6 +59,12 @@ class UserAdmin(AdminFormFieldsOverridesMixin,
 
     def sync_handler(self, obj):
         sync_user.delay(obj.gl_id)
+
+    def changelist_view(self, request, extra_context=None):
+        if not len(request.GET):
+            return redirect(f'{request.path}?is_active=yes')
+
+        return super().changelist_view(request, extra_context)
 
 
 @admin.register(Group)
