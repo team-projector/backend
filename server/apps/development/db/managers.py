@@ -45,6 +45,9 @@ class NoteManager(models.Manager):
         from ..services.gitlab.notes import read_note
         from ..services.gitlab.parsers import parse_gl_datetime
 
+        if issue.last_note_date and issue.last_note_date > parse_gl_datetime(gl_note.created_at):
+            return
+
         parse_data = read_note(gl_note)
         if not parse_data:
             return
