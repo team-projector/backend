@@ -2,15 +2,17 @@ from django.contrib import admin
 
 from apps.core.admin.base import BaseModelAdmin
 from apps.core.admin.mixins import ForceSyncEntityMixin
-from apps.development.admin.filters import TeamFilter, MilestoneFilter
+from apps.development.admin.filters import MilestoneFilter, TeamFilter
 from apps.development.tasks import (
-    sync_project_issue, sync_project, sync_project_group, sync_project_merge_request, sync_project_milestone,
-    sync_group_milestone)
+    sync_group_milestone, sync_project, sync_project_group, sync_project_issue, sync_project_merge_request,
+    sync_project_milestone
+)
 from apps.users.admin.filters import UserFilter
 from .filters import ProjectFilter
-from .inlines import NoteInline, TeamMemberInline, ProjectMemberInline
+from .inlines import NoteInline, ProjectMemberInline, TeamMemberInline
 from ..models import (
-    Issue, Label, Note, Project, ProjectGroup, Team, TeamMember, Milestone, ProjectMember, Feature, MergeRequest)
+    Feature, Issue, Label, MergeRequest, Milestone, Note, Project, ProjectGroup, ProjectMember, Team, TeamMember
+)
 
 
 @admin.register(Team)
