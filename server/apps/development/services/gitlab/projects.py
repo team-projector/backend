@@ -34,7 +34,7 @@ def load_group_projects(group: ProjectGroup) -> None:
 
 
 def load_project(gl: Gitlab, group: ProjectGroup, gl_project: GlProject) -> None:
-    logger.info(f'Syncing project "{gl_project.name}"...')
+    msg = f'Syncing project "{gl_project.name}"...'
 
     try:
         project, _ = Project.objects.sync_gitlab(
@@ -48,9 +48,10 @@ def load_project(gl: Gitlab, group: ProjectGroup, gl_project: GlProject) -> None
         if settings.GITLAB_CHECK_WEBHOOKS:
             check_project_webhooks(gl.projects.get(gl_project.id))
     except Exception as e:
+        logger.info(f'{msg}')
         logger.exception(str(e))
     else:
-        logger.info('done')
+        logger.info(f'{msg} done')
 
 
 def check_project_webhooks(gl_project: GlProject) -> None:
