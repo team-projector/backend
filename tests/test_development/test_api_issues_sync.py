@@ -1,12 +1,10 @@
-import httpretty
-
 from django.test import override_settings
 from rest_framework import status
 
 from tests.base import BaseAPITest
 from tests.test_development.factories import IssueFactory, ProjectFactory
 from tests.test_users.factories import UserFactory
-from tests.test_development.mocks import registry_get_gl_url
+from tests.test_development.mocks import activate, registry_get_gl_url
 from tests.test_development.factories_gitlab import (
     AttrDict, GlIssueTimeStats, GlUserFactory, GlProjectFactory, GlProjectsIssueFactory)
 
@@ -29,7 +27,7 @@ class ApiIssuesSyncTests(BaseAPITest):
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
     @override_settings(GITLAB_TOKEN='GITLAB_TOKEN')
-    @httpretty.activate
+    @activate
     def test_sync_project(self):
         gl_project = AttrDict(GlProjectFactory())
         project = ProjectFactory.create(gl_id=gl_project.id)
