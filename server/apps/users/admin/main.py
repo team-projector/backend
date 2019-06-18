@@ -1,3 +1,5 @@
+from urllib.parse import urlparse
+
 from admin_tools.decorators import admin_field
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as DjUserAdmin
@@ -22,7 +24,7 @@ class UserAdmin(AdminFormFieldsOverridesMixin,
     list_display = (
         'login', 'name', 'email', 'hour_rate', 'last_login', 'is_active', 'is_staff', 'change_password_link'
     )
-    list_filter = ('is_active', 'is_staff', 'is_active')
+    list_filter = ('is_active', 'is_staff')
     ordering = ('login',)
     sortable_by = ()
     autocomplete_fields = ('groups',)
@@ -59,6 +61,18 @@ class UserAdmin(AdminFormFieldsOverridesMixin,
 
     def sync_handler(self, obj):
         sync_user.delay(obj.gl_id)
+
+    def changelist_view(self, request, extra_context=None):
+        referer = request.META.get('HTTP_REFERER')
+        referer_path = urlparse(referer).path
+
+        if not referer or referer_path != reverse('admin:users_user_changelist'):
+            q = request.GET.copy()
+            q['is_active__exact'] = '1'
+            request.GET = q
+            request.META['QUERY_STRING'] = request.GET.urlencode()
+
+        return super().changelist_view(request, extra_context)
 
 
 @admin.register(Group)
