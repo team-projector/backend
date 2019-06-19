@@ -5,14 +5,14 @@ from apps.core.gitlab import get_gitlab_client
 from apps.development.services.gitlab.projects import load_project, load_group_projects, load_projects
 from apps.development.models import Project
 
-from tests.test_development.mocks import activate, registry_get_gl_url, registry_post_gl_url
+from tests.test_development.mocks import activate_mocks, registry_get_gl_url, registry_post_gl_url
 from tests.test_development.factories import ProjectGroupFactory
 from tests.test_development.factories_gitlab import (
     AttrDict, GlUserFactory, GlGroupFactory, GlProjectFactory, GlHookFactory)
 
 
 @override_settings(GITLAB_TOKEN='GITLAB_TOKEN')
-@activate
+@activate_mocks
 def test_load_project(db):
     assert settings.GITLAB_CHECK_WEBHOOKS is False
 
@@ -33,7 +33,7 @@ def test_load_project(db):
 @override_settings(GITLAB_TOKEN='GITLAB_TOKEN',
                    GITLAB_CHECK_WEBHOOKS=True,
                    DOMAIN_NAME='test.com')
-@activate
+@activate_mocks
 def test_load_project_with_check_webhooks(db):
     group = ProjectGroupFactory.create()
     gl_project = AttrDict(GlProjectFactory())
@@ -59,7 +59,7 @@ def test_load_project_with_check_webhooks(db):
 
 
 @override_settings(GITLAB_TOKEN='GITLAB_TOKEN')
-@activate
+@activate_mocks
 def test_load_group_projects(db):
     assert settings.GITLAB_CHECK_WEBHOOKS is False
 
@@ -83,7 +83,7 @@ def test_load_group_projects(db):
 
 
 @override_settings(GITLAB_TOKEN='GITLAB_TOKEN')
-@activate
+@activate_mocks
 def test_load_projects(db):
     assert settings.GITLAB_CHECK_WEBHOOKS is False
 

@@ -25,4 +25,4 @@ def registry_post_gl_url(url: str, factory: dict) -> None:
     httpretty.register_uri(httpretty.POST, url, body=request_callback)
 
 
-activate = partial(httpretty.activate, allow_net_connect=False)
+activate_mocks = partial(httpretty.activate, allow_net_connect=False)

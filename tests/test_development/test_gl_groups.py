@@ -5,7 +5,7 @@ from apps.development.models import ProjectGroup
 
 from tests.test_development.factories import ProjectGroupFactory
 from tests.test_development.factories_gitlab import AttrDict, GlUserFactory, GlGroupFactory
-from tests.test_development.mocks import activate, registry_get_gl_url
+from tests.test_development.mocks import activate_mocks, registry_get_gl_url
 
 
 def test_load_single_group(db):
@@ -26,7 +26,7 @@ def test_load_single_group_with_parent(db):
 
 
 @override_settings(GITLAB_TOKEN='GITLAB_TOKEN')
-@activate
+@activate_mocks
 def test_load_groups(db):
     gl_group_1 = AttrDict(GlGroupFactory())
     gl_group_2 = AttrDict(GlGroupFactory(parent_id=gl_group_1.id))

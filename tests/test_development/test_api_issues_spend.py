@@ -3,7 +3,7 @@ from rest_framework import status
 
 from tests.base import BaseAPITest
 from tests.test_development.factories import IssueFactory, ProjectFactory
-from tests.test_development.mocks import activate, registry_get_gl_url, registry_post_gl_url
+from tests.test_development.mocks import activate_mocks, registry_get_gl_url, registry_post_gl_url
 from tests.test_development.factories_gitlab import (
     AttrDict, GlIssueAddSpentTimeFactory, GlProjectFactory, GlProjectsIssueFactory, GlUserFactory)
 
@@ -59,7 +59,7 @@ class ApiIssuesSpendTests(BaseAPITest):
 
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
-    @activate
+    @activate_mocks
     def test_spend(self):
         gl_project = AttrDict(GlProjectFactory())
         project = ProjectFactory.create(gl_id=gl_project.id)
