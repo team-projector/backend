@@ -18,7 +18,7 @@ class SalaryCalculator:
         self.period_to = period_to
 
     def generate_bulk(self):
-        for user in User.objects.all():
+        for user in User.objects.filter(is_active=True):
             with suppress(EmptySalaryException):
                 self.generate(user)
 
@@ -35,21 +35,27 @@ class SalaryCalculator:
         if locked == 0:
             raise EmptySalaryException
 
-        spent_data = SpentTime.objects \
-            .filter(salary=salary) \
-            .aggregate(total_sum=Sum('sum'),
-                       total_time_spent=Sum('time_spent'))
+        spent_data = SpentTime.objects.filter(
+            salary=salary
+        ).aggregate(
+            total_sum=Sum('sum'),
+            total_time_spent=Sum('time_spent')
+        )
 
         salary.sum = spent_data['total_sum'] or 0
         salary.charged_time = spent_data['total_time_spent'] or 0
 
-        salary.penalty = (Penalty.objects
-                          .filter(salary=salary)
-                          .aggregate(total_sum=Sum('sum'))['total_sum'] or 0)
+        salary.penalty = Penalty.objects.filter(
+            salary=salary
+        ).aggregate(
+            total_sum=Sum('sum')
+        )['total_sum'] or 0
 
-        salary.bonus = (Bonus.objects
-                        .filter(salary=salary)
-                        .aggregate(total_sum=Sum('sum'))['total_sum'] or 0)
+        salary.bonus = Bonus.objects.filter(
+            salary=salary
+        ).aggregate(
+            total_sum=Sum('sum')
+        )['total_sum'] or 0
 
         salary.total = salary.sum + salary.bonus - salary.penalty
 
@@ -62,12 +68,25 @@ class SalaryCalculator:
 
     @staticmethod
     def _lock_payrolls(user: User, salary: Salary) -> int:
-        locked = Penalty.objects.filter(salary__isnull=True, user=user).update(salary=salary)
-        locked += Bonus.objects.filter(salary__isnull=True, user=user).update(salary=salary)
-
-        locked += SpentTime.objects \
-            .filter(salary__isnull=True, user=user) \
-            .filter(Q(issues__state=STATE_CLOSED)) \
-            .update(salary=salary)
+        locked = Penalty.objects.filter(
+            salary__isnull=True,
+            user=user
+        ).update(
+            salary=salary
+        )
+        locked += Bonus.objects.filter(
+            salary__isnull=True,
+            user=user
+        ).update(
+            salary=salary
+        )
+        locked += SpentTime.objects.filter(
+            salary__isnull=True,
+            user=user
+        ).filter(
+            Q(issues__state=STATE_CLOSED)
+        ).update(
+            salary=salary
+        )
 
         return locked
