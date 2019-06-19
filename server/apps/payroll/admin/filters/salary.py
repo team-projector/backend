@@ -19,5 +19,5 @@ class HasSalaryFilter(SimpleListFilter):
             return queryset
 
         return queryset.filter(
-            salary__isnull=False if strtobool(self.value()) else True
+            salary__isnull=not strtobool(self.value())
         )
