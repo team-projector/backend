@@ -66,12 +66,12 @@ class UserAdmin(AdminFormFieldsOverridesMixin,
         referer = request.META.get('HTTP_REFERER')
         referer_path = urlparse(referer).path
 
-        self._filter_is_active_true_by_default(request, referer, referer_path)
+        self._apply_default_filter_if_need(request, referer, referer_path)
 
         return super().changelist_view(request, extra_context)
 
     @staticmethod
-    def _filter_is_active_true_by_default(request, referer, referer_path):
+    def _apply_default_filter_if_need(request, referer, referer_path):
         if not referer or referer_path != reverse('admin:users_user_changelist'):
             q = request.GET.copy()
             q['is_active__exact'] = '1'
