@@ -8,6 +8,7 @@ from apps.payroll.admin.forms import GenerateSalaryForm
 from apps.payroll.services.salary.calculator import SalaryCalculator
 from apps.users.admin.filters import UserFilter
 from ..models import Bonus, Payment, Payroll, Penalty, Salary, SpentTime, WorkBreak
+from .filters import HasSalaryFilter
 
 
 @admin.register(Salary)
@@ -49,7 +50,7 @@ class SalaryAdmin(BaseModelAdmin):
 @admin.register(Payroll)
 class PayrollAdmin(BaseModelAdmin):
     list_display = ('user', 'created_by', 'created_at', 'sum')
-    list_filter = (UserFilter,)
+    list_filter = (UserFilter, HasSalaryFilter)
     search_fields = ('user',)
     autocomplete_fields = ('user', 'created_by', 'salary')
 
