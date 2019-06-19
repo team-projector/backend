@@ -1,3 +1,4 @@
+from functools import partial
 import json
 import httpretty
 
@@ -22,3 +23,6 @@ def registry_post_gl_url(url: str, factory: dict) -> None:
         return [status.HTTP_200_OK, response_headers, data]
 
     httpretty.register_uri(httpretty.POST, url, body=request_callback)
+
+
+activate_httpretty = partial(httpretty.activate, allow_net_connect=False)
