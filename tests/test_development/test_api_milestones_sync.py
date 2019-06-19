@@ -4,7 +4,7 @@ from rest_framework import status
 from tests.base import BaseAPITest
 from tests.test_development.factories import (
     ProjectGroupFactory, ProjectGroupMilestoneFactory, ProjectFactory, ProjectMilestoneFactory)
-from tests.test_development.mocks import activate_mocks, registry_get_gl_url
+from tests.test_development.mocks import activate_httpretty, registry_get_gl_url
 from tests.test_development.factories_gitlab import (
     AttrDict, GlUserFactory, GlGroupFactory, GlGroupMilestoneFactory, GlProjectFactory, GlProjectMilestoneFactory)
 
@@ -27,7 +27,7 @@ class ApiMilestoneSyncTests(BaseAPITest):
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
     @override_settings(GITLAB_TOKEN='GITLAB_TOKEN')
-    @activate_mocks
+    @activate_httpretty
     def test_sync_group(self):
         gl_group = AttrDict(GlGroupFactory())
         group = ProjectGroupFactory.create(gl_id=gl_group.id)
@@ -51,7 +51,7 @@ class ApiMilestoneSyncTests(BaseAPITest):
         self.assertEqual(milestone.state, 'closed')
 
     @override_settings(GITLAB_TOKEN='GITLAB_TOKEN')
-    @activate_mocks
+    @activate_httpretty
     def test_sync_project(self):
         gl_project = AttrDict(GlProjectFactory())
         project = ProjectFactory.create(gl_id=gl_project.id)
