@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-06-07 16:26+0300\n"
+"POT-Creation-Date: 2019-06-19 20:13+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -183,7 +183,7 @@ msgstr "Project"
 
 #: server/apps/development/models/issue.py:96
 #: server/apps/development/models/note.py:33
-#: server/apps/development/models/team_member.py:26
+#: server/apps/development/models/team_member.py:27
 #: server/apps/payroll/models/payroll.py:39
 #: server/apps/payroll/models/salary.py:23
 #: server/apps/payroll/models/workbreak.py:26
@@ -193,7 +193,7 @@ msgstr "User"
 
 #: server/apps/development/models/issue.py:97
 #: server/apps/development/models/note.py:34
-#: server/apps/development/models/team_member.py:27
+#: server/apps/development/models/team_member.py:28
 #: server/apps/payroll/models/payroll.py:40
 #: server/apps/payroll/models/salary.py:24
 #: server/apps/payroll/models/workbreak.py:27
@@ -354,7 +354,7 @@ msgid "VN__PROJECT_MEMBERS"
 msgstr "Project Members"
 
 #: server/apps/development/models/team.py:14
-#: server/apps/development/models/team_member.py:19
+#: server/apps/development/models/team_member.py:20
 msgid "VN__TEAM"
 msgstr "Team"
 
@@ -366,19 +366,23 @@ msgstr "Teams"
 msgid "CH_LEADER"
 msgstr "Team leader"
 
-#: server/apps/development/models/team_member.py:20
+#: server/apps/development/models/team_member.py:14
+msgid "CH_WATCHER"
+msgstr "Watcher"
+
+#: server/apps/development/models/team_member.py:21
 msgid "HT__TEAM"
 msgstr "Team"
 
-#: server/apps/development/models/team_member.py:36
+#: server/apps/development/models/team_member.py:37
 msgid "VN__TEAM_MEMBER"
 msgstr "Team Member"
 
-#: server/apps/development/models/team_member.py:37
+#: server/apps/development/models/team_member.py:38
 msgid "VN__TEAM_MEMBERS"
 msgstr "Team Members"
 
-#: server/apps/development/rest/views.py:93
+#: server/apps/development/rest/views.py:94
 msgid "MSG_PLEASE_PROVIDE_PERSONAL_GL_TOKEN"
 msgstr "Please fill personal gitlab token in profile"
 
