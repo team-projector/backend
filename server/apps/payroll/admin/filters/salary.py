@@ -1,3 +1,5 @@
+from distutils.util import strtobool
+
 from django.contrib.admin.filters import SimpleListFilter
 from django.utils.translation import ugettext as _
 
@@ -13,9 +15,10 @@ class HasSalaryFilter(SimpleListFilter):
         )
 
     def queryset(self, request, queryset):
-        if self.value() == 'yes':
-            return queryset.filter(salary__isnull=False)
-        elif self.value() == 'no':
-            return queryset.filter(salary__isnull=True)
+        if not self.value():
+            return queryset
 
-        return queryset
+        if strtobool(self.value()):
+            return queryset.filter(salary__isnull=False)
+
+        return queryset.filter(salary__isnull=True)
