@@ -15,12 +15,9 @@ class HasSalaryFilter(SimpleListFilter):
         )
 
     def queryset(self, request, queryset):
-        if not self.value():
-            return queryset
-
         try:
             return queryset.filter(
-                salary__isnull=not strtobool(self.value())
+                salary__isnull=not strtobool(self.value()) if self.value() else None
             )
         except ValueError:
             return queryset
