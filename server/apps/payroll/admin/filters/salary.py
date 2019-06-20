@@ -15,7 +15,7 @@ class HasSalaryFilter(SimpleListFilter):
         )
 
     def queryset(self, request, queryset):
-        if not self.value():
+        if not self.value() or self.value() not in [choice[0] for choice in self.lookup_choices]:
             return queryset
 
         return queryset.filter(
