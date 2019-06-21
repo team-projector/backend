@@ -19,14 +19,16 @@ from apps.core.rest.views import BaseGenericAPIView, BaseGenericViewSet
 from apps.core.tasks import add_action
 from apps.development.rest import permissions
 from apps.development.rest.filters import (
-    IssueStatusUrlFiler, MilestoneActiveFiler, TeamMemberFilterBackend, TeamMemberRoleFilterBackend)
+    IssueStatusUrlFiler, MilestoneActiveFiler, TeamMemberFilterBackend, TeamMemberRoleFilterBackend
+)
 from apps.development.services.gitlab.spent_time import add_spent_time
 from apps.development.services.problems.issues import IssueProblemsChecker
 from apps.development.services.status.gitlab import get_gitlab_sync_status
-from .serializers import (FeatureCardSerializer, FeatureSerializer, FeatureUpdateSerializer,
-                          GitlabAddSpentTimeSerializer, GitlabIssieStatusSerializer, GitlabStatusSerializer,
-                          IssueCardSerializer, IssueProblemSerializer, IssueSerializer, IssueUpdateSerializer,
-                          MilestoneCardSerializer, TeamCardSerializer, TeamMemberCardSerializer, TeamSerializer)
+from .serializers import (
+    FeatureCardSerializer, FeatureSerializer, FeatureUpdateSerializer, GitlabAddSpentTimeSerializer,
+    GitlabIssieStatusSerializer, GitlabStatusSerializer, IssueCardSerializer, IssueProblemSerializer, IssueSerializer,
+    IssueUpdateSerializer, MilestoneCardSerializer, TeamCardSerializer, TeamMemberCardSerializer, TeamSerializer
+)
 from ..models import Feature, Issue, Milestone, Project, ProjectGroup, Team, TeamMember
 from ..tasks import sync_group_milestone, sync_project_issue, sync_project_milestone
 
@@ -157,7 +159,10 @@ class TeamMembersViewset(mixins.ListModelMixin,
 
 class MilestoneIssuesViewset(mixins.ListModelMixin,
                              BaseGenericViewSet):
-    permission_classes = (IsAuthenticated, permissions.IsProjectManager)
+    permission_classes = (
+        IsAuthenticated,
+        permissions.IsProjectManager
+    )
 
     serializer_classes = {
         'list': IssueCardSerializer
@@ -175,7 +180,10 @@ class MilestoneIssuesViewset(mixins.ListModelMixin,
 
 class MilestoneFeaturesViewset(mixins.ListModelMixin,
                                BaseGenericViewSet):
-    permission_classes = (IsAuthenticated, permissions.IsProjectManager)
+    permission_classes = (
+        IsAuthenticated,
+        permissions.IsProjectManager
+    )
 
     serializer_classes = {
         'list': FeatureCardSerializer
@@ -194,7 +202,10 @@ class MilestoneFeaturesViewset(mixins.ListModelMixin,
 class FeaturesViewset(CreateModelMixin,
                       UpdateModelMixin,
                       BaseGenericViewSet):
-    permission_classes = (IsAuthenticated, permissions.IsProjectManager)
+    permission_classes = (
+        IsAuthenticated,
+        permissions.IsProjectManager
+    )
 
     serializer_classes = {
         'create': FeatureSerializer,
@@ -207,7 +218,10 @@ class FeaturesViewset(CreateModelMixin,
 
 
 class FeatureIssuesViewset(mixins.ListModelMixin, BaseGenericViewSet):
-    permission_classes = (IsAuthenticated, permissions.IsProjectManager)
+    permission_classes = (
+        IsAuthenticated,
+        permissions.IsProjectManager
+    )
 
     serializer_classes = {
         'list': IssueCardSerializer
@@ -234,14 +248,20 @@ class GitlabStatusView(BaseGenericAPIView):
 
 class MilestonesViewset(mixins.ListModelMixin,
                         BaseGenericViewSet):
-    permission_classes = (IsAuthenticated, permissions.IsProjectManager,)
+    permission_classes = (
+        IsAuthenticated,
+        permissions.IsProjectManager
+    )
 
     serializer_classes = {
         'list': MilestoneCardSerializer
     }
 
     queryset = Milestone.objects.all()
-    filter_backends = (filters.OrderingFilter, MilestoneActiveFiler,)
+    filter_backends = (
+        filters.OrderingFilter,
+        MilestoneActiveFiler
+    )
     ordering = ('-due_date',)
 
     @action(detail=True,
@@ -290,7 +310,10 @@ class GitlabIssueStatusView(BaseGenericAPIView):
 
 class TeamIssueProblemsViewset(mixins.ListModelMixin,
                                BaseGenericViewSet):
-    permission_classes = (IsAuthenticated, permissions.IsTeamLeader)
+    permission_classes = (
+        IsAuthenticated,
+        permissions.IsTeamLeader
+    )
     serializer_classes = {
         'list': IssueProblemSerializer
     }
@@ -316,12 +339,18 @@ class TeamIssueProblemsViewset(mixins.ListModelMixin,
 
 class TeamIssuesViewset(mixins.ListModelMixin,
                         BaseGenericViewSet):
-    permission_classes = (IsAuthenticated, permissions.IsTeamLeader,)
+    permission_classes = (
+        IsAuthenticated,
+        permissions.IsTeamLeader
+    )
     serializer_classes = {
         'list': IssueCardSerializer
     }
     queryset = Issue.objects
-    filter_backends = (filters.SearchFilter, DjangoFilterBackend)
+    filter_backends = (
+        filters.SearchFilter,
+        DjangoFilterBackend
+    )
 
     search_fields = ('title',)
     filter_fields = ('state', 'due_date', 'user')
@@ -335,4 +364,6 @@ class TeamIssuesViewset(mixins.ListModelMixin,
         return team
 
     def filter_queryset(self, queryset):
-        return super().filter_queryset(queryset).filter(user__team_members__team=self.team)
+        return super().filter_queryset(queryset).filter(
+            user__team_members__team=self.team
+        )

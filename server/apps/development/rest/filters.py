@@ -1,15 +1,25 @@
 from distutils.util import strtobool
 from functools import reduce
 from operator import or_
+from typing import List
 
 from bitfield import Bit
-from django.db.models import Exists, OuterRef, Q
+from django.db.models import Exists, OuterRef, Q, QuerySet
 from rest_framework import filters
 
 from apps.core.rest.filters import FilterParamUrlSerializer
 from apps.core.utils.rest import parse_query_params
 from apps.development.models import Milestone, TeamMember
-from apps.development.rest.serializers import RolesFilterSerializer, TeamMemberFilterSerializer
+from apps.development.rest.serializers import TeamMemberFilterSerializer, TeamMemberRoleFilterSerializer
+
+
+def _filter_by_roles(queryset: QuerySet, roles: List[str]) -> QuerySet:
+    return queryset.filter(
+        reduce(or_, [
+            Q(roles=Bit(TeamMember.roles.keys().index(role)))
+            for role in roles
+        ])
+    )
 
 
 class TeamMemberFilterBackend(filters.BaseFilterBackend):
@@ -19,15 +29,11 @@ class TeamMemberFilterBackend(filters.BaseFilterBackend):
         user, roles = params.get('user'), params.get('roles')
 
         if all(param is not None for param in (user, roles)):
-            team_members = TeamMember.objects.filter(
-                team=OuterRef('pk'),
-                user=user,
-            ).filter(
-                reduce(or_, [
-                    Q(roles=Bit(TeamMember.roles.keys().index(role)))
-                    for role in roles
-                ])
-            )
+            team_members = _filter_by_roles(
+                TeamMember.objects.filter(
+                    team=OuterRef('pk'),
+                    user=user,
+                ), roles)
 
             queryset = queryset.annotate(
                 member_exists=Exists(team_members)
@@ -40,30 +46,13 @@ class TeamMemberFilterBackend(filters.BaseFilterBackend):
 
 class TeamMemberRoleFilterBackend(filters.BaseFilterBackend):
     def filter_queryset(self, request, queryset, view):
-        param_roles = request.GET.get('roles')
+        params = parse_query_params(request, TeamMemberRoleFilterSerializer)
 
-        if param_roles:
-            roles = self.parse_list(param_roles)
-
-            return queryset.filter(self._get_filter_roles(roles))
+        roles = params.get('roles')
+        if roles:
+            queryset = _filter_by_roles(queryset, roles)
 
         return queryset
-
-    @staticmethod
-    def parse_list(l):
-        return l.split(',')
-
-    @staticmethod
-    def _get_filter_roles(roles):
-        filter_roles = Q()
-
-        for role in roles:
-            serializer = RolesFilterSerializer(data={'roles': [role]})
-            serializer.is_valid(raise_exception=True)
-
-            filter_roles |= Q(roles=serializer.validated_data['roles'])
-
-        return filter_roles
 
 
 class MilestoneActiveFiler(filters.BaseFilterBackend):

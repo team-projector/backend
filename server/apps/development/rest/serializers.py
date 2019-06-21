@@ -3,6 +3,7 @@ from typing import Dict, Iterable, Optional, Type
 from bitfield.rest.fields import BitField
 from django.db.models import Model, Sum
 from rest_framework import serializers
+from rest_framework.exceptions import ValidationError
 
 from apps.core.rest.serializers import LinkSerializer
 from apps.core.utils.objects import dict2obj
@@ -147,9 +148,29 @@ class IssueProblemSerializer(serializers.Serializer):
         ]
 
 
-class TeamMemberFilterSerializer(serializers.Serializer):
+# TODO refactor!
+class NoCastBitField(BitField):
+    def to_internal_value(self, data):
+        model_field = self._get_model_field()
+        flags = model_field.flags
+
+        errors = []
+        for choice in data:
+            if choice not in flags:
+                errors.append(ValidationError(f'Unknown choice: {choice}'))
+
+        if errors:
+            raise ValidationError(errors)
+
+        return data
+
+
+class TeamMemberRoleFilterSerializer(serializers.Serializer):
+    roles = NoCastBitField(required=False, model=TeamMember)
+
+
+class TeamMemberFilterSerializer(TeamMemberRoleFilterSerializer):
     user = serializers.PrimaryKeyRelatedField(queryset=User.objects.all(), required=False)
-    roles = serializers.ListField(child=serializers.CharField(), required=False)
 
 
 class FeatureSerializer(serializers.ModelSerializer):
@@ -234,8 +255,10 @@ class MilestoneCardSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Milestone
-        fields = ('id', 'gl_id', 'gl_last_sync', 'gl_url', 'title', 'start_date', 'due_date', 'metrics', 'owner',
-                  'budget', 'state')
+        fields = (
+            'id', 'gl_id', 'gl_last_sync', 'gl_url', 'title', 'start_date', 'due_date', 'metrics', 'owner', 'budget',
+            'state'
+        )
 
 
 class GitlabIssieStatusSerializer(serializers.ModelSerializer):
@@ -258,12 +281,3 @@ class ProjectGroupCardSerializer(serializers.ModelSerializer):
     class Meta:
         model = ProjectGroup
         fields = ('id', 'gl_id', 'gl_last_sync', 'gl_url', 'title')
-
-
-class RoleBitField(BitField):
-    def get_value(self, dictionary):
-        return dictionary.get(self.field_name)
-
-
-class RolesFilterSerializer(serializers.Serializer):
-    roles = RoleBitField(required=False, allow_null=True, model=TeamMember)
