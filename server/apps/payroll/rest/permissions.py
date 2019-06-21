@@ -3,7 +3,7 @@ from django.db.models import Exists, OuterRef
 from rest_framework import permissions
 
 from apps.development.models import TeamMember
-
+from apps.development.services.team_members import filter_by_roles
 
 User = get_user_model()
 
@@ -15,10 +15,11 @@ class CanViewUserMetrics(permissions.BasePermission):
         if user == request.user:
             return True
 
-        user_team_leader = TeamMember.objects.filter(
+        user_team_leader = filter_by_roles(TeamMember.objects.filter(
             team_id=OuterRef('team_id'),
-            roles=TeamMember.roles.leader,
             user=request.user
+        ),
+            [TeamMember.roles.leader, TeamMember.roles.watcher]
         )
 
         return user.team_members.annotate(
@@ -32,10 +33,11 @@ class CanViewTeamMetrics(permissions.BasePermission):
     message = 'You can\'t view team metrics'
 
     def has_object_permission(self, request, view, team):
-        user_team_leader = TeamMember.objects.filter(
+        user_team_leader = filter_by_roles(TeamMember.objects.filter(
             team_id=OuterRef('team_id'),
-            roles=TeamMember.roles.leader,
             user=request.user
+        ),
+            [TeamMember.roles.leader, TeamMember.roles.watcher]
         )
 
         return team.members.annotate(
@@ -92,9 +94,13 @@ class CanViewSalaries(permissions.BasePermission):
 
 
 def is_user_teamlead(request, user):
-    teams = TeamMember.objects.filter(user=request.user,
-                                      roles=TeamMember.roles.leader).values_list('team', flat=True)
+    teams = TeamMember.objects.filter(
+        user=request.user,
+        roles=TeamMember.roles.leader
+    ).values_list('team', flat=True)
 
-    return User.objects.filter(team_members__team__in=teams,
-                               team_members__roles=TeamMember.roles.developer,
-                               id=user.id).exists()
+    return User.objects.filter(
+        team_members__team__in=teams,
+        team_members__roles=TeamMember.roles.developer,
+        id=user.id
+    ).exists()

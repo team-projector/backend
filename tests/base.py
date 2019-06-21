@@ -45,7 +45,11 @@ class BaseTestMixin:
             if 'password' not in kwargs:
                 kwargs['password'] = USER_PASSWORD
 
-            user = User.objects.create_user(login=login, is_staff=False, **kwargs)
+            user = User.objects.create_user(
+                login=login,
+                is_staff=False,
+                **kwargs
+            )
         elif 'password' in kwargs:
             user.set_password(kwargs.get('password'))
             user.save()

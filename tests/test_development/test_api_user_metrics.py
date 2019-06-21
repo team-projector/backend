@@ -1,7 +1,7 @@
 from rest_framework import status
 
-from tests.base import BaseAPITest
 from apps.development.models import TeamMember
+from tests.base import BaseAPITest
 from tests.test_development.factories import IssueFactory, TeamFactory, TeamMemberFactory
 from tests.test_users.factories import UserFactory
 
@@ -31,13 +31,17 @@ class ApiUserMetrcisTests(BaseAPITest):
     def test_another_user_but_another_team_leader(self):
         user = self.create_user('user_2@mail.com')
 
-        TeamMemberFactory.create(team=TeamFactory.create(),
-                                 user=self.user,
-                                 roles=TeamMember.roles.developer | TeamMember.roles.leader)
+        TeamMemberFactory.create(
+            team=TeamFactory.create(),
+            user=self.user,
+            roles=TeamMember.roles.developer | TeamMember.roles.leader
+        )
 
-        TeamMemberFactory.create(team=TeamFactory.create(),
-                                 user=user,
-                                 roles=TeamMember.roles.developer)
+        TeamMemberFactory.create(
+            team=TeamFactory.create(),
+            user=user,
+            roles=TeamMember.roles.developer
+        )
 
         self.set_credentials()
         response = self.client.get(f'/api/users/{user.id}', {'metrics': 'true'})
@@ -49,13 +53,41 @@ class ApiUserMetrcisTests(BaseAPITest):
 
         team = TeamFactory.create()
 
-        TeamMemberFactory.create(team=team,
-                                 user=self.user,
-                                 roles=TeamMember.roles.developer | TeamMember.roles.leader)
+        TeamMemberFactory.create(
+            team=team,
+            user=self.user,
+            roles=TeamMember.roles.developer | TeamMember.roles.leader
+        )
 
-        TeamMemberFactory.create(team=team,
-                                 user=user,
-                                 roles=TeamMember.roles.developer)
+        TeamMemberFactory.create(
+            team=team,
+            user=user,
+            roles=TeamMember.roles.developer
+        )
+
+        self.set_credentials()
+        response = self.client.get(f'/api/users/{user.id}', {'metrics': 'true'})
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data['id'], user.id)
+        self.assertIsNotNone(response.data['metrics'])
+
+    def test_another_user_but_watcher(self):
+        user = self.create_user('user_2@mail.com')
+
+        team = TeamFactory.create()
+
+        TeamMemberFactory.create(
+            team=team,
+            user=self.user,
+            roles=TeamMember.roles.developer | TeamMember.roles.watcher
+        )
+
+        TeamMemberFactory.create(
+            team=team,
+            user=user,
+            roles=TeamMember.roles.developer
+        )
 
         self.set_credentials()
         response = self.client.get(f'/api/users/{user.id}', {'metrics': 'true'})

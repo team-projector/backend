@@ -1,25 +1,13 @@
 from distutils.util import strtobool
-from functools import reduce
-from operator import or_
-from typing import List
 
-from bitfield import Bit
-from django.db.models import Exists, OuterRef, Q, QuerySet
+from django.db.models import Exists, OuterRef
 from rest_framework import filters
 
 from apps.core.rest.filters import FilterParamUrlSerializer
 from apps.core.utils.rest import parse_query_params
 from apps.development.models import Milestone, TeamMember
 from apps.development.rest.serializers import TeamMemberFilterSerializer, TeamMemberRoleFilterSerializer
-
-
-def _filter_by_roles(queryset: QuerySet, roles: List[str]) -> QuerySet:
-    return queryset.filter(
-        reduce(or_, [
-            Q(roles=Bit(TeamMember.roles.keys().index(role)))
-            for role in roles
-        ])
-    )
+from apps.development.services.team_members import filter_by_roles
 
 
 class TeamMemberFilterBackend(filters.BaseFilterBackend):
@@ -29,7 +17,7 @@ class TeamMemberFilterBackend(filters.BaseFilterBackend):
         user, roles = params.get('user'), params.get('roles')
 
         if all(param is not None for param in (user, roles)):
-            team_members = _filter_by_roles(
+            team_members = filter_by_roles(
                 TeamMember.objects.filter(
                     team=OuterRef('pk'),
                     user=user,
@@ -50,7 +38,7 @@ class TeamMemberRoleFilterBackend(filters.BaseFilterBackend):
 
         roles = params.get('roles')
         if roles:
-            queryset = _filter_by_roles(queryset, roles)
+            queryset = filter_by_roles(queryset, roles)
 
         return queryset
 
