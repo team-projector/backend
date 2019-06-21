@@ -1,13 +1,15 @@
 from distutils.util import strtobool
+from functools import reduce
+from operator import or_
 
-
+from bitfield import Bit
 from django.db.models import Exists, OuterRef, Q
 from rest_framework import filters
 
 from apps.core.rest.filters import FilterParamUrlSerializer
 from apps.core.utils.rest import parse_query_params
-from apps.development.models import TeamMember, Milestone
-from apps.development.rest.serializers import TeamMemberFilterSerializer, RolesFilterSerializer
+from apps.development.models import Milestone, TeamMember
+from apps.development.rest.serializers import RolesFilterSerializer, TeamMemberFilterSerializer
 
 
 class TeamMemberFilterBackend(filters.BaseFilterBackend):
@@ -16,9 +18,22 @@ class TeamMemberFilterBackend(filters.BaseFilterBackend):
 
         user, roles = params.get('user'), params.get('roles')
 
-        if user is not None and roles is not None:
-            team_members = TeamMember.objects.filter(team=OuterRef('pk'), user=user, roles=roles)
-            queryset = queryset.annotate(member_exists=Exists(team_members)).filter(member_exists=True)
+        if all(param is not None for param in (user, roles)):
+            team_members = TeamMember.objects.filter(
+                team=OuterRef('pk'),
+                user=user,
+            ).filter(
+                reduce(or_, [
+                    Q(roles=Bit(TeamMember.roles.keys().index(role)))
+                    for role in roles
+                ])
+            )
+
+            queryset = queryset.annotate(
+                member_exists=Exists(team_members)
+            ).filter(
+                member_exists=True
+            )
 
         return queryset
 

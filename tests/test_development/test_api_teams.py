@@ -1,7 +1,7 @@
 from rest_framework import status
 
-from tests.base import BaseAPITest
 from apps.development.models import TeamMember
+from tests.base import BaseAPITest
 from tests.test_development.factories import TeamFactory, TeamMemberFactory
 from tests.test_users.factories import UserFactory
 
@@ -81,30 +81,34 @@ class ApiTeamsTests(BaseAPITest):
         TeamFactory.create_batch(5)
         team = TeamFactory.create()
 
-        TeamMemberFactory.create(user=self.user,
-                                 team=team,
-                                 roles=TeamMember.roles.leader | TeamMember.roles.developer)
+        TeamMemberFactory.create(
+            user=self.user,
+            team=team,
+            roles=TeamMember.roles.leader | TeamMember.roles.developer
+        )
 
         self.set_credentials()
         response = self.client.get('/api/teams', {
             'user': self.user.id,
-            'roles': [TeamMember.ROLES.leader]
+            'roles': 'leader'
         })
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data['count'], 1)
         self.assertEqual(response.data['results'][0]['id'], team.id)
 
-    def test_filter_querystring(self):
+    def test_filter_by_user_and_many_roles(self):
         TeamFactory.create_batch(5)
         team = TeamFactory.create()
 
-        TeamMemberFactory.create(user=self.user,
-                                 team=team,
-                                 roles=TeamMember.roles.leader | TeamMember.roles.developer)
+        TeamMemberFactory.create(
+            user=self.user,
+            team=team,
+            roles=TeamMember.roles.leader | TeamMember.roles.developer
+        )
 
         self.set_credentials()
-        response = self.client.get(f'/api/teams?user={self.user.id}&roles=leader&roles=developer')
+        response = self.client.get(f'/api/teams?user={self.user.id}&roles=leader&roles=watcher')
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data['count'], 1)

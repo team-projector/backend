@@ -1,7 +1,7 @@
 from typing import Dict, Iterable, Optional, Type
 
 from bitfield.rest.fields import BitField
-from django.db.models import Sum, Model
+from django.db.models import Model, Sum
 from rest_framework import serializers
 
 from apps.core.rest.serializers import LinkSerializer
@@ -148,8 +148,8 @@ class IssueProblemSerializer(serializers.Serializer):
 
 
 class TeamMemberFilterSerializer(serializers.Serializer):
-    user = serializers.PrimaryKeyRelatedField(queryset=User.objects.all(), required=False, allow_null=True)
-    roles = BitField(required=False, allow_null=True, model=TeamMember)
+    user = serializers.PrimaryKeyRelatedField(queryset=User.objects.all(), required=False)
+    roles = serializers.ListField(child=serializers.CharField(), required=False)
 
 
 class FeatureSerializer(serializers.ModelSerializer):

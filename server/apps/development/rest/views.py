@@ -27,8 +27,8 @@ from .serializers import (FeatureCardSerializer, FeatureSerializer, FeatureUpdat
                           GitlabAddSpentTimeSerializer, GitlabIssieStatusSerializer, GitlabStatusSerializer,
                           IssueCardSerializer, IssueProblemSerializer, IssueSerializer, IssueUpdateSerializer,
                           MilestoneCardSerializer, TeamCardSerializer, TeamMemberCardSerializer, TeamSerializer)
-from ..models import Feature, Issue, Milestone, Team, TeamMember, Project, ProjectGroup
-from ..tasks import sync_project_issue, sync_project_milestone, sync_group_milestone
+from ..models import Feature, Issue, Milestone, Project, ProjectGroup, Team, TeamMember
+from ..tasks import sync_group_milestone, sync_project_issue, sync_project_milestone
 
 logger = logging.getLogger(__name__)
 
@@ -126,7 +126,12 @@ class TeamsViewset(mixins.ListModelMixin,
     }
     queryset = Team.objects.all()
     search_fields = ('title',)
-    filter_backends = (filters.OrderingFilter, filters.SearchFilter, DjangoFilterBackend, TeamMemberFilterBackend)
+    filter_backends = (
+        filters.OrderingFilter,
+        filters.SearchFilter,
+        DjangoFilterBackend,
+        TeamMemberFilterBackend
+    )
     ordering_fields = ('title',)
 
 
@@ -134,11 +139,17 @@ class TeamMembersViewset(mixins.ListModelMixin,
                          BaseGenericViewSet):
     serializer_class = TeamMemberCardSerializer
     queryset = TeamMember.objects.all()
-    filter_backends = (DjangoFilterBackend, TeamMemberRoleFilterBackend)
+    filter_backends = (
+        DjangoFilterBackend,
+        TeamMemberRoleFilterBackend
+    )
 
     @cached_property
     def team(self):
-        return get_object_or_404(Team.objects, pk=self.kwargs['team_pk'])
+        return get_object_or_404(
+            Team.objects,
+            pk=self.kwargs['team_pk']
+        )
 
     def filter_queryset(self, queryset):
         return super().filter_queryset(queryset).filter(team=self.team)
