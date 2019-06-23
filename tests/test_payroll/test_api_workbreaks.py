@@ -1,12 +1,12 @@
 from rest_framework import status
 
 from apps.development.models import TeamMember
-from apps.payroll.db.mixins import CREATED, DECLINED, APPROVED
+from apps.payroll.db.mixins.approved import APPROVED, CREATED, DECLINED
 from apps.payroll.models.workbreak import DAYOFF, VACATION
-from tests.test_users.factories import UserFactory
 from tests.base import BaseAPITest
 from tests.test_development.factories import TeamFactory, TeamMemberFactory
 from tests.test_payroll.factories import WorkBreakFactory
+from tests.test_users.factories import UserFactory
 
 
 class WorkBreaksTests(BaseAPITest):

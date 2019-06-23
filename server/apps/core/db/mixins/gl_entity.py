@@ -24,22 +24,3 @@ class GitlabEntityMixin(models.Model):
 
     class Meta:
         abstract = True
-
-
-class GitlabInternalIdMixin(models.Model):
-    gl_iid = models.PositiveIntegerField(
-        null=True,
-        verbose_name=_('VN__GITLAB_INTERNAL_ID'),
-        help_text=_('HT__GITLAB_INTERNAL_ID')
-    )
-
-    class Meta:
-        abstract = True
-
-
-class Timestamps(models.Model):
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-
-    class Meta:
-        abstract = True

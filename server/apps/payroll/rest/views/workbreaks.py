@@ -8,7 +8,7 @@ from rest_framework.response import Response
 from apps.core.rest.mixins.views import CreateModelMixin, UpdateModelMixin
 from apps.core.rest.views import BaseGenericViewSet
 from apps.development.models import TeamMember
-from apps.payroll.db.mixins import APPROVED, CREATED, DECLINED
+from apps.payroll.db.mixins.approved import APPROVED, CREATED, DECLINED
 from apps.payroll.models import WorkBreak
 from apps.payroll.rest.permissions import CanApproveDeclineWorkbreaks, CanManageWorkbreaks
 from apps.payroll.rest.serializers import WorkBreakCardSerializer, WorkBreakSerializer, WorkBreakUpdateSerializer

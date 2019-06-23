@@ -1,4 +1,4 @@
-from django.http import JsonResponse, HttpResponseBadRequest
+from django.http import HttpResponseBadRequest, JsonResponse
 from django.utils import timezone
 from social_core.backends.gitlab import GitLabOAuth2
 from social_core.utils import handle_http_errors

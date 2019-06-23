@@ -1,26 +1,12 @@
-from django.contrib.contenttypes.fields import GenericRelation
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
 from apps.core.db.utils import Choices
 from apps.users.models import User
 
-
 CREATED = 'created'
 APPROVED = 'approved'
 DECLINED = 'declined'
-
-
-class SpentTimesMixin(models.Model):
-    time_spents = GenericRelation(
-        'payroll.SpentTime',
-        related_query_name='%(class)ss',
-        verbose_name=_('VN__TIME_SPENTS'),
-        help_text=_('HT__TIME_SPENTS')
-    )
-
-    class Meta:
-        abstract = True
 
 
 class ApprovedMixin(models.Model):
