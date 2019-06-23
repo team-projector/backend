@@ -1,30 +1,31 @@
 from django.urls import include, path
 
 from apps.core.rest.routers import AppRouter
-from .views import (
-    SalariesTimeExpensesViewSet, SalariesViewSet, TeamProgressMetricsView, TimeExpensesView,
-    UserProgressMetricsView, UserSalariesView, UserWorkBreaksView, WorkBreaksViewset
-)
+from . import views
 
 app_name = 'payroll'
 
 router = AppRouter()
-router.register('work-breaks', WorkBreaksViewset, 'work-breaks')
-router.register('salaries', SalariesViewSet, 'salaries')
-router.register(r'^salaries/(?P<salary_pk>\d+)/time-expenses$', SalariesTimeExpensesViewSet, 'salaries-time-expenses')
+router.register('work-breaks', views.WorkBreaksViewset, 'work-breaks')
+router.register('salaries', views.SalariesViewSet, 'salaries')
+router.register(
+    r'^salaries/(?P<salary_pk>\d+)/time-expenses$',
+    views.SalariesTimeExpensesViewSet,
+    'salaries-time-expenses'
+)
 
 urlpatterns = [
     path('users/<int:user_pk>/', include((
         [
-            path('progress-metrics', UserProgressMetricsView.as_view(), name='progress-metrics'),
-            path('salaries', UserSalariesView.as_view(), name='salaries'),
-            path('time-expenses', TimeExpensesView.as_view(),
+            path('progress-metrics', views.UserProgressMetricsView.as_view(), name='progress-metrics'),
+            path('salaries', views.UserSalariesView.as_view(), name='salaries'),
+            path('time-expenses', views.TimeExpensesView.as_view(),
                  name='time-expenses'),
-            path('work-breaks', UserWorkBreaksView.as_view(), name='user-work-breaks')
+            path('work-breaks', views.UserWorkBreaksView.as_view(), name='user-work-breaks')
         ], app_name), 'users')),
     path('teams/<int:team_pk>/', include((
         [
-            path('progress-metrics', TeamProgressMetricsView.as_view(), name='progress-metrics'),
+            path('progress-metrics', views.TeamProgressMetricsView.as_view(), name='progress-metrics'),
         ], app_name), 'teams')),
     *router.urls
 ]

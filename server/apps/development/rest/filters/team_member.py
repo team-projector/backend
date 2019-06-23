@@ -1,13 +1,37 @@
-from distutils.util import strtobool
-
+from bitfield.rest.fields import BitField
 from django.db.models import Exists, OuterRef
-from rest_framework import filters
+from rest_framework import filters, serializers
+from rest_framework.exceptions import ValidationError
 
-from apps.core.rest.filters import FilterParamUrlSerializer
 from apps.core.utils.rest import parse_query_params
-from apps.development.models import Milestone, TeamMember
-from apps.development.rest.serializers import TeamMemberFilterSerializer, TeamMemberRoleFilterSerializer
+from apps.development.models import TeamMember
 from apps.development.services.team_members import filter_by_roles
+from apps.users.models import User
+
+
+# TODO refactor!
+class NoCastBitField(BitField):
+    def to_internal_value(self, data):
+        model_field = self._get_model_field()
+        flags = model_field.flags
+
+        errors = []
+        for choice in data:
+            if choice not in flags:
+                errors.append(ValidationError(f'Unknown choice: {choice}'))
+
+        if errors:
+            raise ValidationError(errors)
+
+        return data
+
+
+class TeamMemberRoleFilterSerializer(serializers.Serializer):
+    roles = NoCastBitField(required=False, model=TeamMember)
+
+
+class TeamMemberFilterSerializer(TeamMemberRoleFilterSerializer):
+    user = serializers.PrimaryKeyRelatedField(queryset=User.objects.all(), required=False)
 
 
 class TeamMemberFilterBackend(filters.BaseFilterBackend):
@@ -39,30 +63,5 @@ class TeamMemberRoleFilterBackend(filters.BaseFilterBackend):
         roles = params.get('roles')
         if roles:
             queryset = filter_by_roles(queryset, roles)
-
-        return queryset
-
-
-class MilestoneActiveFiler(filters.BaseFilterBackend):
-    def filter_queryset(self, request, queryset, view):
-        active_param = request.GET.get('active')
-
-        if not active_param:
-            return queryset
-
-        if strtobool(active_param):
-            return queryset.filter(state=Milestone.STATE.active)
-
-        return queryset.filter(state=Milestone.STATE.closed)
-
-
-class IssueStatusUrlFiler(filters.BaseFilterBackend):
-    def filter_queryset(self, request, queryset, view):
-        params = parse_query_params(request, FilterParamUrlSerializer)
-
-        gl_url = params.get('url')
-
-        if gl_url:
-            queryset = queryset.filter(gl_url=gl_url)
 
         return queryset

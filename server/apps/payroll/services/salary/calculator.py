@@ -6,9 +6,9 @@ from django.db import transaction
 from django.db.models import Q, Sum
 
 from apps.development.models.issue import STATE_CLOSED
-from apps.payroll.exceptions import EmptySalaryException
 from apps.payroll.models import Bonus, Penalty, Salary, SpentTime
 from apps.users.models import User
+from .exceptions import EmptySalaryException
 
 
 class SalaryCalculator:

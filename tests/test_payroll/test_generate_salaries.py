@@ -5,9 +5,9 @@ from django.test import TestCase
 from django.utils import timezone
 
 from apps.development.models.issue import STATE_CLOSED, STATE_OPENED
-from apps.payroll.exceptions import EmptySalaryException
 from apps.payroll.models import Payroll, Salary
 from apps.payroll.services.salary.calculator import SalaryCalculator
+from apps.payroll.services.salary.exceptions import EmptySalaryException
 from apps.users.models import User
 from tests.test_development.factories import IssueFactory
 from tests.test_payroll.factories import BonusFactory, IssueSpentTimeFactory, PenaltyFactory, SalaryFactory
@@ -17,10 +17,15 @@ from tests.test_users.factories import UserFactory
 class GenerateSalariesTests(TestCase):
     def setUp(self):
         self.initiator = User.objects.create_user(login='initiator')
-        self.user = User.objects.create_user(login='user', hour_rate=100)
-        self.calculator = SalaryCalculator(self.initiator,
-                                           period_from=timezone.now() - timedelta(days=30),
-                                           period_to=timezone.now())
+        self.user = User.objects.create_user(
+            login='user',
+            hour_rate=100
+        )
+        self.calculator = SalaryCalculator(
+            self.initiator,
+            period_from=timezone.now() - timedelta(days=30),
+            period_to=timezone.now()
+        )
 
     def test_common(self):
         issue = IssueFactory.create(state=STATE_CLOSED)

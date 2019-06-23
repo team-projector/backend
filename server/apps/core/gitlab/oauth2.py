@@ -28,4 +28,6 @@ class CustomGitLabOAuth2(GitLabOAuth2):
 
     def authenticate(self, *args, **kwargs):
         if 'response' in kwargs:
-            return User.objects.filter(login=kwargs['response']['username']).first()
+            return User.objects.filter(
+                login=kwargs['response']['username']
+            ).first()

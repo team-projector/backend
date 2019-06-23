@@ -3,7 +3,7 @@ from apps.payroll.services.metrics.user import UserMetricsCalculator
 
 class UserMetricsMixin:
     def get_metrics(self, instance):
-        from .serializers import UserMetricsSerializer
+        from ..user_metrics import UserMetricsSerializer
 
         show_metrics = self.context['request'].query_params.get('metrics', 'false') != 'false'
         if not show_metrics:

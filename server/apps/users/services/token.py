@@ -14,4 +14,6 @@ def clear_tokens() -> None:
     if settings.REST_FRAMEWORK_TOKEN_EXPIRE is None:
         return
 
-    Token.objects.filter(created__lt=timezone.now() - timedelta(minutes=settings.REST_FRAMEWORK_TOKEN_EXPIRE)).delete()
+    Token.objects.filter(
+        created__lt=timezone.now() - timedelta(minutes=settings.REST_FRAMEWORK_TOKEN_EXPIRE)
+    ).delete()

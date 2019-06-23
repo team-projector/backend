@@ -4,13 +4,6 @@ from rest_framework import permissions
 from apps.development.models import TeamMember
 
 
-class IsProjectManager(permissions.BasePermission):
-    message = 'Only project managers can view project resources'
-
-    def has_permission(self, request, view):
-        return request.user.roles.project_manager
-
-
 class IsTeamLeader(permissions.BasePermission):
     message = 'Only team leader can view team resources'
 
