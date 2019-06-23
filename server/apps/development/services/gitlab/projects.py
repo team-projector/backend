@@ -33,7 +33,9 @@ def load_group_projects(group: ProjectGroup) -> None:
             load_project(gl, group, gl_project)
 
 
-def load_project(gl: Gitlab, group: ProjectGroup, gl_project: GlProject) -> None:
+def load_project(gl: Gitlab,
+                 group: ProjectGroup,
+                 gl_project: GlProject) -> None:
     msg = f'Syncing project "{gl_project.name}"...'
 
     try:

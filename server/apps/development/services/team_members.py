@@ -11,7 +11,9 @@ from apps.development.models import TeamMember
 def filter_by_roles(queryset: QuerySet,
                     roles: List[Union[str, Bit]]) -> QuerySet:
     roles = [
-        role if isinstance(role, Bit) else Bit(TeamMember.roles.keys().index(role))
+        role
+        if isinstance(role, Bit) else
+        Bit(TeamMember.roles.keys().index(role))
         for role in roles
     ]
 

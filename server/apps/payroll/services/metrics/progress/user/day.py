@@ -60,7 +60,9 @@ class DayMetricsCalculator(ProgressMetricsCalculator):
                           now: date) -> bool:
         return day >= now and day.weekday() not in settings.TP_WEEKENDS_DAYS
 
-    def _update_loading(self, metric: UserProgressMetrics, active_issues: List[dict]) -> None:
+    def _update_loading(self,
+                        metric: UserProgressMetrics,
+                        active_issues: List[dict]) -> None:
         if not active_issues:
             return
 
@@ -113,8 +115,10 @@ class DayMetricsCalculator(ProgressMetricsCalculator):
             due_date_truncated=TruncDay('due_date'),
             time_remains=Case(
                 When(
-                    Q(time_estimate__gt=F('total_time_spent')) & ~Q(state=STATE_CLOSED),
-                    then=F('time_estimate') - F('total_time_spent')),
+                    Q(time_estimate__gt=F('total_time_spent')) &  # noqa:W504
+                    ~Q(state=STATE_CLOSED),
+                    then=F('time_estimate') - F('total_time_spent')
+                ),
                 default=Value(0),
                 output_field=IntegerField()
             ),

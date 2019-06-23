@@ -5,7 +5,8 @@ class UserMetricsMixin:
     def get_metrics(self, instance):
         from ..user_metrics import UserMetricsSerializer
 
-        show_metrics = self.context['request'].query_params.get('metrics', 'false') != 'false'
+        query_params = self.context['request'].query_params
+        show_metrics = query_params.get('metrics', 'false') != 'false'
         if not show_metrics:
             return None
 

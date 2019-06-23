@@ -18,24 +18,38 @@ schema_view = get_schema_view(
         description='Team projector API',
     ),
     public=True,
-    authentication_classes=(authentication.SessionAuthentication,),
-    permission_classes=(permissions.IsAdminUser,),
+    authentication_classes=(
+        authentication.SessionAuthentication,
+    ),
+    permission_classes=(
+        permissions.IsAdminUser,
+    ),
 )
 
 urlpatterns = [
     path('ht/', include('health_check.urls')),
-
     path('api/', include((get_module_url_patterns(
         'apps.users.rest.urls',
         'apps.development.rest.urls',
         'apps.payroll.rest.urls',
     ), 'urls'), namespace='api')),
-
     path('api/', include('apps.users.pages.urls', namespace='social')),
 
-    re_path(r'^api/swagger(?P<format>\.json|\.yaml)$', schema_view.without_ui(cache_timeout=0), name='swagger-json'),
-    path('api/swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
-    path('api/redoc/', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
+    re_path(
+        r'^api/swagger(?P<format>\.json|\.yaml)$',
+        schema_view.without_ui(cache_timeout=0),
+        name='swagger-json'
+    ),
+    path(
+        'api/swagger/',
+        schema_view.with_ui('swagger', cache_timeout=0),
+        name='schema-swagger-ui'
+    ),
+    path(
+        'api/redoc/',
+        schema_view.with_ui('redoc', cache_timeout=0),
+        name='schema-redoc'
+    ),
 
     path('admin_tools/', include('admin_tools.urls')),
     path('admin/', admin.site.urls),

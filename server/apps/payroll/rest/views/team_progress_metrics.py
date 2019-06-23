@@ -8,7 +8,9 @@ from apps.core.utils.rest import parse_query_params
 from apps.development.models import Team
 from apps.payroll.rest.permissions import CanViewTeamMetrics
 from apps.payroll.rest.serializers import TeamMemberProgressMetricsSerializer
-from apps.payroll.services.metrics.progress.team import calculate_team_progress_metrics
+from apps.payroll.services.metrics.progress.team import (
+    calculate_team_progress_metrics
+)
 
 
 class TeamProgressMetricsParamsSerializer(serializers.Serializer):

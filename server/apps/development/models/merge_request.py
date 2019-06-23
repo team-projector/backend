@@ -126,7 +126,9 @@ class MergeRequest(NotableMixin,
 
     @cached_property
     def last_note_date(self) -> datetime:
-        return self.notes.aggregate(last_created=Max('created_at'))['last_created']
+        return self.notes.aggregate(
+            last_created=Max('created_at')
+        )['last_created']
 
     def adjust_spent_times(self) -> None:
         from apps.payroll.models import SpentTime

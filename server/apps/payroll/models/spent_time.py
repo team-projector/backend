@@ -8,7 +8,7 @@ from apps.development.models import Note
 from apps.payroll.db.managers import SpentTimeManager
 from .payroll import Payroll
 
-SECONDS_IN_HOUR = 60 * 60
+SECS_IN_HOUR = 60 * 60
 
 
 class SpentTime(Payroll):
@@ -67,8 +67,8 @@ class SpentTime(Payroll):
         super().save(*args, **kwargs)
 
     def _adjust_sums(self):
-        self.sum = self.time_spent / SECONDS_IN_HOUR * self.rate
-        self.customer_sum = self.time_spent / SECONDS_IN_HOUR * self.customer_rate
+        self.sum = self.time_spent / SECS_IN_HOUR * self.rate
+        self.customer_sum = self.time_spent / SECS_IN_HOUR * self.customer_rate
 
     class Meta:
         verbose_name = _('VN__SPENT_TIME')

@@ -25,8 +25,10 @@ class BaseGenericViewSet(viewsets.GenericViewSet):
             else super().get_serializer_class()
 
     def get_update_serializer(self, request, instance=None, *args, **kwargs):
-        assert self.update_serializer_class is not None, \
-            f'"{self.__class__.__name__}" should include a `update_serializer_class` attribute'
+        msg = f'"{self.__class__.__name__}" should include a ' \
+            f'`update_serializer_class` attribute '
+
+        assert self.update_serializer_class is not None, msg
 
         params = {
             'context': self.get_serializer_context(),
@@ -38,7 +40,9 @@ class BaseGenericViewSet(viewsets.GenericViewSet):
 
 
 class LinksViewMixin:
-    @action(detail=False, serializer_class=LinkSerializer, pagination_class=None)
+    @action(detail=False,
+            serializer_class=LinkSerializer,
+            pagination_class=None)
     def links(self, request, **kwargs):
         queryset = self.filter_queryset(self.get_queryset())
         serializer = self.get_serializer(queryset, many=True)

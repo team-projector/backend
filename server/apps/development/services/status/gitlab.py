@@ -4,7 +4,9 @@ from typing import Dict, Iterable
 from actstream.models import Action
 from django.apps import apps
 
-from apps.core.activity.verbs import ACTION_GITLAB_CALL_API, ACTION_GITLAB_WEBHOOK_TRIGGERED
+from apps.core.activity.verbs import (
+    ACTION_GITLAB_CALL_API, ACTION_GITLAB_WEBHOOK_TRIGGERED
+)
 from apps.core.db.mixins import GitlabEntityMixin
 from apps.development.models import Issue
 
@@ -46,7 +48,9 @@ class GLStatusProvider:
             for x in apps.get_models()
             if issubclass(x, GitlabEntityMixin)
         ]
-        value = querysets[0].union(*querysets[1:]).order_by('-gl_last_sync').first() or {}
+        value = querysets[0].union(*querysets[1:]).order_by(
+            '-gl_last_sync'
+        ).first() or {}
         return value.get('gl_last_sync')  # type: ignore
 
     @classmethod
@@ -54,7 +58,10 @@ class GLStatusProvider:
         stats = {}
 
         for key, value in ACTIONS_MAPS.items():
-            action = Action.objects.filter(verb=value).order_by('-timestamp').first()
+            action = Action.objects.filter(verb=value).order_by(
+                '-timestamp'
+            ).first()
+
             if action:
                 stats[key] = action.timestamp
 

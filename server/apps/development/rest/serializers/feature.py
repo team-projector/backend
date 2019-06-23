@@ -25,7 +25,10 @@ class FeatureCardSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Feature
-        fields = ('id', 'title', 'start_date', 'due_date', 'milestone', 'metrics', 'issues')
+        fields = (
+            'id', 'title', 'start_date', 'due_date', 'milestone', 'metrics',
+            'issues'
+        )
 
 
 class FeatureUpdateSerializer(serializers.ModelSerializer):

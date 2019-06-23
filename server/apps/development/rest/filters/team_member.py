@@ -27,11 +27,17 @@ class NoCastBitField(BitField):
 
 
 class TeamMemberRoleFilterSerializer(serializers.Serializer):
-    roles = NoCastBitField(required=False, model=TeamMember)
+    roles = NoCastBitField(
+        required=False,
+        model=TeamMember
+    )
 
 
 class TeamMemberFilterSerializer(TeamMemberRoleFilterSerializer):
-    user = serializers.PrimaryKeyRelatedField(queryset=User.objects.all(), required=False)
+    user = serializers.PrimaryKeyRelatedField(
+        queryset=User.objects.all(),
+        required=False
+    )
 
 
 class TeamMemberFilterBackend(filters.BaseFilterBackend):

@@ -2,7 +2,9 @@ import logging
 
 from django.utils import timezone
 from gitlab import GitlabGetError
-from gitlab.v4.objects import Project as GlProject, ProjectIssue as GlProjectIssue
+from gitlab.v4.objects import (
+    Project as GlProject, ProjectIssue as GlProjectIssue
+)
 from rest_framework import status
 
 from apps.core.activity.verbs import ACTION_GITLAB_CALL_API
@@ -79,7 +81,8 @@ def check_project_deleted_issues(project: Project,
 
     project.issues.filter(gl_id__in=diff).delete()
 
-    logger.info(f'Project "{project}" deleted issues ckecked: removed {len(diff)} issues')
+    logger.info(f'Project "{project}" deleted issues '
+                f'ckecked: removed {len(diff)} issues')
 
 
 def load_project_issue(project: Project,
@@ -107,7 +110,8 @@ def load_project_issue(project: Project,
     params['milestone'] = None
 
     if gl_issue.milestone:
-        milestone = Milestone.objects.filter(gl_id=gl_issue.milestone['id']).first()
+        milestone = Milestone.objects.filter(
+            gl_id=gl_issue.milestone['id']).first()
 
         if milestone:
             params['milestone'] = milestone
@@ -132,11 +136,20 @@ def load_issue_labels(issue: Issue,
     labels = []
 
     for label_title in gl_issue.labels:
-        label = Label.objects.filter(title=label_title).first()
+        label = Label.objects.filter(
+            title=label_title
+        ).first()
         if not label:
-            gl_label = next((x for x in project_labels if x.name == label_title), None)
+            gl_label = next((
+                x
+                for x in project_labels
+                if x.name == label_title
+            ), None)
             if gl_label:
-                label = Label.objects.create(title=label_title, color=gl_label.color)
+                label = Label.objects.create(
+                    title=label_title,
+                    color=gl_label.color
+                )
 
         if label:
             labels.append(label)

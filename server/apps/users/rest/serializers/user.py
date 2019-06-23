@@ -13,7 +13,10 @@ class UserSerializer(UserMetricsMixin,
 
     class Meta:
         model = User
-        fields = ('id', 'name', 'login', 'hour_rate', 'avatar', 'gl_url', 'roles', 'metrics')
+        fields = (
+            'id', 'name', 'login', 'hour_rate', 'avatar', 'gl_url', 'roles',
+            'metrics'
+        )
 
 
 class UserCardSerializer(UserMetricsMixin,

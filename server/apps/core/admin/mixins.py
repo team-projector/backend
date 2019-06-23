@@ -27,7 +27,10 @@ class ForceSyncEntityMixin(BaseModelAdmin):
 
     def _sync_obj(self, request, obj):
         self.sync_handler(obj)
-        self.message_user(request, f'{obj._meta.verbose_name} "{obj}" is syncing')
+        self.message_user(
+            request,
+            f'{obj._meta.verbose_name} "{obj}" is syncing'
+        )
 
     def sync_handler(self, obj):
         raise NotImplementedError

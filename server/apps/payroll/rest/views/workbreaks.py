@@ -10,8 +10,12 @@ from apps.core.rest.views import BaseGenericViewSet
 from apps.development.models import TeamMember
 from apps.payroll.db.mixins.approved import APPROVED, CREATED, DECLINED
 from apps.payroll.models import WorkBreak
-from apps.payroll.rest.permissions import CanApproveDeclineWorkbreaks, CanManageWorkbreaks
-from apps.payroll.rest.serializers import WorkBreakCardSerializer, WorkBreakSerializer, WorkBreakUpdateSerializer
+from apps.payroll.rest.permissions import (
+    CanApproveDeclineWorkbreaks, CanManageWorkbreaks
+)
+from apps.payroll.rest.serializers import (
+    WorkBreakCardSerializer, WorkBreakSerializer, WorkBreakUpdateSerializer
+)
 
 User = get_user_model()
 
@@ -33,7 +37,10 @@ class WorkBreakDeclineSerializer(serializers.Serializer):
         instance.approve_state = DECLINED
         instance.approved_by = self.context['request'].user
         instance.approved_at = timezone.now()
-        instance.decline_reason = validated_data.get('decline_reason', instance.decline_reason)
+        instance.decline_reason = validated_data.get(
+            'decline_reason',
+            instance.decline_reason
+        )
         instance.save()
 
         return instance

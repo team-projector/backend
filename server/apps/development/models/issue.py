@@ -132,7 +132,9 @@ class Issue(NotableMixin,
 
     @cached_property
     def last_note_date(self) -> datetime:
-        return self.notes.aggregate(last_created=Max('created_at'))['last_created']
+        return self.notes.aggregate(
+            last_created=Max('created_at')
+        )['last_created']
 
     @property
     def time_remains(self) -> Optional[int]:

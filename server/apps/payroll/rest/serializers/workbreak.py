@@ -20,8 +20,8 @@ class WorkBreakSerializer(serializers.ModelSerializer):
     class Meta:
         model = WorkBreak
         fields = (
-            'approve_state', 'approved_by', 'approved_at', 'decline_reason', 'comment', 'from_date', 'reason',
-            'to_date', 'id', 'user'
+            'approve_state', 'approved_by', 'approved_at', 'decline_reason',
+            'comment', 'from_date', 'reason', 'to_date', 'id', 'user'
         )
 
 
@@ -31,6 +31,9 @@ class WorkBreakCardSerializer(WorkBreakSerializer):
 
 class WorkBreakUpdateSerializer(serializers.ModelSerializer):
     def validate_user(self, user):
+        if user == self.context['request'].user:
+            return user
+
         teams = TeamMember.objects.filter(
             user=self.context['request'].user,
             roles=TeamMember.roles.leader
@@ -39,12 +42,13 @@ class WorkBreakUpdateSerializer(serializers.ModelSerializer):
             flat=True
         )
 
-        if user == self.context['request'].user or User.objects.filter(team_members__team__in=teams,
-                                                                       team_members__roles=TeamMember.roles.developer,
-                                                                       id=user.id).exists():
+        if User.objects.filter(team_members__team__in=teams,
+                               team_members__roles=TeamMember.roles.developer,
+                               id=user.id).exists():
             return user
 
-        raise serializers.ValidationError(_('MSG_USER_CAN_NOT_MANAGE_CURRENT_WORKBREAK'))
+        raise serializers.ValidationError(
+            _('MSG_USER_CAN_NOT_MANAGE_CURRENT_WORKBREAK'))
 
     class Meta:
         model = WorkBreak

@@ -11,10 +11,13 @@ class IssueMetricsMixin(serializers.ModelSerializer):
     metrics = serializers.SerializerMethodField()
 
     def get_metrics(self, instance: Issue):
-        if self.context['request'].query_params.get('metrics', 'false') == 'false':
+        query_params = self.context['request'].query_params
+        if query_params.get('metrics', 'false') == 'false':
             return None
 
-        payroll = SpentTime.objects.filter(issues__id=instance.id).aggregate_payrolls()
+        payroll = SpentTime.objects.filter(
+            issues__id=instance.id
+        ).aggregate_payrolls()
 
         metrics = {
             'remains': instance.time_remains,

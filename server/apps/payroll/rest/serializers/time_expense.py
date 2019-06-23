@@ -19,7 +19,10 @@ class TimeExpenseSerializer(serializers.ModelSerializer):
             return
 
         if instance.content_type.model_class() == Issue:
-            data['issue'] = IssueCardSerializer(instance.base, context=self.context).data
+            data['issue'] = IssueCardSerializer(
+                instance.base,
+                context=self.context
+            ).data
 
     class Meta:
         model = SpentTime

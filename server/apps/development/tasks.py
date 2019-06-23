@@ -5,9 +5,12 @@ from celery_app import app
 from .models import Project, ProjectGroup
 from .services.gitlab.groups import load_groups, load_single_group
 from .services.gitlab.issues import load_project_issue, load_project_issues
-from .services.gitlab.merge_requests import load_project_merge_request, load_project_merge_requests
+from .services.gitlab.merge_requests import (
+    load_project_merge_request, load_project_merge_requests
+)
 from .services.gitlab.milestones import (
-    load_gl_project_milestones, load_group_milestone, load_group_milestones, load_project_milestone
+    load_gl_project_milestones, load_group_milestone, load_group_milestones,
+    load_project_milestone
 )
 from .services.gitlab.projects import load_project, load_projects
 from .services.gitlab.users import load_user
@@ -26,7 +29,9 @@ def sync() -> None:
 
 @app.task(queue='low_priority')
 def sync_groups_milestones() -> None:
-    for project_group_id in ProjectGroup.objects.all().values_list('id', flat=True):
+    groups = ProjectGroup.objects.all()
+
+    for project_group_id in groups.values_list('id', flat=True):
         load_project_group_milestones.delay(project_group_id)
 
 

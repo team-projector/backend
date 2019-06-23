@@ -20,7 +20,9 @@ class LoginSerializer(serializers.Serializer):
             )
 
             if not user:
-                raise AuthenticationFailed(_('MSG_UNABLE_TO_LOGIN_WITH_PROVIDED_CREDENTIALS'))
+                raise AuthenticationFailed(
+                    _('MSG_UNABLE_TO_LOGIN_WITH_PROVIDED_CREDENTIALS')
+                )
         else:
             raise AuthenticationFailed(_('MSG_MUST_INCLUDE_LOGIN_AND_PASSWORD'))
 

@@ -12,6 +12,9 @@ class AdminMenu(Menu):
                 items.MenuItem('Job queue', '/admin/flower/'),
             ]),
             items.MenuItem('Utils', children=[
-                items.MenuItem('Generate salaries', reverse('admin:generate-salaries')),
+                items.MenuItem(
+                    'Generate salaries',
+                    reverse('admin:generate-salaries')
+                ),
             ]),
         ]

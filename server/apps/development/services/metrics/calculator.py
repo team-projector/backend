@@ -26,8 +26,12 @@ class IssuesContainerCalculator:
         stats = issues.aggregate(
             time_estimate=Coalesce(Sum('time_estimate'), 0),
             time_spent=Coalesce(Sum('total_time_spent'), 0),
-            issues_closed_count=Coalesce(Count('id', filter=Q(state=STATE_CLOSED)), 0),
-            issues_opened_count=Coalesce(Count('id', filter=Q(state=STATE_OPENED)), 0),
+            issues_closed_count=Coalesce(
+                Count('id', filter=Q(state=STATE_CLOSED)), 0
+            ),
+            issues_opened_count=Coalesce(
+                Count('id', filter=Q(state=STATE_OPENED)), 0
+            ),
             issues_count=Count('*'),
         )
 
@@ -38,7 +42,8 @@ class IssuesContainerCalculator:
             metrics.time_remains = stats['time_estimate'] - stats['time_spent']
 
             if stats['time_spent']:
-                metrics.efficiency = stats['time_estimate'] / stats['time_spent']
+                metrics.efficiency = stats['time_estimate'] / stats[
+                    'time_spent']
 
             metrics.time_spent = stats['time_spent']
             metrics.issues_count = stats['issues_count']

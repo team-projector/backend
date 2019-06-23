@@ -1,6 +1,3 @@
-from typing import Optional, Type
-
-from django.db.models import Model
 from rest_framework import serializers
 
 from apps.development.models import Milestone, Project, ProjectGroup
@@ -15,13 +12,15 @@ class MilestoneCardSerializer(serializers.ModelSerializer):
     owner = serializers.SerializerMethodField()
 
     def get_metrics(self, instance):
-        if self.context['request'].query_params.get('metrics', 'false') == 'false':
+        if self.context['request'].query_params.get('metrics',
+                                                    'false') == 'false':
             return None
 
         return MilestoneMetricsSerializer(get_milestone_metrics(instance)).data
 
     def get_owner(self, instance):
-        serializer_class = self._get_serializer_class(instance.content_type.model_class())
+        serializer_class = self._get_serializer_class(
+            instance.content_type.model_class())
 
         if not serializer_class:
             return
@@ -32,7 +31,7 @@ class MilestoneCardSerializer(serializers.ModelSerializer):
         return data
 
     @staticmethod
-    def _get_serializer_class(model_class: Optional[Type[Model]]) -> Optional[Type[serializers.ModelSerializer]]:
+    def _get_serializer_class(model_class):
         if model_class == Project:
             return ProjectCardSerializer
         elif model_class == ProjectGroup:
@@ -41,6 +40,6 @@ class MilestoneCardSerializer(serializers.ModelSerializer):
     class Meta:
         model = Milestone
         fields = (
-            'id', 'gl_id', 'gl_last_sync', 'gl_url', 'title', 'start_date', 'due_date', 'metrics', 'owner', 'budget',
-            'state'
+            'id', 'gl_id', 'gl_last_sync', 'gl_url', 'title', 'start_date',
+            'due_date', 'metrics', 'owner', 'budget', 'state'
         )

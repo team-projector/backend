@@ -31,40 +31,65 @@ class UserMetricsCalculator:
 
     @staticmethod
     def _get_issues_opened_count(user: User) -> int:
-        return Issue.objects.filter(user=user, state=STATE_OPENED).count()
+        return Issue.objects.filter(
+            user=user,
+            state=STATE_OPENED
+        ).count()
 
     @staticmethod
     def _get_bonus(user: User) -> float:
-        return (Bonus.objects
-                .filter(user=user, salary__isnull=True)
-                .aggregate(total_bonus=Sum('sum'))['total_bonus'] or 0)
+        return Bonus.objects.filter(
+            user=user,
+            salary__isnull=True
+        ).aggregate(
+            total_bonus=Sum('sum')
+        )['total_bonus'] or 0
 
     @staticmethod
     def _get_penalty(user: User) -> float:
-        return (Penalty.objects
-                .filter(user=user, salary__isnull=True)
-                .aggregate(total_penalty=Sum('sum'))['total_penalty'] or 0)
+        return Penalty.objects.filter(
+            user=user,
+            salary__isnull=True
+        ).aggregate(
+            total_penalty=Sum('sum')
+        )['total_penalty'] or 0
 
     @staticmethod
     def _get_payroll_opened(user: User) -> float:
-        return (SpentTime.objects
-                .filter(salary__isnull=True, user=user, issues__state=STATE_OPENED)
-                .aggregate(total_sum=Sum('sum'))['total_sum'] or 0)
+        return SpentTime.objects.filter(
+            salary__isnull=True,
+            user=user,
+            issues__state=STATE_OPENED
+        ).aggregate(
+            total_sum=Sum('sum')
+        )['total_sum'] or 0
 
     @staticmethod
     def _get_payroll_closed(user: User) -> float:
-        return (SpentTime.objects
-                .filter(salary__isnull=True, user=user, issues__state=STATE_CLOSED)
-                .aggregate(total_sum=Sum('sum'))['total_sum'] or 0)
+        return SpentTime.objects.filter(
+            salary__isnull=True,
+            user=user,
+            issues__state=STATE_CLOSED
+        ).aggregate(
+            total_sum=Sum('sum')
+        )['total_sum'] or 0
 
     @staticmethod
     def _get_issues_closed_spent(user: User) -> float:
-        return (SpentTime.objects
-                .filter(salary__isnull=True, user=user, issues__state=STATE_CLOSED)
-                .aggregate(total_time_spent=Sum('time_spent'))['total_time_spent'] or 0)
+        return SpentTime.objects.filter(
+            salary__isnull=True,
+            user=user,
+            issues__state=STATE_CLOSED
+        ).aggregate(
+            total_time_spent=Sum('time_spent')
+        )['total_time_spent'] or 0
 
     @staticmethod
     def _get_issues_opened_spent(user: User) -> float:
-        return (SpentTime.objects
-                .filter(salary__isnull=True, user=user, issues__state=STATE_OPENED)
-                .aggregate(total_time_spent=Sum('time_spent'))['total_time_spent'] or 0)
+        return SpentTime.objects.filter(
+            salary__isnull=True,
+            user=user,
+            issues__state=STATE_OPENED
+        ).aggregate(
+            total_time_spent=Sum('time_spent')
+        )['total_time_spent'] or 0

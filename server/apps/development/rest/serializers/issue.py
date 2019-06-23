@@ -20,8 +20,10 @@ class IssueSerializer(IssueMetricsMixin,
     class Meta:
         model = Issue
         fields = (
-            'id', 'title', 'labels', 'project', 'due_date', 'state', 'time_estimate', 'total_time_spent', 'time_spent',
-            'gl_url', 'metrics', 'milestone', 'feature', 'participants', 'gl_last_sync', 'gl_id', 'user'
+            'id', 'title', 'labels', 'project', 'due_date', 'state',
+            'time_estimate', 'total_time_spent', 'time_spent',
+            'gl_url', 'metrics', 'milestone', 'feature', 'participants',
+            'gl_last_sync', 'gl_id', 'user'
         )
 
 
@@ -39,8 +41,10 @@ class IssueCardSerializer(IssueMetricsMixin,
     class Meta:
         model = Issue
         fields = (
-            'id', 'title', 'labels', 'project', 'due_date', 'state', 'time_estimate', 'total_time_spent', 'time_spent',
-            'gl_url', 'metrics', 'milestone', 'feature', 'participants', 'gl_last_sync', 'gl_id', 'user'
+            'id', 'title', 'labels', 'project', 'due_date', 'state',
+            'time_estimate', 'total_time_spent', 'time_spent',
+            'gl_url', 'metrics', 'milestone', 'feature', 'participants',
+            'gl_last_sync', 'gl_id', 'user'
         )
 
 

@@ -4,14 +4,15 @@ from apps.core.admin.base import BaseModelAdmin
 from apps.core.admin.mixins import ForceSyncEntityMixin
 from apps.development.admin.filters import MilestoneFilter, TeamFilter
 from apps.development.tasks import (
-    sync_group_milestone, sync_project, sync_project_group, sync_project_issue, sync_project_merge_request,
-    sync_project_milestone
+    sync_group_milestone, sync_project, sync_project_group, sync_project_issue,
+    sync_project_merge_request, sync_project_milestone
 )
 from apps.users.admin.filters import UserFilter
 from .filters import ProjectFilter
 from .inlines import NoteInline, ProjectMemberInline, TeamMemberInline
 from ..models import (
-    Feature, Issue, Label, MergeRequest, Milestone, Note, Project, ProjectGroup, ProjectMember, Team, TeamMember
+    Feature, Issue, Label, MergeRequest, Milestone, Note, Project, ProjectGroup,
+    ProjectMember, Team, TeamMember
 )
 
 
@@ -60,12 +61,16 @@ class ProjectAdmin(ForceSyncEntityMixin, BaseModelAdmin):
 
 @admin.register(Issue)
 class IssueAdmin(ForceSyncEntityMixin, BaseModelAdmin):
-    list_display = ('title', 'user', 'milestone', 'state', 'created_at', 'gl_last_sync')
+    list_display = (
+        'title', 'user', 'milestone', 'state', 'created_at', 'gl_last_sync'
+    )
     list_filter = (ProjectFilter, MilestoneFilter, 'state')
     search_fields = ('title', 'gl_id')
     sortable_by = ('gl_last_sync', 'created_at')
     ordering = ('-gl_last_sync',)
-    autocomplete_fields = ('project', 'user', 'milestone', 'feature', 'labels', 'participants')
+    autocomplete_fields = (
+        'project', 'user', 'milestone', 'feature', 'labels', 'participants'
+    )
     inlines = (NoteInline,)
 
     def sync_handler(self, obj):
@@ -104,12 +109,16 @@ class FeatureAdmin(BaseModelAdmin):
 
 @admin.register(MergeRequest)
 class MergeRequestAdmin(ForceSyncEntityMixin, BaseModelAdmin):
-    list_display = ('title', 'assignee', 'author', 'state', 'created_at', 'gl_last_sync')
+    list_display = (
+        'title', 'assignee', 'author', 'state', 'created_at', 'gl_last_sync'
+    )
     list_filter = (ProjectFilter,)
     search_fields = ('title', 'gl_id')
     sortable_by = ('gl_last_sync', 'created_at')
     ordering = ('-gl_last_sync',)
-    autocomplete_fields = ('project', 'assignee', 'author', 'milestone', 'labels')
+    autocomplete_fields = (
+        'project', 'assignee', 'author', 'milestone', 'labels'
+    )
     inlines = (NoteInline,)
 
     def sync_handler(self, obj):

@@ -10,7 +10,8 @@ from apps.core.rest.mixins.views import UpdateModelMixin
 from apps.core.rest.views import BaseGenericViewSet
 from apps.development.models import Issue
 from apps.development.rest.serializers import (
-    IssueCardSerializer, IssueProblemSerializer, IssueSerializer, IssueUpdateSerializer
+    IssueCardSerializer, IssueProblemSerializer, IssueSerializer,
+    IssueUpdateSerializer
 )
 from apps.development.services.gitlab.spent_time import add_spent_time
 from apps.development.services.problems.issues import IssueProblemsChecker

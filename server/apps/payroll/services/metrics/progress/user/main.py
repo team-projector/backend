@@ -22,6 +22,6 @@ def create_progress_calculator(user: User,
 def calculate_user_progress_metrics(user: User,
                                     start: date,
                                     end: date,
-                                    group: str) -> Iterable[UserProgressMetrics]:
-    calculator = create_progress_calculator(user, start, end, group)
+                                    grp: str) -> Iterable[UserProgressMetrics]:
+    calculator = create_progress_calculator(user, start, end, grp)
     return calculator.calculate()

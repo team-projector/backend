@@ -17,15 +17,34 @@ router.register(
 urlpatterns = [
     path('users/<int:user_pk>/', include((
         [
-            path('progress-metrics', views.UserProgressMetricsView.as_view(), name='progress-metrics'),
-            path('salaries', views.UserSalariesView.as_view(), name='salaries'),
-            path('time-expenses', views.TimeExpensesView.as_view(),
-                 name='time-expenses'),
-            path('work-breaks', views.UserWorkBreaksView.as_view(), name='user-work-breaks')
+            path(
+                'progress-metrics',
+                views.UserProgressMetricsView.as_view(),
+                name='progress-metrics'
+            ),
+            path(
+                'salaries',
+                views.UserSalariesView.as_view(),
+                name='salaries'
+            ),
+            path(
+                'time-expenses',
+                views.TimeExpensesView.as_view(),
+                name='time-expenses'
+            ),
+            path(
+                'work-breaks',
+                views.UserWorkBreaksView.as_view(),
+                name='user-work-breaks'
+            )
         ], app_name), 'users')),
     path('teams/<int:team_pk>/', include((
         [
-            path('progress-metrics', views.TeamProgressMetricsView.as_view(), name='progress-metrics'),
+            path(
+                'progress-metrics',
+                views.TeamProgressMetricsView.as_view(),
+                name='progress-metrics'
+            ),
         ], app_name), 'teams')),
     *router.urls
 ]

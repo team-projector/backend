@@ -19,9 +19,12 @@ def create_progress_calculator(team: Team,
     raise ValueError(f'Bad group "{group}"')
 
 
+TeamMemberProgressMetricsList = Iterable[TeamMemberProgressMetrics]
+
+
 def calculate_team_progress_metrics(team: Team,
                                     start: date,
                                     end: date,
-                                    group: str) -> Iterable[TeamMemberProgressMetrics]:
-    calculator = create_progress_calculator(team, start, end, group)
+                                    grp: str) -> TeamMemberProgressMetricsList:
+    calculator = create_progress_calculator(team, start, end, grp)
     return calculator.calculate()

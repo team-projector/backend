@@ -33,7 +33,10 @@ class EmptyDueDateProblemChecker(BaseProblemChecker):
     problem_code = PROBLEM_EMPTY_DUE_DAY
 
     def get_condition(self) -> When:
-        return When(Q(due_date__isnull=True, state=STATE_OPENED), then=True)
+        return When(
+            Q(due_date__isnull=True, state=STATE_OPENED),
+            then=True
+        )
 
 
 class OverdueDueDateProblemChecker(BaseProblemChecker):
@@ -41,7 +44,10 @@ class OverdueDueDateProblemChecker(BaseProblemChecker):
     problem_code = PROBLEM_OVER_DUE_DAY
 
     def get_condition(self) -> When:
-        return When(Q(due_date__lt=timezone.now(), state=STATE_OPENED), then=True)
+        return When(
+            Q(due_date__lt=timezone.now(), state=STATE_OPENED),
+            then=True
+        )
 
 
 class EmptyEstimateProblemChecker(BaseProblemChecker):

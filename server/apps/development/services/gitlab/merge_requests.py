@@ -2,7 +2,9 @@ import logging
 
 from django.utils import timezone
 from gitlab import GitlabGetError
-from gitlab.v4.objects import Project as GlProject, MergeRequest as GlMergeRequest
+from gitlab.v4.objects import (
+    Project as GlProject, MergeRequest as GlMergeRequest
+)
 from rest_framework import status
 
 from apps.core.activity.verbs import ACTION_GITLAB_CALL_API
@@ -69,7 +71,9 @@ def load_project_merge_request(project: Project,
     }
 
     if gl_merge_request.milestone:
-        milestone = Milestone.objects.filter(gl_id=gl_merge_request.milestone['id']).first()
+        milestone = Milestone.objects.filter(
+            gl_id=gl_merge_request.milestone['id']
+        ).first()
 
         if milestone:
             params['milestone'] = milestone
@@ -95,9 +99,16 @@ def load_merge_request_labels(merge_request: MergeRequest,
     for label_title in gl_merge_request.labels:
         label = Label.objects.filter(title=label_title).first()
         if not label:
-            gl_label = next((x for x in project_labels if x.name == label_title), None)
+            gl_label = next((
+                x
+                for x in project_labels
+                if x.name == label_title
+            ), None)
             if gl_label:
-                label = Label.objects.create(title=label_title, color=gl_label.color)
+                label = Label.objects.create(
+                    title=label_title,
+                    color=gl_label.color
+                )
 
         if label:
             labels.append(label)

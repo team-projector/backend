@@ -105,7 +105,8 @@ class WeekMetricsCalculator(ProgressMetricsCalculator):
             'week'
         ).annotate(
             avg_efficiency=Coalesce(
-                Cast(Sum(F('time_estimate')), FloatField()) / Cast(Sum(F('total_time_spent')), FloatField()),
+                Cast(Sum(F('time_estimate')), FloatField()) /  # noqa:W504
+                Cast(Sum(F('total_time_spent')), FloatField()),
                 0)
         ).order_by()
 

@@ -9,7 +9,9 @@ from django.urls import reverse
 from django.utils.html import format_html
 
 from apps.core.admin.base import BaseModelAdmin
-from apps.core.admin.mixins import AdminFormFieldsOverridesMixin, ForceSyncEntityMixin
+from apps.core.admin.mixins import (
+    AdminFormFieldsOverridesMixin, ForceSyncEntityMixin
+)
 from apps.development.tasks import sync_user
 from .forms import GroupAdminForm
 from ..models import User
@@ -22,7 +24,8 @@ class UserAdmin(AdminFormFieldsOverridesMixin,
                 ForceSyncEntityMixin,
                 DjUserAdmin):
     list_display = (
-        'login', 'name', 'email', 'hour_rate', 'last_login', 'is_active', 'is_staff', 'change_password_link'
+        'login', 'name', 'email', 'hour_rate', 'last_login', 'is_active',
+        'is_staff', 'change_password_link'
     )
     list_filter = ('is_active', 'is_staff')
     ordering = ('login',)
@@ -39,13 +42,17 @@ class UserAdmin(AdminFormFieldsOverridesMixin,
     exclude = ('user_permissions',)
     fieldsets = (
         (None, {
-            'fields': ('login', 'email', 'name', 'roles', 'is_superuser', 'is_staff', 'is_active', 'last_login')
+            'fields': (
+                'login', 'email', 'name', 'roles', 'is_superuser', 'is_staff',
+                'is_active', 'last_login')
         }),
         ('GitLab', {
-            'fields': ('gl_avatar', 'gl_id', 'gl_url', 'gl_last_sync', 'gl_token')
+            'fields': (
+                'gl_avatar', 'gl_id', 'gl_url', 'gl_last_sync', 'gl_token')
         }),
         ('Costs', {
-            'fields': ('hour_rate', 'customer_hour_rate', 'taxes', 'daily_work_hours')
+            'fields': (
+                'hour_rate', 'customer_hour_rate', 'taxes', 'daily_work_hours')
         })
 
     )
@@ -64,19 +71,25 @@ class UserAdmin(AdminFormFieldsOverridesMixin,
 
     def changelist_view(self, request, extra_context=None):
         referer = request.META.get('HTTP_REFERER')
-        referer_path = urlparse(referer).path
 
-        self._apply_default_filter_if_need(request, referer, referer_path)
+        self._apply_default_filter_if_need(request, referer)
 
         return super().changelist_view(request, extra_context)
 
-    @staticmethod
-    def _apply_default_filter_if_need(request, referer, referer_path):
-        if not referer or referer_path != reverse('admin:users_user_changelist'):
+    @classmethod
+    def _apply_default_filter_if_need(cls, request, referer):
+        if cls._is_apply_default_filter(referer):
             q = request.GET.copy()
             q['is_active__exact'] = '1'
             request.GET = q
             request.META['QUERY_STRING'] = request.GET.urlencode()
+
+    @classmethod
+    def _is_apply_default_filter(cls, referer) -> bool:
+        return (
+            not referer or  # noqa: W504
+            urlparse(referer).path != reverse('admin:users_user_changelist')
+        )
 
 
 @admin.register(Group)
