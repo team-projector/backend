@@ -57,9 +57,15 @@ class PayrollAdmin(BaseModelAdmin):
     autocomplete_fields = ('user', 'created_by', 'salary')
     readonly_fields = ('inheritance',)
 
+    fieldsets = (
+        (None, {
+            'fields': ('inheritance', 'created_by', 'sum', 'salary', 'user')
+        }),
+    )
+
     def inheritance(self, payroll):
         node = None
-        for field in self._get_accessor_name_fields(self.model):
+        for field in self._get_accessor_names(self.model):
             try:
                 node = getattr(payroll, field)
                 if node:
@@ -70,10 +76,10 @@ class PayrollAdmin(BaseModelAdmin):
         if node:
             url = reverse(f'admin:{node._meta.app_label}_{node._meta.model_name}_change', args=[node.id])
 
-            return mark_safe(f'<a href={url}>{node._meta.model_name.capitalize()}: {str(node)}</a>')
+            return mark_safe(f'<a href={url}>{node._meta.model_name.capitalize()}: {node}</a>')
 
     @staticmethod
-    def _get_accessor_name_fields(model):
+    def _get_accessor_names(model):
         related_objects = [
             f for f in model._meta.get_fields()
             if isinstance(f, OneToOneRel) and issubclass(f.field.model, model)
