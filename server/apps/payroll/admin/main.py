@@ -51,10 +51,10 @@ class SalaryAdmin(BaseModelAdmin):
 
 @admin.register(Payroll)
 class PayrollAdmin(BaseModelAdmin):
-    list_display = ('user', 'created_at', 'sum',)
+    list_display = ('user', 'created_by', 'created_at', 'sum')
     list_filter = (UserFilter,)
     search_fields = ('user',)
-    autocomplete_fields = ('user', 'salary')
+    autocomplete_fields = ('user', 'created_by', 'salary')
     readonly_fields = ('inheritance',)
 
     def inheritance(self, payroll):
