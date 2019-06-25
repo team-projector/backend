@@ -88,9 +88,15 @@ class PayrollAdmin(BaseModelAdmin):
                 pass
 
         if node:
-            url = reverse(f'admin:{node._meta.app_label}_{node._meta.model_name}_change', args=[node.id])
+            url = reverse(
+                f'admin:{node._meta.app_label}_{node._meta.model_name}_change',
+                args=[node.id]
+            )
 
-            return mark_safe(f'<a href={url}>{node._meta.model_name.capitalize()}: {node}</a>')
+            return mark_safe(
+                f'<a href={url}>{node._meta.model_name.capitalize()}: '
+                f'{node}</a>'
+            )
 
     @staticmethod
     def _get_accessor_names(model):
