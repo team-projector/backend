@@ -1,3 +1,4 @@
+from admin_tools.mixins import AdminAutocompleteFieldsMixin
 from django import forms
 from django.contrib import admin
 from django.contrib.contenttypes.admin import (
@@ -7,7 +8,8 @@ from django.contrib.contenttypes.admin import (
 from apps.core.admin.mixins import AdminFormFieldsOverridesMixin
 
 
-class BaseModelAdmin(AdminFormFieldsOverridesMixin,
+class BaseModelAdmin(AdminAutocompleteFieldsMixin,
+                     AdminFormFieldsOverridesMixin,
                      admin.ModelAdmin):
     list_per_page = 20
 

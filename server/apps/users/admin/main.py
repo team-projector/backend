@@ -30,7 +30,6 @@ class UserAdmin(AdminFormFieldsOverridesMixin,
     list_filter = ('is_active', 'is_staff')
     ordering = ('login',)
     sortable_by = ()
-    autocomplete_fields = ('groups',)
     search_fields = ('login',)
     add_fieldsets = (
         (None, {
