@@ -155,7 +155,7 @@ class ApiTeamIssuesTests(BaseAPITest):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data['count'], 5)
 
-    def test_list_searh_by_title(self):
+    def test_list_search_by_title(self):
         issue = IssueFactory.create(title='Issue Test', user=self.user)
         IssueFactory.create_batch(5, user=self.user)
 
@@ -170,8 +170,9 @@ class ApiTeamIssuesTests(BaseAPITest):
         issue_1 = IssueFactory.create(user=self.user, due_date=date(2018, 11, 15))
         issue_2 = IssueFactory.create(user=self.user, due_date=date(2018, 3, 5))
         issue_3 = IssueFactory.create(user=self.user, due_date=date(2019, 5, 2))
+        issue_4 = IssueFactory.create(user=self.user, due_date=None)
 
-        self._test_ordering([issue_2, issue_1, issue_3])
+        self._test_ordering([issue_2, issue_1, issue_3, issue_4])
 
     def test_ordering_by_title(self):
         issue_1 = IssueFactory.create(title='Second Issue', user=self.user)
