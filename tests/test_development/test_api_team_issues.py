@@ -1,3 +1,6 @@
+from datetime import date, timedelta
+
+from django.utils import timezone
 from rest_framework import status
 
 from apps.development.models import TeamMember
@@ -162,3 +165,46 @@ class ApiTeamIssuesTests(BaseAPITest):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data['count'], 1)
         self.assertEqual(response.data['results'][0]['id'], issue.id)
+
+    def test_default_ordering(self):
+        issue_1 = IssueFactory.create(user=self.user, due_date=date(2018, 11, 15))
+        issue_2 = IssueFactory.create(user=self.user, due_date=date(2018, 3, 5))
+        issue_3 = IssueFactory.create(user=self.user, due_date=date(2019, 5, 2))
+
+        self._test_ordering([issue_2, issue_1, issue_3])
+
+    def test_ordering_by_title(self):
+        issue_1 = IssueFactory.create(title='Second Issue', user=self.user)
+        issue_2 = IssueFactory.create(title='Bad Issue', user=self.user)
+        issue_3 = IssueFactory.create(title='Refactor Issue', user=self.user)
+
+        self._test_ordering([issue_2, issue_3, issue_1], 'title')
+        self._test_ordering([issue_1, issue_3, issue_2], '-title')
+
+    def test_ordering_by_due_date(self):
+        issue_1 = IssueFactory.create(user=self.user, due_date=date(2018, 11, 15))
+        issue_2 = IssueFactory.create(user=self.user, due_date=date(2019, 3, 5))
+        issue_3 = IssueFactory.create(user=self.user, due_date=date(2019, 1, 2))
+
+        self._test_ordering([issue_1, issue_3, issue_2], 'due_date')
+        self._test_ordering([issue_2, issue_3, issue_1], '-due_date')
+
+    def test_ordering_by_created_at(self):
+        issue_1 = IssueFactory.create(user=self.user, created_at=timezone.now() - timedelta(minutes=5))
+        issue_2 = IssueFactory.create(user=self.user, created_at=timezone.now() + timedelta(minutes=5))
+        issue_3 = IssueFactory.create(user=self.user, created_at=timezone.now())
+
+        self._test_ordering([issue_1, issue_3, issue_2], 'created_at')
+        self._test_ordering([issue_2, issue_3, issue_1], '-created_at')
+
+    def _test_ordering(self, issues, ordering=None):
+        data = {}
+        if ordering:
+            data['ordering'] = ordering
+
+        self.set_credentials()
+        response = self.client.get(f'/api/teams/{self.team.id}/issues', data)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data['count'], len(issues))
+
+        self.assertListEqual([x['id'] for x in response.data['results']], [x.id for x in issues])

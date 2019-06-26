@@ -22,12 +22,14 @@ class TeamIssuesViewset(mixins.ListModelMixin,
     queryset = Issue.objects
     filter_backends = (
         filters.SearchFilter,
-        DjangoFilterBackend
+        DjangoFilterBackend,
+        filters.OrderingFilter
     )
 
     search_fields = ('title',)
     filter_fields = ('state', 'due_date', 'user')
     ordering_fields = ('due_date', 'title', 'created_at')
+    ordering = ('due_date',)
 
     @cached_property
     def team(self):
