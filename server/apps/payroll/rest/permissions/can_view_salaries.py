@@ -1,7 +1,7 @@
 from rest_framework import permissions
 
 from apps.development.models import TeamMember
-from apps.payroll.services.users import user_related_with_another_by_roles
+from apps.payroll.services.users import user_related_with_another_by_team_roles
 
 
 class CanViewSalaries(permissions.BasePermission):
@@ -14,7 +14,7 @@ class CanViewSalaries(permissions.BasePermission):
         if salary.user == request.user:
             return True
 
-        return user_related_with_another_by_roles(
+        return user_related_with_another_by_team_roles(
             request.user,
             salary.user,
             [TeamMember.roles.leader]

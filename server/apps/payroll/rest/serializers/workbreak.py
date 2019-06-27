@@ -5,7 +5,7 @@ from rest_framework import serializers
 from apps.core.rest.serializers import LinkSerializer
 from apps.development.models import TeamMember
 from apps.payroll.models import WorkBreak
-from apps.payroll.services.users import user_related_with_another_by_roles
+from apps.payroll.services.users import user_related_with_another_by_team_roles
 from apps.users.rest.serializers import UserCardSerializer
 
 User = get_user_model()
@@ -35,7 +35,7 @@ class WorkBreakUpdateSerializer(serializers.ModelSerializer):
         if user == self.context['request'].user:
             return user
 
-        is_team_leader = user_related_with_another_by_roles(
+        is_team_leader = user_related_with_another_by_team_roles(
             self.context['request'].user,
             user,
             [TeamMember.roles.leader]
