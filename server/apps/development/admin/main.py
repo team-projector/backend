@@ -28,7 +28,6 @@ class TeamMemberAdmin(BaseModelAdmin):
     list_display = ('team', 'user')
     search_fields = ('team', 'user')
     list_filter = (TeamFilter, UserFilter)
-    autocomplete_fields = ('team', 'user')
 
 
 @admin.register(Label)
@@ -41,7 +40,6 @@ class LabelAdmin(BaseModelAdmin):
 class ProjectGroupAdmin(ForceSyncEntityMixin, BaseModelAdmin):
     list_display = ('title', 'parent', 'gl_url', 'gl_last_sync')
     search_fields = ('title',)
-    autocomplete_fields = ('parent',)
     inlines = (ProjectMemberInline,)
 
     def sync_handler(self, obj):
@@ -52,7 +50,6 @@ class ProjectGroupAdmin(ForceSyncEntityMixin, BaseModelAdmin):
 class ProjectAdmin(ForceSyncEntityMixin, BaseModelAdmin):
     list_display = ('title', 'group', 'gl_url', 'gl_last_sync')
     search_fields = ('title', 'group__title', 'gl_url')
-    autocomplete_fields = ('group',)
     inlines = (ProjectMemberInline,)
 
     def sync_handler(self, obj):
@@ -68,9 +65,6 @@ class IssueAdmin(ForceSyncEntityMixin, BaseModelAdmin):
     search_fields = ('title', 'gl_id')
     sortable_by = ('gl_last_sync', 'created_at')
     ordering = ('-gl_last_sync',)
-    autocomplete_fields = (
-        'project', 'user', 'milestone', 'feature', 'labels', 'participants'
-    )
     inlines = (NoteInline,)
 
     def sync_handler(self, obj):
@@ -116,9 +110,6 @@ class MergeRequestAdmin(ForceSyncEntityMixin, BaseModelAdmin):
     search_fields = ('title', 'gl_id')
     sortable_by = ('gl_last_sync', 'created_at')
     ordering = ('-gl_last_sync',)
-    autocomplete_fields = (
-        'project', 'assignee', 'author', 'milestone', 'labels'
-    )
     inlines = (NoteInline,)
 
     def sync_handler(self, obj):
