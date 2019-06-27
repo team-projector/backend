@@ -1,3 +1,5 @@
+from functools import reduce
+from operator import or_, and_
 from typing import ClassVar, Optional
 
 from django.db.models import Case, NullBooleanField, Q, QuerySet, When
@@ -53,7 +55,10 @@ class EmptyEstimateProblemChecker(BaseProblemChecker):
     problem_code = PROBLEM_EMPTY_ESTIMATE
 
     def get_condition(self) -> When:
-        return When(time_estimate__isnull=True, then=True)
+        return When(
+            time_estimate__isnull=True,
+            then=True
+        )
 
 
 checkers = [
@@ -62,15 +67,22 @@ checkers = [
 ]
 
 
-class IssueProblemsChecker:
-    def check(self, queryset: QuerySet) -> QuerySet:
-        queryset = self._annotate_queryset(queryset)
+def annotate_issues_problems(queryset: QuerySet) -> QuerySet:
+    for checker in checkers:
+        queryset = checker.setup_queryset(queryset)
 
-        return queryset
+    return queryset
 
-    @staticmethod
-    def _annotate_queryset(queryset: QuerySet) -> QuerySet:
-        for checker in checkers:
-            queryset = checker.setup_queryset(queryset)
 
-        return queryset
+def filter_issues_problems(queryset: QuerySet) -> QuerySet:
+    return queryset.filter(reduce(or_, [
+        Q(**{checker.annotate_field: True})
+        for checker in checkers
+    ]))
+
+
+def exclude_issues_problems(queryset: QuerySet) -> QuerySet:
+    return queryset.filter(reduce(and_, [
+        Q(**{checker.annotate_field: None})
+        for checker in checkers
+    ]))

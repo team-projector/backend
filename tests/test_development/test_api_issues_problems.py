@@ -13,7 +13,7 @@ from tests.test_development.factories import IssueFactory
 from tests.test_users.factories import UserFactory
 
 
-class ApiIssuesTests(BaseAPITest):
+class ApiIssuesProblemsTests(BaseAPITest):
     def test_empty_due_day(self):
         IssueFactory.create_batch(2, user=self.user, due_date=timezone.now())
         problem_issue = IssueFactory.create(user=self.user)

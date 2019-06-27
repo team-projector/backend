@@ -9,11 +9,12 @@ from rest_framework.response import Response
 from apps.core.rest.mixins.views import UpdateModelMixin
 from apps.core.rest.views import BaseGenericViewSet
 from apps.development.models import Issue
+from apps.development.rest.filters import IssueProblemFilter
 from apps.development.rest.serializers import (
     IssueCardSerializer, IssueSerializer, IssueUpdateSerializer
 )
 from apps.development.services.gitlab.spent_time import add_spent_time
-from apps.development.services.problems.issues import IssueProblemsChecker
+from apps.development.services.problems.issues import annotate_issues_problems
 from apps.development.tasks import sync_project_issue
 
 
@@ -37,7 +38,8 @@ class IssuesViewset(mixins.RetrieveModelMixin,
     filter_backends = (
         filters.OrderingFilter,
         filters.SearchFilter,
-        DjangoFilterBackend
+        DjangoFilterBackend,
+        IssueProblemFilter
     )
 
     search_fields = ('title',)
@@ -49,17 +51,7 @@ class IssuesViewset(mixins.RetrieveModelMixin,
         queryset = super().get_queryset()
 
         if self.action in ('list', 'retrieve'):
-            checker = IssueProblemsChecker()
-            queryset = checker.check(queryset)
-
-        return queryset
-
-    def filter_queryset(self, queryset):
-        queryset = super().filter_queryset(queryset)
-
-        # if self.action == 'problems':
-        #     checker = IssueProblemsChecker()
-        #     queryset = checker.check(queryset)
+            queryset = annotate_issues_problems(queryset)
 
         return queryset
 
