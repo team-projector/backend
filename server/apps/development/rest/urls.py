@@ -6,8 +6,9 @@ from . import views
 app_name = 'development'
 
 router = AppRouter()
-router.register('features', views.FeaturesViewset, 'features')
 router.register('issues', views.IssuesViewset, 'issues')
+
+router.register('features', views.FeaturesViewset, 'features')
 router.register(
     r'^features/(?P<feature_pk>\d+)/issues$',
     views.FeatureIssuesViewset,
@@ -41,8 +42,11 @@ router.register(
     views.TeamMembersViewset,
     'team-members'
 )
-
-router.register('teams', views.TeamsViewset, 'teams')
+router.register(
+    'teams',
+    views.TeamsViewset,
+    'teams'
+)
 
 urlpatterns = [
     path(

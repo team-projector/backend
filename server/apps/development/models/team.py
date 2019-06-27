@@ -1,5 +1,8 @@
+from django.conf import settings
 from django.db import models
 from django.utils.translation import gettext_lazy as _
+
+from .team_member import TeamMember
 
 
 class Team(models.Model):
@@ -8,6 +11,12 @@ class Team(models.Model):
         verbose_name=_('VN__TITLE'),
         help_text=_('HT__TITLE'),
         unique=True
+    )
+
+    members = models.ManyToManyField(
+        settings.AUTH_USER_MODEL,
+        through=TeamMember,
+        related_name='teams'
     )
 
     class Meta:

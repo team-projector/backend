@@ -1,6 +1,7 @@
 from rest_framework import permissions
 
-from apps.payroll.services.users import is_teamleader_for_user
+from apps.development.models import TeamMember
+from apps.payroll.services.users import user_related_with_another_by_roles
 
 
 class CanManageWorkbreaks(permissions.BasePermission):
@@ -13,7 +14,8 @@ class CanManageWorkbreaks(permissions.BasePermission):
         if workbreak.user == request.user:
             return True
 
-        return is_teamleader_for_user(
+        return user_related_with_another_by_roles(
             request.user,
-            workbreak.user
+            workbreak.user,
+            [TeamMember.roles.leader]
         )

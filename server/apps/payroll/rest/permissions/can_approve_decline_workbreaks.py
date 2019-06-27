@@ -1,13 +1,15 @@
 from rest_framework import permissions
 
-from apps.payroll.services.users import is_teamleader_for_user
+from apps.development.models import TeamMember
+from apps.payroll.services.users import user_related_with_another_by_roles
 
 
 class CanApproveDeclineWorkbreaks(permissions.BasePermission):
     message = 'You can\'t approve or decline user workbreaks'
 
     def has_object_permission(self, request, view, workbreak):
-        return is_teamleader_for_user(
+        return user_related_with_another_by_roles(
             request.user,
-            workbreak.user
+            workbreak.user,
+            [TeamMember.roles.leader]
         )

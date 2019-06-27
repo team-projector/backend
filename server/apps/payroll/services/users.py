@@ -1,18 +1,22 @@
+from typing import List
+
+from django.db.models import OuterRef, Exists
+
 from apps.development.models import TeamMember
+from apps.development.services.team_members import filter_by_roles
 from apps.users.models import User
 
 
-def is_teamleader_for_user(leader: User, user: User) -> bool:
-    teams = TeamMember.objects.filter(
-        user=leader,
-        roles=TeamMember.roles.leader
-    ).values_list(
-        'team',
-        flat=True
-    )
+def user_related_with_another_by_roles(user: User,
+                                       target_user: User,
+                                       roles: List[str]) -> bool:
+    allowed = filter_by_roles(TeamMember.objects.filter(
+        team_id=OuterRef('id'),
+        user=user
+    ), roles)
 
-    return User.objects.filter(
-        team_members__team__in=teams,
-        team_members__roles=TeamMember.roles.developer,
-        id=user.id
+    return target_user.teams.annotate(
+        is_allowed=Exists(allowed)
+    ).filter(
+        is_allowed=True
     ).exists()
