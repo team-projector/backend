@@ -41,11 +41,7 @@ router.register(
     views.TeamMembersViewset,
     'team-members'
 )
-router.register(
-    r'^teams/(?P<team_pk>\d+)/problems$',
-    views.TeamIssueProblemsViewset,
-    'team-problems'
-)
+
 router.register('teams', views.TeamsViewset, 'teams')
 
 urlpatterns = [
