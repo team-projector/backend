@@ -69,6 +69,8 @@ class GlUserFactory(factory.DictFactory):
     name = factory.Sequence(lambda n: f'User {n}')
     username = factory.Sequence(lambda n: f'user_name{n}')
     state = 'active'
+    avatar_url = factory.Faker('url')
+    web_url = factory.Faker('url')
 
 
 class GlProjectsIssueFactory(factory.DictFactory):
@@ -94,6 +96,20 @@ class GlIssueTimeStats(factory.DictFactory):
 
 class GlHookFactory(factory.DictFactory):
     url = factory.Faker('url')
+
+
+class GlIssueNoteFactory(factory.DictFactory):
+    id = factory.Faker('random_int')
+    body = factory.Faker('word')
+    created_at = gl_format_datetime(datetime.now())
+    updated_at = gl_format_datetime(datetime.now())
+    author = factory.SubFactory(GlUserFactory)
+
+
+class GlLabelFactory(factory.DictFactory):
+    id = factory.Faker('random_int')
+    name = factory.Faker('word')
+    color = factory.Faker('word')
 
 
 class AttrDict(dict):
