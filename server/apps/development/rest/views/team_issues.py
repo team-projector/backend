@@ -14,7 +14,7 @@ class TeamIssuesViewset(mixins.ListModelMixin,
                         BaseGenericViewSet):
     permission_classes = (
         IsAuthenticated,
-        permissions.IsTeamLeader
+        permissions.CanViewTeamData
     )
     serializer_classes = {
         'list': IssueCardSerializer
