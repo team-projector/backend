@@ -12,7 +12,7 @@ class TeamSerializer(serializers.ModelSerializer):
 
 class TeamCardSerializer(serializers.ModelSerializer):
     members_count = serializers.SerializerMethodField()
-    members = TeamMemberCardSerializer(many=True)
+    members = TeamMemberCardSerializer(many=True, source='teammember_set')
 
     @staticmethod
     def get_members_count(instance):

@@ -26,8 +26,8 @@ class ProgressMetricsCalculator:
         for member in self.team.members.all():
             user_metrics = TeamMemberProgressMetrics()
 
-            user_metrics.user = member.user_id
-            user_metrics.metrics = self.calculate_user_metrics(member.user)
+            user_metrics.user = member.id
+            user_metrics.metrics = self.calculate_user_metrics(member)
 
             metrics.append(user_metrics)
 
