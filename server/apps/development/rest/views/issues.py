@@ -10,8 +10,7 @@ from apps.core.rest.mixins.views import UpdateModelMixin
 from apps.core.rest.views import BaseGenericViewSet
 from apps.development.models import Issue
 from apps.development.rest.serializers import (
-    IssueCardSerializer, IssueProblemSerializer, IssueSerializer,
-    IssueUpdateSerializer
+    IssueCardSerializer, IssueSerializer, IssueUpdateSerializer
 )
 from apps.development.services.gitlab.spent_time import add_spent_time
 from apps.development.services.problems.issues import IssueProblemsChecker
@@ -46,21 +45,23 @@ class IssuesViewset(mixins.RetrieveModelMixin,
     ordering_fields = ('due_date', 'title', 'created_at')
     ordering = ('due_date',)
 
-    def filter_queryset(self, queryset):
-        queryset = super().filter_queryset(queryset)
+    def get_queryset(self):
+        queryset = super().get_queryset()
 
-        if self.action == 'problems':
+        if self.action in ('list', 'retrieve'):
             checker = IssueProblemsChecker()
             queryset = checker.check(queryset)
 
         return queryset
 
-    @action(detail=False,
-            filter_backends=(DjangoFilterBackend,),
-            filter_fields=('user',),
-            serializer_class=IssueProblemSerializer)
-    def problems(self, request):
-        return self.list(request)
+    def filter_queryset(self, queryset):
+        queryset = super().filter_queryset(queryset)
+
+        # if self.action == 'problems':
+        #     checker = IssueProblemsChecker()
+        #     queryset = checker.check(queryset)
+
+        return queryset
 
     @action(detail=True,
             methods=['post'],

@@ -1,7 +1,6 @@
 from .feature import FeatureCardSerializer, FeatureSerializer
 from .issue import IssueCardSerializer, IssueSerializer, IssueUpdateSerializer
 from .issue_metrics import IssueMetricsSerializer
-from .issue_problems import IssueProblemSerializer
 from .issues_container_metrics import IssuesContainerMetrics
 from .label import LabelSerializer
 from .milestone import MilestoneCardSerializer

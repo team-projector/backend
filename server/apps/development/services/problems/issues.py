@@ -1,5 +1,3 @@
-from functools import reduce
-from operator import or_
 from typing import ClassVar, Optional
 
 from django.db.models import Case, NullBooleanField, Q, QuerySet, When
@@ -67,16 +65,8 @@ checkers = [
 class IssueProblemsChecker:
     def check(self, queryset: QuerySet) -> QuerySet:
         queryset = self._annotate_queryset(queryset)
-        queryset = self._filter_queryset(queryset)
 
         return queryset
-
-    @staticmethod
-    def _filter_queryset(queryset: QuerySet) -> QuerySet:
-        return queryset.filter(reduce(or_, [
-            Q(**{checker.annotate_field: True})
-            for checker in checkers
-        ]))
 
     @staticmethod
     def _annotate_queryset(queryset: QuerySet) -> QuerySet:
