@@ -69,6 +69,8 @@ class GlUserFactory(factory.DictFactory):
     name = factory.Sequence(lambda n: f'User {n}')
     username = factory.Sequence(lambda n: f'user_name{n}')
     state = 'active'
+    avatar_url = factory.Faker('url')
+    web_url = factory.Faker('url')
 
 
 class GlProjectsIssueFactory(factory.DictFactory):
