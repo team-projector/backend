@@ -17,25 +17,29 @@ class BaseModelAdmin(AdminAutocompleteFieldsMixin,
         pass
 
 
-class BaseStackedInline(AdminFormFieldsOverridesMixin,
+class BaseStackedInline(AdminAutocompleteFieldsMixin,
+                        AdminFormFieldsOverridesMixin,
                         admin.StackedInline):
     extra = 0
     show_change_link = True
 
 
-class BaseTabularInline(AdminFormFieldsOverridesMixin,
+class BaseTabularInline(AdminAutocompleteFieldsMixin,
+                        AdminFormFieldsOverridesMixin,
                         admin.TabularInline):
     extra = 0
     show_change_link = True
 
 
-class BaseGenericStackedInline(AdminFormFieldsOverridesMixin,
+class BaseGenericStackedInline(AdminAutocompleteFieldsMixin,
+                               AdminFormFieldsOverridesMixin,
                                GenericStackedInline):
     extra = 0
     show_change_link = True
 
 
-class BaseGenericTabularInline(AdminFormFieldsOverridesMixin,
+class BaseGenericTabularInline(AdminAutocompleteFieldsMixin,
+                               AdminFormFieldsOverridesMixin,
                                GenericTabularInline):
     extra = 0
     show_change_link = True
