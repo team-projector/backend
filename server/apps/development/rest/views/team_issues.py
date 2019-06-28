@@ -14,7 +14,7 @@ class TeamIssuesViewset(mixins.ListModelMixin,
                         BaseGenericViewSet):
     permission_classes = (
         IsAuthenticated,
-        permissions.IsTeamLeader
+        permissions.CanViewTeamData
     )
     serializer_classes = {
         'list': IssueCardSerializer
@@ -43,5 +43,5 @@ class TeamIssuesViewset(mixins.ListModelMixin,
 
     def filter_queryset(self, queryset):
         return super().filter_queryset(queryset).filter(
-            user__team_members__team=self.team
+            user__teams=self.team
         )

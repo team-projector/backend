@@ -84,9 +84,9 @@ class WorkBreaksViewset(mixins.ListModelMixin,
             'team',
             flat=True
         )
+
         subquery = User.objects.filter(
-            team_members__team__in=teams,
-            team_members__roles=TeamMember.roles.developer,
+            teams__in=teams,
             id=OuterRef('user_id')
         )
 

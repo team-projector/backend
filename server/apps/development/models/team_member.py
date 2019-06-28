@@ -1,10 +1,9 @@
 from bitfield import BitField
+from django.conf import settings
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
 from apps.core.db.utils import Choices
-from apps.users.models import User
-from .team import Team
 
 
 class TeamMember(models.Model):
@@ -15,15 +14,15 @@ class TeamMember(models.Model):
     )
 
     team = models.ForeignKey(
-        Team, models.CASCADE,
-        related_name='members',
+        'Team',
+        models.CASCADE,
         verbose_name=_('VN__TEAM'),
         help_text=_('HT__TEAM')
     )
 
     user = models.ForeignKey(
-        User, models.CASCADE,
-        related_name='team_members',
+        settings.AUTH_USER_MODEL,
+        models.CASCADE,
         verbose_name=_('VN__USER'),
         help_text=_('HT__USER')
     )
@@ -36,7 +35,6 @@ class TeamMember(models.Model):
     class Meta:
         verbose_name = _('VN__TEAM_MEMBER')
         verbose_name_plural = _('VN__TEAM_MEMBERS')
-        ordering = ('team', 'user')
         unique_together = ('team', 'user')
 
     def __str__(self):
