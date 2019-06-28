@@ -1,7 +1,6 @@
 from rest_framework import filters, serializers
 
 from apps.core.utils.rest import parse_query_params
-from apps.development.rest.filters.issue_status_url import ParamsSerializer
 
 
 class ParamsSerializer(serializers.Serializer):
