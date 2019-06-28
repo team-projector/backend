@@ -1,7 +1,8 @@
 from rest_framework import status
 
 from tests.base import BaseAPITest
-from tests.test_development.factories import FeatureFactory, IssueFactory, ProjectGroupMilestoneFactory
+from tests.test_development.factories import FeatureFactory, IssueFactory, \
+    ProjectGroupMilestoneFactory
 from tests.test_users.factories import UserFactory
 
 
@@ -34,12 +35,15 @@ class ApiIssuesTests(BaseAPITest):
 
     def test_update_issue_feature(self):
         issue = IssueFactory.create()
-        feature = FeatureFactory.create(milestone=ProjectGroupMilestoneFactory.create())
+        feature = FeatureFactory.create(
+            milestone=ProjectGroupMilestoneFactory.create())
 
         self.assertNotEqual(issue.feature_id, feature.id)
 
         self.set_credentials()
-        response = self.client.patch(f'/api/issues/{issue.id}', {'feature': feature.id})
+        response = self.client.patch(f'/api/issues/{issue.id}', {
+            'feature': feature.id
+        })
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data['feature']['id'], feature.id)
@@ -48,18 +52,24 @@ class ApiIssuesTests(BaseAPITest):
         issue = IssueFactory.create()
 
         self.set_credentials()
-        response = self.client.patch(f'/api/issues/{issue.id}', {'feature': 0})
+        response = self.client.patch(f'/api/issues/{issue.id}', {
+            'feature': 0
+        })
 
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_change_issue_feature(self):
-        issue = IssueFactory.create(feature=FeatureFactory.create(milestone=ProjectGroupMilestoneFactory.create()))
-        feature = FeatureFactory.create(milestone=ProjectGroupMilestoneFactory.create())
+        issue = IssueFactory.create(feature=FeatureFactory.create(
+            milestone=ProjectGroupMilestoneFactory.create()))
+        feature = FeatureFactory.create(
+            milestone=ProjectGroupMilestoneFactory.create())
 
         self.assertNotEqual(issue.feature_id, feature.id)
 
         self.set_credentials()
-        response = self.client.patch(f'/api/issues/{issue.id}', {'feature': feature.id})
+        response = self.client.patch(f'/api/issues/{issue.id}', {
+            'feature': feature.id
+        })
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data['feature']['id'], feature.id)
@@ -76,8 +86,9 @@ class ApiIssuesTests(BaseAPITest):
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data['count'], 1)
-        self.assertEqual(set(x['id'] for x in response.data['results'][0]['participants']),
-                         set(x.id for x in users))
+        self.assertEqual(
+            set(x['id'] for x in response.data['results'][0]['participants']),
+            set(x.id for x in users))
 
     def test_show_users(self):
         user_2 = UserFactory.create()
@@ -89,4 +100,5 @@ class ApiIssuesTests(BaseAPITest):
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data['count'], 2)
-        self.assertEqual(set(x['user']['id'] for x in response.data['results']), {self.user.id, user_2.id})
+        self.assertEqual(set(x['user']['id'] for x in response.data['results']),
+                         {self.user.id, user_2.id})
