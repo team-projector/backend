@@ -3,7 +3,7 @@ from rest_framework import mixins, permissions, filters
 
 from apps.core.rest.views import BaseGenericAPIView
 from apps.payroll.models import SpentTime
-from ..filters import TeamFilter, AllowedSpentFilter
+from ..filters import TeamFilter, AvailableSpentFilter
 from ..serializers import TimeExpenseSerializer
 
 
@@ -14,7 +14,7 @@ class TimeExpensesView(mixins.ListModelMixin,
         DjangoFilterBackend,
         TeamFilter,
         filters.OrderingFilter,
-        AllowedSpentFilter
+        AvailableSpentFilter
     )
     filterset_fields = ('date', 'user', 'salary')
     ordering_fields = ('date',)
