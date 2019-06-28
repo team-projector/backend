@@ -1,11 +1,20 @@
-from rest_framework import filters
+from rest_framework import filters, serializers
+
+from apps.core.utils.rest import parse_query_params
+from apps.development.rest.filters.issue_status_url import ParamsSerializer
+
+
+class ParamsSerializer(serializers.Serializer):
+    team = serializers.IntegerField(required=False)
 
 
 class TeamFilter(filters.BaseFilterBackend):
     def filter_queryset(self, request, queryset, view):
-        team_param = request.GET.get('team')
+        params = parse_query_params(request, ParamsSerializer)
 
-        if team_param and team_param.isdigit():
-            queryset = queryset.filter(user__teams=team_param)
+        team_id = params.get('team')
+
+        if team_id:
+            queryset = queryset.filter(user__teams=team_id)
 
         return queryset

@@ -2,7 +2,7 @@ from django.test import TestCase
 
 from apps.development.models import TeamMember
 from apps.payroll.models import SpentTime
-from apps.payroll.services.time_spents import get_available_spent_times
+from apps.payroll.services.time_spents import filter_available_spent_times
 from tests.test_development.factories import TeamFactory
 from tests.test_payroll.factories import IssueSpentTimeFactory
 from tests.test_users.factories import UserFactory
@@ -12,6 +12,7 @@ class AvailableSpentTimesTests(TestCase):
     def setUp(self):
         super().setUp()
         self.user = UserFactory.create()
+        self.qs = SpentTime.objects.all()
 
     def test_my_spents(self):
         spents = IssueSpentTimeFactory.create_batch(
@@ -22,7 +23,10 @@ class AvailableSpentTimesTests(TestCase):
             size=5,
             user=UserFactory.create())
 
-        self._assert_spents(get_available_spent_times(self.user), spents)
+        self._assert_spents(
+            filter_available_spent_times(self.qs, self.user),
+            spents
+        )
 
     def test_in_team_not_viewer(self):
         user_2 = UserFactory.create()
@@ -31,7 +35,9 @@ class AvailableSpentTimesTests(TestCase):
 
         IssueSpentTimeFactory.create(user=user_2)
 
-        self._assert_spents(get_available_spent_times(self.user), [])
+        self._assert_spents(
+            filter_available_spent_times(self.qs, self.user)
+        )
 
     def test_as_team_leader(self):
         user_2 = UserFactory.create()
@@ -44,7 +50,10 @@ class AvailableSpentTimesTests(TestCase):
 
         spent = IssueSpentTimeFactory.create(user=user_2)
 
-        self._assert_spents(get_available_spent_times(self.user), [spent])
+        self._assert_spents(
+            filter_available_spent_times(self.qs, self.user),
+            [spent]
+        )
 
     def test_as_team_watcher(self):
         user_2 = UserFactory.create()
@@ -57,7 +66,10 @@ class AvailableSpentTimesTests(TestCase):
 
         spent = IssueSpentTimeFactory.create(user=user_2)
 
-        self._assert_spents(get_available_spent_times(self.user), [spent])
+        self._assert_spents(
+            filter_available_spent_times(self.qs, self.user),
+            [spent]
+        )
 
     def test_as_leader_another_team(self):
         team_1 = TeamFactory.create()
@@ -73,7 +85,9 @@ class AvailableSpentTimesTests(TestCase):
 
         IssueSpentTimeFactory.create(user=user_2)
 
-        self._assert_spents(get_available_spent_times(self.user), [])
+        self._assert_spents(
+            filter_available_spent_times(self.qs, self.user)
+        )
 
     def test_as_watcher_another_team(self):
         team_1 = TeamFactory.create()
@@ -89,7 +103,9 @@ class AvailableSpentTimesTests(TestCase):
 
         IssueSpentTimeFactory.create(user=user_2)
 
-        self._assert_spents(get_available_spent_times(self.user), [])
+        self._assert_spents(
+            filter_available_spent_times(self.qs, self.user)
+        )
 
     def test_my_spents_and_as_leader(self):
         team_1 = TeamFactory.create()
@@ -107,7 +123,8 @@ class AvailableSpentTimesTests(TestCase):
         spents = IssueSpentTimeFactory.create_batch(size=3, user=user_2)
 
         self._assert_spents(
-            get_available_spent_times(self.user), [*spents_my, *spents]
+            filter_available_spent_times(self.qs, self.user),
+            [*spents_my, *spents]
         )
 
     def test_my_spents_and_as_leader_with_queryset(self):
@@ -131,8 +148,8 @@ class AvailableSpentTimesTests(TestCase):
         queryset = SpentTime.objects.filter(user=user_3)
 
         self._assert_spents(
-            get_available_spent_times(self.user, queryset), []
+            filter_available_spent_times(queryset, self.user)
         )
 
-    def _assert_spents(self, queryset, spents):
+    def _assert_spents(self, queryset, spents=[]):
         self.assertEqual(set(queryset), set(spents))
