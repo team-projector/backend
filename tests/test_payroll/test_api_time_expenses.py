@@ -5,7 +5,9 @@ from rest_framework import status
 
 from apps.development.models import TeamMember
 from tests.base import BaseAPITest
-from tests.test_development.factories import IssueFactory, TeamFactory, TeamMemberFactory
+from tests.test_development.factories import (
+    IssueFactory, TeamFactory, TeamMemberFactory
+)
 from tests.test_payroll.factories import IssueSpentTimeFactory, SalaryFactory
 from tests.test_users.factories import UserFactory
 
@@ -14,35 +16,42 @@ class ApiTimeExpensesTests(BaseAPITest):
     def test_list(self):
         issue = IssueFactory.create()
 
-        spend_1 = IssueSpentTimeFactory.create(date=timezone.now() - timedelta(hours=4),
-                                               user=self.user,
-                                               base=issue,
-                                               time_spent=int(timedelta(hours=5).total_seconds()))
+        spend_1 = IssueSpentTimeFactory.create(
+            date=timezone.now() - timedelta(hours=4),
+            user=self.user,
+            base=issue,
+            time_spent=int(timedelta(hours=5).total_seconds()))
 
-        spend_2 = IssueSpentTimeFactory.create(date=timezone.now() - timedelta(hours=2),
-                                               user=self.user,
-                                               base=issue,
-                                               time_spent=int(timedelta(hours=2).total_seconds()))
+        spend_2 = IssueSpentTimeFactory.create(
+            date=timezone.now() - timedelta(hours=2),
+            user=self.user,
+            base=issue,
+            time_spent=int(timedelta(hours=2).total_seconds()))
 
-        spend_3 = IssueSpentTimeFactory.create(date=timezone.now() - timedelta(hours=3),
-                                               user=self.user,
-                                               base=issue,
-                                               time_spent=int(timedelta(hours=4).total_seconds()))
+        spend_3 = IssueSpentTimeFactory.create(
+            date=timezone.now() - timedelta(hours=3),
+            user=self.user,
+            base=issue,
+            time_spent=int(timedelta(hours=4).total_seconds()))
 
-        spend_4 = IssueSpentTimeFactory.create(date=timezone.now() - timedelta(hours=1),
-                                               user=self.user,
-                                               base=issue,
-                                               time_spent=int(timedelta(minutes=10).total_seconds()))
+        spend_4 = IssueSpentTimeFactory.create(
+            date=timezone.now() - timedelta(hours=1),
+            user=self.user,
+            base=issue,
+            time_spent=int(timedelta(minutes=10).total_seconds()))
 
         self.set_credentials()
-        response = self.client.get(f'/api/time-expenses', {'user': self.user.id})
+        response = self.client.get(f'/api/time-expenses',
+                                   {'user': self.user.id})
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self._check_time_expences(response.data, [spend_1, spend_2, spend_3, spend_4])
+        self._check_time_expences(response.data,
+                                  [spend_1, spend_2, spend_3, spend_4])
 
     def test_permissions_self(self):
         self.set_credentials()
-        response = self.client.get(f'/api/time-expenses', {'user': self.user.id})
+        response = self.client.get(f'/api/time-expenses',
+                                   {'user': self.user.id})
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
@@ -139,12 +148,14 @@ class ApiTimeExpensesTests(BaseAPITest):
             time_spent=int(timedelta(minutes=10).total_seconds())
         )
 
-        self._test_time_expenses_filter({'user': self.user.id}, [spend_2, spend_4])
+        self._test_time_expenses_filter({'user': self.user.id},
+                                        [spend_2, spend_4])
 
     def test_time_expenses_filter_by_team(self):
         user_2 = UserFactory.create()
         issue = IssueFactory.create()
-        team_member = TeamMemberFactory.create(user=self.user, team=TeamFactory.create())
+        team_member = TeamMemberFactory.create(user=self.user,
+                                               team=TeamFactory.create())
 
         spend_1 = IssueSpentTimeFactory.create(
             date=timezone.now() - timedelta(hours=4),
@@ -174,7 +185,8 @@ class ApiTimeExpensesTests(BaseAPITest):
             time_spent=int(timedelta(minutes=10).total_seconds())
         )
 
-        self._test_time_expenses_filter({'team': team_member.team_id}, [spend_1, spend_3])
+        self._test_time_expenses_filter({'team': team_member.team_id},
+                                        [spend_1, spend_3])
 
     def test_time_expenses_filter_by_salary(self):
         user_2 = UserFactory.create()
@@ -211,7 +223,8 @@ class ApiTimeExpensesTests(BaseAPITest):
             time_spent=int(timedelta(minutes=10).total_seconds())
         )
 
-        self._test_time_expenses_filter({'salary': salary.id}, [spend_1, spend_3])
+        self._test_time_expenses_filter({'salary': salary.id},
+                                        [spend_1, spend_3])
 
     def test_time_expenses_filter_by_date(self):
         user_2 = UserFactory.create()
@@ -246,7 +259,8 @@ class ApiTimeExpensesTests(BaseAPITest):
             time_spent=int(timedelta(minutes=10).total_seconds())
         )
 
-        self._test_time_expenses_filter({'date': '2019-03-03'}, [spend_1, spend_3])
+        self._test_time_expenses_filter({'date': '2019-03-03'},
+                                        [spend_1, spend_3])
 
     def test_time_expenses_filter_by_date_and_user(self):
         user_2 = UserFactory.create()
@@ -281,7 +295,8 @@ class ApiTimeExpensesTests(BaseAPITest):
             time_spent=int(timedelta(minutes=10).total_seconds())
         )
 
-        self._test_time_expenses_filter({'date': '2019-03-03', 'user': self.user.id}, [spend_1])
+        self._test_time_expenses_filter(
+            {'date': '2019-03-03', 'user': self.user.id}, [spend_1])
 
     def test_time_expenses_order_by_date(self):
         issue = IssueFactory.create()
@@ -314,8 +329,10 @@ class ApiTimeExpensesTests(BaseAPITest):
             time_spent=int(timedelta(minutes=10).total_seconds())
         )
 
-        self._test_time_expenses_order_by('date', [spend_1, spend_3, spend_2, spend_4])
-        self._test_time_expenses_order_by('-date', [spend_4, spend_2, spend_3, spend_1])
+        self._test_time_expenses_order_by('date',
+                                          [spend_1, spend_3, spend_2, spend_4])
+        self._test_time_expenses_order_by('-date',
+                                          [spend_4, spend_2, spend_3, spend_1])
 
     def _test_time_expenses_filter(self, user_filter, results):
         self.set_credentials()
@@ -329,4 +346,5 @@ class ApiTimeExpensesTests(BaseAPITest):
         response = self.client.get('/api/time-expenses', {'ordering': param})
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertListEqual([x['id'] for x in response.data['results']], [x.id for x in results])
+        self.assertListEqual([x['id'] for x in response.data['results']],
+                             [x.id for x in results])

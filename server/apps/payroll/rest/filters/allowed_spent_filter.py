@@ -9,8 +9,10 @@ User = get_user_model()
 
 class AllowedSpentFilter(filters.BaseFilterBackend):
     def filter_queryset(self, request, queryset, view):
-        query = (Q(user=request.user)
-                 & Q(Q(roles=TeamMember.roles.leader) | Q(roles=TeamMember.roles.watcher)))
+        query = Q(user=request.user)
+        query &= Q(
+            Q(roles=TeamMember.roles.leader) | Q(roles=TeamMember.roles.watcher)
+        )
 
         is_team_leader = TeamMember.objects.filter(query).exists()
 
