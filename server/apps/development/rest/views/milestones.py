@@ -31,7 +31,8 @@ class MilestonesViewset(mixins.ListModelMixin,
     ordering = ('-due_date',)
 
     @action(detail=True,
-            methods=['post'])
+            methods=['post'],
+            permission_classes=(IsAuthenticated,))
     def sync(self, request, pk=None):
         milestone = self.get_object()
 
