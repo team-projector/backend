@@ -19,11 +19,6 @@ urlpatterns = [
                 name='progress-metrics'
             ),
             path(
-                'salaries',
-                views.UserSalariesView.as_view(),
-                name='salaries'
-            ),
-            path(
                 'work-breaks',
                 views.UserWorkBreaksView.as_view(),
                 name='user-work-breaks'
