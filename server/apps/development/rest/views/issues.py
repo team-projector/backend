@@ -3,7 +3,6 @@ from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import filters, mixins, serializers
 from rest_framework.decorators import action
 from rest_framework.exceptions import ValidationError
-from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
 from apps.core.rest.mixins.views import UpdateModelMixin
@@ -11,10 +10,12 @@ from apps.core.rest.views import BaseGenericViewSet
 from apps.development.models import Issue
 from apps.development.rest.filters import IssueProblemFilter
 from apps.development.rest.serializers import (
-    IssueCardSerializer, IssueSerializer, IssueUpdateSerializer
+    IssueCardSerializer, IssueSerializer, IssueUpdateSerializer,
+    IssuesSummarySerializer
 )
 from apps.development.services.gitlab.spent_time import add_spent_time
-from apps.development.services.problems.issues import annotate_issues_problems
+from apps.development.services.issues.problems import annotate_issues_problems
+from apps.development.services.issues.summary import get_issues_summary
 from apps.development.tasks import sync_project_issue
 
 
@@ -26,24 +27,27 @@ class IssuesViewset(mixins.RetrieveModelMixin,
                     mixins.ListModelMixin,
                     UpdateModelMixin,
                     BaseGenericViewSet):
-    serializer_classes = {
+    actions_serializers = {
         'retrieve': IssueSerializer,
         'list': IssueCardSerializer,
         'update': IssueCardSerializer,
         'partial_update': IssueCardSerializer,
+        'spend': IssueSerializer,
+        'sync': IssueSerializer,
+        'summary': IssuesSummarySerializer
     }
     update_serializer_class = IssueUpdateSerializer
-
     queryset = Issue.objects.all()
+
     filter_backends = (
         filters.OrderingFilter,
         filters.SearchFilter,
         DjangoFilterBackend,
         IssueProblemFilter
     )
+    filter_fields = ('state', 'due_date', 'user')
 
     search_fields = ('title',)
-    filter_fields = ('state', 'due_date', 'user')
     ordering_fields = ('due_date', 'title', 'created_at')
     ordering = ('due_date',)
 
@@ -56,8 +60,7 @@ class IssuesViewset(mixins.RetrieveModelMixin,
         return queryset
 
     @action(detail=True,
-            methods=['post'],
-            serializer_class=IssueSerializer)
+            methods=['post'])
     def spend(self, request, **kwargs):
         if not request.user.gl_token:
             raise ValidationError(_('MSG_PLEASE_PROVIDE_PERSONAL_GL_TOKEN'))
@@ -76,11 +79,15 @@ class IssuesViewset(mixins.RetrieveModelMixin,
         return Response(self.get_serializer(issue).data)
 
     @action(detail=True,
-            methods=['post'],
-            serializer_class=IssueSerializer,
-            permission_classes=(IsAuthenticated,))
+            methods=['post'])
     def sync(self, request, pk=None):
         issue = self.get_object()
         sync_project_issue.delay(issue.project.gl_id, issue.gl_iid)
 
         return Response(self.get_serializer(self.get_object()).data)
+
+    @action(detail=False,
+            methods=['get'])
+    def summary(self, request):
+        queryset = self.get_filtered_queryset()
+        return Response(self.get_serializer(get_issues_summary(queryset)).data)

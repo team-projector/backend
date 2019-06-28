@@ -18,8 +18,9 @@ class MilestonesViewset(mixins.ListModelMixin,
         permissions.IsProjectManager
     )
 
-    serializer_classes = {
-        'list': MilestoneCardSerializer
+    actions_serializers = {
+        'list': MilestoneCardSerializer,
+        'sync': MilestoneCardSerializer
     }
 
     queryset = Milestone.objects.all()
@@ -30,9 +31,7 @@ class MilestonesViewset(mixins.ListModelMixin,
     ordering = ('-due_date',)
 
     @action(detail=True,
-            methods=['post'],
-            serializer_class=MilestoneCardSerializer,
-            permission_classes=(IsAuthenticated,))
+            methods=['post'])
     def sync(self, request, pk=None):
         milestone = self.get_object()
 

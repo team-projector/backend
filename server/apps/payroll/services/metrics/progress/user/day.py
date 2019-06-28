@@ -8,13 +8,13 @@ from django.utils import timezone
 
 from apps.development.models.issue import Issue, STATE_CLOSED
 from apps.payroll.models import SpentTime
-from .base import ProgressMetricsCalculator, UserProgressMetrics
+from .base import ProgressMetricsProvider, UserProgressMetrics
 
 DAY_STEP = timedelta(days=1)
 
 
-class DayMetricsCalculator(ProgressMetricsCalculator):
-    def calculate(self) -> Iterable[UserProgressMetrics]:
+class DayMetricsProvider(ProgressMetricsProvider):
+    def get_metrics(self) -> Iterable[UserProgressMetrics]:
         metrics = []
 
         current = self.start

@@ -1,4 +1,4 @@
-from apps.payroll.services.metrics.user import UserMetricsCalculator
+from apps.payroll.services.metrics.user import UserMetricsProvider
 
 
 class UserMetricsMixin:
@@ -10,7 +10,7 @@ class UserMetricsMixin:
         if not show_metrics:
             return None
 
-        calculator = UserMetricsCalculator()
-        metrics = calculator.calculate(instance)
+        provider = UserMetricsProvider()
+        metrics = provider.get_metrics(instance)
 
         return UserMetricsSerializer(metrics).data

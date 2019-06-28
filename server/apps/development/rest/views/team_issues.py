@@ -16,7 +16,7 @@ class TeamIssuesViewset(mixins.ListModelMixin,
         IsAuthenticated,
         permissions.CanViewTeamData
     )
-    serializer_classes = {
+    actions_serializers = {
         'list': IssueCardSerializer
     }
     queryset = Issue.objects

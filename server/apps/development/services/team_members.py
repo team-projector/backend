@@ -18,5 +18,8 @@ def filter_by_roles(queryset: QuerySet,
     ]
 
     return queryset.filter(
-        reduce(or_, [Q(roles=role) for role in roles])
+        reduce(
+            or_,
+            [Q(roles=role) for role in roles]
+        )
     )

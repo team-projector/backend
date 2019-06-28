@@ -9,7 +9,7 @@ from apps.core.utils.rest import parse_query_params
 from apps.payroll.rest.permissions import CanViewUserMetrics
 from apps.payroll.rest.serializers import UserProgressMetricsSerializer
 from apps.payroll.services.metrics.progress.user import (
-    calculate_user_progress_metrics
+    get_user_progress_metrics
 )
 
 User = get_user_model()
@@ -46,7 +46,7 @@ class UserProgressMetricsView(BaseGenericAPIView):
             UserProgressMetricsParamsSerializer
         )
 
-        metrics = calculate_user_progress_metrics(
+        metrics = get_user_progress_metrics(
             self.user,
             params['start'],
             params['end'],

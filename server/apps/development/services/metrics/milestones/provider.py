@@ -1,7 +1,7 @@
 from django.db.models import QuerySet
 
 from apps.development.models import Milestone
-from ..calculator import IssuesContainerCalculator, IssuesContainerMetrics
+from ..provider import IssuesContainerMetricsProvider, IssuesContainerMetrics
 
 
 class MilestoneMetrics(IssuesContainerMetrics):
@@ -10,14 +10,14 @@ class MilestoneMetrics(IssuesContainerMetrics):
     profit: float = 0
 
 
-class MilestoneMetricsCalculator(IssuesContainerCalculator):
+class MilestoneMetricsProvider(IssuesContainerMetricsProvider):
     def __init__(self, milestone: Milestone):
         self.milestone = milestone
 
     def filter_issues(self, queryset: QuerySet) -> QuerySet:
         return queryset.filter(milestone=self.milestone)
 
-    def calculate(self) -> MilestoneMetrics:
+    def get_metrics(self) -> MilestoneMetrics:
         metrics = MilestoneMetrics()
 
         self.fill_issues_metrics(metrics)
