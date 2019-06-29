@@ -57,7 +57,7 @@ class WorkBreaksViewset(mixins.ListModelMixin,
         CanManageWorkbreaks
     )
 
-    serializer_classes = {
+    actions_serializers = {
         'create': WorkBreakSerializer,
         'update': WorkBreakSerializer,
         'retrieve': WorkBreakSerializer,

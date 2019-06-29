@@ -18,7 +18,7 @@ class IssuesContainerMetrics:
     customer_payroll: float = 0.0
 
 
-class IssuesContainerCalculator:
+class IssuesContainerMetricsProvider:
     def fill_issues_metrics(self, metrics: IssuesContainerMetrics) -> None:
         issues = Issue.objects.all()
         issues = self.filter_issues(issues)

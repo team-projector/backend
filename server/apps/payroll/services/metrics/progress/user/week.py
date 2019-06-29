@@ -8,13 +8,13 @@ from django.utils.timezone import make_aware
 from apps.core.utils.date import begin_of_week, date2datetime
 from apps.development.models.issue import Issue, STATE_CLOSED
 from apps.payroll.models import SpentTime
-from .base import ProgressMetricsCalculator, UserProgressMetrics
+from .base import ProgressMetricsProvider, UserProgressMetrics
 
 WEEK_STEP = timedelta(weeks=1)
 
 
-class WeekMetricsCalculator(ProgressMetricsCalculator):
-    def calculate(self) -> Iterable[UserProgressMetrics]:
+class WeekMetricsProvider(ProgressMetricsProvider):
+    def get_metrics(self) -> Iterable[UserProgressMetrics]:
         metrics = []
 
         time_spents = self._get_time_spents()

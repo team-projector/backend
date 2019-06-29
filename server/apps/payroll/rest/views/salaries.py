@@ -11,7 +11,7 @@ from ..serializers import SalarySerializer
 class SalariesViewSet(mixins.RetrieveModelMixin,
                       BaseGenericViewSet):
     permission_classes = (CanViewSalaries,)
-    serializer_classes = {
+    actions_serializers = {
         'retrieve': SalarySerializer,
     }
     queryset = Salary.objects.all()
