@@ -2,6 +2,8 @@ from collections import namedtuple
 
 from django.db.models import QuerySet, Sum
 
+from .problems import annotate_issues_problems, filter_issues_problems
+
 IssuesSummary = namedtuple(
     'IssuesSummary', [
         'issues_count',
@@ -30,7 +32,10 @@ class IssuesSummaryProvider:
         )['total_spent']
 
     def _get_problems_count(self) -> int:
-        return 0
+        queryset = annotate_issues_problems(self.queryset)
+        queryset = filter_issues_problems(queryset)
+
+        return queryset.count()
 
 
 def get_issues_summary(queryset: QuerySet) -> IssuesSummary:
