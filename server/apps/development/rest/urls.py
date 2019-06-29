@@ -28,9 +28,13 @@ router.register(
 router.register(
     r'^milestones/(?P<milestone_pk>\d+)/features',
     views.MilestoneFeaturesViewset,
-    'features-issues'
+    'milestone-features'
 )
-router.register('milestones', views.MilestonesViewset, 'milestones')
+router.register(
+    'milestones',
+    views.MilestonesViewset,
+    'milestones'
+)
 
 router.register(
     r'^teams/(?P<team_pk>\d+)/issues$',

@@ -16,7 +16,7 @@ class FeaturesViewset(CreateModelMixin,
         permissions.IsProjectManager
     )
 
-    serializer_classes = {
+    actions_serializers = {
         'create': FeatureSerializer,
         'update': FeatureSerializer,
         'partial_update': FeatureSerializer,

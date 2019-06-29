@@ -22,7 +22,7 @@ class UserProgressMetrics:
     planned_work_hours: int = 0
 
 
-class ProgressMetricsCalculator:
+class ProgressMetricsProvider:
     def __init__(self, user: User, start: date, end: date):
         self.user = user
         self.start = start
@@ -32,7 +32,7 @@ class ProgressMetricsCalculator:
     def max_day_loading(self):
         return timedelta(hours=self.user.daily_work_hours).total_seconds()
 
-    def calculate(self) -> Iterable[UserProgressMetrics]:
+    def get_metrics(self) -> Iterable[UserProgressMetrics]:
         raise NotImplementedError
 
     def get_active_issues(self) -> List[Dict[str, Any]]:

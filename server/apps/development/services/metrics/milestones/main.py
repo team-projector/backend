@@ -1,6 +1,6 @@
 from apps.development.models import Milestone
-from .calculator import MilestoneMetrics, MilestoneMetricsCalculator
+from .provider import MilestoneMetrics, MilestoneMetricsProvider
 
 
 def get_milestone_metrics(milestone: Milestone) -> MilestoneMetrics:
-    return MilestoneMetricsCalculator(milestone).calculate()
+    return MilestoneMetricsProvider(milestone).get_metrics()

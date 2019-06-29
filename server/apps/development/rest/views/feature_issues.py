@@ -16,7 +16,7 @@ class FeatureIssuesViewset(mixins.ListModelMixin,
         permissions.IsProjectManager
     )
 
-    serializer_classes = {
+    actions_serializers = {
         'list': IssueCardSerializer
     }
 

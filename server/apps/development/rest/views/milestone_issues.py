@@ -16,7 +16,7 @@ class MilestoneIssuesViewset(mixins.ListModelMixin,
         permissions.IsProjectManager
     )
 
-    serializer_classes = {
+    actions_serializers = {
         'list': IssueCardSerializer
     }
 
@@ -42,7 +42,7 @@ class MilestoneIssuesOrphanViewset(mixins.ListModelMixin,
         permissions.IsProjectManager
     )
 
-    serializer_classes = {
+    actions_serializers = {
         'list': IssueCardSerializer
     }
 
