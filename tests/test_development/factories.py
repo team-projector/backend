@@ -2,8 +2,12 @@ import factory
 import pytz
 from django.contrib.contenttypes.models import ContentType
 
-from apps.development.models import (Feature, Issue, Label, Milestone, Note, Project, ProjectGroup, Team, TeamMember)
+from apps.development.models import (
+    Feature, Issue, Label, Milestone, Note, Project, ProjectGroup, Team,
+    TeamMember, MergeRequest
+)
 from apps.development.models.issue import STATE_OPENED
+from tests.test_users.factories import UserFactory
 
 
 class GitlabFieldMixin(factory.django.DjangoModelFactory):
@@ -36,7 +40,8 @@ class ProjectFactory(GitlabFieldMixin):
 class MilestoneFactory(GitlabFieldMixin):
     owner = factory.SubFactory(ProjectGroupFactory)
     object_id = factory.SelfAttribute('owner.id')
-    content_type = factory.LazyAttribute(lambda o: ContentType.objects.get_for_model(o.owner))
+    content_type = factory.LazyAttribute(
+        lambda o: ContentType.objects.get_for_model(o.owner))
 
     class Meta:
         abstract = True
@@ -63,7 +68,8 @@ class IssueFactory(GitlabFieldMixin):
     project = factory.SubFactory(ProjectFactory)
     time_estimate = factory.Faker('random_int')
     total_time_spent = factory.Faker('random_int')
-    created_at = factory.Faker('date_time_this_year', before_now=True, after_now=False, tzinfo=pytz.UTC)
+    created_at = factory.Faker('date_time_this_year', before_now=True,
+                               after_now=False, tzinfo=pytz.UTC)
     state = STATE_OPENED
 
     class Meta:
@@ -72,7 +78,8 @@ class IssueFactory(GitlabFieldMixin):
 
 class IssueNoteFactory(factory.django.DjangoModelFactory):
     gl_id = factory.Sequence(lambda i: i)
-    created_at = factory.Faker('date_time_this_year', before_now=True, after_now=False, tzinfo=pytz.UTC)
+    created_at = factory.Faker('date_time_this_year', before_now=True,
+                               after_now=False, tzinfo=pytz.UTC)
     content_object = factory.SubFactory(IssueFactory)
     data = {}
 
@@ -99,3 +106,17 @@ class FeatureFactory(factory.django.DjangoModelFactory):
 
     class Meta:
         model = Feature
+
+
+class MergeRequestFactory(GitlabFieldMixin):
+    state = STATE_OPENED
+    title = factory.Faker('text', max_nb_chars=200)
+    time_estimate = factory.Faker('random_int')
+    milestone = factory.SubFactory(ProjectGroupMilestoneFactory)
+    gl_iid = factory.Sequence(lambda i: i)
+    author = factory.SubFactory(UserFactory)
+    created_at = factory.Faker('date_time_this_year', before_now=True,
+                               after_now=False, tzinfo=pytz.UTC)
+
+    class Meta:
+        model = MergeRequest
