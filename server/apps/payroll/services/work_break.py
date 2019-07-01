@@ -19,4 +19,4 @@ def filter_available_work_breaks(queryset, user):
     ).values_list(
         'user', flat=True)
 
-    return queryset.filter(user__in=[*users, user.id])
+    return queryset.filter(user__in=(*users, user.id))
