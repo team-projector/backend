@@ -3,11 +3,13 @@ from datetime import timedelta
 from django.utils import timezone
 from rest_framework import status
 
-from apps.development.models import Note
+from apps.development.models import Note, TeamMember
 from apps.development.models.issue import STATE_CLOSED, STATE_OPENED
 from apps.users.models import User
 from tests.base import BaseAPITest, format_date
-from tests.test_development.factories import IssueFactory, IssueNoteFactory
+from tests.test_development.factories import (
+    IssueFactory, IssueNoteFactory, TeamFactory, TeamMemberFactory
+)
 
 
 class ApiIssuesMetricsTests(BaseAPITest):
@@ -15,21 +17,27 @@ class ApiIssuesMetricsTests(BaseAPITest):
         IssueFactory.create_batch(5, user=self.user)
 
         self.set_credentials()
-        response = self.client.get('/api/issues', {'metrics': 'true'})
+        response = self.client.get('/api/issues', {
+            'metrics': 'true'
+        })
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data['count'], 5)
-        self.assertTrue(all(item['metrics'] is not None for item in response.data['results']))
+        self.assertTrue(all(
+            item['metrics'] is not None for item in response.data['results']))
 
     def test_list_without_metrics(self):
         IssueFactory.create_batch(5, user=self.user)
 
         self.set_credentials()
-        response = self.client.get('/api/issues', {'metrics': 'false'})
+        response = self.client.get('/api/issues', {
+            'metrics': 'false'
+        })
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data['count'], 5)
-        self.assertTrue(all(item['metrics'] is None for item in response.data['results']))
+        self.assertTrue(
+            all(item['metrics'] is None for item in response.data['results']))
 
     def test_search(self):
         issue = IssueFactory.create(title='create', user=self.user)
@@ -46,6 +54,19 @@ class ApiIssuesMetricsTests(BaseAPITest):
 
     def test_filter_by_user(self):
         user_2 = self.create_user('user_2')
+
+        team = TeamFactory.create()
+        TeamMemberFactory.create(
+            user=self.user,
+            team=team,
+            roles=TeamMember.roles.leader
+        )
+
+        TeamMemberFactory.create(
+            user=user_2,
+            team=team,
+            roles=TeamMember.roles.developer
+        )
 
         IssueFactory.create_batch(3, user=self.user)
         issue = IssueFactory.create(user=user_2)
@@ -74,7 +95,8 @@ class ApiIssuesMetricsTests(BaseAPITest):
 
     def test_filter_by_due_date(self):
         now = timezone.now()
-        issue = IssueFactory.create(user=self.user, state=STATE_OPENED, due_date=now)
+        issue = IssueFactory.create(user=self.user, state=STATE_OPENED,
+                                    due_date=now)
         IssueFactory.create(user=self.user, due_date=now + timedelta(days=1))
         IssueFactory.create(user=self.user, due_date=now - timedelta(days=1))
 
@@ -89,10 +111,14 @@ class ApiIssuesMetricsTests(BaseAPITest):
 
     def test_filter_by_due_date_and_state(self):
         now = timezone.now()
-        issue = IssueFactory.create(user=self.user, state=STATE_OPENED, due_date=now)
-        IssueFactory.create(user=self.user, state=STATE_CLOSED, due_date=now + timedelta(days=1))
-        IssueFactory.create(user=self.user, state=STATE_CLOSED, due_date=now - timedelta(days=1))
-        IssueFactory.create(user=self.user, state=STATE_OPENED, due_date=now - timedelta(days=1))
+        issue = IssueFactory.create(user=self.user, state=STATE_OPENED,
+                                    due_date=now)
+        IssueFactory.create(user=self.user, state=STATE_CLOSED,
+                            due_date=now + timedelta(days=1))
+        IssueFactory.create(user=self.user, state=STATE_CLOSED,
+                            due_date=now - timedelta(days=1))
+        IssueFactory.create(user=self.user, state=STATE_OPENED,
+                            due_date=now - timedelta(days=1))
 
         self.set_credentials()
         response = self.client.get('/api/issues', {
@@ -141,8 +167,10 @@ class ApiIssuesMetricsTests(BaseAPITest):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data['count'], 1)
 
-        self.assertEqual(response.data['results'][0]['time_spent'], timedelta(hours=4).total_seconds())
-        self.assertEqual(response.data['results'][0]['metrics']['remains'], timedelta(hours=1).total_seconds())
+        self.assertEqual(response.data['results'][0]['time_spent'],
+                         timedelta(hours=4).total_seconds())
+        self.assertEqual(response.data['results'][0]['metrics']['remains'],
+                         timedelta(hours=1).total_seconds())
 
     def test_with_negative_remains(self):
         issue = IssueFactory.create(
@@ -170,7 +198,8 @@ class ApiIssuesMetricsTests(BaseAPITest):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data['count'], 1)
 
-        self.assertEqual(response.data['results'][0]['time_spent'], timedelta(hours=5).total_seconds())
+        self.assertEqual(response.data['results'][0]['time_spent'],
+                         timedelta(hours=5).total_seconds())
         self.assertEqual(response.data['results'][0]['metrics']['remains'], 0)
 
     def test_with_spends_users_mix(self):
@@ -219,7 +248,8 @@ class ApiIssuesMetricsTests(BaseAPITest):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data['count'], 1)
 
-        self.assertEqual(response.data['results'][0]['time_spent'], timedelta(hours=6).total_seconds())
+        self.assertEqual(response.data['results'][0]['time_spent'],
+                         timedelta(hours=6).total_seconds())
 
     def test_with_spends_reset(self):
         issue = IssueFactory.create(user=self.user)
@@ -240,8 +270,10 @@ class ApiIssuesMetricsTests(BaseAPITest):
                                 user=self.user,
                                 content_object=issue,
                                 data={
-                                    'spent': int(timedelta(hours=1).total_seconds()),
-                                    'date': (timezone.now() - timedelta(hours=4)).date()
+                                    'spent': int(
+                                        timedelta(hours=1).total_seconds()),
+                                    'date': (timezone.now() - timedelta(
+                                        hours=4)).date()
                                 })
 
         IssueNoteFactory.create(type=Note.TYPE.reset_spend,
@@ -254,8 +286,10 @@ class ApiIssuesMetricsTests(BaseAPITest):
                                 user=self.user,
                                 content_object=issue,
                                 data={
-                                    'spent': int(timedelta(hours=1).total_seconds()),
-                                    'date': (timezone.now() - timedelta(hours=1)).date()
+                                    'spent': int(
+                                        timedelta(hours=1).total_seconds()),
+                                    'date': (timezone.now() - timedelta(
+                                        hours=1)).date()
                                 })
 
         issue.adjust_spent_times()
@@ -266,4 +300,5 @@ class ApiIssuesMetricsTests(BaseAPITest):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data['count'], 1)
 
-        self.assertEqual(response.data['results'][0]['time_spent'], timedelta(hours=1).total_seconds())
+        self.assertEqual(response.data['results'][0]['time_spent'],
+                         timedelta(hours=1).total_seconds())

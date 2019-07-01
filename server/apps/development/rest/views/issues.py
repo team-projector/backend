@@ -47,7 +47,6 @@ class IssuesViewset(mixins.RetrieveModelMixin,
         'summary': IssuesSummarySerializer
     }
     update_serializer_class = IssueUpdateSerializer
-    queryset = Issue.objects.all()
 
     filter_backends = (
         filters.OrderingFilter,
@@ -62,7 +61,7 @@ class IssuesViewset(mixins.RetrieveModelMixin,
     ordering = ('due_date',)
 
     def get_queryset(self):
-        queryset = super().get_queryset()
+        queryset = Issue.objects.allowed_for_user(self.request.user)
 
         if self.action in ('list', 'retrieve'):
             queryset = annotate_issues_problems(queryset)
@@ -99,7 +98,7 @@ class IssuesViewset(mixins.RetrieveModelMixin,
             issue.gl_iid
         )
 
-        return Response(self.get_serializer(self.get_object()).data)
+        return Response(self.get_serializer(issue).data)
 
     @action(detail=False)
     def summary(self, request):
