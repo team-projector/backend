@@ -96,6 +96,25 @@ class SalariesTests(BaseAPITest):
 
         self._test_salaries_filter({'team': team.id}, salaries)
 
+    def test_double_salaries(self):
+        salaries = SalaryFactory.create_batch(size=10, user=self.user)
+
+        TeamMemberFactory.create(
+            team=TeamFactory.create(),
+            user=self.user,
+            roles=TeamMember.roles.leader
+        )
+        TeamMemberFactory.create(
+            team=TeamFactory.create(),
+            user=self.user,
+            roles=TeamMember.roles.leader
+        )
+
+        self._test_salaries_filter(
+            {'user': self.user.id},
+            salaries
+        )
+
     def _test_salaries_filter(self, user_filter, results):
         self.set_credentials()
         response = self.client.get('/api/salaries', user_filter)

@@ -12,4 +12,4 @@ def filter_available_salaries(queryset, user):
 
     users_query = Q(user__teams__in=teams) | Q(user=user.id)
 
-    return queryset.filter(users_query)
+    return queryset.filter(users_query).distinct()
