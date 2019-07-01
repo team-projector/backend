@@ -10,7 +10,6 @@ from tests.test_development.factories_gitlab import (
 ONE_MINUTE = 60
 
 
-@override_settings(GITLAB_TOKEN='GITLAB_TOKEN')
 class ApiIssuesSpendTests(BaseAPITest):
     def setUp(self):
         super().setUp()
@@ -59,10 +58,11 @@ class ApiIssuesSpendTests(BaseAPITest):
 
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
+    @override_settings(GITLAB_TOKEN='GITLAB_TOKEN')
     @activate_httpretty
     def test_spend(self):
-        gl_mock = GitlabMock()
-        
+        gl_mocker = GitlabMock()
+
         gl_project = AttrDict(GlProjectFactory())
         project = ProjectFactory.create(gl_id=gl_project.id)
 
@@ -70,10 +70,10 @@ class ApiIssuesSpendTests(BaseAPITest):
         issue = IssueFactory.create(gl_iid=gl_project_issue.iid, user=self.user, project=project)
         IssueFactory.create_batch(5, project=project)
 
-        gl_mock.registry_get('/user', GlUserFactory())
-        gl_mock.registry_get(f'/projects/{gl_project.id}', gl_project)
-        gl_mock.registry_get(f'/projects/{gl_project.id}/issues/{gl_project_issue.iid}', gl_project_issue)
-        gl_mock.registry_post(f'/projects/{gl_project.id}/issues/{gl_project_issue.iid}/add_spent_time',
+        gl_mocker.registry_get('/user', GlUserFactory())
+        gl_mocker.registry_get(f'/projects/{gl_project.id}', gl_project)
+        gl_mocker.registry_get(f'/projects/{gl_project.id}/issues/{gl_project_issue.iid}', gl_project_issue)
+        gl_mocker.registry_post(f'/projects/{gl_project.id}/issues/{gl_project_issue.iid}/add_spent_time',
                               GlIssueAddSpentTimeFactory())
 
         self.set_credentials()

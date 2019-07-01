@@ -33,7 +33,7 @@ class ApiIssuesSyncTests(BaseAPITest):
     @override_settings(GITLAB_TOKEN='GITLAB_TOKEN')
     @activate_httpretty
     def test_sync_project(self):
-        gl_mock = GitlabMock()
+        gl_mocker = GitlabMock()
 
         gl_project = AttrDict(GlProjectFactory())
         project = ProjectFactory.create(gl_id=gl_project.id)
@@ -55,15 +55,15 @@ class ApiIssuesSyncTests(BaseAPITest):
             state='opened'
         )
 
-        gl_mock.registry_get('/user', GlUserFactory())
-        gl_mock.registry_get(f'/projects/{gl_project.id}', gl_project)
-        gl_mock.registry_get(f'/projects/{gl_project.id}/issues/{gl_issue.iid}', gl_issue)
-        gl_mock.registry_get(f'/projects/{gl_project.id}/issues/{gl_issue.iid}/time_stats', GlIssueTimeStats())
-        gl_mock.registry_get(f'/users/{gl_assignee.id}', gl_assignee)
-        gl_mock.registry_get(f'/projects/{gl_project.id}/issues/{gl_issue.iid}/closed_by', [])
-        gl_mock.registry_get(f'/projects/{gl_project.id}/labels', [])
-        gl_mock.registry_get(f'/projects/{gl_project.id}/issues/{gl_issue.iid}/notes', [])
-        gl_mock.registry_get(f'/projects/{gl_project.id}/issues/{gl_issue.iid}/participants', [])
+        gl_mocker.registry_get('/user', GlUserFactory())
+        gl_mocker.registry_get(f'/projects/{gl_project.id}', gl_project)
+        gl_mocker.registry_get(f'/projects/{gl_project.id}/issues/{gl_issue.iid}', gl_issue)
+        gl_mocker.registry_get(f'/projects/{gl_project.id}/issues/{gl_issue.iid}/time_stats', GlIssueTimeStats())
+        gl_mocker.registry_get(f'/users/{gl_assignee.id}', gl_assignee)
+        gl_mocker.registry_get(f'/projects/{gl_project.id}/issues/{gl_issue.iid}/closed_by', [])
+        gl_mocker.registry_get(f'/projects/{gl_project.id}/labels', [])
+        gl_mocker.registry_get(f'/projects/{gl_project.id}/issues/{gl_issue.iid}/notes', [])
+        gl_mocker.registry_get(f'/projects/{gl_project.id}/issues/{gl_issue.iid}/participants', [])
 
         t = list(Issue.objects.allowed_for_user(self.user))
 

@@ -1,4 +1,7 @@
+import httpretty
 import pytest
+
+from tests.mocks import GitlabMock
 
 
 def pytest_addoption(parser):
@@ -30,3 +33,12 @@ def password_hashers(settings):
     settings.PASSWORD_HASHERS = [
         'django.contrib.auth.hashers.MD5PasswordHasher',
     ]
+
+
+@pytest.fixture()
+def gl_mocker():
+    httpretty.enable()
+
+    yield GitlabMock()
+
+    httpretty.disable()

@@ -31,17 +31,17 @@ class ApiMilestoneSyncTests(BaseAPITest):
     @override_settings(GITLAB_TOKEN='GITLAB_TOKEN')
     @activate_httpretty
     def test_sync_group(self):
-        gl_mock = GitlabMock()
-        
+        gl_mocker = GitlabMock()
+
         gl_group = AttrDict(GlGroupFactory())
         group = ProjectGroupFactory.create(gl_id=gl_group.id)
 
         gl_milestone = AttrDict(GlGroupMilestoneFactory(state='closed'))
         milestone = ProjectGroupMilestoneFactory.create(gl_id=gl_milestone.id, owner=group, state='active')
 
-        gl_mock.registry_get('/user', GlUserFactory())
-        gl_mock.registry_get(f'/groups/{gl_group.id}', gl_group)
-        gl_mock.registry_get(f'/groups/{gl_group.id}/milestones/{gl_milestone.id}', gl_milestone)
+        gl_mocker.registry_get('/user', GlUserFactory())
+        gl_mocker.registry_get(f'/groups/{gl_group.id}', gl_group)
+        gl_mocker.registry_get(f'/groups/{gl_group.id}/milestones/{gl_milestone.id}', gl_milestone)
 
         self.set_credentials()
         response = self.client.post(f'/api/milestones/{milestone.id}/sync')
@@ -56,7 +56,7 @@ class ApiMilestoneSyncTests(BaseAPITest):
     @override_settings(GITLAB_TOKEN='GITLAB_TOKEN')
     @activate_httpretty
     def test_sync_project(self):
-        gl_mock = GitlabMock()
+        gl_mocker = GitlabMock()
 
         gl_project = AttrDict(GlProjectFactory())
         project = ProjectFactory.create(gl_id=gl_project.id)
@@ -64,9 +64,9 @@ class ApiMilestoneSyncTests(BaseAPITest):
         gl_milestone = AttrDict(GlProjectMilestoneFactory(state='closed'))
         milestone = ProjectMilestoneFactory.create(gl_id=gl_milestone.id, owner=project, state='active')
 
-        gl_mock.registry_get('/user', GlUserFactory())
-        gl_mock.registry_get(f'/projects/{gl_project.id}', gl_project)
-        gl_mock.registry_get(f'/projects/{gl_project.id}/milestones/{gl_milestone.id}', gl_milestone)
+        gl_mocker.registry_get('/user', GlUserFactory())
+        gl_mocker.registry_get(f'/projects/{gl_project.id}', gl_project)
+        gl_mocker.registry_get(f'/projects/{gl_project.id}/milestones/{gl_milestone.id}', gl_milestone)
 
         self.set_credentials()
         response = self.client.post(f'/api/milestones/{milestone.id}/sync')

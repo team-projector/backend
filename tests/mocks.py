@@ -23,19 +23,19 @@ class GitlabMock:
 
     @staticmethod
     def _registry_url(method, path, data):
-        gl_url = f'{BASE_GL_API_URL}{path}' if path else None
+        gl_uri = f'{BASE_GL_API_URL}{path}' if path else None
 
         def request_callback(request, uri, response_headers):
-            if gl_url:
+            if gl_uri:
                 response_headers['Content-Type'] = 'application/json'
 
             return [status.HTTP_200_OK, response_headers, json.dumps(data)]
 
         httpretty.register_uri(
             method=method,
-            uri=gl_url or re.compile(r'http://.*'),
+            uri=gl_uri or re.compile(r'http.*'),
             body=request_callback,
-            priority=int(bool(gl_url))
+            priority=int(bool(gl_uri))
         )
 
 
