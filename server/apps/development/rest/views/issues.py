@@ -9,7 +9,7 @@ from apps.core.rest.mixins.views import UpdateModelMixin
 from apps.core.rest.views import BaseGenericViewSet
 from apps.core.utils.rest import parse_query_params, parse_data_params
 from apps.development.models import Issue
-from apps.development.rest.filters import IssueProblemFilter
+from apps.development.rest.filters import IssueProblemFilter, IssueTeamFilter
 from apps.development.rest.serializers import (
     IssueCardSerializer, IssueSerializer, IssueUpdateSerializer,
     IssuesSummarySerializer
@@ -52,7 +52,8 @@ class IssuesViewset(mixins.RetrieveModelMixin,
         filters.OrderingFilter,
         filters.SearchFilter,
         DjangoFilterBackend,
-        IssueProblemFilter
+        IssueProblemFilter,
+        IssueTeamFilter
     )
     filter_fields = ('state', 'due_date', 'user')
 
