@@ -17,11 +17,6 @@ urlpatterns = [
                 views.UserProgressMetricsView.as_view(),
                 name='progress-metrics'
             ),
-            path(
-                'salaries',
-                views.UserSalariesView.as_view(),
-                name='salaries'
-            ),
         ], app_name), 'users')),
     path('teams/<int:team_pk>/', include((
         [
