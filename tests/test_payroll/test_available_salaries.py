@@ -2,7 +2,6 @@ from django.test import TestCase
 
 from apps.development.models import TeamMember
 from apps.payroll.models import Salary
-from apps.payroll.services.salaries import filter_available_salaries
 from tests.test_development.factories import TeamFactory
 from tests.test_payroll.factories import SalaryFactory
 from tests.test_users.factories import UserFactory
@@ -12,7 +11,6 @@ class AvailableSalariesTests(TestCase):
     def setUp(self):
         super().setUp()
         self.user = UserFactory.create()
-        self.qs = Salary.objects.all()
 
     def test_my_salaries(self):
         salaries = SalaryFactory.create_batch(
@@ -24,7 +22,7 @@ class AvailableSalariesTests(TestCase):
             user=UserFactory.create())
 
         self._assert_salaries(
-            filter_available_salaries(self.qs, self.user),
+            Salary.objects.get_available(self.user),
             salaries
         )
 
@@ -36,7 +34,7 @@ class AvailableSalariesTests(TestCase):
         SalaryFactory.create(user=user_2)
 
         self._assert_salaries(
-            filter_available_salaries(self.qs, self.user)
+            Salary.objects.get_available(self.user)
         )
 
     def test_as_team_leader(self):
@@ -51,7 +49,7 @@ class AvailableSalariesTests(TestCase):
         salary = SalaryFactory.create(user=user_2)
 
         self._assert_salaries(
-            filter_available_salaries(self.qs, self.user),
+            Salary.objects.get_available(self.user),
             [salary]
         )
 
@@ -67,7 +65,7 @@ class AvailableSalariesTests(TestCase):
         SalaryFactory.create(user=user_2)
 
         self._assert_salaries(
-            filter_available_salaries(self.qs, self.user)
+            Salary.objects.get_available(self.user)
         )
 
     def test_as_leader_another_team(self):
@@ -85,7 +83,7 @@ class AvailableSalariesTests(TestCase):
         SalaryFactory.create(user=user_2)
 
         self._assert_salaries(
-            filter_available_salaries(self.qs, self.user)
+            Salary.objects.get_available(self.user)
         )
 
     def test_as_watcher_another_team(self):
@@ -103,7 +101,7 @@ class AvailableSalariesTests(TestCase):
         SalaryFactory.create(user=user_2)
 
         self._assert_salaries(
-            filter_available_salaries(self.qs, self.user)
+            Salary.objects.get_available(self.user)
         )
 
     def test_my_salaries_and_as_leader(self):
@@ -122,7 +120,7 @@ class AvailableSalariesTests(TestCase):
         salaries = SalaryFactory.create_batch(size=3, user=user_2)
 
         self._assert_salaries(
-            filter_available_salaries(self.qs, self.user),
+            Salary.objects.get_available(self.user),
             [*salaries_my, *salaries]
         )
 
@@ -147,7 +145,7 @@ class AvailableSalariesTests(TestCase):
         queryset = Salary.objects.filter(user=user_3)
 
         self._assert_salaries(
-            filter_available_salaries(queryset, self.user)
+            queryset.filter(id__in=Salary.objects.get_available(self.user))
         )
 
     def _assert_salaries(self, queryset, results=[]):

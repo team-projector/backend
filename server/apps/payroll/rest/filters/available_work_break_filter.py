@@ -1,8 +1,10 @@
 from rest_framework import filters
 
-from apps.payroll.services.work_break import filter_available_work_breaks
+from apps.payroll.models import WorkBreak
 
 
 class AvailableWorkBreakFilter(filters.BaseFilterBackend):
     def filter_queryset(self, request, queryset, view):
-        return filter_available_work_breaks(queryset, request.user)
+        return queryset.filter(
+            id__in=WorkBreak.objects.get_available(request.user)
+        )

@@ -4,6 +4,7 @@ from django.utils.translation import gettext_lazy as _
 
 from apps.core.db.fields import MoneyField
 from apps.core.db.mixins import Timestamps
+from apps.payroll.db.managers import SalaryManager
 
 User = get_user_model()
 
@@ -86,6 +87,8 @@ class Salary(Timestamps):
         verbose_name=_('VN__COMMENTS'),
         help_text=_('HT__COMMENTS')
     )
+
+    objects = SalaryManager()
 
     def __str__(self):
         return f'{self.user} [{self.created_at}]: {self.sum}'

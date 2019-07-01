@@ -6,6 +6,9 @@ from django.db.models import Case, F, FloatField, QuerySet, Sum, When
 from django.db.models.functions import Coalesce
 from django.db.models.manager import BaseManager
 
+from apps.development.models import TeamMember
+from apps.development.services.team_members import filter_by_roles
+
 
 class SpentTimeQuerySet(models.QuerySet):
     def for_issues(self, issues):
@@ -59,4 +62,16 @@ BaseSpentTimeManager: Any = BaseManager.from_queryset(SpentTimeQuerySet)
 
 
 class SpentTimeManager(BaseSpentTimeManager):
-    pass
+    def get_available(self, user):
+        users = filter_by_roles(
+            TeamMember.objects.filter(user=user),
+            [
+                TeamMember.roles.leader,
+                TeamMember.roles.watcher
+            ]
+        ).values_list(
+            'team__members',
+            flat=True
+        )
+
+        return self.filter(user__in=(*users, user.id))
