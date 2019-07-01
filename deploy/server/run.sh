@@ -2,6 +2,6 @@
 
 ./manage.py migrate
 
-uwsgi --ini docker/server/uwsgi.ini --processes $UWSGI_PROCESSES_COUNT &
+uwsgi --ini deploy/server/uwsgi.ini --processes $UWSGI_PROCESSES_COUNT &
 
 nginx
