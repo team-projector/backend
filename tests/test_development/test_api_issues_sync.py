@@ -6,7 +6,7 @@ from tests.test_development.factories import IssueFactory, ProjectFactory
 from tests.test_users.factories import UserFactory
 from tests.test_development.mocks import activate_httpretty, registry_get_gl_url
 from tests.test_development.factories_gitlab import (
-    AttrDict, GlIssueTimeStats, GlUserFactory, GlProjectFactory, GlProjectsIssueFactory)
+    AttrDict, GlTimeStats, GlUserFactory, GlProjectFactory, GlProjectsIssueFactory)
 
 
 class ApiIssuesSyncTests(BaseAPITest):
@@ -43,7 +43,7 @@ class ApiIssuesSyncTests(BaseAPITest):
         registry_get_gl_url(f'https://gitlab.com/api/v4/projects/{gl_project.id}', gl_project)
         registry_get_gl_url(f'https://gitlab.com/api/v4/projects/{gl_project.id}/issues/{gl_issue.iid}', gl_issue)
         registry_get_gl_url(f'https://gitlab.com/api/v4/projects/{gl_project.id}/issues/{gl_issue.iid}'
-                            f'/time_stats', GlIssueTimeStats())
+                            f'/time_stats', GlTimeStats())
         registry_get_gl_url(f'https://gitlab.com/api/v4/users/{gl_assignee.id}', gl_assignee)
         registry_get_gl_url(f'https://gitlab.com/api/v4/projects/{gl_project.id}/issues/{gl_issue.iid}/closed_by', [])
         registry_get_gl_url(f'https://gitlab.com/api/v4/projects/{gl_project.id}/labels', [])
