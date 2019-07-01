@@ -26,8 +26,8 @@ RUN apt update \
     && poetry install --no-dev --no-interaction --no-ansi \
     && python manage.py collectstatic --noinput --verbosity 0 \
     && django-admin compilemessages \
-    && cp docker/nginx/* /etc/nginx \
+    && cp deploy/nginx/* /etc/nginx \
     && apt remove --purge -y git gcc binutils \
     && apt autoremove -y
 
-CMD ["/bin/bash", "docker/server/run.sh"]
+CMD ["/bin/bash", "deploy/server/run.sh"]
