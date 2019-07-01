@@ -33,7 +33,7 @@ build:
     GIT_STRATEGY: fetch
   script:
     - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN registry.gitlab.com
-    - docker build -t $DOCKER_TEST_IMAGE -f docker/Dockerfile .
+    - docker build -t $DOCKER_TEST_IMAGE -f deploy/Dockerfile .
     - docker push $DOCKER_TEST_IMAGE
 
 include:

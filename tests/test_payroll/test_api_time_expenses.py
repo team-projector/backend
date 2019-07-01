@@ -334,6 +334,25 @@ class ApiTimeExpensesTests(BaseAPITest):
         self._test_time_expenses_order_by('-date',
                                           [spend_4, spend_2, spend_3, spend_1])
 
+    def test_double_spent_time(self):
+        spends = IssueSpentTimeFactory.create_batch(size=10, user=self.user)
+
+        TeamMemberFactory.create(
+            team=TeamFactory.create(),
+            user=self.user,
+            roles=TeamMember.roles.leader | TeamMember.roles.watcher
+        )
+        TeamMemberFactory.create(
+            team=TeamFactory.create(),
+            user=self.user,
+            roles=TeamMember.roles.leader | TeamMember.roles.watcher
+        )
+
+        self._test_time_expenses_filter(
+            {'user': self.user.id, 'page': 1, 'page_size': 20},
+            spends
+        )
+
     def _test_time_expenses_filter(self, user_filter, results):
         self.set_credentials()
         response = self.client.get('/api/time-expenses', user_filter)
