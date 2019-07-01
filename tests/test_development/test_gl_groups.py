@@ -3,9 +3,9 @@ from django.test import override_settings
 from apps.development.services.gitlab.groups import load_single_group, load_groups
 from apps.development.models import ProjectGroup
 
+from tests.mocks import activate_httpretty, GitlabMock
 from tests.test_development.factories import ProjectGroupFactory
 from tests.test_development.factories_gitlab import AttrDict, GlUserFactory, GlGroupFactory
-from tests.test_development.mocks import activate_httpretty, registry_get_gl_url
 
 
 def test_load_single_group(db):
@@ -28,11 +28,13 @@ def test_load_single_group_with_parent(db):
 @override_settings(GITLAB_TOKEN='GITLAB_TOKEN')
 @activate_httpretty
 def test_load_groups(db):
+    gl_mock = GitlabMock()
+
     gl_group_1 = AttrDict(GlGroupFactory())
     gl_group_2 = AttrDict(GlGroupFactory(parent_id=gl_group_1.id))
 
-    registry_get_gl_url('https://gitlab.com/api/v4/user', GlUserFactory())
-    registry_get_gl_url('https://gitlab.com/api/v4/groups', [gl_group_1, gl_group_2])
+    gl_mock.registry_get('/user', GlUserFactory())
+    gl_mock.registry_get('/groups', [gl_group_1, gl_group_2])
 
     load_groups()
 

@@ -1,5 +1,4 @@
 import pytest
-from .mocks import GitlabMock
 
 
 def pytest_addoption(parser):
@@ -31,8 +30,3 @@ def password_hashers(settings):
     settings.PASSWORD_HASHERS = [
         'django.contrib.auth.hashers.MD5PasswordHasher',
     ]
-
-
-@pytest.fixture(autouse=True, scope='function')
-def gl_mock():
-    return GitlabMock()

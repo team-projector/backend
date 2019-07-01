@@ -2,8 +2,8 @@ from django.test import override_settings
 from rest_framework import status
 
 from tests.base import BaseAPITest
+from tests.mocks import activate_httpretty, GitlabMock
 from tests.test_development.factories import IssueFactory, ProjectFactory
-from tests.test_development.mocks import activate_httpretty, registry_get_gl_url, registry_post_gl_url
 from tests.test_development.factories_gitlab import (
     AttrDict, GlIssueAddSpentTimeFactory, GlProjectFactory, GlProjectsIssueFactory, GlUserFactory)
 
@@ -61,6 +61,8 @@ class ApiIssuesSpendTests(BaseAPITest):
 
     @activate_httpretty
     def test_spend(self):
+        gl_mock = GitlabMock()
+        
         gl_project = AttrDict(GlProjectFactory())
         project = ProjectFactory.create(gl_id=gl_project.id)
 
@@ -68,12 +70,11 @@ class ApiIssuesSpendTests(BaseAPITest):
         issue = IssueFactory.create(gl_iid=gl_project_issue.iid, user=self.user, project=project)
         IssueFactory.create_batch(5, project=project)
 
-        registry_get_gl_url('https://gitlab.com/api/v4/user', GlUserFactory())
-        registry_get_gl_url(f'https://gitlab.com/api/v4/projects/{gl_project.id}', gl_project)
-        registry_get_gl_url(f'https://gitlab.com/api/v4/projects/{gl_project.id}/'
-                            f'issues/{gl_project_issue.iid}', gl_project_issue)
-        registry_post_gl_url(f'https://gitlab.com/api/v4/projects/{gl_project.id}/'
-                             f'issues/{gl_project_issue.iid}/add_spent_time', GlIssueAddSpentTimeFactory())
+        gl_mock.registry_get('/user', GlUserFactory())
+        gl_mock.registry_get(f'/projects/{gl_project.id}', gl_project)
+        gl_mock.registry_get(f'/projects/{gl_project.id}/issues/{gl_project_issue.iid}', gl_project_issue)
+        gl_mock.registry_post(f'/projects/{gl_project.id}/issues/{gl_project_issue.iid}/add_spent_time',
+                              GlIssueAddSpentTimeFactory())
 
         self.set_credentials()
         response = self.client.post(f'/api/issues/{issue.id}/spend', {'time': ONE_MINUTE})

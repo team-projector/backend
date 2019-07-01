@@ -2,18 +2,21 @@ from django.test import override_settings
 
 from apps.development.services.gitlab.users import load_user, update_users
 from apps.users.models import User
+
+from tests.mocks import activate_httpretty, GitlabMock
 from tests.test_development.factories_gitlab import AttrDict, GlUserFactory
 from tests.test_users.factories import UserFactory
-from tests.mocks import activate_httpretty
 
 
 @override_settings(GITLAB_TOKEN='GITLAB_TOKEN')
 @activate_httpretty
-def test_load_user(db, gl_mock):
+def test_load_user(db):
+    gl_mock = GitlabMock()
+
     gl_user = AttrDict(GlUserFactory())
 
-    gl_mock.registry_get('user', GlUserFactory())
-    gl_mock.registry_get(f'users/{gl_user.id}', gl_user)
+    gl_mock.registry_get('/user', GlUserFactory())
+    gl_mock.registry_get(f'/users/{gl_user.id}', gl_user)
 
     load_user(gl_user.id)
 
@@ -24,14 +27,16 @@ def test_load_user(db, gl_mock):
 
 @override_settings(GITLAB_TOKEN='GITLAB_TOKEN')
 @activate_httpretty
-def test_update_users(db, gl_mock):
+def test_update_users(db):
+    gl_mock = GitlabMock()
+
     gl_user = AttrDict(GlUserFactory(name='new name'))
     user = UserFactory.create(gl_id=gl_user.id, name='old name')
 
     UserFactory.create_batch(3)
 
-    gl_mock.registry_get('user', GlUserFactory())
-    gl_mock.registry_get(f'users/{gl_user.id}', gl_user)
+    gl_mock.registry_get('/user', GlUserFactory())
+    gl_mock.registry_get(f'/users/{gl_user.id}', gl_user)
 
     update_users()
 

@@ -2,13 +2,14 @@ from django.conf import settings
 from django.test import override_settings
 
 from apps.core.gitlab import get_gitlab_client
-from apps.development.services.gitlab.projects import load_project, load_group_projects, load_projects
 from apps.development.models import Project
+from apps.development.services.gitlab.projects import load_project, load_group_projects, load_projects
 
-from tests.test_development.mocks import activate_httpretty, registry_get_gl_url, registry_post_gl_url
+from tests.mocks import activate_httpretty, GitlabMock
 from tests.test_development.factories import ProjectGroupFactory
 from tests.test_development.factories_gitlab import (
-    AttrDict, GlUserFactory, GlGroupFactory, GlProjectFactory, GlHookFactory)
+    AttrDict, GlUserFactory, GlGroupFactory, GlProjectFactory, GlHookFactory
+)
 
 
 @override_settings(GITLAB_TOKEN='GITLAB_TOKEN')
@@ -16,10 +17,12 @@ from tests.test_development.factories_gitlab import (
 def test_load_project(db):
     assert settings.GITLAB_CHECK_WEBHOOKS is False
 
+    gl_mock = GitlabMock()
+
     group = ProjectGroupFactory.create()
     gl_project = AttrDict(GlProjectFactory())
 
-    registry_get_gl_url('https://gitlab.com/api/v4/user', GlUserFactory())
+    gl_mock.registry_get('/user', GlUserFactory())
 
     gl = get_gitlab_client()
 
@@ -35,14 +38,16 @@ def test_load_project(db):
                    DOMAIN_NAME='test.com')
 @activate_httpretty
 def test_load_project_with_check_webhooks(db):
+    gl_mock = GitlabMock()
+
     group = ProjectGroupFactory.create()
     gl_project = AttrDict(GlProjectFactory())
     gl_hook_1 = AttrDict(GlHookFactory(url='https://test.com/api/gl-webhook'))
     gl_hook_2 = AttrDict(GlHookFactory(url='https://test1.com/api/1'))
 
-    registry_get_gl_url('https://gitlab.com/api/v4/user', GlUserFactory())
-    registry_get_gl_url(f'https://gitlab.com/api/v4/projects/{gl_project.id}', gl_project)
-    registry_get_gl_url(f'https://gitlab.com/api/v4/projects/{gl_project.id}/hooks', [gl_hook_1])
+    gl_mock.registry_get('/user', GlUserFactory())
+    gl_mock.registry_get(f'/projects/{gl_project.id}', gl_project)
+    gl_mock.registry_get(f'/projects/{gl_project.id}/hooks', [gl_hook_1])
 
     gl = get_gitlab_client()
 
@@ -52,8 +57,8 @@ def test_load_project_with_check_webhooks(db):
 
     _check_project(project, gl_project, group)
 
-    registry_get_gl_url(f'https://gitlab.com/api/v4/projects/{gl_project.id}/hooks', [gl_hook_2])
-    registry_post_gl_url(f'https://gitlab.com/api/v4/projects/{gl_project.id}/hooks', {'id': gl_project.id})
+    gl_mock.registry_get(f'/projects/{gl_project.id}/hooks', [gl_hook_2])
+    gl_mock.registry_post(f'/projects/{gl_project.id}/hooks', {'id': gl_project.id})
 
     load_project(gl, group, gl_project)
 
@@ -63,15 +68,17 @@ def test_load_project_with_check_webhooks(db):
 def test_load_group_projects(db):
     assert settings.GITLAB_CHECK_WEBHOOKS is False
 
+    gl_mock = GitlabMock()
+
     gl_group = AttrDict(GlGroupFactory())
     group = ProjectGroupFactory.create(gl_id=gl_group.id)
 
     gl_project_1 = AttrDict(GlProjectFactory())
     gl_project_2 = AttrDict(GlProjectFactory())
 
-    registry_get_gl_url('https://gitlab.com/api/v4/user', GlUserFactory())
-    registry_get_gl_url(f'https://gitlab.com/api/v4/groups/{gl_group.id}', gl_group)
-    registry_get_gl_url(f'https://gitlab.com/api/v4/groups/{gl_group.id}/projects', [gl_project_1, gl_project_2])
+    gl_mock.registry_get('/user', GlUserFactory())
+    gl_mock.registry_get(f'/groups/{gl_group.id}', gl_group)
+    gl_mock.registry_get(f'/groups/{gl_group.id}/projects', [gl_project_1, gl_project_2])
 
     load_group_projects(group)
 
@@ -87,6 +94,8 @@ def test_load_group_projects(db):
 def test_load_projects(db):
     assert settings.GITLAB_CHECK_WEBHOOKS is False
 
+    gl_mock = GitlabMock()
+
     gl_group_1 = AttrDict(GlGroupFactory())
     group_1 = ProjectGroupFactory.create(gl_id=gl_group_1.id)
     gl_group_2 = AttrDict(GlGroupFactory())
@@ -95,11 +104,11 @@ def test_load_projects(db):
     gl_project_1 = AttrDict(GlProjectFactory())
     gl_project_2 = AttrDict(GlProjectFactory())
 
-    registry_get_gl_url('https://gitlab.com/api/v4/user', GlUserFactory())
-    registry_get_gl_url(f'https://gitlab.com/api/v4/groups/{gl_group_1.id}', gl_group_1)
-    registry_get_gl_url(f'https://gitlab.com/api/v4/groups/{gl_group_1.id}/projects', [gl_project_1])
-    registry_get_gl_url(f'https://gitlab.com/api/v4/groups/{gl_group_2.id}', gl_group_2)
-    registry_get_gl_url(f'https://gitlab.com/api/v4/groups/{gl_group_2.id}/projects', [gl_project_2])
+    gl_mock.registry_get('/user', GlUserFactory())
+    gl_mock.registry_get(f'/groups/{gl_group_1.id}', gl_group_1)
+    gl_mock.registry_get(f'/groups/{gl_group_1.id}/projects', [gl_project_1])
+    gl_mock.registry_get(f'/groups/{gl_group_2.id}', gl_group_2)
+    gl_mock.registry_get(f'/groups/{gl_group_2.id}/projects', [gl_project_2])
 
     load_projects()
 
