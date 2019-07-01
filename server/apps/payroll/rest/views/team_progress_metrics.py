@@ -9,7 +9,7 @@ from apps.development.models import Team
 from apps.development.rest.permissions import CanViewTeamData
 from apps.payroll.rest.serializers import TeamMemberProgressMetricsSerializer
 from apps.payroll.services.metrics.progress.team import (
-    calculate_team_progress_metrics
+    get_team_progress_metrics
 )
 
 
@@ -44,7 +44,7 @@ class TeamProgressMetricsView(BaseGenericAPIView):
             TeamProgressMetricsParamsSerializer
         )
 
-        metrics = calculate_team_progress_metrics(
+        metrics = get_team_progress_metrics(
             self.team,
             params['start'],
             params['end'],

@@ -10,7 +10,7 @@ from apps.development.rest.serializers import TeamCardSerializer, TeamSerializer
 class TeamsViewset(mixins.ListModelMixin,
                    mixins.RetrieveModelMixin,
                    BaseGenericViewSet):
-    serializer_classes = {
+    actions_serializers = {
         'list': TeamCardSerializer,
         'retrieve': TeamSerializer,
     }

@@ -12,7 +12,7 @@ class TeamMemberProgressMetrics:
     metrics: Iterable[UserProgressMetrics] = []
 
 
-class ProgressMetricsCalculator:
+class ProgressMetricsProvider:
     def __init__(self,
                  team: Team,
                  start: date,
@@ -21,18 +21,18 @@ class ProgressMetricsCalculator:
         self.start = start
         self.end = end
 
-    def calculate(self) -> Iterable[TeamMemberProgressMetrics]:
+    def get_metrics(self) -> Iterable[TeamMemberProgressMetrics]:
         metrics: List[TeamMemberProgressMetrics] = []
         for member in self.team.members.all():
             user_metrics = TeamMemberProgressMetrics()
 
             user_metrics.user = member.id
-            user_metrics.metrics = self.calculate_user_metrics(member)
+            user_metrics.metrics = self.get_user_metrics(member)
 
             metrics.append(user_metrics)
 
         return metrics
 
-    def calculate_user_metrics(self,
-                               user: User) -> Iterable[UserProgressMetrics]:
+    def get_user_metrics(self,
+                         user: User) -> Iterable[UserProgressMetrics]:
         raise NotImplementedError

@@ -10,7 +10,7 @@ from ..serializers import SalarySerializer
 class SalariesViewSet(mixins.RetrieveModelMixin,
                       mixins.ListModelMixin,
                       BaseGenericViewSet):
-    serializer_classes = {
+    actions_serializers = {
         'retrieve': SalarySerializer,
         'list': SalarySerializer
     }

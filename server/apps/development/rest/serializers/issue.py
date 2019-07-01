@@ -6,7 +6,7 @@ from rest_framework import serializers
 from apps.core.rest.serializers import LinkSerializer
 from apps.core.utils.objects import dict2obj
 from apps.development.models import Feature
-from apps.development.services.problems.issues import checkers
+from apps.development.services.issues.problems import checkers
 from apps.payroll.models import SpentTime
 from apps.users.rest.serializers import UserCardSerializer
 from .issue_metrics import IssueMetricsSerializer
