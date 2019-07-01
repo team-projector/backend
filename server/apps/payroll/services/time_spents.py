@@ -1,16 +1,18 @@
-from django.db.models import Q
-
 from apps.development.models import TeamMember
+
+from apps.development.services.team_members import filter_by_roles
 
 
 def filter_available_spent_times(queryset, user):
-    query = Q(user=user)
-    query &= Q(
-        Q(roles=TeamMember.roles.leader) | Q(roles=TeamMember.roles.watcher)
+    users = filter_by_roles(
+        TeamMember.objects.filter(user=user),
+        [
+            TeamMember.roles.leader,
+            TeamMember.roles.watcher
+        ]
+    ).values_list(
+        'team__members',
+        flat=True
     )
 
-    teams = TeamMember.objects.filter(query).values_list('team_id', flat=True)
-
-    users_query = Q(user__teams__in=teams) | Q(user=user.id)
-
-    return queryset.filter(users_query).distinct()
+    return queryset.filter(user__in=(*users, user.id))
