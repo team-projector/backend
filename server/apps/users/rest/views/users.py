@@ -16,6 +16,6 @@ class UsersViewset(LinksViewMixin,
     )
 
     queryset = User.objects.filter(is_active=True)
-    serializer_classes = {
+    actions_serializers = {
         'retrieve': UserSerializer
     }

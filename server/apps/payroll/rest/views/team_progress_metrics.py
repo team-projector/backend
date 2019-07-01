@@ -6,10 +6,10 @@ from rest_framework.response import Response
 from apps.core.rest.views import BaseGenericAPIView
 from apps.core.utils.rest import parse_query_params
 from apps.development.models import Team
-from apps.payroll.rest.permissions import CanViewTeamMetrics
+from apps.development.rest.permissions import CanViewTeamData
 from apps.payroll.rest.serializers import TeamMemberProgressMetricsSerializer
 from apps.payroll.services.metrics.progress.team import (
-    calculate_team_progress_metrics
+    get_team_progress_metrics
 )
 
 
@@ -22,7 +22,7 @@ class TeamProgressMetricsParamsSerializer(serializers.Serializer):
 class TeamProgressMetricsView(BaseGenericAPIView):
     permission_classes = (
         permissions.IsAuthenticated,
-        CanViewTeamMetrics
+        CanViewTeamData
     )
 
     @cached_property
@@ -44,7 +44,7 @@ class TeamProgressMetricsView(BaseGenericAPIView):
             TeamProgressMetricsParamsSerializer
         )
 
-        metrics = calculate_team_progress_metrics(
+        metrics = get_team_progress_metrics(
             self.team,
             params['start'],
             params['end'],

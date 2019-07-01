@@ -2,26 +2,26 @@ from datetime import date
 from typing import Iterable
 
 from apps.users.models import User
-from .base import ProgressMetricsCalculator, UserProgressMetrics
-from .day import DayMetricsCalculator
-from .week import WeekMetricsCalculator
+from .base import ProgressMetricsProvider, UserProgressMetrics
+from .day import DayMetricsProvider
+from .week import WeekMetricsProvider
 
 
-def create_progress_calculator(user: User,
-                               start: date,
-                               end: date,
-                               group: str) -> ProgressMetricsCalculator:
+def _create_provider(user: User,
+                     start: date,
+                     end: date,
+                     group: str) -> ProgressMetricsProvider:
     if group == 'day':
-        return DayMetricsCalculator(user, start, end)
+        return DayMetricsProvider(user, start, end)
     elif group == 'week':
-        return WeekMetricsCalculator(user, start, end)
+        return WeekMetricsProvider(user, start, end)
 
     raise ValueError(f'Bad group "{group}"')
 
 
-def calculate_user_progress_metrics(user: User,
-                                    start: date,
-                                    end: date,
-                                    grp: str) -> Iterable[UserProgressMetrics]:
-    calculator = create_progress_calculator(user, start, end, grp)
-    return calculator.calculate()
+def get_user_progress_metrics(user: User,
+                              start: date,
+                              end: date,
+                              grp: str) -> Iterable[UserProgressMetrics]:
+    provider = _create_provider(user, start, end, grp)
+    return provider.get_metrics()

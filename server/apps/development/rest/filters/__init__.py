@@ -1,3 +1,4 @@
-from .issue import IssueStatusUrlFiler
+from .issue_problem import IssueProblemFilter
+from .issue_status_url import IssueStatusUrlFilter
 from .milestone import MilestoneActiveFilter
 from .team_member import TeamMemberFilterBackend, TeamMemberRoleFilterBackend
