@@ -1,8 +1,14 @@
+from datetime import timedelta
+
+from django.utils import timezone
 from rest_framework import status
 
 from apps.development.models import TeamMember
+from apps.development.models.issue import STATE_OPENED, STATE_CLOSED
 from tests.base import BaseAPITest
-from tests.test_development.factories import TeamFactory, TeamMemberFactory
+from tests.test_development.factories import (
+    TeamFactory, TeamMemberFactory, IssueFactory
+)
 from tests.test_users.factories import UserFactory
 
 
@@ -20,7 +26,8 @@ class ApiTeamsTests(BaseAPITest):
         TeamFactory.create_batch(5)
         team = TeamFactory.create()
 
-        TeamMemberFactory.create(user=self.user, team=team, roles=TeamMember.roles.leader)
+        TeamMemberFactory.create(user=self.user, team=team,
+                                 roles=TeamMember.roles.leader)
 
         self.set_credentials()
         response = self.client.get('/api/teams', {
@@ -51,7 +58,8 @@ class ApiTeamsTests(BaseAPITest):
 
         user_2 = UserFactory.create()
 
-        TeamMemberFactory.create(user=user_2, team=team, roles=TeamMember.roles.leader)
+        TeamMemberFactory.create(user=user_2, team=team,
+                                 roles=TeamMember.roles.leader)
 
         self.set_credentials()
         response = self.client.get('/api/teams', {
@@ -66,7 +74,8 @@ class ApiTeamsTests(BaseAPITest):
         TeamFactory.create_batch(5)
         team = TeamFactory.create()
 
-        TeamMemberFactory.create(user=self.user, team=team, roles=TeamMember.roles.leader)
+        TeamMemberFactory.create(user=self.user, team=team,
+                                 roles=TeamMember.roles.leader)
 
         self.set_credentials()
         response = self.client.get('/api/teams', {
@@ -108,7 +117,8 @@ class ApiTeamsTests(BaseAPITest):
         )
 
         self.set_credentials()
-        response = self.client.get(f'/api/teams?user={self.user.id}&roles=leader&roles=watcher')
+        response = self.client.get(
+            f'/api/teams?user={self.user.id}&roles=leader&roles=watcher')
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data['count'], 1)
@@ -135,14 +145,18 @@ class ApiTeamsTests(BaseAPITest):
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data['count'], 3)
-        self.assertIn((team_1.id, 3), [(x['id'], x['members_count']) for x in response.data['results']])
-        self.assertIn((team_2.id, 2), [(x['id'], x['members_count']) for x in response.data['results']])
-        self.assertIn((team_3.id, 0), [(x['id'], x['members_count']) for x in response.data['results']])
+        self.assertIn((team_1.id, 3), [(x['id'], x['members_count']) for x in
+                                       response.data['results']])
+        self.assertIn((team_2.id, 2), [(x['id'], x['members_count']) for x in
+                                       response.data['results']])
+        self.assertIn((team_3.id, 0), [(x['id'], x['members_count']) for x in
+                                       response.data['results']])
 
     def test_team_member(self):
         team = TeamFactory.create()
 
-        TeamMemberFactory.create(user=self.user, team=team, roles=TeamMember.roles.leader)
+        TeamMemberFactory.create(user=self.user, team=team,
+                                 roles=TeamMember.roles.leader)
 
         self.set_credentials()
         response = self.client.get('/api/teams')
@@ -151,8 +165,11 @@ class ApiTeamsTests(BaseAPITest):
         self.assertEqual(response.data['count'], 1)
         self.assertEqual(response.data['results'][0]['title'], team.title)
         self.assertEqual(response.data['results'][0]['members_count'], 1)
-        self.assertEqual(response.data['results'][0]['members'][0]['user']['id'], self.user.id)
-        self.assertEqual(response.data['results'][0]['members'][0]['roles'][0], 'leader')
+        self.assertEqual(
+            response.data['results'][0]['members'][0]['user']['id'],
+            self.user.id)
+        self.assertEqual(response.data['results'][0]['members'][0]['roles'][0],
+                         'leader')
 
     def test_retrieve(self):
         team = TeamFactory.create()
@@ -167,3 +184,51 @@ class ApiTeamsTests(BaseAPITest):
         response = self.client.get(f'/api/teams/{team.id + 1}')
 
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
+    def test_retrieve_metrics(self):
+        user_1 = UserFactory.create()
+        user_2 = UserFactory.create()
+
+        team = TeamFactory.create()
+        team.members.set([user_1, user_2])
+
+        IssueFactory.create(
+            user=user_1,
+            due_date=None,
+            state=STATE_OPENED,
+            title='issue_problem_1'
+        )
+        IssueFactory.create(
+            user=user_1,
+            due_date=timezone.now() - timedelta(days=3),
+            state=STATE_OPENED,
+            title='issue_problem_2'
+        )
+
+        IssueFactory.create(
+            user=user_1,
+            time_estimate=None,
+            title='issue_problem_3'
+        )
+
+        IssueFactory.create_batch(
+            size=4,
+            user=user_2,
+            due_date=timezone.now() + timedelta(days=3),
+            time_estimate=1000,
+            state=STATE_CLOSED
+        )
+
+        IssueFactory.create_batch(size=5)
+
+        self.set_credentials()
+        response = self.client.get(f'/api/teams')
+
+        self.assertEqual(status.HTTP_200_OK, response.status_code)
+        self.assertEqual(response.data['count'], 1)
+
+        response_team = response.data['results'][0]
+
+        self.assertEqual(team.id, response_team['id'])
+        self.assertEqual(7, response_team['metrics']['issues_count'])
+        self.assertEqual(3, response_team['metrics']['problems_count'])
