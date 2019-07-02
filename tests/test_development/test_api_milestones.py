@@ -117,7 +117,7 @@ class ApiMilestonesTests(BaseAPITest):
     def test_list_owner_type(self):
         milestone_1 = ProjectMilestoneFactory.create()
         milestone_2 = ProjectGroupMilestoneFactory.create()
-        milestone_3 = Milestone.objects.create(gl_id=milestone_2.gl_id+1, gl_url=f'{milestone_2.gl_id}test',
+        milestone_3 = Milestone.objects.create(gl_id=milestone_2.gl_id + 1, gl_url=f'{milestone_2.gl_id}test',
                                                owner=self.user, object_id=self.user.id,
                                                content_type=ContentType.objects.get_for_model(User))
 

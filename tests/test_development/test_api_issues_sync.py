@@ -1,14 +1,13 @@
 from django.test import override_settings
 from rest_framework import status
 
-from apps.development.models import Issue
 from tests.base import BaseAPITest
+from tests.mocks import activate_httpretty, GitlabMock
 from tests.test_development.factories import IssueFactory, ProjectFactory
 from tests.test_development.factories_gitlab import (
     AttrDict, GlIssueTimeStats, GlUserFactory, GlProjectFactory,
     GlProjectsIssueFactory
 )
-from tests.test_development.mocks import activate_httpretty, registry_get_gl_url
 from tests.test_users.factories import UserFactory
 
 
@@ -33,6 +32,8 @@ class ApiIssuesSyncTests(BaseAPITest):
     @override_settings(GITLAB_TOKEN='GITLAB_TOKEN')
     @activate_httpretty
     def test_sync_project(self):
+        gl_mocker = GitlabMock()
+
         gl_project = AttrDict(GlProjectFactory())
         project = ProjectFactory.create(gl_id=gl_project.id)
 
@@ -53,30 +54,15 @@ class ApiIssuesSyncTests(BaseAPITest):
             state='opened'
         )
 
-        registry_get_gl_url('https://gitlab.com/api/v4/user', GlUserFactory())
-        registry_get_gl_url(
-            f'https://gitlab.com/api/v4/projects/{gl_project.id}', gl_project)
-        registry_get_gl_url(
-            f'https://gitlab.com/api/v4/projects/{gl_project.id}/issues/{gl_issue.iid}',
-            gl_issue)
-        registry_get_gl_url(
-            f'https://gitlab.com/api/v4/projects/{gl_project.id}/issues/{gl_issue.iid}'
-            f'/time_stats', GlIssueTimeStats())
-        registry_get_gl_url(f'https://gitlab.com/api/v4/users/{gl_assignee.id}',
-                            gl_assignee)
-        registry_get_gl_url(
-            f'https://gitlab.com/api/v4/projects/{gl_project.id}/issues/{gl_issue.iid}/closed_by',
-            [])
-        registry_get_gl_url(
-            f'https://gitlab.com/api/v4/projects/{gl_project.id}/labels', [])
-        registry_get_gl_url(
-            f'https://gitlab.com/api/v4/projects/{gl_project.id}/issues/{gl_issue.iid}/notes',
-            [])
-        registry_get_gl_url(
-            f'https://gitlab.com/api/v4/projects/{gl_project.id}/issues/{gl_issue.iid}'
-            f'/participants', [])
-
-        t = list(Issue.objects.allowed_for_user(self.user))
+        gl_mocker.registry_get('/user', GlUserFactory())
+        gl_mocker.registry_get(f'/projects/{gl_project.id}', gl_project)
+        gl_mocker.registry_get(f'/projects/{gl_project.id}/issues/{gl_issue.iid}', gl_issue)
+        gl_mocker.registry_get(f'/projects/{gl_project.id}/issues/{gl_issue.iid}/time_stats', GlIssueTimeStats())
+        gl_mocker.registry_get(f'/users/{gl_assignee.id}', gl_assignee)
+        gl_mocker.registry_get(f'/projects/{gl_project.id}/issues/{gl_issue.iid}/closed_by', [])
+        gl_mocker.registry_get(f'/projects/{gl_project.id}/labels', [])
+        gl_mocker.registry_get(f'/projects/{gl_project.id}/issues/{gl_issue.iid}/notes', [])
+        gl_mocker.registry_get(f'/projects/{gl_project.id}/issues/{gl_issue.iid}/participants', [])
 
         self.set_credentials()
         response = self.client.post(f'/api/issues/{issue.id}/sync')
