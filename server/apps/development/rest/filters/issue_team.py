@@ -1,7 +1,7 @@
 from rest_framework import filters, serializers
 
 from apps.core.utils.rest import parse_query_params
-from apps.development.models import Team
+from apps.development.models import Team, TeamMember
 
 
 class ParamsSerializer(serializers.Serializer):
@@ -21,6 +21,17 @@ class IssueTeamFilter(filters.BaseFilterBackend):
         team = params.get('team')
 
         if team:
-            queryset = queryset.filter(user__teams=team)
+            """
+            Filter by team members with roles not a watcher
+            https://gitlab.com/junte/team-projector/backend/issues/168
+            """
+            users = TeamMember.objects.filter(
+                team=team,
+                roles=~TeamMember.roles.watcher
+            ).values_list(
+                'user',
+                flat=True
+            )
+            queryset = queryset.filter(user__in=users)
 
         return queryset
