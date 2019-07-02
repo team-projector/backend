@@ -15,21 +15,21 @@ class GitlabMock:
         self.registry_get()
         self.registry_post()
 
-    def registry_get(self, path=None, data=None):
-        self._registry_url(httpretty.GET, path, data)
+    def registry_get(self, path=None, data=None, status=status.HTTP_200_OK):
+        self._registry_url(httpretty.GET, path, data, status)
 
-    def registry_post(self, path=None, data=None):
-        self._registry_url(httpretty.POST, path, data)
+    def registry_post(self, path=None, data=None, status=status.HTTP_200_OK):
+        self._registry_url(httpretty.POST, path, data, status)
 
     @staticmethod
-    def _registry_url(method, path, data):
+    def _registry_url(method, path, data, status):
         gl_uri = f'{BASE_GL_API_URL}{path}' if path else None
 
         def request_callback(request, uri, response_headers):
             if gl_uri:
                 response_headers['Content-Type'] = 'application/json'
 
-            return [status.HTTP_200_OK, response_headers, json.dumps(data)]
+            return [status, response_headers, json.dumps(data)]
 
         httpretty.register_uri(
             method=method,
