@@ -20,7 +20,7 @@ class TeamMetricsMixin(serializers.Serializer):
 
         return TeamMetricsSerializer(dict2obj(metrics)).data
 
-    def get_problems_count(self, team) -> int:
+    def get_problems_count(self, team: Team) -> int:
         queryset = team.issues
         queryset = annotate_issues_problems(queryset)
         queryset = filter_issues_problems(queryset)
