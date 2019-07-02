@@ -12,7 +12,7 @@ from .team_member import TeamMemberCardSerializer
 class TeamMetricsMixin(serializers.Serializer):
     metrics = serializers.SerializerMethodField()
 
-    def get_metrics(self, instance: Team):
+    def get_metrics(self, instance: Team) -> dict:
         metrics = {
             'issues_count': instance.issues.count(),
             'problems_count': self.get_problems_count(instance)
@@ -20,7 +20,7 @@ class TeamMetricsMixin(serializers.Serializer):
 
         return TeamMetricsSerializer(dict2obj(metrics)).data
 
-    def get_problems_count(self, team):
+    def get_problems_count(self, team) -> int:
         queryset = team.issues
         queryset = annotate_issues_problems(queryset)
         queryset = filter_issues_problems(queryset)
