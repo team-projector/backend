@@ -3,6 +3,7 @@ from datetime import date
 
 from django.db.models import QuerySet, Sum
 
+from apps.development.models import Team
 from apps.payroll.models import SpentTime
 from apps.users.models import User
 from .problems import annotate_issues_problems, filter_issues_problems
@@ -19,10 +20,12 @@ class IssuesSummaryProvider:
     def __init__(self,
                  queryset: QuerySet,
                  due_date: date,
-                 user: User):
+                 user: User,
+                 team: Team):
         self.queryset = queryset
         self.due_date = due_date
         self.user = user
+        self.team = team
 
     def execute(self) -> IssuesSummary:
         return IssuesSummary(
@@ -43,6 +46,9 @@ class IssuesSummaryProvider:
         if self.user:
             queryset = queryset.filter(user=self.user)
 
+        if self.team:
+            queryset = queryset.filter(user__teams=self.team)
+
         return queryset.aggregate(
             total_time_spent=Sum('time_spent')
         )['total_time_spent'] or 0
@@ -56,11 +62,13 @@ class IssuesSummaryProvider:
 
 def get_issues_summary(queryset: QuerySet,
                        due_date: date,
-                       user: User) -> IssuesSummary:
+                       user: User,
+                       team: Team) -> IssuesSummary:
     provider = IssuesSummaryProvider(
         queryset,
         due_date,
-        user
+        user,
+        team
     )
 
     return provider.execute()
