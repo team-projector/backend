@@ -15,8 +15,8 @@ class UserMetrics:
     issues_opened_spent: float = 0
 
 
-class UserMetricsCalculator:
-    def calculate(self, user: User) -> UserMetrics:
+class UserMetricsProvider:
+    def get_metrics(self, user: User) -> UserMetrics:
         metrics = UserMetrics()
 
         metrics.issues_opened_count = self._get_issues_opened_count(user)

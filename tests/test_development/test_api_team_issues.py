@@ -7,7 +7,8 @@ from apps.development.models import TeamMember
 from apps.development.models.issue import STATE_CLOSED, STATE_OPENED
 from apps.users.models import User
 from tests.base import BaseAPITest
-from tests.test_development.factories import IssueFactory, TeamFactory, TeamMemberFactory
+from tests.test_development.factories import IssueFactory, TeamFactory, \
+    TeamMemberFactory
 from tests.test_users.factories import UserFactory
 
 
@@ -19,7 +20,8 @@ class ApiTeamIssuesTests(BaseAPITest):
         self.user.save()
 
         self.team = TeamFactory.create()
-        TeamMemberFactory.create(team=self.team, user=self.user, roles=TeamMember.roles.leader)
+        TeamMemberFactory.create(team=self.team, user=self.user,
+                                 roles=TeamMember.roles.leader)
 
     def test_permissions(self):
         developer = UserFactory.create()
@@ -30,7 +32,8 @@ class ApiTeamIssuesTests(BaseAPITest):
 
         TeamMemberFactory.create(team=team_1, user=developer)
         TeamMemberFactory.create(team=team_2, user=developer)
-        TeamMemberFactory.create(team=team_1, user=team_leader, roles=TeamMember.roles.leader)
+        TeamMemberFactory.create(team=team_1, user=team_leader,
+                                 roles=TeamMember.roles.leader)
 
         IssueFactory.create(user=developer)
         IssueFactory.create(user=team_leader)
@@ -107,13 +110,15 @@ class ApiTeamIssuesTests(BaseAPITest):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data['count'], 2)
 
-        response = self.client.get(f'/api/teams/{self.team.id}/issues', {'user': self.user.id})
+        response = self.client.get(f'/api/teams/{self.team.id}/issues',
+                                   {'user': self.user.id})
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data['count'], 1)
         self.assertIn(issue_1.id, [x['id'] for x in response.data['results']])
 
-        response = self.client.get(f'/api/teams/{self.team.id}/issues', {'user': user_2.id})
+        response = self.client.get(f'/api/teams/{self.team.id}/issues',
+                                   {'user': user_2.id})
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data['count'], 1)
@@ -129,7 +134,8 @@ class ApiTeamIssuesTests(BaseAPITest):
         self.assertEqual(response.data['count'], 1)
         self.assertFalse(response.data['results'][0]['metrics'])
 
-        response = self.client.get(f'/api/teams/{self.team.id}/issues', {'metrics': 'true'})
+        response = self.client.get(f'/api/teams/{self.team.id}/issues',
+                                   {'metrics': 'true'})
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data['count'], 1)
@@ -145,29 +151,36 @@ class ApiTeamIssuesTests(BaseAPITest):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data['count'], 8)
 
-        response = self.client.get(f'/api/teams/{self.team.id}/issues', {'state': 'closed'})
+        response = self.client.get(f'/api/teams/{self.team.id}/issues',
+                                   {'state': 'closed'})
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data['count'], 3)
 
-        response = self.client.get(f'/api/teams/{self.team.id}/issues', {'state': 'opened'})
+        response = self.client.get(f'/api/teams/{self.team.id}/issues',
+                                   {'state': 'opened'})
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data['count'], 5)
 
     def test_list_search_by_title(self):
         issue = IssueFactory.create(title='Issue Test', user=self.user)
-        IssueFactory.create_batch(5, user=self.user)
+
+        IssueFactory.create(title='Another Test', user=self.user)
+        IssueFactory.create(title='Another Issue', user=self.user)
 
         self.set_credentials()
-        response = self.client.get(f'/api/teams/{self.team.id}/issues', {'q': 'Issue Test'})
+        response = self.client.get(f'/api/teams/{self.team.id}/issues', {
+            'q': 'Issue Test'
+        })
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data['count'], 1)
         self.assertEqual(response.data['results'][0]['id'], issue.id)
 
     def test_default_ordering(self):
-        issue_1 = IssueFactory.create(user=self.user, due_date=date(2018, 11, 15))
+        issue_1 = IssueFactory.create(user=self.user,
+                                      due_date=date(2018, 11, 15))
         issue_2 = IssueFactory.create(user=self.user, due_date=date(2018, 3, 5))
         issue_3 = IssueFactory.create(user=self.user, due_date=date(2019, 5, 2))
         issue_4 = IssueFactory.create(user=self.user, due_date=None)
@@ -183,7 +196,8 @@ class ApiTeamIssuesTests(BaseAPITest):
         self._test_ordering([issue_1, issue_3, issue_2], '-title')
 
     def test_ordering_by_due_date(self):
-        issue_1 = IssueFactory.create(user=self.user, due_date=date(2018, 11, 15))
+        issue_1 = IssueFactory.create(user=self.user,
+                                      due_date=date(2018, 11, 15))
         issue_2 = IssueFactory.create(user=self.user, due_date=date(2019, 3, 5))
         issue_3 = IssueFactory.create(user=self.user, due_date=date(2019, 1, 2))
 
@@ -191,8 +205,12 @@ class ApiTeamIssuesTests(BaseAPITest):
         self._test_ordering([issue_2, issue_3, issue_1], '-due_date')
 
     def test_ordering_by_created_at(self):
-        issue_1 = IssueFactory.create(user=self.user, created_at=timezone.now() - timedelta(minutes=5))
-        issue_2 = IssueFactory.create(user=self.user, created_at=timezone.now() + timedelta(minutes=5))
+        issue_1 = IssueFactory.create(user=self.user,
+                                      created_at=timezone.now() - timedelta(
+                                          minutes=5))
+        issue_2 = IssueFactory.create(user=self.user,
+                                      created_at=timezone.now() + timedelta(
+                                          minutes=5))
         issue_3 = IssueFactory.create(user=self.user, created_at=timezone.now())
 
         self._test_ordering([issue_1, issue_3, issue_2], 'created_at')
@@ -208,4 +226,5 @@ class ApiTeamIssuesTests(BaseAPITest):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data['count'], len(issues))
 
-        self.assertListEqual([x['id'] for x in response.data['results']], [x.id for x in issues])
+        self.assertListEqual([x['id'] for x in response.data['results']],
+                             [x.id for x in issues])

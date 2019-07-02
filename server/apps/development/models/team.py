@@ -1,5 +1,9 @@
+from django.conf import settings
 from django.db import models
 from django.utils.translation import gettext_lazy as _
+
+from apps.development.models import Issue
+from .team_member import TeamMember
 
 
 class Team(models.Model):
@@ -10,6 +14,12 @@ class Team(models.Model):
         unique=True
     )
 
+    members = models.ManyToManyField(
+        settings.AUTH_USER_MODEL,
+        through=TeamMember,
+        related_name='teams'
+    )
+
     class Meta:
         verbose_name = _('VN__TEAM')
         verbose_name_plural = _('VN__TEAMS')
@@ -17,3 +27,7 @@ class Team(models.Model):
 
     def __str__(self):
         return self.title
+
+    @property
+    def issues(self):
+        return Issue.objects.filter(user__in=self.members.all())

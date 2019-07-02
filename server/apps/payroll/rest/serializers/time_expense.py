@@ -1,29 +1,37 @@
 from rest_framework import serializers
+from rest_framework.fields import Field
 
 from apps.payroll.models import SpentTime
 
 
-class TimeExpenseSerializer(serializers.ModelSerializer):
-    def to_representation(self, instance: SpentTime):
-        data = super().to_representation(instance)
+class OwnerSerializerField(Field):
+    def to_representation(self, instance):
+        serializer = self.get_field_serializer(instance)
 
-        self._adjust_base(data, instance)
-
-        return data
-
-    def _adjust_base(self, data, instance: SpentTime):
-        from apps.development.models import Issue
-        from apps.development.rest.serializers import IssueCardSerializer
-
-        if not instance.base:
-            return
-
-        if instance.content_type.model_class() == Issue:
-            data['issue'] = IssueCardSerializer(
-                instance.base,
+        if serializer:
+            return serializer(
+                instance,
                 context=self.context
             ).data
 
+    def get_field_serializer(self, instance):
+        from apps.development.models import Issue, MergeRequest
+        from apps.development.rest.serializers import (
+            IssueCardSerializer, MergeRequestCardSerializer
+        )
+
+        serializers_map = {
+            Issue: IssueCardSerializer,
+            MergeRequest: MergeRequestCardSerializer
+        }
+
+        return serializers_map.get(instance._meta.model)
+
+
+class TimeExpenseSerializer(serializers.ModelSerializer):
+    owner = OwnerSerializerField(source='base')
+
     class Meta:
         model = SpentTime
-        fields = ('id', 'created_at', 'updated_at', 'date', 'time_spent')
+        fields = (
+            'id', 'created_at', 'updated_at', 'date', 'time_spent', 'owner')

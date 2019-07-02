@@ -1,6 +1,7 @@
 from django.contrib.auth import get_user_model
 from django.db.models import Exists, OuterRef
 from django.utils import timezone
+from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import mixins, permissions, serializers
 from rest_framework.decorators import action
 from rest_framework.response import Response
@@ -16,6 +17,7 @@ from apps.payroll.rest.permissions import (
 from apps.payroll.rest.serializers import (
     WorkBreakCardSerializer, WorkBreakSerializer, WorkBreakUpdateSerializer
 )
+from ..filters import TeamFilter, AvailableWorkBreakFilter
 
 User = get_user_model()
 
@@ -57,13 +59,21 @@ class WorkBreaksViewset(mixins.ListModelMixin,
         CanManageWorkbreaks
     )
 
-    serializer_classes = {
+    actions_serializers = {
+        'list': WorkBreakCardSerializer,
         'create': WorkBreakSerializer,
         'update': WorkBreakSerializer,
         'retrieve': WorkBreakSerializer,
         'destroy': WorkBreakSerializer,
     }
     update_serializer_class = WorkBreakUpdateSerializer
+
+    filter_backends = (
+        DjangoFilterBackend,
+        AvailableWorkBreakFilter,
+        TeamFilter
+    )
+    filterset_fields = ('user',)
 
     queryset = WorkBreak.objects.all()
 
@@ -84,9 +94,9 @@ class WorkBreaksViewset(mixins.ListModelMixin,
             'team',
             flat=True
         )
+
         subquery = User.objects.filter(
-            team_members__team__in=teams,
-            team_members__roles=TeamMember.roles.developer,
+            teams__in=teams,
             id=OuterRef('user_id')
         )
 

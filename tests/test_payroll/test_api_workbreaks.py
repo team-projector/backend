@@ -88,7 +88,7 @@ class WorkBreaksTests(BaseAPITest):
         self.set_credentials()
         response = self.client.get(f'/api/work-breaks/{work_break.id}')
 
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
     def test_retrieve_by_bad_user(self):
         user_2 = self.create_user('user_2@mail.com')
@@ -98,7 +98,7 @@ class WorkBreaksTests(BaseAPITest):
         self.set_credentials()
         response = self.client.get(f'/api/work-breaks/{work_break.id}')
 
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
     def test_create(self):
         data = self.get_data()
@@ -170,7 +170,8 @@ class WorkBreaksTests(BaseAPITest):
 
         self.set_credentials()
 
-        response = self.client.put(f'/api/work-breaks/{work_break.id}', update_data)
+        response = self.client.put(f'/api/work-breaks/{work_break.id}',
+                                   update_data)
 
         self.assertEqual(response.data['reason'], update_data['reason'])
 
@@ -192,7 +193,8 @@ class WorkBreaksTests(BaseAPITest):
         update_data['user'] = user_2.id
 
         self.set_credentials()
-        response = self.client.put(f'/api/work-breaks/{work_break.id}', update_data)
+        response = self.client.put(f'/api/work-breaks/{work_break.id}',
+                                   update_data)
 
         self.assertEqual(response.data['reason'], update_data['reason'])
 
@@ -215,9 +217,10 @@ class WorkBreaksTests(BaseAPITest):
         update_data['user'] = user_2.id
 
         self.set_credentials()
-        response = self.client.put(f'/api/work-breaks/{work_break.id}', update_data)
+        response = self.client.put(f'/api/work-breaks/{work_break.id}',
+                                   update_data)
 
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
     def test_update_by_bad_user(self):
         user_2 = self.create_user('user_2@mail.com')
@@ -227,9 +230,10 @@ class WorkBreaksTests(BaseAPITest):
         update_data['user'] = user_2.id
 
         self.set_credentials()
-        response = self.client.put(f'/api/work-breaks/{work_break.id}', update_data)
+        response = self.client.put(f'/api/work-breaks/{work_break.id}',
+                                   update_data)
 
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
     def test_delete(self):
         work_break = WorkBreakFactory.create(user=self.user)
@@ -279,7 +283,7 @@ class WorkBreaksTests(BaseAPITest):
         self.set_credentials()
         response = self.client.delete(f'/api/work-breaks/{work_break.id}')
 
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
     def test_delete_by_bad_user(self):
         user_2 = self.create_user('user_2@mail.com')
@@ -289,7 +293,7 @@ class WorkBreaksTests(BaseAPITest):
         self.set_credentials()
         response = self.client.delete(f'/api/work-breaks/{work_break.id}')
 
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
     def test_approving_list_teamlead(self):
         user_2 = self.create_user('user_2@mail.com')
@@ -381,12 +385,14 @@ class WorkBreaksTests(BaseAPITest):
 
         self.set_credentials()
 
-        response = self.client.post(f'/api/work-breaks/{work_break.id}/decline', data)
+        response = self.client.post(f'/api/work-breaks/{work_break.id}/decline',
+                                    data)
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data['approve_state'], DECLINED)
         self.assertEqual(response.data['approved_by']['id'], self.user.id)
-        self.assertEqual(response.data['decline_reason'], data['decline_reason'])
+        self.assertEqual(response.data['decline_reason'],
+                         data['decline_reason'])
 
     def test_decline_by_other_team_teamlead(self):
         user_2 = self.create_user('user_2@mail.com')
@@ -407,9 +413,10 @@ class WorkBreaksTests(BaseAPITest):
 
         self.set_credentials()
 
-        response = self.client.post(f'/api/work-breaks/{work_break.id}/decline', data)
+        response = self.client.post(f'/api/work-breaks/{work_break.id}/decline',
+                                    data)
 
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
     def test_decline_by_current_user(self):
         data = {'decline_reason': 'work'}
@@ -418,7 +425,8 @@ class WorkBreaksTests(BaseAPITest):
 
         self.set_credentials()
 
-        response = self.client.post(f'/api/work-breaks/{work_break.id}/decline', data)
+        response = self.client.post(f'/api/work-breaks/{work_break.id}/decline',
+                                    data)
 
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
@@ -429,9 +437,10 @@ class WorkBreaksTests(BaseAPITest):
 
         self.set_credentials()
 
-        response = self.client.post(f'/api/work-breaks/{work_break.id}/decline', data)
+        response = self.client.post(f'/api/work-breaks/{work_break.id}/decline',
+                                    data)
 
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
     def test_decline_without_decline_reason(self):
         user_2 = self.create_user('user_2@mail.com')
@@ -472,7 +481,8 @@ class WorkBreaksTests(BaseAPITest):
 
         self.set_credentials()
 
-        response = self.client.post(f'/api/work-breaks/{work_break.id}/decline', data)
+        response = self.client.post(f'/api/work-breaks/{work_break.id}/decline',
+                                    data)
 
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
@@ -519,7 +529,7 @@ class WorkBreaksTests(BaseAPITest):
 
         response = self.client.post(f'/api/work-breaks/{work_break.id}/approve')
 
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
     def test_approve_by_current_user(self):
         work_break = WorkBreakFactory.create(user=self.user)
@@ -538,4 +548,79 @@ class WorkBreaksTests(BaseAPITest):
 
         response = self.client.post(f'/api/work-breaks/{work_break.id}/approve')
 
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
+    def test_work_breaks_filter_by_user_as_leader(self):
+        user_2 = UserFactory.create()
+        user_3 = UserFactory.create()
+        work_breaks = WorkBreakFactory.create_batch(size=5, user=user_2)
+        WorkBreakFactory.create_batch(size=5, user=user_3)
+        team = TeamFactory.create()
+        team.members.set([self.user, user_2])
+
+        TeamMember.objects.filter(user=self.user, team=team).update(
+            roles=TeamMember.roles.leader)
+
+        self._test_work_breaks_filter({'user': user_2.id}, work_breaks)
+
+    def test_work_breaks_filter_by_user_as_watcher(self):
+        user_2 = UserFactory.create()
+        user_3 = UserFactory.create()
+        WorkBreakFactory.create_batch(size=5, user=user_2)
+        WorkBreakFactory.create_batch(size=5, user=user_3)
+        team = TeamFactory.create()
+        team.members.set([self.user, user_2])
+
+        TeamMember.objects.filter(user=self.user, team=team).update(
+            roles=TeamMember.roles.watcher)
+
+        self._test_work_breaks_filter({'user': user_2.id})
+
+    def test_work_breaks_filter_by_user_empty(self):
+        user_2 = UserFactory.create()
+        team = TeamFactory.create()
+        team.members.set([self.user, user_2])
+
+        TeamMember.objects.filter(user=self.user, team=team).update(
+            roles=TeamMember.roles.watcher)
+
+        self._test_work_breaks_filter({'user': user_2.id})
+
+    def test_work_breaks_filter_by_team(self):
+        user_2 = UserFactory.create()
+        user_3 = UserFactory.create()
+        work_breaks = WorkBreakFactory.create_batch(size=5, user=user_2)
+        WorkBreakFactory.create_batch(size=5, user=user_3)
+        team = TeamFactory.create()
+        team.members.set([self.user, user_2])
+
+        TeamMember.objects.filter(user=self.user, team=team).update(
+            roles=TeamMember.roles.leader)
+
+        self._test_work_breaks_filter({'team': team.id}, work_breaks)
+
+    def test_work_breaks_filter_by_team_empty(self):
+        user_2 = UserFactory.create()
+        user_3 = UserFactory.create()
+        WorkBreakFactory.create_batch(size=5, user=user_2)
+        WorkBreakFactory.create_batch(size=5, user=user_3)
+        team = TeamFactory.create()
+
+        TeamMember.objects.filter(user=self.user, team=team).update(
+            roles=TeamMember.roles.leader)
+
+        self._test_work_breaks_filter({'team': team.id})
+
+    def _test_work_breaks_filter(self, user_filter, results=[]):
+        self.set_credentials()
+        response = self.client.get('/api/work-breaks', user_filter)
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        response_data = [x['id'] for x in response.data['results']]
+        response_data.sort()
+
+        result_ids = [x.id for x in results]
+        result_ids.sort()
+
+        self.assertListEqual(response_data, result_ids)
