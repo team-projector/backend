@@ -37,7 +37,7 @@ def password_hashers(settings):
 
 @pytest.fixture()
 def gl_mocker():
-    httpretty.enable()
+    httpretty.enable(allow_net_connect=False)
 
     yield GitlabMock()
 

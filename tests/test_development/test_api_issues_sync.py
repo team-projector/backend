@@ -1,7 +1,6 @@
 from django.test import override_settings
 from rest_framework import status
 
-from apps.development.models import Issue
 from tests.base import BaseAPITest
 from tests.mocks import activate_httpretty, GitlabMock
 from tests.test_development.factories import IssueFactory, ProjectFactory
@@ -64,8 +63,6 @@ class ApiIssuesSyncTests(BaseAPITest):
         gl_mocker.registry_get(f'/projects/{gl_project.id}/labels', [])
         gl_mocker.registry_get(f'/projects/{gl_project.id}/issues/{gl_issue.iid}/notes', [])
         gl_mocker.registry_get(f'/projects/{gl_project.id}/issues/{gl_issue.iid}/participants', [])
-
-        t = list(Issue.objects.allowed_for_user(self.user))
 
         self.set_credentials()
         response = self.client.post(f'/api/issues/{issue.id}/sync')

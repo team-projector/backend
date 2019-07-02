@@ -9,7 +9,6 @@ from tests.test_users.factories import UserFactory
 
 @override_settings(GITLAB_TOKEN='GITLAB_TOKEN')
 def test_load_user(db, gl_mocker):
-
     gl_user = AttrDict(GlUserFactory())
 
     gl_mocker.registry_get('/user', GlUserFactory())
@@ -25,7 +24,7 @@ def test_load_user(db, gl_mocker):
 @override_settings(GITLAB_TOKEN='GITLAB_TOKEN')
 def test_update_users(db, gl_mocker):
     gl_user = AttrDict(GlUserFactory(name='new name'))
-    user = UserFactory.create(gl_id=gl_user.id, name='old name')
+    UserFactory.create(gl_id=gl_user.id, name='old name')
 
     UserFactory.create_batch(3)
 
@@ -34,7 +33,7 @@ def test_update_users(db, gl_mocker):
 
     update_users()
 
-    user = User.objects.get(login=gl_user.username)
+    user = User.objects.get(gl_id=gl_user.id)
 
     _check_user(user, gl_user)
 
