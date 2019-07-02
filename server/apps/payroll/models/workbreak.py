@@ -1,11 +1,11 @@
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
-from apps.core.db.utils import Choices
 from apps.core.db.mixins import Timestamps
+from apps.core.db.utils import Choices
+from apps.payroll.db.managers import WorkBreakManager
 from apps.payroll.db.mixins import ApprovedMixin
 from apps.users.models import User
-
 
 DAYOFF = 'dayoff'
 VACATION = 'vacation'
@@ -49,6 +49,8 @@ class WorkBreak(ApprovedMixin, Timestamps):
         verbose_name=_('VN__COMMENT'),
         help_text=_('HT__COMMENT')
     )
+
+    objects = WorkBreakManager()
 
     class Meta:
         verbose_name = _('VN__WORKBREAK')
