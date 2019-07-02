@@ -1,8 +1,10 @@
 from rest_framework import status
 
+from apps.development.models import TeamMember
 from tests.base import BaseAPITest
-from tests.test_development.factories import FeatureFactory, IssueFactory, \
-    ProjectGroupMilestoneFactory
+from tests.test_development.factories import (
+    FeatureFactory, IssueFactory, ProjectGroupMilestoneFactory,
+    TeamFactory, TeamMemberFactory)
 from tests.test_users.factories import UserFactory
 
 
@@ -13,8 +15,8 @@ class ApiIssuesTests(BaseAPITest):
         self.set_credentials()
         response = self.client.get('/api/issues')
 
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data['count'], 5)
+        self.assertEqual(status.HTTP_200_OK, response.status_code)
+        self.assertEqual(5, response.data['count'])
 
     def test_retrieve(self):
         issue = IssueFactory.create(user=self.user)
@@ -22,8 +24,8 @@ class ApiIssuesTests(BaseAPITest):
         self.set_credentials()
         response = self.client.get(f'/api/issues/{issue.id}')
 
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data['id'], issue.id)
+        self.assertEqual(status.HTTP_200_OK, response.status_code)
+        self.assertEqual(issue.id, response.data['id'])
 
     def test_retrieve_not_found(self):
         issue = IssueFactory.create(user=self.user)
@@ -31,10 +33,10 @@ class ApiIssuesTests(BaseAPITest):
         self.set_credentials()
         response = self.client.get(f'/api/issues/{issue.id + 1}')
 
-        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+        self.assertEqual(status.HTTP_404_NOT_FOUND, response.status_code)
 
     def test_update_issue_feature(self):
-        issue = IssueFactory.create()
+        issue = IssueFactory.create(user=self.user)
         feature = FeatureFactory.create(
             milestone=ProjectGroupMilestoneFactory.create())
 
@@ -45,60 +47,98 @@ class ApiIssuesTests(BaseAPITest):
             'feature': feature.id
         })
 
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data['feature']['id'], feature.id)
+        self.assertEqual(status.HTTP_200_OK, response.status_code)
+        self.assertEqual(feature.id, response.data['feature']['id'])
 
     def test_update_issue_feature_not_exist(self):
-        issue = IssueFactory.create()
+        issue = IssueFactory.create(user=self.user)
 
         self.set_credentials()
         response = self.client.patch(f'/api/issues/{issue.id}', {
             'feature': 0
         })
 
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(status.HTTP_400_BAD_REQUEST, response.status_code)
 
     def test_change_issue_feature(self):
-        issue = IssueFactory.create(feature=FeatureFactory.create(
-            milestone=ProjectGroupMilestoneFactory.create()))
+        issue = IssueFactory.create(
+            user=self.user,
+            feature=FeatureFactory.create(
+                milestone=ProjectGroupMilestoneFactory.create()
+            )
+        )
         feature = FeatureFactory.create(
-            milestone=ProjectGroupMilestoneFactory.create())
+            milestone=ProjectGroupMilestoneFactory.create()
+        )
 
-        self.assertNotEqual(issue.feature_id, feature.id)
+        self.assertNotEqual(feature.id, issue.feature_id)
 
         self.set_credentials()
         response = self.client.patch(f'/api/issues/{issue.id}', {
             'feature': feature.id
         })
 
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data['feature']['id'], feature.id)
+        self.assertEqual(status.HTTP_200_OK, response.status_code)
+        self.assertEqual(feature.id, response.data['feature']['id'])
 
     def test_show_participants(self):
         user = UserFactory.create()
+
+        team = TeamFactory.create()
+        TeamMemberFactory.create(
+            user=self.user,
+            team=team,
+            roles=TeamMember.roles.leader
+        )
+
+        TeamMemberFactory.create(
+            user=user,
+            team=team,
+            roles=TeamMember.roles.developer
+        )
+
         issue = IssueFactory.create(user=user)
 
         users = UserFactory.create_batch(size=3)
         issue.participants.set(users)
 
         self.set_credentials()
-        response = self.client.get('/api/issues', {'user': user.id})
+        response = self.client.get('/api/issues', {
+            'user': user.id
+        })
 
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data['count'], 1)
+        self.assertEqual(status.HTTP_200_OK, response.status_code)
+        self.assertEqual(1, response.data['count'])
         self.assertEqual(
             set(x['id'] for x in response.data['results'][0]['participants']),
-            set(x.id for x in users))
+            set(x.id for x in users)
+        )
 
     def test_show_users(self):
         user_2 = UserFactory.create()
+
+        team = TeamFactory.create()
+        TeamMemberFactory.create(
+            user=self.user,
+            team=team,
+            roles=TeamMember.roles.leader
+        )
+
+        TeamMemberFactory.create(
+            user=user_2,
+            team=team,
+            roles=TeamMember.roles.developer
+        )
+
         IssueFactory.create(user=user_2)
         IssueFactory.create(user=self.user)
 
         self.set_credentials()
         response = self.client.get('/api/issues')
 
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data['count'], 2)
-        self.assertEqual(set(x['user']['id'] for x in response.data['results']),
-                         {self.user.id, user_2.id})
+        self.assertEqual(status.HTTP_200_OK, response.status_code)
+        self.assertEqual(2, response.data['count'])
+        self.assertEqual(
+            set(x['user']['id'] for x in response.data['results']),
+            {self.user.id, user_2.id}
+        )

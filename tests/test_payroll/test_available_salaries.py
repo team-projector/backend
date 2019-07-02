@@ -1,29 +1,29 @@
 from django.test import TestCase
 
 from apps.development.models import TeamMember
-from apps.payroll.models import SpentTime
+from apps.payroll.models import Salary
 from tests.test_development.factories import TeamFactory
-from tests.test_payroll.factories import IssueSpentTimeFactory
+from tests.test_payroll.factories import SalaryFactory
 from tests.test_users.factories import UserFactory
 
 
-class AvailableSpentTimesTests(TestCase):
+class AvailableSalariesTests(TestCase):
     def setUp(self):
         super().setUp()
         self.user = UserFactory.create()
 
-    def test_my_spents(self):
-        spents = IssueSpentTimeFactory.create_batch(
+    def test_my_salaries(self):
+        salaries = SalaryFactory.create_batch(
             size=3,
             user=self.user)
 
-        IssueSpentTimeFactory.create_batch(
+        SalaryFactory.create_batch(
             size=5,
             user=UserFactory.create())
 
-        self._assert_spents(
-            SpentTime.objects.allowed_for_user(self.user),
-            spents
+        self._assert_salaries(
+            Salary.objects.allowed_for_user(self.user),
+            salaries
         )
 
     def test_in_team_not_viewer(self):
@@ -31,10 +31,10 @@ class AvailableSpentTimesTests(TestCase):
         team = TeamFactory.create()
         team.members.set([self.user, user_2])
 
-        IssueSpentTimeFactory.create(user=user_2)
+        SalaryFactory.create(user=user_2)
 
-        self._assert_spents(
-            SpentTime.objects.allowed_for_user(self.user)
+        self._assert_salaries(
+            Salary.objects.allowed_for_user(self.user)
         )
 
     def test_as_team_leader(self):
@@ -46,11 +46,11 @@ class AvailableSpentTimesTests(TestCase):
             roles=TeamMember.roles.leader
         )
 
-        spent = IssueSpentTimeFactory.create(user=user_2)
+        salary = SalaryFactory.create(user=user_2)
 
-        self._assert_spents(
-            SpentTime.objects.allowed_for_user(self.user),
-            [spent]
+        self._assert_salaries(
+            Salary.objects.allowed_for_user(self.user),
+            [salary]
         )
 
     def test_as_team_watcher(self):
@@ -62,11 +62,10 @@ class AvailableSpentTimesTests(TestCase):
             roles=TeamMember.roles.watcher
         )
 
-        spent = IssueSpentTimeFactory.create(user=user_2)
+        SalaryFactory.create(user=user_2)
 
-        self._assert_spents(
-            SpentTime.objects.allowed_for_user(self.user),
-            [spent]
+        self._assert_salaries(
+            Salary.objects.allowed_for_user(self.user)
         )
 
     def test_as_leader_another_team(self):
@@ -81,10 +80,10 @@ class AvailableSpentTimesTests(TestCase):
             roles=TeamMember.roles.leader
         )
 
-        IssueSpentTimeFactory.create(user=user_2)
+        SalaryFactory.create(user=user_2)
 
-        self._assert_spents(
-            SpentTime.objects.allowed_for_user(self.user)
+        self._assert_salaries(
+            Salary.objects.allowed_for_user(self.user)
         )
 
     def test_as_watcher_another_team(self):
@@ -99,13 +98,13 @@ class AvailableSpentTimesTests(TestCase):
             roles=TeamMember.roles.watcher
         )
 
-        IssueSpentTimeFactory.create(user=user_2)
+        SalaryFactory.create(user=user_2)
 
-        self._assert_spents(
-            SpentTime.objects.allowed_for_user(self.user)
+        self._assert_salaries(
+            Salary.objects.allowed_for_user(self.user)
         )
 
-    def test_my_spents_and_as_leader(self):
+    def test_my_salaries_and_as_leader(self):
         team_1 = TeamFactory.create()
         team_1.members.add(self.user)
 
@@ -117,15 +116,15 @@ class AvailableSpentTimesTests(TestCase):
             roles=TeamMember.roles.leader
         )
 
-        spents_my = IssueSpentTimeFactory.create_batch(size=3, user=self.user)
-        spents = IssueSpentTimeFactory.create_batch(size=3, user=user_2)
+        salaries_my = SalaryFactory.create_batch(size=3, user=self.user)
+        salaries = SalaryFactory.create_batch(size=3, user=user_2)
 
-        self._assert_spents(
-            SpentTime.objects.allowed_for_user(self.user),
-            [*spents_my, *spents]
+        self._assert_salaries(
+            Salary.objects.allowed_for_user(self.user),
+            [*salaries_my, *salaries]
         )
 
-    def test_my_spents_and_as_leader_with_queryset(self):
+    def test_my_salaries_and_as_leader_with_queryset(self):
         team_1 = TeamFactory.create()
         team_1.members.add(self.user)
 
@@ -139,15 +138,15 @@ class AvailableSpentTimesTests(TestCase):
             roles=TeamMember.roles.leader
         )
 
-        IssueSpentTimeFactory.create_batch(size=3, user=self.user)
-        IssueSpentTimeFactory.create_batch(size=3, user=user_2)
-        IssueSpentTimeFactory.create_batch(size=3, user=user_3)
+        SalaryFactory.create_batch(size=3, user=self.user)
+        SalaryFactory.create_batch(size=3, user=user_2)
+        SalaryFactory.create_batch(size=3, user=user_3)
 
-        queryset = SpentTime.objects.filter(user=user_3)
+        queryset = Salary.objects.filter(user=user_3)
 
-        self._assert_spents(
-            queryset.filter(id__in=SpentTime.objects.allowed_for_user(self.user))
+        self._assert_salaries(
+            queryset.filter(id__in=Salary.objects.allowed_for_user(self.user))
         )
 
-    def _assert_spents(self, queryset, spents=[]):
-        self.assertEqual(set(queryset), set(spents))
+    def _assert_salaries(self, queryset, results=[]):
+        self.assertEqual(set(queryset), set(results))

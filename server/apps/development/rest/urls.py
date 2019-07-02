@@ -6,9 +6,17 @@ from . import views
 app_name = 'development'
 
 router = AppRouter()
-router.register('issues', views.IssuesViewset, 'issues')
+router.register(
+    'issues',
+    views.IssuesViewset,
+    'issues'
+)
 
-router.register('features', views.FeaturesViewset, 'features')
+router.register(
+    'features',
+    views.FeaturesViewset,
+    'features'
+)
 router.register(
     r'^features/(?P<feature_pk>\d+)/issues$',
     views.FeatureIssuesViewset,

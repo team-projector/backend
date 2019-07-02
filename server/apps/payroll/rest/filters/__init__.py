@@ -1,2 +1,4 @@
 from .team_filter import TeamFilter
-from .avilable_spent_filter import AvailableSpentFilter
+from .available_spent_filter import AvailableSpentFilter
+from .available_salary_filter import AvailableSalaryFilter
+from .available_work_break_filter import AvailableWorkBreakFilter

@@ -9,7 +9,6 @@ router = AppRouter()
 router.register('work-breaks', views.WorkBreaksViewset, 'work-breaks')
 router.register('salaries', views.SalariesViewSet, 'salaries')
 
-
 urlpatterns = [
     path('users/<int:user_pk>/', include((
         [
@@ -18,16 +17,6 @@ urlpatterns = [
                 views.UserProgressMetricsView.as_view(),
                 name='progress-metrics'
             ),
-            path(
-                'salaries',
-                views.UserSalariesView.as_view(),
-                name='salaries'
-            ),
-            path(
-                'work-breaks',
-                views.UserWorkBreaksView.as_view(),
-                name='user-work-breaks'
-            )
         ], app_name), 'users')),
     path('teams/<int:team_pk>/', include((
         [
