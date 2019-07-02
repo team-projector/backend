@@ -4,7 +4,7 @@ from apps.development.models import TeamMember
 
 
 class SalaryManager(models.Manager):
-    def get_available(self, user):
+    def allowed_for_user(self, user):
         users = TeamMember.objects.filter(
             user=user,
             roles=TeamMember.roles.leader

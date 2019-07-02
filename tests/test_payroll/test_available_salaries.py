@@ -22,7 +22,7 @@ class AvailableSalariesTests(TestCase):
             user=UserFactory.create())
 
         self._assert_salaries(
-            Salary.objects.get_available(self.user),
+            Salary.objects.allowed_for_user(self.user),
             salaries
         )
 
@@ -34,7 +34,7 @@ class AvailableSalariesTests(TestCase):
         SalaryFactory.create(user=user_2)
 
         self._assert_salaries(
-            Salary.objects.get_available(self.user)
+            Salary.objects.allowed_for_user(self.user)
         )
 
     def test_as_team_leader(self):
@@ -49,7 +49,7 @@ class AvailableSalariesTests(TestCase):
         salary = SalaryFactory.create(user=user_2)
 
         self._assert_salaries(
-            Salary.objects.get_available(self.user),
+            Salary.objects.allowed_for_user(self.user),
             [salary]
         )
 
@@ -65,7 +65,7 @@ class AvailableSalariesTests(TestCase):
         SalaryFactory.create(user=user_2)
 
         self._assert_salaries(
-            Salary.objects.get_available(self.user)
+            Salary.objects.allowed_for_user(self.user)
         )
 
     def test_as_leader_another_team(self):
@@ -83,7 +83,7 @@ class AvailableSalariesTests(TestCase):
         SalaryFactory.create(user=user_2)
 
         self._assert_salaries(
-            Salary.objects.get_available(self.user)
+            Salary.objects.allowed_for_user(self.user)
         )
 
     def test_as_watcher_another_team(self):
@@ -101,7 +101,7 @@ class AvailableSalariesTests(TestCase):
         SalaryFactory.create(user=user_2)
 
         self._assert_salaries(
-            Salary.objects.get_available(self.user)
+            Salary.objects.allowed_for_user(self.user)
         )
 
     def test_my_salaries_and_as_leader(self):
@@ -120,7 +120,7 @@ class AvailableSalariesTests(TestCase):
         salaries = SalaryFactory.create_batch(size=3, user=user_2)
 
         self._assert_salaries(
-            Salary.objects.get_available(self.user),
+            Salary.objects.allowed_for_user(self.user),
             [*salaries_my, *salaries]
         )
 
@@ -145,7 +145,7 @@ class AvailableSalariesTests(TestCase):
         queryset = Salary.objects.filter(user=user_3)
 
         self._assert_salaries(
-            queryset.filter(id__in=Salary.objects.get_available(self.user))
+            queryset.filter(id__in=Salary.objects.allowed_for_user(self.user))
         )
 
     def _assert_salaries(self, queryset, results=[]):

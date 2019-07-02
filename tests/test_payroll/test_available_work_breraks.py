@@ -22,7 +22,7 @@ class AvailableWorkBreaksTests(TestCase):
             user=UserFactory.create())
 
         self._assert_work_breaks(
-            WorkBreak.objects.get_available(self.user),
+            WorkBreak.objects.allowed_for_user(self.user),
             work_breaks
         )
 
@@ -34,7 +34,7 @@ class AvailableWorkBreaksTests(TestCase):
         WorkBreakFactory.create(user=user_2)
 
         self._assert_work_breaks(
-            WorkBreak.objects.get_available(self.user)
+            WorkBreak.objects.allowed_for_user(self.user)
         )
 
     def test_as_team_leader(self):
@@ -49,7 +49,7 @@ class AvailableWorkBreaksTests(TestCase):
         salary = WorkBreakFactory.create(user=user_2)
 
         self._assert_work_breaks(
-            WorkBreak.objects.get_available(self.user),
+            WorkBreak.objects.allowed_for_user(self.user),
             [salary]
         )
 
@@ -65,7 +65,7 @@ class AvailableWorkBreaksTests(TestCase):
         WorkBreakFactory.create(user=user_2)
 
         self._assert_work_breaks(
-            WorkBreak.objects.get_available(self.user)
+            WorkBreak.objects.allowed_for_user(self.user)
         )
 
     def test_as_leader_another_team(self):
@@ -83,7 +83,7 @@ class AvailableWorkBreaksTests(TestCase):
         WorkBreakFactory.create(user=user_2)
 
         self._assert_work_breaks(
-            WorkBreak.objects.get_available(self.user)
+            WorkBreak.objects.allowed_for_user(self.user)
         )
 
     def test_as_watcher_another_team(self):
@@ -101,7 +101,7 @@ class AvailableWorkBreaksTests(TestCase):
         WorkBreakFactory.create(user=user_2)
 
         self._assert_work_breaks(
-            WorkBreak.objects.get_available(self.user)
+            WorkBreak.objects.allowed_for_user(self.user)
         )
 
     def test_my_work_breaks_and_as_leader(self):
@@ -120,7 +120,7 @@ class AvailableWorkBreaksTests(TestCase):
         work_breaks = WorkBreakFactory.create_batch(size=3, user=user_2)
 
         self._assert_work_breaks(
-            WorkBreak.objects.get_available(self.user),
+            WorkBreak.objects.allowed_for_user(self.user),
             [*work_breaks_my, *work_breaks]
         )
 
@@ -145,7 +145,7 @@ class AvailableWorkBreaksTests(TestCase):
         queryset = WorkBreak.objects.filter(user=user_3)
 
         self._assert_work_breaks(
-            queryset.filter(id__in=WorkBreak.objects.get_available(self.user))
+            queryset.filter(id__in=WorkBreak.objects.allowed_for_user(self.user))
         )
 
     def test_double_work_breaks(self):
@@ -163,7 +163,7 @@ class AvailableWorkBreaksTests(TestCase):
         )
 
         self._assert_work_breaks(
-            WorkBreak.objects.get_available(self.user), work_breaks
+            WorkBreak.objects.allowed_for_user(self.user), work_breaks
         )
 
     def _assert_work_breaks(self, queryset, results=[]):

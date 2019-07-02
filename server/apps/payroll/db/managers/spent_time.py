@@ -62,7 +62,7 @@ BaseSpentTimeManager: Any = BaseManager.from_queryset(SpentTimeQuerySet)
 
 
 class SpentTimeManager(BaseSpentTimeManager):
-    def get_available(self, user):
+    def allowed_for_user(self, user):
         users = filter_by_roles(
             TeamMember.objects.filter(user=user),
             [
