@@ -1,4 +1,9 @@
+import pytest
+from gitlab.exceptions import GitlabGetError
+
+from rest_framework import status
 from django.test import override_settings
+from django.utils import timezone
 
 from apps.core.gitlab import get_gitlab_client
 from apps.development.models import MergeRequest, Note
@@ -120,11 +125,38 @@ def test_load_project_merge_request(db):
 
 @override_settings(GITLAB_TOKEN='GITLAB_TOKEN')
 @activate_httpretty
-def test_load_merge_requests(db):
+def test_load_merge_requests_server_error(db):
     registry_get_gl_url('https://gitlab.com/api/v4/user', GlUserFactory())
 
     gl_project = AttrDict(GlProjectFactory())
     ProjectFactory.create(gl_id=gl_project.id)
+    registry_get_gl_url(f'https://gitlab.com/api/v4/projects/{gl_project.id}',
+                        status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+    with pytest.raises(GitlabGetError):
+        load_merge_requests()
+
+
+@override_settings(GITLAB_TOKEN='GITLAB_TOKEN')
+@activate_httpretty
+def test_load_merge_requests_not_found(db):
+    registry_get_gl_url('https://gitlab.com/api/v4/user', GlUserFactory())
+
+    gl_project = AttrDict(GlProjectFactory())
+    ProjectFactory.create(gl_id=gl_project.id)
+    registry_get_gl_url(f'https://gitlab.com/api/v4/projects/{gl_project.id}', status=status.HTTP_404_NOT_FOUND)
+
+    load_merge_requests()
+
+
+@override_settings(GITLAB_TOKEN='GITLAB_TOKEN')
+@activate_httpretty
+def test_load_merge_requests(db):
+    registry_get_gl_url('https://gitlab.com/api/v4/user', GlUserFactory())
+
+    gl_project = AttrDict(GlProjectFactory())
+    project = ProjectFactory.create(gl_id=gl_project.id,
+                                    gl_last_merge_requests_sync=timezone.now() - timezone.timedelta(days=10))
     registry_get_gl_url(f'https://gitlab.com/api/v4/projects/{gl_project.id}', gl_project)
 
     gl_user = AttrDict(GlUserFactory())
@@ -148,6 +180,9 @@ def test_load_merge_requests(db):
     merge_request = MergeRequest.objects.first()
 
     _check_merge_request(merge_request, gl_merge_request)
+
+    project.refresh_from_db()
+    assert timezone.datetime.date(project.gl_last_merge_requests_sync) == timezone.now().date()
 
 
 def _check_merge_request(merge_request, gl_merge_request):
