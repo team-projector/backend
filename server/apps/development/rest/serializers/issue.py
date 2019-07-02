@@ -3,6 +3,7 @@ from typing import Iterable
 from django.db.models import Sum
 from rest_framework import serializers
 
+from apps.core.rest.mixins.serializers import TypeSerializerMixin
 from apps.core.rest.serializers import LinkSerializer
 from apps.core.utils.objects import dict2obj
 from apps.development.models import Feature
@@ -54,7 +55,8 @@ class MetricsMixin(serializers.ModelSerializer):
         )['total_spent']
 
 
-class IssueSerializer(MetricsMixin,
+class IssueSerializer(TypeSerializerMixin,
+                      MetricsMixin,
                       ProblemsMixin,
                       serializers.ModelSerializer):
     labels = LabelSerializer(many=True)
@@ -75,7 +77,8 @@ class IssueSerializer(MetricsMixin,
         )
 
 
-class IssueCardSerializer(MetricsMixin,
+class IssueCardSerializer(TypeSerializerMixin,
+                          MetricsMixin,
                           ProblemsMixin,
                           serializers.ModelSerializer):
     labels = LabelSerializer(many=True)
