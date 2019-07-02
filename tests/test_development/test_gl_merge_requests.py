@@ -8,7 +8,8 @@ from django.utils import timezone
 from apps.core.gitlab import get_gitlab_client
 from apps.development.models import MergeRequest, Note
 from apps.development.services.gitlab.merge_requests import (
-    load_merge_request_notes, load_merge_request_labels, load_project_merge_request, load_merge_requests
+    load_merge_request_notes, load_merge_request_labels, load_project_merge_request, load_merge_requests,
+    load_project_merge_requests
 )
 from tests.test_development.factories import ProjectFactory, MergeRequestFactory, ProjectMilestoneFactory
 from tests.test_development.factories_gitlab import (
@@ -111,6 +112,27 @@ def test_load_project_merge_request(db, gl_mocker):
     _check_user(merge_request.author, gl_user)
     _check_user(merge_request.assignee, gl_user)
     assert merge_request.milestone == milestone
+
+
+@override_settings(GITLAB_TOKEN='GITLAB_TOKEN')
+def test_load_project_merge_requests(db, gl_mocker):
+    gl_mocker.registry_get('/user', GlUserFactory())
+
+    gl_project = AttrDict(GlProjectFactory())
+    project = ProjectFactory.create(gl_id=gl_project.id, gl_last_merge_requests_sync=timezone.now())
+    gl_mocker.registry_get(f'/projects/{gl_project.id}', gl_project)
+
+    gl_user = AttrDict(GlUserFactory())
+    gl_mocker.registry_get(f'/users/{gl_user.id}', gl_user)
+
+    gl_merge_request = AttrDict(GlMergeRequestFactory(project_id=gl_project.id, assignee=gl_user, author=gl_user))
+    _registry_merge_request(gl_mocker, gl_project, gl_merge_request)
+
+    load_project_merge_requests(project, full_reload=True)
+
+    merge_request = MergeRequest.objects.first()
+
+    _check_merge_request(merge_request, gl_merge_request)
 
 
 @override_settings(GITLAB_TOKEN='GITLAB_TOKEN')
