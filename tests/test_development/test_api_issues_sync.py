@@ -5,8 +5,8 @@ from tests.base import BaseAPITest
 from tests.mocks import activate_httpretty, GitlabMock
 from tests.test_development.factories import IssueFactory, ProjectFactory
 from tests.test_development.factories_gitlab import (
-    AttrDict, GlIssueTimeStats, GlUserFactory, GlProjectFactory,
-    GlProjectsIssueFactory
+    AttrDict, GlTimeStats, GlUserFactory, GlProjectFactory,
+    GlIssueFactory
 )
 from tests.test_users.factories import UserFactory
 
@@ -40,7 +40,7 @@ class ApiIssuesSyncTests(BaseAPITest):
         gl_assignee = AttrDict(GlUserFactory())
         UserFactory.create(gl_id=gl_assignee.id)
 
-        gl_issue = AttrDict(GlProjectsIssueFactory(
+        gl_issue = AttrDict(GlIssueFactory(
             project_id=gl_project.id,
             assignee=gl_assignee,
             state='closed'
@@ -57,7 +57,7 @@ class ApiIssuesSyncTests(BaseAPITest):
         gl_mocker.registry_get('/user', GlUserFactory())
         gl_mocker.registry_get(f'/projects/{gl_project.id}', gl_project)
         gl_mocker.registry_get(f'/projects/{gl_project.id}/issues/{gl_issue.iid}', gl_issue)
-        gl_mocker.registry_get(f'/projects/{gl_project.id}/issues/{gl_issue.iid}/time_stats', GlIssueTimeStats())
+        gl_mocker.registry_get(f'/projects/{gl_project.id}/issues/{gl_issue.iid}/time_stats', GlTimeStats())
         gl_mocker.registry_get(f'/users/{gl_assignee.id}', gl_assignee)
         gl_mocker.registry_get(f'/projects/{gl_project.id}/issues/{gl_issue.iid}/closed_by', [])
         gl_mocker.registry_get(f'/projects/{gl_project.id}/labels', [])
