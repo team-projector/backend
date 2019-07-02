@@ -15,30 +15,26 @@ from tests.test_development.factories_gitlab import (
     AttrDict, GlUserFactory, GlProjectFactory, GlMergeRequestFactory, GlNoteFactory, GlLabelFactory, GlTimeStats,
     GlProjectMilestoneFactory
 )
-from tests.test_development.mocks import activate_httpretty, registry_get_gl_url
 
 
 @override_settings(GITLAB_TOKEN='GITLAB_TOKEN')
-@activate_httpretty
-def test_load_merge_request_notes(db):
-    registry_get_gl_url('https://gitlab.com/api/v4/user', GlUserFactory())
+def test_load_merge_request_notes(db, gl_mocker):
+    gl_mocker.registry_get('/user', GlUserFactory())
     gl = get_gitlab_client()
 
     gl_project = AttrDict(GlProjectFactory())
     project = ProjectFactory.create(gl_id=gl_project.id)
-    registry_get_gl_url(f'https://gitlab.com/api/v4/projects/{gl_project.id}', gl_project)
+    gl_mocker.registry_get(f'/projects/{gl_project.id}', gl_project)
 
     gl_merge_request = AttrDict(GlMergeRequestFactory(project_id=gl_project.id))
     merge_request = MergeRequestFactory.create(gl_id=gl_merge_request.id, gl_iid=gl_merge_request.iid, project=project)
-    registry_get_gl_url(f'https://gitlab.com/api/v4/projects/{gl_project.id}/merge_requests/{gl_merge_request.iid}',
-                        gl_merge_request)
+    gl_mocker.registry_get(f'/projects/{gl_project.id}/merge_requests/{gl_merge_request.iid}', gl_merge_request)
 
     gl_author = AttrDict(GlUserFactory())
-    registry_get_gl_url(f'https://gitlab.com/api/v4/users/{gl_author.id}', gl_author)
+    gl_mocker.registry_get(f'/users/{gl_author.id}', gl_author)
 
     gl_note = AttrDict(GlNoteFactory(author=gl_author, body='added 1h of time spent at 2000-01-01'))
-    registry_get_gl_url(f'https://gitlab.com/api/v4/projects/{gl_project.id}/merge_requests/{gl_merge_request.iid}'
-                        f'/notes', [gl_note])
+    gl_mocker.registry_get(f'/projects/{gl_project.id}/merge_requests/{gl_merge_request.iid}/notes', [gl_note])
 
     gl_project_loaded = gl.projects.get(id=project.gl_id)
     gl_merge_request_loaded = gl_project_loaded.mergerequests.get(id=merge_request.gl_iid)
@@ -59,56 +55,50 @@ def test_load_merge_request_notes(db):
 
 
 @override_settings(GITLAB_TOKEN='GITLAB_TOKEN')
-@activate_httpretty
-def test_load_merge_request_labels(db):
-    registry_get_gl_url('https://gitlab.com/api/v4/user', GlUserFactory())
+def test_load_merge_request_labels(db, gl_mocker):
+    gl_mocker.registry_get('/user', GlUserFactory())
     gl = get_gitlab_client()
 
     gl_project = AttrDict(GlProjectFactory())
     project = ProjectFactory.create(gl_id=gl_project.id)
-    registry_get_gl_url(f'https://gitlab.com/api/v4/projects/{gl_project.id}', gl_project)
+    gl_mocker.registry_get(f'/projects/{gl_project.id}', gl_project)
 
     gl_label = AttrDict(GlLabelFactory())
-    registry_get_gl_url(f'https://gitlab.com/api/v4/projects/{gl_project.id}/labels', [gl_label])
+    gl_mocker.registry_get(f'/projects/{gl_project.id}/labels', [gl_label])
 
-    gl_merge_request = AttrDict(GlMergeRequestFactory(project_id=gl_project.id), labels=[gl_label])
+    gl_merge_request = AttrDict(GlMergeRequestFactory(project_id=gl_project.id), labels=[gl_label.name])
     merge_request = MergeRequestFactory.create(gl_id=gl_merge_request.id, gl_iid=gl_merge_request.iid, project=project)
-    registry_get_gl_url(f'https://gitlab.com/api/v4/projects/{gl_project.id}/merge_requests/{gl_merge_request.iid}',
-                        gl_merge_request)
+    gl_mocker.registry_get(f'/projects/{gl_project.id}/merge_requests/{gl_merge_request.iid}', gl_merge_request)
 
     gl_project_loaded = gl.projects.get(id=project.gl_id)
     gl_merge_request_loaded = gl_project_loaded.mergerequests.get(id=merge_request.gl_iid)
 
     load_merge_request_labels(merge_request, gl_project_loaded, gl_merge_request_loaded)
 
+    merge_request = MergeRequest.objects.first()
+
+    assert merge_request.gl_id == gl_merge_request.id
+    assert merge_request.labels.first().title == gl_label.name
+
 
 @override_settings(GITLAB_TOKEN='GITLAB_TOKEN')
-@activate_httpretty
-def test_load_project_merge_request(db):
-    registry_get_gl_url('https://gitlab.com/api/v4/user', GlUserFactory())
+def test_load_project_merge_request(db, gl_mocker):
+    gl_mocker.registry_get('/user', GlUserFactory())
     gl = get_gitlab_client()
 
     gl_project = AttrDict(GlProjectFactory())
     project = ProjectFactory.create(gl_id=gl_project.id)
-    registry_get_gl_url(f'https://gitlab.com/api/v4/projects/{gl_project.id}', gl_project)
+    gl_mocker.registry_get(f'/projects/{gl_project.id}', gl_project)
 
     gl_user = AttrDict(GlUserFactory())
-    registry_get_gl_url(f'https://gitlab.com/api/v4/users/{gl_user.id}', gl_user)
+    gl_mocker.registry_get(f'/users/{gl_user.id}', gl_user)
 
     gl_milestone = AttrDict(GlProjectMilestoneFactory())
     milestone = ProjectMilestoneFactory.create(gl_id=gl_milestone.id)
 
     gl_merge_request = AttrDict(GlMergeRequestFactory(project_id=gl_project.id, assignee=gl_user, author=gl_user,
                                                       state='closed', milestone=gl_milestone))
-    registry_get_gl_url(f'https://gitlab.com/api/v4/projects/{gl_project.id}/merge_requests/{gl_merge_request.iid}',
-                        gl_merge_request)
-    registry_get_gl_url(f'https://gitlab.com/api/v4/projects/{gl_project.id}/merge_requests/{gl_merge_request.iid}'
-                        f'/time_stats', GlTimeStats())
-    registry_get_gl_url(f'https://gitlab.com/api/v4/projects/{gl_project.id}/merge_requests/{gl_merge_request.iid}'
-                        f'/closed_by', [])
-    registry_get_gl_url(f'https://gitlab.com/api/v4/projects/{gl_project.id}/labels', [])
-    registry_get_gl_url(f'https://gitlab.com/api/v4/projects/{gl_project.id}/merge_requests/{gl_merge_request.iid}'
-                        f'/notes', [])
+    _registry_merge_request(gl_mocker, gl_project, gl_merge_request)
 
     gl_project_loaded = gl.projects.get(id=project.gl_id)
     gl_merge_request_loaded = gl_project_loaded.mergerequests.get(id=gl_merge_request.iid)
@@ -124,56 +114,20 @@ def test_load_project_merge_request(db):
 
 
 @override_settings(GITLAB_TOKEN='GITLAB_TOKEN')
-@activate_httpretty
-def test_load_merge_requests_server_error(db):
-    registry_get_gl_url('https://gitlab.com/api/v4/user', GlUserFactory())
-
-    gl_project = AttrDict(GlProjectFactory())
-    ProjectFactory.create(gl_id=gl_project.id)
-    registry_get_gl_url(f'https://gitlab.com/api/v4/projects/{gl_project.id}',
-                        status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
-    with pytest.raises(GitlabGetError):
-        load_merge_requests()
-
-
-@override_settings(GITLAB_TOKEN='GITLAB_TOKEN')
-@activate_httpretty
-def test_load_merge_requests_not_found(db):
-    registry_get_gl_url('https://gitlab.com/api/v4/user', GlUserFactory())
-
-    gl_project = AttrDict(GlProjectFactory())
-    ProjectFactory.create(gl_id=gl_project.id)
-    registry_get_gl_url(f'https://gitlab.com/api/v4/projects/{gl_project.id}', status=status.HTTP_404_NOT_FOUND)
-
-    load_merge_requests()
-
-
-@override_settings(GITLAB_TOKEN='GITLAB_TOKEN')
-@activate_httpretty
-def test_load_merge_requests(db):
-    registry_get_gl_url('https://gitlab.com/api/v4/user', GlUserFactory())
+def test_load_merge_requests(db, gl_mocker):
+    gl_mocker.registry_get('/user', GlUserFactory())
 
     gl_project = AttrDict(GlProjectFactory())
     project = ProjectFactory.create(gl_id=gl_project.id,
                                     gl_last_merge_requests_sync=timezone.now() - timezone.timedelta(days=10))
-    registry_get_gl_url(f'https://gitlab.com/api/v4/projects/{gl_project.id}', gl_project)
+    gl_mocker.registry_get(f'/projects/{gl_project.id}', gl_project)
 
     gl_user = AttrDict(GlUserFactory())
-    registry_get_gl_url(f'https://gitlab.com/api/v4/users/{gl_user.id}', gl_user)
+    gl_mocker.registry_get(f'/users/{gl_user.id}', gl_user)
 
     gl_merge_request = AttrDict(GlMergeRequestFactory(project_id=gl_project.id, assignee=gl_user,
                                                       author=gl_user, state='closed'))
-    registry_get_gl_url(f'https://gitlab.com/api/v4/projects/{gl_project.id}/merge_requests', [gl_merge_request])
-    registry_get_gl_url(f'https://gitlab.com/api/v4/projects/{gl_project.id}/merge_requests/{gl_merge_request.iid}',
-                        gl_merge_request)
-    registry_get_gl_url(f'https://gitlab.com/api/v4/projects/{gl_project.id}/merge_requests/{gl_merge_request.iid}'
-                        f'/time_stats', GlTimeStats())
-    registry_get_gl_url(f'https://gitlab.com/api/v4/projects/{gl_project.id}/merge_requests/{gl_merge_request.iid}'
-                        f'/closed_by', [])
-    registry_get_gl_url(f'https://gitlab.com/api/v4/projects/{gl_project.id}/labels', [])
-    registry_get_gl_url(f'https://gitlab.com/api/v4/projects/{gl_project.id}/merge_requests/{gl_merge_request.iid}'
-                        f'/notes', [])
+    _registry_merge_request(gl_mocker, gl_project, gl_merge_request)
 
     load_merge_requests()
 
@@ -183,6 +137,38 @@ def test_load_merge_requests(db):
 
     project.refresh_from_db()
     assert timezone.datetime.date(project.gl_last_merge_requests_sync) == timezone.now().date()
+
+
+@override_settings(GITLAB_TOKEN='GITLAB_TOKEN')
+def test_load_merge_requests_server_error(db, gl_mocker):
+    gl_mocker.registry_get('/user', GlUserFactory())
+
+    gl_project = AttrDict(GlProjectFactory())
+    ProjectFactory.create(gl_id=gl_project.id)
+    gl_mocker.registry_get(f'/projects/{gl_project.id}', status_code=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+    with pytest.raises(GitlabGetError):
+        load_merge_requests()
+
+
+@override_settings(GITLAB_TOKEN='GITLAB_TOKEN')
+def test_load_merge_requests_not_found(db, gl_mocker):
+    gl_mocker.registry_get('/user', GlUserFactory())
+
+    gl_project = AttrDict(GlProjectFactory())
+    ProjectFactory.create(gl_id=gl_project.id)
+    gl_mocker.registry_get(f'/projects/{gl_project.id}', status_code=status.HTTP_404_NOT_FOUND)
+
+    load_merge_requests()
+
+
+def _registry_merge_request(gl_mocker, gl_project, gl_merge_request):
+    gl_mocker.registry_get(f'/projects/{gl_project.id}/merge_requests', [gl_merge_request])
+    gl_mocker.registry_get(f'/projects/{gl_project.id}/merge_requests/{gl_merge_request.iid}', gl_merge_request)
+    gl_mocker.registry_get(f'/projects/{gl_project.id}/merge_requests/{gl_merge_request.iid}/time_stats', GlTimeStats())
+    gl_mocker.registry_get(f'/projects/{gl_project.id}/merge_requests/{gl_merge_request.iid}/closed_by', [])
+    gl_mocker.registry_get(f'/projects/{gl_project.id}/labels', [])
+    gl_mocker.registry_get(f'/projects/{gl_project.id}/merge_requests/{gl_merge_request.iid}/notes', [])
 
 
 def _check_merge_request(merge_request, gl_merge_request):
