@@ -8,7 +8,8 @@ from apps.development.models import Issue
 from apps.development.rest.filters import IssueStatusUrlFilter
 
 
-class GitlabIssieStatusSerializer(TypeSerializerMixin, serializers.ModelSerializer):
+class GitlabIssieStatusSerializer(TypeSerializerMixin,
+                                  serializers.ModelSerializer):
     class Meta:
         model = Issue
         fields = ('id', 'title', 'state', 'is_merged')
