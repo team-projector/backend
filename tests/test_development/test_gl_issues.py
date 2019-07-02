@@ -13,8 +13,8 @@ from apps.development.services.gitlab.issues import (
 )
 from tests.test_development.factories import IssueFactory, ProjectFactory, ProjectMilestoneFactory
 from tests.test_development.factories_gitlab import (
-    AttrDict, GlUserFactory, GlProjectFactory, GlProjectsIssueFactory, GlIssueNoteFactory, GlLabelFactory,
-    GlProjectMilestoneFactory, GlIssueTimeStats
+    AttrDict, GlIssueFactory, GlLabelFactory, GlNoteFactory, GlProjectFactory, GlProjectMilestoneFactory,
+    GlTimeStats, GlUserFactory
 )
 
 
@@ -27,7 +27,7 @@ def test_load_issue_participants(db, gl_mocker):
     project = ProjectFactory.create(gl_id=gl_project.id)
     gl_mocker.registry_get(f'/projects/{gl_project.id}', gl_project)
 
-    gl_issue = AttrDict(GlProjectsIssueFactory())
+    gl_issue = AttrDict(GlIssueFactory())
     issue = IssueFactory.create(gl_id=gl_issue.id, gl_iid=gl_issue.iid, project=project)
     gl_mocker.registry_get(f'/projects/{gl_project.id}/issues/{gl_issue.iid}', gl_issue)
 
@@ -61,14 +61,14 @@ def test_load_issue_notes(db, gl_mocker):
     project = ProjectFactory.create(gl_id=gl_project.id)
     gl_mocker.registry_get(f'/projects/{gl_project.id}', gl_project)
 
-    gl_issue = AttrDict(GlProjectsIssueFactory(project_id=gl_project.id))
+    gl_issue = AttrDict(GlIssueFactory(project_id=gl_project.id))
     issue = IssueFactory.create(gl_id=gl_issue.id, gl_iid=gl_issue.iid, project=project)
     gl_mocker.registry_get(f'/projects/{gl_project.id}/issues/{gl_issue.iid}', gl_issue)
 
     gl_author = AttrDict(GlUserFactory())
     gl_mocker.registry_get(f'/users/{gl_author.id}', gl_author)
 
-    gl_note = AttrDict(GlIssueNoteFactory(author=gl_author, body='added 1h of time spent at 2000-01-01'))
+    gl_note = AttrDict(GlNoteFactory(author=gl_author, body='added 1h of time spent at 2000-01-01'))
     gl_mocker.registry_get(f'/projects/{gl_project.id}/issues/{gl_issue.iid}/notes', [gl_note])
 
     gl_project = gl.projects.get(id=project.gl_id)
@@ -101,7 +101,7 @@ def test_load_issue_labels(db, gl_mocker):
     gl_label = AttrDict(GlLabelFactory())
     gl_mocker.registry_get(f'/projects/{gl_project.id}/labels', [gl_label])
 
-    gl_issue = AttrDict(GlProjectsIssueFactory(project_id=gl_project.id), labels=[gl_label.name])
+    gl_issue = AttrDict(GlIssueFactory(project_id=gl_project.id), labels=[gl_label.name])
     issue = IssueFactory.create(gl_id=gl_issue.id, gl_iid=gl_issue.iid, project=project)
     gl_mocker.registry_get(f'/projects/{gl_project.id}/issues/{gl_issue.iid}', gl_issue)
 
@@ -131,8 +131,8 @@ def test_load_project_issue(db, gl_mocker):
     gl_milestone = AttrDict(GlProjectMilestoneFactory())
     milestone = ProjectMilestoneFactory.create(gl_id=gl_milestone.id)
 
-    gl_issue = AttrDict(GlProjectsIssueFactory(project_id=gl_project.id, assignee=gl_assignee,
-                                               state='closed', milestone=gl_milestone))
+    gl_issue = AttrDict(GlIssueFactory(project_id=gl_project.id, assignee=gl_assignee, state='closed',
+                                       milestone=gl_milestone))
     _registry_issue(gl_mocker, gl_project, gl_issue)
 
     gl_project_loaded = gl.projects.get(id=project.gl_id)
@@ -159,7 +159,7 @@ def test_load_project_issues(db, gl_mocker):
     gl_assignee = AttrDict(GlUserFactory())
     gl_mocker.registry_get(f'/users/{gl_assignee.id}', gl_assignee)
 
-    gl_issue = AttrDict(GlProjectsIssueFactory(project_id=gl_project.id, assignee=gl_assignee))
+    gl_issue = AttrDict(GlIssueFactory(project_id=gl_project.id, assignee=gl_assignee))
     _registry_issue(gl_mocker, gl_project, gl_issue)
 
     load_project_issues(project, check_deleted=False)
@@ -183,7 +183,7 @@ def test_load_issues(db, gl_mocker):
     gl_assignee = AttrDict(GlUserFactory())
     gl_mocker.registry_get(f'/users/{gl_assignee.id}', gl_assignee)
 
-    gl_issue = AttrDict(GlProjectsIssueFactory(project_id=gl_project.id, assignee=gl_assignee))
+    gl_issue = AttrDict(GlIssueFactory(project_id=gl_project.id, assignee=gl_assignee))
     _registry_issue(gl_mocker, gl_project, gl_issue)
 
     load_issues()
@@ -228,7 +228,7 @@ def test_check_projects_deleted_issues(db, gl_mocker):
     gl_assignee = AttrDict(GlUserFactory())
     gl_mocker.registry_get(f'/users/{gl_assignee.id}', gl_assignee)
 
-    gl_issue = AttrDict(GlProjectsIssueFactory(project_id=gl_project.id, assignee=gl_assignee))
+    gl_issue = AttrDict(GlIssueFactory(project_id=gl_project.id, assignee=gl_assignee))
     gl_mocker.registry_get(f'/projects/{gl_project.id}/issues', [gl_issue])
 
     IssueFactory.create_batch(5, project=project)
@@ -245,7 +245,7 @@ def test_check_projects_deleted_issues_server_error(db, gl_mocker):
     gl_mocker.registry_get(f'/projects/{gl_project.id}', status_code=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     with pytest.raises(GitlabGetError):
-        load_issues()
+        check_projects_deleted_issues()
 
 
 @override_settings(GITLAB_TOKEN='GITLAB_TOKEN')
@@ -262,7 +262,7 @@ def test_check_projects_deleted_issues_not_found(db, gl_mocker):
 def _registry_issue(gl_mocker, gl_project, gl_issue):
     gl_mocker.registry_get(f'/projects/{gl_project.id}/issues', [gl_issue])
     gl_mocker.registry_get(f'/projects/{gl_project.id}/issues/{gl_issue.iid}', gl_issue)
-    gl_mocker.registry_get(f'/projects/{gl_project.id}/issues/{gl_issue.iid}/time_stats', GlIssueTimeStats())
+    gl_mocker.registry_get(f'/projects/{gl_project.id}/issues/{gl_issue.iid}/time_stats', GlTimeStats())
     gl_mocker.registry_get(f'/projects/{gl_project.id}/issues/{gl_issue.iid}/closed_by', [])
     gl_mocker.registry_get(f'/projects/{gl_project.id}/labels', [])
     gl_mocker.registry_get(f'/projects/{gl_project.id}/issues/{gl_issue.iid}/notes', [])

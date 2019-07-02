@@ -73,7 +73,7 @@ class GlUserFactory(factory.DictFactory):
     web_url = factory.Faker('url')
 
 
-class GlProjectsIssueFactory(factory.DictFactory):
+class GlIssueFactory(factory.DictFactory):
     id = factory.Faker('random_int')
     iid = factory.Faker('random_int')
     web_url = factory.Faker('url')
@@ -89,7 +89,7 @@ class GlProjectsIssueFactory(factory.DictFactory):
     labels = []
 
 
-class GlIssueTimeStats(factory.DictFactory):
+class GlTimeStats(factory.DictFactory):
     total_time_spent = factory.Faker('random_int')
     time_estimate = factory.Faker('random_int')
 
@@ -98,7 +98,7 @@ class GlHookFactory(factory.DictFactory):
     url = factory.Faker('url')
 
 
-class GlIssueNoteFactory(factory.DictFactory):
+class GlNoteFactory(factory.DictFactory):
     id = factory.Faker('random_int')
     body = factory.Faker('word')
     created_at = gl_format_datetime(datetime.now())
