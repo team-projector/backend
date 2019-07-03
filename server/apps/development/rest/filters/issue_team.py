@@ -21,17 +21,7 @@ class IssueTeamFilter(filters.BaseFilterBackend):
         team = params.get('team')
 
         if team:
-            """
-            Filter by team members with roles not a watcher
-            https://gitlab.com/junte/team-projector/backend/issues/168
-            """
-            users = TeamMember.objects.filter(
-                team=team,
-                roles=~TeamMember.roles.watcher
-            ).values_list(
-                'user',
-                flat=True
-            )
+            users = TeamMember.objects.get_no_watchers(team)
             queryset = queryset.filter(user__in=users)
 
         return queryset
