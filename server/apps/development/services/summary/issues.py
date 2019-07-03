@@ -4,9 +4,11 @@ from datetime import date
 from django.db.models import QuerySet, Sum
 
 from apps.development.models import Team
+from apps.development.services.problems.issues import (
+    annotate_issues_problems, filter_issues_problems
+)
 from apps.payroll.models import SpentTime
 from apps.users.models import User
-from .problems import annotate_issues_problems, filter_issues_problems
 
 IssuesSummary = namedtuple(
     'IssuesSummary', [

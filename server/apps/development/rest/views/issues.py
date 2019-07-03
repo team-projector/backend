@@ -15,8 +15,8 @@ from apps.development.rest.serializers import (
     IssuesSummarySerializer
 )
 from apps.development.services.gitlab.spent_time import add_spent_time
-from apps.development.services.issues.problems import annotate_issues_problems
-from apps.development.services.issues.summary import get_issues_summary
+from apps.development.services.problems.issues import annotate_issues_problems
+from apps.development.services.summary.issues import get_issues_summary
 from apps.development.tasks import sync_project_issue
 from apps.users.models import User
 

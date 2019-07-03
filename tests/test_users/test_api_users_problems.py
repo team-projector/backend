@@ -4,7 +4,7 @@ from datetime import timedelta
 from rest_framework import status
 
 from apps.development.models import TeamMember
-from apps.users.services.users.problems import PROBLEM_PAYROLL_OPENED_OVERFLOW
+from apps.users.services.problems.users import PROBLEM_PAYROLL_OPENED_OVERFLOW
 from tests.base import BaseAPITest
 from tests.test_development.factories import TeamMemberFactory, TeamFactory
 from tests.test_payroll.factories import IssueSpentTimeFactory
