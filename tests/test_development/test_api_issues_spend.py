@@ -5,7 +5,7 @@ from tests.base import BaseAPITest
 from tests.mocks import activate_httpretty, GitlabMock
 from tests.test_development.factories import IssueFactory, ProjectFactory
 from tests.test_development.factories_gitlab import (
-    AttrDict, GlIssueAddSpentTimeFactory, GlProjectFactory, GlProjectsIssueFactory, GlUserFactory)
+    AttrDict, GlIssueAddSpentTimeFactory, GlProjectFactory, GlIssueFactory, GlUserFactory)
 
 ONE_MINUTE = 60
 
@@ -66,7 +66,7 @@ class ApiIssuesSpendTests(BaseAPITest):
         gl_project = AttrDict(GlProjectFactory())
         project = ProjectFactory.create(gl_id=gl_project.id)
 
-        gl_project_issue = AttrDict(GlProjectsIssueFactory(id=gl_project.id))
+        gl_project_issue = AttrDict(GlIssueFactory(id=gl_project.id))
         issue = IssueFactory.create(gl_iid=gl_project_issue.iid, user=self.user, project=project)
         IssueFactory.create_batch(5, project=project)
 
