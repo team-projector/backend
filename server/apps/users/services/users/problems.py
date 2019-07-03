@@ -1,64 +1,40 @@
-from functools import reduce
-from operator import or_, and_
-from typing import ClassVar, Optional
+from typing import ClassVar, Optional, Iterable
 
-from django.db.models import Case, NullBooleanField, Q, QuerySet, When
-from django.utils import timezone
+from django.db.models import Sum
+from django.db.models.functions import Coalesce
 
+from apps.core.consts import SECONDS_PER_HOUR
 from apps.development.models.issue import STATE_OPENED
+from apps.payroll.models import SpentTime
+from apps.users.models import User
 
-PROBLEM_EMPTY_DUE_DAY = 'empty_due_date'
-PROBLEM_OVER_DUE_DAY = 'over_due_date'
-PROBLEM_EMPTY_ESTIMATE = 'empty_estimate'
+PROBLEM_PAYROLL_OPENED_OVERFLOW = 'payroll_opened_overflow'
 
 
 class BaseProblemChecker:
-    annotate_field: ClassVar[Optional[str]] = None
     problem_code: ClassVar[Optional[str]] = None
 
-    def setup_queryset(self, queryset: QuerySet) -> QuerySet:
-        return queryset.annotate(**{
-            self.annotate_field: Case(
-                self.get_condition(),
-                output_field=NullBooleanField(),
-            )
-        })
+    def check(self, user: User) -> Optional[str]:
+        if self.has_problem(user):
+            return self.problem_code
 
-    def get_condition(self) -> When:
+    def has_problem(self, user: User) -> bool:
         raise NotImplementedError
 
 
-class EmptyDueDateProblemChecker(BaseProblemChecker):
-    annotate_field = 'problem_empty_due_date'
-    problem_code = PROBLEM_EMPTY_DUE_DAY
+class PayrollOpenedOverflowChecker(BaseProblemChecker):
+    problem_code = PROBLEM_PAYROLL_OPENED_OVERFLOW
 
-    def get_condition(self) -> When:
-        return When(
-            Q(due_date__isnull=True, state=STATE_OPENED),
-            then=True
-        )
+    def has_problem(self, user: User) -> bool:
+        total_spend = SpentTime.objects.filter(
+            salary__isnull=True,
+            user=user,
+            issues__state=STATE_OPENED
+        ).aggregate(
+            total_time_spent=Coalesce(Sum('time_spent'), 0)
+        )['total_time_spent']
 
-
-class OverdueDueDateProblemChecker(BaseProblemChecker):
-    annotate_field = 'problem_over_due_date'
-    problem_code = PROBLEM_OVER_DUE_DAY
-
-    def get_condition(self) -> When:
-        return When(
-            Q(due_date__lt=timezone.now(), state=STATE_OPENED),
-            then=True
-        )
-
-
-class EmptyEstimateProblemChecker(BaseProblemChecker):
-    annotate_field = 'problem_empty_estimate'
-    problem_code = PROBLEM_EMPTY_ESTIMATE
-
-    def get_condition(self) -> When:
-        return When(
-            time_estimate__isnull=True,
-            then=True
-        )
+        return total_spend > user.daily_work_hours * SECONDS_PER_HOUR * 1.5
 
 
 checkers = [
@@ -67,22 +43,12 @@ checkers = [
 ]
 
 
-def annotate_issues_problems(queryset: QuerySet) -> QuerySet:
+def get_user_problems(user: User) -> Iterable[str]:
+    problems = []
+
     for checker in checkers:
-        queryset = checker.setup_queryset(queryset)
+        problem = checker.check(user)
+        if problem:
+            problems.append(problem)
 
-    return queryset
-
-
-def filter_issues_problems(queryset: QuerySet) -> QuerySet:
-    return queryset.filter(reduce(or_, [
-        Q(**{checker.annotate_field: True})
-        for checker in checkers
-    ]))
-
-
-def exclude_issues_problems(queryset: QuerySet) -> QuerySet:
-    return queryset.filter(reduce(and_, [
-        Q(**{checker.annotate_field: None})
-        for checker in checkers
-    ]))
+    return problems
