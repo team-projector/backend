@@ -8,7 +8,7 @@ from rest_framework.response import Response
 from apps.core.rest.mixins.views import UpdateModelMixin
 from apps.core.rest.views import BaseGenericViewSet
 from apps.core.utils.rest import parse_query_params, parse_data_params
-from apps.development.models import Issue
+from apps.development.models import Issue, Team
 from apps.development.rest.filters import IssueProblemFilter, IssueTeamFilter
 from apps.development.rest.serializers import (
     IssueCardSerializer, IssueSerializer, IssueUpdateSerializer,
@@ -29,6 +29,10 @@ class IssuesSummaryParamsSerializer(serializers.Serializer):
     due_date = serializers.DateField(required=False)
     user = serializers.PrimaryKeyRelatedField(
         queryset=User.objects.all(),
+        required=False
+    )
+    team = serializers.PrimaryKeyRelatedField(
+        queryset=Team.objects.all(),
         required=False
     )
 
@@ -113,5 +117,6 @@ class IssuesViewset(mixins.RetrieveModelMixin,
             get_issues_summary(
                 queryset,
                 params.get('due_date'),
-                params.get('user')
+                params.get('user'),
+                params.get('team'),
             )).data)
