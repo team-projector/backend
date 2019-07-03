@@ -109,7 +109,7 @@ class GlNoteFactory(factory.DictFactory):
 class GlLabelFactory(factory.DictFactory):
     id = factory.Faker('random_int')
     name = factory.Faker('word')
-    color = factory.Faker('word')
+    color = factory.Faker('text', max_nb_chars=10)
 
 
 class GlMergeRequestFactory(factory.DictFactory):
