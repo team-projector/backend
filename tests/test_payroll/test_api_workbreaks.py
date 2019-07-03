@@ -609,7 +609,10 @@ class WorkBreaksTests(BaseAPITest):
         TeamMember.objects.filter(user=self.user, team=team).update(
             roles=TeamMember.roles.leader)
 
-        self._test_work_breaks_filter({'team': team.id})
+        self.set_credentials()
+        response = self.client.get('/api/work-breaks', {'team': team.id})
+
+        self.assertEqual(status.HTTP_400_BAD_REQUEST, response.status_code)
 
     def _test_work_breaks_filter(self, user_filter, results=[]):
         self.set_credentials()
