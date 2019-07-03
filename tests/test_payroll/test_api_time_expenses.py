@@ -156,8 +156,11 @@ class ApiTimeExpensesTests(BaseAPITest):
     def test_time_expenses_filter_by_team(self):
         user_2 = UserFactory.create()
         issue = IssueFactory.create()
-        team_member = TeamMemberFactory.create(user=self.user,
-                                               team=TeamFactory.create())
+        team_member = TeamMemberFactory.create(
+            user=self.user,
+            roles=TeamMember.roles.leader,
+            team=TeamFactory.create()
+        )
 
         spend_1 = IssueSpentTimeFactory.create(
             date=timezone.now() - timedelta(hours=4),

@@ -155,7 +155,10 @@ class ApiIssuesTests(BaseAPITest):
 
         IssueFactory.create(user=self.user)
 
-        self._test_issues_filter({'team': team_1.id})
+        self.set_credentials()
+        response = self.client.get('/api/issues', {'team': team_1.id})
+
+        self.assertEqual(status.HTTP_400_BAD_REQUEST, response.status_code)
 
     def test_issues_filter_by_team_watcher_empty(self):
         user_1 = UserFactory.create()
