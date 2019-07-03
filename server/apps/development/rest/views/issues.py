@@ -5,8 +5,8 @@ from rest_framework.decorators import action
 from rest_framework.exceptions import ValidationError
 from rest_framework.response import Response
 
-from apps.core.rest.mixins.views import UpdateModelMixin
 from apps.core.rest.views import BaseGenericViewSet
+from apps.core.rest.views.mixins import UpdateModelMixin
 from apps.core.utils.rest import parse_query_params, parse_data_params
 from apps.development.models import Issue, Team
 from apps.development.rest.filters import IssueProblemFilter, IssueTeamFilter
@@ -15,8 +15,8 @@ from apps.development.rest.serializers import (
     IssuesSummarySerializer
 )
 from apps.development.services.gitlab.spent_time import add_spent_time
-from apps.development.services.issues.problems import annotate_issues_problems
-from apps.development.services.issues.summary import get_issues_summary
+from apps.development.services.problems.issues import annotate_issues_problems
+from apps.development.services.summary.issues import get_issues_summary
 from apps.development.tasks import sync_project_issue
 from apps.users.models import User
 

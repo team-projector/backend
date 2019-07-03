@@ -1,7 +1,7 @@
 from rest_framework import serializers
 
-from apps.core.rest.mixins.serializers import TypeSerializerMixin
 from apps.core.rest.serializers import LinkSerializer
+from apps.core.rest.serializers.mixins import TypeSerializerMixin
 from apps.development.models import MergeRequest
 from apps.development.rest.serializers import LabelSerializer
 from apps.development.rest.serializers.issue import MetricsMixin

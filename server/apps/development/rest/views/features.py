@@ -1,7 +1,7 @@
 from rest_framework.permissions import IsAuthenticated
 
-from apps.core.rest.mixins.views import CreateModelMixin, UpdateModelMixin
 from apps.core.rest.views import BaseGenericViewSet
+from apps.core.rest.views.mixins import CreateModelMixin, UpdateModelMixin
 from apps.development.models import Feature
 from apps.development.rest import permissions
 from apps.development.rest.serializers import FeatureSerializer

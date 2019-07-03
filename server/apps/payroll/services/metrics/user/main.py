@@ -1,4 +1,5 @@
 from django.db.models import Sum
+from django.db.models.functions import Coalesce
 
 from apps.development.models.issue import Issue, STATE_CLOSED, STATE_OPENED
 from apps.payroll.models import Bonus, Penalty, SpentTime
@@ -42,8 +43,8 @@ class UserMetricsProvider:
             user=user,
             salary__isnull=True
         ).aggregate(
-            total_bonus=Sum('sum')
-        )['total_bonus'] or 0
+            total_bonus=Coalesce(Sum('sum'), 0)
+        )['total_bonus']
 
     @staticmethod
     def _get_penalty(user: User) -> float:
@@ -51,8 +52,8 @@ class UserMetricsProvider:
             user=user,
             salary__isnull=True
         ).aggregate(
-            total_penalty=Sum('sum')
-        )['total_penalty'] or 0
+            total_penalty=Coalesce(Sum('sum'), 0)
+        )['total_penalty']
 
     @staticmethod
     def _get_payroll_opened(user: User) -> float:
@@ -61,8 +62,8 @@ class UserMetricsProvider:
             user=user,
             issues__state=STATE_OPENED
         ).aggregate(
-            total_sum=Sum('sum')
-        )['total_sum'] or 0
+            total_sum=Coalesce(Sum('sum'), 0)
+        )['total_sum']
 
     @staticmethod
     def _get_payroll_closed(user: User) -> float:
@@ -71,8 +72,8 @@ class UserMetricsProvider:
             user=user,
             issues__state=STATE_CLOSED
         ).aggregate(
-            total_sum=Sum('sum')
-        )['total_sum'] or 0
+            total_sum=Coalesce(Sum('sum'), 0)
+        )['total_sum']
 
     @staticmethod
     def _get_issues_closed_spent(user: User) -> float:
@@ -81,8 +82,8 @@ class UserMetricsProvider:
             user=user,
             issues__state=STATE_CLOSED
         ).aggregate(
-            total_time_spent=Sum('time_spent')
-        )['total_time_spent'] or 0
+            total_time_spent=Coalesce(Sum('time_spent'), 0)
+        )['total_time_spent']
 
     @staticmethod
     def _get_issues_opened_spent(user: User) -> float:
@@ -91,5 +92,5 @@ class UserMetricsProvider:
             user=user,
             issues__state=STATE_OPENED
         ).aggregate(
-            total_time_spent=Sum('time_spent')
-        )['total_time_spent'] or 0
+            total_time_spent=Coalesce(Sum('time_spent'), 0)
+        )['total_time_spent']
