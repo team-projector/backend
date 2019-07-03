@@ -1,3 +1,5 @@
+from functools import partial
+
 from rest_framework import status
 
 from apps.development.models import TeamMember
@@ -21,8 +23,10 @@ class ApiTeamMembersTests(BaseAPITest):
 
     def test_list(self):
         user_2 = UserFactory.create()
-        TeamMemberFactory.create(user=self.user, team=self.team, roles=TeamMember.roles.leader)
-        TeamMemberFactory.create(user=user_2, team=self.team, roles=TeamMember.roles.developer)
+        TeamMemberFactory.create(user=self.user, team=self.team,
+                                 roles=TeamMember.roles.leader)
+        TeamMemberFactory.create(user=user_2, team=self.team,
+                                 roles=TeamMember.roles.developer)
 
         self.set_credentials()
         response = self.client.get(f'/api/teams/{self.team.id}/members')
@@ -82,8 +86,10 @@ class ApiTeamMembersTests(BaseAPITest):
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data['count'], 2)
-        self.assertIn(developer_1.id, [x['id'] for x in response.data['results']])
-        self.assertIn(developer_2.id, [x['id'] for x in response.data['results']])
+        self.assertIn(developer_1.id,
+                      [x['id'] for x in response.data['results']])
+        self.assertIn(developer_2.id,
+                      [x['id'] for x in response.data['results']])
 
     def test_many_roles(self):
         user_1 = TeamMemberFactory.create(
@@ -104,7 +110,8 @@ class ApiTeamMembersTests(BaseAPITest):
 
         self.set_credentials()
 
-        response = self.client.get(f'/api/teams/{self.team.id}/members?roles=leader&roles=watcher')
+        response = self.client.get(
+            f'/api/teams/{self.team.id}/members?roles=leader&roles=watcher')
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data['count'], 2)
@@ -130,7 +137,8 @@ class ApiTeamMembersTests(BaseAPITest):
 
         self.set_credentials()
 
-        response = self.client.get(f'/api/teams/{self.team.id}/members', {'roles': 'watcher'})
+        response = self.client.get(f'/api/teams/{self.team.id}/members',
+                                   {'roles': 'watcher'})
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data['count'], 1)
@@ -138,6 +146,27 @@ class ApiTeamMembersTests(BaseAPITest):
 
     def test_bad_role(self):
         self.set_credentials()
-        response = self.client.get(f'/api/teams/{self.team.id}/members', {'roles': ['watcher', 'test']})
+        response = self.client.get(f'/api/teams/{self.team.id}/members',
+                                   {'roles': ['watcher', 'test']})
 
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_order_by_user_name(self):
+        team = TeamFactory.create()
+
+        tm_factory = partial(TeamMemberFactory.create, team=team)
+
+        tm_1 = tm_factory(user=UserFactory.create(name='first user'))
+        tm_2 = tm_factory(user=UserFactory.create(name='second user'))
+        tm_3 = tm_factory(user=UserFactory.create(name='third user'))
+        tm_4 = tm_factory(user=UserFactory.create(name='main user'))
+
+        self.set_credentials()
+
+        response = self.client.get(f'/api/teams/{team.id}/members')
+
+        self.assertEqual(status.HTTP_200_OK, response.status_code)
+        self.assertListEqual(
+            [x.id for x in [tm_1, tm_4, tm_2, tm_3]],
+            [x['id'] for x in response.data['results']]
+        )

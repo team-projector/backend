@@ -1,7 +1,7 @@
 from django.shortcuts import get_object_or_404
 from django.utils.functional import cached_property
 from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework import mixins
+from rest_framework import mixins, filters
 
 from apps.core.rest.views import BaseGenericViewSet
 from apps.development.models import Team, TeamMember
@@ -15,8 +15,10 @@ class TeamMembersViewset(mixins.ListModelMixin,
     queryset = TeamMember.objects.all()
     filter_backends = (
         DjangoFilterBackend,
-        TeamMemberRoleFilterBackend
+        TeamMemberRoleFilterBackend,
+        filters.OrderingFilter
     )
+    ordering = ('user__name',)
 
     @cached_property
     def team(self):
