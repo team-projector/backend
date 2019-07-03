@@ -1,7 +1,8 @@
 from rest_framework import mixins
 from rest_framework.permissions import IsAuthenticated
 
-from apps.core.rest.views import BaseGenericViewSet, LinksViewMixin
+from apps.core.rest.views import BaseGenericViewSet
+from apps.core.rest.views.mixins import LinksViewMixin
 from apps.payroll.rest.permissions import CanViewEmbeddedUserMetrics
 from apps.users.models import User
 from apps.users.rest.serializers import UserSerializer

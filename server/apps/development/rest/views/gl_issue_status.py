@@ -2,7 +2,7 @@ from rest_framework import serializers
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 
-from apps.core.rest.mixins.serializers import TypeSerializerMixin
+from apps.core.rest.serializers.mixins import TypeSerializerMixin
 from apps.core.rest.views import BaseGenericAPIView
 from apps.development.models import Issue
 from apps.development.rest.filters import IssueStatusUrlFilter

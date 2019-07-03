@@ -5,8 +5,8 @@ from rest_framework.decorators import action
 from rest_framework.exceptions import ValidationError
 from rest_framework.response import Response
 
-from apps.core.rest.mixins.views import UpdateModelMixin
 from apps.core.rest.views import BaseGenericViewSet
+from apps.core.rest.views.mixins import UpdateModelMixin
 from apps.core.utils.rest import parse_query_params, parse_data_params
 from apps.development.models import Issue, Team
 from apps.development.rest.filters import IssueProblemFilter, IssueTeamFilter

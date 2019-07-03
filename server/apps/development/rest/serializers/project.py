@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from apps.core.rest.mixins.serializers import TypeSerializerMixin
+from apps.core.rest.serializers.mixins import TypeSerializerMixin
 from apps.development.models import Project
 
 

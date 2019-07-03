@@ -1,20 +1,7 @@
 from typing import Dict
 
 from django.db.models import QuerySet
-from rest_framework import generics, serializers, viewsets
-from rest_framework.decorators import action
-from rest_framework.response import Response
-
-from .serializers import LinkSerializer
-
-
-class BaseGenericAPIView(generics.GenericAPIView):
-    actions_serializers: Dict[str, serializers.Serializer] = {}
-
-    def get_serializer_class(self):
-        return (self.actions_serializers[self.request.method]
-                if self.request.method in self.actions_serializers
-                else super().get_serializer_class())
+from rest_framework import serializers, viewsets
 
 
 class BaseGenericViewSet(viewsets.GenericViewSet):
@@ -41,13 +28,3 @@ class BaseGenericViewSet(viewsets.GenericViewSet):
 
     def get_filtered_queryset(self) -> QuerySet:
         return self.filter_queryset(self.get_queryset())
-
-
-class LinksViewMixin:
-    @action(detail=False,
-            serializer_class=LinkSerializer,
-            pagination_class=None)
-    def links(self, request, **kwargs):
-        queryset = self.filter_queryset(self.get_queryset())
-        serializer = self.get_serializer(queryset, many=True)
-        return Response(serializer.data)
