@@ -1,0 +1,129 @@
+<meta charset="utf-8">
+<style>
+  body {
+    margin: 0;
+    padding: 0;
+    background: #eee;
+  }
+
+  .page {
+    background-color: #eee;
+    font-family: sans-serif;
+    height: 100%;
+  }
+
+  .header {
+    background-color: #269691;
+  }
+
+  .logo {
+    background-color: white;
+  }
+
+  .logo img {
+    display: block;
+  }
+
+  .title {
+    color: white;
+  }
+
+  .hgutter {
+    width: 14px;
+  }
+
+  .vgutter {
+    height: 14px;
+  }
+
+  .message .content {
+    background-color: white;
+  }
+
+  .message .content a {
+    text-decoration: none;
+  }
+
+  .button-accent {
+    white-space: nowrap;
+    background-color: #E67838;
+    border-left: 7px solid transparent;
+    border-right: 7px solid transparent;
+    color: white;
+    text-decoration: none;
+    padding-top: 10px;
+    padding-left: 14px;
+    padding-right: 14px;
+    padding-bottom: 10px;
+  }
+
+  .message .sidebar {
+    width: 230px;
+    color: #666666;
+  }
+
+  .footer {
+    background-color: #6CBEBA;
+    font-size: .8em;
+    color: white;
+  }
+
+  .footer .menu a,
+  .footer .languages a {
+    color: white;
+  }
+
+  .footer .line td {
+    border-top: 7px solid transparent;
+    border-bottom: 0;
+  }
+
+  .footer .line hr {
+    height: 1px;
+    border: 1px solid transparent;
+    border-top: 1px solid #269691;
+  }
+
+  .content {
+    padding: 15px;
+  }
+</style>
+{% block head %}{% endblock %}
+<div class="page">
+  <table align="center" border="0" cellpadding="0" cellspacing="0" width="770">
+    <tbody>
+    <tr>
+      <td colspan="12" class="vgutter"></td>
+    </tr>
+    <tr class="header" height="50">
+      <td class="hgutter logo"></td>
+      <td class="hgutter"></td>
+      <td colspan="8" class="title" valign="center">
+        {{ title }}
+      </td>
+      <td class="hgutter"></td>
+    </tr>
+    <tr>
+      <td colspan="12" class="vgutter"></td>
+    </tr>
+    <tr class="message">
+      <td class="content" colspan="12" valign="top" width="484">
+        {{ text|safe }}
+      </td>
+    </tr>
+    <tr>
+      <td colspan="12" class="vgutter"></td>
+    </tr>
+    <tr class="message">
+      <td class="content" colspan="12" valign="top" width="484">
+        <p>
+          <b>Team Projector</b>
+        </p>
+      </td>
+    </tr>
+    </tbody>
+    <tfoot class="footer">
+    <p></p>
+    </tfoot>
+  </table>
+</div>
