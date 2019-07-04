@@ -1,14 +1,15 @@
-from django.template.loader import render_to_string
+from apps.core.slack import get_slack_client
+from apps.core.slack.base import (
+    get_users_channel_by_email, send_message_to_channel
+)
 
-from apps.core.system_email_dispatcher import SystemEmailDispatcher
 
+def send_message_to_slack(email):
+    msg = 'Salary has been paid.'
 
-def send_report_to_email(salary):
-    subject = f'Salary Report {salary.period_to}'
+    slack = get_slack_client()
 
-    text = render_to_string(
-        'emails/salary_report.txt',
-        {'salary': salary}
-    )
+    channel = get_users_channel_by_email(slack, email)
 
-    SystemEmailDispatcher.mail_managers(subject, text)
+    if channel:
+        send_message_to_channel(slack, channel['id'], msg)

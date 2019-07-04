@@ -8,4 +8,4 @@ class AppConfig(BaseAppConfig):
     verbose_name = _('VN__PAYROLL')
 
     def ready(self):
-        import apps.payroll.signal_handlers
+        import apps.payroll.signal_handlers # noqa
