@@ -11,7 +11,9 @@ from apps.development.models import TeamMember
 from apps.development.models.issue import STATE_CLOSED, STATE_OPENED
 from apps.development.services.parsers import parse_date
 from tests.base import BaseAPITest, format_date
-from tests.test_development.factories import IssueFactory, TeamFactory, TeamMemberFactory
+from tests.test_development.factories import (
+    IssueFactory, TeamFactory, TeamMemberFactory
+)
 from tests.test_payroll.factories import IssueSpentTimeFactory
 from tests.test_users.factories import UserFactory
 
@@ -21,18 +23,25 @@ class ApiMetricsWeeksTests(BaseAPITest):
     def setUp(self):
         super().setUp()
 
-        self.issue = IssueFactory.create(user=self.user, due_date=timezone.now())
+        self.issue = IssueFactory.create(
+            user=self.user,
+            due_date=timezone.now(),
+            closed_at=timezone.now()
+        )
 
     def test_simple(self):
         monday = begin_of_week(timezone.now().date())
 
         self._create_spent_time(monday + timedelta(days=4), timedelta(hours=3))
-        self._create_spent_time(monday + timedelta(days=2, hours=5), timedelta(hours=2))
+        self._create_spent_time(monday + timedelta(days=2, hours=5),
+                                timedelta(hours=2))
         self._create_spent_time(monday + timedelta(days=1), timedelta(hours=4))
-        self._create_spent_time(monday + timedelta(days=1, hours=5), -timedelta(hours=3))
+        self._create_spent_time(monday + timedelta(days=1, hours=5),
+                                -timedelta(hours=3))
 
         self.issue.time_estimate = timedelta(hours=15).total_seconds()
-        self.issue.total_time_spent = self.issue.time_spents.aggregate(spent=Sum('time_spent'))['spent']
+        self.issue.total_time_spent = \
+            self.issue.time_spents.aggregate(spent=Sum('time_spent'))['spent']
         self.issue.state = STATE_OPENED
         self.issue.due_date = monday + timedelta(days=1)
         self.issue.save()
@@ -41,11 +50,12 @@ class ApiMetricsWeeksTests(BaseAPITest):
         start = monday - timedelta(days=5)
         end = monday + timedelta(days=5)
 
-        response = self.client.get(f'/api/users/{self.user.id}/progress-metrics', {
-            'start': format_date(start),
-            'end': format_date(end),
-            'group': 'week'
-        })
+        response = self.client.get(
+            f'/api/users/{self.user.id}/progress-metrics', {
+                'start': format_date(start),
+                'end': format_date(end),
+                'group': 'week'
+            })
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(len(response.data), 2)
@@ -63,12 +73,16 @@ class ApiMetricsWeeksTests(BaseAPITest):
         monday = begin_of_week(timezone.now().date())
 
         self._create_spent_time(monday + timedelta(days=4), timedelta(hours=3))
-        self._create_spent_time(monday + timedelta(days=2, hours=5), timedelta(hours=2))
+        self._create_spent_time(monday + timedelta(days=2, hours=5),
+                                timedelta(hours=2))
         self._create_spent_time(monday + timedelta(days=1), timedelta(hours=4))
-        self._create_spent_time(monday + timedelta(days=1, hours=5), -timedelta(hours=3))
+        self._create_spent_time(monday + timedelta(days=1, hours=5),
+                                -timedelta(hours=3))
 
         self.issue.time_estimate = timedelta(hours=15).total_seconds()
-        self.issue.total_time_spent = self.issue.time_spents.aggregate(spent=Sum('time_spent'))['spent']
+        self.issue.total_time_spent = self.issue.time_spents.aggregate(
+            spent=Sum('time_spent')
+        )['spent']
         self.issue.state = STATE_CLOSED
         self.issue.due_date = monday + timedelta(days=1)
         self.issue.closed_at = monday + timedelta(days=1)
@@ -78,11 +92,12 @@ class ApiMetricsWeeksTests(BaseAPITest):
         start = monday - timedelta(days=5)
         end = monday + timedelta(days=5)
 
-        response = self.client.get(f'/api/users/{self.user.id}/progress-metrics', {
-            'start': format_date(start),
-            'end': format_date(end),
-            'group': 'week'
-        })
+        response = self.client.get(
+            f'/api/users/{self.user.id}/progress-metrics', {
+                'start': format_date(start),
+                'end': format_date(end),
+                'group': 'week'
+            })
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(len(response.data), 2)
@@ -102,12 +117,16 @@ class ApiMetricsWeeksTests(BaseAPITest):
         monday = begin_of_week(timezone.now().date())
 
         self._create_spent_time(monday + timedelta(days=4), timedelta(hours=3))
-        self._create_spent_time(monday + timedelta(days=2, hours=5), timedelta(hours=2))
+        self._create_spent_time(monday + timedelta(days=2, hours=5),
+                                timedelta(hours=2))
         self._create_spent_time(monday + timedelta(days=1), timedelta(hours=4))
-        self._create_spent_time(monday + timedelta(days=1, hours=5), -timedelta(hours=3))
+        self._create_spent_time(monday + timedelta(days=1, hours=5),
+                                -timedelta(hours=3))
 
         self.issue.time_estimate = timedelta(hours=3).total_seconds()
-        self.issue.total_time_spent = self.issue.time_spents.aggregate(spent=Sum('time_spent'))['spent']
+        self.issue.total_time_spent = self.issue.time_spents.aggregate(
+            spent=Sum('time_spent')
+        )['spent']
         self.issue.state = STATE_CLOSED
         self.issue.due_date = monday + timedelta(days=1)
         self.issue.closed_at = monday + timedelta(days=1)
@@ -117,11 +136,12 @@ class ApiMetricsWeeksTests(BaseAPITest):
         start = monday - timedelta(days=5)
         end = monday + timedelta(days=5)
 
-        response = self.client.get(f'/api/users/{self.user.id}/progress-metrics', {
-            'start': format_date(start),
-            'end': format_date(end),
-            'group': 'week'
-        })
+        response = self.client.get(
+            f'/api/users/{self.user.id}/progress-metrics', {
+                'start': format_date(start),
+                'end': format_date(end),
+                'group': 'week'
+            })
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(len(response.data), 2)
@@ -141,12 +161,15 @@ class ApiMetricsWeeksTests(BaseAPITest):
         monday = begin_of_week(timezone.now().date())
 
         self._create_spent_time(monday + timedelta(days=4), timedelta(hours=3))
-        self._create_spent_time(monday + timedelta(days=2, hours=5), timedelta(hours=2))
+        self._create_spent_time(monday + timedelta(days=2, hours=5),
+                                timedelta(hours=2))
         self._create_spent_time(monday + timedelta(days=1), timedelta(hours=4))
-        self._create_spent_time(monday + timedelta(days=1, hours=5), -timedelta(hours=3))
+        self._create_spent_time(monday + timedelta(days=1, hours=5),
+                                -timedelta(hours=3))
 
         self.issue.time_estimate = 0
-        self.issue.total_time_spent = self.issue.time_spents.aggregate(spent=Sum('time_spent'))['spent']
+        self.issue.total_time_spent = \
+            self.issue.time_spents.aggregate(spent=Sum('time_spent'))['spent']
         self.issue.state = STATE_CLOSED
         self.issue.due_date = monday + timedelta(days=1)
         self.issue.closed_at = monday + timedelta(days=1)
@@ -156,11 +179,12 @@ class ApiMetricsWeeksTests(BaseAPITest):
         start = monday - timedelta(days=5)
         end = monday + timedelta(days=5)
 
-        response = self.client.get(f'/api/users/{self.user.id}/progress-metrics', {
-            'start': format_date(start),
-            'end': format_date(end),
-            'group': 'week'
-        })
+        response = self.client.get(
+            f'/api/users/{self.user.id}/progress-metrics', {
+                'start': format_date(start),
+                'end': format_date(end),
+                'group': 'week'
+            })
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(len(response.data), 2)
@@ -186,11 +210,12 @@ class ApiMetricsWeeksTests(BaseAPITest):
         start = monday - timedelta(days=5)
         end = monday + timedelta(days=5)
 
-        response = self.client.get(f'/api/users/{self.user.id}/progress-metrics', {
-            'start': format_date(start),
-            'end': format_date(end),
-            'group': 'week'
-        })
+        response = self.client.get(
+            f'/api/users/{self.user.id}/progress-metrics', {
+                'start': format_date(start),
+                'end': format_date(end),
+                'group': 'week'
+            })
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(len(response.data), 2)
@@ -207,12 +232,15 @@ class ApiMetricsWeeksTests(BaseAPITest):
         monday = begin_of_week(timezone.now().date())
 
         self._create_spent_time(monday - timedelta(days=4), timedelta(hours=3))
-        self._create_spent_time(monday - timedelta(days=2, hours=5), timedelta(hours=2))
+        self._create_spent_time(monday - timedelta(days=2, hours=5),
+                                timedelta(hours=2))
         self._create_spent_time(monday + timedelta(days=1), timedelta(hours=4))
-        self._create_spent_time(monday + timedelta(days=1, hours=5), -timedelta(hours=3))
+        self._create_spent_time(monday + timedelta(days=1, hours=5),
+                                -timedelta(hours=3))
 
         self.issue.time_estimate = timedelta(hours=15).total_seconds()
-        self.issue.total_time_spent = self.issue.time_spents.aggregate(spent=Sum('time_spent'))['spent']
+        self.issue.total_time_spent = \
+            self.issue.time_spents.aggregate(spent=Sum('time_spent'))['spent']
         self.issue.state = STATE_OPENED
         self.issue.due_date = monday + timedelta(days=2)
         self.issue.save()
@@ -221,11 +249,12 @@ class ApiMetricsWeeksTests(BaseAPITest):
         start = monday - timedelta(days=5)
         end = monday + timedelta(days=5)
 
-        response = self.client.get(f'/api/users/{self.user.id}/progress-metrics', {
-            'start': format_date(start),
-            'end': format_date(end),
-            'group': 'week'
-        })
+        response = self.client.get(
+            f'/api/users/{self.user.id}/progress-metrics', {
+                'start': format_date(start),
+                'end': format_date(end),
+                'group': 'week'
+            })
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(len(response.data), 2)
@@ -244,12 +273,15 @@ class ApiMetricsWeeksTests(BaseAPITest):
         monday = begin_of_week(timezone.now().date())
 
         self._create_spent_time(monday - timedelta(days=4), timedelta(hours=3))
-        self._create_spent_time(monday - timedelta(days=2, hours=5), timedelta(hours=2))
+        self._create_spent_time(monday - timedelta(days=2, hours=5),
+                                timedelta(hours=2))
         self._create_spent_time(monday + timedelta(days=1), timedelta(hours=4))
-        self._create_spent_time(monday + timedelta(days=1, hours=5), -timedelta(hours=3))
+        self._create_spent_time(monday + timedelta(days=1, hours=5),
+                                -timedelta(hours=3))
 
         self.issue.time_estimate = timedelta(hours=15).total_seconds()
-        self.issue.total_time_spent = self.issue.time_spents.aggregate(spent=Sum('time_spent'))['spent']
+        self.issue.total_time_spent = \
+            self.issue.time_spents.aggregate(spent=Sum('time_spent'))['spent']
         self.issue.state = STATE_OPENED
         self.issue.due_date = monday + timedelta(days=1)
         self.issue.save()
@@ -258,11 +290,12 @@ class ApiMetricsWeeksTests(BaseAPITest):
         start = monday
         end = monday + timedelta(weeks=1, days=5)
 
-        response = self.client.get(f'/api/users/{self.user.id}/progress-metrics', {
-            'start': format_date(start),
-            'end': format_date(end),
-            'group': 'week'
-        })
+        response = self.client.get(
+            f'/api/users/{self.user.id}/progress-metrics', {
+                'start': format_date(start),
+                'end': format_date(end),
+                'group': 'week'
+            })
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(len(response.data), 2)
@@ -282,12 +315,16 @@ class ApiMetricsWeeksTests(BaseAPITest):
         monday = begin_of_week(timezone.now().date())
 
         self._create_spent_time(monday + timedelta(days=4), timedelta(hours=3))
-        self._create_spent_time(monday + timedelta(days=2, hours=5), timedelta(hours=2))
-        self._create_spent_time(monday + timedelta(days=1), timedelta(hours=4), user=another_user)
-        self._create_spent_time(monday + timedelta(days=1, hours=5), -timedelta(hours=3), user=another_user)
+        self._create_spent_time(monday + timedelta(days=2, hours=5),
+                                timedelta(hours=2))
+        self._create_spent_time(monday + timedelta(days=1), timedelta(hours=4),
+                                user=another_user)
+        self._create_spent_time(monday + timedelta(days=1, hours=5),
+                                -timedelta(hours=3), user=another_user)
 
         self.issue.time_estimate = timedelta(hours=15).total_seconds()
-        self.issue.total_time_spent = self.issue.time_spents.aggregate(spent=Sum('time_spent'))['spent']
+        self.issue.total_time_spent = \
+            self.issue.time_spents.aggregate(spent=Sum('time_spent'))['spent']
         self.issue.state = STATE_OPENED
         self.issue.due_date = monday + timedelta(days=1)
         self.issue.save()
@@ -296,11 +333,12 @@ class ApiMetricsWeeksTests(BaseAPITest):
         start = monday - timedelta(days=5)
         end = monday + timedelta(days=5)
 
-        response = self.client.get(f'/api/users/{self.user.id}/progress-metrics', {
-            'start': format_date(start),
-            'end': format_date(end),
-            'group': 'week'
-        })
+        response = self.client.get(
+            f'/api/users/{self.user.id}/progress-metrics', {
+                'start': format_date(start),
+                'end': format_date(end),
+                'group': 'week'
+            })
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(len(response.data), 2)
@@ -319,32 +357,41 @@ class ApiMetricsWeeksTests(BaseAPITest):
         another_issue = IssueFactory.create(user=self.user,
                                             state=STATE_OPENED,
                                             due_date=monday + timedelta(days=4),
-                                            total_time_spent=timedelta(hours=3).total_seconds(),
-                                            time_estimate=timedelta(hours=10).total_seconds())
+                                            total_time_spent=timedelta(
+                                                hours=3).total_seconds(),
+                                            time_estimate=timedelta(
+                                                hours=10).total_seconds())
 
-        self._create_spent_time(monday + timedelta(days=4), timedelta(hours=3), issue=another_issue)
-        self._create_spent_time(monday + timedelta(days=2, hours=5), timedelta(hours=2), issue=another_issue)
+        self._create_spent_time(monday + timedelta(days=4), timedelta(hours=3),
+                                issue=another_issue)
+        self._create_spent_time(monday + timedelta(days=2, hours=5),
+                                timedelta(hours=2), issue=another_issue)
         self._create_spent_time(monday + timedelta(days=1), timedelta(hours=4))
-        self._create_spent_time(monday + timedelta(days=1, hours=5), -timedelta(hours=3))
+        self._create_spent_time(monday + timedelta(days=1, hours=5),
+                                -timedelta(hours=3))
 
         self.issue.time_estimate = timedelta(hours=15).total_seconds()
-        self.issue.total_time_spent = self.issue.time_spents.aggregate(spent=Sum('time_spent'))['spent']
+        self.issue.total_time_spent = \
+            self.issue.time_spents.aggregate(spent=Sum('time_spent'))['spent']
         self.issue.state = STATE_OPENED
         self.issue.due_date = monday + timedelta(days=1)
         self.issue.save()
 
-        another_issue.total_time_spent = another_issue.time_spents.aggregate(spent=Sum('time_spent'))['spent']
+        another_issue.total_time_spent = \
+            another_issue.time_spents.aggregate(spent=Sum('time_spent'))[
+                'spent']
         another_issue.save()
 
         self.set_credentials()
         start = monday - timedelta(days=5)
         end = monday + timedelta(days=5)
 
-        response = self.client.get(f'/api/users/{self.user.id}/progress-metrics', {
-            'start': format_date(start),
-            'end': format_date(end),
-            'group': 'week'
-        })
+        response = self.client.get(
+            f'/api/users/{self.user.id}/progress-metrics', {
+                'start': format_date(start),
+                'end': format_date(end),
+                'group': 'week'
+            })
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(len(response.data), 2)
@@ -360,11 +407,12 @@ class ApiMetricsWeeksTests(BaseAPITest):
 
     def test_permissions_self(self):
         self.set_credentials()
-        response = self.client.get(f'/api/users/{self.user.id}/progress-metrics', {
-            'start': format_date(timezone.now() - timedelta(days=5)),
-            'end': format_date(timezone.now() - timedelta(days=5)),
-            'group': 'week'
-        })
+        response = self.client.get(
+            f'/api/users/{self.user.id}/progress-metrics', {
+                'start': format_date(timezone.now() - timedelta(days=5)),
+                'end': format_date(timezone.now() - timedelta(days=5)),
+                'group': 'week'
+            })
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
@@ -434,7 +482,8 @@ class ApiMetricsWeeksTests(BaseAPITest):
 
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
-    def _create_spent_time(self, date, spent: timedelta = None, user=None, issue=None):
+    def _create_spent_time(self, date, spent: timedelta = None, user=None,
+                           issue=None):
         return IssueSpentTimeFactory.create(date=date,
                                             user=user or self.user,
                                             base=issue or self.issue,
@@ -452,14 +501,15 @@ class ApiMetricsWeeksTests(BaseAPITest):
         efficiencies = self._prepare_metrics(efficiencies)
 
         for metric in metrics:
-            self.assertEqual(metric['end'], format_date(parse_date(metric['start']) + timedelta(weeks=1)))
+            self.assertEqual(metric['end'], format_date(
+                parse_date(metric['start']) + timedelta(weeks=1)))
 
             self._check_metric(metric, 'time_spent', spents)
             self._check_metric(metric, 'time_estimate', time_estimates)
 
             if metric['start'] in efficiencies:
-                self.assertEqual(metric['efficiency'],
-                                 efficiencies[metric['start']],
+                self.assertEqual(efficiencies[metric['start']],
+                                 metric['efficiency'],
                                  f'bad efficiency for {metric["start"]}: '
                                  f'expected - {efficiencies[metric["start"]]}, '
                                  f'actual - {metric["efficiency"]}')
@@ -470,9 +520,10 @@ class ApiMetricsWeeksTests(BaseAPITest):
                                  f'actual - {metric["efficiency"]}')
 
             if metric['start'] in issues_counts:
-                self.assertEqual(metric['issues_count'], issues_counts[metric['start']])
+                self.assertEqual(issues_counts[metric['start']],
+                                 metric['issues_count'])
             else:
-                self.assertEqual(metric['issues_count'], 0)
+                self.assertEqual(0, metric['issues_count'])
 
     def _prepare_metrics(self, metrics):
         return {
@@ -482,14 +533,18 @@ class ApiMetricsWeeksTests(BaseAPITest):
 
     def _check_metric(self, metric, metric_name, values):
         if metric['start'] in values:
-            self.assertEqual(metric[metric_name],
-                             values[metric['start']].total_seconds(),
-                             f'bad {metric_name} for {metric["start"]}: '
-                             f'expected - {values[metric["start"]]}, '
-                             f'actual - {timedelta(seconds=metric[metric_name])}')
+            self.assertEqual(
+                values[metric['start']].total_seconds(),
+                metric[metric_name],
+                f'bad {metric_name} for {metric["start"]}: '
+                f'expected - {values[metric["start"]]}, '
+                f'actual - {timedelta(seconds=metric[metric_name])}'
+            )
         else:
-            self.assertEqual(metric[metric_name],
-                             0,
-                             f'bad {metric_name} for {metric["start"]}: '
-                             f'expected - 0, '
-                             f'actual - {timedelta(seconds=metric[metric_name])}')
+            self.assertEqual(
+                0,
+                metric[metric_name],
+                f'bad {metric_name} for {metric["start"]}: '
+                f'expected - 0, '
+                f'actual - {timedelta(seconds=metric[metric_name])}'
+            )

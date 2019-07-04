@@ -1,7 +1,6 @@
 from typing import Iterable
 
 from bitfield.rest.fields import BitField
-from django.utils.functional import cached_property
 from rest_framework import serializers
 
 from apps.payroll.services.metrics.user import UserMetricsProvider
@@ -19,12 +18,10 @@ class MetricsMixin(serializers.ModelSerializer):
         if not show_metrics:
             return None
 
-        return UserMetricsSerializer(self.user_metrics).data
-
-    @cached_property
-    def user_metrics(self):
         provider = UserMetricsProvider()
-        return provider.get_metrics(self.instance)
+        metrics = provider.get_metrics(instance)
+
+        return UserMetricsSerializer(metrics).data
 
 
 class ProblemsMixin(serializers.ModelSerializer):

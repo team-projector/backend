@@ -46,7 +46,8 @@ class ApiFeatureIssuesTests(BaseAPITest):
     def test_issues_metrics(self):
         feature = FeatureFactory.create()
 
-        issue = IssueFactory.create(feature=feature, time_estimate=4, total_time_spent=2)
+        issue = IssueFactory.create(feature=feature, time_estimate=4,
+                                    total_time_spent=2)
         IssueSpentTimeFactory(user=self.user, base=issue, time_spent=5)
 
         self.set_credentials()
@@ -57,13 +58,15 @@ class ApiFeatureIssuesTests(BaseAPITest):
         self.assertEqual(response.data['results'][0]['id'], issue.id)
         self.assertFalse(response.data['results'][0]['metrics'])
 
-        response = self.client.get(f'/api/features/{feature.id}/issues', {'metrics': 'true'})
+        response = self.client.get(f'/api/features/{feature.id}/issues', {
+            'metrics': 'true'
+        })
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data['count'], 1)
         self.assertIsNotNone(response.data['results'][0]['metrics'])
         self.assertEqual(response.data['results'][0]['metrics']['remains'], 2)
-        self.assertEqual(response.data['results'][0]['metrics']['efficiency'], 2.0)
+        self.assertIsNone(response.data['results'][0]['metrics']['efficiency'])
         self.assertEqual(response.data['results'][0]['metrics']['payroll'], 0.0)
         self.assertEqual(response.data['results'][0]['metrics']['paid'], 0.0)
 
