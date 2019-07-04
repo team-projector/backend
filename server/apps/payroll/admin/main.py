@@ -61,6 +61,15 @@ class SalaryAdmin(BaseModelAdmin):
             context
         )
 
+    def save_model(self, request, obj, form, change):
+        if not change:
+            super().save_model(request, obj, form, change)
+
+        update_fields = [f for f, v in form.initial.items()
+                         if v != form.cleaned_data[f]]
+
+        obj.save(update_fields=update_fields)
+
 
 @admin.register(Payroll)
 class PayrollAdmin(BaseModelAdmin):
