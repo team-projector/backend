@@ -90,7 +90,7 @@ class WeekMetricsProvider(ProgressMetricsProvider):
 
     def _get_efficiency_stats(self) -> dict:
         queryset = Issue.objects.annotate(
-            week=TruncWeek('due_date')
+            week=TruncWeek('closed_at')
         ).filter(
             user=self.user,
             closed_at__range=(
