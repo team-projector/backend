@@ -3,7 +3,7 @@ from contextlib import suppress
 from django.utils import timezone
 from rest_framework import status
 
-from apps.development.services.issues.problems import (
+from apps.development.services.problems.issues import (
     PROBLEM_EMPTY_DUE_DAY
 )
 from tests.base import BaseAPITest

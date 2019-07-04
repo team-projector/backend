@@ -28,7 +28,7 @@ class BaseProblemChecker:
         raise NotImplementedError
 
 
-class EmptyDueDateProblemChecker(BaseProblemChecker):
+class EmptyDueDateChecker(BaseProblemChecker):
     annotate_field = 'problem_empty_due_date'
     problem_code = PROBLEM_EMPTY_DUE_DAY
 
@@ -39,7 +39,7 @@ class EmptyDueDateProblemChecker(BaseProblemChecker):
         )
 
 
-class OverdueDueDateProblemChecker(BaseProblemChecker):
+class OverdueDueDateChecker(BaseProblemChecker):
     annotate_field = 'problem_over_due_date'
     problem_code = PROBLEM_OVER_DUE_DAY
 
@@ -50,7 +50,7 @@ class OverdueDueDateProblemChecker(BaseProblemChecker):
         )
 
 
-class EmptyEstimateProblemChecker(BaseProblemChecker):
+class EmptyEstimateChecker(BaseProblemChecker):
     annotate_field = 'problem_empty_estimate'
     problem_code = PROBLEM_EMPTY_ESTIMATE
 

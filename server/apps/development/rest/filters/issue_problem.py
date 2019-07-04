@@ -1,7 +1,7 @@
 from rest_framework import filters, serializers
 
 from apps.core.utils.rest import parse_query_params
-from apps.development.services.issues.problems import (
+from apps.development.services.problems.issues import (
     filter_issues_problems, exclude_issues_problems
 )
 

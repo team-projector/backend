@@ -6,8 +6,8 @@ from rest_framework import mixins, permissions, serializers
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
-from apps.core.rest.mixins.views import CreateModelMixin, UpdateModelMixin
 from apps.core.rest.views import BaseGenericViewSet
+from apps.core.rest.views.mixins import CreateModelMixin, UpdateModelMixin
 from apps.development.models import TeamMember
 from apps.payroll.db.mixins.approved import APPROVED, CREATED, DECLINED
 from apps.payroll.models import WorkBreak

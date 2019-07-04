@@ -6,7 +6,7 @@ from tests.mocks import activate_httpretty, GitlabMock
 from tests.test_development.factories import IssueFactory, ProjectFactory
 from tests.test_development.factories_gitlab import (
     AttrDict, GlTimeStats, GlUserFactory, GlProjectFactory,
-    GlProjectsIssueFactory
+    GlIssueFactory
 )
 from tests.test_users.factories import UserFactory
 
@@ -40,7 +40,7 @@ class ApiIssuesSyncTests(BaseAPITest):
         gl_assignee = AttrDict(GlUserFactory())
         UserFactory.create(gl_id=gl_assignee.id)
 
-        gl_issue = AttrDict(GlProjectsIssueFactory(
+        gl_issue = AttrDict(GlIssueFactory(
             project_id=gl_project.id,
             assignee=gl_assignee,
             state='closed'

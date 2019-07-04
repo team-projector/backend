@@ -1,19 +1,16 @@
-from rest_framework import filters, serializers
+from rest_framework import filters
 
 from apps.core.utils.rest import parse_query_params
-
-
-class ParamsSerializer(serializers.Serializer):
-    team = serializers.IntegerField(required=False)
+from apps.development.rest.filters.serializers import TeamParamsSerializer
 
 
 class TeamFilter(filters.BaseFilterBackend):
     def filter_queryset(self, request, queryset, view):
-        params = parse_query_params(request, ParamsSerializer)
+        params = parse_query_params(request, TeamParamsSerializer)
 
-        team_id = params.get('team')
+        team = params.get('team')
 
-        if team_id:
-            queryset = queryset.filter(user__teams=team_id)
+        if team:
+            queryset = queryset.filter(user__teams=team)
 
         return queryset

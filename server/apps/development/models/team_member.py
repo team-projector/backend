@@ -4,6 +4,7 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 
 from apps.core.db.utils import Choices
+from apps.development.db.managers import TeamMemberManager
 
 
 class TeamMember(models.Model):
@@ -31,6 +32,8 @@ class TeamMember(models.Model):
         flags=ROLES,
         default=0
     )
+
+    objects = TeamMemberManager()
 
     class Meta:
         verbose_name = _('VN__TEAM_MEMBER')
