@@ -39,7 +39,6 @@ def test_user_without_gl_token(user, api_client):
     )
 
     assert response.status_code == status.HTTP_400_BAD_REQUEST
-    assert response.data[0] == 'MSG_PLEASE_PROVIDE_PERSONAL_GL_TOKEN'
 
 
 def test_issue_not_found(user, api_client):
