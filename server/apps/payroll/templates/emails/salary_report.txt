@@ -1,6 +1,0 @@
-period: {{ salary.period_from }} - {{ salary.period_to }}
-total: {{ salary.total }}
-
-sum: {{ salary.sum }}
-bonus: {{ salary.bonus }}
-penalty: {{ salary.penalty }}
