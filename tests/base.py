@@ -3,7 +3,7 @@ import os
 import sys
 
 from django.db import transaction
-from rest_framework.test import APITestCase
+from rest_framework.test import APIClient, APITestCase
 
 from apps.users.models import User
 from apps.users.services.token import create_user_token
@@ -39,22 +39,7 @@ class BaseTestMixin:
 
     @classmethod
     def create_user(cls, login=USER_LOGIN, **kwargs):
-        user = User.objects.filter(login=login).first()
-
-        if not user:
-            if 'password' not in kwargs:
-                kwargs['password'] = USER_PASSWORD
-
-            user = User.objects.create_user(
-                login=login,
-                is_staff=False,
-                **kwargs
-            )
-        elif 'password' in kwargs:
-            user.set_password(kwargs.get('password'))
-            user.save()
-
-        return user
+        return create_user(login)
 
     def open_asset(self, filename, mode='rb', encoding=None):
         module_path = os.path.abspath(sys.modules[self.__module__].__file__)
@@ -79,6 +64,33 @@ class BaseAPITest(BaseTestMixin, APITestCase):
 
     def clear_client_headers(self):
         self.client._credentials = {}
+
+
+class TestAPIClient(APIClient):
+    def set_credentials(self, user, token=None):
+        if token is None:
+            token = create_user_token(user)
+
+        self.credentials(HTTP_AUTHORIZATION=f'Bearer {token.key}')
+
+
+def create_user(login=USER_LOGIN, **kwargs):
+    user = User.objects.filter(login=login).first()
+
+    if not user:
+        if 'password' not in kwargs:
+            kwargs['password'] = USER_PASSWORD
+
+        user = User.objects.create_user(
+            login=login,
+            is_staff=False,
+            **kwargs
+        )
+    elif 'password' in kwargs:
+        user.set_password(kwargs.get('password'))
+        user.save()
+
+    return user
 
 
 def format_date(d: datetime) -> str:

@@ -5,300 +5,311 @@ from rest_framework import status
 
 from apps.development.models import Note, TeamMember
 from apps.development.models.issue import STATE_CLOSED, STATE_OPENED
-from apps.users.models import User
-from tests.base import BaseAPITest, format_date
+from tests.base import format_date
 from tests.test_development.factories import (
     IssueFactory, IssueNoteFactory, TeamFactory, TeamMemberFactory
 )
+from tests.test_users.factories import UserFactory
 
 
-class ApiIssuesMetricsTests(BaseAPITest):
-    def test_list_with_metrics(self):
-        IssueFactory.create_batch(5, user=self.user)
+def test_list_with_metrics(user, api_client):
+    IssueFactory.create_batch(5, user=user)
 
-        self.set_credentials()
-        response = self.client.get('/api/issues', {
-            'metrics': 'true'
-        })
+    api_client.set_credentials(user)
+    response = api_client.get('/api/issues', {
+        'metrics': 'true'
+    })
 
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data['count'], 5)
-        self.assertTrue(all(
-            item['metrics'] is not None for item in response.data['results']))
+    assert response.status_code == status.HTTP_200_OK
+    assert response.data['count'] == 5
+    assert all(
+        item['metrics'] is not None for item in response.data['results']
+    ) is True
 
-    def test_list_without_metrics(self):
-        IssueFactory.create_batch(5, user=self.user)
 
-        self.set_credentials()
-        response = self.client.get('/api/issues', {
-            'metrics': 'false'
-        })
+def test_list_without_metrics(user, api_client):
+    IssueFactory.create_batch(5, user=user)
 
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data['count'], 5)
-        self.assertTrue(
-            all(item['metrics'] is None for item in response.data['results']))
+    api_client.set_credentials(user)
+    response = api_client.get('/api/issues', {
+        'metrics': 'false'
+    })
 
-    def test_search(self):
-        issue = IssueFactory.create(title='create', user=self.user)
-        IssueFactory.create(title='implement', user=self.user)
+    assert response.status_code == status.HTTP_200_OK
+    assert response.data['count'] == 5
+    assert all(
+        item['metrics'] is None for item in response.data['results']
+    ) is True
 
-        self.set_credentials()
-        response = self.client.get('/api/issues', {
-            'q': 'cre'
-        })
 
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data['count'], 1)
-        self.assertEqual(response.data['results'][0]['id'], issue.id)
+def test_search(user, api_client):
+    issue = IssueFactory.create(title='create', user=user)
+    IssueFactory.create(title='implement', user=user)
 
-    def test_filter_by_user(self):
-        user_2 = self.create_user('user_2')
+    api_client.set_credentials(user)
+    response = api_client.get('/api/issues', {
+        'q': 'cre'
+    })
 
-        team = TeamFactory.create()
-        TeamMemberFactory.create(
-            user=self.user,
-            team=team,
-            roles=TeamMember.roles.leader
-        )
+    assert response.status_code == status.HTTP_200_OK
+    assert response.data['count'] == 1
+    assert response.data['results'][0]['id'] == issue.id
 
-        TeamMemberFactory.create(
-            user=user_2,
-            team=team,
-            roles=TeamMember.roles.developer
-        )
 
-        IssueFactory.create_batch(3, user=self.user)
-        issue = IssueFactory.create(user=user_2)
+def test_filter_by_user(user, api_client):
+    user_2 = UserFactory.create()
 
-        self.set_credentials()
-        response = self.client.get('/api/issues', {
-            'user': user_2.id
-        })
+    team = TeamFactory.create()
+    TeamMemberFactory.create(
+        user=user,
+        team=team,
+        roles=TeamMember.roles.leader
+    )
 
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data['count'], 1)
-        self.assertEqual(response.data['results'][0]['id'], issue.id)
+    TeamMemberFactory.create(
+        user=user_2,
+        team=team,
+        roles=TeamMember.roles.developer
+    )
 
-    def test_filter_by_state(self):
-        IssueFactory.create(user=self.user, state=STATE_OPENED)
-        issue = IssueFactory.create(user=self.user, state=STATE_CLOSED)
+    IssueFactory.create_batch(3, user=user)
+    issue = IssueFactory.create(user=user_2)
 
-        self.set_credentials()
-        response = self.client.get('/api/issues', {
-            'state': STATE_CLOSED
-        })
+    api_client.set_credentials(user)
+    response = api_client.get('/api/issues', {
+        'user': user_2.id
+    })
 
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data['count'], 1)
-        self.assertEqual(response.data['results'][0]['id'], issue.id)
+    assert response.status_code == status.HTTP_200_OK
+    assert response.data['count'] == 1
+    assert response.data['results'][0]['id'] == issue.id
 
-    def test_filter_by_due_date(self):
-        now = timezone.now()
-        issue = IssueFactory.create(user=self.user, state=STATE_OPENED,
-                                    due_date=now)
-        IssueFactory.create(user=self.user, due_date=now + timedelta(days=1))
-        IssueFactory.create(user=self.user, due_date=now - timedelta(days=1))
 
-        self.set_credentials()
-        response = self.client.get('/api/issues', {
-            'due_date': format_date(timezone.now())
-        })
+def test_filter_by_state(user, api_client):
+    IssueFactory.create(user=user, state=STATE_OPENED)
+    issue = IssueFactory.create(user=user, state=STATE_CLOSED)
 
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data['count'], 1)
-        self.assertEqual(response.data['results'][0]['id'], issue.id)
+    api_client.set_credentials(user)
+    response = api_client.get('/api/issues', {
+        'state': STATE_CLOSED
+    })
 
-    def test_filter_by_due_date_and_state(self):
-        now = timezone.now()
-        issue = IssueFactory.create(user=self.user, state=STATE_OPENED,
-                                    due_date=now)
-        IssueFactory.create(user=self.user, state=STATE_CLOSED,
-                            due_date=now + timedelta(days=1))
-        IssueFactory.create(user=self.user, state=STATE_CLOSED,
-                            due_date=now - timedelta(days=1))
-        IssueFactory.create(user=self.user, state=STATE_OPENED,
-                            due_date=now - timedelta(days=1))
+    assert response.status_code == status.HTTP_200_OK
+    assert response.data['count'] == 1
+    assert response.data['results'][0]['id'] == issue.id
 
-        self.set_credentials()
-        response = self.client.get('/api/issues', {
-            'due_date': format_date(timezone.now()),
-            'state': STATE_OPENED
-        })
 
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data['count'], 1)
-        self.assertEqual(response.data['results'][0]['id'], issue.id)
+def test_filter_by_due_date(user, api_client):
+    now = timezone.now()
+    issue = IssueFactory.create(user=user, state=STATE_OPENED,
+                                due_date=now)
+    IssueFactory.create(user=user, due_date=now + timedelta(days=1))
+    IssueFactory.create(user=user, due_date=now - timedelta(days=1))
 
-    def test_with_spends(self):
-        issue = IssueFactory.create(
-            user=self.user,
-            time_estimate=int(timedelta(hours=5).total_seconds()),
-            total_time_spent=int(timedelta(hours=4).total_seconds())
-        )
+    api_client.set_credentials(user)
+    response = api_client.get('/api/issues', {
+        'due_date': format_date(timezone.now())
+    })
 
-        IssueNoteFactory.create(
-            type=Note.TYPE.time_spend,
-            created_at=timezone.now() - timedelta(hours=4),
-            user=self.user,
-            content_object=issue,
-            data={
-                'spent': int(timedelta(hours=5).total_seconds()),
-                'date': (timezone.now() - timedelta(hours=4)).date()
-            }
-        )
+    assert response.status_code == status.HTTP_200_OK
+    assert response.data['count'] == 1
+    assert response.data['results'][0]['id'] == issue.id
 
-        IssueNoteFactory.create(
-            type=Note.TYPE.time_spend,
-            created_at=timezone.now() - timedelta(hours=2),
-            user=self.user,
-            content_object=issue,
-            data={
-                'spent': -int(timedelta(hours=1).total_seconds()),
-                'date': (timezone.now() - timedelta(hours=2)).date()
-            }
-        )
 
-        issue.adjust_spent_times()
+def test_filter_by_due_date_and_state(user, api_client):
+    now = timezone.now()
+    issue = IssueFactory.create(user=user, state=STATE_OPENED,
+                                due_date=now)
+    IssueFactory.create(user=user, state=STATE_CLOSED,
+                        due_date=now + timedelta(days=1))
+    IssueFactory.create(user=user, state=STATE_CLOSED,
+                        due_date=now - timedelta(days=1))
+    IssueFactory.create(user=user, state=STATE_OPENED,
+                        due_date=now - timedelta(days=1))
 
-        self.set_credentials()
-        response = self.client.get('/api/issues', {'metrics': 'true'})
+    api_client.set_credentials(user)
+    response = api_client.get('/api/issues', {
+        'due_date': format_date(timezone.now()),
+        'state': STATE_OPENED
+    })
 
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data['count'], 1)
+    assert response.status_code == status.HTTP_200_OK
+    assert response.data['count'] == 1
+    assert response.data['results'][0]['id'] == issue.id
 
-        self.assertEqual(response.data['results'][0]['time_spent'],
-                         timedelta(hours=4).total_seconds())
-        self.assertEqual(response.data['results'][0]['metrics']['remains'],
-                         timedelta(hours=1).total_seconds())
 
-    def test_with_negative_remains(self):
-        issue = IssueFactory.create(
-            user=self.user,
-            time_estimate=int(timedelta(hours=4).total_seconds()),
-            total_time_spent=int(timedelta(hours=5).total_seconds())
-        )
+def test_with_spends(user, api_client):
+    issue = IssueFactory.create(
+        user=user,
+        time_estimate=int(timedelta(hours=5).total_seconds()),
+        total_time_spent=int(timedelta(hours=4).total_seconds())
+    )
 
-        IssueNoteFactory.create(
-            type=Note.TYPE.time_spend,
-            created_at=timezone.now() - timedelta(hours=4),
-            user=self.user,
-            content_object=issue,
-            data={
-                'spent': int(timedelta(hours=5).total_seconds()),
-                'date': (timezone.now() - timedelta(hours=4)).date()
-            }
-        )
+    IssueNoteFactory.create(
+        type=Note.TYPE.time_spend,
+        created_at=timezone.now() - timedelta(hours=4),
+        user=user,
+        content_object=issue,
+        data={
+            'spent': int(timedelta(hours=5).total_seconds()),
+            'date': (timezone.now() - timedelta(hours=4)).date()
+        }
+    )
 
-        issue.adjust_spent_times()
+    IssueNoteFactory.create(
+        type=Note.TYPE.time_spend,
+        created_at=timezone.now() - timedelta(hours=2),
+        user=user,
+        content_object=issue,
+        data={
+            'spent': -int(timedelta(hours=1).total_seconds()),
+            'date': (timezone.now() - timedelta(hours=2)).date()
+        }
+    )
 
-        self.set_credentials()
-        response = self.client.get('/api/issues', {'metrics': 'true'})
+    issue.adjust_spent_times()
 
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data['count'], 1)
+    api_client.set_credentials(user)
+    response = api_client.get('/api/issues', {'metrics': 'true'})
 
-        self.assertEqual(response.data['results'][0]['time_spent'],
-                         timedelta(hours=5).total_seconds())
-        self.assertEqual(response.data['results'][0]['metrics']['remains'], 0)
+    assert response.status_code == status.HTTP_200_OK
+    assert response.data['count'] == 1
 
-    def test_with_spends_users_mix(self):
-        user_2 = User.objects.create_user(login='user 2', gl_id=11)
+    assert response.data['results'][0]['time_spent'] == \
+           timedelta(hours=4).total_seconds()
+    assert response.data['results'][0]['metrics']['remains'] == \
+           timedelta(hours=1).total_seconds()
 
-        issue = IssueFactory.create(user=self.user)
 
-        IssueNoteFactory.create(
-            type=Note.TYPE.time_spend,
-            created_at=timezone.now() - timedelta(hours=4),
-            user=self.user,
-            content_object=issue,
-            data={
-                'spent': int(timedelta(hours=5).total_seconds()),
-                'date': (timezone.now() - timedelta(hours=4)).date()
-            }
-        )
+def test_with_negative_remains(user, api_client):
+    issue = IssueFactory.create(
+        user=user,
+        time_estimate=int(timedelta(hours=4).total_seconds()),
+        total_time_spent=int(timedelta(hours=5).total_seconds())
+    )
 
-        IssueNoteFactory.create(
-            type=Note.TYPE.time_spend,
-            created_at=timezone.now() - timedelta(hours=4),
-            user=self.user,
-            content_object=issue,
-            data={
-                'spent': int(timedelta(hours=1).total_seconds()),
-                'date': (timezone.now() - timedelta(hours=4)).date()
-            }
-        )
+    IssueNoteFactory.create(
+        type=Note.TYPE.time_spend,
+        created_at=timezone.now() - timedelta(hours=4),
+        user=user,
+        content_object=issue,
+        data={
+            'spent': int(timedelta(hours=5).total_seconds()),
+            'date': (timezone.now() - timedelta(hours=4)).date()
+        }
+    )
 
-        IssueNoteFactory.create(
-            type=Note.TYPE.time_spend,
-            created_at=timezone.now() - timedelta(hours=2),
-            user=user_2,
-            content_object=issue,
-            data={
-                'spent': -int(timedelta(hours=1).total_seconds()),
-                'date': (timezone.now() - timedelta(hours=2)).date()
-            }
-        )
+    issue.adjust_spent_times()
 
-        issue.adjust_spent_times()
+    api_client.set_credentials(user)
+    response = api_client.get('/api/issues', {'metrics': 'true'})
 
-        self.set_credentials()
-        response = self.client.get('/api/issues')
+    assert response.status_code == status.HTTP_200_OK
+    assert response.data['count'] == 1
 
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data['count'], 1)
+    assert response.data['results'][0]['time_spent'] == \
+           timedelta(hours=5).total_seconds()
+    assert response.data['results'][0]['metrics']['remains'] == 0
 
-        self.assertEqual(response.data['results'][0]['time_spent'],
-                         timedelta(hours=6).total_seconds())
 
-    def test_with_spends_reset(self):
-        issue = IssueFactory.create(user=self.user)
+def test_with_spends_users_mix(user, api_client):
+    user_2 = UserFactory.create(login='user 2', gl_id=11)
 
-        IssueNoteFactory.create(
-            type=Note.TYPE.time_spend,
-            created_at=timezone.now() - timedelta(hours=4),
-            user=self.user,
-            content_object=issue,
-            data={
-                'spent': int(timedelta(hours=5).total_seconds()),
-                'date': (timezone.now() - timedelta(hours=4)).date()
-            }
-        )
+    issue = IssueFactory.create(user=user)
 
-        IssueNoteFactory.create(type=Note.TYPE.time_spend,
-                                created_at=timezone.now() - timedelta(hours=4),
-                                user=self.user,
-                                content_object=issue,
-                                data={
-                                    'spent': int(
-                                        timedelta(hours=1).total_seconds()),
-                                    'date': (timezone.now() - timedelta(
-                                        hours=4)).date()
-                                })
+    IssueNoteFactory.create(
+        type=Note.TYPE.time_spend,
+        created_at=timezone.now() - timedelta(hours=4),
+        user=user,
+        content_object=issue,
+        data={
+            'spent': int(timedelta(hours=5).total_seconds()),
+            'date': (timezone.now() - timedelta(hours=4)).date()
+        }
+    )
 
-        IssueNoteFactory.create(type=Note.TYPE.reset_spend,
-                                created_at=timezone.now() - timedelta(hours=2),
-                                user=self.user,
-                                content_object=issue)
+    IssueNoteFactory.create(
+        type=Note.TYPE.time_spend,
+        created_at=timezone.now() - timedelta(hours=4),
+        user=user,
+        content_object=issue,
+        data={
+            'spent': int(timedelta(hours=1).total_seconds()),
+            'date': (timezone.now() - timedelta(hours=4)).date()
+        }
+    )
 
-        IssueNoteFactory.create(type=Note.TYPE.time_spend,
-                                created_at=timezone.now() - timedelta(hours=1),
-                                user=self.user,
-                                content_object=issue,
-                                data={
-                                    'spent': int(
-                                        timedelta(hours=1).total_seconds()),
-                                    'date': (timezone.now() - timedelta(
-                                        hours=1)).date()
-                                })
+    IssueNoteFactory.create(
+        type=Note.TYPE.time_spend,
+        created_at=timezone.now() - timedelta(hours=2),
+        user=user_2,
+        content_object=issue,
+        data={
+            'spent': -int(timedelta(hours=1).total_seconds()),
+            'date': (timezone.now() - timedelta(hours=2)).date()
+        }
+    )
 
-        issue.adjust_spent_times()
+    issue.adjust_spent_times()
 
-        self.set_credentials()
-        response = self.client.get('/api/issues')
+    api_client.set_credentials(user)
+    response = api_client.get('/api/issues')
 
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data['count'], 1)
+    assert response.status_code == status.HTTP_200_OK
+    assert response.data['count'] == 1
 
-        self.assertEqual(response.data['results'][0]['time_spent'],
-                         timedelta(hours=1).total_seconds())
+    assert response.data['results'][0]['time_spent'] == \
+           timedelta(hours=6).total_seconds()
+
+
+def test_with_spends_reset(user, api_client):
+    issue = IssueFactory.create(user=user)
+
+    IssueNoteFactory.create(
+        type=Note.TYPE.time_spend,
+        created_at=timezone.now() - timedelta(hours=4),
+        user=user,
+        content_object=issue,
+        data={
+            'spent': int(timedelta(hours=5).total_seconds()),
+            'date': (timezone.now() - timedelta(hours=4)).date()
+        }
+    )
+
+    IssueNoteFactory.create(type=Note.TYPE.time_spend,
+                            created_at=timezone.now() - timedelta(hours=4),
+                            user=user,
+                            content_object=issue,
+                            data={
+                                'spent': int(
+                                    timedelta(hours=1).total_seconds()),
+                                'date': (timezone.now() - timedelta(
+                                    hours=4)).date()
+                            })
+
+    IssueNoteFactory.create(type=Note.TYPE.reset_spend,
+                            created_at=timezone.now() - timedelta(hours=2),
+                            user=user,
+                            content_object=issue)
+
+    IssueNoteFactory.create(type=Note.TYPE.time_spend,
+                            created_at=timezone.now() - timedelta(hours=1),
+                            user=user,
+                            content_object=issue,
+                            data={
+                                'spent': int(
+                                    timedelta(hours=1).total_seconds()),
+                                'date': (timezone.now() - timedelta(
+                                    hours=1)).date()
+                            })
+
+    issue.adjust_spent_times()
+
+    api_client.set_credentials(user)
+    response = api_client.get('/api/issues')
+
+    assert response.status_code == status.HTTP_200_OK
+    assert response.data['count'] == 1
+
+    assert response.data['results'][0]['time_spent'] == \
+           timedelta(hours=1).total_seconds()
