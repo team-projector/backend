@@ -39,22 +39,7 @@ class BaseTestMixin:
 
     @classmethod
     def create_user(cls, login=USER_LOGIN, **kwargs):
-        user = User.objects.filter(login=login).first()
-
-        if not user:
-            if 'password' not in kwargs:
-                kwargs['password'] = USER_PASSWORD
-
-            user = User.objects.create_user(
-                login=login,
-                is_staff=False,
-                **kwargs
-            )
-        elif 'password' in kwargs:
-            user.set_password(kwargs.get('password'))
-            user.save()
-
-        return user
+        return create_user(login)
 
     def open_asset(self, filename, mode='rb', encoding=None):
         module_path = os.path.abspath(sys.modules[self.__module__].__file__)
@@ -87,3 +72,29 @@ def format_date(d: datetime) -> str:
 
 def parse_gl_date(s: str) -> datetime:
     return datetime.datetime.strptime(s, '%Y-%m-%d')
+
+
+def create_user(login=USER_LOGIN, **kwargs):
+    user = User.objects.filter(login=login).first()
+
+    if not user:
+        if 'password' not in kwargs:
+            kwargs['password'] = USER_PASSWORD
+
+        user = User.objects.create_user(
+            login=login,
+            is_staff=False,
+            **kwargs
+        )
+    elif 'password' in kwargs:
+        user.set_password(kwargs.get('password'))
+        user.save()
+
+    return user
+
+
+def get_header_auth(user, token=None):
+    if token is None:
+        token = create_user_token(user)
+
+    return {'HTTP_AUTHORIZATION': f'Bearer {token.key}'}

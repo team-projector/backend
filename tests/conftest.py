@@ -1,7 +1,10 @@
 import httpretty
 import pytest
 
+from rest_framework.test import APIClient
+
 from tests.mocks import GitlabMock
+from tests.base import create_user, get_header_auth
 
 
 def pytest_addoption(parser):
@@ -42,3 +45,13 @@ def gl_mocker():
     yield GitlabMock()
 
     httpretty.disable()
+
+
+@pytest.fixture()
+def user(db):
+    return create_user()
+
+
+@pytest.fixture()
+def api_client():
+    return APIClient()
