@@ -3,7 +3,7 @@ import os
 import sys
 
 from django.db import transaction
-from rest_framework.test import APITestCase
+from rest_framework.test import APIClient, APITestCase
 
 from apps.users.models import User
 from apps.users.services.token import create_user_token
@@ -66,12 +66,12 @@ class BaseAPITest(BaseTestMixin, APITestCase):
         self.client._credentials = {}
 
 
-def format_date(d: datetime) -> str:
-    return d.strftime('%Y-%m-%d')
+class TestAPIClient(APIClient):
+    def set_credentials(self, user, token=None):
+        if token is None:
+            token = create_user_token(user)
 
-
-def parse_gl_date(s: str) -> datetime:
-    return datetime.datetime.strptime(s, '%Y-%m-%d')
+        self.credentials(HTTP_AUTHORIZATION=f'Bearer {token.key}')
 
 
 def create_user(login=USER_LOGIN, **kwargs):
@@ -93,8 +93,11 @@ def create_user(login=USER_LOGIN, **kwargs):
     return user
 
 
-def get_header_auth(user, token=None):
-    if token is None:
-        token = create_user_token(user)
+def format_date(d: datetime) -> str:
+    return d.strftime('%Y-%m-%d')
 
-    return {'HTTP_AUTHORIZATION': f'Bearer {token.key}'}
+
+def parse_gl_date(s: str) -> datetime:
+    return datetime.datetime.strptime(s, '%Y-%m-%d')
+
+

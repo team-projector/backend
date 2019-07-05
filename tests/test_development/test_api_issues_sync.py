@@ -2,8 +2,6 @@ from django.test import override_settings
 from rest_framework import status
 
 
-from tests.base import get_header_auth
-from tests.mocks import activate_httpretty, GitlabMock
 from tests.test_development.factories import IssueFactory, ProjectFactory
 from tests.test_development.factories_gitlab import (
     AttrDict, GlTimeStats, GlUserFactory, GlProjectFactory,
@@ -12,19 +10,27 @@ from tests.test_development.factories_gitlab import (
 from tests.test_users.factories import UserFactory
 
 
-def test_list_not_allowed(user, api_client):
+def test_user_unauthorized(user, api_client):
     issue = IssueFactory.create(user=user)
 
-    api_client.credentials(**get_header_auth(user))
+    response = api_client.get(f'/api/issues/{issue.id}/sync')
+
+    assert response.status_code == status.HTTP_401_UNAUTHORIZED
+    
+
+def test_method_not_allowed(user, api_client):
+    issue = IssueFactory.create(user=user)
+
+    api_client.set_credentials(user)
     response = api_client.get(f'/api/issues/{issue.id}/sync')
 
     assert response.status_code == status.HTTP_405_METHOD_NOT_ALLOWED
 
 
-def test_list_not_found(user, api_client):
+def test_issue_not_found(user, api_client):
     issue = IssueFactory.create(user=user)
 
-    api_client.credentials(**get_header_auth(user))
+    api_client.set_credentials(user)
     response = api_client.post(f'/api/issues/{issue.id + 1}/sync')
 
     assert response.status_code == status.HTTP_404_NOT_FOUND
@@ -32,8 +38,6 @@ def test_list_not_found(user, api_client):
 
 @override_settings(GITLAB_TOKEN='GITLAB_TOKEN')
 def test_sync_project(user, api_client, gl_mocker):
-    gl_mocker = GitlabMock()
-
     gl_project = AttrDict(GlProjectFactory())
     project = ProjectFactory.create(gl_id=gl_project.id)
 
@@ -86,7 +90,7 @@ def test_sync_project(user, api_client, gl_mocker):
         f'/projects/{gl_project.id}/issues/{gl_issue.iid}/participants', []
     )
 
-    api_client.credentials(**get_header_auth(user))
+    api_client.set_credentials(user)
     response = api_client.post(f'/api/issues/{issue.id}/sync')
 
     assert response.status_code == status.HTTP_200_OK
