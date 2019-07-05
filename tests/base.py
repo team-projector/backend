@@ -99,5 +99,3 @@ def format_date(d: datetime) -> str:
 
 def parse_gl_date(s: str) -> datetime:
     return datetime.datetime.strptime(s, '%Y-%m-%d')
-
-

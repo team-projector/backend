@@ -5,8 +5,7 @@ from rest_framework import status
 
 from apps.development.models import Note, TeamMember
 from apps.development.models.issue import STATE_CLOSED, STATE_OPENED
-# from apps.users.models import User
-from tests.base import BaseAPITest, format_date
+from tests.base import format_date
 from tests.test_development.factories import (
     IssueFactory, IssueNoteFactory, TeamFactory, TeamMemberFactory
 )

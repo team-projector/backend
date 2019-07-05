@@ -17,7 +17,7 @@ def test_one_member(user, api_client):
         team=team,
         roles=TeamMember.roles.leader
     )
-    
+
     IssueFactory.create_batch(2, user=user)
 
     another_user = UserFactory.create()

@@ -16,7 +16,7 @@ def test_user_unauthorized(user, api_client):
     response = api_client.get(f'/api/issues/{issue.id}/sync')
 
     assert response.status_code == status.HTTP_401_UNAUTHORIZED
-    
+
 
 def test_method_not_allowed(user, api_client):
     issue = IssueFactory.create(user=user)
