@@ -1,13 +1,11 @@
 import graphene
-from graphene import relay
-from graphene_django.filter import DjangoFilterConnectionField
 
-from apps.development.graphql.nodes.issues import IssueNode
+from apps.development.graphql.query.issues import IssuesQuery
 
 
-class Query(graphene.ObjectType):
-    issue = relay.Node.Field(IssueNode)
-    issues = DjangoFilterConnectionField(IssueNode)
+class Query(IssuesQuery,
+            graphene.ObjectType):
+    pass
 
 
 schema = graphene.Schema(
