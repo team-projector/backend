@@ -88,7 +88,7 @@ class DataSourceConnectionField(DjangoFilterConnectionField):
             )
 
         # It is differences from original function `connection_from_list_slice`
-        _slice = list_slice[start_offset: end_offset]
+        _slice = list_slice[start_offset:end_offset]
         edges = [
             edge_type(
                 node=node,

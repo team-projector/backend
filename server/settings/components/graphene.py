@@ -1,3 +1,3 @@
 GRAPHENE = {
-    'SCHEMA': 'gql_schema.schema'
+    'SCHEMA': 'gql.schema'
 }

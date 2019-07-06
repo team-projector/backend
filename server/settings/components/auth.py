@@ -14,6 +14,8 @@ AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
 ]
 
+LOGIN_URL = 'admin:login'
+
 SOCIAL_AUTH_USER_MODEL = 'users.User'
 SOCIAL_AUTH_PIPELINE = (
     'social_core.pipeline.social_auth.social_details',
