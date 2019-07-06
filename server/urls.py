@@ -8,6 +8,7 @@ from drf_yasg.views import get_schema_view
 from rest_framework import authentication, permissions
 
 from apps.core.utils.modules import get_module_url_patterns
+from gql import PrivateGraphQLView
 
 admin.site.site_header = _('VN__ADMIN_DASHBOARD')
 
@@ -27,6 +28,9 @@ schema_view = get_schema_view(
 )
 
 urlpatterns = [
+    path('graphql', PrivateGraphQLView.as_view(
+        graphiql=True
+    )),
     path('ht/', include('health_check.urls')),
     path('api/', include((get_module_url_patterns(
         'apps.users.rest.urls',
