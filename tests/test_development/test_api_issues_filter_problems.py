@@ -1,4 +1,5 @@
 from contextlib import suppress
+from datetime import datetime
 
 from django.utils import timezone
 from rest_framework import status
@@ -10,7 +11,7 @@ from tests.test_development.factories import IssueFactory
 
 
 def test_no_filter(user, api_client):
-    IssueFactory.create_batch(2, user=user, due_date=timezone.now())
+    IssueFactory.create_batch(2, user=user, due_date=datetime.now())
     problem_issue = IssueFactory.create(user=user)
 
     api_client.set_credentials(user)
@@ -27,7 +28,7 @@ def test_no_filter(user, api_client):
 
 
 def test_only_problems(user, api_client):
-    IssueFactory.create_batch(2, user=user, due_date=timezone.now())
+    IssueFactory.create_batch(2, user=user, due_date=datetime.now())
     problem_issue = IssueFactory.create(user=user)
 
     api_client.set_credentials(user)
@@ -45,7 +46,7 @@ def test_only_problems(user, api_client):
 
 
 def test_exclude_problems(user, api_client):
-    IssueFactory.create_batch(2, user=user, due_date=timezone.now())
+    IssueFactory.create_batch(2, user=user, due_date=datetime.now())
     problem_issue = IssueFactory.create(user=user)
 
     api_client.set_credentials(user)

@@ -1,4 +1,4 @@
-from datetime import timedelta
+from datetime import timedelta, datetime
 
 from django.utils import timezone
 from rest_framework import status
@@ -100,7 +100,7 @@ def test_filter_by_state(user, api_client):
 
 
 def test_filter_by_due_date(user, api_client):
-    now = timezone.now()
+    now = datetime.now()
     issue = IssueFactory.create(user=user, state=STATE_OPENED,
                                 due_date=now)
     IssueFactory.create(user=user, due_date=now + timedelta(days=1))
@@ -108,7 +108,7 @@ def test_filter_by_due_date(user, api_client):
 
     api_client.set_credentials(user)
     response = api_client.get('/api/issues', {
-        'due_date': format_date(timezone.now())
+        'due_date': format_date(datetime.now())
     })
 
     assert response.status_code == status.HTTP_200_OK
@@ -117,7 +117,7 @@ def test_filter_by_due_date(user, api_client):
 
 
 def test_filter_by_due_date_and_state(user, api_client):
-    now = timezone.now()
+    now = datetime.now()
     issue = IssueFactory.create(user=user, state=STATE_OPENED,
                                 due_date=now)
     IssueFactory.create(user=user, state=STATE_CLOSED,
@@ -129,7 +129,7 @@ def test_filter_by_due_date_and_state(user, api_client):
 
     api_client.set_credentials(user)
     response = api_client.get('/api/issues', {
-        'due_date': format_date(timezone.now()),
+        'due_date': format_date(datetime.now()),
         'state': STATE_OPENED
     })
 

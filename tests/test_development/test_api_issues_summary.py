@@ -1,4 +1,4 @@
-from datetime import timedelta
+from datetime import timedelta, datetime
 
 from django.utils import timezone
 from rest_framework import status
@@ -15,7 +15,7 @@ def test_one_user(user, api_client):
     IssueFactory.create_batch(
         5, user=user,
         total_time_spent=0,
-        due_date=timezone.now()
+        due_date=datetime.now()
     )
 
     api_client.set_credentials(user)
@@ -30,11 +30,11 @@ def test_one_user(user, api_client):
 
 def test_filter_by_user(user, api_client):
     IssueFactory.create_batch(5, user=user, total_time_spent=0,
-                              due_date=timezone.now())
+                              due_date=datetime.now())
 
     another_user = UserFactory.create()
     IssueFactory.create_batch(5, user=another_user, total_time_spent=0,
-                              due_date=timezone.now())
+                              due_date=datetime.now())
 
     api_client.set_credentials(user)
     response = api_client.get('/api/issues/summary', {
@@ -48,26 +48,26 @@ def test_filter_by_user(user, api_client):
 
 def test_time_spents_by_user(user, api_client):
     issues = IssueFactory.create_batch(5, user=user,
-                                       due_date=timezone.now())
+                                       due_date=datetime.now())
 
     another_user = UserFactory.create()
 
     IssueSpentTimeFactory.create(
-        date=timezone.now(),
+        date=datetime.now(),
         user=another_user,
         base=IssueFactory.create(user=another_user),
         time_spent=300
     )
 
     IssueSpentTimeFactory.create(
-        date=timezone.now(),
+        date=datetime.now(),
         user=user,
         base=issues[0],
         time_spent=100
     )
 
     IssueSpentTimeFactory.create(
-        date=timezone.now() - timedelta(days=2),
+        date=datetime.now() - timedelta(days=2),
         user=user,
         base=issues[0],
         time_spent=200
@@ -76,7 +76,7 @@ def test_time_spents_by_user(user, api_client):
     api_client.set_credentials(user)
     response = api_client.get('/api/issues/summary', {
         'user': user.id,
-        'due_date': timezone.now().date()
+        'due_date': datetime.now().date()
     })
 
     assert response.status_code == status.HTTP_200_OK
@@ -91,7 +91,7 @@ def test_time_spents_by_user(user, api_client):
 
 def test_time_spents_by_team(user, api_client):
     issues = IssueFactory.create_batch(5, user=user,
-                                       due_date=timezone.now())
+                                       due_date=datetime.now())
 
     another_user = UserFactory.create()
 
@@ -109,14 +109,14 @@ def test_time_spents_by_team(user, api_client):
     )
 
     IssueSpentTimeFactory.create(
-        date=timezone.now(),
+        date=datetime.now(),
         user=another_user,
         base=IssueFactory.create(user=another_user),
         time_spent=300
     )
 
     IssueSpentTimeFactory.create(
-        date=timezone.now(),
+        date=datetime.now(),
         user=user,
         base=issues[0],
         time_spent=100
@@ -155,7 +155,7 @@ def test_problems(user, api_client):
         1,
         user=user,
         total_time_spent=0,
-        due_date=timezone.now()
+        due_date=datetime.now()
     )
 
     IssueFactory.create_batch(

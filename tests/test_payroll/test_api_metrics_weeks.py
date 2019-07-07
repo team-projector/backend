@@ -1,4 +1,4 @@
-from datetime import date, timedelta
+from datetime import date, timedelta, datetime
 from typing import Dict
 
 from django.db.models import Sum
@@ -25,7 +25,7 @@ class ApiMetricsWeeksTests(BaseAPITest):
 
         self.issue = IssueFactory.create(
             user=self.user,
-            due_date=timezone.now(),
+            due_date=datetime.now(),
             closed_at=timezone.now()
         )
 
@@ -353,7 +353,7 @@ class ApiMetricsWeeksTests(BaseAPITest):
                             }, {})
 
     def test_many_issues(self):
-        monday = begin_of_week(timezone.now().date())
+        monday = begin_of_week(datetime.now().date())
         another_issue = IssueFactory.create(user=self.user,
                                             state=STATE_OPENED,
                                             due_date=monday + timedelta(days=4),

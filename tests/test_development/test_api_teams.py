@@ -1,6 +1,5 @@
-from datetime import timedelta
+from datetime import timedelta, datetime
 
-from django.utils import timezone
 from rest_framework import status
 
 from apps.development.models import TeamMember
@@ -200,7 +199,7 @@ class ApiTeamsTests(BaseAPITest):
         )
         IssueFactory.create(
             user=user_1,
-            due_date=timezone.now() - timedelta(days=3),
+            due_date=datetime.now() - timedelta(days=3),
             state=STATE_OPENED,
             title='issue_problem_2'
         )
@@ -214,7 +213,7 @@ class ApiTeamsTests(BaseAPITest):
         IssueFactory.create_batch(
             size=4,
             user=user_2,
-            due_date=timezone.now() + timedelta(days=3),
+            due_date=datetime.now() + timedelta(days=3),
             time_estimate=1000,
             state=STATE_CLOSED
         )

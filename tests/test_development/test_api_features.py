@@ -1,9 +1,12 @@
+from datetime import datetime
+
 from django.utils import timezone
 from rest_framework import status
 
 from apps.users.models import User
 from tests.base import BaseAPITest
-from tests.test_development.factories import (FeatureFactory, ProjectGroupMilestoneFactory)
+from tests.test_development.factories import (FeatureFactory,
+                                              ProjectGroupMilestoneFactory)
 
 
 class ApiIssuesTests(BaseAPITest):
@@ -37,8 +40,9 @@ class ApiIssuesTests(BaseAPITest):
 
     def test_feature_update(self):
         feature = FeatureFactory.create(title='Feature 0',
-                                        start_date=timezone.now().date() - timezone.timedelta(days=5),
-                                        due_date=timezone.now().date(),
+                                        start_date=timezone.now().date() - timezone.timedelta(
+                                            days=5),
+                                        due_date=datetime.now().date(),
                                         milestone=self.milestone)
         data = self.get_data()
 

@@ -1,3 +1,4 @@
+from datetime import datetime
 from decimal import Decimal
 
 from django.utils import timezone
@@ -99,9 +100,9 @@ class ApiMilestonesTests(BaseAPITest):
         self.assertTrue(all(item['metrics'] is not None for item in response.data['results']))
 
     def test_list_ordering(self):
-        milestone_1 = ProjectGroupMilestoneFactory.create(due_date=timezone.now().date())
-        milestone_2 = ProjectGroupMilestoneFactory.create(due_date=timezone.now().date() + timezone.timedelta(days=1))
-        milestone_3 = ProjectGroupMilestoneFactory.create(due_date=timezone.now().date() - timezone.timedelta(days=1))
+        milestone_1 = ProjectGroupMilestoneFactory.create(due_date=datetime.now().date())
+        milestone_2 = ProjectGroupMilestoneFactory.create(due_date=datetime.now().date() + timezone.timedelta(days=1))
+        milestone_3 = ProjectGroupMilestoneFactory.create(due_date=datetime.now().date() - timezone.timedelta(days=1))
         milestone_4 = ProjectGroupMilestoneFactory.create()
 
         self.set_credentials()

@@ -1,5 +1,5 @@
 from contextlib import suppress
-from datetime import timedelta
+from datetime import timedelta, datetime
 
 from django.utils import timezone
 from rest_framework import status
@@ -13,7 +13,7 @@ from tests.test_users.factories import UserFactory
 
 
 def test_empty_due_day(user, api_client):
-    IssueFactory.create_batch(2, user=user, due_date=timezone.now())
+    IssueFactory.create_batch(2, user=user, due_date=datetime.now())
     problem_issue = IssueFactory.create(user=user)
 
     api_client.set_credentials(user)
@@ -29,7 +29,7 @@ def test_empty_due_day(user, api_client):
 
 
 def test_empty_due_day_but_closed(user, api_client):
-    IssueFactory.create_batch(2, user=user, due_date=timezone.now())
+    IssueFactory.create_batch(2, user=user, due_date=datetime.now())
     IssueFactory.create(user=user, state=STATE_CLOSED)
 
     api_client.set_credentials(user)
@@ -42,10 +42,10 @@ def test_empty_due_day_but_closed(user, api_client):
 
 
 def test_overdue_due_day(user, api_client):
-    IssueFactory.create_batch(2, user=user, due_date=timezone.now())
+    IssueFactory.create_batch(2, user=user, due_date=datetime.now())
     problem_issue = IssueFactory.create(
         user=user,
-        due_date=timezone.now() - timedelta(days=1)
+        due_date=datetime.now() - timedelta(days=1)
     )
 
     api_client.set_credentials(user)
@@ -61,10 +61,10 @@ def test_overdue_due_day(user, api_client):
 
 
 def test_overdue_due_day_but_closed(user, api_client):
-    IssueFactory.create_batch(2, user=user, due_date=timezone.now())
+    IssueFactory.create_batch(2, user=user, due_date=datetime.now())
     IssueFactory.create(
         user=user,
-        due_date=timezone.now() - timedelta(days=1),
+        due_date=datetime.now() - timedelta(days=1),
         state=STATE_CLOSED
     )
 
@@ -78,10 +78,10 @@ def test_overdue_due_day_but_closed(user, api_client):
 
 
 def test_empty_estimate(user, api_client):
-    IssueFactory.create_batch(2, user=user, due_date=timezone.now())
+    IssueFactory.create_batch(2, user=user, due_date=datetime.now())
     problem_issue = IssueFactory.create(
         user=user,
-        due_date=timezone.now(),
+        due_date=datetime.now(),
         time_estimate=None
     )
 
@@ -98,7 +98,7 @@ def test_empty_estimate(user, api_client):
 
 
 def test_two_errors_per_issue(user, api_client):
-    IssueFactory.create_batch(2, user=user, due_date=timezone.now())
+    IssueFactory.create_batch(2, user=user, due_date=datetime.now())
     problem_issue = IssueFactory.create(user=user, time_estimate=None)
 
     api_client.set_credentials(user)
@@ -115,7 +115,7 @@ def test_two_errors_per_issue(user, api_client):
 
 
 def test_no_user_filter(user, api_client):
-    IssueFactory.create_batch(2, user=user, due_date=timezone.now())
+    IssueFactory.create_batch(2, user=user, due_date=datetime.now())
     problem_issue = IssueFactory.create(user=user, time_estimate=None)
 
     api_client.set_credentials(user)
@@ -131,7 +131,7 @@ def test_no_user_filter(user, api_client):
 
 def test_empty_due_day_but_another_user(user, api_client):
     user_2 = UserFactory.create()
-    IssueFactory.create_batch(2, user=user, due_date=timezone.now())
+    IssueFactory.create_batch(2, user=user, due_date=datetime.now())
     IssueFactory.create(user=user_2)
 
     api_client.set_credentials(user)
