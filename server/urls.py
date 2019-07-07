@@ -3,6 +3,7 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import include, path, re_path
 from django.utils.translation import gettext_lazy as _
+from django.views.decorators.csrf import csrf_exempt
 from drf_yasg import openapi
 from drf_yasg.views import get_schema_view
 from rest_framework import authentication, permissions
@@ -28,9 +29,9 @@ schema_view = get_schema_view(
 )
 
 urlpatterns = [
-    path('graphql', PrivateGraphQLView.as_view(
+    path('graphql', csrf_exempt(PrivateGraphQLView.as_view(
         graphiql=True
-    )),
+    ))),
     path('ht/', include('health_check.urls')),
     path('api/', include((get_module_url_patterns(
         'apps.users.rest.urls',
