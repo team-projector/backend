@@ -1,8 +1,13 @@
-from apps.core.system_email_dispatcher import SystemEmailDispatcher
+from apps.core.notifications.mail.dispatcher import SystemEmailDispatcher
 
 
-def send_report_to_email(salary, email):
-    subject = f'Salary Report {salary.period_to}'
+def send_salary_report(salary):
+    send_email_report(email=salary.user.email)
+    send_slack_report(email=salary.user.email)
+
+
+def send_email_report(email):
+    subject = 'Salary Report'
 
     text = 'Salary has been paid.'
 
@@ -11,3 +16,7 @@ def send_report_to_email(salary, email):
         text=text,
         recipient_list=[email]
     )
+
+
+def send_slack_report(email):
+    pass
