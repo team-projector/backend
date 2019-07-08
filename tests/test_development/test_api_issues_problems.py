@@ -1,5 +1,5 @@
 from contextlib import suppress
-from datetime import timedelta
+from datetime import timedelta, datetime
 
 from django.utils import timezone
 from rest_framework import status
@@ -8,140 +8,146 @@ from apps.development.models.issue import STATE_CLOSED
 from apps.development.services.problems.issues import (
     PROBLEM_EMPTY_DUE_DAY, PROBLEM_EMPTY_ESTIMATE, PROBLEM_OVER_DUE_DAY
 )
-from tests.base import BaseAPITest
 from tests.test_development.factories import IssueFactory
 from tests.test_users.factories import UserFactory
 
 
-class ApiIssuesProblemsTests(BaseAPITest):
-    def test_empty_due_day(self):
-        IssueFactory.create_batch(2, user=self.user, due_date=timezone.now())
-        problem_issue = IssueFactory.create(user=self.user)
+def test_empty_due_day(user, api_client):
+    IssueFactory.create_batch(2, user=user, due_date=datetime.now())
+    problem_issue = IssueFactory.create(user=user)
 
-        self.set_credentials()
-        response = self.client.get('/api/issues', {
-            'user': self.user.id
-        })
+    api_client.set_credentials(user)
+    response = api_client.get('/api/issues', {
+        'user': user.id
+    })
 
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        issue = self._get_issue_by_id(response.data['results'], problem_issue)
-        self.assertIsNotNone(issue)
-        self.assertEqual(issue['problems'], [PROBLEM_EMPTY_DUE_DAY])
+    assert response.status_code == status.HTTP_200_OK
 
-    def test_empty_due_day_but_closed(self):
-        IssueFactory.create_batch(2, user=self.user, due_date=timezone.now())
-        IssueFactory.create(user=self.user, state=STATE_CLOSED)
+    issue = _get_issue_by_id(response.data['results'], problem_issue)
+    assert issue is not None
+    assert issue['problems'] == [PROBLEM_EMPTY_DUE_DAY]
 
-        self.set_credentials()
-        response = self.client.get('/api/issues', {
-            'user': self.user.id
-        })
 
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self._assert_no_problems(response.data['results'])
+def test_empty_due_day_but_closed(user, api_client):
+    IssueFactory.create_batch(2, user=user, due_date=datetime.now())
+    IssueFactory.create(user=user, state=STATE_CLOSED)
 
-    def test_overdue_due_day(self):
-        IssueFactory.create_batch(2, user=self.user, due_date=timezone.now())
-        problem_issue = IssueFactory.create(
-            user=self.user,
-            due_date=timezone.now() - timedelta(days=1)
-        )
+    api_client.set_credentials(user)
+    response = api_client.get('/api/issues', {
+        'user': user.id
+    })
 
-        self.set_credentials()
-        response = self.client.get('/api/issues', {
-            'user': self.user.id
-        })
+    assert response.status_code == status.HTTP_200_OK
+    _assert_no_problems(response.data['results'])
 
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
 
-        issue = self._get_issue_by_id(response.data['results'], problem_issue)
-        self.assertIsNotNone(issue)
-        self.assertEqual(issue['problems'], [PROBLEM_OVER_DUE_DAY])
+def test_overdue_due_day(user, api_client):
+    IssueFactory.create_batch(2, user=user, due_date=datetime.now())
+    problem_issue = IssueFactory.create(
+        user=user,
+        due_date=datetime.now() - timedelta(days=1)
+    )
 
-    def test_overdue_due_day_but_closed(self):
-        IssueFactory.create_batch(2, user=self.user, due_date=timezone.now())
-        IssueFactory.create(
-            user=self.user,
-            due_date=timezone.now() - timedelta(days=1),
-            state=STATE_CLOSED
-        )
+    api_client.set_credentials(user)
+    response = api_client.get('/api/issues', {
+        'user': user.id
+    })
 
-        self.set_credentials()
-        response = self.client.get('/api/issues', {
-            'user': self.user.id
-        })
+    assert response.status_code == status.HTTP_200_OK
 
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self._assert_no_problems(response.data['results'])
+    issue = _get_issue_by_id(response.data['results'], problem_issue)
+    assert issue is not None
+    assert issue['problems'] == [PROBLEM_OVER_DUE_DAY]
 
-    def test_empty_estimate(self):
-        IssueFactory.create_batch(2, user=self.user, due_date=timezone.now())
-        problem_issue = IssueFactory.create(
-            user=self.user,
-            due_date=timezone.now(),
-            time_estimate=None
-        )
 
-        self.set_credentials()
-        response = self.client.get('/api/issues', {
-            'user': self.user.id
-        })
+def test_overdue_due_day_but_closed(user, api_client):
+    IssueFactory.create_batch(2, user=user, due_date=datetime.now())
+    IssueFactory.create(
+        user=user,
+        due_date=datetime.now() - timedelta(days=1),
+        state=STATE_CLOSED
+    )
 
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
+    api_client.set_credentials(user)
+    response = api_client.get('/api/issues', {
+        'user': user.id
+    })
 
-        issue = self._get_issue_by_id(response.data['results'], problem_issue)
-        self.assertIsNotNone(issue)
-        self.assertEqual(issue['problems'], [PROBLEM_EMPTY_ESTIMATE])
+    assert response.status_code == status.HTTP_200_OK
+    _assert_no_problems(response.data['results'])
 
-    def test_two_errors_per_issue(self):
-        IssueFactory.create_batch(2, user=self.user, due_date=timezone.now())
-        problem_issue = IssueFactory.create(user=self.user, time_estimate=None)
 
-        self.set_credentials()
-        response = self.client.get('/api/issues', {
-            'user': self.user.id
-        })
+def test_empty_estimate(user, api_client):
+    IssueFactory.create_batch(2, user=user, due_date=datetime.now())
+    problem_issue = IssueFactory.create(
+        user=user,
+        due_date=datetime.now(),
+        time_estimate=None
+    )
 
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        issue = self._get_issue_by_id(response.data['results'], problem_issue)
-        self.assertIsNotNone(issue)
-        self.assertEqual(
-            set(issue['problems']),
-            {PROBLEM_EMPTY_ESTIMATE, PROBLEM_EMPTY_DUE_DAY}
-        )
+    api_client.set_credentials(user)
+    response = api_client.get('/api/issues', {
+        'user': user.id
+    })
 
-    def test_no_user_filter(self):
-        IssueFactory.create_batch(2, user=self.user, due_date=timezone.now())
-        problem_issue = IssueFactory.create(user=self.user, time_estimate=None)
+    assert response.status_code == status.HTTP_200_OK
 
-        self.set_credentials()
-        response = self.client.get('/api/issues')
+    issue = _get_issue_by_id(response.data['results'], problem_issue)
+    assert issue is not None
+    assert issue['problems'] == [PROBLEM_EMPTY_ESTIMATE]
 
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        issue = self._get_issue_by_id(response.data['results'], problem_issue)
-        self.assertIsNotNone(issue)
-        self.assertEqual(
-            set(issue['problems']),
-            {PROBLEM_EMPTY_ESTIMATE, PROBLEM_EMPTY_DUE_DAY}
-        )
 
-    def test_empty_due_day_but_another_user(self):
-        user_2 = UserFactory.create()
-        IssueFactory.create_batch(2, user=self.user, due_date=timezone.now())
-        IssueFactory.create(user=user_2)
+def test_two_errors_per_issue(user, api_client):
+    IssueFactory.create_batch(2, user=user, due_date=datetime.now())
+    problem_issue = IssueFactory.create(user=user, time_estimate=None)
 
-        self.set_credentials()
-        response = self.client.get('/api/issues', {
-            'user': self.user.id
-        })
+    api_client.set_credentials(user)
+    response = api_client.get('/api/issues', {
+        'user': user.id
+    })
 
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self._assert_no_problems(response.data['results'])
+    assert response.status_code == status.HTTP_200_OK
 
-    def _get_issue_by_id(self, items, issue):
-        with suppress(StopIteration):
-            return next(item for item in items if item['id'] == issue.id)
+    issue = _get_issue_by_id(response.data['results'], problem_issue)
+    assert issue is not None
+    assert set(issue['problems']) == {PROBLEM_EMPTY_ESTIMATE,
+                                      PROBLEM_EMPTY_DUE_DAY}
 
-    def _assert_no_problems(self, items):
-        for item in items:
-            self.assertEqual(len(item['problems']), 0)
+
+def test_no_user_filter(user, api_client):
+    IssueFactory.create_batch(2, user=user, due_date=datetime.now())
+    problem_issue = IssueFactory.create(user=user, time_estimate=None)
+
+    api_client.set_credentials(user)
+    response = api_client.get('/api/issues')
+
+    assert response.status_code == status.HTTP_200_OK
+
+    issue = _get_issue_by_id(response.data['results'], problem_issue)
+    assert issue is not None
+    assert set(issue['problems']) == {PROBLEM_EMPTY_ESTIMATE,
+                                      PROBLEM_EMPTY_DUE_DAY}
+
+
+def test_empty_due_day_but_another_user(user, api_client):
+    user_2 = UserFactory.create()
+    IssueFactory.create_batch(2, user=user, due_date=datetime.now())
+    IssueFactory.create(user=user_2)
+
+    api_client.set_credentials(user)
+    response = api_client.get('/api/issues', {
+        'user': user.id
+    })
+
+    assert response.status_code == status.HTTP_200_OK
+    _assert_no_problems(response.data['results'])
+
+
+def _get_issue_by_id(items, issue):
+    with suppress(StopIteration):
+        return next(item for item in items if item['id'] == issue.id)
+
+
+def _assert_no_problems(items):
+    for item in items:
+        assert len(item['problems']) == 0

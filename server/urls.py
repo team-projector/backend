@@ -3,11 +3,13 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import include, path, re_path
 from django.utils.translation import gettext_lazy as _
+from django.views.decorators.csrf import csrf_exempt
 from drf_yasg import openapi
 from drf_yasg.views import get_schema_view
 from rest_framework import authentication, permissions
 
 from apps.core.utils.modules import get_module_url_patterns
+from gql import get_graphql_view, get_api_graphql_view
 
 admin.site.site_header = _('VN__ADMIN_DASHBOARD')
 
@@ -27,7 +29,10 @@ schema_view = get_schema_view(
 )
 
 urlpatterns = [
+    path('graphql', get_graphql_view()),
+
     path('ht/', include('health_check.urls')),
+    path('api/graphql', csrf_exempt(get_api_graphql_view())),
     path('api/', include((get_module_url_patterns(
         'apps.users.rest.urls',
         'apps.development.rest.urls',

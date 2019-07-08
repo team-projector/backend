@@ -1,10 +1,9 @@
-from datetime import date, timedelta
+from datetime import date, timedelta, datetime
 from typing import Iterable, List
 
 from django.conf import settings
 from django.db.models import Case, Count, F, IntegerField, Q, Sum, Value, When
 from django.db.models.functions import Coalesce, TruncDay
-from django.utils import timezone
 
 from apps.development.models.issue import Issue, STATE_CLOSED
 from apps.payroll.models import SpentTime
@@ -18,7 +17,7 @@ class DayMetricsProvider(ProgressMetricsProvider):
         metrics = []
 
         current = self.start
-        now = timezone.now().date()
+        now = datetime.now().date()
 
         active_issues = self.get_active_issues() if now >= self.start else []
 

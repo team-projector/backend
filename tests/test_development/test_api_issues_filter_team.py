@@ -3,86 +3,100 @@ from contextlib import suppress
 from rest_framework import status
 
 from apps.development.models import TeamMember
-from tests.base import BaseAPITest
 from tests.test_development.factories import (
     IssueFactory, TeamFactory, TeamMemberFactory
 )
 from tests.test_users.factories import UserFactory
 
 
-class ApiIssuesFilterTeamTests(BaseAPITest):
-    def setUp(self):
-        super().setUp()
+def test_one_member(user, api_client):
+    team = TeamFactory.create()
 
-        self.team = TeamFactory.create()
+    TeamMemberFactory.create(
+        user=user,
+        team=team,
+        roles=TeamMember.roles.leader
+    )
 
-        TeamMemberFactory.create(
-            user=self.user,
-            team=self.team,
-            roles=TeamMember.roles.leader
-        )
+    IssueFactory.create_batch(2, user=user)
 
-    def test_one_member(self):
-        IssueFactory.create_batch(2, user=self.user)
+    another_user = UserFactory.create()
+    IssueFactory.create_batch(3, user=another_user)
 
-        another_user = UserFactory.create()
-        IssueFactory.create_batch(3, user=another_user)
+    api_client.set_credentials(user)
+    response = api_client.get('/api/issues', {
+        'team': team.id
+    })
 
-        self.set_credentials()
-        response = self.client.get('/api/issues', {
-            'team': self.team.id
-        })
+    assert response.status_code == status.HTTP_200_OK
+    assert response.data['count'] == 2
 
-        self.assertEqual(status.HTTP_200_OK, response.status_code)
-        self.assertEqual(2, response.data['count'])
 
-    def test_many_members(self):
-        IssueFactory.create_batch(2, user=self.user)
+def test_many_members(user, api_client):
+    team = TeamFactory.create()
 
-        another_user = UserFactory.create()
-        IssueFactory.create_batch(3, user=another_user)
+    TeamMemberFactory.create(
+        user=user,
+        team=team,
+        roles=TeamMember.roles.leader
+    )
 
-        TeamMemberFactory.create(
-            user=another_user,
-            team=self.team,
-            roles=TeamMember.roles.developer
-        )
+    IssueFactory.create_batch(2, user=user)
 
-        self.set_credentials()
-        response = self.client.get('/api/issues', {
-            'team': self.team.id
-        })
+    another_user = UserFactory.create()
+    IssueFactory.create_batch(3, user=another_user)
 
-        self.assertEqual(status.HTTP_200_OK, response.status_code)
-        self.assertEqual(5, response.data['count'])
+    TeamMemberFactory.create(
+        user=another_user,
+        team=team,
+        roles=TeamMember.roles.developer
+    )
 
-    def test_many_teams(self):
-        another_user = UserFactory.create()
+    api_client.set_credentials(user)
+    response = api_client.get('/api/issues', {
+        'team': team.id
+    })
 
-        IssueFactory.create_batch(2, user=self.user)
-        IssueFactory.create_batch(3, user=another_user)
+    assert response.status_code == status.HTTP_200_OK
+    assert response.data['count'] == 5
 
-        another_team = TeamFactory.create()
-        TeamMemberFactory.create(
-            user=self.user,
-            team=another_team,
-            roles=TeamMember.roles.watcher
-        )
 
-        TeamMemberFactory.create(
-            user=another_user,
-            team=another_team,
-            roles=TeamMember.roles.developer
-        )
+def test_many_teams(user, api_client):
+    team = TeamFactory.create()
 
-        self.set_credentials()
-        response = self.client.get('/api/issues', {
-            'team': self.team.id
-        })
+    TeamMemberFactory.create(
+        user=user,
+        team=team,
+        roles=TeamMember.roles.leader
+    )
 
-        self.assertEqual(status.HTTP_200_OK, response.status_code)
-        self.assertEqual(2, response.data['count'])
+    another_user = UserFactory.create()
 
-    def _get_issue_by_id(self, items, issue):
-        with suppress(StopIteration):
-            return next(item for item in items if item['id'] == issue.id)
+    IssueFactory.create_batch(2, user=user)
+    IssueFactory.create_batch(3, user=another_user)
+
+    another_team = TeamFactory.create()
+    TeamMemberFactory.create(
+        user=user,
+        team=another_team,
+        roles=TeamMember.roles.watcher
+    )
+
+    TeamMemberFactory.create(
+        user=another_user,
+        team=another_team,
+        roles=TeamMember.roles.developer
+    )
+
+    api_client.set_credentials(user)
+    response = api_client.get('/api/issues', {
+        'team': team.id
+    })
+
+    assert response.status_code == status.HTTP_200_OK
+    assert response.data['count'] == 2
+
+
+def _get_issue_by_id(self, items, issue):
+    with suppress(StopIteration):
+        return next(item for item in items if item['id'] == issue.id)

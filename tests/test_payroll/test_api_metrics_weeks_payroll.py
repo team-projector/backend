@@ -1,4 +1,4 @@
-from datetime import date, timedelta
+from datetime import date, timedelta, datetime
 from typing import Dict
 
 from django.test import override_settings
@@ -21,7 +21,7 @@ class ApiMetricsWeeksPayrollTests(BaseAPITest):
         self.user.hour_rate = 100
         self.user.save()
 
-        self.issue = IssueFactory.create(user=self.user, due_date=timezone.now())
+        self.issue = IssueFactory.create(user=self.user, due_date=datetime.now())
 
     def test_opened(self):
         monday = begin_of_week(timezone.now().date())
@@ -126,8 +126,8 @@ class ApiMetricsWeeksPayrollTests(BaseAPITest):
 
         salary = SalaryFactory.create(user=self.user)
 
-        closed_issue = IssueFactory.create(user=self.user, due_date=timezone.now(), state=STATE_CLOSED)
-        opened_issue = IssueFactory.create(user=self.user, due_date=timezone.now(), state=STATE_OPENED)
+        closed_issue = IssueFactory.create(user=self.user, due_date=datetime.now(), state=STATE_CLOSED)
+        opened_issue = IssueFactory.create(user=self.user, due_date=datetime.now(), state=STATE_OPENED)
 
         self._create_spent_time(monday, timedelta(hours=4), issue=closed_issue)
         self._create_spent_time(monday, timedelta(hours=2), issue=opened_issue)

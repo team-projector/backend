@@ -143,8 +143,14 @@ class Issue(NotableMixin,
 
     @property
     def efficiency(self) -> Optional[float]:
-        if self.total_time_spent and self.time_estimate:
+        if self.efficiency_available:
             return self.time_estimate / self.total_time_spent
+
+    @property
+    def efficiency_available(self) -> bool:
+        return (self.state == STATE_CLOSED and
+                self.total_time_spent and
+                self.time_estimate)
 
     def adjust_spent_times(self) -> None:
         from apps.payroll.models import SpentTime

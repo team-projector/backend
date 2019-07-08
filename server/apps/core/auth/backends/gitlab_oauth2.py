@@ -1,6 +1,6 @@
 from django.http import HttpResponseBadRequest, JsonResponse
 from django.utils import timezone
-from social_core.backends.gitlab import GitLabOAuth2
+from social_core.backends.gitlab import GitLabOAuth2 as SocialGitLabOAuth2
 from social_core.utils import handle_http_errors
 
 from apps.users.models import User
@@ -8,7 +8,7 @@ from apps.users.rest.serializers import TokenSerializer
 from apps.users.services.token import create_user_token
 
 
-class CustomGitLabOAuth2(GitLabOAuth2):
+class GitLabOAuth2Backend(SocialGitLabOAuth2):
     @handle_http_errors
     def auth_complete(self, *args, **kwargs):
         user = super().auth_complete(*args, **kwargs)

@@ -1,174 +1,180 @@
-from datetime import timedelta
+from datetime import timedelta, datetime
 
 from django.utils import timezone
 from rest_framework import status
 
 from apps.development.models import TeamMember
-from tests.base import BaseAPITest
-from tests.test_development.factories import IssueFactory, TeamFactory, \
-    TeamMemberFactory
+from tests.test_development.factories import (
+    IssueFactory, TeamFactory, TeamMemberFactory
+)
 from tests.test_payroll.factories import IssueSpentTimeFactory
 from tests.test_users.factories import UserFactory
 
 
-class ApiIssuesSummaryTests(BaseAPITest):
-    def test_one_user(self):
-        IssueFactory.create_batch(
-            5, user=self.user,
-            total_time_spent=0,
-            due_date=timezone.now()
-        )
+def test_one_user(user, api_client):
+    IssueFactory.create_batch(
+        5, user=user,
+        total_time_spent=0,
+        due_date=datetime.now()
+    )
 
-        self.set_credentials()
-        response = self.client.get('/api/issues/summary', {
-            'user': self.user.id
-        })
+    api_client.set_credentials(user)
+    response = api_client.get('/api/issues/summary', {
+        'user': user.id
+    })
 
-        self.assertEqual(status.HTTP_200_OK, response.status_code)
+    assert response.status_code == status.HTTP_200_OK
 
-        self._check_summary(response.data, 5, 0, 0)
+    _check_summary(response.data, 5, 0, 0)
 
-    def test_filter_by_user(self):
-        IssueFactory.create_batch(5, user=self.user, total_time_spent=0,
-                                  due_date=timezone.now())
 
-        another_user = UserFactory.create()
-        IssueFactory.create_batch(5, user=another_user, total_time_spent=0,
-                                  due_date=timezone.now())
+def test_filter_by_user(user, api_client):
+    IssueFactory.create_batch(5, user=user, total_time_spent=0,
+                              due_date=datetime.now())
 
-        self.set_credentials()
-        response = self.client.get('/api/issues/summary', {
-            'user': self.user.id
-        })
+    another_user = UserFactory.create()
+    IssueFactory.create_batch(5, user=another_user, total_time_spent=0,
+                              due_date=datetime.now())
 
-        self.assertEqual(status.HTTP_200_OK, response.status_code)
-        self._check_summary(response.data, 5, 0, 0)
+    api_client.set_credentials(user)
+    response = api_client.get('/api/issues/summary', {
+        'user': user.id
+    })
 
-    def test_time_spents_by_user(self):
-        issues = IssueFactory.create_batch(5, user=self.user,
-                                           due_date=timezone.now())
+    assert response.status_code == status.HTTP_200_OK
 
-        another_user = UserFactory.create()
+    _check_summary(response.data, 5, 0, 0)
 
-        IssueSpentTimeFactory.create(
-            date=timezone.now(),
-            user=another_user,
-            base=IssueFactory.create(user=another_user),
-            time_spent=300
-        )
 
-        IssueSpentTimeFactory.create(
-            date=timezone.now(),
-            user=self.user,
-            base=issues[0],
-            time_spent=100
-        )
+def test_time_spents_by_user(user, api_client):
+    issues = IssueFactory.create_batch(5, user=user,
+                                       due_date=datetime.now())
 
-        IssueSpentTimeFactory.create(
-            date=timezone.now() - timedelta(days=2),
-            user=self.user,
-            base=issues[0],
-            time_spent=200
-        )
+    another_user = UserFactory.create()
 
-        self.set_credentials()
-        response = self.client.get('/api/issues/summary', {
-            'user': self.user.id,
-            'due_date': timezone.now().date()
-        })
+    IssueSpentTimeFactory.create(
+        date=datetime.now(),
+        user=another_user,
+        base=IssueFactory.create(user=another_user),
+        time_spent=300
+    )
 
-        self.assertEqual(status.HTTP_200_OK, response.status_code)
+    IssueSpentTimeFactory.create(
+        date=datetime.now(),
+        user=user,
+        base=issues[0],
+        time_spent=100
+    )
 
-        self._check_summary(
-            response.data,
-            5,
-            100,
-            0
-        )
+    IssueSpentTimeFactory.create(
+        date=datetime.now() - timedelta(days=2),
+        user=user,
+        base=issues[0],
+        time_spent=200
+    )
 
-    def test_time_spents_by_team(self):
-        issues = IssueFactory.create_batch(5, user=self.user,
-                                           due_date=timezone.now())
+    api_client.set_credentials(user)
+    response = api_client.get('/api/issues/summary', {
+        'user': user.id,
+        'due_date': datetime.now().date()
+    })
 
-        another_user = UserFactory.create()
+    assert response.status_code == status.HTTP_200_OK
 
-        team = TeamFactory.create()
-        TeamMemberFactory.create(
-            user=self.user,
-            team=team,
-            roles=TeamMember.roles.leader
-        )
+    _check_summary(
+        response.data,
+        5,
+        100,
+        0
+    )
 
-        TeamMemberFactory.create(
-            user=another_user,
-            team=TeamFactory.create(),
-            roles=TeamMember.roles.developer
-        )
 
-        IssueSpentTimeFactory.create(
-            date=timezone.now(),
-            user=another_user,
-            base=IssueFactory.create(user=another_user),
-            time_spent=300
-        )
+def test_time_spents_by_team(user, api_client):
+    issues = IssueFactory.create_batch(5, user=user,
+                                       due_date=datetime.now())
 
-        IssueSpentTimeFactory.create(
-            date=timezone.now(),
-            user=self.user,
-            base=issues[0],
-            time_spent=100
-        )
+    another_user = UserFactory.create()
 
-        IssueSpentTimeFactory.create(
-            date=timezone.now() - timedelta(days=2),
-            user=self.user,
-            base=issues[0],
-            time_spent=200
-        )
+    team = TeamFactory.create()
+    TeamMemberFactory.create(
+        user=user,
+        team=team,
+        roles=TeamMember.roles.leader
+    )
 
-        self.set_credentials()
-        response = self.client.get('/api/issues/summary', {
-            'team': team.id,
-            'due_date': timezone.now().date()
-        })
+    TeamMemberFactory.create(
+        user=another_user,
+        team=TeamFactory.create(),
+        roles=TeamMember.roles.developer
+    )
 
-        self.assertEqual(status.HTTP_200_OK, response.status_code)
+    IssueSpentTimeFactory.create(
+        date=datetime.now(),
+        user=another_user,
+        base=IssueFactory.create(user=another_user),
+        time_spent=300
+    )
 
-        self._check_summary(
-            response.data,
-            5,
-            100,
-            0
-        )
+    IssueSpentTimeFactory.create(
+        date=datetime.now(),
+        user=user,
+        base=issues[0],
+        time_spent=100
+    )
 
-    def test_problems(self):
-        IssueFactory.create_batch(
-            4,
-            user=self.user,
-            total_time_spent=0
-        )
-        IssueFactory.create_batch(
-            1,
-            user=self.user,
-            total_time_spent=0,
-            due_date=timezone.now()
-        )
+    IssueSpentTimeFactory.create(
+        date=timezone.now() - timedelta(days=2),
+        user=user,
+        base=issues[0],
+        time_spent=200
+    )
 
-        IssueFactory.create_batch(
-            2,
-            user=UserFactory.create(),
-            total_time_spent=0
-        )
+    api_client.set_credentials(user)
+    response = api_client.get('/api/issues/summary', {
+        'team': team.id,
+        'due_date': timezone.now().date()
+    })
 
-        self.set_credentials()
-        response = self.client.get('/api/issues/summary', {
-            'user': self.user.id
-        })
+    assert response.status_code == status.HTTP_200_OK
 
-        self.assertEqual(status.HTTP_200_OK, response.status_code)
-        self._check_summary(response.data, 5, 0, 4)
+    _check_summary(
+        response.data,
+        5,
+        100,
+        0
+    )
 
-    def _check_summary(self, data, issues_count, time_spent, problems_count):
-        self.assertEqual(issues_count, data['issues_count'])
-        self.assertEqual(time_spent, data['time_spent'])
-        self.assertEqual(problems_count, data['problems_count'])
+
+def test_problems(user, api_client):
+    IssueFactory.create_batch(
+        4,
+        user=user,
+        total_time_spent=0
+    )
+    IssueFactory.create_batch(
+        1,
+        user=user,
+        total_time_spent=0,
+        due_date=datetime.now()
+    )
+
+    IssueFactory.create_batch(
+        2,
+        user=UserFactory.create(),
+        total_time_spent=0
+    )
+
+    api_client.set_credentials(user)
+    response = api_client.get('/api/issues/summary', {
+        'user': user.id
+    })
+
+    assert response.status_code == status.HTTP_200_OK
+
+    _check_summary(response.data, 5, 0, 4)
+
+
+def _check_summary(data, issues_count, time_spent, problems_count):
+    assert data['issues_count'] == issues_count
+    assert data['time_spent'] == time_spent
+    assert data['problems_count'] == problems_count
