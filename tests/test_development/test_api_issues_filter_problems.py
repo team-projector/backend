@@ -3,7 +3,7 @@ from datetime import datetime
 
 from rest_framework import status
 
-from apps.development.services.problems.issues import (
+from apps.development.services.problems.issue import (
     PROBLEM_EMPTY_DUE_DAY
 )
 from tests.test_development.factories import IssueFactory
