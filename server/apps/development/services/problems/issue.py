@@ -67,7 +67,7 @@ class EmptyEstimateChecker(BaseProblemChecker):
 
     def get_condition(self) -> When:
         return When(
-            time_estimate__isnull=True,
+            Q(time_estimate__isnull=True) | Q(time_estimate=0),
             then=True
         )
 
