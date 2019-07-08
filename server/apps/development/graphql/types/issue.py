@@ -2,7 +2,8 @@ import graphene
 from graphene_django import DjangoObjectType
 
 from apps.development.models import Issue
-from apps.payroll.models import SpentTime
+from apps.development.services.metrics.issue import get_issue_metrcis
+from apps.development.services.problems.issue import get_issue_problems
 from .issue_metrics import IssueMetrics
 
 
@@ -11,17 +12,10 @@ class IssueType(DjangoObjectType):
         model = Issue
 
     metrics = graphene.Field(IssueMetrics)
+    problems = graphene.List(graphene.String)
+
+    def resolve_problems(self, info, **kwargs):
+        return get_issue_problems(self)
 
     def resolve_metrics(self, info, **kwargs):
-        instance: Issue = self
-
-        payroll = SpentTime.objects.filter(
-            issues__id=instance.id
-        ).aggregate_payrolls()
-
-        return {
-            'remains': instance.time_remains,
-            'efficiency': instance.efficiency,
-            'payroll': payroll['total_payroll'],
-            'paid': payroll['total_paid'],
-        }
+        return get_issue_metrcis(self)
