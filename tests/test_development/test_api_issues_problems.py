@@ -1,7 +1,6 @@
 from contextlib import suppress
 from datetime import timedelta, datetime
 
-from django.utils import timezone
 from rest_framework import status
 
 from apps.development.models.issue import STATE_CLOSED

@@ -1,7 +1,6 @@
 from contextlib import suppress
 from datetime import datetime
 
-from django.utils import timezone
 from rest_framework import status
 
 from apps.development.services.problems.issues import (
