@@ -17,9 +17,13 @@ class TeamFilter(django_filters.ModelChoiceFilter):
         return qs.filter(user__in=users)
 
 
-class IssuesFilter(django_filters.FilterSet):
+class IssuesFilterSet(django_filters.FilterSet):
     user = django_filters.ModelChoiceFilter(queryset=User.objects.all())
     team = TeamFilter()
+
+    order_by = django_filters.OrderingFilter(
+        fields=('due_date', 'title', 'created_at')
+    )
 
     class Meta:
         model = Issue
