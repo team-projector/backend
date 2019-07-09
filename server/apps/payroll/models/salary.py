@@ -1,3 +1,5 @@
+from model_utils import FieldTracker
+
 from django.contrib.auth import get_user_model
 from django.db import models
 from django.utils.translation import gettext_lazy as _
@@ -80,6 +82,8 @@ class Salary(Timestamps):
         verbose_name=_('VN__PAYED'),
         help_text=_('HT__PAYED')
     )
+
+    payed_tracker = FieldTracker(fields=['payed'])
 
     comments = models.TextField(
         null=True,
