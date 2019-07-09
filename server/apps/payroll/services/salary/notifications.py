@@ -2,13 +2,8 @@ from apps.core.notifications.mail.dispatcher import SystemEmailDispatcher
 from apps.payroll.models.salary import Salary
 
 
-def send_salary_report(salary: Salary) -> None:
-    send_email_report(salary)
-
-
 def send_email_report(salary: Salary) -> None:
     subject = 'Salary Report'
-
     text = 'Salary has been paid.'
 
     SystemEmailDispatcher.mail_users(
@@ -19,4 +14,4 @@ def send_email_report(salary: Salary) -> None:
 
 
 def is_payed(salary: Salary) -> bool:
-    return salary.payed_tracker.changed().get('payed') is False
+    return salary.field_tracker.has_changed('payed') and salary.payed

@@ -83,8 +83,6 @@ class Salary(Timestamps):
         help_text=_('HT__PAYED')
     )
 
-    payed_tracker = FieldTracker(fields=['payed'])
-
     comments = models.TextField(
         null=True,
         blank=True,
@@ -93,6 +91,8 @@ class Salary(Timestamps):
     )
 
     objects = SalaryManager()
+
+    field_tracker = FieldTracker()
 
     def __str__(self):
         return f'{self.user} [{self.created_at}]: {self.sum}'
