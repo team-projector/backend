@@ -10,3 +10,4 @@ class LabelType(DjangoObjectType):
         model = Label
         interfaces = (DatasourceRelayNode,)
         connection_class = DataSourceConnection
+        name = 'Label'

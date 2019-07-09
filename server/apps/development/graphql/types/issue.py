@@ -17,6 +17,7 @@ class IssueType(DjangoObjectType):
         model = Issue
         interfaces = (DatasourceRelayNode,)
         connection_class = DataSourceConnection
+        name = 'Issue'
 
     metrics = graphene.Field(IssueMetricsType)
     problems = graphene.List(graphene.String)

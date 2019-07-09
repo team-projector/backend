@@ -10,3 +10,4 @@ class ProjectType(DjangoObjectType):
         model = Project
         interfaces = (DatasourceRelayNode,)
         connection_class = DataSourceConnection
+        name = 'Project'
