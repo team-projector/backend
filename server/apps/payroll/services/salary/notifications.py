@@ -3,11 +3,10 @@ from apps.payroll.models.salary import Salary
 
 
 def send_salary_report(salary: Salary) -> None:
-    send_email_report(email=salary.user.email)
-    send_slack_report(email=salary.user.email)
+    send_email_report(salary)
 
 
-def send_email_report(email: str) -> None:
+def send_email_report(salary: Salary) -> None:
     subject = 'Salary Report'
 
     text = 'Salary has been paid.'
@@ -15,9 +14,9 @@ def send_email_report(email: str) -> None:
     SystemEmailDispatcher.mail_users(
         subject=subject,
         text=text,
-        recipient_list=[email]
+        recipient_list=[salary.user.email]
     )
 
 
-def send_slack_report(email: str) -> None:
-    pass
+def is_payed(salary: Salary) -> bool:
+    return salary.payed_tracker.changed().get('payed') is False
