@@ -16,7 +16,7 @@ class DatasourceRelayNode(relay.Node):
         if cls not in only_type._meta.interfaces:
             return None
 
-        get_node = getattr(only_type, "get_node", None)
+        get_node = getattr(only_type, 'get_node', None)
         if get_node:
             return get_node(info, _id)
 
