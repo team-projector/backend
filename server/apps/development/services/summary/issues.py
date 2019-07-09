@@ -4,7 +4,7 @@ from datetime import date
 from django.db.models import QuerySet, Sum
 
 from apps.development.models import Team
-from apps.development.services.problems.issues import (
+from apps.development.services.problems.issue import (
     annotate_issues_problems, filter_issues_problems
 )
 from apps.payroll.models import SpentTime

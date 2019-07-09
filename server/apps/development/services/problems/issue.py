@@ -1,11 +1,11 @@
 from functools import reduce
 from operator import or_, and_
-from typing import ClassVar, Optional
+from typing import ClassVar, List
 
 from django.db.models import Case, NullBooleanField, Q, QuerySet, When
-from django.utils import timezone
+from django.utils.timezone import localdate
 
-from apps.development.models.issue import STATE_OPENED
+from apps.development.models.issue import STATE_OPENED, Issue
 
 PROBLEM_EMPTY_DUE_DAY = 'empty_due_date'
 PROBLEM_OVER_DUE_DAY = 'over_due_date'
@@ -13,8 +13,8 @@ PROBLEM_EMPTY_ESTIMATE = 'empty_estimate'
 
 
 class BaseProblemChecker:
-    annotate_field: ClassVar[Optional[str]] = None
-    problem_code: ClassVar[Optional[str]] = None
+    annotate_field: ClassVar[str] = ''
+    problem_code: ClassVar[str] = ''
 
     def setup_queryset(self, queryset: QuerySet) -> QuerySet:
         return queryset.annotate(**{
@@ -23,6 +23,9 @@ class BaseProblemChecker:
                 output_field=NullBooleanField(),
             )
         })
+
+    def issue_has_problem(self, issue: Issue) -> bool:
+        raise NotImplementedError
 
     def get_condition(self) -> When:
         raise NotImplementedError
@@ -38,6 +41,10 @@ class EmptyDueDateChecker(BaseProblemChecker):
             then=True
         )
 
+    def issue_has_problem(self, issue: Issue) -> bool:
+        return (not issue.due_date and
+                issue.state == STATE_OPENED)
+
 
 class OverdueDueDateChecker(BaseProblemChecker):
     annotate_field = 'problem_over_due_date'
@@ -45,9 +52,14 @@ class OverdueDueDateChecker(BaseProblemChecker):
 
     def get_condition(self) -> When:
         return When(
-            Q(due_date__lt=timezone.now(), state=STATE_OPENED),
+            Q(due_date__lt=localdate(), state=STATE_OPENED),
             then=True
         )
+
+    def issue_has_problem(self, issue: Issue) -> bool:
+        return (issue.due_date and
+                issue.due_date < localdate() and
+                issue.state == STATE_OPENED)
 
 
 class EmptyEstimateChecker(BaseProblemChecker):
@@ -56,9 +68,17 @@ class EmptyEstimateChecker(BaseProblemChecker):
 
     def get_condition(self) -> When:
         return When(
-            time_estimate__isnull=True,
+            Q(
+                Q(time_estimate__isnull=True) |
+                Q(time_estimate=0)
+            ) &
+            Q(state=STATE_OPENED),
             then=True
         )
+
+    def issue_has_problem(self, issue: Issue) -> bool:
+        return (not issue.time_estimate and
+                issue.state == STATE_OPENED)
 
 
 checkers = [
@@ -67,11 +87,29 @@ checkers = [
 ]
 
 
+def get_issue_problems(issue: Issue) -> List[str]:
+    problems = []
+
+    for checker in checkers:
+        if checker.issue_has_problem(issue):
+            problems.append(checker.problem_code)
+
+    return problems
+
+
 def annotate_issues_problems(queryset: QuerySet) -> QuerySet:
     for checker in checkers:
         queryset = checker.setup_queryset(queryset)
 
     return queryset
+
+
+def extract_problems_from_annotated(issue: Issue) -> List[str]:
+    return [
+        checker.problem_code
+        for checker in checkers
+        if getattr(issue, checker.annotate_field, False)
+    ]
 
 
 def filter_issues_problems(queryset: QuerySet) -> QuerySet:

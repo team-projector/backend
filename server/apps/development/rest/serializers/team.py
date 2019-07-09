@@ -4,7 +4,7 @@ from rest_framework import serializers
 from apps.core.utils.objects import dict2obj
 from apps.development.models import Team, TeamMember, Issue
 from apps.development.rest.serializers.team_metrics import TeamMetricsSerializer
-from apps.development.services.problems.issues import (
+from apps.development.services.problems.issue import (
     filter_issues_problems, annotate_issues_problems
 )
 from .team_member import TeamMemberCardSerializer

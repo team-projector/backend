@@ -1,1 +1,1 @@
-from .issues import IssuesFilter
+from .issues import IssuesFilterSet

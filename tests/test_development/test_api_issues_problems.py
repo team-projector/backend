@@ -1,11 +1,10 @@
 from contextlib import suppress
 from datetime import timedelta, datetime
 
-from django.utils import timezone
 from rest_framework import status
 
 from apps.development.models.issue import STATE_CLOSED
-from apps.development.services.problems.issues import (
+from apps.development.services.problems.issue import (
     PROBLEM_EMPTY_DUE_DAY, PROBLEM_EMPTY_ESTIMATE, PROBLEM_OVER_DUE_DAY
 )
 from tests.test_development.factories import IssueFactory
@@ -83,6 +82,26 @@ def test_empty_estimate(user, api_client):
         user=user,
         due_date=datetime.now(),
         time_estimate=None
+    )
+
+    api_client.set_credentials(user)
+    response = api_client.get('/api/issues', {
+        'user': user.id
+    })
+
+    assert response.status_code == status.HTTP_200_OK
+
+    issue = _get_issue_by_id(response.data['results'], problem_issue)
+    assert issue is not None
+    assert issue['problems'] == [PROBLEM_EMPTY_ESTIMATE]
+
+
+def test_zero_estimate(user, api_client):
+    IssueFactory.create_batch(2, user=user, due_date=datetime.now())
+    problem_issue = IssueFactory.create(
+        user=user,
+        due_date=datetime.now(),
+        time_estimate=0
     )
 
     api_client.set_credentials(user)

@@ -2,6 +2,10 @@ import django_filters
 from django.db.models import QuerySet
 
 from apps.development.models import Issue, Team, TeamMember
+from apps.development.services.problems.issue import (
+    filter_issues_problems, exclude_issues_problems,
+    annotate_issues_problems
+)
 from apps.users.models import User
 
 
@@ -9,17 +13,37 @@ class TeamFilter(django_filters.ModelChoiceFilter):
     def __init__(self) -> None:
         super().__init__(queryset=Team.objects.all())
 
-    def filter(self, qs, value) -> QuerySet:
+    def filter(self, queryset, value) -> QuerySet:
         if not value:
-            return qs
+            return queryset
 
         users = TeamMember.objects.get_no_watchers(value)
-        return qs.filter(user__in=users)
+        return queryset.filter(user__in=users)
 
 
-class IssuesFilter(django_filters.FilterSet):
+class ProblemsFilter(django_filters.BooleanFilter):
+    def filter(self, queryset, value) -> QuerySet:
+        if value is None:
+            return queryset
+
+        queryset = annotate_issues_problems(queryset)
+
+        if value is True:
+            queryset = filter_issues_problems(queryset)
+        elif value is False:
+            queryset = exclude_issues_problems(queryset)
+
+        return queryset
+
+
+class IssuesFilterSet(django_filters.FilterSet):
     user = django_filters.ModelChoiceFilter(queryset=User.objects.all())
     team = TeamFilter()
+    problems = ProblemsFilter()
+
+    order_by = django_filters.OrderingFilter(
+        fields=('due_date', 'title', 'created_at')
+    )
 
     class Meta:
         model = Issue
