@@ -2,7 +2,7 @@ from django.contrib.auth import get_user_model
 from django.db.models import Exists, OuterRef
 from django.utils import timezone
 from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework import mixins, permissions, serializers
+from rest_framework import mixins, serializers
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
@@ -11,9 +11,7 @@ from apps.core.rest.views.mixins import CreateModelMixin, UpdateModelMixin
 from apps.development.models import TeamMember
 from apps.payroll.db.mixins.approved import APPROVED, CREATED, DECLINED
 from apps.payroll.models import WorkBreak
-from apps.payroll.rest.permissions import (
-    CanApproveDeclineWorkbreaks, CanManageWorkbreaks
-)
+from apps.payroll.rest.permissions import CanApproveDeclineWorkbreaks
 from apps.payroll.rest.serializers import (
     WorkBreakCardSerializer, WorkBreakSerializer, WorkBreakUpdateSerializer
 )
@@ -54,11 +52,6 @@ class WorkBreaksViewset(mixins.ListModelMixin,
                         mixins.RetrieveModelMixin,
                         mixins.DestroyModelMixin,
                         BaseGenericViewSet):
-    permission_classes = (
-        permissions.IsAuthenticated,
-        CanManageWorkbreaks
-    )
-
     actions_serializers = {
         'list': WorkBreakCardSerializer,
         'create': WorkBreakSerializer,
@@ -83,8 +76,7 @@ class WorkBreaksViewset(mixins.ListModelMixin,
     @action(detail=False,
             serializer_class=WorkBreakCardSerializer,
             permission_classes=(
-                permissions.IsAuthenticated,
-                CanApproveDeclineWorkbreaks
+                CanApproveDeclineWorkbreaks,
             ))
     def approving(self, request):
         teams = TeamMember.objects.filter(
@@ -115,8 +107,7 @@ class WorkBreaksViewset(mixins.ListModelMixin,
             methods=['post'],
             serializer_class=WorkBreakDeclineSerializer,
             permission_classes=(
-                permissions.IsAuthenticated,
-                CanApproveDeclineWorkbreaks
+                CanApproveDeclineWorkbreaks,
             ))
     def decline(self, request, pk=None):
         instance = self.get_object()
@@ -138,8 +129,7 @@ class WorkBreaksViewset(mixins.ListModelMixin,
             methods=['post'],
             serializer_class=WorkBreakApproveSerializer,
             permission_classes=(
-                permissions.IsAuthenticated,
-                CanApproveDeclineWorkbreaks
+                CanApproveDeclineWorkbreaks,
             ))
     def approve(self, request, pk=None):
         instance = self.get_object()

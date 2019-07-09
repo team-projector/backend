@@ -1,7 +1,5 @@
 from django.contrib.auth import get_user_model
-from django.shortcuts import get_object_or_404
-from django.utils.functional import cached_property
-from rest_framework import permissions, serializers
+from rest_framework import serializers
 from rest_framework.response import Response
 
 from apps.core.rest.views import BaseGenericAPIView
@@ -23,22 +21,11 @@ class UserProgressMetricsParamsSerializer(serializers.Serializer):
 
 class UserProgressMetricsView(BaseGenericAPIView):
     permission_classes = (
-        permissions.IsAuthenticated,
-        CanViewUserMetrics
+        CanViewUserMetrics,
     )
 
-    @cached_property
-    def user(self) -> User:
-        user = get_object_or_404(
-            User.objects,
-            pk=self.kwargs['user_pk']
-        )
-        self.check_object_permissions(
-            self.request,
-            user
-        )
-
-        return user
+    queryset = User.objects.all()
+    lookup_url_kwarg = 'user_pk'
 
     def get(self, request, **kwargs):
         params = parse_query_params(
@@ -47,7 +34,7 @@ class UserProgressMetricsView(BaseGenericAPIView):
         )
 
         metrics = get_user_progress_metrics(
-            self.user,
+            self.get_object(),
             params['start'],
             params['end'],
             params['group']
