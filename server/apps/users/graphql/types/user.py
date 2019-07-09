@@ -11,4 +11,3 @@ class UserType(DjangoObjectType):
         exclude_fields = ('password',)
         interfaces = (DatasourceRelayNode,)
         connection_class = DataSourceConnection
-    
