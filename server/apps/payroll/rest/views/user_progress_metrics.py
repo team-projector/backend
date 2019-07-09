@@ -1,5 +1,5 @@
 from django.contrib.auth import get_user_model
-from rest_framework import serializers
+from rest_framework import permissions, serializers
 from rest_framework.response import Response
 
 from apps.core.rest.views import BaseGenericAPIView
@@ -21,6 +21,7 @@ class UserProgressMetricsParamsSerializer(serializers.Serializer):
 
 class UserProgressMetricsView(BaseGenericAPIView):
     permission_classes = (
+        permissions.IsAuthenticated,
         CanViewUserMetrics,
     )
 

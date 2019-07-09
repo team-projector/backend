@@ -2,7 +2,7 @@ from django.contrib.auth import get_user_model
 from django.db.models import Exists, OuterRef
 from django.utils import timezone
 from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework import mixins, serializers
+from rest_framework import mixins, permissions, serializers
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
@@ -76,6 +76,7 @@ class WorkBreaksViewset(mixins.ListModelMixin,
     @action(detail=False,
             serializer_class=WorkBreakCardSerializer,
             permission_classes=(
+                permissions.IsAuthenticated,
                 CanApproveDeclineWorkbreaks,
             ))
     def approving(self, request):
@@ -107,6 +108,7 @@ class WorkBreaksViewset(mixins.ListModelMixin,
             methods=['post'],
             serializer_class=WorkBreakDeclineSerializer,
             permission_classes=(
+                permissions.IsAuthenticated,
                 CanApproveDeclineWorkbreaks,
             ))
     def decline(self, request, pk=None):
@@ -129,7 +131,8 @@ class WorkBreaksViewset(mixins.ListModelMixin,
             methods=['post'],
             serializer_class=WorkBreakApproveSerializer,
             permission_classes=(
-                CanApproveDeclineWorkbreaks,
+                permissions.IsAuthenticated,
+                CanApproveDeclineWorkbreaks
             ))
     def approve(self, request, pk=None):
         instance = self.get_object()

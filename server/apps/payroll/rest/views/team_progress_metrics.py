@@ -1,4 +1,4 @@
-from rest_framework import serializers
+from rest_framework import permissions, serializers
 from rest_framework.response import Response
 
 from apps.core.rest.views import BaseGenericAPIView
@@ -19,6 +19,7 @@ class TeamProgressMetricsParamsSerializer(serializers.Serializer):
 
 class TeamProgressMetricsView(BaseGenericAPIView):
     permission_classes = (
+        permissions.IsAuthenticated,
         CanViewTeamData,
     )
 
