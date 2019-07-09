@@ -20,7 +20,7 @@ class TeamProgressMetricsParamsSerializer(serializers.Serializer):
 class TeamProgressMetricsView(BaseGenericAPIView):
     permission_classes = (
         permissions.IsAuthenticated,
-        CanViewTeamData,
+        CanViewTeamData
     )
 
     queryset = Team.objects.all()

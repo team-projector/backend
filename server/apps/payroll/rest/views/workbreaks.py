@@ -77,7 +77,7 @@ class WorkBreaksViewset(mixins.ListModelMixin,
             serializer_class=WorkBreakCardSerializer,
             permission_classes=(
                 permissions.IsAuthenticated,
-                CanApproveDeclineWorkbreaks,
+                CanApproveDeclineWorkbreaks
             ))
     def approving(self, request):
         teams = TeamMember.objects.filter(
@@ -109,7 +109,7 @@ class WorkBreaksViewset(mixins.ListModelMixin,
             serializer_class=WorkBreakDeclineSerializer,
             permission_classes=(
                 permissions.IsAuthenticated,
-                CanApproveDeclineWorkbreaks,
+                CanApproveDeclineWorkbreaks
             ))
     def decline(self, request, pk=None):
         instance = self.get_object()

@@ -22,7 +22,7 @@ class UserProgressMetricsParamsSerializer(serializers.Serializer):
 class UserProgressMetricsView(BaseGenericAPIView):
     permission_classes = (
         permissions.IsAuthenticated,
-        CanViewUserMetrics,
+        CanViewUserMetrics
     )
 
     queryset = User.objects.all()
