@@ -10,9 +10,11 @@ AUTH_USER_MODEL = 'users.User'
 ACCOUNT_USER_MODEL_USERNAME_FIELD = 'login'
 
 AUTHENTICATION_BACKENDS = [
-    'apps.core.gitlab.oauth2.CustomGitLabOAuth2',
+    'apps.core.auth.backends.GitLabOAuth2Backend',
     'django.contrib.auth.backends.ModelBackend',
 ]
+
+LOGIN_URL = 'admin:login'
 
 SOCIAL_AUTH_USER_MODEL = 'users.User'
 SOCIAL_AUTH_PIPELINE = (

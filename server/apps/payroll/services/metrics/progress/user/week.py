@@ -2,7 +2,7 @@ from datetime import date, timedelta
 from typing import Iterable, List
 
 from django.db.models import Count, F, FloatField, Sum
-from django.db.models.functions import Cast, Coalesce, TruncWeek
+from django.db.models.functions import Cast, Coalesce, TruncWeek, TruncDate
 from django.utils.timezone import make_aware
 
 from apps.core.utils.date import begin_of_week, date2datetime
@@ -90,7 +90,8 @@ class WeekMetricsProvider(ProgressMetricsProvider):
 
     def _get_efficiency_stats(self) -> dict:
         queryset = Issue.objects.annotate(
-            week=TruncWeek('due_date')
+            week=TruncWeek(TruncDate('closed_at'))
+            # week=TruncWeek('due_date')
         ).filter(
             user=self.user,
             closed_at__range=(

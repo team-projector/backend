@@ -1,67 +1,69 @@
 from contextlib import suppress
+from datetime import datetime
 
-from django.utils import timezone
 from rest_framework import status
 
-from apps.development.services.problems.issues import (
+from apps.development.services.problems.issue import (
     PROBLEM_EMPTY_DUE_DAY
 )
-from tests.base import BaseAPITest
 from tests.test_development.factories import IssueFactory
 
 
-class ApiIssuesFilterProblemsTests(BaseAPITest):
-    def test_no_filter(self):
-        IssueFactory.create_batch(2, user=self.user, due_date=timezone.now())
-        problem_issue = IssueFactory.create(user=self.user)
+def test_no_filter(user, api_client):
+    IssueFactory.create_batch(2, user=user, due_date=datetime.now())
+    problem_issue = IssueFactory.create(user=user)
 
-        self.set_credentials()
-        response = self.client.get('/api/issues', {
-            'user': self.user.id
-        })
+    api_client.set_credentials(user)
+    response = api_client.get('/api/issues', {
+        'user': user.id
+    })
 
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data['count'], 3)
-        issue = self._get_issue_by_id(response.data['results'], problem_issue)
-        self.assertIsNotNone(issue)
-        self.assertEqual(issue['problems'], [PROBLEM_EMPTY_DUE_DAY])
+    assert response.status_code == status.HTTP_200_OK
+    assert response.data['count'] == 3
 
-    def test_only_problems(self):
-        IssueFactory.create_batch(2, user=self.user, due_date=timezone.now())
-        problem_issue = IssueFactory.create(user=self.user)
+    issue = _get_issue_by_id(response.data['results'], problem_issue)
+    assert issue is not None
+    assert issue['problems'] == [PROBLEM_EMPTY_DUE_DAY]
 
-        self.set_credentials()
-        response = self.client.get('/api/issues', {
-            'user': self.user.id,
-            'problems': 'true'
-        })
 
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data['count'], 1)
-        issue = self._get_issue_by_id(response.data['results'], problem_issue)
-        self.assertIsNotNone(issue)
-        self.assertEqual(issue['problems'], [PROBLEM_EMPTY_DUE_DAY])
+def test_only_problems(user, api_client):
+    IssueFactory.create_batch(2, user=user, due_date=datetime.now())
+    problem_issue = IssueFactory.create(user=user)
 
-    def test_exclude_problems(self):
-        IssueFactory.create_batch(2, user=self.user, due_date=timezone.now())
-        problem_issue = IssueFactory.create(user=self.user)
+    api_client.set_credentials(user)
+    response = api_client.get('/api/issues', {
+        'user': user.id,
+        'problems': 'true'
+    })
 
-        self.set_credentials()
-        response = self.client.get('/api/issues', {
-            'user': self.user.id,
-            'problems': 'false'
-        })
+    assert response.status_code == status.HTTP_200_OK
+    assert response.data['count'] == 1
 
-        self.assertEqual(status.HTTP_200_OK, response.status_code)
-        self.assertEqual(2, response.data['count'])
-        self.assertIsNone(
-            self._get_issue_by_id(response.data['results'], problem_issue)
-        )
+    issue = _get_issue_by_id(response.data['results'], problem_issue)
+    assert issue is not None
+    assert issue['problems'] == [PROBLEM_EMPTY_DUE_DAY]
 
-    def _get_issue_by_id(self, items, issue):
-        with suppress(StopIteration):
-            return next(item for item in items if item['id'] == issue.id)
 
-    def _assert_no_problems(self, items):
-        for item in items:
-            self.assertEqual(len(item['problems']), 0)
+def test_exclude_problems(user, api_client):
+    IssueFactory.create_batch(2, user=user, due_date=datetime.now())
+    problem_issue = IssueFactory.create(user=user)
+
+    api_client.set_credentials(user)
+    response = api_client.get('/api/issues', {
+        'user': user.id,
+        'problems': 'false'
+    })
+
+    assert response.status_code == status.HTTP_200_OK
+    assert response.data['count'] == 2
+    assert _get_issue_by_id(response.data['results'], problem_issue) is None
+
+
+def _get_issue_by_id(items, issue):
+    with suppress(StopIteration):
+        return next(item for item in items if item['id'] == issue.id)
+
+
+def _assert_no_problems(items):
+    for item in items:
+        assert len(item['problems']) == 0

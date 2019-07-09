@@ -5,7 +5,7 @@ from rest_framework import serializers
 
 from apps.payroll.services.metrics.user import UserMetricsProvider
 from apps.users.models import User
-from apps.users.services.problems.users import get_user_problems
+from apps.users.services.problems.user import get_user_problems
 from .user_metrics import UserMetricsSerializer
 
 

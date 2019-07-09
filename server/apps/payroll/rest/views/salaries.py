@@ -15,5 +15,9 @@ class SalariesViewSet(mixins.RetrieveModelMixin,
         'list': SalarySerializer
     }
     queryset = Salary.objects.all()
-    filter_backends = (DjangoFilterBackend, AvailableSalaryFilter, TeamFilter)
+    filter_backends = (
+        DjangoFilterBackend,
+        AvailableSalaryFilter,
+        TeamFilter
+    )
     filterset_fields = ('user',)

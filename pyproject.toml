@@ -31,7 +31,7 @@ xlsxwriter = "*"
 tornado = "5.*"
 uWSGI = "*"
 kombu = "4.3"
-slackclient = "^2.1"
+graphene-django = "^2.3"
 
 [tool.poetry.dev-dependencies]
 pytest = "*"

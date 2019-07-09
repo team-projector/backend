@@ -7,7 +7,9 @@ from apps.core.rest.serializers import LinkSerializer
 from apps.core.rest.serializers.mixins import TypeSerializerMixin
 from apps.core.utils.objects import dict2obj
 from apps.development.models import Feature
-from apps.development.services.problems.issues import checkers
+from apps.development.services.problems.issue import (
+    extract_problems_from_annotated
+)
 from apps.payroll.models import SpentTime
 from apps.users.rest.serializers import UserCardSerializer
 from .issue_metrics import IssueMetricsSerializer
@@ -19,11 +21,7 @@ class ProblemsMixin(serializers.ModelSerializer):
     problems = serializers.SerializerMethodField()
 
     def get_problems(self, instance: Issue) -> Iterable[str]:
-        return [
-            checker.problem_code
-            for checker in checkers
-            if getattr(instance, checker.annotate_field, False)
-        ]
+        return extract_problems_from_annotated(instance)
 
 
 class MetricsMixin(serializers.ModelSerializer):
