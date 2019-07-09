@@ -6,6 +6,7 @@ from apps.core.graphql.connection import DataSourceConnection
 from apps.core.graphql.relay_node import DatasourceRelayNode
 from apps.development.graphql.types import IssueType
 from apps.development.models import Issue
+from apps.development.services.allowed.issues import filter_allowed_for_user
 
 
 def collect_fields(node,
@@ -65,6 +66,11 @@ class IssueNode(IssueType):
     def get_queryset(cls,
                      queryset,
                      info) -> QuerySet:
+        queryset = filter_allowed_for_user(
+            queryset,
+            info.context.user
+        )
+
         if cls.is_field_selected(info, 'edges.node.user'):
             queryset = queryset.select_related('user')
 
