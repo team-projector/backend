@@ -26,7 +26,7 @@ class TeamAdmin(BaseModelAdmin):
 @admin.register(TeamMember)
 class TeamMemberAdmin(BaseModelAdmin):
     list_display = ('team', 'user')
-    search_fields = ('team', 'user__login')
+    search_fields = ('team', 'user__login', 'user__email')
     list_filter = (TeamFilter, UserFilter)
 
 
