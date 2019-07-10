@@ -23,7 +23,7 @@ from ..models import (
 class SalaryAdmin(BaseModelAdmin):
     list_display = ('user', 'created_by', 'created_at', 'total', 'payed')
     list_filter = (UserFilter,)
-    search_fields = ('user',)
+    search_fields = ('user__login', 'user__email')
 
     def get_urls(self):
         urls = super().get_urls()
@@ -75,7 +75,7 @@ class SalaryAdmin(BaseModelAdmin):
 class PayrollAdmin(BaseModelAdmin):
     list_display = ('user', 'created_by', 'created_at', 'sum')
     list_filter = (UserFilter, HasSalaryFilter)
-    search_fields = ('user',)
+    search_fields = ('user__login', 'user__email')
     readonly_fields = ('inheritance',)
 
     fieldsets = (
@@ -119,7 +119,7 @@ class PayrollAdmin(BaseModelAdmin):
 class SpentTimeAdmin(BaseModelAdmin):
     list_display = (
         'user', 'created_at', 'date', 'content_type', 'object_id', 'time_spent')
-    search_fields = ('user',)
+    search_fields = ('user__login', 'user__email')
     list_filter = (UserFilter,)
 
 
@@ -127,28 +127,28 @@ class SpentTimeAdmin(BaseModelAdmin):
 class BonusAdmin(BaseModelAdmin):
     list_display = ('user', 'created_by', 'created_at', 'sum')
     list_filter = (UserFilter,)
-    search_fields = ('user',)
+    search_fields = ('user__login', 'user__email')
 
 
 @admin.register(Penalty)
 class PenaltyAdmin(BaseModelAdmin):
     list_display = ('user', 'created_by', 'created_at', 'sum')
     list_filter = (UserFilter,)
-    search_fields = ('user',)
+    search_fields = ('user__login', 'user__email')
 
 
 @admin.register(Payment)
 class PaymentAdmin(BaseModelAdmin):
     list_display = ('user', 'created_by', 'created_at', 'sum')
     list_filter = (UserFilter,)
-    search_fields = ('user',)
+    search_fields = ('user__login', 'user__email')
 
 
 @admin.register(WorkBreak)
 class WorkBreakAdmin(BaseModelAdmin):
     list_display = ('user', 'reason', 'from_date', 'to_date', 'approve_state')
     list_filter = (UserFilter,)
-    search_fields = ('user',)
+    search_fields = ('user__login', 'user__email')
     fieldsets = (
         (None, {
             'fields': ('user', 'reason', 'from_date', 'to_date', 'comment')

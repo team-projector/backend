@@ -26,7 +26,7 @@ class TeamAdmin(BaseModelAdmin):
 @admin.register(TeamMember)
 class TeamMemberAdmin(BaseModelAdmin):
     list_display = ('team', 'user')
-    search_fields = ('team', 'user')
+    search_fields = ('team', 'user__login', 'user__email')
     list_filter = (TeamFilter, UserFilter)
 
 
@@ -74,7 +74,7 @@ class IssueAdmin(ForceSyncEntityMixin, BaseModelAdmin):
 @admin.register(Note)
 class NoteAdmin(BaseModelAdmin):
     list_display = ('type', 'created_at', 'user')
-    search_fields = ('user__login',)
+    search_fields = ('user__login', 'user__email')
 
 
 @admin.register(Milestone)
@@ -92,7 +92,7 @@ class MilestoneAdmin(ForceSyncEntityMixin, BaseModelAdmin):
 @admin.register(ProjectMember)
 class ProjectMemberAdmin(BaseModelAdmin):
     list_display = ('id', 'user', 'role')
-    search_fields = ('user', 'role')
+    search_fields = ('user__login', 'user__email', 'role')
 
 
 @admin.register(Feature)
