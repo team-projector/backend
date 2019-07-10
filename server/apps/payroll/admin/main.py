@@ -1,6 +1,7 @@
 from django.contrib import admin
 from django.contrib.admin import helpers
 from django.core.exceptions import ObjectDoesNotExist
+from django.db import transaction
 from django.db.models.fields.related import OneToOneRel
 from django.shortcuts import redirect, render
 from django.utils.html import mark_safe
@@ -9,6 +10,8 @@ from django.urls import path, reverse
 from apps.core.admin.base import BaseModelAdmin
 from apps.payroll.admin.forms import GenerateSalaryForm
 from apps.payroll.services.salary.calculator import SalaryCalculator
+from apps.payroll.services.salary.notifications import is_payed
+from apps.payroll.tasks import send_salary_report
 from apps.users.admin.filters import UserFilter
 from .filters import HasSalaryFilter
 from ..models import (
@@ -60,6 +63,12 @@ class SalaryAdmin(BaseModelAdmin):
             'admin/payrolls/forms/generate_salaries.html',
             context
         )
+
+    def save_model(self, request, obj, form, change):
+        if change and is_payed(obj):
+            transaction.on_commit(lambda: send_salary_report.delay(obj))
+
+        super().save_model(request, obj, form, change)
 
 
 @admin.register(Payroll)
