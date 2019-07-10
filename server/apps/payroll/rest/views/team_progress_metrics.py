@@ -1,5 +1,3 @@
-from django.shortcuts import get_object_or_404
-from django.utils.functional import cached_property
 from rest_framework import permissions, serializers
 from rest_framework.response import Response
 
@@ -25,18 +23,8 @@ class TeamProgressMetricsView(BaseGenericAPIView):
         CanViewTeamData
     )
 
-    @cached_property
-    def team(self) -> Team:
-        team = get_object_or_404(
-            Team.objects,
-            pk=self.kwargs['team_pk']
-        )
-        self.check_object_permissions(
-            self.request,
-            team
-        )
-
-        return team
+    queryset = Team.objects.all()
+    lookup_url_kwarg = 'team_pk'
 
     def get(self, request, **kwargs):
         params = parse_query_params(
@@ -45,7 +33,7 @@ class TeamProgressMetricsView(BaseGenericAPIView):
         )
 
         metrics = get_team_progress_metrics(
-            self.team,
+            self.get_object(),
             params['start'],
             params['end'],
             params['group']
