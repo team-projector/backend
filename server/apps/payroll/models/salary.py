@@ -83,8 +83,6 @@ class Salary(Timestamps):
         help_text=_('HT__PAYED')
     )
 
-    payed_tracker = FieldTracker(fields=['payed'])
-
     comments = models.TextField(
         null=True,
         blank=True,

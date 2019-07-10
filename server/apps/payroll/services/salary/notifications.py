@@ -3,6 +3,10 @@ from apps.core.notifications.slack.client import SlackClient
 from apps.payroll.models.salary import Salary
 
 
+def is_payed(salary: Salary) -> bool:
+    return salary.field_tracker.has_changed('payed') and salary.payed
+
+
 def send_email_report(salary: Salary) -> None:
     subject = 'Salary Report'
     text = 'Salary has been paid.'
@@ -22,7 +26,3 @@ def send_slack_report(salary: Salary) -> None:
 
     if channel:
         slack.send_message_to_channel(channel['id'], msg)
-
-
-def is_payed(salary: Salary) -> bool:
-    return salary.field_tracker.has_changed('payed') and salary.payed
