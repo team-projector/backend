@@ -1,6 +1,7 @@
 import pytest
 
 from django.conf import settings
+from django.core.exceptions import ValidationError
 from django.contrib.admin import site
 from django.core import mail
 
@@ -10,11 +11,11 @@ from tests.test_users.factories import UserFactory
 
 
 @pytest.fixture
-def model_admin(db):
+def model_admin():
     yield site._registry[Salary]
 
 
-def test_send_notification(model_admin):
+def test_send_notification(transactional_db, model_admin):
     user = UserFactory.create(email='test@mail.com')
     salary = SalaryFactory.create(user=user)
     salary.payed = True
@@ -30,7 +31,7 @@ def test_send_notification(model_admin):
     assert mail.outbox[0].to == [user.email]
 
 
-def test_send_notification_list_users(model_admin):
+def test_send_notification_to_users(transactional_db, model_admin):
     user_1 = UserFactory.create(email='test1@mail.com')
     salary_1 = SalaryFactory.create(user=user_1, payed=False)
 
@@ -48,7 +49,19 @@ def test_send_notification_list_users(model_admin):
     assert mail.outbox[1].to == [user_2.email]
 
 
-def test_salary_payed_changed_to_false(model_admin):
+def test_dont_send_mail_when_failed(db, model_admin):
+    user = UserFactory.create(email='test@mail.com')
+    salary = SalaryFactory.create(user=user, payed=False)
+    salary.sum = 'failed'
+    salary.payed = True
+
+    with pytest.raises(ValidationError):
+        model_admin.save_model(request=None, obj=salary, form=None, change=True)
+
+    assert len(mail.outbox) == 0
+
+
+def test_salary_payed_changed_to_false(db, model_admin):
     user = UserFactory.create(email='test@mail.com')
     salary = SalaryFactory.create(user=user, payed=True)
     salary.payed = False
@@ -57,11 +70,10 @@ def test_salary_payed_changed_to_false(model_admin):
 
     salary.refresh_from_db()
 
-    assert salary.payed is False
     assert len(mail.outbox) == 0
 
 
-def test_salary_payed_not_changed(model_admin):
+def test_salary_payed_not_changed(db, model_admin):
     user = UserFactory.create(email='test@mail.com')
     salary = SalaryFactory.create(user=user, payed=True)
     salary.payed = True
@@ -71,7 +83,7 @@ def test_salary_payed_not_changed(model_admin):
     assert len(mail.outbox) == 0
 
 
-def test_salary_another_field_changed(model_admin):
+def test_salary_another_field_changed(db, model_admin):
     user = UserFactory.create(email='test@mail.com')
     salary = SalaryFactory.create(user=user, payed=False)
     salary.sum = 10.0
@@ -84,23 +96,7 @@ def test_salary_another_field_changed(model_admin):
     assert len(mail.outbox) == 0
 
 
-def test_salary_payed_with_another_fields_changed(model_admin):
-    user = UserFactory.create(email='test@mail.com')
-    salary = SalaryFactory.create(user=user, payed=False)
-    salary.sum = 10.0
-    salary.payed = True
-
-    model_admin.save_model(request=None, obj=salary, form=None, change=True)
-
-    salary.refresh_from_db()
-
-    assert salary.sum == 10.0
-    assert salary.payed is True
-    assert len(mail.outbox) == 1
-    assert mail.outbox[0].to == [user.email]
-
-
-def test_user_without_email(model_admin):
+def test_user_without_email(db, model_admin):
     user = UserFactory.create()
     salary = SalaryFactory.create(user=user, payed=False)
     salary.payed = True
