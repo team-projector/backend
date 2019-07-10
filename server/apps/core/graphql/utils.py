@@ -1,11 +1,4 @@
-# from graphql.execution.utils import collect_fields
-from django.db.models import QuerySet
 from graphql.utils.ast_to_dict import ast_to_dict
-
-from apps.core.graphql.connection import DataSourceConnection
-from apps.core.graphql.relay_node import DatasourceRelayNode
-from apps.development.graphql.types import IssueType
-from apps.development.models import Issue
 
 
 def collect_fields(node,
@@ -38,7 +31,7 @@ def collect_fields(node,
     return field
 
 
-def get_fields(info) -> dict:
+def get_fields_from_info(info) -> dict:
     """A convenience function to call collect_fields with info
     Args:
         info (ResolveInfo)
@@ -55,34 +48,14 @@ def get_fields(info) -> dict:
     return collect_fields(node, fragments)
 
 
-class IssueNode(IssueType):
-    class Meta:
-        model = Issue
-        interfaces = (DatasourceRelayNode,)
-        connection_class = DataSourceConnection
+def is_field_selected(info,
+                      path: str) -> bool:
+    fields = get_fields_from_info(info)
 
-    @classmethod
-    def get_queryset(cls,
-                     queryset,
-                     info) -> QuerySet:
-        if cls.is_field_selected(info, 'edges.node.user'):
-            queryset = queryset.select_related('user')
+    for key in path.split('.'):
+        try:
+            fields = fields[key]
+        except KeyError:
+            return False
 
-        if cls.is_field_selected(info, 'edges.node.participants'):
-            queryset = queryset.prefetch_related('participants')
-
-        return queryset
-
-    @classmethod
-    def is_field_selected(cls,
-                          info,
-                          path: str) -> bool:
-        fields = get_fields(info)
-
-        for key in path.split('.'):
-            try:
-                fields = fields[key]
-            except KeyError:
-                return False
-
-        return True
+    return True

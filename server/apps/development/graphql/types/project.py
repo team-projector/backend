@@ -2,13 +2,12 @@ from graphene_django import DjangoObjectType
 
 from apps.core.graphql.connection import DataSourceConnection
 from apps.core.graphql.relay_node import DatasourceRelayNode
-from apps.users.models import User
+from apps.development.models import Project
 
 
-class UserType(DjangoObjectType):
+class ProjectType(DjangoObjectType):
     class Meta:
-        model = User
-        exclude_fields = ('password',)
+        model = Project
         interfaces = (DatasourceRelayNode,)
         connection_class = DataSourceConnection
-        name = 'User'
+        name = 'Project'

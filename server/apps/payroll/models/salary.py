@@ -94,6 +94,8 @@ class Salary(Timestamps):
 
     objects = SalaryManager()
 
+    field_tracker = FieldTracker()
+
     def __str__(self):
         return f'{self.user} [{self.created_at}]: {self.sum}'
 
