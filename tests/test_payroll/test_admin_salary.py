@@ -5,6 +5,7 @@ from django.contrib.admin import site
 from django.core import mail
 
 from apps.payroll.models.salary import Salary
+from tests.base import trigger_on_commit
 from tests.test_payroll.factories import SalaryFactory
 from tests.test_users.factories import UserFactory
 
@@ -14,7 +15,6 @@ def model_admin(db):
     yield site._registry[Salary]
 
 
-@pytest.mark.django_db(transaction=True)
 def test_send_notification(model_admin):
     user_1 = UserFactory.create(email='test1@mail.com')
     salary_1 = SalaryFactory.create(user=user_1, payed=False)
@@ -28,10 +28,12 @@ def test_send_notification(model_admin):
     model_admin.save_model(request=None, obj=salary_1, form=None, change=True)
     model_admin.save_model(request=None, obj=salary_2, form=None, change=True)
 
+    trigger_on_commit()
+
     assert len(mail.outbox) == 2
-    assert mail.outbox[0].to == [user_1.email]
     assert mail.outbox[0].body is not None
     assert mail.outbox[0].from_email == settings.SERVER_EMAIL
+    assert mail.outbox[0].to == [user_1.email]
     assert mail.outbox[1].to == [user_2.email]
 
 
@@ -42,18 +44,10 @@ def test_salary_payed_changed_to_false(model_admin):
 
     model_admin.save_model(request=None, obj=salary, form=None, change=True)
 
+    trigger_on_commit()
     salary.refresh_from_db()
 
-    assert len(mail.outbox) == 0
-
-
-def test_salary_payed_not_changed(model_admin):
-    user = UserFactory.create(email='test@mail.com')
-    salary = SalaryFactory.create(user=user, payed=True)
-    salary.payed = True
-
-    model_admin.save_model(request=None, obj=salary, form=None, change=True)
-
+    assert salary.payed is False
     assert len(mail.outbox) == 0
 
 
@@ -63,6 +57,8 @@ def test_salary_another_field_changed(model_admin):
     salary.sum = 10.0
 
     model_admin.save_model(request=None, obj=salary, form=None, change=True)
+
+    trigger_on_commit()
 
     salary.refresh_from_db()
 
@@ -76,5 +72,7 @@ def test_user_without_email(model_admin):
     salary.payed = True
 
     model_admin.save_model(request=None, obj=salary, form=None, change=True)
+
+    trigger_on_commit()
 
     assert len(mail.outbox) == 0

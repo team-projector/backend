@@ -27,16 +27,6 @@ class BaseTestMixin:
             if not f.closed:
                 f.close()
 
-    @staticmethod
-    def trigger_on_commit():
-        connection = transaction.get_connection()
-
-        current_run_on_commit = connection.run_on_commit
-        connection.run_on_commit = []
-        while current_run_on_commit:
-            sids, func = current_run_on_commit.pop(0)
-            func()
-
     @classmethod
     def create_user(cls, login=USER_LOGIN, **kwargs):
         return create_user(login)
@@ -72,6 +62,16 @@ class TestAPIClient(APIClient):
             token = create_user_token(user)
 
         self.credentials(HTTP_AUTHORIZATION=f'Bearer {token.key}')
+
+
+def trigger_on_commit():
+    connection = transaction.get_connection()
+
+    current_run_on_commit = connection.run_on_commit
+    connection.run_on_commit = []
+    while current_run_on_commit:
+        sids, func = current_run_on_commit.pop(0)
+        func()
 
 
 def create_user(login=USER_LOGIN, **kwargs):
