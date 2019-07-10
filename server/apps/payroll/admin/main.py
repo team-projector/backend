@@ -66,9 +66,7 @@ class SalaryAdmin(BaseModelAdmin):
 
     def save_model(self, request, obj, form, change):
         if change and is_payed(obj):
-            transaction.on_commit(
-                lambda: send_salary_report.delay(obj.user.email)
-            )
+            transaction.on_commit(lambda: send_salary_report.delay(obj.id))
 
         super().save_model(request, obj, form, change)
 
