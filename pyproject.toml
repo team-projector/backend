@@ -32,6 +32,7 @@ tornado = "5.*"
 uWSGI = "*"
 kombu = "4.3"
 graphene-django = "^2.3"
+slackclient = "^2.1"
 
 [tool.poetry.dev-dependencies]
 pytest = "*"

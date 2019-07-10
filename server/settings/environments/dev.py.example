@@ -20,3 +20,5 @@ STATIC_ROOT = BASE_DIR.joinpath('static')
 SECRET_KEY = 'dev'
 
 GITLAB_TOKEN = '...'
+
+SLACK_TOKEN = '...'
