@@ -10,11 +10,12 @@ from tests.test_users.factories import UserFactory
 
 
 @pytest.fixture
-def model_admin():
+def model_admin(db):
     yield site._registry[Salary]
 
 
-def test_send_notification(transactional_db, model_admin):
+@pytest.mark.django_db(transaction=True)
+def test_send_notification(model_admin):
     user_1 = UserFactory.create(email='test1@mail.com')
     salary_1 = SalaryFactory.create(user=user_1, payed=False)
 
@@ -34,7 +35,7 @@ def test_send_notification(transactional_db, model_admin):
     assert mail.outbox[1].to == [user_2.email]
 
 
-def test_salary_payed_changed_to_false(db, model_admin):
+def test_salary_payed_changed_to_false(model_admin):
     user = UserFactory.create(email='test@mail.com')
     salary = SalaryFactory.create(user=user, payed=True)
     salary.payed = False
@@ -46,7 +47,7 @@ def test_salary_payed_changed_to_false(db, model_admin):
     assert len(mail.outbox) == 0
 
 
-def test_salary_payed_not_changed(db, model_admin):
+def test_salary_payed_not_changed(model_admin):
     user = UserFactory.create(email='test@mail.com')
     salary = SalaryFactory.create(user=user, payed=True)
     salary.payed = True
@@ -56,7 +57,7 @@ def test_salary_payed_not_changed(db, model_admin):
     assert len(mail.outbox) == 0
 
 
-def test_salary_another_field_changed(db, model_admin):
+def test_salary_another_field_changed(model_admin):
     user = UserFactory.create(email='test@mail.com')
     salary = SalaryFactory.create(user=user, payed=False)
     salary.sum = 10.0
@@ -69,7 +70,7 @@ def test_salary_another_field_changed(db, model_admin):
     assert len(mail.outbox) == 0
 
 
-def test_user_without_email(db, model_admin):
+def test_user_without_email(model_admin):
     user = UserFactory.create()
     salary = SalaryFactory.create(user=user, payed=False)
     salary.payed = True
