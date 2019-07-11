@@ -8,7 +8,7 @@ from apps.development.graphql.types import IssueType
 
 class IssuesQuery(graphene.ObjectType):
     issue = DatasourceRelayNode.Field(IssueType)
-    issues = DataSourceConnectionField(
+    all_issues = DataSourceConnectionField(
         IssueType,
         filterset_class=IssuesFilterSet
     )
