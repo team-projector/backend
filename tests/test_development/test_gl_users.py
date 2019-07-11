@@ -3,6 +3,7 @@ from django.test import override_settings
 from apps.development.services.gitlab.users import load_user, update_users
 from apps.users.models import User
 
+from tests.test_development.checkers_gitlab import check_user
 from tests.test_development.factories_gitlab import AttrDict, GlUserFactory
 from tests.test_users.factories import UserFactory
 
@@ -18,7 +19,7 @@ def test_load_user(db, gl_mocker):
 
     user = User.objects.get(login=gl_user.username)
 
-    _check_user(user, gl_user)
+    check_user(user, gl_user)
 
 
 @override_settings(GITLAB_TOKEN='GITLAB_TOKEN')
@@ -35,11 +36,4 @@ def test_update_users(db, gl_mocker):
 
     user = User.objects.get(gl_id=gl_user.id)
 
-    _check_user(user, gl_user)
-
-
-def _check_user(user, gl_user):
-    assert user.login == gl_user.username
-    assert user.name == gl_user.name
-    assert user.gl_avatar == gl_user.avatar_url
-    assert user.gl_url == gl_user.web_url
+    check_user(user, gl_user)
