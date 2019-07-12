@@ -1,4 +1,5 @@
 import graphene
+from django.db.models import QuerySet
 from graphene_django import DjangoObjectType
 
 from apps.core.graphql.connection import DataSourceConnection
@@ -26,3 +27,9 @@ class UserType(DjangoObjectType):
 
     def resolve_problems(self, info, **kwargs):
         return get_user_problems(self)
+
+    @classmethod
+    def get_queryset(cls,
+                     queryset,
+                     info) -> QuerySet:
+        return queryset.filter(is_active=True)
