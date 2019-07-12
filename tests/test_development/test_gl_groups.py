@@ -7,7 +7,8 @@ from apps.development.models import ProjectGroup
 from tests.test_development.checkers_gitlab import check_group
 from tests.test_development.factories import ProjectGroupFactory
 from tests.test_development.factories_gitlab import (
-    AttrDict, GlUserFactory, GlGroupFactory)
+    AttrDict, GlUserFactory, GlGroupFactory
+)
 
 
 def test_load_single_group(db):

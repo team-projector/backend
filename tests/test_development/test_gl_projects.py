@@ -13,7 +13,8 @@ from apps.development.services.gitlab.projects import (
 from tests.test_development.checkers_gitlab import check_project
 from tests.test_development.factories import ProjectGroupFactory
 from tests.test_development.factories_gitlab import (
-    AttrDict, GlUserFactory, GlGroupFactory, GlProjectFactory, GlHookFactory)
+    AttrDict, GlUserFactory, GlGroupFactory, GlProjectFactory, GlHookFactory
+)
 
 
 @override_settings(GITLAB_TOKEN='GITLAB_TOKEN')

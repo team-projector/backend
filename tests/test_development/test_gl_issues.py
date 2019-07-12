@@ -16,10 +16,12 @@ from tests.test_development.checkers_gitlab import (
     check_issue, check_user
 )
 from tests.test_development.factories import (
-    IssueFactory, ProjectFactory, ProjectMilestoneFactory)
+    IssueFactory, ProjectFactory, ProjectMilestoneFactory
+)
 from tests.test_development.factories_gitlab import (
     AttrDict, GlIssueFactory, GlLabelFactory, GlNoteFactory, GlProjectFactory,
-    GlProjectMilestoneFactory, GlTimeStats, GlUserFactory)
+    GlProjectMilestoneFactory, GlTimeStats, GlUserFactory
+)
 
 
 @override_settings(GITLAB_TOKEN='GITLAB_TOKEN')
