@@ -1,12 +1,17 @@
+from datetime import timedelta
 import pytest
 
+from rest_framework import status
 from django.conf import settings
 from django.contrib.admin import site
 from django.core import mail
+from django.utils import timezone
 
-from apps.payroll.models.salary import Salary
-from tests.base import trigger_on_commit
-from tests.test_payroll.factories import SalaryFactory
+from apps.development.models.issue import STATE_CLOSED
+from apps.payroll.models import Salary
+from tests.base import trigger_on_commit, model_to_dict_form
+from tests.test_development.factories import IssueFactory
+from tests.test_payroll.factories import IssueSpentTimeFactory, SalaryFactory
 from tests.test_users.factories import UserFactory
 
 
@@ -15,34 +20,107 @@ def model_admin(db):
     yield site._registry[Salary]
 
 
-def test_send_notification(model_admin):
-    user_1 = UserFactory.create(email='test1@mail.com')
-    salary_1 = SalaryFactory.create(user=user_1, payed=False)
+def test_salary_instance_str(db):
+    user = UserFactory.create()
+    salary = SalaryFactory.create(user=user)
 
-    user_2 = UserFactory.create(email='test2@mail.com')
-    salary_2 = SalaryFactory.create(user=user_2, payed=False)
+    assert str(salary) == f'{user} [{salary.created_at}]: {salary.sum}'
 
-    salary_1.payed = True
-    salary_2.payed = True
 
-    model_admin.save_model(request=None, obj=salary_1, form=None, change=True)
-    model_admin.save_model(request=None, obj=salary_2, form=None, change=True)
+def test_get_urls(model_admin):
+    assert 'generate-salaries' in [p.name for p in model_admin.get_urls()]
+
+
+def test_generate_salaries_get_form(model_admin, admin_client):
+    issue = IssueFactory.create(state=STATE_CLOSED)
+    IssueSpentTimeFactory.create(
+        user=UserFactory.create(),
+        base=issue,
+        time_spent=timedelta(hours=5).total_seconds()
+    )
+
+    url = f'/admin/payroll/salary/'
+
+    response = model_admin.generate_salaries(
+        admin_client.request_get(url)
+    )
+
+    assert response.status_code == status.HTTP_200_OK
+    assert Salary.objects.count() == 0
+    assert b'/admin/payroll/salary/generate/' in response.content
+    assert b'period_from' in response.content
+    assert b'period_to' in response.content
+
+
+def test_generate_salaries(model_admin, admin_client):
+    user = UserFactory.create()
+
+    issue = IssueFactory.create(state=STATE_CLOSED)
+    IssueSpentTimeFactory.create(
+        user=user,
+        base=issue,
+        time_spent=timedelta(hours=5).total_seconds()
+    )
+
+    url = f'/admin/payroll/salary/'
+    data = {
+        'period_from': str(timezone.now().date() - timedelta(days=15)),
+        'period_to': str(timezone.now().date())
+    }
+
+    response = model_admin.generate_salaries(
+        admin_client.request_post(url, data)
+    )
+
+    assert response.status_code == status.HTTP_302_FOUND
+    assert Salary.objects.count() == 1
+
+    salary = Salary.objects.first()
+    assert salary.total == user.hour_rate * 5
+    assert salary.period_from == timezone.now().date() - timedelta(days=15)
+    assert salary.period_to == timezone.now().date()
+
+
+def test_send_notification(model_admin, admin_client):
+    user = UserFactory.create(email='test1@mail.com')
+
+    salary = SalaryFactory.create(user=user, payed=False)
+    salary.payed = True
+
+    SalaryFactory.create_batch(3, user=user, payed=False)
+    SalaryFactory.create_batch(2, user=user, payed=True)
+
+    url = f'/admin/payroll/salary/{salary.id}/change/'
+    data = model_to_dict_form(salary)
+
+    model_admin.changeform_view(
+        admin_client.request_post(url, data),
+        object_id=str(salary.id)
+    )
 
     trigger_on_commit()
+    salary.refresh_from_db()
 
-    assert len(mail.outbox) == 2
+    assert salary.payed is True
+    assert len(mail.outbox) == 1
     assert mail.outbox[0].body is not None
     assert mail.outbox[0].from_email == settings.SERVER_EMAIL
-    assert mail.outbox[0].to == [user_1.email]
-    assert mail.outbox[1].to == [user_2.email]
+    assert mail.outbox[0].to == [user.email]
 
 
-def test_salary_payed_changed_to_false(model_admin):
+def test_salary_payed_changed_to_false(model_admin, admin_client):
     user = UserFactory.create(email='test@mail.com')
+
     salary = SalaryFactory.create(user=user, payed=True)
     salary.payed = False
 
-    model_admin.save_model(request=None, obj=salary, form=None, change=True)
+    url = f'/admin/payroll/salary/{salary.id}/change/'
+    data = model_to_dict_form(salary)
+
+    model_admin.changeform_view(
+        admin_client.request_post(url, data),
+        object_id=str(salary.id)
+    )
 
     trigger_on_commit()
     salary.refresh_from_db()
@@ -51,28 +129,63 @@ def test_salary_payed_changed_to_false(model_admin):
     assert len(mail.outbox) == 0
 
 
-def test_salary_another_field_changed(model_admin):
+def test_user_without_email_but_payed(model_admin, admin_client):
+    user = UserFactory.create()
+    salary = SalaryFactory.create(user=user, payed=False)
+    salary.payed = True
+
+    url = f'/admin/payroll/salary/{salary.id}/change/'
+    data = model_to_dict_form(salary)
+
+    model_admin.changeform_view(
+        admin_client.request_post(url, data),
+        object_id=str(salary.id)
+    )
+
+    trigger_on_commit()
+    salary.refresh_from_db()
+
+    assert salary.payed is True
+    assert len(mail.outbox) == 0
+
+
+def test_salary_another_field_changed(model_admin, admin_client):
     user = UserFactory.create(email='test@mail.com')
     salary = SalaryFactory.create(user=user, payed=False)
     salary.sum = 10.0
 
-    model_admin.save_model(request=None, obj=salary, form=None, change=True)
+    url = f'/admin/payroll/salary/{salary.id}/change/'
+    data = model_to_dict_form(salary)
+
+    model_admin.changeform_view(
+        admin_client.request_post(url, data),
+        object_id=str(salary.id)
+    )
 
     trigger_on_commit()
-
     salary.refresh_from_db()
 
     assert salary.sum == 10.0
     assert len(mail.outbox) == 0
 
 
-def test_user_without_email(model_admin):
-    user = UserFactory.create()
+def test_salary_another_field_changed_and_payed(model_admin, admin_client):
+    user = UserFactory.create(email='test@mail.com')
     salary = SalaryFactory.create(user=user, payed=False)
+    salary.sum = 10.0
     salary.payed = True
 
-    model_admin.save_model(request=None, obj=salary, form=None, change=True)
+    url = f'/admin/payroll/salary/{salary.id}/change/'
+    data = model_to_dict_form(salary)
+
+    model_admin.changeform_view(
+        admin_client.request_post(url, data),
+        object_id=str(salary.id)
+    )
 
     trigger_on_commit()
+    salary.refresh_from_db()
 
-    assert len(mail.outbox) == 0
+    assert salary.sum == 10.0
+    assert salary.payed is True
+    assert len(mail.outbox) == 1

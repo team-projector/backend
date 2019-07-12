@@ -3,6 +3,9 @@ import os
 import sys
 
 from django.db import transaction
+from django.contrib.messages.storage.cookie import CookieStorage
+from django.forms.models import model_to_dict
+from django.test import RequestFactory
 from rest_framework.test import APIClient, APITestCase
 
 from apps.users.models import User
@@ -93,9 +96,36 @@ def create_user(login=USER_LOGIN, **kwargs):
     return user
 
 
+def model_to_dict_form(data):
+    def replace(value):
+        return '' if value is None else value
+
+    original = model_to_dict(data)
+    return {k: replace(v) for k, v in original.items()}
+
+
 def format_date(d: datetime) -> str:
     return d.strftime('%Y-%m-%d')
 
 
 def parse_gl_date(s: str) -> datetime:
     return datetime.datetime.strptime(s, '%Y-%m-%d')
+
+
+class TestClient:
+    def __init__(self, user):
+        self.user = user
+
+    def request_get(self, url, **extra):
+        request = RequestFactory().get(url, **extra)
+        request.user = self.user
+
+        return request
+
+    def request_post(self, url, data, **extra):
+        request = RequestFactory().post(url, data=data, **extra)
+        request.user = self.user
+        request._dont_enforce_csrf_checks = True
+        request._messages = CookieStorage(request)
+
+        return request

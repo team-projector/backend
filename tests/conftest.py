@@ -1,8 +1,11 @@
 import httpretty
 import pytest
 
+from apps.users.models import User
+from tests.base import (
+    TestClient, TestAPIClient, create_user, USER_LOGIN, USER_PASSWORD
+)
 from tests.mocks import GitlabMock
-from tests.base import TestAPIClient, create_user
 
 
 def pytest_addoption(parser):
@@ -51,5 +54,15 @@ def user(db):
 
 
 @pytest.fixture()
+def admin_user(db):
+    return User.objects.create_superuser(USER_LOGIN, USER_PASSWORD)
+
+
+@pytest.fixture()
 def api_client():
     return TestAPIClient()
+
+
+@pytest.fixture()
+def admin_client(admin_user):
+    return TestClient(admin_user)
