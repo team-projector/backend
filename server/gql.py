@@ -5,11 +5,12 @@ from apps.core.graphql.views import (
     DrfAuthenticatedGraphQLView,
     PrivateGraphQLView
 )
-from apps.development.graphql.query import IssuesQuery
+from apps.development.graphql.query import IssuesQuery, TeamsQuery
 from apps.users.graphql.query import UsersQuery
 
 
 class Query(IssuesQuery,
+            TeamsQuery,
             UsersQuery,
             graphene.ObjectType):
     debug = graphene.Field(DjangoDebug, name='_debug')
