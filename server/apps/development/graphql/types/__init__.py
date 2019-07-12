@@ -1,5 +1,6 @@
 from .issue import IssueType
 from .issue_metrics import IssueMetricsType
+from .issues_summary import IssuesSummaryType
 from .label import LabelType
 from .merge_request import MergeRequestType
 from .project import ProjectType
