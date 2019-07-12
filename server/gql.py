@@ -5,19 +5,26 @@ from apps.core.graphql.views import (
     DrfAuthenticatedGraphQLView,
     PrivateGraphQLView
 )
-from apps.development.graphql.query import IssuesQuery, TeamsQuery
-from apps.users.graphql.query import UsersQuery
+from apps.development.graphql.mutations import IssuesMutations
+from apps.development.graphql.queries import IssuesQueries, TeamsQueries
+from apps.users.graphql.queries import UsersQueries
 
 
-class Query(IssuesQuery,
-            TeamsQuery,
-            UsersQuery,
+class Query(IssuesQueries,
+            TeamsQueries,
+            UsersQueries,
             graphene.ObjectType):
     debug = graphene.Field(DjangoDebug, name='_debug')
 
 
+class Mutation(IssuesMutations,
+               graphene.ObjectType):
+    pass
+
+
 schema = graphene.Schema(
-    query=Query
+    query=Query,
+    mutation=Mutation,
 )
 
 

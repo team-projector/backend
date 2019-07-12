@@ -6,7 +6,7 @@ from apps.development.graphql.filters import IssuesFilterSet
 from apps.development.graphql.types import IssueType
 
 
-class IssuesQuery(graphene.ObjectType):
+class IssuesQueries(graphene.ObjectType):
     issue = DatasourceRelayNode.Field(IssueType)
     all_issues = DataSourceConnectionField(
         IssueType,
