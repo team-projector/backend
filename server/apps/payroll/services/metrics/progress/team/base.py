@@ -8,7 +8,7 @@ from apps.payroll.services.metrics.progress.user import (
 
 
 class TeamMemberProgressMetrics:
-    user: int
+    user: User
     metrics: Iterable[UserProgressMetrics] = []
 
 
@@ -26,7 +26,7 @@ class ProgressMetricsProvider:
         for member in self.team.members.all():
             user_metrics = TeamMemberProgressMetrics()
 
-            user_metrics.user = member.id
+            user_metrics.user = member
             user_metrics.metrics = self.get_user_metrics(member)
 
             metrics.append(user_metrics)

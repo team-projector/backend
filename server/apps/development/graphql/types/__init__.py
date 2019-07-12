@@ -6,4 +6,5 @@ from .merge_request import MergeRequestType
 from .project import ProjectType
 from .team import TeamType
 from .team_member import TeamMemberType
+from .team_member_progress_metrics import TeamMemberProgressMetricsType
 from .team_metrics import TeamMetricsType
