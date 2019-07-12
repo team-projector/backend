@@ -13,14 +13,14 @@ from .issue_metrics import IssueMetricsType
 
 
 class IssueType(DjangoObjectType):
+    metrics = graphene.Field(IssueMetricsType)
+    problems = graphene.List(graphene.String)
+
     class Meta:
         model = Issue
         interfaces = (DatasourceRelayNode,)
         connection_class = DataSourceConnection
         name = 'Issue'
-
-    metrics = graphene.Field(IssueMetricsType)
-    problems = graphene.List(graphene.String)
 
     def resolve_problems(self, info, **kwargs):
         return get_issue_problems(self)

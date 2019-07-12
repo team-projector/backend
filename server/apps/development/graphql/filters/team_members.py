@@ -29,7 +29,7 @@ class TeamMemberRolesFilter(django_filters.CharFilter):
 class TeamMembersFilterSet(django_filters.FilterSet):
     roles = TeamMemberRolesFilter()
     order_by = django_filters.OrderingFilter(
-        fields=('user_name',)
+        fields=('user__name',)
     )
 
     class Meta:
