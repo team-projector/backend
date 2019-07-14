@@ -18,7 +18,7 @@ class UsersQueries(graphene.ObjectType):
         group=graphene.String(required=True),
         resolver=resolve_user_progress_metrics
     )
-    me_user = graphene.Field(
+    me = graphene.Field(
         UserType,
         resolver=resolve_me_user
     )
