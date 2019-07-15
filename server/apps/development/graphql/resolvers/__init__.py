@@ -1,2 +1,3 @@
+from .gitlab_status import resolve_gitlab_status
 from .issues_summary import resolve_issues_summary
 from .team_progress_metrics import resolve_team_progress_metrics

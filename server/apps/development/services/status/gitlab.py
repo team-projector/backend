@@ -1,5 +1,5 @@
 from datetime import datetime
-from typing import Dict, Iterable
+from typing import Iterable
 
 from actstream.models import Action
 from django.apps import apps
@@ -11,13 +11,18 @@ from apps.core.db.mixins import GitlabEntityMixin
 from apps.development.models import Issue
 
 
-class GLStatus:
-    services: dict = {}
+class GlServiceStatus:
+    name: str
+    time: datetime
+
+
+class GlStatus:
+    services: Iterable[GlServiceStatus] = []
     last_issues: Iterable[Issue] = []
     last_sync: datetime
 
 
-def get_gitlab_sync_status() -> GLStatus:
+def get_gitlab_sync_status() -> GlStatus:
     provider = GLStatusProvider()
     return provider.get_status()
 
@@ -29,8 +34,8 @@ ACTIONS_MAPS = {
 
 
 class GLStatusProvider:
-    def get_status(self) -> GLStatus:
-        status = GLStatus()
+    def get_status(self) -> GlStatus:
+        status = GlStatus()
         status.last_sync = self._get_last_sync()
         status.last_issues = self._get_last_issues()
         status.services = self._get_services_stats()
@@ -54,8 +59,8 @@ class GLStatusProvider:
         return value.get('gl_last_sync')  # type: ignore
 
     @classmethod
-    def _get_services_stats(cls) -> Dict:
-        stats = {}
+    def _get_services_stats(cls) -> Iterable[GlServiceStatus]:
+        stats = []
 
         for key, value in ACTIONS_MAPS.items():
             action = Action.objects.filter(verb=value).order_by(
@@ -63,6 +68,10 @@ class GLStatusProvider:
             ).first()
 
             if action:
-                stats[key] = action.timestamp
+                service_status = GlServiceStatus()
+                service_status.name = key
+                service_status.time = action.timestamp
+
+                stats.append(service_status)
 
         return stats

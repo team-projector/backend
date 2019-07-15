@@ -19,6 +19,7 @@ class IssueType(DjangoObjectType):
 
     class Meta:
         model = Issue
+        filter_fields = []
         interfaces = (DatasourceRelayNode, SpentTimeBase)
         connection_class = DataSourceConnection
         name = 'Issue'

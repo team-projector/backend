@@ -1,3 +1,5 @@
+from .gitlab_service_status import GitlabServiceStatusType
+from .gitlab_status import GitlabStatusType
 from .issue import IssueType
 from .issue_metrics import IssueMetricsType
 from .issues_summary import IssuesSummaryType

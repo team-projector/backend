@@ -2,11 +2,12 @@ import graphene
 from graphene_django.debug import DjangoDebug
 
 from apps.core.graphql.views import (
-    DrfAuthenticatedGraphQLView,
-    PrivateGraphQLView
+    DrfAuthenticatedGraphQLView, PrivateGraphQLView
 )
 from apps.development.graphql.mutations import IssuesMutations
-from apps.development.graphql.queries import IssuesQueries, TeamsQueries
+from apps.development.graphql.queries import (
+    IssuesQueries, TeamsQueries, GitlabQueries
+)
 from apps.payroll.graphql.queries import TimeExpensesQueries
 from apps.users.graphql.mutations import AuthMutations
 from apps.users.graphql.queries import UsersQueries
@@ -14,6 +15,7 @@ from apps.users.graphql.queries import UsersQueries
 
 class Query(IssuesQueries,
             TeamsQueries,
+            GitlabQueries,
             TimeExpensesQueries,
             UsersQueries,
             graphene.ObjectType):
