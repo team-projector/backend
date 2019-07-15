@@ -23,7 +23,7 @@ class GlStatus:
 
 
 def get_gitlab_sync_status() -> GlStatus:
-    provider = GLStatusProvider()
+    provider = GlStatusProvider()
     return provider.get_status()
 
 
@@ -33,7 +33,7 @@ ACTIONS_MAPS = {
 }
 
 
-class GLStatusProvider:
+class GlStatusProvider:
     def get_status(self) -> GlStatus:
         status = GlStatus()
         status.last_sync = self._get_last_sync()
