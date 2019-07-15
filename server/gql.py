@@ -8,6 +8,7 @@ from apps.core.graphql.views import (
 from apps.development.graphql.mutations import IssuesMutations
 from apps.development.graphql.queries import IssuesQueries, TeamsQueries
 from apps.payroll.graphql.queries import TimeExpensesQueries
+from apps.users.graphql.mutations import AuthMutations
 from apps.users.graphql.queries import UsersQueries
 
 
@@ -20,6 +21,7 @@ class Query(IssuesQueries,
 
 
 class Mutation(IssuesMutations,
+               AuthMutations,
                graphene.ObjectType):
     pass
 
