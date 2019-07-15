@@ -17,7 +17,8 @@ class UserMetrics:
 
 
 class UserMetricsProvider:
-    def get_metrics(self, user: User) -> UserMetrics:
+    def get_metrics(self,
+                    user: User) -> UserMetrics:
         metrics = UserMetrics()
 
         metrics.issues_opened_count = self._get_issues_opened_count(user)

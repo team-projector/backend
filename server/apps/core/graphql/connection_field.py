@@ -1,6 +1,7 @@
 from django.db.models import QuerySet
 from graphene import Connection, Int, PageInfo
 from graphene_django.filter import DjangoFilterConnectionField
+from graphene_django.settings import graphene_settings
 from graphene_django.utils import maybe_queryset
 from graphql_relay.connection.arrayconnection import (
     get_offset_with_default, offset_to_cursor
@@ -88,6 +89,10 @@ class DataSourceConnectionField(DjangoFilterConnectionField):
             )
 
         # It is differences from original function `connection_from_list_slice`
+        max_size = graphene_settings.RELAY_CONNECTION_MAX_LIMIT
+        if end_offset - start_offset > max_size:
+            end_offset = start_offset + max_size
+
         _slice = list_slice[start_offset:end_offset]
         edges = [
             edge_type(
