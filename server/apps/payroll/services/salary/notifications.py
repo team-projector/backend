@@ -8,6 +8,9 @@ def is_payed(salary: Salary) -> bool:
 
 
 def send_email_report(salary: Salary) -> None:
+    if not salary.user.email:
+        return
+
     subject = 'Salary Report'
     text = 'Salary has been paid.'
 
@@ -19,6 +22,9 @@ def send_email_report(salary: Salary) -> None:
 
 
 def send_slack_report(salary: Salary) -> None:
+    if not salary.user.email:
+        return
+
     msg = 'Salary has been paid.'
 
     slack = SlackClient()
