@@ -116,7 +116,7 @@ def create_user(login=USER_LOGIN, **kwargs):
     return user
 
 
-def registry_model_admin(model):
+def model_admin(model):
     return site._registry[model]
 
 
