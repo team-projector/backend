@@ -3,7 +3,7 @@ import pytest
 
 from apps.users.models import User
 from tests.base import (
-    TestClient, TestAPIClient, create_user, USER_LOGIN, USER_PASSWORD
+    Client, TestAPIClient, create_user, USER_LOGIN, USER_PASSWORD
 )
 from tests.mocks import GitlabMock
 
@@ -53,16 +53,16 @@ def user(db):
     return create_user()
 
 
-@pytest.fixture()
+@pytest.fixture
 def admin_user(db):
     return User.objects.create_superuser(USER_LOGIN, USER_PASSWORD)
+
+
+@pytest.fixture
+def admin_client(admin_user):
+    return Client(admin_user)
 
 
 @pytest.fixture()
 def api_client():
     return TestAPIClient()
-
-
-@pytest.fixture()
-def admin_client(admin_user):
-    return TestClient(admin_user)

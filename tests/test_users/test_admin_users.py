@@ -1,27 +1,24 @@
-import pytest
-
-from django.contrib.admin import site
 from django.test import override_settings
 
 from apps.users.models import User
+from tests.base import registry_model_admin
 from tests.test_users.factories import UserFactory
 from tests.test_development.factories_gitlab import AttrDict, GlUserFactory
 from tests.test_development.checkers_gitlab import check_user
 
 
-@pytest.fixture
-def model_admin(db):
-    yield site._registry[User]
+def test_change_password_link(admin_user):
+    model_admin = registry_model_admin(User)
 
-
-def test_change_password_link(model_admin, admin_user):
     assert model_admin.change_password_link(admin_user) == \
            f'<a href="/admin/users/user/{admin_user.id}/password/">' \
            f'change password</a>'
 
 
 @override_settings(GITLAB_TOKEN='GITLAB_TOKEN')
-def test_sync_handler(model_admin, gl_mocker):
+def test_sync_handler(db, gl_mocker):
+    model_admin = registry_model_admin(User)
+
     gl_mocker.registry_get('/user', GlUserFactory())
 
     gl_user = AttrDict(GlUserFactory())
@@ -34,8 +31,10 @@ def test_sync_handler(model_admin, gl_mocker):
     check_user(user, gl_user)
 
 
-def test_changelist_view_without_referer(model_admin, admin_client):
-    request = admin_client.request_get('/admin/users/user/')
+def test_changelist_view_without_referer(admin_client):
+    model_admin = registry_model_admin(User)
+
+    request = admin_client.get('/admin/users/user/')
 
     assert request.META['QUERY_STRING'] == ''
 
@@ -44,11 +43,12 @@ def test_changelist_view_without_referer(model_admin, admin_client):
     assert request.META['QUERY_STRING'] == 'is_active__exact=1'
 
 
-def test_changelist_view_with_referer(model_admin, admin_client):
-    url = '/admin/users/user/'
+def test_changelist_view_with_referer(admin_client):
+    model_admin = registry_model_admin(User)
 
-    request_1 = admin_client.request_get(url, HTTP_REFERER=url)
-    request_2 = admin_client.request_get(url, HTTP_REFERER='www.test.com')
+    url = '/admin/users/user/'
+    request_1 = admin_client.get(url, HTTP_REFERER=url)
+    request_2 = admin_client.get(url, HTTP_REFERER='www.test.com')
 
     assert request_1.META['QUERY_STRING'] == ''
 

@@ -1,17 +1,9 @@
-import pytest
-
-from django.contrib.admin import site
-
 from apps.payroll.models import Payroll
+from tests.base import registry_model_admin
 from tests.test_payroll.factories import (
     IssueSpentTimeFactory, BonusFactory, PaymentFactory, PenaltyFactory
 )
 from tests.test_users.factories import UserFactory
-
-
-@pytest.fixture
-def model_admin(db):
-    yield site._registry[Payroll]
 
 
 def test_payroll_instance_str(db):
@@ -21,7 +13,9 @@ def test_payroll_instance_str(db):
     assert str(payroll) == f'{user} [{payroll.created_at}]: {payroll.sum}'
 
 
-def test_inheritance_bonus(model_admin):
+def test_inheritance_bonus(db):
+    model_admin = registry_model_admin(Payroll)
+
     bonus = BonusFactory.create(user=UserFactory.create())
 
     payroll = Payroll.objects.first()
@@ -31,7 +25,9 @@ def test_inheritance_bonus(model_admin):
            in inheritance
 
 
-def test_inheritance_payment(model_admin):
+def test_inheritance_payment(db):
+    model_admin = registry_model_admin(Payroll)
+
     payment = PaymentFactory.create(user=UserFactory.create())
 
     payroll = Payroll.objects.first()
@@ -41,7 +37,9 @@ def test_inheritance_payment(model_admin):
            in inheritance
 
 
-def test_inheritance_penalty(model_admin):
+def test_inheritance_penalty(db):
+    model_admin = registry_model_admin(Payroll)
+
     penalty = PenaltyFactory.create(user=UserFactory.create())
 
     payroll = Payroll.objects.first()
@@ -51,7 +49,9 @@ def test_inheritance_penalty(model_admin):
            in inheritance
 
 
-def test_inheritance_spenttime(model_admin):
+def test_inheritance_spenttime(db):
+    model_admin = registry_model_admin(Payroll)
+
     spenttime = IssueSpentTimeFactory.create(user=UserFactory.create())
 
     payroll = Payroll.objects.first()
