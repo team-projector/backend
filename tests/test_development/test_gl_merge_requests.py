@@ -8,12 +8,19 @@ from django.utils import timezone
 from apps.core.gitlab import get_gitlab_client
 from apps.development.models import MergeRequest, Note
 from apps.development.services.gitlab.merge_requests import (
-    load_merge_request_notes, load_merge_request_labels, load_project_merge_request, load_merge_requests,
+    load_merge_request_notes, load_merge_request_labels,
+    load_project_merge_request, load_merge_requests,
     load_project_merge_requests
 )
-from tests.test_development.factories import ProjectFactory, MergeRequestFactory, ProjectMilestoneFactory
+from tests.test_development.checkers_gitlab import (
+    check_merge_request, check_user
+)
+from tests.test_development.factories import (
+    ProjectFactory, MergeRequestFactory, ProjectMilestoneFactory
+)
 from tests.test_development.factories_gitlab import (
-    AttrDict, GlUserFactory, GlProjectFactory, GlMergeRequestFactory, GlNoteFactory, GlLabelFactory, GlTimeStats,
+    AttrDict, GlUserFactory, GlProjectFactory, GlMergeRequestFactory,
+    GlNoteFactory, GlLabelFactory, GlTimeStats,
     GlProjectMilestoneFactory
 )
 
@@ -52,7 +59,7 @@ def test_load_merge_request_notes(db, gl_mocker):
     assert note.user.login == gl_author.username
     assert note.content_object == merge_request
     assert note.data == {'date': '2000-01-01', 'spent': 3600}
-    _check_user(note.user, gl_author)
+    check_user(note.user, gl_author)
 
 
 @override_settings(GITLAB_TOKEN='GITLAB_TOKEN')
@@ -108,9 +115,9 @@ def test_load_project_merge_request(db, gl_mocker):
 
     merge_request = MergeRequest.objects.first()
 
-    _check_merge_request(merge_request, gl_merge_request_loaded)
-    _check_user(merge_request.author, gl_user)
-    _check_user(merge_request.assignee, gl_user)
+    check_merge_request(merge_request, gl_merge_request_loaded)
+    check_user(merge_request.author, gl_user)
+    check_user(merge_request.assignee, gl_user)
     assert merge_request.milestone == milestone
 
 
@@ -132,7 +139,7 @@ def test_load_project_merge_requests(db, gl_mocker):
 
     merge_request = MergeRequest.objects.first()
 
-    _check_merge_request(merge_request, gl_merge_request)
+    check_merge_request(merge_request, gl_merge_request)
 
 
 @override_settings(GITLAB_TOKEN='GITLAB_TOKEN')
@@ -155,7 +162,7 @@ def test_load_merge_requests(db, gl_mocker):
 
     merge_request = MergeRequest.objects.first()
 
-    _check_merge_request(merge_request, gl_merge_request)
+    check_merge_request(merge_request, gl_merge_request)
 
     project.refresh_from_db()
     assert timezone.datetime.date(project.gl_last_merge_requests_sync) == timezone.now().date()
@@ -191,20 +198,3 @@ def _registry_merge_request(gl_mocker, gl_project, gl_merge_request):
     gl_mocker.registry_get(f'/projects/{gl_project.id}/merge_requests/{gl_merge_request.iid}/closed_by', [])
     gl_mocker.registry_get(f'/projects/{gl_project.id}/labels', [])
     gl_mocker.registry_get(f'/projects/{gl_project.id}/merge_requests/{gl_merge_request.iid}/notes', [])
-
-
-def _check_merge_request(merge_request, gl_merge_request):
-    assert merge_request.gl_id == gl_merge_request.id
-    assert merge_request.gl_iid == gl_merge_request.iid
-    assert merge_request.gl_url == gl_merge_request.web_url
-    assert merge_request.title == gl_merge_request.title
-    assert merge_request.state == gl_merge_request.state
-    assert merge_request.created_at is not None
-    assert merge_request.updated_at is not None
-
-
-def _check_user(user, gl_user):
-    assert user.login == gl_user.username
-    assert user.name == gl_user.name
-    assert user.gl_avatar == gl_user.avatar_url
-    assert user.gl_url == gl_user.web_url

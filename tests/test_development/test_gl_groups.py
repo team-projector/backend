@@ -1,10 +1,16 @@
 from django.test import override_settings
 
-from apps.development.services.gitlab.groups import load_single_group, load_groups
+from apps.development.services.gitlab.groups import (
+    load_single_group, load_groups
+)
 from apps.development.models import ProjectGroup
 
+
+from tests.test_development.checkers_gitlab import check_group
 from tests.test_development.factories import ProjectGroupFactory
-from tests.test_development.factories_gitlab import AttrDict, GlUserFactory, GlGroupFactory
+from tests.test_development.factories_gitlab import (
+    AttrDict, GlUserFactory, GlGroupFactory
+)
 
 
 def test_load_single_group(db):
@@ -12,16 +18,18 @@ def test_load_single_group(db):
 
     group = load_single_group(gl_group, None)
 
-    _check_group(group, gl_group)
+    check_group(group, gl_group)
 
 
 def test_load_single_group_with_parent(db):
-    parent = ProjectGroupFactory.create()
-    gl_group = AttrDict(GlGroupFactory(parent_id=parent.id))
+    gl_parent = AttrDict(GlGroupFactory())
+    parent = ProjectGroupFactory.create(gl_id=gl_parent.id)
+
+    gl_group = AttrDict(GlGroupFactory(parent_id=parent.gl_id))
 
     group = load_single_group(gl_group, parent)
 
-    _check_group(group, gl_group, parent)
+    check_group(group, gl_group, parent)
 
 
 @override_settings(GITLAB_TOKEN='GITLAB_TOKEN')
@@ -35,19 +43,7 @@ def test_load_groups(db, gl_mocker):
     load_groups()
 
     group_1 = ProjectGroup.objects.get(gl_id=gl_group_1.id)
-    _check_group(group_1, gl_group_1)
+    check_group(group_1, gl_group_1)
 
     group_2 = ProjectGroup.objects.get(gl_id=gl_group_2.id)
-    _check_group(group_2, gl_group_2, group_1)
-
-
-def _check_group(group, gl_group, parent=None):
-    assert group.gl_id == gl_group.id
-    assert group.gl_url == gl_group.web_url
-    assert group.title == gl_group.name
-    assert group.full_title == gl_group.full_name
-
-    if not parent:
-        assert group.parent is None
-    else:
-        assert group.parent == parent
+    check_group(group_2, gl_group_2, group_1)

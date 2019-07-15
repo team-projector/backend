@@ -482,6 +482,15 @@ class ApiMetricsWeeksTests(BaseAPITest):
 
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
+    def test_bad_group(self):
+        self.set_credentials()
+
+        self.client.get(f'/api/users/{self.user.id}/progress-metrics', {
+            'start': datetime.now() - timedelta(days=5),
+            'end': datetime.now() + timedelta(days=5),
+            'group': 'test'
+        })
+
     def _create_spent_time(self, date, spent: timedelta = None, user=None,
                            issue=None):
         return IssueSpentTimeFactory.create(date=date,
