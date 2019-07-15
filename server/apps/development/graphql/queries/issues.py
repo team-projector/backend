@@ -19,5 +19,6 @@ class IssuesQueries(graphene.ObjectType):
         user=graphene.ID(),
         team=graphene.ID(),
         state=graphene.String(),
+        problems=graphene.Boolean(),
         resolver=resolve_issues_summary
     )

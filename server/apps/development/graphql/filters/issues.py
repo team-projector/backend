@@ -47,4 +47,4 @@ class IssuesFilterSet(django_filters.FilterSet):
 
     class Meta:
         model = Issue
-        fields = ('state', 'due_date', 'user', 'team')
+        fields = ('state', 'due_date', 'user', 'team', 'problems')
