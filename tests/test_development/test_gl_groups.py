@@ -1,6 +1,8 @@
 from django.test import override_settings
 
-from apps.development.services.gitlab.groups import load_single_group, load_groups
+from apps.development.services.gitlab.groups import (
+    load_single_group, load_groups
+)
 from apps.development.models import ProjectGroup
 
 

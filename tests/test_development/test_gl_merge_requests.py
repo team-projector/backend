@@ -13,7 +13,8 @@ from apps.development.services.gitlab.merge_requests import (
     load_project_merge_requests
 )
 from tests.test_development.checkers_gitlab import (
-    check_merge_request, check_user)
+    check_merge_request, check_user
+)
 from tests.test_development.factories import (
     ProjectFactory, MergeRequestFactory, ProjectMilestoneFactory
 )
