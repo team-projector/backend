@@ -6,8 +6,13 @@ from apps.development.rest.serializers import IssueCardSerializer
 from apps.development.services.status.gitlab import get_gitlab_sync_status
 
 
+class GitlabServiceStatusSerializer(serializers.Serializer):
+    name = serializers.CharField()
+    time = serializers.DateTimeField()
+
+
 class GitlabStatusSerializer(serializers.Serializer):
-    services = serializers.DictField(child=serializers.DateTimeField())
+    services = serializers.Serializer(GitlabServiceStatusSerializer, many=True)
     last_issues = IssueCardSerializer(many=True)
     last_sync = serializers.DateTimeField()
 
