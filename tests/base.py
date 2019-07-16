@@ -4,7 +4,6 @@ import sys
 
 from django.db import transaction
 from django.contrib.admin import site
-from django.contrib.messages.storage.cookie import CookieStorage
 from django.forms.models import model_to_dict
 from django.test import RequestFactory
 from rest_framework.test import APIClient, APITestCase
@@ -68,21 +67,27 @@ class TestAPIClient(APIClient):
         self.credentials(HTTP_AUTHORIZATION=f'Bearer {token.key}')
 
 
+class MockStorageMessages:
+    def add(self, level, message, extra_tags):
+        return
+
+
 class Client:
     def __init__(self, user):
         self.user = user
+        self._factory = RequestFactory()
 
-    def get(self, url, **extra):
-        request = RequestFactory().get(url, **extra)
+    def get(self, url, data=None, **extra):
+        request = self._factory.get(url, data, **extra)
         request.user = self.user
 
         return request
 
     def post(self, url, data, **extra):
-        request = RequestFactory().post(url, data=data, **extra)
+        request = self._factory.post(url, data=data, **extra)
         request.user = self.user
         request._dont_enforce_csrf_checks = True
-        request._messages = CookieStorage(request)
+        request._messages = MockStorageMessages()
 
         return request
 
