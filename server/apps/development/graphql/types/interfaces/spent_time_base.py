@@ -1,5 +1,7 @@
 import graphene
 
+from apps.core.graphql.connection_field import DataSourceConnectionField
+from ..label import LabelType
 from ..project import ProjectType
 
 
@@ -11,3 +13,4 @@ class SpentTimeBase(graphene.Interface):
     gl_last_sync = graphene.DateTime()
     gl_iid = graphene.Int()
     project = graphene.Field(ProjectType)
+    labels = DataSourceConnectionField(LabelType)
