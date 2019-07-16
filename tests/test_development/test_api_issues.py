@@ -1,69 +1,84 @@
 from rest_framework import status
 
 from apps.development.models import TeamMember
+from apps.development.rest.views import IssuesViewset
 from tests.test_development.factories import (
     FeatureFactory, IssueFactory, ProjectGroupMilestoneFactory,
     TeamFactory, TeamMemberFactory)
 from tests.test_users.factories import UserFactory
 
 
-def test_list(user, api_client):
+def test_list(user, client):
+    view = IssuesViewset.as_view(actions={'get': 'list'})
+
     IssueFactory.create_batch(5, user=user)
 
-    api_client.set_credentials(user)
-    response = api_client.get('/api/issues')
+    client.set_credentials(user)
+    response = view(client.get('/'))
 
     assert response.status_code == status.HTTP_200_OK
     assert response.data['count'] == 5
 
 
-def test_retrieve(user, api_client):
+def test_retrieve(user, client):
+    view = IssuesViewset.as_view(actions={'get': 'retrieve'})
+
     issue = IssueFactory.create(user=user)
 
-    api_client.set_credentials(user)
-    response = api_client.get(f'/api/issues/{issue.id}')
+    client.set_credentials(user)
+    response = view(client.get('/'), pk=issue.id)
 
     assert response.status_code == status.HTTP_200_OK
     assert response.data['id'] == issue.id
 
 
-def test_retrieve_not_found(user, api_client):
+def test_retrieve_not_found(user, client):
+    view = IssuesViewset.as_view(actions={'get': 'retrieve'})
+
     issue = IssueFactory.create(user=user)
 
-    api_client.set_credentials(user)
-    response = api_client.get(f'/api/issues/{issue.id + 1}')
+    client.set_credentials(user)
+    response = view(client.get('/'), pk=issue.id + 1)
 
     assert response.status_code == status.HTTP_404_NOT_FOUND
 
 
-def test_update_issue_feature(user, api_client):
+def test_update_issue_feature(user, client):
+    view = IssuesViewset.as_view(actions={'patch': 'update'})
+
     issue = IssueFactory.create(user=user)
     feature = FeatureFactory.create(
         milestone=ProjectGroupMilestoneFactory.create())
 
     assert issue.feature_id != feature.id
 
-    api_client.set_credentials(user)
-    response = api_client.patch(f'/api/issues/{issue.id}', {
-        'feature': feature.id
-    })
+    client.set_credentials(user)
+    response = view(
+        client.patch('/', {'feature': feature.id}),
+        pk=issue.id
+    )
 
     assert response.status_code == status.HTTP_200_OK
     assert response.data['feature']['id'] == feature.id
 
 
-def test_update_issue_feature_not_exist(user, api_client):
+def test_update_issue_feature_not_exist(user, client):
+    view = IssuesViewset.as_view(actions={'patch': 'update'})
+
     issue = IssueFactory.create(user=user)
 
-    api_client.set_credentials(user)
-    response = api_client.patch(f'/api/issues/{issue.id}', {
-        'feature': 0
-    })
+    client.set_credentials(user)
+    response = view(
+        client.patch('/', {'feature': 0}),
+        pk=issue.id
+    )
 
     assert response.status_code == status.HTTP_400_BAD_REQUEST
 
 
-def test_change_issue_feature(user, api_client):
+def test_change_issue_feature(user, client):
+    view = IssuesViewset.as_view(actions={'patch': 'update'})
+
     issue = IssueFactory.create(
         user=user,
         feature=FeatureFactory.create(
@@ -76,16 +91,19 @@ def test_change_issue_feature(user, api_client):
 
     assert feature.id != issue.feature_id
 
-    api_client.set_credentials(user)
-    response = api_client.patch(f'/api/issues/{issue.id}', {
-        'feature': feature.id
-    })
+    client.set_credentials(user)
+    response = view(
+        client.patch('/', {'feature': feature.id}),
+        pk=issue.id
+    )
 
     assert response.status_code == status.HTTP_200_OK
     assert response.data['feature']['id'] == feature.id
 
 
-def test_show_participants(user, api_client):
+def test_show_participants(user, client):
+    view = IssuesViewset.as_view(actions={'get': 'list'})
+
     user_2 = UserFactory.create()
 
     team = TeamFactory.create()
@@ -106,10 +124,8 @@ def test_show_participants(user, api_client):
     users = UserFactory.create_batch(size=3)
     issue.participants.set(users)
 
-    api_client.set_credentials(user)
-    response = api_client.get('/api/issues', {
-        'user': user_2.id
-    })
+    client.set_credentials(user)
+    response = view(client.get('/'), {'user': user_2.id})
 
     assert response.status_code == status.HTTP_200_OK
     assert response.data['count'] == 1
@@ -118,7 +134,9 @@ def test_show_participants(user, api_client):
     ) == set(x.id for x in users)
 
 
-def test_show_users(user, api_client):
+def test_show_users(user, client):
+    view = IssuesViewset.as_view(actions={'get': 'list'})
+
     user_2 = UserFactory.create()
 
     team = TeamFactory.create()
@@ -137,8 +155,8 @@ def test_show_users(user, api_client):
     IssueFactory.create(user=user_2)
     IssueFactory.create(user=user)
 
-    api_client.set_credentials(user)
-    response = api_client.get('/api/issues')
+    client.set_credentials(user)
+    response = view(client.get('/'))
 
     assert response.status_code == status.HTTP_200_OK
     assert response.data['count'] == 2
@@ -146,7 +164,9 @@ def test_show_users(user, api_client):
            {user.id, user_2.id}
 
 
-def test_issues_filter_by_team_empty(user, api_client):
+def test_issues_filter_by_team_empty(user, client):
+    view = IssuesViewset.as_view(actions={'get': 'list'})
+
     user_1 = UserFactory.create()
     user_2 = UserFactory.create()
 
@@ -158,13 +178,15 @@ def test_issues_filter_by_team_empty(user, api_client):
 
     IssueFactory.create(user=user)
 
-    api_client.set_credentials(user)
-    response = api_client.get('/api/issues', {'team': team_1.id})
+    client.set_credentials(user)
+    response = view(client.get('/', {'team': team_1.id}))
 
     assert response.status_code == status.HTTP_400_BAD_REQUEST
 
 
-def test_issues_filter_by_team_watcher_empty(user, api_client):
+def test_issues_filter_by_team_watcher_empty(user, client):
+    view = IssuesViewset.as_view(actions={'get': 'list'})
+
     user_1 = UserFactory.create()
 
     team_1 = TeamFactory.create()
@@ -181,8 +203,8 @@ def test_issues_filter_by_team_watcher_empty(user, api_client):
 
     IssueFactory.create(user=user)
 
-    api_client.set_credentials(user)
-    response = api_client.get('/api/issues', {'team': team_1.id})
+    client.set_credentials(user)
+    response = view(client.get('/', {'team': team_1.id}))
 
     assert response.status_code == status.HTTP_200_OK
 
@@ -192,7 +214,9 @@ def test_issues_filter_by_team_watcher_empty(user, api_client):
     assert response_ids == []
 
 
-def test_issues_filter_by_team_leader(user, api_client):
+def test_issues_filter_by_team_leader(user, client):
+    view = IssuesViewset.as_view(actions={'get': 'list'})
+
     user_1 = UserFactory.create()
 
     team_1 = TeamFactory.create()
@@ -213,8 +237,8 @@ def test_issues_filter_by_team_leader(user, api_client):
     issue_1 = IssueFactory.create(user=user_1)
     IssueFactory.create(user=user)
 
-    api_client.set_credentials(user)
-    response = api_client.get('/api/issues', {'team': team_1.id})
+    client.set_credentials(user)
+    response = view(client.get('/', {'team': team_1.id}))
 
     assert response.status_code == status.HTTP_200_OK
 

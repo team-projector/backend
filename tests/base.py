@@ -5,8 +5,7 @@ import sys
 from django.db import transaction
 from django.contrib.admin import site
 from django.forms.models import model_to_dict
-from django.test import RequestFactory
-from rest_framework.test import APIClient, APITestCase
+from rest_framework.test import APIClient, APITestCase, APIRequestFactory
 
 from apps.users.models import User
 from apps.users.services.token import create_user_token
@@ -73,33 +72,55 @@ class MockStorageMessages:
 
 
 class Client:
-    def __init__(self, user):
+    def __init__(self, user=None):
         self.user = user
-        self._factory = RequestFactory()
+        self._factory = APIRequestFactory()
+        self._credentials = {}
 
     def get(self, url, data=None, **extra):
         request = self._factory.get(url, data, **extra)
         request.user = self.user
+        request.META.update(**self._credentials)
 
         return request
 
     def post(self, url, data, **extra):
-        request = self._factory.post(url, data=data, **extra)
+        request = self._factory.post(url, data, **extra)
         request.user = self.user
-        request._dont_enforce_csrf_checks = True
-        request._messages = MockStorageMessages()
+        request.META.update(**self._credentials)
+
+        if self.user.is_superuser:
+            request._messages = MockStorageMessages()
 
         return request
 
+    def patch(self, url, data, **extra):
+        request = self._factory.patch(url, data, **extra)
+        request.user = self.user
+        request.META.update(**self._credentials)
 
-def trigger_on_commit():
-    connection = transaction.get_connection()
+        return request
 
-    current_run_on_commit = connection.run_on_commit
-    connection.run_on_commit = []
-    while current_run_on_commit:
-        sids, func = current_run_on_commit.pop(0)
-        func()
+    def set_credentials(self, user=None, token=None):
+        if not user:
+            user = self.user
+
+        if token is None:
+            token = create_user_token(user)
+
+        self._credentials = {
+            'HTTP_AUTHORIZATION': f'Bearer {token.key}'
+        }
+
+    @staticmethod
+    def trigger_on_commit():
+        connection = transaction.get_connection()
+
+        current_run_on_commit = connection.run_on_commit
+        connection.run_on_commit = []
+        while current_run_on_commit:
+            sids, func = current_run_on_commit.pop(0)
+            func()
 
 
 def create_user(login=USER_LOGIN, **kwargs):
