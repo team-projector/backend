@@ -67,6 +67,7 @@ class GlProjectMilestoneFactory(factory.DictFactory):
 class GlUserFactory(factory.DictFactory):
     id = factory.Faker('random_int')
     name = factory.Sequence(lambda n: f'User {n}')
+    public_email = factory.Sequence(lambda n: f'public.email{n}@test.com')
     username = factory.Sequence(lambda n: f'user_name{n}')
     state = 'active'
     avatar_url = factory.Faker('url')
