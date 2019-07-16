@@ -3,6 +3,10 @@ import os
 import sys
 
 from django.db import transaction
+from django.contrib.admin import site
+from django.contrib.messages.storage.cookie import CookieStorage
+from django.forms.models import model_to_dict
+from django.test import RequestFactory
 from rest_framework.test import APIClient, APITestCase
 
 from apps.users.models import User
@@ -64,6 +68,25 @@ class TestAPIClient(APIClient):
         self.credentials(HTTP_AUTHORIZATION=f'Bearer {token.key}')
 
 
+class Client:
+    def __init__(self, user):
+        self.user = user
+
+    def get(self, url, **extra):
+        request = RequestFactory().get(url, **extra)
+        request.user = self.user
+
+        return request
+
+    def post(self, url, data, **extra):
+        request = RequestFactory().post(url, data=data, **extra)
+        request.user = self.user
+        request._dont_enforce_csrf_checks = True
+        request._messages = CookieStorage(request)
+
+        return request
+
+
 def trigger_on_commit():
     connection = transaction.get_connection()
 
@@ -91,6 +114,18 @@ def create_user(login=USER_LOGIN, **kwargs):
         user.save()
 
     return user
+
+
+def model_admin(model):
+    return site._registry[model]
+
+
+def model_to_dict_form(data: dict) -> dict:
+    def replace(value):
+        return '' if value is None else value
+
+    original = model_to_dict(data)
+    return {k: replace(v) for k, v in original.items()}
 
 
 def format_date(d: datetime) -> str:
