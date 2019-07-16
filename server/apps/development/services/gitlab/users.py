@@ -51,6 +51,10 @@ def load_user(user_id: int) -> User:
         user.is_staff = False
         user.save()
 
+    if not user.email and gl_user.public_email:
+        user.email = gl_user.public_email
+        user.save(update_fields=['email'])
+
     logger.info(f'User "{user}" is synced')
 
     return user
