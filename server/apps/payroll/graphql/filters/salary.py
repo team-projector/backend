@@ -1,12 +1,10 @@
 import django_filters
 from django.db.models import QuerySet
 
-from apps.development.models import Team, TeamMember
+from apps.development.models import Team
 from apps.payroll.models import Salary
+from apps.payroll.services.allowed.salary import check_allowed_filtering_by_team
 from apps.users.models import User
-
-from apps.development.services.team_members import filter_by_roles
-from rest_framework.exceptions import ValidationError
 
 
 class TeamFilter(django_filters.ModelChoiceFilter):
@@ -14,27 +12,12 @@ class TeamFilter(django_filters.ModelChoiceFilter):
         super().__init__(queryset=Team.objects.all())
 
     def filter(self, queryset, value) -> QuerySet:
-        if value:
-            self._check_allowed_filtering(value)
+        if not value:
+            return queryset
 
-        return queryset
+        check_allowed_filtering_by_team(value, self.get_request().user)
 
-    def _check_allowed_filtering(self, value):
-        queryset = TeamMember.objects.filter(
-            team=value,
-            user=self.get_request().user
-        )
-
-        can_filtering = filter_by_roles(
-            queryset,
-            [
-                TeamMember.roles.leader,
-                TeamMember.roles.watcher
-            ]
-        ).exists()
-
-        if not can_filtering:
-            raise ValidationError('Can\'t filter by team')
+        return queryset.filter(user__teams=value)
 
 
 class SalaryFilterSet(django_filters.FilterSet):
