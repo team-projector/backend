@@ -7,7 +7,7 @@ from django.utils import timezone
 
 from apps.development.models.issue import STATE_CLOSED
 from apps.payroll.models import Salary
-from tests.base import model_to_dict_form, model_admin
+from tests.base import trigger_on_commit, model_to_dict_form, model_admin
 from tests.test_development.factories import IssueFactory
 from tests.test_payroll.factories import IssueSpentTimeFactory, SalaryFactory
 from tests.test_users.factories import UserFactory
@@ -95,7 +95,7 @@ def test_send_notification(admin_client):
         object_id=str(salary.id)
     )
 
-    admin_client.trigger_on_commit()
+    trigger_on_commit()
     salary.refresh_from_db()
 
     assert salary.payed is True
@@ -120,7 +120,7 @@ def test_salary_payed_changed_to_false(admin_client):
         object_id=str(salary.id)
     )
 
-    admin_client.trigger_on_commit()
+    trigger_on_commit()
     salary.refresh_from_db()
 
     assert salary.payed is False
@@ -141,7 +141,7 @@ def test_user_without_email_but_payed(admin_client):
         object_id=str(salary.id)
     )
 
-    admin_client.trigger_on_commit()
+    trigger_on_commit()
     salary.refresh_from_db()
 
     assert salary.payed is True
@@ -162,7 +162,7 @@ def test_salary_another_field_changed(admin_client):
         object_id=str(salary.id)
     )
 
-    admin_client.trigger_on_commit()
+    trigger_on_commit()
     salary.refresh_from_db()
 
     assert salary.sum == 10.0
@@ -184,7 +184,7 @@ def test_salary_another_field_changed_and_payed(admin_client):
         object_id=str(salary.id)
     )
 
-    admin_client.trigger_on_commit()
+    trigger_on_commit()
     salary.refresh_from_db()
 
     assert salary.sum == 10.0

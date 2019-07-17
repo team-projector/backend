@@ -1,3 +1,4 @@
+from django.urls import resolve
 from rest_framework import status
 
 from apps.development.models import TeamMember
@@ -6,6 +7,19 @@ from tests.test_development.factories import (
     FeatureFactory, IssueFactory, ProjectGroupMilestoneFactory,
     TeamFactory, TeamMemberFactory)
 from tests.test_users.factories import UserFactory
+
+
+def test_issues_api_path():
+    resolver = resolve('/api/issues')
+
+    assert resolver.url_name == 'issues-list'
+    assert resolver.func.cls == IssuesViewset
+
+    resolver = resolve('/api/issues/1')
+
+    assert resolver.url_name == 'issues-detail'
+    assert resolver.func.cls == IssuesViewset
+    assert resolver.kwargs == {'pk': '1'}
 
 
 def test_list(user, client):
@@ -44,7 +58,7 @@ def test_retrieve_not_found(user, client):
 
 
 def test_update_issue_feature(user, client):
-    view = IssuesViewset.as_view(actions={'patch': 'update'})
+    view = IssuesViewset.as_view(actions={'patch': 'partial_update'})
 
     issue = IssueFactory.create(user=user)
     feature = FeatureFactory.create(
@@ -63,7 +77,7 @@ def test_update_issue_feature(user, client):
 
 
 def test_update_issue_feature_not_exist(user, client):
-    view = IssuesViewset.as_view(actions={'patch': 'update'})
+    view = IssuesViewset.as_view(actions={'patch': 'partial_update'})
 
     issue = IssueFactory.create(user=user)
 
@@ -77,7 +91,7 @@ def test_update_issue_feature_not_exist(user, client):
 
 
 def test_change_issue_feature(user, client):
-    view = IssuesViewset.as_view(actions={'patch': 'update'})
+    view = IssuesViewset.as_view(actions={'patch': 'partial_update'})
 
     issue = IssueFactory.create(
         user=user,

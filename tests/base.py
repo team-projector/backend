@@ -94,8 +94,22 @@ class Client:
 
         return request
 
+    def put(self, url, data, **extra):
+        request = self._factory.put(url, data, **extra)
+        request.user = self.user
+        request.META.update(**self._credentials)
+
+        return request
+
     def patch(self, url, data, **extra):
         request = self._factory.patch(url, data, **extra)
+        request.user = self.user
+        request.META.update(**self._credentials)
+
+        return request
+
+    def delete(self, url, data, **extra):
+        request = self._factory.delete(url, data, **extra)
         request.user = self.user
         request.META.update(**self._credentials)
 
@@ -108,19 +122,17 @@ class Client:
         if token is None:
             token = create_user_token(user)
 
-        self._credentials = {
-            'HTTP_AUTHORIZATION': f'Bearer {token.key}'
-        }
+        self._credentials = {'HTTP_AUTHORIZATION': f'Bearer {token.key}'}
 
-    @staticmethod
-    def trigger_on_commit():
-        connection = transaction.get_connection()
 
-        current_run_on_commit = connection.run_on_commit
-        connection.run_on_commit = []
-        while current_run_on_commit:
-            sids, func = current_run_on_commit.pop(0)
-            func()
+def trigger_on_commit():
+    connection = transaction.get_connection()
+
+    current_run_on_commit = connection.run_on_commit
+    connection.run_on_commit = []
+    while current_run_on_commit:
+        sids, func = current_run_on_commit.pop(0)
+        func()
 
 
 def create_user(login=USER_LOGIN, **kwargs):
