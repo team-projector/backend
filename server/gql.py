@@ -8,7 +8,7 @@ from apps.development.graphql.mutations import IssuesMutations
 from apps.development.graphql.queries import (
     IssuesQueries, TeamsQueries, GitlabQueries
 )
-from apps.payroll.graphql.queries import TimeExpensesQueries
+from apps.payroll.graphql.queries import TimeExpensesQueries, SalariesQueries
 from apps.users.graphql.mutations import AuthMutations
 from apps.users.graphql.queries import UsersQueries
 
@@ -17,6 +17,7 @@ class Query(IssuesQueries,
             TeamsQueries,
             GitlabQueries,
             TimeExpensesQueries,
+            SalariesQueries,
             UsersQueries,
             graphene.ObjectType):
     debug = graphene.Field(DjangoDebug, name='_debug')
