@@ -5,17 +5,36 @@ from apps.development.models import Team, TeamMember
 from apps.payroll.models import Salary
 from apps.users.models import User
 
+from apps.development.services.team_members import filter_by_roles
+from rest_framework.exceptions import ValidationError
+
 
 class TeamFilter(django_filters.ModelChoiceFilter):
     def __init__(self) -> None:
         super().__init__(queryset=Team.objects.all())
 
     def filter(self, queryset, value) -> QuerySet:
-        if not value:
-            return queryset
+        if value:
+            self._check_allowed_filtering(value)
 
-        users = TeamMember.objects.get_no_watchers(value)
-        return queryset.filter(user__in=users)
+        return queryset
+
+    def _check_allowed_filtering(self, value):
+        queryset = TeamMember.objects.filter(
+            team=value,
+            user=self.get_request().user
+        )
+
+        can_filtering = filter_by_roles(
+            queryset,
+            [
+                TeamMember.roles.leader,
+                TeamMember.roles.watcher
+            ]
+        ).exists()
+
+        if not can_filtering:
+            raise ValidationError('Can\'t filter by team')
 
 
 class SalaryFilterSet(django_filters.FilterSet):
