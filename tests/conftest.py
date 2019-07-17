@@ -53,6 +53,11 @@ def user(db):
     return create_user()
 
 
+@pytest.fixture(scope='module')
+def client():
+    return Client()
+
+
 @pytest.fixture
 def admin_user(db):
     return User.objects.create_superuser(USER_LOGIN, USER_PASSWORD)

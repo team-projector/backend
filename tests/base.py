@@ -4,10 +4,8 @@ import sys
 
 from django.db import transaction
 from django.contrib.admin import site
-from django.contrib.messages.storage.cookie import CookieStorage
 from django.forms.models import model_to_dict
-from django.test import RequestFactory
-from rest_framework.test import APIClient, APITestCase
+from rest_framework.test import APIClient, APITestCase, APIRequestFactory
 
 from apps.users.models import User
 from apps.users.services.token import create_user_token
@@ -68,23 +66,63 @@ class TestAPIClient(APIClient):
         self.credentials(HTTP_AUTHORIZATION=f'Bearer {token.key}')
 
 
-class Client:
-    def __init__(self, user):
-        self.user = user
+class MockStorageMessages:
+    def add(self, level, message, extra_tags):
+        return
 
-    def get(self, url, **extra):
-        request = RequestFactory().get(url, **extra)
+
+class Client:
+    def __init__(self, user=None):
+        self.user = user
+        self._factory = APIRequestFactory()
+        self._credentials = {}
+
+    def get(self, url, data=None, **extra):
+        request = self._factory.get(url, data, **extra)
         request.user = self.user
+        request.META.update(**self._credentials)
 
         return request
 
     def post(self, url, data, **extra):
-        request = RequestFactory().post(url, data=data, **extra)
+        request = self._factory.post(url, data, **extra)
         request.user = self.user
-        request._dont_enforce_csrf_checks = True
-        request._messages = CookieStorage(request)
+        request.META.update(**self._credentials)
+
+        if self.user.is_superuser:
+            request._messages = MockStorageMessages()
 
         return request
+
+    def put(self, url, data, **extra):
+        request = self._factory.put(url, data, **extra)
+        request.user = self.user
+        request.META.update(**self._credentials)
+
+        return request
+
+    def patch(self, url, data, **extra):
+        request = self._factory.patch(url, data, **extra)
+        request.user = self.user
+        request.META.update(**self._credentials)
+
+        return request
+
+    def delete(self, url, data, **extra):
+        request = self._factory.delete(url, data, **extra)
+        request.user = self.user
+        request.META.update(**self._credentials)
+
+        return request
+
+    def set_credentials(self, user=None, token=None):
+        if not user:
+            user = self.user
+
+        if token is None:
+            token = create_user_token(user)
+
+        self._credentials = {'HTTP_AUTHORIZATION': f'Bearer {token.key}'}
 
 
 def trigger_on_commit():
