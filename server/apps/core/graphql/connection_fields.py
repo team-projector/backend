@@ -3,13 +3,13 @@ from graphene import Connection, Int, PageInfo
 from graphene_django.filter import DjangoFilterConnectionField
 from graphene_django.settings import graphene_settings
 from graphene_django.utils import maybe_queryset
-from graphene_permissions.permissions import AllowAuthenticated
 from graphql_relay.connection.arrayconnection import (
     get_offset_with_default, offset_to_cursor
 )
 from graphql_relay.connection.connectiontypes import Edge
 
 from apps.core.graphql.security.mixins.filter import AuthFilter
+from apps.core.graphql.security.permissions import AllowAuthenticated
 
 
 class DataSourceConnectionField(AuthFilter,
