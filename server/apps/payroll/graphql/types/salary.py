@@ -1,15 +1,15 @@
 import graphene
 from django.db.models import QuerySet
-from graphene_django import DjangoObjectType
 
-from apps.core.graphql.connection import DataSourceConnection
-from apps.core.graphql.relay_node import DatasourceRelayNode
+from apps.core.graphql.connections import DataSourceConnection
+from apps.core.graphql.relay_nodes import DatasourceRelayNode
+from apps.core.graphql.types import BaseDjangoObjectType
 from apps.development.graphql.types.interfaces import SpentTimeBase
 from apps.payroll.models import Salary
 from apps.payroll.services.allowed.salary import filter_allowed_for_user
 
 
-class SalaryType(DjangoObjectType):
+class SalaryType(BaseDjangoObjectType):
     owner = graphene.Field(SpentTimeBase)
 
     class Meta:
