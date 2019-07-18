@@ -1,7 +1,7 @@
 import graphene
 
 
-class Owner(graphene.Interface):
+class MilestoneOwner(graphene.Interface):
     id = graphene.ID(required=True)
     title = graphene.String()
     gl_id = graphene.Int()
