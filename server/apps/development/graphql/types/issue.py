@@ -5,7 +5,7 @@ from graphene_django import DjangoObjectType
 from apps.core.graphql.connection import DataSourceConnection
 from apps.core.graphql.relay_node import DatasourceRelayNode
 from apps.core.graphql.utils import is_field_selected
-from apps.development.graphql.types.interfaces import SpentTimeBase
+from apps.development.graphql.types.interfaces import WorkItem
 from apps.development.models import Issue
 from apps.development.services.allowed.issues import filter_allowed_for_user
 from apps.development.services.metrics.issue import get_issue_metrcis
@@ -20,7 +20,7 @@ class IssueType(DjangoObjectType):
     class Meta:
         model = Issue
         filter_fields: list = []
-        interfaces = (DatasourceRelayNode, SpentTimeBase)
+        interfaces = (DatasourceRelayNode, WorkItem)
         connection_class = DataSourceConnection
         name = 'Issue'
 

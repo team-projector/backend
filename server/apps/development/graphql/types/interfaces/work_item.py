@@ -5,7 +5,7 @@ from ..label import LabelType
 from ..project import ProjectType
 
 
-class SpentTimeBase(graphene.Interface):
+class WorkItem(graphene.Interface):
     id = graphene.ID(required=True)
     title = graphene.String()
     gl_id = graphene.Int()

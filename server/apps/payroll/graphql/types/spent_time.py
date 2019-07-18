@@ -4,13 +4,13 @@ from graphene_django import DjangoObjectType
 
 from apps.core.graphql.connection import DataSourceConnection
 from apps.core.graphql.relay_node import DatasourceRelayNode
-from apps.development.graphql.types.interfaces import SpentTimeBase
+from apps.development.graphql.types.interfaces import WorkItem
 from apps.payroll.models import SpentTime
 from apps.payroll.services.allowed.spent_time import filter_allowed_for_user
 
 
 class SpentTimeType(DjangoObjectType):
-    owner = graphene.Field(SpentTimeBase)
+    owner = graphene.Field(WorkItem)
 
     class Meta:
         model = SpentTime
