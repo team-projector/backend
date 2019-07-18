@@ -8,6 +8,7 @@ from .merge_request import MergeRequestType
 from .milestone import MilestoneType
 from .milestone_metrics import MilestoneMetricsType
 from .project import ProjectType
+from .project_group import ProjectGroupType
 from .team import TeamType
 from .team_member import TeamMemberType
 from .team_member_progress_metrics import TeamMemberProgressMetricsType
