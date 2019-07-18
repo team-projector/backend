@@ -1,7 +1,7 @@
 import graphene
 
-from apps.core.graphql.connection_field import DataSourceConnectionField
-from apps.core.graphql.relay_node import DatasourceRelayNode
+from apps.core.graphql.connection_fields import DataSourceConnectionField
+from apps.core.graphql.relay_nodes import DatasourceRelayNode
 from apps.payroll.graphql.filters import SalaryFilterSet
 from apps.payroll.graphql.types import SalaryType
 
