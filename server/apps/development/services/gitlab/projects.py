@@ -61,10 +61,33 @@ def check_project_webhooks(gl_project: GlProject) -> None:
 
     webhook_url = f'https://{settings.DOMAIN_NAME}{reverse("api:gl-webhook")}'
 
-    if any(hook.url == webhook_url for hook in hooks):
-        return
+    tp_webhooks = [
+        hook
+        for hook in hooks
+        if hook.url == webhook_url
+    ]
 
-    gl_project.hooks.create({
-        'url': webhook_url,
-        'issues_events': True
-    })
+    has_valid = False
+
+    for webhook in tp_webhooks:
+        if has_valid:
+            webhook.delete()
+
+        if not validate_webhook(webhook, webhook_url):
+            webhook.delete()
+        else:
+            has_valid = True
+
+    if not has_valid:
+        gl_project.hooks.create({
+            'url': webhook_url,
+            'issues_events': True,
+            'merge_requests_events': True
+        })
+
+
+def validate_webhook(webhook,
+                     webhook_url: str) -> bool:
+    return (webhook.url == webhook_url and
+            webhook.issues_events and
+            webhook.merge_requests_events)
