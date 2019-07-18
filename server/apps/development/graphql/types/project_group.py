@@ -1,13 +1,14 @@
+from graphene_django import DjangoObjectType
+
 from apps.core.graphql.connections import DataSourceConnection
 from apps.core.graphql.relay_nodes import DatasourceRelayNode
-from apps.core.graphql.types import BaseDjangoObjectType
-from apps.development.models import Project
+from apps.development.models import ProjectGroup
 from apps.development.graphql.types.interfaces import MilestoneOwner
 
 
-class ProjectType(BaseDjangoObjectType):
+class ProjectGroupType(DjangoObjectType):
     class Meta:
-        model = Project
+        model = ProjectGroup
         interfaces = (DatasourceRelayNode, MilestoneOwner)
         connection_class = DataSourceConnection
-        name = 'Project'
+        name = 'ProjectGroup'
