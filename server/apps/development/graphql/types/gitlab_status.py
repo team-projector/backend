@@ -1,6 +1,6 @@
 import graphene
 
-from apps.core.graphql.connection_field import DataSourceConnectionField
+from apps.core.graphql.connection_fields import DataSourceConnectionField
 from .gitlab_service_status import GitlabServiceStatusType
 from .issue import IssueType
 

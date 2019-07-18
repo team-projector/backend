@@ -5,21 +5,18 @@ from apps.core.graphql.connections import DataSourceConnection
 from apps.core.graphql.relay_nodes import DatasourceRelayNode
 from apps.core.graphql.types import BaseDjangoObjectType
 from apps.development.graphql.types.interfaces import SpentTimeBase
-from apps.payroll.models import SpentTime
-from apps.payroll.services.allowed.spent_time import filter_allowed_for_user
+from apps.payroll.models import Salary
+from apps.payroll.services.allowed.salary import filter_allowed_for_user
 
 
-class SpentTimeType(BaseDjangoObjectType):
+class SalaryType(BaseDjangoObjectType):
     owner = graphene.Field(SpentTimeBase)
 
     class Meta:
-        model = SpentTime
+        model = Salary
         interfaces = (DatasourceRelayNode,)
         connection_class = DataSourceConnection
-        name = 'SpentTime'
-
-    def resolve_owner(self, info, **kwargs):
-        return self.base
+        name = 'Salary'
 
     @classmethod
     def get_queryset(cls,

@@ -1,16 +1,16 @@
 import graphene
 from django.db.models import QuerySet
-from graphene_django import DjangoObjectType
 
-from apps.core.graphql.connection import DataSourceConnection
-from apps.core.graphql.relay_node import DatasourceRelayNode
+from apps.core.graphql.connections import DataSourceConnection
+from apps.core.graphql.relay_nodes import DatasourceRelayNode
+from apps.core.graphql.types import BaseDjangoObjectType
 from apps.payroll.services.metrics.user import UserMetricsProvider
 from apps.users.models import User
 from apps.users.services.problems.user import get_user_problems
 from .user_metrics import UserMetricsType
 
 
-class UserType(DjangoObjectType):
+class UserType(BaseDjangoObjectType):
     metrics = graphene.Field(UserMetricsType)
     problems = graphene.List(graphene.String)
 

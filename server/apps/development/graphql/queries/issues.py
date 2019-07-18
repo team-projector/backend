@@ -1,7 +1,7 @@
 import graphene
 
-from apps.core.graphql.connection_field import DataSourceConnectionField
-from apps.core.graphql.relay_node import DatasourceRelayNode
+from apps.core.graphql.connection_fields import DataSourceConnectionField
+from apps.core.graphql.relay_nodes import DatasourceRelayNode
 from apps.development.graphql.filters import IssuesFilterSet
 from apps.development.graphql.resolvers import resolve_issues_summary
 from apps.development.graphql.types import IssueType, IssuesSummaryType

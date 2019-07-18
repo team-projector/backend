@@ -1,10 +1,10 @@
 import graphene
 from django.db.models import QuerySet
-from graphene_django import DjangoObjectType
 
-from apps.core.graphql.connection import DataSourceConnection
-from apps.core.graphql.connection_field import DataSourceConnectionField
-from apps.core.graphql.relay_node import DatasourceRelayNode
+from apps.core.graphql.connections import DataSourceConnection
+from apps.core.graphql.connection_fields import DataSourceConnectionField
+from apps.core.graphql.relay_nodes import DatasourceRelayNode
+from apps.core.graphql.types import BaseDjangoObjectType
 from apps.development.graphql.filters import TeamMembersFilterSet
 from apps.development.models import Team
 from apps.development.services.allowed.teams import filter_allowed_for_user
@@ -13,7 +13,7 @@ from .team_member import TeamMemberType
 from .team_metrics import TeamMetricsType
 
 
-class TeamType(DjangoObjectType):
+class TeamType(BaseDjangoObjectType):
     metrics = graphene.Field(TeamMetricsType)
     members = DataSourceConnectionField(
         TeamMemberType,

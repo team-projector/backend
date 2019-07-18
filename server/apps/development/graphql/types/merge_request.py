@@ -1,14 +1,13 @@
-from graphene_django import DjangoObjectType
-
-from apps.core.graphql.connection import DataSourceConnection
-from apps.core.graphql.relay_node import DatasourceRelayNode
+from apps.core.graphql.connections import DataSourceConnection
+from apps.core.graphql.relay_nodes import DatasourceRelayNode
+from apps.core.graphql.types import BaseDjangoObjectType
+from apps.development.graphql.types.interfaces import SpentTimeBase
 from apps.development.models import MergeRequest
-from apps.development.graphql.types.interfaces import WorkItem
 
 
-class MergeRequestType(DjangoObjectType):
+class MergeRequestType(BaseDjangoObjectType):
     class Meta:
         model = MergeRequest
-        interfaces = (DatasourceRelayNode, WorkItem)
+        interfaces = (DatasourceRelayNode, SpentTimeBase)
         connection_class = DataSourceConnection
         name = 'MergeRequest'

@@ -8,8 +8,14 @@ from graphql_relay.connection.arrayconnection import (
 )
 from graphql_relay.connection.connectiontypes import Edge
 
+from apps.core.graphql.security.mixins.filter import AuthFilter
+from apps.core.graphql.security.permissions import AllowAuthenticated
 
-class DataSourceConnectionField(DjangoFilterConnectionField):
+
+class DataSourceConnectionField(AuthFilter,
+                                DjangoFilterConnectionField):
+    permission_classes = (AllowAuthenticated,)
+
     def __init__(self, type, *args, **kwargs):
         kwargs.setdefault('offset', Int())
         super().__init__(type, *args, **kwargs)

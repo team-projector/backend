@@ -1,6 +1,6 @@
 import graphene
 
-from apps.core.graphql.connection_field import DataSourceConnectionField
+from apps.core.graphql.connection_fields import DataSourceConnectionField
 from apps.payroll.graphql.filters import SpentTimeFilterSet
 from apps.payroll.graphql.types import SpentTimeType
 
