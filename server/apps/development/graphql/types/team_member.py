@@ -1,5 +1,5 @@
-from apps.core.graphql.connection import DataSourceConnection
-from apps.core.graphql.relay_node import DatasourceRelayNode
+from apps.core.graphql.connections import DataSourceConnection
+from apps.core.graphql.relay_nodes import DatasourceRelayNode
 from apps.development.models import TeamMember
 from apps.users.graphql.types import UserType
 

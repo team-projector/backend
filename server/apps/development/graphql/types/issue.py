@@ -1,9 +1,9 @@
 import graphene
 from django.db.models import QuerySet
-from graphene_django import DjangoObjectType
 
-from apps.core.graphql.connection import DataSourceConnection
-from apps.core.graphql.relay_node import DatasourceRelayNode
+from apps.core.graphql.connections import DataSourceConnection
+from apps.core.graphql.relay_nodes import DatasourceRelayNode
+from apps.core.graphql.types import BaseDjangoObjectType
 from apps.core.graphql.utils import is_field_selected
 from apps.development.graphql.types.interfaces import SpentTimeBase
 from apps.development.models import Issue
@@ -13,7 +13,7 @@ from apps.development.services.problems.issue import get_issue_problems
 from .issue_metrics import IssueMetricsType
 
 
-class IssueType(DjangoObjectType):
+class IssueType(BaseDjangoObjectType):
     metrics = graphene.Field(IssueMetricsType)
     problems = graphene.List(graphene.String)
 

@@ -1,9 +1,8 @@
 import graphene
 from graphene_django.debug import DjangoDebug
 
-from apps.core.graphql.views import (
-    DrfAuthenticatedGraphQLView, PrivateGraphQLView
-)
+from apps.core.graphql.views import PrivateGraphQLView, \
+    DrfAuthenticatedGraphQLView
 from apps.development.graphql.mutations import IssuesMutations
 from apps.development.graphql.queries import (
     IssuesQueries, TeamsQueries, GitlabQueries
@@ -36,7 +35,6 @@ schema = graphene.Schema(
 
 def get_api_graphql_view():
     return DrfAuthenticatedGraphQLView.as_view(
-        graphiql=True,
         schema=schema
     )
 

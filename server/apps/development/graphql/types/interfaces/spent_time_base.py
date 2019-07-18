@@ -1,6 +1,6 @@
 import graphene
 
-from apps.core.graphql.connection_field import DataSourceConnectionField
+from apps.core.graphql.connection_fields import DataSourceConnectionField
 from ..label import LabelType
 from ..project import ProjectType
 

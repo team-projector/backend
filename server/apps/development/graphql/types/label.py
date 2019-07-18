@@ -1,11 +1,10 @@
-from graphene_django import DjangoObjectType
-
-from apps.core.graphql.connection import DataSourceConnection
-from apps.core.graphql.relay_node import DatasourceRelayNode
+from apps.core.graphql.connections import DataSourceConnection
+from apps.core.graphql.relay_nodes import DatasourceRelayNode
+from apps.core.graphql.types import BaseDjangoObjectType
 from apps.development.models import Label
 
 
-class LabelType(DjangoObjectType):
+class LabelType(BaseDjangoObjectType):
     class Meta:
         model = Label
         interfaces = (DatasourceRelayNode,)

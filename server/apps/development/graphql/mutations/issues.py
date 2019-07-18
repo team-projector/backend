@@ -1,18 +1,20 @@
 import graphene
 from rest_framework.generics import get_object_or_404
 
+from apps.core.graphql.mutations import BaseMutation
 from apps.development.graphql.types import IssueType
 from apps.development.models import Issue
 from apps.development.tasks import sync_project_issue
 
 
-class SyncIssueMutation(graphene.Mutation):
+class SyncIssueMutation(BaseMutation):
     class Arguments:
         id = graphene.ID()
 
     issue = graphene.Field(IssueType)
 
-    def mutate(self, info, id):
+    @classmethod
+    def do_mutate(cls, root, info, id):
         issue = get_object_or_404(
             Issue.objects.allowed_for_user(info.context.user),
             pk=id
