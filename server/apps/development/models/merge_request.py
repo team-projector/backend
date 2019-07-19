@@ -1,6 +1,4 @@
-from collections import defaultdict
 from datetime import datetime
-from typing import DefaultDict
 
 from django.db import models
 from django.db.models import Max
@@ -9,11 +7,9 @@ from django.utils.translation import gettext_lazy as _
 
 from apps.core.db.mixins import GitlabEntityMixin, GitlabInternalIdMixin
 from apps.core.db.utils import Choices
-from apps.development.services.parsers import parse_date
 from apps.payroll.db.mixins import SpentTimesMixin
 from apps.users.models import User
 from .label import Label
-from .note import Note
 from .project import Project
 from ..db.managers import MergeRequestManager
 from ..db.mixins import NotableMixin
@@ -129,33 +125,3 @@ class MergeRequest(NotableMixin,
         return self.notes.aggregate(
             last_created=Max('created_at')
         )['last_created']
-
-    def adjust_spent_times(self) -> None:
-        from apps.payroll.models import SpentTime
-
-        users_spents: DefaultDict[int, int] = defaultdict(int)
-
-        for note in self.notes.all().order_by('created_at'):
-            time_spent = 0
-            note_date = note.created_at.date()
-
-            if note.type == Note.TYPE.reset_spend:
-                time_spent = -users_spents[note.user_id]
-                users_spents[note.user_id] = 0
-            elif note.type == Note.TYPE.time_spend:
-                time_spent = note.data['spent']
-                note_date = parse_date(note.data['date'])
-
-                users_spents[note.user_id] += note.data['spent']
-
-            if SpentTime.objects.filter(note=note).exists():
-                continue
-
-            SpentTime.objects.create(
-                date=note_date,
-                created_by=note.user,
-                user=note.user,
-                time_spent=time_spent,
-                note=note,
-                base=self
-            )
