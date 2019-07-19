@@ -89,7 +89,7 @@ class Client:
         request.user = self.user
         request.META.update(**self._credentials)
 
-        if self.user.is_superuser:
+        if self.user and self.user.is_superuser:
             request._messages = MockStorageMessages()
 
         return request

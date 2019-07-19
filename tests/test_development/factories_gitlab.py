@@ -117,7 +117,7 @@ class GlMergeRequestFactory(factory.DictFactory):
     id = factory.Faker('random_int')
     iid = factory.Faker('random_int')
     web_url = factory.Faker('url')
-    title = factory.Sequence(lambda n: f'Issue {n}')
+    title = factory.Sequence(lambda n: f'MergeRequest {n}')
     project_id = factory.Faker('random_int')
     state = 'opened'
     due_date = gl_format_date(datetime.now())
@@ -127,6 +127,22 @@ class GlMergeRequestFactory(factory.DictFactory):
     assignee = factory.SubFactory(GlUserFactory)
     milestone = None
     labels = []
+
+
+class GlIssueWebhookFactory(factory.DictFactory):
+    object_kind = 'issue'
+    event_type = 'issue'
+    user = factory.SubFactory(GlUserFactory)
+    project = factory.SubFactory(GlProjectFactory)
+    object_attributes = factory.SubFactory(GlIssueFactory)
+
+
+class GlMergeRequestWebhookFactory(factory.DictFactory):
+    object_kind = 'merge_request'
+    event_type = 'merge_request'
+    user = factory.SubFactory(GlUserFactory)
+    project = factory.SubFactory(GlProjectFactory)
+    object_attributes = factory.SubFactory(GlMergeRequestFactory)
 
 
 class AttrDict(dict):
