@@ -73,7 +73,7 @@ def test_sync_merge_request(db, gl_mocker, client):
 
     assert response.status_code == status.HTTP_200_OK
     check_user(merge_request.author, gl_user)
-    check_user(merge_request.assignee, gl_user)
+    check_user(merge_request.user, gl_user)
     check_merge_request(merge_request, gl_merge_request)
 
 

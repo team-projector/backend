@@ -117,7 +117,7 @@ def test_load_project_merge_request(db, gl_mocker):
 
     check_merge_request(merge_request, gl_merge_request_loaded)
     check_user(merge_request.author, gl_user)
-    check_user(merge_request.assignee, gl_user)
+    check_user(merge_request.user, gl_user)
     assert merge_request.milestone == milestone
 
 
