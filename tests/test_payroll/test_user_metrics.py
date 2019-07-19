@@ -6,10 +6,10 @@ from apps.development.models.issue import STATE_CLOSED, STATE_OPENED
 from apps.payroll.services.metrics.user import (
     User, UserMetrics, UserMetricsProvider
 )
-from tests.test_development.factories import IssueFactory
+from tests.test_development.factories import IssueFactory, MergeRequestFactory
 from tests.test_payroll.factories import (
-    BonusFactory, IssueSpentTimeFactory, PenaltyFactory, SalaryFactory
-)
+    BonusFactory, IssueSpentTimeFactory, PenaltyFactory, SalaryFactory,
+    MergeRequestSpentTimeFactory)
 from tests.test_users.factories import UserFactory
 
 
@@ -28,6 +28,13 @@ class UserMetricsTests(TestCase):
 
         self._check_metrics(metrics, issues_opened_count=10)
 
+    def test_mr_opened_count(self):
+        MergeRequestFactory.create_batch(10, user=self.user)
+
+        metrics = self.calculator.get_metrics(self.user)
+
+        self._check_metrics(metrics, mr_opened_count=10)
+
     def test_issues_opened_count_exists_closed(self):
         IssueFactory.create_batch(10, user=self.user)
         IssueFactory.create_batch(5, user=self.user, state=STATE_CLOSED)
@@ -35,6 +42,14 @@ class UserMetricsTests(TestCase):
         metrics = self.calculator.get_metrics(self.user)
 
         self._check_metrics(metrics, issues_opened_count=10)
+
+    def test_mr_opened_count_exists_closed(self):
+        MergeRequestFactory.create_batch(10, user=self.user)
+        MergeRequestFactory.create_batch(5, user=self.user, state=STATE_CLOSED)
+
+        metrics = self.calculator.get_metrics(self.user)
+
+        self._check_metrics(metrics, mr_opened_count=10)
 
     def test_issues_opened_count_another_user(self):
         user_2 = UserFactory.create()
@@ -45,6 +60,16 @@ class UserMetricsTests(TestCase):
         metrics = self.calculator.get_metrics(self.user)
 
         self._check_metrics(metrics, issues_opened_count=10)
+
+    def test_mr_opened_count_another_user(self):
+        user_2 = UserFactory.create()
+
+        MergeRequestFactory.create_batch(10, user=self.user)
+        MergeRequestFactory.create_batch(5, user=user_2)
+
+        metrics = self.calculator.get_metrics(self.user)
+
+        self._check_metrics(metrics, mr_opened_count=10)
 
     def test_bonus(self):
         bonuses = BonusFactory.create_batch(10, user=self.user)
@@ -103,6 +128,7 @@ class UserMetricsTests(TestCase):
 
     def test_payroll_opened(self):
         issue = IssueFactory.create(state=STATE_OPENED)
+        mr = MergeRequestFactory.create(state=STATE_OPENED)
 
         IssueSpentTimeFactory.create(user=self.user, base=issue,
                                      time_spent=timedelta(
@@ -114,20 +140,34 @@ class UserMetricsTests(TestCase):
                                      time_spent=timedelta(
                                          hours=5).total_seconds())
 
+        MergeRequestSpentTimeFactory.create(
+            user=self.user,
+            base=mr,
+            time_spent=timedelta(hours=5).total_seconds()
+        )
+
         metrics = self.calculator.get_metrics(self.user)
 
-        self._check_metrics(metrics, payroll_opened=self.user.hour_rate * 4,
-                            issues_opened_spent=timedelta(
-                                hours=4).total_seconds())
+        self._check_metrics(
+            metrics,
+            payroll_opened=self.user.hour_rate * 9,
+            issues_opened_spent=timedelta(hours=4).total_seconds(),
+            mr_opened_spent=timedelta(hours=5).total_seconds()
+        )
 
     def test_payroll_opened_has_salary(self):
         issue = IssueFactory.create(state=STATE_OPENED)
+        mr = MergeRequestFactory.create(state=STATE_OPENED)
 
-        IssueSpentTimeFactory.create(user=self.user, base=issue,
-                                     time_spent=timedelta(
-                                         hours=4).total_seconds(),
-                                     salary=SalaryFactory.create(
-                                         user=self.user))
+        salary = SalaryFactory.create(user=self.user)
+
+        IssueSpentTimeFactory.create(
+            user=self.user,
+            base=issue,
+            time_spent=timedelta(hours=4).total_seconds(),
+            salary=salary
+        )
+
         IssueSpentTimeFactory.create(user=self.user, base=issue,
                                      time_spent=timedelta(
                                          hours=2).total_seconds())
@@ -135,11 +175,27 @@ class UserMetricsTests(TestCase):
                                      time_spent=timedelta(
                                          hours=5).total_seconds())
 
+        MergeRequestSpentTimeFactory.create(
+            user=self.user,
+            base=mr,
+            time_spent=timedelta(hours=5).total_seconds()
+        )
+
+        MergeRequestSpentTimeFactory.create(
+            user=self.user,
+            base=mr,
+            time_spent=timedelta(hours=2).total_seconds(),
+            salary=salary
+        )
+
         metrics = self.calculator.get_metrics(self.user)
 
-        self._check_metrics(metrics, payroll_opened=self.user.hour_rate * 7,
-                            issues_opened_spent=timedelta(
-                                hours=7).total_seconds())
+        self._check_metrics(
+            metrics,
+            payroll_opened=self.user.hour_rate * 12,
+            issues_opened_spent=timedelta(hours=7).total_seconds(),
+            mr_opened_spent=timedelta(hours=5).total_seconds(),
+        )
 
     def test_payroll_opened_has_closed(self):
         issue = IssueFactory.create(state=STATE_CLOSED)
@@ -251,6 +307,7 @@ class UserMetricsTests(TestCase):
 
     def test_payroll_closed_another_user(self):
         issue = IssueFactory.create(state=STATE_CLOSED)
+        mr = MergeRequestFactory.create(state=STATE_CLOSED)
 
         user_2 = UserFactory.create()
 
@@ -264,11 +321,20 @@ class UserMetricsTests(TestCase):
                                      time_spent=timedelta(
                                          hours=5).total_seconds())
 
+        MergeRequestSpentTimeFactory.create(
+            user=self.user,
+            base=mr,
+            time_spent=timedelta(hours=2).total_seconds()
+        )
+
         metrics = self.calculator.get_metrics(self.user)
 
-        self._check_metrics(metrics, payroll_closed=self.user.hour_rate * 5,
-                            issues_closed_spent=timedelta(
-                                hours=5).total_seconds())
+        self._check_metrics(
+            metrics,
+            payroll_closed=self.user.hour_rate * 7,
+            issues_closed_spent=timedelta(hours=5).total_seconds(),
+            mr_closed_spent=timedelta(hours=2).total_seconds(),
+        )
 
     def test_complex(self):
         bonuses = BonusFactory.create_batch(10, user=self.user)
@@ -301,17 +367,25 @@ class UserMetricsTests(TestCase):
                                 hours=6).total_seconds())
 
     def _check_metrics(self, metrics: UserMetrics,
-                       issues_opened_count=0,
                        bonus=0,
                        penalty=0,
                        payroll_opened=0,
                        payroll_closed=0,
+                       issues_opened_count=0,
                        issues_closed_spent=0.0,
-                       issues_opened_spent=0.0):
-        self.assertEqual(metrics.bonus, bonus)
-        self.assertEqual(metrics.penalty, penalty)
-        self.assertEqual(metrics.issues_opened_count, issues_opened_count)
-        self.assertEqual(metrics.payroll_opened, payroll_opened)
-        self.assertEqual(metrics.payroll_closed, payroll_closed)
-        self.assertEqual(metrics.issues_closed_spent, issues_closed_spent)
-        self.assertEqual(metrics.issues_opened_spent, issues_opened_spent)
+                       issues_opened_spent=0.0,
+                       mr_opened_count=0,
+                       mr_closed_spent=0.0,
+                       mr_opened_spent=0.0):
+        self.assertEqual(bonus, metrics.bonus)
+        self.assertEqual(penalty, metrics.penalty)
+        self.assertEqual(payroll_opened, metrics.payroll_opened)
+        self.assertEqual(payroll_closed, metrics.payroll_closed)
+
+        self.assertEqual(issues_opened_count, metrics.issues.opened_count)
+        self.assertEqual(issues_closed_spent, metrics.issues.closed_spent)
+        self.assertEqual(issues_opened_spent, metrics.issues.opened_spent)
+
+        self.assertEqual(mr_opened_count, metrics.merge_requests.opened_count)
+        self.assertEqual(mr_closed_spent, metrics.merge_requests.closed_spent)
+        self.assertEqual(mr_opened_spent, metrics.merge_requests.opened_spent)

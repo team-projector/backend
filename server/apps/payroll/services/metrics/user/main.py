@@ -1,9 +1,17 @@
-from django.db.models import Sum
+from django.db.models import Sum, Q
 from django.db.models.functions import Coalesce
 
+from apps.development.models import MergeRequest
 from apps.development.models.issue import Issue, STATE_CLOSED, STATE_OPENED
+from apps.development.models.merge_request import STATE_MERGED
 from apps.payroll.models import Bonus, Penalty, SpentTime
 from apps.users.models import User
+
+
+class WorkItemUserMetrics:
+    opened_count: int = 0
+    closed_spent: float = 0
+    opened_spent: float = 0
 
 
 class UserMetrics:
@@ -11,32 +19,39 @@ class UserMetrics:
     payroll_opened: float = 0
     bonus: float = 0
     penalty: float = 0
-    issues_opened_count: int = 0
-    issues_closed_spent: float = 0
-    issues_opened_spent: float = 0
+    issues: WorkItemUserMetrics
+    merge_requests: WorkItemUserMetrics
 
 
 class UserMetricsProvider:
-    def get_metrics(self,
-                    user: User) -> UserMetrics:
+    def get_metrics(self, user: User) -> UserMetrics:
         metrics = UserMetrics()
 
-        metrics.issues_opened_count = self._get_issues_opened_count(user)
         metrics.bonus = self._get_bonus(user)
         metrics.penalty = self._get_penalty(user)
         metrics.payroll_opened = self._get_payroll_opened(user)
         metrics.payroll_closed = self._get_payroll_closed(user)
-        metrics.issues_closed_spent = self._get_issues_closed_spent(user)
-        metrics.issues_opened_spent = self._get_issues_opened_spent(user)
+
+        metrics.issues = self._get_issues_metrics(user)
+        metrics.merge_requests = self._get_merge_requests_metrics(user)
 
         return metrics
 
-    @staticmethod
-    def _get_issues_opened_count(user: User) -> int:
-        return Issue.objects.filter(
-            user=user,
-            state=STATE_OPENED
-        ).count()
+    def _get_issues_metrics(self, user: User) -> WorkItemUserMetrics:
+        metrics = WorkItemUserMetrics()
+        metrics.opened_count = self._get_issues_opened_count(user)
+        metrics.closed_spent = self._get_issues_closed_spent(user)
+        metrics.opened_spent = self._get_issues_opened_spent(user)
+
+        return metrics
+
+    def _get_merge_requests_metrics(self, user: User) -> WorkItemUserMetrics:
+        metrics = WorkItemUserMetrics()
+        metrics.opened_count = self._get_merge_requests_opened_count(user)
+        metrics.closed_spent = self._get_merge_requests_closed_spent(user)
+        metrics.opened_spent = self._get_merge_requests_opened_spent(user)
+
+        return metrics
 
     @staticmethod
     def _get_bonus(user: User) -> float:
@@ -59,9 +74,10 @@ class UserMetricsProvider:
     @staticmethod
     def _get_payroll_opened(user: User) -> float:
         return SpentTime.objects.filter(
+            Q(issues__state=STATE_OPENED) |
+            Q(mergerequests__state=STATE_OPENED),
             salary__isnull=True,
-            user=user,
-            issues__state=STATE_OPENED
+            user=user
         ).aggregate(
             total_sum=Coalesce(Sum('sum'), 0)
         )['total_sum']
@@ -69,12 +85,20 @@ class UserMetricsProvider:
     @staticmethod
     def _get_payroll_closed(user: User) -> float:
         return SpentTime.objects.filter(
+            Q(issues__state=STATE_CLOSED) |
+            Q(mergerequests__state__in=(STATE_CLOSED, STATE_MERGED)),
             salary__isnull=True,
             user=user,
-            issues__state=STATE_CLOSED
         ).aggregate(
             total_sum=Coalesce(Sum('sum'), 0)
         )['total_sum']
+
+    @staticmethod
+    def _get_issues_opened_count(user: User) -> int:
+        return Issue.objects.filter(
+            user=user,
+            state=STATE_OPENED
+        ).count()
 
     @staticmethod
     def _get_issues_closed_spent(user: User) -> float:
@@ -92,6 +116,33 @@ class UserMetricsProvider:
             salary__isnull=True,
             user=user,
             issues__state=STATE_OPENED
+        ).aggregate(
+            total_time_spent=Coalesce(Sum('time_spent'), 0)
+        )['total_time_spent']
+
+    @staticmethod
+    def _get_merge_requests_opened_count(user: User) -> int:
+        return MergeRequest.objects.filter(
+            user=user,
+            state=STATE_OPENED
+        ).count()
+
+    @staticmethod
+    def _get_merge_requests_closed_spent(user: User) -> float:
+        return SpentTime.objects.filter(
+            salary__isnull=True,
+            user=user,
+            mergerequests__state__in=(STATE_CLOSED, STATE_MERGED)
+        ).aggregate(
+            total_time_spent=Coalesce(Sum('time_spent'), 0)
+        )['total_time_spent']
+
+    @staticmethod
+    def _get_merge_requests_opened_spent(user: User) -> float:
+        return SpentTime.objects.filter(
+            salary__isnull=True,
+            user=user,
+            mergerequests__state=STATE_OPENED
         ).aggregate(
             total_time_spent=Coalesce(Sum('time_spent'), 0)
         )['total_time_spent']

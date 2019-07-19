@@ -14,6 +14,7 @@ from .project import Project
 from ..db.managers import MergeRequestManager
 from ..db.mixins import NotableMixin
 
+STATE_MERGED = 'merged'
 
 class MergeRequest(NotableMixin,
                    SpentTimesMixin,
@@ -83,14 +84,14 @@ class MergeRequest(NotableMixin,
         help_text=_('HT__PROJECT')
     )
 
-    assignee = models.ForeignKey(
+    user = models.ForeignKey(
         User,
         models.SET_NULL,
-        related_name='assignee_merge_requests',
+        related_name='merge_requests',
         null=True,
         blank=True,
-        verbose_name=_('VN__ASSIGNEE'),
-        help_text=_('HT__ASSIGNEE')
+        verbose_name=_('VN__USER'),
+        help_text=_('HT__USER')
     )
 
     author = models.ForeignKey(

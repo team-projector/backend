@@ -104,7 +104,7 @@ class FeatureAdmin(BaseModelAdmin):
 @admin.register(MergeRequest)
 class MergeRequestAdmin(ForceSyncEntityMixin, BaseModelAdmin):
     list_display = (
-        'title', 'assignee', 'author', 'state', 'created_at', 'gl_last_sync'
+        'title', 'user', 'author', 'state', 'created_at', 'gl_last_sync'
     )
     list_filter = (ProjectFilter,)
     search_fields = ('title', 'gl_id')
