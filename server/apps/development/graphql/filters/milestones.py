@@ -16,3 +16,7 @@ class ActiveFilter(django_filters.BooleanFilter):
 
 class MilestonesFilterSet(django_filters.FilterSet):
     active = ActiveFilter()
+
+    order_by = django_filters.OrderingFilter(
+        fields=('due_date',)
+    )
