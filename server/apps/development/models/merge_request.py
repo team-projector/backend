@@ -16,6 +16,7 @@ from ..db.mixins import NotableMixin
 
 STATE_MERGED = 'merged'
 
+
 class MergeRequest(NotableMixin,
                    SpentTimesMixin,
                    GitlabEntityMixin,
