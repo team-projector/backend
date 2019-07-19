@@ -6,13 +6,17 @@ from django.db import transaction
 from django.db.models import Q, Sum
 
 from apps.development.models.issue import STATE_CLOSED
+from apps.development.models.merge_request import STATE_MERGED
 from apps.payroll.models import Bonus, Penalty, Salary, SpentTime
 from apps.users.models import User
 from .exceptions import EmptySalaryException
 
 
 class SalaryCalculator:
-    def __init__(self, initiator: User, period_from: date, period_to: date):
+    def __init__(self,
+                 initiator: User,
+                 period_from: date,
+                 period_to: date):
         self.initiator = initiator
         self.period_from = period_from
         self.period_to = period_to
@@ -67,7 +71,8 @@ class SalaryCalculator:
         return salary
 
     @staticmethod
-    def _lock_payrolls(user: User, salary: Salary) -> int:
+    def _lock_payrolls(user: User,
+                       salary: Salary) -> int:
         locked = Penalty.objects.filter(
             salary__isnull=True,
             user=user
@@ -84,7 +89,8 @@ class SalaryCalculator:
             salary__isnull=True,
             user=user
         ).filter(
-            Q(issues__state=STATE_CLOSED)
+            Q(issues__state=STATE_CLOSED) |
+            Q(mergerequests__state__in=(STATE_CLOSED, STATE_MERGED))
         ).update(
             salary=salary
         )

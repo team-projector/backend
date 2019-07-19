@@ -9,8 +9,9 @@ from apps.payroll.models import Payroll, Salary
 from apps.payroll.services.salary.calculator import SalaryCalculator
 from apps.payroll.services.salary.exceptions import EmptySalaryException
 from apps.users.models import User
-from tests.test_development.factories import IssueFactory
-from tests.test_payroll.factories import BonusFactory, IssueSpentTimeFactory, PenaltyFactory, SalaryFactory
+from tests.test_development.factories import IssueFactory, MergeRequestFactory
+from tests.test_payroll.factories import BonusFactory, IssueSpentTimeFactory, \
+    PenaltyFactory, SalaryFactory, MergeRequestSpentTimeFactory
 from tests.test_users.factories import UserFactory
 
 
@@ -29,22 +30,34 @@ class GenerateSalariesTests(TestCase):
 
     def test_common(self):
         issue = IssueFactory.create(state=STATE_CLOSED)
+        mr = MergeRequestFactory.create(state=STATE_CLOSED)
 
-        IssueSpentTimeFactory.create(user=self.user, base=issue, time_spent=timedelta(hours=1).total_seconds())
-        IssueSpentTimeFactory.create(user=self.user, base=issue, time_spent=-timedelta(hours=2).total_seconds())
-        IssueSpentTimeFactory.create(user=self.user, base=issue, time_spent=timedelta(hours=5).total_seconds())
+        IssueSpentTimeFactory.create(user=self.user, base=issue,
+                                     time_spent=timedelta(
+                                         hours=1).total_seconds())
+        IssueSpentTimeFactory.create(user=self.user, base=issue,
+                                     time_spent=-timedelta(
+                                         hours=2).total_seconds())
+        IssueSpentTimeFactory.create(user=self.user, base=issue,
+                                     time_spent=timedelta(
+                                         hours=5).total_seconds())
+
+        MergeRequestSpentTimeFactory.create(user=self.user, base=mr,
+                                            time_spent=timedelta(
+                                                hours=5).total_seconds())
 
         salary = self.calculator.generate(self.user)
 
-        self.assertEqual(salary.charged_time, timedelta(hours=4).total_seconds())
-        self.assertEqual(salary.sum, self.user.hour_rate * 4)
-        self.assertEqual(salary.penalty, 0)
-        self.assertEqual(salary.bonus, 0)
-        self.assertEqual(salary.taxes, 0)
+        self.assertEqual(salary.charged_time,
+                         timedelta(hours=9).total_seconds())
+        self.assertEqual(self.user.hour_rate * 9, salary.sum)
+        self.assertEqual(0, salary.penalty)
+        self.assertEqual(0, salary.bonus)
+        self.assertEqual(0, salary.taxes)
 
-        self.assertEqual(salary.sum, salary.total)
+        self.assertEqual(salary.total, salary.sum)
 
-        self.assertEqual(Payroll.objects.filter(salary=salary).count(), 3)
+        self.assertEqual(4, Payroll.objects.filter(salary=salary).count())
 
     def test_no_payrolls(self):
         salary = None
@@ -58,15 +71,22 @@ class GenerateSalariesTests(TestCase):
     def test_with_penalty(self):
         issue = IssueFactory.create(state=STATE_CLOSED)
 
-        IssueSpentTimeFactory.create(user=self.user, base=issue, time_spent=timedelta(hours=1).total_seconds())
-        IssueSpentTimeFactory.create(user=self.user, base=issue, time_spent=-timedelta(hours=2).total_seconds())
-        IssueSpentTimeFactory.create(user=self.user, base=issue, time_spent=timedelta(hours=5).total_seconds())
+        IssueSpentTimeFactory.create(user=self.user, base=issue,
+                                     time_spent=timedelta(
+                                         hours=1).total_seconds())
+        IssueSpentTimeFactory.create(user=self.user, base=issue,
+                                     time_spent=-timedelta(
+                                         hours=2).total_seconds())
+        IssueSpentTimeFactory.create(user=self.user, base=issue,
+                                     time_spent=timedelta(
+                                         hours=5).total_seconds())
 
         penalty = PenaltyFactory.create(user=self.user, sum=100)
 
         salary = self.calculator.generate(self.user)
 
-        self.assertEqual(salary.charged_time, timedelta(hours=4).total_seconds())
+        self.assertEqual(salary.charged_time,
+                         timedelta(hours=4).total_seconds())
         self.assertEqual(salary.sum, self.user.hour_rate * 4)
         self.assertEqual(salary.penalty, penalty.sum)
         self.assertEqual(salary.bonus, 0)
@@ -78,15 +98,22 @@ class GenerateSalariesTests(TestCase):
     def test_with_bonus(self):
         issue = IssueFactory.create(state=STATE_CLOSED)
 
-        IssueSpentTimeFactory.create(user=self.user, base=issue, time_spent=timedelta(hours=1).total_seconds())
-        IssueSpentTimeFactory.create(user=self.user, base=issue, time_spent=-timedelta(hours=2).total_seconds())
-        IssueSpentTimeFactory.create(user=self.user, base=issue, time_spent=timedelta(hours=5).total_seconds())
+        IssueSpentTimeFactory.create(user=self.user, base=issue,
+                                     time_spent=timedelta(
+                                         hours=1).total_seconds())
+        IssueSpentTimeFactory.create(user=self.user, base=issue,
+                                     time_spent=-timedelta(
+                                         hours=2).total_seconds())
+        IssueSpentTimeFactory.create(user=self.user, base=issue,
+                                     time_spent=timedelta(
+                                         hours=5).total_seconds())
 
         bonus = BonusFactory.create(user=self.user)
 
         salary = self.calculator.generate(self.user)
 
-        self.assertEqual(salary.charged_time, timedelta(hours=4).total_seconds())
+        self.assertEqual(salary.charged_time,
+                         timedelta(hours=4).total_seconds())
         self.assertEqual(salary.sum, self.user.hour_rate * 4)
         self.assertEqual(salary.bonus, bonus.sum)
         self.assertEqual(salary.penalty, 0)
@@ -98,16 +125,23 @@ class GenerateSalariesTests(TestCase):
     def test_complex(self):
         issue = IssueFactory.create(state=STATE_CLOSED)
 
-        IssueSpentTimeFactory.create(user=self.user, base=issue, time_spent=timedelta(hours=1).total_seconds())
-        IssueSpentTimeFactory.create(user=self.user, base=issue, time_spent=-timedelta(hours=2).total_seconds())
-        IssueSpentTimeFactory.create(user=self.user, base=issue, time_spent=timedelta(hours=5).total_seconds())
+        IssueSpentTimeFactory.create(user=self.user, base=issue,
+                                     time_spent=timedelta(
+                                         hours=1).total_seconds())
+        IssueSpentTimeFactory.create(user=self.user, base=issue,
+                                     time_spent=-timedelta(
+                                         hours=2).total_seconds())
+        IssueSpentTimeFactory.create(user=self.user, base=issue,
+                                     time_spent=timedelta(
+                                         hours=5).total_seconds())
 
         bonus = BonusFactory.create(user=self.user)
         penalty = PenaltyFactory.create(user=self.user, sum=100)
 
         salary = self.calculator.generate(self.user)
 
-        self.assertEqual(salary.charged_time, timedelta(hours=4).total_seconds())
+        self.assertEqual(salary.charged_time,
+                         timedelta(hours=4).total_seconds())
         self.assertEqual(salary.sum, self.user.hour_rate * 4)
         self.assertEqual(salary.bonus, bonus.sum)
         self.assertEqual(salary.penalty, penalty.sum)
@@ -120,18 +154,25 @@ class GenerateSalariesTests(TestCase):
         prev_salary = SalaryFactory.create(user=self.user)
         issue = IssueFactory.create(state=STATE_CLOSED)
 
-        IssueSpentTimeFactory.create(salary=prev_salary, base=issue, user=self.user,
-                                     time_spent=timedelta(hours=1).total_seconds())
-        IssueSpentTimeFactory.create(salary=prev_salary, base=issue, user=self.user,
-                                     time_spent=-timedelta(hours=2).total_seconds())
-        IssueSpentTimeFactory.create(user=self.user, base=issue, time_spent=timedelta(hours=5).total_seconds())
+        IssueSpentTimeFactory.create(salary=prev_salary, base=issue,
+                                     user=self.user,
+                                     time_spent=timedelta(
+                                         hours=1).total_seconds())
+        IssueSpentTimeFactory.create(salary=prev_salary, base=issue,
+                                     user=self.user,
+                                     time_spent=-timedelta(
+                                         hours=2).total_seconds())
+        IssueSpentTimeFactory.create(user=self.user, base=issue,
+                                     time_spent=timedelta(
+                                         hours=5).total_seconds())
 
         bonus = BonusFactory.create(user=self.user)
         PenaltyFactory.create(user=self.user, salary=prev_salary, sum=100)
 
         salary = self.calculator.generate(self.user)
 
-        self.assertEqual(salary.charged_time, timedelta(hours=5).total_seconds())
+        self.assertEqual(salary.charged_time,
+                         timedelta(hours=5).total_seconds())
         self.assertEqual(salary.sum, self.user.hour_rate * 5)
         self.assertEqual(salary.bonus, bonus.sum)
         self.assertEqual(salary.penalty, 0)
@@ -145,16 +186,23 @@ class GenerateSalariesTests(TestCase):
         user_2 = UserFactory.create()
         issue = IssueFactory.create(state=STATE_CLOSED)
 
-        IssueSpentTimeFactory.create(user=user_2, base=issue, time_spent=timedelta(hours=1).total_seconds())
-        IssueSpentTimeFactory.create(user=user_2, base=issue, time_spent=-timedelta(hours=2).total_seconds())
-        IssueSpentTimeFactory.create(user=self.user, base=issue, time_spent=timedelta(hours=5).total_seconds())
+        IssueSpentTimeFactory.create(user=user_2, base=issue,
+                                     time_spent=timedelta(
+                                         hours=1).total_seconds())
+        IssueSpentTimeFactory.create(user=user_2, base=issue,
+                                     time_spent=-timedelta(
+                                         hours=2).total_seconds())
+        IssueSpentTimeFactory.create(user=self.user, base=issue,
+                                     time_spent=timedelta(
+                                         hours=5).total_seconds())
 
         BonusFactory.create(user=user_2)
         penalty = PenaltyFactory.create(user=self.user, sum=100)
 
         salary = self.calculator.generate(self.user)
 
-        self.assertEqual(salary.charged_time, timedelta(hours=5).total_seconds())
+        self.assertEqual(salary.charged_time,
+                         timedelta(hours=5).total_seconds())
         self.assertEqual(salary.sum, self.user.hour_rate * 5)
         self.assertEqual(salary.bonus, 0)
         self.assertEqual(salary.taxes, 0)
@@ -163,17 +211,29 @@ class GenerateSalariesTests(TestCase):
 
         self.assertEqual(Payroll.objects.filter(salary=salary).count(), 2)
 
-    def test_with_opened_issues(self):
+    def test_with_opened_issues_mr(self):
         closed_issue = IssueFactory.create(state=STATE_CLOSED)
         opened_issue = IssueFactory.create(state=STATE_OPENED)
+        opened_mr = MergeRequestFactory.create(state=STATE_OPENED)
 
-        IssueSpentTimeFactory.create(user=self.user, base=opened_issue, time_spent=timedelta(hours=1).total_seconds())
-        IssueSpentTimeFactory.create(user=self.user, base=closed_issue, time_spent=-timedelta(hours=2).total_seconds())
-        IssueSpentTimeFactory.create(user=self.user, base=closed_issue, time_spent=timedelta(hours=5).total_seconds())
+        IssueSpentTimeFactory.create(user=self.user, base=opened_issue,
+                                     time_spent=timedelta(
+                                         hours=1).total_seconds())
+        IssueSpentTimeFactory.create(user=self.user, base=closed_issue,
+                                     time_spent=-timedelta(
+                                         hours=2).total_seconds())
+        IssueSpentTimeFactory.create(user=self.user, base=closed_issue,
+                                     time_spent=timedelta(
+                                         hours=5).total_seconds())
+
+        MergeRequestSpentTimeFactory.create(user=self.user, base=opened_mr,
+                                            time_spent=timedelta(
+                                                hours=5).total_seconds())
 
         salary = self.calculator.generate(self.user)
 
-        self.assertEqual(salary.charged_time, timedelta(hours=3).total_seconds())
+        self.assertEqual(salary.charged_time,
+                         timedelta(hours=3).total_seconds())
         self.assertEqual(salary.sum, self.user.hour_rate * 3)
         self.assertEqual(salary.bonus, 0)
         self.assertEqual(salary.penalty, 0)
@@ -188,20 +248,28 @@ class GenerateSalariesTests(TestCase):
 
         issue = IssueFactory.create(state=STATE_CLOSED)
 
-        IssueSpentTimeFactory.create(user=self.user, base=issue, time_spent=timedelta(hours=1).total_seconds())
-        IssueSpentTimeFactory.create(user=self.user, base=issue, time_spent=-timedelta(hours=2).total_seconds())
-        IssueSpentTimeFactory.create(user=self.user, base=issue, time_spent=timedelta(hours=5).total_seconds())
+        IssueSpentTimeFactory.create(user=self.user, base=issue,
+                                     time_spent=timedelta(
+                                         hours=1).total_seconds())
+        IssueSpentTimeFactory.create(user=self.user, base=issue,
+                                     time_spent=-timedelta(
+                                         hours=2).total_seconds())
+        IssueSpentTimeFactory.create(user=self.user, base=issue,
+                                     time_spent=timedelta(
+                                         hours=5).total_seconds())
 
         bonus = BonusFactory.create(user=self.user)
         penalty = PenaltyFactory.create(user=self.user, sum=100)
 
         salary = self.calculator.generate(self.user)
 
-        self.assertEqual(salary.charged_time, timedelta(hours=4).total_seconds())
+        self.assertEqual(salary.charged_time,
+                         timedelta(hours=4).total_seconds())
         self.assertEqual(salary.sum, self.user.hour_rate * 4)
         self.assertEqual(salary.bonus, bonus.sum)
         self.assertEqual(salary.penalty, penalty.sum)
         self.assertEqual(salary.total, salary.sum + bonus.sum - penalty.sum)
-        self.assertEqual(salary.taxes, salary.total * Decimal.from_float(self.user.taxes))
+        self.assertEqual(salary.taxes,
+                         salary.total * Decimal.from_float(self.user.taxes))
 
         self.assertEqual(Payroll.objects.filter(salary=salary).count(), 5)
