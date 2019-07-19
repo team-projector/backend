@@ -36,8 +36,6 @@ class IssuesContainerMetricsProvider:
         )
 
         if stats:
-            metrics.issues_closed_count = stats['issues_closed_count']
-            metrics.issues_opened_count = stats['issues_opened_count']
             metrics.time_estimate = stats['time_estimate']
             metrics.time_remains = stats['time_estimate'] - stats['time_spent']
 
@@ -46,7 +44,9 @@ class IssuesContainerMetricsProvider:
                     'time_spent']
 
             metrics.time_spent = stats['time_spent']
-            metrics.issues_count = stats['issues_count']
+
+            metrics.issues_closed_count = stats['issues_closed_count']
+            metrics.issues_opened_count = stats['issues_opened_count']
             metrics.issues_count = stats['issues_count']
 
         payroll = SpentTime.objects.for_issues(issues).aggregate(
