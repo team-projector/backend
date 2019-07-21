@@ -7,7 +7,7 @@ from server import BASE_DIR
 
 config = AutoConfig(search_path=BASE_DIR.joinpath('config'))
 
-ENV = environ.get('DJANGO_ENV') or 'dev'
+ENV = environ.get('DJANGO_ENV') or 'development'
 
 base_settings = [
     'components/*.py',

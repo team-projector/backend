@@ -10,8 +10,8 @@ ENV PYTHONFAULTHANDLER=1 \
   PIPENV_NOSPIN=true \
   C_FORCE_ROOT=true
 
-WORKDIR /var/www
-COPY . /var/www
+WORKDIR /app
+COPY . .
 
 RUN apt update \
     && apt install -y gcc \
@@ -29,5 +29,7 @@ RUN apt update \
     && cp deploy/nginx/* /etc/nginx \
     && apt remove --purge -y git gcc binutils \
     && apt autoremove -y
+
+ENV DJANGO_ENV=production
 
 CMD ["/bin/bash", "deploy/server/run.sh"]

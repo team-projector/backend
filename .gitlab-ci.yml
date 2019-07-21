@@ -43,11 +43,11 @@ test:
   image: $DOCKER_TEST_IMAGE
   stage: test
   variables:
-    DJANGO_ENV: 'test'
+    DJANGO_ENV: test
   services:
     - postgres
   script:
-    - cd /var/www
+    - cd /app
     - pip install pytest-django pytest-xdist pytest-cov factory-boy httpretty
     - pytest -n auto --dist=loadscope --cov=apps --cov-report=html:coverage_html
     - mkdir $CI_PROJECT_DIR/coverage

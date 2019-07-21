@@ -17,8 +17,8 @@ DATABASES = {
     },
 }
 
-STATIC_ROOT = '/var/www/server/static'
-MEDIA_ROOT = '/var/www/server/media'
+STATIC_ROOT = '/var/www/static'
+MEDIA_ROOT = '/var/www/media'
 
 GITLAB_TOKEN = config('DJANGO_GITLAB_TOKEN')
 
