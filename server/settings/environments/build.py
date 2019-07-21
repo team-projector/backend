@@ -1,5 +1,3 @@
-from .production import STATIC_ROOT as PROD_STATIC_ROOT
-
 SECRET_KEY = 'build'
 
 DATABASES = {
@@ -8,4 +6,4 @@ DATABASES = {
     }
 }
 
-STATIC_ROOT = PROD_STATIC_ROOT
+STATIC_ROOT = '/var/www/static'
