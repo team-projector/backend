@@ -10,8 +10,7 @@ ENV PYTHONFAULTHANDLER=1 \
   PIPENV_NOSPIN=true \
   C_FORCE_ROOT=true
 
-WORKDIR /app
-COPY . .
+COPY pyproject.toml poetry.lock ./
 
 RUN apt update \
     && apt install -y gcc \
@@ -21,14 +20,18 @@ RUN apt update \
                       git \
     && chown -R www-data:www-data /var/lib/nginx \
     && pip install poetry \
-    && export DJANGO_ENV=build \
     && poetry config settings.virtualenvs.create false \
     && poetry install --no-dev --no-interaction --no-ansi \
-    && python manage.py collectstatic --noinput --verbosity 0 \
-    && django-admin compilemessages \
-    && cp deploy/nginx/* /etc/nginx \
     && apt remove --purge -y git gcc binutils \
     && apt autoremove -y
+
+WORKDIR /app
+COPY . .
+
+RUN export DJANGO_ENV=build \
+    && python manage.py collectstatic --noinput --verbosity 0 \
+    && django-admin compilemessages \
+    && cp deploy/nginx/* /etc/nginx
 
 ENV DJANGO_ENV=production
 
