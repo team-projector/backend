@@ -10,6 +10,8 @@ ENV PYTHONFAULTHANDLER=1 \
   PIPENV_NOSPIN=true \
   C_FORCE_ROOT=true
 
+WORKDIR /app
+
 COPY pyproject.toml poetry.lock ./
 
 RUN apt update \
@@ -25,7 +27,6 @@ RUN apt update \
     && apt remove --purge -y git gcc binutils \
     && apt autoremove -y
 
-WORKDIR /app
 COPY . .
 
 RUN export DJANGO_ENV=build \
