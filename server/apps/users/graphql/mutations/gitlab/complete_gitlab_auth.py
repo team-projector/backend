@@ -1,20 +1,18 @@
+import json
 import graphene
 from django.contrib.auth import REDIRECT_FIELD_NAME
 from social_core.actions import do_complete
+from social_django.views import _do_login
 
 from apps.core.graphql.mutations import BaseMutation
 from apps.core.graphql.security.permissions import AllowAny
-from apps.users.graphql.types import TokenType
-from apps.users.services.auth import login_user
 from .utils import psa
 
-from social_django.views import _do_login
 
-
-class AuthCompleteMutation(BaseMutation):
+class CompleteGitlabAuthMutation(BaseMutation):
     permission_classes = (AllowAny,)
 
-    ok = graphene.Boolean()
+    token = graphene.String()
 
     class Arguments:
         code = graphene.String(required=True)
@@ -24,7 +22,12 @@ class AuthCompleteMutation(BaseMutation):
     def do_mutate(cls, root, info, code, state):
         request = psa(info.context)
 
-        do_complete(
+        request.backend.set_data({
+            'code': code,
+            'state': state
+        })
+
+        response = do_complete(
             request.backend,
             _do_login,
             user=None,
@@ -32,6 +35,6 @@ class AuthCompleteMutation(BaseMutation):
             request=request
         )
 
-        return AuthCompleteMutation(
-            ok=True
+        return CompleteGitlabAuthMutation(
+            token=json.loads(response.content)
         )

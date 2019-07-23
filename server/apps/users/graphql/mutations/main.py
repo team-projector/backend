@@ -1,7 +1,7 @@
 from .login import LoginMutation
-from .gitlab.auth_complete import AuthCompleteMutation
+from .gitlab.complete_gitlab_auth import CompleteGitlabAuthMutation
 
 
 class AuthMutations:
     login = LoginMutation.Field()
-    auth_complete = AuthCompleteMutation.Field()
+    complete_gitlab_auth = CompleteGitlabAuthMutation.Field()

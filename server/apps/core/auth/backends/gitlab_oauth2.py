@@ -31,3 +31,6 @@ class GitLabOAuth2Backend(SocialGitLabOAuth2):
             return User.objects.filter(
                 login=kwargs['response']['username']
             ).first()
+
+    def set_data(self, data):
+        self.data = data
