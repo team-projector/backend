@@ -1,4 +1,3 @@
-import json
 import graphene
 from django.contrib.auth import REDIRECT_FIELD_NAME
 from social_core.actions import do_complete
@@ -21,13 +20,9 @@ class CompleteGitlabAuthMutation(BaseMutation):
     @classmethod
     def do_mutate(cls, root, info, code, state):
         request = psa(info.context)
+        request.backend.set_data(code=code, state=state)
 
-        request.backend.set_data({
-            'code': code,
-            'state': state
-        })
-
-        response = do_complete(
+        token = do_complete(
             request.backend,
             _do_login,
             user=None,
@@ -36,5 +31,5 @@ class CompleteGitlabAuthMutation(BaseMutation):
         )
 
         return CompleteGitlabAuthMutation(
-            token=json.loads(response.content)
+            token=token
         )
