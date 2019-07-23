@@ -1,7 +1,5 @@
 *.py[cod]
 .idea/
-logs/
-env
 .venv
 .mypy_cache
 .pytest_cache
@@ -9,4 +7,3 @@ env
 run/
 *.mo
 development.py
-venv
