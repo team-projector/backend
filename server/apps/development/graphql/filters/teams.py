@@ -4,6 +4,7 @@ import django_filters
 from django.db.models import Exists
 from django.db.models import QuerySet, OuterRef
 
+from apps.core.graphql.filters import SearchFilter
 from apps.development.models import Team, TeamMember
 from apps.development.services.team_members import filter_by_roles
 
@@ -44,6 +45,7 @@ class TeamsFilterSet(django_filters.FilterSet):
     order_by = django_filters.OrderingFilter(
         fields=('title',)
     )
+    q = SearchFilter(fields=('title',))
 
     class Meta:
         model = Team
