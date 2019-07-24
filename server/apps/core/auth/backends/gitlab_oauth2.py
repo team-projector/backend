@@ -1,9 +1,10 @@
-from django.http import HttpResponseBadRequest
+from django.http import HttpResponseBadRequest, JsonResponse
 from django.utils import timezone
 from social_core.backends.gitlab import GitLabOAuth2 as SocialGitLabOAuth2
 from social_core.utils import handle_http_errors
 
 from apps.users.models import User
+from apps.users.rest.serializers import TokenSerializer
 from apps.users.services.token import create_user_token
 
 
@@ -20,7 +21,7 @@ class GitLabOAuth2Backend(SocialGitLabOAuth2):
         user.last_login = timezone.now()
         user.save(update_fields=['last_login'])
 
-        return token
+        return JsonResponse(TokenSerializer(token).data)
 
     def get_redirect_uri(self, state=None):
         return self.setting('REDIRECT_URI')
