@@ -7,7 +7,7 @@ from django.db.models import (
 from django.db.models.functions import Coalesce
 
 from apps.development.models import Team, Project
-from apps.development.models.issue import STATE_OPENED, STATE_CLOSED
+from apps.development.models.issue import STATE_CLOSED
 from apps.development.services.problems.issue import (
     annotate_issues_problems, filter_issues_problems
 )
