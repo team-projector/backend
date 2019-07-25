@@ -1,7 +1,6 @@
 from datetime import datetime
 
 from apps.development.models import Issue, Project
-from apps.development.models.issue import STATE_CLOSED
 from apps.development.services.summary.issues import (
     get_issues_summary, IssuesSummary
 )
@@ -18,16 +17,6 @@ def test_basic(user):
         5,
         user=user,
         total_time_spent=300,
-        time_estimate=400,
-        project=project_1,
-        due_date=datetime.now().date()
-    )
-
-    IssueFactory.create_batch(
-        2,
-        user=user,
-        state=STATE_CLOSED,
-        total_time_spent=200,
         time_estimate=400,
         project=project_1,
         due_date=datetime.now().date()
