@@ -11,23 +11,6 @@ from tests.test_payroll.factories import IssueSpentTimeFactory
 from tests.test_users.factories import UserFactory
 
 
-def test_one_user(user, api_client):
-    IssueFactory.create_batch(
-        5, user=user,
-        total_time_spent=0,
-        due_date=datetime.now()
-    )
-
-    api_client.set_credentials(user)
-    response = api_client.get('/api/issues/summary', {
-        'user': user.id
-    })
-
-    assert response.status_code == status.HTTP_200_OK
-
-    _check_summary(response.data, 5, 0, 0)
-
-
 def test_filter_by_user(user, api_client):
     IssueFactory.create_batch(5, user=user, total_time_spent=0,
                               due_date=datetime.now())
