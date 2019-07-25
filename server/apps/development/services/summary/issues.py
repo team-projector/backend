@@ -90,8 +90,6 @@ class IssuesSummaryProvider:
                 default=Value(0),
                 output_field=IntegerField()
             ),
-        ).filter(
-            state=STATE_OPENED,
         ).values(
             'project'
         ).annotate(
