@@ -2,9 +2,9 @@ image: docker:latest
 
 variables:
   DOCKER_DRIVER: overlay2
-  DOCKER_TEST_IMAGE: ${CI_REGISTRY_IMAGE}/${CI_COMMIT_REF_SLUG}:${CI_COMMIT_SHA}
-  DOCKER_DEV_IMAGE: ${CI_REGISTRY_IMAGE}:dev
-  DOCKER_PROD_IMAGE: ${CI_REGISTRY_IMAGE}:prod
+  DOCKER_TEST_IMAGE: $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG:$CI_COMMIT_SHA
+  DOCKER_DEV_IMAGE: $CI_REGISTRY_IMAGE:dev
+  DOCKER_PROD_IMAGE: $CI_REGISTRY_IMAGE:prod
   GIT_STRATEGY: none
 
 services:
@@ -33,8 +33,9 @@ build:
     GIT_STRATEGY: fetch
   script:
     - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN registry.gitlab.com
-    - docker build -t $DOCKER_TEST_IMAGE -f deploy/Dockerfile .
+    - docker build --cache-from $CI_REGISTRY_IMAGE:latest -t $DOCKER_TEST_IMAGE -t $CI_REGISTRY_IMAGE:latest -f deploy/Dockerfile .
     - docker push $DOCKER_TEST_IMAGE
+    - docker push $CI_REGISTRY_IMAGE:latest
 
 include:
   template: Container-Scanning.gitlab-ci.yml
