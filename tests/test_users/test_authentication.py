@@ -62,7 +62,17 @@ def test_no_auth(user, client):
     client.user = user
     request = client.get('/')
 
+    assert Token.objects.filter(user=user).exists() is False
     assert TokenAuthentication().authenticate(request) is None
+
+
+def test_auth(user, client):
+    token = create_user_token(user)
+
+    client.set_credentials(user, token)
+    request = client.get('/')
+
+    assert TokenAuthentication().authenticate(request) is not None
 
 
 def test_expired_token(user, client):
