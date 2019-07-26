@@ -1,7 +1,7 @@
 import django_filters
 from django.db.models import QuerySet
 
-from apps.development.models import Issue, Team, TeamMember
+from apps.development.models import Issue, Team, TeamMember, Project
 from apps.development.services.problems.issue import (
     filter_issues_problems, exclude_issues_problems,
     annotate_issues_problems
@@ -38,6 +38,7 @@ class ProblemsFilter(django_filters.BooleanFilter):
 
 class IssuesFilterSet(django_filters.FilterSet):
     user = django_filters.ModelChoiceFilter(queryset=User.objects.all())
+    project = django_filters.ModelChoiceFilter(queryset=Project.objects.all())
     team = TeamFilter()
     problems = ProblemsFilter()
 
@@ -47,4 +48,4 @@ class IssuesFilterSet(django_filters.FilterSet):
 
     class Meta:
         model = Issue
-        fields = ('state', 'due_date', 'user', 'team', 'problems')
+        fields = ('state', 'due_date', 'user', 'team', 'problems', 'project')
