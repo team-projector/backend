@@ -30,19 +30,20 @@ def test_login_user_not_active(user):
         login_user(user.login, USER_PASSWORD, None)
 
 
-def test_login_user_without_password(user):
+def test_login_user_invalid_password(user):
+    with raises(AuthenticationFailed):
+        login_user(user.login, f'{USER_PASSWORD}bla', None)
+
     with raises(AuthenticationFailed):
         login_user(user.login, '', None)
 
 
-def test_login_user_without_login(user):
+def test_login_user_invalid_login(user):
+    with raises(AuthenticationFailed):
+        login_user(f'{user.login}bla', USER_PASSWORD, None)
+
     with raises(AuthenticationFailed):
         login_user('', USER_PASSWORD, None)
-
-
-def test_login_not_existed_user(user):
-    with raises(AuthenticationFailed):
-        login_user(user.login, f'{USER_PASSWORD}bla', None)
 
 
 def test_multitokens(user):
