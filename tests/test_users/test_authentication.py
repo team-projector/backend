@@ -22,17 +22,39 @@ def test_login_user(user):
     assert Token.objects.count() == 1
 
 
-def test_login_user_without_password_or_login(user):
+def test_login_user_not_active(user):
+    user.is_active = False
+    user.save()
+
+    with raises(AuthenticationFailed):
+        login_user(user.login, USER_PASSWORD, None)
+
+
+def test_login_user_without_password(user):
     with raises(AuthenticationFailed):
         login_user(user.login, '', None)
 
+
+def test_login_user_without_login(user):
     with raises(AuthenticationFailed):
         login_user('', USER_PASSWORD, None)
 
 
 def test_login_not_existed_user(user):
     with raises(AuthenticationFailed):
-        login_user(user.login, 'test1234', None)
+        login_user(user.login, f'{USER_PASSWORD}bla', None)
+
+
+def test_multitokens(user):
+    assert Token.objects.count() == 0
+
+    login_user(user.login, USER_PASSWORD, None)
+
+    assert Token.objects.filter(user=user).count() == 1
+
+    login_user(user.login, USER_PASSWORD, None)
+
+    assert Token.objects.filter(user=user).count() == 2
 
 
 def test_no_auth(user, client):
