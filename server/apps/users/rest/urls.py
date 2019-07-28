@@ -1,5 +1,3 @@
-from django.urls import include, path
-
 from apps.core.rest.routers import AppRouter
 from . import views
 
