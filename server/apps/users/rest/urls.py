@@ -13,13 +13,5 @@ router.register(
 )
 
 urlpatterns = [
-    path('me/', include((
-        [
-            path(
-                'user',
-                views.MeUserView.as_view(),
-                name='user'
-            )
-        ], app_name), 'me')),
     *router.urls
 ]
