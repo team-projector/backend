@@ -62,11 +62,6 @@ router.register(
 
 urlpatterns = [
     path(
-        'gitlab/status',
-        views.GitlabStatusView.as_view(),
-        name='gitlab-status'
-    ),
-    path(
         'gitlab/issue/status',
         views.GitlabIssueStatusView.as_view(),
         name='gitlab-issue-status'

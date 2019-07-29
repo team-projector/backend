@@ -20,9 +20,12 @@ class AuthNode:
         if all((perm().has_node_permission(info, id) for perm in
                 cls.permission_classes)):
             try:
-                object_instance = cls._meta.model.objects.get(  # type: ignore
-                    id=id
+                queryset = cls.get_queryset(  # type: ignore
+                    cls._meta.model.objects,  # type: ignore
+                    info
                 )
+
+                object_instance = queryset.get(id=id)
             except cls._meta.model.DoesNotExist:  # type: ignore
                 object_instance = None
             return object_instance
