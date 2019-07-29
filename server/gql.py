@@ -5,7 +5,8 @@ from apps.core.graphql.views import PrivateGraphQLView, \
     DrfAuthenticatedGraphQLView
 from apps.development.graphql.mutations import IssuesMutations
 from apps.development.graphql.queries import (
-    IssuesQueries, MilestonesQueries, TeamsQueries, GitlabQueries
+    IssuesQueries, MilestonesQueries, ProjectsQueries, TeamsQueries,
+    GitlabQueries
 )
 from apps.payroll.graphql.queries import TimeExpensesQueries, SalariesQueries
 from apps.users.graphql.mutations import AuthMutations
@@ -14,6 +15,7 @@ from apps.users.graphql.queries import UsersQueries
 
 class Query(IssuesQueries,
             MilestonesQueries,
+            ProjectsQueries,
             TeamsQueries,
             GitlabQueries,
             TimeExpensesQueries,
