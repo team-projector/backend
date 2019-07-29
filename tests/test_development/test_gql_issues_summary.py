@@ -1,35 +1,44 @@
 from datetime import datetime, timedelta
 from django.utils import timezone
 
-from apps.development.graphql.resolvers import resolve_issues_summary
-from apps.development.models import TeamMember
+from apps.development.graphql.filters import IssuesFilterSet
+from apps.development.services.allowed.issues import filter_allowed_for_user
+from apps.development.services.summary.issues import get_issues_summary
+from apps.development.models import Issue, TeamMember
 from tests.test_development.factories import (
     IssueFactory, TeamFactory, TeamMemberFactory
 )
-from tests.test_development.factories_gitlab import AttrDict
 from tests.test_payroll.factories import IssueSpentTimeFactory
 from tests.test_users.factories import UserFactory
 
 
-def test_one_user(user):
+def test_one_user(user, client):
     IssueFactory.create_batch(
         5, user=user,
         total_time_spent=0,
         due_date=datetime.now()
     )
 
-    info = AttrDict({
-        'context': AttrDict({
-            'user': user
-        })
-    })
+    filterset = IssuesFilterSet(
+        data={'user': user.id},
+        queryset=filter_allowed_for_user(
+            Issue.objects.all(),
+            user
+        ),
+        request=client
+    )
 
-    results = resolve_issues_summary(None, info=info, user=user.id)
+    results = get_issues_summary(
+        filterset.qs,
+        filterset.form.cleaned_data['due_date'],
+        filterset.form.cleaned_data['user'],
+        filterset.form.cleaned_data['team']
+    )
 
     _check_summary(results, 5, 0, 0)
 
 
-def test_filter_by_user(user):
+def test_filter_by_user(user, client):
     IssueFactory.create_batch(5, user=user, total_time_spent=0,
                               due_date=datetime.now())
 
@@ -37,18 +46,26 @@ def test_filter_by_user(user):
     IssueFactory.create_batch(5, user=another_user, total_time_spent=0,
                               due_date=datetime.now())
 
-    info = AttrDict({
-        'context': AttrDict({
-            'user': user
-        })
-    })
+    filterset = IssuesFilterSet(
+        data={'user': user.id},
+        queryset=filter_allowed_for_user(
+            Issue.objects.all(),
+            user
+        ),
+        request=client
+    )
 
-    results = resolve_issues_summary(None, info=info, user=user.id)
+    results = get_issues_summary(
+        filterset.qs,
+        filterset.form.cleaned_data['due_date'],
+        filterset.form.cleaned_data['user'],
+        filterset.form.cleaned_data['team']
+    )
 
     _check_summary(results, 5, 0, 0)
 
 
-def test_time_spents_by_user(user):
+def test_time_spents_by_user(user, client):
     issues = IssueFactory.create_batch(5, user=user,
                                        due_date=datetime.now())
 
@@ -75,20 +92,27 @@ def test_time_spents_by_user(user):
         time_spent=200
     )
 
-    info = AttrDict({
-        'context': AttrDict({
-            'user': user
-        })
-    })
+    filterset = IssuesFilterSet(
+        data={'user': user.id,
+              'due_date': datetime.now().date()},
+        queryset=filter_allowed_for_user(
+            Issue.objects.all(),
+            user
+        ),
+        request=client
+    )
 
-    results = resolve_issues_summary(
-        None, info=info, user=user.id, due_date=datetime.now().date()
+    results = get_issues_summary(
+        filterset.qs,
+        filterset.form.cleaned_data['due_date'],
+        filterset.form.cleaned_data['user'],
+        filterset.form.cleaned_data['team']
     )
 
     _check_summary(results, 5, 100, 0)
 
 
-def test_time_spents_by_team(user):
+def test_time_spents_by_team(user, client):
     issues = IssueFactory.create_batch(5, user=user,
                                        due_date=datetime.now())
 
@@ -128,20 +152,27 @@ def test_time_spents_by_team(user):
         time_spent=200
     )
 
-    info = AttrDict({
-        'context': AttrDict({
-            'user': user
-        })
-    })
+    filterset = IssuesFilterSet(
+        data={'team': team.id,
+              'due_date': datetime.now().date()},
+        queryset=filter_allowed_for_user(
+            Issue.objects.all(),
+            user
+        ),
+        request=client
+    )
 
-    results = resolve_issues_summary(
-        None, info=info, team=team.id, due_date=timezone.now().date()
+    results = get_issues_summary(
+        filterset.qs,
+        filterset.form.cleaned_data['due_date'],
+        filterset.form.cleaned_data['user'],
+        filterset.form.cleaned_data['team']
     )
 
     _check_summary(results, 5, 100, 0)
 
 
-def test_problems(user):
+def test_problems(user, client):
     IssueFactory.create_batch(
         4,
         user=user,
@@ -160,13 +191,21 @@ def test_problems(user):
         total_time_spent=0
     )
 
-    info = AttrDict({
-        'context': AttrDict({
-            'user': user
-        })
-    })
+    filterset = IssuesFilterSet(
+        data={'user': user.id},
+        queryset=filter_allowed_for_user(
+            Issue.objects.all(),
+            user
+        ),
+        request=client
+    )
 
-    results = resolve_issues_summary(None, info=info, user=user.id)
+    results = get_issues_summary(
+        filterset.qs,
+        filterset.form.cleaned_data['due_date'],
+        filterset.form.cleaned_data['user'],
+        filterset.form.cleaned_data['team']
+    )
 
     _check_summary(results, 5, 0, 4)
 

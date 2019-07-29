@@ -62,3 +62,17 @@ def test_change_issue_feature(user, client):
 
     assert response.status_code == status.HTTP_200_OK
     assert response.data['feature']['id'] == feature.id
+
+
+# def test_search(user, api_client):
+#     issue = IssueFactory.create(title='create', user=user)
+#     IssueFactory.create(title='implement', user=user)
+#
+#     api_client.set_credentials(user)
+#     response = api_client.get('/api/issues', {
+#         'q': 'cre'
+#     })
+#
+#     assert response.status_code == status.HTTP_200_OK
+#     assert response.data['count'] == 1
+#     assert response.data['results'][0]['id'] == issue.id

@@ -1,5 +1,3 @@
-from contextlib import suppress
-
 from apps.development.models import TeamMember
 from apps.development.graphql.types.issue import IssueType
 from apps.development.models import Issue
@@ -11,7 +9,7 @@ from tests.test_development.factories_gitlab import AttrDict
 from tests.test_users.factories import UserFactory
 
 
-def test_one_member(user):
+def test_one_member(user, client):
     team = TeamFactory.create()
 
     TeamMemberFactory.create(
@@ -25,28 +23,25 @@ def test_one_member(user):
     another_user = UserFactory.create()
     IssueFactory.create_batch(3, user=another_user)
 
+    client.user = user
     info = AttrDict({
-        'context': AttrDict({
-            'user': user
-        }),
+        'context': client,
         'field_asts': [{}],
         'fragments': {},
-
     })
+
     issues = IssueType().get_queryset(Issue.objects.all(), info)
 
     results = IssuesFilterSet(
         data={'team': team.id},
         queryset=issues,
-        request=AttrDict({
-            'user': user
-        }),
+        request=client
     ).qs
 
     assert results.count() == 2
 
 
-def test_many_members(user):
+def test_many_members(user, client):
     team = TeamFactory.create()
 
     TeamMemberFactory.create(
@@ -66,28 +61,25 @@ def test_many_members(user):
         roles=TeamMember.roles.developer
     )
 
+    client.user = user
     info = AttrDict({
-        'context': AttrDict({
-            'user': user
-        }),
+        'context': client,
         'field_asts': [{}],
         'fragments': {},
-
     })
+
     issues = IssueType().get_queryset(Issue.objects.all(), info)
 
     results = IssuesFilterSet(
         data={'team': team.id},
         queryset=issues,
-        request=AttrDict({
-            'user': user
-        }),
+        request=client
     ).qs
 
     assert results.count() == 5
 
 
-def test_many_teams(user):
+def test_many_teams(user, client):
     team = TeamFactory.create()
 
     TeamMemberFactory.create(
@@ -114,27 +106,19 @@ def test_many_teams(user):
         roles=TeamMember.roles.developer
     )
 
+    client.user = user
     info = AttrDict({
-        'context': AttrDict({
-            'user': user
-        }),
+        'context': client,
         'field_asts': [{}],
         'fragments': {},
-
     })
+
     issues = IssueType().get_queryset(Issue.objects.all(), info)
 
     results = IssuesFilterSet(
         data={'team': team.id},
         queryset=issues,
-        request=AttrDict({
-            'user': user
-        }),
+        request=client
     ).qs
 
     assert results.count() == 2
-
-
-def _get_issue_by_id(self, items, issue):
-    with suppress(StopIteration):
-        return next(item for item in items if item['id'] == issue.id)

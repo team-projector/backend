@@ -10,7 +10,7 @@ from tests.test_users.factories import UserFactory
 
 
 @override_settings(GITLAB_TOKEN='GITLAB_TOKEN')
-def test_sync_project(user, gl_mocker):
+def test_sync_project(user, client, gl_mocker):
     gl_project = AttrDict(GlProjectFactory())
     project = ProjectFactory.create(gl_id=gl_project.id)
 
@@ -65,11 +65,11 @@ def test_sync_project(user, gl_mocker):
 
     assert issue.state == 'opened'
 
+    client.user = user
     info = AttrDict({
-        'context': AttrDict({
-            'user': user
-        }),
+        'context': client
     })
+
     issue_mutated = SyncIssueMutation().do_mutate(None, info, issue.id).issue
 
     assert issue_mutated.id == issue.id
