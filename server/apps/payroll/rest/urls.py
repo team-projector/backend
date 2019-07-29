@@ -7,7 +7,6 @@ app_name = 'payroll'
 
 router = AppRouter()
 router.register('work-breaks', views.WorkBreaksViewset, 'work-breaks')
-router.register('salaries', views.SalariesViewSet, 'salaries')
 
 urlpatterns = [
     path('users/<int:user_pk>/', include((
