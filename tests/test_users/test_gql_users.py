@@ -19,7 +19,7 @@ def test_user_inactive(user, client):
     client.user = user
     info = AttrDict({'context': client})
 
-    assert UserType().get_node(info, user.id) == user
+    assert UserType().get_node(info, user.id) is None
 
 
 def test_users(user, client):
