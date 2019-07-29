@@ -34,7 +34,6 @@ urlpatterns = [
     path('ht/', include('health_check.urls')),
     path('api/graphql', csrf_exempt(get_api_graphql_view())),
     path('api/', include((get_module_url_patterns(
-        'apps.users.rest.urls',
         'apps.development.rest.urls',
         'apps.payroll.rest.urls',
     ), 'urls'), namespace='api')),
