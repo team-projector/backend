@@ -25,11 +25,6 @@ urlpatterns = [
                 name='progress-metrics'
             ),
         ], app_name), 'teams')),
-    path(
-        'time-expenses',
-        views.TimeExpensesView.as_view(),
-        name='time-expenses'
-    ),
 
     *router.urls
 ]
