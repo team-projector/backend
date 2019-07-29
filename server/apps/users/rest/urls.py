@@ -1,15 +1,16 @@
-from apps.core.rest.routers import AppRouter
+from django.urls import include, path
+
 from . import views
 
 app_name = 'users'
 
-router = AppRouter()
-router.register(
-    'users',
-    views.UsersViewset,
-    'users'
-)
-
 urlpatterns = [
-    *router.urls
+    path('me/', include((
+        [
+            path(
+                'user',
+                views.MeUserView.as_view(),
+                name='user'
+            )
+        ], app_name), 'me')),
 ]
