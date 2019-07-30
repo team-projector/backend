@@ -1,3 +1,5 @@
+from typing import List
+
 from django.conf import settings
 from django.core.mail import send_mail
 from django.template.loader import get_template
@@ -5,7 +7,9 @@ from django.template.loader import get_template
 
 class SystemEmailDispatcher:
     @staticmethod
-    def mail_users(subject, text, recipient_list):
+    def mail_users(subject: str,
+                   text: str,
+                   recipient_list: List[str]) -> None:
         content = get_template('system_email_template.html')
 
         renderer = content.render(context={

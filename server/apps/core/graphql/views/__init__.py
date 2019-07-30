@@ -1,2 +1,2 @@
-from .drf_auth import DrfAuthenticatedGraphQLView
-from .private import PrivateGraphQLView
+from .api import ApiGraphQLView
+from .playground import PlaygroundGraphQLView

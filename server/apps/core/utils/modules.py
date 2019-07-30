@@ -13,7 +13,8 @@ def get_module_url_patterns(*modules: str) -> Iterable:
     return patterns
 
 
-def load_module_from_app(app, module):
+def load_module_from_app(app: str,
+                         module: str):
     name = f'{app}.{module}'
 
     try:
