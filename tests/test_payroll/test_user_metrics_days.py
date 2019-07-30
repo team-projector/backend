@@ -2,6 +2,7 @@ from datetime import timedelta, datetime
 from django.db.models import Sum
 from django.test import override_settings
 from django.utils import timezone
+from pytest import raises
 from typing import Dict
 
 from apps.development.models.issue import STATE_OPENED
@@ -253,6 +254,18 @@ def test_another_user(user):
                    }, {}, {
                        timezone.now(): 1
                    }, {}, {})
+
+
+def test_bad_group(user):
+    with raises(ValueError) as error:
+        get_user_progress_metrics(
+            user,
+            datetime.now().date() - timedelta(days=5),
+            datetime.now().date() + timedelta(days=5),
+            'bag_group'
+        )
+
+    assert 'Bad group' in str(error)
 
 
 def _check_metrics(metrics,

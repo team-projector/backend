@@ -31,20 +31,6 @@ class ProblemsMixin(serializers.ModelSerializer):
         return get_user_problems(instance)
 
 
-class UserSerializer(MetricsMixin,
-                     ProblemsMixin,
-                     serializers.ModelSerializer):
-    avatar = serializers.URLField(source='gl_avatar')
-    roles = BitField()
-
-    class Meta:
-        model = User
-        fields = (
-            'id', 'name', 'login', 'hour_rate', 'avatar', 'gl_url', 'roles',
-            'metrics', 'problems'
-        )
-
-
 class UserCardSerializer(MetricsMixin,
                          ProblemsMixin,
                          serializers.ModelSerializer):
