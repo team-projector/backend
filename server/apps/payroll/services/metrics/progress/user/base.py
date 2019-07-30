@@ -23,7 +23,10 @@ class UserProgressMetrics:
 
 
 class ProgressMetricsProvider:
-    def __init__(self, user: User, start: date, end: date):
+    def __init__(self,
+                 user: User,
+                 start: date,
+                 end: date):
         self.user = user
         self.start = start
         self.end = end

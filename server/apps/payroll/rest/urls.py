@@ -6,7 +6,11 @@ from . import views
 app_name = 'payroll'
 
 router = AppRouter()
-router.register('work-breaks', views.WorkBreaksViewset, 'work-breaks')
+router.register(
+    'work-breaks',
+    views.WorkBreaksViewset,
+    'work-breaks'
+)
 
 urlpatterns = [
     path('users/<int:user_pk>/', include((

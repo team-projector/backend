@@ -7,34 +7,18 @@ from rest_framework.response import Response
 
 from apps.core.rest.views import BaseGenericViewSet
 from apps.core.rest.views.mixins import UpdateModelMixin
-from apps.core.utils.rest import parse_query_params, parse_data_params
-from apps.development.models import Issue, Team
+from apps.core.utils.rest import parse_data_params
+from apps.development.models import Issue
 from apps.development.rest.filters import IssueProblemFilter, IssueTeamFilter
 from apps.development.rest.serializers import (
-    IssueCardSerializer, IssueSerializer, IssueUpdateSerializer,
-    IssuesSummarySerializer
+    IssueCardSerializer, IssueSerializer, IssueUpdateSerializer
 )
 from apps.development.services.gitlab.spent_time import add_spent_time
 from apps.development.services.problems.issue import annotate_issues_problems
-from apps.development.services.summary.issues import get_issues_summary
-from apps.development.tasks import sync_project_issue
-from apps.users.models import User
 
 
 class GitlabAddSpentTimeSerializer(serializers.Serializer):
     time = serializers.IntegerField(min_value=1)
-
-
-class IssuesSummaryParamsSerializer(serializers.Serializer):
-    due_date = serializers.DateField(required=False)
-    user = serializers.PrimaryKeyRelatedField(
-        queryset=User.objects.all(),
-        required=False
-    )
-    team = serializers.PrimaryKeyRelatedField(
-        queryset=Team.objects.all(),
-        required=False
-    )
 
 
 class IssuesViewset(mixins.RetrieveModelMixin,
@@ -47,8 +31,6 @@ class IssuesViewset(mixins.RetrieveModelMixin,
         'update': IssueCardSerializer,
         'partial_update': IssueCardSerializer,
         'spend': IssueSerializer,
-        'sync': IssueSerializer,
-        'summary': IssuesSummarySerializer
     }
     update_serializer_class = IssueUpdateSerializer
 
@@ -93,30 +75,3 @@ class IssuesViewset(mixins.RetrieveModelMixin,
         )
 
         return Response(self.get_serializer(issue).data)
-
-    @action(detail=True,
-            methods=['post'])
-    def sync(self, request, pk=None):
-        issue = self.get_object()
-        sync_project_issue.delay(
-            issue.project.gl_id,
-            issue.gl_iid
-        )
-
-        return Response(self.get_serializer(issue).data)
-
-    @action(detail=False)
-    def summary(self, request):
-        params = parse_query_params(
-            request,
-            IssuesSummaryParamsSerializer
-        )
-
-        queryset = self.get_filtered_queryset()
-        return Response(self.get_serializer(
-            get_issues_summary(
-                queryset,
-                params.get('due_date'),
-                params.get('user'),
-                params.get('team'),
-            )).data)

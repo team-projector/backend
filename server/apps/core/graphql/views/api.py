@@ -7,7 +7,7 @@ from rest_framework.request import Request
 from rest_framework.settings import api_settings
 
 
-class DrfAuthenticatedGraphQLView(GraphQLView):
+class ApiGraphQLView(GraphQLView):
     def parse_body(self, request):
         if isinstance(request, Request):
             return request.data

@@ -1,8 +1,9 @@
 from datetime import timedelta
 
-from apps.users.services.problems.user import (
-    get_user_problems, PROBLEM_PAYROLL_OPENED_OVERFLOW
+from apps.users.services.problems.checkers.payroll_opened_overflow import (
+    PROBLEM_PAYROLL_OPENED_OVERFLOW
 )
+from apps.users.services.problems.user import get_user_problems
 from tests.test_payroll.factories import IssueSpentTimeFactory
 
 

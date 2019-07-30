@@ -21,7 +21,11 @@ class DataSourceConnectionField(AuthFilter,
         super().__init__(type, *args, **kwargs)
 
     @classmethod
-    def resolve_connection(cls, connection, default_manager, args, iterable):
+    def resolve_connection(cls,
+                           connection,
+                           default_manager,
+                           args,
+                           iterable):
         if iterable is None:
             iterable = default_manager
 

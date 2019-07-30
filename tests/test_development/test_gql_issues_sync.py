@@ -1,7 +1,6 @@
 from django.test import override_settings
-from rest_framework import status
 
-
+from apps.development.graphql.mutations.issues import SyncIssueMutation
 from tests.test_development.factories import IssueFactory, ProjectFactory
 from tests.test_development.factories_gitlab import (
     AttrDict, GlTimeStats, GlUserFactory, GlProjectFactory,
@@ -10,34 +9,8 @@ from tests.test_development.factories_gitlab import (
 from tests.test_users.factories import UserFactory
 
 
-def test_user_unauthorized(user, api_client):
-    issue = IssueFactory.create(user=user)
-
-    response = api_client.get(f'/api/issues/{issue.id}/sync')
-
-    assert response.status_code == status.HTTP_401_UNAUTHORIZED
-
-
-def test_method_not_allowed(user, api_client):
-    issue = IssueFactory.create(user=user)
-
-    api_client.set_credentials(user)
-    response = api_client.get(f'/api/issues/{issue.id}/sync')
-
-    assert response.status_code == status.HTTP_405_METHOD_NOT_ALLOWED
-
-
-def test_issue_not_found(user, api_client):
-    issue = IssueFactory.create(user=user)
-
-    api_client.set_credentials(user)
-    response = api_client.post(f'/api/issues/{issue.id + 1}/sync')
-
-    assert response.status_code == status.HTTP_404_NOT_FOUND
-
-
 @override_settings(GITLAB_TOKEN='GITLAB_TOKEN')
-def test_sync_project(user, api_client, gl_mocker):
+def test_sync_project(user, client, gl_mocker):
     gl_project = AttrDict(GlProjectFactory())
     project = ProjectFactory.create(gl_id=gl_project.id)
 
@@ -90,12 +63,17 @@ def test_sync_project(user, api_client, gl_mocker):
         f'/projects/{gl_project.id}/issues/{gl_issue.iid}/participants', []
     )
 
-    api_client.set_credentials(user)
-    response = api_client.post(f'/api/issues/{issue.id}/sync')
+    assert issue.state == 'opened'
 
-    assert response.status_code == status.HTTP_200_OK
-    assert response.data['id'] == issue.id
-    assert response.data['gl_id'] == issue.gl_id
+    client.user = user
+    info = AttrDict({
+        'context': client
+    })
+
+    issue_mutated = SyncIssueMutation().do_mutate(None, info, issue.id).issue
+
+    assert issue_mutated.id == issue.id
+    assert issue_mutated.gl_id == issue.gl_id
 
     issue.refresh_from_db()
     assert issue.state == 'closed'
