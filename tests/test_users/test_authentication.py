@@ -1,14 +1,15 @@
 from datetime import timedelta
+
 from django.conf import settings
 from django.utils import timezone
 from pytest import raises
 from rest_framework.exceptions import AuthenticationFailed
 from rest_framework.settings import api_settings
 
+from apps.core.rest.authentication import TokenAuthentication
 from apps.users.models import Token
-from apps.users.rest.authentication import TokenAuthentication
-from apps.users.services.token import create_user_token
 from apps.users.services.auth import login_user
+from apps.users.services.token import create_user_token
 from tests.base import USER_PASSWORD
 
 
