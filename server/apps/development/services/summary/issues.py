@@ -28,6 +28,7 @@ class IssuesProjectSummary:
 
 class IssuesSummary:
     issues_count: int = 0
+    opened_count: int = 0
     time_spent: int = 0
     problems_count: int = 0
     projects: List[IssuesProjectSummary] = []
@@ -47,6 +48,7 @@ class IssuesSummaryProvider:
     def execute(self) -> IssuesSummary:
         summary = IssuesSummary()
         summary.issues_count = self._get_issues_count()
+        summary.opened_count = self._get_issues_opened_count()
         summary.time_spent = self._get_time_spent()
         summary.problems_count = self._get_problems_count()
 
@@ -56,6 +58,9 @@ class IssuesSummaryProvider:
 
     def _get_issues_count(self) -> int:
         return self.queryset.count()
+
+    def _get_issues_opened_count(self) -> int:
+        return self.queryset.filter(~Q(state=STATE_CLOSED)).count()
 
     def _get_time_spent(self) -> int:
         queryset = SpentTime.objects.all()
