@@ -1,4 +1,5 @@
 from datetime import datetime
+from typing import Optional
 
 from django.db import models
 from django.db.models import Max
@@ -127,3 +128,19 @@ class MergeRequest(NotableMixin,
         return self.notes.aggregate(
             last_created=Max('created_at')
         )['last_created']
+
+    @property
+    def time_remains(self) -> Optional[int]:
+        if self.time_estimate is not None and self.total_time_spent is not None:
+            return max(self.time_estimate - self.total_time_spent, 0)
+
+    @property
+    def efficiency(self) -> Optional[float]:
+        if self.efficiency_available:
+            return self.time_estimate / self.total_time_spent
+
+    @property
+    def efficiency_available(self) -> bool:
+        return (self.state == self.STATE.closed and
+                self.total_time_spent and
+                self.time_estimate)
