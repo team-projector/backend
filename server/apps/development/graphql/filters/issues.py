@@ -1,6 +1,7 @@
 import django_filters
 from django.db.models import QuerySet
 
+from apps.core.graphql.filters import SearchFilter
 from apps.development.models import Issue, Team, TeamMember, Project
 from apps.development.services.problems.issue import (
     filter_issues_problems, exclude_issues_problems,
@@ -41,6 +42,7 @@ class IssuesFilterSet(django_filters.FilterSet):
     project = django_filters.ModelChoiceFilter(queryset=Project.objects.all())
     team = TeamFilter()
     problems = ProblemsFilter()
+    q = SearchFilter(fields=('title',))
 
     order_by = django_filters.OrderingFilter(
         fields=('due_date', 'title', 'created_at')

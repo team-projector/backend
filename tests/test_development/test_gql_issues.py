@@ -309,3 +309,44 @@ def test_filter_by_due_date_and_state(user, client):
 
     assert results.count() == 1
     assert results[0] == issue
+
+
+def test_search(user, client):
+    issue_1 = IssueFactory.create(title='create', user=user)
+    issue_2 = IssueFactory.create(title='react', user=user)
+    IssueFactory.create(title='test0', user=user)
+
+    client.user = user
+    info = AttrDict({
+        'context': client,
+        'field_asts': [{}],
+        'fragments': {},
+    })
+
+    issues = IssueType().get_queryset(Issue.objects.all(), info)
+
+    results = IssuesFilterSet(
+        data={'q': 'ate'},
+        queryset=issues,
+        request=client
+    ).qs
+
+    assert results.count() == 1
+    assert results.first() == issue_1
+
+    results = IssuesFilterSet(
+        data={'q': 'rea'},
+        queryset=issues,
+        request=client
+    ).qs
+
+    assert results.count() == 2
+    assert set(results) == {issue_1, issue_2}
+
+    results = IssuesFilterSet(
+        data={'q': '012345'},
+        queryset=issues,
+        request=client
+    ).qs
+
+    assert results.count() == 0
