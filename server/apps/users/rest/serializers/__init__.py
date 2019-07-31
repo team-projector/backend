@@ -1,1 +1,1 @@
-from .user import UserCardSerializer, UserSerializer
+from .user import UserCardSerializer
