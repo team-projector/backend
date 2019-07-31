@@ -63,6 +63,14 @@ def test_filter_by_user(user, client):
     assert results.count() == 1
     assert results.first().user == user_2
 
+    results = MergeRequestFilterSet(
+        data={'user': user.id},
+        queryset=merge_requests,
+        request=client
+    ).qs
+
+    assert results.count() == 3
+
 
 def test_filter_by_state(user, client):
     merge_request_opened = MergeRequestFactory.create(
@@ -139,16 +147,10 @@ def test_filter_by_projects(user, client):
     assert results.first().project == project_2
 
 
-def test_filter_by_projects(user, client):
-    project_1 = ProjectFactory.create()
-    MergeRequestFactory.create(user=user, project=project_1)
-
-    project_2 = ProjectFactory.create()
-    MergeRequestFactory.create(user=user, project=project_2)
-
-    MergeRequestFactory.create_batch(
-        3, user=user, project=ProjectFactory.create()
-    )
+def test_ordering(user, client):
+    merge_request_1 = MergeRequestFactory.create(title='agent', user=user)
+    merge_request_2 = MergeRequestFactory.create(title='cloud', user=user)
+    merge_request_3 = MergeRequestFactory.create(title='bar', user=user)
 
     client.user = user
     info = AttrDict({
@@ -160,19 +162,17 @@ def test_filter_by_projects(user, client):
     merge_requests = MergeRequestType().get_queryset(MergeRequest.objects.all(), info)
 
     results = MergeRequestFilterSet(
-        data={'project': project_1.id},
+        data={'order_by': 'title'},
         queryset=merge_requests,
         request=client
     ).qs
 
-    assert results.count() == 1
-    assert results.first().project == project_1
+    assert list(results) == [merge_request_1, merge_request_3, merge_request_2]
 
     results = MergeRequestFilterSet(
-        data={'project': project_2.id},
+        data={'order_by': '-title'},
         queryset=merge_requests,
         request=client
     ).qs
 
-    assert results.count() == 1
-    assert results.first().project == project_2
+    assert list(results) == [merge_request_2, merge_request_3, merge_request_1]

@@ -1,4 +1,3 @@
-from apps.development.models import MergeRequest
 from apps.payroll.models import SpentTime
 
 
@@ -9,7 +8,7 @@ class MergeRequestMetrics:
     paid: float = 0
 
 
-def get_merge_request_metrcis(merge_request: MergeRequest) -> MergeRequestMetrics:
+def get_merge_request_metrcis(merge_request) -> MergeRequestMetrics:
     payroll = SpentTime.objects.filter(
         mergerequests__id=merge_request.id
     ).aggregate_payrolls()
