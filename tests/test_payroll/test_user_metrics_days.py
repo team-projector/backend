@@ -257,15 +257,13 @@ def test_another_user(user):
 
 
 def test_bad_group(user):
-    with raises(ValueError) as error:
+    with raises(ValueError):
         get_user_progress_metrics(
             user,
             datetime.now().date() - timedelta(days=5),
             datetime.now().date() + timedelta(days=5),
-            'bag_group'
+            'test_bad_group'
         )
-
-    assert 'Bad group' in str(error)
 
 
 def _check_metrics(metrics,

@@ -426,15 +426,13 @@ def test_another_user_in_team(user):
 
 
 def test_bad_group(db):
-    with raises(ValueError) as error:
+    with raises(ValueError):
         get_team_progress_metrics(
             TeamFactory.create(),
             timezone.now().date() - timedelta(days=5),
             timezone.now().date() + timedelta(days=5),
-            'bag_group'
+            'test_bad_group'
         )
-
-    assert 'Bad group' in str(error)
 
 
 def _check_metrics(metrics,
