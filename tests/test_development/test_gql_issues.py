@@ -6,7 +6,7 @@ from apps.development.models.issue import Issue, STATE_CLOSED, STATE_OPENED
 from apps.development.graphql.filters import IssuesFilterSet
 from tests.base import format_date
 from tests.test_development.factories import (
-    IssueFactory, TeamFactory, TeamMemberFactory
+    IssueFactory, ProjectFactory, TeamFactory, TeamMemberFactory
 )
 from tests.test_development.factories_gitlab import AttrDict
 from tests.test_users.factories import UserFactory
@@ -350,3 +350,48 @@ def test_search(user, client):
     ).qs
 
     assert results.count() == 0
+
+
+def test_issues_filter_by_project(user, client):
+    team = TeamFactory.create()
+    team.members.set([user])
+
+    TeamMember.objects.filter(
+        user=user, team=team
+    ).update(
+        roles=TeamMember.roles.leader
+    )
+
+    project_1 = ProjectFactory.create()
+    IssueFactory.create(user=user, project=project_1)
+
+    project_2 = ProjectFactory.create()
+    IssueFactory.create(user=user, project=project_2)
+    IssueFactory.create_batch(3, user=user)
+
+    client.user = user
+    info = AttrDict({
+        'context': client,
+        'field_asts': [{}],
+        'fragments': {},
+    })
+
+    issues = IssueType().get_queryset(Issue.objects.all(), info)
+
+    results = IssuesFilterSet(
+        data={'project': project_1.id},
+        queryset=issues,
+        request=client
+    ).qs
+
+    assert results.count() == 1
+    assert results.first().project == project_1
+
+    results = IssuesFilterSet(
+        data={'project': project_2.id},
+        queryset=issues,
+        request=client
+    ).qs
+
+    assert results.count() == 1
+    assert results.first().project == project_2
