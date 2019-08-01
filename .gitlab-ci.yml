@@ -98,7 +98,6 @@ deploy_k8s:
     - cd deploy/helm
     - helm repo update
   script:
-    - cd backend
     - export RELEASE_NAME=backend
     - export DEPLOYS=$(helm ls | grep $RELEASE_NAME | wc -l)
     - if [ ${DEPLOYS}  -eq 0 ]; then helm install --set image.tag=dev --name=${RELEASE_NAME} . ; else helm upgrade  ${RELEASE_NAME} --set image.tag=dev .; fi
