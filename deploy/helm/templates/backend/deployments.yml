@@ -91,32 +91,32 @@ spec:
                   name: global-config
                   key: global.domain
             - name: DJANGO_EMAIL_HOST
-                valueFrom:
-                  configMapKeyRef:
-                    name: backend-config
-                    key: backend.email.host
+              valueFrom:
+                configMapKeyRef:
+                  name: backend-config
+                  key: backend.email.host
             - name: DJANGO_EMAIL_PORT
-                valueFrom:
-                  configMapKeyRef:
-                    name: backend-config
-                    key: backend.email.port
+              valueFrom:
+                configMapKeyRef:
+                  name: backend-config
+                  key: backend.email.port
             - name: DJANGO_DEFAULT_FROM_EMAIL
-                valueFrom:
-                  configMapKeyRef:
-                    name: backend-config
-                    key: backend.email.from_email
+              valueFrom:
+                configMapKeyRef:
+                  name: backend-config
+                  key: backend.email.from_email
             - name: DJANGO_EMAIL_HOST_USER
-                valueFrom:
-                  secretKeyRef:
-                    name: backend-secrets
-                    key: backend.email.user
+              valueFrom:
+                secretKeyRef:
+                  name: backend-secrets
+                  key: backend.email.user
             - name: DJANGO_EMAIL_HOST_PASSWORD
-                valueFrom:
-                  secretKeyRef:
-                    name: backend-secrets
-                    key: backend.email.password
+              valueFrom:
+                secretKeyRef:
+                  name: backend-secrets
+                  key: backend.email.password
             - name: DJANGO_SLACK_TOKEN
-                valueFrom:
-                  secretKeyRef:
-                    name: backend-secrets
-                    key: backend.slack.token
+              valueFrom:
+                secretKeyRef:
+                  name: backend-secrets
+                  key: backend.slack.token
