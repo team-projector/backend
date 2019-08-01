@@ -1,9 +1,21 @@
 import graphene
 
 
+class WorkItemMetricsType(graphene.ObjectType):
+    count = graphene.Int()
+    opened_count = graphene.Int()
+    opened_estimated = graphene.Int()
+
+
+class TeamIssueMetricsType(WorkItemMetricsType):
+    pass
+
+
+class TeamMergeRequestMetricsType(WorkItemMetricsType):
+    pass
+
+
 class TeamMetricsType(graphene.ObjectType):
-    issues_count = graphene.Int()
     problems_count = graphene.Int()
-    issues_opened_count = graphene.Int()
-    # remains = graphene.Float()
-    # efficiency = graphene.Float()
+    issues = graphene.Field(TeamIssueMetricsType)
+    merge_requests = graphene.Field(TeamMergeRequestMetricsType)
