@@ -3,8 +3,7 @@ image: docker:latest
 variables:
   DOCKER_DRIVER: overlay2
   DOCKER_TEST_IMAGE: $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG:$CI_COMMIT_SHA
-  DOCKER_DEV_IMAGE: $CI_REGISTRY_IMAGE:dev
-  DOCKER_PROD_IMAGE: $CI_REGISTRY_IMAGE:prod
+  DOCKER_IMAGE: $CI_REGISTRY_IMAGE:$CI_PIPELINE_IID
   GIT_STRATEGY: none
 
 services:
@@ -63,8 +62,10 @@ publish-dev:
   script:
     - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN registry.gitlab.com
     - docker pull $DOCKER_TEST_IMAGE
-    - docker tag $DOCKER_TEST_IMAGE $DOCKER_DEV_IMAGE
-    - docker push $DOCKER_DEV_IMAGE
+    - docker tag $DOCKER_TEST_IMAGE $DOCKER_IMAGE
+    - docker tag $DOCKER_TEST_IMAGE $CI_REGISTRY_IMAGE:dev
+    - docker push $DOCKER_IMAGE
+    - docker push $CI_REGISTRY_IMAGE:dev
   only:
     - master
 
