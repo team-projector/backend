@@ -1,3 +1,5 @@
+from django.db.models import Sum
+
 from apps.development.models import Issue, MergeRequest, Team, TeamMember
 from apps.development.models.issue import STATE_OPENED
 from apps.development.services.problems.issue import annotate_issues_problems, \
@@ -7,6 +9,7 @@ from apps.development.services.problems.issue import annotate_issues_problems, \
 class WorkItemMetrics:
     count: int = 0
     opened_count: int = 0
+    opened_estimated: int = 0
 
 
 class IssuesMetrics(WorkItemMetrics):
@@ -33,17 +36,8 @@ class TeamMetricsProvider:
     def execute(self) -> TeamMetrics:
         metrics = TeamMetrics()
 
-        metrics.issues = IssuesMetrics()
-        metrics.issues.count = self.issues.count()
-        metrics.issues.opened_count = self._get_opened_workitems_count(
-            self.issues
-        )
-
-        metrics.merge_requests = MergeRequestMetrics()
-        metrics.merge_requests.count = self.merge_requests.count()
-        metrics.merge_requests.opened_count = self._get_opened_workitems_count(
-            self.merge_requests
-        )
+        metrics.issues = self._get_issues_metrics()
+        metrics.merge_requests = self._get_merge_requests_metrics()
 
         problems_issues = annotate_issues_problems(self.issues)
         problems_issues = filter_issues_problems(problems_issues)
@@ -51,9 +45,37 @@ class TeamMetricsProvider:
 
         return metrics
 
+    def _get_issues_metrics(self) -> IssuesMetrics:
+        issues = IssuesMetrics()
+
+        issues.count = self.issues.count()
+        issues.opened_count = self._get_opened_count(self.issues)
+        issues.opened_estimated = self._get_opened_estimated(self.issues)
+
+        return issues
+
+    def _get_merge_requests_metrics(self) -> MergeRequestMetrics:
+        merge_requests = MergeRequestMetrics()
+
+        merge_requests.count = self.merge_requests.count()
+        merge_requests.opened_count = self._get_opened_count(self.merge_requests)
+        merge_requests.opened_estimated = self._get_opened_estimated(
+            self.merge_requests
+        )
+
+        return merge_requests
+
     @staticmethod
-    def _get_opened_workitems_count(items) -> int:
-        return items.filter(state=STATE_OPENED).count()
+    def _get_opened_count(workitems) -> int:
+        return workitems.filter(state=STATE_OPENED).count()
+
+    @staticmethod
+    def _get_opened_estimated(workitems) -> int:
+        return workitems.filter(
+            state=STATE_OPENED
+        ).aggregate(
+            total_time_estimate=Sum('time_estimate')
+        )['total_time_estimate']
 
 
 def get_team_metrics(team: Team) -> TeamMetrics:
