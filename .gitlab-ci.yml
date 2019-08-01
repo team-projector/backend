@@ -17,7 +17,7 @@ stages:
   - publish
   - deploy
 
-quality:
+.quality:
   image: junte/python-quality
   stage: quality
   variables:
@@ -26,7 +26,7 @@ quality:
   script:
     - make check_quality
 
-build:
+.build:
   stage: build
   variables:
     GIT_DEPTH: 5
@@ -37,7 +37,7 @@ build:
     - docker push $DOCKER_TEST_IMAGE
     - docker push $CI_REGISTRY_IMAGE:latest
 
-test:
+.test:
   image: $DOCKER_TEST_IMAGE
   stage: test
   variables:
@@ -57,7 +57,7 @@ test:
     paths:
       - coverage
 
-publish-dev:
+.publish-dev:
   stage: publish
   dependencies: []
   script:
@@ -68,18 +68,7 @@ publish-dev:
   only:
     - master
 
-.publish-prod:
-  stage: publish
-  dependencies: []
-  script:
-    - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN registry.gitlab.com
-    - docker pull $DOCKER_TEST_IMAGE
-    - docker tag $DOCKER_TEST_IMAGE $DOCKER_PROD_IMAGE
-    - docker push $DOCKER_PROD_IMAGE
-  only:
-    - prod
-
-deploy-dev:
+.deploy-dev:
   stage: deploy
   image: junte/ssh-agent
   dependencies: []
@@ -92,3 +81,30 @@ deploy-dev:
     url: https://${DEV_HOST}/admin/
   only:
     - master
+
+deploy_k8s:
+  image: dtzar/helm-kubectl
+  stage: deploy
+  dependencies: []
+  variables:
+    GIT_DEPTH: 5
+    GIT_STRATEGY: fetch
+  before_script:
+    - kubectl config set-cluster prod --server="${K8S_URL}" --insecure-skip-tls-verify
+    - kubectl config set-credentials deploy --token="$K8S_TOKEN"
+    - kubectl config set-context default-context --cluster=prod --user=deploy
+    - kubectl config use-context default-context
+    - helm init --client-only
+    - cd deploy/helm
+    - helm repo update
+  script:
+    - cd backend
+    - export RELEASE_NAME=backend
+    - export DEPLOYS=$(helm ls | grep $RELEASE_NAME | wc -l)
+    - if [ ${DEPLOYS}  -eq 0 ]; then helm install --set image.tag=dev --name=${RELEASE_NAME} . ; else helm upgrade  ${RELEASE_NAME} --set image.tag=dev .; fi
+  environment:
+    name: dev
+    url: https://${DEV_HOST}
+  only:
+  - master
+
