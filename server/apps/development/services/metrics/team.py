@@ -49,8 +49,12 @@ class TeamMetricsProvider:
         issues = IssuesMetrics()
 
         issues.count = self.issues.count()
-        issues.opened_count = self._get_opened_count(self.issues)
-        issues.opened_estimated = self._get_opened_estimated(self.issues)
+        issues.opened_count = self._get_opened_count(
+            self.issues
+        )
+        issues.opened_estimated = self._get_opened_estimated(
+            self.issues
+        )
 
         return issues
 
@@ -58,7 +62,9 @@ class TeamMetricsProvider:
         merge_requests = MergeRequestMetrics()
 
         merge_requests.count = self.merge_requests.count()
-        merge_requests.opened_count = self._get_opened_count(self.merge_requests)
+        merge_requests.opened_count = self._get_opened_count(
+            self.merge_requests
+        )
         merge_requests.opened_estimated = self._get_opened_estimated(
             self.merge_requests
         )
