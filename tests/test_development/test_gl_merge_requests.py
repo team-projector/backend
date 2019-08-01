@@ -10,7 +10,7 @@ from apps.development.models import MergeRequest, Note
 from apps.development.services.gitlab.merge_requests import (
     load_merge_request_notes, load_merge_request_labels,
     load_project_merge_request, load_merge_requests,
-    load_project_merge_requests
+    load_project_merge_requests, load_merge_request_participants
 )
 from tests.test_development.checkers_gitlab import (
     check_merge_request, check_user
@@ -23,6 +23,40 @@ from tests.test_development.factories_gitlab import (
     GlNoteFactory, GlLabelFactory, GlTimeStats,
     GlProjectMilestoneFactory
 )
+
+
+@override_settings(GITLAB_TOKEN='GITLAB_TOKEN')
+def test_load_merge_request_participants(db, gl_mocker):
+    gl_mocker.registry_get('/user', GlUserFactory())
+    gl = get_gitlab_client()
+
+    gl_project = AttrDict(GlProjectFactory())
+    project = ProjectFactory.create(gl_id=gl_project.id)
+    gl_mocker.registry_get(f'/projects/{gl_project.id}', gl_project)
+
+    gl_merge_request = AttrDict(GlMergeRequestFactory())
+    merge_request = MergeRequestFactory.create(gl_id=gl_merge_request.id, gl_iid=gl_merge_request.iid, project=project)
+    gl_mocker.registry_get(f'/projects/{gl_project.id}/merge_requests/{gl_merge_request.iid}', gl_merge_request)
+
+    gl_participant_1 = AttrDict(GlUserFactory())
+    gl_mocker.registry_get(f'/users/{gl_participant_1.id}', gl_participant_1)
+
+    gl_participant_2 = AttrDict(GlUserFactory())
+    gl_mocker.registry_get(f'/users/{gl_participant_2.id}', gl_participant_2)
+
+    gl_mocker.registry_get(f'/projects/{gl_project.id}/merge_requests/{gl_merge_request.iid}/participants',
+                           [gl_participant_1, gl_participant_2])
+
+    gl_project = gl.projects.get(id=project.gl_id)
+    gl_merge_request = gl_project.mergerequests.get(id=merge_request.gl_iid)
+
+    load_merge_request_participants(merge_request, gl_merge_request)
+
+    participant_1 = merge_request.participants.get(login=gl_participant_1.username)
+    participant_2 = merge_request.participants.get(login=gl_participant_2.username)
+
+    check_user(participant_1, gl_participant_1)
+    check_user(participant_2, gl_participant_2)
 
 
 @override_settings(GITLAB_TOKEN='GITLAB_TOKEN')
@@ -198,3 +232,4 @@ def _registry_merge_request(gl_mocker, gl_project, gl_merge_request):
     gl_mocker.registry_get(f'/projects/{gl_project.id}/merge_requests/{gl_merge_request.iid}/closed_by', [])
     gl_mocker.registry_get(f'/projects/{gl_project.id}/labels', [])
     gl_mocker.registry_get(f'/projects/{gl_project.id}/merge_requests/{gl_merge_request.iid}/notes', [])
+    gl_mocker.registry_get(f'/projects/{gl_project.id}/merge_requests/{gl_merge_request.iid}/participants', [])

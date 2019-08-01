@@ -11,11 +11,13 @@ from apps.development.services.allowed.merge_requests import \
     filter_allowed_for_user
 from apps.development.services.metrics.merge_request import \
     get_merge_request_metrcis
+from apps.users.graphql.types.user import UserType
 from .merge_request_metrics import MergeRequestMetricsType
 
 
 class MergeRequestType(BaseDjangoObjectType):
     metrics = graphene.Field(MergeRequestMetricsType)
+    participants = graphene.List(UserType)
 
     class Meta:
         model = MergeRequest
@@ -25,6 +27,9 @@ class MergeRequestType(BaseDjangoObjectType):
 
     def resolve_metrics(self, info, **kwargs):
         return get_merge_request_metrcis(self)
+
+    def resolve_participants(self, info, **kwargs):
+        return self.participants.all()
 
     @classmethod
     def get_queryset(cls,
@@ -37,6 +42,9 @@ class MergeRequestType(BaseDjangoObjectType):
 
         if is_field_selected(info, 'edges.node.user'):
             queryset = queryset.select_related('user')
+
+        if is_field_selected(info, 'edges.node.participants'):
+            queryset = queryset.prefetch_related('participants')
 
         if is_field_selected(info, 'edges.node.labels'):
             queryset = queryset.prefetch_related('labels')
