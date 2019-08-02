@@ -1,0 +1,23 @@
+apiVersion: apps/v1beta2
+kind: Deployment
+metadata:
+  name: backend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: backend
+  template:
+    metadata:
+      labels:
+        app: backend
+    spec:
+      imagePullSecrets:
+        - name: regcred
+      containers:
+        - name: app
+          image: {{ .Values.image.name }}:{{ .Values.image.tag }}
+          env:
+            - name: UWSGI_PROCESSES_COUNT
+              value: "2"
+          {{- include "env" . | nindent 12 }}

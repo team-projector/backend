@@ -1,0 +1,35 @@
+apiVersion: apps/v1beta2
+kind: Deployment
+metadata:
+  name: flower
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: flower
+  template:
+    metadata:
+      labels:
+        app: flower
+    spec:
+      imagePullSecrets:
+        - name: regcred
+      containers:
+        - name: flower
+          image: {{ .Values.image.name }}:{{ .Values.image.tag }}
+          command: ["celery"]
+          args: ["-A", "server.celery_app", "flower", "--url_prefix=admin/flower", "--basic_auth=$(FLOWER_USER):$(FLOWER_PASSWORD)"]
+          env:
+            - name: FLOWER_USER
+              valueFrom:
+                secretKeyRef:
+                  name: flower-credentials
+                  key: flower.user
+            - name: FLOWER_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: flower-credentials
+                  key: flower.password
+            - name: FLOWER_PORT
+              value: "5555"
+            {{- include "env" . | nindent 12 }}

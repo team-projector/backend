@@ -4,7 +4,8 @@ from django.utils import timezone
 from apps.development.graphql.filters import IssuesFilterSet
 from apps.development.services.allowed.issues import filter_allowed_for_user
 from apps.development.services.summary.issues import get_issues_summary
-from apps.development.models import Issue, TeamMember
+from apps.development.models import TeamMember
+from apps.development.models.issue import Issue, STATE_OPENED, STATE_CLOSED
 from tests.test_development.factories import (
     IssueFactory, TeamFactory, TeamMemberFactory
 )
@@ -208,6 +209,42 @@ def test_problems(user, client):
     )
 
     _check_summary(results, 5, 0, 4)
+
+
+def test_opened_count(user, client):
+    IssueFactory.create_batch(
+        4,
+        user=user,
+        state=STATE_OPENED
+    )
+    IssueFactory.create_batch(
+        5,
+        user=user,
+        state=STATE_CLOSED
+    )
+    IssueFactory.create_batch(
+        3,
+        user=user
+    )
+
+    filterset = IssuesFilterSet(
+        data={'user': user.id},
+        queryset=filter_allowed_for_user(
+            Issue.objects.all(),
+            user
+        ),
+        request=client
+    )
+
+    results = get_issues_summary(
+        filterset.qs,
+        filterset.form.cleaned_data['due_date'],
+        filterset.form.cleaned_data['user'],
+        filterset.form.cleaned_data['team']
+    )
+
+    assert results.opened_count == 7
+    _check_summary(results, 12, 0, 7)
 
 
 def _check_summary(data, issues_count, time_spent, problems_count):
