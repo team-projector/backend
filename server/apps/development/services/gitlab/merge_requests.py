@@ -10,8 +10,9 @@ from rest_framework import status
 from apps.core.activity.verbs import ACTION_GITLAB_CALL_API
 from apps.core.gitlab import get_gitlab_client
 from apps.core.tasks import add_action
+from apps.users.models import User
 from .parsers import parse_gl_datetime
-from .users import extract_user_from_data
+from .users import extract_user_from_data, load_user
 from ...models import Label, MergeRequest, Milestone, Note, Project
 
 logger = logging.getLogger(__name__)
@@ -82,6 +83,7 @@ def load_project_merge_request(project: Project,
 
     load_merge_request_labels(merge_request, gl_project, gl_merge_request)
     load_merge_request_notes(merge_request, gl_merge_request)
+    load_merge_request_participants(merge_request, gl_merge_request)
 
     logger.info(f'MergeRequest "{merge_request}" is synced')
 
@@ -122,3 +124,14 @@ def load_merge_request_notes(merge_request: MergeRequest,
         Note.objects.sync_gitlab(gl_note, merge_request)
 
     merge_request.adjust_spent_times()
+
+
+def load_merge_request_participants(merge_request: MergeRequest,
+                                    gl_merge_request: GlMergeRequest) -> None:
+    def get_user(gl_id: int) -> User:
+        return User.objects.filter(gl_id=gl_id).first() or load_user(gl_id)
+
+    merge_request.participants.set((
+        get_user(x['id'])
+        for x in gl_merge_request.participants()
+    ))

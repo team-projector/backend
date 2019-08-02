@@ -119,4 +119,3 @@ def test_merge_requests(user):
     assert metrics.merge_requests.count == 8
     assert metrics.merge_requests.opened_count == 2
     assert metrics.merge_requests.opened_estimated == 720
-
