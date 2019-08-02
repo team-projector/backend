@@ -10,14 +10,12 @@ from apps.development.models import Issue
 from apps.development.services.allowed.issues import filter_allowed_for_user
 from apps.development.services.metrics.issue import get_issue_metrcis
 from apps.development.services.problems.issue import get_issue_problems
-from apps.users.graphql.types.user import UserType
 from .issue_metrics import IssueMetricsType
 
 
 class IssueType(BaseDjangoObjectType):
     metrics = graphene.Field(IssueMetricsType)
     problems = graphene.List(graphene.String)
-    participants = graphene.List(UserType)
 
     class Meta:
         model = Issue
@@ -31,9 +29,6 @@ class IssueType(BaseDjangoObjectType):
 
     def resolve_metrics(self, info, **kwargs):
         return get_issue_metrcis(self)
-
-    def resolve_participants(self, info, **kwargs):
-        return self.participants.all()
 
     @classmethod
     def get_queryset(cls,
