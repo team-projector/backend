@@ -18,5 +18,6 @@ def resolve_issues_summary(parent, info, **kwargs):
         filterset.qs,
         filterset.form.cleaned_data['due_date'],
         filterset.form.cleaned_data['user'],
-        filterset.form.cleaned_data['team']
+        filterset.form.cleaned_data['team'],
+        filterset.form.cleaned_data['project']
     )
