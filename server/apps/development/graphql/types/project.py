@@ -15,7 +15,7 @@ class ProjectType(BaseDjangoObjectType):
     )
 
     def resolve_milestones(self, info, **kwargs):
-        if not self.milestones.count():
+        if not self.milestones.exists():
             return self.group.milestones
 
         return self.milestones
