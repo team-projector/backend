@@ -14,13 +14,21 @@ class WorkItemUserMetrics:
     opened_spent: float = 0
 
 
+class IssueUserMetrics(WorkItemUserMetrics):
+    pass
+
+
+class MergeRequestUserMetrics(WorkItemUserMetrics):
+    pass
+
+
 class UserMetrics:
     payroll_closed: float = 0
     payroll_opened: float = 0
     bonus: float = 0
     penalty: float = 0
-    issues: WorkItemUserMetrics
-    merge_requests: WorkItemUserMetrics
+    issues: IssueUserMetrics
+    merge_requests: MergeRequestUserMetrics
 
 
 class UserMetricsProvider:
@@ -37,16 +45,18 @@ class UserMetricsProvider:
 
         return metrics
 
-    def _get_issues_metrics(self, user: User) -> WorkItemUserMetrics:
-        metrics = WorkItemUserMetrics()
+    def _get_issues_metrics(self,
+                            user: User) -> IssueUserMetrics:
+        metrics = IssueUserMetrics()
         metrics.opened_count = self._get_issues_opened_count(user)
         metrics.closed_spent = self._get_issues_closed_spent(user)
         metrics.opened_spent = self._get_issues_opened_spent(user)
 
         return metrics
 
-    def _get_merge_requests_metrics(self, user: User) -> WorkItemUserMetrics:
-        metrics = WorkItemUserMetrics()
+    def _get_merge_requests_metrics(self,
+                                    user: User) -> MergeRequestUserMetrics:
+        metrics = MergeRequestUserMetrics()
         metrics.opened_count = self._get_merge_requests_opened_count(user)
         metrics.closed_spent = self._get_merge_requests_closed_spent(user)
         metrics.opened_spent = self._get_merge_requests_opened_spent(user)
