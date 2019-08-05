@@ -40,13 +40,14 @@ class IssuesSummaryProvider:
                  due_date: Optional[date],
                  user: Optional[User],
                  team: Optional[Team],
-                 project: Optional[Project]
-                 ):
+                 project: Optional[Project],
+                 state: Optional[str]):
         self.queryset = queryset
         self.due_date = due_date
         self.user = user
         self.team = team
         self.project = project
+        self.state = state
 
     def execute(self) -> IssuesSummary:
         summary = IssuesSummary()
@@ -79,6 +80,9 @@ class IssuesSummaryProvider:
 
         if self.project:
             queryset = queryset.filter(issues__project=self.project)
+
+        if self.state:
+            queryset = queryset.filter(issues__state=self.state)
 
         return queryset.aggregate(
             total_time_spent=Sum('time_spent')
@@ -148,13 +152,15 @@ def get_issues_summary(queryset: QuerySet,
                        due_date: Optional[date],
                        user: Optional[User],
                        team: Optional[Team],
-                       project: Optional[Project]) -> IssuesSummary:
+                       project: Optional[Project],
+                       state: Optional[str]) -> IssuesSummary:
     provider = IssuesSummaryProvider(
         queryset,
         due_date,
         user,
         team,
         project,
+        state,
     )
 
     return provider.execute()

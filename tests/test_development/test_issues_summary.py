@@ -13,7 +13,7 @@ from tests.test_payroll.factories import IssueSpentTimeFactory
 from tests.test_users.factories import UserFactory
 
 
-def test_counts(user):
+def test_issue_counts(user):
     IssueFactory.create_batch(
         5, user=user,
         state=STATE_OPENED,
@@ -32,7 +32,8 @@ def test_counts(user):
         due_date=None,
         user=user,
         team=None,
-        project=None
+        project=None,
+        state=None
     )
 
     _check_summary(summary, 8, 5, 0, 0)
@@ -62,7 +63,8 @@ def test_problems(user):
         due_date=None,
         user=user,
         team=None,
-        project=None
+        project=None,
+        state=None
     )
 
     _check_summary(summary, 5, 5, 0, 4)
@@ -95,7 +97,8 @@ def test_project_summary(user):
         due_date=datetime.now().date(),
         user=user,
         team=None,
-        project=None
+        project=None,
+        state=None
     )
 
     assert len(summary.projects) == 2
@@ -150,7 +153,8 @@ def test_time_spents_by_user(user):
         due_date=datetime.now().date(),
         user=user,
         team=None,
-        project=None
+        project=None,
+        state=None
     )
 
     _check_summary(summary, 5, 5, 100, 0)
@@ -204,7 +208,8 @@ def test_time_spents_by_team(user):
         due_date=datetime.now().date(),
         user=user,
         team=team,
-        project=None
+        project=None,
+        state=None
     )
 
     _check_summary(summary, 5, 5, 100, 0)
@@ -255,7 +260,8 @@ def test_time_spents_by_project(user):
         due_date=datetime.now().date(),
         user=user,
         team=None,
-        project=project_1
+        project=project_1,
+        state=None
     )
 
     _check_summary(summary, 5, 5, 100, 0)
@@ -265,10 +271,67 @@ def test_time_spents_by_project(user):
         due_date=datetime.now().date(),
         user=another_user,
         team=None,
-        project=project_2
+        project=project_2,
+        state=None
     )
 
     _check_summary(summary, 1, 1, 300, 0)
+
+
+def test_time_spents_by_state(user):
+    issue_opened = IssueFactory.create(
+        user=user,
+        due_date=datetime.now(),
+        state=STATE_OPENED
+    )
+
+    IssueSpentTimeFactory.create(
+        date=datetime.now(),
+        user=user,
+        base=issue_opened,
+        time_spent=100
+    )
+    IssueSpentTimeFactory.create(
+        date=timezone.now() - timedelta(days=2),
+        user=user,
+        base=issue_opened,
+        time_spent=200
+    )
+
+    issue_closed = IssueFactory.create(
+        user=user,
+        due_date=datetime.now(),
+        state=STATE_CLOSED
+    )
+
+    IssueSpentTimeFactory.create(
+        date=datetime.now(),
+        user=user,
+        base=issue_closed,
+        time_spent=400
+    )
+
+    summary = get_issues_summary(
+        Issue.objects.filter(user=user),
+        due_date=datetime.now().date(),
+        user=user,
+        team=None,
+        project=None,
+        state=STATE_OPENED
+    )
+
+    _check_summary(summary, 2, 1, 100, 0)
+
+    summary = get_issues_summary(
+        Issue.objects.filter(user=user),
+        due_date=datetime.now().date(),
+        user=user,
+        team=None,
+        project=None,
+        state=STATE_CLOSED
+    )
+
+    _check_summary(summary, 2, 1, 400, 0)
 
 
 def _check_summary(data: IssuesSummary,
