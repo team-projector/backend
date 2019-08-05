@@ -812,3 +812,13 @@ msgstr "Close"
 #: server/urls.py:12
 msgid "VN__ADMIN_DASHBOARD"
 msgstr "Admin Dashboard"
+
+#: server/apps/development/models/project.py:36
+#: server/apps/development/models/project_group.py:28
+msgid "VN__GITLAB_AVATAR_URL"
+msgstr "GitLab avatar"
+
+#: server/apps/development/models/project.py:37
+#: server/apps/development/models/project_group.py:29
+msgid "HT__GITLAB_AVATAR_URL"
+msgstr "GitLab avatar"

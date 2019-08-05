@@ -22,6 +22,13 @@ class ProjectGroup(GitlabEntityMixin):
         help_text=_('HT__FULL_TITLE')
     )
 
+    gl_avatar_url = models.URLField(
+        null=True,
+        blank=True,
+        verbose_name=_('VN__GITLAB_AVATAR_URL'),
+        help_text=_('HT__GITLAB_AVATAR_URL')
+    )
+
     parent = models.ForeignKey(
         'self',
         models.CASCADE,

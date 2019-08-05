@@ -1,6 +1,7 @@
 def check_group(group, gl_group, parent=None):
     assert group.gl_id == gl_group.id
     assert group.gl_url == gl_group.web_url
+    assert group.gl_avatar_url == gl_group.avatar_url
     assert group.title == gl_group.name
     assert group.full_title == gl_group.full_name
 
@@ -47,6 +48,7 @@ def check_merge_request(merge_request, gl_merge_request):
 def check_project(project, gl_project, group=None):
     assert project.gl_id == gl_project.id
     assert project.gl_url == gl_project.web_url
+    assert project.gl_avatar_url == gl_project.avatar_url
     assert project.title == gl_project.name
     assert project.full_title == gl_project.name_with_namespace
 
