@@ -15,7 +15,10 @@ class ProjectType(BaseDjangoObjectType):
     )
 
     def resolve_milestones(self, info, **kwargs):
-        return self.group.milestones
+        if not self.milestones.count():
+            return self.group.milestones
+
+        return self.milestones
 
     class Meta:
         model = Project
