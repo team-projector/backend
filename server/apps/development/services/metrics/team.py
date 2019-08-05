@@ -6,24 +6,24 @@ from apps.development.services.problems.issue import annotate_issues_problems, \
     filter_issues_problems
 
 
-class WorkItemMetrics:
+class WorkItemTeamMetrics:
     count: int = 0
     opened_count: int = 0
     opened_estimated: int = 0
 
 
-class IssuesMetrics(WorkItemMetrics):
+class IssueTeamMetrics(WorkItemTeamMetrics):
     pass
 
 
-class MergeRequestMetrics(WorkItemMetrics):
+class MergeRequestTeamMetrics(WorkItemTeamMetrics):
     pass
 
 
 class TeamMetrics:
     problems_count: int = 0
-    issues: IssuesMetrics
-    merge_requests: MergeRequestMetrics
+    issues: IssueTeamMetrics
+    merge_requests: MergeRequestTeamMetrics
 
 
 class TeamMetricsProvider:
@@ -45,8 +45,8 @@ class TeamMetricsProvider:
 
         return metrics
 
-    def _get_issues_metrics(self) -> IssuesMetrics:
-        issues = IssuesMetrics()
+    def _get_issues_metrics(self) -> IssueTeamMetrics:
+        issues = IssueTeamMetrics()
 
         issues.count = self.issues.count()
         issues.opened_count = self._get_opened_count(
@@ -58,8 +58,8 @@ class TeamMetricsProvider:
 
         return issues
 
-    def _get_merge_requests_metrics(self) -> MergeRequestMetrics:
-        merge_requests = MergeRequestMetrics()
+    def _get_merge_requests_metrics(self) -> MergeRequestTeamMetrics:
+        merge_requests = MergeRequestTeamMetrics()
 
         merge_requests.count = self.merge_requests.count()
         merge_requests.opened_count = self._get_opened_count(
