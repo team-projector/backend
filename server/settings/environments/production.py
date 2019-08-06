@@ -1,4 +1,4 @@
-from settings import config
+from decouple import config
 
 SECRET_KEY = config('DJANGO_SECRET_KEY')
 DOMAIN_NAME = config('DOMAIN_NAME')

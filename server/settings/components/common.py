@@ -1,5 +1,6 @@
+from decouple import config
+
 from server import BASE_DIR
-from settings import config
 
 ROOT_URLCONF = 'server.urls'
 DEBUG = config('DJANGO_DEBUG', default=False, cast=bool)
