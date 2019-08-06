@@ -30,11 +30,11 @@ class Project(GitlabEntityMixin):
         help_text=_('HT__GROUP')
     )
 
-    gl_avatar_url = models.URLField(
+    gl_avatar = models.URLField(
         null=True,
         blank=True,
-        verbose_name=_('VN__GITLAB_AVATAR_URL'),
-        help_text=_('HT__GITLAB_AVATAR_URL')
+        verbose_name=_('VN__GITLAB_AVATAR'),
+        help_text=_('HT__GITLAB_AVATAR')
     )
 
     gl_last_issues_sync = models.DateTimeField(
