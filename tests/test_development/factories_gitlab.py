@@ -15,6 +15,7 @@ def gl_format_datetime(dt):
 class GlGroupFactory(factory.DictFactory):
     id = factory.Faker('random_int')
     web_url = factory.Faker('url')
+    avatar_url = factory.Faker('url')
     name = factory.Sequence(lambda n: f'Group {n}')
     full_name = factory.Sequence(lambda n: f'Test / Group {n}')
     description = factory.Faker('word')
@@ -47,6 +48,7 @@ class GlProjectFactory(factory.DictFactory):
     description = factory.Faker('word')
     name = factory.Sequence(lambda n: f'Project {n}')
     web_url = factory.Faker('url')
+    avatar_url = factory.Faker('url')
     name_with_namespace = factory.Faker('word')
 
 

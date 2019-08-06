@@ -41,6 +41,7 @@ def load_single_group(gl_group: GlGroup,
     group, _ = ProjectGroup.objects.sync_gitlab(
         gl_id=gl_group.id,
         gl_url=gl_group.web_url,
+        gl_avatar=gl_group.avatar_url,
         parent=parent,
         title=gl_group.name,
         full_title=gl_group.full_name

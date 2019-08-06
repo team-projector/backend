@@ -42,6 +42,7 @@ def load_project(gl: Gitlab,
         project, _ = Project.objects.sync_gitlab(
             gl_id=gl_project.id,
             gl_url=gl_project.web_url,
+            gl_avatar=gl_project.avatar_url,
             group=group,
             full_title=gl_project.name_with_namespace,
             title=gl_project.name
