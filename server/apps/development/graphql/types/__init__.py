@@ -6,6 +6,7 @@ from .issues_project_summary import IssuesProjectSummary
 from .issues_summary import IssuesSummaryType
 from .label import LabelType
 from .merge_request import MergeRequestType
+from .merge_requests_summary import MergeRequestsSummaryType
 from .milestone import MilestoneType
 from .milestone_metrics import MilestoneMetricsType
 from .project import ProjectType
