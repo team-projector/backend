@@ -27,21 +27,18 @@ class MergeRequestsSummaryProvider:
     def execute(self) -> MergeRequestsSummary:
         summary = MergeRequestsSummary()
 
-        total_count = 0
         for item in self._get_counts_by_state():
             if item['state'] == MergeRequest.STATE.opened:
                 summary.opened_count = item['count']
-                total_count += item['count']
+                summary.count += item['count']
             elif item['state'] == MergeRequest.STATE.closed:
                 summary.closed_count = item['count']
-                total_count += item['count']
+                summary.count += item['count']
             elif item['state'] == MergeRequest.STATE.merged:
                 summary.merged_count = item['count']
-                total_count += item['count']
-            elif item['state'] is None:
-                total_count += item['count']
-
-        summary.count = total_count
+                summary.count += item['count']
+            else:
+                summary.count += item['count']
 
         return summary
 

@@ -7,7 +7,7 @@ from apps.development.services.summary.merge_requests import \
 def resolve_merge_requests_summary(parent, info, **kwargs):
     filterset = MergeRequestFilterSet(
         data=kwargs,
-        queryset=MergeRequest.objects.allowed_for_user(info.context.user),
+        queryset=MergeRequest.objects.all(),
         request=info.context,
     )
 
