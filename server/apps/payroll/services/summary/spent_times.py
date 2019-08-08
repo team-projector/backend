@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Optional, Type, Union
 
 from django.contrib.contenttypes.models import ContentType
 from django.db.models import Sum, Value, QuerySet
@@ -60,7 +60,7 @@ class SpentTimesSummaryProvider:
 
         return summary
 
-    def _get_issues_summary(self):
+    def _get_issues_summary(self) -> IssuesSummary:
         return get_issues_summary(
             Issue.objects.filter(
                 id__in=self.queryset.values_list(
@@ -74,7 +74,7 @@ class SpentTimesSummaryProvider:
             None
         )
 
-    def _get_merge_requests_summary(self):
+    def _get_merge_requests_summary(self) -> MergeRequestsSummary:
         return get_merge_requests_summary(
             MergeRequest.objects.filter(
                 id__in=self.queryset.values_list(
@@ -93,7 +93,9 @@ class SpentTimesSummaryProvider:
 
     @staticmethod
     def _is_model_class(id: int,
-                        model_class) -> bool:
+                        model_class: Union[
+                            Type[Issue], Type[MergeRequest]
+                        ]) -> bool:
         return ContentType.objects.get_for_id(id).model_class() == model_class
 
 

@@ -26,7 +26,11 @@ class ProjectFilter(django_filters.ModelChoiceFilter):
         if not value:
             return queryset
 
-        return queryset
+        return queryset.filter(
+            issues__project=value
+        ) | queryset.filter(
+            mergerequests__project=value
+        )
 
 
 class SpentTimeFilterSet(django_filters.FilterSet):

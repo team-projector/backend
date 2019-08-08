@@ -1,7 +1,8 @@
 import graphene
 
 from apps.development.graphql.types.issues_summary import IssuesSummaryType
-from apps.development.graphql.types.merge_requests_summary import MergeRequestsSummaryType
+from apps.development.graphql.types.merge_requests_summary import \
+    MergeRequestsSummaryType
 
 
 class IssuesSpentTimesSummaryType(IssuesSummaryType):

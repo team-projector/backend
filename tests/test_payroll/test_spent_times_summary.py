@@ -1,7 +1,7 @@
-from datetime import datetime, timedelta
+from datetime import timedelta
 
 from apps.development.models import MergeRequest
-from apps.development.models.issue import Issue, STATE_OPENED, STATE_CLOSED
+from apps.development.models.issue import STATE_OPENED, STATE_CLOSED
 from apps.payroll.models import SpentTime
 from apps.payroll.services.summary.spent_times import \
     get_spent_times_summary
