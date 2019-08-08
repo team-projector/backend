@@ -31,7 +31,7 @@ def test_filter_by_state(user):
     assert results.first() == issue_closed
 
 
-def test_filter_by_by_due_date(user):
+def test_filter_by_due_date(user):
     issue = IssueFactory.create(user=user, due_date=datetime.now())
     IssueFactory.create(user=user, due_date=datetime.now() + timedelta(days=1))
     IssueFactory.create(user=user, due_date=datetime.now() - timedelta(days=1))
