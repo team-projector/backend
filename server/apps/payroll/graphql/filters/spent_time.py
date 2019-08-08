@@ -1,7 +1,7 @@
 import django_filters
 from django.db.models import QuerySet
 
-from apps.development.models import Team, TeamMember
+from apps.development.models import Project, Team, TeamMember
 from apps.payroll.models import SpentTime
 from apps.users.models import User
 
@@ -18,8 +18,20 @@ class TeamFilter(django_filters.ModelChoiceFilter):
         return queryset.filter(user__in=users)
 
 
+class ProjectFilter(django_filters.ModelChoiceFilter):
+    def __init__(self) -> None:
+        super().__init__(queryset=Project.objects.all())
+
+    def filter(self, queryset, value) -> QuerySet:
+        if not value:
+            return queryset
+
+        return queryset
+
+
 class SpentTimeFilterSet(django_filters.FilterSet):
     user = django_filters.ModelChoiceFilter(queryset=User.objects.all())
+    project = ProjectFilter()
     team = TeamFilter()
 
     order_by = django_filters.OrderingFilter(
