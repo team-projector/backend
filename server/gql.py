@@ -2,7 +2,9 @@ import graphene
 from graphene_django.debug import DjangoDebug
 
 from apps.core.graphql.views import PlaygroundGraphQLView, ApiGraphQLView
-from apps.development.graphql.mutations import IssuesMutations
+from apps.development.graphql.mutations import (
+    IssuesMutations, MilestonesMutations
+)
 from apps.development.graphql.queries import (
     IssuesQueries, MergeRequestQueries, MilestonesQueries, ProjectsQueries,
     TeamsQueries, GitlabQueries
@@ -26,6 +28,7 @@ class Query(IssuesQueries,
 
 
 class Mutation(IssuesMutations,
+               MilestonesMutations,
                AuthMutations,
                graphene.ObjectType):
     pass
