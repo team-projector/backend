@@ -36,7 +36,7 @@ def test_issue_counts(user):
         state=None
     )
 
-    _check_summary(summary, 8, 5, 0, 0)
+    _check_summary(summary, 8, 5, 3, 0, 0)
 
 
 def test_problems(user):
@@ -67,7 +67,7 @@ def test_problems(user):
         state=None
     )
 
-    _check_summary(summary, 5, 5, 0, 4)
+    _check_summary(summary, 5, 5, 0, 0, 4)
 
 
 def test_project_summary(user):
@@ -157,7 +157,7 @@ def test_time_spents_by_user(user):
         state=None
     )
 
-    _check_summary(summary, 5, 5, 100, 0)
+    _check_summary(summary, 5, 5, 0, 100, 0)
 
 
 def test_time_spents_by_team(user):
@@ -212,7 +212,7 @@ def test_time_spents_by_team(user):
         state=None
     )
 
-    _check_summary(summary, 5, 5, 100, 0)
+    _check_summary(summary, 5, 5, 0, 100, 0)
 
 
 def test_time_spents_by_project(user):
@@ -264,7 +264,7 @@ def test_time_spents_by_project(user):
         state=None
     )
 
-    _check_summary(summary, 5, 5, 100, 0)
+    _check_summary(summary, 5, 5, 0, 100, 0)
 
     summary = get_issues_summary(
         Issue.objects.filter(user=another_user),
@@ -275,7 +275,7 @@ def test_time_spents_by_project(user):
         state=None
     )
 
-    _check_summary(summary, 1, 1, 300, 0)
+    _check_summary(summary, 1, 1, 0, 300, 0)
 
 
 def test_time_spents_by_state(user):
@@ -320,7 +320,7 @@ def test_time_spents_by_state(user):
         state=STATE_OPENED
     )
 
-    _check_summary(summary, 2, 1, 100, 0)
+    _check_summary(summary, 2, 1, 1, 100, 0)
 
     summary = get_issues_summary(
         Issue.objects.filter(user=user),
@@ -331,16 +331,18 @@ def test_time_spents_by_state(user):
         state=STATE_CLOSED
     )
 
-    _check_summary(summary, 2, 1, 400, 0)
+    _check_summary(summary, 2, 1, 1, 400, 0)
 
 
 def _check_summary(data: IssuesSummary,
-                   issues_count: int,
+                   count: int,
                    opened_count: int,
+                   closed_count: int,
                    time_spent: int,
                    problems_count: int):
-    assert data.issues_count == issues_count
+    assert data.count == count
     assert data.opened_count == opened_count
+    assert data.closed_count == closed_count
     assert data.time_spent == time_spent
     assert data.problems_count == problems_count
 

@@ -32,7 +32,7 @@ def test_without_spents(user):
         user=None
     )
 
-    assert summary.issues.issues_count == 0
+    assert summary.issues.count == 0
     assert summary.issues.spent == 0
 
     assert summary.merge_requests.count == 0
@@ -75,7 +75,7 @@ def test_issues_spents(user):
         user=None
     )
 
-    assert summary.issues.issues_count == 2
+    assert summary.issues.count == 2
     assert summary.issues.opened_count == 1
     assert summary.issues.spent == timedelta(hours=8).total_seconds()
 
@@ -138,7 +138,7 @@ def test_merge_requests_spents(user):
         user=None
     )
 
-    assert summary.issues.issues_count == 0
+    assert summary.issues.count == 0
     assert summary.issues.opened_count == 0
     assert summary.issues.spent == 0
 
@@ -188,7 +188,7 @@ def test_complex_spents(user):
         user=None
     )
 
-    assert summary.issues.issues_count == 1
+    assert summary.issues.count == 1
     assert summary.issues.spent == timedelta(hours=5).total_seconds()
 
     assert summary.merge_requests.count == 1

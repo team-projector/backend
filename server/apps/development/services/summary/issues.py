@@ -7,7 +7,7 @@ from django.db.models import (
 from django.db.models.functions import Coalesce
 
 from apps.development.models import Team, Project
-from apps.development.models.issue import STATE_CLOSED
+from apps.development.models.issue import STATE_CLOSED, STATE_OPENED
 from apps.development.services.problems.issue import (
     annotate_issues_problems, filter_issues_problems
 )
@@ -27,8 +27,9 @@ class IssuesProjectSummary:
 
 
 class IssuesSummary:
-    issues_count: int = 0
+    count: int = 0
     opened_count: int = 0
+    closed_count: int = 0
     time_spent: int = 0
     problems_count: int = 0
     projects: List[IssuesProjectSummary] = []
@@ -51,8 +52,17 @@ class IssuesSummaryProvider:
 
     def execute(self) -> IssuesSummary:
         summary = IssuesSummary()
-        summary.issues_count = self._get_issues_count()
-        summary.opened_count = self._get_opened_count()
+
+        for item in self._get_counts_by_state():
+            if item['state'] == STATE_OPENED:
+                summary.opened_count = item['count']
+                summary.count += item['count']
+            elif item['state'] == STATE_CLOSED:
+                summary.closed_count = item['count']
+                summary.count += item['count']
+            else:
+                summary.count += item['count']
+
         summary.time_spent = self._get_time_spent()
         summary.problems_count = self._get_problems_count()
 
@@ -60,14 +70,15 @@ class IssuesSummaryProvider:
 
         return summary
 
-    def _get_issues_count(self) -> int:
-        return self.queryset.count()
-
-    def _get_opened_count(self) -> int:
-        return self.queryset.filter(~Q(state=STATE_CLOSED)).count()
+    def _get_counts_by_state(self) -> QuerySet:
+        return self.queryset.values(
+            'state'
+        ).annotate(
+            count=Count('*')
+        ).order_by()
 
     def _get_time_spent(self) -> int:
-        queryset = SpentTime.objects.all()
+        queryset = SpentTime.objects.filter(issues__isnull=False)
 
         if self.due_date:
             queryset = queryset.filter(date=self.due_date)
