@@ -54,11 +54,6 @@ router.register(
     views.TeamMembersViewset,
     'team-members'
 )
-router.register(
-    'teams',
-    views.TeamsViewset,
-    'teams'
-)
 
 urlpatterns = [
     path(
