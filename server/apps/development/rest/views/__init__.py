@@ -10,4 +10,3 @@ from .milestone_issues import (
 from .milestones import MilestonesViewset
 from .team_issues import TeamIssuesViewset
 from .team_members import TeamMembersViewset
-from .teams import TeamsViewset
