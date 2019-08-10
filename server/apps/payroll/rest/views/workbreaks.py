@@ -1,15 +1,13 @@
 from django.contrib.auth import get_user_model
 from django.db.models import Exists, OuterRef
-from django.utils import timezone
 from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework import mixins, permissions, serializers
+from rest_framework import mixins, permissions
 from rest_framework.decorators import action
-from rest_framework.response import Response
 
 from apps.core.rest.views import BaseGenericViewSet
 from apps.core.rest.views.mixins import CreateModelMixin, UpdateModelMixin
 from apps.development.models import TeamMember
-from apps.payroll.db.mixins.approved import APPROVED, CREATED, DECLINED
+from apps.payroll.db.mixins.approved import CREATED
 from apps.payroll.models import WorkBreak
 from apps.payroll.rest.permissions import CanApproveDeclineWorkbreaks
 from apps.payroll.rest.serializers import (
@@ -18,32 +16,6 @@ from apps.payroll.rest.serializers import (
 from ..filters import TeamFilter, AvailableWorkBreakFilter
 
 User = get_user_model()
-
-
-class WorkBreakApproveSerializer(serializers.Serializer):
-    def update(self, instance, validated_data):
-        instance.approve_state = APPROVED
-        instance.approved_by = self.context['request'].user
-        instance.approved_at = timezone.now()
-        instance.save()
-
-        return instance
-
-
-class WorkBreakDeclineSerializer(serializers.Serializer):
-    decline_reason = serializers.CharField(required=True, allow_null=False)
-
-    def update(self, instance, validated_data):
-        instance.approve_state = DECLINED
-        instance.approved_by = self.context['request'].user
-        instance.approved_at = timezone.now()
-        instance.decline_reason = validated_data.get(
-            'decline_reason',
-            instance.decline_reason
-        )
-        instance.save()
-
-        return instance
 
 
 class WorkBreaksViewset(mixins.ListModelMixin,
@@ -103,49 +75,3 @@ class WorkBreaksViewset(mixins.ListModelMixin,
         serializer = self.get_serializer(page, many=True)
 
         return self.get_paginated_response(serializer.data)
-
-    @action(detail=True,
-            methods=['post'],
-            serializer_class=WorkBreakDeclineSerializer,
-            permission_classes=(
-                permissions.IsAuthenticated,
-                CanApproveDeclineWorkbreaks
-            ))
-    def decline(self, request, pk=None):
-        instance = self.get_object()
-
-        serializer = self.get_serializer(
-            instance,
-            context=self.get_serializer_context(),
-            data=request.data
-        )
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
-
-        return Response(WorkBreakSerializer(
-            instance,
-            context=self.get_serializer_context()
-        ).data)
-
-    @action(detail=True,
-            methods=['post'],
-            serializer_class=WorkBreakApproveSerializer,
-            permission_classes=(
-                permissions.IsAuthenticated,
-                CanApproveDeclineWorkbreaks
-            ))
-    def approve(self, request, pk=None):
-        instance = self.get_object()
-
-        serializer = self.get_serializer(
-            instance,
-            context=self.get_serializer_context(),
-            data=request.data
-        )
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
-
-        return Response(WorkBreakSerializer(
-            instance,
-            context=self.get_serializer_context()
-        ).data)

@@ -9,6 +9,7 @@ from apps.development.graphql.queries import (
     IssuesQueries, MergeRequestQueries, MilestonesQueries, ProjectsQueries,
     TeamsQueries, GitlabQueries
 )
+from apps.payroll.graphql.mutations import WorkBreaksMutations
 from apps.payroll.graphql.queries import TimeExpensesQueries, SalariesQueries
 from apps.users.graphql.mutations import AuthMutations
 from apps.users.graphql.queries import UsersQueries
@@ -29,6 +30,7 @@ class Query(IssuesQueries,
 
 class Mutation(IssuesMutations,
                MilestonesMutations,
+               WorkBreaksMutations,
                AuthMutations,
                graphene.ObjectType):
     pass
