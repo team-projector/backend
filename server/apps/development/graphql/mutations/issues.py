@@ -5,7 +5,7 @@ from rest_framework.exceptions import ValidationError
 
 from apps.core.graphql.mutations import BaseMutation
 from apps.development.graphql.types import IssueType
-from apps.development.models import Issue
+from apps.development.models import Issue, Feature
 from apps.development.services.gitlab.spent_time import add_spent_time
 from apps.development.tasks import sync_project_issue
 
@@ -58,3 +58,29 @@ class SyncIssueMutation(BaseMutation):
         )
 
         return SyncIssueMutation(issue=issue)
+
+
+class UpdateIssueMutation(BaseMutation):
+    class Arguments:
+        id = graphene.ID()
+        feature = graphene.Int()
+
+    issue = graphene.Field(IssueType)
+
+    @classmethod
+    def do_mutate(cls, root, info, id, **kwargs):
+        issue = get_object_or_404(
+            Issue.objects.allowed_for_user(info.context.user),
+            pk=id
+        )
+
+        if kwargs.get('feature'):
+            feature = get_object_or_404(
+                Feature.objects.all(),
+                pk=kwargs.pop('feature')
+            )
+            issue.feature = feature
+
+        issue.save()
+
+        return UpdateIssueMutation(issue=issue)

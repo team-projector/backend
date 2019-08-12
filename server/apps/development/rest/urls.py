@@ -7,12 +7,6 @@ app_name = 'development'
 
 router = AppRouter()
 router.register(
-    'issues',
-    views.IssuesViewset,
-    'issues'
-)
-
-router.register(
     'features',
     views.FeaturesViewset,
     'features'
