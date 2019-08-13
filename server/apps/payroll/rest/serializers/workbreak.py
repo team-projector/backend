@@ -1,4 +1,3 @@
-from django.contrib.auth import get_user_model
 from django.utils.translation import gettext_lazy as _
 from rest_framework import serializers
 
@@ -7,8 +6,6 @@ from apps.development.models import TeamMember
 from apps.payroll.models import WorkBreak
 from apps.payroll.services.users import user_related_with_another_by_team_roles
 from apps.users.rest.serializers import UserCardSerializer
-
-User = get_user_model()
 
 
 class WorkBreakSerializer(serializers.ModelSerializer):
@@ -24,10 +21,6 @@ class WorkBreakSerializer(serializers.ModelSerializer):
             'approve_state', 'approved_by', 'approved_at', 'decline_reason',
             'comment', 'from_date', 'reason', 'to_date', 'id', 'user'
         )
-
-
-class WorkBreakCardSerializer(WorkBreakSerializer):
-    approved_by = LinkSerializer()
 
 
 class WorkBreakUpdateSerializer(serializers.ModelSerializer):

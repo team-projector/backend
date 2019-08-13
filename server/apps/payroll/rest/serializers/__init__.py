@@ -1,1 +1,1 @@
-from .workbreak import WorkBreakCardSerializer, WorkBreakSerializer, WorkBreakUpdateSerializer
+from .workbreak import WorkBreakSerializer, WorkBreakUpdateSerializer

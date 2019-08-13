@@ -4,6 +4,7 @@ from apps.core.graphql.connections import DataSourceConnection
 from apps.core.graphql.relay_nodes import DatasourceRelayNode
 from apps.core.graphql.types import BaseDjangoObjectType
 from apps.payroll.models import WorkBreak
+from apps.payroll.services.allowed.work_break import filter_allowed_for_user
 
 
 class WorkBreakType(BaseDjangoObjectType):
@@ -17,8 +18,7 @@ class WorkBreakType(BaseDjangoObjectType):
     def get_queryset(cls,
                      queryset,
                      info) -> QuerySet:
-        queryset = WorkBreak.objects.allowed_for_user(
+        return filter_allowed_for_user(
+            queryset,
             info.context.user
         )
-
-        return queryset
