@@ -34,10 +34,10 @@ class IssueType(BaseDjangoObjectType):
     def get_queryset(cls,
                      queryset,
                      info) -> QuerySet:
-        # queryset = filter_allowed_for_user(
-        #     queryset,
-        #     info.context.user
-        # )
+        queryset = filter_allowed_for_user(
+            queryset,
+            info.context.user
+        )
 
         if is_field_selected(info, 'edges.node.user'):
             queryset = queryset.select_related('user')
