@@ -1,3 +1,1 @@
-from .team_progress_metrics import TeamProgressMetricsView
-from .user_progress_metrics import UserProgressMetricsView
 from .workbreaks import WorkBreaksViewset
