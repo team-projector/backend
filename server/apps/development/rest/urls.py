@@ -51,11 +51,6 @@ router.register(
 
 urlpatterns = [
     path(
-        'gitlab/issue/status',
-        views.GitlabIssueStatusView.as_view(),
-        name='gitlab-issue-status'
-    ),
-    path(
         'gl-webhook',
         views.gl_webhook,
         name='gl-webhook'
