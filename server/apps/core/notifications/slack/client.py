@@ -6,7 +6,6 @@ from . import get_slack_client
 class SlackClient:
     def __init__(self):
         self.client = get_slack_client()
-        self.client.auth_test()
 
     def get_channel_user_by_email(self,
                                   email: str):
@@ -18,8 +17,10 @@ class SlackClient:
 
     def send_message_to_channel(self,
                                 channel,
-                                msg: str) -> None:
+                                msg: str,
+                                ** kwargs) -> None:
         self.client.chat_postMessage(
             channel=channel,
             text=msg,
+            **kwargs
         )
