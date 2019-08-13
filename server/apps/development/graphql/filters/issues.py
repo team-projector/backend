@@ -1,5 +1,6 @@
 import django_filters
 from django.db.models import QuerySet
+from django.core.exceptions import PermissionDenied
 
 from apps.core.graphql.filters import SearchFilter
 from apps.development.models import Issue, Milestone, Team, TeamMember, Project
@@ -37,12 +38,24 @@ class ProblemsFilter(django_filters.BooleanFilter):
         return queryset
 
 
+class Milestoneilter(django_filters.ModelChoiceFilter):
+    def __init__(self) -> None:
+        super().__init__(queryset=Milestone.objects.all())
+
+    def filter(self, queryset, value) -> QuerySet:
+        if not value:
+            return queryset
+
+        if not self.parent.request.user.roles.project_manager:
+            raise PermissionDenied
+
+        return queryset
+
+
 class IssuesFilterSet(django_filters.FilterSet):
     user = django_filters.ModelChoiceFilter(queryset=User.objects.all())
     project = django_filters.ModelChoiceFilter(queryset=Project.objects.all())
-    milestone = django_filters.ModelChoiceFilter(
-        queryset=Milestone.objects.all()
-    )
+    milestone = Milestoneilter()
     team = TeamFilter()
     problems = ProblemsFilter()
     q = SearchFilter(fields=('title',))
