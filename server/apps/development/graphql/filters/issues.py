@@ -2,7 +2,7 @@ import django_filters
 from django.db.models import QuerySet
 
 from apps.core.graphql.filters import SearchFilter
-from apps.development.models import Issue, Team, TeamMember, Project
+from apps.development.models import Issue, Milestone, Team, TeamMember, Project
 from apps.development.services.problems.issue import (
     filter_issues_problems, exclude_issues_problems,
     annotate_issues_problems
@@ -40,6 +40,9 @@ class ProblemsFilter(django_filters.BooleanFilter):
 class IssuesFilterSet(django_filters.FilterSet):
     user = django_filters.ModelChoiceFilter(queryset=User.objects.all())
     project = django_filters.ModelChoiceFilter(queryset=Project.objects.all())
+    milestone = django_filters.ModelChoiceFilter(
+        queryset=Milestone.objects.all()
+    )
     team = TeamFilter()
     problems = ProblemsFilter()
     q = SearchFilter(fields=('title',))
@@ -53,4 +56,5 @@ class IssuesFilterSet(django_filters.FilterSet):
 
     class Meta:
         model = Issue
-        fields = ('state', 'due_date', 'user', 'team', 'problems', 'project')
+        fields = ('state', 'due_date', 'user', 'team', 'problems', 'project',
+                  'milestone', 'milestone_issue_orphan')
