@@ -1,67 +1,88 @@
 from datetime import timedelta
 
-from django.test import TestCase
-
 from apps.development.services.metrics.milestones import get_milestone_metrics
-from tests.test_development.factories import IssueFactory, ProjectMilestoneFactory
+from tests.test_development.factories import (
+    IssueFactory, ProjectMilestoneFactory
+)
 from tests.test_payroll.factories import IssueSpentTimeFactory
-from tests.test_users.factories import UserFactory
 
 
-class MilestoneMetricsTests(TestCase):
-    def setUp(self):
-        super().setUp()
+def test_payrolls(user):
+    user.hour_rate = 1000
+    user.customer_hour_rate = 100
+    user.save()
 
-        self.milestone = ProjectMilestoneFactory.create(budget=10000)
-        self.user = UserFactory.create(
-            hour_rate=1000,
-            customer_hour_rate=100
-        )
+    milestone = ProjectMilestoneFactory.create(budget=10000)
 
-    def test_payrolls(self):
-        issue_1 = IssueFactory.create(user=self.user, milestone=self.milestone)
-        issue_2 = IssueFactory.create(user=self.user, milestone=self.milestone)
-        issue_3 = IssueFactory.create(user=self.user)
+    issue_1 = IssueFactory.create(user=user, milestone=milestone)
+    issue_2 = IssueFactory.create(user=user, milestone=milestone)
+    issue_3 = IssueFactory.create(user=user)
 
-        IssueSpentTimeFactory.create(user=self.user, base=issue_1, time_spent=timedelta(hours=1).total_seconds())
-        IssueSpentTimeFactory.create(user=self.user, base=issue_1, time_spent=timedelta(hours=2).total_seconds())
-        IssueSpentTimeFactory.create(user=self.user, base=issue_2, time_spent=-timedelta(hours=1).total_seconds())
-        IssueSpentTimeFactory.create(user=self.user, base=issue_3, time_spent=timedelta(hours=3).total_seconds())
+    IssueSpentTimeFactory.create(
+        user=user, base=issue_1, time_spent=timedelta(hours=1).total_seconds()
+    )
+    IssueSpentTimeFactory.create(
+        user=user, base=issue_1, time_spent=timedelta(hours=2).total_seconds()
+    )
+    IssueSpentTimeFactory.create(
+        user=user, base=issue_2, time_spent=-timedelta(hours=1).total_seconds()
+    )
+    IssueSpentTimeFactory.create(
+        user=user, base=issue_3, time_spent=timedelta(hours=3).total_seconds()
+    )
 
-        metrics = get_milestone_metrics(self.milestone)
+    metrics = get_milestone_metrics(milestone)
 
-        self.assertEqual(metrics.budget, self.milestone.budget)
-        self.assertEqual(metrics.payroll, 2000)
-        self.assertEqual(metrics.profit, 8000)
-        self.assertEqual(metrics.budget_remains, 9800)
+    assert metrics.budget == milestone.budget
+    assert metrics.payroll == 2000
+    assert metrics.profit == 8000
+    assert metrics.budget_remains == 9800
 
-    def test_payrolls_no_spents(self):
-        IssueFactory.create(user=self.user, milestone=self.milestone)
-        IssueFactory.create(user=self.user, milestone=self.milestone)
-        IssueFactory.create(user=self.user)
 
-        metrics = get_milestone_metrics(self.milestone)
+def test_payrolls_no_spents(user):
+    user.hour_rate = 1000
+    user.customer_hour_rate = 100
+    user.save()
 
-        self.assertEqual(metrics.budget, self.milestone.budget)
-        self.assertEqual(metrics.payroll, 0)
-        self.assertEqual(metrics.profit, self.milestone.budget)
-        self.assertEqual(metrics.budget_remains, self.milestone.budget)
+    milestone = ProjectMilestoneFactory.create(budget=10000)
 
-    def test_payrolls_no_issues(self):
-        metrics = get_milestone_metrics(self.milestone)
+    IssueFactory.create(user=user, milestone=milestone)
+    IssueFactory.create(user=user, milestone=milestone)
+    IssueFactory.create(user=user)
 
-        self.assertEqual(metrics.budget, self.milestone.budget)
-        self.assertEqual(metrics.payroll, 0)
-        self.assertEqual(metrics.profit, self.milestone.budget)
-        self.assertEqual(metrics.budget_remains, self.milestone.budget)
+    metrics = get_milestone_metrics(milestone)
 
-    def test_payrolls_no_budget(self):
-        self.milestone.budget = 0
-        self.milestone.save()
+    assert metrics.budget == milestone.budget
+    assert metrics.payroll == 0
+    assert metrics.profit == milestone.budget
+    assert metrics.budget_remains == milestone.budget
 
-        metrics = get_milestone_metrics(self.milestone)
 
-        self.assertEqual(metrics.budget, self.milestone.budget)
-        self.assertEqual(metrics.payroll, 0)
-        self.assertEqual(metrics.profit, self.milestone.budget)
-        self.assertEqual(metrics.budget_remains, self.milestone.budget)
+def test_payrolls_no_issues(user):
+    user.hour_rate = 1000
+    user.customer_hour_rate = 100
+    user.save()
+
+    milestone = ProjectMilestoneFactory.create(budget=10000)
+
+    metrics = get_milestone_metrics(milestone)
+
+    assert metrics.budget == milestone.budget
+    assert metrics.payroll == 0
+    assert metrics.profit == milestone.budget
+    assert metrics.budget_remains == milestone.budget
+
+
+def test_payrolls_no_budget(user):
+    user.hour_rate = 1000
+    user.customer_hour_rate = 100
+    user.save()
+
+    milestone = ProjectMilestoneFactory.create(budget=0)
+
+    metrics = get_milestone_metrics(milestone)
+
+    assert metrics.budget == milestone.budget
+    assert metrics.payroll == 0
+    assert metrics.profit == milestone.budget
+    assert metrics.budget_remains == milestone.budget

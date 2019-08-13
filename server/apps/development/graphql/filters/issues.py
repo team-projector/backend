@@ -43,6 +43,9 @@ class IssuesFilterSet(django_filters.FilterSet):
     team = TeamFilter()
     problems = ProblemsFilter()
     q = SearchFilter(fields=('title',))
+    milestone_issue_orphan = django_filters.BooleanFilter(
+        field_name='milestone', lookup_expr='feature__isnull'
+    )
 
     order_by = django_filters.OrderingFilter(
         fields=('due_date', 'title', 'created_at')
