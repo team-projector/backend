@@ -31,4 +31,6 @@ def send_slack_report(salary: Salary) -> None:
     channel = slack.get_channel_user_by_email(salary.user.email)
 
     if channel:
-        slack.send_message_to_channel(channel['id'], msg)
+        slack.send_message_to_channel(
+            channel['id'], msg, icon_emoji=':moneybag:'
+        )
