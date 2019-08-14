@@ -5,7 +5,6 @@ from apps.core.rest.serializers import LinkSerializer
 from apps.core.utils.objects import dict2obj
 from apps.payroll.models import SpentTime
 from .issue_metrics import IssueMetricsSerializer
-from .label import LabelSerializer
 from ...models import Issue
 
 
@@ -40,7 +39,6 @@ class MetricsMixin(serializers.ModelSerializer):
 
 class IssueCardSerializer(MetricsMixin,
                           serializers.ModelSerializer):
-    labels = LabelSerializer(many=True)
     project = LinkSerializer()
     time_spent = serializers.SerializerMethodField()
     milestone = LinkSerializer()
@@ -49,7 +47,7 @@ class IssueCardSerializer(MetricsMixin,
     class Meta:
         model = Issue
         fields = (
-            'id', 'title', 'labels', 'project', 'due_date', 'state',
+            'id', 'title', 'project', 'due_date', 'state',
             'time_estimate', 'total_time_spent', 'time_spent',
             'gl_url', 'metrics', 'milestone', 'feature',
             'gl_last_sync', 'gl_id'
