@@ -1,6 +1,5 @@
 import django_filters
 from django.db.models import QuerySet
-from django.core.exceptions import PermissionDenied
 
 from apps.core.graphql.filters import SearchFilter
 from apps.development.models import Issue, Milestone, Team, TeamMember, Project
@@ -8,19 +7,32 @@ from apps.development.services.problems.issue import (
     filter_issues_problems, exclude_issues_problems,
     annotate_issues_problems
 )
+from apps.development.services.allowed.issues import \
+    check_allow_project_manager
 from apps.users.models import User
 
 
-class TeamFilter(django_filters.ModelChoiceFilter):
+class MilestoneFilter(django_filters.ModelChoiceFilter):
     def __init__(self) -> None:
-        super().__init__(queryset=Team.objects.all())
+        super().__init__(queryset=Milestone.objects.all())
 
     def filter(self, queryset, value) -> QuerySet:
         if not value:
             return queryset
 
-        users = TeamMember.objects.get_no_watchers(value)
-        return queryset.filter(user__in=users)
+        check_allow_project_manager(self.parent.request.user)
+
+        return queryset.filter(milestone=value)
+
+
+class MilestoneIssueOrphanFilter(django_filters.BooleanFilter):
+    def filter(self, queryset, value) -> QuerySet:
+        if value is None:
+            return queryset
+
+        check_allow_project_manager(self.parent.request.user)
+
+        return queryset.filter(milestone__feature__isnull=value)
 
 
 class ProblemsFilter(django_filters.BooleanFilter):
@@ -38,34 +50,31 @@ class ProblemsFilter(django_filters.BooleanFilter):
         return queryset
 
 
-class Milestoneilter(django_filters.ModelChoiceFilter):
+class TeamFilter(django_filters.ModelChoiceFilter):
     def __init__(self) -> None:
-        super().__init__(queryset=Milestone.objects.all())
+        super().__init__(queryset=Team.objects.all())
 
     def filter(self, queryset, value) -> QuerySet:
         if not value:
             return queryset
 
-        if not self.parent.request.user.roles.project_manager:
-            raise PermissionDenied
-
-        return queryset
+        users = TeamMember.objects.get_no_watchers(value)
+        return queryset.filter(user__in=users)
 
 
 class IssuesFilterSet(django_filters.FilterSet):
-    user = django_filters.ModelChoiceFilter(queryset=User.objects.all())
-    project = django_filters.ModelChoiceFilter(queryset=Project.objects.all())
-    milestone = Milestoneilter()
-    team = TeamFilter()
+    milestone = MilestoneFilter()
+    milestone_issue_orphan = MilestoneIssueOrphanFilter()
     problems = ProblemsFilter()
-    q = SearchFilter(fields=('title',))
-    milestone_issue_orphan = django_filters.BooleanFilter(
-        field_name='milestone', lookup_expr='feature__isnull'
-    )
+    project = django_filters.ModelChoiceFilter(queryset=Project.objects.all())
+    team = TeamFilter()
+    user = django_filters.ModelChoiceFilter(queryset=User.objects.all())
 
     order_by = django_filters.OrderingFilter(
         fields=('due_date', 'title', 'created_at')
     )
+
+    q = SearchFilter(fields=('title',))
 
     class Meta:
         model = Issue

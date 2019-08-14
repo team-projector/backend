@@ -1,10 +1,13 @@
 from datetime import timedelta, datetime
+from pytest import raises
+from django.core.exceptions import PermissionDenied
 
 from apps.development.models import TeamMember
 from apps.development.models.issue import Issue, STATE_CLOSED, STATE_OPENED
 from apps.development.graphql.filters import IssuesFilterSet
 from tests.test_development.factories import (
-    IssueFactory, ProjectFactory, TeamFactory, TeamMemberFactory
+    IssueFactory, FeatureFactory, ProjectFactory, ProjectMilestoneFactory,
+    TeamFactory, TeamMemberFactory
 )
 from tests.test_users.factories import UserFactory
 
@@ -297,3 +300,95 @@ def test_order_by_due_date(user):
     ).qs
 
     assert list(results) == [issue_2, issue_3, issue_1]
+
+
+def test_filter_by_milestone(user, client):
+    user.roles.project_manager = True
+    user.save()
+
+    milestone_1 = ProjectMilestoneFactory.create()
+    IssueFactory.create_batch(3, user=user, milestone=milestone_1)
+
+    milestone_2 = ProjectMilestoneFactory.create()
+    IssueFactory.create_batch(2, user=user, milestone=milestone_2)
+
+    client.user = user
+
+    results = IssuesFilterSet(
+        data={'milestone': milestone_1.id},
+        queryset=Issue.objects.all(),
+        request=client
+    ).qs
+
+    assert results.count() == 3
+    assert all([item.milestone == milestone_1 for item in results]) is True
+
+    results = IssuesFilterSet(
+        data={'milestone': milestone_2.id},
+        queryset=Issue.objects.all(),
+        request=client
+    ).qs
+
+    assert results.count() == 2
+    assert all([item.milestone == milestone_2 for item in results]) is True
+
+
+def test_filter_by_milestone_not_pm(user, client):
+    milestone_1 = ProjectMilestoneFactory.create()
+    IssueFactory.create_batch(3, user=user, milestone=milestone_1)
+
+    client.user = user
+
+    with raises(PermissionDenied):
+        IssuesFilterSet(
+            data={'milestone': milestone_1.id},
+            queryset=Issue.objects.all(),
+            request=client
+        ).qs
+
+
+def test_filter_by_milestone_issue_orphan(user, client):
+    user.roles.project_manager = True
+    user.save()
+
+    milestone_1 = ProjectMilestoneFactory.create()
+    FeatureFactory.create(milestone=milestone_1)
+    IssueFactory.create_batch(3, user=user, milestone=milestone_1)
+
+    milestone_2 = ProjectMilestoneFactory.create()
+    IssueFactory.create_batch(2, user=user, milestone=milestone_2)
+
+    client.user = user
+
+    results = IssuesFilterSet(
+        data={'milestone_issue_orphan': True},
+        queryset=Issue.objects.all(),
+        request=client
+    ).qs
+
+    assert results.count() == 2
+    assert all([item.milestone == milestone_2 for item in results]) is True
+
+    results = IssuesFilterSet(
+        data={'milestone_issue_orphan': False},
+        queryset=Issue.objects.all(),
+        request=client
+    ).qs
+
+    assert results.count() == 3
+    assert all([item.milestone == milestone_1 for item in results]) is True
+
+
+def test_filter_by_milestone_issue_orphan_not_pm(user, client):
+    milestone_1 = ProjectMilestoneFactory.create()
+    FeatureFactory.create(milestone=milestone_1)
+    IssueFactory.create_batch(3, user=user, milestone=milestone_1)
+
+    client.user = user
+
+    with raises(PermissionDenied):
+        IssuesFilterSet(
+            data={'milestone_issue_orphan': True},
+            queryset=Issue.objects.all(),
+            request=client
+        ).qs
