@@ -7,7 +7,7 @@ from apps.core.graphql.mutations import BaseMutation
 from apps.payroll.db.mixins.approved import APPROVED, DECLINED
 from apps.payroll.graphql.types import WorkBreakType
 from apps.payroll.models import WorkBreak
-from ..permissions import CanApproveDeclineWorkBreak
+from ..permissions import CanApproveDeclineWorkBreak, CanManageWorkBreak
 
 User = get_user_model()
 
@@ -78,34 +78,34 @@ class DeclineWorkBreakMutation(BaseMutation):
 
 
 class UpdateWorkBreakMutation(BaseMutation):
+    permission_classes = (CanManageWorkBreak,)
+
     class Arguments:
         id = graphene.ID()
-        comment = graphene.String()
-        from_date = graphene.DateTime()
-        reason = graphene.String()
-        to_date = graphene.DateTime()
-        user = graphene.ID()
+        comment = graphene.String(required=True)
+        from_date = graphene.DateTime(required=True)
+        reason = graphene.String(required=True)
+        to_date = graphene.DateTime(required=True)
 
     work_break = graphene.Field(WorkBreakType)
 
     @classmethod
     def do_mutate(cls, root, info, id, **kwargs):
-        work_break = get_object_or_404(
-                WorkBreak.objects.all(),
-                pk=id
-            )
+        WorkBreak.objects.filter(pk=id).update(**kwargs)
 
-        if kwargs.get('user'):
-            user = get_object_or_404(
-                User.objects.all(),
-                pk=kwargs['user']
-            )
+        return UpdateWorkBreakMutation(work_break=WorkBreak.objects.get(pk=id))
 
-            kwargs['user'] = user
 
-        for attr, value in kwargs.items():
-            setattr(work_break, attr, value)
+class DeleteWorkBreakMutation(BaseMutation):
+    permission_classes = (CanManageWorkBreak,)
 
-        work_break.save()
+    class Arguments:
+        id = graphene.ID()
 
-        return UpdateWorkBreakMutation(work_break=work_break)
+    ok = graphene.Boolean()
+
+    @classmethod
+    def do_mutate(cls, root, info, id, **kwargs):
+        WorkBreak.objects.filter(pk=id).delete()
+
+        return DeleteWorkBreakMutation(ok=True)

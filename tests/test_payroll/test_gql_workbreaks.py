@@ -1,9 +1,11 @@
 from datetime import datetime
+from pytest import raises
+from rest_framework.exceptions import PermissionDenied
 
 from apps.development.models import TeamMember
 from apps.payroll.models import WorkBreak
 from apps.payroll.graphql.mutations.workbreaks import (
-    CreateWorkBreakMutation, UpdateWorkBreakMutation
+    CreateWorkBreakMutation, DeleteWorkBreakMutation, UpdateWorkBreakMutation
 )
 from apps.payroll.graphql.queries.work_break import WorkBreakType
 from tests.test_development.factories import TeamFactory, TeamMemberFactory
@@ -75,20 +77,6 @@ def test_work_breaks(user, client):
     assert work_breaks.count() == 5
 
 
-def test_update_work_break(user, client):
-    work_break = WorkBreakFactory.create(user=user, comment='created')
-
-    client.user = user
-    info = AttrDict({'context': client})
-
-    work_break_mutated = UpdateWorkBreakMutation.mutate(
-        None, info, id=work_break.id, comment='updated'
-    ).work_break
-
-    assert WorkBreak.objects.count() == 1
-    assert work_break_mutated.comment == 'updated'
-
-
 def test_create_work_break(user, client):
     client.user = user
     info = AttrDict({'context': client})
@@ -109,3 +97,104 @@ def test_create_work_break(user, client):
     assert work_break_created.reason == WorkBreak.WORK_BREAK_REASONS.dayoff
     assert work_break_created.to_date is not None
     assert work_break_created.user == user
+
+
+def test_update_work_break(user, client):
+    work_break = WorkBreakFactory.create(user=user, comment='created')
+
+    client.user = user
+    info = AttrDict({'context': client})
+
+    work_break_mutated = UpdateWorkBreakMutation.mutate(
+        None,
+        info,
+        id=work_break.id,
+        comment='updated',
+        from_date=str(datetime.now()),
+        reason=WorkBreak.WORK_BREAK_REASONS.vacation,
+        to_date=str(datetime.now()),
+        user=user.id
+    ).work_break
+
+    assert WorkBreak.objects.count() == 1
+    assert work_break_mutated.comment == 'updated'
+    assert work_break_mutated.user == user
+
+
+def test_update_work_break_another_user(user, client):
+    team = TeamFactory.create()
+
+    TeamMemberFactory.create(team=team,
+                             user=user,
+                             roles=TeamMember.roles.developer)
+
+    user_2 = UserFactory.create()
+    TeamMemberFactory.create(team=team,
+                             user=user_2,
+                             roles=TeamMember.roles.developer)
+
+    work_break = WorkBreakFactory.create(user=user_2, comment='created')
+
+    client.user = user
+    info = AttrDict({'context': client})
+
+    with raises(PermissionDenied):
+        UpdateWorkBreakMutation.mutate(
+            None,
+            info,
+            id=work_break.id,
+            comment='updated',
+            from_date=str(datetime.now()),
+            reason=WorkBreak.WORK_BREAK_REASONS.vacation,
+            to_date=str(datetime.now())
+        ).work_break
+
+
+def test_update_work_break_another_user_but_teamlead(user, client):
+    team = TeamFactory.create()
+
+    TeamMemberFactory.create(team=team,
+                             user=user,
+                             roles=TeamMember.roles.leader)
+
+    user_2 = UserFactory.create()
+    TeamMemberFactory.create(team=team,
+                             user=user_2,
+                             roles=TeamMember.roles.developer)
+
+    work_break = WorkBreakFactory.create(user=user_2, comment='created')
+
+    client.user = user
+    info = AttrDict({'context': client})
+
+    work_break_mutated = UpdateWorkBreakMutation.mutate(
+        None,
+        info,
+        id=work_break.id,
+        comment='updated',
+        from_date=str(datetime.now()),
+        reason=WorkBreak.WORK_BREAK_REASONS.vacation,
+        to_date=str(datetime.now())
+    ).work_break
+
+    assert WorkBreak.objects.count() == 1
+    assert work_break_mutated.comment == 'updated'
+    assert work_break_mutated.user == user_2
+
+
+def test_delete_work_break(user, client):
+    work_break = WorkBreakFactory.create(user=user, comment='created')
+
+    client.user = user
+    info = AttrDict({'context': client})
+
+    assert WorkBreak.objects.count() == 1
+
+    DeleteWorkBreakMutation.mutate(
+        None,
+        info,
+        id=work_break.id,
+        user=user.id
+    )
+
+    assert WorkBreak.objects.count() == 0

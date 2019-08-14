@@ -35,7 +35,6 @@ urlpatterns = [
     path('api/graphql', csrf_exempt(get_api_graphql_view())),
     path('api/', include((get_module_url_patterns(
         'apps.development.rest.urls',
-        'apps.payroll.rest.urls',
     ), 'urls'), namespace='api')),
     path('api/', include('apps.users.pages.urls', namespace='social')),
 
