@@ -25,16 +25,6 @@ class MilestoneFilter(django_filters.ModelChoiceFilter):
         return queryset.filter(milestone=value)
 
 
-class MilestoneIssueOrphanFilter(django_filters.BooleanFilter):
-    def filter(self, queryset, value) -> QuerySet:
-        if value is None:
-            return queryset
-
-        check_allow_project_manager(self.parent.request.user)
-
-        return queryset.filter(milestone__feature__isnull=value)
-
-
 class ProblemsFilter(django_filters.BooleanFilter):
     def filter(self, queryset, value) -> QuerySet:
         if value is None:
@@ -64,7 +54,6 @@ class TeamFilter(django_filters.ModelChoiceFilter):
 
 class IssuesFilterSet(django_filters.FilterSet):
     milestone = MilestoneFilter()
-    milestone_issue_orphan = MilestoneIssueOrphanFilter()
     problems = ProblemsFilter()
     project = django_filters.ModelChoiceFilter(queryset=Project.objects.all())
     team = TeamFilter()
@@ -79,4 +68,4 @@ class IssuesFilterSet(django_filters.FilterSet):
     class Meta:
         model = Issue
         fields = ('state', 'due_date', 'user', 'team', 'problems', 'project',
-                  'milestone', 'milestone_issue_orphan')
+                  'milestone')
