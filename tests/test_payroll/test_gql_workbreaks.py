@@ -1,5 +1,10 @@
+from datetime import datetime
+
 from apps.development.models import TeamMember
 from apps.payroll.models import WorkBreak
+from apps.payroll.graphql.mutations.workbreaks import (
+    CreateWorkBreakMutation, UpdateWorkBreakMutation
+)
 from apps.payroll.graphql.queries.work_break import WorkBreakType
 from tests.test_development.factories import TeamFactory, TeamMemberFactory
 from tests.test_development.factories_gitlab import AttrDict
@@ -68,3 +73,39 @@ def test_work_breaks(user, client):
     work_breaks = WorkBreakType.get_queryset(WorkBreak.objects.all(), info)
 
     assert work_breaks.count() == 5
+
+
+def test_update_work_break(user, client):
+    work_break = WorkBreakFactory.create(user=user, comment='created')
+
+    client.user = user
+    info = AttrDict({'context': client})
+
+    work_break_mutated = UpdateWorkBreakMutation.mutate(
+        None, info, id=work_break.id, comment='updated'
+    ).work_break
+
+    assert WorkBreak.objects.count() == 1
+    assert work_break_mutated.comment == 'updated'
+
+
+def test_create_work_break(user, client):
+    client.user = user
+    info = AttrDict({'context': client})
+
+    work_break_created = CreateWorkBreakMutation.mutate(
+        None,
+        info,
+        comment='created',
+        from_date=str(datetime.now()),
+        reason=WorkBreak.WORK_BREAK_REASONS.dayoff,
+        to_date=str(datetime.now()),
+        user=user.id
+    ).work_break
+
+    assert WorkBreak.objects.count() == 1
+    assert work_break_created.comment == 'created'
+    assert work_break_created.from_date is not None
+    assert work_break_created.reason == WorkBreak.WORK_BREAK_REASONS.dayoff
+    assert work_break_created.to_date is not None
+    assert work_break_created.user == user
