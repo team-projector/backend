@@ -11,9 +11,4 @@ def resolve_spent_times_summary(parent, info, **kwargs):
         request=info.context,
     )
 
-    return get_spent_times_summary(
-        filterset.qs,
-        filterset.form.cleaned_data['project'],
-        filterset.form.cleaned_data['team'],
-        filterset.form.cleaned_data['user']
-    )
+    return get_spent_times_summary(filterset.qs)

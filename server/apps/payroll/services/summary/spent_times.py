@@ -1,25 +1,21 @@
-from typing import Optional, Type, Union
-
-from django.contrib.contenttypes.models import ContentType
 from django.db.models import Sum, Value, QuerySet
 from django.db.models.functions import Coalesce
 
-from apps.development.models import Issue, MergeRequest, Project, Team
-from apps.development.services.summary.issues import (
-    IssuesSummary, get_issues_summary
-)
-from apps.development.services.summary.merge_requests import (
-    MergeRequestsSummary, get_merge_requests_summary
-)
-from apps.users.models import User
+from apps.development.models import MergeRequest
+from apps.development.models.issue import STATE_CLOSED, STATE_OPENED
 
 
-class IssuesSpentTimesSummary(IssuesSummary):
+class IssuesSpentTimesSummary:
     spent: int = 0
+    closed_spent: int = 0
+    opened_spent: int = 0
 
 
-class MergeRequestsSpentTimesSummary(MergeRequestsSummary):
+class MergeRequestsSpentTimesSummary:
     spent: int = 0
+    closed_spent: int = 0
+    opened_spent: int = 0
+    merged_spent: int = 0
 
 
 class SpentTimesSummary:
@@ -30,84 +26,65 @@ class SpentTimesSummary:
 
 class SpentTimesSummaryProvider:
     def __init__(self,
-                 queryset: QuerySet,
-                 project: Optional[Project],
-                 team: Optional[Team],
-                 user: Optional[User]):
+                 queryset: QuerySet):
         self.queryset = queryset
-        self.project = project
-        self.team = team
-        self.user = user
 
     def execute(self) -> SpentTimesSummary:
         summary = SpentTimesSummary()
 
         summary.issues = IssuesSpentTimesSummary()
-        summary.issues.__dict__ \
-            = self._get_issues_summary().__dict__
+        self._calculate_issues(summary.issues)
 
         summary.merge_requests = MergeRequestsSpentTimesSummary()
-        summary.merge_requests.__dict__ \
-            = self._get_merge_requests_summary().__dict__
+        self._calculate_merge_requests(summary.merge_requests)
 
-        for item in self._get_time_spent():
-            if self._is_model_class(item['content_type'], Issue):
-                summary.issues.spent = item['spent']
-                summary.spent += item['spent']
-            elif self._is_model_class(item['content_type'], MergeRequest):
-                summary.merge_requests.spent = item['spent']
-                summary.spent += item['spent']
+        summary.spent = summary.issues.spent + summary.merge_requests.spent
 
         return summary
 
-    def _get_issues_summary(self) -> IssuesSummary:
-        return get_issues_summary(
-            Issue.objects.filter(
-                id__in=self.queryset.values_list(
-                    'issues__id', flat=True
-                )
-            ),
-            None,
-            self.user,
-            self.team,
-            self.project,
-            None
-        )
-
-    def _get_merge_requests_summary(self) -> MergeRequestsSummary:
-        return get_merge_requests_summary(
-            MergeRequest.objects.filter(
-                id__in=self.queryset.values_list(
-                    'mergerequests__id', flat=True
-                )
-            ),
-            self.project,
-            self.team,
-            self.user
-        )
-
-    def _get_time_spent(self) -> QuerySet:
-        return self.queryset.values('content_type').annotate(
+    def _get_issues_spent(self) -> QuerySet:
+        return self.queryset.filter(
+            issues__isnull=False
+        ).values(
+            'issues__state'
+        ).annotate(
             spent=Coalesce(Sum('time_spent'), Value(0))
         ).order_by()
 
-    @staticmethod
-    def _is_model_class(id: int,
-                        model_class: Union[
-                            Type[Issue], Type[MergeRequest]
-                        ]) -> bool:
-        return ContentType.objects.get_for_id(id).model_class() == model_class
+    def _get_merge_requests_spent(self) -> QuerySet:
+        return self.queryset.filter(
+            mergerequests__isnull=False
+        ).values(
+            'mergerequests__state'
+        ).annotate(
+            spent=Coalesce(Sum('time_spent'), Value(0))
+        ).order_by()
+
+    def _calculate_issues(self, issues) -> None:
+        for item in self._get_issues_spent():
+            if item['issues__state'] == STATE_OPENED:
+                issues.opened_spent = item['spent']
+                issues.spent += item['spent']
+            elif item['issues__state'] == STATE_CLOSED:
+                issues.closed_spent = item['spent']
+                issues.spent += item['spent']
+            else:
+                issues.spent += item['spent']
+
+    def _calculate_merge_requests(self, merge_requests) -> None:
+        for item in self._get_merge_requests_spent():
+            if item['mergerequests__state'] == MergeRequest.STATE.opened:
+                merge_requests.opened_spent = item['spent']
+                merge_requests.spent += item['spent']
+            elif item['mergerequests__state'] == MergeRequest.STATE.closed:
+                merge_requests.closed_spent = item['spent']
+                merge_requests.spent += item['spent']
+            elif item['mergerequests__state'] == MergeRequest.STATE.merged:
+                merge_requests.merged_spent = item['spent']
+                merge_requests.spent += item['spent']
+            else:
+                merge_requests.spent += item['spent']
 
 
-def get_spent_times_summary(queryset: QuerySet,
-                            project: Optional[Project],
-                            team: Optional[Team],
-                            user: Optional[User]) -> SpentTimesSummary:
-    provider = SpentTimesSummaryProvider(
-        queryset,
-        project,
-        team,
-        user
-    )
-
-    return provider.execute()
+def get_spent_times_summary(queryset: QuerySet) -> SpentTimesSummary:
+    return SpentTimesSummaryProvider(queryset).execute()
