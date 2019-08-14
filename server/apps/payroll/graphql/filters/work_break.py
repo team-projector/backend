@@ -4,8 +4,9 @@ from django.db.models import Exists, OuterRef, QuerySet
 from apps.development.models import Team, TeamMember
 from apps.payroll.db.mixins.approved import CREATED
 from apps.payroll.models import WorkBreak
-from apps.payroll.services.allowed.work_break import \
+from apps.payroll.services.allowed.work_break import (
     check_allow_filtering_by_team
+)
 from apps.users.models import User
 
 
