@@ -1,9 +1,6 @@
-from typing import Optional
-
 from django.db.models import QuerySet, Count
 
-from apps.development.models import MergeRequest, Project, Team
-from apps.users.models import User
+from apps.development.models import MergeRequest
 
 
 class MergeRequestsSummary:
@@ -14,15 +11,8 @@ class MergeRequestsSummary:
 
 
 class MergeRequestsSummaryProvider:
-    def __init__(self,
-                 queryset: QuerySet,
-                 project: Optional[Project],
-                 team: Optional[Team],
-                 user: Optional[User]):
+    def __init__(self, queryset: QuerySet):
         self.queryset = queryset
-        self.project = project
-        self.team = team
-        self.user = user
 
     def execute(self) -> MergeRequestsSummary:
         summary = MergeRequestsSummary()
@@ -50,15 +40,5 @@ class MergeRequestsSummaryProvider:
         ).order_by()
 
 
-def get_merge_requests_summary(queryset: QuerySet,
-                               project: Optional[Project],
-                               team: Optional[Team],
-                               user: Optional[User]) -> MergeRequestsSummary:
-    provider = MergeRequestsSummaryProvider(
-        queryset,
-        project,
-        team,
-        user
-    )
-
-    return provider.execute()
+def get_merge_requests_summary(queryset: QuerySet) -> MergeRequestsSummary:
+    return MergeRequestsSummaryProvider(queryset).execute()

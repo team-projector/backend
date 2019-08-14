@@ -1,0 +1,116 @@
+from apps.development.models import TeamMember
+from apps.development.models import MergeRequest
+from apps.development.graphql.filters import MergeRequestFilterSet
+from tests.test_development.factories import (
+    MergeRequestFactory, ProjectFactory, TeamFactory, TeamMemberFactory
+)
+from tests.test_users.factories import UserFactory
+
+
+def test_filter_by_user(user):
+    user_2 = UserFactory.create()
+
+    team = TeamFactory.create()
+    TeamMemberFactory.create(
+        user=user,
+        team=team,
+        roles=TeamMember.roles.leader
+    )
+
+    TeamMemberFactory.create(
+        user=user_2,
+        team=team,
+        roles=TeamMember.roles.developer
+    )
+
+    MergeRequestFactory.create(user=user_2)
+    MergeRequestFactory.create_batch(3, user=user)
+
+    results = MergeRequestFilterSet(
+        data={'user': user_2.id},
+        queryset=MergeRequest.objects.all(),
+
+    ).qs
+
+    assert results.count() == 1
+    assert results.first().user == user_2
+
+    results = MergeRequestFilterSet(
+        data={'user': user.id},
+        queryset=MergeRequest.objects.all(),
+    ).qs
+
+    assert results.count() == 3
+
+
+def test_filter_by_state(user):
+    merge_request_opened = MergeRequestFactory.create(
+        user=user, state=MergeRequest.STATE.opened
+    )
+    merge_request_closed = MergeRequestFactory.create(
+        user=user, state=MergeRequest.STATE.closed
+    )
+
+    results = MergeRequestFilterSet(
+        data={'state': MergeRequest.STATE.closed},
+        queryset=MergeRequest.objects.all(),
+    ).qs
+
+    assert results.count() == 1
+    assert results.first() == merge_request_closed
+
+    results = MergeRequestFilterSet(
+        data={'state': MergeRequest.STATE.opened},
+        queryset=MergeRequest.objects.all(),
+    ).qs
+
+    assert results.count() == 1
+    assert results.first() == merge_request_opened
+
+
+def test_filter_by_projects(user):
+    project_1 = ProjectFactory.create()
+    MergeRequestFactory.create(user=user, project=project_1)
+
+    project_2 = ProjectFactory.create()
+    MergeRequestFactory.create(user=user, project=project_2)
+
+    MergeRequestFactory.create_batch(
+        3, user=user, project=ProjectFactory.create()
+    )
+
+    results = MergeRequestFilterSet(
+        data={'project': project_1.id},
+        queryset=MergeRequest.objects.all(),
+    ).qs
+
+    assert results.count() == 1
+    assert results.first().project == project_1
+
+    results = MergeRequestFilterSet(
+        data={'project': project_2.id},
+        queryset=MergeRequest.objects.all(),
+    ).qs
+
+    assert results.count() == 1
+    assert results.first().project == project_2
+
+
+def test_ordering(user):
+    merge_request_1 = MergeRequestFactory.create(title='agent', user=user)
+    merge_request_2 = MergeRequestFactory.create(title='cloud', user=user)
+    merge_request_3 = MergeRequestFactory.create(title='bar', user=user)
+
+    results = MergeRequestFilterSet(
+        data={'order_by': 'title'},
+        queryset=MergeRequest.objects.all(),
+    ).qs
+
+    assert list(results) == [merge_request_1, merge_request_3, merge_request_2]
+
+    results = MergeRequestFilterSet(
+        data={'order_by': '-title'},
+        queryset=MergeRequest.objects.all(),
+    ).qs
+
+    assert list(results) == [merge_request_2, merge_request_3, merge_request_1]
