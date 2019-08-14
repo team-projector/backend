@@ -1,16 +1,17 @@
 import graphene
 
-from apps.development.graphql.types.issues_summary import IssuesSummaryType
-from apps.development.graphql.types.merge_requests_summary import \
-    MergeRequestsSummaryType
 
-
-class IssuesSpentTimesSummaryType(IssuesSummaryType):
+class IssuesSpentTimesSummaryType(graphene.ObjectType):
     spent = graphene.Int()
+    closed_spent = graphene.Int()
+    opened_spent = graphene.Int()
 
 
-class MergeRequestsSpentTimesSummaryType(MergeRequestsSummaryType):
+class MergeRequestsSpentTimesSummaryType(graphene.ObjectType):
     spent = graphene.Int()
+    closed_spent = graphene.Int()
+    opened_spent = graphene.Int()
+    merged_spent = graphene.Int()
 
 
 class SpentTimesSummaryType(graphene.ObjectType):
