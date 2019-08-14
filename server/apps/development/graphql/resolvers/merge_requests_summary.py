@@ -12,8 +12,5 @@ def resolve_merge_requests_summary(parent, info, **kwargs):
     )
 
     return get_merge_requests_summary(
-        filterset.qs,
-        filterset.form.cleaned_data['project'],
-        filterset.form.cleaned_data['team'],
-        filterset.form.cleaned_data['user']
+        filterset.qs
     )

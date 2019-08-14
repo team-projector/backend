@@ -18,5 +18,6 @@ class MergeRequestQueries(graphene.ObjectType):
         user=graphene.ID(),
         team=graphene.ID(),
         project=graphene.ID(),
+        state=graphene.String(),
         resolver=resolve_merge_requests_summary
     )
