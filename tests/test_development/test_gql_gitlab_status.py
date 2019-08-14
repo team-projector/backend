@@ -1,7 +1,9 @@
 from datetime import timedelta
 from django.utils import timezone
 
-from apps.core.activity.verbs import ACTION_GITLAB_CALL_API, ACTION_GITLAB_WEBHOOK_TRIGGERED
+from apps.core.activity.verbs import (
+    ACTION_GITLAB_CALL_API, ACTION_GITLAB_WEBHOOK_TRIGGERED
+)
 from apps.core.tasks import add_action
 from apps.development.models import Issue, Project
 from apps.development.services.status.gitlab import get_gitlab_sync_status
@@ -22,5 +24,8 @@ def test_status(user):
     sync_status = get_gitlab_sync_status()
 
     assert sync_status.last_sync == project.gl_last_sync
-    assert set(x.id for x in sync_status.last_issues) == \
-           set(Issue.objects.order_by('-updated_at')[:10].values_list('id', flat=True))
+    assert set(
+        x.id for x in sync_status.last_issues
+    ) == set(
+        Issue.objects.order_by('-updated_at')[:10].values_list('id', flat=True)
+    )

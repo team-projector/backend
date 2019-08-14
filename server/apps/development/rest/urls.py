@@ -7,12 +7,6 @@ app_name = 'development'
 
 router = AppRouter()
 router.register(
-    'issues',
-    views.IssuesViewset,
-    'issues'
-)
-
-router.register(
     'features',
     views.FeaturesViewset,
     'features'
@@ -54,18 +48,8 @@ router.register(
     views.TeamMembersViewset,
     'team-members'
 )
-router.register(
-    'teams',
-    views.TeamsViewset,
-    'teams'
-)
 
 urlpatterns = [
-    path(
-        'gitlab/issue/status',
-        views.GitlabIssueStatusView.as_view(),
-        name='gitlab-issue-status'
-    ),
     path(
         'gl-webhook',
         views.gl_webhook,

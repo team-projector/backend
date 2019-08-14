@@ -1,3 +1,4 @@
+from .feature import FeatureType
 from .gitlab_service_status import GitlabServiceStatusType
 from .gitlab_status import GitlabStatusType
 from .issue import IssueType

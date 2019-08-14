@@ -147,6 +147,8 @@ class MergeRequest(NotableMixin,
 
     @property
     def efficiency_available(self) -> bool:
-        return (self.state == self.STATE.closed and
-                self.total_time_spent and
-                self.time_estimate)
+        return (
+            self.state == self.STATE.closed and
+            self.total_time_spent and
+            self.time_estimate
+        )

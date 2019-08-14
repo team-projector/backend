@@ -246,7 +246,6 @@ def test_search(user):
     results = IssuesFilterSet(
         data={'q': 'rea'},
         queryset=Issue.objects.all(),
-
     ).qs
 
     assert results.count() == 2
@@ -255,7 +254,6 @@ def test_search(user):
     results = IssuesFilterSet(
         data={'q': '012345'},
         queryset=Issue.objects.all()
-
     ).qs
 
     assert results.count() == 0
