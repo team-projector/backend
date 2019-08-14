@@ -18,24 +18,9 @@ router.register(
 )
 
 router.register(
-    r'^milestones/(?P<milestone_pk>\d+)/issues$',
-    views.MilestoneIssuesViewset,
-    'milestone-issues'
-)
-router.register(
-    r'^milestones/(?P<milestone_pk>\d+)/issues/orphan$',
-    views.MilestoneIssuesOrphanViewset,
-    'milestone-issues-orphan'
-)
-router.register(
     r'^milestones/(?P<milestone_pk>\d+)/features',
     views.MilestoneFeaturesViewset,
     'milestone-features'
-)
-router.register(
-    'milestones',
-    views.MilestonesViewset,
-    'milestones'
 )
 
 router.register(

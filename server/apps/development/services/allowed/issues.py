@@ -1,3 +1,4 @@
+from django.core.exceptions import PermissionDenied
 from django.db.models import QuerySet
 
 from apps.development.services.team_members import filter_by_roles
@@ -25,3 +26,10 @@ def filter_allowed_for_user(queryset: QuerySet,
         allowed_users.add(member)
 
     return queryset.filter(user__in=allowed_users)
+
+
+def check_allow_project_manager(user: User) -> None:
+    if not user.roles.project_manager:
+        raise PermissionDenied(
+            'Only project managers can view project resources'
+        )
