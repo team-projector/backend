@@ -6,8 +6,8 @@ from apps.development.models import TeamMember
 from apps.development.models.issue import Issue, STATE_CLOSED, STATE_OPENED
 from apps.development.graphql.filters import IssuesFilterSet
 from tests.test_development.factories import (
-    IssueFactory, ProjectFactory, ProjectMilestoneFactory, TeamFactory,
-    TeamMemberFactory
+    IssueFactory, FeatureFactory, ProjectFactory, ProjectMilestoneFactory,
+    TeamFactory, TeamMemberFactory
 )
 from tests.test_users.factories import UserFactory
 
@@ -342,6 +342,51 @@ def test_filter_by_milestone_not_pm(user, client):
     with raises(PermissionDenied):
         IssuesFilterSet(
             data={'milestone': milestone_1.id},
+            queryset=Issue.objects.all(),
+            request=client
+        ).qs
+
+
+def test_filter_by_feature(user, client):
+    user.roles.project_manager = True
+    user.save()
+
+    feature_1 = FeatureFactory.create()
+    IssueFactory.create_batch(3, user=user, feature=feature_1)
+
+    feature_2 = FeatureFactory.create()
+    IssueFactory.create_batch(2, user=user, feature=feature_2)
+
+    client.user = user
+
+    results = IssuesFilterSet(
+        data={'feature': feature_1.id},
+        queryset=Issue.objects.all(),
+        request=client
+    ).qs
+
+    assert results.count() == 3
+    assert all([item.feature == feature_1 for item in results]) is True
+
+    results = IssuesFilterSet(
+        data={'feature': feature_2.id},
+        queryset=Issue.objects.all(),
+        request=client
+    ).qs
+
+    assert results.count() == 2
+    assert all([item.feature == feature_2 for item in results]) is True
+
+
+def test_filter_by_feature_not_pm(user, client):
+    feature_1 = FeatureFactory.create()
+    IssueFactory.create_batch(3, user=user, feature=feature_1)
+
+    client.user = user
+
+    with raises(PermissionDenied):
+        IssuesFilterSet(
+            data={'feature': feature_1.id},
             queryset=Issue.objects.all(),
             request=client
         ).qs

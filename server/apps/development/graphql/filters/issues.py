@@ -2,7 +2,9 @@ import django_filters
 from django.db.models import QuerySet
 
 from apps.core.graphql.filters import SearchFilter
-from apps.development.models import Issue, Milestone, Team, TeamMember, Project
+from apps.development.models import (
+    Issue, Feature, Milestone, Team, TeamMember, Project
+)
 from apps.development.services.problems.issue import (
     filter_issues_problems, exclude_issues_problems,
     annotate_issues_problems
@@ -10,6 +12,19 @@ from apps.development.services.problems.issue import (
 from apps.development.services.allowed.issues import \
     check_allow_project_manager
 from apps.users.models import User
+
+
+class FeatureFilter(django_filters.ModelChoiceFilter):
+    def __init__(self) -> None:
+        super().__init__(queryset=Feature.objects.all())
+
+    def filter(self, queryset, value) -> QuerySet:
+        if not value:
+            return queryset
+
+        check_allow_project_manager(self.parent.request.user)
+
+        return queryset.filter(feature=value)
 
 
 class MilestoneFilter(django_filters.ModelChoiceFilter):
@@ -53,6 +68,7 @@ class TeamFilter(django_filters.ModelChoiceFilter):
 
 
 class IssuesFilterSet(django_filters.FilterSet):
+    feature = FeatureFilter()
     milestone = MilestoneFilter()
     problems = ProblemsFilter()
     project = django_filters.ModelChoiceFilter(queryset=Project.objects.all())
@@ -68,4 +84,4 @@ class IssuesFilterSet(django_filters.FilterSet):
     class Meta:
         model = Issue
         fields = ('state', 'due_date', 'user', 'team', 'problems', 'project',
-                  'milestone')
+                  'milestone', 'feature')
