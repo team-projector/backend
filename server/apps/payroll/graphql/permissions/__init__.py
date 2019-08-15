@@ -1,1 +1,2 @@
 from .can_approve_decline_workbreaks import CanApproveDeclineWorkBreak
+from .can_manage_workbreak import CanManageWorkBreak

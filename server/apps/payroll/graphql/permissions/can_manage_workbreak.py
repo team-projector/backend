@@ -8,7 +8,7 @@ from apps.payroll.models import WorkBreak
 from apps.payroll.services.users import user_related_with_another_by_team_roles
 
 
-class CanApproveDeclineWorkBreak:
+class CanManageWorkBreak:
     @staticmethod
     def has_mutation_permission(root: Any,
                                 info: ResolveInfo,
@@ -22,4 +22,4 @@ class CanApproveDeclineWorkBreak:
             info.context.user,
             work_break.user,
             [TeamMember.roles.leader]
-        )
+        ) or work_break.user == info.context.user

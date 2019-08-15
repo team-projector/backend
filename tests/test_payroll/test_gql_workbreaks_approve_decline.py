@@ -33,7 +33,7 @@ def test_approve_by_teamlead(user, client):
         root=None,
         info=info,
         id=work_break.id
-    ).workbreak
+    ).work_break
 
     assert work_break_mutated.approve_state == APPROVED
     assert work_break_mutated.approved_by == user
@@ -101,7 +101,7 @@ def test_decline_by_teamlead(user, client):
         info=info,
         id=work_break.id,
         decline_reason='reason'
-    ).workbreak
+    ).work_break
 
     assert work_break_mutated.approve_state == DECLINED
     assert work_break_mutated.approved_by == user
