@@ -29,7 +29,9 @@ class SpentTimesSummary:
     issues: IssuesSpentTimesSummary
     merge_requests: MergeRequestsSpentTimesSummary
 
-    def __init__(self, issues: IssuesSpentTimesSummary, merge_requests: MergeRequestsSpentTimesSummary):
+    def __init__(self,
+                 issues: IssuesSpentTimesSummary,
+                 merge_requests: MergeRequestsSpentTimesSummary):
         self.issues = issues
         self.merge_requests = merge_requests
 
