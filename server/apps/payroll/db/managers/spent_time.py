@@ -31,7 +31,7 @@ class SpentTimeQuerySet(models.QuerySet):
         from apps.development.models import merge_request
         from apps.development.models import issue
 
-        def _h(**filters):
+        def _h(**filters) -> Coalesce:
             return Coalesce(Sum('time_spent', filter=Q(**filters)), 0)
 
         return self.aggregate(

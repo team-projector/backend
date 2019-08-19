@@ -6,7 +6,10 @@ class IssuesSpentTimesSummary:
     closed_spent: int = 0
     opened_spent: int = 0
 
-    def __init__(self, spent=0, closed_spent=0, opened_spent=0):
+    def __init__(self,
+                 spent=0,
+                 closed_spent=0,
+                 opened_spent=0) -> None:
         self.spent = spent
         self.closed_spent = closed_spent
         self.opened_spent = opened_spent
@@ -18,7 +21,11 @@ class MergeRequestsSpentTimesSummary:
     opened_spent: int = 0
     merged_spent: int = 0
 
-    def __init__(self, spent=0, closed_spent=0, opened_spent=0, merged_spent=0):
+    def __init__(self,
+                 spent=0,
+                 closed_spent=0,
+                 opened_spent=0,
+                 merged_spent=0) -> None:
         self.spent = spent
         self.closed_spent = closed_spent
         self.opened_spent = opened_spent
