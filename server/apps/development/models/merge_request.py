@@ -10,11 +10,11 @@ from apps.core.db.mixins import GitlabEntityMixin, GitlabInternalIdMixin
 from apps.core.db.utils import Choices
 from apps.payroll.db.mixins import SpentTimesMixin
 from apps.users.models import User
-from .label import Label
-from .project import Project
 from ..db.managers import MergeRequestManager
 from ..db.mixins import NotableMixin
 
+STATE_CLOSED = 'closed'
+STATE_OPENED = 'opened'
 STATE_MERGED = 'merged'
 
 
@@ -23,9 +23,9 @@ class MergeRequest(NotableMixin,
                    GitlabEntityMixin,
                    GitlabInternalIdMixin):
     STATE = Choices(
-        ('closed', 'closed'),
-        ('merged', 'merged'),
-        ('opened', 'opened')
+        (STATE_OPENED, 'closed'),
+        (STATE_MERGED, 'merged'),
+        (STATE_CLOSED, 'opened')
     )
 
     title = models.CharField(
@@ -71,13 +71,13 @@ class MergeRequest(NotableMixin,
     )
 
     labels = models.ManyToManyField(
-        Label,
+        'development.Label',
         related_name='merge_requests',
         blank=True
     )
 
     project = models.ForeignKey(
-        Project,
+        'development.Project',
         models.SET_NULL,
         null=True,
         blank=True,
