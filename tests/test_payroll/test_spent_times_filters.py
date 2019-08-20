@@ -1,9 +1,13 @@
+from collections import Counter
 from datetime import timedelta, date
+
+import pytest
 from django.utils import timezone
 
-from apps.development.models import TeamMember
-from apps.payroll.models.spent_time import SpentTime
+from apps.development.models import TeamMember, STATE_OPENED, STATE_CLOSED, STATE_MERGED
+from apps.payroll.models import SpentTime
 from apps.payroll.graphql.filters import SpentTimeFilterSet
+from core.utils.time import seconds
 from tests.test_development.factories import (
     IssueFactory, MergeRequestFactory, ProjectFactory, TeamFactory,
     TeamMemberFactory
@@ -14,16 +18,27 @@ from tests.test_payroll.factories import (
 from tests.test_users.factories import UserFactory
 
 
-def test_filter_by_salary(user):
-    user_2 = UserFactory.create()
-    issue = IssueFactory.create()
-    salary = SalaryFactory.create(user=user)
+@pytest.fixture
+def user_2(db):
+    yield UserFactory.create()
 
+
+@pytest.fixture
+def issue(db):
+    yield IssueFactory.create()
+
+
+@pytest.fixture
+def salary(db, user):
+    yield SalaryFactory.create(user=user)
+
+
+def test_filter_by_salary(user, user_2, issue, salary):
     spend_1 = IssueSpentTimeFactory.create(
         date=timezone.now() - timedelta(hours=4),
         user=user,
         base=issue,
-        time_spent=int(timedelta(hours=5).total_seconds()),
+        time_spent=int(seconds(hours=5)),
         salary=salary
     )
 
@@ -31,14 +46,14 @@ def test_filter_by_salary(user):
         date=timezone.now() - timedelta(hours=2),
         user=user_2,
         base=issue,
-        time_spent=int(timedelta(hours=2).total_seconds())
+        time_spent=int(seconds(hours=2))
     )
 
     spend_3 = IssueSpentTimeFactory.create(
         date=timezone.now() - timedelta(hours=3),
         user=user,
         base=issue,
-        time_spent=int(timedelta(hours=4).total_seconds()),
+        time_spent=int(seconds(hours=4)),
         salary=salary
     )
 
@@ -46,7 +61,7 @@ def test_filter_by_salary(user):
         date=timezone.now() - timedelta(hours=1),
         user=user_2,
         base=issue,
-        time_spent=int(timedelta(minutes=10).total_seconds())
+        time_spent=int(seconds(minutes=10))
     )
 
     results = SpentTimeFilterSet(
@@ -59,7 +74,7 @@ def test_filter_by_salary(user):
     assert set(results) == {spend_1, spend_3}
 
 
-def test_filter_by_date(user):
+def test_filter_by_date(user, user_2, issue):
     user_2 = UserFactory.create()
     issue = IssueFactory.create()
     spend_date = date(2019, 3, 3)
@@ -67,21 +82,21 @@ def test_filter_by_date(user):
     spend_1 = IssueSpentTimeFactory.create(
         user=user,
         base=issue,
-        time_spent=int(timedelta(hours=5).total_seconds()),
+        time_spent=int(seconds(hours=5)),
         date=spend_date,
     )
 
     spend_2 = IssueSpentTimeFactory.create(
         user=user_2,
         base=issue,
-        time_spent=int(timedelta(hours=2).total_seconds()),
+        time_spent=int(seconds(hours=2)),
         date=spend_date
     )
 
     IssueSpentTimeFactory.create(
         user=user_2,
         base=issue,
-        time_spent=int(timedelta(minutes=10).total_seconds()),
+        time_spent=int(seconds(minutes=10)),
         date=timezone.now() - timedelta(hours=1)
     )
 
@@ -95,22 +110,20 @@ def test_filter_by_date(user):
     assert set(results) == {spend_1, spend_2}
 
 
-def test_by_date_and_user(user):
-    user_2 = UserFactory.create()
-    issue = IssueFactory.create()
+def test_by_date_and_user(user, user_2, issue):
     spend_date = date(2019, 3, 3)
 
     spend_1 = IssueSpentTimeFactory.create(
         date=spend_date,
         user=user,
         base=issue,
-        time_spent=int(timedelta(hours=5).total_seconds()),
+        time_spent=int(seconds(hours=5)),
     )
 
     IssueSpentTimeFactory.create(
         user=user_2,
         base=issue,
-        time_spent=int(timedelta(hours=2).total_seconds()),
+        time_spent=int(seconds(hours=2)),
         date=spend_date
     )
 
@@ -118,14 +131,14 @@ def test_by_date_and_user(user):
         date=timezone.now() - timedelta(hours=3),
         user=user,
         base=issue,
-        time_spent=int(timedelta(hours=4).total_seconds()),
+        time_spent=int(seconds(hours=4)),
     )
 
     IssueSpentTimeFactory.create(
         date=timezone.now() - timedelta(hours=1),
         user=user_2,
         base=issue,
-        time_spent=int(timedelta(minutes=10).total_seconds())
+        time_spent=int(seconds(minutes=10))
     )
 
     results = SpentTimeFilterSet(
@@ -146,13 +159,13 @@ def test_filter_by_project(user):
     spend_1 = IssueSpentTimeFactory.create(
         user=user,
         base=issue,
-        time_spent=int(timedelta(hours=5).total_seconds())
+        time_spent=int(seconds(hours=5))
     )
 
     spend_2 = IssueSpentTimeFactory.create(
         user=user,
         base=issue,
-        time_spent=int(timedelta(hours=2).total_seconds())
+        time_spent=int(seconds(hours=2))
     )
 
     project_2 = ProjectFactory.create()
@@ -161,13 +174,13 @@ def test_filter_by_project(user):
     spend_3 = MergeRequestSpentTimeFactory.create(
         user=user,
         base=merge_request,
-        time_spent=int(timedelta(hours=4).total_seconds()),
+        time_spent=int(seconds(hours=4)),
     )
 
     spend_4 = MergeRequestSpentTimeFactory.create(
         user=user,
         base=merge_request,
-        time_spent=int(timedelta(hours=1).total_seconds())
+        time_spent=int(seconds(hours=1))
     )
 
     results = SpentTimeFilterSet(
@@ -208,13 +221,13 @@ def test_filter_by_team(user):
     spend_1 = IssueSpentTimeFactory.create(
         user=user,
         base=issue,
-        time_spent=int(timedelta(hours=5).total_seconds())
+        time_spent=int(seconds(hours=5))
     )
 
     spend_2 = IssueSpentTimeFactory.create(
         user=user,
         base=issue,
-        time_spent=int(timedelta(hours=2).total_seconds())
+        time_spent=int(seconds(hours=2))
     )
 
     merge_request = MergeRequestFactory.create(user=user)
@@ -222,13 +235,13 @@ def test_filter_by_team(user):
     spend_3 = MergeRequestSpentTimeFactory.create(
         user=another_user,
         base=merge_request,
-        time_spent=int(timedelta(hours=4).total_seconds()),
+        time_spent=int(seconds(hours=4)),
     )
 
     spend_4 = MergeRequestSpentTimeFactory.create(
         user=another_user,
         base=merge_request,
-        time_spent=int(timedelta(hours=1).total_seconds())
+        time_spent=int(seconds(hours=1))
     )
 
     results = SpentTimeFilterSet(
@@ -248,35 +261,35 @@ def test_filter_by_team(user):
     assert set(results) == {spend_3, spend_4}
 
 
-def test_order_by_date(user):
+def test_order_by_date(user, issue):
     issue = IssueFactory.create()
 
     spend_1 = IssueSpentTimeFactory.create(
         date=timezone.now() - timedelta(days=4),
         user=user,
         base=issue,
-        time_spent=int(timedelta(hours=5).total_seconds())
+        time_spent=int(seconds(hours=5))
     )
 
     spend_2 = IssueSpentTimeFactory.create(
         date=timezone.now() - timedelta(days=2),
         user=user,
         base=issue,
-        time_spent=int(timedelta(hours=2).total_seconds())
+        time_spent=int(seconds(hours=2))
     )
 
     spend_3 = IssueSpentTimeFactory.create(
         date=timezone.now() - timedelta(days=3),
         user=user,
         base=issue,
-        time_spent=int(timedelta(hours=4).total_seconds()),
+        time_spent=int(seconds(hours=4)),
     )
 
     spend_4 = IssueSpentTimeFactory.create(
         date=timezone.now() - timedelta(days=1),
         user=user,
         base=issue,
-        time_spent=int(timedelta(minutes=10).total_seconds())
+        time_spent=int(seconds(minutes=10))
     )
 
     results = SpentTimeFilterSet(
@@ -294,3 +307,31 @@ def test_order_by_date(user):
     ).qs
 
     assert list(results) == [spend_4, spend_2, spend_3, spend_1]
+
+
+def test_filter_by_state(user):
+    i_opened, _ = [
+        IssueSpentTimeFactory(
+            user=user,
+            base=IssueFactory(state=state),
+            time_spent=int(seconds(hours=1))
+        )
+        for state
+        in (STATE_OPENED, STATE_CLOSED)
+    ]
+
+    m_opened, _, _ = [MergeRequestSpentTimeFactory(
+        user=user,
+        base=MergeRequestFactory(state=state),
+        time_spent=int(seconds(hours=5))
+    )
+        for state
+        in (STATE_OPENED, STATE_CLOSED, STATE_MERGED)]
+
+    results = SpentTimeFilterSet(
+        data={'state': 'opened'},
+        queryset=SpentTime.objects.all(),
+        request=None,
+    ).qs
+
+    assert Counter(results) == Counter([i_opened, m_opened])

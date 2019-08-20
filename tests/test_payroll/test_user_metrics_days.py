@@ -8,6 +8,7 @@ from typing import Dict
 from apps.development.models.issue import STATE_OPENED
 from apps.payroll.services.metrics.progress.user import \
     get_user_progress_metrics
+from core.utils.time import seconds
 from tests.base import format_date
 from tests.test_development.factories import IssueFactory
 from tests.test_payroll.factories import IssueSpentTimeFactory
@@ -22,28 +23,28 @@ def test_simple(user):
         date=datetime.now() - timedelta(days=4),
         user=user,
         base=issue,
-        time_spent=timedelta(hours=3).total_seconds()
+        time_spent=seconds(hours=3)
     )
     IssueSpentTimeFactory.create(
         date=datetime.now() - timedelta(days=2, hours=5),
         user=user,
         base=issue,
-        time_spent=timedelta(hours=2).total_seconds()
+        time_spent=seconds(hours=2)
     )
     IssueSpentTimeFactory.create(
         date=datetime.now() - timedelta(days=1),
         user=user,
         base=issue,
-        time_spent=timedelta(hours=4).total_seconds()
+        time_spent=seconds(hours=4)
     )
     IssueSpentTimeFactory.create(
         date=datetime.now() - timedelta(days=1, hours=5),
         user=user,
         base=issue,
-        time_spent=-timedelta(hours=3).total_seconds()
+        time_spent=-seconds(hours=3)
     )
 
-    issue.time_estimate = timedelta(hours=15).total_seconds()
+    issue.time_estimate = seconds(hours=15)
     issue.total_time_spent = issue.time_spents.aggregate(spent=Sum('time_spent'))['spent']
     issue.state = STATE_OPENED
     issue.due_date = datetime.now() + timedelta(days=1)
@@ -79,10 +80,10 @@ def test_negative_remains(user):
         date=datetime.now() - timedelta(days=4),
         user=user,
         base=issue,
-        time_spent=timedelta(hours=3).total_seconds()
+        time_spent=seconds(hours=3)
     )
 
-    issue.time_estimate = timedelta(hours=2).total_seconds()
+    issue.time_estimate = seconds(hours=2)
     issue.total_time_spent = issue.time_spents.aggregate(spent=Sum('time_spent'))['spent']
     issue.state = STATE_OPENED
     issue.due_date = datetime.now() + timedelta(days=1)
@@ -108,30 +109,30 @@ def test_loading_day_already_has_spends(user):
     issue = IssueFactory.create(user=user, due_date=datetime.now())
     issue_2 = IssueFactory.create(user=user,
                                   state=STATE_OPENED,
-                                  total_time_spent=timedelta(hours=3).total_seconds(),
-                                  time_estimate=timedelta(hours=10).total_seconds())
+                                  total_time_spent=seconds(hours=3),
+                                  time_estimate=seconds(hours=10))
 
     IssueSpentTimeFactory.create(
         date=datetime.now(),
         user=user,
         base=issue_2,
-        time_spent=timedelta(hours=1).total_seconds()
+        time_spent=seconds(hours=1)
     )
     IssueSpentTimeFactory.create(
         date=datetime.now(),
         user=user,
         base=issue_2,
-        time_spent=timedelta(hours=2).total_seconds()
+        time_spent=seconds(hours=2)
     )
     IssueSpentTimeFactory.create(
         date=datetime.now(),
         user=user,
         base=issue,
-        time_spent=timedelta(hours=3).total_seconds()
+        time_spent=seconds(hours=3)
     )
 
-    issue.time_estimate = int(timedelta(hours=4).total_seconds())
-    issue.total_time_spent = int(timedelta(hours=3).total_seconds())
+    issue.time_estimate = int(seconds(hours=4))
+    issue.total_time_spent = int(seconds(hours=3))
     issue.state = STATE_OPENED
     issue.due_date = datetime.now()
     issue.save()
@@ -172,25 +173,25 @@ def test_not_in_range(user):
         date=datetime.now() - timedelta(days=5, hours=5),
         user=user,
         base=issue,
-        time_spent=timedelta(hours=2).total_seconds()
+        time_spent=seconds(hours=2)
     )
     IssueSpentTimeFactory.create(
         date=datetime.now() - timedelta(days=1),
         user=user,
         base=issue,
-        time_spent=timedelta(hours=4).total_seconds()
+        time_spent=seconds(hours=4)
     )
     IssueSpentTimeFactory.create(
         date=datetime.now() - timedelta(days=1, hours=5),
         user=user,
         base=issue,
-        time_spent=-timedelta(hours=3).total_seconds()
+        time_spent=-seconds(hours=3)
     )
     IssueSpentTimeFactory.create(
         date=datetime.now() + timedelta(days=1),
         user=user,
         base=issue,
-        time_spent=timedelta(hours=3).total_seconds()
+        time_spent=seconds(hours=3)
     )
 
     start = datetime.now().date() - timedelta(days=3)
@@ -221,25 +222,25 @@ def test_another_user(user):
         date=datetime.now() - timedelta(days=2, hours=5),
         user=user,
         base=issue,
-        time_spent=timedelta(hours=2).total_seconds()
+        time_spent=seconds(hours=2)
     )
     IssueSpentTimeFactory.create(
         date=datetime.now() - timedelta(days=1),
         user=another_user,
         base=issue,
-        time_spent=timedelta(hours=4).total_seconds()
+        time_spent=seconds(hours=4)
     )
     IssueSpentTimeFactory.create(
         date=datetime.now() - timedelta(days=1, hours=5),
         user=user,
         base=issue,
-        time_spent=-timedelta(hours=3).total_seconds()
+        time_spent=-seconds(hours=3)
     )
     IssueSpentTimeFactory.create(
         date=datetime.now() + timedelta(days=1),
         user=another_user,
         base=issue,
-        time_spent=timedelta(hours=3).total_seconds()
+        time_spent=seconds(hours=3)
     )
 
     start = datetime.now().date() - timedelta(days=5)

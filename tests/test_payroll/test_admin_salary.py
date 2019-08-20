@@ -7,6 +7,7 @@ from django.utils import timezone
 
 from apps.development.models.issue import STATE_CLOSED
 from apps.payroll.models import Salary
+from core.utils.time import seconds
 from tests.base import trigger_on_commit, model_to_dict_form, model_admin
 from tests.test_development.factories import IssueFactory
 from tests.test_payroll.factories import IssueSpentTimeFactory, SalaryFactory
@@ -33,7 +34,7 @@ def test_generate_salaries_get_form(admin_client):
     IssueSpentTimeFactory.create(
         user=UserFactory.create(),
         base=issue,
-        time_spent=timedelta(hours=5).total_seconds()
+        time_spent=seconds(hours=5)
     )
 
     response = ma_salary.generate_salaries(
@@ -56,7 +57,7 @@ def test_generate_salaries(admin_client):
     IssueSpentTimeFactory.create(
         user=user,
         base=issue,
-        time_spent=timedelta(hours=5).total_seconds()
+        time_spent=seconds(hours=5)
     )
 
     data = {

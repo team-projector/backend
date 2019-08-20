@@ -9,6 +9,7 @@ from apps.development.models import TeamMember
 from apps.development.models.issue import STATE_OPENED
 from apps.payroll.services.metrics.progress.team import \
     get_team_progress_metrics
+from core.utils.time import seconds
 from tests.base import format_date
 from tests.test_development.factories import IssueFactory, TeamFactory, \
     TeamMemberFactory
@@ -32,28 +33,28 @@ def test_simple(user):
         date=timezone.now() - timedelta(days=4),
         user=developer,
         base=issue,
-        time_spent=timedelta(hours=3).total_seconds()
+        time_spent=seconds(hours=3)
     )
     IssueSpentTimeFactory.create(
         date=timezone.now() - timedelta(days=2, hours=5),
         user=developer,
         base=issue,
-        time_spent=timedelta(hours=2).total_seconds()
+        time_spent=seconds(hours=2)
     )
     IssueSpentTimeFactory.create(
         date=timezone.now() - timedelta(days=1),
         user=developer,
         base=issue,
-        time_spent=timedelta(hours=4).total_seconds()
+        time_spent=seconds(hours=4)
     )
     IssueSpentTimeFactory.create(
         date=timezone.now() - timedelta(days=1, hours=5),
         user=developer,
         base=issue,
-        time_spent=-timedelta(hours=3).total_seconds()
+        time_spent=-seconds(hours=3)
     )
 
-    issue.time_estimate = timedelta(hours=15).total_seconds()
+    issue.time_estimate = seconds(hours=15)
     issue.total_time_spent = \
         issue.time_spents.aggregate(spent=Sum('time_spent'))['spent']
     issue.state = STATE_OPENED
@@ -111,10 +112,10 @@ def test_negative_remains(user):
         date=timezone.now() - timedelta(days=4, hours=5),
         user=developer,
         base=issue,
-        time_spent=timedelta(hours=3).total_seconds()
+        time_spent=seconds(hours=3)
     )
 
-    issue.time_estimate = timedelta(hours=2).total_seconds()
+    issue.time_estimate = seconds(hours=2)
     issue.total_time_spent = \
         issue.time_spents.aggregate(spent=Sum('time_spent'))['spent']
     issue.state = STATE_OPENED
@@ -167,23 +168,23 @@ def test_loading_day_already_has_spends(user):
         date=timezone.now(),
         user=developer,
         base=issue_2,
-        time_spent=timedelta(hours=1).total_seconds()
+        time_spent=seconds(hours=1)
     )
     IssueSpentTimeFactory.create(
         date=timezone.now(),
         user=developer,
         base=issue_2,
-        time_spent=timedelta(hours=2).total_seconds()
+        time_spent=seconds(hours=2)
     )
     IssueSpentTimeFactory.create(
         date=timezone.now(),
         user=developer,
         base=issue,
-        time_spent=timedelta(hours=3).total_seconds()
+        time_spent=seconds(hours=3)
     )
 
-    issue.time_estimate = int(timedelta(hours=4).total_seconds())
-    issue.total_time_spent = int(timedelta(hours=3).total_seconds())
+    issue.time_estimate = int(seconds(hours=4))
+    issue.total_time_spent = int(seconds(hours=3))
     issue.state = STATE_OPENED
     issue.due_date = timezone.now()
     issue.save()
@@ -241,25 +242,25 @@ def test_not_in_range(user):
         date=timezone.now() - timedelta(days=5, hours=5),
         user=developer,
         base=issue,
-        time_spent=timedelta(hours=2).total_seconds()
+        time_spent=seconds(hours=2)
     )
     IssueSpentTimeFactory.create(
         date=timezone.now() - timedelta(days=1),
         user=developer,
         base=issue,
-        time_spent=timedelta(hours=4).total_seconds()
+        time_spent=seconds(hours=4)
     )
     IssueSpentTimeFactory.create(
         date=timezone.now() - timedelta(days=1, hours=5),
         user=developer,
         base=issue,
-        time_spent=-timedelta(hours=3).total_seconds()
+        time_spent=-seconds(hours=3)
     )
     IssueSpentTimeFactory.create(
         date=timezone.now() + timedelta(days=1),
         user=developer,
         base=issue,
-        time_spent=timedelta(hours=3).total_seconds()
+        time_spent=seconds(hours=3)
     )
 
     start = timezone.now().date() - timedelta(days=3)
@@ -305,25 +306,25 @@ def test_another_user_not_in_team(user):
         date=timezone.now() - timedelta(days=2, hours=5),
         user=developer,
         base=issue,
-        time_spent=timedelta(hours=2).total_seconds()
+        time_spent=seconds(hours=2)
     )
     IssueSpentTimeFactory.create(
         date=timezone.now() - timedelta(days=1),
         user=another_user,
         base=issue,
-        time_spent=timedelta(hours=4).total_seconds()
+        time_spent=seconds(hours=4)
     )
     IssueSpentTimeFactory.create(
         date=timezone.now() - timedelta(days=1, hours=5),
         user=developer,
         base=issue,
-        time_spent=-timedelta(hours=3).total_seconds()
+        time_spent=-seconds(hours=3)
     )
     IssueSpentTimeFactory.create(
         date=timezone.now() + timedelta(days=1),
         user=another_user,
         base=issue,
-        time_spent=timedelta(hours=3).total_seconds()
+        time_spent=seconds(hours=3)
     )
 
     start = timezone.now().date() - timedelta(days=5)
@@ -354,28 +355,28 @@ def test_another_user_in_team(user):
         date=timezone.now() - timedelta(days=2, hours=5),
         user=developer,
         base=issue,
-        time_spent=timedelta(hours=2).total_seconds()
+        time_spent=seconds(hours=2)
     )
     IssueSpentTimeFactory.create(
         date=timezone.now() - timedelta(days=1),
         user=another_user,
         base=issue,
-        time_spent=timedelta(hours=4).total_seconds()
+        time_spent=seconds(hours=4)
     )
     IssueSpentTimeFactory.create(
         date=timezone.now() - timedelta(days=1, hours=5),
         user=developer,
         base=issue,
-        time_spent=-timedelta(hours=3).total_seconds()
+        time_spent=-seconds(hours=3)
     )
     IssueSpentTimeFactory.create(
         date=timezone.now() + timedelta(days=1),
         user=another_user,
         base=issue,
-        time_spent=timedelta(hours=3).total_seconds()
+        time_spent=seconds(hours=3)
     )
 
-    issue.time_estimate = timedelta(hours=4).total_seconds()
+    issue.time_estimate = seconds(hours=4)
     issue.total_time_spent = 0
     issue.state = STATE_OPENED
     issue.save()

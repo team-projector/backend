@@ -9,6 +9,7 @@ from apps.core.utils.date import begin_of_week
 from apps.development.models.issue import STATE_CLOSED, STATE_OPENED
 from apps.payroll.services.metrics.progress.user import \
     get_user_progress_metrics
+from core.utils.time import seconds
 from tests.base import format_date
 from tests.test_development.factories import IssueFactory
 from tests.test_payroll.factories import IssueSpentTimeFactory
@@ -29,28 +30,28 @@ def test_simple(user):
         date=monday + timedelta(days=4),
         user=user,
         base=issue,
-        time_spent=timedelta(hours=3).total_seconds()
+        time_spent=seconds(hours=3)
     )
     IssueSpentTimeFactory.create(
         date=monday + timedelta(days=2, hours=5),
         user=user,
         base=issue,
-        time_spent=timedelta(hours=2).total_seconds()
+        time_spent=seconds(hours=2)
     )
     IssueSpentTimeFactory.create(
         date=monday + timedelta(days=1),
         user=user,
         base=issue,
-        time_spent=timedelta(hours=4).total_seconds()
+        time_spent=seconds(hours=4)
     )
     IssueSpentTimeFactory.create(
         date=monday + timedelta(days=1, hours=5),
         user=user,
         base=issue,
-        time_spent=-timedelta(hours=3).total_seconds()
+        time_spent=-seconds(hours=3)
     )
 
-    issue.time_estimate = timedelta(hours=15).total_seconds()
+    issue.time_estimate = seconds(hours=15)
     issue.total_time_spent = \
         issue.time_spents.aggregate(spent=Sum('time_spent'))['spent']
     issue.state = STATE_OPENED
@@ -86,28 +87,28 @@ def test_efficiency_more_1(user):
         date=monday + timedelta(days=4),
         user=user,
         base=issue,
-        time_spent=timedelta(hours=3).total_seconds()
+        time_spent=seconds(hours=3)
     )
     IssueSpentTimeFactory.create(
         date=monday + timedelta(days=2, hours=5),
         user=user,
         base=issue,
-        time_spent=timedelta(hours=2).total_seconds()
+        time_spent=seconds(hours=2)
     )
     IssueSpentTimeFactory.create(
         date=monday + timedelta(days=1),
         user=user,
         base=issue,
-        time_spent=timedelta(hours=4).total_seconds()
+        time_spent=seconds(hours=4)
     )
     IssueSpentTimeFactory.create(
         date=monday + timedelta(days=1, hours=5),
         user=user,
         base=issue,
-        time_spent=-timedelta(hours=3).total_seconds()
+        time_spent=-seconds(hours=3)
     )
 
-    issue.time_estimate = timedelta(hours=15).total_seconds()
+    issue.time_estimate = seconds(hours=15)
     issue.total_time_spent = issue.time_spents.aggregate(
         spent=Sum('time_spent')
     )['spent']
@@ -147,28 +148,28 @@ def test_efficiency_less_1(user):
         date=monday + timedelta(days=4),
         user=user,
         base=issue,
-        time_spent=timedelta(hours=3).total_seconds()
+        time_spent=seconds(hours=3)
     )
     IssueSpentTimeFactory.create(
         date=monday + timedelta(days=2, hours=5),
         user=user,
         base=issue,
-        time_spent=timedelta(hours=2).total_seconds()
+        time_spent=seconds(hours=2)
     )
     IssueSpentTimeFactory.create(
         date=monday + timedelta(days=1),
         user=user,
         base=issue,
-        time_spent=timedelta(hours=4).total_seconds()
+        time_spent=seconds(hours=4)
     )
     IssueSpentTimeFactory.create(
         date=monday + timedelta(days=1, hours=5),
         user=user,
         base=issue,
-        time_spent=-timedelta(hours=3).total_seconds()
+        time_spent=-seconds(hours=3)
     )
 
-    issue.time_estimate = timedelta(hours=3).total_seconds()
+    issue.time_estimate = seconds(hours=3)
     issue.total_time_spent = issue.time_spents.aggregate(
         spent=Sum('time_spent')
     )['spent']
@@ -209,25 +210,25 @@ def test_efficiency_zero_estimate(user):
         date=monday + timedelta(days=4),
         user=user,
         base=issue,
-        time_spent=timedelta(hours=3).total_seconds()
+        time_spent=seconds(hours=3)
     )
     IssueSpentTimeFactory.create(
         date=monday + timedelta(days=2, hours=5),
         user=user,
         base=issue,
-        time_spent=timedelta(hours=2).total_seconds()
+        time_spent=seconds(hours=2)
     )
     IssueSpentTimeFactory.create(
         date=monday + timedelta(days=1),
         user=user,
         base=issue,
-        time_spent=timedelta(hours=4).total_seconds()
+        time_spent=seconds(hours=4)
     )
     IssueSpentTimeFactory.create(
         date=monday + timedelta(days=1, hours=5),
         user=user,
         base=issue,
-        time_spent=-timedelta(hours=3).total_seconds()
+        time_spent=-seconds(hours=3)
     )
 
     issue.time_estimate = 0
@@ -262,7 +263,7 @@ def test_efficiency_zero_spend(user):
 
     monday = begin_of_week(timezone.now().date())
 
-    issue.time_estimate = timedelta(hours=2).total_seconds()
+    issue.time_estimate = seconds(hours=2)
     issue.total_time_spent = 0
     issue.state = STATE_CLOSED
     issue.due_date = monday + timedelta(days=1)
@@ -298,28 +299,28 @@ def test_many_weeks(user):
         date=monday - timedelta(days=4),
         user=user,
         base=issue,
-        time_spent=timedelta(hours=3).total_seconds()
+        time_spent=seconds(hours=3)
     )
     IssueSpentTimeFactory.create(
         date=monday - timedelta(days=2, hours=5),
         user=user,
         base=issue,
-        time_spent=timedelta(hours=2).total_seconds()
+        time_spent=seconds(hours=2)
     )
     IssueSpentTimeFactory.create(
         date=monday + timedelta(days=1),
         user=user,
         base=issue,
-        time_spent=timedelta(hours=4).total_seconds()
+        time_spent=seconds(hours=4)
     )
     IssueSpentTimeFactory.create(
         date=monday + timedelta(days=1, hours=5),
         user=user,
         base=issue,
-        time_spent=-timedelta(hours=3).total_seconds()
+        time_spent=-seconds(hours=3)
     )
 
-    issue.time_estimate = timedelta(hours=15).total_seconds()
+    issue.time_estimate = seconds(hours=15)
     issue.total_time_spent = \
         issue.time_spents.aggregate(spent=Sum('time_spent'))['spent']
     issue.state = STATE_OPENED
@@ -357,28 +358,28 @@ def test_not_in_range(user):
         date=monday - timedelta(days=4),
         user=user,
         base=issue,
-        time_spent=timedelta(hours=3).total_seconds()
+        time_spent=seconds(hours=3)
     )
     IssueSpentTimeFactory.create(
         date=monday - timedelta(days=2, hours=5),
         user=user,
         base=issue,
-        time_spent=timedelta(hours=2).total_seconds()
+        time_spent=seconds(hours=2)
     )
     IssueSpentTimeFactory.create(
         date=monday + timedelta(days=1),
         user=user,
         base=issue,
-        time_spent=timedelta(hours=4).total_seconds()
+        time_spent=seconds(hours=4)
     )
     IssueSpentTimeFactory.create(
         date=monday + timedelta(days=1, hours=5),
         user=user,
         base=issue,
-        time_spent=-timedelta(hours=3).total_seconds()
+        time_spent=-seconds(hours=3)
     )
 
-    issue.time_estimate = timedelta(hours=15).total_seconds()
+    issue.time_estimate = seconds(hours=15)
     issue.total_time_spent = \
         issue.time_spents.aggregate(spent=Sum('time_spent'))['spent']
     issue.state = STATE_OPENED
@@ -417,28 +418,28 @@ def test_another_user(user):
         date=monday + timedelta(days=4),
         user=user,
         base=issue,
-        time_spent=timedelta(hours=3).total_seconds()
+        time_spent=seconds(hours=3)
     )
     IssueSpentTimeFactory.create(
         date=monday + timedelta(days=2, hours=5),
         user=user,
         base=issue,
-        time_spent=timedelta(hours=2).total_seconds()
+        time_spent=seconds(hours=2)
     )
     IssueSpentTimeFactory.create(
         date=monday + timedelta(days=1),
         user=another_user,
         base=issue,
-        time_spent=timedelta(hours=4).total_seconds()
+        time_spent=seconds(hours=4)
     )
     IssueSpentTimeFactory.create(
         date=monday + timedelta(days=1, hours=5),
         user=another_user,
         base=issue,
-        time_spent=-timedelta(hours=3).total_seconds()
+        time_spent=-seconds(hours=3)
     )
 
-    issue.time_estimate = timedelta(hours=15).total_seconds()
+    issue.time_estimate = seconds(hours=15)
     issue.total_time_spent = \
         issue.time_spents.aggregate(spent=Sum('time_spent'))['spent']
     issue.state = STATE_OPENED
@@ -482,28 +483,28 @@ def test_many_issues(user):
         date=monday + timedelta(days=4),
         user=user,
         base=another_issue,
-        time_spent=timedelta(hours=3).total_seconds()
+        time_spent=seconds(hours=3)
     )
     IssueSpentTimeFactory.create(
         date=monday + timedelta(days=2, hours=5),
         user=user,
         base=another_issue,
-        time_spent=timedelta(hours=2).total_seconds()
+        time_spent=seconds(hours=2)
     )
     IssueSpentTimeFactory.create(
         date=monday + timedelta(days=1),
         user=user,
         base=issue,
-        time_spent=timedelta(hours=4).total_seconds()
+        time_spent=seconds(hours=4)
     )
     IssueSpentTimeFactory.create(
         date=monday + timedelta(days=1, hours=5),
         user=user,
         base=issue,
-        time_spent=-timedelta(hours=3).total_seconds()
+        time_spent=-seconds(hours=3)
     )
 
-    issue.time_estimate = timedelta(hours=15).total_seconds()
+    issue.time_estimate = seconds(hours=15)
     issue.total_time_spent = \
         issue.time_spents.aggregate(spent=Sum('time_spent'))['spent']
     issue.state = STATE_OPENED

@@ -33,10 +33,23 @@ class ProjectFilter(django_filters.ModelChoiceFilter):
         )
 
 
+class StateFilter(django_filters.CharFilter):
+    def filter(self, queryset, value) -> QuerySet:
+        if not value:
+            return queryset
+
+        return queryset.filter(
+            issues__state=value
+        ) | queryset.filter(
+            mergerequests__state=value
+        )
+
+
 class SpentTimeFilterSet(django_filters.FilterSet):
     user = django_filters.ModelChoiceFilter(queryset=User.objects.all())
     project = ProjectFilter()
     team = TeamFilter()
+    state = StateFilter()
 
     order_by = django_filters.OrderingFilter(
         fields=(
@@ -47,4 +60,4 @@ class SpentTimeFilterSet(django_filters.FilterSet):
 
     class Meta:
         model = SpentTime
-        fields = ('date', 'user', 'salary', 'team')
+        fields = ('date', 'user', 'salary', 'team', 'state')

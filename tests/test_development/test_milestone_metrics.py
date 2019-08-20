@@ -19,16 +19,16 @@ def test_payrolls(user):
     issue_3 = IssueFactory.create(user=user)
 
     IssueSpentTimeFactory.create(
-        user=user, base=issue_1, time_spent=timedelta(hours=1).total_seconds()
+        user=user, base=issue_1, time_spent=seconds(hours=1)
     )
     IssueSpentTimeFactory.create(
-        user=user, base=issue_1, time_spent=timedelta(hours=2).total_seconds()
+        user=user, base=issue_1, time_spent=seconds(hours=2)
     )
     IssueSpentTimeFactory.create(
-        user=user, base=issue_2, time_spent=-timedelta(hours=1).total_seconds()
+        user=user, base=issue_2, time_spent=-seconds(hours=1)
     )
     IssueSpentTimeFactory.create(
-        user=user, base=issue_3, time_spent=timedelta(hours=3).total_seconds()
+        user=user, base=issue_3, time_spent=seconds(hours=3)
     )
 
     metrics = get_milestone_metrics(milestone)

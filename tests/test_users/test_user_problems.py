@@ -1,9 +1,8 @@
-from datetime import timedelta
-
 from apps.users.services.problems.checkers.payroll_opened_overflow import (
     PROBLEM_PAYROLL_OPENED_OVERFLOW
 )
 from apps.users.services.problems.user import get_user_problems
+from core.utils.time import seconds
 from tests.test_payroll.factories import IssueSpentTimeFactory
 
 
@@ -20,12 +19,12 @@ def test_payroll_opened_overflow(user):
 
     IssueSpentTimeFactory.create(
         user=user,
-        time_spent=timedelta(hours=5).total_seconds()
+        time_spent=seconds(hours=5)
     )
 
     IssueSpentTimeFactory.create(
         user=user,
-        time_spent=timedelta(hours=8).total_seconds()
+        time_spent=seconds(hours=8)
     )
 
     assert get_user_problems(user) == [PROBLEM_PAYROLL_OPENED_OVERFLOW]
@@ -37,12 +36,12 @@ def test_no_payroll_opened_overflow(user):
 
     IssueSpentTimeFactory.create(
         user=user,
-        time_spent=timedelta(hours=4).total_seconds()
+        time_spent=seconds(hours=4)
     )
 
     IssueSpentTimeFactory.create(
         user=user,
-        time_spent=timedelta(hours=8).total_seconds()
+        time_spent=seconds(hours=8)
     )
 
     assert get_user_problems(user) == []

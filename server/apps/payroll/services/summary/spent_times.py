@@ -46,6 +46,10 @@ class SpentTimesSummary:
     def spent(self) -> int:
         return self.issues.spent + self.merge_requests.spent
 
+    @property
+    def opened_spent(self) -> int:
+        return self.issues.opened_spent + self.merge_requests.opened_spent
+
 
 class SpentTimesSummaryProvider:
     def __init__(self,
