@@ -7,7 +7,7 @@ from django.utils import timezone
 from apps.development.models import TeamMember, STATE_OPENED, STATE_CLOSED, STATE_MERGED
 from apps.payroll.models import SpentTime
 from apps.payroll.graphql.filters import SpentTimeFilterSet
-from core.utils.time import seconds
+from apps.core.utils.time import seconds
 from tests.test_development.factories import (
     IssueFactory, MergeRequestFactory, ProjectFactory, TeamFactory,
     TeamMemberFactory

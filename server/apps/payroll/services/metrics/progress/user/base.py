@@ -6,7 +6,7 @@ from django.utils.functional import cached_property
 
 from apps.development.models.issue import Issue, STATE_CLOSED
 from apps.users.models import User
-from core.utils.time import seconds
+from apps.core.utils.time import seconds
 
 
 class UserProgressMetrics:

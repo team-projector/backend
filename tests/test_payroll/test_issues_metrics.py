@@ -2,7 +2,7 @@ from datetime import timedelta
 
 from apps.development.services.metrics.issue import get_issue_metrcis
 from apps.development.models.issue import STATE_OPENED, STATE_CLOSED
-from core.utils.time import seconds
+from apps.core.utils.time import seconds
 from tests.test_development.factories import IssueFactory
 from tests.test_payroll.factories import IssueSpentTimeFactory, SalaryFactory
 

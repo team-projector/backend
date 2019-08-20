@@ -1,5 +1,4 @@
-from datetime import timedelta
-
+from apps.core.utils.time import seconds
 from apps.development.services.metrics.milestones import get_milestone_metrics
 from tests.test_development.factories import (
     IssueFactory, ProjectMilestoneFactory

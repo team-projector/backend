@@ -7,7 +7,7 @@ from django.utils import timezone
 
 from apps.development.models.issue import STATE_CLOSED
 from apps.payroll.models import Salary
-from core.utils.time import seconds
+from apps.core.utils.time import seconds
 from tests.base import trigger_on_commit, model_to_dict_form, model_admin
 from tests.test_development.factories import IssueFactory
 from tests.test_payroll.factories import IssueSpentTimeFactory, SalaryFactory

@@ -10,7 +10,7 @@ from apps.development.models import TeamMember
 from apps.development.models.issue import STATE_CLOSED, STATE_OPENED
 from apps.payroll.services.metrics.progress.team import \
     get_team_progress_metrics
-from core.utils.time import seconds
+from apps.core.utils.time import seconds
 from tests.base import format_date
 from tests.test_development.factories import (
     IssueFactory, TeamFactory, TeamMemberFactory

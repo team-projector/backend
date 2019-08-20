@@ -4,7 +4,7 @@ from apps.development.models.issue import STATE_CLOSED, STATE_OPENED
 from apps.payroll.services.metrics.user import (
     User, UserMetrics, UserMetricsProvider
 )
-from core.utils.time import seconds
+from apps.core.utils.time import seconds
 from tests.test_development.factories import IssueFactory, MergeRequestFactory
 from tests.test_payroll.factories import (
     BonusFactory, IssueSpentTimeFactory, PenaltyFactory, SalaryFactory,

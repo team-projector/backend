@@ -9,6 +9,7 @@ from apps.payroll.models import Payroll, Salary
 from apps.payroll.services.salary.calculator import SalaryCalculator
 from apps.payroll.services.salary.exceptions import EmptySalaryException
 from apps.users.models import User
+from apps.core.utils.time import seconds
 from tests.test_development.factories import IssueFactory, MergeRequestFactory
 from tests.test_payroll.factories import BonusFactory, IssueSpentTimeFactory, \
     PenaltyFactory, SalaryFactory, MergeRequestSpentTimeFactory

@@ -5,7 +5,7 @@ from apps.development.models.issue import STATE_OPENED, STATE_CLOSED
 from apps.payroll.models import SpentTime
 from apps.payroll.services.summary.spent_times import \
     get_spent_times_summary
-from core.utils.time import seconds
+from apps.core.utils.time import seconds
 from tests.test_development.factories import IssueFactory, MergeRequestFactory
 from tests.test_payroll.factories import (
     IssueSpentTimeFactory, MergeRequestSpentTimeFactory

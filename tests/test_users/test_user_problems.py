@@ -2,7 +2,7 @@ from apps.users.services.problems.checkers.payroll_opened_overflow import (
     PROBLEM_PAYROLL_OPENED_OVERFLOW
 )
 from apps.users.services.problems.user import get_user_problems
-from core.utils.time import seconds
+from apps.core.utils.time import seconds
 from tests.test_payroll.factories import IssueSpentTimeFactory
 
 

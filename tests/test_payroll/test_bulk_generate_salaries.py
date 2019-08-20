@@ -7,7 +7,7 @@ from apps.development.models.issue import STATE_CLOSED
 from apps.payroll.models import Salary
 from apps.payroll.services.salary.calculator import SalaryCalculator
 from apps.users.models import User
-from core.utils.time import seconds
+from apps.core.utils.time import seconds
 from tests.test_development.factories import IssueFactory
 from tests.test_payroll.factories import IssueSpentTimeFactory
 from tests.test_users.factories import UserFactory

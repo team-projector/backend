@@ -8,7 +8,7 @@ from apps.core.utils.date import begin_of_week
 from apps.development.models.issue import STATE_CLOSED, STATE_OPENED
 from apps.payroll.services.metrics.progress.user import \
     get_user_progress_metrics
-from core.utils.time import seconds
+from apps.core.utils.time import seconds
 from tests.base import format_date
 from tests.test_development.factories import IssueFactory
 from tests.test_payroll.factories import IssueSpentTimeFactory, SalaryFactory

@@ -4,7 +4,7 @@ from typing import DefaultDict, Optional, Pattern
 
 from apps.development.services.gitlab.parsers import parse_gl_date, \
     parse_gl_datetime
-from core.utils.time import seconds
+from apps.core.utils.time import seconds
 
 RE_SPEND_FULL: Pattern = re.compile(
     r'^(?P<action>(added|subtracted)) (?P<spent>.+) '
