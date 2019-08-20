@@ -16,5 +16,6 @@ class MergeRequestsSpentTimesSummaryType(graphene.ObjectType):
 
 class SpentTimesSummaryType(graphene.ObjectType):
     spent = graphene.Int()
+    opened_spent = graphene.Int()
     issues = graphene.Field(IssuesSpentTimesSummaryType)
     merge_requests = graphene.Field(MergeRequestsSpentTimesSummaryType)

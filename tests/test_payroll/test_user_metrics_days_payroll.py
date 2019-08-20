@@ -8,6 +8,7 @@ from apps.core.utils.date import begin_of_week
 from apps.development.models.issue import STATE_CLOSED, STATE_OPENED
 from apps.payroll.services.metrics.progress.user import \
     get_user_progress_metrics
+from apps.core.utils.time import seconds
 from tests.base import format_date
 from tests.test_development.factories import IssueFactory
 from tests.test_payroll.factories import IssueSpentTimeFactory, SalaryFactory
@@ -26,31 +27,31 @@ def test_opened(user):
         date=monday,
         user=user,
         base=issue,
-        time_spent=timedelta(hours=3).total_seconds()
+        time_spent=seconds(hours=3)
     )
     IssueSpentTimeFactory.create(
         date=monday + timedelta(days=2, hours=5),
         user=user,
         base=issue,
-        time_spent=timedelta(hours=2).total_seconds()
+        time_spent=seconds(hours=2)
     )
     IssueSpentTimeFactory.create(
         date=monday + timedelta(days=1),
         user=user,
         base=issue,
-        time_spent=timedelta(hours=4).total_seconds()
+        time_spent=seconds(hours=4)
     )
     IssueSpentTimeFactory.create(
         date=monday + timedelta(days=1, hours=5),
         user=user,
         base=issue,
-        time_spent=-timedelta(hours=3).total_seconds()
+        time_spent=-seconds(hours=3)
     )
     IssueSpentTimeFactory.create(
         date=monday + timedelta(days=10),
         user=user,
         base=issue,
-        time_spent=-timedelta(hours=3).total_seconds()
+        time_spent=-seconds(hours=3)
     )
 
     issue.state = STATE_OPENED
@@ -86,35 +87,35 @@ def test_paid(user):
         user=user,
         base=issue,
         salary=salary,
-        time_spent=timedelta(hours=3).total_seconds()
+        time_spent=seconds(hours=3)
     )
     IssueSpentTimeFactory.create(
         date=monday + timedelta(days=2, hours=5),
         user=user,
         base=issue,
         salary=salary,
-        time_spent=timedelta(hours=2).total_seconds()
+        time_spent=seconds(hours=2)
     )
     IssueSpentTimeFactory.create(
         date=monday + timedelta(days=1),
         user=user,
         base=issue,
         salary=salary,
-        time_spent=timedelta(hours=4).total_seconds()
+        time_spent=seconds(hours=4)
     )
     IssueSpentTimeFactory.create(
         date=monday + timedelta(days=1, hours=5),
         user=user,
         base=issue,
         salary=salary,
-        time_spent=-timedelta(hours=3).total_seconds()
+        time_spent=-seconds(hours=3)
     )
     IssueSpentTimeFactory.create(
         date=monday + timedelta(days=10),
         user=user,
         base=issue,
         salary=salary,
-        time_spent=-timedelta(hours=3).total_seconds()
+        time_spent=-seconds(hours=3)
     )
 
     issue.state = STATE_CLOSED
@@ -146,31 +147,31 @@ def test_closed(user):
         date=monday,
         user=user,
         base=issue,
-        time_spent=timedelta(hours=3).total_seconds()
+        time_spent=seconds(hours=3)
     )
     IssueSpentTimeFactory.create(
         date=monday + timedelta(days=2, hours=5),
         user=user,
         base=issue,
-        time_spent=timedelta(hours=2).total_seconds()
+        time_spent=seconds(hours=2)
     )
     IssueSpentTimeFactory.create(
         date=monday + timedelta(days=1),
         user=user,
         base=issue,
-        time_spent=timedelta(hours=4).total_seconds()
+        time_spent=seconds(hours=4)
     )
     IssueSpentTimeFactory.create(
         date=monday + timedelta(days=1, hours=5),
         user=user,
         base=issue,
-        time_spent=-timedelta(hours=3).total_seconds()
+        time_spent=-seconds(hours=3)
     )
     IssueSpentTimeFactory.create(
         date=monday + timedelta(days=10),
         user=user,
         base=issue,
-        time_spent=-timedelta(hours=3).total_seconds()
+        time_spent=-seconds(hours=3)
     )
 
     issue.state = STATE_CLOSED
@@ -206,38 +207,38 @@ def test_complex(user):
         date=monday,
         user=user,
         base=closed_issue,
-        time_spent=timedelta(hours=4).total_seconds()
+        time_spent=seconds(hours=4)
     )
     IssueSpentTimeFactory.create(
         date=monday,
         user=user,
         base=opened_issue,
-        time_spent=timedelta(hours=2).total_seconds()
+        time_spent=seconds(hours=2)
     )
     IssueSpentTimeFactory.create(
         date=monday + timedelta(days=2, hours=5),
         user=user,
         base=opened_issue,
-        time_spent=timedelta(hours=2).total_seconds()
+        time_spent=seconds(hours=2)
     )
     IssueSpentTimeFactory.create(
         date=monday + timedelta(days=1),
         user=user,
         base=opened_issue,
-        time_spent=timedelta(hours=4).total_seconds()
+        time_spent=seconds(hours=4)
     )
     IssueSpentTimeFactory.create(
         date=monday + timedelta(days=1, hours=5),
         user=user,
         base=closed_issue,
         salary=salary,
-        time_spent=timedelta(hours=3).total_seconds()
+        time_spent=seconds(hours=3)
     )
     IssueSpentTimeFactory.create(
         date=monday + timedelta(days=10),
         user=user,
         base=opened_issue,
-        time_spent=-timedelta(hours=3).total_seconds()
+        time_spent=-seconds(hours=3)
     )
 
     start = monday - timedelta(days=5)

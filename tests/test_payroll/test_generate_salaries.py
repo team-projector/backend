@@ -9,6 +9,7 @@ from apps.payroll.models import Payroll, Salary
 from apps.payroll.services.salary.calculator import SalaryCalculator
 from apps.payroll.services.salary.exceptions import EmptySalaryException
 from apps.users.models import User
+from apps.core.utils.time import seconds
 from tests.test_development.factories import IssueFactory, MergeRequestFactory
 from tests.test_payroll.factories import BonusFactory, IssueSpentTimeFactory, \
     PenaltyFactory, SalaryFactory, MergeRequestSpentTimeFactory
@@ -49,7 +50,7 @@ class GenerateSalariesTests(TestCase):
         salary = self.calculator.generate(self.user)
 
         self.assertEqual(salary.charged_time,
-                         timedelta(hours=9).total_seconds())
+                         seconds(hours=9))
         self.assertEqual(self.user.hour_rate * 9, salary.sum)
         self.assertEqual(0, salary.penalty)
         self.assertEqual(0, salary.bonus)
@@ -86,7 +87,7 @@ class GenerateSalariesTests(TestCase):
         salary = self.calculator.generate(self.user)
 
         self.assertEqual(salary.charged_time,
-                         timedelta(hours=4).total_seconds())
+                         seconds(hours=4))
         self.assertEqual(salary.sum, self.user.hour_rate * 4)
         self.assertEqual(salary.penalty, penalty.sum)
         self.assertEqual(salary.bonus, 0)
@@ -113,7 +114,7 @@ class GenerateSalariesTests(TestCase):
         salary = self.calculator.generate(self.user)
 
         self.assertEqual(salary.charged_time,
-                         timedelta(hours=4).total_seconds())
+                         seconds(hours=4))
         self.assertEqual(salary.sum, self.user.hour_rate * 4)
         self.assertEqual(salary.bonus, bonus.sum)
         self.assertEqual(salary.penalty, 0)
@@ -141,7 +142,7 @@ class GenerateSalariesTests(TestCase):
         salary = self.calculator.generate(self.user)
 
         self.assertEqual(salary.charged_time,
-                         timedelta(hours=4).total_seconds())
+                         seconds(hours=4))
         self.assertEqual(salary.sum, self.user.hour_rate * 4)
         self.assertEqual(salary.bonus, bonus.sum)
         self.assertEqual(salary.penalty, penalty.sum)
@@ -172,7 +173,7 @@ class GenerateSalariesTests(TestCase):
         salary = self.calculator.generate(self.user)
 
         self.assertEqual(salary.charged_time,
-                         timedelta(hours=5).total_seconds())
+                         seconds(hours=5))
         self.assertEqual(salary.sum, self.user.hour_rate * 5)
         self.assertEqual(salary.bonus, bonus.sum)
         self.assertEqual(salary.penalty, 0)
@@ -202,7 +203,7 @@ class GenerateSalariesTests(TestCase):
         salary = self.calculator.generate(self.user)
 
         self.assertEqual(salary.charged_time,
-                         timedelta(hours=5).total_seconds())
+                         seconds(hours=5))
         self.assertEqual(salary.sum, self.user.hour_rate * 5)
         self.assertEqual(salary.bonus, 0)
         self.assertEqual(salary.taxes, 0)
@@ -233,7 +234,7 @@ class GenerateSalariesTests(TestCase):
         salary = self.calculator.generate(self.user)
 
         self.assertEqual(salary.charged_time,
-                         timedelta(hours=3).total_seconds())
+                         seconds(hours=3))
         self.assertEqual(salary.sum, self.user.hour_rate * 3)
         self.assertEqual(salary.bonus, 0)
         self.assertEqual(salary.penalty, 0)
@@ -264,7 +265,7 @@ class GenerateSalariesTests(TestCase):
         salary = self.calculator.generate(self.user)
 
         self.assertEqual(salary.charged_time,
-                         timedelta(hours=4).total_seconds())
+                         seconds(hours=4))
         self.assertEqual(salary.sum, self.user.hour_rate * 4)
         self.assertEqual(salary.bonus, bonus.sum)
         self.assertEqual(salary.penalty, penalty.sum)

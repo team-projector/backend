@@ -2,8 +2,9 @@ from django.db.models import Sum
 
 from apps.development.models import Issue, MergeRequest, Team, TeamMember
 from apps.development.models.issue import STATE_OPENED
-from apps.development.services.problems.issue import annotate_issues_problems, \
-    filter_issues_problems
+from apps.development.services.problems.issue import (
+    annotate_issues_problems, filter_issues_problems
+)
 
 
 class WorkItemTeamMetrics:

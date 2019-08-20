@@ -4,6 +4,7 @@ from apps.development.models.issue import STATE_CLOSED, STATE_OPENED
 from apps.payroll.services.metrics.user import (
     User, UserMetrics, UserMetricsProvider
 )
+from apps.core.utils.time import seconds
 from tests.test_development.factories import IssueFactory, MergeRequestFactory
 from tests.test_payroll.factories import (
     BonusFactory, IssueSpentTimeFactory, PenaltyFactory, SalaryFactory,
@@ -157,7 +158,7 @@ def test_payroll_opened(db):
     MergeRequestSpentTimeFactory.create(
         user=user,
         base=mr,
-        time_spent=timedelta(hours=5).total_seconds()
+        time_spent=seconds(hours=5)
     )
 
     metrics = calculator.get_metrics(user)
@@ -165,8 +166,8 @@ def test_payroll_opened(db):
     _check_metrics(
         metrics,
         payroll_opened=user.hour_rate * 9,
-        issues_opened_spent=timedelta(hours=4).total_seconds(),
-        mr_opened_spent=timedelta(hours=5).total_seconds()
+        issues_opened_spent=seconds(hours=4),
+        mr_opened_spent=seconds(hours=5)
     )
 
 
@@ -180,7 +181,7 @@ def test_payroll_opened_has_salary(db):
     IssueSpentTimeFactory.create(
         user=user,
         base=issue,
-        time_spent=timedelta(hours=4).total_seconds(),
+        time_spent=seconds(hours=4),
         salary=salary
     )
 
@@ -194,13 +195,13 @@ def test_payroll_opened_has_salary(db):
     MergeRequestSpentTimeFactory.create(
         user=user,
         base=mr,
-        time_spent=timedelta(hours=5).total_seconds()
+        time_spent=seconds(hours=5)
     )
 
     MergeRequestSpentTimeFactory.create(
         user=user,
         base=mr,
-        time_spent=timedelta(hours=2).total_seconds(),
+        time_spent=seconds(hours=2),
         salary=salary
     )
 
@@ -209,8 +210,8 @@ def test_payroll_opened_has_salary(db):
     _check_metrics(
         metrics,
         payroll_opened=user.hour_rate * 12,
-        issues_opened_spent=timedelta(hours=7).total_seconds(),
-        mr_opened_spent=timedelta(hours=5).total_seconds(),
+        issues_opened_spent=seconds(hours=7),
+        mr_opened_spent=seconds(hours=5),
     )
 
 
@@ -233,9 +234,9 @@ def test_payroll_opened_has_closed(db):
     _check_metrics(
         metrics,
         payroll_opened=user.hour_rate * 5,
-        issues_opened_spent=timedelta(hours=5).total_seconds(),
+        issues_opened_spent=seconds(hours=5),
         payroll_closed=user.hour_rate * 6,
-        issues_closed_spent=timedelta(hours=6).total_seconds()
+        issues_closed_spent=seconds(hours=6)
     )
 
 
@@ -260,7 +261,7 @@ def test_payroll_opened_another_user(db):
     _check_metrics(
         metrics,
         payroll_opened=user.hour_rate * 5,
-        issues_opened_spent=timedelta(hours=5).total_seconds()
+        issues_opened_spent=seconds(hours=5)
     )
 
 
@@ -283,7 +284,7 @@ def test_payroll_closed(db):
     _check_metrics(
         metrics,
         payroll_closed=user.hour_rate * 4,
-        issues_closed_spent=timedelta(hours=4).total_seconds()
+        issues_closed_spent=seconds(hours=4)
     )
 
 
@@ -308,7 +309,7 @@ def test_payroll_closed_has_salary(db):
     _check_metrics(
         metrics,
         payroll_closed=user.hour_rate * 7,
-        issues_closed_spent=timedelta(hours=7).total_seconds()
+        issues_closed_spent=seconds(hours=7)
     )
 
 
@@ -332,9 +333,9 @@ def test_payroll_opened_has_opened(db):
     _check_metrics(
         metrics,
         payroll_closed=user.hour_rate * 5,
-        issues_closed_spent=timedelta(hours=5).total_seconds(),
+        issues_closed_spent=seconds(hours=5),
         payroll_opened=user.hour_rate * 6,
-        issues_opened_spent=timedelta(hours=6).total_seconds()
+        issues_opened_spent=seconds(hours=6)
     )
 
 
@@ -358,7 +359,7 @@ def test_payroll_closed_another_user(db):
     MergeRequestSpentTimeFactory.create(
         user=user,
         base=mr,
-        time_spent=timedelta(hours=2).total_seconds()
+        time_spent=seconds(hours=2)
     )
 
     metrics = calculator.get_metrics(user)
@@ -366,8 +367,8 @@ def test_payroll_closed_another_user(db):
     _check_metrics(
         metrics,
         payroll_closed=user.hour_rate * 7,
-        issues_closed_spent=timedelta(hours=5).total_seconds(),
-        mr_closed_spent=timedelta(hours=2).total_seconds(),
+        issues_closed_spent=seconds(hours=5),
+        mr_closed_spent=seconds(hours=2),
     )
 
 
@@ -397,9 +398,9 @@ def test_complex(db):
         bonus=sum(bonus.sum for bonus in bonuses),
         penalty=sum(penalty.sum for penalty in penalties),
         payroll_closed=user.hour_rate * 5,
-        issues_closed_spent=timedelta(hours=5).total_seconds(),
+        issues_closed_spent=seconds(hours=5),
         payroll_opened=user.hour_rate * 6,
-        issues_opened_spent=timedelta(hours=6).total_seconds()
+        issues_opened_spent=seconds(hours=6)
     )
 
 

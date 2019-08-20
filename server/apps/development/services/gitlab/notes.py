@@ -1,10 +1,10 @@
 import re
 from collections import defaultdict, namedtuple
-from datetime import timedelta
 from typing import DefaultDict, Optional, Pattern
 
 from apps.development.services.gitlab.parsers import parse_gl_date, \
     parse_gl_datetime
+from apps.core.utils.time import seconds
 
 RE_SPEND_FULL: Pattern = re.compile(
     r'^(?P<action>(added|subtracted)) (?P<spent>.+) '
@@ -75,7 +75,7 @@ def parse_spend(s: str) -> int:
 
         GITLAB_SPEND_HANDLERS[m.group('part')](bag, int(m.group('value')))
 
-    return int(timedelta(**bag).total_seconds())
+    return int(seconds(**bag))
 
 
 class BaseNoteParser:

@@ -7,6 +7,7 @@ from apps.development.models.issue import STATE_CLOSED
 from apps.payroll.models import Salary
 from apps.payroll.services.salary.calculator import SalaryCalculator
 from apps.users.models import User
+from apps.core.utils.time import seconds
 from tests.test_development.factories import IssueFactory
 from tests.test_payroll.factories import IssueSpentTimeFactory
 from tests.test_users.factories import UserFactory
@@ -23,9 +24,9 @@ class BulkGenerateSalariesTests(TestCase):
     def test_single(self):
         issue = IssueFactory.create(state=STATE_CLOSED)
 
-        IssueSpentTimeFactory.create(user=self.user, base=issue, time_spent=timedelta(hours=1).total_seconds())
-        IssueSpentTimeFactory.create(user=self.user, base=issue, time_spent=-timedelta(hours=2).total_seconds())
-        IssueSpentTimeFactory.create(user=self.user, base=issue, time_spent=timedelta(hours=5).total_seconds())
+        IssueSpentTimeFactory.create(user=self.user, base=issue, time_spent=seconds(hours=1))
+        IssueSpentTimeFactory.create(user=self.user, base=issue, time_spent=-seconds(hours=2))
+        IssueSpentTimeFactory.create(user=self.user, base=issue, time_spent=seconds(hours=5))
 
         self.calculator.generate_bulk()
 
@@ -42,9 +43,9 @@ class BulkGenerateSalariesTests(TestCase):
         user_2 = UserFactory.create()
         user_3 = UserFactory.create()
 
-        IssueSpentTimeFactory.create(user=self.user, base=issue_1, time_spent=timedelta(hours=1).total_seconds())
-        IssueSpentTimeFactory.create(user=user_2, base=issue_2, time_spent=timedelta(hours=2).total_seconds())
-        IssueSpentTimeFactory.create(user=user_3, base=issue_3, time_spent=timedelta(hours=5).total_seconds())
+        IssueSpentTimeFactory.create(user=self.user, base=issue_1, time_spent=seconds(hours=1))
+        IssueSpentTimeFactory.create(user=user_2, base=issue_2, time_spent=seconds(hours=2))
+        IssueSpentTimeFactory.create(user=user_3, base=issue_3, time_spent=seconds(hours=5))
 
         self.calculator.generate_bulk()
 
