@@ -8,4 +8,7 @@ class NullsAlwaysLastOrderingFilter(OrderingFilter):
         param = param[1:] if descending else param
         field_name = self.param_map.get(param, param)
 
-        return F(field_name).desc(nulls_last=True) if descending else F(field_name).asc(nulls_last=True)
+        if descending:
+            return F(field_name).desc(nulls_last=True)
+
+        return F(field_name).asc(nulls_last=True)

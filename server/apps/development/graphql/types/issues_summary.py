@@ -1,6 +1,8 @@
 import graphene
 
-from apps.development.graphql.resolvers.issues_summary import resolve_issues_project_summaries
+from apps.development.graphql.resolvers.issues_summary import (
+    resolve_issues_project_summaries
+)
 from .issues_project_summary import IssuesProjectSummary
 
 

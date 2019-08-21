@@ -32,8 +32,8 @@ class ProjectsFilterSet(django_filters.FilterSet):
         ct = ContentType.objects.get_for_model(Project)
         sub_qs = Milestone.objects. \
             filter(content_type=ct, object_id=OuterRef('pk')). \
-            order_by(ordering)
+            order_by(ordering).values('due_date')[:1]
 
-        queryset = queryset.annotate(due_date=Subquery(sub_qs.values('due_date')[:1]))
+        queryset = queryset.annotate(due_date=Subquery(sub_qs))
 
         return super().filter_queryset(queryset)

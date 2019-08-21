@@ -35,10 +35,7 @@ class IssuesProjectSummaryProvider:
         self.queryset = queryset
         self.order_by = order_by
 
-    def execute(self):
-        return self._get_projects_summary()
-
-    def _get_projects_summary(self) -> List[IssuesProjectSummary]:
+    def execute(self) -> List[IssuesProjectSummary]:
         summaries_qs = self.queryset.annotate(
             time_remains=Case(
                 When(
@@ -69,20 +66,22 @@ class IssuesProjectSummaryProvider:
             ]
         )
 
+        project_ids = [item['project'] for item in summaries_qs]
         projects_qs = ProjectsFilterSet(
             data=dict(order_by=self.order_by),
-            queryset=Project.objects.filter(id__in=[item['project'] for item in summaries_qs]),
+            queryset=Project.objects.filter(
+                id__in=project_ids),
         ).qs
 
         ret = []
 
-        for project in projects_qs:
+        for p in projects_qs:
             summary = IssuesProjectSummary()
-            summary.project = project
+            summary.project = p
 
             issues_summary = ProjectIssuesSummary()
-            issues_summary.opened_count = summaries[project.id]['issues_opened_count']
-            issues_summary.remains = summaries[project.id]['total_time_remains']
+            issues_summary.opened_count = summaries[p.id]['issues_opened_count']
+            issues_summary.remains = summaries[p.id]['total_time_remains']
             issues_summary.percentage = (issues_summary.opened_count /
                                          total_issues_count)
 
@@ -190,8 +189,8 @@ def get_issues_summary(queryset: QuerySet,
     return provider.execute()
 
 
-def get_issues_project_summaries(queryset: QuerySet,
-                                 order_by: Optional[str] = None) -> List[IssuesProjectSummary]:
+def get_project_summaries(queryset: QuerySet,
+                          order_by: str = None) -> List[IssuesProjectSummary]:
     provider = IssuesProjectSummaryProvider(
         queryset,
         order_by

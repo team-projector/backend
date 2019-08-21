@@ -1,6 +1,8 @@
 from apps.development.graphql.filters import IssuesFilterSet
 from apps.development.models import Issue
-from apps.development.services.summary.issues import get_issues_summary, get_issues_project_summaries
+from apps.development.services.summary.issues import (
+    get_issues_summary, get_project_summaries
+)
 
 
 def resolve_issues_summary(parent, info, **kwargs):
@@ -21,7 +23,7 @@ def resolve_issues_summary(parent, info, **kwargs):
 
 
 def resolve_issues_project_summaries(parent, info, **kwargs):
-    return get_issues_project_summaries(
+    return get_project_summaries(
         parent.queryset,
         **kwargs
     )
