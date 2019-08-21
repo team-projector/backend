@@ -2,7 +2,7 @@ from datetime import datetime, timedelta
 from django.utils import timezone
 
 from apps.development.services.summary.issues import (
-    get_issues_summary, IssuesSummary
+    get_issues_summary, get_issues_project_summaries, IssuesSummary
 )
 from apps.development.models import TeamMember, Project
 from apps.development.models.issue import Issue, STATE_OPENED, STATE_CLOSED
@@ -100,6 +100,8 @@ def test_project_summary(user):
         project=None,
         state=None
     )
+
+    summary.projects = get_issues_project_summaries(summary.queryset)
 
     assert len(summary.projects) == 2
     _check_project_stats(
