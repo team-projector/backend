@@ -2,9 +2,7 @@ import httpretty
 import pytest
 
 from apps.users.models import User
-from tests.base import (
-    Client, TestAPIClient, create_user, USER_LOGIN, USER_PASSWORD
-)
+from tests.base import Client, create_user, USER_LOGIN, USER_PASSWORD
 from tests.mocks import GitlabMock
 
 
@@ -66,8 +64,3 @@ def admin_user(db):
 @pytest.fixture
 def admin_client(admin_user):
     return Client(admin_user)
-
-
-@pytest.fixture()
-def api_client():
-    return TestAPIClient()

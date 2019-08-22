@@ -1,69 +1,15 @@
 import datetime
-import os
-import sys
 
 from django.db import transaction
 from django.contrib.admin import site
 from django.forms.models import model_to_dict
-from rest_framework.test import APIClient, APITestCase, APIRequestFactory
+from rest_framework.test import APIRequestFactory
 
 from apps.users.models import User
 from apps.users.services.token import create_user_token
 
 USER_LOGIN = 'test_test'
 USER_PASSWORD = '1234560'
-
-
-class BaseTestMixin:
-    def setUp(self):
-        super().setUp()
-
-        self.user = self.create_user()
-
-        self.opened_files = []
-
-    def tearDown(self):
-        super().tearDown()
-
-        for f in self.opened_files:
-            if not f.closed:
-                f.close()
-
-    @classmethod
-    def create_user(cls, login=USER_LOGIN, **kwargs):
-        return create_user(login)
-
-    def open_asset(self, filename, mode='rb', encoding=None):
-        module_path = os.path.abspath(sys.modules[self.__module__].__file__)
-        f = open(os.path.join(os.path.dirname(module_path), 'assets', filename), mode, encoding=encoding)
-
-        self.opened_files.append(f)
-        return f
-
-
-class BaseAPITest(BaseTestMixin, APITestCase):
-    def set_credentials(self, user=None, token=None):
-        if not user:
-            user = self.user
-
-        if token is None:
-            token = create_user_token(user)
-
-        self.client.credentials(HTTP_AUTHORIZATION=f'Bearer {token.key}')
-
-    def add_client_header(self, key, value):
-        self.client._credentials[key] = value
-
-    def clear_client_headers(self):
-        self.client._credentials = {}
-
-
-class TestAPIClient(APIClient):
-    def set_credentials(self, user, token=None):
-        if token is None:
-            token = create_user_token(user)
-
-        self.credentials(HTTP_AUTHORIZATION=f'Bearer {token.key}')
 
 
 class MockStorageMessages:
