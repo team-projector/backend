@@ -2,9 +2,8 @@ from django.contrib.contenttypes.fields import GenericRelation
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
-from apps.core.models.db.mixins import GitlabEntityMixin
-from .project_member import ProjectMember
-from .db.managers import ProjectGroupManager
+from apps.core.models.mixins import GitlabEntityMixin
+from .managers import ProjectGroupManager
 
 
 class ProjectGroup(GitlabEntityMixin):
@@ -39,11 +38,11 @@ class ProjectGroup(GitlabEntityMixin):
     )
 
     milestones = GenericRelation(
-        'Milestone',
+        'development.Milestone',
         related_query_name='project_group'
     )
     members = GenericRelation(
-        ProjectMember,
+        'development.ProjectMember',
         related_query_name='project_group'
     )
 

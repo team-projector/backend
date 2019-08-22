@@ -2,10 +2,8 @@ from django.contrib.contenttypes.fields import GenericRelation
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
-from apps.core.models.db.mixins import GitlabEntityMixin
-from .project_group import ProjectGroup
-from .project_member import ProjectMember
-from .db.managers import ProjectManager
+from apps.core.models.mixins import GitlabEntityMixin
+from .managers import ProjectManager
 
 
 class Project(GitlabEntityMixin):
@@ -14,6 +12,7 @@ class Project(GitlabEntityMixin):
         verbose_name=_('VN__TITLE'),
         help_text=_('HT__TITLE')
     )
+
     full_title = models.CharField(
         max_length=255,
         null=True,
@@ -21,8 +20,9 @@ class Project(GitlabEntityMixin):
         verbose_name=_('VN__FULL_TITLE'),
         help_text=_('HT__FULL_TITLE')
     )
+
     group = models.ForeignKey(
-        ProjectGroup,
+        'development.ProjectGroup',
         models.SET_NULL,
         null=True,
         blank=True,
@@ -56,7 +56,7 @@ class Project(GitlabEntityMixin):
         related_query_name='project'
     )
     members = GenericRelation(
-        ProjectMember,
+        'development.ProjectMember',
         related_query_name='project'
     )
 

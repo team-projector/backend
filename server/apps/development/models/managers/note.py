@@ -5,9 +5,9 @@ from django.db import models
 
 class NoteManager(models.Manager):
     def sync_gitlab(self, gl_note, issue) -> Any:
-        from ....services.gitlab.users import extract_user_from_data
-        from ....services.gitlab.notes import read_note
-        from ....services.gitlab.parsers import parse_gl_datetime
+        from ...services.gitlab.users import extract_user_from_data
+        from ...services.gitlab.notes import read_note
+        from ...services.gitlab.parsers import parse_gl_datetime
 
         last_date = issue.last_note_date
 

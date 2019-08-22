@@ -1,16 +1,14 @@
-from django.contrib.auth import get_user_model
+from django.conf import settings
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
-from apps.core.models.db.fields import MoneyField
-from apps.core.models.db.mixins import Timestamps
-
-User = get_user_model()
+from apps.core.models.fields import MoneyField
+from apps.core.models.mixins import Timestamps
 
 
 class Payroll(Timestamps):
     created_by = models.ForeignKey(
-        User,
+        settings.AUTH_USER_MODEL,
         models.CASCADE,
         verbose_name=_('VN__CREATED_BY'),
         help_text=_('HT__CREATED_BY')
@@ -23,7 +21,7 @@ class Payroll(Timestamps):
     )
 
     salary = models.ForeignKey(
-        'Salary',
+        'payroll.Salary',
         models.SET_NULL,
         null=True,
         blank=True,
@@ -33,7 +31,7 @@ class Payroll(Timestamps):
     )
 
     user = models.ForeignKey(
-        User,
+        settings.AUTH_USER_MODEL,
         models.CASCADE,
         related_name='+',
         verbose_name=_('VN__USER'),
