@@ -3,6 +3,7 @@ from .gitlab_service_status import GitlabServiceStatusType
 from .gitlab_status import GitlabStatusType
 from .issue import IssueType
 from .issue_metrics import IssueMetricsType
+from .issues_container_metrics import IssuesContainerMetricsType
 from .issues_project_summary import IssuesProjectSummary
 from .issues_summary import IssuesSummaryType
 from .label import LabelType
