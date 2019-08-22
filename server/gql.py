@@ -3,11 +3,11 @@ from graphene_django.debug import DjangoDebug
 
 from apps.core.graphql.views import PlaygroundGraphQLView, ApiGraphQLView
 from apps.development.graphql.mutations import (
-    IssuesMutations, MilestonesMutations
+    IssuesMutations, FeaturesMutations, MilestonesMutations
 )
 from apps.development.graphql.queries import (
-    IssuesQueries, MergeRequestQueries, MilestonesQueries, ProjectsQueries,
-    TeamsQueries, GitlabQueries
+    IssuesQueries, FeaturesQueries, MergeRequestQueries, MilestonesQueries,
+    ProjectsQueries, TeamsQueries, GitlabQueries
 )
 from apps.payroll.graphql.mutations import WorkBreaksMutations
 from apps.payroll.graphql.queries import (
@@ -18,6 +18,7 @@ from apps.users.graphql.queries import UsersQueries
 
 
 class Query(IssuesQueries,
+            FeaturesQueries,
             MergeRequestQueries,
             MilestonesQueries,
             ProjectsQueries,
@@ -32,6 +33,7 @@ class Query(IssuesQueries,
 
 
 class Mutation(IssuesMutations,
+               FeaturesMutations,
                MilestonesMutations,
                WorkBreaksMutations,
                AuthMutations,

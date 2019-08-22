@@ -1,1 +1,0 @@
-from .is_project_manager import IsProjectManager
