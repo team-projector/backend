@@ -3,8 +3,8 @@ from django.conf import settings
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
-from apps.core.db.utils import Choices
-from apps.development.db.managers import TeamMemberManager
+from apps.core.models.db.utils import Choices
+from apps.development.models.db.managers import TeamMemberManager
 
 
 class TeamMember(models.Model):

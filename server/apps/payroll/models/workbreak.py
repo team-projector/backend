@@ -1,10 +1,10 @@
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
-from apps.core.db.mixins import Timestamps
-from apps.core.db.utils import Choices
-from apps.payroll.db.managers import WorkBreakManager
-from apps.payroll.db.mixins import ApprovedMixin
+from apps.core.models.db.mixins import Timestamps
+from apps.core.models.db.utils import Choices
+from apps.payroll.models.db.managers import WorkBreakManager
+from apps.payroll.models.db.mixins import ApprovedMixin
 from apps.users.models import User
 
 DAYOFF = 'dayoff'

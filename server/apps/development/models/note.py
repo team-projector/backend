@@ -5,9 +5,9 @@ from django.core.serializers.json import DjangoJSONEncoder
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
-from apps.core.db.utils import Choices
+from apps.core.models.db.utils import Choices
 from apps.users.models import User
-from ..db.managers import NoteManager
+from .db.managers import NoteManager
 
 
 class Note(models.Model):

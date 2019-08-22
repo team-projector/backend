@@ -2,9 +2,9 @@ from django.contrib.contenttypes.fields import GenericRelation
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
-from apps.core.db.mixins import GitlabEntityMixin
+from apps.core.models.db.mixins import GitlabEntityMixin
 from .project_member import ProjectMember
-from ..db.managers import ProjectGroupManager
+from .db.managers import ProjectGroupManager
 
 
 class ProjectGroup(GitlabEntityMixin):

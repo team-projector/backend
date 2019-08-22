@@ -3,11 +3,11 @@ from django.contrib.contenttypes.models import ContentType
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
-from apps.core.db.mixins import (
+from apps.core.models.db.mixins import (
     GitlabEntityMixin, GitlabInternalIdMixin, Timestamps
 )
-from apps.core.db.utils import Choices
-from ..db.managers import MilestoneManager
+from apps.core.models.db.utils import Choices
+from .db.managers import MilestoneManager
 
 
 class Milestone(GitlabEntityMixin,

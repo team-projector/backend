@@ -1,19 +1,16 @@
 from datetime import datetime
 from typing import Optional
 
+from django.conf import settings
 from django.db import models
 from django.db.models import Max
 from django.utils.functional import cached_property
 from django.utils.translation import gettext_lazy as _
 
-from apps.core.db.mixins import GitlabEntityMixin, GitlabInternalIdMixin
-from apps.payroll.db.mixins import SpentTimesMixin
-from apps.users.models import User
-from .feature import Feature
-from .label import Label
-from .project import Project
-from ..db.managers import IssueManager
-from ..db.mixins import NotableMixin
+from apps.core.models.db.mixins import GitlabEntityMixin, GitlabInternalIdMixin
+from apps.payroll.models.db.mixins import SpentTimesMixin
+from .db.managers import IssueManager
+from .db.mixins import NotableMixin
 
 STATE_CLOSED = 'closed'
 STATE_OPENED = 'opened'
@@ -70,13 +67,13 @@ class Issue(NotableMixin,
     )
 
     labels = models.ManyToManyField(
-        Label,
+        'development.Label',
         related_name='issues',
         blank=True
     )
 
     project = models.ForeignKey(
-        Project,
+        'development.Project',
         models.SET_NULL,
         null=True,
         blank=True,
@@ -86,7 +83,7 @@ class Issue(NotableMixin,
     )
 
     user = models.ForeignKey(
-        User,
+        settings.AUTH_USER_MODEL,
         models.SET_NULL,
         null=True,
         blank=True,
@@ -102,7 +99,7 @@ class Issue(NotableMixin,
     )
 
     feature = models.ForeignKey(
-        Feature,
+        'development.Feature',
         on_delete=models.SET_NULL,
         null=True,
         blank=True,
@@ -110,7 +107,7 @@ class Issue(NotableMixin,
     )
 
     participants = models.ManyToManyField(
-        User,
+        settings.AUTH_USER_MODEL,
         blank=True,
         related_name='participant_issues',
     )

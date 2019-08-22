@@ -2,7 +2,7 @@ import django_filters
 from django.db.models import Exists, OuterRef, QuerySet
 
 from apps.development.models import Team, TeamMember
-from apps.payroll.db.mixins.approved import CREATED
+from apps.payroll.models.db.mixins.approved import CREATED
 from apps.payroll.models import WorkBreak
 from apps.payroll.services.allowed.work_break import (
     check_allow_filtering_by_team

@@ -3,9 +3,9 @@ from django.contrib.contenttypes.models import ContentType
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
-from apps.core.db.fields import MoneyField
+from apps.core.models.db.fields import MoneyField
 from apps.development.models import Note
-from apps.payroll.db.managers import SpentTimeManager
+from apps.payroll.models.db.managers import SpentTimeManager
 from .payroll import Payroll
 
 SECS_IN_HOUR = 60 * 60

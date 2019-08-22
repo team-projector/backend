@@ -2,7 +2,7 @@ from pytest import raises
 from rest_framework.exceptions import PermissionDenied
 
 from apps.development.models import TeamMember
-from apps.payroll.db.mixins.approved import APPROVED, DECLINED
+from apps.payroll.models.db.mixins.approved import APPROVED, DECLINED
 from apps.payroll.graphql.mutations.workbreaks import (
     ApproveWorkBreakMutation, DeclineWorkBreakMutation
 )

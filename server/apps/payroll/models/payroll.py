@@ -2,8 +2,8 @@ from django.contrib.auth import get_user_model
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
-from apps.core.db.fields import MoneyField
-from apps.core.db.mixins import Timestamps
+from apps.core.models.db.fields import MoneyField
+from apps.core.models.db.mixins import Timestamps
 
 User = get_user_model()
 
