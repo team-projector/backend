@@ -22,7 +22,6 @@ INSTALLED_APPS = (
     'django_extensions',
     'django_filters',
     'rest_framework',
-    'drf_yasg',
     'corsheaders',
     'admin_auto_filters',
     'social_django',
