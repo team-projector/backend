@@ -1,5 +1,3 @@
-from datetime import timedelta
-
 from apps.development.models import MergeRequest
 from apps.development.models.issue import STATE_OPENED, STATE_CLOSED
 from apps.payroll.models import SpentTime

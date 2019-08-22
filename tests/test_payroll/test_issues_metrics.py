@@ -1,5 +1,3 @@
-from datetime import timedelta
-
 from apps.development.services.metrics.issue import get_issue_metrcis
 from apps.development.models.issue import STATE_OPENED, STATE_CLOSED
 from apps.core.utils.time import seconds
