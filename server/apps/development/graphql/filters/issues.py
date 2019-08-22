@@ -83,5 +83,7 @@ class IssuesFilterSet(django_filters.FilterSet):
 
     class Meta:
         model = Issue
-        fields = ('state', 'due_date', 'user', 'team', 'problems', 'project',
-                  'milestone', 'feature')
+        fields = (
+            'state', 'due_date', 'user', 'team', 'problems', 'project',
+            'milestone', 'feature'
+        )
