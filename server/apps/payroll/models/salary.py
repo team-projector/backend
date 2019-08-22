@@ -1,26 +1,24 @@
+from django.conf import settings
 from model_utils import FieldTracker
 
-from django.contrib.auth import get_user_model
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
-from apps.core.db.fields import MoneyField
-from apps.core.db.mixins import Timestamps
-from apps.payroll.db.managers import SalaryManager
-
-User = get_user_model()
+from apps.core.models.fields import MoneyField
+from apps.core.models.mixins import Timestamps
+from apps.payroll.models.managers import SalaryManager
 
 
 class Salary(Timestamps):
     created_by = models.ForeignKey(
-        User,
+        settings.AUTH_USER_MODEL,
         models.CASCADE,
         verbose_name=_('VN__CREATED_BY'),
         help_text=_('HT__CREATED_BY')
     )
 
     user = models.ForeignKey(
-        User,
+        settings.AUTH_USER_MODEL,
         models.CASCADE,
         related_name='salaries',
         verbose_name=_('VN__USER'),

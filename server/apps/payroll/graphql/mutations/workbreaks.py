@@ -4,7 +4,7 @@ from django.utils import timezone
 from rest_framework.generics import get_object_or_404
 
 from apps.core.graphql.mutations import BaseMutation
-from apps.payroll.db.mixins.approved import APPROVED, DECLINED
+from apps.payroll.models.mixins.approved import APPROVED, DECLINED
 from apps.payroll.graphql.types import WorkBreakType
 from apps.payroll.models import WorkBreak
 from ..permissions import CanApproveDeclineWorkBreak, CanManageWorkBreak

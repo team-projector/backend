@@ -1,10 +1,10 @@
 from django.db import models
 
-from apps.development.models import TeamMember
-
 
 class WorkBreakManager(models.Manager):
     def allowed_for_user(self, user):
+        from apps.development.models import TeamMember
+
         users = TeamMember.objects.filter(
             user=user,
             roles=TeamMember.roles.leader

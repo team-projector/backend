@@ -4,7 +4,7 @@ from django.core.exceptions import PermissionDenied
 from apps.development.models import TeamMember
 from apps.payroll.models import WorkBreak
 from apps.payroll.graphql.filters import WorkBreakFilterSet
-from apps.payroll.db.mixins.approved import APPROVED
+from apps.payroll.models.mixins.approved import APPROVED
 from tests.test_development.factories import TeamFactory, TeamMemberFactory
 from tests.test_payroll.factories import WorkBreakFactory
 from tests.test_users.factories import UserFactory

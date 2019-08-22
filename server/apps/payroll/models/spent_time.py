@@ -3,16 +3,17 @@ from django.contrib.contenttypes.models import ContentType
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
-from apps.core.db.fields import MoneyField
-from apps.development.models import Note
-from apps.payroll.db.managers import SpentTimeManager
+from apps.core.models.fields import MoneyField
+from apps.payroll.models.managers import SpentTimeManager
 from .payroll import Payroll
 
 SECS_IN_HOUR = 60 * 60
 
 
 class SpentTime(Payroll):
-    date = models.DateField(null=True)
+    date = models.DateField(
+        null=True
+    )
 
     customer_sum = MoneyField(
         default=0,
@@ -41,11 +42,13 @@ class SpentTime(Payroll):
         ContentType,
         models.CASCADE
     )
+
     object_id = models.PositiveIntegerField()
+
     base = GenericForeignKey()
 
     note = models.OneToOneField(
-        Note,
+        'development.Note',
         models.SET_NULL,
         null=True,
         blank=True,

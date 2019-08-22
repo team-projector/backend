@@ -5,9 +5,9 @@ from django.core.serializers.json import DjangoJSONEncoder
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
-from apps.core.db.utils import Choices
+from apps.core.models.utils import Choices
 from apps.users.models import User
-from ..db.managers import NoteManager
+from .managers import NoteManager
 
 
 class Note(models.Model):
@@ -17,8 +17,13 @@ class Note(models.Model):
     )
 
     object_id = models.IntegerField()
+
     content_object = GenericForeignKey()
-    content_type = models.ForeignKey(ContentType, models.CASCADE)
+
+    content_type = models.ForeignKey(
+        ContentType,
+        models.CASCADE
+    )
 
     gl_id = models.PositiveIntegerField(
         verbose_name=_('VN__GITLAB_ID'),
@@ -44,7 +49,9 @@ class Note(models.Model):
         blank=True
     )
 
-    body = models.TextField(null=True)
+    body = models.TextField(
+        null=True
+    )
 
     type = models.CharField(
         choices=TYPE,
@@ -53,7 +60,9 @@ class Note(models.Model):
         help_text=_('HT__TYPE')
     )
 
-    data = JSONField(encoder=DjangoJSONEncoder)
+    data = JSONField(
+        encoder=DjangoJSONEncoder
+    )
 
     objects = NoteManager()
 

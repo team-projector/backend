@@ -1,11 +1,11 @@
+from django.conf import settings
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
-from apps.core.db.mixins import Timestamps
-from apps.core.db.utils import Choices
-from apps.users.models import User
+from apps.core.models.mixins import Timestamps
+from apps.core.models.utils import Choices
 
 
 class ProjectMember(Timestamps):
@@ -16,7 +16,7 @@ class ProjectMember(Timestamps):
     )
 
     user = models.ForeignKey(
-        User,
+        settings.AUTH_USER_MODEL,
         models.CASCADE
     )
 

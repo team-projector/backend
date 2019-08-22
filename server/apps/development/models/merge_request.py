@@ -1,17 +1,17 @@
 from datetime import datetime
 from typing import Optional
 
+from django.conf import settings
 from django.db import models
 from django.db.models import Max
 from django.utils.functional import cached_property
 from django.utils.translation import gettext_lazy as _
 
-from apps.core.db.mixins import GitlabEntityMixin, GitlabInternalIdMixin
-from apps.core.db.utils import Choices
-from apps.payroll.db.mixins import SpentTimesMixin
-from apps.users.models import User
-from ..db.managers import MergeRequestManager
-from ..db.mixins import NotableMixin
+from apps.core.models.mixins import GitlabEntityMixin, GitlabInternalIdMixin
+from apps.core.models.utils import Choices
+from apps.payroll.models.mixins import SpentTimesMixin
+from .managers import MergeRequestManager
+from .mixins import NotableMixin
 
 STATE_CLOSED = 'closed'
 STATE_OPENED = 'opened'
@@ -87,7 +87,7 @@ class MergeRequest(NotableMixin,
     )
 
     user = models.ForeignKey(
-        User,
+        settings.AUTH_USER_MODEL,
         models.SET_NULL,
         related_name='merge_requests',
         null=True,
@@ -97,7 +97,7 @@ class MergeRequest(NotableMixin,
     )
 
     author = models.ForeignKey(
-        User,
+        settings.AUTH_USER_MODEL,
         models.SET_NULL,
         related_name='author_merge_requests',
         null=True,
@@ -107,14 +107,14 @@ class MergeRequest(NotableMixin,
     )
 
     milestone = models.ForeignKey(
-        'Milestone',
+        'development.Milestone',
         models.CASCADE,
         null=True,
         blank=True,
     )
 
     participants = models.ManyToManyField(
-        User,
+        settings.AUTH_USER_MODEL,
         blank=True,
         related_name='participant_merge_requests',
     )

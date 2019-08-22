@@ -1,11 +1,11 @@
+from django.conf import settings
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
-from apps.core.db.mixins import Timestamps
-from apps.core.db.utils import Choices
-from apps.payroll.db.managers import WorkBreakManager
-from apps.payroll.db.mixins import ApprovedMixin
-from apps.users.models import User
+from apps.core.models.mixins import Timestamps
+from apps.core.models.utils import Choices
+from apps.payroll.models.managers import WorkBreakManager
+from apps.payroll.models.mixins import ApprovedMixin
 
 DAYOFF = 'dayoff'
 VACATION = 'vacation'
@@ -20,7 +20,7 @@ class WorkBreak(ApprovedMixin, Timestamps):
     )
 
     user = models.ForeignKey(
-        User,
+        settings.AUTH_USER_MODEL,
         models.CASCADE,
         related_name='work_break',
         verbose_name=_('VN__USER'),

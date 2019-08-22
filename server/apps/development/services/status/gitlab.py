@@ -7,7 +7,7 @@ from django.apps import apps
 from apps.core.activity.verbs import (
     ACTION_GITLAB_CALL_API, ACTION_GITLAB_WEBHOOK_TRIGGERED
 )
-from apps.core.db.mixins import GitlabEntityMixin
+from apps.core.models.mixins import GitlabEntityMixin
 from apps.development.models import Issue
 
 
