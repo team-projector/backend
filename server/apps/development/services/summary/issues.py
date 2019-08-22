@@ -6,6 +6,7 @@ from django.db.models import (
 )
 from django.db.models.functions import Coalesce
 
+from apps.development.graphql.filters.projects import ProjectsFilterSet
 from apps.development.models import Team, Project
 from apps.development.models.issue import STATE_CLOSED, STATE_OPENED
 from apps.development.services.problems.issue import (
@@ -24,6 +25,71 @@ class ProjectIssuesSummary:
 class IssuesProjectSummary:
     project: Project
     issues: ProjectIssuesSummary
+    order_by: str
+
+
+class IssuesProjectSummaryProvider:
+    def __init__(self,
+                 queryset: QuerySet,
+                 order_by: Optional[str]):
+        self.queryset = queryset
+        self.order_by = order_by
+
+    def execute(self) -> List[IssuesProjectSummary]:
+        summaries_qs = self.queryset.annotate(
+            time_remains=Case(
+                When(
+                    Q(time_estimate__gt=F('total_time_spent')) &  # noqa:W504
+                    ~Q(state=STATE_CLOSED),
+                    then=F('time_estimate') - F('total_time_spent')
+                ),
+                default=Value(0),
+                output_field=IntegerField()
+            ),
+        ).values(
+            'project'
+        ).annotate(
+            issues_opened_count=Count('*'),
+            total_time_remains=Coalesce(Sum('time_remains'), 0)
+        ).order_by()
+
+        summaries = {
+            summary['project']: summary
+            for summary in
+            summaries_qs
+        }
+
+        total_issues_count = sum(
+            [
+                item['issues_opened_count']
+                for item in summaries_qs
+            ]
+        )
+
+        project_ids = [item['project'] for item in summaries_qs]
+        projects_qs = ProjectsFilterSet(
+            data=dict(order_by=self.order_by),
+            queryset=Project.objects.filter(
+                id__in=project_ids),
+        ).qs
+
+        ret = []
+
+        for p in projects_qs:
+            summary = IssuesProjectSummary()
+            summary.project = p
+
+            issues_summary = ProjectIssuesSummary()
+            issues_summary.opened_count = summaries[p.id]['issues_opened_count']
+            issues_summary.remains = summaries[p.id]['total_time_remains']
+            issues_summary.percentage = (issues_summary.opened_count /
+                                         total_issues_count)
+
+            summary.issues = issues_summary
+
+            ret.append(summary)
+
+        return ret
 
 
 class IssuesSummary:
@@ -33,6 +99,8 @@ class IssuesSummary:
     time_spent: int = 0
     problems_count: int = 0
     projects: List[IssuesProjectSummary] = []
+
+    queryset: QuerySet
 
 
 class IssuesSummaryProvider:
@@ -52,21 +120,18 @@ class IssuesSummaryProvider:
 
     def execute(self) -> IssuesSummary:
         summary = IssuesSummary()
+        summary.queryset = self.queryset
 
         for item in self._get_counts_by_state():
+            summary.count += item['count']
+
             if item['state'] == STATE_OPENED:
                 summary.opened_count = item['count']
-                summary.count += item['count']
             elif item['state'] == STATE_CLOSED:
                 summary.closed_count = item['count']
-                summary.count += item['count']
-            else:
-                summary.count += item['count']
 
         summary.time_spent = self._get_time_spent()
         summary.problems_count = self._get_problems_count()
-
-        summary.projects = self._get_projects_summary()
 
         return summary
 
@@ -105,59 +170,6 @@ class IssuesSummaryProvider:
 
         return queryset.count()
 
-    def _get_projects_summary(self) -> List[IssuesProjectSummary]:
-        queryset = self.queryset.annotate(
-            time_remains=Case(
-                When(
-                    Q(time_estimate__gt=F('total_time_spent')) &  # noqa:W504
-                    ~Q(state=STATE_CLOSED),
-                    then=F('time_estimate') - F('total_time_spent')
-                ),
-                default=Value(0),
-                output_field=IntegerField()
-            ),
-        ).values(
-            'project'
-        ).annotate(
-            issues_opened_count=Count('*'),
-            total_time_remains=Coalesce(Sum('time_remains'), 0)
-        ).order_by()
-
-        projects = {
-            project.id: project
-            for project in
-            Project.objects.filter(
-                id__in=[
-                    item['project']
-                    for item in queryset
-                ])
-        }
-
-        total_issues_count = sum(
-            [
-                item['issues_opened_count']
-                for item in queryset
-            ]
-        )
-
-        summaries = []
-
-        for project_summary in queryset:
-            summary = IssuesProjectSummary()
-            summary.project = projects[project_summary['project']]
-
-            issues_summary = ProjectIssuesSummary()
-            issues_summary.opened_count = project_summary['issues_opened_count']
-            issues_summary.remains = project_summary['total_time_remains']
-            issues_summary.percentage = (issues_summary.opened_count /
-                                         total_issues_count)
-
-            summary.issues = issues_summary
-
-            summaries.append(summary)
-
-        return summaries
-
 
 def get_issues_summary(queryset: QuerySet,
                        due_date: Optional[date],
@@ -171,7 +183,17 @@ def get_issues_summary(queryset: QuerySet,
         user,
         team,
         project,
-        state,
+        state
+    )
+
+    return provider.execute()
+
+
+def get_project_summaries(queryset: QuerySet,
+                          order_by: str = None) -> List[IssuesProjectSummary]:
+    provider = IssuesProjectSummaryProvider(
+        queryset,
+        order_by
     )
 
     return provider.execute()
