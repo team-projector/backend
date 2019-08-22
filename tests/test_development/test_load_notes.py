@@ -4,6 +4,7 @@ from django.test import TestCase
 from django.utils import timezone
 
 from apps.core.utils.objects import dict2obj
+from apps.core.utils.time import seconds
 from apps.development.models import Note
 from apps.development.services.gitlab.notes import SPEND_RESET_MESSAGE
 from apps.development.services.parsers import GITLAB_DATETIME_FORMAT, GITLAB_DATE_FORMAT
@@ -38,7 +39,7 @@ class LoadNotesTests(TestCase):
         self.assertEqual(note.user, self.user)
         self.assertEqual(note.type, Note.TYPE.time_spend)
         self.assertEqual(note.body, body)
-        self.assertEqual(note.data['spent'], timedelta(hours=1, minutes=1).total_seconds())
+        self.assertEqual(note.data['spent'], seconds(hours=1, minutes=1))
         self.assertEqual(note.data['date'], note_date.strftime(GITLAB_DATE_FORMAT))
 
     def test_load_spend_subtracted(self):
@@ -62,7 +63,7 @@ class LoadNotesTests(TestCase):
         self.assertEqual(note.user, self.user)
         self.assertEqual(note.body, body)
         self.assertEqual(note.type, Note.TYPE.time_spend)
-        self.assertEqual(note.data['spent'], -timedelta(hours=1, minutes=1).total_seconds())
+        self.assertEqual(note.data['spent'], -seconds(hours=1, minutes=1))
         self.assertEqual(note.data['date'], note_date.strftime(GITLAB_DATE_FORMAT))
 
     def test_load_spend_reset(self):

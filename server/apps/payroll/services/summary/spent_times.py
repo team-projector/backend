@@ -1,14 +1,18 @@
-from django.db.models import Sum, Value, QuerySet
-from django.db.models.functions import Coalesce
-
-from apps.development.models import MergeRequest
-from apps.development.models.issue import STATE_CLOSED, STATE_OPENED
+from django.db.models import QuerySet
 
 
 class IssuesSpentTimesSummary:
     spent: int = 0
     closed_spent: int = 0
     opened_spent: int = 0
+
+    def __init__(self,
+                 spent=0,
+                 closed_spent=0,
+                 opened_spent=0) -> None:
+        self.spent = spent
+        self.closed_spent = closed_spent
+        self.opened_spent = opened_spent
 
 
 class MergeRequestsSpentTimesSummary:
@@ -17,11 +21,34 @@ class MergeRequestsSpentTimesSummary:
     opened_spent: int = 0
     merged_spent: int = 0
 
+    def __init__(self,
+                 spent=0,
+                 closed_spent=0,
+                 opened_spent=0,
+                 merged_spent=0) -> None:
+        self.spent = spent
+        self.closed_spent = closed_spent
+        self.opened_spent = opened_spent
+        self.merged_spent = merged_spent
+
 
 class SpentTimesSummary:
-    spent: int = 0
     issues: IssuesSpentTimesSummary
     merge_requests: MergeRequestsSpentTimesSummary
+
+    def __init__(self,
+                 issues: IssuesSpentTimesSummary,
+                 merge_requests: MergeRequestsSpentTimesSummary):
+        self.issues = issues
+        self.merge_requests = merge_requests
+
+    @property
+    def spent(self) -> int:
+        return self.issues.spent + self.merge_requests.spent
+
+    @property
+    def opened_spent(self) -> int:
+        return self.issues.opened_spent + self.merge_requests.opened_spent
 
 
 class SpentTimesSummaryProvider:
@@ -30,60 +57,22 @@ class SpentTimesSummaryProvider:
         self.queryset = queryset
 
     def execute(self) -> SpentTimesSummary:
-        summary = SpentTimesSummary()
+        spent_summaries = self.queryset.summaries()
 
-        summary.issues = IssuesSpentTimesSummary()
-        self._calculate_issues(summary.issues)
+        issues_summaries = IssuesSpentTimesSummary(
+            spent=spent_summaries['total_issues'],
+            opened_spent=spent_summaries['opened_issues'],
+            closed_spent=spent_summaries['closed_issues']
+        )
 
-        summary.merge_requests = MergeRequestsSpentTimesSummary()
-        self._calculate_merge_requests(summary.merge_requests)
+        merges_summaries = MergeRequestsSpentTimesSummary(
+            spent=spent_summaries['total_merges'],
+            opened_spent=spent_summaries['opened_merges'],
+            closed_spent=spent_summaries['closed_merges'],
+            merged_spent=spent_summaries['merged_merges']
+        )
 
-        summary.spent = summary.issues.spent + summary.merge_requests.spent
-
-        return summary
-
-    def _get_issues_spent(self) -> QuerySet:
-        return self.queryset.filter(
-            issues__isnull=False
-        ).values(
-            'issues__state'
-        ).annotate(
-            spent=Coalesce(Sum('time_spent'), Value(0))
-        ).order_by()
-
-    def _get_merge_requests_spent(self) -> QuerySet:
-        return self.queryset.filter(
-            mergerequests__isnull=False
-        ).values(
-            'mergerequests__state'
-        ).annotate(
-            spent=Coalesce(Sum('time_spent'), Value(0))
-        ).order_by()
-
-    def _calculate_issues(self, issues) -> None:
-        for item in self._get_issues_spent():
-            if item['issues__state'] == STATE_OPENED:
-                issues.opened_spent = item['spent']
-                issues.spent += item['spent']
-            elif item['issues__state'] == STATE_CLOSED:
-                issues.closed_spent = item['spent']
-                issues.spent += item['spent']
-            else:
-                issues.spent += item['spent']
-
-    def _calculate_merge_requests(self, merge_requests) -> None:
-        for item in self._get_merge_requests_spent():
-            if item['mergerequests__state'] == MergeRequest.STATE.opened:
-                merge_requests.opened_spent = item['spent']
-                merge_requests.spent += item['spent']
-            elif item['mergerequests__state'] == MergeRequest.STATE.closed:
-                merge_requests.closed_spent = item['spent']
-                merge_requests.spent += item['spent']
-            elif item['mergerequests__state'] == MergeRequest.STATE.merged:
-                merge_requests.merged_spent = item['spent']
-                merge_requests.spent += item['spent']
-            else:
-                merge_requests.spent += item['spent']
+        return SpentTimesSummary(issues_summaries, merges_summaries)
 
 
 def get_spent_times_summary(queryset: QuerySet) -> SpentTimesSummary:

@@ -1,4 +1,4 @@
-from datetime import date, timedelta
+from datetime import date
 from typing import Any, Dict, Iterable, List, Optional
 
 from django.db.models import F
@@ -6,6 +6,7 @@ from django.utils.functional import cached_property
 
 from apps.development.models.issue import Issue, STATE_CLOSED
 from apps.users.models import User
+from apps.core.utils.time import seconds
 
 
 class UserProgressMetrics:
@@ -33,7 +34,7 @@ class ProgressMetricsProvider:
 
     @cached_property
     def max_day_loading(self):
-        return timedelta(hours=self.user.daily_work_hours).total_seconds()
+        return seconds(hours=self.user.daily_work_hours)
 
     def get_metrics(self) -> Iterable[UserProgressMetrics]:
         raise NotImplementedError

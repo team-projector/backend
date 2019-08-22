@@ -7,10 +7,10 @@ from django.db.models import Max
 from django.utils.functional import cached_property
 from django.utils.translation import gettext_lazy as _
 
-from apps.core.models.db.mixins import GitlabEntityMixin, GitlabInternalIdMixin
-from apps.payroll.models.db.mixins import SpentTimesMixin
-from .db.managers import IssueManager
-from .db.mixins import NotableMixin
+from apps.core.db.mixins import GitlabEntityMixin, GitlabInternalIdMixin
+from apps.payroll.db.mixins import SpentTimesMixin
+from ..db.managers import IssueManager
+from ..db.mixins import NotableMixin
 
 STATE_CLOSED = 'closed'
 STATE_OPENED = 'opened'

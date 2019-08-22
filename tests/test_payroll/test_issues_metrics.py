@@ -1,7 +1,6 @@
-from datetime import timedelta
-
 from apps.development.services.metrics.issue import get_issue_metrcis
 from apps.development.models.issue import STATE_OPENED, STATE_CLOSED
+from apps.core.utils.time import seconds
 from tests.test_development.factories import IssueFactory
 from tests.test_payroll.factories import IssueSpentTimeFactory, SalaryFactory
 
@@ -15,22 +14,22 @@ def test_payroll_metrics(user):
     IssueSpentTimeFactory.create(
         user=user,
         base=issue,
-        time_spent=timedelta(hours=3).total_seconds()
+        time_spent=seconds(hours=3)
     )
     IssueSpentTimeFactory.create(
         user=user,
         base=issue,
-        time_spent=timedelta(hours=2).total_seconds()
+        time_spent=seconds(hours=2)
     )
     IssueSpentTimeFactory.create(
         user=user,
         base=issue,
-        time_spent=timedelta(hours=4).total_seconds()
+        time_spent=seconds(hours=4)
     )
     IssueSpentTimeFactory.create(
         user=user,
         base=issue,
-        time_spent=-timedelta(hours=3).total_seconds()
+        time_spent=-seconds(hours=3)
     )
 
     metrics = get_issue_metrcis(issue)
@@ -50,25 +49,25 @@ def test_paid_metrics(user):
         user=user,
         base=issue,
         salary=salary,
-        time_spent=timedelta(hours=3).total_seconds()
+        time_spent=seconds(hours=3)
     )
     IssueSpentTimeFactory.create(
         user=user,
         base=issue,
         salary=salary,
-        time_spent=timedelta(hours=2).total_seconds()
+        time_spent=seconds(hours=2)
     )
     IssueSpentTimeFactory.create(
         user=user,
         base=issue,
         salary=salary,
-        time_spent=timedelta(hours=4).total_seconds()
+        time_spent=seconds(hours=4)
     )
     IssueSpentTimeFactory.create(
         user=user,
         base=issue,
         salary=salary,
-        time_spent=-timedelta(hours=3).total_seconds()
+        time_spent=-seconds(hours=3)
     )
 
     metrics = get_issue_metrcis(issue)
@@ -88,23 +87,23 @@ def test_complex_metrics(user):
         user=user,
         base=issue,
         salary=salary,
-        time_spent=timedelta(hours=3).total_seconds()
+        time_spent=seconds(hours=3)
     )
     IssueSpentTimeFactory.create(
         user=user,
         base=issue,
         salary=salary,
-        time_spent=timedelta(hours=2).total_seconds()
+        time_spent=seconds(hours=2)
     )
     IssueSpentTimeFactory.create(
         user=user,
         base=issue,
-        time_spent=timedelta(hours=4).total_seconds()
+        time_spent=seconds(hours=4)
     )
     IssueSpentTimeFactory.create(
         user=user,
         base=issue,
-        time_spent=-timedelta(hours=3).total_seconds()
+        time_spent=-seconds(hours=3)
     )
 
     metrics = get_issue_metrcis(issue)
@@ -117,23 +116,23 @@ def test_remains(user):
     issue_1 = IssueFactory.create(
         user=user,
         state=STATE_OPENED,
-        time_estimate=timedelta(hours=4).total_seconds(),
-        total_time_spent=timedelta(hours=2).total_seconds(),
+        time_estimate=seconds(hours=4),
+        total_time_spent=seconds(hours=2),
     )
     issue_2 = IssueFactory.create(
         user=user,
         state=STATE_CLOSED,
-        time_estimate=timedelta(hours=4).total_seconds(),
-        total_time_spent=timedelta(hours=8).total_seconds(),
+        time_estimate=seconds(hours=4),
+        total_time_spent=seconds(hours=8),
     )
     issue_3 = IssueFactory.create(
         user=user,
         state=STATE_CLOSED,
-        total_time_spent=timedelta(hours=3).total_seconds(),
+        total_time_spent=seconds(hours=3),
     )
 
     metrics = get_issue_metrcis(issue_1)
-    assert metrics.remains == timedelta(hours=2).total_seconds()
+    assert metrics.remains == seconds(hours=2)
 
     metrics = get_issue_metrcis(issue_2)
     assert metrics.remains == 0
@@ -146,20 +145,20 @@ def test_efficiency(user):
     issue_1 = IssueFactory.create(
         user=user,
         state=STATE_CLOSED,
-        time_estimate=timedelta(hours=4).total_seconds(),
-        total_time_spent=timedelta(hours=2).total_seconds(),
+        time_estimate=seconds(hours=4),
+        total_time_spent=seconds(hours=2),
     )
     issue_2 = IssueFactory.create(
         user=user,
         state=STATE_CLOSED,
-        time_estimate=timedelta(hours=4).total_seconds(),
-        total_time_spent=timedelta(hours=8).total_seconds(),
+        time_estimate=seconds(hours=4),
+        total_time_spent=seconds(hours=8),
     )
     issue_3 = IssueFactory.create(
         user=user,
         state=STATE_OPENED,
-        time_estimate=timedelta(hours=4).total_seconds(),
-        total_time_spent=timedelta(hours=2).total_seconds(),
+        time_estimate=seconds(hours=4),
+        total_time_spent=seconds(hours=2),
     )
 
     metrics = get_issue_metrcis(issue_1)
