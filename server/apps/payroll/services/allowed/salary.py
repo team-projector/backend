@@ -1,4 +1,4 @@
-from rest_framework.exceptions import ValidationError
+from django.core.exceptions import PermissionDenied
 from django.db.models import QuerySet
 
 from apps.development.models import Team, TeamMember
@@ -28,7 +28,7 @@ def check_allowed_filtering_by_team(team: Team,
         user=user
     )
 
-    can_filtering = filter_by_roles(
+    can_filter = filter_by_roles(
         queryset,
         [
             TeamMember.roles.leader,
@@ -36,5 +36,5 @@ def check_allowed_filtering_by_team(team: Team,
         ]
     ).exists()
 
-    if not can_filtering:
-        raise ValidationError('Can\'t filter by team')
+    if not can_filter:
+        raise PermissionDenied
