@@ -1,7 +1,7 @@
 from django.test import override_settings
 from rest_framework import status
 
-from apps.development.rest.views.gl_webhook import gl_webhook
+from apps.development.api.views.gl_webhook import gl_webhook
 from apps.development.models import Issue, MergeRequest
 from tests.test_development.checkers_gitlab import (
     check_issue, check_merge_request, check_user
@@ -79,18 +79,33 @@ def test_sync_merge_request(db, gl_mocker, client):
 
 def _registry_issue(gl_mocker, gl_project, gl_issue):
     gl_mocker.registry_get(f'/projects/{gl_project.id}/issues', [gl_issue])
-    gl_mocker.registry_get(f'/projects/{gl_project.id}/issues/{gl_issue.iid}', gl_issue)
-    gl_mocker.registry_get(f'/projects/{gl_project.id}/issues/{gl_issue.iid}/time_stats', GlTimeStats())
-    gl_mocker.registry_get(f'/projects/{gl_project.id}/issues/{gl_issue.iid}/closed_by', [])
+    gl_mocker.registry_get(f'/projects/{gl_project.id}/issues/{gl_issue.iid}',
+                           gl_issue)
+    gl_mocker.registry_get(
+        f'/projects/{gl_project.id}/issues/{gl_issue.iid}/time_stats',
+        GlTimeStats())
+    gl_mocker.registry_get(
+        f'/projects/{gl_project.id}/issues/{gl_issue.iid}/closed_by', [])
     gl_mocker.registry_get(f'/projects/{gl_project.id}/labels', [])
-    gl_mocker.registry_get(f'/projects/{gl_project.id}/issues/{gl_issue.iid}/notes', [])
-    gl_mocker.registry_get(f'/projects/{gl_project.id}/issues/{gl_issue.iid}/participants', [])
+    gl_mocker.registry_get(
+        f'/projects/{gl_project.id}/issues/{gl_issue.iid}/notes', [])
+    gl_mocker.registry_get(
+        f'/projects/{gl_project.id}/issues/{gl_issue.iid}/participants', [])
 
 
 def _registry_merge_request(gl_mocker, gl_project, gl_merge_request):
-    gl_mocker.registry_get(f'/projects/{gl_project.id}/merge_requests', [gl_merge_request])
-    gl_mocker.registry_get(f'/projects/{gl_project.id}/merge_requests/{gl_merge_request.iid}', gl_merge_request)
-    gl_mocker.registry_get(f'/projects/{gl_project.id}/merge_requests/{gl_merge_request.iid}/time_stats', GlTimeStats())
-    gl_mocker.registry_get(f'/projects/{gl_project.id}/merge_requests/{gl_merge_request.iid}/closed_by', [])
+    gl_mocker.registry_get(f'/projects/{gl_project.id}/merge_requests',
+                           [gl_merge_request])
+    gl_mocker.registry_get(
+        f'/projects/{gl_project.id}/merge_requests/{gl_merge_request.iid}',
+        gl_merge_request)
+    gl_mocker.registry_get(
+        f'/projects/{gl_project.id}/merge_requests/{gl_merge_request.iid}/time_stats',
+        GlTimeStats())
+    gl_mocker.registry_get(
+        f'/projects/{gl_project.id}/merge_requests/{gl_merge_request.iid}/closed_by',
+        [])
     gl_mocker.registry_get(f'/projects/{gl_project.id}/labels', [])
-    gl_mocker.registry_get(f'/projects/{gl_project.id}/merge_requests/{gl_merge_request.iid}/notes', [])
+    gl_mocker.registry_get(
+        f'/projects/{gl_project.id}/merge_requests/{gl_merge_request.iid}/notes',
+        [])

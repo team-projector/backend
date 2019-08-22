@@ -89,6 +89,8 @@ def check_project_webhooks(gl_project: GlProject) -> None:
 
 def validate_webhook(webhook,
                      webhook_url: str) -> bool:
-    return (webhook.url == webhook_url and
-            webhook.issues_events and
-            webhook.merge_requests_events)
+    return (
+        webhook.url == webhook_url and
+        webhook.issues_events and
+        webhook.merge_requests_events
+    )
