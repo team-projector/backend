@@ -14,7 +14,7 @@ class TeamFilter(django_filters.ModelChoiceFilter):
         if not value:
             return queryset
 
-        check_allowed_filtering_by_team(value, self.get_request().user)
+        check_allowed_filtering_by_team(value, self.parent.request.user)
 
         return queryset.filter(user__teams=value)
 
