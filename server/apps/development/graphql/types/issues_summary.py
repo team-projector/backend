@@ -12,6 +12,8 @@ class IssuesSummaryType(graphene.ObjectType):
     closed_count = graphene.Int()
     time_spent = graphene.Int()
     problems_count = graphene.Int()
-    projects = graphene.List(IssuesProjectSummary,
-                             order_by=graphene.String(),
-                             resolver=resolve_issues_project_summaries)
+    projects = graphene.List(
+        IssuesProjectSummary,
+        order_by=graphene.String(),
+        resolver=resolve_issues_project_summaries
+    )
