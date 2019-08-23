@@ -14,7 +14,9 @@ def filter_allowed_for_user(self, user):
         flat=True
     )
 
-    return self.filter(user__in=(*users, user.id))
+    return self.filter(
+        user__in=(*users, user.id)
+    )
 
 
 def check_allow_filtering_by_team(team: Team,
