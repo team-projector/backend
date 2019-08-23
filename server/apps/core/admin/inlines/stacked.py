@@ -1,7 +1,7 @@
 from admin_tools.mixins import AdminAutocompleteFieldsMixin
 from django.contrib import admin
 
-from core.admin.mixins import AdminFormFieldsOverridesMixin
+from apps.core.admin.mixins import AdminFormFieldsOverridesMixin
 
 
 class BaseStackedInline(AdminAutocompleteFieldsMixin,
