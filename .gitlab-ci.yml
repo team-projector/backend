@@ -32,7 +32,7 @@ locale-check:
   variables:
     CHECK_PATH: locale
   script:
-    - python fuzzy_checker.py
+    - ls
 
 
 build:
