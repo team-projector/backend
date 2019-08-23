@@ -1,4 +1,4 @@
-from core.admin.inlines import BaseTabularInline
+from apps.core.admin.inlines import BaseTabularInline
 from ...models import TeamMember
 
 

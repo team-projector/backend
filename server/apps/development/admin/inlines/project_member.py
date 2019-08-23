@@ -1,4 +1,4 @@
-from core.admin.inlines import BaseGenericTabularInline
+from apps.core.admin.inlines import BaseGenericTabularInline
 from ...models import ProjectMember
 
 
