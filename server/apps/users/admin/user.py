@@ -4,19 +4,14 @@ from admin_tools.decorators import admin_field
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as DjUserAdmin
 from django.contrib.auth.forms import AdminPasswordChangeForm
-from django.contrib.auth.models import Group
 from django.urls import reverse
 from django.utils.html import format_html
 
-from apps.core.admin.base import BaseModelAdmin
 from apps.core.admin.mixins import (
     AdminFormFieldsOverridesMixin, ForceSyncEntityMixin
 )
 from apps.development.tasks import sync_user
-from .forms import GroupAdminForm
 from ..models import User
-
-admin.site.unregister(Group)
 
 
 @admin.register(User)
@@ -89,10 +84,3 @@ class UserAdmin(AdminFormFieldsOverridesMixin,
             not referer or  # noqa: W504
             urlparse(referer).path != reverse('admin:users_user_changelist')
         )
-
-
-@admin.register(Group)
-class GroupAdmin(BaseModelAdmin):
-    list_display = ('name',)
-    form = GroupAdminForm
-    search_fields = ('name',)

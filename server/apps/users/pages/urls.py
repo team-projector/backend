@@ -16,14 +16,4 @@ urlpatterns = [
         auth_complete,
         name='complete'
     ),
-    # path(
-    #     'disconnect/<slug:backend>/',
-    #     views.disconnect,
-    #     name='disconnect'
-    # ),
-    # path(
-    #     'disconnect/<slug:backend>/<int:association_id>/',
-    #     views.disconnect,
-    #     name='disconnect_individual'
-    # ),
 ]

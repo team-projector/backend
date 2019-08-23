@@ -1,1 +1,1 @@
-from .salary import HasSalaryFilter
+from .has_salary import HasSalaryFilter

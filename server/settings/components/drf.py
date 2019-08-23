@@ -3,14 +3,14 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.IsAuthenticated',
     ],
     'DEFAULT_AUTHENTICATION_CLASSES': [
-        'apps.core.rest.authentication.TokenAuthentication',
+        'apps.core.api.authentication.TokenAuthentication',
     ],
     'DEFAULT_RENDERER_CLASSES': [
         'rest_framework.renderers.JSONRenderer',
         'rest_framework.renderers.BrowsableAPIRenderer',
     ],
     'NON_FIELD_ERRORS_KEY': 'detail',
-    'DEFAULT_PAGINATION_CLASS': 'apps.core.rest.pagination.DefaultPagination',
+    'DEFAULT_PAGINATION_CLASS': 'apps.core.api.pagination.DefaultPagination',
     'PAGE_SIZE': 20,
     'SEARCH_PARAM': 'q',
     'COERCE_DECIMAL_TO_STRING': False

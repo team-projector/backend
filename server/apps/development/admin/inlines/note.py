@@ -1,4 +1,4 @@
-from apps.core.admin.base import BaseGenericStackedInline
+from core.admin.inlines import BaseGenericStackedInline
 from ...models import Note
 
 
