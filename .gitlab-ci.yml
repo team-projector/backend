@@ -31,6 +31,8 @@ locale-check:
   stage: locale-check
   variables:
     CHECK_PATH: locale
+  script:
+    - make check_locale
 
 
 build:
