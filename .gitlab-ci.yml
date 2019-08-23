@@ -11,6 +11,7 @@ services:
 
 stages:
   - quality
+  - locale-check
   - build
   - test
   - publish
@@ -24,6 +25,13 @@ quality:
     GIT_STRATEGY: fetch
   script:
     - make check_quality
+
+locale-check:
+  image: junte/locale-check
+  stage: locale-check
+  variables:
+    CHECK_PATH: locale
+
 
 build:
   stage: build
