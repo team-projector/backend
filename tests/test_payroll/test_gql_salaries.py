@@ -1,4 +1,3 @@
-from apps.development.models import TeamMember
 from apps.payroll.graphql.filters import SalaryFilterSet
 from apps.payroll.graphql.types import SalaryType
 from apps.payroll.models.salary import Salary
