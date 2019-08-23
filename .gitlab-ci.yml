@@ -10,8 +10,8 @@ services:
   - docker:dind
 
 stages:
-  - quality
   - locale-check
+  - quality
   - build
   - test
   - publish
@@ -32,7 +32,7 @@ locale-check:
   variables:
     CHECK_PATH: locale
   script:
-    - make check_locale
+    - fuzzy_checker.py
 
 
 build:
