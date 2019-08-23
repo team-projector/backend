@@ -28,10 +28,11 @@ quality:
 
 locale-check:
   image: junte/locale-check
-  stage: locale-check
+  stage: quality
   variables:
     CHECK_PATH: locale
-  volumes: $CI_PROJECT_DIR/locale:/locale
+    GIT_DEPTH: 5
+    GIT_STRATEGY: fetch
   script:
     - echo locale checking
 
