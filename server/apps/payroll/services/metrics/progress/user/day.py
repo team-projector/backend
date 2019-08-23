@@ -14,16 +14,19 @@ DAY_STEP = timedelta(days=1)
 
 class DayMetricsProvider(ProgressMetricsProvider):
     def get_metrics(self) -> Iterable[UserProgressMetrics]:
-        metrics = []
-
-        current = self.start
         now = datetime.now().date()
 
-        active_issues = self.get_active_issues() if now >= self.start else []
+        active_issues = self.get_active_issues() if now <= self.end else []
 
         time_spents = self._get_time_spents()
         due_day_stats = self._get_due_day_stats()
         payrols_stats = self._get_payrolls_stats()
+
+        if self.start > now:
+            self._replay_loading(now, active_issues)
+
+        current = self.start
+        metrics = []
 
         while current <= self.end:
             metric = UserProgressMetrics()
@@ -32,20 +35,9 @@ class DayMetricsProvider(ProgressMetricsProvider):
             metric.start = metric.end = current
             metric.planned_work_hours = self.user.daily_work_hours
 
-            if current in due_day_stats:
-                current_progress = due_day_stats[current]
-                metric.issues_count = current_progress['issues_count']
-                metric.time_estimate = current_progress['total_time_estimate']
-                metric.time_remains = current_progress['total_time_remains']
-
-            if current in time_spents:
-                spent = time_spents[current]
-                metric.time_spent = spent['period_spent']
-
-            if current in payrols_stats:
-                current_payrolls = payrols_stats[current]
-                metric.payroll = current_payrolls['total_payroll']
-                metric.paid = current_payrolls['total_paid']
+            self._apply_due_day_stats(current, metric, due_day_stats)
+            self._apply_time_spents(current, metric, time_spents)
+            self._apply_payrols_stats(current, metric, payrols_stats)
 
             if self._is_apply_loading(current, now):
                 self._update_loading(metric, active_issues)
@@ -53,6 +45,57 @@ class DayMetricsProvider(ProgressMetricsProvider):
             current += DAY_STEP
 
         return metrics
+
+    def _replay_loading(self,
+                        now: date,
+                        active_issues: List[dict]) -> None:
+        current = now
+
+        while current < self.start:
+            if not active_issues:
+                return
+
+            metric = UserProgressMetrics()
+            metric.start = metric.end = current
+
+            if self._is_apply_loading(current, now):
+                self._update_loading(metric, active_issues)
+
+            current += DAY_STEP
+
+    def _apply_due_day_stats(self,
+                             day: date,
+                             metric: UserProgressMetrics,
+                             due_day_stats: dict) -> None:
+        if day not in due_day_stats:
+            return
+
+        progress = due_day_stats[day]
+
+        metric.issues_count = progress['issues_count']
+        metric.time_estimate = progress['total_time_estimate']
+        metric.time_remains = progress['total_time_remains']
+
+    def _apply_time_spents(self,
+                           day: date,
+                           metric: UserProgressMetrics,
+                           time_spents: dict) -> None:
+        if day not in time_spents:
+            return
+
+        spent = time_spents[day]
+        metric.time_spent = spent['period_spent']
+
+    def _apply_payrols_stats(self,
+                             day: date,
+                             metric: UserProgressMetrics,
+                             payrols_stats: dict) -> None:
+        if day not in payrols_stats:
+            return
+
+        payrolls = payrols_stats[day]
+        metric.payroll = payrolls['total_payroll']
+        metric.paid = payrolls['total_paid']
 
     @staticmethod
     def _is_apply_loading(day: date,
