@@ -18,7 +18,9 @@ def filter_allowed_for_user(queryset: QuerySet,
         flat=True
     )
 
-    return queryset.filter(user__in={*users, user.id})
+    return queryset.filter(
+        user__in={*users, user.id}
+    )
 
 
 def check_allowed_filtering_by_team(team: Team,
