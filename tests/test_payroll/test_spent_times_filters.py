@@ -75,8 +75,6 @@ def test_filter_by_salary(user, user_2, issue, salary):
 
 
 def test_filter_by_date(user, user_2, issue):
-    user_2 = UserFactory.create()
-    issue = IssueFactory.create()
     spend_date = date(2019, 3, 3)
 
     spend_1 = IssueSpentTimeFactory.create(
