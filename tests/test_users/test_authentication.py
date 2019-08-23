@@ -79,7 +79,7 @@ def test_auth(user, client):
 def test_expired_token(user, client):
     token = create_user_token(user)
     token.created = timezone.now() - timedelta(
-        minutes=settings.REST_FRAMEWORK_TOKEN_EXPIRE + 60
+        minutes=settings.TOKEN_EXPIRE_PERIOD + 60
     )
     token.save()
 

@@ -8,7 +8,7 @@ from apps.users.models import Token
 from apps.users.tasks import clear_expired_tokens
 
 
-@override_settings(REST_FRAMEWORK_TOKEN_EXPIRE=None)
+@override_settings(TOKEN_EXPIRE_PERIOD=None)
 def test_settings_token_expire_none(user):
     create_user_token(user)
 
@@ -17,7 +17,7 @@ def test_settings_token_expire_none(user):
     assert Token.objects.first() is not None
 
 
-@override_settings(REST_FRAMEWORK_TOKEN_EXPIRE=1)
+@override_settings(TOKEN_EXPIRE_PERIOD=1)
 def test_clear_tokens(user):
     token_expired = create_user_token(user)
     token_expired.created = timezone.now() - timedelta(minutes=3)
@@ -31,7 +31,7 @@ def test_clear_tokens(user):
     assert Token.objects.first() == token_fresh
 
 
-@override_settings(REST_FRAMEWORK_TOKEN_EXPIRE=1)
+@override_settings(TOKEN_EXPIRE_PERIOD=1)
 def test_task_clear_expired_tokens(user):
     token_expired = create_user_token(user)
     token_expired.created = timezone.now() - timedelta(minutes=3)

@@ -11,10 +11,10 @@ def create_user_token(user: User) -> Token:
 
 
 def clear_tokens() -> None:
-    if settings.REST_FRAMEWORK_TOKEN_EXPIRE is None:
+    if settings.TOKEN_EXPIRE_PERIOD is None:
         return
 
     Token.objects.filter(
         created__lt=timezone.now() -  # noqa W504
-                    timedelta(minutes=settings.REST_FRAMEWORK_TOKEN_EXPIRE)
+                    timedelta(minutes=settings.TOKEN_EXPIRE_PERIOD)
     ).delete()
