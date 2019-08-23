@@ -31,8 +31,9 @@ locale-check:
   stage: locale-check
   variables:
     CHECK_PATH: locale
+  volumes: $CI_PROJECT_DIR/locale:/locale
   script:
-    - ls
+    - echo locale checking
 
 
 build:
