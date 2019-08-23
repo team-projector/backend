@@ -9,4 +9,7 @@ class Choices(ModelChoices):
         return super().__eq__(other)
 
     def keys(self):
-        return [choice[0] for choice in self._doubles]
+        return [
+            choice[0]
+            for choice in self._doubles
+        ]

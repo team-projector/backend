@@ -1,14 +1,16 @@
 from datetime import timedelta, datetime
+from typing import Dict
+
 from django.db.models import Sum
 from django.test import override_settings
 from django.utils import timezone
 from pytest import raises
-from typing import Dict
 
-from apps.development.models.issue import STATE_OPENED
-from apps.payroll.services.metrics.progress.user import \
-    get_user_progress_metrics
 from apps.core.utils.time import seconds
+from apps.development.models.issue import STATE_OPENED
+from apps.payroll.services.metrics.progress.user import (
+    get_user_progress_metrics
+)
 from tests.base import format_date
 from tests.test_development.factories import IssueFactory
 from tests.test_payroll.factories import IssueSpentTimeFactory
@@ -45,7 +47,8 @@ def test_simple(user):
     )
 
     issue.time_estimate = seconds(hours=15)
-    issue.total_time_spent = issue.time_spents.aggregate(spent=Sum('time_spent'))['spent']
+    issue.total_time_spent = \
+    issue.time_spents.aggregate(spent=Sum('time_spent'))['spent']
     issue.state = STATE_OPENED
     issue.due_date = datetime.now() + timedelta(days=1)
     issue.save()
@@ -69,7 +72,8 @@ def test_simple(user):
                        datetime.now() + timedelta(days=1): timedelta(hours=15)
                    }, {
                        datetime.now() + timedelta(days=1):
-                           timedelta(seconds=issue.time_estimate - issue.total_time_spent)
+                           timedelta(
+                               seconds=issue.time_estimate - issue.total_time_spent)
                    })
 
 
@@ -84,7 +88,8 @@ def test_negative_remains(user):
     )
 
     issue.time_estimate = seconds(hours=2)
-    issue.total_time_spent = issue.time_spents.aggregate(spent=Sum('time_spent'))['spent']
+    issue.total_time_spent = \
+    issue.time_spents.aggregate(spent=Sum('time_spent'))['spent']
     issue.state = STATE_OPENED
     issue.due_date = datetime.now() + timedelta(days=1)
     issue.save()
@@ -137,7 +142,8 @@ def test_loading_day_already_has_spends(user):
     issue.due_date = datetime.now()
     issue.save()
 
-    issue_2.total_time_spent = issue_2.time_spents.aggregate(spent=Sum('time_spent'))['spent']
+    issue_2.total_time_spent = \
+        issue_2.time_spents.aggregate(spent=Sum('time_spent'))['spent']
     issue_2.save()
 
     start = datetime.now().date() - timedelta(days=5)
