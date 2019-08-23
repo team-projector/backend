@@ -5,7 +5,6 @@ from django.urls import include, path
 from django.utils.translation import gettext_lazy as _
 from django.views.decorators.csrf import csrf_exempt
 
-from apps.core.utils.modules import get_module_url_patterns
 from gql import get_graphql_view, get_api_graphql_view
 
 admin.site.site_header = _('VN__ADMIN_DASHBOARD')
@@ -14,9 +13,7 @@ urlpatterns = [
     path('ht/', include('health_check.urls')),
     path('graphql', get_graphql_view()),
     path('api/graphql', csrf_exempt(get_api_graphql_view())),
-    path('api/', include((get_module_url_patterns(
-        'apps.development.api.urls',
-    ), 'urls'), namespace='api')),
+    path('api/', include('apps.development.api.urls', namespace='api')),
     path('api/', include('apps.users.pages.urls', namespace='social')),
     path('admin_tools/', include('admin_tools.urls')),
     path('admin/', admin.site.urls),
