@@ -352,7 +352,7 @@ def test_another_user_in_team(user):
                              roles=TeamMember.roles.developer)
 
     IssueSpentTimeFactory.create(
-        date=timezone.now() - timedelta(days=2, hours=5),
+        date=timezone.now() - timedelta(days=2, hours=3),
         user=developer,
         base=issue,
         time_spent=seconds(hours=2)
@@ -396,10 +396,10 @@ def test_another_user_in_team(user):
     _check_metrics(developer_metrics,
                    {
                        timezone.now() - timedelta(days=2,
-                                                  hours=5): timedelta(
+                                                  hours=3): timedelta(
                            hours=2),
                        timezone.now() - timedelta(days=1,
-                                                  hours=5): -timedelta(
+                                                  hours=3): -timedelta(
                            hours=3),
                    }, {
                        timezone.now(): timedelta(hours=4),
@@ -419,7 +419,7 @@ def test_another_user_in_team(user):
     _check_metrics(another_user_metrics,
                    {
                        timezone.now() - timedelta(days=1,
-                                                  hours=5): timedelta(
+                                                  hours=3): timedelta(
                            hours=4),
                        timezone.now() + timedelta(days=1): timedelta(
                            hours=3),
