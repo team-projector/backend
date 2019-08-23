@@ -4,9 +4,8 @@ from django.conf import settings
 from django.utils import timezone
 from pytest import raises
 from rest_framework.exceptions import AuthenticationFailed
-from rest_framework.settings import api_settings
 
-from apps.core.api.authentication import TokenAuthentication
+from apps.core.graphql.security.authentication import TokenAuthentication
 from apps.users.models import Token
 from apps.users.services.auth import login_user
 from apps.users.services.token import create_user_token
@@ -14,7 +13,6 @@ from tests.base import USER_PASSWORD
 
 
 def test_login_user(user):
-    assert TokenAuthentication in api_settings.DEFAULT_AUTHENTICATION_CLASSES
     assert Token.objects.count() == 0
 
     token = login_user(user.login, USER_PASSWORD, None)
