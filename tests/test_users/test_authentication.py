@@ -6,7 +6,7 @@ from pytest import raises
 from rest_framework.exceptions import AuthenticationFailed
 from rest_framework.settings import api_settings
 
-from apps.core.rest.authentication import TokenAuthentication
+from apps.core.api.authentication import TokenAuthentication
 from apps.users.models import Token
 from apps.users.services.auth import login_user
 from apps.users.services.token import create_user_token
