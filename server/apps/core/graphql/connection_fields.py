@@ -4,7 +4,8 @@ from graphene_django.filter import DjangoFilterConnectionField
 from graphene_django.settings import graphene_settings
 from graphene_django.utils import maybe_queryset
 from graphql_relay.connection.arrayconnection import (
-    get_offset_with_default, offset_to_cursor
+    get_offset_with_default,
+    offset_to_cursor
 )
 from graphql_relay.connection.connectiontypes import Edge
 

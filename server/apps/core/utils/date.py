@@ -1,4 +1,8 @@
-from datetime import date, datetime, timedelta
+from datetime import (
+    date,
+    datetime,
+    timedelta
+)
 
 
 def date2datetime(d: date) -> datetime:

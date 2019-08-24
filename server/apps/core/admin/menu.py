@@ -1,4 +1,8 @@
-from admin_tools.menu import Menu, items, reverse
+from admin_tools.menu import (
+    Menu,
+    items
+)
+from django.urls import reverse
 
 
 class AdminMenu(Menu):
