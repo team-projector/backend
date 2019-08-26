@@ -10,7 +10,6 @@ services:
   - docker:dind
 
 stages:
-  - locale-check
   - quality
   - build
   - test
@@ -18,23 +17,14 @@ stages:
   - deploy
 
 quality:
-  image: junte/python-quality
+  image: junte/django-quality
   stage: quality
   variables:
     GIT_DEPTH: 5
     GIT_STRATEGY: fetch
   script:
     - make check_quality
-
-locale-check:
-  image: junte/django-quality
-  stage: quality
-  variables:
-    LOCALE_PATH: $CI_PROJECT_DIR/locale
-    GIT_DEPTH: 5
-    GIT_STRATEGY: fetch
-  script:
-    - locale_checker.py
+    - check-locale
 
 
 build:
