@@ -42,8 +42,10 @@ class EmptyDueDateChecker(BaseProblemChecker):
         )
 
     def issue_has_problem(self, issue: Issue) -> bool:
-        return (not issue.due_date and
-                issue.state == STATE_OPENED)
+        return (
+            not issue.due_date and
+            issue.state == STATE_OPENED
+        )
 
 
 class OverdueDueDateChecker(BaseProblemChecker):
@@ -57,9 +59,11 @@ class OverdueDueDateChecker(BaseProblemChecker):
         )
 
     def issue_has_problem(self, issue: Issue) -> bool:
-        return (issue.due_date and
-                issue.due_date < localdate() and
-                issue.state == STATE_OPENED)
+        return (
+            issue.due_date and
+            issue.due_date < localdate() and
+            issue.state == STATE_OPENED
+        )
 
 
 class EmptyEstimateChecker(BaseProblemChecker):
@@ -77,8 +81,10 @@ class EmptyEstimateChecker(BaseProblemChecker):
         )
 
     def issue_has_problem(self, issue: Issue) -> bool:
-        return (not issue.time_estimate and
-                issue.state == STATE_OPENED)
+        return (
+            not issue.time_estimate and
+            issue.state == STATE_OPENED
+        )
 
 
 checkers = [
