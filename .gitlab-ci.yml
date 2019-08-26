@@ -30,11 +30,11 @@ locale-check:
   image: junte/django-quality
   stage: quality
   variables:
-    LOCALE_PATH: locale
+    LOCALE_PATH: $CI_PROJECT_DIR/locale
     GIT_DEPTH: 5
     GIT_STRATEGY: fetch
   script:
-    - locale_checker
+    - locale_checker.py
 
 
 build:
