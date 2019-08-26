@@ -8,7 +8,6 @@ PROBLEM_OVER_DUE_DAY = 'over_due_date'
 
 
 class BaseProblemChecker:
-    annotate_field: ClassVar[str] = ''
     problem_code: ClassVar[str] = ''
 
     def milestone_has_problem(self, milestone: Milestone) -> bool:
@@ -16,7 +15,6 @@ class BaseProblemChecker:
 
 
 class OverdueDueDateChecker(BaseProblemChecker):
-    annotate_field = 'problem_over_due_date'
     problem_code = PROBLEM_OVER_DUE_DAY
 
     def milestone_has_problem(self, milestone: Milestone) -> bool:
