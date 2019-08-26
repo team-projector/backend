@@ -27,14 +27,14 @@ quality:
     - make check_quality
 
 locale-check:
-  image: junte/locale-check
+  image: junte/django-quality
   stage: quality
   variables:
-    CHECK_PATH: locale
+    LOCALE_PATH: locale
     GIT_DEPTH: 5
     GIT_STRATEGY: fetch
   script:
-    - echo locale checking
+    - locale_checker
 
 
 build:
