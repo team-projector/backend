@@ -15,13 +15,16 @@ stages:
   - deploy
 
 quality:
-  image: junte/python-quality
+  image: junte/django-quality
   stage: quality
   variables:
+    LOCALE_PATH: $CI_PROJECT_DIR/locale
     GIT_DEPTH: 5
     GIT_STRATEGY: fetch
   script:
     - make check_quality
+    - check-locale
+
 
 build:
   stage: build
