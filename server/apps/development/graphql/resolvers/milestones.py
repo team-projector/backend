@@ -1,25 +1,42 @@
+from typing import Optional
+
 from django.db.models import QuerySet
 
 from apps.development.graphql.filters import MilestonesFilterSet
 from apps.development.models import Milestone
 
 
-def resolve_milestones(parent, info, **kwargs):
-    def _filtered_milestones(**filters) -> QuerySet:
+class ProjectMilestonesResolver:
+    def __init__(self, project, info, **kwargs):
+        self.project = project
+        self.request = info.context
+        self.kwargs = kwargs
+        self.depth = 0
+        self.filters = {'project__pk': self.project.id}
+
+    def execute(self) -> QuerySet:
+        return self._get_milestones(self.project)
+
+    def _get_milestones(self, instance) -> Optional[QuerySet]:
+        self.depth += 1
+
+        if self.depth > 1:
+            self.filters = {'project_group__pk': instance.id}
+
+        milestones = self._filtered_milestones(**self.filters)
+        if milestones:
+            return milestones
+
+        if self.depth == 1 and instance.group:
+            return self._get_milestones(instance.group)
+        elif self.depth > 1 and instance.parent:
+            return self._get_milestones(instance.parent)
+
+        return Milestone.objects.none()
+
+    def _filtered_milestones(self, **filters) -> QuerySet:
         return MilestonesFilterSet(
-            data=kwargs,
+            data=self.kwargs,
             queryset=Milestone.objects.filter(**filters),
-            request=info.context,
+            request=self.request,
         ).qs
-
-    project_ms = _filtered_milestones(project__pk=parent.id)
-    if project_ms:
-        return project_ms
-
-    group_ms = _filtered_milestones(project_group__pk=parent.group.id)
-    if group_ms:
-        return group_ms
-
-    parent_ms = _filtered_milestones(project_group__pk=parent.group.parent.id)
-    if parent_ms:
-        return parent_ms
