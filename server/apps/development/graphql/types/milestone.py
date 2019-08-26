@@ -8,12 +8,14 @@ from apps.development.graphql.types.interfaces import MilestoneOwner
 from apps.development.models import Milestone
 from apps.development.services.allowed.milestones import filter_allowed_for_user
 from apps.development.services.metrics.milestones import get_milestone_metrics
+from apps.development.services.problems.milestone import get_milestone_problems
 from .milestone_metrics import MilestoneMetricsType
 
 
 class MilestoneType(BaseDjangoObjectType):
-    owner = graphene.Field(MilestoneOwner)
     metrics = graphene.Field(MilestoneMetricsType)
+    owner = graphene.Field(MilestoneOwner)
+    problems = graphene.List(graphene.String)
 
     class Meta:
         model = Milestone
@@ -23,6 +25,9 @@ class MilestoneType(BaseDjangoObjectType):
 
     def resolve_metrics(self, info, **kwargs):
         return get_milestone_metrics(self)
+
+    def resolve_problems(self, info, **kwargs):
+        return get_milestone_problems(self)
 
     @classmethod
     def get_queryset(cls,

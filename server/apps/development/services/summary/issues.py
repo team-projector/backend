@@ -66,11 +66,14 @@ class IssuesProjectSummaryProvider:
             ]
         )
 
-        project_ids = [item['project'] for item in summaries_qs]
+        project_ids = [
+            item['project']
+            for item in summaries_qs
+        ]
+
         projects_qs = ProjectsFilterSet(
             data=dict(order_by=self.order_by),
-            queryset=Project.objects.filter(
-                id__in=project_ids),
+            queryset=Project.objects.filter(id__in=project_ids),
         ).qs
 
         ret = []
@@ -82,8 +85,9 @@ class IssuesProjectSummaryProvider:
             issues_summary = ProjectIssuesSummary()
             issues_summary.opened_count = summaries[p.id]['issues_opened_count']
             issues_summary.remains = summaries[p.id]['total_time_remains']
-            issues_summary.percentage = (issues_summary.opened_count /
-                                         total_issues_count)
+            issues_summary.percentage = (
+                issues_summary.opened_count / total_issues_count
+            )
 
             summary.issues = issues_summary
 
@@ -177,16 +181,14 @@ def get_issues_summary(queryset: QuerySet,
                        team: Optional[Team],
                        project: Optional[Project],
                        state: Optional[str]) -> IssuesSummary:
-    provider = IssuesSummaryProvider(
+    return IssuesSummaryProvider(
         queryset,
         due_date,
         user,
         team,
         project,
         state
-    )
-
-    return provider.execute()
+    ).execute()
 
 
 def get_project_summaries(queryset: QuerySet,

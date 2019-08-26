@@ -8,6 +8,8 @@ from apps.users.models.managers import UserManager
 
 
 class User(AbstractBaseUser, PermissionsMixin):
+    USERNAME_FIELD = 'login'
+
     ROLES = Choices(
         ('developer', _('CH_DEVELOPER')),
         ('team_leader', _('CH_TEAM_LEADER')),
@@ -116,8 +118,6 @@ class User(AbstractBaseUser, PermissionsMixin):
     )
 
     daily_work_hours = models.PositiveIntegerField(default=8)
-
-    USERNAME_FIELD = 'login'
 
     objects = UserManager()
 

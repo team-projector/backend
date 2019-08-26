@@ -5,10 +5,14 @@ from apps.development.services.summary.issues import (
 )
 
 
-def resolve_issues_summary(parent, info, **kwargs):
+def resolve_issues_summary(parent,
+                           info,
+                           **kwargs):
     filterset = IssuesFilterSet(
         data=kwargs,
-        queryset=Issue.objects.allowed_for_user(info.context.user),
+        queryset=Issue.objects.allowed_for_user(
+            info.context.user
+        ),
         request=info.context,
     )
 
@@ -22,7 +26,9 @@ def resolve_issues_summary(parent, info, **kwargs):
     )
 
 
-def resolve_issues_project_summaries(parent, info, **kwargs):
+def resolve_issues_project_summaries(parent,
+                                     info,
+                                     **kwargs):
     return get_project_summaries(
         parent.queryset,
         **kwargs

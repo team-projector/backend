@@ -11,6 +11,7 @@ class TimeExpensesQueries(graphene.ObjectType):
         SpentTimeType,
         filterset_class=SpentTimeFilterSet
     )
+
     spent_times_summary = graphene.Field(
         SpentTimesSummaryType,
         project=graphene.ID(),
