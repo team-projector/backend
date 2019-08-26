@@ -6,6 +6,8 @@ variables:
   DOCKER_IMAGE: $CI_REGISTRY_IMAGE:$CI_PIPELINE_IID
   GIT_STRATEGY: none
 
+
+
 stages:
   - quality
   - build
@@ -27,6 +29,8 @@ build:
   variables:
     GIT_DEPTH: 5
     GIT_STRATEGY: fetch
+  services:
+    - docker:dind
   script:
     - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN registry.gitlab.com
     - docker build --cache-from $CI_REGISTRY_IMAGE:latest -t $DOCKER_TEST_IMAGE -t $CI_REGISTRY_IMAGE:latest -f deploy/Dockerfile .
