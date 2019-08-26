@@ -14,7 +14,7 @@ class ProjectMilestonesResolver:
 
     def execute(self) -> QuerySet:
         milestones = self._get_milestones(project__pk=self.project.id)
-        if milestones:
+        if milestones or not self.project.group:
             return milestones
 
         return self._get_group_milestones(self.project.group)
