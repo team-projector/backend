@@ -9,10 +9,12 @@ from apps.development.graphql.types import IssueType, IssuesSummaryType
 
 class IssuesQueries(graphene.ObjectType):
     issue = DatasourceRelayNode.Field(IssueType)
+
     all_issues = DataSourceConnectionField(
         IssueType,
         filterset_class=IssuesFilterSet
     )
+
     issuesSummary = graphene.Field(
         IssuesSummaryType,
         due_date=graphene.Date(),

@@ -72,8 +72,13 @@ class SpentTimesSummaryProvider:
             merged_spent=spent_summaries['merged_merges']
         )
 
-        return SpentTimesSummary(issues_summaries, merges_summaries)
+        return SpentTimesSummary(
+            issues_summaries,
+            merges_summaries
+        )
 
 
 def get_spent_times_summary(queryset: QuerySet) -> SpentTimesSummary:
-    return SpentTimesSummaryProvider(queryset).execute()
+    return SpentTimesSummaryProvider(
+        queryset
+    ).execute()
