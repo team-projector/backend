@@ -4,6 +4,7 @@ from apps.core.graphql.relay_nodes import DatasourceRelayNode
 from apps.core.graphql.types import BaseDjangoObjectType
 from apps.development.models import Project
 from apps.development.graphql.filters import MilestonesFilterSet
+from apps.development.graphql.resolvers import ProjectMilestonesResolver
 from apps.development.graphql.types.interfaces import MilestoneOwner
 from apps.development.graphql.types.milestone import MilestoneType
 
@@ -15,10 +16,9 @@ class ProjectType(BaseDjangoObjectType):
     )
 
     def resolve_milestones(self, info, **kwargs):
-        if not self.milestones.exists():
-            return self.group.milestones
+        resolver = ProjectMilestonesResolver(self, info, **kwargs)
 
-        return self.milestones
+        return resolver.execute()
 
     class Meta:
         model = Project
