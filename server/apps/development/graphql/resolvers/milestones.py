@@ -1,5 +1,3 @@
-from typing import Optional
-
 from django.db.models import QuerySet
 
 from apps.development.graphql.filters import MilestonesFilterSet
@@ -14,14 +12,14 @@ class ProjectMilestonesResolver:
 
     def execute(self) -> QuerySet:
         milestones = self._get_milestones(project__pk=self.project.id)
-        if milestones or not self.project.group:
+        if milestones.exists() or not self.project.group:
             return milestones
 
         return self._get_group_milestones(self.project.group)
 
-    def _get_group_milestones(self, group) -> Optional[QuerySet]:
+    def _get_group_milestones(self, group) -> QuerySet:
         milestones = self._get_milestones(project_group__pk=group.id)
-        if milestones or not group.parent:
+        if milestones.exists() or not group.parent:
             return milestones
 
         return self._get_group_milestones(group.parent)
