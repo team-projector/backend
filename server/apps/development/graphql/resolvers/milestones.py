@@ -21,15 +21,12 @@ class ProjectMilestonesResolver:
         if group_milestones:
             return group_milestones
 
-        return Milestone.objects.none()
-
     def _get_group_milestones(self, group) -> Optional[QuerySet]:
         milestones = self._get_milestones(project_group__pk=group.id)
-        if milestones:
+        if milestones or not group.parent:
             return milestones
 
-        if group.parent:
-            return self._get_group_milestones(group.parent)
+        return self._get_group_milestones(group.parent)
 
     def _get_milestones(self, **filters) -> QuerySet:
         return MilestonesFilterSet(
