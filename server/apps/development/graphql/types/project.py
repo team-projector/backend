@@ -1,24 +1,21 @@
-from apps.core.graphql.connection_fields import DataSourceConnectionField
+import graphene
+
 from apps.core.graphql.connections import DataSourceConnection
 from apps.core.graphql.relay_nodes import DatasourceRelayNode
 from apps.core.graphql.types import BaseDjangoObjectType
 from apps.development.models import Project
-from apps.development.graphql.filters import MilestonesFilterSet
+from apps.development.graphql.resolvers import resolve_milestones
 from apps.development.graphql.types.interfaces import MilestoneOwner
 from apps.development.graphql.types.milestone import MilestoneType
 
 
 class ProjectType(BaseDjangoObjectType):
-    milestones = DataSourceConnectionField(
+    milestones = graphene.List(
         MilestoneType,
-        filterset_class=MilestonesFilterSet
+        active=graphene.Boolean(),
+        order_by=graphene.String(),
+        resolver=resolve_milestones
     )
-
-    def resolve_milestones(self, info, **kwargs):
-        if not self.milestones.exists():
-            return self.group.milestones
-
-        return self.milestones
 
     class Meta:
         model = Project
