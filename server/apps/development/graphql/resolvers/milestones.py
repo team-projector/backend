@@ -11,30 +11,27 @@ class ProjectMilestonesResolver:
         self.project = project
         self.request = info.context
         self.kwargs = kwargs
-        self.depth = 0
-        self.filters = {'project__pk': self.project.id}
 
     def execute(self) -> QuerySet:
-        return self._get_milestones(self.project)
-
-    def _get_milestones(self, instance) -> Optional[QuerySet]:
-        self.depth += 1
-
-        if self.depth > 1:
-            self.filters = {'project_group__pk': instance.id}
-
-        milestones = self._filtered_milestones(**self.filters)
+        milestones = self._get_milestones(project__pk=self.project.id)
         if milestones:
             return milestones
 
-        if self.depth == 1 and instance.group:
-            return self._get_milestones(instance.group)
-        elif self.depth > 1 and instance.parent:
-            return self._get_milestones(instance.parent)
+        group_milestones = self._get_group_milestones(self.project.group)
+        if group_milestones:
+            return group_milestones
 
         return Milestone.objects.none()
 
-    def _filtered_milestones(self, **filters) -> QuerySet:
+    def _get_group_milestones(self, group) -> Optional[QuerySet]:
+        milestones = self._get_milestones(project_group__pk=group.id)
+        if milestones:
+            return milestones
+
+        if group.parent:
+            return self._get_group_milestones(group.parent)
+
+    def _get_milestones(self, **filters) -> QuerySet:
         return MilestonesFilterSet(
             data=self.kwargs,
             queryset=Milestone.objects.filter(**filters),
