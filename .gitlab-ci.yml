@@ -6,9 +6,6 @@ variables:
   DOCKER_IMAGE: $CI_REGISTRY_IMAGE:$CI_PIPELINE_IID
   GIT_STRATEGY: none
 
-services:
-  - docker:dind
-
 stages:
   - quality
   - build
