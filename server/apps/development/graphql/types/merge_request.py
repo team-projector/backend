@@ -7,10 +7,12 @@ from apps.core.graphql.types import BaseDjangoObjectType
 from apps.core.graphql.utils import is_field_selected
 from apps.development.graphql.types.interfaces import WorkItem
 from apps.development.models import MergeRequest
-from apps.development.services.allowed.merge_requests import \
+from apps.development.services.allowed.merge_requests import (
     filter_allowed_for_user
-from apps.development.services.metrics.merge_request import \
+)
+from apps.development.services.metrics.merge_request import (
     get_merge_request_metrcis
+)
 from .merge_request_metrics import MergeRequestMetricsType
 
 
