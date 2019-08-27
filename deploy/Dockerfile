@@ -19,12 +19,11 @@ RUN apt update \
                       binutils \
                       gettext \
                       nginx \
-                      git \
     && chown -R www-data:www-data /var/lib/nginx \
     && pip install poetry \
     && poetry config settings.virtualenvs.create false \
     && poetry install --no-dev --no-interaction --no-ansi \
-    && apt remove --purge -y git gcc binutils \
+    && apt remove --purge -y gcc binutils \
     && apt autoremove -y
 
 COPY . .
