@@ -1,5 +1,4 @@
 from .issues import sync_issues, sync_project_issue, sync_project_issues
-from .main import sync
 from .merge_requests import (
     sync_merge_requests, sync_project_merge_request, sync_project_merge_requests
 )
@@ -10,4 +9,5 @@ from .milestones import (
 )
 from .projects import sync_project
 from .project_groups import sync_project_group
+from .sync_all import sync
 from .users import sync_user
