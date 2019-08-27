@@ -1,8 +1,11 @@
 from django.contrib.contenttypes.fields import GenericRelation
 from django.db import models
+from django.utils.functional import cached_property
 from django.utils.translation import gettext_lazy as _
 
 from apps.core.models.mixins import GitlabEntityMixin
+from apps.development.models import Milestone
+from apps.development.services.projects import get_group_active_milestones
 from .managers import ProjectManager
 
 
@@ -75,3 +78,12 @@ class Project(GitlabEntityMixin):
             self.full_title = self.title
 
         super().save(*args, **kwargs)
+
+    @cached_property
+    def active_milestones(self):
+        ret = self.milestones.filter(state=Milestone.STATE.active)
+
+        if not ret and self.group:
+            return get_group_active_milestones(self.group)
+
+        return ret or []
