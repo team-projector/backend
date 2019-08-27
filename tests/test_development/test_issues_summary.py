@@ -2,12 +2,13 @@ from datetime import datetime, timedelta
 from django.utils import timezone
 
 from apps.development.services.summary.issues import (
-    get_issues_summary, get_project_summaries, IssuesSummary
-)
-from apps.development.models import TeamMember, Project
+    get_issues_summary, get_project_summaries, IssuesSummary,
+    get_min_due_date)
+from apps.development.models import TeamMember, Project, Milestone
 from apps.development.models.issue import Issue, STATE_OPENED, STATE_CLOSED
 from tests.test_development.factories import (
-    IssueFactory, ProjectFactory, TeamFactory, TeamMemberFactory
+    IssueFactory, ProjectFactory, TeamFactory, TeamMemberFactory,
+    ProjectMilestoneFactory, ProjectGroupFactory
 )
 from tests.test_payroll.factories import IssueSpentTimeFactory
 from tests.test_users.factories import UserFactory
@@ -119,6 +120,50 @@ def test_project_summary(user):
         percentage=3 / 8,
         remains=900
     )
+
+
+def test_sort_projects_by_milestone_flat(user, client):
+    projs = []
+    for n in range(3):
+        m = ProjectMilestoneFactory(state=Milestone.STATE.active)
+        ProjectMilestoneFactory(
+            owner=m.owner,
+            due_date=timezone.now() - timezone.timedelta(days=n),
+        )
+        ProjectMilestoneFactory(
+            owner=m.owner,
+            due_date=timezone.now() + timezone.timedelta(days=n),
+            state=Milestone.STATE.active
+        )
+
+        projs.append(m.owner)
+
+    results = sorted(projs, key=get_min_due_date)
+    assert [projs[0].id, projs[1].id, projs[2].id] == [p.id for p in results]
+
+
+def test_sort_projects_by_milestone_neested(user, client):
+    projs = []
+    for n in range(3):
+        group = ProjectGroupFactory(parent=ProjectGroupFactory())
+        proj = ProjectFactory(group=group)
+
+        ProjectMilestoneFactory(state=Milestone.STATE.active)
+        ProjectMilestoneFactory(
+            owner=group.parent,
+            due_date=timezone.now() - timezone.timedelta(days=n),
+            state=Milestone.STATE.active
+        )
+        ProjectMilestoneFactory(
+            owner=group.parent,
+            due_date=timezone.now() + timezone.timedelta(days=n),
+            state=Milestone.STATE.active
+        )
+
+        projs.append(proj)
+
+    results = sorted(projs, key=get_min_due_date)
+    assert [projs[2].id, projs[1].id, projs[0].id] == [p.id for p in results]
 
 
 def test_time_spents_by_user(user):

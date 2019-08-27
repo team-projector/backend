@@ -1,4 +1,4 @@
-from datetime import date
+from datetime import date, datetime
 from typing import List, Optional
 
 from django.db.models import (
@@ -6,7 +6,6 @@ from django.db.models import (
 )
 from django.db.models.functions import Coalesce
 
-from apps.development.graphql.filters.projects import ProjectsFilterSet
 from apps.development.models import Team, Project
 from apps.development.models.issue import STATE_CLOSED, STATE_OPENED
 from apps.development.services.problems.issue import (
@@ -14,6 +13,17 @@ from apps.development.services.problems.issue import (
 )
 from apps.payroll.models import SpentTime
 from apps.users.models import User
+
+
+def get_min_due_date(project):
+    def get_date(milestone):
+        return getattr(milestone, 'due_date', None) or datetime.max.date()
+
+    sorted_milestones = sorted(project.active_milestones, key=get_date)
+    if sorted_milestones:
+        return sorted_milestones[0].due_date or datetime.max.date()
+
+    return datetime.max.date()
 
 
 class ProjectIssuesSummary:
@@ -71,10 +81,8 @@ class IssuesProjectSummaryProvider:
             for item in summaries_qs
         ]
 
-        projects_qs = ProjectsFilterSet(
-            data=dict(order_by=self.order_by),
-            queryset=Project.objects.filter(id__in=project_ids),
-        ).qs
+        projects_qs = Project.objects.filter(id__in=project_ids)
+        projects_qs = sorted(projects_qs, key=get_min_due_date)
 
         ret = []
 
