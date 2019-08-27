@@ -8,3 +8,4 @@ class MilestoneOwner(graphene.Interface):
     gl_id = graphene.Int()
     gl_url = graphene.String()
     gl_last_sync = graphene.DateTime()
+    gl_avatar = graphene.String()
