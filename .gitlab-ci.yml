@@ -48,8 +48,8 @@ test:
     - postgres
   script:
     - cd /app
-    - poetry install --no-interaction --no-ansi
-#    - pip install pytest-django pytest-xdist pytest-cov factory-boy httpretty
+#    - poetry install --no-interaction --no-ansi
+    - pip install pytest-django pytest-xdist pytest-cov factory-boy httpretty
     - pytest -n auto --dist=loadscope --cov=apps --cov-report=html:coverage_html
     - mkdir $CI_PROJECT_DIR/coverage
     - coverage report -m > $CI_PROJECT_DIR/coverage/report.log
