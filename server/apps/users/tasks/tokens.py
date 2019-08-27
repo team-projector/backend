@@ -1,5 +1,5 @@
 from celery_app import app
-from .services.token import clear_tokens
+from ..services.token import clear_tokens
 
 
 @app.task
