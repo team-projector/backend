@@ -1,3 +1,4 @@
+from apps.core.utils.time import seconds
 from apps.development.models import TeamMember
 from apps.development.graphql.types.merge_request import MergeRequestType
 from apps.development.models import MergeRequest
@@ -59,3 +60,14 @@ def test_merge_requests_not_teamlead(user, client):
 
     assert merge_requests.count() == 2
     assert all(item.user == user for item in merge_requests) is True
+
+
+def test_metrics(user):
+    merge_request = MergeRequestFactory.create(
+        user=user,
+        total_time_spent=seconds(hours=1),
+        time_estimate=seconds(hours=2)
+    )
+
+    metrics = MergeRequestType.resolve_metrics(merge_request, None)
+    assert metrics.remains == seconds(hours=1)
