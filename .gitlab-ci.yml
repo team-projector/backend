@@ -25,7 +25,6 @@ quality:
     - make check_quality
     - check-locale
 
-
 build:
   stage: build
   variables:
@@ -60,7 +59,7 @@ test:
     paths:
       - coverage
 
-publish-dev:
+publish_dev:
   stage: publish
   dependencies: []
   services:
@@ -75,7 +74,7 @@ publish-dev:
   only:
     - master
 
-deploy-dev:
+deploy_dev:
   stage: deploy
   image: junte/ssh-agent
   dependencies: []
