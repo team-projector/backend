@@ -40,7 +40,6 @@ pytest-django = "*"
 pytest-xdist = "*"
 factory-boy = "*"
 flake8 = "*"
-ipython = "*"
 mypy = "*"
 httpretty = "*"
 
