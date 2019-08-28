@@ -1,0 +1,58 @@
+#content {
+    padding: 0;
+    margin: 15px;
+}
+
+#header {
+    background: #0B227B;
+    padding-left: 0;
+    padding-right: 0;
+    display: block;
+    line-height: 70px;
+    height: 90px;
+    color: #ffffff;
+}
+
+#header #branding h1 {
+    margin: 10px;
+    padding: 10px;
+    text-indent: -9999px;
+    background: transparent url(../img/logo-light.svg) 10px 5px no-repeat;
+    height: 30px;
+    width: 90px;
+}
+
+#header #user-tools {
+    padding-right: 1.2em;
+    font-size: 13px;
+}
+
+#bookmark-form {
+    clear: both;
+}
+
+div.breadcrumbs {
+    display: block;
+    padding: 10px 15px;
+    border: 0;
+    background-position: 0 -8px;
+    border-bottom: 1px solid #ededed;
+    background: #6F74DD;
+}
+
+div.breadcrumbs a {
+    display: inline;
+}
+
+.module h2 {
+  background: #6F74DD;
+}
+
+.dashboard-module h2 {
+  background: #6F74DD;
+  color: #ffffff
+}
+
+a:link, a:visited {
+    color: #6F74DD;
+}
