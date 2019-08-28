@@ -1,9 +1,11 @@
 from apps.core.utils.time import seconds
 from apps.development.services.metrics.milestones import get_milestone_metrics
 from tests.test_development.factories import (
-    IssueFactory, ProjectMilestoneFactory
+    IssueFactory, MergeRequestFactory, ProjectMilestoneFactory
 )
-from tests.test_payroll.factories import IssueSpentTimeFactory
+from tests.test_payroll.factories import (
+    IssueSpentTimeFactory, MergeRequestSpentTimeFactory
+)
 
 
 def test_payrolls(user):
@@ -30,12 +32,27 @@ def test_payrolls(user):
         user=user, base=issue_3, time_spent=seconds(hours=3)
     )
 
+    merge_request_1 = MergeRequestFactory.create(
+        user=user, milestone=milestone
+    )
+    merge_request_2 = MergeRequestFactory.create(
+        user=user, milestone=ProjectMilestoneFactory()
+    )
+
+    MergeRequestSpentTimeFactory.create(
+        user=user, base=merge_request_1, time_spent=seconds(hours=1)
+    )
+    MergeRequestSpentTimeFactory.create(
+        user=user, base=merge_request_2, time_spent=seconds(hours=10)
+    )
+
     metrics = get_milestone_metrics(milestone)
 
     assert metrics.budget == milestone.budget
-    assert metrics.payroll == 2000
-    assert metrics.profit == 8000
-    assert metrics.budget_remains == 9800
+    assert metrics.payroll == 3000
+    assert metrics.profit == 7000
+    assert metrics.budget_remains == 9700
+    assert metrics.budget_spent == 300
 
 
 def test_payrolls_no_spents(user):
@@ -55,6 +72,7 @@ def test_payrolls_no_spents(user):
     assert metrics.payroll == 0
     assert metrics.profit == milestone.budget
     assert metrics.budget_remains == milestone.budget
+    assert metrics.budget_spent == 0
 
 
 def test_payrolls_no_issues(user):
@@ -70,6 +88,7 @@ def test_payrolls_no_issues(user):
     assert metrics.payroll == 0
     assert metrics.profit == milestone.budget
     assert metrics.budget_remains == milestone.budget
+    assert metrics.budget_spent == 0
 
 
 def test_payrolls_no_budget(user):
@@ -85,3 +104,4 @@ def test_payrolls_no_budget(user):
     assert metrics.payroll == 0
     assert metrics.profit == milestone.budget
     assert metrics.budget_remains == milestone.budget
+    assert metrics.budget_spent == 0
