@@ -52,3 +52,7 @@ div.breadcrumbs a {
   background: #6F74DD;
   color: #ffffff
 }
+
+a:link, a:visited {
+    color: #6F74DD;
+}
