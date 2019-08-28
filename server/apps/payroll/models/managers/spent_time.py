@@ -27,6 +27,12 @@ class SpentTimeQuerySet(models.QuerySet):
             total_paid=Coalesce(Sum('paid'), 0)
         )
 
+    def aggregate_spent_sums(self):
+        return self.annotate_payrolls().aggregate(
+            total_sum=Coalesce(Sum('sum'), 0),
+            total_customer_sum=Coalesce(Sum('customer_sum'), 0),
+        )
+
     def summaries(self):
         from apps.development.models import merge_request
         from apps.development.models import issue
