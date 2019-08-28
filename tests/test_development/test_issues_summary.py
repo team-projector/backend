@@ -1,15 +1,17 @@
 from datetime import datetime, timedelta
 from django.utils import timezone
 
-from apps.development.services.summary.issues import (
-    get_issues_summary, get_project_summaries, IssuesSummary,
-    get_min_due_date)
+from apps.development.graphql.resolvers import resolve_issues_summary
 from apps.development.models import TeamMember, Project, Milestone
 from apps.development.models.issue import Issue, STATE_OPENED, STATE_CLOSED
+from apps.development.services.summary.issues import (
+    get_issues_summary, get_min_due_date, get_project_summaries, IssuesSummary
+)
 from tests.test_development.factories import (
     IssueFactory, ProjectFactory, TeamFactory, TeamMemberFactory,
     ProjectMilestoneFactory, ProjectGroupFactory
 )
+from tests.test_development.factories_gitlab import AttrDict
 from tests.test_payroll.factories import IssueSpentTimeFactory
 from tests.test_users.factories import UserFactory
 
@@ -379,6 +381,34 @@ def test_time_spents_by_state(user):
     )
 
     _check_summary(summary, 2, 1, 1, 400, 0)
+
+
+def test_resolver(user, client):
+    IssueFactory.create_batch(
+        5, user=user,
+        state=STATE_OPENED,
+        total_time_spent=0,
+        due_date=datetime.now()
+    )
+    IssueFactory.create_batch(
+        3, user=UserFactory.create(),
+        state=STATE_OPENED
+    )
+
+    client.user = user
+    info = AttrDict({
+        'context': client,
+        'field_asts': [{}],
+        'fragments': {},
+    })
+
+    summary = resolve_issues_summary(
+        parent=None,
+        info=info,
+        user=user.id
+    )
+
+    _check_summary(summary, 5, 5, 0, 0, 0)
 
 
 def _check_summary(data: IssuesSummary,
