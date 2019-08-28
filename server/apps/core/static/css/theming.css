@@ -10,6 +10,7 @@
     display: block;
     line-height: 70px;
     height: 90px;
+    color: #ffffff;
 }
 
 #header #branding h1 {
@@ -30,25 +31,24 @@
     clear: both;
 }
 
-#footer {
-    background: #0B227B;
-    display: flex;
-    flex-direction: column;
-    min-height: 100%;
-}
-
-h1 {
-  color: #3949AB;
-}
-
 div.breadcrumbs {
     display: block;
     padding: 10px 15px;
     border: 0;
     background-position: 0 -8px;
     border-bottom: 1px solid #ededed;
+    background: #6F74DD;
 }
 
 div.breadcrumbs a {
     display: inline;
+}
+
+.module h2 {
+  background: #6F74DD;
+}
+
+.dashboard-module h2 {
+  background: #6F74DD;
+  color: #ffffff
 }
