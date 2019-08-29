@@ -62,3 +62,19 @@ def test_teams_not_member(user, client):
 
     assert teams.count() == 1
     assert teams.first() == team_1
+
+
+def test_resolver(user):
+    team = TeamFactory.create()
+
+    member_1 = TeamMemberFactory.create(
+        user=user,
+        team=team
+    )
+    member_2 = TeamMemberFactory.create(
+        user=UserFactory.create(),
+        team=team
+    )
+
+    members = TeamType.resolve_members(team, None).all()
+    assert set(members) == {member_1, member_2}

@@ -15,7 +15,7 @@ def test_active_milestones_sort(user, client):
     info = AttrDict({'context': client})
 
     m1 = ProjectMilestoneFactory(state=Milestone.STATE.active)
-    m2 = ProjectMilestoneFactory(
+    ProjectMilestoneFactory(
         state=Milestone.STATE.active,
         owner=m1.owner
     )
