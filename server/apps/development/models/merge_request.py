@@ -23,9 +23,9 @@ class MergeRequest(NotableMixin,
                    GitlabEntityMixin,
                    GitlabInternalIdMixin):
     STATE = Choices(
-        (STATE_OPENED, 'closed'),
+        (STATE_OPENED, 'opened'),
         (STATE_MERGED, 'merged'),
-        (STATE_CLOSED, 'opened')
+        (STATE_CLOSED, 'closed')
     )
 
     title = models.CharField(

@@ -13,6 +13,7 @@ class MergeRequestQueries(graphene.ObjectType):
         MergeRequestType,
         filterset_class=MergeRequestFilterSet
     )
+
     merge_requests_summary = graphene.Field(
         MergeRequestsSummaryType,
         user=graphene.ID(),
