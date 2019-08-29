@@ -89,7 +89,7 @@ deploy_dev:
   only:
     - master
 
-.deploy_k8s:
+deploy_k8s:
   image: dtzar/helm-kubectl
   stage: deploy
   dependencies: []
