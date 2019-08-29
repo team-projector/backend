@@ -1,10 +1,13 @@
+from apps.core.utils.time import seconds
 from apps.development.models import MergeRequest
 from apps.development.models.issue import STATE_OPENED, STATE_CLOSED
+from apps.payroll.graphql.resolvers import resolve_spent_times_summary
 from apps.payroll.models import SpentTime
-from apps.payroll.services.summary.spent_times import \
+from apps.payroll.services.summary.spent_times import (
     get_spent_times_summary
-from apps.core.utils.time import seconds
+)
 from tests.test_development.factories import IssueFactory, MergeRequestFactory
+from tests.test_development.factories_gitlab import AttrDict
 from tests.test_payroll.factories import (
     IssueSpentTimeFactory, MergeRequestSpentTimeFactory
 )
@@ -185,3 +188,34 @@ def test_complex_spents(user):
 
     assert summary.spent == seconds(hours=22)
     assert summary.opened_spent == seconds(hours=10)
+
+
+def test_resolver(user, client):
+    IssueSpentTimeFactory.create(
+        user=user,
+        base=IssueFactory.create(user=user, state=STATE_OPENED),
+        time_spent=seconds(hours=2)
+    )
+    IssueSpentTimeFactory.create(
+        user=user,
+        base=IssueFactory.create(user=user, state=STATE_CLOSED),
+        time_spent=seconds(hours=1)
+    )
+
+    client.user = user
+    info = AttrDict({'context': client})
+
+    summary = resolve_spent_times_summary(
+        parent=None,
+        info=info,
+        state=STATE_OPENED
+    )
+
+    assert summary.merge_requests.spent == 0
+
+    assert summary.issues.opened_spent == seconds(hours=2)
+    assert summary.issues.closed_spent == seconds(hours=0)
+    assert summary.issues.spent == seconds(hours=2)
+
+    assert summary.spent == seconds(hours=2)
+    assert summary.opened_spent == seconds(hours=2)

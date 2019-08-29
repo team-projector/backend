@@ -1,4 +1,7 @@
+import pytest
+
 from apps.core.utils.time import seconds
+from apps.development.graphql.types.milestone import MilestoneType
 from apps.development.services.metrics.milestones import get_milestone_metrics
 from tests.test_development.factories import (
     IssueFactory, MergeRequestFactory, ProjectMilestoneFactory
@@ -6,13 +9,15 @@ from tests.test_development.factories import (
 from tests.test_payroll.factories import (
     IssueSpentTimeFactory, MergeRequestSpentTimeFactory
 )
+from tests.test_payroll.factories import UserFactory
+
+
+@pytest.fixture
+def user(db):
+    yield UserFactory.create(customer_hour_rate=100, hour_rate=1000)
 
 
 def test_payrolls(user):
-    user.hour_rate = 1000
-    user.customer_hour_rate = 100
-    user.save()
-
     milestone = ProjectMilestoneFactory.create(budget=10000)
 
     issue_1 = IssueFactory.create(user=user, milestone=milestone)
@@ -56,10 +61,6 @@ def test_payrolls(user):
 
 
 def test_payrolls_no_spents(user):
-    user.hour_rate = 1000
-    user.customer_hour_rate = 100
-    user.save()
-
     milestone = ProjectMilestoneFactory.create(budget=10000)
 
     IssueFactory.create(user=user, milestone=milestone)
@@ -75,11 +76,7 @@ def test_payrolls_no_spents(user):
     assert metrics.budget_spent == 0
 
 
-def test_payrolls_no_issues(user):
-    user.hour_rate = 1000
-    user.customer_hour_rate = 100
-    user.save()
-
+def test_payrolls_no_issues(db):
     milestone = ProjectMilestoneFactory.create(budget=10000)
 
     metrics = get_milestone_metrics(milestone)
@@ -91,11 +88,7 @@ def test_payrolls_no_issues(user):
     assert metrics.budget_spent == 0
 
 
-def test_payrolls_no_budget(user):
-    user.hour_rate = 1000
-    user.customer_hour_rate = 100
-    user.save()
-
+def test_payrolls_no_budget(db):
     milestone = ProjectMilestoneFactory.create(budget=0)
 
     metrics = get_milestone_metrics(milestone)
@@ -105,3 +98,20 @@ def test_payrolls_no_budget(user):
     assert metrics.profit == milestone.budget
     assert metrics.budget_remains == milestone.budget
     assert metrics.budget_spent == 0
+
+
+def test_resolver(user):
+    milestone = ProjectMilestoneFactory.create(budget=10000)
+    issue = IssueFactory.create(user=user, milestone=milestone)
+
+    IssueSpentTimeFactory.create(
+        user=user, base=issue, time_spent=seconds(hours=1)
+    )
+
+    metrics = MilestoneType.resolve_metrics(milestone, None)
+
+    assert metrics.budget == 10000
+    assert metrics.payroll == 1000
+    assert metrics.profit == 9000
+    assert metrics.budget_spent == 100
+    assert metrics.budget_remains == 9900

@@ -1,14 +1,20 @@
+import pytest
+
+from apps.core.utils.time import seconds
+from apps.development.graphql.types.issue import IssueType
 from apps.development.services.metrics.issue import get_issue_metrcis
 from apps.development.models.issue import STATE_OPENED, STATE_CLOSED
-from apps.core.utils.time import seconds
 from tests.test_development.factories import IssueFactory
 from tests.test_payroll.factories import IssueSpentTimeFactory, SalaryFactory
+from tests.test_users.factories import UserFactory
+
+
+@pytest.fixture
+def user(db):
+    yield UserFactory.create(hour_rate=100)
 
 
 def test_payroll_metrics(user):
-    user.hour_rate = 100
-    user.save()
-
     issue = IssueFactory.create(user=user, state=STATE_OPENED)
 
     IssueSpentTimeFactory.create(
@@ -39,9 +45,6 @@ def test_payroll_metrics(user):
 
 
 def test_paid_metrics(user):
-    user.hour_rate = 100
-    user.save()
-
     issue = IssueFactory.create(user=user, state=STATE_OPENED)
     salary = SalaryFactory.create(user=user)
 
@@ -77,9 +80,6 @@ def test_paid_metrics(user):
 
 
 def test_complex_metrics(user):
-    user.hour_rate = 100
-    user.save()
-
     issue = IssueFactory.create(user=user, state=STATE_OPENED)
     salary = SalaryFactory.create(user=user)
 
@@ -169,3 +169,18 @@ def test_efficiency(user):
 
     metrics = get_issue_metrcis(issue_3)
     assert metrics.efficiency is None
+
+
+def test_resolver(user):
+    issue = IssueFactory.create(user=user, state=STATE_OPENED)
+
+    IssueSpentTimeFactory.create(
+        user=user,
+        base=issue,
+        time_spent=seconds(hours=6)
+    )
+
+    metrics = IssueType.resolve_metrics(issue, None)
+
+    assert metrics.payroll == 6 * user.hour_rate
+    assert metrics.paid == 0

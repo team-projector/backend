@@ -1,5 +1,6 @@
 from datetime import datetime, timedelta
 
+from apps.development.graphql.types.issue import IssueType
 from apps.development.models.issue import STATE_CLOSED
 from apps.development.services.problems.issue import (
     get_issue_problems, PROBLEM_EMPTY_DUE_DAY, PROBLEM_EMPTY_ESTIMATE,
@@ -62,6 +63,12 @@ def test_zero_estimate(user):
 def test_two_errors_per_issue(user):
     problem_issue = IssueFactory.create(user=user, time_estimate=None)
 
-    assert set(
-        get_issue_problems(problem_issue)
-    ) == {PROBLEM_EMPTY_ESTIMATE, PROBLEM_EMPTY_DUE_DAY}
+    problems = get_issue_problems(problem_issue)
+    assert set(problems) == {PROBLEM_EMPTY_ESTIMATE, PROBLEM_EMPTY_DUE_DAY}
+
+
+def test_resolver(user):
+    problem_issue = IssueFactory.create(user=user)
+
+    problems = IssueType.resolve_problems(problem_issue, None)
+    assert problems == [PROBLEM_EMPTY_DUE_DAY]
