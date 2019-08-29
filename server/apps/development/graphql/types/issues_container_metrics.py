@@ -9,5 +9,3 @@ class IssuesContainerMetricsType(graphene.ObjectType):
     issues_closed_count = graphene.Int()
     issues_opened_count = graphene.Int()
     efficiency = graphene.Float()
-    payroll = graphene.Float()
-    customer_payroll = graphene.Float()
