@@ -61,21 +61,6 @@ a:hover {
     color: #933183;
 }
 
-/* SELECT */
-
-.select2-results__option[aria-selected] {
-    color: #6F74DD;
-}
-
-.select2-container--admin-autocomplete .select2-results__option--highlighted[aria-selected] {
-    background-color: #6F74DD;
-}
-
-.select2-results__option[aria-selected]:hover {
-    color: #fff;
-    background: #6F74DD;
-}
-
 /* PAGINATOR */
 
 .paginator a:link, .paginator a:visited {
@@ -98,12 +83,12 @@ a:hover {
 
 /* BUTTONS */
 
-.submit-row input {
+.button, input[type=submit], input[type=button], .submit-row input, a.button {
     background: #6F74DD;
     color: #fff;
 }
 
-.submit-row input:hover {
+.button:hover, input[type=submit]:hover, input[type=button]:hover, .submit-row input:hover, a.button:hover {
     background: #0B227B;
     color: #fff;
 }
@@ -122,6 +107,13 @@ a:hover {
     background: #933183;
     font-weight: normal;
     font-size: 13px;
+}
+
+.object-tools a.addlink {
+    background-image: url(../img/tooltag-add.svg);
+    background-repeat: no-repeat;
+    background-position: right 7px center;
+    padding-right: 26px;
 }
 
 /* BREADCRUMBS */
@@ -149,4 +141,31 @@ div.breadcrumbs a {
 .dashboard-module h2 {
   background: #6F74DD;
   color: #fff;
+}
+
+
+/* WIDGETS */
+
+.select2-results__option[aria-selected] {
+    color: #6F74DD;
+}
+
+.select2-container--admin-autocomplete .select2-results__option--highlighted[aria-selected] {
+    background-color: #6F74DD;
+}
+
+.select2-results__option[aria-selected]:hover {
+    color: #fff;
+    background: #6F74DD;
+}
+
+.calendar td.selected a {
+    background: #6F74DD;
+    color: #fff;
+}
+
+.calendar td a:focus, .timelist a:focus,
+.calendar td a:hover, .timelist a:hover {
+    background: #6F74DD;
+    color: #fff;
 }
