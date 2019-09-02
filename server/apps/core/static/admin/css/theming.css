@@ -29,6 +29,48 @@
     font-size: 13px;
 }
 
+/* HEADER NAVIGATION MENU*/
+
+#header ul#navigation-menu li.first a {
+    background: transparent url(../img/navigation_menu/home.svg) 0 1px no-repeat;
+    text-indent: 19px;
+}
+
+#header ul#navigation-menu li.first a:hover {
+    background: transparent url(../img/navigation_menu/home-hover.svg) 0 1px no-repeat;
+    text-indent: 19px;
+}
+
+#header ul#navigation-menu > li:nth-child(2) {
+    background: transparent url(../img/navigation_menu/applications.svg) 0 1px no-repeat;
+    text-indent: 19px;
+}
+
+#header ul#navigation-menu > li:nth-child(2):hover {
+    background: transparent url(../img/navigation_menu/applications-hover.svg) 0 1px no-repeat;
+    text-indent: 19px;
+}
+
+#header ul#navigation-menu li:nth-child(3) {
+    background: transparent url(../img/navigation_menu/managment.svg) 0 1px no-repeat;
+    text-indent: 19px;
+}
+
+#header ul#navigation-menu > li:nth-child(3):hover {
+    background: transparent url(../img/navigation_menu/managment-hover.svg) 0 1px no-repeat;
+    text-indent: 19px;
+}
+
+#header ul#navigation-menu li:nth-child(4) {
+    background: transparent url(../img/navigation_menu/utils.svg) 0 1px no-repeat;
+    text-indent: 19px;
+}
+
+#header ul#navigation-menu > li:nth-child(4):hover {
+    background: transparent url(../img/navigation_menu/utils-hover.svg) 0 1px no-repeat;
+    text-indent: 19px;
+}
+
 #bookmark-form {
     clear: both;
 }
@@ -106,7 +148,7 @@ a:hover {
 .object-tools a:link, .object-tools a:visited {
     background: #933183;
     font-weight: normal;
-    font-size: 13px;
+    font-size: 12px;
 }
 
 .object-tools a.addlink {
