@@ -36,7 +36,8 @@ def test_issue_counts(user):
         user=user,
         team=None,
         project=None,
-        state=None
+        state=None,
+        milestone=None
     )
 
     _check_summary(summary, 8, 5, 3, 0, 0)
@@ -67,7 +68,8 @@ def test_problems(user):
         user=user,
         team=None,
         project=None,
-        state=None
+        state=None,
+        milestone=None
     )
 
     _check_summary(summary, 5, 5, 0, 0, 4)
@@ -101,7 +103,8 @@ def test_project_summary(user):
         user=user,
         team=None,
         project=None,
-        state=None
+        state=None,
+        milestone=None
     )
 
     summary.projects = get_project_summaries(summary.queryset)
@@ -124,7 +127,7 @@ def test_project_summary(user):
     )
 
 
-def test_sort_projects_by_milestone_flat(user, client):
+def test_sort_projects_by_milestone_flat(db):
     projs = []
     for n in range(3):
         m = ProjectMilestoneFactory(state=Milestone.STATE.active)
@@ -144,7 +147,7 @@ def test_sort_projects_by_milestone_flat(user, client):
     assert [projs[0].id, projs[1].id, projs[2].id] == [p.id for p in results]
 
 
-def test_sort_projects_by_milestone_neested(user, client):
+def test_sort_projects_by_milestone_neested(db):
     projs = []
     for n in range(3):
         group = ProjectGroupFactory(parent=ProjectGroupFactory())
@@ -203,7 +206,8 @@ def test_time_spents_by_user(user):
         user=user,
         team=None,
         project=None,
-        state=None
+        state=None,
+        milestone=None
     )
 
     _check_summary(summary, 5, 5, 0, 100, 0)
@@ -258,7 +262,8 @@ def test_time_spents_by_team(user):
         user=user,
         team=team,
         project=None,
-        state=None
+        state=None,
+        milestone=None
     )
 
     _check_summary(summary, 5, 5, 0, 100, 0)
@@ -310,7 +315,8 @@ def test_time_spents_by_project(user):
         user=user,
         team=None,
         project=project_1,
-        state=None
+        state=None,
+        milestone=None
     )
 
     _check_summary(summary, 5, 5, 0, 100, 0)
@@ -321,7 +327,8 @@ def test_time_spents_by_project(user):
         user=another_user,
         team=None,
         project=project_2,
-        state=None
+        state=None,
+        milestone=None
     )
 
     _check_summary(summary, 1, 1, 0, 300, 0)
@@ -366,7 +373,8 @@ def test_time_spents_by_state(user):
         user=user,
         team=None,
         project=None,
-        state=STATE_OPENED
+        state=STATE_OPENED,
+        milestone=None
     )
 
     _check_summary(summary, 2, 1, 1, 100, 0)
@@ -377,10 +385,65 @@ def test_time_spents_by_state(user):
         user=user,
         team=None,
         project=None,
-        state=STATE_CLOSED
+        state=STATE_CLOSED,
+        milestone=None
     )
 
     _check_summary(summary, 2, 1, 1, 400, 0)
+
+
+def test_time_spents_by_milestone(user):
+    milestone_1 = ProjectMilestoneFactory.create()
+    issue_1 = IssueFactory.create(
+        user=user,
+        due_date=datetime.now(),
+        state=STATE_OPENED,
+        milestone=milestone_1
+    )
+    IssueSpentTimeFactory.create(
+        date=datetime.now(),
+        user=user,
+        base=issue_1,
+        time_spent=100
+    )
+
+    milestone_2 = ProjectMilestoneFactory.create()
+    issue_2 = IssueFactory.create(
+        user=user,
+        due_date=datetime.now(),
+        state=STATE_OPENED,
+        milestone=milestone_2
+    )
+    IssueSpentTimeFactory.create(
+        date=datetime.now(),
+        user=user,
+        base=issue_2,
+        time_spent=300
+    )
+
+    summary = get_issues_summary(
+        Issue.objects.filter(user=user),
+        due_date=datetime.now().date(),
+        user=user,
+        team=None,
+        project=None,
+        state=None,
+        milestone=milestone_1.id
+    )
+
+    _check_summary(summary, 2, 2, 0, 100, 0)
+
+    summary = get_issues_summary(
+        Issue.objects.filter(user=user),
+        due_date=datetime.now().date(),
+        user=user,
+        team=None,
+        project=None,
+        state=None,
+        milestone=milestone_2.id
+    )
+
+    _check_summary(summary, 2, 2, 0, 300, 0)
 
 
 def test_resolver(user, client):
