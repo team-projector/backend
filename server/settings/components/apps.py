@@ -23,7 +23,6 @@ INSTALLED_APPS = (
     'django_filters',
     'rest_framework',
     'corsheaders',
-    'admin_auto_filters',
     'social_django',
     'health_check',
     'health_check.db',
