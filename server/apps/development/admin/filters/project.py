@@ -1,4 +1,4 @@
-from admin_auto_filters.filters import AutocompleteFilter
+from admin_tools.autocomplete_filter import AutocompleteFilter
 
 
 class ProjectFilter(AutocompleteFilter):

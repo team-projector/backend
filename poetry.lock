@@ -168,17 +168,6 @@ version = "0.8.0"
 
 [[package]]
 category = "main"
-description = "A simple Django app to render list filters in django admin using autocomplete widget"
-name = "django-admin-autocomplete-filter"
-optional = false
-python-versions = "*"
-version = "0.3"
-
-[package.dependencies]
-django = ">=2.0"
-
-[[package]]
-category = "main"
 description = "django-cors-headers is a Django application for handling the server headers required for Cross-Origin Resource Sharing (CORS)."
 name = "django-cors-headers"
 optional = false
@@ -420,11 +409,10 @@ description = "A collection of tools for the django administration interface"
 name = "jnt-django-admin-tools"
 optional = false
 python-versions = ">=3.6,<4.0"
-version = "0.8.10"
+version = "0.8.11"
 
 [package.dependencies]
 django = ">=2.0.0,<3.0.0"
-django-admin-autocomplete-filter = "*"
 
 [[package]]
 category = "main"
@@ -949,7 +937,6 @@ coverage = ["08907593569fe59baca0bf152c43f3863201efb6113ecb38ce7e97ce339805a6", 
 defusedxml = ["6687150770438374ab581bb7a1b327a847dd9c5749e396102de3fad4e8a3ef93", "f684034d135af4c6cbb949b8a4d2ed61634515257a67299e5f940fbaa34377f5"]
 django = ["16a5d54411599780ac9dfe3b9b38f90f785c51259a584e0b24b6f14a7f69aae8", "9a2f98211ab474c710fcdad29c82f30fc14ce9917c7a70c3682162a624de4035"]
 django-activity-stream = ["ef07f7242f25dbf6e198b377632a72fdd0c06ce3cd1097c394d9b7052c943b4e"]
-django-admin-autocomplete-filter = ["775b4110da8aed62c52772480030b009c412524c39bbc5e4d3b48e9dd5442359", "d5b4bb7f1cbbac25ee285c053a637e61baf9988de3607934936bfbd0b0b3d1f6"]
 django-cors-headers = ["e4b12209b3a0bc577883fe0ac0aa3adac9e82742389f8ddb6c6b41c66b1e9c4f", "e69b1c909f2eddc7ef2a24f071583bc22b73b871731ea3370ac52b3318c43b3c"]
 django-extensions = ["4aafdb865104eaa5d681b9976b36c52c9d441be89b7d782e40808f1c5c0c8f93", "8a2552fdeb222b23895ef52cdc28fc56efba976f6da07ca92937f6f5e626e345"]
 django-filter = ["558c727bce3ffa89c4a7a0b13bc8976745d63e5fd576b3a9a851650ef11c401b", "c3deb57f0dd7ff94d7dce52a047516822013e2b441bed472b722a317658cfd14"]
@@ -971,7 +958,7 @@ httpretty = ["01b52d45077e702eda491f4fe75328d3468fd886aed5dcc530003e7b2b5939dc"]
 idna = ["c357b3f628cf53ae2c4c05627ecc484553142ca23264e593d327bcde5e9c3407", "ea8b7f6188e6fa117537c3df7da9fc686d485087abf6ac197f9c46432f7e4a3c"]
 idna-ssl = ["a933e3bb13da54383f9e8f35dc4f9cb9eb9b3b78c6b36f311254d6d0d92c6c7c"]
 importlib-metadata = ["23d3d873e008a513952355379d93cbcab874c58f4f034ff657c7a87422fa64e8", "80d2de76188eabfbfcf27e6a37342c2827801e59c4cc14b0371c56fed43820e3"]
-jnt-django-admin-tools = ["7da38f6a7902ce0b33acf78d7d877959228c296927d677466c25a5932939f4cc", "d9ef3936a11b0d90e6fbbe32f0e0d75b35069c9f8b6dde0db0906986cffcf916"]
+jnt-django-admin-tools = ["31b8e3c8e3e00fe5b7fbbd0b1be19c289c45b613790bd1d1c587480a7098937e", "380c254bcb64b087dd639461abb8ed845422ad0e19c8cde0d884aa15d4d270c5"]
 jnt-django-bitfield = ["ea03587b5acdba2cf4023734b04390fe54449cfce46a8e2a6a518d59544a7b77", "f894acccd0eea1426858438991fcc4a37f6255647d251a797e9a0ffc0c66d22e"]
 kombu = ["529df9e0ecc0bad9fc2b376c3ce4796c41b482cf697b78b71aea6ebe7ca353c8", "7a2cbed551103db9a4e2efafe9b63222e012a61a18a881160ad797b9d4e1d0a1"]
 mccabe = ["ab8a6258860da4b6677da4bd2fe5dc2c659cff31b3ee4f7f5d64e79735b80d42", "dd8d182285a0fe56bace7f45b5e7d1a6ebcbf524e8f3bd87eb0f125271b8831f"]
