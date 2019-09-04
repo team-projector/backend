@@ -29,22 +29,7 @@ class IssuesTeamSummaryProvider:
         self.order_by = order_by
 
     def execute(self) -> List[IssuesTeamSummary]:
-        summaries_qs = self.queryset.annotate(
-            time_remains=Case(
-                When(
-                    Q(time_estimate__gt=F('total_time_spent')) &  # noqa:W504
-                    ~Q(state=STATE_CLOSED),
-                    then=F('time_estimate') - F('total_time_spent')
-                ),
-                default=Value(0),
-                output_field=IntegerField()
-            ),
-        ).values(
-            'user__teams'
-        ).annotate(
-            issues_opened_count=Count('*'),
-            total_time_remains=Coalesce(Sum('time_remains'), 0)
-        ).order_by()
+        summaries_qs = self._get_summaries_qs()
 
         summaries = {
             summary['user__teams']: summary
@@ -52,19 +37,9 @@ class IssuesTeamSummaryProvider:
             summaries_qs
         }
 
-        total_issues_count = sum(
-            [
-                item['issues_opened_count']
-                for item in summaries_qs
-            ]
-        )
+        total_issues_count = self._get_total_issues_count(summaries_qs)
 
-        team_ids = [
-            item['user__teams']
-            for item in summaries_qs
-        ]
-
-        team_qs = Team.objects.filter(id__in=team_ids)
+        team_qs = self._get_team_qs(summaries_qs)
 
         ret = []
 
@@ -84,6 +59,40 @@ class IssuesTeamSummaryProvider:
             ret.append(summary)
 
         return ret
+
+    def _get_summaries_qs(self) -> QuerySet:
+        return self.queryset.annotate(
+            time_remains=Case(
+                When(
+                    Q(time_estimate__gt=F('total_time_spent')) &  # noqa:W504
+                    ~Q(state=STATE_CLOSED),
+                    then=F('time_estimate') - F('total_time_spent')
+                ),
+                default=Value(0),
+                output_field=IntegerField()
+            ),
+        ).values(
+            'user__teams'
+        ).annotate(
+            issues_opened_count=Count('*'),
+            total_time_remains=Coalesce(Sum('time_remains'), 0)
+        ).order_by()
+
+    def _get_total_issues_count(self, summaries_qs: QuerySet) -> int:
+        return sum(
+            [
+                item['issues_opened_count']
+                for item in summaries_qs
+            ]
+        )
+
+    def _get_team_qs(self, summaries_qs: QuerySet) -> QuerySet:
+        team_ids = [
+            item['user__teams']
+            for item in summaries_qs
+        ]
+
+        return Team.objects.filter(id__in=team_ids)
 
 
 def get_team_summaries(queryset: QuerySet,
