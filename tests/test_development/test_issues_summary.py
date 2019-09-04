@@ -2,12 +2,15 @@ from datetime import datetime, timedelta
 from django.utils import timezone
 
 from apps.development.graphql.resolvers import resolve_issues_summary
-from apps.development.models import TeamMember, Project, Milestone
+from apps.development.models import Team, TeamMember, Project, Milestone
 from apps.development.models.issue import Issue, STATE_OPENED, STATE_CLOSED
 from apps.development.services.summary.issues import (
-    get_issues_summary, get_min_due_date, get_project_summaries,
-    get_team_summaries, IssuesSummary
+    get_issues_summary, IssuesSummary
 )
+from apps.development.services.summary.issues_project import (
+    get_min_due_date, get_project_summaries
+)
+from apps.development.services.summary.issues_team import get_team_summaries
 from tests.test_development.factories import (
     IssueFactory, ProjectFactory, TeamFactory, TeamMemberFactory,
     ProjectMilestoneFactory, ProjectGroupFactory
@@ -136,15 +139,6 @@ def test_team_summary(db):
         team=team_1,
         roles=TeamMember.roles.developer
     )
-
-    user_2 = UserFactory.create()
-    team_2 = TeamFactory.create()
-    TeamMemberFactory.create(
-        user=user_2,
-        team=team_2,
-        roles=TeamMember.roles.developer
-    )
-
     IssueFactory.create_batch(
         5,
         user=user_1,
@@ -153,6 +147,13 @@ def test_team_summary(db):
         due_date=datetime.now().date()
     )
 
+    user_2 = UserFactory.create()
+    team_2 = TeamFactory.create()
+    TeamMemberFactory.create(
+        user=user_2,
+        team=team_2,
+        roles=TeamMember.roles.developer
+    )
     IssueFactory.create_batch(
         3,
         user=user_2,
@@ -174,6 +175,20 @@ def test_team_summary(db):
     summary.teams = get_team_summaries(summary.queryset)
 
     assert len(summary.teams) == 2
+    _check_team_stats(
+        summary,
+        team_1,
+        issues_opened_count=5,
+        percentage=5 / 8,
+        remains=500
+    )
+    _check_team_stats(
+        summary,
+        team_2,
+        issues_opened_count=3,
+        percentage=3 / 8,
+        remains=900
+    )
 
 
 def test_sort_projects_by_milestone_flat(db):
@@ -545,6 +560,23 @@ def _check_project_stats(data: IssuesSummary,
         item
         for item in data.projects
         if item.project == project
+    ), None)
+
+    assert stats is not None
+    assert stats.issues.opened_count == issues_opened_count
+    assert stats.issues.percentage == percentage
+    assert stats.issues.remains == remains
+
+
+def _check_team_stats(data: IssuesSummary,
+                       team: Team,
+                       issues_opened_count: int,
+                       percentage: float,
+                       remains: int):
+    stats = next((
+        item
+        for item in data.teams
+        if item.team == team
     ), None)
 
     assert stats is not None

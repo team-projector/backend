@@ -1,8 +1,10 @@
 from apps.development.graphql.filters import IssuesFilterSet
 from apps.development.models import Issue
-from apps.development.services.summary.issues import (
-    get_issues_summary, get_project_summaries, get_team_summaries
+from apps.development.services.summary.issues import get_issues_summary
+from apps.development.services.summary.issues_project import (
+    get_project_summaries
 )
+from apps.development.services.summary.issues_team import get_team_summaries
 
 
 def resolve_issues_summary(parent,
