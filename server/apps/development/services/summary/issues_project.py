@@ -41,22 +41,7 @@ class IssuesProjectSummaryProvider:
         self.order_by = order_by
 
     def execute(self) -> List[IssuesProjectSummary]:
-        summaries_qs = self.queryset.annotate(
-            time_remains=Case(
-                When(
-                    Q(time_estimate__gt=F('total_time_spent')) &  # noqa:W504
-                    ~Q(state=STATE_CLOSED),
-                    then=F('time_estimate') - F('total_time_spent')
-                ),
-                default=Value(0),
-                output_field=IntegerField()
-            ),
-        ).values(
-            'project'
-        ).annotate(
-            issues_opened_count=Count('*'),
-            total_time_remains=Coalesce(Sum('time_remains'), 0)
-        ).order_by()
+        summaries_qs = self._get_summaries_qs()
 
         summaries = {
             summary['project']: summary
@@ -64,20 +49,9 @@ class IssuesProjectSummaryProvider:
             summaries_qs
         }
 
-        total_issues_count = sum(
-            [
-                item['issues_opened_count']
-                for item in summaries_qs
-            ]
-        )
+        total_issues_count = self._get_total_issues_count(summaries_qs)
 
-        project_ids = [
-            item['project']
-            for item in summaries_qs
-        ]
-
-        projects_qs = Project.objects.filter(id__in=project_ids)
-        projects_qs = sorted(projects_qs, key=get_min_due_date)
+        projects_qs = self._get_project_qs(summaries_qs)
 
         ret = []
 
@@ -97,6 +71,43 @@ class IssuesProjectSummaryProvider:
             ret.append(summary)
 
         return ret
+
+    def _get_summaries_qs(self) -> QuerySet:
+        return self.queryset.annotate(
+            time_remains=Case(
+                When(
+                    Q(time_estimate__gt=F('total_time_spent')) &  # noqa:W504
+                    ~Q(state=STATE_CLOSED),
+                    then=F('time_estimate') - F('total_time_spent')
+                ),
+                default=Value(0),
+                output_field=IntegerField()
+            ),
+        ).values(
+            'project'
+        ).annotate(
+            issues_opened_count=Count('*'),
+            total_time_remains=Coalesce(Sum('time_remains'), 0)
+        ).order_by()
+
+    def _get_total_issues_count(self, summaries_qs: QuerySet) -> int:
+        return sum(
+            [
+                item['issues_opened_count']
+                for item in summaries_qs
+            ]
+        )
+
+    def _get_project_qs(self, summaries_qs: QuerySet) -> list:
+        project_ids = [
+            item['project']
+            for item in summaries_qs
+        ]
+
+        projects_qs = Project.objects.filter(id__in=project_ids)
+        projects_qs = sorted(projects_qs, key=get_min_due_date)
+
+        return projects_qs
 
 
 def get_project_summaries(queryset: QuerySet,
