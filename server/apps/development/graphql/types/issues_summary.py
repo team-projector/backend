@@ -1,9 +1,10 @@
 import graphene
 
 from apps.development.graphql.resolvers.issues_summary import (
-    resolve_issues_project_summaries
+    resolve_issues_project_summaries, resolve_issues_team_summaries
 )
 from .issues_project_summary import IssuesProjectSummary
+from .issues_team_summary import IssuesTeamSummary
 
 
 class IssuesSummaryType(graphene.ObjectType):
@@ -16,4 +17,9 @@ class IssuesSummaryType(graphene.ObjectType):
         IssuesProjectSummary,
         order_by=graphene.String(),
         resolver=resolve_issues_project_summaries
+    )
+    teams = graphene.List(
+        IssuesTeamSummary,
+        order_by=graphene.String(),
+        resolver=resolve_issues_team_summaries
     )

@@ -23,5 +23,6 @@ class IssuesQueries(graphene.ObjectType):
         state=graphene.String(),
         problems=graphene.Boolean(),
         project=graphene.ID(),
+        milestone=graphene.ID(),
         resolver=resolve_issues_summary
     )
