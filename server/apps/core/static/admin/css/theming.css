@@ -3,6 +3,18 @@
     margin: 15px;
 }
 
+#bookmark-form {
+    clear: both;
+}
+
+body {
+  font-family: Open Sans;
+}
+
+td, th {
+  font-family: Open Sans;
+}
+
 /* HEADER */
 
 #header {
@@ -26,59 +38,17 @@
 
 #header #user-tools {
     padding-right: 1.2em;
-    font-size: 13px;
-}
-
-/* HEADER NAVIGATION MENU*/
-
-#header ul#navigation-menu li.first a {
-    background: transparent url(../img/navigation_menu/home.svg) 0 1px no-repeat;
-    text-indent: 19px;
-}
-
-#header ul#navigation-menu li.first a:hover {
-    background: transparent url(../img/navigation_menu/home-hover.svg) 0 1px no-repeat;
-    text-indent: 19px;
-}
-
-#header ul#navigation-menu > li:nth-child(2) {
-    background: transparent url(../img/navigation_menu/applications.svg) 0 1px no-repeat;
-    text-indent: 19px;
-}
-
-#header ul#navigation-menu > li:nth-child(2):hover {
-    background: transparent url(../img/navigation_menu/applications-hover.svg) 0 1px no-repeat;
-    text-indent: 19px;
-}
-
-#header ul#navigation-menu li:nth-child(3) {
-    background: transparent url(../img/navigation_menu/managment.svg) 0 1px no-repeat;
-    text-indent: 19px;
-}
-
-#header ul#navigation-menu > li:nth-child(3):hover {
-    background: transparent url(../img/navigation_menu/managment-hover.svg) 0 1px no-repeat;
-    text-indent: 19px;
-}
-
-#header ul#navigation-menu li:nth-child(4) {
-    background: transparent url(../img/navigation_menu/utils.svg) 0 1px no-repeat;
-    text-indent: 19px;
-}
-
-#header ul#navigation-menu > li:nth-child(4):hover {
-    background: transparent url(../img/navigation_menu/utils-hover.svg) 0 1px no-repeat;
-    text-indent: 19px;
-}
-
-#bookmark-form {
-    clear: both;
+    font-size: 12px;
 }
 
 /* LINKS */
 
 a:link, a:visited {
     color: #6F74DD;
+    font-weight: 400;
+    font-size: .875rem;
+    transition: color .3s;
+    text-align: left;
 }
 
 a:hover {
@@ -210,4 +180,84 @@ div.breadcrumbs a {
 .calendar td a:hover, .timelist a:hover {
     background: #6F74DD;
     color: #fff;
+}
+
+/* HEADER NAVIGATION MENU ICONS */
+
+#header ul#navigation-menu li.first a {
+    background: transparent url(../img/navigation_menu/home.svg) 0 1px no-repeat;
+    text-indent: 19px;
+}
+
+#header ul#navigation-menu li.first a:hover {
+    background: transparent url(../img/navigation_menu/home-hover.svg) 0 1px no-repeat;
+    text-indent: 19px;
+}
+
+#header ul#navigation-menu > li:nth-child(2) {
+    background: transparent url(../img/navigation_menu/applications.svg) 0 1px no-repeat;
+    text-indent: 19px;
+}
+
+#header ul#navigation-menu > li:nth-child(2):hover {
+    background: transparent url(../img/navigation_menu/applications-hover.svg) 0 1px no-repeat;
+    text-indent: 19px;
+}
+
+#header ul#navigation-menu li:nth-child(3) {
+    background: transparent url(../img/navigation_menu/managment.svg) 0 1px no-repeat;
+    text-indent: 19px;
+}
+
+#header ul#navigation-menu > li:nth-child(3):hover {
+    background: transparent url(../img/navigation_menu/managment-hover.svg) 0 1px no-repeat;
+    text-indent: 19px;
+}
+
+#header ul#navigation-menu li:nth-child(4) {
+    background: transparent url(../img/navigation_menu/utils.svg) 0 1px no-repeat;
+    text-indent: 19px;
+}
+
+#header ul#navigation-menu > li:nth-child(4):hover {
+    background: transparent url(../img/navigation_menu/utils-hover.svg) 0 1px no-repeat;
+    text-indent: 19px;
+}
+
+/* ICONS */
+
+.addlink {
+    background: url(../img/icons/plus.svg) 0 3px no-repeat;
+}
+
+.related-widget-wrapper-link.add-related {
+    content: url(../img/icons/plus.svg);
+}
+
+.changelink, .inlinechangelink {
+    background: url(../img/icons/edit.svg) 0 1px no-repeat;
+}
+
+.related-widget-wrapper-link.change-related {
+    content: url(../img/icons/edit.svg);
+}
+
+.related-widget-wrapper-link.delete-related {
+    content: url(../img/icons/close.svg);
+}
+
+.datetimeshortcuts .date-icon {
+    background: url(../img/icons/calendar.svg) 0 0 no-repeat;
+}
+
+.datetimeshortcuts a:focus .date-icon, .datetimeshortcuts a:hover .date-icon {
+    background-position: 0 0;
+}
+
+.datetimeshortcuts .clock-icon {
+    background: url(../img/icons/time.svg) 0 0 no-repeat;
+}
+
+.datetimeshortcuts a:focus .clock-icon, .datetimeshortcuts a:hover .clock-icon {
+    background-position: 0 0;
 }
