@@ -8,3 +8,4 @@ from .project_group import ProjectGroupAdmin
 from .project_member import ProjectMemberAdmin
 from .team import TeamAdmin
 from .team_member import TeamMemberAdmin
+from .ticket import TicketAdmin

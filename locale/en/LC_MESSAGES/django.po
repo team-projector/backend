@@ -64,7 +64,7 @@ msgstr "Notes"
 msgid "HT__NOTES"
 msgstr "Notes"
 
-#: server/apps/development/models/feature.py:11
+#: server/apps/development/models/ticket.py:11
 #: server/apps/development/models/issue.py:31
 #: server/apps/development/models/label.py:8
 #: server/apps/development/models/merge_request.py:34
@@ -75,7 +75,7 @@ msgstr "Notes"
 msgid "VN__TITLE"
 msgstr "Title"
 
-#: server/apps/development/models/feature.py:12
+#: server/apps/development/models/ticket.py:12
 #: server/apps/development/models/issue.py:32
 #: server/apps/development/models/label.py:9
 #: server/apps/development/models/merge_request.py:35
@@ -86,55 +86,75 @@ msgstr "Title"
 msgid "HT__TITLE"
 msgstr "Title"
 
-#: server/apps/development/models/feature.py:18
+#: server/apps/development/models/ticket.py:18
 #: server/apps/development/models/milestone.py:27
 #: server/apps/payroll/models/bonus.py:9
 #: server/apps/payroll/models/penalty.py:9
 msgid "VN__DESCRIPTION"
 msgstr "Description"
 
-#: server/apps/development/models/feature.py:19
+#: server/apps/development/models/ticket.py:19
 #: server/apps/development/models/milestone.py:28
 #: server/apps/payroll/models/bonus.py:10
 #: server/apps/payroll/models/penalty.py:10
 msgid "HT__DESCRIPTION"
 msgstr "Description"
 
-#: server/apps/development/models/feature.py:25
+#: server/apps/development/models/ticket.py:25
 #: server/apps/development/models/milestone.py:33
 msgid "VN__START_DATE"
 msgstr "Start Date"
 
-#: server/apps/development/models/feature.py:26
+#: server/apps/development/models/ticket.py:26
 #: server/apps/development/models/milestone.py:34
 msgid "HT__START_DATE"
 msgstr "Start Date"
 
-#: server/apps/development/models/feature.py:32
+#: server/apps/development/models/ticket.py:32
 #: server/apps/development/models/milestone.py:47
 msgid "VN__DUE_DATE"
 msgstr "Due Date"
 
-#: server/apps/development/models/feature.py:33
+#: server/apps/development/models/ticket.py:33
 #: server/apps/development/models/milestone.py:48
 msgid "HT__DUE_DATE"
 msgstr "Due Date"
 
-#: server/apps/development/models/feature.py:40
+#: server/apps/development/models/ticket.py:40
 #: server/apps/development/models/milestone.py:54
 msgid "VN__BUDGET"
 msgstr "Budget"
 
-#: server/apps/development/models/feature.py:41
+#: server/apps/development/models/ticket.py:41
 #: server/apps/development/models/milestone.py:55
 msgid "HT__BUDGET"
 msgstr "Budget"
 
-#: server/apps/development/models/feature.py:61
+#: server/apps/development/models/ticket.py:14
+msgid "CH_FEATURE"
+msgstr "Feature"
+
+#: server/apps/development/models/ticket.py:15
+msgid "CH_IMPROVEMENT"
+msgstr "Improvement"
+
+#: server/apps/development/models/ticket.py:16
+msgid "CH_BUG_FIXING"
+msgstr "Bug Fixing"
+
+#: server/apps/development/models/ticket.py:50
+msgid "VN__URL"
+msgstr "Url"
+
+#: server/apps/development/models/ticket.py:51
+msgid "HT__URL"
+msgstr "Url"
+
+#: server/apps/development/models/ticket.py:61
 msgid "VN__TICKET"
 msgstr "Ticket"
 
-#: server/apps/development/models/feature.py:62
+#: server/apps/development/models/ticket.py:62
 msgid "VN__TICKETS"
 msgstr "Tickets"
 

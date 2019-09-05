@@ -47,8 +47,8 @@ class Ticket(Timestamps):
 
     url = models.URLField(
         unique=True,
-        verbose_name=_('VN__GITLAB_URL'),
-        help_text=_('HT__GITLAB_URL')
+        verbose_name=_('VN__URL'),
+        help_text=_('HT__URL')
     )
 
     milestone = models.ForeignKey(

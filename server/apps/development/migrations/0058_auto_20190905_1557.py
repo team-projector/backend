@@ -22,7 +22,7 @@ class Migration(migrations.Migration):
                 ('title', models.CharField(help_text='HT__TITLE', max_length=255, verbose_name='VN__TITLE')),
                 ('start_date', models.DateField(blank=True, help_text='HT__START_DATE', null=True, verbose_name='VN__START_DATE')),
                 ('due_date', models.DateField(blank=True, help_text='HT__DUE_DATE', null=True, verbose_name='VN__DUE_DATE')),
-                ('url', models.URLField(help_text='HT__GITLAB_URL', unique=True, verbose_name='VN__GITLAB_URL')),
+                ('url', models.URLField(help_text='HT__URL', unique=True, verbose_name='VN__URL')),
                 ('milestone', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='ticket', to='development.Milestone')),
             ],
             options={
