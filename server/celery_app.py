@@ -25,6 +25,7 @@ def setup_periodic_tasks(sender, **kwargs):
         sync.s(),
         name='gitlab sync'
     )
+
     sender.add_periodic_task(
         crontab(minute=0, hour=0),
         clear_expired_tokens.s(),
