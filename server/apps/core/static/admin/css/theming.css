@@ -155,8 +155,16 @@ div.breadcrumbs a {
   color: #fff;
 }
 
+.dashboard-module ul li ul li {
+    padding: 0 16px;
+}
+
 
 /* WIDGETS */
+
+p.datetime br {
+  display: none
+}
 
 .select2-results__option[aria-selected] {
     color: #6F74DD;
@@ -182,52 +190,16 @@ div.breadcrumbs a {
     color: #fff;
 }
 
-/* HEADER NAVIGATION MENU ICONS */
+/* ICONS */
 
 #header ul#navigation-menu li.first a {
-    background: transparent url(../img/navigation_menu/home.svg) 0 1px no-repeat;
-    text-indent: 19px;
+    background: transparent url(../img/icons/home.svg) 0 4px no-repeat;
+    text-indent: 13px;
 }
-
-#header ul#navigation-menu li.first a:hover {
-    background: transparent url(../img/navigation_menu/home-hover.svg) 0 1px no-repeat;
-    text-indent: 19px;
-}
-
-#header ul#navigation-menu > li:nth-child(2) {
-    background: transparent url(../img/navigation_menu/applications.svg) 0 1px no-repeat;
-    text-indent: 19px;
-}
-
-#header ul#navigation-menu > li:nth-child(2):hover {
-    background: transparent url(../img/navigation_menu/applications-hover.svg) 0 1px no-repeat;
-    text-indent: 19px;
-}
-
-#header ul#navigation-menu li:nth-child(3) {
-    background: transparent url(../img/navigation_menu/managment.svg) 0 1px no-repeat;
-    text-indent: 19px;
-}
-
-#header ul#navigation-menu > li:nth-child(3):hover {
-    background: transparent url(../img/navigation_menu/managment-hover.svg) 0 1px no-repeat;
-    text-indent: 19px;
-}
-
-#header ul#navigation-menu li:nth-child(4) {
-    background: transparent url(../img/navigation_menu/utils.svg) 0 1px no-repeat;
-    text-indent: 19px;
-}
-
-#header ul#navigation-menu > li:nth-child(4):hover {
-    background: transparent url(../img/navigation_menu/utils-hover.svg) 0 1px no-repeat;
-    text-indent: 19px;
-}
-
-/* ICONS */
 
 .addlink {
     background: url(../img/icons/plus.svg) 0 3px no-repeat;
+    padding-left: 23px;
 }
 
 .related-widget-wrapper-link.add-related {
@@ -236,6 +208,7 @@ div.breadcrumbs a {
 
 .changelink, .inlinechangelink {
     background: url(../img/icons/edit.svg) 0 1px no-repeat;
+    padding-left: 23px;
 }
 
 .related-widget-wrapper-link.change-related {
