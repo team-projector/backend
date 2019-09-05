@@ -3,21 +3,21 @@ from rest_framework.generics import get_object_or_404
 
 from apps.core.graphql.mutations import BaseMutation
 from apps.core.graphql.security.permissions import AllowProjectManager
-from apps.development.graphql.types import FeatureType
-from apps.development.models import Feature, Milestone
+from apps.development.graphql.types import TicketType
+from apps.development.models import Ticket, Milestone
 
 
-class CreateFeatureMutation(BaseMutation):
+class CreateTicketMutation(BaseMutation):
     permission_classes = (AllowProjectManager,)
 
     class Arguments:
         title = graphene.String(required=True)
-        description = graphene.String(required=True)
+        type = graphene.String(required=True)
         start_date = graphene.Date(required=True)
         due_date = graphene.Date(required=True)
         milestone = graphene.ID(required=True)
 
-    feature = graphene.Field(FeatureType)
+    ticket = graphene.Field(TicketType)
 
     @classmethod
     def do_mutate(cls, root, info, **kwargs):
@@ -27,28 +27,28 @@ class CreateFeatureMutation(BaseMutation):
         )
 
         kwargs['milestone'] = milestone
-        feature = Feature.objects.create(**kwargs)
+        ticket = Ticket.objects.create(**kwargs)
 
-        return CreateFeatureMutation(feature=feature)
+        return CreateTicketMutation(ticket=ticket)
 
 
-class UpdateFeatureMutation(BaseMutation):
+class UpdateTicketMutation(BaseMutation):
     permission_classes = (AllowProjectManager,)
 
     class Arguments:
         id = graphene.ID()
         title = graphene.String()
-        description = graphene.String()
+        type = graphene.String()
         start_date = graphene.Date()
         due_date = graphene.Date()
         milestone = graphene.ID()
 
-    feature = graphene.Field(FeatureType)
+    ticket = graphene.Field(TicketType)
 
     @classmethod
     def do_mutate(cls, root, info, id, **kwargs):
-        feature = get_object_or_404(
-            Feature.objects.all(),
+        ticket = get_object_or_404(
+            Ticket.objects.all(),
             pk=id
         )
 
@@ -61,7 +61,7 @@ class UpdateFeatureMutation(BaseMutation):
             kwargs['milestone'] = milestone
 
         for attr, value in kwargs.items():
-            setattr(feature, attr, value)
-        feature.save()
+            setattr(ticket, attr, value)
+        ticket.save()
 
-        return UpdateFeatureMutation(feature=feature)
+        return UpdateTicketMutation(ticket=ticket)

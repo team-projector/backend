@@ -7,16 +7,16 @@ from apps.core.graphql.views import (
 )
 from apps.development.graphql.mutations import (
     IssuesMutations,
-    FeaturesMutations,
-    MilestonesMutations
+    MilestonesMutations,
+    TicketsMutations
 )
 from apps.development.graphql.queries import (
     IssuesQueries,
-    FeaturesQueries,
     MergeRequestQueries,
     MilestonesQueries,
     ProjectsQueries,
     TeamsQueries,
+    TicketsQueries,
     GitlabQueries
 )
 from apps.payroll.graphql.mutations import WorkBreaksMutations
@@ -30,7 +30,7 @@ from apps.users.graphql.queries import UsersQueries
 
 
 class Query(IssuesQueries,
-            FeaturesQueries,
+            TicketsQueries,
             MergeRequestQueries,
             MilestonesQueries,
             ProjectsQueries,
@@ -48,8 +48,8 @@ class Query(IssuesQueries,
 
 
 class Mutation(IssuesMutations,
-               FeaturesMutations,
                MilestonesMutations,
+               TicketsMutations,
                WorkBreaksMutations,
                AuthMutations,
                graphene.ObjectType):

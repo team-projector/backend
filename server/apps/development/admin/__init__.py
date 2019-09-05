@@ -1,4 +1,3 @@
-from .feature import FeatureAdmin
 from .issue import IssueAdmin
 from .label import LabelAdmin
 from .merge_request import MergeRequestAdmin

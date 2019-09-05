@@ -2,7 +2,7 @@ from apps.development.graphql.types.issue import IssueType
 from apps.development.graphql.mutations.issues import UpdateIssueMutation
 from apps.development.models.issue import Issue
 from tests.test_development.factories import (
-    FeatureFactory, IssueFactory, ProjectGroupMilestoneFactory,
+    TicketFactory, IssueFactory, ProjectGroupMilestoneFactory,
 )
 from tests.test_development.factories_gitlab import AttrDict
 
@@ -39,18 +39,18 @@ def test_all_issues(user, client):
     assert issues.count() == 5
 
 
-def test_update_issue_feature(user, client):
+def test_update_issue_ticket(user, client):
     issue = IssueFactory.create(user=user)
-    feature = FeatureFactory.create(
+    ticket = TicketFactory.create(
         milestone=ProjectGroupMilestoneFactory.create())
 
-    assert issue.feature is None
+    assert issue.ticket is None
 
     client.user = user
     info = AttrDict({'context': client})
 
     issue_mutated = UpdateIssueMutation.do_mutate(
-        None, info, issue.id, feature=feature.id
+        None, info, issue.id, ticket=ticket.id
     ).issue
 
-    assert issue_mutated.feature == feature
+    assert issue_mutated.ticket == ticket

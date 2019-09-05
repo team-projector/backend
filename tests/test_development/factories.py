@@ -3,7 +3,7 @@ import pytz
 from django.contrib.contenttypes.models import ContentType
 
 from apps.development.models import (
-    Feature, Issue, Label, Milestone, Note, Project, ProjectGroup, Team,
+    Ticket, Issue, Label, Milestone, Note, Project, ProjectGroup, Team,
     TeamMember, MergeRequest
 )
 from apps.development.models.issue import STATE_OPENED
@@ -99,13 +99,13 @@ class TeamMemberFactory(factory.django.DjangoModelFactory):
         model = TeamMember
 
 
-class FeatureFactory(factory.django.DjangoModelFactory):
+class TicketFactory(factory.django.DjangoModelFactory):
     title = factory.Faker('text', max_nb_chars=200)
-    budget = factory.Faker('random_int')
+    url = factory.Sequence(lambda s: f'https://team-projector-{s}.com')
     milestone = factory.SubFactory(ProjectGroupMilestoneFactory)
 
     class Meta:
-        model = Feature
+        model = Ticket
 
 
 class MergeRequestFactory(GitlabFieldMixin):

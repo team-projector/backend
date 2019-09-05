@@ -130,13 +130,13 @@ msgstr "Budget"
 msgid "HT__BUDGET"
 msgstr "Budget"
 
-#: server/apps/development/models/feature.py:51
-msgid "VN__FEATURE"
-msgstr "Feature"
+#: server/apps/development/models/feature.py:61
+msgid "VN__TICKET"
+msgstr "Ticket"
 
-#: server/apps/development/models/feature.py:52
-msgid "VN__FEATURES"
-msgstr "Features"
+#: server/apps/development/models/feature.py:62
+msgid "VN__TICKETS"
+msgstr "Tickets"
 
 #: server/apps/development/models/issue.py:37
 #: server/apps/development/models/merge_request.py:40

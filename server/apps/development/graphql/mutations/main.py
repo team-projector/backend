@@ -1,8 +1,8 @@
 from .issues import (
     AddSpendIssueMutation, SyncIssueMutation, UpdateIssueMutation
 )
-from .features import CreateFeatureMutation, UpdateFeatureMutation
 from .milestones import SyncMilestoneMutation
+from .ticket import CreateTicketMutation, UpdateTicketMutation
 
 
 class IssuesMutations:
@@ -11,9 +11,9 @@ class IssuesMutations:
     update_issue = UpdateIssueMutation.Field()
 
 
-class FeaturesMutations:
-    create_feature = CreateFeatureMutation.Field()
-    update_feature = UpdateFeatureMutation.Field()
+class TicketsMutations:
+    create_ticket = CreateTicketMutation.Field()
+    update_ticket = UpdateTicketMutation.Field()
 
 
 class MilestonesMutations:

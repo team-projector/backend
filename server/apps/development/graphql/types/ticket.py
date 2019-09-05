@@ -1,28 +1,18 @@
-import graphene
 from django.db.models import QuerySet
 
 from apps.core.graphql.connections import DataSourceConnection
 from apps.core.graphql.relay_nodes import DatasourceRelayNode
 from apps.core.graphql.types import BaseDjangoObjectType
-from apps.development.graphql.types.issues_container_metrics import (
-    IssuesContainerMetricsType
-)
-from apps.development.models import Feature
-from apps.development.services.allowed.features import filter_allowed_for_user
-from apps.development.services.metrics.feature import get_feature_metrics
+from apps.development.models import Ticket
+from apps.development.services.allowed.ticket import filter_allowed_for_user
 
 
-class FeatureType(BaseDjangoObjectType):
-    metrics = graphene.Field(IssuesContainerMetricsType)
-
+class TicketType(BaseDjangoObjectType):
     class Meta:
-        model = Feature
+        model = Ticket
         interfaces = (DatasourceRelayNode,)
         connection_class = DataSourceConnection
-        name = 'Feature'
-
-    def resolve_metrics(self, info, **kwargs):
-        return get_feature_metrics(self)
+        name = 'Ticket'
 
     @classmethod
     def get_queryset(cls,

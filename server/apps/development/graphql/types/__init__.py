@@ -1,4 +1,3 @@
-from .feature import FeatureType
 from .gitlab_service_status import GitlabServiceStatusType
 from .gitlab_status import GitlabStatusType
 from .issue import IssueType
@@ -19,3 +18,4 @@ from .team import TeamType
 from .team_member import TeamMemberType
 from .team_member_progress_metrics import TeamMemberProgressMetricsType
 from .team_metrics import TeamMetricsType
+from .ticket import TicketType
