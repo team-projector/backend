@@ -1,13 +1,14 @@
 from datetime import timedelta
+from pytest import raises
 
 from rest_framework import status
 from django.conf import settings
 from django.core import mail
 from django.utils import timezone
 
+from apps.core.utils.time import seconds
 from apps.development.models.issue import STATE_CLOSED
 from apps.payroll.models import Salary
-from apps.core.utils.time import seconds
 from tests.base import trigger_on_commit, model_to_dict_form, model_admin
 from tests.test_development.factories import IssueFactory
 from tests.test_payroll.factories import IssueSpentTimeFactory, SalaryFactory
@@ -76,6 +77,37 @@ def test_generate_salaries(admin_client):
     assert salary.total == user.hour_rate * 5
     assert salary.period_from == timezone.now().date() - timedelta(days=15)
     assert salary.period_to == timezone.now().date()
+
+
+def test_generate_salaries_invalid_form(admin_client):
+    ma_salary = model_admin(Salary)
+
+    user = UserFactory.create()
+
+    issue = IssueFactory.create(state=STATE_CLOSED)
+    IssueSpentTimeFactory.create(
+        user=user,
+        base=issue,
+        time_spent=seconds(hours=5)
+    )
+
+    data = {
+        'period_from': str(timezone.now().date() - timedelta(days=15))
+    }
+
+    with raises(TypeError):
+        ma_salary.generate_salaries(
+            admin_client.post('/admin/payroll/salary/', data)
+        )
+
+    data = {
+        'period_to': str(timezone.now().date())
+    }
+
+    with raises(TypeError):
+        ma_salary.generate_salaries(
+            admin_client.post('/admin/payroll/salary/', data)
+        )
 
 
 def test_send_notification(admin_client):

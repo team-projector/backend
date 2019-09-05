@@ -1,7 +1,9 @@
-from apps.payroll.models import Payroll
+from apps.payroll.admin.filters import HasSalaryFilter
+from apps.payroll.models import Payroll, Salary
 from tests.base import model_admin
 from tests.test_payroll.factories import (
-    IssueSpentTimeFactory, BonusFactory, PaymentFactory, PenaltyFactory
+    BonusFactory, IssueSpentTimeFactory, PaymentFactory, PenaltyFactory,
+    SalaryFactory
 )
 from tests.test_users.factories import UserFactory
 
@@ -59,3 +61,61 @@ def test_inheritance_spenttime(db):
 
     assert f'<a href=/admin/payroll/spenttime/{spenttime.id}/change/>' \
            in inheritance
+
+
+def test_inheritance_payroll(db):
+    ma_payroll = model_admin(Payroll)
+
+    user = UserFactory.create()
+    payroll = Payroll.objects.create(user=user,
+                                     created_by=user)
+
+    assert ma_payroll.inheritance(payroll) is None
+
+
+def test_salary_filter_has_salary(admin_client):
+    ma_salary = model_admin(Salary)
+
+    user = UserFactory.create()
+
+    payroll_1 = Payroll.objects.create(created_by=user, user=user)
+    payroll_2 = Payroll.objects.create(created_by=user,
+                                       user=user,
+                                       salary=SalaryFactory.create(user=user))
+
+    filter = HasSalaryFilter(
+        request=admin_client.get('/admin/payroll/salary/'),
+        params={'has_salary': True},
+        model=Salary,
+        model_admin=ma_salary
+    )
+
+    assert filter.has_output() is True
+
+    payroll_with_salaries = filter.queryset(None, Payroll.objects)
+
+    assert payroll_with_salaries.count() == 1
+    assert payroll_with_salaries.first() == payroll_2
+
+    filter = HasSalaryFilter(
+        request=admin_client.get('/admin/payroll/salary/'),
+        params={'has_salary': False},
+        model=Salary,
+        model_admin=ma_salary
+    )
+
+    payroll_without_salaries = filter.queryset(None, Payroll.objects)
+
+    assert payroll_without_salaries.count() == 1
+    assert payroll_without_salaries.first() == payroll_1
+
+    filter = HasSalaryFilter(
+        request=admin_client.get('/admin/payroll/salary/'),
+        params={},
+        model=Salary,
+        model_admin=ma_salary
+    )
+
+    payroll_all = filter.queryset(None, Payroll.objects)
+
+    assert payroll_all.count() == 2
