@@ -1,6 +1,7 @@
 import django_filters
 from django.db.models import QuerySet
 
+from apps.core.graphql.filters.ordering import CamelCasedOrderingFilter
 from apps.development.models import MergeRequest, Team, TeamMember, Project
 from apps.users.models import User
 
@@ -22,7 +23,7 @@ class MergeRequestFilterSet(django_filters.FilterSet):
     project = django_filters.ModelChoiceFilter(queryset=Project.objects.all())
     team = TeamFilter()
 
-    order_by = django_filters.OrderingFilter(
+    order_by = CamelCasedOrderingFilter(
         fields=('title', 'created_at')
     )
 

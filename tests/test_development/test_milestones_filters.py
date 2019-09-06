@@ -42,14 +42,14 @@ def test_order_by_due_date(db):
     )
 
     results = MilestonesFilterSet(
-        data={'order_by': 'due_date'},
+        data={'order_by': 'dueDate'},
         queryset=Milestone.objects.all()
     ).qs
 
     assert list(results) == [milestone_1, milestone_3, milestone_2]
 
     results = MilestonesFilterSet(
-        data={'order_by': '-due_date'},
+        data={'order_by': '-dueDate'},
         queryset=Milestone.objects.all()
     ).qs
 

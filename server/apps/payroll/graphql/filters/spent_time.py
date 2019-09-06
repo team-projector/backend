@@ -1,6 +1,7 @@
 import django_filters
 from django.db.models import QuerySet
 
+from apps.core.graphql.filters.ordering import CamelCasedOrderingFilter
 from apps.development.models import Project, Team, TeamMember
 from apps.payroll.models import SpentTime
 from apps.users.models import User
@@ -51,11 +52,8 @@ class SpentTimeFilterSet(django_filters.FilterSet):
     team = TeamFilter()
     state = StateFilter()
 
-    order_by = django_filters.OrderingFilter(
-        fields=(
-            ('date', 'date'),
-            ('created_at', 'createdAt'),
-        )
+    order_by = CamelCasedOrderingFilter(
+        fields=('date', 'created_at')
     )
 
     class Meta:
