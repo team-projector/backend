@@ -5,6 +5,7 @@ from django.db.models import Exists
 from django.db.models import QuerySet, OuterRef
 
 from apps.core.graphql.filters import SearchFilter
+from apps.core.graphql.filters.ordering import CamelCasedOrderingFilter
 from apps.development.models import Team, TeamMember
 from apps.development.services.team_members import filter_by_roles
 
@@ -42,7 +43,7 @@ class TeamRolesFilter(django_filters.CharFilter):
 
 class TeamsFilterSet(django_filters.FilterSet):
     roles = TeamRolesFilter()
-    order_by = django_filters.OrderingFilter(
+    order_by = CamelCasedOrderingFilter(
         fields=('title',)
     )
     q = SearchFilter(fields=('title',))

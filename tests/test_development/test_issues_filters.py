@@ -288,14 +288,14 @@ def test_order_by_due_date(user):
     issue_3 = IssueFactory.create(due_date=datetime.now(), user=user)
 
     results = IssuesFilterSet(
-        data={'order_by': 'due_date'},
+        data={'order_by': 'dueDate'},
         queryset=Issue.objects.all()
     ).qs
 
     assert list(results) == [issue_1, issue_3, issue_2]
 
     results = IssuesFilterSet(
-        data={'order_by': '-due_date'},
+        data={'order_by': '-dueDate'},
         queryset=Issue.objects.all()
     ).qs
 

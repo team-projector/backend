@@ -1,6 +1,7 @@
 import django_filters
 from django.db.models import Exists, OuterRef, QuerySet
 
+from apps.core.graphql.filters.ordering import CamelCasedOrderingFilter
 from apps.development.models import Team, TeamMember
 from apps.payroll.models.mixins.approved import CREATED
 from apps.payroll.models import WorkBreak
@@ -56,8 +57,8 @@ class WorkBreakFilterSet(django_filters.FilterSet):
     team = TeamFilter()
     user = django_filters.ModelChoiceFilter(queryset=User.objects.all())
 
-    order_by = django_filters.OrderingFilter(
-        fields=(('from_date', 'fromDate'),)
+    order_by = CamelCasedOrderingFilter(
+        fields=('from_date',)
     )
 
     class Meta:

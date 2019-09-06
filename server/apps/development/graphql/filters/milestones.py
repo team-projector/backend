@@ -1,6 +1,7 @@
 import django_filters
 from django.db.models import QuerySet
 
+from apps.core.graphql.filters.ordering import CamelCasedOrderingFilter
 from apps.development.models import Milestone
 
 
@@ -17,6 +18,6 @@ class ActiveFilter(django_filters.BooleanFilter):
 class MilestonesFilterSet(django_filters.FilterSet):
     active = ActiveFilter()
 
-    order_by = django_filters.OrderingFilter(
+    order_by = CamelCasedOrderingFilter(
         fields=('due_date',)
     )

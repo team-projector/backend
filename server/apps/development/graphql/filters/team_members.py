@@ -3,6 +3,7 @@ from typing import List
 import django_filters
 from django.db.models import QuerySet
 
+from apps.core.graphql.filters.ordering import CamelCasedOrderingFilter
 from apps.development.models import TeamMember
 from apps.development.services.team_members import filter_by_roles
 
@@ -28,7 +29,7 @@ class TeamMemberRolesFilter(django_filters.CharFilter):
 
 class TeamMembersFilterSet(django_filters.FilterSet):
     roles = TeamMemberRolesFilter()
-    order_by = django_filters.OrderingFilter(
+    order_by = CamelCasedOrderingFilter(
         fields=('user__name',)
     )
 
