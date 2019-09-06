@@ -18,35 +18,38 @@ class Ticket(Timestamps):
 
     type = models.CharField(
         choices=TYPE,
-        max_length=255,
-        null=True,
+        max_length=50,
         blank=True,
+        null=True,
         verbose_name=_('VN__TYPE'),
         help_text=_('HT__TYPE')
     )
 
     title = models.CharField(
         max_length=255,
+        blank=True,
+        null=True,
         verbose_name=_('VN__TITLE'),
         help_text=_('HT__TITLE')
     )
 
     start_date = models.DateField(
-        null=True,
         blank=True,
+        null=True,
         verbose_name=_('VN__START_DATE'),
         help_text=_('HT__START_DATE')
     )
 
     due_date = models.DateField(
-        null=True,
         blank=True,
+        null=True,
         verbose_name=_('VN__DUE_DATE'),
         help_text=_('HT__DUE_DATE')
     )
 
     url = models.URLField(
-        unique=True,
+        blank=True,
+        null=True,
         verbose_name=_('VN__URL'),
         help_text=_('HT__URL')
     )
@@ -54,7 +57,9 @@ class Ticket(Timestamps):
     milestone = models.ForeignKey(
         'development.Milestone',
         models.CASCADE,
-        related_name='ticket'
+        related_name='ticket',
+        blank=True,
+        null=True
     )
 
     class Meta:

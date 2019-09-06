@@ -3,6 +3,7 @@ from apps.development.graphql.types import TicketType
 from apps.development.models.issue import STATE_OPENED, STATE_CLOSED
 from apps.development.services.metrics.ticket import get_ticket_metrics
 from tests.test_development.factories import IssueFactory, TicketFactory
+from tests.test_development.factories_gitlab import AttrDict
 from tests.test_users.factories import UserFactory
 
 
@@ -88,7 +89,10 @@ def test_budget_estimated(db):
     assert metrics.budget_estimate == 19
 
 
-def test_resolver(db):
+def test_resolver(user, client):
+    user.roles.project_manager = True
+    user.save()
+
     ticket = TicketFactory.create()
 
     IssueFactory.create(
@@ -98,7 +102,10 @@ def test_resolver(db):
         time_estimate=seconds(hours=1)
     )
 
-    metrics = TicketType.resolve_metrics(ticket, None)
+    client.user = user
+    info = AttrDict({'context': client})
+
+    metrics = TicketType.resolve_metrics(ticket, info=info)
 
     assert metrics.issues_count == 1
     assert metrics.time_estimate == seconds(hours=1)

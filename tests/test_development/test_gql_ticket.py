@@ -1,13 +1,10 @@
 from datetime import datetime
-from pytest import raises
-from django.core.exceptions import PermissionDenied
 
 from apps.development.graphql.mutations.ticket import (
     CreateTicketMutation, UpdateTicketMutation
 )
 from apps.development.graphql.types.ticket import TicketType
 from apps.development.models.ticket import Ticket, TYPE_FEATURE, TYPE_BUG_FIXING
-from apps.users.models import User
 from tests.test_development.factories import (
     TicketFactory, ProjectMilestoneFactory
 )
@@ -15,9 +12,6 @@ from tests.test_development.factories_gitlab import AttrDict
 
 
 def test_tickets(user, client):
-    user.roles = User.roles.project_manager
-    user.save()
-
     TicketFactory.create_batch(5)
 
     client.user = user
@@ -28,22 +22,7 @@ def test_tickets(user, client):
     assert tickets.count() == 5
 
 
-def test_tickets_not_pm(user, client):
-    TicketFactory.create_batch(5)
-
-    client.user = user
-    info = AttrDict({'context': client})
-
-    with raises(PermissionDenied):
-        TicketType().get_queryset(
-            Ticket.objects.all(), info
-        )
-
-
 def test_ticket_create(user, client):
-    user.roles = User.roles.project_manager
-    user.save()
-
     client.user = user
     info = AttrDict({'context': client})
 
@@ -69,9 +48,6 @@ def test_ticket_create(user, client):
 
 
 def test_ticket_update(user, client):
-    user.roles = User.roles.project_manager
-    user.save()
-
     client.user = user
     info = AttrDict({'context': client})
 

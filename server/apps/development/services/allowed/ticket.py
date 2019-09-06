@@ -1,14 +1,10 @@
 from django.core.exceptions import PermissionDenied
-from django.db.models import QuerySet
 
 from apps.users.models import User
 
 
-def filter_allowed_for_user(queryset: QuerySet,
-                            user: User) -> QuerySet:
+def check_project_manager(user: User) -> None:
     if not user.roles.project_manager:
         raise PermissionDenied(
-            'Only project managers can view project resources'
+            'Only project managers can view ticket metrics'
         )
-
-    return queryset

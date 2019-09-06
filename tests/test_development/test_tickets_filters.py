@@ -7,7 +7,7 @@ from tests.test_development.factories import (
 )
 
 
-def test_filter_by_milestone(user):
+def test_filter_by_milestone(db):
     milestone_1 = ProjectMilestoneFactory.create()
     TicketFactory.create(milestone=milestone_1)
 
@@ -31,7 +31,7 @@ def test_filter_by_milestone(user):
     assert results.first().milestone == milestone_2
 
 
-def test_order_by_due_date(user):
+def test_order_by_due_date(db):
     ticket_1 = TicketFactory.create(
         due_date=datetime.now() - timedelta(days=1)
     )
