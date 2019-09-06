@@ -6,7 +6,7 @@ from apps.development.models import TeamMember
 from apps.development.models.issue import Issue, STATE_CLOSED, STATE_OPENED
 from apps.development.graphql.filters import IssuesFilterSet
 from tests.test_development.factories import (
-    IssueFactory, FeatureFactory, ProjectFactory, ProjectMilestoneFactory,
+    IssueFactory, TicketFactory, ProjectFactory, ProjectMilestoneFactory,
     TeamFactory, TeamMemberFactory
 )
 from tests.test_users.factories import UserFactory
@@ -347,46 +347,46 @@ def test_filter_by_milestone_not_pm(user, client):
         ).qs
 
 
-def test_filter_by_feature(user, client):
+def test_filter_by_ticket(user, client):
     user.roles.project_manager = True
     user.save()
 
-    feature_1 = FeatureFactory.create()
-    IssueFactory.create_batch(3, user=user, feature=feature_1)
+    ticket_1 = TicketFactory.create()
+    IssueFactory.create_batch(3, user=user, ticket=ticket_1)
 
-    feature_2 = FeatureFactory.create()
-    IssueFactory.create_batch(2, user=user, feature=feature_2)
+    ticket_2 = TicketFactory.create()
+    IssueFactory.create_batch(2, user=user, ticket=ticket_2)
 
     client.user = user
 
     results = IssuesFilterSet(
-        data={'feature': feature_1.id},
+        data={'ticket': ticket_1.id},
         queryset=Issue.objects.all(),
         request=client
     ).qs
 
     assert results.count() == 3
-    assert all([item.feature == feature_1 for item in results]) is True
+    assert all([item.ticket == ticket_1 for item in results]) is True
 
     results = IssuesFilterSet(
-        data={'feature': feature_2.id},
+        data={'ticket': ticket_2.id},
         queryset=Issue.objects.all(),
         request=client
     ).qs
 
     assert results.count() == 2
-    assert all([item.feature == feature_2 for item in results]) is True
+    assert all([item.ticket == ticket_2 for item in results]) is True
 
 
-def test_filter_by_feature_not_pm(user, client):
-    feature_1 = FeatureFactory.create()
-    IssueFactory.create_batch(3, user=user, feature=feature_1)
+def test_filter_by_ticket_not_pm(user, client):
+    ticket_1 = TicketFactory.create()
+    IssueFactory.create_batch(3, user=user, ticket=ticket_1)
 
     client.user = user
 
     with raises(PermissionDenied):
         IssuesFilterSet(
-            data={'feature': feature_1.id},
+            data={'ticket': ticket_1.id},
             queryset=Issue.objects.all(),
             request=client
         ).qs

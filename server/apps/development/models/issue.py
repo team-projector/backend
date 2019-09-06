@@ -98,8 +98,8 @@ class Issue(NotableMixin,
         blank=True,
     )
 
-    feature = models.ForeignKey(
-        'development.Feature',
+    ticket = models.ForeignKey(
+        'development.Ticket',
         on_delete=models.SET_NULL,
         null=True,
         blank=True,

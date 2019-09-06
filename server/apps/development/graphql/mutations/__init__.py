@@ -1,1 +1,1 @@
-from .main import IssuesMutations, FeaturesMutations, MilestonesMutations
+from .main import IssuesMutations, MilestonesMutations, TicketsMutations

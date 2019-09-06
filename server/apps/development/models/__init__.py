@@ -1,6 +1,6 @@
 from .merge_request import MergeRequest, STATE_OPENED, STATE_CLOSED, STATE_MERGED
 from .issue import Issue
-from .feature import Feature
+from .ticket import Ticket
 from .label import Label
 from .milestone import Milestone
 from .note import Note
