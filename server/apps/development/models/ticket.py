@@ -27,8 +27,6 @@ class Ticket(Timestamps):
 
     title = models.CharField(
         max_length=255,
-        blank=True,
-        null=True,
         verbose_name=_('VN__TITLE'),
         help_text=_('HT__TITLE')
     )
