@@ -50,7 +50,7 @@ def test_update_issue_ticket(user, client):
     info = AttrDict({'context': client})
 
     issue_mutated = UpdateIssueMutation.do_mutate(
-        None, info, issue.id, ticket=ticket.id
+        None, info, id=issue.id, ticket=ticket.id
     ).issue
 
     assert issue_mutated.ticket == ticket

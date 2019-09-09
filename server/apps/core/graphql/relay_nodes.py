@@ -25,5 +25,5 @@ class DatasourceRelayNode(relay.Node):
         return global_id
 
     @classmethod
-    def to_global_id(cls, type, id):
+    def to_global_id(cls, obj_type, obj_id):
         return id

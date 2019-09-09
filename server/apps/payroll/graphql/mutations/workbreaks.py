@@ -4,9 +4,9 @@ from django.utils import timezone
 from rest_framework.generics import get_object_or_404
 
 from apps.core.graphql.mutations import BaseMutation
-from apps.payroll.models.mixins.approved import APPROVED, DECLINED
 from apps.payroll.graphql.types import WorkBreakType
 from apps.payroll.models import WorkBreak
+from apps.payroll.models.mixins.approved import APPROVED, DECLINED
 from ..permissions import CanApproveDeclineWorkBreak, CanManageWorkBreak
 
 User = get_user_model()
@@ -21,8 +21,10 @@ class ApproveWorkBreakMutation(BaseMutation):
     work_break = graphene.Field(WorkBreakType)
 
     @classmethod
-    def do_mutate(cls, root, info, id):
-        work_break = WorkBreak.objects.get(pk=id)
+    def do_mutate(cls, root, info, **kwargs):
+        work_break = WorkBreak.objects.get(
+            pk=kwargs['id']
+        )
 
         work_break.approve_state = APPROVED
         work_break.approved_by = info.context.user
@@ -65,16 +67,20 @@ class DeclineWorkBreakMutation(BaseMutation):
     work_break = graphene.Field(WorkBreakType)
 
     @classmethod
-    def do_mutate(cls, root, info, id, decline_reason):
-        work_break = WorkBreak.objects.get(pk=id)
+    def do_mutate(cls, root, info, **kwargs):
+        work_break = WorkBreak.objects.get(
+            pk=kwargs['id']
+        )
 
         work_break.approve_state = DECLINED
         work_break.approved_by = info.context.user
         work_break.approved_at = timezone.now()
-        work_break.decline_reason = decline_reason
+        work_break.decline_reason = kwargs['decline_reason']
         work_break.save()
 
-        return DeclineWorkBreakMutation(work_break=work_break)
+        return DeclineWorkBreakMutation(
+            work_break=work_break
+        )
 
 
 class UpdateWorkBreakMutation(BaseMutation):
@@ -90,10 +96,19 @@ class UpdateWorkBreakMutation(BaseMutation):
     work_break = graphene.Field(WorkBreakType)
 
     @classmethod
-    def do_mutate(cls, root, info, id, **kwargs):
-        WorkBreak.objects.filter(pk=id).update(**kwargs)
+    def do_mutate(cls, root, info, **kwargs):
+        work_break = WorkBreak.objects.get(
+            pk=kwargs['id']
+        )
 
-        return UpdateWorkBreakMutation(work_break=WorkBreak.objects.get(pk=id))
+        work_break.comment = kwargs['comment']
+        work_break.from_date = kwargs['from_date']
+        work_break.reason = kwargs['reason']
+        work_break.to_date = kwargs['to_date']
+
+        return UpdateWorkBreakMutation(
+            work_break=work_break
+        )
 
 
 class DeleteWorkBreakMutation(BaseMutation):
@@ -105,7 +120,9 @@ class DeleteWorkBreakMutation(BaseMutation):
     ok = graphene.Boolean()
 
     @classmethod
-    def do_mutate(cls, root, info, id, **kwargs):
-        WorkBreak.objects.filter(pk=id).delete()
+    def do_mutate(cls, root, info, **kwargs):
+        WorkBreak.objects.filter(
+            pk=kwargs['id']
+        ).delete()
 
         return DeleteWorkBreakMutation(ok=True)

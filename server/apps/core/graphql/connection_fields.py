@@ -17,9 +17,9 @@ class DataSourceConnectionField(AuthFilter,
                                 DjangoFilterConnectionField):
     permission_classes = (AllowAuthenticated,)
 
-    def __init__(self, type, *args, **kwargs):
+    def __init__(self, model_type, *args, **kwargs):
         kwargs.setdefault('offset', Int())
-        super().__init__(type, *args, **kwargs)
+        super().__init__(model_type, *args, **kwargs)
 
     @classmethod
     def resolve_connection(cls,
@@ -128,9 +128,10 @@ class DataSourceConnectionField(AuthFilter,
             page_info=pageinfo_type(
                 start_cursor=first_edge_cursor,
                 end_cursor=last_edge_cursor,
-                has_previous_page=(isinstance(last, int) and
-                                   start_offset > lower_bound),
-                has_next_page=(isinstance(first, int)
-                               and end_offset < upper_bound)
+                has_previous_page=(
+                    isinstance(last, int) and start_offset > lower_bound),
+                has_next_page=(
+                    isinstance(first, int) and end_offset < upper_bound
+                )
             )
         )

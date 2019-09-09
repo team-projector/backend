@@ -16,10 +16,10 @@ class SyncMilestoneMutation(BaseMutation):
     milestone = graphene.Field(MilestoneType)
 
     @classmethod
-    def do_mutate(cls, root, info, id):
+    def do_mutate(cls, root, info, **kwargs):
         milestone = get_object_or_404(
             Milestone.objects.all(),
-            pk=id
+            pk=kwargs.get('id')
         )
 
         if milestone.content_type.model_class() == Project:
@@ -32,4 +32,6 @@ class SyncMilestoneMutation(BaseMutation):
                 milestone.owner.gl_id, milestone.gl_id
             )
 
-        return SyncMilestoneMutation(milestone=milestone)
+        return SyncMilestoneMutation(
+            milestone=milestone
+        )

@@ -70,7 +70,9 @@ def test_sync_project(user, client, gl_mocker):
         'context': client
     })
 
-    issue_mutated = SyncIssueMutation().do_mutate(None, info, issue.id).issue
+    issue_mutated = SyncIssueMutation().do_mutate(
+        None, info, id=issue.id
+    ).issue
 
     assert issue_mutated.id == issue.id
     assert issue_mutated.gl_id == issue.gl_id

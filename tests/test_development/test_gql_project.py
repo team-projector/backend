@@ -25,7 +25,7 @@ def test_active_milestones_sort(user, client):
         due_date=timezone.now()
     )
 
-    parent = ProjectType.get_node(info, id=m1.owner.id)
+    parent = ProjectType.get_node(info, obj_id=m1.owner.id)
     parent.parent_type = IssuesProjectSummary()
 
     milestones = ProjectType.resolve_milestones(
@@ -57,7 +57,7 @@ def test_active_milestones_sort_desc(user, client):
         due_date=timezone.now()
     )
 
-    parent = ProjectType.get_node(info, id=m1.owner.id)
+    parent = ProjectType.get_node(info, obj_id=m1.owner.id)
     parent.parent_type = IssuesProjectSummary()
 
     milestones = ProjectType.resolve_milestones(

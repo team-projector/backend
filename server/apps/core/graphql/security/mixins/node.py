@@ -16,8 +16,8 @@ class AuthNode:
     @classmethod
     def get_node(cls,
                  info: ResolveInfo,
-                 id: str) -> Optional[Model]:
-        if all((perm().has_node_permission(info, id) for perm in
+                 obj_id: str) -> Optional[Model]:
+        if all((perm().has_node_permission(info, obj_id) for perm in
                 cls.permission_classes)):
             try:
                 queryset = cls.get_queryset(  # type: ignore
@@ -25,7 +25,7 @@ class AuthNode:
                     info
                 )
 
-                return queryset.get(id=id)
+                return queryset.get(id=obj_id)
             except cls._meta.model.DoesNotExist:  # type: ignore
                 return None
 
