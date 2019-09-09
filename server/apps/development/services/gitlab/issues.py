@@ -81,7 +81,7 @@ def check_project_deleted_issues(project: Project,
 
     project.issues.filter(gl_id__in=diff).delete()
 
-    logger.info(f'Project "{project}" deleted issues '
+    logger.info(f'Project "{project}" deleted issues ' +
                 f'ckecked: removed {len(diff)} issues')
 
 

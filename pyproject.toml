@@ -42,6 +42,7 @@ factory-boy = "*"
 flake8 = "*"
 mypy = "*"
 httpretty = "*"
+wemake-python-styleguide = "*"
 
 [build-system]
 requires = ["poetry>=0.12"]

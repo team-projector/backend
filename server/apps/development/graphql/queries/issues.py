@@ -15,7 +15,7 @@ class IssuesQueries(graphene.ObjectType):
         filterset_class=IssuesFilterSet
     )
 
-    issuesSummary = graphene.Field(
+    issues_summary = graphene.Field(
         IssuesSummaryType,
         due_date=graphene.Date(),
         user=graphene.ID(),

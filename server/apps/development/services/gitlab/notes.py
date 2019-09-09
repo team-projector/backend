@@ -2,12 +2,12 @@ import re
 from collections import defaultdict, namedtuple
 from typing import DefaultDict, Optional, Pattern
 
+from apps.core.utils.time import seconds
 from apps.development.services.gitlab.parsers import parse_gl_date, \
     parse_gl_datetime
-from apps.core.utils.time import seconds
 
 RE_SPEND_FULL: Pattern = re.compile(
-    r'^(?P<action>(added|subtracted)) (?P<spent>.+) '
+    r'^(?P<action>(added|subtracted)) (?P<spent>.+) ' +
     r'of time spent at (?P<date>\d{4}-\d{2}-\d{2})$'
 )
 RE_SPEND_SHORT: Pattern = re.compile(
@@ -21,11 +21,13 @@ DAYS_PER_WEEK = 5
 HOURS_PER_DAY = 8
 
 
-def seconds_handler(bag: DefaultDict[str, int], val: int) -> None:
+def seconds_handler(bag: DefaultDict[str, int],
+                    val: int) -> None:
     bag['seconds'] += val
 
 
-def minutes_handler(bag: DefaultDict[str, int], val: int) -> None:
+def minutes_handler(bag: DefaultDict[str, int],
+                    val: int) -> None:
     bag['minutes'] += val
 
 
@@ -34,15 +36,18 @@ def hours_handler(bag: DefaultDict[str, int],
     bag['hours'] += val
 
 
-def days_handler(bag: DefaultDict[str, int], val: int) -> None:
+def days_handler(bag: DefaultDict[str, int],
+                 val: int) -> None:
     bag['hours'] += val * HOURS_PER_DAY
 
 
-def weeks_handler(bag: DefaultDict[str, int], val: int) -> None:
+def weeks_handler(bag: DefaultDict[str, int],
+                  val: int) -> None:
     bag['hours'] += val * DAYS_PER_WEEK * HOURS_PER_DAY
 
 
-def months_handler(bag: DefaultDict[str, int], val: int) -> None:
+def months_handler(bag: DefaultDict[str, int],
+                   val: int) -> None:
     bag['hours'] += val * WEEK_PER_MONTH * DAYS_PER_WEEK * HOURS_PER_DAY
 
 
@@ -113,14 +118,14 @@ class SpendResetParser(BaseNoteParser):
             return NoteReadResult(Note.TYPE.reset_spend, {})
 
 
-NOTES_PARSERS = [
+_notes_parsers = [
     SpendAddedParser(),
     SpendResetParser()
 ]
 
 
 def read_note(gl_note) -> Optional[NoteReadResult]:
-    for parser in NOTES_PARSERS:
+    for parser in _notes_parsers:
         parse_data = parser.parse(gl_note)
         if parse_data:
             return parse_data
