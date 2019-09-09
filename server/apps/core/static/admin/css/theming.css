@@ -7,14 +7,6 @@
     clear: both;
 }
 
-body {
-  font-family: Open Sans;
-}
-
-td, th {
-  font-family: Open Sans;
-}
-
 /* HEADER */
 
 #header {
@@ -45,9 +37,6 @@ td, th {
 
 a:link, a:visited {
     color: #6F74DD;
-    font-weight: 400;
-    font-size: .875rem;
-    transition: color .3s;
     text-align: left;
 }
 
