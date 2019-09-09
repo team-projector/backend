@@ -87,7 +87,7 @@ def check_project_deleted_issues(project: Project,
 
 def load_project_issue(project: Project,
                        gl_project: GlProject,
-                       gl_issue: GlProjectIssue) -> None:
+                       gl_issue: GlProjectIssue) -> Issue:
     time_stats = gl_issue.time_stats()
 
     params = {
