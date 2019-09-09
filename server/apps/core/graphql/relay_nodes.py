@@ -26,4 +26,4 @@ class DatasourceRelayNode(relay.Node):
 
     @classmethod
     def to_global_id(cls, obj_type, obj_id):
-        return id
+        return obj_id
