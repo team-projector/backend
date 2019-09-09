@@ -63,7 +63,7 @@ class SyncIssueMutation(BaseMutation):
 class UpdateIssueMutation(BaseMutation):
     class Arguments:
         id = graphene.ID()
-        ticket = graphene.Int()
+        ticket = graphene.ID()
 
     issue = graphene.Field(IssueType)
 
