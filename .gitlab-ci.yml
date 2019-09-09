@@ -15,7 +15,7 @@ stages:
   - deploy
 
 quality:
-  image: junte/django-quality
+  image: junte/django-quality:advanced
   stage: quality
   variables:
     LOCALE_PATH: $CI_PROJECT_DIR/locale
