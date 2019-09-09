@@ -1,4 +1,6 @@
 from datetime import datetime
+from pytest import raises
+from rest_framework.exceptions import PermissionDenied, ValidationError
 
 from apps.development.graphql.mutations.ticket import (
     CreateTicketMutation, UpdateTicketMutation
@@ -26,25 +28,67 @@ def test_ticket_create(user, client):
     client.user = user
     info = AttrDict({'context': client})
 
-    milestone = ProjectMilestoneFactory.create()
-
     CreateTicketMutation.do_mutate(
-        None,
-        info,
+        root=None,
+        info=info,
         title='test ticket',
         type=TYPE_FEATURE,
         start_date=str(datetime.now().date()),
         due_date=str(datetime.now().date()),
-        milestone=milestone.id
+        url='test url'
     )
 
     assert Ticket.objects.count() == 1
 
     ticket = Ticket.objects.first()
-    assert ticket.milestone == milestone
     assert ticket.type == TYPE_FEATURE
     assert ticket.start_date is not None
     assert ticket.due_date is not None
+
+
+def test_ticket_create_invalid(user, client):
+    client.user = user
+    info = AttrDict({'context': client})
+
+    with raises(ValidationError):
+        CreateTicketMutation.do_mutate(
+            root=None,
+            info=info,
+            title='test ticket',
+            type='invalid type',
+            start_date=str(datetime.now().date()),
+            due_date=str(datetime.now().date()),
+            url='test url'
+        )
+
+
+def test_ticket_create_not_pm(user, client):
+    client.user = user
+    info = AttrDict({'context': client})
+
+    with raises(PermissionDenied):
+        CreateTicketMutation.mutate(
+            root=None,
+            info=info,
+            title='test ticket',
+            type=TYPE_BUG_FIXING,
+            start_date=str(datetime.now().date()),
+            due_date=str(datetime.now().date()),
+            url='test url'
+        )
+
+    user.roles.project_manager = True
+    user.save()
+
+    CreateTicketMutation.mutate(
+        root=None,
+        info=info,
+        title='test ticket',
+        type=TYPE_BUG_FIXING,
+        start_date=str(datetime.now().date()),
+        due_date=str(datetime.now().date()),
+        url='test url'
+    )
 
 
 def test_ticket_update(user, client):
@@ -57,9 +101,9 @@ def test_ticket_update(user, client):
     milestone = ProjectMilestoneFactory.create()
 
     UpdateTicketMutation.do_mutate(
-        None,
-        info,
-        ticket.id,
+        root=None,
+        info=info,
+        id=ticket.id,
         type=TYPE_FEATURE,
         milestone=milestone.id
     )
@@ -67,3 +111,26 @@ def test_ticket_update(user, client):
     assert Ticket.objects.count() == 1
     assert Ticket.objects.first().type == TYPE_FEATURE
     assert Ticket.objects.first().milestone == milestone
+
+
+def test_ticket_update_not_pm(user, client):
+    ticket = TicketFactory.create()
+
+    client.user = user
+    info = AttrDict({'context': client})
+
+    with raises(PermissionDenied):
+        UpdateTicketMutation.mutate(
+            root=None,
+            info=info,
+            id=ticket.id,
+        )
+
+    user.roles.project_manager = True
+    user.save()
+
+    UpdateTicketMutation.mutate(
+        root=None,
+        info=info,
+        id=ticket.id,
+    )

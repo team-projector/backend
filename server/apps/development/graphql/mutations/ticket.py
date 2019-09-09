@@ -1,4 +1,5 @@
 import graphene
+from rest_framework.exceptions import ValidationError
 from rest_framework.generics import get_object_or_404
 
 from apps.core.graphql.mutations import BaseMutation
@@ -11,22 +12,20 @@ class CreateTicketMutation(BaseMutation):
     permission_classes = (AllowProjectManager,)
 
     class Arguments:
-        title = graphene.String(required=True)
         type = graphene.String(required=True)
+        title = graphene.String(required=True)
         start_date = graphene.Date(required=True)
         due_date = graphene.Date(required=True)
-        milestone = graphene.ID(required=True)
+        url = graphene.String(required=True)
+        milestone = graphene.ID()
 
     ticket = graphene.Field(TicketType)
 
     @classmethod
     def do_mutate(cls, root, info, **kwargs):
-        milestone = get_object_or_404(
-            Milestone.objects.all(),
-            pk=kwargs['milestone']
-        )
+        _validate_type(kwargs)
+        _validate_milestone(kwargs)
 
-        kwargs['milestone'] = milestone
         ticket = Ticket.objects.create(**kwargs)
 
         return CreateTicketMutation(ticket=ticket)
@@ -36,11 +35,12 @@ class UpdateTicketMutation(BaseMutation):
     permission_classes = (AllowProjectManager,)
 
     class Arguments:
-        id = graphene.ID()
-        title = graphene.String()
+        id = graphene.ID(required=True)
         type = graphene.String()
+        title = graphene.String()
         start_date = graphene.Date()
         due_date = graphene.Date()
+        url = graphene.String()
         milestone = graphene.ID()
 
     ticket = graphene.Field(TicketType)
@@ -52,16 +52,31 @@ class UpdateTicketMutation(BaseMutation):
             pk=id
         )
 
-        if kwargs.get('milestone'):
-            milestone = get_object_or_404(
-                Milestone.objects.all(),
-                pk=kwargs['milestone']
-            )
-
-            kwargs['milestone'] = milestone
+        _validate_type(kwargs)
+        _validate_milestone(kwargs)
 
         for attr, value in kwargs.items():
             setattr(ticket, attr, value)
         ticket.save()
 
         return UpdateTicketMutation(ticket=ticket)
+
+
+def _validate_type(inputs: dict) -> None:
+    if not inputs.get('type'):
+        return
+
+    if not inputs.get('type') in Ticket.TYPE.keys():
+        raise ValidationError('Incorrect ticket type')
+
+
+def _validate_milestone(inputs: dict) -> None:
+    if not inputs.get('milestone'):
+        return
+
+    milestone = get_object_or_404(
+        Milestone.objects.all(),
+        pk=inputs['milestone']
+    )
+
+    inputs['milestone'] = milestone
