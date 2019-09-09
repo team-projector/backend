@@ -124,6 +124,8 @@ def load_project_issue(project: Project,
 
     logger.info(f'Issue "{issue}" is synced')
 
+    return issue
+
 
 def load_issue_labels(issue: Issue,
                       gl_project: GlProject,

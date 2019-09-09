@@ -37,6 +37,9 @@ class MergeRequestType(BaseDjangoObjectType):
             info.context.user
         )
 
+        if is_field_selected(info, 'edges.node.issues'):
+            queryset = queryset.prefetch_related('labels')
+
         if is_field_selected(info, 'edges.node.user'):
             queryset = queryset.select_related('user')
 

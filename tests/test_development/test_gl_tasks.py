@@ -227,6 +227,7 @@ def _registry_merge_request(gl_mocker, gl_project, gl_merge_request):
     gl_mocker.registry_get(f'/projects/{gl_project.id}/labels', [])
     gl_mocker.registry_get(f'/projects/{gl_project.id}/merge_requests/{gl_merge_request.iid}/notes', [])
     gl_mocker.registry_get(f'/projects/{gl_project.id}/merge_requests/{gl_merge_request.iid}/participants', [])
+    gl_mocker.registry_get(f'/projects/{gl_project.id}/merge_requests/{gl_merge_request.iid}/closes_issues', [])
 
 
 def _registry_issue(gl_mocker, gl_project, gl_issue):
