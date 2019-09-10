@@ -35,5 +35,4 @@ RUN export DJANGO_ENV=build \
 
 ENV DJANGO_ENV=production
 
-ENTRYPOINT ["/bin/bash"]
-CMD ["deploy/server/run.sh"]
+CMD ["/bin/bash", "deploy/server/run.sh"]
