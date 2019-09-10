@@ -44,12 +44,14 @@ class TicketMetricsProvider:
                 Count('id', filter=Q(state=STATE_OPENED)), 0
             ),
             issues_count=Count('*'),
-            budget_estimate=Coalesce(Sum(
-                F('time_estimate')
-                / SECS_IN_HOUR
-                * F('user__customer_hour_rate'),
-                output_field=DecimalField()
-            ), 0),
+            budget_estimate=Coalesce(
+                Sum(
+                    F('time_estimate') /
+                    SECS_IN_HOUR *
+                    F('user__customer_hour_rate'),
+                    output_field=DecimalField(),
+                ), 0
+            ),
         )
 
         if not stats:

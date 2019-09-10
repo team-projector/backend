@@ -92,10 +92,8 @@ class IssuesProjectSummaryProvider:
 
     def _get_total_issues_count(self, summaries_qs: QuerySet) -> int:
         return sum(
-            [
-                item['issues_opened_count']
-                for item in summaries_qs
-            ]
+            item['issues_opened_count']
+            for item in summaries_qs
         )
 
     def _get_project_qs(self, summaries_qs: QuerySet) -> list:
