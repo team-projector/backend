@@ -77,7 +77,7 @@ class IssuesFilterSet(django_filters.FilterSet):
     user = django_filters.ModelChoiceFilter(queryset=User.objects.all())
 
     order_by = OrderingFilter(
-        fields=('due_date', 'title', 'created_at')
+        fields=('due_date', 'title', 'created_at', 'closed_at')
     )
 
     q = SearchFilter(fields=('title',))
