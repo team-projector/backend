@@ -3,8 +3,7 @@ import logging
 from django.utils import timezone
 from gitlab import GitlabGetError
 from gitlab.v4.objects import (
-    Project as GlProject, MergeRequest as GlMergeRequest,
-    ProjectIssue as GlProjectIssue
+    Project as GlProject, MergeRequest as GlMergeRequest
 )
 from rest_framework import status
 
@@ -12,10 +11,9 @@ from apps.core.activity.verbs import ACTION_GITLAB_CALL_API
 from apps.core.gitlab import get_gitlab_client
 from apps.core.tasks import add_action
 from apps.users.models import User
-from .issues import load_project_issue
 from .parsers import parse_gl_datetime
 from .users import extract_user_from_data, load_user
-from ...models import Issue, Label, MergeRequest, Milestone, Note, Project
+from ...models import Label, MergeRequest, Milestone, Note, Project
 
 logger = logging.getLogger(__name__)
 
@@ -54,7 +52,7 @@ def load_project_merge_requests(project: Project,
 
 def load_project_merge_request(project: Project,
                                gl_project: GlProject,
-                               gl_merge_request: GlMergeRequest) -> None:
+                               gl_merge_request: GlMergeRequest) -> MergeRequest:  # noqa: E501
     time_stats = gl_merge_request.time_stats()
 
     params = {
@@ -83,13 +81,13 @@ def load_project_merge_request(project: Project,
 
     merge_request, _ = MergeRequest.objects.sync_gitlab(**params)
 
-    load_merge_request_issues(merge_request, gl_merge_request,
-                              project, gl_project)
     load_merge_request_labels(merge_request, gl_project, gl_merge_request)
     load_merge_request_notes(merge_request, gl_merge_request)
     load_merge_request_participants(merge_request, gl_merge_request)
 
     logger.info(f'MergeRequest "{merge_request}" is synced')
+
+    return merge_request
 
 
 def load_merge_request_labels(merge_request: MergeRequest,
@@ -138,18 +136,4 @@ def load_merge_request_participants(merge_request: MergeRequest,
     merge_request.participants.set((
         get_user(x['id'])
         for x in gl_merge_request.participants()
-    ))
-
-
-def load_merge_request_issues(merge_request: MergeRequest,
-                              gl_merge_request: GlMergeRequest,
-                              project: Project,
-                              gl_project: GlProject) -> None:
-    def get_issue(gl_issue: GlProjectIssue) -> User:
-        return Issue.objects.filter(gl_id=gl_issue.id).first() or \
-               load_project_issue(project, gl_project, gl_issue)
-
-    merge_request.issues.set((
-        get_issue(item)
-        for item in gl_merge_request.closes_issues()
     ))

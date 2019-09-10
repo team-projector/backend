@@ -119,12 +119,6 @@ class MergeRequest(NotableMixin,
         related_name='participant_merge_requests',
     )
 
-    issues = models.ManyToManyField(
-        'development.Issue',
-        blank=True,
-        related_name='issue_merge_requests',
-    )
-
     objects = MergeRequestManager()
 
     class Meta:

@@ -11,9 +11,10 @@ from apps.core.activity.verbs import ACTION_GITLAB_CALL_API
 from apps.core.gitlab import get_gitlab_client
 from apps.core.tasks import add_action
 from apps.users.models import User
+from .merge_requests import load_project_merge_request
 from .parsers import parse_gl_date, parse_gl_datetime, parse_state_merged
 from .users import extract_user_from_data, load_user
-from ...models import Issue, Label, Milestone, Note, Project
+from ...models import Issue, Label, MergeRequest, Milestone, Note, Project
 
 logger = logging.getLogger(__name__)
 
@@ -121,10 +122,9 @@ def load_project_issue(project: Project,
     load_issue_labels(issue, gl_project, gl_issue)
     load_issue_notes(issue, gl_issue)
     load_issue_participants(issue, gl_issue)
+    load_merge_requests(issue, project, gl_issue, gl_project)
 
     logger.info(f'Issue "{issue}" is synced')
-
-    return issue
 
 
 def load_issue_labels(issue: Issue,
@@ -175,4 +175,26 @@ def load_issue_participants(issue: Issue,
     issue.participants.set((
         get_user(x['id'])
         for x in gl_issue.participants()
+    ))
+
+
+def load_merge_requests(issue: Issue,
+                        project: Project,
+                        gl_issue: GlProjectIssue,
+                        gl_project: GlProject) -> None:
+    def get_merge_request(id: int, iid: int) -> MergeRequest:
+        merge_request = MergeRequest.objects.filter(gl_id=id).first()
+
+        if not merge_request:
+            gl_merge_request = gl_project.mergerequests.get(iid)
+
+            merge_request = load_project_merge_request(
+                project, gl_project, gl_merge_request
+            )
+
+        return merge_request
+
+    issue.merge_requests.set((
+        get_merge_request(item['id'], item['iid'])
+        for item in gl_issue.closed_by()
     ))

@@ -10,8 +10,7 @@ from apps.development.models import MergeRequest, Note
 from apps.development.services.gitlab.merge_requests import (
     load_merge_request_notes, load_merge_request_labels,
     load_project_merge_request, load_merge_requests,
-    load_project_merge_requests, load_merge_request_participants,
-    load_merge_request_issues
+    load_project_merge_requests, load_merge_request_participants
 )
 from tests.test_development.checkers_gitlab import (
     check_merge_request, check_user
@@ -125,39 +124,6 @@ def test_load_merge_request_labels(db, gl_mocker):
 
 
 @override_settings(GITLAB_TOKEN='GITLAB_TOKEN')
-def test_load_merge_request_issues(db, gl_mocker):
-    gl_mocker.registry_get('/user', GlUserFactory())
-    gl = get_gitlab_client()
-
-    gl_project = AttrDict(GlProjectFactory())
-    project = ProjectFactory.create(gl_id=gl_project.id)
-    gl_mocker.registry_get(f'/projects/{gl_project.id}', gl_project)
-
-    gl_merge_request = AttrDict(GlMergeRequestFactory(project_id=gl_project.id))
-
-    gl_user = AttrDict(GlUserFactory())
-    gl_mocker.registry_get(f'/users/{gl_user.id}', gl_user)
-
-    gl_issue = AttrDict(GlIssueFactory(project_id=gl_project.id, assignee=gl_user))
-    gl_mocker.registry_get(f'/projects/{gl_project.id}/merge_requests/{gl_merge_request.iid}/closes_issues', [gl_issue])
-    _registry_issue(gl_mocker, gl_project, gl_issue)
-
-    merge_request = MergeRequestFactory.create(gl_id=gl_merge_request.id, gl_iid=gl_merge_request.iid, project=project)
-    gl_mocker.registry_get(f'/projects/{gl_project.id}/merge_requests/{gl_merge_request.iid}', gl_merge_request)
-
-    gl_project_loaded = gl.projects.get(id=project.gl_id)
-    gl_merge_request_loaded = gl_project_loaded.mergerequests.get(id=merge_request.gl_iid)
-
-    load_merge_request_issues(merge_request, gl_merge_request_loaded, project, gl_project_loaded)
-
-    merge_request = MergeRequest.objects.first()
-
-    assert merge_request.gl_id == gl_merge_request.id
-    assert merge_request.issues.count() == 1
-    assert merge_request.issues.first().gl_id == gl_issue.id
-
-
-@override_settings(GITLAB_TOKEN='GITLAB_TOKEN')
 def test_load_project_merge_request(db, gl_mocker):
     gl_mocker.registry_get('/user', GlUserFactory())
     gl = get_gitlab_client()
@@ -267,14 +233,3 @@ def _registry_merge_request(gl_mocker, gl_project, gl_merge_request):
     gl_mocker.registry_get(f'/projects/{gl_project.id}/labels', [])
     gl_mocker.registry_get(f'/projects/{gl_project.id}/merge_requests/{gl_merge_request.iid}/notes', [])
     gl_mocker.registry_get(f'/projects/{gl_project.id}/merge_requests/{gl_merge_request.iid}/participants', [])
-    gl_mocker.registry_get(f'/projects/{gl_project.id}/merge_requests/{gl_merge_request.iid}/closes_issues', [])
-
-
-def _registry_issue(gl_mocker, gl_project, gl_issue):
-    gl_mocker.registry_get(f'/projects/{gl_project.id}/issues', [gl_issue])
-    gl_mocker.registry_get(f'/projects/{gl_project.id}/issues/{gl_issue.iid}', gl_issue)
-    gl_mocker.registry_get(f'/projects/{gl_project.id}/issues/{gl_issue.iid}/time_stats', GlTimeStats())
-    gl_mocker.registry_get(f'/projects/{gl_project.id}/issues/{gl_issue.iid}/closed_by', [])
-    gl_mocker.registry_get(f'/projects/{gl_project.id}/labels', [])
-    gl_mocker.registry_get(f'/projects/{gl_project.id}/issues/{gl_issue.iid}/notes', [])
-    gl_mocker.registry_get(f'/projects/{gl_project.id}/issues/{gl_issue.iid}/participants', [])
