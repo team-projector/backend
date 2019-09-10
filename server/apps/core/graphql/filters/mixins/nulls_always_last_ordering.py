@@ -1,7 +1,15 @@
+from typing import TYPE_CHECKING, Any
+
 from django.db.models import F
+from django_filters import OrderingFilter
+
+if TYPE_CHECKING:
+    _Base: Any = OrderingFilter
+else:
+    _Base = object
 
 
-class NullsAlwaysLastOrderingMixin:
+class NullsAlwaysLastOrderingMixin(_Base):
     def get_ordering_value(self, param):
         ord_value = super().get_ordering_value(param)
 

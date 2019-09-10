@@ -1,9 +1,16 @@
 from collections import OrderedDict
+from typing import TYPE_CHECKING, Any
 
+from django_filters import OrderingFilter
 from graphene.utils.str_converters import to_camel_case
 
+if TYPE_CHECKING:
+    _Base: Any = OrderingFilter
+else:
+    _Base = object
 
-class CamelCasedOrderingMixin:
+
+class CamelCasedOrderingMixin(_Base):
     """
     ('user__due_date',) becomes => {'user__due_date': 'user__dueDate'}
     (('due_date', 'due_date'),) becomes => {'due_date': 'dueDate'}
