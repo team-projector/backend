@@ -3,8 +3,7 @@ from collections import defaultdict, namedtuple
 from typing import DefaultDict, Optional, Pattern
 
 from apps.core.utils.time import seconds
-from apps.development.services.gitlab.parsers import parse_gl_date, \
-    parse_gl_datetime
+from ...services.gitlab.parsers import parse_gl_date, parse_gl_datetime
 
 RE_SPEND_FULL: Pattern = re.compile(
     r'^(?P<action>(added|subtracted)) (?P<spent>.+) ' +

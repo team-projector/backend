@@ -1,12 +1,14 @@
 import graphene
-from django.db.models import QuerySet
+from django.contrib.auth import get_user_model
+from django.db.models import QuerySet, Prefetch
+from graphene_django_optimizer import query as optimized_query
 
 from apps.core.graphql.connections import DataSourceConnection
 from apps.core.graphql.relay_nodes import DatasourceRelayNode
 from apps.core.graphql.types import BaseDjangoObjectType
 from apps.core.graphql.utils import is_field_selected
 from apps.development.graphql.types.interfaces import WorkItem
-from apps.development.models import Issue
+from apps.development.models import Issue, Label
 from apps.development.services.allowed.issues import filter_allowed_for_user
 from apps.development.services.metrics.issue import get_issue_metrcis
 from apps.development.services.problems.issue import get_issue_problems
@@ -30,22 +32,41 @@ class IssueType(BaseDjangoObjectType):
     def resolve_metrics(self, info, **kwargs):
         return get_issue_metrcis(self)
 
+    def resolve_participants(self, info, **kwargs):
+        return self._participants_
+
+    def resolve_labels(self, info, **kwargs):
+        return self._labels_
+
     @classmethod
     def get_queryset(cls,
                      queryset,
                      info) -> QuerySet:
+
         queryset = filter_allowed_for_user(
-            queryset,
+            optimized_query(queryset, info),
             info.context.user
         )
 
-        if is_field_selected(info, 'edges.node.user'):
-            queryset = queryset.select_related('user')
-
+        # TODO: condsider using graphene_django_optimizer here
         if is_field_selected(info, 'edges.node.participants'):
-            queryset = queryset.prefetch_related('participants')
+            from apps.users.graphql.types import UserType
 
+            users = get_user_model().objects
+            queryset = queryset.prefetch_related(Prefetch(
+                'participants',
+                queryset=UserType.get_queryset(users, info).all(),
+                to_attr='_participants_'
+            ))
+
+        # TODO: condsider using graphene_django_optimizer here
         if is_field_selected(info, 'edges.node.labels'):
-            queryset = queryset.prefetch_related('labels')
+            from apps.development.graphql.types import LabelType
+
+            queryset = queryset.prefetch_related(Prefetch(
+                'labels',
+                queryset=LabelType.get_queryset(Label.objects, info).all(),
+                to_attr='_labels_'
+            ))
 
         return queryset

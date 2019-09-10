@@ -1,11 +1,11 @@
-from graphene_django import DjangoObjectType
+from graphene_django_optimizer import OptimizedDjangoObjectType
 
 from apps.core.graphql.security.mixins.node import AuthNode
 from apps.core.graphql.security.permissions import AllowAuthenticated
 
 
 class BaseDjangoObjectType(AuthNode,
-                           DjangoObjectType):
+                           OptimizedDjangoObjectType):
     permission_classes = (AllowAuthenticated,)
 
     class Meta:

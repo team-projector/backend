@@ -1,7 +1,6 @@
 from apps.payroll.graphql.filters import SpentTimeFilterSet
 from apps.payroll.models import SpentTime
-from apps.payroll.services.summary.spent_times import \
-    get_spent_times_summary
+from ...services.summary.spent_times import get_spent_times_summary
 
 
 def resolve_spent_times_summary(parent,

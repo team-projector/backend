@@ -1,18 +1,17 @@
 import django_filters
+from django.contrib.auth import get_user_model
 from django.db.models import QuerySet
 
 from apps.core.graphql.filters import SearchFilter
 from apps.core.graphql.filters.ordering import CamelCasedOrderingFilter
-from apps.development.models import (
-    Issue, Ticket, Milestone, Team, TeamMember, Project
-)
-from apps.development.services.problems.issue import (
+from ...models import Issue, Ticket, Milestone, Team, TeamMember, Project
+from ...services.allowed.issues import check_allow_project_manager
+from ...services.problems.issue import (
     filter_issues_problems, exclude_issues_problems,
     annotate_issues_problems
 )
-from apps.development.services.allowed.issues import \
-    check_allow_project_manager
-from apps.users.models import User
+
+User = get_user_model()
 
 
 class TicketFilter(django_filters.ModelChoiceFilter):
