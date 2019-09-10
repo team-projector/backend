@@ -11,6 +11,7 @@ from apps.core.activity.verbs import ACTION_GITLAB_CALL_API
 from apps.core.gitlab import get_gitlab_client
 from apps.core.tasks import add_action
 from apps.users.models import User
+from .merge_requests import load_project_merge_request
 from .parsers import parse_gl_date, parse_gl_datetime, parse_state_merged
 from .users import extract_user_from_data, load_user
 from ...models import Issue, Label, MergeRequest, Milestone, Note, Project
@@ -182,8 +183,6 @@ def load_merge_requests(issue: Issue,
                         gl_issue: GlProjectIssue,
                         gl_project: GlProject) -> None:
     def get_merge_request(gl_id: int, gl_iid: int) -> MergeRequest:
-        from .merge_requests import load_project_merge_request
-
         merge_request = MergeRequest.objects.filter(gl_id=gl_id).first()
 
         if not merge_request:
