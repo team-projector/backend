@@ -100,11 +100,16 @@ class SpendAddedParser(BaseNoteParser):
         if m.group('action') == 'subtracted':
             spent *= -1
 
+        if m.lastgroup == 'date':
+            date = parse_gl_date(m.group('date'))
+        else:
+            datetime = parse_gl_datetime(gl_note.created_at)
+            date = datetime.date() if datetime is not None else None
+
         return NoteReadResult(
             Note.TYPE.time_spend, {
                 'spent': spent,
-                'date': parse_gl_date(m.group('date')) if m.lastgroup == 'date'
-                else parse_gl_datetime(gl_note.created_at).date()
+                'date': date,
             }
         )
 
