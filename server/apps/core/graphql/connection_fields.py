@@ -17,9 +17,9 @@ class DataSourceConnectionField(AuthFilter,
                                 DjangoFilterConnectionField):
     permission_classes = (AllowAuthenticated,)
 
-    def __init__(self, type, *args, **kwargs):
+    def __init__(self, model_type, *args, **kwargs):
         kwargs.setdefault('offset', Int())
-        super().__init__(type, *args, **kwargs)
+        super().__init__(model_type, *args, **kwargs)
 
     @classmethod
     def resolve_connection(cls,
@@ -35,29 +35,34 @@ class DataSourceConnectionField(AuthFilter,
             if iterable is not default_manager:
                 default_queryset = maybe_queryset(default_manager)
                 iterable = cls.merge_querysets(default_queryset, iterable)
-            _len = iterable.count()
+            items_count = iterable.count()
         else:
-            _len = len(iterable)
+            items_count = len(iterable)
+
         connection = cls._connection_from_list_slice(
             iterable,
             args,
             # differences from original function
             slice_start=args.get('offset', 0),
-            list_length=_len,
-            list_slice_length=_len,
+            list_length=items_count,
+            list_slice_length=items_count,
             connection_type=connection,
             edge_type=connection.Edge,
             pageinfo_type=PageInfo,
         )
+
         connection.iterable = iterable
-        connection.length = _len
+        connection.length = items_count
         return connection
 
     @classmethod
-    def _connection_from_list_slice(cls, list_slice, args=None,
-                                    connection_type=None, edge_type=None,
+    def _connection_from_list_slice(cls, list_slice,
+                                    args=None,
+                                    connection_type=None,
+                                    edge_type=None,
                                     pageinfo_type=None,
-                                    slice_start=0, list_length=0,
+                                    slice_start=0,
+                                    list_length=0,
                                     list_slice_length=None):
 
         # implemented support for offsets
@@ -104,13 +109,13 @@ class DataSourceConnectionField(AuthFilter,
         if end_offset - start_offset > max_size:
             end_offset = start_offset + max_size
 
-        _slice = list_slice[start_offset:end_offset]
+        slice_fragment = list_slice[start_offset:end_offset]
         edges = [
             edge_type(
                 node=node,
                 cursor=offset_to_cursor(start_offset + i)
             )
-            for i, node in enumerate(_slice)
+            for i, node in enumerate(slice_fragment)
         ]
 
         first_edge_cursor = edges[0].cursor if edges else None
@@ -123,9 +128,10 @@ class DataSourceConnectionField(AuthFilter,
             page_info=pageinfo_type(
                 start_cursor=first_edge_cursor,
                 end_cursor=last_edge_cursor,
-                has_previous_page=(isinstance(last, int) and
-                                   start_offset > lower_bound),
-                has_next_page=(isinstance(first, int)
-                               and end_offset < upper_bound)
+                has_previous_page=(
+                    isinstance(last, int) and start_offset > lower_bound),
+                has_next_page=(
+                    isinstance(first, int) and end_offset < upper_bound
+                )
             )
         )

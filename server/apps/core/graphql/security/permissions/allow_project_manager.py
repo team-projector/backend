@@ -10,7 +10,7 @@ class AllowProjectManager:
 
     @staticmethod
     def has_node_permission(info: ResolveInfo,
-                            id: str) -> bool:
+                            obj_id: str) -> bool:
         return info.context.user.roles.project_manager
 
     @staticmethod

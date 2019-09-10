@@ -14,12 +14,11 @@ class SpentTimeQuerySet(models.QuerySet):
         from apps.development.models import Issue
 
         ct = ContentType.objects.get_for_model(Issue)
-        queryset = self.filter(
+
+        return self.filter(
             content_type=ct,
             object_id__in=issues.values_list('id')
         )
-
-        return queryset
 
     def aggregate_payrolls(self):
         return self.annotate_payrolls().aggregate(

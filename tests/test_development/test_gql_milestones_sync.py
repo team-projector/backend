@@ -35,7 +35,7 @@ def test_sync_group(user, client, gl_mocker):
     })
 
     milestone_mutated = SyncMilestoneMutation().do_mutate(
-        None, info, milestone.id
+        None, info, id=milestone.id
     ).milestone
 
     assert milestone_mutated.id == milestone_mutated.id
@@ -69,7 +69,7 @@ def test_sync_project(user, client, gl_mocker):
     })
 
     milestone_mutated = SyncMilestoneMutation().do_mutate(
-        None, info, milestone.id
+        None, info, id=milestone.id
     ).milestone
 
     assert milestone_mutated.id == milestone_mutated.id

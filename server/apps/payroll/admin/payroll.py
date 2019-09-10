@@ -40,7 +40,7 @@ class PayrollAdmin(BaseModelAdmin):
             )
 
             return mark_safe(
-                f'<a href={url}>{node._meta.model_name.capitalize()}: '
+                f'<a href={url}>{node._meta.model_name.capitalize()}: ' +
                 f'{node}</a>'
             )
 

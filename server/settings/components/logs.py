@@ -3,7 +3,7 @@ LOGGING = {
     'disable_existing_loggers': False,
     'formatters': {
         'standard': {
-            'format': '[%(asctime)s]|%(levelname)s|%(module)s'
+            'format': '[%(asctime)s]|%(levelname)s|%(module)s' +
                       '.%(funcName)s:%(lineno)s|%(message)s',
             'datefmt': '%Y-%m-%d %H:%M:%S'
         },
@@ -16,12 +16,12 @@ LOGGING = {
     },
     'loggers': {
         'django': {
-            'handlers': ['console'],
+            'handlers': ('console',),
             'level': 'INFO',
             'propagate': False,
         },
         'apps': {
-            'handlers': ['console'],
+            'handlers': ('console',),
             'level': 'DEBUG',
             'propagate': False,
         },

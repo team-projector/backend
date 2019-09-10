@@ -20,7 +20,7 @@ class GitLabOAuth2Backend(SocialGitLabOAuth2):
         user.last_login = timezone.now()
         user.save(update_fields=['last_login'])
 
-        return token
+        return token  # noqa WPS331
 
     def get_redirect_uri(self, state=None):
         return self.setting('REDIRECT_URI')
