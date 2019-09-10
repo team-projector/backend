@@ -19,7 +19,6 @@ RUN apt update \
                       binutils \
                       gettext \
                       nginx \
-#    && chown -R www-data:www-data /var/lib/nginx \
     && pip install poetry \
     && poetry config settings.virtualenvs.create false \
     && poetry install --no-dev --no-interaction --no-ansi \

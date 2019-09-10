@@ -107,7 +107,7 @@ deploy_k8s:
   script:
     - export RELEASE_NAME=backend
     - export DEPLOYS=$(helm ls | grep $RELEASE_NAME | wc -l)
-    - if [ ${DEPLOYS}  -eq 0 ]; then helm install --set image.tag=$CI_PIPELINE_IID --name=${RELEASE_NAME} . ; else helm upgrade  ${RELEASE_NAME} --set image.tag=$CI_PIPELINE_IID .; fi
+    - if [ ${DEPLOYS} -eq 0 ]; then helm install --set image.tag=$CI_PIPELINE_IID --name=${RELEASE_NAME} . ; else helm upgrade  ${RELEASE_NAME} --set image.tag=$CI_PIPELINE_IID .; fi
   environment:
     name: dev
     url: https://${DEV_HOST}
