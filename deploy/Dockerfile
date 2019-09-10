@@ -19,7 +19,7 @@ RUN apt update \
                       binutils \
                       gettext \
                       nginx \
-    && chown -R www-data:www-data /var/lib/nginx \
+#    && chown -R www-data:www-data /var/lib/nginx \
     && pip install poetry \
     && poetry config settings.virtualenvs.create false \
     && poetry install --no-dev --no-interaction --no-ansi \
@@ -35,4 +35,5 @@ RUN export DJANGO_ENV=build \
 
 ENV DJANGO_ENV=production
 
-CMD ["/bin/bash", "deploy/server/run.sh"]
+ENTRYPOINT ["/bin/bash"]
+CMD ["deploy/server/run.sh"]
