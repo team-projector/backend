@@ -2,7 +2,7 @@ import django_filters
 from django.db.models import QuerySet
 
 from apps.core.graphql.filters import SearchFilter
-from apps.core.graphql.filters.ordering import CamelCasedOrderingFilter
+from apps.core.graphql.filters.ordering import OrderingFilter
 from apps.development.models import (
     Issue, Ticket, Milestone, Team, TeamMember, Project
 )
@@ -76,7 +76,7 @@ class IssuesFilterSet(django_filters.FilterSet):
     ticket = TicketFilter()
     user = django_filters.ModelChoiceFilter(queryset=User.objects.all())
 
-    order_by = CamelCasedOrderingFilter(
+    order_by = OrderingFilter(
         fields=('due_date', 'title', 'created_at')
     )
 
