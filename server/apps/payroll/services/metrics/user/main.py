@@ -67,18 +67,18 @@ class UserMetricsProvider:
     def _get_bonus(user: User) -> float:
         return Bonus.objects.filter(
             user=user,
-            salary__isnull=True
+            salary__isnull=True,
         ).aggregate(
-            total_bonus=Coalesce(Sum('sum'), 0)
+            total_bonus=Coalesce(Sum('sum'), 0),
         )['total_bonus']
 
     @staticmethod
     def _get_penalty(user: User) -> float:
         return Penalty.objects.filter(
             user=user,
-            salary__isnull=True
+            salary__isnull=True,
         ).aggregate(
-            total_penalty=Coalesce(Sum('sum'), 0)
+            total_penalty=Coalesce(Sum('sum'), 0),
         )['total_penalty']
 
     @staticmethod

@@ -22,7 +22,7 @@ class AuthFilter(DjangoFilterConnectionField):
     def connection_resolver(
         cls, resolver, connection, default_manager,
         max_limit, enforce_first_or_last, filterset_class,
-        filtering_args, root, info, **args
+        filtering_args, root, info, **args,
     ):
         if not cls.has_permission(info):
             raise PermissionDenied()
