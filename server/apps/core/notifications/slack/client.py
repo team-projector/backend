@@ -18,9 +18,9 @@ class SlackClient:
     def send_message_to_channel(self,
                                 channel,
                                 msg: str,
-                                ** kwargs) -> None:
+                                **kwargs) -> None:
         self.client.chat_postMessage(
             channel=channel,
             text=msg,
-            **kwargs
+            **kwargs,
         )

@@ -12,7 +12,7 @@ class AllowAny:
 
     @staticmethod
     def has_node_permission(info: ResolveInfo,
-                            id: str) -> bool:
+                            obj_id: str) -> bool:
         return True
 
     @staticmethod

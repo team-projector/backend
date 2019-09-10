@@ -19,11 +19,9 @@ def load_groups() -> None:
             if not parent and gl_group.parent_id in gl_groups_map:
                 parent = load_group(gl_groups_map[gl_group.parent_id])
 
-        group = load_single_group(gl_group, parent)
-
         gl_groups.remove(gl_group)
 
-        return group
+        return load_single_group(gl_group, parent)
 
     gl = get_gitlab_client()
     gl_groups = gl.groups.list(all=True)

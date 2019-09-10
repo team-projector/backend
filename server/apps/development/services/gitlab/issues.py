@@ -82,7 +82,7 @@ def check_project_deleted_issues(project: Project,
 
     project.issues.filter(gl_id__in=diff).delete()
 
-    logger.info(f'Project "{project}" deleted issues '
+    logger.info(f'Project "{project}" deleted issues ' +
                 f'ckecked: removed {len(diff)} issues')
 
 
@@ -133,7 +133,7 @@ def load_issue_labels(issue: Issue,
     project_labels = getattr(gl_project, '_cache_labels', None)
     if project_labels is None:
         project_labels = gl_project.labels.list(all=True)
-        setattr(gl_project, '_cache_labels', project_labels)
+        gl_project._cache_labels = project_labels
 
     labels = []
 

@@ -1,5 +1,5 @@
-from pytest import raises
 from django.test import override_settings
+from pytest import raises
 from rest_framework.exceptions import ValidationError
 
 from apps.development.graphql.mutations.issues import AddSpendIssueMutation
@@ -18,7 +18,10 @@ def test_user_without_gl_token(user, client):
 
     with raises(ValidationError):
         AddSpendIssueMutation.do_mutate(
-            None, info, issue.id, 60
+            None,
+            info,
+            id=issue.id,
+            seconds=60
         )
 
 
@@ -33,7 +36,7 @@ def test_bad_time(user, client):
 
     with raises(ValidationError):
         AddSpendIssueMutation.do_mutate(
-            None, info, issue.id, -30
+            None, info, id=issue.id, seconds=-30
         )
 
 
@@ -75,7 +78,7 @@ def test_spend(user, client, gl_mocker):
     info = AttrDict({'context': client})
 
     issue_spend = AddSpendIssueMutation.do_mutate(
-        None, info, issue.id, 60
+        None, info, id=issue.id, seconds=60
     ).issue
 
     assert issue_spend == issue

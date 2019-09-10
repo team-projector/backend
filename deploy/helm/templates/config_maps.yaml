@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: backend-config
+data:
+  backend.gitlab_check_webhooks: {{ .Values.gitlab_check_webhooks | quote}}
+  backend.env: {{ .Values.env }}
+  backend.email.host: {{ .Values.email.host }}
+  backend.email.port: {{ .Values.email.port | quote }}
+  backend.email.from_email: {{ .Values.email.from_email }}

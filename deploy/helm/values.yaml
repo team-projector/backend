@@ -1,3 +1,22 @@
+env: production
 image:
   name: registry.gitlab.com/junte/team-projector/backend
   tag: dev
+gitlab_check_webhooks: "true"
+email:
+  host: smtp.mailgun.org
+  port: "587"
+  from_email: system@teamprojector.com
+secrets:
+  secret_key: ""
+  gitlab_token: ""
+  social_auth_gitlab_key: ""
+  social_auth_gitlab_secret: ""
+  slack:
+    token: ""
+  email:
+    user: ""
+    password: ""
+  flower:
+    user: ""
+    password: ""

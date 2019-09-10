@@ -46,10 +46,10 @@ class UpdateTicketMutation(BaseMutation):
     ticket = graphene.Field(TicketType)
 
     @classmethod
-    def do_mutate(cls, root, info, id, **kwargs):
+    def do_mutate(cls, root, info, **kwargs):
         ticket = get_object_or_404(
             Ticket.objects.all(),
-            pk=id
+            pk=kwargs['id']
         )
 
         if kwargs.get('milestone'):
@@ -60,8 +60,27 @@ class UpdateTicketMutation(BaseMutation):
 
             kwargs['milestone'] = milestone
 
-        for attr, value in kwargs.items():
-            setattr(ticket, attr, value)
-        ticket.save()
+        cls._update_ticket(ticket, kwargs)
 
-        return UpdateTicketMutation(ticket=ticket)
+        return UpdateTicketMutation(
+            ticket=ticket
+        )
+
+    @classmethod
+    def _update_ticket(cls, ticket, data):
+        if 'title' in data:
+            ticket.title = data['title']
+
+        if 'type' in data:
+            ticket.type = data['type']
+
+        if 'start_date' in data:
+            ticket.start_date = data['start_date']
+
+        if 'due_date' in data:
+            ticket.due_date = data['due_date']
+
+        if 'milestone' in data:
+            ticket.milestone = data['milestone']
+
+        ticket.save()

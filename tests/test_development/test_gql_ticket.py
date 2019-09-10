@@ -59,7 +59,7 @@ def test_ticket_update(user, client):
     UpdateTicketMutation.do_mutate(
         None,
         info,
-        ticket.id,
+        id=ticket.id,
         type=TYPE_FEATURE,
         milestone=milestone.id
     )
