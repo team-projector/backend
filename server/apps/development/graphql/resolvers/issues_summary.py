@@ -34,7 +34,7 @@ def resolve_issues_project_summaries(parent,
                                      **kwargs):
     return get_project_summaries(
         parent.queryset,
-        **kwargs
+        **kwargs,
     )
 
 
@@ -43,5 +43,5 @@ def resolve_issues_team_summaries(parent,
                                   **kwargs):
     return get_team_summaries(
         parent.queryset,
-        **kwargs
+        **kwargs,
     )

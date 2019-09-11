@@ -1,8 +1,14 @@
-from apps.core.graphql.filters.ordering import CamelCasedOrderingFilter
+from apps.core.graphql.filters.mixins import CamelCasedOrderingMixin
+from django_filters import OrderingFilter as BaseOrderingFilter
+
+
+class OrderingFilter(CamelCasedOrderingMixin,
+                     BaseOrderingFilter):
+    pass
 
 
 def test_camel_case():
-    f = CamelCasedOrderingFilter(fields=(
+    f = OrderingFilter(fields=(
         ('field_i18n', 'field_i18n'),
         'snakes_on_a__plane',
     ))
@@ -12,7 +18,7 @@ def test_camel_case():
 
 
 def test_camel_case_input_ad_dict():
-    f = CamelCasedOrderingFilter(fields={
+    f = OrderingFilter(fields={
         'due_date': 'due_date',
         'user__due_date': 'user__due_date'
     })

@@ -94,7 +94,7 @@ def load_merge_request_labels(merge_request: MergeRequest,
     project_labels = getattr(gl_project, '_cache_labels', None)
     if project_labels is None:
         project_labels = gl_project.labels.list(all=True)
-        setattr(gl_project, '_cache_labels', project_labels)
+        gl_project._cache_labels = project_labels
 
     labels = []
 
