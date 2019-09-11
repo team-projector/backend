@@ -35,4 +35,4 @@ def check_allow_filtering_by_team(team: Team,
     ).exists()
 
     if not allowed_members:
-        raise PermissionDenied('You can\'t filter by team')
+        raise PermissionDenied("You can't filter by team")

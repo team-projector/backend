@@ -1,7 +1,6 @@
 from apps.development.graphql.filters import MergeRequestFilterSet
 from apps.development.models import MergeRequest
-from apps.development.services.summary.merge_requests import \
-    get_merge_requests_summary
+from ...services.summary.merge_requests import get_merge_requests_summary
 
 
 def resolve_merge_requests_summary(parent, info, **kwargs):

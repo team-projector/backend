@@ -1,7 +1,9 @@
 import httpretty
 import pytest
-
+from django.contrib.auth.models import AnonymousUser
+from graphene.test import Client as GQLClient
 from apps.users.models import User
+from gql import schema
 from tests.base import Client, create_user, USER_LOGIN, USER_PASSWORD
 from tests.mocks import GitlabMock
 
@@ -64,3 +66,19 @@ def admin_user(db):
 @pytest.fixture
 def admin_client(admin_user):
     return Client(admin_user)
+
+
+@pytest.fixture
+def gql_client_authenticated(rf, admin_user):
+    request = rf.post('/')
+    request.user = admin_user
+
+    return GQLClient(schema, context_value=request)
+
+
+@pytest.fixture
+def gql_client_anonymous(rf):
+    request = rf.post('/')
+    request.user = AnonymousUser()
+
+    return GQLClient(schema, context_value=request)

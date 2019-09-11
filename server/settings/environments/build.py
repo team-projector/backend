@@ -1,4 +1,4 @@
-SECRET_KEY = 'build'
+SECRET_KEY = 'build'  # noqa S105
 
 DATABASES = {
     'default': {
