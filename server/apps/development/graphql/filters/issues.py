@@ -3,7 +3,7 @@ from django.contrib.auth import get_user_model
 from django.db.models import QuerySet
 
 from apps.core.graphql.filters import SearchFilter
-from apps.core.graphql.filters.ordering import CamelCasedOrderingFilter
+from apps.core.graphql.filters.ordering import OrderingFilter
 from ...models import Issue, Ticket, Milestone, Team, TeamMember, Project
 from ...services.allowed.issues import check_allow_project_manager
 from ...services.problems.issue import (
@@ -75,8 +75,8 @@ class IssuesFilterSet(django_filters.FilterSet):
     ticket = TicketFilter()
     user = django_filters.ModelChoiceFilter(queryset=User.objects.all())
 
-    order_by = CamelCasedOrderingFilter(
-        fields=('due_date', 'title', 'created_at')
+    order_by = OrderingFilter(
+        fields=('due_date', 'title', 'created_at', 'closed_at')
     )
 
     q = SearchFilter(fields=('title',))

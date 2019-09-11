@@ -20,8 +20,8 @@ from tests.test_development.factories import (
 )
 from tests.test_development.factories_gitlab import (
     AttrDict, GlUserFactory, GlProjectFactory, GlMergeRequestFactory,
-    GlNoteFactory, GlLabelFactory, GlTimeStats,
-    GlProjectMilestoneFactory
+    GlNoteFactory, GlLabelFactory, GlTimeStats, GlIssueFactory,
+    GlProjectMilestoneFactory,
 )
 
 

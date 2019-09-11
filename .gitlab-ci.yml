@@ -48,7 +48,6 @@ test:
     - postgres
   script:
     - cd /app
-#    - poetry install --no-interaction --no-ansi
     - pip install pytest-django pytest-xdist pytest-cov factory-boy httpretty
     - pytest -n auto --dist=loadscope --cov=apps --cov-report=html:coverage_html
     - mkdir $CI_PROJECT_DIR/coverage
@@ -107,7 +106,7 @@ deploy_k8s:
   script:
     - export RELEASE_NAME=backend
     - export DEPLOYS=$(helm ls | grep $RELEASE_NAME | wc -l)
-    - if [ ${DEPLOYS}  -eq 0 ]; then helm install --set image.tag=$CI_PIPELINE_IID --name=${RELEASE_NAME} . ; else helm upgrade  ${RELEASE_NAME} --set image.tag=$CI_PIPELINE_IID .; fi
+    - if [ ${DEPLOYS} -eq 0 ]; then helm install --set image.tag=$CI_PIPELINE_IID --name=${RELEASE_NAME} -f $K8S_HELM_OVERRIDES . ; else helm upgrade ${RELEASE_NAME} --set image.tag=$CI_PIPELINE_IID -f $K8S_HELM_OVERRIDES .; fi
   environment:
     name: dev
     url: https://${DEV_HOST}

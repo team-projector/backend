@@ -52,28 +52,28 @@ def load_project_merge_requests(project: Project,
 
 def load_project_merge_request(project: Project,
                                gl_project: GlProject,
-                               gl_merge_request: GlMergeRequest) -> None:
-    time_stats = gl_merge_request.time_stats()
+                               gl_mr: GlMergeRequest) -> MergeRequest:
+    time_stats = gl_mr.time_stats()
 
     params = {
-        'gl_id': gl_merge_request.id,
-        'gl_iid': gl_merge_request.iid,
-        'gl_url': gl_merge_request.web_url,
+        'gl_id': gl_mr.id,
+        'gl_iid': gl_mr.iid,
+        'gl_url': gl_mr.web_url,
         'project': project,
-        'title': gl_merge_request.title,
+        'title': gl_mr.title,
         'total_time_spent': time_stats['total_time_spent'],
         'time_estimate': time_stats['time_estimate'],
-        'state': gl_merge_request.state,
-        'created_at': parse_gl_datetime(gl_merge_request.created_at),
-        'updated_at': parse_gl_datetime(gl_merge_request.updated_at),
-        'closed_at': parse_gl_datetime(gl_merge_request.closed_at),
-        'user': extract_user_from_data(gl_merge_request.assignee),
-        'author': extract_user_from_data(gl_merge_request.author),
+        'state': gl_mr.state,
+        'created_at': parse_gl_datetime(gl_mr.created_at),
+        'updated_at': parse_gl_datetime(gl_mr.updated_at),
+        'closed_at': parse_gl_datetime(gl_mr.closed_at),
+        'user': extract_user_from_data(gl_mr.assignee),
+        'author': extract_user_from_data(gl_mr.author),
     }
 
-    if gl_merge_request.milestone:
+    if gl_mr.milestone:
         milestone = Milestone.objects.filter(
-            gl_id=gl_merge_request.milestone['id']
+            gl_id=gl_mr.milestone['id']
         ).first()
 
         if milestone:
@@ -81,11 +81,13 @@ def load_project_merge_request(project: Project,
 
     merge_request, _ = MergeRequest.objects.sync_gitlab(**params)
 
-    load_merge_request_labels(merge_request, gl_project, gl_merge_request)
-    load_merge_request_notes(merge_request, gl_merge_request)
-    load_merge_request_participants(merge_request, gl_merge_request)
+    load_merge_request_labels(merge_request, gl_project, gl_mr)
+    load_merge_request_notes(merge_request, gl_mr)
+    load_merge_request_participants(merge_request, gl_mr)
 
     logger.info(f'MergeRequest "{merge_request}" is synced')
+
+    return merge_request
 
 
 def load_merge_request_labels(merge_request: MergeRequest,
