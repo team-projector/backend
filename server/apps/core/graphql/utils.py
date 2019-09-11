@@ -3,7 +3,8 @@ from graphql.utils.ast_to_dict import ast_to_dict
 
 def collect_fields(node,
                    fragments) -> dict:
-    """Recursively collects fields from the AST
+    """
+    Recursively collects fields from the AST.
     Args:
         node (dict): A node in the AST
         fragments (dict): Fragment definitions
@@ -32,7 +33,8 @@ def collect_fields(node,
 
 
 def get_fields_from_info(info) -> dict:
-    """A convenience function to call collect_fields with info
+    """
+    A convenience function to call collect_fields with info.
     Args:
         info (ResolveInfo)
     Returns:

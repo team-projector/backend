@@ -28,12 +28,16 @@ class ProjectMember(Timestamps):
     )
 
     owner = GenericForeignKey()
+
     content_type = models.ForeignKey(
         ContentType,
         models.CASCADE,
         null=True
     )
-    object_id = models.PositiveIntegerField(null=True)
+
+    object_id = models.PositiveIntegerField(
+        null=True
+    )
 
     class Meta:
         verbose_name = _('VN__PROJECT_MEMBER')

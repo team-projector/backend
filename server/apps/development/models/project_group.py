@@ -41,6 +41,7 @@ class ProjectGroup(GitlabEntityMixin):
         'development.Milestone',
         related_query_name='project_group'
     )
+
     members = GenericRelation(
         'development.ProjectMember',
         related_query_name='project_group'
