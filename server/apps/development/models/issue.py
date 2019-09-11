@@ -114,6 +114,12 @@ class Issue(NotableMixin,
 
     is_merged = models.BooleanField(default=False)
 
+    merge_requests = models.ManyToManyField(
+        'development.MergeRequest',
+        blank=True,
+        related_name='issues',
+    )
+
     objects = IssueManager()
 
     class Meta:
