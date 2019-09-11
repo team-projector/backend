@@ -7,10 +7,26 @@ from django.utils import timezone
 
 from apps.core.gitlab import get_gitlab_client
 from apps.development.models import Issue, Note
-from apps.development.services.gitlab.issues import (
-    load_issue_participants, load_issue_notes, load_issue_labels,
-    load_project_issue, load_issues, load_project_issues,
-    check_projects_deleted_issues, load_merge_requests
+from apps.development.services.gitlab.issues.participants import (
+    load_issue_participants
+)
+from apps.development.services.gitlab.issues.notes import (
+    load_issue_notes
+)
+from apps.development.services.gitlab.issues.labels import (
+    load_issue_labels
+)
+from apps.development.services.gitlab.issues.checkers import (
+    check_projects_deleted_issues
+)
+from apps.development.services.gitlab.issues.load_all import (
+    load_project_issues, load_issues
+)
+from apps.development.services.gitlab.issues.issue import (
+    load_project_issue
+)
+from apps.development.services.gitlab.issues.merge_requests import (
+    load_merge_requests
 )
 from tests.test_development.checkers_gitlab import (
     check_issue, check_user
