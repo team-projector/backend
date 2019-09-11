@@ -35,7 +35,7 @@ def test_ticket_create(user, client):
         type=TYPE_FEATURE,
         start_date=str(datetime.now().date()),
         due_date=str(datetime.now().date()),
-        url='test url'
+        url='test1.com'
     )
 
     assert Ticket.objects.count() == 1
@@ -58,7 +58,7 @@ def test_ticket_create_invalid(user, client):
             type='invalid type',
             start_date=str(datetime.now().date()),
             due_date=str(datetime.now().date()),
-            url='test url'
+            url='invalid url'
         )
 
 
@@ -87,7 +87,7 @@ def test_ticket_create_not_pm(user, client):
         type=TYPE_BUG_FIXING,
         start_date=str(datetime.now().date()),
         due_date=str(datetime.now().date()),
-        url='test url'
+        url='test1.com'
     )
 
 

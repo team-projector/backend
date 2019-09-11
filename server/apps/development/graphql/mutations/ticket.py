@@ -1,15 +1,18 @@
 import graphene
-from rest_framework.exceptions import ValidationError
+
 from rest_framework.generics import get_object_or_404
 
-from apps.core.graphql.mutations import BaseMutation
+from apps.core.graphql.mutations import BaseMutation, ArgumentsValidationMixin
 from apps.core.graphql.security.permissions import AllowProjectManager
 from apps.development.graphql.types import TicketType
-from apps.development.models import Ticket, Milestone
+from apps.development.models import Ticket
+from apps.development.forms import TicketForm
 
 
-class CreateTicketMutation(BaseMutation):
+class CreateTicketMutation(ArgumentsValidationMixin,
+                           BaseMutation):
     permission_classes = (AllowProjectManager,)
+    form_class = TicketForm
 
     class Arguments:
         type = graphene.String(required=True)
@@ -22,17 +25,18 @@ class CreateTicketMutation(BaseMutation):
     ticket = graphene.Field(TicketType)
 
     @classmethod
-    def do_mutate(cls, root, info, **kwargs):
-        _validate_type(kwargs)
-        _validate_milestone(kwargs)
+    def perform_mutate(cls, info, data):
+        ticket = Ticket.objects.create(**data)
 
-        ticket = Ticket.objects.create(**kwargs)
+        return CreateTicketMutation(
+            ticket=ticket
+        )
 
-        return CreateTicketMutation(ticket=ticket)
 
-
-class UpdateTicketMutation(BaseMutation):
+class UpdateTicketMutation(ArgumentsValidationMixin,
+                           BaseMutation):
     permission_classes = (AllowProjectManager,)
+    form_class = TicketForm
 
     class Arguments:
         id = graphene.ID(required=True)
@@ -46,16 +50,13 @@ class UpdateTicketMutation(BaseMutation):
     ticket = graphene.Field(TicketType)
 
     @classmethod
-    def do_mutate(cls, root, info, id, **kwargs):
+    def perform_mutate(cls, info, data):
         ticket = get_object_or_404(
             Ticket.objects.all(),
-            pk=id
+            pk=data['id']
         )
 
-        _validate_type(kwargs)
-        _validate_milestone(kwargs)
-
-        cls._update_ticket(ticket, kwargs)
+        cls._update_ticket(ticket, data)
 
         return UpdateTicketMutation(
             ticket=ticket
@@ -63,41 +64,21 @@ class UpdateTicketMutation(BaseMutation):
 
     @classmethod
     def _update_ticket(cls, ticket, data):
-        if 'title' in data:
+        if data.get('title'):
             ticket.title = data['title']
 
-        if 'type' in data:
+        if data.get('type'):
             ticket.type = data['type']
 
-        if 'start_date' in data:
+        if data.get('start_date'):
             ticket.start_date = data['start_date']
 
-        if 'due_date' in data:
+        if data.get('due_date'):
             ticket.due_date = data['due_date']
 
-        if 'milestone' in data:
+        if data.get('milestone'):
             ticket.milestone = data['milestone']
 
         ticket.save()
 
         return UpdateTicketMutation(ticket=ticket)
-
-
-def _validate_type(inputs: dict) -> None:
-    if not inputs.get('type'):
-        return
-
-    if not inputs.get('type') in Ticket.TYPE.keys():
-        raise ValidationError('Incorrect ticket type')
-
-
-def _validate_milestone(inputs: dict) -> None:
-    if not inputs.get('milestone'):
-        return
-
-    milestone = get_object_or_404(
-        Milestone.objects.all(),
-        pk=inputs['milestone']
-    )
-
-    inputs['milestone'] = milestone
