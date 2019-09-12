@@ -1,9 +1,8 @@
 import pytest
-from gitlab.exceptions import GitlabGetError
-
-from rest_framework import status
 from django.conf import settings
 from django.test import override_settings
+from gitlab.exceptions import GitlabGetError
+from rest_framework import status
 
 from apps.core.gitlab import get_gitlab_client
 from apps.development.models import Project
@@ -47,6 +46,10 @@ def test_load_project_with_check_webhooks(db, gl_mocker):
     gl_mocker.registry_get('/user', GlUserFactory())
     gl_mocker.registry_get(f'/projects/{gl_project.id}', gl_project)
     gl_mocker.registry_get(f'/projects/{gl_project.id}/hooks', [gl_hook_1])
+    gl_mocker.registry_post(f'/projects/{gl_project.id}/hooks', {
+        'id': gl_project.id
+    })
+    gl_mocker.registry_delete(f'/projects/{gl_project.id}/hooks')
 
     gl = get_gitlab_client()
 
@@ -57,7 +60,6 @@ def test_load_project_with_check_webhooks(db, gl_mocker):
     check_project(project, gl_project, group)
 
     gl_mocker.registry_get(f'/projects/{gl_project.id}/hooks', [gl_hook_2])
-    gl_mocker.registry_post(f'/projects/{gl_project.id}/hooks', {'id': gl_project.id})
 
     load_project(gl, group, gl_project)
 
