@@ -3,20 +3,6 @@ from graphql.utils.ast_to_dict import ast_to_dict
 
 def collect_fields(node,
                    fragments) -> dict:
-    """
-    Recursively collects fields from the AST.
-    Args:
-        node (dict): A node in the AST
-        fragments (dict): Fragment definitions
-    Returns:
-        A dict mapping each field found, along with their sub fields.
-        {'name': {},
-         'sentimentsPerLanguage': {'id': {},
-                                   'name': {},
-                                   'totalSentiments': {}},
-         'slug': {}}
-    """
-
     field = {}
 
     if node.get('selection_set'):
@@ -33,14 +19,6 @@ def collect_fields(node,
 
 
 def get_fields_from_info(info) -> dict:
-    """
-    A convenience function to call collect_fields with info.
-    Args:
-        info (ResolveInfo)
-    Returns:
-        dict: Returned from collect_fields
-    """
-
     fragments = {}
     node = ast_to_dict(info.field_asts[0])
 

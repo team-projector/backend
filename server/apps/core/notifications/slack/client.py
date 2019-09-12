@@ -10,8 +10,11 @@ class SlackClient:
     def get_channel_user_by_email(self,
                                   email: str):
         try:
-            user = self.client.users_lookupByEmail(email=email).get('user')
-            return self.client.im_open(user=user.get('id')).get('channel')
+            return self.client.im_open(
+                user=self.client.users_lookupByEmail(
+                    email=email
+                ).get('user').get('id')
+            ).get('channel')
         except (TypeError, SlackApiError):
             pass
 

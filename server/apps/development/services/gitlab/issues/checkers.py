@@ -16,15 +16,15 @@ def check_projects_deleted_issues() -> None:
     gl = get_gitlab_client()
 
     for project in Project.objects.all():
+        add_action.delay(verb=ACTION_GITLAB_CALL_API)
+
         try:
             gl_project = gl.projects.get(id=project.gl_id)
-
-            add_action.delay(verb=ACTION_GITLAB_CALL_API)
-
-            check_project_deleted_issues(project, gl_project)
         except GitlabGetError as e:
             if e.response_code != status.HTTP_404_NOT_FOUND:
                 raise
+        else:
+            check_project_deleted_issues(project, gl_project)
 
 
 def check_project_deleted_issues(project: Project,
@@ -39,5 +39,5 @@ def check_project_deleted_issues(project: Project,
 
     project.issues.filter(gl_id__in=diff).delete()
 
-    logger.info(f'Project "{project}" deleted issues ' +
-                f'ckecked: removed {len(diff)} issues')
+    logger.info(f'Project "{project}" deleted issues '
+                + f'ckecked: removed {len(diff)} issues')

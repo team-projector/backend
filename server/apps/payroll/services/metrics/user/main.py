@@ -84,8 +84,8 @@ class UserMetricsProvider:
     @staticmethod
     def _get_payroll_opened(user: User) -> float:
         return SpentTime.objects.filter(
-            Q(issues__state=STATE_OPENED) |
-            Q(mergerequests__state=STATE_OPENED),
+            Q(issues__state=STATE_OPENED)
+            | Q(mergerequests__state=STATE_OPENED),
             salary__isnull=True,
             user=user
         ).aggregate(
@@ -95,8 +95,8 @@ class UserMetricsProvider:
     @staticmethod
     def _get_payroll_closed(user: User) -> float:
         return SpentTime.objects.filter(
-            Q(issues__state=STATE_CLOSED) |
-            Q(mergerequests__state__in=(STATE_CLOSED, STATE_MERGED)),
+            Q(issues__state=STATE_CLOSED)
+            | Q(mergerequests__state__in=(STATE_CLOSED, STATE_MERGED)),
             salary__isnull=True,
             user=user,
         ).aggregate(

@@ -13,11 +13,15 @@ from apps.development.services.allowed.merge_requests import (
 from apps.development.services.metrics.merge_request import (
     get_merge_request_metrcis
 )
+from apps.development.services.problems.merge_request import (
+    get_merge_request_problems
+)
 from .merge_request_metrics import MergeRequestMetricsType
 
 
 class MergeRequestType(BaseDjangoObjectType):
     metrics = graphene.Field(MergeRequestMetricsType)
+    problems = graphene.List(graphene.String)
 
     class Meta:
         model = MergeRequest
@@ -27,6 +31,9 @@ class MergeRequestType(BaseDjangoObjectType):
 
     def resolve_metrics(self, info, **kwargs):
         return get_merge_request_metrcis(self)
+
+    def resolve_problems(self, info, **kwargs):
+        return get_merge_request_problems(self)
 
     @classmethod
     def get_queryset(cls,

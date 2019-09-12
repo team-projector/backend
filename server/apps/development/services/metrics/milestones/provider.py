@@ -36,8 +36,8 @@ class MilestoneMetricsProvider(IssuesContainerMetricsProvider):
 
     def _fill_payroll_metrics(self, metrics: MilestoneMetrics) -> None:
         payroll = SpentTime.objects.filter(
-            Q(issues__milestone=self.milestone) |
-            Q(mergerequests__milestone=self.milestone)
+            Q(issues__milestone=self.milestone)
+            | Q(mergerequests__milestone=self.milestone)
         ).aggregate(
             total_sum=Coalesce(Sum('sum'), 0),
             total_customer_sum=Coalesce(Sum('customer_sum'), 0),
