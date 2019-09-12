@@ -34,7 +34,8 @@ class NotAssignedChecker(BaseProblemChecker):
     def merge_request_has_problem(self, merge_request: MergeRequest) -> bool:
         return (
             not merge_request.user
-            and merge_request.issues.filter(labels__title='Done').exists()
+            and merge_request.issues.filter(labels__title='Done',
+                                            state=STATE_OPENED).exists()
         )
 
 
