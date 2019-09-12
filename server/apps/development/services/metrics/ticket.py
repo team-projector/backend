@@ -46,9 +46,9 @@ class TicketMetricsProvider:
             issues_count=Count('*'),
             budget_estimate=Coalesce(
                 Sum(
-                    F('time_estimate') /
-                    SECS_IN_HOUR *
-                    F('user__customer_hour_rate'),
+                    F('time_estimate')
+                    / SECS_IN_HOUR
+                    * F('user__customer_hour_rate'),
                     output_field=DecimalField(),
                 ), 0
             ),

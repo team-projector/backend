@@ -11,7 +11,7 @@ from apps.development.graphql.types import (
 
 class TeamsQueries(graphene.ObjectType):
     team = DatasourceRelayNode.Field(TeamType)
-    
+
     all_teams = DataSourceConnectionField(
         TeamType,
         filterset_class=TeamsFilterSet

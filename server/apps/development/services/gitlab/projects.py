@@ -2,7 +2,7 @@ import logging
 
 from django.conf import settings
 from django.urls import reverse
-from gitlab import Gitlab, GitlabGetError
+from gitlab import Gitlab, GitlabGetError, GitlabError
 from gitlab.v4.objects import Project as GlProject
 from rest_framework import status
 
@@ -22,9 +22,10 @@ def load_projects() -> None:
 def load_group_projects(group: ProjectGroup) -> None:
     gl = get_gitlab_client()
 
+    add_action.delay(verb=ACTION_GITLAB_CALL_API)
+
     try:
         gl_group = gl.groups.get(id=group.gl_id)
-        add_action.delay(verb=ACTION_GITLAB_CALL_API)
     except GitlabGetError as e:
         if e.response_code != status.HTTP_404_NOT_FOUND:
             raise
@@ -38,8 +39,10 @@ def load_project(gl: Gitlab,
                  gl_project: GlProject) -> None:
     msg = f'Syncing project "{gl_project.name}"...'
 
+    logger.info(f'{msg}')
+
     try:
-        project, _ = Project.objects.sync_gitlab(
+        Project.objects.sync_gitlab(
             gl_id=gl_project.id,
             gl_url=gl_project.web_url,
             gl_avatar=gl_project.avatar_url,
@@ -47,14 +50,23 @@ def load_project(gl: Gitlab,
             full_title=gl_project.name_with_namespace,
             title=gl_project.name
         )
-
-        if settings.GITLAB_CHECK_WEBHOOKS:
-            check_project_webhooks(gl.projects.get(gl_project.id))
     except Exception as e:
-        logger.info(f'{msg}')
         logger.exception(str(e))
     else:
-        logger.info(f'{msg} done')
+        check_project_webhooks_if_need(gl, gl_project)
+
+    logger.info(f'{msg} done')
+
+
+def check_project_webhooks_if_need(gl: Gitlab,
+                                   gl_project: GlProject):
+    if not settings.GITLAB_CHECK_WEBHOOKS:
+        return
+
+    try:
+        check_project_webhooks(gl.projects.get(gl_project.id))
+    except GitlabError as e:
+        logger.exception(str(e))
 
 
 def check_project_webhooks(gl_project: GlProject) -> None:
@@ -90,7 +102,7 @@ def check_project_webhooks(gl_project: GlProject) -> None:
 def validate_webhook(webhook,
                      webhook_url: str) -> bool:
     return (
-        webhook.url == webhook_url and
-        webhook.issues_events and
-        webhook.merge_requests_events
+        webhook.url == webhook_url
+        and webhook.issues_events
+        and webhook.merge_requests_events
     )

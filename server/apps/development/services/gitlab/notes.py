@@ -6,8 +6,8 @@ from apps.core.utils.time import seconds
 from ...services.gitlab.parsers import parse_gl_date, parse_gl_datetime
 
 RE_SPEND_FULL: Pattern = re.compile(
-    r'^(?P<action>(added|subtracted)) (?P<spent>.+) ' +
-    r'of time spent at (?P<date>\d{4}-\d{2}-\d{2})$'
+    r'^(?P<action>(added|subtracted)) (?P<spent>.+) '
+    + r'of time spent at (?P<date>\d{4}-\d{2}-\d{2})$'
 )
 RE_SPEND_SHORT: Pattern = re.compile(
     r'^(?P<action>(added|subtracted)) (?P<spent>.+) of time spent$'

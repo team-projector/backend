@@ -89,8 +89,8 @@ class SalaryCalculator:
             salary__isnull=True,
             user=user
         ).filter(
-            Q(issues__state=STATE_CLOSED) |
-            Q(mergerequests__state__in=(STATE_CLOSED, STATE_MERGED))
+            Q(issues__state=STATE_CLOSED)
+            | Q(mergerequests__state__in=(STATE_CLOSED, STATE_MERGED))
         ).update(
             salary=salary
         )

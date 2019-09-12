@@ -24,25 +24,27 @@ class PayrollAdmin(BaseModelAdmin):
     )
 
     def inheritance(self, payroll):
-        node = None
         for field in self._get_accessor_names(self.model):
+            node = None
+
             try:
                 node = getattr(payroll, field)
-                if node:
-                    break
             except ObjectDoesNotExist:
                 pass
 
-        if node:
-            url = reverse(
-                f'admin:{node._meta.app_label}_{node._meta.model_name}_change',
-                args=[node.id]
-            )
+            if node:
+                return self._get_inheritance_link(node)
 
-            return mark_safe(
-                f'<a href={url}>{node._meta.model_name.capitalize()}: ' +
-                f'{node}</a>'
-            )
+    def _get_inheritance_link(self, node):
+        url = reverse(
+            f'admin:{node._meta.app_label}_{node._meta.model_name}_change',
+            args=[node.id]
+        )
+
+        return mark_safe(
+            f'<a href={url}>{node._meta.model_name.capitalize()}: '
+            + f'{node}</a>'
+        )
 
     @staticmethod
     def _get_accessor_names(model):
@@ -51,4 +53,7 @@ class PayrollAdmin(BaseModelAdmin):
             if isinstance(f, OneToOneRel) and issubclass(f.field.model, model)
         ]
 
-        return [rel.get_accessor_name() for rel in related_objects]
+        return [
+            rel.get_accessor_name()
+            for rel in related_objects
+        ]
