@@ -15,7 +15,6 @@ NAMESPACE = getattr(settings, setting_name('URL_NAMESPACE'), None) or 'social'
 @csrf_exempt
 @psa(f'{NAMESPACE}:complete')
 def auth_complete(request, backend, *args, **kwargs):
-    """Authentication complete view"""
     return do_complete(
         request.backend,
         _do_login,

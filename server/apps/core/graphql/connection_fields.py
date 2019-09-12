@@ -32,7 +32,7 @@ class DataSourceConnectionField(AuthFilter,
 
         iterable = maybe_queryset(iterable)
         if isinstance(iterable, QuerySet):
-            if iterable is not default_manager:
+            if iterable.model.objects is not default_manager:
                 default_queryset = maybe_queryset(default_manager)
                 iterable = cls.merge_querysets(default_queryset, iterable)
             items_count = iterable.count()

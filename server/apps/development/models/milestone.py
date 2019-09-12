@@ -23,18 +23,21 @@ class Milestone(GitlabEntityMixin,
         verbose_name=_('VN__TITLE'),
         help_text=_('HT__TITLE')
     )
+
     description = models.TextField(
         null=True,
         blank=True,
         verbose_name=_('VN__DESCRIPTION'),
         help_text=_('HT__DESCRIPTION')
     )
+
     start_date = models.DateField(
         null=True,
         blank=True,
         verbose_name=_('VN__START_DATE'),
         help_text=_('HT__START_DATE')
     )
+
     state = models.CharField(
         choices=STATE,
         max_length=20,
@@ -43,12 +46,14 @@ class Milestone(GitlabEntityMixin,
         verbose_name=_('VN__STATE'),
         help_text=_('HT__STATE')
     )
+
     due_date = models.DateField(
         null=True,
         blank=True,
         verbose_name=_('VN__DUE_DATE'),
         help_text=_('HT__DUE_DATE')
     )
+
     budget = models.DecimalField(
         default=0,
         max_digits=12,
@@ -58,10 +63,12 @@ class Milestone(GitlabEntityMixin,
     )
 
     owner = GenericForeignKey()
+
     content_type = models.ForeignKey(
         ContentType,
         models.CASCADE
     )
+
     object_id = models.PositiveIntegerField()
 
     objects = MilestoneManager()

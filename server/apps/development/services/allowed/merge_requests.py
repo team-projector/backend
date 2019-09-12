@@ -24,4 +24,6 @@ def filter_allowed_for_user(queryset: QuerySet,
     for member in members:
         allowed_users.add(member)
 
-    return queryset.filter(user__in=allowed_users)
+    return queryset.filter(
+        user__in=allowed_users
+    )

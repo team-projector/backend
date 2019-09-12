@@ -3,8 +3,7 @@ from collections import defaultdict, namedtuple
 from typing import DefaultDict, Optional, Pattern
 
 from apps.core.utils.time import seconds
-from apps.development.services.gitlab.parsers import parse_gl_date, \
-    parse_gl_datetime
+from ...services.gitlab.parsers import parse_gl_date, parse_gl_datetime
 
 RE_SPEND_FULL: Pattern = re.compile(
     r'^(?P<action>(added|subtracted)) (?P<spent>.+) ' +
@@ -101,11 +100,16 @@ class SpendAddedParser(BaseNoteParser):
         if m.group('action') == 'subtracted':
             spent *= -1
 
+        if m.lastgroup == 'date':
+            date = parse_gl_date(m.group('date'))
+        else:
+            datetime = parse_gl_datetime(gl_note.created_at)
+            date = datetime.date() if datetime is not None else None
+
         return NoteReadResult(
             Note.TYPE.time_spend, {
                 'spent': spent,
-                'date': parse_gl_date(m.group('date')) if m.lastgroup == 'date'
-                else parse_gl_datetime(gl_note.created_at).date()
+                'date': date,
             }
         )
 
