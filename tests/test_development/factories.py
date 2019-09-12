@@ -24,7 +24,7 @@ class ProjectGroupFactory(GitlabFieldMixin):
 
 class LabelFactory(factory.django.DjangoModelFactory):
     title = factory.Faker('text', max_nb_chars=200)
-    address = factory.Faker('address')
+    color = factory.Faker('text', max_nb_chars=10)
 
     class Meta:
         model = Label
