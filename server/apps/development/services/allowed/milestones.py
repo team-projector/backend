@@ -11,7 +11,7 @@ def filter_allowed_for_user(queryset: QuerySet,
         project__members__role=ProjectMember.ROLE.project_manager
     )
 
-    def fill_milestones(groups):
+    def fill_milestones(groups: QuerySet) -> None:
         nonlocal milestones
 
         milestones_on_level = Milestone.objects.filter(

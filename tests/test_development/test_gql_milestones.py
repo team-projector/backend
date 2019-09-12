@@ -27,3 +27,25 @@ def test_milestones(user, client):
 
     assert milestones.count() == 1
     assert milestones.first() == milestone
+
+
+def test_milestone(user, client):
+    project = ProjectFactory.create()
+    ProjectMemberFactory.create(
+        user=user,
+        role=ProjectMember.ROLE.project_manager,
+        owner=project
+    )
+
+    milestone = ProjectMilestoneFactory.create(owner=project)
+
+    client.user = user
+    info = AttrDict({'context': client})
+
+    ProjectMilestoneFactory.create_batch(5)
+
+    results = MilestoneType().get_node(
+        info, milestone.id
+    )
+
+    assert results == milestone
