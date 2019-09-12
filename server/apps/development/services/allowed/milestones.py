@@ -15,8 +15,7 @@ def filter_allowed_for_user(queryset: QuerySet,
         nonlocal milestones
 
         milestones_on_level = Milestone.objects.filter(
-            Q(project_group__in=groups) |
-            Q(project__group__in=groups)
+            Q(project_group__in=groups) | Q(project__group__in=groups)
         )
 
         milestones = milestones | milestones_on_level  # noqa:WPS442
