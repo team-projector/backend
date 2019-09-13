@@ -1,6 +1,3 @@
-from pytest import raises
-from django.core.exceptions import PermissionDenied
-
 from apps.development.graphql.types.milestone import MilestoneType
 from apps.development.models import Milestone
 from tests.test_development.factories import ProjectMilestoneFactory
@@ -23,13 +20,18 @@ def test_milestones(user, client):
     assert milestones.count() == 5
 
 
-def test_milestones_not_pm(user, client):
+def test_milestone(user, client):
+    user.roles.project_manager = True
+    user.save()
+
     client.user = user
     info = AttrDict({'context': client})
 
-    ProjectMilestoneFactory.create_batch(5)
+    milestone = ProjectMilestoneFactory.create()
 
-    with raises(PermissionDenied):
-        MilestoneType().get_queryset(
-            Milestone.objects.all(), info
-        )
+    results = MilestoneType().get_node(
+        info=info,
+        obj_id=milestone.id
+    )
+
+    assert results == milestone
