@@ -1,9 +1,35 @@
+from pytest import raises
+from django.core.exceptions import PermissionDenied
+
 from apps.development.models import Milestone, ProjectMember
 from apps.development.services.allowed.milestones import filter_allowed_for_user
 from tests.test_development.factories import (
     ProjectFactory, ProjectGroupFactory, ProjectMemberFactory,
     ProjectMilestoneFactory
 )
+
+
+def test_not_pm(user):
+    project = ProjectFactory.create()
+    ProjectMemberFactory.create(
+        user=user,
+        role=ProjectMember.ROLE.developer,
+        owner=project
+    )
+
+    ProjectMilestoneFactory.create(owner=project)
+
+    group = ProjectGroupFactory.create()
+    ProjectMemberFactory.create(
+        user=user,
+        role=ProjectMember.ROLE.customer,
+        owner=group
+    )
+
+    ProjectMilestoneFactory.create(owner=group)
+
+    with raises(PermissionDenied):
+        filter_allowed_for_user(Milestone.objects.all(), user)
 
 
 def test_projects(user):
@@ -33,16 +59,6 @@ def test_projects(user):
     assert queryset.count() == 3
     assert set(queryset) == {milestone_1, milestone_2, milestone_3}
 
-    ProjectMember.objects.filter(
-        user=user
-    ).update(
-        role=ProjectMember.ROLE.developer
-    )
-
-    queryset = filter_allowed_for_user(Milestone.objects.all(), user)
-
-    assert queryset.count() == 0
-
 
 def test_groups(user):
     group_1 = ProjectGroupFactory.create()
@@ -70,16 +86,6 @@ def test_groups(user):
 
     assert queryset.count() == 3
     assert set(queryset) == {milestone_1, milestone_2, milestone_3}
-
-    ProjectMember.objects.filter(
-        user=user
-    ).update(
-        role=ProjectMember.ROLE.developer
-    )
-
-    queryset = filter_allowed_for_user(Milestone.objects.all(), user)
-
-    assert queryset.count() == 0
 
 
 def test_group_and_projects(user):
