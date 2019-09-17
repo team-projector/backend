@@ -4,10 +4,10 @@ from rest_framework.exceptions import PermissionDenied
 
 from apps.development.models import TeamMember
 from apps.payroll.models import WorkBreak
-from apps.payroll.graphql.mutations.workbreaks import (
+from apps.payroll.graphql.mutations.work_breaks import (
     CreateWorkBreakMutation, DeleteWorkBreakMutation, UpdateWorkBreakMutation
 )
-from apps.payroll.graphql.queries.work_break import WorkBreakType
+from apps.payroll.graphql.queries.work_breaks import WorkBreakType
 from tests.test_development.factories import TeamFactory, TeamMemberFactory
 from tests.test_development.factories_gitlab import AttrDict
 from tests.test_payroll.factories import WorkBreakFactory

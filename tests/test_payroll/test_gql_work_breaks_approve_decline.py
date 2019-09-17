@@ -3,7 +3,7 @@ from rest_framework.exceptions import PermissionDenied
 
 from apps.development.models import TeamMember
 from apps.payroll.models.mixins.approved import APPROVED, DECLINED
-from apps.payroll.graphql.mutations.workbreaks import (
+from apps.payroll.graphql.mutations.work_breaks import (
     ApproveWorkBreakMutation, DeclineWorkBreakMutation
 )
 from tests.test_development.factories import TeamFactory, TeamMemberFactory
