@@ -7,7 +7,7 @@ from apps.users.models import User
 
 def filter_allowed_for_user(queryset: QuerySet,
                             user: User) -> QuerySet:
-    members = get_pm_members(user)
+    members = get_members(user)
 
     milestones = Milestone.objects.filter(project__members__in=members)
 
@@ -34,7 +34,7 @@ def filter_allowed_for_user(queryset: QuerySet,
     return queryset.filter(id__in=milestones)
 
 
-def get_pm_members(user: User):
+def get_members(user: User) -> list:
     members = ProjectMember.objects.filter(
         user=user,
         role=ProjectMember.ROLE.project_manager
