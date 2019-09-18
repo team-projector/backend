@@ -1,12 +1,20 @@
 from apps.development.graphql.types.milestone import MilestoneType
-from apps.development.models import Milestone
-from tests.test_development.factories import ProjectMilestoneFactory
+from apps.development.models import Milestone, ProjectMember
+from tests.test_development.factories import (
+    ProjectFactory, ProjectMilestoneFactory, ProjectMemberFactory
+)
 from tests.test_development.factories_gitlab import AttrDict
 
 
 def test_milestones(user, client):
-    user.roles.project_manager = True
-    user.save()
+    project = ProjectFactory.create()
+    ProjectMemberFactory.create(
+        user=user,
+        role=ProjectMember.ROLE.project_manager,
+        owner=project
+    )
+
+    milestone = ProjectMilestoneFactory.create(owner=project)
 
     client.user = user
     info = AttrDict({'context': client})
@@ -17,21 +25,27 @@ def test_milestones(user, client):
         Milestone.objects.all(), info
     )
 
-    assert milestones.count() == 5
+    assert milestones.count() == 1
+    assert milestones.first() == milestone
 
 
 def test_milestone(user, client):
-    user.roles.project_manager = True
-    user.save()
+    project = ProjectFactory.create()
+    ProjectMemberFactory.create(
+        user=user,
+        role=ProjectMember.ROLE.project_manager,
+        owner=project
+    )
+
+    milestone = ProjectMilestoneFactory.create(owner=project)
 
     client.user = user
     info = AttrDict({'context': client})
 
-    milestone = ProjectMilestoneFactory.create()
+    ProjectMilestoneFactory.create_batch(5)
 
     results = MilestoneType().get_node(
-        info=info,
-        obj_id=milestone.id
+        info, milestone.id
     )
 
     assert results == milestone

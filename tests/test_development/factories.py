@@ -3,8 +3,8 @@ import pytz
 from django.contrib.contenttypes.models import ContentType
 
 from apps.development.models import (
-    Ticket, Issue, Label, Milestone, Note, Project, ProjectGroup, Team,
-    TeamMember, MergeRequest
+    Ticket, Issue, Label, MergeRequest, Milestone, Note, Project, ProjectGroup,
+    ProjectMember, Team, TeamMember,
 )
 from apps.development.models.issue import STATE_OPENED
 from tests.test_users.factories import UserFactory
@@ -120,3 +120,8 @@ class MergeRequestFactory(GitlabFieldMixin):
 
     class Meta:
         model = MergeRequest
+
+
+class ProjectMemberFactory(factory.django.DjangoModelFactory):
+    class Meta:
+        model = ProjectMember
