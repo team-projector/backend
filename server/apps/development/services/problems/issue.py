@@ -114,7 +114,7 @@ def extract_problems_from_annotated(issue: Issue) -> List[str]:
     return [
         checker.problem_code
         for checker in checkers
-        if getattr(issue, checker.annotate_field, False)
+        if getattr(issue, checker.annotate_field, False)  # noqa WPS425
     ]
 
 
