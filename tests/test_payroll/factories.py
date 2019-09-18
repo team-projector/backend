@@ -4,7 +4,7 @@ import factory
 import pytz
 
 from apps.payroll.models import Bonus, Payment, Penalty, Salary, SpentTime, WorkBreak
-from apps.payroll.models.workbreak import DAYOFF, VACATION, DISEASE
+from apps.payroll.models.work_break import DAYOFF, VACATION, DISEASE
 from tests.test_development.factories import IssueFactory, MergeRequestFactory
 from tests.test_users.factories import UserFactory
 

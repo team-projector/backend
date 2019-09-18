@@ -4,4 +4,4 @@ from .payroll import Payroll
 from .penalty import Penalty
 from .salary import Salary
 from .spent_time import SpentTime
-from .workbreak import WorkBreak
+from .work_break import WorkBreak

@@ -1,4 +1,4 @@
-from .workbreaks import (
+from .work_breaks import (
     ApproveWorkBreakMutation, CreateWorkBreakMutation,
     DeclineWorkBreakMutation, DeleteWorkBreakMutation,
     UpdateWorkBreakMutation
@@ -6,8 +6,8 @@ from .workbreaks import (
 
 
 class WorkBreaksMutations:
-    approve_workbreak = ApproveWorkBreakMutation.Field()
-    create_workbreak = CreateWorkBreakMutation.Field()
-    decline_workbreak = DeclineWorkBreakMutation.Field()
-    delete_workbreak = DeleteWorkBreakMutation.Field()
-    update_workbreak = UpdateWorkBreakMutation.Field()
+    approve_work_break = ApproveWorkBreakMutation.Field()
+    create_work_break = CreateWorkBreakMutation.Field()
+    decline_work_break = DeclineWorkBreakMutation.Field()
+    delete_work_break = DeleteWorkBreakMutation.Field()
+    update_work_break = UpdateWorkBreakMutation.Field()

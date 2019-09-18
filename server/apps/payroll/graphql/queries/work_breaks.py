@@ -6,7 +6,7 @@ from apps.payroll.graphql.filters import WorkBreakFilterSet
 from apps.payroll.graphql.types import WorkBreakType
 
 
-class WorkBreakQueries(graphene.ObjectType):
+class WorkBreaksQueries(graphene.ObjectType):
     work_break = DatasourceRelayNode.Field(WorkBreakType)
     all_work_breaks = DataSourceConnectionField(
         WorkBreakType,

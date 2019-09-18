@@ -23,7 +23,7 @@ from apps.payroll.graphql.mutations import WorkBreaksMutations
 from apps.payroll.graphql.queries import (
     TimeExpensesQueries,
     SalariesQueries,
-    WorkBreakQueries
+    WorkBreaksQueries
 )
 from apps.users.graphql.mutations import AuthMutations
 from apps.users.graphql.queries import UsersQueries
@@ -38,7 +38,7 @@ class Query(IssuesQueries,
             GitlabQueries,
             TimeExpensesQueries,
             SalariesQueries,
-            WorkBreakQueries,
+            WorkBreaksQueries,
             UsersQueries,
             graphene.ObjectType):
     debug = graphene.Field(
