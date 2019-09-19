@@ -13,6 +13,7 @@ from django.contrib.auth.management.commands.createsuperuser import (
 )
 
 
+# TODO: remove after Django upgraded to 3 ver
 class Command(createsuperuser.Command):
     def handle(self, *args, **options):
         username = options[self.UserModel.USERNAME_FIELD]
