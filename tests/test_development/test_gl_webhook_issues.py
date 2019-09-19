@@ -1,5 +1,7 @@
+from pytest import raises
 from django.test import override_settings
 from rest_framework import status
+from rest_framework.exceptions import AuthenticationFailed
 
 from apps.development.api.views.gl_webhook import gl_webhook
 from apps.development.models import Issue, MergeRequest
@@ -15,6 +17,7 @@ from tests.test_development.factories_gitlab import (
 
 
 @override_settings(GITLAB_TOKEN='GITLAB_TOKEN')
+@override_settings(WEBHOOK_SECRET_TOKEN=None)
 def test_sync_issues(db, gl_mocker, client):
     gl_mocker.registry_get('/user', GlUserFactory())
 
@@ -46,6 +49,7 @@ def test_sync_issues(db, gl_mocker, client):
 
 
 @override_settings(GITLAB_TOKEN='GITLAB_TOKEN')
+@override_settings(WEBHOOK_SECRET_TOKEN=None)
 def test_sync_merge_request(db, gl_mocker, client):
     gl_mocker.registry_get('/user', GlUserFactory())
 
@@ -68,6 +72,50 @@ def test_sync_merge_request(db, gl_mocker, client):
     assert MergeRequest.objects.count() == 0
 
     response = gl_webhook(client.post('/', data=webhook, format='json'))
+
+    merge_request = MergeRequest.objects.first()
+
+    assert response.status_code == status.HTTP_200_OK
+    check_user(merge_request.author, gl_user)
+    check_user(merge_request.user, gl_user)
+    check_merge_request(merge_request, gl_merge_request)
+
+
+@override_settings(GITLAB_TOKEN='GITLAB_TOKEN')
+@override_settings(WEBHOOK_SECRET_TOKEN='WEBHOOK_SECRET_TOKEN')
+def test_webhook_secret_token(client):
+    webhook = AttrDict(GlIssueWebhookFactory())
+
+    with raises(AuthenticationFailed):
+        gl_webhook(client.post('/', data=webhook, format='json'))
+
+
+@override_settings(GITLAB_TOKEN='GITLAB_TOKEN')
+@override_settings(WEBHOOK_SECRET_TOKEN='WEBHOOK_SECRET_TOKEN')
+def test_sync_merge_request_with_secret_token(db, gl_mocker, client):
+    gl_mocker.registry_get('/user', GlUserFactory())
+
+    gl_project = AttrDict(GlProjectFactory())
+    ProjectFactory.create(gl_id=gl_project.id)
+    gl_mocker.registry_get(f'/projects/{gl_project.id}', gl_project)
+
+    gl_user = AttrDict(GlUserFactory())
+    gl_mocker.registry_get(f'/users/{gl_user.id}', gl_user)
+
+    gl_merge_request = AttrDict(GlMergeRequestFactory(
+        project_id=gl_project.id, assignee=gl_user, author=gl_user
+    ))
+    _registry_merge_request(gl_mocker, gl_project, gl_merge_request)
+
+    webhook = AttrDict(GlMergeRequestWebhookFactory(
+        project=gl_project, object_attributes=gl_merge_request
+    ))
+
+    assert MergeRequest.objects.count() == 0
+
+    response = gl_webhook(client.post(
+        '/', data=webhook, format='json', HTTP_X_GITLAB_TOKEN='WEBHOOK_SECRET_TOKEN'
+    ))
 
     merge_request = MergeRequest.objects.first()
 
