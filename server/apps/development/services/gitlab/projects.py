@@ -94,6 +94,7 @@ def check_project_webhooks(gl_project: GlProject) -> None:
     if not has_valid:
         gl_project.hooks.create({
             'url': webhook_url,
+            'token': settings.WEBHOOK_SECRET_TOKEN,
             'issues_events': True,
             'merge_requests_events': True
         })
