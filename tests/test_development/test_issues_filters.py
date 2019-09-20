@@ -1,10 +1,11 @@
 from datetime import timedelta, datetime
-from pytest import raises
-from django.core.exceptions import PermissionDenied
 
-from apps.development.models import TeamMember
-from apps.development.models.issue import Issue, STATE_CLOSED, STATE_OPENED
+from django.core.exceptions import PermissionDenied
+from pytest import raises
+
 from apps.development.graphql.filters import IssuesFilterSet
+from apps.development.models import TeamMember
+from apps.development.models.issue import Issue, ISSUE_STATES
 from tests.test_development.factories import (
     IssueFactory, TicketFactory, ProjectFactory, ProjectMilestoneFactory,
     TeamFactory, TeamMemberFactory
@@ -13,12 +14,12 @@ from tests.test_users.factories import UserFactory
 
 
 def test_filter_by_state(user):
-    issue_opened = IssueFactory.create(user=user, state=STATE_OPENED)
-    issue_closed = IssueFactory.create(user=user, state=STATE_CLOSED)
+    issue_opened = IssueFactory.create(user=user, state=ISSUE_STATES.opened)
+    issue_closed = IssueFactory.create(user=user, state=ISSUE_STATES.closed)
     IssueFactory.create_batch(5, user=user, state=None)
 
     results = IssuesFilterSet(
-        data={'state': STATE_OPENED},
+        data={'state': ISSUE_STATES.opened},
         queryset=Issue.objects.all()
     ).qs
 
@@ -26,7 +27,7 @@ def test_filter_by_state(user):
     assert results.first() == issue_opened
 
     results = IssuesFilterSet(
-        data={'state': STATE_CLOSED},
+        data={'state': ISSUE_STATES.closed},
         queryset=Issue.objects.all()
     ).qs
 
@@ -51,28 +52,30 @@ def test_filter_by_due_date(user):
 def test_filter_by_due_date_and_state(user):
     issue = IssueFactory.create(
         user=user,
-        state=STATE_OPENED,
+        state=ISSUE_STATES.opened,
         due_date=datetime.now()
     )
     IssueFactory.create(
         user=user,
-        state=STATE_CLOSED,
+        state=ISSUE_STATES.closed,
         due_date=datetime.now()
     )
     IssueFactory.create(
         user=user,
-        state=STATE_CLOSED,
+        state=ISSUE_STATES.closed,
         due_date=datetime.now() - timedelta(days=1)
     )
     IssueFactory.create(
         user=user,
-        state=STATE_OPENED,
+        state=ISSUE_STATES.opened,
         due_date=datetime.now() - timedelta(days=1)
     )
 
     results = IssuesFilterSet(
-        data={'due_date': datetime.now().date(),
-              'state': STATE_OPENED},
+        data={
+            'due_date': datetime.now().date(),
+            'state': ISSUE_STATES.opened
+        },
         queryset=Issue.objects.all()
     ).qs
 
@@ -155,7 +158,8 @@ def test_filter_by_team_with_many_members(user):
     ).qs
 
     assert results.count() == 5
-    assert all(issue.user == user or issue.user == another_user for issue in results) is True
+    assert all(issue.user == user or issue.user == another_user for issue in
+               results) is True
 
 
 def test_filter_by_team_with_watcher(user):
@@ -283,8 +287,10 @@ def test_order_by_title(user):
 
 
 def test_order_by_due_date(user):
-    issue_1 = IssueFactory.create(due_date=datetime.now() - timedelta(days=3), user=user)
-    issue_2 = IssueFactory.create(due_date=datetime.now() + timedelta(days=1), user=user)
+    issue_1 = IssueFactory.create(due_date=datetime.now() - timedelta(days=3),
+                                  user=user)
+    issue_2 = IssueFactory.create(due_date=datetime.now() + timedelta(days=1),
+                                  user=user)
     issue_3 = IssueFactory.create(due_date=datetime.now(), user=user)
 
     results = IssuesFilterSet(

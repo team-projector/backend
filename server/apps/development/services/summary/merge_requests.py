@@ -1,6 +1,6 @@
 from django.db.models import QuerySet, Count
 
-from apps.development.models import MergeRequest
+from apps.development.models.merge_request import MERGE_REQUESTS_STATES
 
 
 class MergeRequestsSummary:
@@ -17,14 +17,15 @@ class MergeRequestsSummaryProvider:
     def execute(self) -> MergeRequestsSummary:
         summary = MergeRequestsSummary()
 
+        # TODO refactor
         for item in self._get_counts_by_state():
-            if item['state'] == MergeRequest.STATE.opened:
+            if item['state'] == MERGE_REQUESTS_STATES.opened:
                 summary.opened_count = item['count']
                 summary.count += item['count']
-            elif item['state'] == MergeRequest.STATE.closed:
+            elif item['state'] == MERGE_REQUESTS_STATES.closed:
                 summary.closed_count = item['count']
                 summary.count += item['count']
-            elif item['state'] == MergeRequest.STATE.merged:
+            elif item['state'] == MERGE_REQUESTS_STATES.merged:
                 summary.merged_count = item['count']
                 summary.count += item['count']
             else:

@@ -3,7 +3,7 @@ from typing import ClassVar, List
 from django.db.models import Q
 
 from apps.development.models import MergeRequest
-from apps.development.models.issue import STATE_OPENED
+from apps.development.models.merge_request import MERGE_REQUESTS_STATES
 
 PROBLEM_EMPTY_ESTIMATE = 'empty_estimate'
 PROBLEM_NOT_ASSIGNED = 'not_assigned'
@@ -27,7 +27,7 @@ class EmptyEstimateChecker(BaseProblemChecker):
                 Q(time_estimate__isnull=True)
                 | Q(time_estimate=0)
             )
-            & Q(state=STATE_OPENED)
+            & Q(state=MERGE_REQUESTS_STATES.opened)
         ).exists()
 
 
@@ -39,8 +39,8 @@ class NotAssignedChecker(BaseProblemChecker):
         return (
             not merge_request.user
             and merge_request.issues.filter(labels__title='Done',
-                                            state=STATE_OPENED).exists()
-        )
+                                            state=MERGE_REQUESTS_STATES.opened
+                                            ).exists())
 
 
 checkers = [

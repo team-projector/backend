@@ -1,5 +1,6 @@
 from apps.development.graphql.types.milestone import MilestoneType
-from apps.development.models import Milestone, ProjectMember
+from apps.development.models import Milestone
+from apps.development.models.project_member import PROJECT_MEMBER_ROLES
 from tests.test_development.factories import (
     ProjectFactory, ProjectMilestoneFactory, ProjectMemberFactory
 )
@@ -10,7 +11,7 @@ def test_milestones(user, client):
     project = ProjectFactory.create()
     ProjectMemberFactory.create(
         user=user,
-        role=ProjectMember.ROLE.project_manager,
+        role=PROJECT_MEMBER_ROLES.project_manager,
         owner=project
     )
 
@@ -33,7 +34,7 @@ def test_milestone(user, client):
     project = ProjectFactory.create()
     ProjectMemberFactory.create(
         user=user,
-        role=ProjectMember.ROLE.project_manager,
+        role=PROJECT_MEMBER_ROLES.project_manager,
         owner=project
     )
 

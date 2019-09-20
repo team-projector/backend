@@ -13,21 +13,17 @@ from apps.payroll.models.mixins import SpentTimesMixin
 from .managers import MergeRequestManager
 from .mixins import NotableMixin
 
-STATE_CLOSED = 'closed'
-STATE_OPENED = 'opened'
-STATE_MERGED = 'merged'
+MERGE_REQUESTS_STATES = Choices(
+    ('opened', 'opened'),
+    ('merged', 'merged'),
+    ('closed', 'closed')
+)
 
 
 class MergeRequest(NotableMixin,
                    SpentTimesMixin,
                    GitlabEntityMixin,
                    GitlabInternalIdMixin):
-    STATE = Choices(
-        (STATE_OPENED, 'opened'),
-        (STATE_MERGED, 'merged'),
-        (STATE_CLOSED, 'closed')
-    )
-
     title = models.CharField(
         max_length=255,
         verbose_name=_('VN__TITLE'),
@@ -47,7 +43,7 @@ class MergeRequest(NotableMixin,
     )
 
     state = models.CharField(
-        choices=STATE,
+        choices=MERGE_REQUESTS_STATES,
         max_length=255,
         null=True,
         blank=True,
@@ -148,7 +144,7 @@ class MergeRequest(NotableMixin,
     @property
     def efficiency_available(self) -> bool:
         return (
-            self.state == self.STATE.closed
+            self.state == MERGE_REQUESTS_STATES.closed
             and self.total_time_spent
             and self.time_estimate
         )

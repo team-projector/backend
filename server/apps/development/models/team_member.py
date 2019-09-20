@@ -6,14 +6,14 @@ from django.utils.translation import gettext_lazy as _
 from apps.core.models.utils import Choices
 from apps.development.models.managers import TeamMemberManager
 
+TEAM_MEMBER_ROLES = Choices(
+    ('leader', _('CH_LEADER')),
+    ('developer', _('CH_DEVELOPER')),
+    ('watcher', _('CH_WATCHER')),
+)
+
 
 class TeamMember(models.Model):
-    ROLES = Choices(
-        ('leader', _('CH_LEADER')),
-        ('developer', _('CH_DEVELOPER')),
-        ('watcher', _('CH_WATCHER')),
-    )
-
     team = models.ForeignKey(
         'Team',
         models.CASCADE,
@@ -29,7 +29,7 @@ class TeamMember(models.Model):
     )
 
     roles = BitField(
-        flags=ROLES,
+        flags=TEAM_MEMBER_ROLES,
         default=0
     )
 

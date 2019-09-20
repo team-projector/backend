@@ -27,21 +27,21 @@ class SpentTimeQuerySet(models.QuerySet):
         )
 
     def summaries(self):
-        from apps.development.models import merge_request
         from apps.development.models import issue
+        from apps.development.models.merge_request import MERGE_REQUESTS_STATES
 
         def _h(**filters) -> Coalesce:
             return Coalesce(Sum('time_spent', filter=Q(**filters)), 0)
 
         return self.aggregate(
             total_issues=_h(issues__isnull=False),
-            opened_issues=_h(issues__state=issue.STATE_OPENED),
-            closed_issues=_h(issues__state=issue.STATE_CLOSED),
+            opened_issues=_h(issues__state=issue.ISSUE_STATES.opened),
+            closed_issues=_h(issues__state=issue.ISSUE_STATES.closed),
 
             total_merges=_h(mergerequests__isnull=False),
-            opened_merges=_h(mergerequests__state=merge_request.STATE_OPENED),
-            closed_merges=_h(mergerequests__state=merge_request.STATE_CLOSED),
-            merged_merges=_h(mergerequests__state=merge_request.STATE_MERGED),
+            opened_merges=_h(mergerequests__state=MERGE_REQUESTS_STATES.opened),
+            closed_merges=_h(mergerequests__state=MERGE_REQUESTS_STATES.closed),
+            merged_merges=_h(mergerequests__state=MERGE_REQUESTS_STATES.merged),
         )
 
     def annotate_payrolls(self,

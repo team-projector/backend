@@ -1,10 +1,10 @@
 import pytest
 
 from apps.core.utils.time import seconds
-from apps.development.models.issue import STATE_CLOSED, STATE_OPENED
+from apps.development.models.issue import ISSUE_STATES
 from apps.payroll.services.metrics.user import (
-    User, UserMetrics, UserMetricsProvider
-)
+    User, UserMetrics, UserMetricsProvider,
+    MERGE_REQUESTS_STATES)
 from apps.users.graphql.types.user import UserType
 from tests.test_development.factories import IssueFactory, MergeRequestFactory
 from tests.test_payroll.factories import (
@@ -39,7 +39,7 @@ def test_mr_opened_count(user):
 
 def test_issues_opened_count_exists_closed(user):
     IssueFactory.create_batch(10, user=user)
-    IssueFactory.create_batch(5, user=user, state=STATE_CLOSED)
+    IssueFactory.create_batch(5, user=user, state=ISSUE_STATES.closed)
 
     metrics = calculator.get_metrics(user)
 
@@ -48,7 +48,7 @@ def test_issues_opened_count_exists_closed(user):
 
 def test_mr_opened_count_exists_closed(user):
     MergeRequestFactory.create_batch(10, user=user)
-    MergeRequestFactory.create_batch(5, user=user, state=STATE_CLOSED)
+    MergeRequestFactory.create_batch(5, user=user, state=ISSUE_STATES.closed)
 
     metrics = calculator.get_metrics(user)
 
@@ -136,8 +136,8 @@ def test_penalty_another_user(user):
 
 
 def test_payroll_opened(user):
-    issue = IssueFactory.create(state=STATE_OPENED)
-    mr = MergeRequestFactory.create(state=STATE_OPENED)
+    issue = IssueFactory.create(state=ISSUE_STATES.opened)
+    mr = MergeRequestFactory.create(state=MERGE_REQUESTS_STATES.opened)
 
     IssueSpentTimeFactory.create(user=user, base=issue,
                                  time_spent=seconds(hours=1))
@@ -163,8 +163,8 @@ def test_payroll_opened(user):
 
 
 def test_payroll_opened_has_salary(user):
-    issue = IssueFactory.create(state=STATE_OPENED)
-    mr = MergeRequestFactory.create(state=STATE_OPENED)
+    issue = IssueFactory.create(state=ISSUE_STATES.opened)
+    mr = MergeRequestFactory.create(state=MERGE_REQUESTS_STATES.opened)
 
     salary = SalaryFactory.create(user=user)
 
@@ -204,7 +204,7 @@ def test_payroll_opened_has_salary(user):
 
 
 def test_payroll_opened_has_closed(user):
-    issue = IssueFactory.create(state=STATE_CLOSED)
+    issue = IssueFactory.create(state=ISSUE_STATES.closed)
 
     IssueSpentTimeFactory.create(user=user, base=issue,
                                  time_spent=seconds(hours=4))
@@ -224,7 +224,7 @@ def test_payroll_opened_has_closed(user):
 
 
 def test_payroll_opened_another_user(user):
-    issue = IssueFactory.create(state=STATE_OPENED)
+    issue = IssueFactory.create(state=ISSUE_STATES.opened)
 
     user_2 = UserFactory.create()
 
@@ -245,7 +245,7 @@ def test_payroll_opened_another_user(user):
 
 
 def test_payroll_closed(user):
-    issue = IssueFactory.create(state=STATE_CLOSED)
+    issue = IssueFactory.create(state=ISSUE_STATES.closed)
 
     IssueSpentTimeFactory.create(user=user, base=issue,
                                  time_spent=seconds(hours=1))
@@ -264,7 +264,7 @@ def test_payroll_closed(user):
 
 
 def test_payroll_closed_has_salary(user):
-    issue = IssueFactory.create(state=STATE_CLOSED)
+    issue = IssueFactory.create(state=ISSUE_STATES.closed)
 
     IssueSpentTimeFactory.create(user=user, base=issue,
                                  time_spent=seconds(hours=4),
@@ -284,14 +284,14 @@ def test_payroll_closed_has_salary(user):
 
 
 def test_payroll_opened_has_opened(user):
-    issue = IssueFactory.create(state=STATE_OPENED)
+    issue = IssueFactory.create(state=ISSUE_STATES.opened)
 
     IssueSpentTimeFactory.create(user=user, base=issue,
                                  time_spent=seconds(hours=4))
     IssueSpentTimeFactory.create(user=user, base=issue,
                                  time_spent=seconds(hours=2))
     IssueSpentTimeFactory.create(user=user,
-                                 base=IssueFactory.create(state=STATE_CLOSED),
+                                 base=IssueFactory.create(state=ISSUE_STATES.closed),
                                  time_spent=seconds(hours=5))
 
     metrics = calculator.get_metrics(user)
@@ -306,8 +306,8 @@ def test_payroll_opened_has_opened(user):
 
 
 def test_payroll_closed_another_user(user):
-    issue = IssueFactory.create(state=STATE_CLOSED)
-    mr = MergeRequestFactory.create(state=STATE_CLOSED)
+    issue = IssueFactory.create(state=ISSUE_STATES.closed)
+    mr = MergeRequestFactory.create(state=ISSUE_STATES.closed)
 
     user_2 = UserFactory.create()
 
@@ -338,14 +338,14 @@ def test_complex(user):
     bonuses = BonusFactory.create_batch(10, user=user)
     penalties = PenaltyFactory.create_batch(10, user=user)
 
-    issue = IssueFactory.create(user=user, state=STATE_OPENED)
+    issue = IssueFactory.create(user=user, state=ISSUE_STATES.opened)
     IssueSpentTimeFactory.create(user=user, base=issue,
                                  time_spent=seconds(hours=4))
     IssueSpentTimeFactory.create(user=user, base=issue,
                                  time_spent=seconds(hours=2))
     IssueSpentTimeFactory.create(user=user,
                                  base=IssueFactory.create(user=user,
-                                                          state=STATE_CLOSED),
+                                                          state=ISSUE_STATES.closed),
                                  time_spent=seconds(hours=5))
 
     metrics = calculator.get_metrics(user)

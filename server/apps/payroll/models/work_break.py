@@ -7,18 +7,14 @@ from apps.core.models.utils import Choices
 from apps.payroll.models.managers import WorkBreakManager
 from apps.payroll.models.mixins import ApprovedMixin
 
-DAYOFF = 'dayoff'
-VACATION = 'vacation'
-DISEASE = 'disease'
+WORK_BREAK_REASONS = Choices(
+    ('dayoff', _('CH_DAYOFF')),
+    ('vacation', _('CH_VACATION')),
+    ('disease', _('CH_DISEASES')),
+)
 
 
 class WorkBreak(ApprovedMixin, Timestamps):
-    WORK_BREAK_REASONS = Choices(
-        (DAYOFF, _('CH_DAYOFF')),
-        (VACATION, _('CH_VACATION')),
-        (DISEASE, _('CH_DISEASES')),
-    )
-
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         models.CASCADE,

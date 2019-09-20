@@ -6,8 +6,10 @@ from django.utils import timezone
 from apps.core.utils.objects import dict2obj
 from apps.core.utils.time import seconds
 from apps.development.models import Note
+from apps.development.models.note import NOTE_TYPES
 from apps.development.services.gitlab.notes import SPEND_RESET_MESSAGE
-from apps.development.services.parsers import GITLAB_DATETIME_FORMAT, GITLAB_DATE_FORMAT
+from apps.development.services.parsers import GITLAB_DATETIME_FORMAT, \
+    GITLAB_DATE_FORMAT
 from apps.users.models import User
 from tests.test_development.factories import IssueFactory
 
@@ -25,8 +27,10 @@ class LoadNotesTests(TestCase):
         Note.objects.sync_gitlab(dict2obj({
             'id': 2,
             'body': body,
-            'created_at': datetime.strftime(datetime.now(), GITLAB_DATETIME_FORMAT),
-            'updated_at': datetime.strftime(datetime.now(), GITLAB_DATETIME_FORMAT),
+            'created_at': datetime.strftime(datetime.now(),
+                                            GITLAB_DATETIME_FORMAT),
+            'updated_at': datetime.strftime(datetime.now(),
+                                            GITLAB_DATETIME_FORMAT),
             'author': {
                 'id': self.user.gl_id
             }
@@ -37,10 +41,11 @@ class LoadNotesTests(TestCase):
         note = Note.objects.first()
         self.assertEqual(note.gl_id, 2)
         self.assertEqual(note.user, self.user)
-        self.assertEqual(note.type, Note.TYPE.time_spend)
+        self.assertEqual(note.type, NOTE_TYPES.time_spend)
         self.assertEqual(note.body, body)
         self.assertEqual(note.data['spent'], seconds(hours=1, minutes=1))
-        self.assertEqual(note.data['date'], note_date.strftime(GITLAB_DATE_FORMAT))
+        self.assertEqual(note.data['date'],
+                         note_date.strftime(GITLAB_DATE_FORMAT))
 
     def test_load_spend_subtracted(self):
         note_date = date.today()
@@ -49,8 +54,10 @@ class LoadNotesTests(TestCase):
         Note.objects.sync_gitlab(dict2obj({
             'id': 2,
             'body': body,
-            'created_at': datetime.strftime(datetime.now(), GITLAB_DATETIME_FORMAT),
-            'updated_at': datetime.strftime(datetime.now(), GITLAB_DATETIME_FORMAT),
+            'created_at': datetime.strftime(datetime.now(),
+                                            GITLAB_DATETIME_FORMAT),
+            'updated_at': datetime.strftime(datetime.now(),
+                                            GITLAB_DATETIME_FORMAT),
             'author': {
                 'id': self.user.gl_id
             }
@@ -62,16 +69,19 @@ class LoadNotesTests(TestCase):
         self.assertEqual(note.gl_id, 2)
         self.assertEqual(note.user, self.user)
         self.assertEqual(note.body, body)
-        self.assertEqual(note.type, Note.TYPE.time_spend)
+        self.assertEqual(note.type, NOTE_TYPES.time_spend)
         self.assertEqual(note.data['spent'], -seconds(hours=1, minutes=1))
-        self.assertEqual(note.data['date'], note_date.strftime(GITLAB_DATE_FORMAT))
+        self.assertEqual(note.data['date'],
+                         note_date.strftime(GITLAB_DATE_FORMAT))
 
     def test_load_spend_reset(self):
         Note.objects.sync_gitlab(dict2obj({
             'id': 2,
             'body': SPEND_RESET_MESSAGE,
-            'created_at': datetime.strftime(datetime.now(), GITLAB_DATETIME_FORMAT),
-            'updated_at': datetime.strftime(datetime.now(), GITLAB_DATETIME_FORMAT),
+            'created_at': datetime.strftime(datetime.now(),
+                                            GITLAB_DATETIME_FORMAT),
+            'updated_at': datetime.strftime(datetime.now(),
+                                            GITLAB_DATETIME_FORMAT),
             'author': {
                 'id': self.user.gl_id
             }
@@ -83,15 +93,17 @@ class LoadNotesTests(TestCase):
         self.assertEqual(note.gl_id, 2)
         self.assertEqual(note.user, self.user)
         self.assertEqual(note.body, SPEND_RESET_MESSAGE)
-        self.assertEqual(note.type, Note.TYPE.reset_spend)
+        self.assertEqual(note.type, NOTE_TYPES.reset_spend)
         self.assertEqual(note.data, {})
 
     def test_load_unsupported(self):
         Note.objects.sync_gitlab(dict2obj({
             'id': 2,
             'body': 'bla',
-            'created_at': datetime.strftime(datetime.now(), GITLAB_DATETIME_FORMAT),
-            'updated_at': datetime.strftime(datetime.now(), GITLAB_DATETIME_FORMAT),
+            'created_at': datetime.strftime(datetime.now(),
+                                            GITLAB_DATETIME_FORMAT),
+            'updated_at': datetime.strftime(datetime.now(),
+                                            GITLAB_DATETIME_FORMAT),
             'author': {
                 'id': self.user.gl_id
             }
@@ -112,8 +124,10 @@ class LoadNotesTests(TestCase):
         Note.objects.sync_gitlab(dict2obj({
             'id': 2,
             'body': f'added 1h 1m of time spent at {date.today():{GITLAB_DATE_FORMAT}}',
-            'created_at': datetime.strftime(datetime.now(), GITLAB_DATETIME_FORMAT),
-            'updated_at': datetime.strftime(datetime.now(), GITLAB_DATETIME_FORMAT),
+            'created_at': datetime.strftime(datetime.now(),
+                                            GITLAB_DATETIME_FORMAT),
+            'updated_at': datetime.strftime(datetime.now(),
+                                            GITLAB_DATETIME_FORMAT),
             'author': {
                 'id': self.user.gl_id
             }
@@ -138,8 +152,10 @@ class LoadNotesTests(TestCase):
         Note.objects.sync_gitlab(dict2obj({
             'id': 2,
             'body': f'added 1h 1m of time spent at {date.today():{GITLAB_DATE_FORMAT}}',
-            'created_at': datetime.strftime(datetime.now(), GITLAB_DATETIME_FORMAT),
-            'updated_at': datetime.strftime(datetime.now(), GITLAB_DATETIME_FORMAT),
+            'created_at': datetime.strftime(datetime.now(),
+                                            GITLAB_DATETIME_FORMAT),
+            'updated_at': datetime.strftime(datetime.now(),
+                                            GITLAB_DATETIME_FORMAT),
             'author': {
                 'id': self.user.gl_id
             }
@@ -161,8 +177,10 @@ class LoadNotesTests(TestCase):
         Note.objects.sync_gitlab(dict2obj({
             'id': 2,
             'body': f'added 1h 1m of time spent at {date.today():{GITLAB_DATE_FORMAT}}',
-            'created_at': datetime.strftime(datetime.now(), GITLAB_DATETIME_FORMAT),
-            'updated_at': datetime.strftime(datetime.now(), GITLAB_DATETIME_FORMAT),
+            'created_at': datetime.strftime(datetime.now(),
+                                            GITLAB_DATETIME_FORMAT),
+            'updated_at': datetime.strftime(datetime.now(),
+                                            GITLAB_DATETIME_FORMAT),
             'author': {
                 'id': self.user.gl_id
             }
@@ -184,8 +202,10 @@ class LoadNotesTests(TestCase):
         Note.objects.sync_gitlab(dict2obj({
             'id': 2,
             'body': f'added 1h 1m of time spent at {date.today():{GITLAB_DATE_FORMAT}}',
-            'created_at': datetime.strftime(timezone.now() - timedelta(hours=1), GITLAB_DATETIME_FORMAT),
-            'updated_at': datetime.strftime(datetime.now(), GITLAB_DATETIME_FORMAT),
+            'created_at': datetime.strftime(timezone.now() - timedelta(hours=1),
+                                            GITLAB_DATETIME_FORMAT),
+            'updated_at': datetime.strftime(datetime.now(),
+                                            GITLAB_DATETIME_FORMAT),
             'author': {
                 'id': self.user.gl_id
             }

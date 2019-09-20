@@ -1,9 +1,11 @@
 from datetime import datetime, timedelta
+
 from django.utils import timezone
 
 from apps.development.graphql.resolvers import resolve_issues_summary
-from apps.development.models import Team, TeamMember, Project, Milestone
-from apps.development.models.issue import Issue, STATE_OPENED, STATE_CLOSED
+from apps.development.models import Team, TeamMember, Project
+from apps.development.models.issue import Issue, ISSUE_STATES
+from apps.development.models.milestone import MILESTONE_STATES
 from apps.development.services.summary.issues import (
     get_issues_summary, IssuesSummary
 )
@@ -23,13 +25,13 @@ from tests.test_users.factories import UserFactory
 def test_issue_counts(user):
     IssueFactory.create_batch(
         5, user=user,
-        state=STATE_OPENED,
+        state=ISSUE_STATES.opened,
         total_time_spent=0,
         due_date=datetime.now()
     )
     IssueFactory.create_batch(
         3, user=user,
-        state=STATE_CLOSED,
+        state=ISSUE_STATES.closed,
         total_time_spent=0,
         due_date=datetime.now()
     )
@@ -194,7 +196,7 @@ def test_team_summary(db):
 def test_sort_projects_by_milestone_flat(db):
     projs = []
     for n in range(3):
-        m = ProjectMilestoneFactory(state=Milestone.STATE.active)
+        m = ProjectMilestoneFactory(state=MILESTONE_STATES.active)
         ProjectMilestoneFactory(
             owner=m.owner,
             due_date=timezone.now() - timezone.timedelta(days=n),
@@ -202,7 +204,7 @@ def test_sort_projects_by_milestone_flat(db):
         ProjectMilestoneFactory(
             owner=m.owner,
             due_date=timezone.now() + timezone.timedelta(days=n),
-            state=Milestone.STATE.active
+            state=MILESTONE_STATES.active
         )
 
         projs.append(m.owner)
@@ -217,16 +219,16 @@ def test_sort_projects_by_milestone_neested(db):
         group = ProjectGroupFactory(parent=ProjectGroupFactory())
         proj = ProjectFactory(group=group)
 
-        ProjectMilestoneFactory(state=Milestone.STATE.active)
+        ProjectMilestoneFactory(state=MILESTONE_STATES.active)
         ProjectMilestoneFactory(
             owner=group.parent,
             due_date=timezone.now() - timezone.timedelta(days=n),
-            state=Milestone.STATE.active
+            state=MILESTONE_STATES.active
         )
         ProjectMilestoneFactory(
             owner=group.parent,
             due_date=timezone.now() + timezone.timedelta(days=n),
-            state=Milestone.STATE.active
+            state=MILESTONE_STATES.active
         )
 
         projs.append(proj)
@@ -238,7 +240,7 @@ def test_sort_projects_by_milestone_neested(db):
 def test_time_spents_by_user(user):
     issues = IssueFactory.create_batch(
         5, user=user,
-        state=STATE_OPENED,
+        state=ISSUE_STATES.opened,
         due_date=datetime.now()
     )
 
@@ -280,7 +282,7 @@ def test_time_spents_by_user(user):
 def test_time_spents_by_team(user):
     issues = IssueFactory.create_batch(
         5, user=user,
-        state=STATE_OPENED,
+        state=ISSUE_STATES.opened,
         due_date=datetime.now()
     )
 
@@ -339,7 +341,7 @@ def test_time_spents_by_project(user):
 
     issues = IssueFactory.create_batch(
         5, user=user,
-        state=STATE_OPENED,
+        state=ISSUE_STATES.opened,
         due_date=datetime.now(),
         project=project_1
     )
@@ -361,7 +363,7 @@ def test_time_spents_by_project(user):
     another_user = UserFactory.create()
     issue_another_user = IssueFactory.create(
         user=another_user,
-        state=STATE_OPENED,
+        state=ISSUE_STATES.opened,
         due_date=datetime.now(),
         project=project_2
     )
@@ -402,7 +404,7 @@ def test_time_spents_by_state(user):
     issue_opened = IssueFactory.create(
         user=user,
         due_date=datetime.now(),
-        state=STATE_OPENED
+        state=ISSUE_STATES.opened
     )
 
     IssueSpentTimeFactory.create(
@@ -421,7 +423,7 @@ def test_time_spents_by_state(user):
     issue_closed = IssueFactory.create(
         user=user,
         due_date=datetime.now(),
-        state=STATE_CLOSED
+        state=ISSUE_STATES.closed
     )
 
     IssueSpentTimeFactory.create(
@@ -437,7 +439,7 @@ def test_time_spents_by_state(user):
         user=user,
         team=None,
         project=None,
-        state=STATE_OPENED,
+        state=ISSUE_STATES.opened,
         milestone=None
     )
 
@@ -449,7 +451,7 @@ def test_time_spents_by_state(user):
         user=user,
         team=None,
         project=None,
-        state=STATE_CLOSED,
+        state=ISSUE_STATES.closed,
         milestone=None
     )
 
@@ -461,7 +463,7 @@ def test_time_spents_by_milestone(user):
     issue_1 = IssueFactory.create(
         user=user,
         due_date=datetime.now(),
-        state=STATE_OPENED,
+        state=ISSUE_STATES.opened,
         milestone=milestone_1
     )
     IssueSpentTimeFactory.create(
@@ -475,7 +477,7 @@ def test_time_spents_by_milestone(user):
     issue_2 = IssueFactory.create(
         user=user,
         due_date=datetime.now(),
-        state=STATE_OPENED,
+        state=ISSUE_STATES.opened,
         milestone=milestone_2
     )
     IssueSpentTimeFactory.create(
@@ -513,13 +515,13 @@ def test_time_spents_by_milestone(user):
 def test_resolver(user, client):
     IssueFactory.create_batch(
         5, user=user,
-        state=STATE_OPENED,
+        state=ISSUE_STATES.opened,
         total_time_spent=0,
         due_date=datetime.now()
     )
     IssueFactory.create_batch(
         3, user=UserFactory.create(),
-        state=STATE_OPENED
+        state=ISSUE_STATES.opened
     )
 
     client.user = user
@@ -569,10 +571,10 @@ def _check_project_stats(data: IssuesSummary,
 
 
 def _check_team_stats(data: IssuesSummary,
-                       team: Team,
-                       issues_opened_count: int,
-                       percentage: float,
-                       remains: int):
+                      team: Team,
+                      issues_opened_count: int,
+                      percentage: float,
+                      remains: int):
     stats = next((
         item
         for item in data.teams

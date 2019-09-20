@@ -2,7 +2,7 @@ from django.db.models import Count, DecimalField, F, Sum, Q
 from django.db.models.functions import Coalesce
 
 from apps.development.models import Issue, Ticket
-from apps.development.models.issue import STATE_CLOSED, STATE_OPENED
+from apps.development.models.issue import ISSUE_STATES
 from apps.payroll.models.spent_time import SpentTime, SECS_IN_HOUR
 from .provider import IssuesContainerMetrics
 
@@ -38,10 +38,10 @@ class TicketMetricsProvider:
             time_estimate=Coalesce(Sum('time_estimate'), 0),
             time_spent=Coalesce(Sum('total_time_spent'), 0),
             issues_closed_count=Coalesce(
-                Count('id', filter=Q(state=STATE_CLOSED)), 0
+                Count('id', filter=Q(state=ISSUE_STATES.closed)), 0
             ),
             issues_opened_count=Coalesce(
-                Count('id', filter=Q(state=STATE_OPENED)), 0
+                Count('id', filter=Q(state=ISSUE_STATES.opened)), 0
             ),
             issues_count=Count('*'),
             budget_estimate=Coalesce(

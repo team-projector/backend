@@ -8,16 +8,16 @@ TYPE_FEATURE = 'feature'
 TYPE_IMPROVEMENT = 'improvement'
 TYPE_BUG_FIXING = 'bug_fixing'
 
+TICKET_TYPES = Choices(
+    (TYPE_FEATURE, _('CH_FEATURE')),
+    (TYPE_IMPROVEMENT, _('CH_IMPROVEMENT')),
+    (TYPE_BUG_FIXING, _('CH_BUG_FIXING')),
+)
+
 
 class Ticket(Timestamps):
-    TYPE = Choices(
-        (TYPE_FEATURE, _('CH_FEATURE')),
-        (TYPE_IMPROVEMENT, _('CH_IMPROVEMENT')),
-        (TYPE_BUG_FIXING, _('CH_BUG_FIXING')),
-    )
-
     type = models.CharField(
-        choices=TYPE,
+        choices=TICKET_TYPES,
         max_length=50,
         blank=True,
         null=True,

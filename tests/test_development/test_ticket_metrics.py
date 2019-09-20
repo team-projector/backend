@@ -1,6 +1,6 @@
 from apps.core.utils.time import seconds
 from apps.development.graphql.types import TicketType
-from apps.development.models.issue import STATE_OPENED, STATE_CLOSED
+from apps.development.models.issue import ISSUE_STATES
 from apps.development.services.metrics.ticket import get_ticket_metrics
 from tests.test_development.factories import IssueFactory, TicketFactory
 from tests.test_development.factories_gitlab import AttrDict
@@ -12,19 +12,19 @@ def test_metrics(db):
 
     IssueFactory.create(
         ticket=ticket,
-        state=STATE_OPENED,
+        state=ISSUE_STATES.opened,
         total_time_spent=0,
         time_estimate=seconds(hours=1)
     )
     IssueFactory.create(
         ticket=ticket,
-        state=STATE_CLOSED,
+        state=ISSUE_STATES.closed,
         total_time_spent=seconds(hours=1),
         time_estimate=seconds(hours=2)
     )
     IssueFactory.create(
         ticket=ticket,
-        state=STATE_CLOSED,
+        state=ISSUE_STATES.closed,
         total_time_spent=seconds(hours=2),
         time_estimate=seconds(hours=2)
     )
@@ -45,14 +45,14 @@ def test_budget_estimated(db):
     IssueFactory.create(
         ticket=ticket,
         user=user_1,
-        state=STATE_OPENED,
+        state=ISSUE_STATES.opened,
         total_time_spent=0,
         time_estimate=seconds(hours=1)
     )
     IssueFactory.create(
         ticket=ticket,
         user=user_1,
-        state=STATE_CLOSED,
+        state=ISSUE_STATES.closed,
         total_time_spent=seconds(hours=1),
         time_estimate=seconds(hours=2)
     )
@@ -62,14 +62,14 @@ def test_budget_estimated(db):
     IssueFactory.create(
         ticket=ticket,
         user=user_2,
-        state=STATE_OPENED,
+        state=ISSUE_STATES.opened,
         total_time_spent=0,
         time_estimate=seconds(hours=1)
     )
     IssueFactory.create(
         ticket=ticket,
         user=user_2,
-        state=STATE_CLOSED,
+        state=ISSUE_STATES.closed,
         total_time_spent=seconds(hours=2),
         time_estimate=seconds(hours=1)
     )
@@ -77,7 +77,7 @@ def test_budget_estimated(db):
     IssueFactory.create(
         ticket=TicketFactory.create(),
         user=user_2,
-        state=STATE_OPENED,
+        state=ISSUE_STATES.opened,
         total_time_spent=seconds(hours=10),
         time_estimate=seconds(hours=10)
     )
@@ -97,7 +97,7 @@ def test_resolver(user, client):
 
     IssueFactory.create(
         ticket=ticket,
-        state=STATE_OPENED,
+        state=ISSUE_STATES.opened,
         total_time_spent=0,
         time_estimate=seconds(hours=1)
     )

@@ -9,15 +9,15 @@ from apps.core.models.mixins import (
 from apps.core.models.utils import Choices
 from .managers import MilestoneManager
 
+MILESTONE_STATES = Choices(
+    ('active', 'active'),
+    ('closed', 'closed')
+)
+
 
 class Milestone(GitlabEntityMixin,
                 GitlabInternalIdMixin,
                 Timestamps):
-    STATE = Choices(
-        ('active', 'active'),
-        ('closed', 'closed')
-    )
-
     title = models.CharField(
         max_length=255,
         verbose_name=_('VN__TITLE'),
@@ -39,7 +39,7 @@ class Milestone(GitlabEntityMixin,
     )
 
     state = models.CharField(
-        choices=STATE,
+        choices=MILESTONE_STATES,
         max_length=20,
         null=True,
         blank=True,

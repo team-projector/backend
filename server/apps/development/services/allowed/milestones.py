@@ -2,6 +2,7 @@ from django.core.exceptions import PermissionDenied
 from django.db.models import Q, QuerySet
 
 from apps.development.models import Milestone, ProjectGroup, ProjectMember
+from apps.development.models.project_member import PROJECT_MEMBER_ROLES
 from apps.users.models import User
 
 
@@ -25,7 +26,7 @@ def filter_allowed_for_user(queryset: QuerySet,
 def get_members(user: User) -> list:
     members = ProjectMember.objects.filter(
         user=user,
-        role=ProjectMember.ROLE.project_manager
+        role=PROJECT_MEMBER_ROLES.project_manager
     )
 
     if not members:

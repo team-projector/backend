@@ -6,7 +6,7 @@ from django.db.models.functions import Cast, Coalesce, TruncWeek, TruncDate
 from django.utils.timezone import make_aware
 
 from apps.core.utils.date import begin_of_week, date2datetime
-from apps.development.models.issue import Issue, STATE_CLOSED
+from apps.development.models.issue import Issue, ISSUE_STATES
 from apps.payroll.models import SpentTime
 from .base import ProgressMetricsProvider, UserProgressMetrics
 
@@ -97,7 +97,7 @@ class WeekMetricsProvider(ProgressMetricsProvider):
                 make_aware(date2datetime(self.start)),
                 make_aware(date2datetime(self.end))
             ),
-            state=STATE_CLOSED,
+            state=ISSUE_STATES.closed,
             total_time_spent__gt=0,
             time_estimate__gt=0,
             week__isnull=False

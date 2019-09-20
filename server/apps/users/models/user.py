@@ -6,17 +6,17 @@ from django.utils.translation import gettext_lazy as _
 from apps.core.models.utils import Choices
 from apps.users.models.managers import UserManager
 
+USER_ROLES = Choices(
+    ('developer', _('CH_DEVELOPER')),
+    ('team_leader', _('CH_TEAM_LEADER')),
+    ('project_manager', _('CH_PROJECT_MANAGER')),
+    ('customer', _('CH_CUSTOMER')),
+    ('shareholder', _('CH_SHAREHOLDER')),
+)
+
 
 class User(AbstractBaseUser, PermissionsMixin):
-    USERNAME_FIELD = 'login'
-
-    ROLES = Choices(
-        ('developer', _('CH_DEVELOPER')),
-        ('team_leader', _('CH_TEAM_LEADER')),
-        ('project_manager', _('CH_PROJECT_MANAGER')),
-        ('customer', _('CH_CUSTOMER')),
-        ('shareholder', _('CH_SHAREHOLDER')),
-    )
+    USERNAME_FIELD = 'login'  # noqa WPS115
 
     login = models.CharField(
         max_length=150,
@@ -64,7 +64,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     )
 
     roles = BitField(
-        flags=ROLES,
+        flags=USER_ROLES,
         default=0
     )
 

@@ -6,7 +6,8 @@ from apps.development.models import (
     Ticket, Issue, Label, MergeRequest, Milestone, Note, Project, ProjectGroup,
     ProjectMember, Team, TeamMember,
 )
-from apps.development.models.issue import STATE_OPENED
+from apps.development.models.issue import ISSUE_STATES
+from apps.development.models.merge_request import MERGE_REQUESTS_STATES
 from tests.test_users.factories import UserFactory
 
 
@@ -70,7 +71,7 @@ class IssueFactory(GitlabFieldMixin):
     total_time_spent = factory.Faker('random_int')
     created_at = factory.Faker('date_time_this_year', before_now=True,
                                after_now=False, tzinfo=pytz.UTC)
-    state = STATE_OPENED
+    state = ISSUE_STATES.opened
 
     class Meta:
         model = Issue
@@ -109,14 +110,18 @@ class TicketFactory(factory.django.DjangoModelFactory):
 
 
 class MergeRequestFactory(GitlabFieldMixin):
-    state = STATE_OPENED
+    state = MERGE_REQUESTS_STATES.opened
     title = factory.Faker('text', max_nb_chars=200)
     time_estimate = factory.Faker('random_int')
     milestone = factory.SubFactory(ProjectGroupMilestoneFactory)
     gl_iid = factory.Sequence(lambda i: i)
     author = factory.SubFactory(UserFactory)
-    created_at = factory.Faker('date_time_this_year', before_now=True,
-                               after_now=False, tzinfo=pytz.UTC)
+    created_at = factory.Faker(
+        'date_time_this_year',
+        before_now=True,
+        after_now=False,
+        tzinfo=pytz.UTC
+    )
 
     class Meta:
         model = MergeRequest

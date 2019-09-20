@@ -5,6 +5,7 @@ from django.db.models import QuerySet
 
 from apps.core.graphql.filters.ordering import OrderingFilter
 from apps.development.models import TeamMember
+from apps.development.models.team_member import TEAM_MEMBER_ROLES
 from apps.development.services.team_members import filter_by_roles
 
 
@@ -23,7 +24,7 @@ class TeamMemberRolesFilter(django_filters.CharFilter):
         return [
             val.strip()
             for val in value.split(',')
-            if val.strip() in TeamMember.ROLES
+            if val.strip() in TEAM_MEMBER_ROLES
         ]
 
 

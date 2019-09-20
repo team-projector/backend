@@ -9,13 +9,13 @@ from apps.core.models.utils import Choices
 from apps.users.models import User
 from .managers import NoteManager
 
+NOTE_TYPES = Choices(
+    ('time_spend', 'Time spend'),
+    ('reset_spend', 'Reset spend')
+)
+
 
 class Note(models.Model):
-    TYPE = Choices(
-        ('time_spend', 'Time spend'),
-        ('reset_spend', 'Reset spend')
-    )
-
     object_id = models.IntegerField()
 
     content_object = GenericForeignKey()
@@ -54,7 +54,7 @@ class Note(models.Model):
     )
 
     type = models.CharField(
-        choices=TYPE,
+        choices=NOTE_TYPES,
         max_length=20,
         verbose_name=_('VN__TYPE'),
         help_text=_('HT__TYPE')

@@ -7,6 +7,7 @@ from django.utils import timezone
 
 from apps.core.gitlab import get_gitlab_client
 from apps.development.models import Issue, Note
+from apps.development.models.note import NOTE_TYPES
 from apps.development.services.gitlab.issues.participants import (
     load_issue_participants
 )
@@ -101,7 +102,7 @@ def test_load_issue_notes(db, gl_mocker):
     note = issue.notes.first()
 
     assert note.gl_id == gl_note.id
-    assert note.type == Note.TYPE.time_spend
+    assert note.type == NOTE_TYPES.time_spend
     assert note.body == 'added 1h of time spent at 2000-01-01'
     assert note.created_at is not None
     assert note.updated_at is not None

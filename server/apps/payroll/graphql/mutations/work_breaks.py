@@ -3,7 +3,7 @@ from django.contrib.auth import get_user_model
 from rest_framework.generics import get_object_or_404
 
 from apps.core.graphql.mutations import BaseMutation, ArgumentsValidationMixin
-from apps.payroll.forms import WorkBreakForm
+from apps.payroll.graphql.forms import WorkBreakForm
 from apps.payroll.graphql.types import WorkBreakType
 from apps.payroll.models import WorkBreak
 from apps.payroll.services.work_break import WorkBreakManager

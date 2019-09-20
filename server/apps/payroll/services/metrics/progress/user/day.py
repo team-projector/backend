@@ -5,7 +5,7 @@ from django.conf import settings
 from django.db.models import Case, Count, F, IntegerField, Q, Sum, Value, When
 from django.db.models.functions import Coalesce, TruncDay
 
-from apps.development.models.issue import Issue, STATE_CLOSED
+from apps.development.models.issue import Issue, ISSUE_STATES
 from apps.payroll.models import SpentTime
 from .base import ProgressMetricsProvider, UserProgressMetrics
 
@@ -158,7 +158,7 @@ class DayMetricsProvider(ProgressMetricsProvider):
             time_remains=Case(
                 When(
                     Q(time_estimate__gt=F('total_time_spent')) &  # noqa:W504
-                    ~Q(state=STATE_CLOSED),
+                    ~Q(state=ISSUE_STATES.closed),
                     then=F('time_estimate') - F('total_time_spent')
                 ),
                 default=Value(0),

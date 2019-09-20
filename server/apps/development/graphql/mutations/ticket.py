@@ -1,12 +1,11 @@
 import graphene
-
 from rest_framework.generics import get_object_or_404
 
 from apps.core.graphql.mutations import BaseMutation, ArgumentsValidationMixin
 from apps.core.graphql.security.permissions import AllowProjectManager
+from apps.development.graphql.forms import TicketForm
 from apps.development.graphql.types import TicketType
 from apps.development.models import Ticket
-from apps.development.forms import TicketForm
 
 
 class CreateTicketMutation(ArgumentsValidationMixin,

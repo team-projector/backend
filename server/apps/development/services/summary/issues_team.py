@@ -6,7 +6,7 @@ from django.db.models import (
 from django.db.models.functions import Coalesce
 
 from apps.development.models import Team
-from apps.development.models.issue import STATE_CLOSED
+from apps.development.models.issue import ISSUE_STATES
 
 
 class TeamIssuesSummary:
@@ -65,7 +65,7 @@ class IssuesTeamSummaryProvider:
             time_remains=Case(
                 When(
                     Q(time_estimate__gt=F('total_time_spent')) &  # noqa:W504
-                    ~Q(state=STATE_CLOSED),
+                    ~Q(state=ISSUE_STATES.closed),
                     then=F('time_estimate') - F('total_time_spent')
                 ),
                 default=Value(0),
