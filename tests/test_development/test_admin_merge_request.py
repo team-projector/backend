@@ -1,3 +1,5 @@
+from django.test import override_settings
+
 from apps.development.models.merge_request import (
     MergeRequest, STATE_CLOSED, STATE_OPENED
 )
@@ -12,6 +14,7 @@ from tests.test_development.factories_gitlab import (
 )
 
 
+@override_settings(GITLAB_TOKEN='GITLAB_TOKEN')
 def test_sync_handler(db, gl_mocker):
     ma_merge_request = model_admin(MergeRequest)
 

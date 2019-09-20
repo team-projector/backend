@@ -1,3 +1,5 @@
+from django.test import override_settings
+
 from apps.development.models import Milestone
 from tests.base import model_admin
 from tests.test_development.checkers_gitlab import check_milestone
@@ -11,6 +13,7 @@ from tests.test_development.factories_gitlab import (
 )
 
 
+@override_settings(GITLAB_TOKEN='GITLAB_TOKEN')
 def test_sync_group_milestone(db, gl_mocker):
     ma_milestone = model_admin(Milestone)
 
@@ -32,6 +35,7 @@ def test_sync_group_milestone(db, gl_mocker):
     check_milestone(milestone, gl_milestone, group)
 
 
+@override_settings(GITLAB_TOKEN='GITLAB_TOKEN')
 def test_sync_project_milestone(db, gl_mocker):
     ma_milestone = model_admin(Milestone)
 

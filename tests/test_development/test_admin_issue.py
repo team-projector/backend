@@ -1,4 +1,7 @@
+from django.test import override_settings
+
 from apps.development.models.issue import Issue, STATE_CLOSED, STATE_OPENED
+from tests.test_development.checkers_gitlab import check_issue
 from tests.base import model_admin
 from tests.test_development.factories import IssueFactory, ProjectFactory
 from tests.test_development.factories_gitlab import (
@@ -6,6 +9,7 @@ from tests.test_development.factories_gitlab import (
 )
 
 
+@override_settings(GITLAB_TOKEN='GITLAB_TOKEN')
 def test_sync_handler(db, gl_mocker):
     ma_issue = model_admin(Issue)
 
@@ -32,7 +36,7 @@ def test_sync_handler(db, gl_mocker):
 
     issue = Issue.objects.first()
 
-    assert issue.state == STATE_CLOSED
+    check_issue(issue, gl_issue)
 
 
 def _registry_issue(gl_mocker, gl_project, gl_issue) -> None:

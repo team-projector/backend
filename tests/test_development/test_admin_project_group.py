@@ -1,3 +1,4 @@
+from django.test import override_settings
 from rest_framework import status
 
 from apps.development.models import ProjectGroup
@@ -9,6 +10,7 @@ from tests.test_development.factories_gitlab import (
 )
 
 
+@override_settings(GITLAB_TOKEN='GITLAB_TOKEN')
 def test_sync_handler(db, gl_mocker):
     ma_group = model_admin(ProjectGroup)
 

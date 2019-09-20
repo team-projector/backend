@@ -1,5 +1,8 @@
+from django.test import override_settings
+
 from apps.development.models import Project
 from tests.base import model_admin
+from tests.test_development.checkers_gitlab import check_project
 from tests.test_development.factories import (
     ProjectGroupFactory, ProjectFactory
 )
@@ -8,6 +11,7 @@ from tests.test_development.factories_gitlab import (
 )
 
 
+@override_settings(GITLAB_TOKEN='GITLAB_TOKEN')
 def test_sync_handler(db, gl_mocker):
     ma_project = model_admin(Project)
 
@@ -17,14 +21,12 @@ def test_sync_handler(db, gl_mocker):
     group = ProjectGroupFactory.create(gl_id=gl_group.id)
     gl_mocker.registry_get(f'/groups/{gl_group.id}', gl_group)
 
-    gl_project = AttrDict(GlProjectFactory(name='update'))
-    project = ProjectFactory.create(gl_id=gl_project.id, group=group, title='created')
+    gl_project = AttrDict(GlProjectFactory())
+    project = ProjectFactory.create(gl_id=gl_project.id, group=group)
     gl_mocker.registry_get(f'/projects/{gl_project.id}', gl_project)
-
-    assert project.title == 'created'
 
     ma_project.sync_handler(project)
 
     project = Project.objects.first()
 
-    assert project.title == 'update'
+    check_project(project, gl_project, group)
