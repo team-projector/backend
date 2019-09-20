@@ -1,6 +1,5 @@
 from apps.development.models.issue import Issue, STATE_CLOSED, STATE_OPENED
 from tests.base import model_admin
-from tests.test_development.checkers_gitlab import check_issue
 from tests.test_development.factories import IssueFactory, ProjectFactory
 from tests.test_development.factories_gitlab import (
     AttrDict, GlIssueFactory, GlProjectFactory, GlTimeStats, GlUserFactory,
@@ -33,7 +32,7 @@ def test_sync_handler(db, gl_mocker):
 
     issue = Issue.objects.first()
 
-    check_issue(issue, gl_issue)
+    assert issue.state == STATE_CLOSED
 
 
 def _registry_issue(gl_mocker, gl_project, gl_issue) -> None:

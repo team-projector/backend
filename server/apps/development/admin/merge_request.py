@@ -21,7 +21,7 @@ class MergeRequestAdmin(ForceSyncEntityMixin,
     inlines = (NoteInline,)
 
     def sync_handler(self, obj):
-        sync_project_merge_request.delay(
+        sync_project_merge_request(
             obj.project.gl_id,
             obj.gl_iid
         )
