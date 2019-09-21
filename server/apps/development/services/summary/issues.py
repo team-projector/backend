@@ -6,7 +6,7 @@ from django.db.models import QuerySet, Sum, Count
 from apps.development.models import Team, Project, Milestone
 from apps.development.models.issue import STATE_CLOSED, STATE_OPENED
 from apps.development.services.problems.issue import (
-    annotate_issues_problems, filter_issues_problems
+    annotate_issues_problems, filter_issues_problems,
 )
 from apps.payroll.models import SpentTime
 from apps.users.models import User
@@ -63,9 +63,9 @@ class IssuesSummaryProvider:
 
     def _get_counts_by_state(self) -> QuerySet:
         return self.queryset.values(
-            'state'
+            'state',
         ).annotate(
-            count=Count('*')
+            count=Count('*'),
         ).order_by()
 
     def _get_time_spent(self) -> int:  # noqa: C901
@@ -90,7 +90,7 @@ class IssuesSummaryProvider:
             queryset = queryset.filter(issues__milestone=self.milestone)
 
         return queryset.aggregate(
-            total_time_spent=Sum('time_spent')
+            total_time_spent=Sum('time_spent'),
         )['total_time_spent'] or 0
 
     def _get_problems_count(self) -> int:
@@ -114,5 +114,5 @@ def get_issues_summary(queryset: QuerySet,
         team,
         project,
         state,
-        milestone
+        milestone,
     ).execute()

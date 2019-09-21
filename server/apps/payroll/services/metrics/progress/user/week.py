@@ -52,15 +52,15 @@ class WeekMetricsProvider(ProgressMetricsProvider):
 
     def _get_time_spents(self) -> dict:
         queryset = SpentTime.objects.annotate(
-            week=TruncWeek('date')
+            week=TruncWeek('date'),
         ).filter(
             user=self.user,
             date__range=(self.start, self.end),
-            week__isnull=False
+            week__isnull=False,
         ).values(
-            'week'
+            'week',
         ).annotate(
-            period_spent=Sum('time_spent')
+            period_spent=Sum('time_spent'),
         ).order_by()
 
         return {
@@ -75,12 +75,12 @@ class WeekMetricsProvider(ProgressMetricsProvider):
             user=self.user,
             due_date__gte=self.start,
             due_date__lt=self.end,
-            week__isnull=False
+            week__isnull=False,
         ).values(
-            'week'
+            'week',
         ).annotate(
             issues_count=Count('*'),
-            total_time_estimate=Coalesce(Sum('time_estimate'), 0)
+            total_time_estimate=Coalesce(Sum('time_estimate'), 0),
         ).order_by()
 
         return {
@@ -90,24 +90,24 @@ class WeekMetricsProvider(ProgressMetricsProvider):
 
     def _get_efficiency_stats(self) -> dict:
         queryset = Issue.objects.annotate(
-            week=TruncWeek(TruncDate('closed_at'))
+            week=TruncWeek(TruncDate('closed_at')),
         ).filter(
             user=self.user,
             closed_at__range=(
                 make_aware(date2datetime(self.start)),
-                make_aware(date2datetime(self.end))
+                make_aware(date2datetime(self.end)),
             ),
             state=STATE_CLOSED,
             total_time_spent__gt=0,
             time_estimate__gt=0,
-            week__isnull=False
+            week__isnull=False,
         ).values(
-            'week'
+            'week',
         ).annotate(
             avg_efficiency=Coalesce(
                 Cast(Sum(F('time_estimate')), FloatField()) /  # noqa:W504
                 Cast(Sum(F('total_time_spent')), FloatField()),
-                0)
+                0),
         ).order_by()
 
         return {
@@ -117,16 +117,16 @@ class WeekMetricsProvider(ProgressMetricsProvider):
 
     def _get_payrolls_stats(self) -> dict:
         queryset = SpentTime.objects.annotate(
-            week=TruncWeek('date')
+            week=TruncWeek('date'),
         ).annotate_payrolls().filter(
             user=self.user,
             date__range=(self.start, self.end),
-            week__isnull=False
+            week__isnull=False,
         ).values(
-            'week'
+            'week',
         ).annotate(
             total_payroll=Coalesce(Sum('payroll'), 0),
-            total_paid=Coalesce(Sum('paid'), 0)
+            total_paid=Coalesce(Sum('paid'), 0),
         ).order_by()
 
         return {

@@ -12,5 +12,5 @@ class TeamMemberAdmin(BaseModelAdmin):
     search_fields = ('team', 'user__login', 'user__email')
     list_filter = (
         TeamFilter,
-        UserFilter
+        UserFilter,
     )

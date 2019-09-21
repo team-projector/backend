@@ -17,13 +17,13 @@ class SpentTimeQuerySet(models.QuerySet):
 
         return self.filter(
             content_type=ct,
-            object_id__in=issues.values_list('id')
+            object_id__in=issues.values_list('id'),
         )
 
     def aggregate_payrolls(self):
         return self.annotate_payrolls().aggregate(
             total_payroll=Coalesce(Sum('payroll'), 0),
-            total_paid=Coalesce(Sum('paid'), 0)
+            total_paid=Coalesce(Sum('paid'), 0),
         )
 
     def summaries(self):
@@ -53,21 +53,21 @@ class SpentTimeQuerySet(models.QuerySet):
             queryset = queryset.annotate(
                 paid=Case(
                     When(
-                        salary__isnull=False, then=F('sum')
+                        salary__isnull=False, then=F('sum'),
                     ),
                     default=0,
-                    output_field=FloatField()
-                )
+                    output_field=FloatField(),
+                ),
             )
 
         if payroll:
             queryset = queryset.annotate(
                 payroll=Case(
                     When(
-                        salary__isnull=True, then=F('sum')
+                        salary__isnull=True, then=F('sum'),
                     ),
                     default=0,
-                    output_field=FloatField()
+                    output_field=FloatField(),
                 ),
             )
 

@@ -23,9 +23,9 @@ class TeamRolesFilter(django_filters.CharFilter):
             ), roles)
 
         queryset = queryset.annotate(
-            member_exists=Exists(team_members)
+            member_exists=Exists(team_members),
         ).filter(
-            member_exists=True
+            member_exists=True,
         )
 
         return queryset
@@ -44,7 +44,7 @@ class TeamRolesFilter(django_filters.CharFilter):
 class TeamsFilterSet(django_filters.FilterSet):
     roles = TeamRolesFilter()
     order_by = OrderingFilter(
-        fields=('title',)
+        fields=('title',),
     )
     q = SearchFilter(fields=('title',))
 

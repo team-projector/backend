@@ -1,6 +1,6 @@
 from admin_tools.menu import (
     Menu,
-    items
+    items,
 )
 from django.urls import reverse
 
@@ -18,7 +18,7 @@ class AdminMenu(Menu):
             items.MenuItem('Utils', children=[
                 items.MenuItem(
                     'Generate salaries',
-                    reverse('admin:generate-salaries')
+                    reverse('admin:generate-salaries'),
                 ),
             ]),
         ]

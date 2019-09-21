@@ -15,7 +15,7 @@ class AuthFilter(DjangoFilterConnectionField):
     def has_permission(cls, info: ResolveInfo) -> bool:
         return all(
             (perm().has_filter_permission(info) for perm in
-             cls.permission_classes)
+             cls.permission_classes),
         )
 
     @classmethod
@@ -35,7 +35,7 @@ class AuthFilter(DjangoFilterConnectionField):
 
         qs = filterset_class(
             data=filter_kwargs,
-            queryset=default_manager.get_queryset()
+            queryset=default_manager.get_queryset(),
         ).qs
 
         return super(DjangoFilterConnectionField, cls).connection_resolver(

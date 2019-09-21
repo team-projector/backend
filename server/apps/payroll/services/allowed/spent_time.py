@@ -12,13 +12,13 @@ def filter_allowed_for_user(queryset: QuerySet,
         TeamMember.objects.filter(user=user),
         [
             TeamMember.roles.leader,
-            TeamMember.roles.watcher
-        ]
+            TeamMember.roles.watcher,
+        ],
     ).values_list(
         'team__members',
-        flat=True
+        flat=True,
     )
 
     return queryset.filter(
-        user__in={*users, user.id}
+        user__in={*users, user.id},
     )

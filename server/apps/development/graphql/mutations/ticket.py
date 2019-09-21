@@ -29,7 +29,7 @@ class CreateTicketMutation(ArgumentsValidationMixin,
         ticket = Ticket.objects.create(**data)
 
         return CreateTicketMutation(
-            ticket=ticket
+            ticket=ticket,
         )
 
 
@@ -53,13 +53,13 @@ class UpdateTicketMutation(ArgumentsValidationMixin,
     def perform_mutate(cls, info, data):
         ticket = get_object_or_404(
             Ticket.objects.all(),
-            pk=data['id']
+            pk=data['id'],
         )
 
         cls._update_ticket(ticket, data)
 
         return UpdateTicketMutation(
-            ticket=ticket
+            ticket=ticket,
         )
 
     @classmethod

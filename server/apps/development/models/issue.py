@@ -23,19 +23,19 @@ class Issue(NotableMixin,
     title = models.CharField(
         max_length=255,
         verbose_name=_('VN__TITLE'),
-        help_text=_('HT__TITLE')
+        help_text=_('HT__TITLE'),
     )
 
     time_estimate = models.PositiveIntegerField(
         null=True,
         verbose_name=_('VN__TIME_ESTIMATE'),
-        help_text=_('HT__TIME_ESTIMATE')
+        help_text=_('HT__TIME_ESTIMATE'),
     )
 
     total_time_spent = models.PositiveIntegerField(
         null=True,
         verbose_name=_('VN__TOTAL_TIME_SPENT'),
-        help_text=_('HT__TOTAL_TIME_SPENT')
+        help_text=_('HT__TOTAL_TIME_SPENT'),
     )
 
     state = models.CharField(
@@ -43,33 +43,33 @@ class Issue(NotableMixin,
         null=True,
         blank=True,
         verbose_name=_('VN__STATE'),
-        help_text=_('HT__STATE')
+        help_text=_('HT__STATE'),
     )
 
     created_at = models.DateTimeField(
         null=True,
-        blank=True
+        blank=True,
     )
 
     updated_at = models.DateTimeField(
         null=True,
-        blank=True
+        blank=True,
     )
 
     closed_at = models.DateTimeField(
         null=True,
-        blank=True
+        blank=True,
     )
 
     due_date = models.DateField(
         null=True,
-        blank=True
+        blank=True,
     )
 
     labels = models.ManyToManyField(
         'development.Label',
         related_name='issues',
-        blank=True
+        blank=True,
     )
 
     project = models.ForeignKey(
@@ -79,7 +79,7 @@ class Issue(NotableMixin,
         blank=True,
         related_name='issues',
         verbose_name=_('VN__PROJECT'),
-        help_text=_('HT__PROJECT')
+        help_text=_('HT__PROJECT'),
     )
 
     user = models.ForeignKey(
@@ -88,7 +88,7 @@ class Issue(NotableMixin,
         null=True,
         blank=True,
         verbose_name=_('VN__USER'),
-        help_text=_('HT__USER')
+        help_text=_('HT__USER'),
     )
 
     milestone = models.ForeignKey(
@@ -103,7 +103,7 @@ class Issue(NotableMixin,
         on_delete=models.SET_NULL,
         null=True,
         blank=True,
-        related_name='issues'
+        related_name='issues',
     )
 
     participants = models.ManyToManyField(
@@ -133,7 +133,7 @@ class Issue(NotableMixin,
     @cached_property
     def last_note_date(self) -> datetime:
         return self.notes.aggregate(
-            last_created=Max('created_at')
+            last_created=Max('created_at'),
         )['last_created']
 
     @property

@@ -13,7 +13,7 @@ from ..models import Issue
 class IssueAdmin(ForceSyncEntityMixin,
                  BaseModelAdmin):
     list_display = (
-        'title', 'user', 'milestone', 'state', 'created_at', 'gl_last_sync'
+        'title', 'user', 'milestone', 'state', 'created_at', 'gl_last_sync',
     )
     list_filter = (ProjectFilter, MilestoneFilter, 'state')
     search_fields = ('title', 'gl_id')
@@ -24,5 +24,5 @@ class IssueAdmin(ForceSyncEntityMixin,
     def sync_handler(self, obj):
         sync_project_issue.delay(
             obj.project.gl_id,
-            obj.gl_iid
+            obj.gl_iid,
         )

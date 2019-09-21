@@ -28,9 +28,9 @@ class CompleteGitlabAuthMutation(BaseMutation):
             _do_login,
             user=None,
             redirect_name=REDIRECT_FIELD_NAME,
-            request=request
+            request=request,
         )
 
         return CompleteGitlabAuthMutation(
-            token=token
+            token=token,
         )

@@ -10,7 +10,7 @@ class ProjectGroup(GitlabEntityMixin):
     title = models.CharField(
         max_length=255,
         verbose_name=_('VN__TITLE'),
-        help_text=_('HT__TITLE')
+        help_text=_('HT__TITLE'),
     )
 
     full_title = models.CharField(
@@ -18,14 +18,14 @@ class ProjectGroup(GitlabEntityMixin):
         null=True,
         blank=True,
         verbose_name=_('VN__FULL_TITLE'),
-        help_text=_('HT__FULL_TITLE')
+        help_text=_('HT__FULL_TITLE'),
     )
 
     gl_avatar = models.URLField(
         null=True,
         blank=True,
         verbose_name=_('VN__GITLAB_AVATAR'),
-        help_text=_('HT__GITLAB_AVATAR')
+        help_text=_('HT__GITLAB_AVATAR'),
     )
 
     parent = models.ForeignKey(
@@ -34,17 +34,17 @@ class ProjectGroup(GitlabEntityMixin):
         null=True,
         blank=True,
         verbose_name=_('VN__PARENT'),
-        help_text=_('HT__PARENT')
+        help_text=_('HT__PARENT'),
     )
 
     milestones = GenericRelation(
         'development.Milestone',
-        related_query_name='project_group'
+        related_query_name='project_group',
     )
 
     members = GenericRelation(
         'development.ProjectMember',
-        related_query_name='project_group'
+        related_query_name='project_group',
     )
 
     objects = ProjectGroupManager()

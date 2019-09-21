@@ -17,14 +17,14 @@ class ProjectMember(Timestamps):
 
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
-        models.CASCADE
+        models.CASCADE,
     )
 
     role = models.CharField(
         choices=ROLE,
         max_length=20,
         verbose_name=_('VN__ROLE'),
-        help_text=_('HT__ROLE')
+        help_text=_('HT__ROLE'),
     )
 
     owner = GenericForeignKey()
@@ -32,11 +32,11 @@ class ProjectMember(Timestamps):
     content_type = models.ForeignKey(
         ContentType,
         models.CASCADE,
-        null=True
+        null=True,
     )
 
     object_id = models.PositiveIntegerField(
-        null=True
+        null=True,
     )
 
     class Meta:

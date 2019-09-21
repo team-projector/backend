@@ -3,7 +3,7 @@ from typing import Iterable, List
 
 from apps.development.models import Team
 from apps.payroll.services.metrics.progress.user import (
-    User, UserProgressMetrics
+    User, UserProgressMetrics,
 )
 
 

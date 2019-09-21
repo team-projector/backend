@@ -15,11 +15,11 @@ class CanApproveDeclineWorkBreak:
                                 **kwargs) -> bool:
         work_break = get_object_or_404(
             WorkBreak.objects.all(),
-            pk=kwargs['id']
+            pk=kwargs['id'],
         )
 
         return user_related_with_another_by_team_roles(
             info.context.user,
             work_break.user,
-            [TeamMember.roles.leader]
+            [TeamMember.roles.leader],
         )

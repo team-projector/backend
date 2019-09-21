@@ -7,10 +7,10 @@ from ...services.gitlab.parsers import parse_gl_date, parse_gl_datetime
 
 RE_SPEND_FULL: Pattern = re.compile(
     r'^(?P<action>(added|subtracted)) (?P<spent>.+) '
-    + r'of time spent at (?P<date>\d{4}-\d{2}-\d{2})$'
+    + r'of time spent at (?P<date>\d{4}-\d{2}-\d{2})$',
 )
 RE_SPEND_SHORT: Pattern = re.compile(
-    r'^(?P<action>(added|subtracted)) (?P<spent>.+) of time spent$'
+    r'^(?P<action>(added|subtracted)) (?P<spent>.+) of time spent$',
 )
 RE_SPEND_PART: Pattern = re.compile(r'(?P<value>\d+)(?P<part>(mo|w|d|h|m|s))')
 SPEND_RESET_MESSAGE = 'removed time spent'
@@ -56,7 +56,7 @@ GITLAB_SPEND_HANDLERS = {
     'd': days_handler,
     'h': hours_handler,
     'm': minutes_handler,
-    's': seconds_handler
+    's': seconds_handler,
 }
 
 NoteReadResult = namedtuple('NoteReadResult', ['type', 'data'])
@@ -110,7 +110,7 @@ class SpendAddedParser(BaseNoteParser):
             Note.TYPE.time_spend, {
                 'spent': spent,
                 'date': date,
-            }
+            },
         )
 
 
@@ -124,7 +124,7 @@ class SpendResetParser(BaseNoteParser):
 
 _notes_parsers = [
     SpendAddedParser(),
-    SpendResetParser()
+    SpendResetParser(),
 ]
 
 

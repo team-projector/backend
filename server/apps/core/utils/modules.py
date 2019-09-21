@@ -2,7 +2,7 @@ from importlib import import_module
 from importlib.util import find_spec
 from typing import (
     Iterable,
-    List
+    List,
 )
 
 

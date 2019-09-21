@@ -12,7 +12,7 @@ class LabelAdmin(BaseModelAdmin):
 
     fieldsets = (
         (None, {
-            'fields': ('title', 'color_square')
+            'fields': ('title', 'color_square'),
         }),
     )
 

@@ -24,17 +24,17 @@ class WorkBreak(ApprovedMixin, Timestamps):
         models.CASCADE,
         related_name='work_break',
         verbose_name=_('VN__USER'),
-        help_text=_('HT__USER')
+        help_text=_('HT__USER'),
     )
 
     from_date = models.DateTimeField(
         verbose_name=_('VN__DATE_FROM'),
-        help_text=_('HT__DATE_FROM')
+        help_text=_('HT__DATE_FROM'),
     )
 
     to_date = models.DateTimeField(
         verbose_name=_('VN__DATE_TO'),
-        help_text=_('HT__DATE_TO')
+        help_text=_('HT__DATE_TO'),
     )
 
     reason = models.CharField(
@@ -42,12 +42,12 @@ class WorkBreak(ApprovedMixin, Timestamps):
         blank=False,
         max_length=15,
         verbose_name=_('VN__REASON'),
-        help_text=_('HT__REASON')
+        help_text=_('HT__REASON'),
     )
 
     comment = models.TextField(
         verbose_name=_('VN__COMMENT'),
-        help_text=_('HT__COMMENT')
+        help_text=_('HT__COMMENT'),
     )
 
     objects = WorkBreakManager()

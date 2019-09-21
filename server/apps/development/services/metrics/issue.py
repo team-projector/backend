@@ -11,7 +11,7 @@ class IssueMetrics:
 
 def get_issue_metrcis(issue: Issue) -> IssueMetrics:
     payroll = SpentTime.objects.filter(
-        issues__id=issue.id
+        issues__id=issue.id,
     ).aggregate_payrolls()
 
     metrics = IssueMetrics()

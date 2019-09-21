@@ -10,7 +10,7 @@ class MergeRequestMetrics:
 
 def get_merge_request_metrcis(merge_request) -> MergeRequestMetrics:
     payroll = SpentTime.objects.filter(
-        mergerequests__id=merge_request.id
+        mergerequests__id=merge_request.id,
     ).aggregate_payrolls()
 
     metrics = MergeRequestMetrics()

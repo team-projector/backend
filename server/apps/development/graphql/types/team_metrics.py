@@ -1,7 +1,7 @@
 import graphene
 
 from .work_item_team_metrics import (
-    IssueTeamMetricsType, MergeRequestTeamMetricsType
+    IssueTeamMetricsType, MergeRequestTeamMetricsType,
 )
 
 

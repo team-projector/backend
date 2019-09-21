@@ -7,7 +7,7 @@ from .payroll import Payroll
 class Penalty(Payroll):
     description = models.TextField(
         verbose_name=_('VN__DESCRIPTION'),
-        help_text=_('HT__DESCRIPTION')
+        help_text=_('HT__DESCRIPTION'),
     )
 
     class Meta:

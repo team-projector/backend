@@ -136,15 +136,15 @@ class DayMetricsProvider(ProgressMetricsProvider):
 
     def _get_time_spents(self) -> dict:
         queryset = SpentTime.objects.annotate(
-            day=TruncDay('date')
+            day=TruncDay('date'),
         ).filter(
             user=self.user,
             date__range=(self.start, self.end),
-            day__isnull=False
+            day__isnull=False,
         ).values(
-            'day'
+            'day',
         ).annotate(
-            period_spent=Sum('time_spent')
+            period_spent=Sum('time_spent'),
         ).order_by()
 
         return {
@@ -159,20 +159,20 @@ class DayMetricsProvider(ProgressMetricsProvider):
                 When(
                     Q(time_estimate__gt=F('total_time_spent')) &  # noqa:W504
                     ~Q(state=STATE_CLOSED),
-                    then=F('time_estimate') - F('total_time_spent')
+                    then=F('time_estimate') - F('total_time_spent'),
                 ),
                 default=Value(0),
-                output_field=IntegerField()
+                output_field=IntegerField(),
             ),
         ).filter(
             user=self.user,
-            due_date_truncated__isnull=False
+            due_date_truncated__isnull=False,
         ).values(
-            'due_date_truncated'
+            'due_date_truncated',
         ).annotate(
             issues_count=Count('*'),
             total_time_estimate=Coalesce(Sum('time_estimate'), 0),
-            total_time_remains=Coalesce(Sum('time_remains'), 0)
+            total_time_remains=Coalesce(Sum('time_remains'), 0),
         ).order_by()
 
         return {
@@ -182,15 +182,15 @@ class DayMetricsProvider(ProgressMetricsProvider):
 
     def _get_payrolls_stats(self) -> dict:
         queryset = SpentTime.objects.annotate(
-            date_truncated=TruncDay('date')
+            date_truncated=TruncDay('date'),
         ).annotate_payrolls().filter(
             user=self.user,
-            date_truncated__isnull=False
+            date_truncated__isnull=False,
         ).values(
-            'date_truncated'
+            'date_truncated',
         ).annotate(
             total_payroll=Coalesce(Sum('payroll'), 0),
-            total_paid=Coalesce(Sum('paid'), 0)
+            total_paid=Coalesce(Sum('paid'), 0),
         ).order_by()
 
         return {

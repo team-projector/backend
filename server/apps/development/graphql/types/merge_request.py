@@ -8,13 +8,13 @@ from apps.core.graphql.utils import is_field_selected
 from apps.development.graphql.types.interfaces import WorkItem
 from apps.development.models import MergeRequest
 from apps.development.services.allowed.merge_requests import (
-    filter_allowed_for_user
+    filter_allowed_for_user,
 )
 from apps.development.services.metrics.merge_request import (
-    get_merge_request_metrcis
+    get_merge_request_metrcis,
 )
 from apps.development.services.problems.merge_request import (
-    get_merge_request_problems
+    get_merge_request_problems,
 )
 from .merge_request_metrics import MergeRequestMetricsType
 
@@ -41,7 +41,7 @@ class MergeRequestType(BaseDjangoObjectType):
                      info) -> QuerySet:
         queryset = filter_allowed_for_user(
             queryset,
-            info.context.user
+            info.context.user,
         )
 
         if is_field_selected(info, 'edges.node.user'):

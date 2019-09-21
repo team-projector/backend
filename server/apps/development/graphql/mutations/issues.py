@@ -27,17 +27,17 @@ class AddSpendIssueMutation(BaseMutation):
 
         issue = get_object_or_404(
             Issue.objects.allowed_for_user(info.context.user),
-            pk=kwargs['id']
+            pk=kwargs['id'],
         )
 
         add_spent_time(
             info.context.user,
             issue,
-            kwargs['seconds']
+            kwargs['seconds'],
         )
 
         return AddSpendIssueMutation(
-            issue=issue
+            issue=issue,
         )
 
 
@@ -51,12 +51,12 @@ class SyncIssueMutation(BaseMutation):
     def do_mutate(cls, root, info, **kwargs):
         issue = get_object_or_404(
             Issue.objects.allowed_for_user(info.context.user),
-            pk=kwargs['id']
+            pk=kwargs['id'],
         )
 
         sync_project_issue.delay(
             issue.project.gl_id,
-            issue.gl_iid
+            issue.gl_iid,
         )
 
         return SyncIssueMutation(issue=issue)
@@ -73,13 +73,13 @@ class UpdateIssueMutation(BaseMutation):
     def do_mutate(cls, root, info, **kwargs):
         issue = get_object_or_404(
             Issue.objects.allowed_for_user(info.context.user),
-            pk=kwargs['id']
+            pk=kwargs['id'],
         )
 
         if kwargs.get('ticket'):
             ticket = get_object_or_404(
                 Ticket.objects.all(),
-                pk=kwargs.pop('ticket')
+                pk=kwargs.pop('ticket'),
             )
             issue.ticket = ticket
 

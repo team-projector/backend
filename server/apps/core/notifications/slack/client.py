@@ -12,8 +12,8 @@ class SlackClient:
         try:
             return self.client.im_open(
                 user=self.client.users_lookupByEmail(
-                    email=email
-                ).get('user').get('id')
+                    email=email,
+                ).get('user').get('id'),
             ).get('channel')
         except (TypeError, SlackApiError):
             pass

@@ -87,9 +87,9 @@ class UserMetricsProvider:
             Q(issues__state=STATE_OPENED)
             | Q(mergerequests__state=STATE_OPENED),
             salary__isnull=True,
-            user=user
+            user=user,
         ).aggregate(
-            total_sum=Coalesce(Sum('sum'), 0)
+            total_sum=Coalesce(Sum('sum'), 0),
         )['total_sum']
 
     @staticmethod
@@ -100,14 +100,14 @@ class UserMetricsProvider:
             salary__isnull=True,
             user=user,
         ).aggregate(
-            total_sum=Coalesce(Sum('sum'), 0)
+            total_sum=Coalesce(Sum('sum'), 0),
         )['total_sum']
 
     @staticmethod
     def _get_issues_opened_count(user: User) -> int:
         return Issue.objects.filter(
             user=user,
-            state=STATE_OPENED
+            state=STATE_OPENED,
         ).count()
 
     @staticmethod
@@ -115,9 +115,9 @@ class UserMetricsProvider:
         return SpentTime.objects.filter(
             salary__isnull=True,
             user=user,
-            issues__state=STATE_CLOSED
+            issues__state=STATE_CLOSED,
         ).aggregate(
-            total_time_spent=Coalesce(Sum('time_spent'), 0)
+            total_time_spent=Coalesce(Sum('time_spent'), 0),
         )['total_time_spent']
 
     @staticmethod
@@ -125,16 +125,16 @@ class UserMetricsProvider:
         return SpentTime.objects.filter(
             salary__isnull=True,
             user=user,
-            issues__state=STATE_OPENED
+            issues__state=STATE_OPENED,
         ).aggregate(
-            total_time_spent=Coalesce(Sum('time_spent'), 0)
+            total_time_spent=Coalesce(Sum('time_spent'), 0),
         )['total_time_spent']
 
     @staticmethod
     def _get_merge_requests_opened_count(user: User) -> int:
         return MergeRequest.objects.filter(
             user=user,
-            state=STATE_OPENED
+            state=STATE_OPENED,
         ).count()
 
     @staticmethod
@@ -142,9 +142,9 @@ class UserMetricsProvider:
         return SpentTime.objects.filter(
             salary__isnull=True,
             user=user,
-            mergerequests__state__in=(STATE_CLOSED, STATE_MERGED)
+            mergerequests__state__in=(STATE_CLOSED, STATE_MERGED),
         ).aggregate(
-            total_time_spent=Coalesce(Sum('time_spent'), 0)
+            total_time_spent=Coalesce(Sum('time_spent'), 0),
         )['total_time_spent']
 
     @staticmethod
@@ -152,7 +152,7 @@ class UserMetricsProvider:
         return SpentTime.objects.filter(
             salary__isnull=True,
             user=user,
-            mergerequests__state=STATE_OPENED
+            mergerequests__state=STATE_OPENED,
         ).aggregate(
-            total_time_spent=Coalesce(Sum('time_spent'), 0)
+            total_time_spent=Coalesce(Sum('time_spent'), 0),
         )['total_time_spent']

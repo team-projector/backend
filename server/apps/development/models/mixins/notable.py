@@ -12,7 +12,7 @@ class NotableMixin(models.Model):
     notes = GenericRelation(
         'development.Note',
         verbose_name=_('VN__NOTES'),
-        help_text=_('HT__NOTES')
+        help_text=_('HT__NOTES'),
     )
 
     class Meta:
@@ -46,5 +46,5 @@ class NotableMixin(models.Model):
                 user=note.user,
                 time_spent=time_spent,
                 note=note,
-                base=self
+                base=self,
             )

@@ -18,5 +18,5 @@ class ProjectAdmin(ForceSyncEntityMixin,
         sync_project.delay(
             obj.group.id,
             obj.gl_id,
-            obj.id
+            obj.id,
         )

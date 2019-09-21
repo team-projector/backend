@@ -43,7 +43,7 @@ def load_user(user_id: int) -> User:
             'name': gl_user.name,
             'gl_avatar': gl_user.avatar_url,
             'gl_url': gl_user.web_url,
-            'gl_last_sync': timezone.now()
+            'gl_last_sync': timezone.now(),
         })
 
     if created:

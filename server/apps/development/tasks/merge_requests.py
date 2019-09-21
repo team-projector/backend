@@ -4,7 +4,7 @@ from apps.core.tasks import add_action
 from celery_app import app
 from ..models import Project
 from ..services.gitlab.merge_requests import (
-    load_project_merge_request, load_project_merge_requests
+    load_project_merge_request, load_project_merge_requests,
 )
 
 

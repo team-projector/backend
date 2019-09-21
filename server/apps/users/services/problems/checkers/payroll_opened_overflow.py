@@ -17,9 +17,9 @@ class PayrollOpenedOverflowChecker(BaseProblemChecker):
         total_spend = SpentTime.objects.filter(
             salary__isnull=True,
             user=user,
-            issues__state=STATE_OPENED
+            issues__state=STATE_OPENED,
         ).aggregate(
-            total_time_spent=Coalesce(Sum('time_spent'), 0)
+            total_time_spent=Coalesce(Sum('time_spent'), 0),
         )['total_time_spent']
 
         return total_spend > user.daily_work_hours * SECONDS_PER_HOUR * 1.5

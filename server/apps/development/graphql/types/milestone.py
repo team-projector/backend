@@ -35,7 +35,7 @@ class MilestoneType(BaseDjangoObjectType):
                      info) -> QuerySet:
         queryset = filter_allowed_for_user(
             queryset,
-            info.context.user
+            info.context.user,
         )
 
         return queryset

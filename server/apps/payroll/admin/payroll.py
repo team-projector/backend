@@ -19,7 +19,7 @@ class PayrollAdmin(BaseModelAdmin):
 
     fieldsets = (
         (None, {
-            'fields': ('inheritance', 'created_by', 'sum', 'salary', 'user')
+            'fields': ('inheritance', 'created_by', 'sum', 'salary', 'user'),
         }),
     )
 
@@ -38,12 +38,12 @@ class PayrollAdmin(BaseModelAdmin):
     def _get_inheritance_link(self, node):
         url = reverse(
             f'admin:{node._meta.app_label}_{node._meta.model_name}_change',
-            args=[node.id]
+            args=[node.id],
         )
 
         return mark_safe(
             f'<a href={url}>{node._meta.model_name.capitalize()}: '
-            + f'{node}</a>'
+            + f'{node}</a>',
         )
 
     @staticmethod

@@ -9,7 +9,7 @@ def collect_fields(node,
         for leaf in node['selection_set']['selections']:
             if leaf['kind'] == 'Field':
                 field.update({
-                    leaf['name']['value']: collect_fields(leaf, fragments)
+                    leaf['name']['value']: collect_fields(leaf, fragments),
                 })
             elif leaf['kind'] == 'FragmentSpread':
                 field.update(collect_fields(fragments[leaf['name']['value']],

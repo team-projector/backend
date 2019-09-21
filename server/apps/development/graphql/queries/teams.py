@@ -5,7 +5,7 @@ from apps.core.graphql.relay_nodes import DatasourceRelayNode
 from apps.development.graphql.filters import TeamsFilterSet
 from apps.development.graphql.resolvers import resolve_team_progress_metrics
 from apps.development.graphql.types import (
-    TeamType, TeamMemberProgressMetricsType
+    TeamType, TeamMemberProgressMetricsType,
 )
 
 
@@ -14,7 +14,7 @@ class TeamsQueries(graphene.ObjectType):
 
     all_teams = DataSourceConnectionField(
         TeamType,
-        filterset_class=TeamsFilterSet
+        filterset_class=TeamsFilterSet,
     )
 
     team_progress_metrics = graphene.Field(
@@ -23,5 +23,5 @@ class TeamsQueries(graphene.ObjectType):
         start=graphene.Date(required=True),
         end=graphene.Date(required=True),
         group=graphene.String(required=True),
-        resolver=resolve_team_progress_metrics
+        resolver=resolve_team_progress_metrics,
     )

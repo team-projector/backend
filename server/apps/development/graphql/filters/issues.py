@@ -8,7 +8,7 @@ from ...models import Issue, Ticket, Milestone, Team, TeamMember, Project
 from ...services.allowed.issues import check_allow_project_manager
 from ...services.problems.issue import (
     filter_issues_problems, exclude_issues_problems,
-    annotate_issues_problems
+    annotate_issues_problems,
 )
 
 User = get_user_model()
@@ -76,7 +76,7 @@ class IssuesFilterSet(django_filters.FilterSet):
     user = django_filters.ModelChoiceFilter(queryset=User.objects.all())
 
     order_by = OrderingFilter(
-        fields=('due_date', 'title', 'created_at', 'closed_at')
+        fields=('due_date', 'title', 'created_at', 'closed_at'),
     )
 
     q = SearchFilter(fields=('title',))
@@ -85,5 +85,5 @@ class IssuesFilterSet(django_filters.FilterSet):
         model = Issue
         fields = (
             'state', 'due_date', 'user', 'team', 'problems', 'project',
-            'milestone', 'ticket'
+            'milestone', 'ticket',
         )

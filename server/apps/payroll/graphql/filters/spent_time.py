@@ -28,9 +28,9 @@ class ProjectFilter(django_filters.ModelChoiceFilter):
             return queryset
 
         return queryset.filter(
-            issues__project=value
+            issues__project=value,
         ) | queryset.filter(
-            mergerequests__project=value
+            mergerequests__project=value,
         )
 
 
@@ -40,9 +40,9 @@ class StateFilter(django_filters.CharFilter):
             return queryset
 
         return queryset.filter(
-            issues__state=value
+            issues__state=value,
         ) | queryset.filter(
-            mergerequests__state=value
+            mergerequests__state=value,
         )
 
 
@@ -53,7 +53,7 @@ class SpentTimeFilterSet(django_filters.FilterSet):
     state = StateFilter()
 
     order_by = OrderingFilter(
-        fields=('date', 'created_at')
+        fields=('date', 'created_at'),
     )
 
     class Meta:

@@ -21,14 +21,14 @@ class ApprovedMixin(models.Model):
         default='created',
         max_length=15,
         verbose_name=_('VN__APPROVE_STATE'),
-        help_text=_('HT__APPROVE_STATE')
+        help_text=_('HT__APPROVE_STATE'),
     )
 
     approved_at = models.DateTimeField(
         null=True,
         blank=True,
         verbose_name=_('VN__APPROVED_AT'),
-        help_text=_('HT__APPROVED_AT')
+        help_text=_('HT__APPROVED_AT'),
     )
 
     approved_by = models.ForeignKey(
@@ -38,14 +38,14 @@ class ApprovedMixin(models.Model):
         null=True,
         blank=True,
         verbose_name=_('VN__APPROVED_BY'),
-        help_text=_('HT__APPROVED_BY')
+        help_text=_('HT__APPROVED_BY'),
     )
 
     decline_reason = models.TextField(
         null=True,
         blank=True,
         verbose_name=_('VN__DECLINE_REASON'),
-        help_text=_('HT__DECLINE_REASON')
+        help_text=_('HT__DECLINE_REASON'),
     )
 
     class Meta:

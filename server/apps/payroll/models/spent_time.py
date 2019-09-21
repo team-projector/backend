@@ -12,35 +12,35 @@ SECS_IN_HOUR = 60 * 60
 
 class SpentTime(Payroll):
     date = models.DateField(
-        null=True
+        null=True,
     )
 
     customer_sum = MoneyField(
         default=0,
         verbose_name=_('VN__CUSTOMER_SUM'),
-        help_text=_('HT__CUSTOMER_SUM')
+        help_text=_('HT__CUSTOMER_SUM'),
     )
 
     rate = models.FloatField(
         null=True,
         verbose_name=_('VN__RATE'),
-        help_text=_('HT__RATE')
+        help_text=_('HT__RATE'),
     )
 
     customer_rate = models.FloatField(
         null=True,
         verbose_name=_('VN__CUSTOMER_RATE'),
-        help_text=_('HT__CUSTOMER_RATE')
+        help_text=_('HT__CUSTOMER_RATE'),
     )
 
     time_spent = models.IntegerField(
         verbose_name=_('VN__TIME_SPENT'),
-        help_text=_('HT__TIME_SPENT')
+        help_text=_('HT__TIME_SPENT'),
     )
 
     content_type = models.ForeignKey(
         ContentType,
-        models.CASCADE
+        models.CASCADE,
     )
 
     object_id = models.PositiveIntegerField()
@@ -52,7 +52,7 @@ class SpentTime(Payroll):
         models.SET_NULL,
         null=True,
         blank=True,
-        related_name='time_spend'
+        related_name='time_spend',
     )
 
     objects = SpentTimeManager()

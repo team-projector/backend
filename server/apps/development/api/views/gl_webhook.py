@@ -15,7 +15,7 @@ logger = logging.getLogger(__name__)
 @csrf_exempt
 def gl_webhook(request):
     _check_webhook_secret_token(
-        request.META.get('HTTP_X_GITLAB_TOKEN')
+        request.META.get('HTTP_X_GITLAB_TOKEN'),
     )
 
     body = json.loads(request.body.decode('utf-8'))
@@ -37,7 +37,7 @@ def _sync_issue(body: dict) -> None:
 
     logger.info(
         f'gitlab webhook was triggered: project_id = {project_id}, '
-        + f'issue_id = {issue_id}'
+        + f'issue_id = {issue_id}',
     )
 
     add_action.delay(verb=ACTION_GITLAB_WEBHOOK_TRIGGERED)
@@ -51,7 +51,7 @@ def _sync_merge_request(body: dict) -> None:
 
     logger.info(
         f'gitlab webhook was triggered: project_id = {project_id}, '
-        + f'merge_request_id = {issue_id}'
+        + f'merge_request_id = {issue_id}',
     )
 
     add_action.delay(verb=ACTION_GITLAB_WEBHOOK_TRIGGERED)

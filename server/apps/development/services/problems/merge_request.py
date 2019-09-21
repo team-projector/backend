@@ -25,9 +25,9 @@ class EmptyEstimateChecker(BaseProblemChecker):
         return merge_request.issues.filter(
             Q(
                 Q(time_estimate__isnull=True)
-                | Q(time_estimate=0)
+                | Q(time_estimate=0),
             )
-            & Q(state=STATE_OPENED)
+            & Q(state=STATE_OPENED),
         ).exists()
 
 

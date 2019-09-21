@@ -5,7 +5,7 @@ from graphene_django.settings import graphene_settings
 from graphene_django.utils import maybe_queryset
 from graphql_relay.connection.arrayconnection import (
     get_offset_with_default,
-    offset_to_cursor
+    offset_to_cursor,
 )
 from graphql_relay.connection.connectiontypes import Edge
 
@@ -86,22 +86,22 @@ class DataSourceConnectionField(AuthFilter,
         start_offset = max(
             slice_start - 1,
             after_offset,
-            -1
+            -1,
         ) + 1
         end_offset = min(
             slice_end,
             before_offset,
-            list_length
+            list_length,
         )
         if isinstance(first, int):
             end_offset = min(
                 end_offset,
-                start_offset + first
+                start_offset + first,
             )
         if isinstance(last, int):
             start_offset = max(
                 start_offset,
-                end_offset - last
+                end_offset - last,
             )
 
         # It is differences from original function `connection_from_list_slice`
@@ -113,7 +113,7 @@ class DataSourceConnectionField(AuthFilter,
         edges = [
             edge_type(
                 node=node,
-                cursor=offset_to_cursor(start_offset + i)
+                cursor=offset_to_cursor(start_offset + i),
             )
             for i, node in enumerate(slice_fragment)
         ]
@@ -132,6 +132,6 @@ class DataSourceConnectionField(AuthFilter,
                     isinstance(last, int) and start_offset > lower_bound),
                 has_next_page=(
                     isinstance(first, int) and end_offset < upper_bound
-                )
-            )
+                ),
+            ),
         )

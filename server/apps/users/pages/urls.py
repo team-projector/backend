@@ -9,11 +9,11 @@ urlpatterns = [
     path(
         'login/<slug:backend>/',
         views.auth,
-        name='begin'
+        name='begin',
     ),
     path(
         'complete/<slug:backend>/',
         auth_complete,
-        name='complete'
+        name='complete',
     ),
 ]

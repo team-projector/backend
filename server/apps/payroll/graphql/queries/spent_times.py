@@ -9,7 +9,7 @@ from apps.payroll.graphql.resolvers import resolve_spent_times_summary
 class TimeExpensesQueries(graphene.ObjectType):
     all_spent_times = DataSourceConnectionField(
         SpentTimeType,
-        filterset_class=SpentTimeFilterSet
+        filterset_class=SpentTimeFilterSet,
     )
 
     spent_times_summary = graphene.Field(
@@ -19,5 +19,5 @@ class TimeExpensesQueries(graphene.ObjectType):
         user=graphene.ID(),
         state=graphene.String(),
         date=graphene.Date(),
-        resolver=resolve_spent_times_summary
+        resolver=resolve_spent_times_summary,
     )

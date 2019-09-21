@@ -1,7 +1,7 @@
 from typing import Iterable
 
 from apps.payroll.services.metrics.progress.user import (
-    UserProgressMetrics, get_user_progress_metrics
+    UserProgressMetrics, get_user_progress_metrics,
 )
 from apps.users.models import User
 from .base import ProgressMetricsProvider
@@ -14,5 +14,5 @@ class WeekMetricsProvider(ProgressMetricsProvider):
             user,
             self.start,
             self.end,
-            'week'
+            'week',
         )

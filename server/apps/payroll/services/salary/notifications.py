@@ -17,7 +17,7 @@ def send_email_report(salary: Salary) -> None:
     SystemEmailDispatcher.mail_users(
         subject=subject,
         text=text,
-        recipient_list=[salary.user.email]
+        recipient_list=[salary.user.email],
     )
 
 
@@ -32,5 +32,5 @@ def send_slack_report(salary: Salary) -> None:
 
     if channel:
         slack.send_message_to_channel(
-            channel['id'], msg, icon_emoji=':moneybag:'
+            channel['id'], msg, icon_emoji=':moneybag:',
         )

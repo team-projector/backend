@@ -8,8 +8,8 @@ class TeamMemberManager(models.Manager):
 
         return self.filter(
             team=team,
-            roles=~TeamMember.roles.watcher
+            roles=~TeamMember.roles.watcher,
         ).values_list(
             'user',
-            flat=True
+            flat=True,
         )

@@ -13,7 +13,7 @@ class Project(GitlabEntityMixin):
     title = models.CharField(
         max_length=255,
         verbose_name=_('VN__TITLE'),
-        help_text=_('HT__TITLE')
+        help_text=_('HT__TITLE'),
     )
 
     full_title = models.CharField(
@@ -21,7 +21,7 @@ class Project(GitlabEntityMixin):
         null=True,
         blank=True,
         verbose_name=_('VN__FULL_TITLE'),
-        help_text=_('HT__FULL_TITLE')
+        help_text=_('HT__FULL_TITLE'),
     )
 
     group = models.ForeignKey(
@@ -30,37 +30,37 @@ class Project(GitlabEntityMixin):
         null=True,
         blank=True,
         verbose_name=_('VN__GROUP'),
-        help_text=_('HT__GROUP')
+        help_text=_('HT__GROUP'),
     )
 
     gl_avatar = models.URLField(
         null=True,
         blank=True,
         verbose_name=_('VN__GITLAB_AVATAR'),
-        help_text=_('HT__GITLAB_AVATAR')
+        help_text=_('HT__GITLAB_AVATAR'),
     )
 
     gl_last_issues_sync = models.DateTimeField(
         null=True,
         blank=True,
         verbose_name=_('VN__GITLAB_LAST_ISSUES_SYNC'),
-        help_text=_('HT__GITLAB_LAST_ISSUES_SYNC')
+        help_text=_('HT__GITLAB_LAST_ISSUES_SYNC'),
     )
 
     gl_last_merge_requests_sync = models.DateTimeField(
         null=True,
         blank=True,
         verbose_name=_('VN__GITLAB_MERGE_REQUESTS_SYNC'),
-        help_text=_('HT__MERGE_REQUESTS_SYNC')
+        help_text=_('HT__MERGE_REQUESTS_SYNC'),
     )
 
     milestones = GenericRelation(
         'Milestone',
-        related_query_name='project'
+        related_query_name='project',
     )
     members = GenericRelation(
         'development.ProjectMember',
-        related_query_name='project'
+        related_query_name='project',
     )
 
     objects = ProjectManager()

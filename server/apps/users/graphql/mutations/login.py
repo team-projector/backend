@@ -20,9 +20,9 @@ class LoginMutation(BaseMutation):
         token = login_user(
             login,
             password,
-            info.context
+            info.context,
         )
 
         return LoginMutation(
-            token=token
+            token=token,
         )

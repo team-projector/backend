@@ -8,6 +8,6 @@ urlpatterns = [
     path(
         'gl-webhook',
         views.gl_webhook,
-        name='gl-webhook'
+        name='gl-webhook',
     ),
 ]
