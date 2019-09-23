@@ -1,16 +1,17 @@
 from datetime import timedelta, datetime
 
-from apps.development.models import Milestone
 from apps.development.graphql.filters import MilestonesFilterSet
+from apps.development.models import Milestone
+from apps.development.models.milestone import MILESTONE_STATES
 from tests.test_development.factories import ProjectMilestoneFactory
 
 
 def test_filter_by_state(db):
     milestone_active = ProjectMilestoneFactory.create(
-        state=Milestone.STATE.active
+        state=MILESTONE_STATES.active
     )
     milestone_closed = ProjectMilestoneFactory.create(
-        state=Milestone.STATE.closed
+        state=MILESTONE_STATES.closed
     )
 
     results = MilestonesFilterSet(

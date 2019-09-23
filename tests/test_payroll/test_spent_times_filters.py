@@ -4,10 +4,12 @@ from datetime import timedelta, date
 import pytest
 from django.utils import timezone
 
-from apps.development.models import TeamMember, STATE_OPENED, STATE_CLOSED, STATE_MERGED
-from apps.payroll.models import SpentTime
-from apps.payroll.graphql.filters import SpentTimeFilterSet
 from apps.core.utils.time import seconds
+from apps.development.models import TeamMember
+from apps.development.models.issue import ISSUE_STATES
+from apps.development.models.merge_request import MERGE_REQUESTS_STATES
+from apps.payroll.graphql.filters import SpentTimeFilterSet
+from apps.payroll.models import SpentTime
 from tests.test_development.factories import (
     IssueFactory, MergeRequestFactory, ProjectFactory, TeamFactory,
     TeamMemberFactory
@@ -315,7 +317,7 @@ def test_filter_by_state(user):
             time_spent=int(seconds(hours=1))
         )
         for state
-        in (STATE_OPENED, STATE_CLOSED)
+        in (ISSUE_STATES.opened, ISSUE_STATES.closed)
     ]
 
     m_opened, _, _ = [MergeRequestSpentTimeFactory(
@@ -324,7 +326,11 @@ def test_filter_by_state(user):
         time_spent=int(seconds(hours=5))
     )
         for state
-        in (STATE_OPENED, STATE_CLOSED, STATE_MERGED)]
+        in (
+            MERGE_REQUESTS_STATES.opened,
+            MERGE_REQUESTS_STATES.closed,
+            MERGE_REQUESTS_STATES.merged
+        )]
 
     results = SpentTimeFilterSet(
         data={'state': 'opened'},

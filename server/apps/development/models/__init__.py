@@ -1,4 +1,4 @@
-from .merge_request import MergeRequest, STATE_OPENED, STATE_CLOSED, STATE_MERGED
+from .merge_request import MergeRequest
 from .issue import Issue
 from .ticket import Ticket
 from .label import Label

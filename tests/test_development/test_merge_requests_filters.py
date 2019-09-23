@@ -1,6 +1,7 @@
 from apps.development.models import TeamMember
 from apps.development.models import MergeRequest
 from apps.development.graphql.filters import MergeRequestFilterSet
+from apps.development.models.merge_request import MERGE_REQUESTS_STATES
 from tests.test_development.factories import (
     MergeRequestFactory, ProjectFactory, TeamFactory, TeamMemberFactory
 )
@@ -45,14 +46,14 @@ def test_filter_by_user(user):
 
 def test_filter_by_state(user):
     merge_request_opened = MergeRequestFactory.create(
-        user=user, state=MergeRequest.STATE.opened
+        user=user, state=MERGE_REQUESTS_STATES.opened
     )
     merge_request_closed = MergeRequestFactory.create(
-        user=user, state=MergeRequest.STATE.closed
+        user=user, state=MERGE_REQUESTS_STATES.closed
     )
 
     results = MergeRequestFilterSet(
-        data={'state': MergeRequest.STATE.closed},
+        data={'state': MERGE_REQUESTS_STATES.closed},
         queryset=MergeRequest.objects.all(),
     ).qs
 
@@ -60,7 +61,7 @@ def test_filter_by_state(user):
     assert results.first() == merge_request_closed
 
     results = MergeRequestFilterSet(
-        data={'state': MergeRequest.STATE.opened},
+        data={'state': MERGE_REQUESTS_STATES.opened},
         queryset=MergeRequest.objects.all(),
     ).qs
 

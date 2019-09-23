@@ -4,7 +4,7 @@ from django.utils.functional import cached_property
 from django.utils.translation import gettext_lazy as _
 
 from apps.core.models.mixins import GitlabEntityMixin
-from apps.development.models import Milestone
+from apps.development.models.milestone import MILESTONE_STATES
 from apps.development.services.projects import get_group_active_milestones
 from .managers import ProjectManager
 
@@ -81,7 +81,7 @@ class Project(GitlabEntityMixin):
 
     @cached_property
     def active_milestones(self):
-        ret = self.milestones.filter(state=Milestone.STATE.active)
+        ret = self.milestones.filter(state=MILESTONE_STATES.active)
 
         if not ret and self.group:
             return get_group_active_milestones(self.group)

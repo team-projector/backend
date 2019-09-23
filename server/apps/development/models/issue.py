@@ -8,12 +8,15 @@ from django.utils.functional import cached_property
 from django.utils.translation import gettext_lazy as _
 
 from apps.core.models.mixins import GitlabEntityMixin, GitlabInternalIdMixin
+from apps.core.models.utils import Choices
 from apps.payroll.models.mixins import SpentTimesMixin
 from .managers import IssueManager
 from .mixins import NotableMixin
 
-STATE_CLOSED = 'closed'
-STATE_OPENED = 'opened'
+ISSUE_STATES = Choices(
+    ('opened', 'opened'),
+    ('closed', 'closed')
+)
 
 
 class Issue(NotableMixin,
@@ -149,7 +152,7 @@ class Issue(NotableMixin,
     @property
     def efficiency_available(self) -> bool:
         return (
-            self.state == STATE_CLOSED
+            self.state == ISSUE_STATES.closed
             and self.total_time_spent
             and self.time_estimate
         )

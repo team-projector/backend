@@ -3,6 +3,7 @@ from collections import defaultdict, namedtuple
 from typing import DefaultDict, Optional, Pattern
 
 from apps.core.utils.time import seconds
+from apps.development.models.note import NOTE_TYPES
 from ...services.gitlab.parsers import parse_gl_date, parse_gl_datetime
 
 RE_SPEND_FULL: Pattern = re.compile(
@@ -89,7 +90,6 @@ class BaseNoteParser:
 
 class SpendAddedParser(BaseNoteParser):
     def parse(self, gl_note) -> Optional[NoteReadResult]:
-        from ...models import Note
 
         m = (RE_SPEND_FULL.match(gl_note.body) or  # noqa W504
              RE_SPEND_SHORT.match(gl_note.body))
@@ -107,7 +107,7 @@ class SpendAddedParser(BaseNoteParser):
             date = datetime.date() if datetime is not None else None
 
         return NoteReadResult(
-            Note.TYPE.time_spend, {
+            NOTE_TYPES.time_spend, {
                 'spent': spent,
                 'date': date,
             },
@@ -116,10 +116,8 @@ class SpendAddedParser(BaseNoteParser):
 
 class SpendResetParser(BaseNoteParser):
     def parse(self, gl_note) -> Optional[NoteReadResult]:
-        from ...models import Note
-
         if gl_note.body == SPEND_RESET_MESSAGE:
-            return NoteReadResult(Note.TYPE.reset_spend, {})
+            return NoteReadResult(NOTE_TYPES.reset_spend, {})
 
 
 _notes_parsers = [

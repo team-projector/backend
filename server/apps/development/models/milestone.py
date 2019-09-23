@@ -4,54 +4,54 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 
 from apps.core.models.mixins import (
-    GitlabEntityMixin, GitlabInternalIdMixin, Timestamps,
+    GitlabEntityMixin, GitlabInternalIdMixin, Timestamps
 )
 from apps.core.models.utils import Choices
 from .managers import MilestoneManager
+
+MILESTONE_STATES = Choices(
+    ('active', 'active'),
+    ('closed', 'closed')
+)
 
 
 class Milestone(GitlabEntityMixin,
                 GitlabInternalIdMixin,
                 Timestamps):
-    STATE = Choices(
-        ('active', 'active'),
-        ('closed', 'closed'),
-    )
-
     title = models.CharField(
         max_length=255,
         verbose_name=_('VN__TITLE'),
-        help_text=_('HT__TITLE'),
+        help_text=_('HT__TITLE')
     )
 
     description = models.TextField(
         null=True,
         blank=True,
         verbose_name=_('VN__DESCRIPTION'),
-        help_text=_('HT__DESCRIPTION'),
+        help_text=_('HT__DESCRIPTION')
     )
 
     start_date = models.DateField(
         null=True,
         blank=True,
         verbose_name=_('VN__START_DATE'),
-        help_text=_('HT__START_DATE'),
+        help_text=_('HT__START_DATE')
     )
 
     state = models.CharField(
-        choices=STATE,
+        choices=MILESTONE_STATES,
         max_length=20,
         null=True,
         blank=True,
         verbose_name=_('VN__STATE'),
-        help_text=_('HT__STATE'),
+        help_text=_('HT__STATE')
     )
 
     due_date = models.DateField(
         null=True,
         blank=True,
         verbose_name=_('VN__DUE_DATE'),
-        help_text=_('HT__DUE_DATE'),
+        help_text=_('HT__DUE_DATE')
     )
 
     budget = models.DecimalField(
@@ -59,14 +59,14 @@ class Milestone(GitlabEntityMixin,
         max_digits=12,
         decimal_places=2,
         verbose_name=_('VN__BUDGET'),
-        help_text=_('HT__BUDGET'),
+        help_text=_('HT__BUDGET')
     )
 
     owner = GenericForeignKey()
 
     content_type = models.ForeignKey(
         ContentType,
-        models.CASCADE,
+        models.CASCADE
     )
 
     object_id = models.PositiveIntegerField()

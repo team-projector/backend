@@ -13,67 +13,63 @@ from apps.payroll.models.mixins import SpentTimesMixin
 from .managers import MergeRequestManager
 from .mixins import NotableMixin
 
-STATE_CLOSED = 'closed'
-STATE_OPENED = 'opened'
-STATE_MERGED = 'merged'
+MERGE_REQUESTS_STATES = Choices(
+    ('opened', 'opened'),
+    ('merged', 'merged'),
+    ('closed', 'closed')
+)
 
 
 class MergeRequest(NotableMixin,
                    SpentTimesMixin,
                    GitlabEntityMixin,
                    GitlabInternalIdMixin):
-    STATE = Choices(
-        (STATE_OPENED, 'opened'),
-        (STATE_MERGED, 'merged'),
-        (STATE_CLOSED, 'closed'),
-    )
-
     title = models.CharField(
         max_length=255,
         verbose_name=_('VN__TITLE'),
-        help_text=_('HT__TITLE'),
+        help_text=_('HT__TITLE')
     )
 
     time_estimate = models.PositiveIntegerField(
         null=True,
         verbose_name=_('VN__TIME_ESTIMATE'),
-        help_text=_('HT__TIME_ESTIMATE'),
+        help_text=_('HT__TIME_ESTIMATE')
     )
 
     total_time_spent = models.PositiveIntegerField(
         null=True,
         verbose_name=_('VN__TOTAL_TIME_SPENT'),
-        help_text=_('HT__TOTAL_TIME_SPENT'),
+        help_text=_('HT__TOTAL_TIME_SPENT')
     )
 
     state = models.CharField(
-        choices=STATE,
+        choices=MERGE_REQUESTS_STATES,
         max_length=255,
         null=True,
         blank=True,
         verbose_name=_('VN__STATE'),
-        help_text=_('HT__STATE'),
+        help_text=_('HT__STATE')
     )
 
     created_at = models.DateTimeField(
         null=True,
-        blank=True,
+        blank=True
     )
 
     updated_at = models.DateTimeField(
         null=True,
-        blank=True,
+        blank=True
     )
 
     closed_at = models.DateTimeField(
         null=True,
-        blank=True,
+        blank=True
     )
 
     labels = models.ManyToManyField(
         'development.Label',
         related_name='merge_requests',
-        blank=True,
+        blank=True
     )
 
     project = models.ForeignKey(
@@ -83,7 +79,7 @@ class MergeRequest(NotableMixin,
         blank=True,
         related_name='merge_requests',
         verbose_name=_('VN__PROJECT'),
-        help_text=_('HT__PROJECT'),
+        help_text=_('HT__PROJECT')
     )
 
     user = models.ForeignKey(
@@ -93,7 +89,7 @@ class MergeRequest(NotableMixin,
         null=True,
         blank=True,
         verbose_name=_('VN__USER'),
-        help_text=_('HT__USER'),
+        help_text=_('HT__USER')
     )
 
     author = models.ForeignKey(
@@ -103,7 +99,7 @@ class MergeRequest(NotableMixin,
         null=True,
         blank=True,
         verbose_name=_('VN__AUTHOR'),
-        help_text=_('HT__AUTHOR'),
+        help_text=_('HT__AUTHOR')
     )
 
     milestone = models.ForeignKey(
@@ -132,7 +128,7 @@ class MergeRequest(NotableMixin,
     @cached_property
     def last_note_date(self) -> datetime:
         return self.notes.aggregate(
-            last_created=Max('created_at'),
+            last_created=Max('created_at')
         )['last_created']
 
     @property
@@ -148,7 +144,7 @@ class MergeRequest(NotableMixin,
     @property
     def efficiency_available(self) -> bool:
         return (
-            self.state == self.STATE.closed
+            self.state == MERGE_REQUESTS_STATES.closed
             and self.total_time_spent
             and self.time_estimate
         )

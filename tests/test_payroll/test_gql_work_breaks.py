@@ -8,6 +8,7 @@ from apps.payroll.graphql.mutations.work_breaks import (
     CreateWorkBreakMutation, DeleteWorkBreakMutation, UpdateWorkBreakMutation
 )
 from apps.payroll.graphql.queries.work_breaks import WorkBreakType
+from apps.payroll.models.work_break import WORK_BREAK_REASONS
 from tests.test_development.factories import TeamFactory, TeamMemberFactory
 from tests.test_development.factories_gitlab import AttrDict
 from tests.test_payroll.factories import WorkBreakFactory
@@ -86,7 +87,7 @@ def test_create_work_break(user, client):
         info,
         comment='created',
         from_date=str(datetime.now()),
-        reason=WorkBreak.WORK_BREAK_REASONS.dayoff,
+        reason=WORK_BREAK_REASONS.dayoff,
         to_date=str(datetime.now()),
         user=user.id
     ).work_break
@@ -94,7 +95,7 @@ def test_create_work_break(user, client):
     assert WorkBreak.objects.count() == 1
     assert work_break_created.comment == 'created'
     assert work_break_created.from_date is not None
-    assert work_break_created.reason == WorkBreak.WORK_BREAK_REASONS.dayoff
+    assert work_break_created.reason == WORK_BREAK_REASONS.dayoff
     assert work_break_created.to_date is not None
     assert work_break_created.user == user
 
@@ -111,7 +112,7 @@ def test_update_work_break(user, client):
         id=work_break.id,
         comment='updated',
         from_date=str(datetime.now()),
-        reason=WorkBreak.WORK_BREAK_REASONS.vacation,
+        reason=WORK_BREAK_REASONS.vacation,
         to_date=str(datetime.now()),
         user=user.id
     ).work_break
@@ -145,7 +146,7 @@ def test_update_work_break_another_user(user, client):
             id=work_break.id,
             comment='updated',
             from_date=str(datetime.now()),
-            reason=WorkBreak.WORK_BREAK_REASONS.vacation,
+            reason=WORK_BREAK_REASONS.vacation,
             to_date=str(datetime.now())
         ).work_break
 
@@ -173,7 +174,7 @@ def test_update_work_break_another_user_but_teamlead(user, client):
         id=work_break.id,
         comment='updated',
         from_date=str(datetime.now()),
-        reason=WorkBreak.WORK_BREAK_REASONS.vacation,
+        reason=WORK_BREAK_REASONS.vacation,
         to_date=str(datetime.now())
     ).work_break
 

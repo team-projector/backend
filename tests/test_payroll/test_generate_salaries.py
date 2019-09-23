@@ -4,15 +4,17 @@ from decimal import Decimal
 from django.test import TestCase
 from django.utils import timezone
 
-from apps.development.models.issue import STATE_CLOSED, STATE_OPENED
+from apps.development.models.issue import ISSUE_STATES
 from apps.payroll.models import Payroll, Salary
 from apps.payroll.services.salary.calculator import SalaryCalculator
 from apps.payroll.services.salary.exceptions import EmptySalaryException
 from apps.users.models import User
 from apps.core.utils.time import seconds
 from tests.test_development.factories import IssueFactory, MergeRequestFactory
-from tests.test_payroll.factories import BonusFactory, IssueSpentTimeFactory, \
+from tests.test_payroll.factories import (
+    BonusFactory, IssueSpentTimeFactory,
     PenaltyFactory, SalaryFactory, MergeRequestSpentTimeFactory
+)
 from tests.test_users.factories import UserFactory
 
 
@@ -30,8 +32,8 @@ class GenerateSalariesTests(TestCase):
         )
 
     def test_common(self):
-        issue = IssueFactory.create(state=STATE_CLOSED)
-        mr = MergeRequestFactory.create(state=STATE_CLOSED)
+        issue = IssueFactory.create(state=ISSUE_STATES.closed)
+        mr = MergeRequestFactory.create(state=ISSUE_STATES.closed)
 
         IssueSpentTimeFactory.create(user=self.user, base=issue,
                                      time_spent=timedelta(
@@ -70,7 +72,7 @@ class GenerateSalariesTests(TestCase):
         self.assertEqual(Salary.objects.count(), 0)
 
     def test_with_penalty(self):
-        issue = IssueFactory.create(state=STATE_CLOSED)
+        issue = IssueFactory.create(state=ISSUE_STATES.closed)
 
         IssueSpentTimeFactory.create(user=self.user, base=issue,
                                      time_spent=timedelta(
@@ -97,7 +99,7 @@ class GenerateSalariesTests(TestCase):
         self.assertEqual(Payroll.objects.filter(salary=salary).count(), 4)
 
     def test_with_bonus(self):
-        issue = IssueFactory.create(state=STATE_CLOSED)
+        issue = IssueFactory.create(state=ISSUE_STATES.closed)
 
         IssueSpentTimeFactory.create(user=self.user, base=issue,
                                      time_spent=timedelta(
@@ -124,7 +126,7 @@ class GenerateSalariesTests(TestCase):
         self.assertEqual(Payroll.objects.filter(salary=salary).count(), 4)
 
     def test_complex(self):
-        issue = IssueFactory.create(state=STATE_CLOSED)
+        issue = IssueFactory.create(state=ISSUE_STATES.closed)
 
         IssueSpentTimeFactory.create(user=self.user, base=issue,
                                      time_spent=timedelta(
@@ -153,7 +155,7 @@ class GenerateSalariesTests(TestCase):
 
     def test_some_already_with_salary(self):
         prev_salary = SalaryFactory.create(user=self.user)
-        issue = IssueFactory.create(state=STATE_CLOSED)
+        issue = IssueFactory.create(state=ISSUE_STATES.closed)
 
         IssueSpentTimeFactory.create(salary=prev_salary, base=issue,
                                      user=self.user,
@@ -185,7 +187,7 @@ class GenerateSalariesTests(TestCase):
 
     def test_with_another_user(self):
         user_2 = UserFactory.create()
-        issue = IssueFactory.create(state=STATE_CLOSED)
+        issue = IssueFactory.create(state=ISSUE_STATES.closed)
 
         IssueSpentTimeFactory.create(user=user_2, base=issue,
                                      time_spent=timedelta(
@@ -213,9 +215,9 @@ class GenerateSalariesTests(TestCase):
         self.assertEqual(Payroll.objects.filter(salary=salary).count(), 2)
 
     def test_with_opened_issues_mr(self):
-        closed_issue = IssueFactory.create(state=STATE_CLOSED)
-        opened_issue = IssueFactory.create(state=STATE_OPENED)
-        opened_mr = MergeRequestFactory.create(state=STATE_OPENED)
+        closed_issue = IssueFactory.create(state=ISSUE_STATES.closed)
+        opened_issue = IssueFactory.create(state=ISSUE_STATES.opened)
+        opened_mr = MergeRequestFactory.create(state=ISSUE_STATES.opened)
 
         IssueSpentTimeFactory.create(user=self.user, base=opened_issue,
                                      time_spent=timedelta(
@@ -247,7 +249,7 @@ class GenerateSalariesTests(TestCase):
         self.user.taxes = 0.3
         self.user.save()
 
-        issue = IssueFactory.create(state=STATE_CLOSED)
+        issue = IssueFactory.create(state=ISSUE_STATES.closed)
 
         IssueSpentTimeFactory.create(user=self.user, base=issue,
                                      time_spent=timedelta(

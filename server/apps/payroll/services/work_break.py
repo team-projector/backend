@@ -1,7 +1,6 @@
 from django.utils import timezone
 
-
-from apps.payroll.models.mixins.approved import APPROVED, DECLINED
+from apps.payroll.models.mixins.approved import APPROVED_STATES
 from apps.users.models import User
 
 
@@ -11,7 +10,7 @@ class WorkBreakManager:
 
     def approve(self,
                 approved_by: User) -> None:
-        self.work_break.approve_state = APPROVED
+        self.work_break.approve_state = APPROVED_STATES.approved
         self.work_break.approved_by = approved_by
         self.work_break.approved_at = timezone.now()
         self.work_break.save()
@@ -19,7 +18,7 @@ class WorkBreakManager:
     def decline(self,
                 approved_by: User,
                 decline_reason: str) -> None:
-        self.work_break.approve_state = DECLINED
+        self.work_break.approve_state = APPROVED_STATES.declined
         self.work_break.approved_by = approved_by
         self.work_break.approved_at = timezone.now()
         self.work_break.decline_reason = decline_reason

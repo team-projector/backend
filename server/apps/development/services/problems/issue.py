@@ -5,7 +5,7 @@ from typing import ClassVar, List
 from django.db.models import Case, NullBooleanField, Q, QuerySet, When
 from django.utils.timezone import localdate
 
-from apps.development.models.issue import STATE_OPENED, Issue
+from apps.development.models.issue import Issue, ISSUE_STATES
 
 PROBLEM_EMPTY_DUE_DAY = 'empty_due_date'
 PROBLEM_OVER_DUE_DAY = 'over_due_date'
@@ -21,7 +21,7 @@ class BaseProblemChecker:
             self.annotate_field: Case(
                 self.get_condition(),
                 output_field=NullBooleanField(),
-            ),
+            )
         })
 
     def issue_has_problem(self, issue: Issue) -> bool:
@@ -37,14 +37,14 @@ class EmptyDueDateChecker(BaseProblemChecker):
 
     def get_condition(self) -> When:
         return When(
-            Q(due_date__isnull=True, state=STATE_OPENED),
-            then=True,
+            Q(due_date__isnull=True, state=ISSUE_STATES.opened),
+            then=True
         )
 
     def issue_has_problem(self, issue: Issue) -> bool:
         return (
             not issue.due_date
-            and issue.state == STATE_OPENED
+            and issue.state == ISSUE_STATES.opened
         )
 
 
@@ -54,15 +54,15 @@ class OverdueDueDateChecker(BaseProblemChecker):
 
     def get_condition(self) -> When:
         return When(
-            Q(due_date__lt=localdate(), state=STATE_OPENED),
-            then=True,
+            Q(due_date__lt=localdate(), state=ISSUE_STATES.opened),
+            then=True
         )
 
     def issue_has_problem(self, issue: Issue) -> bool:
         return (
             issue.due_date
             and issue.due_date < localdate()
-            and issue.state == STATE_OPENED
+            and issue.state == ISSUE_STATES.opened
         )
 
 
@@ -74,16 +74,16 @@ class EmptyEstimateChecker(BaseProblemChecker):
         return When(
             Q(
                 Q(time_estimate__isnull=True)
-                | Q(time_estimate=0),
+                | Q(time_estimate=0)
             )
-            & Q(state=STATE_OPENED),
-            then=True,
+            & Q(state=ISSUE_STATES.opened),
+            then=True
         )
 
     def issue_has_problem(self, issue: Issue) -> bool:
         return (
             not issue.time_estimate
-            and issue.state == STATE_OPENED
+            and issue.state == ISSUE_STATES.opened
         )
 
 

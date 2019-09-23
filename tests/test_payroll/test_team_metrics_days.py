@@ -7,7 +7,7 @@ from typing import Dict
 
 from apps.core.utils.time import seconds
 from apps.development.models import TeamMember
-from apps.development.models.issue import STATE_OPENED
+from apps.development.models.issue import ISSUE_STATES
 from apps.payroll.services.metrics.progress.team import (
     get_team_progress_metrics
 )
@@ -59,7 +59,7 @@ def test_simple(user):
     issue.time_estimate = seconds(hours=15)
     issue.total_time_spent = \
         issue.time_spents.aggregate(spent=Sum('time_spent'))['spent']
-    issue.state = STATE_OPENED
+    issue.state = ISSUE_STATES.opened
     issue.due_date = timezone.now() + timedelta(days=1)
     issue.save()
 
@@ -120,7 +120,7 @@ def test_negative_remains(user):
     issue.time_estimate = seconds(hours=2)
     issue.total_time_spent = \
         issue.time_spents.aggregate(spent=Sum('time_spent'))['spent']
-    issue.state = STATE_OPENED
+    issue.state = ISSUE_STATES.opened
     issue.due_date = timezone.now() + timedelta(days=1)
     issue.save()
 
@@ -160,7 +160,7 @@ def test_loading_day_already_has_spends(user):
                              roles=TeamMember.roles.leader)
 
     issue_2 = IssueFactory.create(user=developer,
-                                  state=STATE_OPENED,
+                                  state=ISSUE_STATES.opened,
                                   total_time_spent=timedelta(
                                       hours=3).total_seconds(),
                                   time_estimate=timedelta(
@@ -187,7 +187,7 @@ def test_loading_day_already_has_spends(user):
 
     issue.time_estimate = int(seconds(hours=4))
     issue.total_time_spent = int(seconds(hours=3))
-    issue.state = STATE_OPENED
+    issue.state = ISSUE_STATES.opened
     issue.due_date = timezone.now()
     issue.save()
 
@@ -237,7 +237,7 @@ def test_not_in_range(user):
 
     issue.time_estimate = 0
     issue.total_time_spent = 0
-    issue.state = STATE_OPENED
+    issue.state = ISSUE_STATES.opened
     issue.save()
 
     IssueSpentTimeFactory.create(
@@ -299,7 +299,7 @@ def test_another_user_not_in_team(user):
 
     issue.time_estimate = 0
     issue.total_time_spent = 0
-    issue.state = STATE_OPENED
+    issue.state = ISSUE_STATES.opened
     issue.save()
 
     another_user = UserFactory.create()
@@ -380,7 +380,7 @@ def test_another_user_in_team(user):
 
     issue.time_estimate = seconds(hours=4)
     issue.total_time_spent = 0
-    issue.state = STATE_OPENED
+    issue.state = ISSUE_STATES.opened
     issue.save()
     issue.save()
 

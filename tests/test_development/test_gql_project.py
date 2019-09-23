@@ -1,7 +1,7 @@
 from django.utils import timezone
 
 from apps.development.graphql.types import ProjectType
-from apps.development.models import Milestone
+from apps.development.models.milestone import MILESTONE_STATES
 from apps.development.services.summary.issues import IssuesProjectSummary
 from tests.test_development.factories import ProjectMilestoneFactory
 from tests.test_development.factories_gitlab import AttrDict
@@ -14,13 +14,13 @@ def test_active_milestones_sort(user, client):
     client.user = user
     info = AttrDict({'context': client})
 
-    m1 = ProjectMilestoneFactory(state=Milestone.STATE.active)
+    m1 = ProjectMilestoneFactory(state=MILESTONE_STATES.active)
     ProjectMilestoneFactory(
-        state=Milestone.STATE.active,
+        state=MILESTONE_STATES.active,
         owner=m1.owner
     )
     m3 = ProjectMilestoneFactory(
-        state=Milestone.STATE.active,
+        state=MILESTONE_STATES.active,
         owner=m1.owner,
         due_date=timezone.now()
     )
@@ -45,14 +45,14 @@ def test_active_milestones_sort_desc(user, client):
     client.user = user
     info = AttrDict({'context': client})
 
-    m1 = ProjectMilestoneFactory(state=Milestone.STATE.active)
+    m1 = ProjectMilestoneFactory(state=MILESTONE_STATES.active)
     m2 = ProjectMilestoneFactory(
-        state=Milestone.STATE.active,
+        state=MILESTONE_STATES.active,
         owner=m1.owner,
         due_date=timezone.now() + timezone.timedelta(days=2)
     )
     ProjectMilestoneFactory(
-        state=Milestone.STATE.active,
+        state=MILESTONE_STATES.active,
         owner=m1.owner,
         due_date=timezone.now()
     )

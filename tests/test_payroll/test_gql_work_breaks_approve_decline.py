@@ -2,10 +2,10 @@ from pytest import raises
 from rest_framework.exceptions import PermissionDenied
 
 from apps.development.models import TeamMember
-from apps.payroll.models.mixins.approved import APPROVED, DECLINED
 from apps.payroll.graphql.mutations.work_breaks import (
     ApproveWorkBreakMutation, DeclineWorkBreakMutation
 )
+from apps.payroll.models.mixins.approved import APPROVED_STATES
 from tests.test_development.factories import TeamFactory, TeamMemberFactory
 from tests.test_development.factories_gitlab import AttrDict
 from tests.test_payroll.factories import WorkBreakFactory
@@ -35,7 +35,7 @@ def test_approve_by_teamlead(user, client):
         id=work_break.id
     ).work_break
 
-    assert work_break_mutated.approve_state == APPROVED
+    assert work_break_mutated.approve_state == APPROVED_STATES.approved
     assert work_break_mutated.approved_by == user
 
 
@@ -103,7 +103,7 @@ def test_decline_by_teamlead(user, client):
         decline_reason='reason'
     ).work_break
 
-    assert work_break_mutated.approve_state == DECLINED
+    assert work_break_mutated.approve_state == APPROVED_STATES.declined
     assert work_break_mutated.approved_by == user
     assert work_break_mutated.decline_reason == 'reason'
 

@@ -1,7 +1,7 @@
 from datetime import datetime, timedelta
 
 from apps.development.graphql.types.issue import IssueType
-from apps.development.models.issue import STATE_CLOSED
+from apps.development.models.issue import ISSUE_STATES
 from apps.development.services.problems.issue import (
     get_issue_problems, PROBLEM_EMPTY_DUE_DAY, PROBLEM_EMPTY_ESTIMATE,
     PROBLEM_OVER_DUE_DAY
@@ -16,7 +16,7 @@ def test_empty_due_day(user):
 
 
 def test_empty_due_day_but_closed(user):
-    issue = IssueFactory.create(user=user, state=STATE_CLOSED)
+    issue = IssueFactory.create(user=user, state=ISSUE_STATES.closed)
 
     assert get_issue_problems(issue) == []
 
@@ -34,7 +34,7 @@ def test_overdue_due_day_but_closed(user):
     issue = IssueFactory.create(
         user=user,
         due_date=datetime.now().date() - timedelta(days=1),
-        state=STATE_CLOSED
+        state=ISSUE_STATES.closed
     )
 
     assert get_issue_problems(issue) == []

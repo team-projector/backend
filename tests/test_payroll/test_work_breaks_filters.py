@@ -1,10 +1,10 @@
-from pytest import raises
 from django.core.exceptions import PermissionDenied
+from pytest import raises
 
 from apps.development.models import TeamMember
-from apps.payroll.models import WorkBreak
 from apps.payroll.graphql.filters import WorkBreakFilterSet
-from apps.payroll.models.mixins.approved import APPROVED
+from apps.payroll.models import WorkBreak
+from apps.payroll.models.mixins.approved import APPROVED_STATES
 from tests.test_development.factories import TeamFactory, TeamMemberFactory
 from tests.test_payroll.factories import WorkBreakFactory
 from tests.test_users.factories import UserFactory
@@ -99,7 +99,8 @@ def test_approving_list(user, client):
                              roles=TeamMember.roles.developer)
 
     WorkBreakFactory.create_batch(5, user=user_2)
-    WorkBreakFactory.create_batch(4, user=user_2, approve_state=APPROVED)
+    WorkBreakFactory.create_batch(4, user=user_2,
+                                  approve_state=APPROVED_STATES.approved)
     WorkBreakFactory.create_batch(3, user=user_3)
 
     client.user = user
@@ -137,7 +138,8 @@ def test_approving_list_not_teamlead(user, client):
 
     WorkBreakFactory.create_batch(5, user=user)
     WorkBreakFactory.create_batch(5, user=user_2)
-    WorkBreakFactory.create_batch(4, user=user_2, approve_state=APPROVED)
+    WorkBreakFactory.create_batch(4, user=user_2,
+                                  approve_state=APPROVED_STATES.approved)
     WorkBreakFactory.create_batch(3, user=user_3)
 
     client.user = user

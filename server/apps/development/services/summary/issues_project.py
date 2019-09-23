@@ -2,12 +2,12 @@ from datetime import datetime
 from typing import List, Optional
 
 from django.db.models import (
-    QuerySet, Sum, Count, Case, When, Q, IntegerField, Value, F,
+    QuerySet, Sum, Count, Case, When, Q, IntegerField, Value, F
 )
 from django.db.models.functions import Coalesce
 
 from apps.development.models import Project
-from apps.development.models.issue import STATE_CLOSED
+from apps.development.models.issue import ISSUE_STATES
 
 
 def get_min_due_date(project):
@@ -77,17 +77,17 @@ class IssuesProjectSummaryProvider:
             time_remains=Case(
                 When(
                     Q(time_estimate__gt=F('total_time_spent')) &  # noqa:W504
-                    ~Q(state=STATE_CLOSED),
-                    then=F('time_estimate') - F('total_time_spent'),
+                    ~Q(state=ISSUE_STATES.closed),
+                    then=F('time_estimate') - F('total_time_spent')
                 ),
                 default=Value(0),
-                output_field=IntegerField(),
+                output_field=IntegerField()
             ),
         ).values(
-            'project',
+            'project'
         ).annotate(
             issues_opened_count=Count('*'),
-            total_time_remains=Coalesce(Sum('time_remains'), 0),
+            total_time_remains=Coalesce(Sum('time_remains'), 0)
         ).order_by()
 
     def _get_total_issues_count(self, summaries_qs: QuerySet) -> int:
@@ -112,7 +112,7 @@ def get_project_summaries(queryset: QuerySet,
                           order_by: str = None) -> List[IssuesProjectSummary]:
     provider = IssuesProjectSummaryProvider(
         queryset,
-        order_by,
+        order_by
     )
 
     return provider.execute()

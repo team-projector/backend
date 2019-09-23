@@ -5,6 +5,7 @@ from django.contrib.contenttypes.fields import GenericRelation
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
+from apps.development.models.note import NOTE_TYPES
 from apps.development.services.parsers import parse_date
 
 
@@ -20,7 +21,6 @@ class NotableMixin(models.Model):
 
     def adjust_spent_times(self) -> None:
         from apps.payroll.models import SpentTime
-        from apps.development.models import Note
 
         users_spents: DefaultDict[int, int] = defaultdict(int)
 
@@ -28,10 +28,10 @@ class NotableMixin(models.Model):
             time_spent = 0
             note_date = note.created_at.date()
 
-            if note.type == Note.TYPE.reset_spend:
+            if note.type == NOTE_TYPES.reset_spend:
                 time_spent = -users_spents[note.user_id]
                 users_spents[note.user_id] = 0
-            elif note.type == Note.TYPE.time_spend:
+            elif note.type == NOTE_TYPES.time_spend:
                 time_spent = note.data['spent']
                 note_date = parse_date(note.data['date'])
 

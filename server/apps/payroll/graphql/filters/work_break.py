@@ -3,10 +3,10 @@ from django.db.models import Exists, OuterRef, QuerySet
 
 from apps.core.graphql.filters.ordering import OrderingFilter
 from apps.development.models import Team, TeamMember
-from apps.payroll.models.mixins.approved import CREATED
 from apps.payroll.models import WorkBreak
+from apps.payroll.models.mixins.approved import APPROVED_STATES
 from apps.payroll.services.allowed.work_break import (
-    check_allow_filtering_by_team,
+    check_allow_filtering_by_team
 )
 from apps.users.models import User
 
@@ -18,22 +18,22 @@ class ApprovingFilter(django_filters.BooleanFilter):
 
         teams = TeamMember.objects.filter(
             user=self.parent.request.user,
-            roles=TeamMember.roles.leader,
+            roles=TeamMember.roles.leader
         ).values_list(
             'team',
-            flat=True,
+            flat=True
         )
 
         subquery = User.objects.filter(
             teams__in=teams,
-            id=OuterRef('user_id'),
+            id=OuterRef('user_id')
         )
 
         queryset = queryset.annotate(
-            user_is_team_member=Exists(subquery),
+            user_is_team_member=Exists(subquery)
         ).filter(
             user_is_team_member=True,
-            approve_state=CREATED,
+            approve_state=APPROVED_STATES.created
         )
 
         return queryset
@@ -58,7 +58,7 @@ class WorkBreakFilterSet(django_filters.FilterSet):
     user = django_filters.ModelChoiceFilter(queryset=User.objects.all())
 
     order_by = OrderingFilter(
-        fields=('from_date',),
+        fields=('from_date',)
     )
 
     class Meta:

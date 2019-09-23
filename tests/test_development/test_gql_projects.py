@@ -1,6 +1,6 @@
 from apps.development.graphql.resolvers import ProjectMilestonesResolver
 from apps.development.graphql.types.project import ProjectType
-from apps.development.models import Milestone
+from apps.development.models.milestone import MILESTONE_STATES
 from tests.test_development.factories import (
     ProjectFactory, ProjectGroupFactory, ProjectMilestoneFactory,
     ProjectGroupMilestoneFactory
@@ -22,11 +22,11 @@ def test_project_milestones(user, client):
 
     milestone_1 = ProjectMilestoneFactory.create(
         owner=project,
-        state=Milestone.STATE.active
+        state=MILESTONE_STATES.active
     )
     milestone_2 = ProjectMilestoneFactory.create(
         owner=project,
-        state=Milestone.STATE.closed
+        state=MILESTONE_STATES.closed
     )
 
     client.user = user
@@ -56,18 +56,18 @@ def test_project_group_milestones(user, client):
 
     milestone_1 = ProjectGroupMilestoneFactory.create(
         owner=group,
-        state=Milestone.STATE.active
+        state=MILESTONE_STATES.active
     )
     ProjectGroupMilestoneFactory.create_batch(
         3,
         owner=group,
-        state=Milestone.STATE.closed
+        state=MILESTONE_STATES.closed
     )
 
     project = ProjectFactory.create(group=group)
     milestone_2 = ProjectGroupMilestoneFactory.create(
         owner=project,
-        state=Milestone.STATE.closed
+        state=MILESTONE_STATES.closed
     )
 
     client.user = user
@@ -97,12 +97,12 @@ def test_project_group_parent_milestones(user, client):
 
     milestone_1 = ProjectGroupMilestoneFactory.create(
         owner=group_parent,
-        state=Milestone.STATE.active
+        state=MILESTONE_STATES.active
     )
     ProjectGroupMilestoneFactory.create_batch(
         3,
         owner=group_parent,
-        state=Milestone.STATE.closed
+        state=MILESTONE_STATES.closed
     )
 
     group = ProjectGroupFactory.create(parent=group_parent)
@@ -110,7 +110,7 @@ def test_project_group_parent_milestones(user, client):
     project = ProjectFactory.create(group=group)
     milestone_2 = ProjectGroupMilestoneFactory.create(
         owner=group,
-        state=Milestone.STATE.closed
+        state=MILESTONE_STATES.closed
     )
 
     client.user = user

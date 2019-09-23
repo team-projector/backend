@@ -4,7 +4,7 @@ from typing import Dict
 from django.test import override_settings
 
 from apps.core.utils.time import seconds
-from apps.development.models.issue import STATE_OPENED
+from apps.development.models.issue import ISSUE_STATES
 from apps.payroll.services.metrics.progress.user import (
     get_user_progress_metrics
 )
@@ -19,7 +19,7 @@ def test_replay(user):
         due_date=datetime.now() + timedelta(days=10),
         time_estimate=seconds(hours=15),
         total_time_spent=0,
-        state=STATE_OPENED
+        state=ISSUE_STATES.opened
     )
 
     start = datetime.now().date() + timedelta(days=1)
@@ -39,7 +39,7 @@ def test_has_spents(user):
         due_date=datetime.now() + timedelta(days=10),
         time_estimate=seconds(hours=15),
         total_time_spent=seconds(hours=2),
-        state=STATE_OPENED
+        state=ISSUE_STATES.opened
     )
 
     start = datetime.now().date() + timedelta(days=1)

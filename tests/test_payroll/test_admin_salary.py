@@ -1,13 +1,13 @@
 from datetime import timedelta
-from pytest import raises
 
-from rest_framework import status
 from django.conf import settings
 from django.core import mail
 from django.utils import timezone
+from pytest import raises
+from rest_framework import status
 
 from apps.core.utils.time import seconds
-from apps.development.models.issue import STATE_CLOSED
+from apps.development.models.issue import ISSUE_STATES
 from apps.payroll.models import Salary
 from tests.base import trigger_on_commit, model_to_dict_form, model_admin
 from tests.test_development.factories import IssueFactory
@@ -31,7 +31,7 @@ def test_get_urls():
 def test_generate_salaries_get_form(admin_client):
     ma_salary = model_admin(Salary)
 
-    issue = IssueFactory.create(state=STATE_CLOSED)
+    issue = IssueFactory.create(state=ISSUE_STATES.closed)
     IssueSpentTimeFactory.create(
         user=UserFactory.create(),
         base=issue,
@@ -54,7 +54,7 @@ def test_generate_salaries(admin_client):
 
     user = UserFactory.create()
 
-    issue = IssueFactory.create(state=STATE_CLOSED)
+    issue = IssueFactory.create(state=ISSUE_STATES.closed)
     IssueSpentTimeFactory.create(
         user=user,
         base=issue,
@@ -84,7 +84,7 @@ def test_generate_salaries_invalid_form(admin_client):
 
     user = UserFactory.create()
 
-    issue = IssueFactory.create(state=STATE_CLOSED)
+    issue = IssueFactory.create(state=ISSUE_STATES.closed)
     IssueSpentTimeFactory.create(
         user=user,
         base=issue,

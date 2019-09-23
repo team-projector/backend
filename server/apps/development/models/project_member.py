@@ -7,21 +7,21 @@ from django.utils.translation import gettext_lazy as _
 from apps.core.models.mixins import Timestamps
 from apps.core.models.utils import Choices
 
+PROJECT_MEMBER_ROLES = Choices(
+    ('developer', _('CH_DEVELOPER')),
+    ('project_manager', _('CH_PM')),
+    ('customer', _('CH_CUSTOMER')),
+)
+
 
 class ProjectMember(Timestamps):
-    ROLE = Choices(
-        ('developer', _('CH_DEVELOPER')),
-        ('project_manager', _('CH_PM')),
-        ('customer', _('CH_CUSTOMER')),
-    )
-
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         models.CASCADE,
     )
 
     role = models.CharField(
-        choices=ROLE,
+        choices=PROJECT_MEMBER_ROLES,
         max_length=20,
         verbose_name=_('VN__ROLE'),
         help_text=_('HT__ROLE'),

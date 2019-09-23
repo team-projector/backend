@@ -4,18 +4,14 @@ from django.utils.translation import gettext_lazy as _
 from apps.core.models.utils import Choices
 from apps.users.models import User
 
-CREATED = 'created'
-APPROVED = 'approved'
-DECLINED = 'declined'
+APPROVED_STATES = Choices(
+    ('created', _('CH_CREATED')),
+    ('approved', _('CH_APPROVED')),
+    ('declined', _('CH_DECLINED')),
+)
 
 
 class ApprovedMixin(models.Model):
-    APPROVED_STATES = Choices(
-        (CREATED, _('CH_CREATED')),
-        (APPROVED, _('CH_APPROVED')),
-        (DECLINED, _('CH_DECLINED')),
-    )
-
     approve_state = models.CharField(
         choices=APPROVED_STATES,
         default='created',

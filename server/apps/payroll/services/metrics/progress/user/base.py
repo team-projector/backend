@@ -4,9 +4,9 @@ from typing import Any, Dict, Iterable, List, Optional
 from django.db.models import F
 from django.utils.functional import cached_property
 
-from apps.development.models.issue import Issue, STATE_CLOSED
-from apps.users.models import User
 from apps.core.utils.time import seconds
+from apps.development.models.issue import Issue, ISSUE_STATES
+from apps.users.models import User
 
 
 class UserProgressMetrics:
@@ -42,11 +42,11 @@ class ProgressMetricsProvider:
     def get_active_issues(self) -> List[Dict[str, Any]]:
         return list(
             Issue.objects.annotate(
-                remaining=F('time_estimate') - F('total_time_spent'),
+                remaining=F('time_estimate') - F('total_time_spent')
             ).filter(
                 user=self.user,
                 remaining__gt=0,
             ).exclude(
-                state=STATE_CLOSED,
-            ).values('id', 'due_date', 'remaining'),
+                state=ISSUE_STATES.closed,
+            ).values('id', 'due_date', 'remaining')
         )

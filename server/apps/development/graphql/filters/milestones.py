@@ -2,7 +2,7 @@ import django_filters
 from django.db.models import QuerySet
 
 from apps.core.graphql.filters.ordering import OrderingFilter
-from apps.development.models import Milestone
+from apps.development.models.milestone import MILESTONE_STATES
 
 
 class ActiveFilter(django_filters.BooleanFilter):
@@ -11,7 +11,7 @@ class ActiveFilter(django_filters.BooleanFilter):
             return queryset
 
         return queryset.filter(
-            state=Milestone.STATE.active if value else Milestone.STATE.closed,
+            state=MILESTONE_STATES.active if value else MILESTONE_STATES.closed
         )
 
 
@@ -19,5 +19,5 @@ class MilestonesFilterSet(django_filters.FilterSet):
     active = ActiveFilter()
 
     order_by = OrderingFilter(
-        fields=('due_date',),
+        fields=('due_date',)
     )
