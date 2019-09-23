@@ -24,7 +24,7 @@ class SalaryAdmin(BaseModelAdmin):
         custom_urls = [
             path('generate/',
                  self.admin_site.admin_view(self.generate_salaries),
-                 name='generate-salaries')
+                 name='generate-salaries'),
         ]
         return custom_urls + urls
 
@@ -35,7 +35,7 @@ class SalaryAdmin(BaseModelAdmin):
                 calculator = SalaryCalculator(
                     request.user,
                     form.cleaned_data['period_from'],
-                    form.cleaned_data['period_to']
+                    form.cleaned_data['period_to'],
                 )
                 calculator.generate_bulk()
 
@@ -49,13 +49,13 @@ class SalaryAdmin(BaseModelAdmin):
         context['adminform'] = helpers.AdminForm(
             form,
             [(None, {'fields': form.base_fields})],
-            self.get_prepopulated_fields(request)
+            self.get_prepopulated_fields(request),
         )
 
         return render(
             request,
             'admin/payrolls/forms/generate_salaries.html',
-            context
+            context,
         )
 
     def save_model(self, request, obj, form, change):

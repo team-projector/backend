@@ -16,10 +16,10 @@ class MilestoneAdmin(ForceSyncEntityMixin,
         if obj.content_type.model_class() == Project:
             sync_project_milestone.delay(
                 obj.owner.gl_id,
-                obj.gl_id
+                obj.gl_id,
             )
         elif obj.content_type.model_class() == ProjectGroup:
             sync_group_milestone.delay(
                 obj.owner.gl_id,
-                obj.gl_id
+                obj.gl_id,
             )

@@ -6,7 +6,7 @@ from apps.core.admin.forms import BaseModelForm
 
 class GroupAdminForm(BaseModelForm):
     permissions = PermissionSelectMultipleField(
-        required=False
+        required=False,
     )
 
     class Meta:

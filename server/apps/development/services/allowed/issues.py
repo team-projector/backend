@@ -15,23 +15,23 @@ def filter_allowed_for_user(queryset: QuerySet,
         TeamMember.objects.filter(user=user),
         [
             TeamMember.roles.leader,
-            TeamMember.roles.watcher
-        ]
+            TeamMember.roles.watcher,
+        ],
     ).values_list(
         'team__members',
-        flat=True
+        flat=True,
     )
 
     for member in members:
         allowed_users.add(member)
 
     return queryset.filter(
-        user__in=allowed_users
+        user__in=allowed_users,
     )
 
 
 def check_allow_project_manager(user: User) -> None:
     if not user.roles.project_manager:
         raise PermissionDenied(
-            'Only project managers can view project resources'
+            'Only project managers can view project resources',
         )

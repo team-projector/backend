@@ -22,7 +22,7 @@ class AuthNode:
             try:
                 return cls.get_queryset(  # type: ignore
                     cls._meta.model.objects,  # type: ignore
-                    info
+                    info,
                 ).get(id=obj_id)
             except cls._meta.model.DoesNotExist:  # type: ignore
                 return None

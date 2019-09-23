@@ -16,7 +16,7 @@ from .mixins import NotableMixin
 MERGE_REQUESTS_STATES = Choices(
     ('opened', 'opened'),
     ('merged', 'merged'),
-    ('closed', 'closed')
+    ('closed', 'closed'),
 )
 
 
@@ -27,19 +27,19 @@ class MergeRequest(NotableMixin,
     title = models.CharField(
         max_length=255,
         verbose_name=_('VN__TITLE'),
-        help_text=_('HT__TITLE')
+        help_text=_('HT__TITLE'),
     )
 
     time_estimate = models.PositiveIntegerField(
         null=True,
         verbose_name=_('VN__TIME_ESTIMATE'),
-        help_text=_('HT__TIME_ESTIMATE')
+        help_text=_('HT__TIME_ESTIMATE'),
     )
 
     total_time_spent = models.PositiveIntegerField(
         null=True,
         verbose_name=_('VN__TOTAL_TIME_SPENT'),
-        help_text=_('HT__TOTAL_TIME_SPENT')
+        help_text=_('HT__TOTAL_TIME_SPENT'),
     )
 
     state = models.CharField(
@@ -48,28 +48,28 @@ class MergeRequest(NotableMixin,
         null=True,
         blank=True,
         verbose_name=_('VN__STATE'),
-        help_text=_('HT__STATE')
+        help_text=_('HT__STATE'),
     )
 
     created_at = models.DateTimeField(
         null=True,
-        blank=True
+        blank=True,
     )
 
     updated_at = models.DateTimeField(
         null=True,
-        blank=True
+        blank=True,
     )
 
     closed_at = models.DateTimeField(
         null=True,
-        blank=True
+        blank=True,
     )
 
     labels = models.ManyToManyField(
         'development.Label',
         related_name='merge_requests',
-        blank=True
+        blank=True,
     )
 
     project = models.ForeignKey(
@@ -79,7 +79,7 @@ class MergeRequest(NotableMixin,
         blank=True,
         related_name='merge_requests',
         verbose_name=_('VN__PROJECT'),
-        help_text=_('HT__PROJECT')
+        help_text=_('HT__PROJECT'),
     )
 
     user = models.ForeignKey(
@@ -89,7 +89,7 @@ class MergeRequest(NotableMixin,
         null=True,
         blank=True,
         verbose_name=_('VN__USER'),
-        help_text=_('HT__USER')
+        help_text=_('HT__USER'),
     )
 
     author = models.ForeignKey(
@@ -99,7 +99,7 @@ class MergeRequest(NotableMixin,
         null=True,
         blank=True,
         verbose_name=_('VN__AUTHOR'),
-        help_text=_('HT__AUTHOR')
+        help_text=_('HT__AUTHOR'),
     )
 
     milestone = models.ForeignKey(
@@ -128,7 +128,7 @@ class MergeRequest(NotableMixin,
     @cached_property
     def last_note_date(self) -> datetime:
         return self.notes.aggregate(
-            last_created=Max('created_at')
+            last_created=Max('created_at'),
         )['last_created']
 
     @property

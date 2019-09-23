@@ -24,7 +24,7 @@ class MergeRequestFilterSet(django_filters.FilterSet):
     team = TeamFilter()
 
     order_by = OrderingFilter(
-        fields=('title', 'created_at', 'closed_at')
+        fields=('title', 'created_at', 'closed_at'),
     )
 
     class Meta:

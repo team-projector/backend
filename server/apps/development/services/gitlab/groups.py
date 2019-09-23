@@ -14,7 +14,7 @@ def load_groups() -> None:
         parent = None
         if gl_group.parent_id:
             parent = ProjectGroup.objects.filter(
-                gl_id=gl_group.parent_id
+                gl_id=gl_group.parent_id,
             ).first()
             if not parent and gl_group.parent_id in gl_groups_map:
                 parent = load_group(gl_groups_map[gl_group.parent_id])
@@ -42,7 +42,7 @@ def load_single_group(gl_group: GlGroup,
         gl_avatar=gl_group.avatar_url,
         parent=parent,
         title=gl_group.name,
-        full_title=gl_group.full_name
+        full_title=gl_group.full_name,
     )
 
     logger.info(f'Group "{group}" is synced')

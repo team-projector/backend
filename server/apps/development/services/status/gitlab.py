@@ -5,7 +5,7 @@ from actstream.models import Action
 from django.apps import apps
 
 from apps.core.activity.verbs import (
-    ACTION_GITLAB_CALL_API, ACTION_GITLAB_WEBHOOK_TRIGGERED
+    ACTION_GITLAB_CALL_API, ACTION_GITLAB_WEBHOOK_TRIGGERED,
 )
 from apps.core.models.mixins import GitlabEntityMixin
 from apps.development.models import Issue
@@ -29,7 +29,7 @@ def get_gitlab_sync_status() -> GlStatus:
 
 ACTIONS_MAPS = {
     'web_hooks': ACTION_GITLAB_WEBHOOK_TRIGGERED,
-    'api': ACTION_GITLAB_CALL_API
+    'api': ACTION_GITLAB_CALL_API,
 }
 
 
@@ -54,7 +54,7 @@ class GlStatusProvider:
             if issubclass(x, GitlabEntityMixin)
         ]
         value = querysets[0].union(*querysets[1:]).order_by(
-            '-gl_last_sync'
+            '-gl_last_sync',
         ).first() or {}
         return value.get('gl_last_sync')  # type: ignore
 
@@ -64,7 +64,7 @@ class GlStatusProvider:
 
         for key, value in ACTIONS_MAPS.items():
             action = Action.objects.filter(verb=value).order_by(
-                '-timestamp'
+                '-timestamp',
             ).first()
 
             if action:

@@ -62,23 +62,23 @@ class SpentTimesSummaryProvider:
         issues_summaries = IssuesSpentTimesSummary(
             spent=spent_summaries['total_issues'],
             opened_spent=spent_summaries['opened_issues'],
-            closed_spent=spent_summaries['closed_issues']
+            closed_spent=spent_summaries['closed_issues'],
         )
 
         merges_summaries = MergeRequestsSpentTimesSummary(
             spent=spent_summaries['total_merges'],
             opened_spent=spent_summaries['opened_merges'],
             closed_spent=spent_summaries['closed_merges'],
-            merged_spent=spent_summaries['merged_merges']
+            merged_spent=spent_summaries['merged_merges'],
         )
 
         return SpentTimesSummary(
             issues_summaries,
-            merges_summaries
+            merges_summaries,
         )
 
 
 def get_spent_times_summary(queryset: QuerySet) -> SpentTimesSummary:
     return SpentTimesSummaryProvider(
-        queryset
+        queryset,
     ).execute()

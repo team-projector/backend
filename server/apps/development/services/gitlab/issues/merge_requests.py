@@ -1,6 +1,6 @@
 from gitlab.v4.objects import (
     Project as GlProject,
-    ProjectIssue as GlProjectIssue
+    ProjectIssue as GlProjectIssue,
 )
 
 from apps.development.models import Issue, MergeRequest, Project
@@ -18,7 +18,7 @@ def load_merge_requests(issue: Issue,
             gl_merge_request = gl_project.mergerequests.get(gl_iid)
 
             merge_request = load_project_merge_request(
-                project, gl_project, gl_merge_request
+                project, gl_project, gl_merge_request,
             )
 
         return merge_request

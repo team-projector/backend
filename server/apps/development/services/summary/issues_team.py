@@ -1,7 +1,7 @@
 from typing import List, Optional
 
 from django.db.models import (
-    QuerySet, Sum, Count, Case, When, Q, IntegerField, Value, F
+    QuerySet, Sum, Count, Case, When, Q, IntegerField, Value, F,
 )
 from django.db.models.functions import Coalesce
 
@@ -66,16 +66,16 @@ class IssuesTeamSummaryProvider:
                 When(
                     Q(time_estimate__gt=F('total_time_spent')) &  # noqa:W504
                     ~Q(state=ISSUE_STATES.closed),
-                    then=F('time_estimate') - F('total_time_spent')
+                    then=F('time_estimate') - F('total_time_spent'),
                 ),
                 default=Value(0),
-                output_field=IntegerField()
+                output_field=IntegerField(),
             ),
         ).values(
-            'user__teams'
+            'user__teams',
         ).annotate(
             issues_opened_count=Count('*'),
-            total_time_remains=Coalesce(Sum('time_remains'), 0)
+            total_time_remains=Coalesce(Sum('time_remains'), 0),
         ).order_by()
 
     def _get_total_issues_count(self, summaries_qs: QuerySet) -> int:
@@ -97,7 +97,7 @@ def get_team_summaries(queryset: QuerySet,
                        order_by: str = None) -> List[IssuesTeamSummary]:
     provider = IssuesTeamSummaryProvider(
         queryset,
-        order_by
+        order_by,
     )
 
     return provider.execute()

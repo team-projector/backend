@@ -35,9 +35,9 @@ class MergeRequestsSummaryProvider:
 
     def _get_counts_by_state(self) -> QuerySet:
         return self.queryset.values(
-            'state'
+            'state',
         ).annotate(
-            count=Count('*')
+            count=Count('*'),
         ).order_by()
 
 

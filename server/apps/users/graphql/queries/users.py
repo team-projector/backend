@@ -2,7 +2,7 @@ import graphene
 
 from apps.core.graphql.relay_nodes import DatasourceRelayNode
 from apps.users.graphql.resolvers import (
-    resolve_me_user, resolve_user_progress_metrics
+    resolve_me_user, resolve_user_progress_metrics,
 )
 from apps.users.graphql.types import UserType, UserProgressMetricsType
 
@@ -16,10 +16,10 @@ class UsersQueries(graphene.ObjectType):
         start=graphene.Date(required=True),
         end=graphene.Date(required=True),
         group=graphene.String(required=True),
-        resolver=resolve_user_progress_metrics
+        resolver=resolve_user_progress_metrics,
     )
 
     me = graphene.Field(
         UserType,
-        resolver=resolve_me_user
+        resolver=resolve_me_user,
     )

@@ -24,11 +24,11 @@ class ApproveWorkBreakMutation(BaseMutation):
     def do_mutate(cls, root, info, **kwargs):
         work_break = get_object_or_404(
             WorkBreak.objects.all(),
-            pk=kwargs['id']
+            pk=kwargs['id'],
         )
 
         WorkBreakManager(work_break).approve(
-            approved_by=info.context.user
+            approved_by=info.context.user,
         )
 
         return ApproveWorkBreakMutation(work_break=work_break)
@@ -67,16 +67,16 @@ class DeclineWorkBreakMutation(BaseMutation):
     def do_mutate(cls, root, info, **kwargs):
         work_break = get_object_or_404(
             WorkBreak.objects.all(),
-            pk=kwargs['id']
+            pk=kwargs['id'],
         )
 
         WorkBreakManager(work_break).decline(
             approved_by=info.context.user,
-            decline_reason=kwargs['decline_reason']
+            decline_reason=kwargs['decline_reason'],
         )
 
         return DeclineWorkBreakMutation(
-            work_break=work_break
+            work_break=work_break,
         )
 
 
@@ -98,7 +98,7 @@ class UpdateWorkBreakMutation(ArgumentsValidationMixin,
     def perform_mutate(cls, info, data):
         work_break = get_object_or_404(
             WorkBreak.objects.all(),
-            pk=data['id']
+            pk=data['id'],
         )
 
         work_break.comment = data['comment']
@@ -107,7 +107,7 @@ class UpdateWorkBreakMutation(ArgumentsValidationMixin,
         work_break.to_date = data['to_date']
 
         return UpdateWorkBreakMutation(
-            work_break=work_break
+            work_break=work_break,
         )
 
 
@@ -123,7 +123,7 @@ class DeleteWorkBreakMutation(BaseMutation):
     def do_mutate(cls, root, info, **kwargs):
         work_break = get_object_or_404(
             WorkBreak.objects.all(),
-            pk=kwargs['id']
+            pk=kwargs['id'],
         )
 
         work_break.delete()

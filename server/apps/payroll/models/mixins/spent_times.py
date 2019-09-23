@@ -8,7 +8,7 @@ class SpentTimesMixin(models.Model):
         'payroll.SpentTime',
         related_query_name='%(class)ss',
         verbose_name=_('VN__TIME_SPENTS'),
-        help_text=_('HT__TIME_SPENTS')
+        help_text=_('HT__TIME_SPENTS'),
     )
 
     class Meta:

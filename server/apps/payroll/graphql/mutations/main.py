@@ -1,7 +1,7 @@
 from .work_breaks import (
     ApproveWorkBreakMutation, CreateWorkBreakMutation,
     DeclineWorkBreakMutation, DeleteWorkBreakMutation,
-    UpdateWorkBreakMutation
+    UpdateWorkBreakMutation,
 )
 
 

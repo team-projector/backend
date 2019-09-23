@@ -5,10 +5,10 @@ from apps.development.models import Milestone, Ticket
 
 class TicketsFilterSet(django_filters.FilterSet):
     milestone = django_filters.ModelChoiceFilter(
-        queryset=Milestone.objects.all()
+        queryset=Milestone.objects.all(),
     )
     order_by = django_filters.OrderingFilter(
-        fields=('due_date',)
+        fields=('due_date',),
     )
 
     class Meta:

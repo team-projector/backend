@@ -14,7 +14,7 @@ class MergeRequestManager(models.Manager):
 
         return self.update_or_create(
             gl_id=gl_id,
-            defaults=kwargs
+            defaults=kwargs,
         )
 
     def allowed_for_user(self, user: User) -> QuerySet:

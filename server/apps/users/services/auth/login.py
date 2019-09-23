@@ -14,12 +14,12 @@ def login_user(login: str,
         user = authenticate(
             request=request,
             login=login,
-            password=password
+            password=password,
         )
 
         if not user:
             raise AuthenticationFailed(
-                _('MSG_UNABLE_TO_LOGIN_WITH_PROVIDED_CREDENTIALS')
+                _('MSG_UNABLE_TO_LOGIN_WITH_PROVIDED_CREDENTIALS'),
             )
 
         token = create_user_token(user)

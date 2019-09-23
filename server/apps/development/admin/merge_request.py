@@ -12,7 +12,7 @@ from ..models import MergeRequest
 class MergeRequestAdmin(ForceSyncEntityMixin,
                         BaseModelAdmin):
     list_display = (
-        'title', 'user', 'author', 'state', 'created_at', 'gl_last_sync'
+        'title', 'user', 'author', 'state', 'created_at', 'gl_last_sync',
     )
     list_filter = (ProjectFilter,)
     search_fields = ('title', 'gl_id')
@@ -23,5 +23,5 @@ class MergeRequestAdmin(ForceSyncEntityMixin,
     def sync_handler(self, obj):
         sync_project_merge_request.delay(
             obj.project.gl_id,
-            obj.gl_iid
+            obj.gl_iid,
         )

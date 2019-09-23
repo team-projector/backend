@@ -76,5 +76,5 @@ def _build_parameters(gl_milestone) -> dict:
         'due_date': parse_gl_date(gl_milestone.due_date),
         'created_at': parse_gl_datetime(gl_milestone.created_at),
         'updated_at': parse_gl_datetime(gl_milestone.updated_at),
-        'state': gl_milestone.state
+        'state': gl_milestone.state,
     }

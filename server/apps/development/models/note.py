@@ -11,7 +11,7 @@ from .managers import NoteManager
 
 NOTE_TYPES = Choices(
     ('time_spend', 'Time spend'),
-    ('reset_spend', 'Reset spend')
+    ('reset_spend', 'Reset spend'),
 )
 
 
@@ -22,12 +22,12 @@ class Note(models.Model):
 
     content_type = models.ForeignKey(
         ContentType,
-        models.CASCADE
+        models.CASCADE,
     )
 
     gl_id = models.PositiveIntegerField(
         verbose_name=_('VN__GITLAB_ID'),
-        help_text=_('HT__GITLAB_ID')
+        help_text=_('HT__GITLAB_ID'),
     )
 
     user = models.ForeignKey(
@@ -36,32 +36,32 @@ class Note(models.Model):
         null=True,
         blank=True,
         verbose_name=_('VN__USER'),
-        help_text=_('HT__USER')
+        help_text=_('HT__USER'),
     )
 
     created_at = models.DateTimeField(
         null=True,
-        blank=True
+        blank=True,
     )
 
     updated_at = models.DateTimeField(
         null=True,
-        blank=True
+        blank=True,
     )
 
     body = models.TextField(
-        null=True
+        null=True,
     )
 
     type = models.CharField(
         choices=NOTE_TYPES,
         max_length=20,
         verbose_name=_('VN__TYPE'),
-        help_text=_('HT__TYPE')
+        help_text=_('HT__TYPE'),
     )
 
     data = JSONField(
-        encoder=DjangoJSONEncoder
+        encoder=DjangoJSONEncoder,
     )
 
     objects = NoteManager()

@@ -34,7 +34,7 @@ def load_project_issues(project: Project,
     add_action.delay(verb=ACTION_GITLAB_CALL_API)
 
     args = {
-        'as_list': False
+        'as_list': False,
     }
 
     if not full_reload and project.gl_last_issues_sync:

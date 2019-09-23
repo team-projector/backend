@@ -10,5 +10,5 @@ class ProjectManager(models.Manager):
 
         return self.update_or_create(
             gl_id=gl_id,
-            defaults=kwargs
+            defaults=kwargs,
         )

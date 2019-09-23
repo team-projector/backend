@@ -12,10 +12,12 @@ class WorkBreakAdmin(BaseModelAdmin):
     search_fields = ('user__login', 'user__email')
     fieldsets = (
         (None, {
-            'fields': ('user', 'reason', 'from_date', 'to_date', 'comment')
+            'fields': ('user', 'reason', 'from_date', 'to_date', 'comment'),
         }),
         ('Approve status', {
             'fields': (
-                'approve_state', 'approved_at', 'approved_by', 'decline_reason')
-        })
+                'approve_state', 'approved_at', 'approved_by',
+                'decline_reason',
+            ),
+        }),
     )

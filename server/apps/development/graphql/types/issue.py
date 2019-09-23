@@ -45,7 +45,7 @@ class IssueType(BaseDjangoObjectType):
 
         queryset = filter_allowed_for_user(
             optimized_query(queryset, info),
-            info.context.user
+            info.context.user,
         )
 
         # TODO: condsider using graphene_django_optimizer here
@@ -56,7 +56,7 @@ class IssueType(BaseDjangoObjectType):
             queryset = queryset.prefetch_related(Prefetch(
                 'participants',
                 queryset=UserType.get_queryset(users, info).all(),
-                to_attr='_participants_'
+                to_attr='_participants_',
             ))
 
         # TODO: condsider using graphene_django_optimizer here
@@ -66,7 +66,7 @@ class IssueType(BaseDjangoObjectType):
             queryset = queryset.prefetch_related(Prefetch(
                 'labels',
                 queryset=LabelType.get_queryset(Label.objects, info).all(),
-                to_attr='_labels_'
+                to_attr='_labels_',
             ))
 
         return queryset

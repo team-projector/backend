@@ -11,5 +11,5 @@ class MilestonesQueries(graphene.ObjectType):
 
     all_milestones = DataSourceConnectionField(
         MilestoneType,
-        filterset_class=MilestonesFilterSet
+        filterset_class=MilestonesFilterSet,
     )

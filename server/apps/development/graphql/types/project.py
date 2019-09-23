@@ -15,7 +15,7 @@ from apps.development.services.summary.issues import IssuesProjectSummary
 class ProjectType(BaseDjangoObjectType):
     milestones = DataSourceConnectionField(
         MilestoneType,
-        filterset_class=MilestonesFilterSet
+        filterset_class=MilestonesFilterSet,
     )
 
     def resolve_milestones(self: Project, info, **kwargs):

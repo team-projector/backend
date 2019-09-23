@@ -24,10 +24,10 @@ class IssuesContainerMetricsProvider:
             time_estimate=Coalesce(Sum('time_estimate'), 0),
             time_spent=Coalesce(Sum('total_time_spent'), 0),
             issues_closed_count=Coalesce(
-                Count('id', filter=Q(state=ISSUE_STATES.closed)), 0
+                Count('id', filter=Q(state=ISSUE_STATES.closed)), 0,
             ),
             issues_opened_count=Coalesce(
-                Count('id', filter=Q(state=ISSUE_STATES.opened)), 0
+                Count('id', filter=Q(state=ISSUE_STATES.opened)), 0,
             ),
             issues_count=Count('*'),
         )

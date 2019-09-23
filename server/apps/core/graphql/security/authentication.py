@@ -4,7 +4,7 @@ from django.conf import settings
 from django.utils import timezone
 from rest_framework import exceptions
 from rest_framework.authentication import (
-    TokenAuthentication as DrfTokenAuthentication
+    TokenAuthentication as DrfTokenAuthentication,
 )
 
 from apps.users.models import Token
@@ -24,5 +24,5 @@ class TokenAuthentication(DrfTokenAuthentication):
 
     def _is_expired(self, token) -> bool:
         return token.created < timezone.now() - timedelta(
-            minutes=settings.TOKEN_EXPIRE_PERIOD
+            minutes=settings.TOKEN_EXPIRE_PERIOD,
         )

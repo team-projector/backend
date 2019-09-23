@@ -2,7 +2,7 @@ import logging
 
 from gitlab.v4.objects import (
     Project as GlProject,
-    ProjectIssue as GlProjectIssue
+    ProjectIssue as GlProjectIssue,
 )
 
 from apps.development.models import Issue, Milestone, Project
@@ -35,7 +35,7 @@ def load_project_issue(project: Project,
         'updated_at': parse_gl_datetime(gl_issue.updated_at),
         'closed_at': parse_gl_datetime(gl_issue.closed_at),
         'user': extract_user_from_data(gl_issue.assignee),
-        'is_merged': parse_state_merged(gl_issue.closed_by())
+        'is_merged': parse_state_merged(gl_issue.closed_by()),
     }
 
     params['milestone'] = None

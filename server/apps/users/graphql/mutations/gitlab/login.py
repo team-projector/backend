@@ -19,5 +19,5 @@ class LoginGitlabMutation(BaseMutation):
         response = do_auth(request.backend, redirect_name=REDIRECT_FIELD_NAME)
 
         return LoginGitlabMutation(
-            redirect_url=response.url
+            redirect_url=response.url,
         )

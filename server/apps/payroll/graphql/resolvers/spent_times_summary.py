@@ -9,11 +9,11 @@ def resolve_spent_times_summary(parent,
     filterset = SpentTimeFilterSet(
         data=kwargs,
         queryset=SpentTime.objects.allowed_for_user(
-            info.context.user
+            info.context.user,
         ),
         request=info.context,
     )
 
     return get_spent_times_summary(
-        filterset.qs
+        filterset.qs,
     )

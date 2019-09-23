@@ -8,14 +8,14 @@ from apps.users.models import User
 def filter_allowed_for_user(self, user):
     users = TeamMember.objects.filter(
         user=user,
-        roles=TeamMember.roles.leader
+        roles=TeamMember.roles.leader,
     ).values_list(
         'team__members',
-        flat=True
+        flat=True,
     )
 
     return self.filter(
-        user__in=(*users, user.id)
+        user__in=(*users, user.id),
     )
 
 
@@ -23,15 +23,15 @@ def check_allow_filtering_by_team(team: Team,
                                   user: User) -> None:
     members = TeamMember.objects.filter(
         team=team,
-        user=user
+        user=user,
     )
 
     allowed_members = filter_by_roles(
         members,
         [
             TeamMember.roles.leader,
-            TeamMember.roles.watcher
-        ]
+            TeamMember.roles.watcher,
+        ],
     ).exists()
 
     if not allowed_members:

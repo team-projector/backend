@@ -10,13 +10,13 @@ class Team(models.Model):
         max_length=255,
         verbose_name=_('VN__TITLE'),
         help_text=_('HT__TITLE'),
-        unique=True
+        unique=True,
     )
 
     members = models.ManyToManyField(
         settings.AUTH_USER_MODEL,
         through=TeamMember,
-        related_name='teams'
+        related_name='teams',
     )
 
     class Meta:

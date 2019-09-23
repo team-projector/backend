@@ -21,7 +21,7 @@ class BaseProblemChecker:
             self.annotate_field: Case(
                 self.get_condition(),
                 output_field=NullBooleanField(),
-            )
+            ),
         })
 
     def issue_has_problem(self, issue: Issue) -> bool:
@@ -38,7 +38,7 @@ class EmptyDueDateChecker(BaseProblemChecker):
     def get_condition(self) -> When:
         return When(
             Q(due_date__isnull=True, state=ISSUE_STATES.opened),
-            then=True
+            then=True,
         )
 
     def issue_has_problem(self, issue: Issue) -> bool:
@@ -55,7 +55,7 @@ class OverdueDueDateChecker(BaseProblemChecker):
     def get_condition(self) -> When:
         return When(
             Q(due_date__lt=localdate(), state=ISSUE_STATES.opened),
-            then=True
+            then=True,
         )
 
     def issue_has_problem(self, issue: Issue) -> bool:
@@ -74,10 +74,10 @@ class EmptyEstimateChecker(BaseProblemChecker):
         return When(
             Q(
                 Q(time_estimate__isnull=True)
-                | Q(time_estimate=0)
+                | Q(time_estimate=0),
             )
             & Q(state=ISSUE_STATES.opened),
-            then=True
+            then=True,
         )
 
     def issue_has_problem(self, issue: Issue) -> bool:

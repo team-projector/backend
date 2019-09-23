@@ -48,7 +48,7 @@ def load_project(gl: Gitlab,
             gl_avatar=gl_project.avatar_url,
             group=group,
             full_title=gl_project.name_with_namespace,
-            title=gl_project.name
+            title=gl_project.name,
         )
     except Exception as e:
         logger.exception(str(e))
@@ -96,7 +96,7 @@ def check_project_webhooks(gl_project: GlProject) -> None:
             'url': webhook_url,
             'token': settings.WEBHOOK_SECRET_TOKEN,
             'issues_events': True,
-            'merge_requests_events': True
+            'merge_requests_events': True,
         })
 
 

@@ -1,7 +1,7 @@
 from django.test import override_settings
 
 from apps.development.models.merge_request import (
-    MergeRequest, STATE_CLOSED, STATE_OPENED
+    MergeRequest, MERGE_REQUESTS_STATES,
 )
 from tests.base import model_admin
 from tests.test_development.checkers_gitlab import check_merge_request
@@ -31,13 +31,13 @@ def test_sync_handler(db, gl_mocker):
         project_id=gl_project.id,
         assignee=gl_user,
         author=gl_user,
-        state=STATE_CLOSED
+        state=MERGE_REQUESTS_STATES.closed
     ))
     merge_request = MergeRequestFactory.create(
         gl_id=gl_merge_request.id,
         gl_iid=gl_merge_request.iid,
         project=project,
-        state=STATE_OPENED
+        state=MERGE_REQUESTS_STATES.opened
     )
     _registry_merge_request(gl_mocker, gl_project, gl_merge_request)
 

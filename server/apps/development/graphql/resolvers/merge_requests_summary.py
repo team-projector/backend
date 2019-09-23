@@ -11,5 +11,5 @@ def resolve_merge_requests_summary(parent, info, **kwargs):
     )
 
     return get_merge_requests_summary(
-        filterset.qs
+        filterset.qs,
     )

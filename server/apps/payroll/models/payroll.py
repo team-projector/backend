@@ -11,13 +11,13 @@ class Payroll(Timestamps):
         settings.AUTH_USER_MODEL,
         models.CASCADE,
         verbose_name=_('VN__CREATED_BY'),
-        help_text=_('HT__CREATED_BY')
+        help_text=_('HT__CREATED_BY'),
     )
 
     sum = MoneyField(
         default=0,
         verbose_name=_('VN__SUM'),
-        help_text=_('HT__SUM')
+        help_text=_('HT__SUM'),
     )
 
     salary = models.ForeignKey(
@@ -27,7 +27,7 @@ class Payroll(Timestamps):
         blank=True,
         related_name='payrolls',
         verbose_name=_('VN__SALARY'),
-        help_text=_('HT__SALARY')
+        help_text=_('HT__SALARY'),
     )
 
     user = models.ForeignKey(
@@ -35,7 +35,7 @@ class Payroll(Timestamps):
         models.CASCADE,
         related_name='+',
         verbose_name=_('VN__USER'),
-        help_text=_('HT__USER')
+        help_text=_('HT__USER'),
     )
 
     def __str__(self):

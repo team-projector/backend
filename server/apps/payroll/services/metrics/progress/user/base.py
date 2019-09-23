@@ -42,11 +42,11 @@ class ProgressMetricsProvider:
     def get_active_issues(self) -> List[Dict[str, Any]]:
         return list(
             Issue.objects.annotate(
-                remaining=F('time_estimate') - F('total_time_spent')
+                remaining=F('time_estimate') - F('total_time_spent'),
             ).filter(
                 user=self.user,
                 remaining__gt=0,
             ).exclude(
                 state=ISSUE_STATES.closed,
-            ).values('id', 'due_date', 'remaining')
+            ).values('id', 'due_date', 'remaining'),
         )

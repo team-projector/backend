@@ -11,15 +11,15 @@ def filter_allowed_for_user(queryset: QuerySet,
     users = filter_by_roles(
         TeamMember.objects.filter(user=user),
         [
-            TeamMember.roles.leader
-        ]
+            TeamMember.roles.leader,
+        ],
     ).values_list(
         'team__members',
-        flat=True
+        flat=True,
     )
 
     return queryset.filter(
-        user__in={*users, user.id}
+        user__in={*users, user.id},
     )
 
 
@@ -27,15 +27,15 @@ def check_allowed_filtering_by_team(team: Team,
                                     user: User) -> None:
     queryset = TeamMember.objects.filter(
         team=team,
-        user=user
+        user=user,
     )
 
     can_filter = filter_by_roles(
         queryset,
         [
             TeamMember.roles.leader,
-            TeamMember.roles.watcher
-        ]
+            TeamMember.roles.watcher,
+        ],
     ).exists()
 
     if not can_filter:

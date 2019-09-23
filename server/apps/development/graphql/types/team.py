@@ -17,7 +17,7 @@ class TeamType(BaseDjangoObjectType):
     metrics = graphene.Field(TeamMetricsType)
     members = DataSourceConnectionField(
         TeamMemberType,
-        filterset_class=TeamMembersFilterSet
+        filterset_class=TeamMembersFilterSet,
     )
 
     class Meta:
@@ -32,7 +32,7 @@ class TeamType(BaseDjangoObjectType):
                      info) -> QuerySet:
         queryset = filter_allowed_for_user(
             queryset,
-            info.context.user
+            info.context.user,
         )
 
         return queryset

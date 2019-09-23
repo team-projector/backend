@@ -19,5 +19,5 @@ class AuthMutation:
             (
                 perm().has_mutation_permission(root, info, **kwargs)
                 for perm in cls.permission_classes
-            )
+            ),
         )

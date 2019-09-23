@@ -9,9 +9,9 @@ def check_allow_get_metrics_by_user(team: Team,
                                     user: User) -> None:
     can_filter = filter_by_roles(TeamMember.objects.filter(
         team=team,
-        user=user
+        user=user,
     ),
-        [TeamMember.roles.leader, TeamMember.roles.watcher]
+        [TeamMember.roles.leader, TeamMember.roles.watcher],
     ).exists()
 
     if not can_filter:

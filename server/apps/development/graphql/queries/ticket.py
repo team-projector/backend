@@ -8,5 +8,5 @@ from apps.development.graphql.types import TicketType
 class TicketsQueries(graphene.ObjectType):
     all_tickets = DataSourceConnectionField(
         TicketType,
-        filterset_class=TicketsFilterSet
+        filterset_class=TicketsFilterSet,
     )

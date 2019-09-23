@@ -22,5 +22,5 @@ class SystemEmailDispatcher:
             message=text,
             from_email=settings.DEFAULT_FROM_EMAIL,
             recipient_list=recipient_list,
-            html_message=renderer
+            html_message=renderer,
         )

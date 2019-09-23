@@ -7,10 +7,10 @@ class SalaryManager(models.Manager):
 
         users = TeamMember.objects.filter(
             user=user,
-            roles=TeamMember.roles.leader
+            roles=TeamMember.roles.leader,
         ).values_list(
             'team__members',
-            flat=True
+            flat=True,
         )
 
         return self.filter(user__in=(*users, user.id))

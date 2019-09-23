@@ -16,5 +16,5 @@ def clear_tokens() -> None:
 
     Token.objects.filter(
         created__lt=timezone.now() -  # noqa W504
-                    timedelta(minutes=settings.TOKEN_EXPIRE_PERIOD)
+                    timedelta(minutes=settings.TOKEN_EXPIRE_PERIOD),
     ).delete()

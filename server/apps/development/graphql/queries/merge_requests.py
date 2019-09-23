@@ -4,14 +4,14 @@ from apps.core.graphql.connection_fields import DataSourceConnectionField
 from apps.development.graphql.filters import MergeRequestFilterSet
 from apps.development.graphql.resolvers import resolve_merge_requests_summary
 from apps.development.graphql.types import (
-    MergeRequestType, MergeRequestsSummaryType
+    MergeRequestType, MergeRequestsSummaryType,
 )
 
 
 class MergeRequestQueries(graphene.ObjectType):
     all_merge_requests = DataSourceConnectionField(
         MergeRequestType,
-        filterset_class=MergeRequestFilterSet
+        filterset_class=MergeRequestFilterSet,
     )
 
     merge_requests_summary = graphene.Field(
@@ -20,5 +20,5 @@ class MergeRequestQueries(graphene.ObjectType):
         team=graphene.ID(),
         project=graphene.ID(),
         state=graphene.String(),
-        resolver=resolve_merge_requests_summary
+        resolver=resolve_merge_requests_summary,
     )

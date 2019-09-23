@@ -12,7 +12,7 @@ class IssuesQueries(graphene.ObjectType):
 
     all_issues = DataSourceConnectionField(
         IssueType,
-        filterset_class=IssuesFilterSet
+        filterset_class=IssuesFilterSet,
     )
 
     issues_summary = graphene.Field(
@@ -24,5 +24,5 @@ class IssuesQueries(graphene.ObjectType):
         problems=graphene.Boolean(),
         project=graphene.ID(),
         milestone=graphene.ID(),
-        resolver=resolve_issues_summary
+        resolver=resolve_issues_summary,
     )

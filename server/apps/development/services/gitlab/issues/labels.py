@@ -1,6 +1,6 @@
 from gitlab.v4.objects import (
     Project as GlProject,
-    ProjectIssue as GlProjectIssue
+    ProjectIssue as GlProjectIssue,
 )
 
 from apps.development.models import Issue, Label
@@ -18,7 +18,7 @@ def load_issue_labels(issue: Issue,
 
     for label_title in gl_issue.labels:
         label = Label.objects.filter(
-            title=label_title
+            title=label_title,
         ).first()
         if not label:
             gl_label = next((
@@ -29,7 +29,7 @@ def load_issue_labels(issue: Issue,
             if gl_label:
                 label = Label.objects.create(
                     title=label_title,
-                    color=gl_label.color
+                    color=gl_label.color,
                 )
 
         if label:

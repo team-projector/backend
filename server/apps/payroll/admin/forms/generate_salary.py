@@ -4,10 +4,10 @@ from django.contrib.admin import widgets
 
 class GenerateSalaryForm(forms.Form):
     period_from = forms.DateField(
-        widget=widgets.AdminDateWidget
+        widget=widgets.AdminDateWidget,
     )
     period_to = forms.DateField(
-        widget=widgets.AdminDateWidget
+        widget=widgets.AdminDateWidget,
     )
 
     class Media:

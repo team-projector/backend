@@ -20,5 +20,5 @@ class WorkBreakType(BaseDjangoObjectType):
                      info) -> QuerySet:
         return filter_allowed_for_user(
             queryset,
-            info.context.user
+            info.context.user,
         )

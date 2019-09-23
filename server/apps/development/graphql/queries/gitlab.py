@@ -7,5 +7,5 @@ from apps.development.graphql.types import GitlabStatusType
 class GitlabQueries(graphene.ObjectType):
     gitlab_status = graphene.Field(
         GitlabStatusType,
-        resolver=resolve_gitlab_status
+        resolver=resolve_gitlab_status,
     )

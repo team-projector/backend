@@ -8,7 +8,7 @@ from .user import User
 class Token(BaseToken):
     user = models.ForeignKey(
         User,
-        models.CASCADE
+        models.CASCADE,
     )
 
     class Meta:
