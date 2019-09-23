@@ -11,7 +11,7 @@ class ActiveFilter(django_filters.BooleanFilter):
             return queryset
 
         return queryset.filter(
-            state=MILESTONE_STATES.active if value else MILESTONE_STATES.closed
+            state=MILESTONE_STATES.active if value else MILESTONE_STATES.closed,
         )
 
 
@@ -19,5 +19,5 @@ class MilestonesFilterSet(django_filters.FilterSet):
     active = ActiveFilter()
 
     order_by = OrderingFilter(
-        fields=('due_date',)
+        fields=('due_date',),
     )

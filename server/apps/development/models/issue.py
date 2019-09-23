@@ -15,7 +15,7 @@ from .mixins import NotableMixin
 
 ISSUE_STATES = Choices(
     ('opened', 'opened'),
-    ('closed', 'closed')
+    ('closed', 'closed'),
 )
 
 

@@ -1,6 +1,6 @@
 from django.test import override_settings
 
-from apps.development.models.issue import Issue, STATE_CLOSED, STATE_OPENED
+from apps.development.models.issue import Issue, ISSUE_STATES
 from tests.test_development.checkers_gitlab import check_issue
 from tests.base import model_admin
 from tests.test_development.factories import IssueFactory, ProjectFactory
@@ -23,12 +23,15 @@ def test_sync_handler(db, gl_mocker):
     gl_mocker.registry_get(f'/users/{gl_assignee.id}', gl_assignee)
 
     gl_issue = AttrDict(GlIssueFactory(
-        project_id=gl_project.id, assignee=gl_assignee, state=STATE_CLOSED
+        project_id=gl_project.id, assignee=gl_assignee,
+        state=ISSUE_STATES.opened,
     ))
     issue = IssueFactory.create(
-        gl_id=gl_issue.id, gl_iid=gl_issue.iid, project=project, state=STATE_OPENED
+        gl_id=gl_issue.id, gl_iid=gl_issue.iid, project=project,
+        state=ISSUE_STATES.closed,
     )
-    gl_mocker.registry_get(f'/projects/{gl_project.id}/issues/{gl_issue.iid}', gl_issue)
+    gl_mocker.registry_get(f'/projects/{gl_project.id}/issues/{gl_issue.iid}',
+                           gl_issue)
 
     _registry_issue(gl_mocker, gl_project, gl_issue)
 

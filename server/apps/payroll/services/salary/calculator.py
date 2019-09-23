@@ -32,7 +32,7 @@ class SalaryCalculator:
             created_by=self.initiator,
             user=user,
             period_from=self.period_from,
-            period_to=self.period_to
+            period_to=self.period_to,
         )
 
         locked = self._lock_payrolls(user, salary)
@@ -40,25 +40,25 @@ class SalaryCalculator:
             raise EmptySalaryException
 
         spent_data = SpentTime.objects.filter(
-            salary=salary
+            salary=salary,
         ).aggregate(
             total_sum=Sum('sum'),
-            total_time_spent=Sum('time_spent')
+            total_time_spent=Sum('time_spent'),
         )
 
         salary.sum = spent_data['total_sum'] or 0
         salary.charged_time = spent_data['total_time_spent'] or 0
 
         salary.penalty = Penalty.objects.filter(
-            salary=salary
+            salary=salary,
         ).aggregate(
-            total_sum=Sum('sum')
+            total_sum=Sum('sum'),
         )['total_sum'] or 0
 
         salary.bonus = Bonus.objects.filter(
-            salary=salary
+            salary=salary,
         ).aggregate(
-            total_sum=Sum('sum')
+            total_sum=Sum('sum'),
         )['total_sum'] or 0
 
         salary.total = salary.sum + salary.bonus - salary.penalty
@@ -75,27 +75,27 @@ class SalaryCalculator:
                        salary: Salary) -> int:
         locked = Penalty.objects.filter(
             salary__isnull=True,
-            user=user
+            user=user,
         ).update(
-            salary=salary
+            salary=salary,
         )
         locked += Bonus.objects.filter(
             salary__isnull=True,
-            user=user
+            user=user,
         ).update(
-            salary=salary
+            salary=salary,
         )
         locked += SpentTime.objects.filter(
             salary__isnull=True,
-            user=user
+            user=user,
         ).filter(
             Q(issues__state=ISSUE_STATES.closed)
             | Q(mergerequests__state__in=(
                 MERGE_REQUESTS_STATES.closed,
                 MERGE_REQUESTS_STATES.merged,
-            ))
+            )),
         ).update(
-            salary=salary
+            salary=salary,
         )
 
         return locked

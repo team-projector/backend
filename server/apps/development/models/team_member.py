@@ -18,19 +18,19 @@ class TeamMember(models.Model):
         'Team',
         models.CASCADE,
         verbose_name=_('VN__TEAM'),
-        help_text=_('HT__TEAM')
+        help_text=_('HT__TEAM'),
     )
 
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         models.CASCADE,
         verbose_name=_('VN__USER'),
-        help_text=_('HT__USER')
+        help_text=_('HT__USER'),
     )
 
     roles = BitField(
         flags=TEAM_MEMBER_ROLES,
-        default=0
+        default=0,
     )
 
     objects = TeamMemberManager()
