@@ -7,7 +7,7 @@ DATABASES = {
         'USER': 'postgres',
         'PASSWORD': 'postgres',
         'HOST': 'postgres',
-    }
+    },
 }
 
 CELERY_TASK_ALWAYS_EAGER = True
