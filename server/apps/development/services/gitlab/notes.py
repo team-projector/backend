@@ -1,4 +1,5 @@
 import re
+import types
 from collections import defaultdict, namedtuple
 from typing import DefaultDict, Optional, Pattern
 
@@ -51,14 +52,14 @@ def months_handler(bag: DefaultDict[str, int],
     bag['hours'] += val * WEEK_PER_MONTH * DAYS_PER_WEEK * HOURS_PER_DAY
 
 
-GITLAB_SPEND_HANDLERS = {
+GITLAB_SPEND_HANDLERS = types.MappingProxyType({
     'mo': months_handler,
     'w': weeks_handler,
     'd': days_handler,
     'h': hours_handler,
     'm': minutes_handler,
     's': seconds_handler,
-}
+})
 
 NoteReadResult = namedtuple('NoteReadResult', ['type', 'data'])
 

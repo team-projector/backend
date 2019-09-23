@@ -1,3 +1,4 @@
+import types
 from datetime import datetime
 from typing import Iterable
 
@@ -27,10 +28,10 @@ def get_gitlab_sync_status() -> GlStatus:
     return provider.get_status()
 
 
-ACTIONS_MAPS = {
+ACTIONS_MAPS = types.MappingProxyType({
     'web_hooks': ACTION_GITLAB_WEBHOOK_TRIGGERED,
     'api': ACTION_GITLAB_CALL_API,
-}
+})
 
 
 class GlStatusProvider:
