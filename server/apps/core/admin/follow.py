@@ -10,5 +10,5 @@ admin.site.unregister(Follow)
 class FollowAdmin(BaseModelAdmin):
     list_display = ('__str__', 'user', 'follow_object', 'actor_only', 'started')
     list_editable = ('user',)
-    list_filter = ('user', 'started',)
+    list_filter = ('user', 'started')
     raw_id_fields = ('user', 'content_type')

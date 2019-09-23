@@ -10,8 +10,8 @@ class HasSalaryFilter(SimpleListFilter):
 
     def lookups(self, request, model_admin):
         return (
-            ('yes', _('Yes'), ),
-            ('no', _('No'), ),
+            ('yes', _('Yes')),
+            ('no', _('No')),
         )
 
     def queryset(self, request, queryset):
