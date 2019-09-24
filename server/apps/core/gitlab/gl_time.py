@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from apps.core.consts import (
     SECONDS_PER_MONTH,
     SECONDS_PER_WEEK,

@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from datetime import datetime
 
 from apps.core.graphql.connection_fields import DataSourceConnectionField

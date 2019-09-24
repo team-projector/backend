@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from urllib.parse import urlparse
 
 from admin_tools.decorators import admin_field

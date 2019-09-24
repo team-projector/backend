@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from django.db.models import QuerySet
 from graphene import Connection, Int, PageInfo
 from graphene_django.filter import DjangoFilterConnectionField

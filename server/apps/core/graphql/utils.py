@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from graphql.utils.ast_to_dict import ast_to_dict
 
 

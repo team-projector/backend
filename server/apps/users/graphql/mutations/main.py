@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from .gitlab.complete_gitlab_auth import CompleteGitlabAuthMutation
 from .gitlab.login import LoginGitlabMutation
 from .login import LoginMutation

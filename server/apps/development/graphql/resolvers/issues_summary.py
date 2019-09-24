@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from apps.development.graphql.filters import IssuesFilterSet
 from apps.development.models import Issue
 from apps.development.services.summary.issues import get_issues_summary

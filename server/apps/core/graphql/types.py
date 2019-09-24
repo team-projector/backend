@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from graphene_django_optimizer import OptimizedDjangoObjectType
 
 from apps.core.graphql.security.mixins.node import AuthNode

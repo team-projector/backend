@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from bitfield import BitField
 from bitfield.forms import BitFieldCheckboxSelectMultiple
 
