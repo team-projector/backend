@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from django.contrib.admin.options import BaseModelAdmin
 from django.http import HttpResponseRedirect
 

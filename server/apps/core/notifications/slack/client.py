@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from slack.errors import SlackApiError
 
 from . import get_slack_client

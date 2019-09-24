@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from rest_framework.generics import get_object_or_404
 
 from apps.payroll.services.metrics.progress.user import (

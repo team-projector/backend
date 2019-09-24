@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from typing import Iterable
 
 from apps.users.models import User

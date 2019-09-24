@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from django.http import Http404, HttpRequest
 from social_core.exceptions import MissingBackend
 from social_django.compat import reverse

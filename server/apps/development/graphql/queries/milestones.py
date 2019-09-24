@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 import graphene
 
 from apps.core.graphql.connection_fields import DataSourceConnectionField

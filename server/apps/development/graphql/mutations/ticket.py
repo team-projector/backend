@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 import graphene
 from rest_framework.generics import get_object_or_404
 

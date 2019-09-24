@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 import re
 import types
 from collections import defaultdict, namedtuple

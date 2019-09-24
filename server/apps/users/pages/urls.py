@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from django.urls import path
 from social_django import views
 

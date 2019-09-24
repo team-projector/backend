@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 import graphene
 from rest_framework.exceptions import PermissionDenied, ValidationError
 

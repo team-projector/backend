@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from graphene_django.filter import DjangoFilterConnectionField
 from graphql import ResolveInfo
 from rest_framework.exceptions import PermissionDenied

@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from admin_tools.fields import PermissionSelectMultipleField
 from django.contrib.auth.models import Group
 

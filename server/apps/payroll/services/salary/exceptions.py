@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from apps.core.exceptions import AppException
 
 

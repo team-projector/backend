@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 INSTALLED_APPS = (
 
     'admin_tools',

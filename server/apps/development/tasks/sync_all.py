@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from celery_app import app
 from ..services.gitlab.groups import load_groups
 from ..services.gitlab.projects import load_projects
