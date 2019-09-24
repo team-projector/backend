@@ -74,4 +74,6 @@ class Note(models.Model):
         ordering = ('-created_at',)
 
     def __str__(self):
-        return f'{self.user} [{self.created_at:%x}]: {self.type}'
+        created_at = f'[{self.created_at:%x}]'
+
+        return f'{self.user} {created_at}: {self.type}'
