@@ -183,7 +183,9 @@ class DayMetricsProvider(ProgressMetricsProvider):
     def _get_payrolls_stats(self) -> dict:
         queryset = SpentTime.objects.annotate(
             date_truncated=TruncDay('date'),
-        ).annotate_payrolls().filter(
+        ).annotate_payrolls()
+
+        queryset = queryset.filter(
             user=self.user,
             date_truncated__isnull=False,
         ).values(

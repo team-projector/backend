@@ -16,7 +16,9 @@ class CamelCasedOrderingMixin:
         ret = super().normalize_fields(fields)  # type: ignore
 
         return OrderedDict([
-            (k, '__'.join(to_camel_case(c) for c in v.split('__')))
+            (
+                k, '__'.join(to_camel_case(c) for c in v.split('__')),
+            )
             for k, v in
             ret.items()
         ])

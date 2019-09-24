@@ -79,7 +79,10 @@ def parse_spend(s: str) -> int:
         if not m:
             continue
 
-        GITLAB_SPEND_HANDLERS[m.group('part')](bag, int(m.group('value')))
+        GITLAB_SPEND_HANDLERS[m.group('part')](
+            bag,
+            int(m.group('value')),
+        )
 
     return int(seconds(**bag))
 
