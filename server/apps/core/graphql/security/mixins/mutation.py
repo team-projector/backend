@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from graphql import ResolveInfo
 from typing import Any
 

@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 import graphene
 from django.contrib.auth import get_user_model
 from django.db.models import QuerySet, Prefetch

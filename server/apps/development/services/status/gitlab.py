@@ -1,3 +1,6 @@
+# -*- coding: utf-8 -*-
+
+import types
 from datetime import datetime
 from typing import Iterable
 
@@ -27,10 +30,10 @@ def get_gitlab_sync_status() -> GlStatus:
     return provider.get_status()
 
 
-ACTIONS_MAPS = {
+ACTIONS_MAPS = types.MappingProxyType({
     'web_hooks': ACTION_GITLAB_WEBHOOK_TRIGGERED,
     'api': ACTION_GITLAB_CALL_API,
-}
+})
 
 
 class GlStatusProvider:
@@ -53,9 +56,13 @@ class GlStatusProvider:
             for x in apps.get_models()
             if issubclass(x, GitlabEntityMixin)
         ]
-        value = querysets[0].union(*querysets[1:]).order_by(
+
+        value = querysets[0].union(
+            *querysets[1:],
+        ).order_by(
             '-gl_last_sync',
         ).first() or {}
+
         return value.get('gl_last_sync')  # type: ignore
 
     @classmethod

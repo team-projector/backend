@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from django.db.models import Count, DecimalField, F, Sum, Q
 from django.db.models.functions import Coalesce
 

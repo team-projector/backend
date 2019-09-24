@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from gitlab.v4.objects import ProjectIssue as GlProjectIssue
 
 from apps.development.models import Issue

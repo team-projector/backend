@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from django.core.management.base import BaseCommand
 
 from apps.development.services.gitlab.merge_requests import load_merge_requests

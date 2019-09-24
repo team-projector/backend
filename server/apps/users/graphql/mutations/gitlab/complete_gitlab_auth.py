@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 import graphene
 from django.contrib.auth import REDIRECT_FIELD_NAME
 from social_core.actions import do_complete

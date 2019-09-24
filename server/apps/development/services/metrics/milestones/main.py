@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from apps.development.models import Milestone
 from .provider import MilestoneMetrics, MilestoneMetricsProvider
 

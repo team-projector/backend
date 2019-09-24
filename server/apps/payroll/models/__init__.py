@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from .bonus import Bonus
 from .payment import Payment
 from .payroll import Payroll

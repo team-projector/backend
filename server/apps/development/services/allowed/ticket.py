@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from django.core.exceptions import PermissionDenied
 
 from apps.users.models import User

@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 import graphene
 
 from .issues_container_metrics import IssuesContainerMetricsType

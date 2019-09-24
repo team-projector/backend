@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from django.db.models import QuerySet
 
 from apps.development.services.team_members import filter_by_roles

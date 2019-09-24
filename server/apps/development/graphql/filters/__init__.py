@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from .issues import IssuesFilterSet
 from .merge_requests import MergeRequestFilterSet
 from .milestones import MilestonesFilterSet

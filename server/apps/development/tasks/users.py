@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from celery_app import app
 from ..services.gitlab.users import load_user
 

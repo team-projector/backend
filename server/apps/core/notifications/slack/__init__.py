@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 import slack
 from django.conf import settings
 from django.core.exceptions import ImproperlyConfigured

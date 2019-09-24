@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from .gitlab import GitlabQueries
 from .issues import IssuesQueries
 from .merge_requests import MergeRequestQueries

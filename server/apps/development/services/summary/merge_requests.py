@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from django.db.models import QuerySet, Count
 
 from apps.development.models.merge_request import MERGE_REQUESTS_STATES
