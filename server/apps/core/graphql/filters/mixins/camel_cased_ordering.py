@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from collections import OrderedDict
 from graphene.utils.str_converters import to_camel_case
 

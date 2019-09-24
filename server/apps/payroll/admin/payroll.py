@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from django.contrib import admin
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models.fields.related import OneToOneRel

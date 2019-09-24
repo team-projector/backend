@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from actstream import action
 
 from apps.users.models import User

@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from .issue import IssueManager
 from .merge_request import MergeRequestManager
 from .milestone import MilestoneManager

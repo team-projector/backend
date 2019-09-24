@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from django.http import HttpResponseBadRequest
 from django.utils import timezone
 from social_core.backends.gitlab import GitLabOAuth2 as SocialGitLabOAuth2

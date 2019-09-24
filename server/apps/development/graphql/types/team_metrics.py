@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 import graphene
 
 from .work_item_team_metrics import (

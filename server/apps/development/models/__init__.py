@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from .merge_request import MergeRequest
 from .issue import Issue
 from .ticket import Ticket

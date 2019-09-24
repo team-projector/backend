@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from model_utils import Choices as ModelChoices
 
 

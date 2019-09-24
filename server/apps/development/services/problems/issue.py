@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from functools import reduce
 from operator import or_, and_
 from typing import ClassVar, List

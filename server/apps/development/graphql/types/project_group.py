@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from graphene_django import DjangoObjectType
 
 from apps.core.graphql.connections import DataSourceConnection

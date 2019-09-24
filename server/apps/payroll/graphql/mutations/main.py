@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from .work_breaks import (
     ApproveWorkBreakMutation, CreateWorkBreakMutation,
     DeclineWorkBreakMutation, DeleteWorkBreakMutation,

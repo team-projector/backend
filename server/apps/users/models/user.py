@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from bitfield import BitField
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 from django.db import models
