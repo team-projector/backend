@@ -22,7 +22,7 @@ quality:
     GIT_DEPTH: 5
     GIT_STRATEGY: fetch
   script:
-    - cat server/gql.py
+    - cat setup.cfg
     - make check_quality
     - check-locale
 
