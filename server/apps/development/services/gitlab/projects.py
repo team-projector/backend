@@ -4,13 +4,14 @@ import logging
 
 from django.conf import settings
 from django.urls import reverse
-from gitlab import Gitlab, GitlabGetError, GitlabError
+from gitlab import Gitlab, GitlabError, GitlabGetError
 from gitlab.v4.objects import Project as GlProject
 from rest_framework import status
 
 from apps.core.activity.verbs import ACTION_GITLAB_CALL_API
 from apps.core.gitlab import get_gitlab_client
 from apps.core.tasks import add_action
+
 from ...models import Project, ProjectGroup
 
 logger = logging.getLogger(__name__)

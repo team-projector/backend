@@ -8,6 +8,7 @@ from social_django.views import _do_login
 from apps.core.graphql.mutations import BaseMutation
 from apps.core.graphql.security.permissions import AllowAny
 from apps.users.graphql.types import TokenType
+
 from .utils import psa
 
 

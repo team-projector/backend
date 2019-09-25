@@ -10,9 +10,11 @@ from django.urls import reverse
 from django.utils.html import format_html
 
 from apps.core.admin.mixins import (
-    AdminFormFieldsOverridesMixin, ForceSyncEntityMixin,
+    AdminFormFieldsOverridesMixin,
+    ForceSyncEntityMixin,
 )
 from apps.development.tasks import sync_user
+
 from ..models import User
 
 

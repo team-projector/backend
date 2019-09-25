@@ -3,7 +3,8 @@
 import graphene
 
 from .work_item_user_metrics import (
-    IssueUserMetricsType, MergeRequestUserMetricsType,
+    IssueUserMetricsType,
+    MergeRequestUserMetricsType,
 )
 
 

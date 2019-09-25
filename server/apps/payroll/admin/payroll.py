@@ -8,8 +8,9 @@ from django.utils.html import mark_safe
 
 from apps.core.admin.base import BaseModelAdmin
 from apps.users.admin.filters import UserFilter
-from .filters import HasSalaryFilter
+
 from ..models import Payroll
+from .filters import HasSalaryFilter
 
 
 @admin.register(Payroll)

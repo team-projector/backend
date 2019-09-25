@@ -4,8 +4,8 @@ import graphene
 
 from apps.core.graphql.connection_fields import DataSourceConnectionField
 from apps.payroll.graphql.filters import SpentTimeFilterSet
-from apps.payroll.graphql.types import SpentTimeType, SpentTimesSummaryType
 from apps.payroll.graphql.resolvers import resolve_spent_times_summary
+from apps.payroll.graphql.types import SpentTimesSummaryType, SpentTimeType
 
 
 class TimeExpensesQueries(graphene.ObjectType):

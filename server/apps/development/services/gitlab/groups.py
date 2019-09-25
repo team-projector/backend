@@ -6,6 +6,7 @@ from typing import Optional
 from gitlab.v4.objects import Group as GlGroup
 
 from apps.core.gitlab import get_gitlab_client
+
 from ...models import ProjectGroup
 
 logger = logging.getLogger(__name__)

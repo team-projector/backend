@@ -3,14 +3,15 @@
 import graphene
 from django.db.models import QuerySet
 
-from apps.core.graphql.connections import DataSourceConnection
 from apps.core.graphql.connection_fields import DataSourceConnectionField
+from apps.core.graphql.connections import DataSourceConnection
 from apps.core.graphql.relay_nodes import DatasourceRelayNode
 from apps.core.graphql.types import BaseDjangoObjectType
 from apps.development.graphql.filters import TeamMembersFilterSet
 from apps.development.models import Team
 from apps.development.services.allowed.teams import filter_allowed_for_user
 from apps.development.services.metrics.team import get_team_metrics
+
 from .team_member import TeamMemberType
 from .team_metrics import TeamMetricsType
 

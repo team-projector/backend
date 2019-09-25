@@ -2,10 +2,7 @@
 
 from importlib import import_module
 from importlib.util import find_spec
-from typing import (
-    Iterable,
-    List,
-)
+from typing import Iterable, List
 
 
 def get_module_url_patterns(*modules: str) -> Iterable:

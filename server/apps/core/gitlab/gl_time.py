@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
 
 from apps.core.consts import (
-    SECONDS_PER_MONTH,
-    SECONDS_PER_WEEK,
     SECONDS_PER_DAY,
     SECONDS_PER_HOUR,
     SECONDS_PER_MINUTE,
+    SECONDS_PER_MONTH,
+    SECONDS_PER_WEEK,
 )
 
 GITLAB_TIME_INTERVALS = (

@@ -6,9 +6,12 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 
 from apps.core.models.mixins import (
-    GitlabEntityMixin, GitlabInternalIdMixin, Timestamps,
+    GitlabEntityMixin,
+    GitlabInternalIdMixin,
+    Timestamps,
 )
 from apps.core.models.utils import Choices
+
 from .managers import MilestoneManager
 
 MILESTONE_STATES = Choices(

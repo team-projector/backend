@@ -3,15 +3,17 @@
 from datetime import date
 from typing import List, Optional
 
-from django.db.models import QuerySet, Sum, Count
+from django.db.models import Count, QuerySet, Sum
 
-from apps.development.models import Team, Project, Milestone
+from apps.development.models import Milestone, Project, Team
 from apps.development.models.issue import ISSUE_STATES
 from apps.development.services.problems.issue import (
-    annotate_issues_problems, filter_issues_problems,
+    annotate_issues_problems,
+    filter_issues_problems,
 )
 from apps.payroll.models import SpentTime
 from apps.users.models import User
+
 from .issues_project import IssuesProjectSummary
 from .issues_team import IssuesTeamSummary
 

@@ -1,11 +1,10 @@
 # -*- coding: utf-8 -*-
 
-from gitlab.v4.objects import (
-    Project as GlProject,
-    ProjectIssue as GlProjectIssue,
-)
+from gitlab.v4.objects import Project as GlProject
+from gitlab.v4.objects import ProjectIssue as GlProjectIssue
 
 from apps.development.models import Issue, MergeRequest, Project
+
 from ..merge_requests import load_project_merge_request
 
 

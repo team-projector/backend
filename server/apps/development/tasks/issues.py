@@ -4,6 +4,7 @@ from apps.core.activity.verbs import ACTION_GITLAB_CALL_API
 from apps.core.gitlab import get_gitlab_client
 from apps.core.tasks import add_action
 from celery_app import app
+
 from ..models import Project
 from ..services.gitlab.issues import load_project_issue, load_project_issues
 

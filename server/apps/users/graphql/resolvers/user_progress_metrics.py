@@ -3,7 +3,8 @@
 from rest_framework.generics import get_object_or_404
 
 from apps.payroll.services.metrics.progress.user import (
-    get_user_progress_metrics, User,
+    User,
+    get_user_progress_metrics,
 )
 from apps.users.services.allowed.user_progress_metrics import (
     filter_allowed_for_user,

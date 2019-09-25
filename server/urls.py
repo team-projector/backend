@@ -7,7 +7,7 @@ from django.urls import include, path
 from django.utils.translation import gettext_lazy as _
 from django.views.decorators.csrf import csrf_exempt
 
-from gql import get_graphql_view, get_api_graphql_view
+from gql import get_api_graphql_view, get_graphql_view
 
 admin.site.site_header = _('VN__ADMIN_DASHBOARD')
 
