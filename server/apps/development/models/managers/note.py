@@ -14,11 +14,11 @@ class NoteManager(models.Manager):
         last_date = issue.last_note_date
 
         if last_date and last_date > parse_gl_datetime(gl_note.created_at):
-            return
+            return None
 
         parse_data = read_note(gl_note)
         if not parse_data:
-            return
+            return None
 
         note = issue.notes.filter(gl_id=gl_note.id).first()
         if note:

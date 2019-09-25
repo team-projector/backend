@@ -30,5 +30,5 @@ def login_user(login: str,
         user.save(update_fields=['last_login'])
 
         return token  # noqa WPS331
-    else:
-        raise AuthenticationFailed(_('MSG_MUST_INCLUDE_LOGIN_AND_PASSWORD'))
+
+    raise AuthenticationFailed(_('MSG_MUST_INCLUDE_LOGIN_AND_PASSWORD'))
