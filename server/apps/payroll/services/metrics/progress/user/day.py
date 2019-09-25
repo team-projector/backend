@@ -35,7 +35,8 @@ class DayMetricsProvider(ProgressMetricsProvider):
             metric = UserProgressMetrics()
             metrics.append(metric)
 
-            metric.start = metric.end = current
+            metric.start = current
+            metric.end = current
             metric.planned_work_hours = self.user.daily_work_hours
 
             self._apply_due_day_stats(current, metric, due_day_stats)
@@ -59,7 +60,8 @@ class DayMetricsProvider(ProgressMetricsProvider):
                 return
 
             metric = UserProgressMetrics()
-            metric.start = metric.end = current
+            metric.start = current
+            metric.end = current
 
             if self._is_apply_loading(current, now):
                 self._update_loading(metric, active_issues)
@@ -99,43 +101,6 @@ class DayMetricsProvider(ProgressMetricsProvider):
         payrolls = payrols_stats[day]
         metric.payroll = payrolls['total_payroll']
         metric.paid = payrolls['total_paid']
-
-    @staticmethod
-    def _is_apply_loading(day: date,
-                          now: date) -> bool:
-        return day >= now and day.weekday() not in settings.TP_WEEKENDS_DAYS
-
-    def _update_loading(self,
-                        metric: UserProgressMetrics,
-                        active_issues: List[dict]) -> None:
-        if not active_issues:
-            return
-
-        metric.loading = metric.time_spent
-
-        deadline_issues = [
-            issue
-            for issue in active_issues
-            if issue['due_date'] and issue['due_date'] <= metric.start
-        ]
-
-        for issue in deadline_issues:
-            metric.loading += issue['remaining']
-            active_issues.remove(issue)
-
-        if metric.loading > self.max_day_loading:
-            return
-
-        for issue in active_issues[:]:
-            available_time = self.max_day_loading - metric.loading
-
-            loading = min(available_time, issue['remaining'])
-
-            metric.loading += loading
-
-            issue['remaining'] -= loading
-            if not issue['remaining']:
-                active_issues.remove(issue)
 
     def _get_time_spents(self) -> dict:
         queryset = SpentTime.objects.annotate(
@@ -202,3 +167,58 @@ class DayMetricsProvider(ProgressMetricsProvider):
             stats['date_truncated']: stats
             for stats in queryset
         }
+
+    @staticmethod
+    def _is_apply_loading(day: date,
+                          now: date) -> bool:
+        return day >= now and day.weekday() not in settings.TP_WEEKENDS_DAYS
+
+    def _update_loading(self,
+                        metric: UserProgressMetrics,
+                        active_issues: List[dict]) -> None:
+        if not active_issues:
+            return
+
+        metric.loading = metric.time_spent
+
+        self._apply_deadline_issues_loading(
+            metric,
+            active_issues,
+        )
+
+        if metric.loading > self.max_day_loading:
+            return
+
+        self._apply_active_issues_loading(
+            metric,
+            active_issues,
+        )
+
+    def _apply_deadline_issues_loading(self,
+                                       metric: UserProgressMetrics,
+                                       active_issues: List[dict]) -> None:
+
+        deadline_issues = [
+            issue
+            for issue in active_issues
+            if issue['due_date'] and issue['due_date'] <= metric.start
+        ]
+
+        for issue in deadline_issues:
+            metric.loading += issue['remaining']
+            active_issues.remove(issue)
+
+    def _apply_active_issues_loading(self,
+                                     metric: UserProgressMetrics,
+                                     active_issues: List[dict]) -> None:
+
+        for issue in active_issues[:]:
+            available_time = self.max_day_loading - metric.loading
+
+            loading = min(available_time, issue['remaining'])
+
+            metric.loading += loading
+
+            issue['remaining'] -= loading
+            if not issue['remaining']:
+                active_issues.remove(issue)
