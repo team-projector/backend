@@ -627,14 +627,6 @@ six = ">=1.10.0"
 
 [[package]]
 category = "main"
-description = "Optimize database access inside graphene queries."
-name = "graphene-django-optimizer"
-optional = false
-python-versions = "*"
-version = "0.6.0"
-
-[[package]]
-category = "main"
 description = "GraphQL implementation for Python"
 name = "graphql-core"
 optional = false
@@ -1375,7 +1367,7 @@ version = "0.6.0"
 more-itertools = "*"
 
 [metadata]
-content-hash = "0f399ede09b8b520400b7ab301bd1b707022562dea2ecb1c11c3c1ec1952ca14"
+content-hash = "8369d422cece485c374aa2f590a50ae1e8e55a250a2dca060be9ae3747b5d74d"
 python-versions = "^3.6"
 
 [metadata.hashes]
@@ -1437,7 +1429,6 @@ gitdb2 = ["83361131a1836661a155172932a13c08bda2db3674e4caa32368aa6eb02f38c2", "e
 gitpython = ["947cc75913e7b6da108458136607e2ee0e40c20be1e12d4284e7c6c12956c276", "d2f4945f8260f6981d724f5957bc076398ada55cb5d25aaee10108bcdc894100"]
 graphene = ["09165f03e1591b76bf57b133482db9be6dac72c74b0a628d3c93182af9c5a896", "2cbe6d4ef15cfc7b7805e0760a0e5b80747161ce1b0f990dfdc0d2cf497c12f9"]
 graphene-django = ["25f2bdf41e30bc7b860c1c13bfb4ba5c3961712394f16e847d79a69fc25a06b1", "d75b3e468d8d765d5964bc809e403b44bf7c37556c0464230a5083bccf14581b"]
-graphene-django-optimizer = ["48dd4806c1eb8597e3ba916531a68c3956d3779ebee3238d9736b795613794ef"]
 graphql-core = ["1488f2a5c2272dc9ba66e3042a6d1c30cea0db4c80bd1e911c6791ad6187d91b", "da64c472d720da4537a2e8de8ba859210b62841bd47a9be65ca35177f62fe0e4"]
 graphql-relay = ["0e94201af4089e1f81f07d7bd8f84799768e39d70fa1ea16d1df505b46cc6335", "75aa0758971e252964cb94068a4decd472d2a8295229f02189e3cbca1f10dbb5", "7fa74661246e826ef939ee92e768f698df167a7617361ab399901eaebf80dce6"]
 httpretty = ["01b52d45077e702eda491f4fe75328d3468fd886aed5dcc530003e7b2b5939dc"]

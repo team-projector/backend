@@ -3,7 +3,6 @@
 import graphene
 from django.contrib.auth import get_user_model
 from django.db.models import QuerySet, Prefetch
-from graphene_django_optimizer import query as optimized_query
 
 from apps.core.graphql.connections import DataSourceConnection
 from apps.core.graphql.relay_nodes import DatasourceRelayNode
@@ -46,9 +45,12 @@ class IssueType(BaseDjangoObjectType):
                      info) -> QuerySet:
 
         queryset = filter_allowed_for_user(
-            optimized_query(queryset, info),
+            queryset,
             info.context.user,
         )
+
+        if is_field_selected(info, 'edges.node.user'):
+            queryset = queryset.select_related('user')
 
         # TODO: condsider using graphene_django_optimizer here
         if is_field_selected(info, 'edges.node.participants'):

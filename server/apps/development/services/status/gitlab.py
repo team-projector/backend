@@ -56,9 +56,13 @@ class GlStatusProvider:
             for x in apps.get_models()
             if issubclass(x, GitlabEntityMixin)
         ]
-        value = querysets[0].union(*querysets[1:]).order_by(
+
+        value = querysets[0].union(
+            *querysets[1:],
+        ).order_by(
             '-gl_last_sync',
         ).first() or {}
+
         return value.get('gl_last_sync')  # type: ignore
 
     @classmethod

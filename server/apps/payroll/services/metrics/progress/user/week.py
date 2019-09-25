@@ -120,7 +120,9 @@ class WeekMetricsProvider(ProgressMetricsProvider):
     def _get_payrolls_stats(self) -> dict:
         queryset = SpentTime.objects.annotate(
             week=TruncWeek('date'),
-        ).annotate_payrolls().filter(
+        ).annotate_payrolls()
+
+        queryset = queryset.filter(
             user=self.user,
             date__range=(self.start, self.end),
             week__isnull=False,
