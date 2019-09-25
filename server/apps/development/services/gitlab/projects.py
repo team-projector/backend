@@ -88,10 +88,10 @@ def check_project_webhooks(gl_project: GlProject) -> None:
         if has_valid:
             webhook.delete()
 
-        if not validate_webhook(webhook, webhook_url):
-            webhook.delete()
-        else:
+        if validate_webhook(webhook, webhook_url):
             has_valid = True
+        else:
+            webhook.delete()
 
     if not has_valid:
         gl_project.hooks.create({
