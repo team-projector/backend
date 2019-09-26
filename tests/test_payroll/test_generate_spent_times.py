@@ -122,17 +122,65 @@ class AdjustSpentTimesTests(TestCase):
 
         self._check_generated_time_spents()
 
+    def test_spents_but_moved_from(self):
+        spent_before = self._create_note(NOTE_TYPES.time_spend,
+                                         timezone.now() - timedelta(hours=2),
+                                         timedelta(hours=1))
+
+        moved_from = self._create_note(NOTE_TYPES.moved_from,
+                                       timezone.now() - timedelta(hours=1))
+
+        spent_after = self._create_note(NOTE_TYPES.time_spend,
+                                        timezone.now() - timedelta(minutes=30),
+                                        timedelta(hours=5))
+
+        self.issue.adjust_spent_times()
+
+        self.assertFalse(SpentTime.objects.filter(note=spent_before).exists())
+        self.assertFalse(SpentTime.objects.filter(note=moved_from).exists())
+        self.assertTrue(SpentTime.objects.filter(note=spent_after).exists())
+
+    def test_spents_with_resets_but_moved_from(self):
+        spent_before = self._create_note(NOTE_TYPES.time_spend,
+                                         timezone.now() - timedelta(hours=2),
+                                         timedelta(hours=1))
+
+        moved_from = self._create_note(NOTE_TYPES.moved_from,
+                                       timezone.now() - timedelta(hours=1))
+
+        spent_after = self._create_note(NOTE_TYPES.time_spend,
+                                        timezone.now() - timedelta(minutes=30),
+                                        timedelta(hours=5))
+
+        reset_spend = self._create_note(NOTE_TYPES.reset_spend,
+                                        timezone.now() - timedelta(minutes=15))
+
+        self.issue.adjust_spent_times()
+
+        self.assertFalse(SpentTime.objects.filter(note=spent_before).exists())
+        self.assertFalse(SpentTime.objects.filter(note=moved_from).exists())
+        self.assertTrue(SpentTime.objects.filter(note=spent_after).exists())
+
+        reset_spent_time = SpentTime.objects.filter(note=reset_spend).first()
+        self.assertIsNotNone(reset_spent_time)
+        self.assertEqual(
+            -timedelta(hours=5).total_seconds(),
+            reset_spent_time.time_spent
+        )
+
     def _create_note(self, note_type, created_at, spent: timedelta = None,
                      date=None, user=None):
-        return IssueNoteFactory.create(type=note_type,
-                                       created_at=created_at,
-                                       updated_at=created_at,
-                                       user=user or self.user,
-                                       content_object=self.issue,
-                                       data={
-                                           'spent': spent.total_seconds(),
-                                           'date': date or created_at.date()
-                                       } if spent else {})
+        return IssueNoteFactory.create(
+            type=note_type,
+            created_at=created_at,
+            updated_at=created_at,
+            user=user or self.user,
+            content_object=self.issue,
+            data={
+                'spent': spent.total_seconds(),
+                'date': date or created_at.date()
+            } if spent else {}
+        )
 
     def _check_generated_time_spents(self):
         users_spents = defaultdict(int)
@@ -143,8 +191,10 @@ class AdjustSpentTimesTests(TestCase):
             self.assertIsNotNone(spent_time)
 
             if note.type == NOTE_TYPES.reset_spend:
-                self.assertEqual(spent_time.time_spent,
-                                 -users_spents[note.user_id])
+                self.assertEqual(
+                    spent_time.time_spent,
+                    -users_spents[note.user_id]
+                )
                 users_spents[note.user_id] = 0
             elif note.type == NOTE_TYPES.time_spend:
                 self.assertEqual(spent_time.time_spent, note.data['spent'])

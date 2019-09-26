@@ -1,13 +1,13 @@
 # -*- coding: utf-8 -*-
 
 from collections import defaultdict
-from typing import DefaultDict
+from typing import DefaultDict, Iterable, List
 
 from django.contrib.contenttypes.fields import GenericRelation
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
-from apps.development.models.note import NOTE_TYPES
+from apps.development.models.note import NOTE_TYPES, Note
 from apps.development.services.parsers import parse_date
 
 
@@ -26,7 +26,7 @@ class NotableMixin(models.Model):
 
         users_spents: DefaultDict[int, int] = defaultdict(int)
 
-        for note in self.notes.all().order_by('created_at'):
+        for note in self._get_notes_for_processing():
             time_spent = 0
             note_date = note.created_at.date()
 
@@ -50,3 +50,14 @@ class NotableMixin(models.Model):
                 note=note,
                 base=self,
             )
+
+    def _get_notes_for_processing(self) -> Iterable[Note]:
+        notes: List[Note] = []
+
+        for note in self.notes.all().order_by('created_at'):
+            if note.type == NOTE_TYPES.moved_from:
+                notes = []
+            else:
+                notes.append(note)
+
+        return notes

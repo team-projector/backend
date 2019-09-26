@@ -15,6 +15,7 @@ from .managers import NoteManager
 NOTE_TYPES = Choices(
     ('time_spend', 'Time spend'),
     ('reset_spend', 'Reset spend'),
+    ('moved_from', 'Moved from'),
 )
 
 
