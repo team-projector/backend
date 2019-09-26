@@ -7,7 +7,6 @@ from typing import DefaultDict, Optional, Pattern
 
 from apps.core.utils.time import seconds
 from apps.development.models.note import NOTE_TYPES
-
 from ...services.gitlab.parsers import parse_gl_date, parse_gl_datetime
 
 RE_SPEND_FULL: Pattern = re.compile(
@@ -18,7 +17,10 @@ RE_SPEND_SHORT: Pattern = re.compile(
     r'^(?P<action>(added|subtracted)) (?P<spent>.+) of time spent$',
 )
 RE_SPEND_PART: Pattern = re.compile(r'(?P<value>\d+)(?P<part>(mo|w|d|h|m|s))')
+
 SPEND_RESET_MESSAGE = 'removed time spent'
+
+RE_MOVED_FROM: Pattern = re.compile(r'^moved from .+#\d+$')
 
 WEEK_PER_MONTH = 4
 DAYS_PER_WEEK = 5
@@ -97,7 +99,6 @@ class BaseNoteParser:
 
 class SpendAddedParser(BaseNoteParser):
     def parse(self, gl_note) -> Optional[NoteReadResult]:
-
         m = (RE_SPEND_FULL.match(gl_note.body) or  # noqa W504
              RE_SPEND_SHORT.match(gl_note.body))
         if not m:
@@ -127,9 +128,16 @@ class SpendResetParser(BaseNoteParser):
             return NoteReadResult(NOTE_TYPES.reset_spend, {})
 
 
+class MovedFromParser(BaseNoteParser):
+    def parse(self, gl_note) -> Optional[NoteReadResult]:
+        if gl_note.system and RE_MOVED_FROM.match(gl_note.body):
+            return NoteReadResult(NOTE_TYPES.moved_from, {})
+
+
 _notes_parsers = [
     SpendAddedParser(),
     SpendResetParser(),
+    MovedFromParser(),
 ]
 
 

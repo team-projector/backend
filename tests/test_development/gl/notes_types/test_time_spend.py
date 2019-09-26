@@ -14,7 +14,7 @@ from apps.users.models import User
 from tests.test_development.factories import IssueFactory
 
 
-class LoadNotesTests(TestCase):
+class TimeSpendNoteTypeTests(TestCase):
     def setUp(self):
         self.issue = IssueFactory.create()
         self.user = User.objects.create_user(login='user', gl_id=10)
@@ -212,3 +212,4 @@ class LoadNotesTests(TestCase):
         }), self.issue)
 
         self.assertEqual(Note.objects.count(), 1)
+
