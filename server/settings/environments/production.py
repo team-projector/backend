@@ -5,7 +5,7 @@ from decouple import config
 SECRET_KEY = config('DJANGO_SECRET_KEY')
 DOMAIN_NAME = config('DOMAIN_NAME')
 
-ALLOWED_HOSTS = [DOMAIN_NAME]
+ALLOWED_HOSTS = ['localhost', DOMAIN_NAME]
 
 DATABASES = {
     'default': {

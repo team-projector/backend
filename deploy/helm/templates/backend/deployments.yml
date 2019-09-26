@@ -16,11 +16,25 @@ spec:
         - name: regcred
       containers:
         - name: app
+          image: {{ .Values.image.name }}:{{ .Values.image.tag }}
           resources:
             requests:
               memory: "100Mi"
               cpu: "10m"
-          image: {{ .Values.image.name }}:{{ .Values.image.tag }}
+          readinessProbe:
+            httpGet:
+              path: /ht/
+              port: 8080
+            initialDelaySeconds: 5
+            periodSeconds: 5
+            failureThreshold: 60
+          livenessProbe:
+            httpGet:
+              path: /ht/
+              port: 8080
+            initialDelaySeconds: 15
+            periodSeconds: 60
+            failureThreshold: 5
           env:
             - name: UWSGI_PROCESSES_COUNT
               value: "2"
