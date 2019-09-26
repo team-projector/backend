@@ -1,11 +1,12 @@
 # -*- coding: utf-8 -*-
 
-from django.db.models import Count, DecimalField, F, Sum, Q
+from django.db.models import Count, DecimalField, F, Q, Sum
 from django.db.models.functions import Coalesce
 
 from apps.development.models import Issue, Ticket
 from apps.development.models.issue import ISSUE_STATES
-from apps.payroll.models.spent_time import SpentTime, SECS_IN_HOUR
+from apps.payroll.models.spent_time import SECS_IN_HOUR, SpentTime
+
 from .provider import IssuesContainerMetrics
 
 

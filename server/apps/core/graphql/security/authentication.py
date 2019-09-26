@@ -5,14 +5,12 @@ from datetime import timedelta
 from django.conf import settings
 from django.utils import timezone
 from rest_framework import exceptions
-from rest_framework.authentication import (
-    TokenAuthentication as DrfTokenAuthentication,
-)
+from rest_framework.authentication import TokenAuthentication as DrfTokenAuth
 
 from apps.users.models import Token
 
 
-class TokenAuthentication(DrfTokenAuthentication):
+class TokenAuthentication(DrfTokenAuth):
     keyword = 'Bearer'
     model = Token
 

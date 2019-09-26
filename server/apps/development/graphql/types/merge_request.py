@@ -2,14 +2,14 @@
 
 import graphene
 from django.contrib.auth import get_user_model
-from django.db.models import QuerySet, Prefetch
+from django.db.models import Prefetch, QuerySet
 
 from apps.core.graphql.connections import DataSourceConnection
 from apps.core.graphql.relay_nodes import DatasourceRelayNode
 from apps.core.graphql.types import BaseDjangoObjectType
 from apps.core.graphql.utils import is_field_selected
 from apps.development.graphql.types.interfaces import WorkItem
-from apps.development.models import MergeRequest, Label, Issue
+from apps.development.models import Issue, Label, MergeRequest
 from apps.development.services.allowed.merge_requests import (
     filter_allowed_for_user,
 )
@@ -19,6 +19,7 @@ from apps.development.services.metrics.merge_request import (
 from apps.development.services.problems.merge_request import (
     get_merge_request_problems,
 )
+
 from .merge_request_metrics import MergeRequestMetricsType
 
 

@@ -1,9 +1,12 @@
 # -*- coding: utf-8 -*-
 
 from celery_app import app
+
 from ..models import Project, ProjectGroup
 from ..services.gitlab.milestones import (
-    load_gl_project_milestones, load_group_milestone, load_group_milestones,
+    load_gl_project_milestones,
+    load_group_milestone,
+    load_group_milestones,
     load_project_milestone,
 )
 

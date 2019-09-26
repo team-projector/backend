@@ -2,6 +2,7 @@
 
 import json
 import logging
+
 from django.conf import settings
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
@@ -9,6 +10,7 @@ from rest_framework.exceptions import AuthenticationFailed
 
 from apps.core.activity.verbs import ACTION_GITLAB_WEBHOOK_TRIGGERED
 from apps.core.tasks import add_action
+
 from ...tasks import sync_project_issue, sync_project_merge_request
 
 logger = logging.getLogger(__name__)

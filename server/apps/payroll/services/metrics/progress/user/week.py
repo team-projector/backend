@@ -4,12 +4,13 @@ from datetime import date, timedelta
 from typing import Iterable, List
 
 from django.db.models import Count, F, FloatField, Sum
-from django.db.models.functions import Cast, Coalesce, TruncWeek, TruncDate
+from django.db.models.functions import Cast, Coalesce, TruncDate, TruncWeek
 from django.utils.timezone import make_aware
 
 from apps.core.utils.date import begin_of_week, date2datetime
-from apps.development.models.issue import Issue, ISSUE_STATES
+from apps.development.models.issue import ISSUE_STATES, Issue
 from apps.payroll.models import SpentTime
+
 from .base import ProgressMetricsProvider, UserProgressMetrics
 
 WEEK_STEP = timedelta(weeks=1)

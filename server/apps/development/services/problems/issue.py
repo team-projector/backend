@@ -1,13 +1,13 @@
 # -*- coding: utf-8 -*-
 
 from functools import reduce
-from operator import or_, and_
+from operator import and_, or_
 from typing import ClassVar, List
 
 from django.db.models import Case, NullBooleanField, Q, QuerySet, When
 from django.utils.timezone import localdate
 
-from apps.development.models.issue import Issue, ISSUE_STATES
+from apps.development.models.issue import ISSUE_STATES, Issue
 
 PROBLEM_EMPTY_DUE_DAY = 'empty_due_date'
 PROBLEM_OVER_DUE_DAY = 'over_due_date'

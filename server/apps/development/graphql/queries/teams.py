@@ -7,7 +7,8 @@ from apps.core.graphql.relay_nodes import DatasourceRelayNode
 from apps.development.graphql.filters import TeamsFilterSet
 from apps.development.graphql.resolvers import resolve_team_progress_metrics
 from apps.development.graphql.types import (
-    TeamType, TeamMemberProgressMetricsType,
+    TeamMemberProgressMetricsType,
+    TeamType,
 )
 
 

@@ -7,7 +7,7 @@ from django.db.models import F
 from django.utils.functional import cached_property
 
 from apps.core.utils.time import seconds
-from apps.development.models.issue import Issue, ISSUE_STATES
+from apps.development.models.issue import ISSUE_STATES, Issue
 from apps.users.models import User
 
 

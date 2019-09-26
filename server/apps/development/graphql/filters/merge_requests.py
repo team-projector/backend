@@ -4,7 +4,7 @@ import django_filters
 from django.db.models import QuerySet
 
 from apps.core.graphql.filters.ordering import OrderingFilter
-from apps.development.models import MergeRequest, Team, TeamMember, Project
+from apps.development.models import MergeRequest, Project, Team, TeamMember
 from apps.users.models import User
 
 

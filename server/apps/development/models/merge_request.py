@@ -12,6 +12,7 @@ from django.utils.translation import gettext_lazy as _
 from apps.core.models.mixins import GitlabEntityMixin, GitlabInternalIdMixin
 from apps.core.models.utils import Choices
 from apps.payroll.models.mixins import SpentTimesMixin
+
 from .managers import MergeRequestManager
 from .mixins import NotableMixin
 

@@ -5,7 +5,8 @@ from django.db.models.functions import Coalesce
 
 from apps.development.models import Milestone
 from apps.payroll.models import SpentTime
-from ..provider import IssuesContainerMetricsProvider, IssuesContainerMetrics
+
+from ..provider import IssuesContainerMetrics, IssuesContainerMetricsProvider
 
 
 class MilestoneMetrics(IssuesContainerMetrics):

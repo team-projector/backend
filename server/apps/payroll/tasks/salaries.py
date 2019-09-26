@@ -1,8 +1,12 @@
 # -*- coding: utf-8 -*-
 
 from celery_app import app
+
 from ..models.salary import Salary
-from ..services.salary.notifications import send_email_report, send_slack_report
+from ..services.salary.notifications import (
+    send_email_report,
+    send_slack_report,
+)
 
 
 @app.task

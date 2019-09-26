@@ -3,8 +3,7 @@
 from typing import List
 
 import django_filters
-from django.db.models import Exists
-from django.db.models import QuerySet, OuterRef
+from django.db.models import Exists, OuterRef, QuerySet
 
 from apps.core.graphql.filters import SearchFilter
 from apps.core.graphql.filters.ordering import OrderingFilter

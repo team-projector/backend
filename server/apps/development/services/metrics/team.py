@@ -5,7 +5,8 @@ from django.db.models import Sum
 from apps.development.models import Issue, MergeRequest, Team, TeamMember
 from apps.development.models.issue import ISSUE_STATES
 from apps.development.services.problems.issue import (
-    annotate_issues_problems, filter_issues_problems,
+    annotate_issues_problems,
+    filter_issues_problems,
 )
 
 

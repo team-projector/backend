@@ -4,7 +4,9 @@ import django_filters
 from django.db.models import QuerySet
 
 from apps.development.models import Team
-from apps.payroll.services.allowed.salary import check_allowed_filtering_by_team
+from apps.payroll.services.allowed.salary import (
+    check_allowed_filtering_by_team,
+)
 from apps.users.models import User
 
 

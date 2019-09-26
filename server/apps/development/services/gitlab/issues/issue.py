@@ -2,18 +2,17 @@
 
 import logging
 
-from gitlab.v4.objects import (
-    Project as GlProject,
-    ProjectIssue as GlProjectIssue,
-)
+from gitlab.v4.objects import Project as GlProject
+from gitlab.v4.objects import ProjectIssue as GlProjectIssue
 
 from apps.development.models import Issue, Milestone, Project
+
 from ..parsers import parse_gl_date, parse_gl_datetime, parse_state_merged
 from ..users import extract_user_from_data
 from .labels import load_issue_labels
+from .merge_requests import load_merge_requests
 from .notes import load_issue_notes
 from .participants import load_issue_participants
-from .merge_requests import load_merge_requests
 
 logger = logging.getLogger(__name__)
 

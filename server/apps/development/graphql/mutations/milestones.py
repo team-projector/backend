@@ -6,9 +6,7 @@ from rest_framework.generics import get_object_or_404
 from apps.core.graphql.mutations import BaseMutation
 from apps.development.graphql.types import MilestoneType
 from apps.development.models import Milestone, Project, ProjectGroup
-from apps.development.tasks import (
-    sync_project_milestone, sync_group_milestone,
-)
+from apps.development.tasks import sync_group_milestone, sync_project_milestone
 
 
 class SyncMilestoneMutation(BaseMutation):

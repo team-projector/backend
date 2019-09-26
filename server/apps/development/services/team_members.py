@@ -2,7 +2,7 @@
 
 from functools import reduce
 from operator import or_
-from typing import Union, Iterable
+from typing import Iterable, Union
 
 from bitfield import Bit
 from django.db.models import Q, QuerySet

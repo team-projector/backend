@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from celery_app import app
+
 from ..services.token import clear_tokens
 
 

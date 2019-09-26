@@ -1,14 +1,15 @@
 # -*- coding: utf-8 -*-
 
-from datetime import date, timedelta, datetime
+from datetime import date, datetime, timedelta
 from typing import Iterable, List
 
 from django.conf import settings
 from django.db.models import Case, Count, F, IntegerField, Q, Sum, Value, When
 from django.db.models.functions import Coalesce, TruncDay
 
-from apps.development.models.issue import Issue, ISSUE_STATES
+from apps.development.models.issue import ISSUE_STATES, Issue
 from apps.payroll.models import SpentTime
+
 from .base import ProgressMetricsProvider, UserProgressMetrics
 
 DAY_STEP = timedelta(days=1)

@@ -1,9 +1,7 @@
 # -*- coding: utf-8 -*-
 
-from gitlab.v4.objects import (
-    Project as GlProject,
-    ProjectIssue as GlProjectIssue,
-)
+from gitlab.v4.objects import Project as GlProject
+from gitlab.v4.objects import ProjectIssue as GlProjectIssue
 
 from apps.development.models import Issue, Label
 

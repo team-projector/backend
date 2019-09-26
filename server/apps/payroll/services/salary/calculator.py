@@ -11,6 +11,7 @@ from apps.development.models.issue import ISSUE_STATES
 from apps.development.models.merge_request import MERGE_REQUESTS_STATES
 from apps.payroll.models import Bonus, Penalty, Salary, SpentTime
 from apps.users.models import User
+
 from .exceptions import EmptySalaryException
 
 

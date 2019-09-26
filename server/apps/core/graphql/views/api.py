@@ -1,9 +1,11 @@
 # -*- coding: utf-8 -*-
 
 from graphene_django.views import GraphQLView
-from rest_framework.decorators import api_view
-from rest_framework.decorators import authentication_classes
-from rest_framework.decorators import permission_classes
+from rest_framework.decorators import (
+    api_view,
+    authentication_classes,
+    permission_classes,
+)
 from rest_framework.permissions import AllowAny
 from rest_framework.request import Request
 

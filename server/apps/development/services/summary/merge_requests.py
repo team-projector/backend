@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from django.db.models import QuerySet, Count
+from django.db.models import Count, QuerySet
 
 from apps.development.models.merge_request import MERGE_REQUESTS_STATES
 

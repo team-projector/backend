@@ -4,6 +4,7 @@ from gitlab.v4.objects import ProjectIssue as GlProjectIssue
 
 from apps.development.models import Issue
 from apps.users.models import User
+
 from ..users import load_user
 
 
