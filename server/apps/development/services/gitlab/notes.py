@@ -130,7 +130,8 @@ class SpendResetParser(BaseNoteParser):
 
 class MovedFromParser(BaseNoteParser):
     def parse(self, gl_note) -> Optional[NoteReadResult]:
-        if gl_note.system and RE_MOVED_FROM.match(gl_note.body):
+        is_system = getattr(gl_note, 'system', False)  # noqa WPS425
+        if is_system and RE_MOVED_FROM.match(gl_note.body):
             return NoteReadResult(NOTE_TYPES.moved_from, {})
 
 

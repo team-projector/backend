@@ -96,21 +96,6 @@ class TimeSpendNoteTypeTests(TestCase):
         self.assertEqual(note.type, NOTE_TYPES.reset_spend)
         self.assertEqual(note.data, {})
 
-    def test_load_unsupported(self):
-        Note.objects.sync_gitlab(dict2obj({
-            'id': 2,
-            'body': 'bla',
-            'created_at': datetime.strftime(datetime.now(),
-                                            GITLAB_DATETIME_FORMAT),
-            'updated_at': datetime.strftime(datetime.now(),
-                                            GITLAB_DATETIME_FORMAT),
-            'author': {
-                'id': self.user.gl_id
-            }
-        }), self.issue)
-
-        self.assertFalse(Note.objects.exists())
-
     def test_load_spend_already_exists(self):
         Note.objects.create(
             gl_id=2,
@@ -212,4 +197,3 @@ class TimeSpendNoteTypeTests(TestCase):
         }), self.issue)
 
         self.assertEqual(Note.objects.count(), 1)
-
