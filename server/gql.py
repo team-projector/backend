@@ -28,30 +28,34 @@ from apps.users.graphql.mutations import AuthMutations
 from apps.users.graphql.queries import UsersQueries
 
 
-class Query(IssuesQueries,
-            TicketsQueries,
-            MergeRequestQueries,
-            MilestonesQueries,
-            ProjectsQueries,
-            TeamsQueries,
-            GitlabQueries,
-            TimeExpensesQueries,
-            SalariesQueries,
-            WorkBreaksQueries,
-            UsersQueries,
-            graphene.ObjectType):
+class Query(
+    IssuesQueries,
+    TicketsQueries,
+    MergeRequestQueries,
+    MilestonesQueries,
+    ProjectsQueries,
+    TeamsQueries,
+    GitlabQueries,
+    TimeExpensesQueries,
+    SalariesQueries,
+    WorkBreaksQueries,
+    UsersQueries,
+    graphene.ObjectType,
+):
     debug = graphene.Field(
         DjangoDebug,
         name='_debug',
     )
 
 
-class Mutation(IssuesMutations,
-               MilestonesMutations,
-               TicketsMutations,
-               WorkBreaksMutations,
-               AuthMutations,
-               graphene.ObjectType):
+class Mutation(
+    IssuesMutations,
+    MilestonesMutations,
+    TicketsMutations,
+    WorkBreaksMutations,
+    AuthMutations,
+    graphene.ObjectType,
+):
     pass
 
 

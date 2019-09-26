@@ -110,7 +110,8 @@ class WeekMetricsProvider(ProgressMetricsProvider):
             avg_efficiency=Coalesce(
                 Cast(Sum(F('time_estimate')), FloatField()) /  # noqa:W504
                 Cast(Sum(F('total_time_spent')), FloatField()),
-                0),
+                0,
+            ),
         ).order_by()
 
         return {
