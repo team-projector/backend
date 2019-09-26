@@ -78,7 +78,7 @@ class Project(GitlabEntityMixin):
 
     def save(self, *args, **kwargs) -> None:
         if not self.full_title:
-            self.full_title = self.title
+            self.full_title = self.title  # noqa WPS601
 
         super().save(*args, **kwargs)
 
