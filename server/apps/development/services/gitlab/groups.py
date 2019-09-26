@@ -13,19 +13,6 @@ logger = logging.getLogger(__name__)
 
 
 def load_groups() -> None:
-    def load_group(gl_group: GlGroup) -> ProjectGroup:
-        parent = None
-        if gl_group.parent_id:
-            parent = ProjectGroup.objects.filter(
-                gl_id=gl_group.parent_id,
-            ).first()
-            if not parent and gl_group.parent_id in gl_groups_map:
-                parent = load_group(gl_groups_map[gl_group.parent_id])
-
-        gl_groups.remove(gl_group)
-
-        return load_single_group(gl_group, parent)
-
     gl = get_gitlab_client()
     gl_groups = gl.groups.list(all=True)
     gl_groups_map = {
@@ -34,7 +21,26 @@ def load_groups() -> None:
     }
 
     while gl_groups:
-        load_group(gl_groups[0])
+        _load_group(gl_groups[0], gl_groups, gl_groups_map)
+
+
+def _load_group(gl_group: GlGroup,
+                gl_groups: GlGroup,
+                gl_groups_map: dict) -> ProjectGroup:
+    parent = None
+
+    if gl_group.parent_id:
+        parent = ProjectGroup.objects.filter(
+            gl_id=gl_group.parent_id,
+        ).first()
+        if not parent and gl_group.parent_id in gl_groups_map:
+            parent = _load_group(
+                gl_groups_map[gl_group.parent_id], gl_groups, gl_groups_map,
+            )
+
+    gl_groups.remove(gl_group)
+
+    return load_single_group(gl_group, parent)
 
 
 def load_single_group(gl_group: GlGroup,

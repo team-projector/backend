@@ -47,3 +47,20 @@ def test_load_groups(db, gl_mocker):
 
     group_2 = ProjectGroup.objects.get(gl_id=gl_group_2.id)
     check_group(group_2, gl_group_2, group_1)
+
+
+@override_settings(GITLAB_TOKEN='GITLAB_TOKEN')
+def test_load_groups_parent_first(db, gl_mocker):
+    gl_group_1 = AttrDict(GlGroupFactory())
+    gl_group_2 = AttrDict(GlGroupFactory(parent_id=gl_group_1.id))
+
+    gl_mocker.registry_get('/user', GlUserFactory())
+    gl_mocker.registry_get('/groups', [gl_group_2, gl_group_1])
+
+    load_groups()
+
+    group_1 = ProjectGroup.objects.get(gl_id=gl_group_1.id)
+    check_group(group_1, gl_group_1)
+
+    group_2 = ProjectGroup.objects.get(gl_id=gl_group_2.id)
+    check_group(group_2, gl_group_2, group_1)
