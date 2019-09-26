@@ -9,6 +9,7 @@ from apps.core.graphql.types import BaseDjangoObjectType
 from apps.payroll.services.metrics.user import UserMetricsProvider
 from apps.users.models import User
 from apps.users.services.problems.user import get_user_problems
+
 from .user_metrics import UserMetricsType
 
 

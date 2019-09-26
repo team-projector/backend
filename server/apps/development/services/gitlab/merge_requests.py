@@ -4,18 +4,18 @@ import logging
 
 from django.utils import timezone
 from gitlab import GitlabGetError
-from gitlab.v4.objects import (
-    Project as GlProject, MergeRequest as GlMergeRequest,
-)
+from gitlab.v4.objects import MergeRequest as GlMergeRequest
+from gitlab.v4.objects import Project as GlProject
 from rest_framework import status
 
 from apps.core.activity.verbs import ACTION_GITLAB_CALL_API
 from apps.core.gitlab import get_gitlab_client
 from apps.core.tasks import add_action
 from apps.users.models import User
+
+from ...models import Label, MergeRequest, Milestone, Note, Project
 from .parsers import parse_gl_datetime
 from .users import extract_user_from_data, load_user
-from ...models import Label, MergeRequest, Milestone, Note, Project
 
 logger = logging.getLogger(__name__)
 

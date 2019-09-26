@@ -4,6 +4,7 @@ from datetime import date
 from typing import Iterable
 
 from apps.development.models import Team
+
 from .base import ProgressMetricsProvider, TeamMemberProgressMetrics
 from .day import DayMetricsProvider
 from .week import WeekMetricsProvider

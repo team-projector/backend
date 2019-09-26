@@ -4,6 +4,7 @@ from django.contrib import admin
 from django.utils.safestring import mark_safe
 
 from apps.core.admin.base import BaseModelAdmin
+
 from ..models import Label
 
 

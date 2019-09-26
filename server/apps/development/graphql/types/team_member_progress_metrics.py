@@ -2,7 +2,7 @@
 
 import graphene
 
-from apps.users.graphql.types import UserType, UserProgressMetricsType
+from apps.users.graphql.types import UserProgressMetricsType, UserType
 
 
 class TeamMemberProgressMetricsType(graphene.ObjectType):

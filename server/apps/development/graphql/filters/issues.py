@@ -6,11 +6,13 @@ from django.db.models import QuerySet
 
 from apps.core.graphql.filters import SearchFilter
 from apps.core.graphql.filters.ordering import OrderingFilter
-from ...models import Issue, Ticket, Milestone, Team, TeamMember, Project
+
+from ...models import Issue, Milestone, Project, Team, TeamMember, Ticket
 from ...services.allowed.issues import check_allow_project_manager
 from ...services.problems.issue import (
-    filter_issues_problems, exclude_issues_problems,
     annotate_issues_problems,
+    exclude_issues_problems,
+    filter_issues_problems,
 )
 
 User = get_user_model()

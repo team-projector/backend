@@ -3,28 +3,25 @@
 import graphene
 from graphene_django.debug import DjangoDebug
 
-from apps.core.graphql.views import (
-    PlaygroundGraphQLView,
-    ApiGraphQLView,
-)
+from apps.core.graphql.views import ApiGraphQLView, PlaygroundGraphQLView
 from apps.development.graphql.mutations import (
     IssuesMutations,
     MilestonesMutations,
     TicketsMutations,
 )
 from apps.development.graphql.queries import (
+    GitlabQueries,
     IssuesQueries,
     MergeRequestQueries,
     MilestonesQueries,
     ProjectsQueries,
     TeamsQueries,
     TicketsQueries,
-    GitlabQueries,
 )
 from apps.payroll.graphql.mutations import WorkBreaksMutations
 from apps.payroll.graphql.queries import (
-    TimeExpensesQueries,
     SalariesQueries,
+    TimeExpensesQueries,
     WorkBreaksQueries,
 )
 from apps.users.graphql.mutations import AuthMutations

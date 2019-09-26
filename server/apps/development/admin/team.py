@@ -3,8 +3,9 @@
 from django.contrib import admin
 
 from apps.core.admin.base import BaseModelAdmin
-from .inlines import TeamMemberInline
+
 from ..models import Team
+from .inlines import TeamMemberInline
 
 
 @admin.register(Team)

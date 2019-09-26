@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 
-from django.db.models import Sum, Q
+from django.db.models import Q, Sum
 from django.db.models.functions import Coalesce
 
 from apps.development.models import MergeRequest
-from apps.development.models.issue import Issue, ISSUE_STATES
+from apps.development.models.issue import ISSUE_STATES, Issue
 from apps.development.models.merge_request import MERGE_REQUESTS_STATES
 from apps.payroll.models import Bonus, Penalty, SpentTime
 from apps.users.models import User

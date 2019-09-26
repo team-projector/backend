@@ -2,8 +2,8 @@
 
 import graphene
 
-from .team import TeamType
 from .project_issues_summary import ProjectIssuesSummary
+from .team import TeamType
 
 
 class IssuesTeamSummary(graphene.ObjectType):

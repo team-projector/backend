@@ -8,9 +8,12 @@ from apps.core.graphql.relay_nodes import DatasourceRelayNode
 from apps.core.graphql.types import BaseDjangoObjectType
 from apps.development.graphql.types.interfaces import MilestoneOwner
 from apps.development.models import Milestone
-from apps.development.services.allowed.milestones import filter_allowed_for_user
+from apps.development.services.allowed.milestones import (
+    filter_allowed_for_user,
+)
 from apps.development.services.metrics.milestones import get_milestone_metrics
 from apps.development.services.problems.milestone import get_milestone_problems
+
 from .milestone_metrics import MilestoneMetricsType
 
 

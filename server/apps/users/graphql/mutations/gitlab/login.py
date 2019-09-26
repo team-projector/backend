@@ -6,6 +6,7 @@ from social_core.actions import do_auth
 
 from apps.core.graphql.mutations import BaseMutation
 from apps.core.graphql.security.permissions import AllowAny
+
 from .utils import psa
 
 

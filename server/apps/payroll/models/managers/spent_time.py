@@ -4,7 +4,7 @@ from typing import Any
 
 from django.contrib.contenttypes.models import ContentType
 from django.db import models
-from django.db.models import Case, F, FloatField, QuerySet, Sum, When, Q
+from django.db.models import Case, F, FloatField, Q, QuerySet, Sum, When
 from django.db.models.functions import Coalesce
 from django.db.models.manager import BaseManager
 

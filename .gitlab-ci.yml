@@ -22,6 +22,7 @@ quality:
     GIT_DEPTH: 5
     GIT_STRATEGY: fetch
   script:
+    - cat setup.cfg
     - make check_quality
     - check-locale
 

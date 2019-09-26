@@ -5,8 +5,9 @@ from django.contrib import admin
 from apps.core.admin.base import BaseModelAdmin
 from apps.core.admin.mixins import ForceSyncEntityMixin
 from apps.development.tasks import sync_project
-from .inlines import ProjectMemberInline
+
 from ..models import Project
+from .inlines import ProjectMemberInline
 
 
 @admin.register(Project)

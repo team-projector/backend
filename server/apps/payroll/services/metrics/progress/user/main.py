@@ -4,6 +4,7 @@ from datetime import date
 from typing import Iterable
 
 from apps.users.models import User
+
 from .base import ProgressMetricsProvider, UserProgressMetrics
 from .day import DayMetricsProvider
 from .week import WeekMetricsProvider

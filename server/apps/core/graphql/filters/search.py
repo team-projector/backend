@@ -3,11 +3,10 @@
 import operator
 from functools import reduce
 
-from django_filters import CharFilter
-
-from django.db.models.constants import LOOKUP_SEP
 from django.db.models import Q, QuerySet
+from django.db.models.constants import LOOKUP_SEP
 from django.utils import six
+from django_filters import CharFilter
 
 
 class SearchFilter(CharFilter):

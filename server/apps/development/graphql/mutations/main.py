@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
 
 from .issues import (
-    AddSpendIssueMutation, SyncIssueMutation, UpdateIssueMutation,
+    AddSpendIssueMutation,
+    SyncIssueMutation,
+    UpdateIssueMutation,
 )
 from .milestones import SyncMilestoneMutation
 from .ticket import CreateTicketMutation, UpdateTicketMutation

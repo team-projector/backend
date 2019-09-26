@@ -8,6 +8,7 @@ from django.utils.translation import gettext_lazy as _
 from apps.core.models.mixins import GitlabEntityMixin
 from apps.development.models.milestone import MILESTONE_STATES
 from apps.development.services.projects import get_group_active_milestones
+
 from .managers import ProjectManager
 
 

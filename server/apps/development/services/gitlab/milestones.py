@@ -3,8 +3,9 @@
 from apps.core.activity.verbs import ACTION_GITLAB_CALL_API
 from apps.core.gitlab import get_gitlab_client
 from apps.core.tasks import add_action
-from .parsers import parse_gl_date, parse_gl_datetime
+
 from ...models import Milestone, Project, ProjectGroup
+from .parsers import parse_gl_date, parse_gl_datetime
 
 
 def load_group_milestones(project_group_id: int,

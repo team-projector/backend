@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 
-from graphql import ResolveInfo
 from typing import Any
+
+from graphql import ResolveInfo
 
 from apps.core.graphql.security.permissions import AllowAny
 

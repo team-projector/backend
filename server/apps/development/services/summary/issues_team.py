@@ -3,7 +3,15 @@
 from typing import List, Optional
 
 from django.db.models import (
-    QuerySet, Sum, Count, Case, When, Q, IntegerField, Value, F,
+    Case,
+    Count,
+    F,
+    IntegerField,
+    Q,
+    QuerySet,
+    Sum,
+    Value,
+    When,
 )
 from django.db.models.functions import Coalesce
 

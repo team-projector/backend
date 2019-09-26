@@ -1,10 +1,9 @@
 # -*- coding: utf-8 -*-
 
 from django.conf import settings
-from model_utils import FieldTracker
-
 from django.db import models
 from django.utils.translation import gettext_lazy as _
+from model_utils import FieldTracker
 
 from apps.core.models.fields import MoneyField
 from apps.core.models.mixins import Timestamps

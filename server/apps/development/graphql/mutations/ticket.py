@@ -3,7 +3,7 @@
 import graphene
 from rest_framework.generics import get_object_or_404
 
-from apps.core.graphql.mutations import BaseMutation, ArgumentsValidationMixin
+from apps.core.graphql.mutations import ArgumentsValidationMixin, BaseMutation
 from apps.core.graphql.security.permissions import AllowProjectManager
 from apps.development.graphql.forms import TicketForm
 from apps.development.graphql.types import TicketType

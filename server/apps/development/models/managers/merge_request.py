@@ -7,6 +7,7 @@ from django.db.models import QuerySet
 from django.utils import timezone
 
 from apps.users.models import User
+
 from ...services.allowed.merge_requests import filter_allowed_for_user
 
 

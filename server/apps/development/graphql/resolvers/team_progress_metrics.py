@@ -6,7 +6,8 @@ from apps.development.services.allowed.team_progress_metrics import (
     check_allow_get_metrics_by_user,
 )
 from apps.payroll.services.metrics.progress.team import (
-    get_team_progress_metrics, Team,
+    Team,
+    get_team_progress_metrics,
 )
 
 
