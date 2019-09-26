@@ -21,14 +21,15 @@ from apps.development.models.issue import ISSUE_STATES
 
 
 def get_min_due_date(project):
-    def get_date(milestone):
-        return getattr(milestone, 'due_date', None) or datetime.max.date()
-
-    sorted_milestones = sorted(project.active_milestones, key=get_date)
+    sorted_milestones = sorted(project.active_milestones, key=_get_key)
     if sorted_milestones:
         return sorted_milestones[0].due_date or datetime.max.date()
 
     return datetime.max.date()
+
+
+def _get_key(milestone):
+    return getattr(milestone, 'due_date', None) or datetime.max.date()
 
 
 class ProjectIssuesSummary:

@@ -132,10 +132,11 @@ def load_merge_request_notes(merge_request: MergeRequest,
 
 def load_merge_request_participants(merge_request: MergeRequest,
                                     gl_merge_request: GlMergeRequest) -> None:
-    def get_user(gl_id: int) -> User:
-        return User.objects.filter(gl_id=gl_id).first() or load_user(gl_id)
-
     merge_request.participants.set((
-        get_user(x['id'])
+        _get_user(x['id'])
         for x in gl_merge_request.participants()
     ))
+
+
+def _get_user(gl_id: int) -> User:
+    return User.objects.filter(gl_id=gl_id).first() or load_user(gl_id)
