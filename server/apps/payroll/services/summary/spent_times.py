@@ -12,9 +12,9 @@ class IssuesSpentTimesSummary:
                  spent=0,
                  closed_spent=0,
                  opened_spent=0) -> None:
-        self.spent = spent
-        self.closed_spent = closed_spent
-        self.opened_spent = opened_spent
+        self.spent = spent  # noqa WPS601
+        self.closed_spent = closed_spent  # noqa WPS601
+        self.opened_spent = opened_spent  # noqa WPS601
 
 
 class MergeRequestsSpentTimesSummary:
@@ -28,10 +28,10 @@ class MergeRequestsSpentTimesSummary:
                  closed_spent=0,
                  opened_spent=0,
                  merged_spent=0) -> None:
-        self.spent = spent
-        self.closed_spent = closed_spent
-        self.opened_spent = opened_spent
-        self.merged_spent = merged_spent
+        self.spent = spent  # noqa WPS601
+        self.closed_spent = closed_spent  # noqa WPS601
+        self.opened_spent = opened_spent  # noqa WPS601
+        self.merged_spent = merged_spent  # noqa WPS601
 
 
 class SpentTimesSummary:

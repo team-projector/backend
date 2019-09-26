@@ -65,8 +65,8 @@ class SpentTime(Payroll):
 
     def save(self, *args, **kwargs):
         self.created_by = self.user
-        self.rate = self.user.hour_rate
-        self.customer_rate = self.user.customer_hour_rate
+        self.rate = self.user.hour_rate  # noqa WPS601
+        self.customer_rate = self.user.customer_hour_rate  # noqa WPS601
 
         self._adjust_sums()
 
@@ -74,7 +74,7 @@ class SpentTime(Payroll):
 
     def _adjust_sums(self):
         self.sum = self.time_spent / SECS_IN_HOUR * self.rate
-        self.customer_sum = self.time_spent / SECS_IN_HOUR * self.customer_rate
+        self.customer_sum = self.time_spent / SECS_IN_HOUR * self.customer_rate  # noqa WPS601
 
     class Meta:
         verbose_name = _('VN__SPENT_TIME')
