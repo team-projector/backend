@@ -53,9 +53,11 @@ class GlStatusProvider:
     @classmethod
     def _get_last_sync(cls) -> datetime:
         querysets = [
-            x.objects.filter(gl_last_sync__isnull=False).values('gl_last_sync')
-            for x in apps.get_models()
-            if issubclass(x, GitlabEntityMixin)
+            model.objects.filter(
+                gl_last_sync__isnull=False,
+            ).values('gl_last_sync')
+            for model in apps.get_models()
+            if issubclass(model, GitlabEntityMixin)
         ]
 
         value = querysets[0].union(

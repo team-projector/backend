@@ -69,24 +69,24 @@ GITLAB_SPEND_HANDLERS = types.MappingProxyType({
 NoteReadResult = namedtuple('NoteReadResult', ['type', 'data'])
 
 
-def parse_spend(s: str) -> int:
+def parse_spend(spent: str) -> int:
     # specs https://docs.gitlab.com/ee/workflow/time_tracking.html
-    s = s or ''
-    s = s.strip()
+    spent = spent or ''
+    spent = spent.strip()
 
-    if not s:
+    if not spent:
         return 0
 
     bag: DefaultDict[str, int] = defaultdict(int)
 
-    for part in s.split(' '):
-        m = RE_SPEND_PART.match(part)
-        if not m:
+    for part in spent.split(' '):
+        match = RE_SPEND_PART.match(part)
+        if not match:
             continue
 
-        GITLAB_SPEND_HANDLERS[m.group('part')](
+        GITLAB_SPEND_HANDLERS[match.group('part')](
             bag,
-            int(m.group('value')),
+            int(match.group('value')),
         )
 
     return int(seconds(**bag))

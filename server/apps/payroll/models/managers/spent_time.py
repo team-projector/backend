@@ -33,18 +33,20 @@ class SpentTimeQuerySet(models.QuerySet):
         from apps.development.models.merge_request import MERGE_REQUESTS_STATES
 
         return self.aggregate(
-            total_issues=self._h(issues__isnull=False),
-            opened_issues=self._h(issues__state=issue.ISSUE_STATES.opened),
-            closed_issues=self._h(issues__state=issue.ISSUE_STATES.closed),
+            total_issues=self._sum(issues__isnull=False),
+            opened_issues=self._sum(issues__state=issue.ISSUE_STATES.opened),
+            closed_issues=self._sum(issues__state=issue.ISSUE_STATES.closed),
 
-            total_merges=self._h(mergerequests__isnull=False),
-            opened_merges=self._h(
+            total_merges=self._sum(
+                mergerequests__isnull=False,
+            ),
+            opened_merges=self._sum(
                 mergerequests__state=MERGE_REQUESTS_STATES.opened,
             ),
-            closed_merges=self._h(
+            closed_merges=self._sum(
                 mergerequests__state=MERGE_REQUESTS_STATES.closed,
             ),
-            merged_merges=self._h(
+            merged_merges=self._sum(
                 mergerequests__state=MERGE_REQUESTS_STATES.merged,
             ),
         )
@@ -79,7 +81,7 @@ class SpentTimeQuerySet(models.QuerySet):
         return queryset
 
     @staticmethod
-    def _h(**filters) -> Coalesce:
+    def _sum(**filters) -> Coalesce:
         return Coalesce(Sum('time_spent', filter=Q(**filters)), 0)
 
 

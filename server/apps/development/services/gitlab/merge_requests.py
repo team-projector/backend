@@ -24,8 +24,8 @@ def load_merge_requests(full_reload: bool = False) -> None:
     for project in Project.objects.all():
         try:
             load_project_merge_requests(project, full_reload)
-        except GitlabGetError as e:
-            if e.response_code != status.HTTP_404_NOT_FOUND:
+        except GitlabGetError as error:
+            if error.response_code != status.HTTP_404_NOT_FOUND:
                 raise
 
 
@@ -106,9 +106,9 @@ def load_merge_request_labels(merge_request: MergeRequest,
         label = Label.objects.filter(title=label_title).first()
         if not label:
             gl_label = next((
-                x
-                for x in project_labels
-                if x.name == label_title
+                item
+                for item in project_labels
+                if item.name == label_title
             ), None)
             if gl_label:
                 label = Label.objects.create(
@@ -133,8 +133,8 @@ def load_merge_request_notes(merge_request: MergeRequest,
 def load_merge_request_participants(merge_request: MergeRequest,
                                     gl_merge_request: GlMergeRequest) -> None:
     merge_request.participants.set((
-        _get_user(x['id'])
-        for x in gl_merge_request.participants()
+        _get_user(user['id'])
+        for user in gl_merge_request.participants()
     ))
 
 
