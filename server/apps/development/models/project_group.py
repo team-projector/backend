@@ -4,6 +4,7 @@ from django.contrib.contenttypes.fields import GenericRelation
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
+from apps.core import consts
 from apps.core.models.mixins import GitlabEntityMixin
 
 from .managers import ProjectGroupManager
@@ -11,13 +12,13 @@ from .managers import ProjectGroupManager
 
 class ProjectGroup(GitlabEntityMixin):
     title = models.CharField(
-        max_length=255,
+        max_length=consts.FIELD_LEN255,
         verbose_name=_('VN__TITLE'),
         help_text=_('HT__TITLE'),
     )
 
     full_title = models.CharField(
-        max_length=255,
+        max_length=consts.FIELD_LEN255,
         null=True,
         blank=True,
         verbose_name=_('VN__FULL_TITLE'),

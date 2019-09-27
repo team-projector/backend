@@ -3,6 +3,7 @@
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
+from apps.core import consts
 from apps.core.models.utils import Choices
 from apps.users.models import User
 
@@ -17,7 +18,7 @@ class ApprovedMixin(models.Model):
     approve_state = models.CharField(
         choices=APPROVED_STATES,
         default='created',
-        max_length=15,
+        max_length=consts.FIELD_LEN15,
         verbose_name=_('VN__APPROVE_STATE'),
         help_text=_('HT__APPROVE_STATE'),
     )

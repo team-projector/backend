@@ -3,6 +3,7 @@
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
+from apps.core import consts
 from apps.core.models.mixins import Timestamps
 from apps.core.models.utils import Choices
 
@@ -20,7 +21,7 @@ TICKET_TYPES = Choices(
 class Ticket(Timestamps):
     type = models.CharField(
         choices=TICKET_TYPES,
-        max_length=50,
+        max_length=consts.FIELD_LEN50,
         blank=True,
         null=True,
         verbose_name=_('VN__TYPE'),
@@ -28,7 +29,7 @@ class Ticket(Timestamps):
     )
 
     title = models.CharField(
-        max_length=255,
+        max_length=consts.FIELD_LEN255,
         verbose_name=_('VN__TITLE'),
         help_text=_('HT__TITLE'),
     )

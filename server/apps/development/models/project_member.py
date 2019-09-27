@@ -6,6 +6,7 @@ from django.contrib.contenttypes.models import ContentType
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
+from apps.core import consts
 from apps.core.models.mixins import Timestamps
 from apps.core.models.utils import Choices
 
@@ -24,7 +25,7 @@ class ProjectMember(Timestamps):
 
     role = models.CharField(
         choices=PROJECT_MEMBER_ROLES,
-        max_length=20,
+        max_length=consts.FIELD_LEN20,
         verbose_name=_('VN__ROLE'),
         help_text=_('HT__ROLE'),
     )

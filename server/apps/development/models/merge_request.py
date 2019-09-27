@@ -9,6 +9,7 @@ from django.db.models import Max
 from django.utils.functional import cached_property
 from django.utils.translation import gettext_lazy as _
 
+from apps.core import consts
 from apps.core.models.mixins import GitlabEntityMixin, GitlabInternalIdMixin
 from apps.core.models.utils import Choices
 from apps.payroll.models.mixins import SpentTimesMixin
@@ -28,7 +29,7 @@ class MergeRequest(NotableMixin,
                    GitlabEntityMixin,
                    GitlabInternalIdMixin):
     title = models.CharField(
-        max_length=255,
+        max_length=consts.FIELD_LEN255,
         verbose_name=_('VN__TITLE'),
         help_text=_('HT__TITLE'),
     )
@@ -47,7 +48,7 @@ class MergeRequest(NotableMixin,
 
     state = models.CharField(
         choices=MERGE_REQUESTS_STATES,
-        max_length=255,
+        max_length=consts.FIELD_LEN255,
         null=True,
         blank=True,
         verbose_name=_('VN__STATE'),

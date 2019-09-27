@@ -5,6 +5,7 @@ from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
+from apps.core import consts
 from apps.core.models.utils import Choices
 from apps.users.models.managers import UserManager
 
@@ -21,7 +22,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     USERNAME_FIELD = 'login'  # noqa WPS115
 
     login = models.CharField(
-        max_length=150,
+        max_length=consts.FIELD_LEN150,
         null=True,
         blank=True,
         unique=True,
@@ -30,7 +31,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     )
 
     name = models.CharField(
-        max_length=150,
+        max_length=consts.FIELD_LEN150,
         null=True,
         blank=True,
         unique=True,
@@ -39,7 +40,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     )
 
     email = models.EmailField(
-        max_length=150,
+        max_length=consts.FIELD_LEN150,
         null=True,
         blank=True,
         unique=True,
@@ -112,7 +113,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     )
 
     gl_token = models.CharField(
-        max_length=128,
+        max_length=consts.FIELD_LEN128,
         null=True,
         blank=True,
         verbose_name=_('VN__PERSONAL_GITLAB_TOKEN'),
