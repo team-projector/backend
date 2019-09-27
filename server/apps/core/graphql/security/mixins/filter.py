@@ -30,9 +30,9 @@ class AuthFilter(DjangoFilterConnectionField):
             raise PermissionDenied()
 
         filter_kwargs = {
-            k: v
-            for k, v in args.items()
-            if k in filtering_args
+            key: value
+            for key, value in args.items()
+            if key in filtering_args
         }
 
         qs = filterset_class(

@@ -26,11 +26,11 @@ class ProjectType(BaseDjangoObjectType):
 
             if kwargs.get('order_by') == 'due_date':
                 default = datetime.max.date()
-                ret = sorted(ret, key=lambda m: m.due_date or default)
+                ret = sorted(ret, key=lambda item: item.due_date or default)
 
             elif kwargs.get('order_by') == '-due_date':
                 default = datetime.min.date()
-                ret = sorted(ret, key=lambda m: m.due_date or default,
+                ret = sorted(ret, key=lambda item: item.due_date or default,
                              reverse=True)
 
             return ret

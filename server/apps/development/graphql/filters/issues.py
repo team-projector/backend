@@ -83,7 +83,7 @@ class IssuesFilterSet(django_filters.FilterSet):
         fields=('due_date', 'title', 'created_at', 'closed_at'),
     )
 
-    q = SearchFilter(fields=('title',))
+    q = SearchFilter(fields=('title',))  # noqa WPS111
 
     class Meta:
         model = Issue

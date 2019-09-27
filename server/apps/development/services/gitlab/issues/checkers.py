@@ -22,8 +22,8 @@ def check_projects_deleted_issues() -> None:
 
         try:
             gl_project = gl.projects.get(id=project.gl_id)
-        except GitlabGetError as e:
-            if e.response_code != status.HTTP_404_NOT_FOUND:
+        except GitlabGetError as error:
+            if error.response_code != status.HTTP_404_NOT_FOUND:
                 raise
         else:
             check_project_deleted_issues(project, gl_project)

@@ -52,8 +52,12 @@ class PayrollAdmin(BaseModelAdmin):
     @staticmethod
     def _get_accessor_names(model):
         related_objects = [
-            f for f in model._meta.get_fields()
-            if isinstance(f, OneToOneRel) and issubclass(f.field.model, model)
+            item for item in model._meta.get_fields()
+            if isinstance(
+                item, OneToOneRel,
+            ) and issubclass(
+                item.field.model, model,
+            )
         ]
 
         return [

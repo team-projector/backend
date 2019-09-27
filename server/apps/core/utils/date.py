@@ -3,17 +3,17 @@
 from datetime import date, datetime, timedelta
 
 
-def date2datetime(d: date) -> datetime:
-    return datetime.combine(d, datetime.min.time())
+def date2datetime(value: date) -> datetime:
+    return datetime.combine(value, datetime.min.time())
 
 
-def next_weekday(d: date, weekday: int) -> date:
-    days_ahead = weekday - d.weekday()
+def next_weekday(value: date, weekday: int) -> date:
+    days_ahead = weekday - value.weekday()
     if days_ahead <= 0:  # Target day already happened this week
         days_ahead += 7
 
-    return d + timedelta(days_ahead)
+    return value + timedelta(days_ahead)
 
 
-def begin_of_week(d: date) -> date:
-    return d - timedelta(days=d.weekday() % 7)
+def begin_of_week(value: date) -> date:
+    return value - timedelta(days=value.weekday() % 7)

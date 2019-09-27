@@ -80,9 +80,9 @@ class UserAdmin(AdminFormFieldsOverridesMixin,
     @classmethod
     def _apply_default_filter_if_need(cls, request, referer):
         if cls._is_apply_default_filter(referer):
-            q = request.GET.copy()
-            q['is_active__exact'] = '1'
-            request.GET = q
+            query = request.GET.copy()
+            query['is_active__exact'] = '1'
+            request.GET = query
             request.META['QUERY_STRING'] = request.GET.urlencode()
 
     @classmethod

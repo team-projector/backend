@@ -66,13 +66,17 @@ class IssuesProjectSummaryProvider:
 
         ret = []
 
-        for p in projects_qs:
+        for project in projects_qs:
             summary = IssuesProjectSummary()
-            summary.project = p
+            summary.project = project
 
             issues_summary = ProjectIssuesSummary()
-            issues_summary.opened_count = summaries[p.id]['issues_opened_count']
-            issues_summary.remains = summaries[p.id]['total_time_remains']
+            issues_summary.opened_count = summaries[project.id][
+                'issues_opened_count'
+            ]
+            issues_summary.remains = summaries[project.id][
+                'total_time_remains'
+            ]
             issues_summary.percentage = (
                 issues_summary.opened_count / total_issues_count
             )

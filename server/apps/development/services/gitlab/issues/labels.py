@@ -22,9 +22,9 @@ def load_issue_labels(issue: Issue,
         ).first()
         if not label:
             gl_label = next((
-                x
-                for x in project_labels
-                if x.name == label_title
+                item
+                for item in project_labels
+                if item.name == label_title
             ), None)
             if gl_label:
                 label = Label.objects.create(

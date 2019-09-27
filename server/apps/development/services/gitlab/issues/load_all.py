@@ -21,8 +21,8 @@ def load_issues(full_reload: bool = False) -> None:
     for project in Project.objects.all():
         try:
             load_project_issues(project, full_reload)
-        except GitlabGetError as e:
-            if e.response_code != status.HTTP_404_NOT_FOUND:
+        except GitlabGetError as error:
+            if error.response_code != status.HTTP_404_NOT_FOUND:
                 raise
 
 

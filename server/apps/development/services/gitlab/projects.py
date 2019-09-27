@@ -29,8 +29,8 @@ def load_group_projects(group: ProjectGroup) -> None:
 
     try:
         gl_group = gl.groups.get(id=group.gl_id)
-    except GitlabGetError as e:
-        if e.response_code != status.HTTP_404_NOT_FOUND:
+    except GitlabGetError as error:
+        if error.response_code != status.HTTP_404_NOT_FOUND:
             raise
     else:
         for gl_project in gl_group.projects.list(all=True):
@@ -53,8 +53,8 @@ def load_project(gl: Gitlab,
             full_title=gl_project.name_with_namespace,
             title=gl_project.name,
         )
-    except Exception as e:
-        logger.exception(str(e))
+    except Exception as error:
+        logger.exception(str(error))
     else:
         check_project_webhooks_if_need(gl, gl_project)
 
@@ -68,8 +68,8 @@ def check_project_webhooks_if_need(gl: Gitlab,
 
     try:
         check_project_webhooks(gl.projects.get(gl_project.id))
-    except GitlabError as e:
-        logger.exception(str(e))
+    except GitlabError as error:
+        logger.exception(str(error))
 
 
 def check_project_webhooks(gl_project: GlProject) -> None:
