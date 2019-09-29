@@ -7,7 +7,6 @@ from django.core.serializers.json import DjangoJSONEncoder
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
-from apps.core import consts
 from apps.core.models.utils import Choices
 from apps.users.models import User
 
@@ -18,6 +17,8 @@ NOTE_TYPES = Choices(
     ('reset_spend', 'Reset spend'),
     ('moved_from', 'Moved from'),
 )
+
+NOTE_TYPE_MAX_LENGTH = 20
 
 
 class Note(models.Model):
@@ -60,7 +61,7 @@ class Note(models.Model):
 
     type = models.CharField(
         choices=NOTE_TYPES,
-        max_length=consts.FIELD_LEN20,
+        max_length=NOTE_TYPE_MAX_LENGTH,
         verbose_name=_('VN__TYPE'),
         help_text=_('HT__TYPE'),
     )

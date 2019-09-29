@@ -20,7 +20,7 @@ class TicketForm(forms.Form):
 
     title = forms.CharField(
         required=False,
-        max_length=consts.FIELD_LEN255,
+        max_length=consts.TITLE_MAX_LENGTH,
         empty_value=None,
     )
 

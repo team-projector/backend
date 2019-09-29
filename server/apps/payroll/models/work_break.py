@@ -4,7 +4,6 @@ from django.conf import settings
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
-from apps.core import consts
 from apps.core.models.mixins import Timestamps
 from apps.core.models.utils import Choices
 from apps.payroll.models.managers import WorkBreakManager
@@ -15,6 +14,8 @@ WORK_BREAK_REASONS = Choices(
     ('vacation', _('CH_VACATION')),
     ('disease', _('CH_DISEASES')),
 )
+
+WORK_BREAK_REASON_MAX_LENGTH = 15
 
 
 class WorkBreak(ApprovedMixin, Timestamps):
@@ -39,7 +40,7 @@ class WorkBreak(ApprovedMixin, Timestamps):
     reason = models.CharField(
         choices=WORK_BREAK_REASONS,
         blank=False,
-        max_length=consts.FIELD_LEN15,
+        max_length=WORK_BREAK_REASON_MAX_LENGTH,
         verbose_name=_('VN__REASON'),
         help_text=_('HT__REASON'),
     )

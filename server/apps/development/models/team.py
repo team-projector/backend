@@ -4,13 +4,13 @@ from django.conf import settings
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
-from apps.core import consts
+from apps.core.consts import TITLE_MAX_LENGTH
 from .team_member import TeamMember
 
 
 class Team(models.Model):
     title = models.CharField(
-        max_length=consts.FIELD_LEN255,
+        max_length=TITLE_MAX_LENGTH,
         verbose_name=_('VN__TITLE'),
         help_text=_('HT__TITLE'),
         unique=True,

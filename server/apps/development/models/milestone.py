@@ -5,7 +5,7 @@ from django.contrib.contenttypes.models import ContentType
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
-from apps.core import consts
+from apps.core.consts import DEFAULT_MAX_DIGITS, TITLE_MAX_LENGTH
 from apps.core.models.mixins import (
     GitlabEntityMixin,
     GitlabInternalIdMixin,
@@ -20,12 +20,14 @@ MILESTONE_STATES = Choices(
     ('closed', 'closed'),
 )
 
+MILESTONE_STATE_MAX_LENGTH = 20
+
 
 class Milestone(GitlabEntityMixin,
                 GitlabInternalIdMixin,
                 Timestamps):
     title = models.CharField(
-        max_length=consts.FIELD_LEN255,
+        max_length=TITLE_MAX_LENGTH,
         verbose_name=_('VN__TITLE'),
         help_text=_('HT__TITLE'),
     )
@@ -46,7 +48,7 @@ class Milestone(GitlabEntityMixin,
 
     state = models.CharField(
         choices=MILESTONE_STATES,
-        max_length=consts.FIELD_LEN20,
+        max_length=MILESTONE_STATE_MAX_LENGTH,
         null=True,
         blank=True,
         verbose_name=_('VN__STATE'),
@@ -62,7 +64,7 @@ class Milestone(GitlabEntityMixin,
 
     budget = models.DecimalField(
         default=0,
-        max_digits=consts.FIELD_LEN12,
+        max_digits=DEFAULT_MAX_DIGITS,
         decimal_places=2,
         verbose_name=_('VN__BUDGET'),
         help_text=_('HT__BUDGET'),
