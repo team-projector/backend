@@ -15,7 +15,7 @@ PROJECT_MEMBER_ROLES = Choices(
     ('customer', _('CH_CUSTOMER')),
 )
 
-ROLE_MAX_LENGTH = 20
+PROJECT_MEMBER_ROLE_MAX_LENGTH = 20
 
 
 class ProjectMember(Timestamps):
@@ -26,7 +26,7 @@ class ProjectMember(Timestamps):
 
     role = models.CharField(
         choices=PROJECT_MEMBER_ROLES,
-        max_length=ROLE_MAX_LENGTH,
+        max_length=PROJECT_MEMBER_ROLE_MAX_LENGTH,
         verbose_name=_('VN__ROLE'),
         help_text=_('HT__ROLE'),
     )

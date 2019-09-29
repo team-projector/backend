@@ -11,7 +11,7 @@ from apps.users.models import User
 from .base import BaseProblemChecker
 
 PROBLEM_PAYROLL_OPENED_OVERFLOW = 'payroll_opened_overflow'
-RATIO = 1.5
+PROBLEM_PAYROLL_OVERFLOW_RATIO = 1.5
 
 
 class PayrollOpenedOverflowChecker(BaseProblemChecker):
@@ -26,4 +26,6 @@ class PayrollOpenedOverflowChecker(BaseProblemChecker):
             total_time_spent=Coalesce(Sum('time_spent'), 0),
         )['total_time_spent']
 
-        return total_spend > user.daily_work_hours * SECONDS_PER_HOUR * RATIO
+        return total_spend > user.daily_work_hours * (
+            SECONDS_PER_HOUR * PROBLEM_PAYROLL_OVERFLOW_RATIO
+        )
