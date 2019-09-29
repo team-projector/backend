@@ -25,6 +25,9 @@ spec:
             httpGet:
               path: /ht/
               port: 8080
+              httpHeaders:
+                - name: Host
+                  value: localhost
             initialDelaySeconds: 5
             periodSeconds: 5
             failureThreshold: 60
@@ -32,6 +35,9 @@ spec:
             httpGet:
               path: /ht/
               port: 8080
+              httpHeaders:
+                - name: Host
+                  value: localhost
             initialDelaySeconds: 15
             periodSeconds: 60
             failureThreshold: 5

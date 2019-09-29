@@ -48,7 +48,7 @@ class TeamsFilterSet(django_filters.FilterSet):
     order_by = OrderingFilter(
         fields=('title',),
     )
-    q = SearchFilter(fields=('title',))
+    q = SearchFilter(fields=('title',))  # noqa WPS111
 
     class Meta:
         model = Team

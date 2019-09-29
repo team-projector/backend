@@ -7,10 +7,10 @@ from graphene_django.converter import convert_django_field
 
 class BitField(graphene.Scalar):
     @staticmethod
-    def serialize(val):
+    def serialize(vals):
         return [
-            v
-            for v, setted in val
+            val
+            for val, setted in vals
             if setted
         ]
 

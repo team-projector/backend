@@ -115,9 +115,9 @@ class DataSourceConnectionField(AuthFilter,
         edges = [
             edge_type(
                 node=node,
-                cursor=offset_to_cursor(start_offset + i),
+                cursor=offset_to_cursor(start_offset + item),
             )
-            for i, node in enumerate(slice_fragment)
+            for item, node in enumerate(slice_fragment)
         ]
 
         first_edge_cursor = edges[0].cursor if edges else None
