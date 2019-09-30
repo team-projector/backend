@@ -23,8 +23,9 @@ build:
   script:
     - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN registry.gitlab.com
     - docker pull $DOCKER_CACHE_IMAGE || true
-    - docker build --cache-from $DOCKER_CACHE_IMAGE -t $DOCKER_IMAGE --target production -f deploy/Dockerfile .
     - docker build --cache-from $DOCKER_CACHE_IMAGE -t $DOCKER_TEST_IMAGE -t $DOCKER_CACHE_IMAGE --target test -f deploy/Dockerfile .
+    - echo "tests" >> .dockerignore # exclude tests from production image
+    - docker build --cache-from $DOCKER_CACHE_IMAGE -t $DOCKER_IMAGE --target production -f deploy/Dockerfile .
     - docker push $DOCKER_TEST_IMAGE
     - docker push $DOCKER_IMAGE
     - docker push $DOCKER_CACHE_IMAGE
