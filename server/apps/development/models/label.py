@@ -3,14 +3,14 @@
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
-from apps.core.consts import TITLE_MAX_LENGTH
+from apps.core.consts import DEFAULT_TITLE_LENGTH
 
 COLOR_MAX_LENGTH = 10
 
 
 class Label(models.Model):
     title = models.CharField(
-        max_length=TITLE_MAX_LENGTH,
+        max_length=DEFAULT_TITLE_LENGTH,
         verbose_name=_('VN__TITLE'),
         help_text=_('HT__TITLE'),
     )

@@ -5,7 +5,7 @@ from django.contrib.contenttypes.models import ContentType
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
-from apps.core.consts import DEFAULT_MAX_DIGITS, TITLE_MAX_LENGTH
+from apps.core.consts import DEFAULT_MAX_DIGITS, DEFAULT_TITLE_LENGTH
 from apps.core.models.mixins import (
     GitlabEntityMixin,
     GitlabInternalIdMixin,
@@ -27,7 +27,7 @@ class Milestone(GitlabEntityMixin,
                 GitlabInternalIdMixin,
                 Timestamps):
     title = models.CharField(
-        max_length=TITLE_MAX_LENGTH,
+        max_length=DEFAULT_TITLE_LENGTH,
         verbose_name=_('VN__TITLE'),
         help_text=_('HT__TITLE'),
     )
