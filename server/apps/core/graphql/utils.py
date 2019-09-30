@@ -3,8 +3,10 @@
 from graphql.utils.ast_to_dict import ast_to_dict
 
 
-def collect_fields(node,
-                   fragments) -> dict:
+def collect_fields(
+    node,
+    fragments,
+) -> dict:
     field = {}
 
     if node.get('selection_set'):
@@ -14,8 +16,9 @@ def collect_fields(node,
                     leaf['name']['value']: collect_fields(leaf, fragments),
                 })
             elif leaf['kind'] == 'FragmentSpread':
-                field.update(collect_fields(fragments[leaf['name']['value']],
-                                            fragments))
+                field.update(
+                    collect_fields(fragments[leaf['name']['value']], fragments),
+                )
 
     return field
 
@@ -30,8 +33,10 @@ def get_fields_from_info(info) -> dict:
     return collect_fields(node, fragments)
 
 
-def is_field_selected(info,
-                      path: str) -> bool:
+def is_field_selected(
+    info,
+    path: str,
+) -> bool:
     fields = get_fields_from_info(info)
 
     for key in path.split('.'):

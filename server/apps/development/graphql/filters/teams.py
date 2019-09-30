@@ -22,7 +22,9 @@ class TeamRolesFilter(django_filters.CharFilter):
             TeamMember.objects.filter(
                 team=OuterRef('pk'),
                 user=self.parent.request.user,
-            ), roles)
+            ),
+            roles,
+        )
 
         queryset = queryset.annotate(
             member_exists=Exists(team_members),

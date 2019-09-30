@@ -19,9 +19,11 @@ from ..models import User
 
 
 @admin.register(User)
-class UserAdmin(AdminFormFieldsOverridesMixin,
-                ForceSyncEntityMixin,
-                DjUserAdmin):
+class UserAdmin(
+    AdminFormFieldsOverridesMixin,
+    ForceSyncEntityMixin,
+    DjUserAdmin,
+):
     list_display = (
         'login', 'name', 'email', 'hour_rate', 'last_login', 'is_active',
         'is_staff', 'change_password_link',
@@ -33,8 +35,8 @@ class UserAdmin(AdminFormFieldsOverridesMixin,
     add_fieldsets = (
         (None, {
             'classes': ('wide',),
-            'fields': ('login', 'password1', 'password2')},
-         ),
+            'fields': ('login', 'password1', 'password2'),
+        }),
     )
 
     exclude = ('user_permissions',)
@@ -42,15 +44,18 @@ class UserAdmin(AdminFormFieldsOverridesMixin,
         (None, {
             'fields': (
                 'login', 'email', 'name', 'roles', 'is_superuser', 'is_staff',
-                'is_active', 'last_login'),
+                'is_active', 'last_login',
+            ),
         }),
         ('GitLab', {
             'fields': (
-                'gl_avatar', 'gl_id', 'gl_url', 'gl_last_sync', 'gl_token'),
+                'gl_avatar', 'gl_id', 'gl_url', 'gl_last_sync', 'gl_token',
+            ),
         }),
         ('Costs', {
             'fields': (
-                'hour_rate', 'customer_hour_rate', 'taxes', 'daily_work_hours'),
+                'hour_rate', 'customer_hour_rate', 'taxes', 'daily_work_hours',
+            ),
         }),
 
     )

@@ -11,14 +11,18 @@ class AllowStaff:
     """
 
     @staticmethod
-    def has_node_permission(info: ResolveInfo,
-                            obj_id: str) -> bool:
+    def has_node_permission(
+        info: ResolveInfo,
+        obj_id: str,
+    ) -> bool:
         return info.context.user.is_staff
 
     @staticmethod
-    def has_mutation_permission(root: Any,
-                                info: ResolveInfo,
-                                **kwargs) -> bool:
+    def has_mutation_permission(
+        root: Any,
+        info: ResolveInfo,
+        **kwargs,
+    ) -> bool:
         return info.context.user.is_staff
 
     @staticmethod

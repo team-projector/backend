@@ -26,10 +26,12 @@ MERGE_REQUESTS_STATES = Choices(
 MERGE_REQUESTS_STATE_MAX_LENGTH = 255
 
 
-class MergeRequest(NotableMixin,
-                   SpentTimesMixin,
-                   GitlabEntityMixin,
-                   GitlabInternalIdMixin):
+class MergeRequest(
+    NotableMixin,
+    SpentTimesMixin,
+    GitlabEntityMixin,
+    GitlabInternalIdMixin,
+):
     title = models.CharField(
         max_length=DEFAULT_TITLE_LENGTH,
         verbose_name=_('VN__TITLE'),

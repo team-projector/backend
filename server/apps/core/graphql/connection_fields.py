@@ -15,8 +15,10 @@ from apps.core.graphql.security.mixins.filter import AuthFilter
 from apps.core.graphql.security.permissions import AllowAuthenticated
 
 
-class DataSourceConnectionField(AuthFilter,
-                                DjangoFilterConnectionField):
+class DataSourceConnectionField(
+    AuthFilter,
+    DjangoFilterConnectionField,
+):
     permission_classes = (AllowAuthenticated,)
 
     def __init__(self, model_type, *args, **kwargs):
@@ -24,11 +26,13 @@ class DataSourceConnectionField(AuthFilter,
         super().__init__(model_type, *args, **kwargs)
 
     @classmethod
-    def resolve_connection(cls,
-                           connection,
-                           default_manager,
-                           args,
-                           iterable):
+    def resolve_connection(
+        cls,
+        connection,
+        default_manager,
+        args,
+        iterable,
+    ):
         if iterable is None:
             iterable = default_manager
 
@@ -58,14 +62,17 @@ class DataSourceConnectionField(AuthFilter,
         return connection
 
     @classmethod
-    def _connection_from_list_slice(cls, list_slice,
-                                    args=None,
-                                    connection_type=None,
-                                    edge_type=None,
-                                    pageinfo_type=None,
-                                    slice_start=0,
-                                    list_length=0,
-                                    list_slice_length=None):
+    def _connection_from_list_slice(
+        cls,
+        list_slice,
+        args=None,
+        connection_type=None,
+        edge_type=None,
+        pageinfo_type=None,
+        slice_start=0,
+        list_length=0,
+        list_slice_length=None,
+    ):
 
         # implemented support for offsets
 
@@ -131,7 +138,8 @@ class DataSourceConnectionField(AuthFilter,
                 start_cursor=first_edge_cursor,
                 end_cursor=last_edge_cursor,
                 has_previous_page=(
-                    isinstance(last, int) and start_offset > lower_bound),
+                    isinstance(last, int) and start_offset > lower_bound
+                ),
                 has_next_page=(
                     isinstance(first, int) and end_offset < upper_bound
                 ),

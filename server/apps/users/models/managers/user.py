@@ -7,10 +7,12 @@ from django.utils.translation import gettext_lazy as _
 
 
 class UserManager(BaseUserManager):
-    def create_user(self,
-                    login,
-                    password=None,
-                    **kwargs):
+    def create_user(
+        self,
+        login,
+        password=None,
+        **kwargs,
+    ):
         if not login:
             raise ValueError(_('VN__USER_MUST_HAVE_A_LOGIN'))
 

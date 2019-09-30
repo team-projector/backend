@@ -6,9 +6,11 @@ from gitlab.v4.objects import ProjectIssue as GlProjectIssue
 from apps.development.models import Issue, Label
 
 
-def load_issue_labels(issue: Issue,
-                      gl_project: GlProject,
-                      gl_issue: GlProjectIssue) -> None:
+def load_issue_labels(
+    issue: Issue,
+    gl_project: GlProject,
+    gl_issue: GlProjectIssue,
+) -> None:
     project_labels = getattr(gl_project, '_cache_labels', None)
     if project_labels is None:
         project_labels = gl_project.labels.list(all=True)
@@ -25,7 +27,9 @@ def load_issue_labels(issue: Issue,
                 item
                 for item in project_labels
                 if item.name == label_title
-            ), None)
+            ),
+                None,
+            )
             if gl_label:
                 label = Label.objects.create(
                     title=label_title,

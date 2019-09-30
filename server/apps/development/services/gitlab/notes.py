@@ -27,33 +27,45 @@ DAYS_PER_WEEK = 5
 HOURS_PER_DAY = 8
 
 
-def seconds_handler(bag: DefaultDict[str, int],
-                    val: int) -> None:
+def seconds_handler(
+    bag: DefaultDict[str, int],
+    val: int,
+) -> None:
     bag['seconds'] += val
 
 
-def minutes_handler(bag: DefaultDict[str, int],
-                    val: int) -> None:
+def minutes_handler(
+    bag: DefaultDict[str, int],
+    val: int,
+) -> None:
     bag['minutes'] += val
 
 
-def hours_handler(bag: DefaultDict[str, int],
-                  val: int) -> None:
+def hours_handler(
+    bag: DefaultDict[str, int],
+    val: int,
+) -> None:
     bag['hours'] += val
 
 
-def days_handler(bag: DefaultDict[str, int],
-                 val: int) -> None:
+def days_handler(
+    bag: DefaultDict[str, int],
+    val: int,
+) -> None:
     bag['hours'] += val * HOURS_PER_DAY
 
 
-def weeks_handler(bag: DefaultDict[str, int],
-                  val: int) -> None:
+def weeks_handler(
+    bag: DefaultDict[str, int],
+    val: int,
+) -> None:
     bag['hours'] += val * DAYS_PER_WEEK * HOURS_PER_DAY
 
 
-def months_handler(bag: DefaultDict[str, int],
-                   val: int) -> None:
+def months_handler(
+    bag: DefaultDict[str, int],
+    val: int,
+) -> None:
     bag['hours'] += val * WEEK_PER_MONTH * DAYS_PER_WEEK * HOURS_PER_DAY
 
 
@@ -93,23 +105,31 @@ def parse_spend(spent: str) -> int:
 
 
 class BaseNoteParser:
-    def parse(self, gl_note) -> Optional[NoteReadResult]:
+    def parse(
+        self,
+        gl_note,
+    ) -> Optional[NoteReadResult]:
         raise NotImplementedError
 
 
 class SpendAddedParser(BaseNoteParser):
-    def parse(self, gl_note) -> Optional[NoteReadResult]:
-        m = (RE_SPEND_FULL.match(gl_note.body) or  # noqa W504
-             RE_SPEND_SHORT.match(gl_note.body))
-        if not m:
+    def parse(
+        self,
+        gl_note,
+    ) -> Optional[NoteReadResult]:
+        match = (
+            RE_SPEND_FULL.match(gl_note.body) or  # noqa W504
+            RE_SPEND_SHORT.match(gl_note.body)
+        )
+        if not match:
             return None
 
-        spent = parse_spend(m.group('spent'))
-        if m.group('action') == 'subtracted':
+        spent = parse_spend(match.group('spent'))
+        if match.group('action') == 'subtracted':
             spent *= -1
 
-        if m.lastgroup == 'date':
-            date = parse_gl_date(m.group('date'))
+        if match.lastgroup == 'date':
+            date = parse_gl_date(match.group('date'))
         else:
             datetime = parse_gl_datetime(gl_note.created_at)
             date = datetime.date() if datetime is not None else None
@@ -123,13 +143,19 @@ class SpendAddedParser(BaseNoteParser):
 
 
 class SpendResetParser(BaseNoteParser):
-    def parse(self, gl_note) -> Optional[NoteReadResult]:
+    def parse(
+        self,
+        gl_note,
+    ) -> Optional[NoteReadResult]:
         if gl_note.body == SPEND_RESET_MESSAGE:
             return NoteReadResult(NOTE_TYPES.reset_spend, {})
 
 
 class MovedFromParser(BaseNoteParser):
-    def parse(self, gl_note) -> Optional[NoteReadResult]:
+    def parse(
+        self,
+        gl_note,
+    ) -> Optional[NoteReadResult]:
         is_system = getattr(gl_note, 'system', False)  # noqa WPS425
         if is_system and RE_MOVED_FROM.match(gl_note.body):
             return NoteReadResult(NOTE_TYPES.moved_from, {})

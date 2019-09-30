@@ -51,9 +51,11 @@ class SpentTimeQuerySet(models.QuerySet):
             ),
         )
 
-    def annotate_payrolls(self,
-                          paid: bool = True,
-                          payroll: bool = True) -> QuerySet:
+    def annotate_payrolls(
+        self,
+        paid: bool = True,
+        payroll: bool = True,
+    ) -> QuerySet:
         queryset = self
 
         if paid:

@@ -7,8 +7,10 @@ from apps.core.graphql.security.mixins.mutation import AuthMutation
 from apps.core.graphql.security.permissions import AllowAuthenticated
 
 
-class BaseMutation(AuthMutation,
-                   graphene.Mutation):
+class BaseMutation(
+    AuthMutation,
+    graphene.Mutation,
+):
     permission_classes = (AllowAuthenticated,)
 
     class Meta:

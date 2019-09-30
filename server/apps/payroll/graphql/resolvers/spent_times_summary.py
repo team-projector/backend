@@ -6,9 +6,11 @@ from apps.payroll.models import SpentTime
 from ...services.summary.spent_times import get_spent_times_summary
 
 
-def resolve_spent_times_summary(parent,
-                                info,
-                                **kwargs):
+def resolve_spent_times_summary(
+    parent,
+    info,
+    **kwargs,
+):
     filterset = SpentTimeFilterSet(
         data=kwargs,
         queryset=SpentTime.objects.allowed_for_user(

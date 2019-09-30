@@ -45,9 +45,11 @@ class IssuesProjectSummary:
 
 
 class IssuesProjectSummaryProvider:
-    def __init__(self,
-                 queryset: QuerySet,
-                 order_by: Optional[str]):
+    def __init__(
+        self,
+        queryset: QuerySet,
+        order_by: Optional[str],
+    ):
         self.queryset = queryset
         self.order_by = order_by
 
@@ -105,13 +107,19 @@ class IssuesProjectSummaryProvider:
             total_time_remains=Coalesce(Sum('time_remains'), 0),
         ).order_by()
 
-    def _get_total_issues_count(self, summaries_qs: QuerySet) -> int:
+    def _get_total_issues_count(
+        self,
+        summaries_qs: QuerySet,
+    ) -> int:
         return sum(
             item['issues_opened_count']
             for item in summaries_qs
         )
 
-    def _get_project_qs(self, summaries_qs: QuerySet) -> list:
+    def _get_project_qs(
+        self,
+        summaries_qs: QuerySet,
+    ) -> list:
         project_ids = [
             item['project']
             for item in summaries_qs
@@ -123,8 +131,10 @@ class IssuesProjectSummaryProvider:
         return projects_qs
 
 
-def get_project_summaries(queryset: QuerySet,
-                          order_by: str = None) -> List[IssuesProjectSummary]:
+def get_project_summaries(
+    queryset: QuerySet,
+    order_by: str = None,
+) -> List[IssuesProjectSummary]:
     provider = IssuesProjectSummaryProvider(
         queryset,
         order_by,

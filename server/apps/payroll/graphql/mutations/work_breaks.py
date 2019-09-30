@@ -37,8 +37,10 @@ class ApproveWorkBreakMutation(BaseMutation):
         return ApproveWorkBreakMutation(work_break=work_break)
 
 
-class CreateWorkBreakMutation(ArgumentsValidationMixin,
-                              BaseMutation):
+class CreateWorkBreakMutation(
+    ArgumentsValidationMixin,
+    BaseMutation,
+):
     form_class = WorkBreakForm
 
     class Arguments:
@@ -83,8 +85,10 @@ class DeclineWorkBreakMutation(BaseMutation):
         )
 
 
-class UpdateWorkBreakMutation(ArgumentsValidationMixin,
-                              BaseMutation):
+class UpdateWorkBreakMutation(
+    ArgumentsValidationMixin,
+    BaseMutation,
+):
     permission_classes = (CanManageWorkBreak,)
     form_class = WorkBreakForm
 

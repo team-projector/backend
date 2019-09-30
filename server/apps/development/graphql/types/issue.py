@@ -41,9 +41,11 @@ class IssueType(BaseDjangoObjectType):
         return self._labels_
 
     @classmethod
-    def get_queryset(cls,
-                     queryset,
-                     info) -> QuerySet:
+    def get_queryset(
+        cls,
+        queryset,
+        info,
+    ) -> QuerySet:
 
         queryset = filter_allowed_for_user(
             queryset,

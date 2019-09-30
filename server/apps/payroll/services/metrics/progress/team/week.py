@@ -12,8 +12,7 @@ from .base import ProgressMetricsProvider
 
 
 class WeekMetricsProvider(ProgressMetricsProvider):
-    def get_user_metrics(self,
-                         user: User) -> Iterable[UserProgressMetrics]:
+    def get_user_metrics(self, user: User) -> Iterable[UserProgressMetrics]:
         return get_user_progress_metrics(
             user,
             self.start,

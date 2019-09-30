@@ -12,8 +12,10 @@ from .inlines import NoteInline
 
 
 @admin.register(MergeRequest)
-class MergeRequestAdmin(ForceSyncEntityMixin,
-                        BaseModelAdmin):
+class MergeRequestAdmin(
+    ForceSyncEntityMixin,
+    BaseModelAdmin,
+):
     list_display = (
         'title', 'user', 'author', 'state', 'created_at', 'gl_last_sync',
     )

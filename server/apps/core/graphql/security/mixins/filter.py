@@ -15,16 +15,24 @@ class AuthFilter(DjangoFilterConnectionField):
 
     @classmethod
     def has_permission(cls, info: ResolveInfo) -> bool:
-        return all(
-            (perm().has_filter_permission(info) for perm in
-             cls.permission_classes),
-        )
+        return all((
+            perm().has_filter_permission(info) for perm in
+            cls.permission_classes
+        ))
 
     @classmethod
     def connection_resolver(
-        cls, resolver, connection, default_manager,
-        max_limit, enforce_first_or_last, filterset_class,
-        filtering_args, root, info, **args,
+        cls,
+        resolver,
+        connection,
+        default_manager,
+        max_limit,
+        enforce_first_or_last,
+        filterset_class,
+        filtering_args,
+        root,
+        info,
+        **args,
     ):
         if not cls.has_permission(info):
             raise PermissionDenied()

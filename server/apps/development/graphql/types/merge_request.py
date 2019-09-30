@@ -49,9 +49,7 @@ class MergeRequestType(BaseDjangoObjectType):
         return self._issues_
 
     @classmethod
-    def get_queryset(cls,
-                     queryset,
-                     info) -> QuerySet:
+    def get_queryset(cls, queryset, info) -> QuerySet:
         queryset = filter_allowed_for_user(
             queryset,
             info.context.user,

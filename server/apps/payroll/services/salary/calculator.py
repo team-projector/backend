@@ -16,10 +16,12 @@ from .exceptions import EmptySalaryException
 
 
 class SalaryCalculator:
-    def __init__(self,
-                 initiator: User,
-                 period_from: date,
-                 period_to: date):
+    def __init__(
+        self,
+        initiator: User,
+        period_from: date,
+        period_to: date,
+    ):
         self.initiator = initiator
         self.period_from = period_from
         self.period_to = period_to
@@ -74,8 +76,10 @@ class SalaryCalculator:
         return salary
 
     @staticmethod
-    def _lock_payrolls(user: User,
-                       salary: Salary) -> int:
+    def _lock_payrolls(
+        user: User,
+        salary: Salary,
+    ) -> int:
         locked = Penalty.objects.filter(
             salary__isnull=True,
             user=user,

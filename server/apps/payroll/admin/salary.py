@@ -27,7 +27,8 @@ class SalaryAdmin(BaseModelAdmin):
         custom_urls = [
             path('generate/',
                  self.admin_site.admin_view(self.generate_salaries),
-                 name='generate-salaries'),
+                 name='generate-salaries',
+                 ),
         ]
         return custom_urls + urls
 

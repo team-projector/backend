@@ -16,11 +16,15 @@ class AuthNode:
     permission_classes = (AllowAny,)
 
     @classmethod
-    def get_node(cls,
-                 info: ResolveInfo,
-                 obj_id: str) -> Optional[Model]:
-        has_node_permission = all((perm().has_node_permission(info, obj_id)
-                                   for perm in cls.permission_classes))
+    def get_node(
+        cls,
+        info: ResolveInfo,
+        obj_id: str,
+    ) -> Optional[Model]:
+        has_node_permission = all((
+            perm().has_node_permission(info, obj_id)
+            for perm in cls.permission_classes
+        ))
         if has_node_permission:
             try:
                 return cls.get_queryset(  # type: ignore

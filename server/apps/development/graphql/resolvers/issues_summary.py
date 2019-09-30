@@ -9,9 +9,11 @@ from apps.development.services.summary.issues_project import (
 from apps.development.services.summary.issues_team import get_team_summaries
 
 
-def resolve_issues_summary(parent,
-                           info,
-                           **kwargs):
+def resolve_issues_summary(
+    parent,
+    info,
+    **kwargs,
+):
     filterset = IssuesFilterSet(
         data=kwargs,
         queryset=Issue.objects.allowed_for_user(
@@ -31,18 +33,22 @@ def resolve_issues_summary(parent,
     )
 
 
-def resolve_issues_project_summaries(parent,
-                                     info,
-                                     **kwargs):
+def resolve_issues_project_summaries(
+    parent,
+    info,
+    **kwargs,
+):
     return get_project_summaries(
         parent.queryset,
         **kwargs,
     )
 
 
-def resolve_issues_team_summaries(parent,
-                                  info,
-                                  **kwargs):
+def resolve_issues_team_summaries(
+    parent,
+    info,
+    **kwargs,
+):
     return get_team_summaries(
         parent.queryset,
         **kwargs,

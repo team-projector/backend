@@ -10,10 +10,12 @@ from .day import DayMetricsProvider
 from .week import WeekMetricsProvider
 
 
-def create_provider(team: Team,
-                    start: date,
-                    end: date,
-                    group: str) -> ProgressMetricsProvider:
+def create_provider(
+    team: Team,
+    start: date,
+    end: date,
+    group: str,
+) -> ProgressMetricsProvider:
     if group == 'day':
         return DayMetricsProvider(team, start, end)
     elif group == 'week':
@@ -25,9 +27,11 @@ def create_provider(team: Team,
 TeamMemberProgressMetricsList = Iterable[TeamMemberProgressMetrics]
 
 
-def get_team_progress_metrics(team: Team,
-                              start: date,
-                              end: date,
-                              grp: str) -> TeamMemberProgressMetricsList:
+def get_team_progress_metrics(
+    team: Team,
+    start: date,
+    end: date,
+    grp: str,
+) -> TeamMemberProgressMetricsList:
     provider = create_provider(team, start, end, grp)
     return provider.get_metrics()
