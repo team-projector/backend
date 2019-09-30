@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
-from django.db.models import QuerySet
 from django.core.exceptions import PermissionDenied
+from django.db.models import QuerySet
 
 from apps.development.models import Team, TeamMember
 from apps.development.services.team_members import filter_by_roles
