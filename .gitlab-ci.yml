@@ -8,23 +8,10 @@ variables:
   GIT_STRATEGY: none
 
 stages:
-#  - quality
   - build
   - test
   - publish
   - deploy
-
-#quality:
-#  image: junte/django-quality:advanced
-#  stage: quality
-#  variables:
-#    LOCALE_PATH: $CI_PROJECT_DIR/locale
-#    GIT_DEPTH: 5
-#    GIT_STRATEGY: fetch
-#  script:
-#    - cat setup.cfg
-#    - make check_quality
-#    - check-locale
 
 build:
   stage: build
@@ -58,7 +45,6 @@ test:
     - postgres
   script:
     - cd /app
-#    - pip install pytest-django pytest-xdist pytest-cov factory-boy httpretty
     - pytest -n auto --dist=loadscope --cov=apps --cov-report=html:coverage_html
     - mkdir $CI_PROJECT_DIR/coverage
     - coverage report -m > $CI_PROJECT_DIR/coverage/report.log
