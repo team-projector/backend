@@ -13,7 +13,6 @@ from apps.development.models import Issue, Label
 from apps.development.services.allowed.issues import filter_allowed_for_user
 from apps.development.services.metrics.issue import get_issue_metrcis
 from apps.development.services.problems.issue import get_issue_problems
-
 from .issue_metrics import IssueMetricsType
 
 
@@ -35,16 +34,17 @@ class IssueType(BaseDjangoObjectType):
         return get_issue_metrcis(self)
 
     def resolve_participants(self, info, **kwargs):
-        return self._participants_
+        return getattr(self, '_participants_', self.participants)
 
     def resolve_labels(self, info, **kwargs):
-        return self._labels_
+        return getattr(self, '_labels_', self.labels)
 
     @classmethod
-    def get_queryset(cls,
-                     queryset,
-                     info) -> QuerySet:
-
+    def get_queryset(
+        cls,
+        queryset,
+        info,
+    ) -> QuerySet:
         queryset = filter_allowed_for_user(
             queryset,
             info.context.user,

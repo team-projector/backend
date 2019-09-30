@@ -9,7 +9,7 @@ from apps.core.graphql.relay_nodes import DatasourceRelayNode
 from apps.core.graphql.types import BaseDjangoObjectType
 from apps.core.graphql.utils import is_field_selected
 from apps.development.graphql.types.interfaces import WorkItem
-from apps.development.models import Issue, Label, MergeRequest
+from apps.development.models import Issue, MergeRequest, Label
 from apps.development.services.allowed.merge_requests import (
     filter_allowed_for_user,
 )
@@ -19,7 +19,6 @@ from apps.development.services.metrics.merge_request import (
 from apps.development.services.problems.merge_request import (
     get_merge_request_problems,
 )
-
 from .merge_request_metrics import MergeRequestMetricsType
 
 
@@ -40,13 +39,13 @@ class MergeRequestType(BaseDjangoObjectType):
         return get_merge_request_problems(self)
 
     def resolve_participants(self, info, **kwargs):
-        return self._participants_
+        return getattr(self, '_participants_', self.participants)
 
     def resolve_labels(self, info, **kwargs):
-        return self._labels_
+        return getattr(self, '_labels_', self.labels)
 
     def resolve_issues(self, info, **kwargs):
-        return self._issues_
+        return getattr(self, '_issues_', self.issues)
 
     @classmethod
     def get_queryset(cls,
