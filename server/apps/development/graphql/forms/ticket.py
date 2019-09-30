@@ -2,6 +2,7 @@
 
 from django import forms
 
+from apps.core.consts import DEFAULT_TITLE_LENGTH
 from apps.development.models import Milestone
 from apps.development.models.ticket import TICKET_TYPES
 
@@ -19,7 +20,7 @@ class TicketForm(forms.Form):
 
     title = forms.CharField(
         required=False,
-        max_length=255,
+        max_length=DEFAULT_TITLE_LENGTH,
         empty_value=None,
     )
 

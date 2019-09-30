@@ -4,12 +4,13 @@ from django.conf import settings
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
+from apps.core.consts import DEFAULT_TITLE_LENGTH
 from .team_member import TeamMember
 
 
 class Team(models.Model):
     title = models.CharField(
-        max_length=255,
+        max_length=DEFAULT_TITLE_LENGTH,
         verbose_name=_('VN__TITLE'),
         help_text=_('HT__TITLE'),
         unique=True,

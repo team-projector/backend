@@ -12,12 +12,14 @@ APPROVED_STATES = Choices(
     ('declined', _('CH_DECLINED')),
 )
 
+APPROVED_STATE_MAX_LENGTH = 15
+
 
 class ApprovedMixin(models.Model):
     approve_state = models.CharField(
         choices=APPROVED_STATES,
         default='created',
-        max_length=15,
+        max_length=APPROVED_STATE_MAX_LENGTH,
         verbose_name=_('VN__APPROVE_STATE'),
         help_text=_('HT__APPROVE_STATE'),
     )

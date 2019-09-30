@@ -16,12 +16,16 @@ USER_ROLES = Choices(
     ('shareholder', _('CH_SHAREHOLDER')),
 )
 
+USER_LOGIN_MAX_LENGTH = 150
+USER_EMAIL_MAX_LENGTH = 150
+USER_GITLAB_TOKEN_MAX_LENGTH = 128
+
 
 class User(AbstractBaseUser, PermissionsMixin):
     USERNAME_FIELD = 'login'  # noqa WPS115
 
     login = models.CharField(
-        max_length=150,
+        max_length=USER_LOGIN_MAX_LENGTH,
         null=True,
         blank=True,
         unique=True,
@@ -30,7 +34,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     )
 
     name = models.CharField(
-        max_length=150,
+        max_length=USER_LOGIN_MAX_LENGTH,
         null=True,
         blank=True,
         unique=True,
@@ -39,7 +43,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     )
 
     email = models.EmailField(
-        max_length=150,
+        max_length=USER_EMAIL_MAX_LENGTH,
         null=True,
         blank=True,
         unique=True,
@@ -112,7 +116,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     )
 
     gl_token = models.CharField(
-        max_length=128,
+        max_length=USER_GITLAB_TOKEN_MAX_LENGTH,
         null=True,
         blank=True,
         verbose_name=_('VN__PERSONAL_GITLAB_TOKEN'),

@@ -18,6 +18,8 @@ NOTE_TYPES = Choices(
     ('moved_from', 'Moved from'),
 )
 
+NOTE_TYPE_MAX_LENGTH = 20
+
 
 class Note(models.Model):
     object_id = models.IntegerField()
@@ -59,7 +61,7 @@ class Note(models.Model):
 
     type = models.CharField(
         choices=NOTE_TYPES,
-        max_length=20,
+        max_length=NOTE_TYPE_MAX_LENGTH,
         verbose_name=_('VN__TYPE'),
         help_text=_('HT__TYPE'),
     )

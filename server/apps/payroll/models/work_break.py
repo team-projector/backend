@@ -15,6 +15,8 @@ WORK_BREAK_REASONS = Choices(
     ('disease', _('CH_DISEASES')),
 )
 
+WORK_BREAK_REASON_MAX_LENGTH = 15
+
 
 class WorkBreak(ApprovedMixin, Timestamps):
     user = models.ForeignKey(
@@ -38,7 +40,7 @@ class WorkBreak(ApprovedMixin, Timestamps):
     reason = models.CharField(
         choices=WORK_BREAK_REASONS,
         blank=False,
-        max_length=15,
+        max_length=WORK_BREAK_REASON_MAX_LENGTH,
         verbose_name=_('VN__REASON'),
         help_text=_('HT__REASON'),
     )

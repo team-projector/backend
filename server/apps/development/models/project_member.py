@@ -15,6 +15,8 @@ PROJECT_MEMBER_ROLES = Choices(
     ('customer', _('CH_CUSTOMER')),
 )
 
+PROJECT_MEMBER_ROLE_MAX_LENGTH = 20
+
 
 class ProjectMember(Timestamps):
     user = models.ForeignKey(
@@ -24,7 +26,7 @@ class ProjectMember(Timestamps):
 
     role = models.CharField(
         choices=PROJECT_MEMBER_ROLES,
-        max_length=20,
+        max_length=PROJECT_MEMBER_ROLE_MAX_LENGTH,
         verbose_name=_('VN__ROLE'),
         help_text=_('HT__ROLE'),
     )

@@ -5,6 +5,7 @@ from django.db import models
 from django.utils.functional import cached_property
 from django.utils.translation import gettext_lazy as _
 
+from apps.core.consts import DEFAULT_TITLE_LENGTH
 from apps.core.models.mixins import GitlabEntityMixin
 from apps.development.models.milestone import MILESTONE_STATES
 from apps.development.services.projects import get_group_active_milestones
@@ -14,13 +15,13 @@ from .managers import ProjectManager
 
 class Project(GitlabEntityMixin):
     title = models.CharField(
-        max_length=255,
+        max_length=DEFAULT_TITLE_LENGTH,
         verbose_name=_('VN__TITLE'),
         help_text=_('HT__TITLE'),
     )
 
     full_title = models.CharField(
-        max_length=255,
+        max_length=DEFAULT_TITLE_LENGTH,
         null=True,
         blank=True,
         verbose_name=_('VN__FULL_TITLE'),

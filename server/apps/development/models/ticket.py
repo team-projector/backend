@@ -3,6 +3,7 @@
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
+from apps.core.consts import DEFAULT_TITLE_LENGTH
 from apps.core.models.mixins import Timestamps
 from apps.core.models.utils import Choices
 
@@ -16,11 +17,13 @@ TICKET_TYPES = Choices(
     (TYPE_BUG_FIXING, _('CH_BUG_FIXING')),
 )
 
+TICKET_TYPE_MAX_LENGTH = 50
+
 
 class Ticket(Timestamps):
     type = models.CharField(
         choices=TICKET_TYPES,
-        max_length=50,
+        max_length=TICKET_TYPE_MAX_LENGTH,
         blank=True,
         null=True,
         verbose_name=_('VN__TYPE'),
@@ -28,7 +31,7 @@ class Ticket(Timestamps):
     )
 
     title = models.CharField(
-        max_length=255,
+        max_length=DEFAULT_TITLE_LENGTH,
         verbose_name=_('VN__TITLE'),
         help_text=_('HT__TITLE'),
     )
