@@ -19,6 +19,7 @@ RUN apt update \
                       binutils \
                       gettext \
                       nginx \
+                      make \
     && curl -sSL https://raw.githubusercontent.com/sdispater/poetry/master/get-poetry.py | python \
     && export PATH="$PATH:$HOME/.poetry/bin" \
     && poetry config settings.virtualenvs.create false \
