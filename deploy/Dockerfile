@@ -1,4 +1,4 @@
-FROM python:3.6-slim
+FROM python:3.6-slim as base
 
 ENV PYTHONFAULTHANDLER=1 \
   PYTHONUNBUFFERED=1 \
@@ -19,11 +19,17 @@ RUN apt update \
                       binutils \
                       gettext \
                       nginx \
-    && pip install poetry \
+                      make \
+    && curl -sSL https://raw.githubusercontent.com/sdispater/poetry/master/get-poetry.py | python \
+    && export PATH="$PATH:$HOME/.poetry/bin" \
     && poetry config settings.virtualenvs.create false \
     && poetry install --no-dev --no-interaction --no-ansi \
     && apt remove --purge -y gcc binutils \
     && apt autoremove -y
+
+# ---
+
+FROM base as production
 
 COPY . .
 
@@ -35,3 +41,12 @@ RUN export DJANGO_ENV=build \
 ENV DJANGO_ENV=production
 
 CMD ["/bin/bash", "deploy/server/run.sh"]
+
+# ---
+
+FROM base as test
+
+RUN export PATH="$PATH:$HOME/.poetry/bin" \
+    && poetry install --no-interaction --no-ansi
+
+COPY . .
