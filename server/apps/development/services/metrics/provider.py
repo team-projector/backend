@@ -34,19 +34,20 @@ class IssuesContainerMetricsProvider:
             issues_count=Count('*'),
         )
 
-        if stats:
-            metrics.time_estimate = stats['time_estimate']
-            metrics.time_remains = stats['time_estimate'] - stats['time_spent']
+        if not stats:
+            return
 
-            if stats['time_spent']:
-                metrics.efficiency = stats['time_estimate'] / stats[
-                    'time_spent']
+        metrics.time_estimate = stats['time_estimate']
+        metrics.time_remains = stats['time_estimate'] - stats['time_spent']
 
-            metrics.time_spent = stats['time_spent']
+        if stats['time_spent']:
+            metrics.efficiency = stats['time_estimate'] / stats['time_spent']
 
-            metrics.issues_closed_count = stats['issues_closed_count']
-            metrics.issues_opened_count = stats['issues_opened_count']
-            metrics.issues_count = stats['issues_count']
+        metrics.time_spent = stats['time_spent']
+
+        metrics.issues_closed_count = stats['issues_closed_count']
+        metrics.issues_opened_count = stats['issues_opened_count']
+        metrics.issues_count = stats['issues_count']
 
     def filter_issues(self, queryset: QuerySet) -> QuerySet:
         raise NotImplementedError

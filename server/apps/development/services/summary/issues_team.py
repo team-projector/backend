@@ -32,9 +32,11 @@ class IssuesTeamSummary:
 
 
 class IssuesTeamSummaryProvider:
-    def __init__(self,
-                 queryset: QuerySet,
-                 order_by: Optional[str]):
+    def __init__(
+        self,
+        queryset: QuerySet,
+        order_by: Optional[str],
+    ):
         self.queryset = queryset
         self.order_by = order_by
 
@@ -92,13 +94,19 @@ class IssuesTeamSummaryProvider:
             total_time_remains=Coalesce(Sum('time_remains'), 0),
         ).order_by()
 
-    def _get_total_issues_count(self, summaries_qs: QuerySet) -> int:
+    def _get_total_issues_count(
+        self,
+        summaries_qs: QuerySet,
+    ) -> int:
         return sum(
             item['issues_opened_count']
             for item in summaries_qs
         )
 
-    def _get_team_qs(self, summaries_qs: QuerySet) -> QuerySet:
+    def _get_team_qs(
+        self,
+        summaries_qs: QuerySet,
+    ) -> QuerySet:
         team_ids = [
             item['user__teams']
             for item in summaries_qs
@@ -107,8 +115,10 @@ class IssuesTeamSummaryProvider:
         return Team.objects.filter(id__in=team_ids)
 
 
-def get_team_summaries(queryset: QuerySet,
-                       order_by: str = None) -> List[IssuesTeamSummary]:
+def get_team_summaries(
+    queryset: QuerySet,
+    order_by: str = None,
+) -> List[IssuesTeamSummary]:
     provider = IssuesTeamSummaryProvider(
         queryset,
         order_by,

@@ -26,9 +26,11 @@ def load_issues(full_reload: bool = False) -> None:
                 raise
 
 
-def load_project_issues(project: Project,
-                        full_reload: bool = False,
-                        check_deleted: bool = True) -> None:
+def load_project_issues(
+    project: Project,
+    full_reload: bool = False,
+    check_deleted: bool = True,
+) -> None:
     gl = get_gitlab_client()
 
     logger.info(f'Syncing project "{project}" issues')

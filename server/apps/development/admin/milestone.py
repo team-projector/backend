@@ -10,8 +10,10 @@ from ..models import Milestone, Project, ProjectGroup
 
 
 @admin.register(Milestone)
-class MilestoneAdmin(ForceSyncEntityMixin,
-                     BaseModelAdmin):
+class MilestoneAdmin(
+    ForceSyncEntityMixin,
+    BaseModelAdmin,
+):
     list_display = ('id', 'title', 'start_date', 'due_date', 'budget', 'state')
     search_fields = ('title',)
 

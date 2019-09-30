@@ -8,8 +8,10 @@ from apps.users.models import User
 from ..users import load_user
 
 
-def load_issue_participants(issue: Issue,
-                            gl_issue: GlProjectIssue) -> None:
+def load_issue_participants(
+    issue: Issue,
+    gl_issue: GlProjectIssue,
+) -> None:
     issue.participants.set((
         _get_user(user['id'])
         for user in gl_issue.participants()

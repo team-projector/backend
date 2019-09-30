@@ -17,9 +17,11 @@ from .participants import load_issue_participants
 logger = logging.getLogger(__name__)
 
 
-def load_project_issue(project: Project,
-                       gl_project: GlProject,
-                       gl_issue: GlProjectIssue) -> None:
+def load_project_issue(
+    project: Project,
+    gl_project: GlProject,
+    gl_issue: GlProjectIssue,
+) -> None:
     time_stats = gl_issue.time_stats()
 
     params = {
@@ -43,7 +45,8 @@ def load_project_issue(project: Project,
 
     if gl_issue.milestone:
         milestone = Milestone.objects.filter(
-            gl_id=gl_issue.milestone['id']).first()
+            gl_id=gl_issue.milestone['id'],
+        ).first()
 
         if milestone:
             params['milestone'] = milestone

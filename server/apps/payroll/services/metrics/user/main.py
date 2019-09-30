@@ -47,8 +47,10 @@ class UserMetricsProvider:
 
         return metrics
 
-    def _get_issues_metrics(self,
-                            user: User) -> IssueUserMetrics:
+    def _get_issues_metrics(
+        self,
+        user: User,
+    ) -> IssueUserMetrics:
         metrics = IssueUserMetrics()
         metrics.opened_count = self._get_issues_opened_count(user)
         metrics.closed_spent = self._get_issues_closed_spent(user)
@@ -56,8 +58,10 @@ class UserMetricsProvider:
 
         return metrics
 
-    def _get_merge_requests_metrics(self,
-                                    user: User) -> MergeRequestUserMetrics:
+    def _get_merge_requests_metrics(
+        self,
+        user: User,
+    ) -> MergeRequestUserMetrics:
         metrics = MergeRequestUserMetrics()
         metrics.opened_count = self._get_merge_requests_opened_count(user)
         metrics.closed_spent = self._get_merge_requests_closed_spent(user)

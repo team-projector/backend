@@ -29,8 +29,10 @@ def check_projects_deleted_issues() -> None:
             check_project_deleted_issues(project, gl_project)
 
 
-def check_project_deleted_issues(project: Project,
-                                 gl_project: GlProject) -> None:
+def check_project_deleted_issues(
+    project: Project,
+    gl_project: GlProject,
+) -> None:
     gl_issues = set()
     for gl_issue in gl_project.issues.list(as_list=False):
         gl_issues.add(gl_issue.id)
@@ -41,5 +43,7 @@ def check_project_deleted_issues(project: Project,
 
     project.issues.filter(gl_id__in=diff).delete()
 
-    logger.info(f'Project "{project}" deleted issues '
-                + f'ckecked: removed {len(diff)} issues')
+    logger.info(
+        f'Project "{project}" deleted issues '
+        + f'ckecked: removed {len(diff)} issues',
+    )

@@ -8,10 +8,12 @@ class IssuesSpentTimesSummary:
     closed_spent: int = 0
     opened_spent: int = 0
 
-    def __init__(self,
-                 spent=0,
-                 closed_spent=0,
-                 opened_spent=0) -> None:
+    def __init__(
+        self,
+        spent=0,
+        closed_spent=0,
+        opened_spent=0,
+    ) -> None:
         self.spent = spent  # noqa WPS601
         self.closed_spent = closed_spent  # noqa WPS601
         self.opened_spent = opened_spent  # noqa WPS601
@@ -23,11 +25,13 @@ class MergeRequestsSpentTimesSummary:
     opened_spent: int = 0
     merged_spent: int = 0
 
-    def __init__(self,
-                 spent=0,
-                 closed_spent=0,
-                 opened_spent=0,
-                 merged_spent=0) -> None:
+    def __init__(
+        self,
+        spent=0,
+        closed_spent=0,
+        opened_spent=0,
+        merged_spent=0,
+    ) -> None:
         self.spent = spent  # noqa WPS601
         self.closed_spent = closed_spent  # noqa WPS601
         self.opened_spent = opened_spent  # noqa WPS601
@@ -38,9 +42,11 @@ class SpentTimesSummary:
     issues: IssuesSpentTimesSummary
     merge_requests: MergeRequestsSpentTimesSummary
 
-    def __init__(self,
-                 issues: IssuesSpentTimesSummary,
-                 merge_requests: MergeRequestsSpentTimesSummary):
+    def __init__(
+        self,
+        issues: IssuesSpentTimesSummary,
+        merge_requests: MergeRequestsSpentTimesSummary,
+    ):
         self.issues = issues
         self.merge_requests = merge_requests
 
@@ -54,8 +60,10 @@ class SpentTimesSummary:
 
 
 class SpentTimesSummaryProvider:
-    def __init__(self,
-                 queryset: QuerySet):
+    def __init__(
+        self,
+        queryset: QuerySet,
+    ):
         self.queryset = queryset
 
     def execute(self) -> SpentTimesSummary:

@@ -13,8 +13,10 @@ from .inlines import NoteInline
 
 
 @admin.register(Issue)
-class IssueAdmin(ForceSyncEntityMixin,
-                 BaseModelAdmin):
+class IssueAdmin(
+    ForceSyncEntityMixin,
+    BaseModelAdmin,
+):
     list_display = (
         'title', 'user', 'milestone', 'state', 'created_at', 'gl_last_sync',
     )

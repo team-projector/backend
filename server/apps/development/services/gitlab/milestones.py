@@ -8,8 +8,10 @@ from ...models import Milestone, Project, ProjectGroup
 from .parsers import parse_gl_date, parse_gl_datetime
 
 
-def load_group_milestones(project_group_id: int,
-                          gl_group_id: int) -> None:
+def load_group_milestones(
+    project_group_id: int,
+    gl_group_id: int,
+) -> None:
     gl = get_gitlab_client()
     gl_group = gl.groups.get(gl_group_id)
 
@@ -22,8 +24,10 @@ def load_group_milestones(project_group_id: int,
     add_action.delay(verb=ACTION_GITLAB_CALL_API)
 
 
-def load_gl_project_milestones(project_id: int,
-                               gl_project_id: int) -> None:
+def load_gl_project_milestones(
+    project_id: int,
+    gl_project_id: int,
+) -> None:
     gl = get_gitlab_client()
     gl_project = gl.projects.get(gl_project_id)
 
@@ -36,9 +40,11 @@ def load_gl_project_milestones(project_id: int,
     add_action.delay(verb=ACTION_GITLAB_CALL_API)
 
 
-def load_project_milestone(project: Project,
-                           project_id: int,
-                           milestone_id: int) -> None:
+def load_project_milestone(
+    project: Project,
+    project_id: int,
+    milestone_id: int,
+) -> None:
     gl = get_gitlab_client()
     gl_project = gl.projects.get(project_id)
 
@@ -52,9 +58,11 @@ def load_project_milestone(project: Project,
     )
 
 
-def load_group_milestone(group: ProjectGroup,
-                         group_id: int,
-                         milestone_id: int) -> None:
+def load_group_milestone(
+    group: ProjectGroup,
+    group_id: int,
+    milestone_id: int,
+) -> None:
     gl = get_gitlab_client()
     gl_group = gl.groups.get(group_id)
 

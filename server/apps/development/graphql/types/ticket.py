@@ -27,7 +27,9 @@ class TicketType(BaseDjangoObjectType):
         name = 'Ticket'
 
     @classmethod
-    def get_queryset(cls,
-                     queryset,
-                     info) -> QuerySet:
+    def get_queryset(
+        cls,
+        queryset,
+        info,
+    ) -> QuerySet:
         return queryset

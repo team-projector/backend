@@ -24,9 +24,11 @@ def load_groups() -> None:
         _load_group(gl_groups[0], gl_groups, gl_groups_map)
 
 
-def _load_group(gl_group: GlGroup,
-                gl_groups: GlGroup,
-                gl_groups_map: dict) -> ProjectGroup:
+def _load_group(
+    gl_group: GlGroup,
+    gl_groups: GlGroup,
+    gl_groups_map: dict,
+) -> ProjectGroup:
     parent = None
 
     if gl_group.parent_id:
@@ -43,8 +45,10 @@ def _load_group(gl_group: GlGroup,
     return load_single_group(gl_group, parent)
 
 
-def load_single_group(gl_group: GlGroup,
-                      parent: Optional[ProjectGroup]) -> ProjectGroup:
+def load_single_group(
+    gl_group: GlGroup,
+    parent: Optional[ProjectGroup],
+) -> ProjectGroup:
     group, _ = ProjectGroup.objects.sync_gitlab(
         gl_id=gl_group.id,
         gl_url=gl_group.web_url,

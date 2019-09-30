@@ -33,8 +33,10 @@ class TicketMetricsProvider:
 
         return metrics
 
-    def _fill_issues_metrics(self,
-                             metrics: TicketMetrics) -> None:
+    def _fill_issues_metrics(
+        self,
+        metrics: TicketMetrics,
+    ) -> None:
         issues = Issue.objects.filter(ticket=self.ticket)
 
         stats = issues.aggregate(
@@ -74,8 +76,10 @@ class TicketMetricsProvider:
 
         metrics.budget_estimate = stats['budget_estimate']
 
-    def _fill_payroll_metrics(self,
-                              metrics: TicketMetrics) -> None:
+    def _fill_payroll_metrics(
+        self,
+        metrics: TicketMetrics,
+    ) -> None:
         payroll = SpentTime.objects.filter(
             issues__ticket=self.ticket,
         ).aggregate(

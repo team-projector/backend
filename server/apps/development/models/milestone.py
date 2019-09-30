@@ -23,9 +23,11 @@ MILESTONE_STATES = Choices(
 MILESTONE_STATE_MAX_LENGTH = 20
 
 
-class Milestone(GitlabEntityMixin,
-                GitlabInternalIdMixin,
-                Timestamps):
+class Milestone(
+    GitlabEntityMixin,
+    GitlabInternalIdMixin,
+    Timestamps,
+):
     title = models.CharField(
         max_length=DEFAULT_TITLE_LENGTH,
         verbose_name=_('VN__TITLE'),

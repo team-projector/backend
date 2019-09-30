@@ -8,8 +8,10 @@ from bitfield import Bit
 from django.db.models import Q, QuerySet
 
 
-def filter_by_roles(queryset: QuerySet,
-                    roles: Iterable[Union[str, Bit]]) -> QuerySet:
+def filter_by_roles(
+    queryset: QuerySet,
+    roles: Iterable[Union[str, Bit]],
+) -> QuerySet:
     from apps.development.models import TeamMember
 
     roles = [

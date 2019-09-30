@@ -7,8 +7,10 @@ from apps.development.services.team_members import filter_by_roles
 from apps.users.models import User
 
 
-def check_allow_get_metrics_by_user(team: Team,
-                                    user: User) -> None:
+def check_allow_get_metrics_by_user(
+    team: Team,
+    user: User,
+) -> None:
     can_filter = filter_by_roles(TeamMember.objects.filter(
         team=team,
         user=user,

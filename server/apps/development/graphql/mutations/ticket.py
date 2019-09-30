@@ -10,8 +10,10 @@ from apps.development.graphql.types import TicketType
 from apps.development.models import Ticket
 
 
-class CreateTicketMutation(ArgumentsValidationMixin,
-                           BaseMutation):
+class CreateTicketMutation(
+    ArgumentsValidationMixin,
+    BaseMutation,
+):
     permission_classes = (AllowProjectManager,)
     form_class = TicketForm
 
@@ -34,8 +36,10 @@ class CreateTicketMutation(ArgumentsValidationMixin,
         )
 
 
-class UpdateTicketMutation(ArgumentsValidationMixin,
-                           BaseMutation):
+class UpdateTicketMutation(
+    ArgumentsValidationMixin,
+    BaseMutation,
+):
     permission_classes = (AllowProjectManager,)
     form_class = TicketForm
 

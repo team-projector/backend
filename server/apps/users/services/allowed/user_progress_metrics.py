@@ -7,8 +7,10 @@ from apps.development.services.team_members import filter_by_roles
 from apps.users.models import User
 
 
-def filter_allowed_for_user(queryset: QuerySet,
-                            user: User) -> QuerySet:
+def filter_allowed_for_user(
+    queryset: QuerySet,
+    user: User,
+) -> QuerySet:
     allowed_users = filter_by_roles(
         TeamMember.objects.filter(user=user),
         [

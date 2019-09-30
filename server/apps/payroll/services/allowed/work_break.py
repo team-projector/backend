@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+from django.db.models import QuerySet
 from django.core.exceptions import PermissionDenied
 
 from apps.development.models import Team, TeamMember
@@ -7,7 +8,10 @@ from apps.development.services.team_members import filter_by_roles
 from apps.users.models import User
 
 
-def filter_allowed_for_user(self, user):
+def filter_allowed_for_user(
+    queryset: QuerySet,
+    user: User,
+):
     users = TeamMember.objects.filter(
         user=user,
         roles=TeamMember.roles.leader,
@@ -16,13 +20,15 @@ def filter_allowed_for_user(self, user):
         flat=True,
     )
 
-    return self.filter(
+    return queryset.filter(
         user__in=(*users, user.id),
     )
 
 
-def check_allow_filtering_by_team(team: Team,
-                                  user: User) -> None:
+def check_allow_filtering_by_team(
+    team: Team,
+    user: User,
+) -> None:
     members = TeamMember.objects.filter(
         team=team,
         user=user,

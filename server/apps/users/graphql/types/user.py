@@ -32,9 +32,11 @@ class UserType(BaseDjangoObjectType):
         return get_user_problems(self)
 
     @classmethod
-    def get_queryset(cls,
-                     queryset: QuerySet,
-                     info) -> QuerySet:
+    def get_queryset(
+        cls,
+        queryset: QuerySet,
+        info,
+    ) -> QuerySet:
         # TODO fix it (team members case)
         if issubclass(queryset.model, User):
             queryset = queryset.filter(is_active=True)

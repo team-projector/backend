@@ -16,10 +16,12 @@ class TeamMemberProgressMetrics:
 
 
 class ProgressMetricsProvider:
-    def __init__(self,
-                 team: Team,
-                 start: date,
-                 end: date):
+    def __init__(
+        self,
+        team: Team,
+        start: date,
+        end: date,
+    ):
         self.team = team
         self.start = start
         self.end = end
@@ -36,6 +38,5 @@ class ProgressMetricsProvider:
 
         return metrics
 
-    def get_user_metrics(self,
-                         user: User) -> Iterable[UserProgressMetrics]:
+    def get_user_metrics(self, user: User) -> Iterable[UserProgressMetrics]:
         raise NotImplementedError

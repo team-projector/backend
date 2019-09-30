@@ -25,10 +25,12 @@ ISSUE_STATES = Choices(
 ISSUE_STATE_MAX_LENGTH = 255
 
 
-class Issue(NotableMixin,
-            SpentTimesMixin,
-            GitlabEntityMixin,
-            GitlabInternalIdMixin):
+class Issue(
+    NotableMixin,
+    SpentTimesMixin,
+    GitlabEntityMixin,
+    GitlabInternalIdMixin,
+):
     title = models.CharField(
         max_length=DEFAULT_TITLE_LENGTH,
         verbose_name=_('VN__TITLE'),

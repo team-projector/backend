@@ -14,10 +14,12 @@ class AuthMutation:
     permission_classes = (AllowAny,)
 
     @classmethod
-    def has_permission(cls,
-                       root: Any,
-                       info: ResolveInfo,
-                       **kwargs) -> bool:
+    def has_permission(
+        cls,
+        root: Any,
+        info: ResolveInfo,
+        **kwargs,
+    ) -> bool:
         return all(
             (
                 perm().has_mutation_permission(root, info, **kwargs)

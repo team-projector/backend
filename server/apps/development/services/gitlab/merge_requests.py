@@ -29,8 +29,10 @@ def load_merge_requests(full_reload: bool = False) -> None:
                 raise
 
 
-def load_project_merge_requests(project: Project,
-                                full_reload: bool = False) -> None:
+def load_project_merge_requests(
+    project: Project,
+    full_reload: bool = False,
+) -> None:
     gl = get_gitlab_client()
 
     logger.info(f'Syncing project "{project}" merge_requests')
@@ -52,9 +54,11 @@ def load_project_merge_requests(project: Project,
         load_project_merge_request(project, gl_project, gl_merge_request)
 
 
-def load_project_merge_request(project: Project,
-                               gl_project: GlProject,
-                               gl_mr: GlMergeRequest) -> MergeRequest:
+def load_project_merge_request(
+    project: Project,
+    gl_project: GlProject,
+    gl_mr: GlMergeRequest,
+) -> MergeRequest:
     time_stats = gl_mr.time_stats()
 
     params = {
@@ -92,9 +96,11 @@ def load_project_merge_request(project: Project,
     return merge_request
 
 
-def load_merge_request_labels(merge_request: MergeRequest,
-                              gl_project: GlProject,
-                              gl_merge_request: GlMergeRequest) -> None:
+def load_merge_request_labels(
+    merge_request: MergeRequest,
+    gl_project: GlProject,
+    gl_merge_request: GlMergeRequest,
+) -> None:
     project_labels = getattr(gl_project, '_cache_labels', None)
     if project_labels is None:
         project_labels = gl_project.labels.list(all=True)
@@ -109,7 +115,9 @@ def load_merge_request_labels(merge_request: MergeRequest,
                 item
                 for item in project_labels
                 if item.name == label_title
-            ), None)
+            ),
+                None,
+            )
             if gl_label:
                 label = Label.objects.create(
                     title=label_title,
@@ -122,16 +130,20 @@ def load_merge_request_labels(merge_request: MergeRequest,
     merge_request.labels.set(labels)
 
 
-def load_merge_request_notes(merge_request: MergeRequest,
-                             gl_merge_request: GlMergeRequest) -> None:
+def load_merge_request_notes(
+    merge_request: MergeRequest,
+    gl_merge_request: GlMergeRequest,
+) -> None:
     for gl_note in gl_merge_request.notes.list(as_list=False, system=True):
         Note.objects.sync_gitlab(gl_note, merge_request)
 
     merge_request.adjust_spent_times()
 
 
-def load_merge_request_participants(merge_request: MergeRequest,
-                                    gl_merge_request: GlMergeRequest) -> None:
+def load_merge_request_participants(
+    merge_request: MergeRequest,
+    gl_merge_request: GlMergeRequest,
+) -> None:
     merge_request.participants.set((
         _get_user(user['id'])
         for user in gl_merge_request.participants()

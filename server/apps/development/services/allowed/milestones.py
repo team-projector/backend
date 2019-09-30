@@ -8,8 +8,10 @@ from apps.development.models.project_member import PROJECT_MEMBER_ROLES
 from apps.users.models import User
 
 
-def filter_allowed_for_user(queryset: QuerySet,
-                            user: User) -> QuerySet:
+def filter_allowed_for_user(
+    queryset: QuerySet,
+    user: User,
+) -> QuerySet:
     members = get_members(user)
 
     project_milestones = Milestone.objects.filter(
@@ -39,8 +41,10 @@ def get_members(user: User) -> list:
     return list(members)
 
 
-def get_group_milestones(groups: QuerySet,
-                         milestones_ids: list) -> list:
+def get_group_milestones(
+    groups: QuerySet,
+    milestones_ids: list,
+) -> list:
     milestones_on_level = Milestone.objects.filter(
         Q(project_group__in=groups) | Q(project__group__in=groups),
     ).values('id')

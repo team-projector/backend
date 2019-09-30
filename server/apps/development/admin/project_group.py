@@ -11,8 +11,10 @@ from .inlines import ProjectMemberInline
 
 
 @admin.register(ProjectGroup)
-class ProjectGroupAdmin(ForceSyncEntityMixin,
-                        BaseModelAdmin):
+class ProjectGroupAdmin(
+    ForceSyncEntityMixin,
+    BaseModelAdmin,
+):
     list_display = ('title', 'parent', 'gl_url', 'gl_last_sync')
     search_fields = ('title',)
     inlines = (ProjectMemberInline,)

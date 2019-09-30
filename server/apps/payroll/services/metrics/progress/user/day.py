@@ -50,9 +50,11 @@ class DayMetricsProvider(ProgressMetricsProvider):
 
         return metrics
 
-    def _replay_loading(self,
-                        now: date,
-                        active_issues: List[dict]) -> None:
+    def _replay_loading(
+        self,
+        now: date,
+        active_issues: List[dict],
+    ) -> None:
         current = now
 
         while current < self.start:
@@ -68,10 +70,12 @@ class DayMetricsProvider(ProgressMetricsProvider):
 
             current += DAY_STEP
 
-    def _apply_due_day_stats(self,
-                             day: date,
-                             metric: UserProgressMetrics,
-                             due_day_stats: dict) -> None:
+    def _apply_due_day_stats(
+        self,
+        day: date,
+        metric: UserProgressMetrics,
+        due_day_stats: dict,
+    ) -> None:
         if day not in due_day_stats:
             return
 
@@ -81,20 +85,24 @@ class DayMetricsProvider(ProgressMetricsProvider):
         metric.time_estimate = progress['total_time_estimate']
         metric.time_remains = progress['total_time_remains']
 
-    def _apply_time_spents(self,
-                           day: date,
-                           metric: UserProgressMetrics,
-                           time_spents: dict) -> None:
+    def _apply_time_spents(
+        self,
+        day: date,
+        metric: UserProgressMetrics,
+        time_spents: dict,
+    ) -> None:
         if day not in time_spents:
             return
 
         spent = time_spents[day]
         metric.time_spent = spent['period_spent']
 
-    def _apply_payrols_stats(self,
-                             day: date,
-                             metric: UserProgressMetrics,
-                             payrols_stats: dict) -> None:
+    def _apply_payrols_stats(
+        self,
+        day: date,
+        metric: UserProgressMetrics,
+        payrols_stats: dict,
+    ) -> None:
         if day not in payrols_stats:
             return
 
@@ -169,13 +177,17 @@ class DayMetricsProvider(ProgressMetricsProvider):
         }
 
     @staticmethod
-    def _is_apply_loading(day: date,
-                          now: date) -> bool:
+    def _is_apply_loading(
+        day: date,
+        now: date,
+    ) -> bool:
         return day >= now and day.weekday() not in settings.TP_WEEKENDS_DAYS
 
-    def _update_loading(self,
-                        metric: UserProgressMetrics,
-                        active_issues: List[dict]) -> None:
+    def _update_loading(
+        self,
+        metric: UserProgressMetrics,
+        active_issues: List[dict],
+    ) -> None:
         if not active_issues:
             return
 
@@ -194,10 +206,11 @@ class DayMetricsProvider(ProgressMetricsProvider):
             active_issues,
         )
 
-    def _apply_deadline_issues_loading(self,
-                                       metric: UserProgressMetrics,
-                                       active_issues: List[dict]) -> None:
-
+    def _apply_deadline_issues_loading(
+        self,
+        metric: UserProgressMetrics,
+        active_issues: List[dict],
+    ) -> None:
         deadline_issues = [
             issue
             for issue in active_issues
@@ -208,10 +221,11 @@ class DayMetricsProvider(ProgressMetricsProvider):
             metric.loading += issue['remaining']
             active_issues.remove(issue)
 
-    def _apply_active_issues_loading(self,
-                                     metric: UserProgressMetrics,
-                                     active_issues: List[dict]) -> None:
-
+    def _apply_active_issues_loading(
+        self,
+        metric: UserProgressMetrics,
+        active_issues: List[dict],
+    ) -> None:
         for issue in active_issues[:]:
             available_time = self.max_day_loading - metric.loading
 

@@ -31,14 +31,16 @@ class IssuesSummary:
 
 
 class IssuesSummaryProvider:
-    def __init__(self,
-                 queryset: QuerySet,
-                 due_date: Optional[date],
-                 user: Optional[User],
-                 team: Optional[Team],
-                 project: Optional[Project],
-                 state: Optional[str],
-                 milestone: Optional[Milestone]):
+    def __init__(
+        self,
+        queryset: QuerySet,
+        due_date: Optional[date],
+        user: Optional[User],
+        team: Optional[Team],
+        project: Optional[Project],
+        state: Optional[str],
+        milestone: Optional[Milestone],
+    ):
         self._queryset = queryset
         self._due_date = due_date
         self._user = user
@@ -103,13 +105,15 @@ class IssuesSummaryProvider:
         return queryset.count()
 
 
-def get_issues_summary(queryset: QuerySet,
-                       due_date: Optional[date],
-                       user: Optional[User],
-                       team: Optional[Team],
-                       project: Optional[Project],
-                       state: Optional[str],
-                       milestone: Optional[Milestone]) -> IssuesSummary:
+def get_issues_summary(
+    queryset: QuerySet,
+    due_date: Optional[date],
+    user: Optional[User],
+    team: Optional[Team],
+    project: Optional[Project],
+    state: Optional[str],
+    milestone: Optional[Milestone],
+) -> IssuesSummary:
     return IssuesSummaryProvider(
         queryset,
         due_date,

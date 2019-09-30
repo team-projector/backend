@@ -37,9 +37,11 @@ def load_group_projects(group: ProjectGroup) -> None:
             load_project(gl, group, gl_project)
 
 
-def load_project(gl: Gitlab,
-                 group: ProjectGroup,
-                 gl_project: GlProject) -> None:
+def load_project(
+    gl: Gitlab,
+    group: ProjectGroup,
+    gl_project: GlProject,
+) -> None:
     msg = f'Syncing project "{gl_project.name}"...'
 
     logger.info(f'{msg}')
@@ -61,8 +63,10 @@ def load_project(gl: Gitlab,
     logger.info(f'{msg} done')
 
 
-def check_project_webhooks_if_need(gl: Gitlab,
-                                   gl_project: GlProject):
+def check_project_webhooks_if_need(
+    gl: Gitlab,
+    gl_project: GlProject,
+):
     if not settings.GITLAB_CHECK_WEBHOOKS:
         return
 
@@ -103,8 +107,10 @@ def check_project_webhooks(gl_project: GlProject) -> None:
         })
 
 
-def validate_webhook(webhook,
-                     webhook_url: str) -> bool:
+def validate_webhook(
+    webhook,
+    webhook_url: str,
+) -> bool:
     return (
         webhook.url == webhook_url
         and webhook.issues_events
