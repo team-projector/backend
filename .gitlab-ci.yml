@@ -8,23 +8,23 @@ variables:
   GIT_STRATEGY: none
 
 stages:
-  - quality
+#  - quality
   - build
   - test
   - publish
   - deploy
 
-quality:
-  image: junte/django-quality:advanced
-  stage: quality
-  variables:
-    LOCALE_PATH: $CI_PROJECT_DIR/locale
-    GIT_DEPTH: 5
-    GIT_STRATEGY: fetch
-  script:
-    - cat setup.cfg
-    - make check_quality
-    - check-locale
+#quality:
+#  image: junte/django-quality:advanced
+#  stage: quality
+#  variables:
+#    LOCALE_PATH: $CI_PROJECT_DIR/locale
+#    GIT_DEPTH: 5
+#    GIT_STRATEGY: fetch
+#  script:
+#    - cat setup.cfg
+#    - make check_quality
+#    - check-locale
 
 build:
   stage: build
@@ -36,9 +36,18 @@ build:
   script:
     - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN registry.gitlab.com
     - docker pull $DOCKER_CACHE_IMAGE || true
-    - docker build --cache-from $DOCKER_CACHE_IMAGE -t $DOCKER_TEST_IMAGE -t $DOCKER_CACHE_IMAGE -f deploy/Dockerfile .
+    - docker build --cache-from $DOCKER_CACHE_IMAGE -t $DOCKER_IMAGE --target production -f deploy/Dockerfile .
+    - docker build --cache-from $DOCKER_CACHE_IMAGE -t $DOCKER_TEST_IMAGE -t $DOCKER_CACHE_IMAGE --target test -f deploy/Dockerfile .
     - docker push $DOCKER_TEST_IMAGE
+    - docker push $DOCKER_IMAGE
     - docker push $DOCKER_CACHE_IMAGE
+
+quality:
+  image: $DOCKER_TEST_IMAGE
+  stage: test
+  script:
+    - cd /app
+    - make check_quality
 
 test:
   image: $DOCKER_TEST_IMAGE
@@ -49,7 +58,7 @@ test:
     - postgres
   script:
     - cd /app
-    - pip install pytest-django pytest-xdist pytest-cov factory-boy httpretty
+#    - pip install pytest-django pytest-xdist pytest-cov factory-boy httpretty
     - pytest -n auto --dist=loadscope --cov=apps --cov-report=html:coverage_html
     - mkdir $CI_PROJECT_DIR/coverage
     - coverage report -m > $CI_PROJECT_DIR/coverage/report.log
@@ -67,10 +76,8 @@ publish_dev:
     - docker:dind
   script:
     - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN registry.gitlab.com
-    - docker pull $DOCKER_TEST_IMAGE
-    - docker tag $DOCKER_TEST_IMAGE $DOCKER_IMAGE
-    - docker tag $DOCKER_TEST_IMAGE $CI_REGISTRY_IMAGE:dev
-    - docker push $DOCKER_IMAGE
+    - docker pull $DOCKER_IMAGE
+    - docker tag $DOCKER_IMAGE $CI_REGISTRY_IMAGE:dev
     - docker push $CI_REGISTRY_IMAGE:dev
   only:
     - master
