@@ -9,7 +9,7 @@ from apps.core.utils.time import seconds
 from apps.development.models import TeamMember
 from apps.development.models.issue import ISSUE_STATES
 from apps.payroll.services.metrics.progress.team import (
-    get_team_progress_metrics
+    get_team_progress_metrics, ProgressMetricsProvider
 )
 from tests.base import format_date
 from tests.test_development.factories import (
@@ -436,6 +436,15 @@ def test_bad_group(db):
             timezone.now().date() + timedelta(days=5),
             'test_bad_group'
         )
+
+
+def test_provider_not_implemented(user):
+    with raises(NotImplementedError):
+        ProgressMetricsProvider(
+            TeamFactory.create(),
+            datetime.now().date() - timedelta(days=5),
+            datetime.now().date() + timedelta(days=5),
+        ).get_user_metrics(user)
 
 
 def _check_metrics(metrics,
