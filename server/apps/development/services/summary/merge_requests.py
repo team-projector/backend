@@ -19,7 +19,7 @@ class MergeRequestsSummaryProvider:
     def execute(self) -> MergeRequestsSummary:
         summary = MergeRequestsSummary()
 
-        merge_requests_counts = self.get_counts_by_state()
+        merge_requests_counts = self.get_counts()
 
         summary.count = merge_requests_counts['count']
         summary.opened_count = merge_requests_counts['opened_count']
@@ -28,7 +28,7 @@ class MergeRequestsSummaryProvider:
 
         return summary
 
-    def get_counts_by_state(self):
+    def get_counts(self) -> QuerySet:
         return self.queryset.aggregate(
             count=self._count(),
             opened_count=self._count(state=MERGE_REQUESTS_STATES.opened),
@@ -37,7 +37,7 @@ class MergeRequestsSummaryProvider:
         )
 
     @staticmethod
-    def _count(**filters):
+    def _count(**filters) -> Count:
         return Count('id', filter=Q(**filters))
 
 
