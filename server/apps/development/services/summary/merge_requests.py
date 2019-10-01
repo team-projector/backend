@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from django.db.models import Count, QuerySet
+from django.db.models import Count, Q, QuerySet
 
 from apps.development.models.merge_request import MERGE_REQUESTS_STATES
 
@@ -19,28 +19,26 @@ class MergeRequestsSummaryProvider:
     def execute(self) -> MergeRequestsSummary:
         summary = MergeRequestsSummary()
 
-        # TODO refactor
-        for item in self._get_counts_by_state():
-            if item['state'] == MERGE_REQUESTS_STATES.opened:
-                summary.opened_count = item['count']
-                summary.count += item['count']
-            elif item['state'] == MERGE_REQUESTS_STATES.closed:
-                summary.closed_count = item['count']
-                summary.count += item['count']
-            elif item['state'] == MERGE_REQUESTS_STATES.merged:
-                summary.merged_count = item['count']
-                summary.count += item['count']
-            else:
-                summary.count += item['count']
+        merge_requests_counts = self.get_counts_by_state()
+
+        summary.count = merge_requests_counts['count']
+        summary.opened_count = merge_requests_counts['opened_count']
+        summary.closed_count = merge_requests_counts['closed_count']
+        summary.merged_count = merge_requests_counts['merged_count']
 
         return summary
 
-    def _get_counts_by_state(self) -> QuerySet:
-        return self.queryset.values(
-            'state',
-        ).annotate(
-            count=Count('*'),
-        ).order_by()
+    def get_counts_by_state(self):
+        return self.queryset.aggregate(
+            count=self._count(),
+            opened_count=self._count(state=MERGE_REQUESTS_STATES.opened),
+            closed_count=self._count(state=MERGE_REQUESTS_STATES.closed),
+            merged_count=self._count(state=MERGE_REQUESTS_STATES.merged),
+        )
+
+    @staticmethod
+    def _count(**filters):
+        return Count('id', filter=Q(**filters))
 
 
 def get_merge_requests_summary(queryset: QuerySet) -> MergeRequestsSummary:
