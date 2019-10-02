@@ -2,12 +2,22 @@
 
 import graphene
 from django.contrib.auth import get_user_model
-from django.db.models import Prefetch, QuerySet
+from django.db import models
 
 from apps.core import graphql
 from apps.development import models as development_models
-from apps.development.graphql.types.interfaces import WorkItem
+from apps.development.services.allowed.merge_requests import (
+    filter_allowed_for_user,
+)
+from apps.development.services.metrics.merge_request import (
+    get_merge_request_metrcis,
+)
+from apps.development.services.problems.merge_request import (
+    get_merge_request_problems,
+)
 
+from ... import graphql as development_graphql
+from .interfaces import WorkItem
 from .merge_request_metrics import MergeRequestMetricsType
 
 
@@ -22,15 +32,9 @@ class MergeRequestType(graphql.BaseDjangoObjectType):
         name = 'MergeRequest'
 
     def resolve_metrics(self, info, **kwargs):
-        from ...services.metrics.merge_request import get_merge_request_metrcis
-
         return get_merge_request_metrcis(self)
 
     def resolve_problems(self, info, **kwargs):
-        from ...services.problems.merge_request import (
-            get_merge_request_problems
-        )
-
         return get_merge_request_problems(self)
 
     def resolve_participants(self, info, **kwargs):
@@ -43,9 +47,7 @@ class MergeRequestType(graphql.BaseDjangoObjectType):
         return getattr(self, '_issues_', self.issues)
 
     @classmethod
-    def get_queryset(cls, queryset, info) -> QuerySet:
-        from ...services.allowed.merge_requests import filter_allowed_for_user
-
+    def get_queryset(cls, queryset, info) -> models.QuerySet:
         queryset = filter_allowed_for_user(
             queryset,
             info.context.user,
@@ -59,7 +61,7 @@ class MergeRequestType(graphql.BaseDjangoObjectType):
             from apps.users.graphql.types import UserType
 
             users = get_user_model().objects
-            queryset = queryset.prefetch_related(Prefetch(
+            queryset = queryset.prefetch_related(models.Prefetch(
                 'participants',
                 queryset=UserType.get_queryset(users, info).all(),
                 to_attr='_participants_',
@@ -67,11 +69,9 @@ class MergeRequestType(graphql.BaseDjangoObjectType):
 
         # TODO: condsider using graphene_django_optimizer here
         if graphql.is_field_selected(info, 'edges.node.labels'):
-            from apps.development.graphql.types import LabelType
-
-            queryset = queryset.prefetch_related(Prefetch(
+            queryset = queryset.prefetch_related(models.Prefetch(
                 'labels',
-                queryset=LabelType.get_queryset(
+                queryset=development_graphql.types.LabelType.get_queryset(
                     development_models.Label.objects, info,
                 ).all(),
                 to_attr='_labels_',
@@ -79,11 +79,9 @@ class MergeRequestType(graphql.BaseDjangoObjectType):
 
         # TODO: condsider using graphene_django_optimizer here
         if graphql.is_field_selected(info, 'edges.node.issues'):
-            from apps.development.graphql.types import IssueType
-
-            queryset = queryset.prefetch_related(Prefetch(
+            queryset = queryset.prefetch_related(models.Prefetch(
                 'issues',
-                queryset=IssueType.get_queryset(
+                queryset=development_graphql.types.IssueType.get_queryset(
                     development_models.Issue.objects, info,
                 ).all(),
                 to_attr='_issues_',
