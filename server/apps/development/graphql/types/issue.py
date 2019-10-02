@@ -4,10 +4,7 @@ import graphene
 from django.contrib.auth import get_user_model
 from django.db.models import Prefetch, QuerySet
 
-from apps.core.graphql.connections import DataSourceConnection
-from apps.core.graphql.relay_nodes import DatasourceRelayNode
-from apps.core.graphql.types import BaseDjangoObjectType
-from apps.core.graphql.utils import is_field_selected
+from apps.core import graphql
 from apps.development.graphql.types.interfaces import WorkItem
 from apps.development.models import Issue, Label
 from apps.development.services.allowed.issues import filter_allowed_for_user
@@ -17,15 +14,15 @@ from apps.development.services.problems.issue import get_issue_problems
 from .issue_metrics import IssueMetricsType
 
 
-class IssueType(BaseDjangoObjectType):
+class IssueType(graphql.BaseDjangoObjectType):
     metrics = graphene.Field(IssueMetricsType)
     problems = graphene.List(graphene.String)
 
     class Meta:
         model = Issue
         filter_fields: list = []
-        interfaces = (DatasourceRelayNode, WorkItem)
-        connection_class = DataSourceConnection
+        interfaces = (graphql.DatasourceRelayNode, WorkItem)
+        connection_class = graphql.DataSourceConnection
         name = 'Issue'
 
     def resolve_problems(self, info, **kwargs):
@@ -51,11 +48,11 @@ class IssueType(BaseDjangoObjectType):
             info.context.user,
         )
 
-        if is_field_selected(info, 'edges.node.user'):
+        if graphql.is_field_selected(info, 'edges.node.user'):
             queryset = queryset.select_related('user')
 
         # TODO: condsider using graphene_django_optimizer here
-        if is_field_selected(info, 'edges.node.participants'):
+        if graphql.is_field_selected(info, 'edges.node.participants'):
             from apps.users.graphql.types import UserType
 
             users = get_user_model().objects
@@ -66,7 +63,7 @@ class IssueType(BaseDjangoObjectType):
             ))
 
         # TODO: condsider using graphene_django_optimizer here
-        if is_field_selected(info, 'edges.node.labels'):
+        if graphql.is_field_selected(info, 'edges.node.labels'):
             from apps.development.graphql.types import LabelType
 
             queryset = queryset.prefetch_related(Prefetch(

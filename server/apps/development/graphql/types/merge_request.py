@@ -4,40 +4,29 @@ import graphene
 from django.contrib.auth import get_user_model
 from django.db.models import Prefetch, QuerySet
 
-from apps.core.graphql.connections import DataSourceConnection
-from apps.core.graphql.relay_nodes import DatasourceRelayNode
-from apps.core.graphql.types import BaseDjangoObjectType
-from apps.core.graphql.utils import is_field_selected
+from apps.core import graphql
+from apps.development import models as development_models
+from apps.development import services as development_services
 from apps.development.graphql.types.interfaces import WorkItem
-from apps.development.models import Issue, Label, MergeRequest
-from apps.development.services.allowed.merge_requests import (
-    filter_allowed_for_user,
-)
-from apps.development.services.metrics.merge_request import (
-    get_merge_request_metrcis,
-)
-from apps.development.services.problems.merge_request import (
-    get_merge_request_problems,
-)
 
 from .merge_request_metrics import MergeRequestMetricsType
 
 
-class MergeRequestType(BaseDjangoObjectType):
+class MergeRequestType(graphql.BaseDjangoObjectType):
     metrics = graphene.Field(MergeRequestMetricsType)
     problems = graphene.List(graphene.String)
 
     class Meta:
-        model = MergeRequest
-        interfaces = (DatasourceRelayNode, WorkItem)
-        connection_class = DataSourceConnection
+        model = development_models.MergeRequest
+        interfaces = (graphql.DatasourceRelayNode, WorkItem)
+        connection_class = graphql.DataSourceConnection
         name = 'MergeRequest'
 
     def resolve_metrics(self, info, **kwargs):
-        return get_merge_request_metrcis(self)
+        return development_services.get_merge_request_metrcis(self)
 
     def resolve_problems(self, info, **kwargs):
-        return get_merge_request_problems(self)
+        return development_services.get_merge_request_problems(self)
 
     def resolve_participants(self, info, **kwargs):
         return getattr(self, '_participants_', self.participants)
@@ -50,16 +39,16 @@ class MergeRequestType(BaseDjangoObjectType):
 
     @classmethod
     def get_queryset(cls, queryset, info) -> QuerySet:
-        queryset = filter_allowed_for_user(
+        queryset = development_services.filter_allowed_for_user(
             queryset,
             info.context.user,
         )
 
-        if is_field_selected(info, 'edges.node.user'):
+        if graphql.is_field_selected(info, 'edges.node.user'):
             queryset = queryset.select_related('user')
 
         # TODO: condsider using graphene_django_optimizer here
-        if is_field_selected(info, 'edges.node.participants'):
+        if graphql.is_field_selected(info, 'edges.node.participants'):
             from apps.users.graphql.types import UserType
 
             users = get_user_model().objects
@@ -70,22 +59,26 @@ class MergeRequestType(BaseDjangoObjectType):
             ))
 
         # TODO: condsider using graphene_django_optimizer here
-        if is_field_selected(info, 'edges.node.labels'):
+        if graphql.is_field_selected(info, 'edges.node.labels'):
             from apps.development.graphql.types import LabelType
 
             queryset = queryset.prefetch_related(Prefetch(
                 'labels',
-                queryset=LabelType.get_queryset(Label.objects, info).all(),
+                queryset=LabelType.get_queryset(
+                    development_models.Label.objects, info,
+                ).all(),
                 to_attr='_labels_',
             ))
 
         # TODO: condsider using graphene_django_optimizer here
-        if is_field_selected(info, 'edges.node.issues'):
+        if graphql.is_field_selected(info, 'edges.node.issues'):
             from apps.development.graphql.types import IssueType
 
             queryset = queryset.prefetch_related(Prefetch(
                 'issues',
-                queryset=IssueType.get_queryset(Issue.objects, info).all(),
+                queryset=IssueType.get_queryset(
+                    development_models.Issue.objects, info,
+                ).all(),
                 to_attr='_issues_',
             ))
 
