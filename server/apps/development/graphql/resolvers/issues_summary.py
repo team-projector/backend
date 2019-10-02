@@ -24,12 +24,7 @@ def resolve_issues_summary(
 
     return get_issues_summary(
         filterset.qs,
-        filterset.form.cleaned_data['due_date'],
-        filterset.form.cleaned_data['user'],
-        filterset.form.cleaned_data['team'],
-        filterset.form.cleaned_data['project'],
-        filterset.form.cleaned_data['state'],
-        filterset.form.cleaned_data['milestone'],
+        **filterset.form.cleaned_data,
     )
 
 
