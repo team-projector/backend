@@ -18,6 +18,9 @@ class MilestoneAdmin(
     search_fields = ('title',)
 
     def sync_handler(self, obj):
+        """
+        Syncing current milestone.
+        """
         if obj.content_type.model_class() == Project:
             sync_project_milestone.delay(
                 obj.owner.gl_id,

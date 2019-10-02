@@ -22,6 +22,9 @@ class NotableMixin(models.Model):
         abstract = True
 
     def adjust_spent_times(self) -> None:
+        """
+        Create spent times from notes when loading issues or merge requests.
+        """
         from apps.payroll.models import SpentTime
 
         users_spents: DefaultDict[int, int] = defaultdict(int)
@@ -52,6 +55,9 @@ class NotableMixin(models.Model):
             )
 
     def _get_notes_for_processing(self) -> Iterable[Note]:
+        """
+        Helper for "adjust_spent_times" method.
+        """
         notes: List[Note] = []
 
         for note in self.notes.all().order_by('created_at'):

@@ -27,6 +27,9 @@ class IssueAdmin(
     inlines = (NoteInline,)
 
     def sync_handler(self, obj):
+        """
+        Syncing current issue.
+        """
         sync_project_issue.delay(
             obj.project.gl_id,
             obj.gl_iid,

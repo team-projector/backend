@@ -20,6 +20,9 @@ class ProjectAdmin(
     inlines = (ProjectMemberInline,)
 
     def sync_handler(self, obj):
+        """
+        Syncing current project.
+        """
         sync_project.delay(
             obj.group.id,
             obj.gl_id,

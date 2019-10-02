@@ -23,6 +23,9 @@ class LabelAdmin(BaseModelAdmin):
 
     @mark_safe
     def color_square(self, obj):
+        """
+        Show current label with colored square.
+        """
         return f"""
                 <div style="float: left;"> {obj.color} </div>
                 <div style="background-color: {obj.color};
