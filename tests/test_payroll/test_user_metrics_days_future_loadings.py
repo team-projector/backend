@@ -52,6 +52,46 @@ def test_has_spents(user):
     })
 
 
+@override_settings(TP_WEEKENDS_DAYS=[])
+def test_replay_without_active_issues(user):
+    IssueFactory.create(
+        user=user,
+        due_date=datetime.now() + timedelta(days=10),
+        time_estimate=seconds(hours=3),
+        total_time_spent=3,
+        state=ISSUE_STATES.closed
+    )
+
+    start = datetime.now().date() + timedelta(days=1)
+    end = datetime.now().date() + timedelta(days=3)
+    metrics = get_user_progress_metrics(user, start, end, 'day')
+
+    assert len(metrics) == (end - start).days + 1
+    _check_metrics(metrics, {
+        start: timedelta(seconds=0)
+    })
+
+
+@override_settings(TP_WEEKENDS_DAYS=[0, 1, 2, 3, 4, 5, 6])
+def test_not_apply_loading_weekends(user):
+    IssueFactory.create(
+        user=user,
+        due_date=datetime.now() + timedelta(days=10),
+        time_estimate=seconds(hours=15),
+        total_time_spent=0,
+        state=ISSUE_STATES.opened
+    )
+
+    start = datetime.now().date() + timedelta(days=1)
+    end = datetime.now().date() + timedelta(days=5)
+    metrics = get_user_progress_metrics(user, start, end, 'day')
+
+    assert len(metrics) == (end - start).days + 1
+    _check_metrics(metrics, {
+        start: timedelta(seconds=0)
+    })
+
+
 def _check_metrics(metrics,
                    loadings: Dict[date, timedelta]):
     loadings = _prepare_metrics(loadings)

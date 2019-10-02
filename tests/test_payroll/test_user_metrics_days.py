@@ -9,7 +9,7 @@ from pytest import raises
 from apps.core.utils.time import seconds
 from apps.development.models.issue import ISSUE_STATES
 from apps.payroll.services.metrics.progress.user import (
-    get_user_progress_metrics
+    get_user_progress_metrics, ProgressMetricsProvider
 )
 from tests.base import format_date
 from tests.test_development.factories import IssueFactory
@@ -263,6 +263,45 @@ def test_another_user(user):
                    }, {}, {})
 
 
+@override_settings(TP_WEEKENDS_DAYS=[])
+def test_not_loading_over_daily_work_hours(user):
+    user.daily_work_hours = 4
+    user.save()
+
+    issue = IssueFactory.create(
+        user=user,
+        due_date=datetime.now() + timedelta(days=7),
+        time_estimate=seconds(hours=15),
+        total_time_spent=5,
+        state=ISSUE_STATES.opened
+    )
+
+    IssueSpentTimeFactory.create(
+        date=datetime.now(),
+        user=user,
+        base=issue,
+        time_spent=seconds(hours=5)
+    )
+
+    start = datetime.now().date() - timedelta(days=1)
+    end = datetime.now().date() + timedelta(days=1)
+    metrics = get_user_progress_metrics(user, start, end, 'day')
+
+    assert len(metrics) == (end - start).days + 1
+    _check_metrics(metrics,
+                   {
+                       timezone.now() - timedelta(days=1): timedelta(hours=0),
+                       timezone.now(): timedelta(hours=5),
+                   }, {
+                       timezone.now(): timedelta(hours=5),
+                       timezone.now() + timedelta(days=1): timedelta(hours=4),
+                   }, {
+                       timezone.now() + timedelta(days=7): 1
+                   }, {
+                       timezone.now() + timedelta(days=7): timedelta(hours=15)
+                   }, {}, 4)
+
+
 def test_bad_group(user):
     with raises(ValueError):
         get_user_progress_metrics(
@@ -271,6 +310,15 @@ def test_bad_group(user):
             datetime.now().date() + timedelta(days=5),
             'test_bad_group'
         )
+
+
+def test_provider_not_implemented(user):
+    with raises(NotImplementedError):
+        ProgressMetricsProvider(
+            user,
+            datetime.now().date() - timedelta(days=5),
+            datetime.now().date() + timedelta(days=5),
+        ).get_metrics()
 
 
 def _check_metrics(metrics,

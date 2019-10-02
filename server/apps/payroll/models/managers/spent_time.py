@@ -2,7 +2,6 @@
 
 from typing import Any
 
-from django.contrib.contenttypes.models import ContentType
 from django.db import models
 from django.db.models import Case, F, FloatField, Q, QuerySet, Sum, When
 from django.db.models.functions import Coalesce
@@ -12,16 +11,6 @@ from apps.payroll.services.allowed.spent_time import filter_allowed_for_user
 
 
 class SpentTimeQuerySet(models.QuerySet):
-    def for_issues(self, issues):
-        from apps.development.models import Issue
-
-        ct = ContentType.objects.get_for_model(Issue)
-
-        return self.filter(
-            content_type=ct,
-            object_id__in=issues.values_list('id'),
-        )
-
     def aggregate_payrolls(self):
         return self.annotate_payrolls().aggregate(
             total_payroll=Coalesce(Sum('payroll'), 0),
