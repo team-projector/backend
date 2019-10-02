@@ -6,7 +6,6 @@ from django.db.models import Prefetch, QuerySet
 
 from apps.core import graphql
 from apps.development import models as development_models
-from apps.development import services as development_services
 from apps.development.graphql.types.interfaces import WorkItem
 
 from .merge_request_metrics import MergeRequestMetricsType
@@ -23,10 +22,16 @@ class MergeRequestType(graphql.BaseDjangoObjectType):
         name = 'MergeRequest'
 
     def resolve_metrics(self, info, **kwargs):
-        return development_services.get_merge_request_metrcis(self)
+        from ...services.metrics.merge_request import get_merge_request_metrcis
+
+        return get_merge_request_metrcis(self)
 
     def resolve_problems(self, info, **kwargs):
-        return development_services.get_merge_request_problems(self)
+        from ...services.problems.merge_request import (
+            get_merge_request_problems
+        )
+
+        return get_merge_request_problems(self)
 
     def resolve_participants(self, info, **kwargs):
         return getattr(self, '_participants_', self.participants)
@@ -39,7 +44,9 @@ class MergeRequestType(graphql.BaseDjangoObjectType):
 
     @classmethod
     def get_queryset(cls, queryset, info) -> QuerySet:
-        queryset = development_services.filter_allowed_for_user(
+        from ...services.allowed.merge_requests import filter_allowed_for_user
+
+        queryset = filter_allowed_for_user(
             queryset,
             info.context.user,
         )
