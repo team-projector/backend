@@ -10,6 +10,9 @@ from ..models import WorkBreak
 
 @admin.register(WorkBreak)
 class WorkBreakAdmin(BaseModelAdmin):
+    """
+    A class representing Work Break model for admin dashboard.
+    """
     list_display = ('user', 'reason', 'from_date', 'to_date', 'approve_state')
     list_filter = (UserFilter,)
     search_fields = ('user__login', 'user__email')

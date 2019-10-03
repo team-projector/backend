@@ -17,6 +17,9 @@ from .team_metrics import TeamMetricsType
 
 
 class TeamType(BaseDjangoObjectType):
+    """
+    A class representing Team model.
+    """
     metrics = graphene.Field(TeamMetricsType)
     members = DataSourceConnectionField(
         TeamMemberType,

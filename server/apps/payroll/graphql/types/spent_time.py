@@ -12,6 +12,9 @@ from apps.payroll.services.allowed.spent_time import filter_allowed_for_user
 
 
 class SpentTimeType(BaseDjangoObjectType):
+    """
+    A class representing Spent Time model for Graphql.
+    """
     owner = graphene.Field(WorkItem)
 
     class Meta:
@@ -21,10 +24,16 @@ class SpentTimeType(BaseDjangoObjectType):
         name = 'SpentTime'
 
     def resolve_owner(self, info, **kwargs):
+        """
+        Get spent time owner: issue or merge request.
+        """
         return self.base
 
     @classmethod
     def get_queryset(cls, queryset, info) -> QuerySet:
+        """
+        Get spent times.
+        """
         return filter_allowed_for_user(
             queryset,
             info.context.user,

@@ -5,7 +5,13 @@ from django.db.models import QuerySet
 
 
 class TeamMemberManager(models.Manager):
+    """
+    The project group manager.
+    """
     def get_no_watchers(self, team) -> QuerySet:
+        """
+        Get all users without watchers for team.
+        """
         from apps.development.models import TeamMember
 
         return self.filter(

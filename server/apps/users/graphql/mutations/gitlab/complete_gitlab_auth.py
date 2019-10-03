@@ -13,6 +13,9 @@ from .utils import psa
 
 
 class CompleteGitlabAuthMutation(BaseMutation):
+    """
+    Complete login mutation after redirection from Gitlab.
+    """
     permission_classes = (AllowAny,)
 
     token = graphene.Field(TokenType)
@@ -23,6 +26,9 @@ class CompleteGitlabAuthMutation(BaseMutation):
 
     @classmethod
     def do_mutate(cls, root, info, code, state):
+        """
+        After successful login return token.
+        """
         request = psa(info.context)
         request.backend.set_data(code=code, state=state)
 

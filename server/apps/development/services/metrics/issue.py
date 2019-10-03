@@ -5,6 +5,9 @@ from apps.payroll.models import SpentTime
 
 
 class IssueMetrics:
+    """
+    Issue metrics.
+    """
     remains: int = 0
     efficiency: float = 0
     payroll: float = 0

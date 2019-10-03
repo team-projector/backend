@@ -9,6 +9,9 @@ from apps.users.services.auth import login_user
 
 
 class LoginMutation(BaseMutation):
+    """
+    Login mutation returns token.
+    """
     permission_classes = (AllowAny,)
 
     token = graphene.Field(TokenType)
@@ -19,6 +22,9 @@ class LoginMutation(BaseMutation):
 
     @classmethod
     def do_mutate(cls, root, info, login, password):
+        """
+        After successful login return token.
+        """
         token = login_user(
             login,
             password,

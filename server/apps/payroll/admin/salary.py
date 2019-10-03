@@ -18,11 +18,17 @@ from ..models import Salary
 
 @admin.register(Salary)
 class SalaryAdmin(BaseModelAdmin):
+    """
+    A class representing Salary model for admin dashboard.
+    """
     list_display = ('user', 'created_by', 'created_at', 'total', 'payed')
     list_filter = (UserFilter,)
     search_fields = ('user__login', 'user__email')
 
     def get_urls(self):
+        """
+        Add url for generate salaries form.
+        """
         urls = super().get_urls()
         custom_urls = [
             path('generate/',
@@ -33,6 +39,9 @@ class SalaryAdmin(BaseModelAdmin):
         return custom_urls + urls
 
     def generate_salaries(self, request):
+        """
+        Generate salaries.
+        """
         if request.method == 'POST':
             form = GenerateSalaryForm(request.POST)
             if form.is_valid():
@@ -63,6 +72,11 @@ class SalaryAdmin(BaseModelAdmin):
         )
 
     def save_model(self, request, obj, form, change):
+        """
+        Save salary.
+
+        Send notification to user if salary is payed.
+        """
         if change and is_payed(obj):
             transaction.on_commit(lambda: send_salary_report.delay(obj.id))
 

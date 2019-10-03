@@ -9,6 +9,9 @@ from .issue import IssueType
 
 
 class GitlabStatusType(graphene.ObjectType):
+    """
+    A class representing gitlab status fields.
+    """
     services = graphene.List(GitlabServiceStatusType)
     last_issues = DataSourceConnectionField(IssueType)
     last_sync = graphene.DateTime()

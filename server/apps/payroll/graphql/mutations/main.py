@@ -10,6 +10,9 @@ from .work_breaks import (
 
 
 class WorkBreaksMutations:
+    """
+    Class representing list of available fields for work break mutations.
+    """
     approve_work_break = ApproveWorkBreakMutation.Field()
     create_work_break = CreateWorkBreakMutation.Field()
     decline_work_break = DeclineWorkBreakMutation.Field()

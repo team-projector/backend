@@ -13,6 +13,9 @@ from apps.development.tasks import sync_project_issue
 
 
 class AddSpendIssueMutation(BaseMutation):
+    """
+    Add spend issue mutation.
+    """
     class Arguments:
         id = graphene.ID()
         seconds = graphene.Int(required=True)
@@ -21,6 +24,9 @@ class AddSpendIssueMutation(BaseMutation):
 
     @classmethod
     def do_mutate(cls, root, info, **kwargs):  # noqa A002
+        """
+        Add spend and return issue.
+        """
         if not info.context.user.gl_token:
             raise ValidationError(_('MSG_PLEASE_PROVIDE_PERSONAL_GL_TOKEN'))
 
@@ -44,6 +50,9 @@ class AddSpendIssueMutation(BaseMutation):
 
 
 class SyncIssueMutation(BaseMutation):
+    """
+    Syncing issue mutation.
+    """
     class Arguments:
         id = graphene.ID()
 
@@ -51,6 +60,9 @@ class SyncIssueMutation(BaseMutation):
 
     @classmethod
     def do_mutate(cls, root, info, **kwargs):
+        """
+        Syncing issue.
+        """
         issue = get_object_or_404(
             Issue.objects.allowed_for_user(info.context.user),
             pk=kwargs['id'],
@@ -65,6 +77,9 @@ class SyncIssueMutation(BaseMutation):
 
 
 class UpdateIssueMutation(BaseMutation):
+    """
+    Update issue mutation.
+    """
     class Arguments:
         id = graphene.ID()
         ticket = graphene.ID()
@@ -73,6 +88,9 @@ class UpdateIssueMutation(BaseMutation):
 
     @classmethod
     def do_mutate(cls, root, info, **kwargs):
+        """
+        Update issue.
+        """
         issue = get_object_or_404(
             Issue.objects.allowed_for_user(info.context.user),
             pk=kwargs['id'],

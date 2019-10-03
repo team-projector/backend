@@ -4,6 +4,9 @@ from apps.payroll.models import SpentTime
 
 
 class MergeRequestMetrics:
+    """
+    Merge request metrics.
+    """
     remains: int = 0
     efficiency: float = 0
     payroll: float = 0

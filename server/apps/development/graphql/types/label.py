@@ -7,6 +7,9 @@ from apps.development.models import Label
 
 
 class LabelType(BaseDjangoObjectType):
+    """
+    A class representing Label model.
+    """
     class Meta:
         model = Label
         interfaces = (DatasourceRelayNode,)

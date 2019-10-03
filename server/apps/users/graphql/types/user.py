@@ -14,6 +14,9 @@ from .user_metrics import UserMetricsType
 
 
 class UserType(BaseDjangoObjectType):
+    """
+    A class representing User model for Graphql.
+    """
     metrics = graphene.Field(UserMetricsType)
     problems = graphene.List(graphene.String)
 
@@ -25,10 +28,16 @@ class UserType(BaseDjangoObjectType):
         name = 'User'
 
     def resolve_metrics(self, info, **kwargs):
+        """
+        Get user metrics.
+        """
         provider = UserMetricsProvider()
         return provider.get_metrics(self)
 
     def resolve_problems(self, info, **kwargs):
+        """
+        Get user problems.
+        """
         return get_user_problems(self)
 
     @classmethod
@@ -37,6 +46,9 @@ class UserType(BaseDjangoObjectType):
         queryset: QuerySet,
         info,
     ) -> QuerySet:
+        """
+        Get queryset.
+        """
         # TODO fix it (team members case)
         if issubclass(queryset.model, User):
             queryset = queryset.filter(is_active=True)

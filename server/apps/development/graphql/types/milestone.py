@@ -18,6 +18,9 @@ from .milestone_metrics import MilestoneMetricsType
 
 
 class MilestoneType(BaseDjangoObjectType):
+    """
+    A class representing Milestone model.
+    """
     metrics = graphene.Field(MilestoneMetricsType)
     owner = graphene.Field(MilestoneOwner)
     problems = graphene.List(graphene.String)

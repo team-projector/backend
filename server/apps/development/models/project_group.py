@@ -11,6 +11,11 @@ from .managers import ProjectGroupManager
 
 
 class ProjectGroup(GitlabEntityMixin):
+    """
+    The project group model.
+
+    Fill from Gitlab.
+    """
     title = models.CharField(
         max_length=DEFAULT_TITLE_LENGTH,
         verbose_name=_('VN__TITLE'),

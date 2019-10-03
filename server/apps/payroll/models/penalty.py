@@ -7,6 +7,9 @@ from .payroll import Payroll
 
 
 class Penalty(Payroll):
+    """
+    The penalty model.
+    """
     description = models.TextField(
         verbose_name=_('VN__DESCRIPTION'),
         help_text=_('HT__DESCRIPTION'),

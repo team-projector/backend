@@ -43,7 +43,7 @@ class GitLabOAuth2Backend(SocialGitLabOAuth2):
 
     def authenticate(self, *args, **kwargs):
         """
-        Return user.
+        Return authenticated user.
         """
         if 'response' in kwargs:
             return User.objects.filter(
@@ -52,6 +52,8 @@ class GitLabOAuth2Backend(SocialGitLabOAuth2):
 
     def set_data(self, **kwargs):
         """
-        Set "state" and "code" values returned from Gitlab.
+        Set data.
+
+        For example "state" and "code" values returned from Gitlab.
         """
         self.data = kwargs

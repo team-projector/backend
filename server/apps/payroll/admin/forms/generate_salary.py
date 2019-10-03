@@ -5,6 +5,9 @@ from django.contrib.admin import widgets
 
 
 class GenerateSalaryForm(forms.Form):
+    """
+    Generate salaries form.
+    """
     period_from = forms.DateField(
         widget=widgets.AdminDateWidget,
     )

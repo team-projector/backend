@@ -11,6 +11,9 @@ from apps.payroll.models.managers import SalaryManager
 
 
 class Salary(Timestamps):
+    """
+    The salary model.
+    """
     created_by = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         models.CASCADE,

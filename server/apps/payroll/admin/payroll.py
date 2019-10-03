@@ -15,6 +15,9 @@ from .filters import HasSalaryFilter
 
 @admin.register(Payroll)
 class PayrollAdmin(BaseModelAdmin):
+    """
+    A class representing Payroll model for admin dashboard.
+    """
     list_display = ('user', 'created_by', 'created_at', 'sum')
     list_filter = (UserFilter, HasSalaryFilter)
     search_fields = ('user__login', 'user__email')
@@ -27,6 +30,9 @@ class PayrollAdmin(BaseModelAdmin):
     )
 
     def inheritance(self, payroll):
+        """
+        Get link to Bonus, Penalty etc.
+        """
         for field in self._get_accessor_names(self.model):
             node = None
 

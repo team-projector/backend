@@ -12,6 +12,9 @@ from apps.development.services.parsers import parse_date
 
 
 class NotableMixin(models.Model):
+    """
+    Create notes when loading issues or merge requests.
+    """
     notes = GenericRelation(
         'development.Note',
         verbose_name=_('VN__NOTES'),
@@ -23,7 +26,7 @@ class NotableMixin(models.Model):
 
     def adjust_spent_times(self) -> None:
         """
-        Create spent times from notes when loading issues or merge requests.
+        Create spent times from parsed notes.
         """
         from apps.payroll.models import SpentTime
 
@@ -55,9 +58,6 @@ class NotableMixin(models.Model):
             )
 
     def _get_notes_for_processing(self) -> Iterable[Note]:
-        """
-        Helper for "adjust_spent_times" method.
-        """
         notes: List[Note] = []
 
         for note in self.notes.all().order_by('created_at'):

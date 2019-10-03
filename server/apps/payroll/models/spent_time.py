@@ -14,6 +14,9 @@ SECS_IN_HOUR = 60 * 60
 
 
 class SpentTime(Payroll):
+    """
+    The spent time model.
+    """
     date = models.DateField(
         null=True,
     )
@@ -64,6 +67,9 @@ class SpentTime(Payroll):
         return f'{self.user} [{self.base}]: {self.time_spent}'
 
     def save(self, *args, **kwargs):
+        """
+        Save spent time.
+        """
         self.created_by = self.user
         self.rate = self.user.hour_rate  # noqa WPS601
         self.customer_rate = self.user.customer_hour_rate  # noqa WPS601

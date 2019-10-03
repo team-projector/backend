@@ -13,6 +13,9 @@ from apps.development.services.metrics.ticket import get_ticket_metrics
 
 
 class TicketType(BaseDjangoObjectType):
+    """
+    Class representing list of available fields for ticket queries.
+    """
     metrics = graphene.Field(TicketMetricsType)
 
     def resolve_metrics(self, info, **kwargs):

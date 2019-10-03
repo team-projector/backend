@@ -15,9 +15,15 @@ PROBLEM_PAYROLL_OVERFLOW_RATIO = 1.5
 
 
 class PayrollOpenedOverflowChecker(BaseProblemChecker):
+    """
+    A class indicates on problem with payroll overflow.
+    """
     problem_code = PROBLEM_PAYROLL_OPENED_OVERFLOW
 
     def has_problem(self, user: User) -> bool:
+        """
+        Has problem if time spent more than daily work hours of user.
+        """
         total_spend = SpentTime.objects.filter(
             salary__isnull=True,
             user=user,

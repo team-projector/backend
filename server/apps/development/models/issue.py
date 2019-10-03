@@ -31,6 +31,11 @@ class Issue(
     GitlabEntityMixin,
     GitlabInternalIdMixin,
 ):
+    """
+    The issue model.
+
+    Fill from Gitlab.
+    """
     title = models.CharField(
         max_length=DEFAULT_TITLE_LENGTH,
         verbose_name=_('VN__TITLE'),
@@ -144,7 +149,7 @@ class Issue(
     @cached_property
     def last_note_date(self) -> datetime:
         """
-        Returns last note date.
+        Return last note date.
         """
         return self.notes.aggregate(
             last_created=Max('created_at'),

@@ -11,6 +11,9 @@ class BaseModelAdmin(
     AdminFormFieldsOverridesMixin,
     admin.ModelAdmin,
 ):
+    """
+    A base class for admin dashboard for given model.
+    """
     list_per_page = 20
 
     class Media:

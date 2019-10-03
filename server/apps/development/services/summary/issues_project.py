@@ -33,18 +33,27 @@ def _get_key(milestone):
 
 
 class ProjectIssuesSummary:
+    """
+    Project issues summary.
+    """
     opened_count: int = 0
     percentage: float = 0.0
     remains: int = 0
 
 
 class IssuesProjectSummary:
+    """
+    Issues project summary.
+    """
     project: Project
     issues: ProjectIssuesSummary
     order_by: str
 
 
 class IssuesProjectSummaryProvider:
+    """
+    Issues project summary provider.
+    """
     def __init__(
         self,
         queryset: QuerySet,
@@ -54,6 +63,9 @@ class IssuesProjectSummaryProvider:
         self.order_by = order_by
 
     def execute(self) -> List[IssuesProjectSummary]:
+        """
+        Calculate and return summary.
+        """
         summaries_qs = self._get_summaries_qs()
 
         summaries = {

@@ -22,6 +22,11 @@ NOTE_TYPE_MAX_LENGTH = 20
 
 
 class Note(models.Model):
+    """
+    The milestone model.
+
+    Fill from Gitlab when loading issues or merge requests.
+    """
     object_id = models.IntegerField()
 
     content_object = GenericForeignKey()

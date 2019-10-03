@@ -18,6 +18,9 @@ from .issue_metrics import IssueMetricsType
 
 
 class IssueType(BaseDjangoObjectType):
+    """
+    A class representing Issue model.
+    """
     metrics = graphene.Field(IssueMetricsType)
     problems = graphene.List(graphene.String)
 

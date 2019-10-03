@@ -4,7 +4,13 @@ from django.db import models
 
 
 class SalaryManager(models.Manager):
+    """
+    The Salary model manager.
+    """
     def allowed_for_user(self, user):
+        """
+        Get user salaries allowed for current user and team leader.
+        """
         from apps.development.models import TeamMember
 
         users = TeamMember.objects.filter(

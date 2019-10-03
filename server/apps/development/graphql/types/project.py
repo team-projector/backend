@@ -15,6 +15,9 @@ from apps.development.services.summary.issues import IssuesProjectSummary
 
 
 class ProjectType(BaseDjangoObjectType):
+    """
+    A class representing Project model.
+    """
     milestones = DataSourceConnectionField(
         MilestoneType,
         filterset_class=MilestonesFilterSet,

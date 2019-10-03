@@ -11,12 +11,18 @@ from .utils import psa
 
 
 class LoginGitlabMutation(BaseMutation):
+    """
+    Login mutation through Gitlab returns url.
+    """
     permission_classes = (AllowAny,)
 
     redirect_url = graphene.String()
 
     @classmethod
     def do_mutate(cls, root, info):
+        """
+        Returns url for Gitlab with application ID, callback url and state.
+        """
         request = psa(info.context)
 
         response = do_auth(request.backend, redirect_name=REDIRECT_FIELD_NAME)

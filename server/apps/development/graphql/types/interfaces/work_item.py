@@ -9,6 +9,9 @@ from ..project import ProjectType
 
 
 class WorkItem(graphene.Interface):
+    """
+    Work item interface.
+    """
     id = graphene.ID(required=True)
     title = graphene.String()
     gl_id = graphene.Int()
