@@ -61,7 +61,7 @@ class DataSourceConnectionField(
         connection.length = items_count
         return connection
 
-    @classmethod
+    @classmethod  # noqa: WPS211
     def _connection_from_list_slice(
         cls,
         list_slice,
