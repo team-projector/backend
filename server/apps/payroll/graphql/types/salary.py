@@ -13,7 +13,7 @@ from apps.payroll.services.allowed.salary import filter_allowed_for_user
 
 class SalaryType(BaseDjangoObjectType):
     """
-    A class representing Salary model for Graphql.
+    Salary type.
     """
     owner = graphene.Field(WorkItem)
 

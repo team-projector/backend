@@ -25,7 +25,7 @@ from .merge_request_metrics import MergeRequestMetricsType
 
 class MergeRequestType(BaseDjangoObjectType):
     """
-    A class representing Merge Request model.
+    Merge request type.
     """
     metrics = graphene.Field(MergeRequestMetricsType)
     problems = graphene.List(graphene.String)

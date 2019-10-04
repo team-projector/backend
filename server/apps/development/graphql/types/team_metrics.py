@@ -10,7 +10,7 @@ from .work_item_team_metrics import (
 
 class TeamMetricsType(graphene.ObjectType):
     """
-    A class representing team metrics fields.
+    Team metrics type.
     """
     problems_count = graphene.Int()
     issues = graphene.Field(IssueTeamMetricsType)

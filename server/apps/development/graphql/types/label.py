@@ -8,7 +8,7 @@ from apps.development.models import Label
 
 class LabelType(BaseDjangoObjectType):
     """
-    A class representing Label model.
+    Label type.
     """
     class Meta:
         model = Label

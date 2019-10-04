@@ -17,6 +17,9 @@ class AllowAny:
         info: ResolveInfo,
         obj_id: str,
     ) -> bool:
+        """
+        Check has node permission.
+        """
         return True
 
     @staticmethod
@@ -25,8 +28,14 @@ class AllowAny:
         info: ResolveInfo,
         **kwargs,
     ) -> bool:
+        """
+        Check has mutation permission.
+        """
         return True
 
     @staticmethod
     def has_filter_permission(info: ResolveInfo) -> bool:
+        """
+        Check has filter permission.
+        """
         return True

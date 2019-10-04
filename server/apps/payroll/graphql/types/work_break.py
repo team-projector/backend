@@ -11,7 +11,7 @@ from apps.payroll.services.allowed.work_break import filter_allowed_for_user
 
 class WorkBreakType(BaseDjangoObjectType):
     """
-    A class representing Work Break model for Graphql.
+    Work break type.
     """
     class Meta:
         model = WorkBreak

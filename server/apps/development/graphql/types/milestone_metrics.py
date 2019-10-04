@@ -5,7 +5,7 @@ import graphene
 
 class MilestoneMetricsType(graphene.ObjectType):
     """
-    A class representing milestone metrics fields.
+    Milestone metrics type.
     """
     budget_spent = graphene.Float()
     payroll = graphene.Float()

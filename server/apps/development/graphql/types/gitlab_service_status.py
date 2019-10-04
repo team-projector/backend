@@ -5,7 +5,7 @@ import graphene
 
 class GitlabServiceStatusType(graphene.ObjectType):
     """
-    A class representing gitlab service status fields.
+    Gitlab service status type.
     """
     name = graphene.String()
     time = graphene.DateTime()

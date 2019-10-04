@@ -19,7 +19,7 @@ from .milestone_metrics import MilestoneMetricsType
 
 class MilestoneType(BaseDjangoObjectType):
     """
-    A class representing Milestone model.
+    Milestone type.
     """
     metrics = graphene.Field(MilestoneMetricsType)
     owner = graphene.Field(MilestoneOwner)
@@ -32,9 +32,15 @@ class MilestoneType(BaseDjangoObjectType):
         name = 'Milestone'
 
     def resolve_metrics(self, info, **kwargs):
+        """
+        Get milestone metrics.
+        """
         return get_milestone_metrics(self)
 
     def resolve_problems(self, info, **kwargs):
+        """
+        Get milestone problems.
+        """
         return get_milestone_problems(self)
 
     @classmethod
@@ -43,6 +49,9 @@ class MilestoneType(BaseDjangoObjectType):
         queryset,
         info,
     ) -> QuerySet:
+        """
+        Get milestones.
+        """
         queryset = filter_allowed_for_user(
             queryset,
             info.context.user,

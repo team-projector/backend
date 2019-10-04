@@ -10,7 +10,7 @@ from apps.development.models import ProjectGroup
 
 class ProjectGroupType(DjangoObjectType):
     """
-    A class representing Project Group model.
+    Project Group type.
     """
     class Meta:
         model = ProjectGroup

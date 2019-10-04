@@ -20,7 +20,7 @@ class SystemEmailDispatcher:
         """
         Send email.
 
-        Sending text in two formats: simple and html
+        Sending text in two formats: simple and html.
         """
         content = get_template('system_email_template.html')
 

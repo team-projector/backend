@@ -11,13 +11,22 @@ from apps.payroll.services.allowed.spent_time import filter_allowed_for_user
 
 
 class SpentTimeQuerySet(models.QuerySet):
+    """
+    Spent Time QuerySet.
+    """
     def aggregate_payrolls(self):
+        """
+        Get total sum payroll and paid.
+        """
         return self.annotate_payrolls().aggregate(
             total_payroll=Coalesce(Sum('payroll'), 0),
             total_paid=Coalesce(Sum('paid'), 0),
         )
 
     def summaries(self):
+        """
+        Get spent time summaries.
+        """
         from apps.development.models import issue
         from apps.development.models.merge_request import MERGE_REQUESTS_STATES
 
@@ -45,6 +54,9 @@ class SpentTimeQuerySet(models.QuerySet):
         paid: bool = True,
         payroll: bool = True,
     ) -> QuerySet:
+        """
+        Get total sum payroll or paid.
+        """
         queryset = self
 
         if paid:
@@ -80,5 +92,11 @@ BaseSpentTimeManager: Any = BaseManager.from_queryset(SpentTimeQuerySet)
 
 
 class SpentTimeManager(BaseSpentTimeManager):
+    """
+    The Spent Time model manager.
+    """
     def allowed_for_user(self, user):
+        """
+        Get user spent times for current user, team leader or watcher.
+        """
         return filter_allowed_for_user(self, user)

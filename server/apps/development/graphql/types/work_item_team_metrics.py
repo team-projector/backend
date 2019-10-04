@@ -5,7 +5,7 @@ import graphene
 
 class WorkItemTeamMetricsType(graphene.ObjectType):
     """
-    A class representing work item fields.
+    Work item team metrics type.
     """
     count = graphene.Int()
     opened_count = graphene.Int()
@@ -14,13 +14,13 @@ class WorkItemTeamMetricsType(graphene.ObjectType):
 
 class IssueTeamMetricsType(WorkItemTeamMetricsType):
     """
-    A class representing issue fields.
+    Issue team metrics type.
     """
     pass
 
 
 class MergeRequestTeamMetricsType(WorkItemTeamMetricsType):
     """
-    A class representing merge request fields.
+    Merge request team metrics type.
     """
     pass

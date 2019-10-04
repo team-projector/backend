@@ -13,7 +13,13 @@ from apps.core.graphql.security.authentication import TokenAuthentication
 
 
 class ApiGraphQLView(GraphQLView):
+    """
+    Api GraphQL View.
+    """
     def parse_body(self, request):
+        """
+        Parse body.
+        """
         if isinstance(request, Request):
             return request.data
 
@@ -21,6 +27,9 @@ class ApiGraphQLView(GraphQLView):
 
     @classmethod
     def as_view(cls, *args, **kwargs):
+        """
+        Main entry point for a request-response process.
+        """
         view = super().as_view(*args, **kwargs)
         view = permission_classes((AllowAny,))(view)
         view = authentication_classes([TokenAuthentication])(view)

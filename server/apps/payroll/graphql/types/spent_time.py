@@ -13,7 +13,7 @@ from apps.payroll.services.allowed.spent_time import filter_allowed_for_user
 
 class SpentTimeType(BaseDjangoObjectType):
     """
-    A class representing Spent Time model for Graphql.
+    Spent Time type.
     """
     owner = graphene.Field(WorkItem)
 

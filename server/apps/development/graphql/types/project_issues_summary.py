@@ -5,7 +5,7 @@ import graphene
 
 class ProjectIssuesSummary(graphene.ObjectType):
     """
-    A class representing project issue fields.
+    Project issues summary type.
     """
     opened_count = graphene.Int()
     percentage = graphene.Float()

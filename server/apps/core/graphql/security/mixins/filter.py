@@ -15,6 +15,9 @@ class AuthFilter(DjangoFilterConnectionField):
 
     @classmethod
     def has_permission(cls, info: ResolveInfo) -> bool:
+        """
+        Check has permission.
+        """
         return all((
             perm().has_filter_permission(info) for perm in
             cls.permission_classes
@@ -34,6 +37,9 @@ class AuthFilter(DjangoFilterConnectionField):
         info,
         **args,
     ):
+        """
+        Connection resolver.
+        """
         if not cls.has_permission(info):
             raise PermissionDenied()
 

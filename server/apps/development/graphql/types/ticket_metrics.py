@@ -7,7 +7,7 @@ from .issues_container_metrics import IssuesContainerMetricsType
 
 class TicketMetricsType(IssuesContainerMetricsType):
     """
-    A class representing ticket metrics fields.
+    Ticket metrics type.
     """
     budget_estimate = graphene.Float()
     budget_spent = graphene.Float()

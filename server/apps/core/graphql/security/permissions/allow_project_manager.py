@@ -15,6 +15,9 @@ class AllowProjectManager:
         info: ResolveInfo,
         obj_id: str,
     ) -> bool:
+        """
+        Check has node permission.
+        """
         return info.context.user.roles.project_manager
 
     @staticmethod
@@ -23,8 +26,14 @@ class AllowProjectManager:
         info: ResolveInfo,
         **kwargs,
     ) -> bool:
+        """
+        Check has mutation permission.
+        """
         return info.context.user.roles.project_manager
 
     @staticmethod
     def has_filter_permission(info: ResolveInfo) -> bool:
+        """
+        Check has filter permission.
+        """
         return info.context.user.roles.project_manager

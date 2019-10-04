@@ -7,7 +7,7 @@ from apps.users.models import Token
 
 class TokenType(BaseDjangoObjectType):
     """
-    A class representing Token model for Graphql.
+    Token type.
     """
     permission_classes = (AllowAny,)
 

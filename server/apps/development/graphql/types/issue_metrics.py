@@ -5,7 +5,7 @@ import graphene
 
 class IssueMetricsType(graphene.ObjectType):
     """
-    A class representing issues metrics fields.
+    Issue metrics type.
     """
     remains = graphene.Int()
     efficiency = graphene.Float()

@@ -5,7 +5,7 @@ import graphene
 
 class MergeRequestsSummaryType(graphene.ObjectType):
     """
-    A class representing merge requests summary fields.
+    Merge requests summary type.
     """
     count = graphene.Int()
     opened_count = graphene.Int()

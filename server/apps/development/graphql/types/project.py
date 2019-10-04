@@ -16,7 +16,7 @@ from apps.development.services.summary.issues import IssuesProjectSummary
 
 class ProjectType(BaseDjangoObjectType):
     """
-    A class representing Project model.
+    Project type.
     """
     milestones = DataSourceConnectionField(
         MilestoneType,
@@ -24,6 +24,9 @@ class ProjectType(BaseDjangoObjectType):
     )
 
     def resolve_milestones(self: Project, info, **kwargs):
+        """
+        Get project milestones.
+        """
         if isinstance(getattr(self, 'parent_type', None), IssuesProjectSummary):
             ret = self.active_milestones
 

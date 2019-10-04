@@ -11,5 +11,8 @@ class BaseTabularInline(
     AdminFormFieldsOverridesMixin,
     admin.TabularInline,
 ):
+    """
+    A base class tabular inline.
+    """
     extra = 0
     show_change_link = True

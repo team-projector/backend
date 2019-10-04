@@ -15,7 +15,7 @@ from .user_metrics import UserMetricsType
 
 class UserType(BaseDjangoObjectType):
     """
-    A class representing User model for Graphql.
+    User type.
     """
     metrics = graphene.Field(UserMetricsType)
     problems = graphene.List(graphene.String)

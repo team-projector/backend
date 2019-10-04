@@ -7,8 +7,6 @@ from django.http import HttpResponseRedirect
 class ForceSyncEntityMixin(BaseModelAdmin):
     """
     A mixin shows "Force sync" button on change form page.
-
-    Define in subclasses "sync_handler" method for action on click button.
     """
     def change_view(self, request, object_id, form_url='', extra_context=None):
         """
@@ -35,7 +33,7 @@ class ForceSyncEntityMixin(BaseModelAdmin):
 
     def sync_handler(self, obj):
         """
-        Action on click button should be implemented in child class.
+        Handler should be implemented in child class.
         """
         raise NotImplementedError
 

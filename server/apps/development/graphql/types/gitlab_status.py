@@ -10,7 +10,7 @@ from .issue import IssueType
 
 class GitlabStatusType(graphene.ObjectType):
     """
-    A class representing gitlab status fields.
+    Gitlab status type.
     """
     services = graphene.List(GitlabServiceStatusType)
     last_issues = DataSourceConnectionField(IssueType)

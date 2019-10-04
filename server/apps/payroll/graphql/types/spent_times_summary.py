@@ -5,7 +5,7 @@ import graphene
 
 class IssuesSpentTimesSummaryType(graphene.ObjectType):
     """
-    A class representing issues fields for summary spent time.
+    Issues spent time summary type.
     """
     spent = graphene.Int()
     closed_spent = graphene.Int()
@@ -14,7 +14,7 @@ class IssuesSpentTimesSummaryType(graphene.ObjectType):
 
 class MergeRequestsSpentTimesSummaryType(graphene.ObjectType):
     """
-    A class representing merge requests fields for summary spent time.
+    Merge requests spent times summary type.
     """
     spent = graphene.Int()
     closed_spent = graphene.Int()
@@ -24,7 +24,7 @@ class MergeRequestsSpentTimesSummaryType(graphene.ObjectType):
 
 class SpentTimesSummaryType(graphene.ObjectType):
     """
-    A class representing summaries fields of spent time.
+    Spent times summary type.
     """
     spent = graphene.Int()
     opened_spent = graphene.Int()

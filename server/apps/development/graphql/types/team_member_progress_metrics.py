@@ -7,7 +7,7 @@ from apps.users.graphql.types import UserProgressMetricsType, UserType
 
 class TeamMemberProgressMetricsType(graphene.ObjectType):
     """
-    A class representing team member progress metrics fields.
+    Team member progress metrics type.
     """
     user = graphene.Field(UserType)
     metrics = graphene.List(UserProgressMetricsType)

@@ -20,6 +20,9 @@ class AuthMutation:
         info: ResolveInfo,
         **kwargs,
     ) -> bool:
+        """
+        Check has permission.
+        """
         return all(
             (
                 perm().has_mutation_permission(root, info, **kwargs)

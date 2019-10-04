@@ -5,7 +5,7 @@ import graphene
 
 class MergeRequestMetricsType(graphene.ObjectType):
     """
-    A class representing merge requests metrics fields.
+    Merge request metrics type.
     """
     remains = graphene.Int()
     efficiency = graphene.Float()

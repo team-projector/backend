@@ -8,7 +8,7 @@ from .project_issues_summary import ProjectIssuesSummary
 
 class IssuesProjectSummary(graphene.ObjectType):
     """
-    A class representing issues project summary fields.
+    Issues project summary.
     """
     project = graphene.Field(ProjectType)
     issues = graphene.Field(ProjectIssuesSummary)
