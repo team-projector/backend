@@ -8,6 +8,12 @@ run_checkers() {
 
   mypy server
 
+  # Run checks to be sure settings are correct (production flag is required):
+#  DJANGO_ENV=production python manage.py check --deploy --fail-level WARNING
+
+  # Running code-quality check:
+#  xenon --max-absolute A --max-modules A --max-average A server
+
   # Check that all migrations worked fine:
   python manage.py makemigrations --dry-run --check
 
