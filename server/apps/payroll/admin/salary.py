@@ -18,30 +18,26 @@ from ..models import Salary
 
 @admin.register(Salary)
 class SalaryAdmin(BaseModelAdmin):
-    """
-    A class representing Salary model for admin dashboard.
-    """
+    """A class representing Salary model for admin dashboard."""
+
     list_display = ('user', 'created_by', 'created_at', 'total', 'payed')
     list_filter = (UserFilter,)
     search_fields = ('user__login', 'user__email')
 
     def get_urls(self):
-        """
-        Add url for generate salaries form.
-        """
+        """Add url for generate salaries form."""
         urls = super().get_urls()
         custom_urls = [
-            path('generate/',
-                 self.admin_site.admin_view(self.generate_salaries),
-                 name='generate-salaries',
-                 ),
+            path(
+                'generate/',
+                self.admin_site.admin_view(self.generate_salaries),
+                name='generate-salaries',
+            ),
         ]
         return custom_urls + urls
 
     def generate_salaries(self, request):
-        """
-        Generate salaries.
-        """
+        """Generate salaries."""
         if request.method == 'POST':
             form = GenerateSalaryForm(request.POST)
             if form.is_valid():
