@@ -42,6 +42,9 @@ class Query(
     UsersQueries,
     graphene.ObjectType,
 ):
+    """
+    Class representing all available queries.
+    """
     debug = graphene.Field(
         DjangoDebug,
         name='_debug',
@@ -56,6 +59,9 @@ class Mutation(
     AuthMutations,
     graphene.ObjectType,
 ):
+    """
+    Class representing all available mutations.
+    """
     pass
 
 

@@ -7,12 +7,18 @@ from django.utils.translation import gettext_lazy as _
 
 
 class UserManager(BaseUserManager):
+    """
+    The User model manager.
+    """
     def create_user(
         self,
         login,
         password=None,
         **kwargs,
     ):
+        """
+        Create user.
+        """
         if not login:
             raise ValueError(_('VN__USER_MUST_HAVE_A_LOGIN'))
 
@@ -23,6 +29,9 @@ class UserManager(BaseUserManager):
         return user
 
     def create_superuser(self, login, password):
+        """
+        Create superuser.
+        """
         user = self.create_user(
             login,
             password=password,
@@ -34,4 +43,7 @@ class UserManager(BaseUserManager):
 
     @cached_property
     def system_user(self):
+        """
+        Get system user.
+        """
         return self.get(login=settings.TP_SYSTEM_USER_LOGIN)

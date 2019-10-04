@@ -16,6 +16,9 @@ APPROVED_STATE_MAX_LENGTH = 15
 
 
 class ApprovedMixin(models.Model):
+    """
+    A mixin for approving or decline work break.
+    """
     approve_state = models.CharField(
         choices=APPROVED_STATES,
         default='created',

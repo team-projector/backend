@@ -106,18 +106,30 @@ def parse_spend(spent: str) -> int:
 
 
 class BaseNoteParser:
+    """
+    A base class note parser.
+    """
     def parse(
         self,
         gl_note,
     ) -> Optional[NoteReadResult]:
+        """
+        Method should be implemented.
+        """
         raise NotImplementedError
 
 
 class SpendAddedParser(BaseNoteParser):
+    """
+    Spend added parser.
+    """
     def parse(
         self,
         gl_note,
     ) -> Optional[NoteReadResult]:
+        """
+        Parse note.
+        """
         match = (
             RE_SPEND_FULL.match(gl_note.body) or  # noqa W504
             RE_SPEND_SHORT.match(gl_note.body)
@@ -144,19 +156,31 @@ class SpendAddedParser(BaseNoteParser):
 
 
 class SpendResetParser(BaseNoteParser):
+    """
+    Spend reset parser.
+    """
     def parse(
         self,
         gl_note,
     ) -> Optional[NoteReadResult]:
+        """
+        Parse note.
+        """
         if gl_note.body == SPEND_RESET_MESSAGE:
             return NoteReadResult(NOTE_TYPES.reset_spend, {})
 
 
 class MovedFromParser(BaseNoteParser):
+    """
+    Moved from parser.
+    """
     def parse(
         self,
         gl_note,
     ) -> Optional[NoteReadResult]:
+        """
+        Parse note.
+        """
         is_system = getattr(gl_note, 'system', False)  # noqa WPS425
         if is_system and RE_MOVED_FROM.match(gl_note.body):
             return NoteReadResult(NOTE_TYPES.moved_from, {})

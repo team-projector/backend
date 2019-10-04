@@ -16,6 +16,9 @@ from .exceptions import EmptySalaryException
 
 
 class SalaryCalculator:
+    """
+    Salary calculator.
+    """
     def __init__(
         self,
         initiator: User,
@@ -27,12 +30,18 @@ class SalaryCalculator:
         self.period_to = period_to
 
     def generate_bulk(self):
+        """
+        Generate salaries for active users.
+        """
         for user in User.objects.filter(is_active=True):
             with suppress(EmptySalaryException):
                 self.generate(user)
 
     @transaction.atomic
     def generate(self, user: User) -> Salary:
+        """
+        Generate salary for user.
+        """
         salary = Salary.objects.create(
             created_by=self.initiator,
             user=user,

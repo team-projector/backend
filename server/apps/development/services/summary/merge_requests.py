@@ -6,6 +6,9 @@ from apps.development.models.merge_request import MERGE_REQUESTS_STATES
 
 
 class MergeRequestsSummary:
+    """
+    Merge requests summary.
+    """
     count: int = 0
     opened_count: int = 0
     closed_count: int = 0
@@ -13,10 +16,16 @@ class MergeRequestsSummary:
 
 
 class MergeRequestsSummaryProvider:
+    """
+    Merge requests summary provider.
+    """
     def __init__(self, queryset: QuerySet):
         self.queryset = queryset
 
     def execute(self) -> MergeRequestsSummary:
+        """
+        Calculate and return summary.
+        """
         summary = MergeRequestsSummary()
 
         merge_requests_counts = self.get_counts()
@@ -29,6 +38,9 @@ class MergeRequestsSummaryProvider:
         return summary
 
     def get_counts(self) -> QuerySet:
+        """
+        Get counts by state.
+        """
         return self.queryset.aggregate(
             count=self._count(),
             opened_count=self._count(state=MERGE_REQUESTS_STATES.opened),

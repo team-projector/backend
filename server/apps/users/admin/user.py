@@ -24,6 +24,9 @@ class UserAdmin(
     ForceSyncEntityMixin,
     DjUserAdmin,
 ):
+    """
+    A class representing User model for admin dashboard.
+    """
     list_display = (
         'login', 'name', 'email', 'hour_rate', 'last_login', 'is_active',
         'is_staff', 'change_password_link',
@@ -64,6 +67,9 @@ class UserAdmin(
 
     @admin_field('Change password')
     def change_password_link(self, obj):
+        """
+        Show "Change password" on change form page.
+        """
         return format_html(
             '<a href="{}">change password</a>',  # noqa P103
             reverse(
@@ -73,9 +79,15 @@ class UserAdmin(
         )
 
     def sync_handler(self, obj):
+        """
+        Syncing user from Gitlab.
+        """
         sync_user.delay(obj.gl_id)
 
     def changelist_view(self, request, extra_context=None):
+        """
+        Show only active user by default on change list page.
+        """
         referer = request.META.get('HTTP_REFERER')
 
         self._apply_default_filter_if_need(request, referer)

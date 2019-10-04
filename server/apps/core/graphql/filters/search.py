@@ -10,11 +10,17 @@ from django_filters import CharFilter
 
 
 class SearchFilter(CharFilter):
+    """
+    Search filter.
+    """
     def __init__(self, *args, **kwargs):
         super().__init__()
         self.fields = kwargs.pop('fields', {})
 
     def filter(self, queryset, value) -> QuerySet:
+        """
+        Do filtering.
+        """
         if not value or not self.fields:
             return queryset
 

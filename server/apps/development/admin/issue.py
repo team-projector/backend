@@ -17,6 +17,9 @@ class IssueAdmin(
     ForceSyncEntityMixin,
     BaseModelAdmin,
 ):
+    """
+    A class representing Issue model for admin dashboard.
+    """
     list_display = (
         'title', 'user', 'milestone', 'state', 'created_at', 'gl_last_sync',
     )
@@ -27,6 +30,9 @@ class IssueAdmin(
     inlines = (NoteInline,)
 
     def sync_handler(self, obj):
+        """
+        Syncing issue.
+        """
         sync_project_issue.delay(
             obj.project.gl_id,
             obj.gl_iid,

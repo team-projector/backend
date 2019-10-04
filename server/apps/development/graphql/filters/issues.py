@@ -19,10 +19,16 @@ User = get_user_model()
 
 
 class TicketFilter(django_filters.ModelChoiceFilter):
+    """
+    Filter issues by ticket.
+    """
     def __init__(self) -> None:
         super().__init__(queryset=Ticket.objects.all())
 
     def filter(self, queryset, value) -> QuerySet:
+        """
+        Do filtering.
+        """
         if not value:
             return queryset
 
@@ -32,10 +38,16 @@ class TicketFilter(django_filters.ModelChoiceFilter):
 
 
 class MilestoneFilter(django_filters.ModelChoiceFilter):
+    """
+    Filter issues by milestone.
+    """
     def __init__(self) -> None:
         super().__init__(queryset=Milestone.objects.all())
 
     def filter(self, queryset, value) -> QuerySet:
+        """
+        Do filtering.
+        """
         if not value:
             return queryset
 
@@ -45,7 +57,13 @@ class MilestoneFilter(django_filters.ModelChoiceFilter):
 
 
 class ProblemsFilter(django_filters.BooleanFilter):
+    """
+    Filter issues by problem.
+    """
     def filter(self, queryset, value) -> QuerySet:
+        """
+        Do filtering.
+        """
         if value is None:
             return queryset
 
@@ -60,10 +78,16 @@ class ProblemsFilter(django_filters.BooleanFilter):
 
 
 class TeamFilter(django_filters.ModelChoiceFilter):
+    """
+    Filter issues by team.
+    """
     def __init__(self) -> None:
         super().__init__(queryset=Team.objects.all())
 
     def filter(self, queryset, value) -> QuerySet:
+        """
+        Do filtering.
+        """
         if not value:
             return queryset
 
@@ -72,6 +96,9 @@ class TeamFilter(django_filters.ModelChoiceFilter):
 
 
 class IssuesFilterSet(django_filters.FilterSet):
+    """
+    Set of filters for Issues.
+    """
     milestone = MilestoneFilter()
     problems = ProblemsFilter()
     project = django_filters.ModelChoiceFilter(queryset=Project.objects.all())

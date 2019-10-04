@@ -5,6 +5,9 @@ from django.urls import reverse
 
 
 class AdminMenu(Menu):
+    """
+    A class representing menu admin dashboard.
+    """
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 

@@ -5,7 +5,15 @@ from django.http import HttpResponseRedirect
 
 
 class ForceSyncEntityMixin(BaseModelAdmin):
+    """
+    A mixin shows "Force sync" button on change form page.
+    """
     def change_view(self, request, object_id, form_url='', extra_context=None):
+        """
+        Show button on change form page.
+
+        Extra context passes to "submit_line.html" template.
+        """
         extra_context = extra_context or {}
         extra_context['show_force_sync'] = True
 
@@ -14,6 +22,9 @@ class ForceSyncEntityMixin(BaseModelAdmin):
         )
 
     def response_change(self, request, obj):
+        """
+        Handling "_force_sync".
+        """
         if '_force_sync' in request.POST:
             self._sync_obj(request, obj)
             return HttpResponseRedirect(request.path)
@@ -21,6 +32,9 @@ class ForceSyncEntityMixin(BaseModelAdmin):
         return super().response_change(request, obj)
 
     def sync_handler(self, obj):
+        """
+        Handler should be implemented in child class.
+        """
         raise NotImplementedError
 
     def _sync_obj(self, request, obj):

@@ -16,6 +16,9 @@ from .issues_team import IssuesTeamSummary
 
 
 class IssuesSummary:
+    """
+    Issues summary.
+    """
     count: int = 0
     opened_count: int = 0
     closed_count: int = 0
@@ -28,6 +31,9 @@ class IssuesSummary:
 
 
 class IssuesSummaryProvider:
+    """
+    Issues summary provider.
+    """
     def __init__(
         self,
         queryset: QuerySet,
@@ -37,6 +43,9 @@ class IssuesSummaryProvider:
         self._options = kwargs
 
     def execute(self) -> IssuesSummary:
+        """
+        Calculate and return summary.
+        """
         summary = IssuesSummary()
         summary.queryset = self._queryset
 

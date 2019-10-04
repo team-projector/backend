@@ -10,6 +10,9 @@ from .team_member import TeamMember
 
 
 class Team(models.Model):
+    """
+    The team model.
+    """
     title = models.CharField(
         max_length=DEFAULT_TITLE_LENGTH,
         verbose_name=_('VN__TITLE'),

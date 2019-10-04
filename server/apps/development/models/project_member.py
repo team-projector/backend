@@ -19,6 +19,9 @@ PROJECT_MEMBER_ROLE_MAX_LENGTH = 20
 
 
 class ProjectMember(Timestamps):
+    """
+    The project member model.
+    """
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         models.CASCADE,

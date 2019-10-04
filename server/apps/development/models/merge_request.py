@@ -32,6 +32,11 @@ class MergeRequest(
     GitlabEntityMixin,
     GitlabInternalIdMixin,
 ):
+    """
+    The merge request model.
+
+    Fill from Gitlab.
+    """
     title = models.CharField(
         max_length=DEFAULT_TITLE_LENGTH,
         verbose_name=_('VN__TITLE'),
@@ -135,22 +140,34 @@ class MergeRequest(
 
     @cached_property
     def last_note_date(self) -> datetime:
+        """
+        Returns last note date.
+        """
         return self.notes.aggregate(
             last_created=Max('created_at'),
         )['last_created']
 
     @property
     def time_remains(self) -> Optional[int]:
+        """
+        Return the difference between estimate and spent time.
+        """
         if self.time_estimate is not None and self.total_time_spent is not None:
             return max(self.time_estimate - self.total_time_spent, 0)
 
     @property
     def efficiency(self) -> Optional[float]:
+        """
+        Return ratio of estimate and spent time only for closed merge requests.
+        """
         if self.efficiency_available:
             return self.time_estimate / self.total_time_spent
 
     @property
     def efficiency_available(self) -> bool:
+        """
+        Helper for efficiency method.
+        """
         return (
             self.state == MERGE_REQUESTS_STATES.closed
             and self.total_time_spent

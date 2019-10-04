@@ -21,6 +21,9 @@ class AuthNode:
         info: ResolveInfo,
         obj_id: str,
     ) -> Optional[Model]:
+        """
+        Get node.
+        """
         has_node_permission = all((
             perm().has_node_permission(info, obj_id)
             for perm in cls.permission_classes

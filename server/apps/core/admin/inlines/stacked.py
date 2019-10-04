@@ -11,5 +11,8 @@ class BaseStackedInline(
     AdminFormFieldsOverridesMixin,
     admin.StackedInline,
 ):
+    """
+    A base class stacked inline.
+    """
     extra = 0
     show_change_link = True

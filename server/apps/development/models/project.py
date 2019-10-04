@@ -14,6 +14,11 @@ from .managers import ProjectManager
 
 
 class Project(GitlabEntityMixin):
+    """
+    The project model.
+
+    Fill from Gitlab.
+    """
     title = models.CharField(
         max_length=DEFAULT_TITLE_LENGTH,
         verbose_name=_('VN__TITLE'),
@@ -78,6 +83,9 @@ class Project(GitlabEntityMixin):
         return self.full_title or self.title
 
     def save(self, *args, **kwargs) -> None:
+        """
+        Save the current project.
+        """
         if not self.full_title:
             self.full_title = self.title  # noqa WPS601
 
@@ -85,6 +93,11 @@ class Project(GitlabEntityMixin):
 
     @cached_property
     def active_milestones(self):
+        """
+        Return active milestones for current project.
+
+        If milestones not found return milestones from parent group.
+        """
         ret = self.milestones.filter(state=MILESTONE_STATES.active)
 
         if not ret and self.group:

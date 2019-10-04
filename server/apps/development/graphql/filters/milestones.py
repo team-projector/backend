@@ -8,7 +8,13 @@ from apps.development.models.milestone import MILESTONE_STATES
 
 
 class ActiveFilter(django_filters.BooleanFilter):
+    """
+    Filter milestone by active state.
+    """
     def filter(self, queryset, value) -> QuerySet:
+        """
+        Do filtering.
+        """
         if value is None:
             return queryset
 
@@ -18,6 +24,9 @@ class ActiveFilter(django_filters.BooleanFilter):
 
 
 class MilestonesFilterSet(django_filters.FilterSet):
+    """
+    Set of filters for Milestone.
+    """
     active = ActiveFilter()
 
     order_by = OrderingFilter(

@@ -4,6 +4,9 @@ import graphene
 
 
 class IssuesContainerMetricsType(graphene.ObjectType):
+    """
+    Issues container metrics type.
+    """
     time_estimate = graphene.Int()
     time_spent = graphene.Int()
     time_remains = graphene.Int()

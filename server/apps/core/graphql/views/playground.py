@@ -8,4 +8,7 @@ class PlaygroundGraphQLView(
     LoginRequiredMixin,
     GraphQLView,
 ):
+    """
+    Playground GraphQL View.
+    """
     pass

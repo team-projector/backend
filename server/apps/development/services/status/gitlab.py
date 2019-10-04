@@ -16,11 +16,17 @@ from apps.development.models import Issue
 
 
 class GlServiceStatus:
+    """
+    Gitlab service status.
+    """
     name: str
     time: datetime
 
 
 class GlStatus:
+    """
+    Gitlab status.
+    """
     services: Iterable[GlServiceStatus] = []
     last_issues: Iterable[Issue] = []
     last_sync: datetime
@@ -38,7 +44,13 @@ ACTIONS_MAPS = types.MappingProxyType({
 
 
 class GlStatusProvider:
+    """
+    Gitlab status provider.
+    """
     def get_status(self) -> GlStatus:
+        """
+        Get status.
+        """
         status = GlStatus()
         status.last_sync = self._get_last_sync()
         status.last_issues = self._get_last_issues()

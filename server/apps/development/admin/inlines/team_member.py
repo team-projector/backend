@@ -6,4 +6,7 @@ from ...models import TeamMember
 
 
 class TeamMemberInline(BaseTabularInline):
+    """
+    Team member inline.
+    """
     model = TeamMember

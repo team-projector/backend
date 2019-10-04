@@ -9,6 +9,9 @@ from apps.development.models import ProjectGroup
 
 
 class ProjectGroupType(DjangoObjectType):
+    """
+    Project Group type.
+    """
     class Meta:
         model = ProjectGroup
         interfaces = (DatasourceRelayNode, MilestoneOwner)

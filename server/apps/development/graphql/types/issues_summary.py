@@ -12,6 +12,9 @@ from .issues_team_summary import IssuesTeamSummary
 
 
 class IssuesSummaryType(graphene.ObjectType):
+    """
+    Issues summary type.
+    """
     count = graphene.Int()
     opened_count = graphene.Int()
     closed_count = graphene.Int()
