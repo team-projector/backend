@@ -15,7 +15,7 @@ run_checkers() {
 #  xenon --max-absolute A --max-modules A --max-average A server
 
   # Check that all migrations worked fine:
-  python manage.py makemigrations --dry-run --check
+  DJANGO_ENV=build python manage.py makemigrations --dry-run --check
 
   # Checking `pyproject.toml` file contents:
   poetry check
