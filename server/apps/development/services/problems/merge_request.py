@@ -58,7 +58,7 @@ class NotAssignedChecker(BaseProblemChecker):
         merge_request: MergeRequest,
     ) -> bool:
         return merge_request.issues.filter(
-            labels__title_iexact='done',
+            labels__title__iexact='done',
             state=MERGE_REQUESTS_STATES.opened,
         ).exists()
 
