@@ -12,28 +12,21 @@ PROBLEM_NOT_ASSIGNED = 'not_assigned'
 
 
 class BaseProblemChecker:
-    """
-    A base class checks problems.
-    """
+    """A base class checks problems."""
+
     problem_code: ClassVar[str] = ''
 
     def merge_request_has_problem(self, merge_request: MergeRequest) -> bool:
-        """
-        Method should be implemented in subclass.
-        """
+        """Method should be implemented in subclass."""
         raise NotImplementedError
 
 
 class EmptyEstimateChecker(BaseProblemChecker):
-    """
-    Check merge request estimate.
-    """
+    """Check merge request estimate."""
+
     problem_code = PROBLEM_EMPTY_ESTIMATE
 
-    def merge_request_has_problem(
-        self,
-        merge_request: MergeRequest,
-    ) -> bool:
+    def merge_request_has_problem(self, merge_request: MergeRequest) -> bool:
         """
         Current merge request has problem.
         """
@@ -47,30 +40,32 @@ class EmptyEstimateChecker(BaseProblemChecker):
 
 
 class NotAssignedChecker(BaseProblemChecker):
-    """
-    Check merge request not assigned.
-    """
+    """Check merge request not assigned."""
+
     problem_code = PROBLEM_NOT_ASSIGNED
 
-    def merge_request_has_problem(
-        self,
-        merge_request: MergeRequest,
-    ) -> bool:
+    def merge_request_has_problem(self, merge_request: MergeRequest) -> bool:
         """
         Current merge request has problem.
         """
         return (
             not merge_request.user
-            and merge_request.issues.filter(
-                labels__title='Done',
-                state=MERGE_REQUESTS_STATES.opened,
-            ).exists()
+            and self._is_done_opened_issues_exists(merge_request)
         )
+
+    def _is_done_opened_issues_exists(
+        self,
+        merge_request: MergeRequest,
+    ) -> bool:
+        return merge_request.issues.filter(
+            labels__title_iexact='done',
+            state=MERGE_REQUESTS_STATES.opened,
+        ).exists()
 
 
 checkers = [
     checker_class()
-    for checker_class in BaseProblemChecker.__subclasses__()
+    for checker_class in (EmptyEstimateChecker, NotAssignedChecker)
 ]
 
 

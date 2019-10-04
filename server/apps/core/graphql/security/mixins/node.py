@@ -11,6 +11,7 @@ from apps.core.graphql.security.permissions import AllowAny
 class AuthNode:
     """
     Permission mixin for queries (nodes).
+
     Allows for simple configuration of access to nodes via class system.
     """
     permission_classes = (AllowAny,)

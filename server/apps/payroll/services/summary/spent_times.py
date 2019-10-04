@@ -4,9 +4,7 @@ from django.db.models import QuerySet
 
 
 class IssuesSpentTimesSummary:
-    """
-    Issues spent times summary.
-    """
+    """Issues spent times summary."""
     spent: int = 0
     closed_spent: int = 0
     opened_spent: int = 0
@@ -23,9 +21,7 @@ class IssuesSpentTimesSummary:
 
 
 class MergeRequestsSpentTimesSummary:
-    """
-    Merge requests spent times summary.
-    """
+    """Merge requests spent times summary."""
     spent: int = 0
     closed_spent: int = 0
     opened_spent: int = 0
@@ -45,9 +41,7 @@ class MergeRequestsSpentTimesSummary:
 
 
 class SpentTimesSummary:
-    """
-    Spent times summary.
-    """
+    """Spent times summary."""
     issues: IssuesSpentTimesSummary
     merge_requests: MergeRequestsSpentTimesSummary
 
@@ -61,23 +55,17 @@ class SpentTimesSummary:
 
     @property
     def spent(self) -> int:
-        """
-        Return total spent issues and merge requests.
-        """
+        """Return total spent issues and merge requests."""
         return self.issues.spent + self.merge_requests.spent
 
     @property
     def opened_spent(self) -> int:
-        """
-        Return total spent opened issues and opened merge requests.
-        """
+        """Return total spent opened issues and opened merge requests."""
         return self.issues.opened_spent + self.merge_requests.opened_spent
 
 
 class SpentTimesSummaryProvider:
-    """
-    Spent times summary provider.
-    """
+    """Spent times summary provider."""
     def __init__(
         self,
         queryset: QuerySet,
@@ -85,9 +73,7 @@ class SpentTimesSummaryProvider:
         self.queryset = queryset
 
     def execute(self) -> SpentTimesSummary:
-        """
-        Calculate summaries.
-        """
+        """Calculate summaries."""
         spent_summaries = self.queryset.summaries()
 
         issues_summaries = IssuesSpentTimesSummary(
