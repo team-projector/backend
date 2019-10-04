@@ -8,6 +8,19 @@ run_checkers() {
 
   mypy server
 
+  # Check that all migrations worked fine:
+  python manage.py makemigrations --dry-run --check
+
+  # Checking `pyproject.toml` file contents:
+  poetry check
+
+  # Checking dependencies status:
+  pip check
+
+  # Checking if all the dependencies are secure and do not have any
+  # known vulnerabilities:
+  safety check --bare --full-report
+
   # po files
   polint -i location,unsorted locale
 

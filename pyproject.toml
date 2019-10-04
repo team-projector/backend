@@ -45,6 +45,7 @@ httpretty = "*"
 wemake-python-styleguide = "*"
 polint = "^0.4.0"
 dennis = "^0.9.0"
+safety = "^1.8"
 
 [build-system]
 requires = ["poetry>=0.12"]
