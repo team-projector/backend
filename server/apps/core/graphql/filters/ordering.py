@@ -10,7 +10,4 @@ class OrderingFilter(
     NullsAlwaysLastOrderingMixin,
     BaseOrderingFilter,
 ):
-    """
-    Ordering filter.
-    """
-    pass
+    """Ordering filter."""

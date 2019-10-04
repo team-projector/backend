@@ -1,14 +1,15 @@
 # -*- coding: utf-8 -*-
 
+from contextlib import suppress
+
 from slack.errors import SlackApiError
 
 from . import get_slack_client
 
 
 class SlackClient:
-    """
-    A class representing client for Slack.
-    """
+    """A class representing client for Slack."""
+
     def __init__(self):
         self.client = get_slack_client()
 
@@ -18,14 +19,12 @@ class SlackClient:
 
         https://api.slack.com/methods/users.lookupByEmail
         """
-        try:
+        with suppress(TypeError, SlackApiError):
             return self.client.im_open(
                 user=self.client.users_lookupByEmail(
                     email=email,
                 ).get('user').get('id'),
             ).get('channel')
-        except (TypeError, SlackApiError):
-            pass
 
     def send_message_to_channel(
         self,

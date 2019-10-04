@@ -60,8 +60,6 @@ class Mutation(
 ):
     """Class representing all available mutations."""
 
-    pass
-
 
 schema = graphene.Schema(
     query=Query,

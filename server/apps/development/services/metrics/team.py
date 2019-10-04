@@ -11,41 +11,32 @@ from apps.development.services.problems.issue import (
 
 
 class WorkItemTeamMetrics:
-    """
-    Work item team metrics.
-    """
+    """Work item team metrics."""
+
     count: int = 0
     opened_count: int = 0
     opened_estimated: int = 0
 
 
 class IssueTeamMetrics(WorkItemTeamMetrics):
-    """
-    Issue team metrics.
-    """
-    pass
+    """Issue team metrics."""
 
 
 class MergeRequestTeamMetrics(WorkItemTeamMetrics):
-    """
-    Merge request team metrics.
-    """
-    pass
+    """Merge request team metrics."""
 
 
 class TeamMetrics:
-    """
-    Team metrics.
-    """
+    """Team metrics."""
+
     problems_count: int = 0
     issues: IssueTeamMetrics
     merge_requests: MergeRequestTeamMetrics
 
 
 class TeamMetricsProvider:
-    """
-    Team metrics provider.
-    """
+    """Team metrics provider."""
+
     def __init__(
         self,
         issues: Issue,
@@ -55,9 +46,7 @@ class TeamMetricsProvider:
         self.merge_requests = merge_requests
 
     def execute(self) -> TeamMetrics:
-        """
-        Calculate and return metrics.
-        """
+        """Calculate and return metrics."""
         metrics = TeamMetrics()
 
         metrics.issues = self._get_issues_metrics()

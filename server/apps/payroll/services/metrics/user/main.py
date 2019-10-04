@@ -20,23 +20,16 @@ class WorkItemUserMetrics:
 
 
 class IssueUserMetrics(WorkItemUserMetrics):
-    """
-    Issue user metrics.
-    """
-    pass
+    """Issue user metrics."""
 
 
 class MergeRequestUserMetrics(WorkItemUserMetrics):
-    """
-    Merge Request user metrics.
-    """
-    pass
+    """Merge Request user metrics."""
 
 
 class UserMetrics:
-    """
-    User metrics fields.
-    """
+    """User metrics fields."""
+
     payroll_closed: float = 0
     payroll_opened: float = 0
     bonus: float = 0
@@ -49,6 +42,7 @@ class UserMetricsProvider:
     """
     User metrics provider.
     """
+
     def get_metrics(self, user: User) -> UserMetrics:
         """
         Calculate and return metrics.
