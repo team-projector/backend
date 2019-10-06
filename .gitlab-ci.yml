@@ -70,19 +70,19 @@ publish_dev:
   only:
     - master
 
-deploy_dev:
-  stage: deploy
-  image: junte/ssh-agent
-  dependencies: []
-  variables:
-    SSH_PRIVATE_KEY: $SSH_DEV_PRIVATE_KEY
-  script:
-    - ssh deploy@${DEV_HOST} "/opt/deploy/deploy.sh"
-  environment:
-    name: dev
-    url: https://${DEV_HOST}/admin/
-  only:
-    - master
+#deploy_dev:
+#  stage: deploy
+#  image: junte/ssh-agent
+#  dependencies: []
+#  variables:
+#    SSH_PRIVATE_KEY: $SSH_DEV_PRIVATE_KEY
+#  script:
+#    - ssh deploy@${DEV_HOST} "/opt/deploy/deploy.sh"
+#  environment:
+#    name: dev
+#    url: https://${DEV_HOST}/admin/
+#  only:
+#    - master
 
 deploy_k8s:
   image: dtzar/helm-kubectl
