@@ -12,10 +12,9 @@ from django.utils.translation import gettext_lazy as _
 from apps.core.consts import DEFAULT_TITLE_LENGTH
 from apps.core.models.mixins import GitlabEntityMixin, GitlabInternalIdMixin
 from apps.core.models.utils import Choices
-from apps.payroll.models.mixins import SpentTimesMixin
+from apps.development.models.mixins import TrackableMixin
 
 from .managers import MergeRequestManager
-from .mixins import NotableMixin
 
 MERGE_REQUESTS_STATES = Choices(
     ('opened', 'opened'),
@@ -27,8 +26,7 @@ MERGE_REQUESTS_STATE_MAX_LENGTH = 255
 
 
 class MergeRequest(
-    NotableMixin,
-    SpentTimesMixin,
+    TrackableMixin,
     GitlabEntityMixin,
     GitlabInternalIdMixin,
 ):

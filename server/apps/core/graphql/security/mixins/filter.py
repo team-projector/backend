@@ -49,7 +49,13 @@ class AuthFilter(DjangoFilterConnectionField):
             queryset=default_manager.get_queryset(),
         ).qs
 
-        return super(DjangoFilterConnectionField, cls).connection_resolver(
-            resolver, connection, qs, max_limit, enforce_first_or_last,
-            root, info, **args,
+        return super().connection_resolver(
+            resolver,
+            connection,
+            qs,
+            max_limit,
+            enforce_first_or_last,
+            root,
+            info,
+            **args,
         )
