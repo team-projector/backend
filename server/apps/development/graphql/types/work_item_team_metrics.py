@@ -5,6 +5,7 @@ import graphene
 
 class WorkItemTeamMetricsType(graphene.ObjectType):
     """Work item team metrics type."""
+
     count = graphene.Int()
     opened_count = graphene.Int()
     opened_estimated = graphene.Int()

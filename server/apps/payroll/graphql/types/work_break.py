@@ -10,9 +10,8 @@ from apps.payroll.services.allowed.work_break import filter_allowed_for_user
 
 
 class WorkBreakType(BaseDjangoObjectType):
-    """
-    Work break type.
-    """
+    """Work break type."""
+
     class Meta:
         model = WorkBreak
         interfaces = (DatasourceRelayNode,)
@@ -21,9 +20,7 @@ class WorkBreakType(BaseDjangoObjectType):
 
     @classmethod
     def get_queryset(cls, queryset, info) -> QuerySet:
-        """
-        Get work breaks.
-        """
+        """Get work breaks."""
         return filter_allowed_for_user(
             queryset,
             info.context.user,

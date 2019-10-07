@@ -27,6 +27,7 @@ class Note(models.Model):
 
     Fill from Gitlab when loading issues or merge requests.
     """
+
     object_id = models.IntegerField()
 
     content_object = GenericForeignKey()

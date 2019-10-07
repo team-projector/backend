@@ -19,6 +19,7 @@ class Project(GitlabEntityMixin):
 
     Fill from Gitlab.
     """
+
     title = models.CharField(
         max_length=DEFAULT_TITLE_LENGTH,
         verbose_name=_('VN__TITLE'),
@@ -83,9 +84,7 @@ class Project(GitlabEntityMixin):
         return self.full_title or self.title
 
     def save(self, *args, **kwargs) -> None:
-        """
-        Save the current project.
-        """
+        """Save the current project."""
         if not self.full_title:
             self.full_title = self.title  # noqa WPS601
 

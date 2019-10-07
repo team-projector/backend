@@ -16,6 +16,7 @@ class GitLabOAuth2Backend(SocialGitLabOAuth2):
     After successful authentication, a token is created.
     Create application: https://gitlab.com/profile/applications
     """
+
     @handle_http_errors
     def auth_complete(self, *args, **kwargs):
         """
@@ -36,15 +37,11 @@ class GitLabOAuth2Backend(SocialGitLabOAuth2):
         return token  # noqa WPS331
 
     def get_redirect_uri(self, state=None):
-        """
-        Callback URL after approving access on Gitlab.
-        """
+        """Callback URL after approving access on Gitlab."""
         return self.setting('REDIRECT_URI')
 
     def authenticate(self, *args, **kwargs):
-        """
-        Return authenticated user.
-        """
+        """Return authenticated user."""
         if 'response' in kwargs:
             return User.objects.filter(
                 login=kwargs['response']['username'],

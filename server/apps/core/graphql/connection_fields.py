@@ -19,9 +19,8 @@ class DataSourceConnectionField(
     AuthFilter,
     DjangoFilterConnectionField,
 ):
-    """
-    Data source connection field.
-    """
+    """Data source connection field."""
+
     permission_classes = (AllowAuthenticated,)
 
     def __init__(self, model_type, *args, **kwargs):
@@ -36,9 +35,7 @@ class DataSourceConnectionField(
         args,
         iterable,
     ):
-        """
-        Resolve connection.
-        """
+        """Resolve connection."""
         if iterable is None:
             iterable = default_manager
 

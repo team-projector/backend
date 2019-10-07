@@ -9,9 +9,8 @@ from apps.payroll.graphql.types import WorkBreakType
 
 
 class WorkBreaksQueries(graphene.ObjectType):
-    """
-    Class representing list of available fields for work break queries.
-    """
+    """Class representing list of available fields for work break queries."""
+
     work_break = DatasourceRelayNode.Field(WorkBreakType)
     all_work_breaks = DataSourceConnectionField(
         WorkBreakType,

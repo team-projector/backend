@@ -8,9 +8,8 @@ from apps.development.models.issue import ISSUE_STATES
 
 
 class IssuesContainerMetrics:
-    """
-    Issues container metrics.
-    """
+    """Issues container metrics."""
+
     time_estimate: int = 0
     time_spent: int = 0
     time_remains: int = 0
@@ -21,13 +20,10 @@ class IssuesContainerMetrics:
 
 
 class IssuesContainerMetricsProvider:
-    """
-    Issues container metrics provider.
-    """
+    """Issues container metrics provider."""
+
     def fill_issues_metrics(self, metrics: IssuesContainerMetrics) -> None:
-        """
-        Fill issues metrics.
-        """
+        """Fill issues metrics."""
         issues = Issue.objects.all()
         issues = self.filter_issues(issues)
 
@@ -59,7 +55,5 @@ class IssuesContainerMetricsProvider:
         metrics.issues_count = stats['issues_count']
 
     def filter_issues(self, queryset: QuerySet) -> QuerySet:
-        """
-        Filter issues should be implemented in subclass.
-        """
+        """Filter issues should be implemented in subclass."""
         raise NotImplementedError

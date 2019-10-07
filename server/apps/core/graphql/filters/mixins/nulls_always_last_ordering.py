@@ -4,13 +4,10 @@ from django.db.models import F
 
 
 class NullsAlwaysLastOrderingMixin:
-    """
-    Nulls always last odering mixin.
-    """
+    """Nulls always last odering mixin."""
+
     def get_ordering_value(self, param):
-        """
-        Get ordering value.
-        """
+        """Get ordering value."""
         ord_value = super().get_ordering_value(param)  # type: ignore
 
         descending = ord_value.startswith('-')

@@ -11,9 +11,8 @@ from .provider import IssuesContainerMetrics
 
 
 class TicketMetrics(IssuesContainerMetrics):
-    """
-    Ticket metrics.
-    """
+    """Ticket metrics."""
+
     budget_estimate: float = 0
     budget_spent: float = 0
     budget_remains: float = 0
@@ -22,16 +21,13 @@ class TicketMetrics(IssuesContainerMetrics):
 
 
 class TicketMetricsProvider:
-    """
-    Ticket metrics provider.
-    """
+    """Ticket metrics provider."""
+
     def __init__(self, ticket: Ticket):
         self.ticket = ticket
 
     def get_metrics(self) -> TicketMetrics:
-        """
-        Calculate and return metrics.
-        """
+        """Calculate and return metrics."""
         metrics = TicketMetrics()
 
         self._fill_issues_metrics(metrics)

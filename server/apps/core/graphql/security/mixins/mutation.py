@@ -8,9 +8,8 @@ from apps.core.graphql.security.permissions import AllowAny
 
 
 class AuthMutation:
-    """
-    Permission mixin for ClientIdMutation.
-    """
+    """Permission mixin for ClientIdMutation."""
+
     permission_classes = (AllowAny,)
 
     @classmethod
@@ -20,9 +19,7 @@ class AuthMutation:
         info: ResolveInfo,
         **kwargs,
     ) -> bool:
-        """
-        Check has permission.
-        """
+        """Check has permission."""
         return all(
             (
                 perm().has_mutation_permission(root, info, **kwargs)

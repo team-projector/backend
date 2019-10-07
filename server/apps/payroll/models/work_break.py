@@ -19,9 +19,8 @@ WORK_BREAK_REASON_MAX_LENGTH = 15
 
 
 class WorkBreak(ApprovedMixin, Timestamps):
-    """
-    The work break model.
-    """
+    """The work break model."""
+
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         models.CASCADE,

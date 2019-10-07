@@ -27,9 +27,7 @@ class EmptyEstimateChecker(BaseProblemChecker):
     problem_code = PROBLEM_EMPTY_ESTIMATE
 
     def merge_request_has_problem(self, merge_request: MergeRequest) -> bool:
-        """
-        Current merge request has problem.
-        """
+        """Current merge request has problem."""
         return merge_request.issues.filter(
             Q(
                 Q(time_estimate__isnull=True)
@@ -45,9 +43,7 @@ class NotAssignedChecker(BaseProblemChecker):
     problem_code = PROBLEM_NOT_ASSIGNED
 
     def merge_request_has_problem(self, merge_request: MergeRequest) -> bool:
-        """
-        Current merge request has problem.
-        """
+        """Current merge request has problem."""
         return (
             not merge_request.user
             and self._is_done_opened_issues_exists(merge_request)

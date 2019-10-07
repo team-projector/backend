@@ -6,7 +6,6 @@ from ...models import Note
 
 
 class NoteInline(BaseGenericStackedInline):
-    """
-    Note inline.
-    """
+    """Note inline."""
+
     model = Note

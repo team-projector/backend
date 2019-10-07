@@ -16,9 +16,8 @@ TEAM_MEMBER_ROLES = Choices(
 
 
 class TeamMember(models.Model):
-    """
-    The team member model.
-    """
+    """The team member model."""
+
     team = models.ForeignKey(
         'Team',
         models.CASCADE,

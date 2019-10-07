@@ -5,6 +5,7 @@ from django.db.models import QuerySet
 
 class IssuesSpentTimesSummary:
     """Issues spent times summary."""
+
     spent: int = 0
     closed_spent: int = 0
     opened_spent: int = 0
@@ -22,6 +23,7 @@ class IssuesSpentTimesSummary:
 
 class MergeRequestsSpentTimesSummary:
     """Merge requests spent times summary."""
+
     spent: int = 0
     closed_spent: int = 0
     opened_spent: int = 0
@@ -42,6 +44,7 @@ class MergeRequestsSpentTimesSummary:
 
 class SpentTimesSummary:
     """Spent times summary."""
+
     issues: IssuesSpentTimesSummary
     merge_requests: MergeRequestsSpentTimesSummary
 
@@ -66,6 +69,7 @@ class SpentTimesSummary:
 
 class SpentTimesSummaryProvider:
     """Spent times summary provider."""
+
     def __init__(
         self,
         queryset: QuerySet,
