@@ -13,13 +13,10 @@ from apps.development.services.team_members import filter_by_roles
 
 
 class TeamRolesFilter(django_filters.CharFilter):
-    """
-    Filter team by roles.
-    """
+    """Filter team by roles."""
+
     def filter(self, queryset, value) -> QuerySet:
-        """
-        Do filtering.
-        """
+        """Do filtering."""
         roles = self._parse_roles(value)
         if not roles:
             return queryset
@@ -52,9 +49,8 @@ class TeamRolesFilter(django_filters.CharFilter):
 
 
 class TeamsFilterSet(django_filters.FilterSet):
-    """
-    Set of filters for Team.
-    """
+    """Set of filters for Team."""
+
     roles = TeamRolesFilter()
     order_by = OrderingFilter(
         fields=('title',),

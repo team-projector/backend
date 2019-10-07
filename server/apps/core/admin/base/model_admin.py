@@ -12,6 +12,7 @@ class BaseModelAdmin(
     admin.ModelAdmin,
 ):
     """A base class for admin dashboard."""
+
     list_per_page = 20
 
     class Media:

@@ -15,15 +15,12 @@ class ProjectGroupAdmin(
     ForceSyncEntityMixin,
     BaseModelAdmin,
 ):
-    """
-    A class representing Project Group model for admin dashboard.
-    """
+    """A class representing Project Group model for admin dashboard."""
+
     list_display = ('title', 'parent', 'gl_url', 'gl_last_sync')
     search_fields = ('title',)
     inlines = (ProjectMemberInline,)
 
     def sync_handler(self, obj):
-        """
-        Syncing group.
-        """
+        """Syncing group."""
         sync_project_group.delay(obj.gl_id)

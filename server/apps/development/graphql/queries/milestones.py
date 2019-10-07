@@ -9,9 +9,8 @@ from apps.development.graphql.types import MilestoneType
 
 
 class MilestonesQueries(graphene.ObjectType):
-    """
-    Class representing list of available fields for milestone queries.
-    """
+    """Class representing list of available fields for milestone queries."""
+
     milestone = DatasourceRelayNode.Field(MilestoneType)
 
     all_milestones = DataSourceConnectionField(

@@ -5,9 +5,8 @@ from bitfield.forms import BitFieldCheckboxSelectMultiple
 
 
 class AdminFormFieldsOverridesMixin:
-    """
-    A mixin with form fields overrides.
-    """
+    """A mixin with form fields overrides."""
+
     formfield_overrides = {
         BitField: {
             'widget': BitFieldCheckboxSelectMultiple,

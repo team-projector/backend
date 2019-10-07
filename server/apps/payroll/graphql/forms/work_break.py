@@ -9,9 +9,8 @@ User = get_user_model()
 
 
 class WorkBreakForm(forms.Form):
-    """
-    Work break form used for validation input data mutations.
-    """
+    """Work break form used for validation input data mutations."""
+
     id = forms.IntegerField(
         required=False,
         min_value=0,

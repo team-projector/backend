@@ -9,9 +9,8 @@ from apps.core.models.mixins import Timestamps
 
 
 class Payroll(Timestamps):
-    """
-    The payroll model.
-    """
+    """The payroll model."""
+
     created_by = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         models.CASCADE,

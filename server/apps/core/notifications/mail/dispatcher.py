@@ -8,9 +8,8 @@ from django.template.loader import get_template
 
 
 class SystemEmailDispatcher:
-    """
-    A class for sending emails.
-    """
+    """A class for sending emails."""
+
     @staticmethod
     def mail_users(
         subject: str,

@@ -16,13 +16,10 @@ DAY_STEP = timedelta(days=1)
 
 
 class DayMetricsProvider(ProgressMetricsProvider):
-    """
-    Day metrics provider.
-    """
+    """Day metrics provider."""
+
     def get_metrics(self) -> Iterable[UserProgressMetrics]:
-        """
-        Calculate and return metrics.
-        """
+        """Calculate and return metrics."""
         now = datetime.now().date()
 
         active_issues = self.get_active_issues() if now <= self.end else []

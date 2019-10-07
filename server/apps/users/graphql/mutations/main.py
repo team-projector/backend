@@ -7,9 +7,8 @@ from .logout import LogoutMutation
 
 
 class AuthMutations:
-    """
-    A class representing list of available fields for authorization.
-    """
+    """A class representing list of available fields for authorization."""
+
     complete_gitlab_auth = CompleteGitlabAuthMutation.Field()
     login_gitlab = LoginGitlabMutation.Field()
     login = LoginMutation.Field()

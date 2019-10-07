@@ -11,9 +11,8 @@ from apps.users.graphql.types import UserProgressMetricsType, UserType
 
 
 class UsersQueries(graphene.ObjectType):
-    """
-    Class representing list of available fields for user queries.
-    """
+    """Class representing list of available fields for user queries."""
+
     user = DatasourceRelayNode.Field(UserType)
 
     user_progress_metrics = graphene.Field(

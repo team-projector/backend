@@ -4,13 +4,10 @@ from django.db import models
 
 
 class WorkBreakManager(models.Manager):
-    """
-    The Work Break model manager.
-    """
+    """The Work Break model manager."""
+
     def allowed_for_user(self, user):
-        """
-        Get user work breaks allowed for current user and team leader.
-        """
+        """Get user work breaks allowed for current user and team leader."""
         from apps.development.models import TeamMember
 
         users = TeamMember.objects.filter(
