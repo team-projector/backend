@@ -1,12 +1,16 @@
+from pytest import raises
 from django.test import override_settings
 from rest_framework import status
 
+from apps.core.admin.mixins.force_sync_entity import ForceSyncEntityMixin
 from apps.development.models import ProjectGroup
 from tests.base import model_admin
 from tests.test_development.checkers_gitlab import check_group
 from tests.test_development.factories import ProjectGroupFactory
 from tests.test_development.factories_gitlab import (
-    AttrDict, GlGroupFactory, GlUserFactory,
+    AttrDict,
+    GlGroupFactory,
+    GlUserFactory,
 )
 
 
@@ -80,3 +84,8 @@ def test_sync_obj(admin_client):
     )
 
     assert response.status_code == status.HTTP_302_FOUND
+
+
+def test_sync_handler_mixin():
+    with raises(NotImplementedError):
+        ForceSyncEntityMixin().sync_handler(None)
