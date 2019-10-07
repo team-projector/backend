@@ -71,11 +71,9 @@ class IssuesProjectSummaryProvider:
 
         total_issues_count = self._get_total_issues_count(summaries_qs)
 
-        projects_qs = self._get_project_qs(summaries_qs)
-
         ret = []
 
-        for project in projects_qs:
+        for project in self._get_project_qs(summaries_qs):
             summary = IssuesProjectSummary()
             summary.project = project
 
