@@ -9,3 +9,6 @@ class TrackableMixin(
     SpentTimesMixin,
 ):
     """Mixin for trackable entities."""
+
+    class Meta:
+        abstract = True
