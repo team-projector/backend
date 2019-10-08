@@ -11,6 +11,7 @@ from ..services.gitlab.groups import load_single_group
 
 @app.task
 def sync_project_group(gl_id: int) -> None:
+    """Syncing project group."""
     gl = get_gitlab_client()
     gl_group = gl.groups.get(id=gl_id)
 

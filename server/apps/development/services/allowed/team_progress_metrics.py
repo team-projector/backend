@@ -11,6 +11,7 @@ def check_allow_get_metrics_by_user(
     team: Team,
     user: User,
 ) -> None:
+    """Whether user allowed to get metrics."""
     can_filter = filter_by_roles(TeamMember.objects.filter(
         team=team,
         user=user,

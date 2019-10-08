@@ -68,12 +68,14 @@ schema = graphene.Schema(
 
 
 def get_api_graphql_view():
+    """Get API graphql view."""
     return ApiGraphQLView.as_view(
         schema=schema,
     )
 
 
 def get_graphql_view():
+    """Get graphql view."""
     return PlaygroundGraphQLView.as_view(
         graphiql=True,
         schema=schema,

@@ -10,6 +10,7 @@ def resolve_spent_times_summary(
     info,
     **kwargs,
 ):
+    """Resolve spent times summary."""
     filterset = SpentTimeFilterSet(
         data=kwargs,
         queryset=SpentTime.objects.allowed_for_user(

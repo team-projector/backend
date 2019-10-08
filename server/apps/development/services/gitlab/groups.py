@@ -13,6 +13,7 @@ logger = logging.getLogger(__name__)
 
 
 def load_groups() -> None:
+    """Load all groups."""
     gl = get_gitlab_client()
     gl_groups = gl.groups.list(all=True)
     gl_groups_map = {
@@ -49,6 +50,7 @@ def load_single_group(
     gl_group: GlGroup,
     parent: Optional[ProjectGroup],
 ) -> ProjectGroup:
+    """Load group."""
     group, _ = ProjectGroup.objects.sync_gitlab(
         gl_id=gl_group.id,
         gl_url=gl_group.web_url,

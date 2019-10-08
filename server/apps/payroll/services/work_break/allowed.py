@@ -12,6 +12,7 @@ def filter_allowed_for_user(
     queryset: QuerySet,
     user: User,
 ):
+    """Get work breaks for user."""
     users = TeamMember.objects.filter(
         user=user,
         roles=TeamMember.roles.leader,
@@ -29,6 +30,7 @@ def check_allow_filtering_by_team(
     team: Team,
     user: User,
 ) -> None:
+    """Check whether user can get work breaks by team."""
     members = TeamMember.objects.filter(
         team=team,
         user=user,

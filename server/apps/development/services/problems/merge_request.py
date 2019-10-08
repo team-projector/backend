@@ -66,6 +66,7 @@ checkers = [
 
 
 def get_merge_request_problems(merge_request: MergeRequest) -> List[str]:
+    """Get problems for merge request."""
     problems = []
 
     for checker in checkers:

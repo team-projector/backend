@@ -19,6 +19,7 @@ app.autodiscover_tasks(lambda: settings.INSTALLED_APPS)
 
 @app.on_after_finalize.connect
 def setup_periodic_tasks(sender, **kwargs):
+    """Add periodic tasks."""
     from apps.development.tasks import sync
     from apps.users.tasks import clear_expired_tokens
 

@@ -14,6 +14,7 @@ logger = logging.getLogger(__name__)
 
 
 def extract_user_from_data(data: dict) -> Optional[User]:
+    """Retrieve Gitlab user from data."""
     if not data:
         return None
 
@@ -27,11 +28,13 @@ def extract_user_from_data(data: dict) -> Optional[User]:
 
 
 def update_users() -> None:
+    """Load users from Gitlab."""
     for user in User.objects.filter(gl_id__isnull=False):
         load_user(user.gl_id)
 
 
 def load_user(user_id: int) -> User:
+    """Load user from Gitlab."""
     gl = get_gitlab_client()
 
     gl_user = gl.users.get(user_id)

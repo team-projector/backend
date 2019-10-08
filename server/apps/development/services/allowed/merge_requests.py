@@ -10,6 +10,7 @@ def filter_allowed_for_user(
     queryset: QuerySet,
     user: User,
 ) -> QuerySet:
+    """Get allowed users for user."""
     from apps.development.models import TeamMember
 
     allowed_users = {user}

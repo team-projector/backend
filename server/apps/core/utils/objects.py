@@ -5,6 +5,7 @@ from typing import Any, Dict
 
 
 def deep_getattr(obj: object, attr: str, default: Any = None) -> Any:
+    """Get attribute from object."""
     try:
         return reduce(getattr, attr.split('.'), obj)
     except AttributeError:
@@ -19,4 +20,5 @@ class ObjectView:
 
 
 def dict2obj(dictionary: Dict) -> object:
+    """Create ObjectView from dictionary."""
     return ObjectView(dictionary)

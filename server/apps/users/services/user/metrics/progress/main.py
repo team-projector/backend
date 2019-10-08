@@ -29,5 +29,6 @@ def get_progress_metrics(
     end: date,
     grp: str,
 ) -> UserProgressMetricsList:
+    """Get user progress."""
     provider = _create_provider(user, start, end, grp)
     return provider.get_metrics()

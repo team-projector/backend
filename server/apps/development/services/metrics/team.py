@@ -98,6 +98,7 @@ class TeamMetricsProvider:
 
 
 def get_team_metrics(team: Team) -> TeamMetrics:
+    """Get metrics for team."""
     users = TeamMember.objects.get_no_watchers(team)
 
     issues = Issue.objects.filter(user__in=users)

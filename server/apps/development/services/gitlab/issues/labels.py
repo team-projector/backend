@@ -11,6 +11,7 @@ def load_issue_labels(
     gl_project: GlProject,
     gl_issue: GlProjectIssue,
 ) -> None:
+    """Load labels for issue."""
     project_labels = getattr(gl_project, '_cache_labels', None)
 
     if project_labels is None:

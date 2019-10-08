@@ -10,6 +10,7 @@ from apps.development.services.allowed.team_progress_metrics import (
 
 
 def resolve_team_progress_metrics(parent, info, **kwargs):
+    """Resolve progress metrics for team."""
     team = get_object_or_404(
         Team.objects.all(),
         pk=kwargs['team'],

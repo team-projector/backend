@@ -31,6 +31,7 @@ class GlStatus:
 
 
 def get_gitlab_sync_status() -> GlStatus:
+    """Get Gitlab sync status."""
     provider = GlStatusProvider()
     return provider.get_status()
 

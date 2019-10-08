@@ -48,4 +48,5 @@ class MergeRequestsSummaryProvider:
 
 
 def get_merge_requests_summary(queryset: QuerySet) -> MergeRequestsSummary:
+    """Get summary for merge requests."""
     return MergeRequestsSummaryProvider(queryset).execute()

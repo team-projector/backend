@@ -18,6 +18,7 @@ logger = logging.getLogger(__name__)
 
 @csrf_exempt
 def gl_webhook(request):
+    """Gitlab webhook."""
     _check_webhook_secret_token(
         request.META.get('HTTP_X_GITLAB_TOKEN'),
     )
