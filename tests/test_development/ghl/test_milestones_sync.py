@@ -12,7 +12,7 @@ from tests.test_development.factories_gitlab import (
 
 
 @override_settings(GITLAB_TOKEN='GITLAB_TOKEN')
-def test_sync_group(user, client, gl_mocker):
+def test_sync_milestone_group(user, client, gl_mocker):
     gl_group = AttrDict(GlGroupFactory())
     group = ProjectGroupFactory.create(gl_id=gl_group.id)
 
@@ -46,7 +46,7 @@ def test_sync_group(user, client, gl_mocker):
 
 
 @override_settings(GITLAB_TOKEN='GITLAB_TOKEN')
-def test_sync_project(user, client, gl_mocker):
+def test_sync_milestone_project(user, client, gl_mocker):
     gl_project = AttrDict(GlProjectFactory())
     project = ProjectFactory.create(gl_id=gl_project.id)
 
@@ -77,3 +77,21 @@ def test_sync_project(user, client, gl_mocker):
 
     milestone.refresh_from_db()
     assert milestone.state == 'closed'
+
+
+def test_sync_milestone_inccorect_owner(user, client):
+    milestone = ProjectMilestoneFactory.create(
+        owner=user, state='active'
+    )
+
+    client.user = user
+    info = AttrDict({
+        'context': client
+    })
+
+    SyncMilestoneMutation().do_mutate(
+        None, info, id=milestone.id
+    )
+
+    milestone.refresh_from_db()
+    assert milestone.state == 'active'

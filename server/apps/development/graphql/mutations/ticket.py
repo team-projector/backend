@@ -73,7 +73,7 @@ class UpdateTicketMutation(
             ticket=ticket,
         )
 
-    @classmethod
+    @classmethod  # noqa C901
     def _update_ticket(cls, ticket, data):
         if data.get('title'):
             ticket.title = data['title']
@@ -86,6 +86,9 @@ class UpdateTicketMutation(
 
         if data.get('due_date'):
             ticket.due_date = data['due_date']
+
+        if data.get('url'):
+            ticket.url = data['url']
 
         if data.get('milestone'):
             ticket.milestone = data['milestone']

@@ -16,7 +16,7 @@ class AddSpendIssueMutation(BaseMutation):
     """Add spend issue mutation."""
 
     class Arguments:
-        id = graphene.ID()
+        id = graphene.ID(required=True)
         seconds = graphene.Int(required=True)
 
     issue = graphene.Field(IssueType)
@@ -50,7 +50,7 @@ class SyncIssueMutation(BaseMutation):
     """Syncing issue mutation."""
 
     class Arguments:
-        id = graphene.ID()
+        id = graphene.ID(required=True)
 
     issue = graphene.Field(IssueType)
 
@@ -74,8 +74,8 @@ class UpdateIssueMutation(BaseMutation):
     """Update issue mutation."""
 
     class Arguments:
-        id = graphene.ID()
-        ticket = graphene.ID()
+        id = graphene.ID(required=True)
+        ticket = graphene.ID(required=True)
 
     issue = graphene.Field(IssueType)
 
@@ -87,12 +87,11 @@ class UpdateIssueMutation(BaseMutation):
             pk=kwargs['id'],
         )
 
-        if kwargs.get('ticket'):
-            ticket = get_object_or_404(
-                Ticket.objects.all(),
-                pk=kwargs.pop('ticket'),
-            )
-            issue.ticket = ticket
+        ticket = get_object_or_404(
+            Ticket.objects.all(),
+            pk=kwargs.pop('ticket'),
+        )
+        issue.ticket = ticket
 
         issue.save()
 

@@ -7,8 +7,12 @@ from apps.development.graphql.filters import IssuesFilterSet
 from apps.development.models import TeamMember
 from apps.development.models.issue import Issue, ISSUE_STATES
 from tests.test_development.factories import (
-    IssueFactory, TicketFactory, ProjectFactory, ProjectMilestoneFactory,
-    TeamFactory, TeamMemberFactory
+    IssueFactory,
+    TicketFactory,
+    ProjectFactory,
+    ProjectMilestoneFactory,
+    TeamFactory,
+    TeamMemberFactory
 )
 from tests.test_users.factories import UserFactory
 

@@ -3,12 +3,18 @@ from pytest import raises
 from rest_framework.exceptions import PermissionDenied, ValidationError
 
 from apps.development.graphql.mutations.ticket import (
-    CreateTicketMutation, UpdateTicketMutation
+    CreateTicketMutation,
+    UpdateTicketMutation,
 )
 from apps.development.graphql.types.ticket import TicketType
-from apps.development.models.ticket import Ticket, TYPE_FEATURE, TYPE_BUG_FIXING
+from apps.development.models.ticket import (
+    Ticket,
+    TYPE_FEATURE,
+    TYPE_BUG_FIXING,)
+
 from tests.test_development.factories import (
-    TicketFactory, ProjectMilestoneFactory
+    TicketFactory,
+    ProjectMilestoneFactory
 )
 from tests.test_development.factories_gitlab import AttrDict
 
@@ -95,8 +101,37 @@ def test_ticket_update(user, client):
     client.user = user
     info = AttrDict({'context': client})
 
-    ticket = TicketFactory.create(type=TYPE_BUG_FIXING,
-                                  milestone=ProjectMilestoneFactory.create())
+    ticket = TicketFactory.create(
+        title='title created',
+        type=TYPE_BUG_FIXING,
+        url='http://created.test',
+    )
+
+    UpdateTicketMutation.do_mutate(
+        root=None,
+        info=info,
+        id=ticket.id,
+        title='updated',
+        type=TYPE_FEATURE,
+        start_date=str(datetime.now().date()),
+        due_date=str(datetime.now().date()),
+        url='http://updated.test',
+    )
+
+    assert Ticket.objects.count() == 1
+
+    ticket.refresh_from_db()
+    assert ticket.title == 'updated'
+    assert ticket.start_date is not None
+    assert ticket.due_date is not None
+    assert ticket.url == 'http://updated.test'
+
+
+def test_ticket_update_milestone(user, client):
+    client.user = user
+    info = AttrDict({'context': client})
+
+    ticket = TicketFactory.create(milestone=ProjectMilestoneFactory.create())
 
     milestone = ProjectMilestoneFactory.create()
 
@@ -104,12 +139,10 @@ def test_ticket_update(user, client):
         root=None,
         info=info,
         id=ticket.id,
-        type=TYPE_FEATURE,
         milestone=milestone.id
     )
 
     assert Ticket.objects.count() == 1
-    assert Ticket.objects.first().type == TYPE_FEATURE
     assert Ticket.objects.first().milestone == milestone
 
 
