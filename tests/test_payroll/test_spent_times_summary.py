@@ -3,9 +3,7 @@ from apps.development.models.issue import ISSUE_STATES
 from apps.development.models.merge_request import MERGE_REQUESTS_STATES
 from apps.payroll.graphql.resolvers import resolve_spent_times_summary
 from apps.payroll.models import SpentTime
-from apps.payroll.services.summary.spent_times import (
-    get_spent_times_summary
-)
+from apps.payroll.services import spent_time as spent_time_service
 from tests.test_development.factories import IssueFactory, MergeRequestFactory
 from tests.test_development.factories_gitlab import AttrDict
 from tests.test_payroll.factories import (
@@ -25,7 +23,7 @@ def test_without_spents(user):
         total_time_spent=1000
     )
 
-    summary = get_spent_times_summary(
+    summary = spent_time_service.get_summary(
         SpentTime.objects.all(),
     )
 
@@ -64,7 +62,7 @@ def test_issues_spents(user):
         time_spent=seconds(hours=1)
     )
 
-    summary = get_spent_times_summary(
+    summary = spent_time_service.get_summary(
         SpentTime.objects.all(),
     )
 
@@ -124,7 +122,7 @@ def test_merge_requests_spents(user):
         time_spent=seconds(hours=5)
     )
 
-    summary = get_spent_times_summary(
+    summary = spent_time_service.get_summary(
         SpentTime.objects.all(),
     )
 
@@ -173,7 +171,7 @@ def test_complex_spents(user):
         time_spent=seconds(hours=6)
     )
 
-    summary = get_spent_times_summary(
+    summary = spent_time_service.get_summary(
         SpentTime.objects.all(),
     )
 

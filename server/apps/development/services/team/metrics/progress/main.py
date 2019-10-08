@@ -28,7 +28,7 @@ def create_provider(
 TeamMemberProgressMetricsList = Iterable[TeamMemberProgressMetrics]
 
 
-def get_team_progress_metrics(
+def get_progress_metrics(
     team: Team,
     start: date,
     end: date,

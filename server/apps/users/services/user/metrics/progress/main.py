@@ -1,11 +1,10 @@
 # -*- coding: utf-8 -*-
 
 from datetime import date
-from typing import Iterable
 
 from apps.users.models import User
 
-from .base import ProgressMetricsProvider, UserProgressMetrics
+from .base import ProgressMetricsProvider, UserProgressMetricsList
 from .day import DayMetricsProvider
 from .week import WeekMetricsProvider
 
@@ -24,12 +23,12 @@ def _create_provider(
     raise ValueError(f'Bad group "{group}"')
 
 
-def get_user_progress_metrics(
+def get_progress_metrics(
     user: User,
     start: date,
     end: date,
     grp: str,
-) -> Iterable[UserProgressMetrics]:
+) -> UserProgressMetricsList:
     """Get user progress."""
     provider = _create_provider(user, start, end, grp)
     return provider.get_metrics()

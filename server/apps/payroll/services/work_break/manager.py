@@ -6,7 +6,7 @@ from apps.payroll.models.mixins.approved import APPROVED_STATES
 from apps.users.models import User
 
 
-class WorkBreakManager:
+class Manager:
     """The Work Break manager."""
 
     def __init__(self, work_break):
