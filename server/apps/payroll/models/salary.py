@@ -96,6 +96,7 @@ class Salary(Timestamps):
     field_tracker = FieldTracker()
 
     def __str__(self):
+        """Returns object string representation."""
         return f'{self.user} [{self.created_at}]: {self.sum}'
 
     class Meta:

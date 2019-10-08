@@ -81,6 +81,7 @@ class Project(GitlabEntityMixin):
         ordering = ('full_title', 'title')
 
     def __str__(self):
+        """Returns object string representation."""
         return self.full_title or self.title
 
     def save(self, *args, **kwargs) -> None:
