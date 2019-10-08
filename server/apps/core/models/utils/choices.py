@@ -7,6 +7,7 @@ class Choices(ModelChoices):
     """Choices."""
 
     def __eq__(self, other):
+        """Equals 'current' and 'other' values. Returns boolean value."""
         if isinstance(other, (tuple, list)) and self._doubles == list(other):
             return True
 

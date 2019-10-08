@@ -60,6 +60,7 @@ class WorkBreak(ApprovedMixin, Timestamps):
         ordering = ('-from_date',)
 
     def __str__(self):
+        """Returns object string representation."""
         period = f'{self.from_date} - {self.to_date}'
 
         return f'{self.user}: {self.reason} ({period})'

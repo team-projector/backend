@@ -32,4 +32,5 @@ class Label(models.Model):
         verbose_name_plural = _('VN__LABELS')
 
     def __str__(self):
+        """Returns object string representation."""
         return self.title
