@@ -63,6 +63,7 @@ class SpentTime(Payroll):
     objects = SpentTimeManager()
 
     def __str__(self):
+        """Returns object string representation."""
         return f'{self.user} [{self.base}]: {self.time_spent}'
 
     def save(self, *args, **kwargs):

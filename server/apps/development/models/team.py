@@ -31,4 +31,5 @@ class Team(models.Model):
         ordering = ('title',)
 
     def __str__(self):
+        """Returns object string representation."""
         return self.title

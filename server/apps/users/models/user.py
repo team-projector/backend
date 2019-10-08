@@ -135,6 +135,7 @@ class User(AbstractBaseUser, PermissionsMixin):
         ordering = ('login',)
 
     def __str__(self):
+        """Returns object string representation."""
         return self.login
 
     def get_short_name(self):
