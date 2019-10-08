@@ -11,34 +11,22 @@ PROBLEM_OVER_DUE_DAY = 'over_due_date'
 
 
 class BaseProblemChecker:
-    """
-    A base class checks problems.
-    """
+    """A base class checks problems."""
+
     problem_code: ClassVar[str] = ''
 
-    def milestone_has_problem(
-        self,
-        milestone: Milestone,
-    ) -> bool:
-        """
-        Method should be implemented in subclass.
-        """
+    def milestone_has_problem(self, milestone: Milestone) -> bool:
+        """Method should be implemented in subclass."""
         raise NotImplementedError
 
 
 class OverdueDueDateChecker(BaseProblemChecker):
-    """
-    Check milestone overdue due date.
-    """
+    """Check milestone overdue due date."""
+
     problem_code = PROBLEM_OVER_DUE_DAY
 
-    def milestone_has_problem(
-        self,
-        milestone: Milestone,
-    ) -> bool:
-        """
-        Current milestone has problem condition.
-        """
+    def milestone_has_problem(self, milestone: Milestone) -> bool:
+        """Current milestone has problem condition."""
         return (
             milestone.due_date
             and milestone.due_date < localdate()
@@ -48,7 +36,7 @@ class OverdueDueDateChecker(BaseProblemChecker):
 
 checkers = [
     checker_class()
-    for checker_class in BaseProblemChecker.__subclasses__()
+    for checker_class in (OverdueDueDateChecker,)
 ]
 
 

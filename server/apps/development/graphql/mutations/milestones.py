@@ -10,9 +10,8 @@ from apps.development.tasks import sync_group_milestone, sync_project_milestone
 
 
 class SyncMilestoneMutation(BaseMutation):
-    """
-    Syncing milestone mutation.
-    """
+    """Syncing milestone mutation."""
+
     class Arguments:
         id = graphene.ID()
 
@@ -20,9 +19,7 @@ class SyncMilestoneMutation(BaseMutation):
 
     @classmethod
     def do_mutate(cls, root, info, **kwargs):
-        """
-        Syncing milestone.
-        """
+        """Syncing milestone."""
         milestone = get_object_or_404(
             Milestone.objects.all(),
             pk=kwargs.get('id'),

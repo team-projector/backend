@@ -6,14 +6,11 @@ from graphene import relay
 
 
 class DatasourceRelayNode(relay.Node):
-    """
-    Datasource relay node.
-    """
+    """Datasource relay node."""
+
     @classmethod
     def get_node_from_global_id(cls, info, global_id, only_type=None):
-        """
-        Get node.
-        """
+        """Get node."""
         with suppress(Exception):
             object_id = cls.from_global_id(global_id)
 
@@ -30,14 +27,10 @@ class DatasourceRelayNode(relay.Node):
 
     @classmethod
     def from_global_id(cls, global_id):
-        """
-        Takes the "global ID", returns the type name and ID used to create it.
-        """
+        """Returns the type name and ID used to create it."""
         return global_id
 
     @classmethod
     def to_global_id(cls, obj_type, obj_id):
-        """
-        Takes a type name and an ID, returns a "global ID".
-        """
+        """Takes a type name and an ID, returns a "global ID"."""
         return obj_id

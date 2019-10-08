@@ -7,9 +7,8 @@ from apps.users.graphql.types import UserType
 
 
 class TeamMemberType(UserType):
-    """
-    Team member type.
-    """
+    """Team member type."""
+
     class Meta:
         model = TeamMember
         interfaces = (DatasourceRelayNode,)

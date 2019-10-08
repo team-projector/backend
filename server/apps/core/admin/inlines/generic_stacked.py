@@ -11,8 +11,7 @@ class BaseGenericStackedInline(
     AdminFormFieldsOverridesMixin,
     GenericStackedInline,
 ):
-    """
-    A base class generic stacked inline.
-    """
+    """A base class generic stacked inline."""
+
     extra = 0
     show_change_link = True

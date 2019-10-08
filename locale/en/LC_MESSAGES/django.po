@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-06-19 20:13+0300\n"
+"POT-Creation-Date: 2019-10-04 15:45+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,818 +17,566 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: server/apps/core/db/mixins.py:8 server/apps/development/models/note.py:24
-#: server/apps/users/models/user.py:92
 msgid "VN__GITLAB_ID"
 msgstr "GitLab ID"
 
-#: server/apps/core/db/mixins.py:9 server/apps/development/models/note.py:25
-#: server/apps/users/models/user.py:93
 msgid "HT__GITLAB_ID"
 msgstr "GitLab ID"
 
-#: server/apps/core/db/mixins.py:14 server/apps/users/models/user.py:99
 msgid "VN__GITLAB_URL"
 msgstr "GitLab URL"
 
-#: server/apps/core/db/mixins.py:15 server/apps/users/models/user.py:100
 msgid "HT__GITLAB_URL"
 msgstr "GitLab URL"
 
-#: server/apps/core/db/mixins.py:21 server/apps/users/models/user.py:106
 msgid "VN__GITLAB_LAST_SYNC"
 msgstr "GitLab last sync"
 
-#: server/apps/core/db/mixins.py:22 server/apps/users/models/user.py:107
 msgid "HT__GITLAB_LAST_SYNC"
 msgstr "GitLab last sync"
 
-#: server/apps/core/db/mixins.py:32
 msgid "VN__GITLAB_INTERNAL_ID"
 msgstr "GitLab Internal ID"
 
-#: server/apps/core/db/mixins.py:33
 msgid "HT__GITLAB_INTERNAL_ID"
 msgstr "GitLab Internal ID"
 
-#: server/apps/development/apps.py:8
 msgid "VN__DEVELOPMENT"
 msgstr "Development"
 
-#: server/apps/development/db/mixins.py:7
-#: server/apps/development/models/note.py:62
-msgid "VN__NOTES"
-msgstr "Notes"
-
-#: server/apps/development/db/mixins.py:7
-msgid "HT__NOTES"
-msgstr "Notes"
-
-#: server/apps/development/models/ticket.py:11
-#: server/apps/development/models/issue.py:31
-#: server/apps/development/models/label.py:8
-#: server/apps/development/models/merge_request.py:34
-#: server/apps/development/models/milestone.py:21
-#: server/apps/development/models/project.py:14
-#: server/apps/development/models/project_group.py:13
-#: server/apps/development/models/team.py:8
-msgid "VN__TITLE"
-msgstr "Title"
-
-#: server/apps/development/models/ticket.py:12
-#: server/apps/development/models/issue.py:32
-#: server/apps/development/models/label.py:9
-#: server/apps/development/models/merge_request.py:35
-#: server/apps/development/models/milestone.py:22
-#: server/apps/development/models/project.py:15
-#: server/apps/development/models/project_group.py:14
-#: server/apps/development/models/team.py:9
-msgid "HT__TITLE"
-msgstr "Title"
-
-#: server/apps/development/models/ticket.py:18
-#: server/apps/development/models/milestone.py:27
-#: server/apps/payroll/models/bonus.py:9
-#: server/apps/payroll/models/penalty.py:9
-msgid "VN__DESCRIPTION"
-msgstr "Description"
-
-#: server/apps/development/models/ticket.py:19
-#: server/apps/development/models/milestone.py:28
-#: server/apps/payroll/models/bonus.py:10
-#: server/apps/payroll/models/penalty.py:10
-msgid "HT__DESCRIPTION"
-msgstr "Description"
-
-#: server/apps/development/models/ticket.py:25
-#: server/apps/development/models/milestone.py:33
-msgid "VN__START_DATE"
-msgstr "Start Date"
-
-#: server/apps/development/models/ticket.py:26
-#: server/apps/development/models/milestone.py:34
-msgid "HT__START_DATE"
-msgstr "Start Date"
-
-#: server/apps/development/models/ticket.py:32
-#: server/apps/development/models/milestone.py:47
-msgid "VN__DUE_DATE"
-msgstr "Due Date"
-
-#: server/apps/development/models/ticket.py:33
-#: server/apps/development/models/milestone.py:48
-msgid "HT__DUE_DATE"
-msgstr "Due Date"
-
-#: server/apps/development/models/ticket.py:40
-#: server/apps/development/models/milestone.py:54
-msgid "VN__BUDGET"
-msgstr "Budget"
-
-#: server/apps/development/models/ticket.py:41
-#: server/apps/development/models/milestone.py:55
-msgid "HT__BUDGET"
-msgstr "Budget"
-
-#: server/apps/development/models/ticket.py:14
-msgid "CH_FEATURE"
-msgstr "Feature"
-
-#: server/apps/development/models/ticket.py:15
-msgid "CH_IMPROVEMENT"
-msgstr "Improvement"
-
-#: server/apps/development/models/ticket.py:16
-msgid "CH_BUG_FIXING"
-msgstr "Bug Fixing"
-
-#: server/apps/development/models/ticket.py:50
-msgid "VN__URL"
-msgstr "Url"
-
-#: server/apps/development/models/ticket.py:51
-msgid "HT__URL"
-msgstr "Url"
-
-#: server/apps/development/models/ticket.py:61
-msgid "VN__TICKET"
-msgstr "Ticket"
-
-#: server/apps/development/models/ticket.py:62
-msgid "VN__TICKETS"
-msgstr "Tickets"
-
-#: server/apps/development/models/issue.py:37
-#: server/apps/development/models/merge_request.py:40
-msgid "VN__TIME_ESTIMATE"
-msgstr "Estimate time"
-
-#: server/apps/development/models/issue.py:38
-#: server/apps/development/models/merge_request.py:41
-msgid "HT__TIME_ESTIMATE"
-msgstr "Estimate time"
-
-#: server/apps/development/models/issue.py:43
-#: server/apps/development/models/merge_request.py:46
-msgid "VN__TOTAL_TIME_SPENT"
-msgstr "Total spent time"
-
-#: server/apps/development/models/issue.py:44
-#: server/apps/development/models/merge_request.py:47
-msgid "HT__TOTAL_TIME_SPENT"
-msgstr "Total spent time"
-
-#: server/apps/development/models/issue.py:51
-#: server/apps/development/models/merge_request.py:55
-#: server/apps/development/models/milestone.py:41
-msgid "VN__STATE"
-msgstr "State"
-
-#: server/apps/development/models/issue.py:52
-#: server/apps/development/models/merge_request.py:56
-#: server/apps/development/models/milestone.py:42
-msgid "HT__STATE"
-msgstr "State"
-
-#: server/apps/development/models/issue.py:87
-#: server/apps/development/models/merge_request.py:86
-#: server/apps/development/models/project.py:59
-msgid "VN__PROJECT"
-msgstr "Project"
-
-#: server/apps/development/models/issue.py:88
-#: server/apps/development/models/merge_request.py:87
-msgid "HT__PROJECT"
-msgstr "Project"
-
-#: server/apps/development/models/issue.py:96
-#: server/apps/development/models/note.py:33
-#: server/apps/development/models/team_member.py:27
-#: server/apps/payroll/models/payroll.py:39
-#: server/apps/payroll/models/salary.py:23
-#: server/apps/payroll/models/workbreak.py:26
-#: server/apps/users/models/user.py:125
-msgid "VN__USER"
-msgstr "User"
-
-#: server/apps/development/models/issue.py:97
-#: server/apps/development/models/note.py:34
-#: server/apps/development/models/team_member.py:28
-#: server/apps/payroll/models/payroll.py:40
-#: server/apps/payroll/models/salary.py:24
-#: server/apps/payroll/models/workbreak.py:27
-msgid "HT__USER"
-msgstr "User"
-
-#: server/apps/development/models/issue.py:126
-msgid "VN__ISSUE"
-msgstr "Issue"
-
-#: server/apps/development/models/issue.py:127
-msgid "VN__ISSUES"
-msgstr "Issues"
-
-#: server/apps/development/models/label.py:14
-msgid "VN__COLOR"
-msgstr "Color"
-
-#: server/apps/development/models/label.py:15
-msgid "HT__COLOR"
-msgstr "Color"
-
-#: server/apps/development/models/label.py:19
-msgid "VN__LABEL"
-msgstr "Label"
-
-#: server/apps/development/models/label.py:20
-msgid "VN__LABELS"
-msgstr "Labels"
-
-#: server/apps/development/models/merge_request.py:96
-msgid "VN__ASSIGNEE"
-msgstr "Assignee"
-
-#: server/apps/development/models/merge_request.py:97
-msgid "HT__ASSIGNEE"
-msgstr "Assignee"
-
-#: server/apps/development/models/merge_request.py:106
-msgid "VN__AUTHOR"
-msgstr "Author"
-
-#: server/apps/development/models/merge_request.py:107
-msgid "HT__AUTHOR"
-msgstr "Author"
-
-#: server/apps/development/models/merge_request.py:120
-msgid "VN__MERGE_REQUEST"
-msgstr "Merge Request"
-
-#: server/apps/development/models/merge_request.py:121
-msgid "VN__MERGE_REQUESTS"
-msgstr "Merge Requests"
-
-#: server/apps/development/models/milestone.py:68
-msgid "VN__MILESTONE"
-msgstr "Milestone"
-
-#: server/apps/development/models/milestone.py:69
-msgid "VN__MILESTONES"
-msgstr "Milestones"
-
-#: server/apps/development/models/note.py:52
-msgid "VN__TYPE"
-msgstr "Type"
-
-#: server/apps/development/models/note.py:53
-msgid "HT__TYPE"
-msgstr "Type"
-
-#: server/apps/development/models/note.py:61
-msgid "VN__NOTE"
-msgstr "Note"
-
-#: server/apps/development/models/project.py:21
-#: server/apps/development/models/project_group.py:21
-msgid "VN__FULL_TITLE"
-msgstr "Full title"
-
-#: server/apps/development/models/project.py:22
-#: server/apps/development/models/project_group.py:22
-msgid "HT__FULL_TITLE"
-msgstr "Full title"
-
-#: server/apps/development/models/project.py:29
-msgid "VN__GROUP"
-msgstr "Group"
-
-#: server/apps/development/models/project.py:30
-msgid "HT__GROUP"
-msgstr "Group"
-
-#: server/apps/development/models/project.py:36
-msgid "VN__GITLAB_LAST_ISSUES_SYNC"
-msgstr "GitLab last issues sync"
-
-#: server/apps/development/models/project.py:37
-msgid "HT__GITLAB_LAST_ISSUES_SYNC"
-msgstr "GitLab last issues sync"
-
-#: server/apps/development/models/project.py:43
-msgid "VN__GITLAB_MERGE_REQUESTS_SYNC"
-msgstr "GitLab merge requests sync"
-
-#: server/apps/development/models/project.py:44
-msgid "HT__MERGE_REQUESTS_SYNC"
-msgstr "GitLab merge requests sync"
-
-#: server/apps/development/models/project.py:60
-msgid "VN__PROJECTS"
-msgstr "Projects"
-
-#: server/apps/development/models/project_group.py:30
-msgid "VN__PARENT"
-msgstr "Parent"
-
-#: server/apps/development/models/project_group.py:31
-msgid "HT__PARENT"
-msgstr "Parent"
-
-#: server/apps/development/models/project_group.py:46
-msgid "VN__PROJECT_GROUP"
-msgstr "Project group"
-
-#: server/apps/development/models/project_group.py:47
-msgid "VN__PROJECT_GROUPS"
-msgstr "Project groups"
-
-#: server/apps/development/models/project_member.py:13
-#: server/apps/development/models/team_member.py:13
-#: server/apps/users/models/user.py:12
-msgid "CH_DEVELOPER"
-msgstr "Developer"
-
-#: server/apps/development/models/project_member.py:14
-msgid "CH_PM"
-msgstr "Project manager"
-
-#: server/apps/development/models/project_member.py:15
-#: server/apps/users/models/user.py:15
-msgid "CH_CUSTOMER"
-msgstr "Customer"
-
-#: server/apps/development/models/project_member.py:26
-msgid "VN__ROLE"
-msgstr "Role"
-
-#: server/apps/development/models/project_member.py:27
-msgid "HT__ROLE"
-msgstr "Role"
-
-#: server/apps/development/models/project_member.py:39
-msgid "VN__PROJECT_MEMBER"
-msgstr "Project Members"
-
-#: server/apps/development/models/project_member.py:40
-msgid "VN__PROJECT_MEMBERS"
-msgstr "Project Members"
-
-#: server/apps/development/models/team.py:14
-#: server/apps/development/models/team_member.py:20
-msgid "VN__TEAM"
-msgstr "Team"
-
-#: server/apps/development/models/team.py:15
-msgid "VN__TEAMS"
-msgstr "Teams"
-
-#: server/apps/development/models/team_member.py:12
-msgid "CH_LEADER"
-msgstr "Team leader"
-
-#: server/apps/development/models/team_member.py:14
-msgid "CH_WATCHER"
-msgstr "Watcher"
-
-#: server/apps/development/models/team_member.py:21
-msgid "HT__TEAM"
-msgstr "Team"
-
-#: server/apps/development/models/team_member.py:37
-msgid "VN__TEAM_MEMBER"
-msgstr "Team Member"
-
-#: server/apps/development/models/team_member.py:38
-msgid "VN__TEAM_MEMBERS"
-msgstr "Team Members"
-
-#: server/apps/development/rest/views.py:94
 msgid "MSG_PLEASE_PROVIDE_PERSONAL_GL_TOKEN"
 msgstr "Please fill personal gitlab token in profile"
 
-#: server/apps/payroll/apps.py:8 server/apps/payroll/models/payroll.py:47
-msgid "VN__PAYROLL"
-msgstr "Payroll"
-
-#: server/apps/payroll/db/mixins.py:18
-msgid "VN__TIME_SPENTS"
-msgstr "Time spents"
-
-#: server/apps/payroll/db/mixins.py:19
-msgid "HT__TIME_SPENTS"
-msgstr "Time spents"
-
-#: server/apps/payroll/db/mixins.py:28
-msgid "CH_CREATED"
-msgstr "created"
-
-#: server/apps/payroll/db/mixins.py:29
-msgid "CH_APPROVED"
-msgstr "approved"
-
-#: server/apps/payroll/db/mixins.py:30
-msgid "CH_DECLINED"
-msgstr "declined"
-
-#: server/apps/payroll/db/mixins.py:37
-msgid "VN__APPROVE_STATE"
-msgstr "Approve state"
-
-#: server/apps/payroll/db/mixins.py:38
-msgid "HT__APPROVE_STATE"
-msgstr "Approve state"
-
-#: server/apps/payroll/db/mixins.py:44
-msgid "VN__APPROVED_AT"
-msgstr "Approved at"
-
-#: server/apps/payroll/db/mixins.py:45
-msgid "HT__APPROVED_AT"
-msgstr "Approved at"
-
-#: server/apps/payroll/db/mixins.py:54
-msgid "VN__APPROVED_BY"
-msgstr "Approved by"
-
-#: server/apps/payroll/db/mixins.py:55
-msgid "HT__APPROVED_BY"
-msgstr "Approved by"
-
-#: server/apps/payroll/db/mixins.py:61
-msgid "VN__DECLINE_REASON"
-msgstr "Decline reason"
-
-#: server/apps/payroll/db/mixins.py:62
-msgid "HT__DECLINE_REASON"
-msgstr "Decline reason"
-
-#: server/apps/payroll/models/bonus.py:14
-#: server/apps/payroll/models/salary.py:55
-msgid "VN__BONUS"
-msgstr "Bonus"
-
-#: server/apps/payroll/models/bonus.py:15
-msgid "VN__BONUSES"
-msgstr "Bonuses"
-
-#: server/apps/payroll/models/payment.py:8
-msgid "VN__PAYMENT"
-msgstr "Payment"
-
-#: server/apps/payroll/models/payment.py:9
-msgid "VN__PAYMENTS"
-msgstr "Payments"
-
-#: server/apps/payroll/models/payroll.py:15
-#: server/apps/payroll/models/salary.py:15
-msgid "VN__CREATED_BY"
-msgstr "Created by"
-
-#: server/apps/payroll/models/payroll.py:16
-#: server/apps/payroll/models/salary.py:16
-msgid "HT__CREATED_BY"
-msgstr "Created by"
-
-#: server/apps/payroll/models/payroll.py:21
-#: server/apps/payroll/models/salary.py:67
-msgid "VN__SUM"
-msgstr "Sum"
-
-#: server/apps/payroll/models/payroll.py:22
-#: server/apps/payroll/models/salary.py:68
-msgid "HT__SUM"
-msgstr "Sum"
-
-#: server/apps/payroll/models/payroll.py:31
-#: server/apps/payroll/models/salary.py:94
-msgid "VN__SALARY"
-msgstr "Salary"
-
-#: server/apps/payroll/models/payroll.py:32
-msgid "HT__SALARY"
-msgstr "Salary"
-
-#: server/apps/payroll/models/payroll.py:48
-msgid "VN__PAYROLLS"
-msgstr "Payrolls"
-
-#: server/apps/payroll/models/penalty.py:14
-#: server/apps/payroll/models/salary.py:61
-msgid "VN__PENALTY"
-msgstr "Penalty"
-
-#: server/apps/payroll/models/penalty.py:15
-msgid "VN__PENALTIES"
-msgstr "Penalties"
-
-#: server/apps/payroll/models/salary.py:30
-msgid "VN__PERIOD_FROM"
-msgstr "Period from"
-
-#: server/apps/payroll/models/salary.py:31
-msgid "HT__PERIOD_FROM"
-msgstr "Period from"
-
-#: server/apps/payroll/models/salary.py:37
-msgid "VN__PERIOD_TO"
-msgstr "Period to"
-
-#: server/apps/payroll/models/salary.py:38
-msgid "HT__PERIOD_TO"
-msgstr "Period to"
-
-#: server/apps/payroll/models/salary.py:43
-msgid "VN__CHARGED_TIME"
-msgstr "Charged time"
-
-#: server/apps/payroll/models/salary.py:44
-msgid "HT__CHARGED_TIME"
-msgstr "Charged time"
-
-#: server/apps/payroll/models/salary.py:49 server/apps/users/models/user.py:60
-msgid "VN__TAXES"
-msgstr "Taxes"
-
-#: server/apps/payroll/models/salary.py:50 server/apps/users/models/user.py:61
-msgid "HT__TAXES"
-msgstr "Taxes"
-
-#: server/apps/payroll/models/salary.py:56
-msgid "HT__BONUS"
-msgstr "Bonus"
-
-#: server/apps/payroll/models/salary.py:62
-msgid "HT__PENALTY"
-msgstr "Penalty"
-
-#: server/apps/payroll/models/salary.py:73
-msgid "VN__TOTAL"
-msgstr "Total"
-
-#: server/apps/payroll/models/salary.py:74
-msgid "HT__TOTAL"
-msgstr "Total"
-
-#: server/apps/payroll/models/salary.py:79
-msgid "VN__PAYED"
-msgstr "Payed"
-
-#: server/apps/payroll/models/salary.py:80
-msgid "HT__PAYED"
-msgstr "Payed"
-
-#: server/apps/payroll/models/salary.py:86
-msgid "VN__COMMENTS"
-msgstr "Comments"
-
-#: server/apps/payroll/models/salary.py:87
-msgid "HT__COMMENTS"
-msgstr "Comments"
-
-#: server/apps/payroll/models/salary.py:95
-msgid "VN__SALARIES"
-msgstr "Salaries"
-
-#: server/apps/payroll/models/spent_time.py:19
-msgid "VN__CUSTOMER_SUM"
-msgstr "Customer sum"
-
-#: server/apps/payroll/models/spent_time.py:20
-msgid "HT__CUSTOMER_SUM"
-msgstr "Customer sum"
-
-#: server/apps/payroll/models/spent_time.py:25
-msgid "VN__RATE"
-msgstr "Rate"
-
-#: server/apps/payroll/models/spent_time.py:26
-msgid "HT__RATE"
-msgstr "Rate"
-
-#: server/apps/payroll/models/spent_time.py:31
-msgid "VN__CUSTOMER_RATE"
-msgstr "Customer rate"
-
-#: server/apps/payroll/models/spent_time.py:32
-msgid "HT__CUSTOMER_RATE"
-msgstr "Customer rate"
-
-#: server/apps/payroll/models/spent_time.py:36
-msgid "VN__TIME_SPENT"
-msgstr "Spent time"
-
-#: server/apps/payroll/models/spent_time.py:37
-msgid "HT__TIME_SPENT"
-msgstr "Spent time"
-
-#: server/apps/payroll/models/spent_time.py:74
-msgid "VN__SPENT_TIME"
-msgstr "Spent time"
-
-#: server/apps/payroll/models/spent_time.py:75
-msgid "VN__SPENT_TIMES"
-msgstr "Spent times"
-
-#: server/apps/payroll/models/workbreak.py:17
-msgid "CH_DAYOFF"
-msgstr "dayoff"
-
-#: server/apps/payroll/models/workbreak.py:18
-msgid "CH_VACATION"
-msgstr "vacation"
-
-#: server/apps/payroll/models/workbreak.py:19
-msgid "CH_DISEASES"
-msgstr "diseases"
-
-#: server/apps/payroll/models/workbreak.py:31
-msgid "VN__DATE_FROM"
-msgstr "From"
-
-#: server/apps/payroll/models/workbreak.py:32
-msgid "HT__DATE_FROM"
-msgstr "From"
-
-#: server/apps/payroll/models/workbreak.py:36
-msgid "VN__DATE_TO"
-msgstr "To"
-
-#: server/apps/payroll/models/workbreak.py:37
-msgid "HT__DATE_TO"
-msgstr "To"
-
-#: server/apps/payroll/models/workbreak.py:44
-msgid "VN__REASON"
-msgstr "Reason"
-
-#: server/apps/payroll/models/workbreak.py:45
-msgid "HT__REASON"
-msgstr "Reason"
-
-#: server/apps/payroll/models/workbreak.py:49
-msgid "VN__COMMENT"
-msgstr "Comment"
-
-#: server/apps/payroll/models/workbreak.py:50
-msgid "HT__COMMENT"
-msgstr "Comment"
+msgid "MSG_SPEND_SHOULD_BE_GREATER_THAN_ONE"
+msgstr "Spend should be greater than one"
 
-#: server/apps/payroll/models/workbreak.py:54
-msgid "VN__WORKBREAK"
-msgstr "Workbreak"
+msgid "VN__TITLE"
+msgstr "Title"
 
-#: server/apps/payroll/models/workbreak.py:55
-msgid "VN__WORKBREAKS"
-msgstr "Workbreaks"
+msgid "HT__TITLE"
+msgstr "Title"
 
-#: server/apps/payroll/rest/serializers.py:143
-msgid "MSG_USER_CAN_NOT_MANAGE_CURRENT_WORKBREAK"
-msgstr "User can't manage current workbreak"
+msgid "VN__TIME_ESTIMATE"
+msgstr "Estimate time"
 
-#: server/apps/users/apps.py:8 server/apps/users/models/user.py:126
-msgid "VN__USERS"
-msgstr "Users"
+msgid "HT__TIME_ESTIMATE"
+msgstr "Estimate time"
 
-#: server/apps/users/db/managers.py:10
-msgid "VN__USER_MUST_HAVE_A_LOGIN"
-msgstr "User must have a login"
+msgid "VN__TOTAL_TIME_SPENT"
+msgstr "Total spent time"
 
-#: server/apps/users/models/token.py:15
-msgid "VN__TOKEN"
-msgstr "Token"
+msgid "HT__TOTAL_TIME_SPENT"
+msgstr "Total spent time"
 
-#: server/apps/users/models/token.py:16
-msgid "VN__TOKENS"
-msgstr "Tokens"
+msgid "VN__STATE"
+msgstr "State"
 
-#: server/apps/users/models/user.py:13
-msgid "CH_TEAM_LEADER"
-msgstr "Team leader"
+msgid "HT__STATE"
+msgstr "State"
 
-#: server/apps/users/models/user.py:14
-msgid "CH_PROJECT_MANAGER"
-msgstr "Project manager"
+msgid "VN__PROJECT"
+msgstr "Project"
 
-#: server/apps/users/models/user.py:16
-msgid "CH_SHAREHOLDER"
-msgstr "Shareholder"
+msgid "HT__PROJECT"
+msgstr "Project"
 
-#: server/apps/users/models/user.py:24
-msgid "VN__LOGIN"
-msgstr "Login"
+msgid "VN__USER"
+msgstr "User"
 
-#: server/apps/users/models/user.py:25
-msgid "HT__LOGIN"
-msgstr "Login"
+msgid "HT__USER"
+msgstr "User"
 
-#: server/apps/users/models/user.py:33
-msgid "VN__NAME"
-msgstr "Name"
+msgid "VN__ISSUE"
+msgstr "Issue"
 
-#: server/apps/users/models/user.py:34
-msgid "HT__NAME"
-msgstr "Name"
+msgid "VN__ISSUES"
+msgstr "Issues"
 
-#: server/apps/users/models/user.py:42
-msgid "VN__EMAIL"
-msgstr "Email"
+msgid "VN__COLOR"
+msgstr "Color"
 
-#: server/apps/users/models/user.py:43
-msgid "HT__EMAIL"
-msgstr "Email"
+msgid "HT__COLOR"
+msgstr "Color"
 
-#: server/apps/users/models/user.py:48
-msgid "VN__HOUR_RATE"
-msgstr "Hour rate, ₽"
+msgid "VN__LABEL"
+msgstr "Label"
 
-#: server/apps/users/models/user.py:49
-msgid "HT__HOUR_RATE"
-msgstr "Hour rate, ₽"
+msgid "VN__LABELS"
+msgstr "Labels"
 
-#: server/apps/users/models/user.py:54
-msgid "VN__CUSTOMER_HOUR_RATE"
-msgstr "Customer hour rate, $"
+msgid "VN__AUTHOR"
+msgstr "Author"
 
-#: server/apps/users/models/user.py:55
-msgid "HT__CUSTOMER_HOUR_RATE"
-msgstr "Customer hour rate, $"
+msgid "HT__AUTHOR"
+msgstr "Author"
 
-#: server/apps/users/models/user.py:71
-msgid "VN__IS_STAFF"
-msgstr "Is Staff"
+msgid "VN__MERGE_REQUEST"
+msgstr "Merge Request"
 
-#: server/apps/users/models/user.py:72
-msgid "HT__IS_STAFF"
-msgstr "Is Staff"
+msgid "VN__MERGE_REQUESTS"
+msgstr "Merge Requests"
 
-#: server/apps/users/models/user.py:77
-msgid "VN__IS_ACTIVE"
-msgstr "Is Active"
+msgid "VN__DESCRIPTION"
+msgstr "Description"
 
-#: server/apps/users/models/user.py:78
-msgid "HT__IS_ACTIVE"
-msgstr "Is Active"
+msgid "HT__DESCRIPTION"
+msgstr "Description"
 
-#: server/apps/users/models/user.py:85
+msgid "VN__START_DATE"
+msgstr "Start Date"
+
+msgid "HT__START_DATE"
+msgstr "Start Date"
+
+msgid "VN__DUE_DATE"
+msgstr "Due Date"
+
+msgid "HT__DUE_DATE"
+msgstr "Due Date"
+
+msgid "VN__BUDGET"
+msgstr "Budget"
+
+msgid "HT__BUDGET"
+msgstr "Budget"
+
+msgid "VN__MILESTONE"
+msgstr "Milestone"
+
+msgid "VN__MILESTONES"
+msgstr "Milestones"
+
+msgid "VN__NOTES"
+msgstr "Notes"
+
+msgid "HT__NOTES"
+msgstr "Notes"
+
+msgid "VN__TYPE"
+msgstr "Type"
+
+msgid "HT__TYPE"
+msgstr "Type"
+
+msgid "VN__NOTE"
+msgstr "Note"
+
+msgid "VN__FULL_TITLE"
+msgstr "Full title"
+
+msgid "HT__FULL_TITLE"
+msgstr "Full title"
+
+msgid "VN__GROUP"
+msgstr "Group"
+
+msgid "HT__GROUP"
+msgstr "Group"
+
 msgid "VN__GITLAB_AVATAR"
 msgstr "GitLab avatar"
 
-#: server/apps/users/models/user.py:86
 msgid "HT__GITLAB_AVATAR"
 msgstr "GitLab avatar"
 
-#: server/apps/users/models/user.py:114
+msgid "VN__GITLAB_LAST_ISSUES_SYNC"
+msgstr "GitLab last issues sync"
+
+msgid "HT__GITLAB_LAST_ISSUES_SYNC"
+msgstr "GitLab last issues sync"
+
+msgid "VN__GITLAB_MERGE_REQUESTS_SYNC"
+msgstr "GitLab merge requests sync"
+
+msgid "HT__MERGE_REQUESTS_SYNC"
+msgstr "GitLab merge requests sync"
+
+msgid "VN__PROJECTS"
+msgstr "Projects"
+
+msgid "VN__PARENT"
+msgstr "Parent"
+
+msgid "HT__PARENT"
+msgstr "Parent"
+
+msgid "VN__PROJECT_GROUP"
+msgstr "Project group"
+
+msgid "VN__PROJECT_GROUPS"
+msgstr "Project groups"
+
+msgid "CH_DEVELOPER"
+msgstr "Developer"
+
+msgid "CH_PM"
+msgstr "Project manager"
+
+msgid "CH_CUSTOMER"
+msgstr "Customer"
+
+msgid "VN__ROLE"
+msgstr "Role"
+
+msgid "HT__ROLE"
+msgstr "Role"
+
+msgid "VN__PROJECT_MEMBER"
+msgstr "Project Members"
+
+msgid "VN__PROJECT_MEMBERS"
+msgstr "Project Members"
+
+msgid "VN__TEAM"
+msgstr "Team"
+
+msgid "VN__TEAMS"
+msgstr "Teams"
+
+msgid "CH_LEADER"
+msgstr "Team leader"
+
+msgid "CH_WATCHER"
+msgstr "Watcher"
+
+msgid "HT__TEAM"
+msgstr "Team"
+
+msgid "VN__TEAM_MEMBER"
+msgstr "Team Member"
+
+msgid "VN__TEAM_MEMBERS"
+msgstr "Team Members"
+
+msgid "CH_FEATURE"
+msgstr "Feature"
+
+msgid "CH_IMPROVEMENT"
+msgstr "Improvement"
+
+msgid "CH_BUG_FIXING"
+msgstr "Bug Fixing"
+
+msgid "VN__URL"
+msgstr "Url"
+
+msgid "HT__URL"
+msgstr "Url"
+
+msgid "VN__TICKET"
+msgstr "Ticket"
+
+msgid "VN__TICKETS"
+msgstr "Tickets"
+
+msgid "Yes"
+msgstr "Yes"
+
+msgid "No"
+msgstr "No"
+
+msgid "VN__PAYROLL"
+msgstr "Payroll"
+
+msgid "VN__BONUS"
+msgstr "Bonus"
+
+msgid "VN__BONUSES"
+msgstr "Bonuses"
+
+msgid "CH_CREATED"
+msgstr "created"
+
+msgid "CH_APPROVED"
+msgstr "approved"
+
+msgid "CH_DECLINED"
+msgstr "declined"
+
+msgid "VN__APPROVE_STATE"
+msgstr "Approve state"
+
+msgid "HT__APPROVE_STATE"
+msgstr "Approve state"
+
+msgid "VN__APPROVED_AT"
+msgstr "Approved at"
+
+msgid "HT__APPROVED_AT"
+msgstr "Approved at"
+
+msgid "VN__APPROVED_BY"
+msgstr "Approved by"
+
+msgid "HT__APPROVED_BY"
+msgstr "Approved by"
+
+msgid "VN__DECLINE_REASON"
+msgstr "Decline reason"
+
+msgid "HT__DECLINE_REASON"
+msgstr "Decline reason"
+
+msgid "VN__TIME_SPENTS"
+msgstr "Time spents"
+
+msgid "HT__TIME_SPENTS"
+msgstr "Time spents"
+
+msgid "VN__PAYMENT"
+msgstr "Payment"
+
+msgid "VN__PAYMENTS"
+msgstr "Payments"
+
+msgid "VN__CREATED_BY"
+msgstr "Created by"
+
+msgid "HT__CREATED_BY"
+msgstr "Created by"
+
+msgid "VN__SUM"
+msgstr "Sum"
+
+msgid "HT__SUM"
+msgstr "Sum"
+
+msgid "VN__SALARY"
+msgstr "Salary"
+
+msgid "HT__SALARY"
+msgstr "Salary"
+
+msgid "VN__PAYROLLS"
+msgstr "Payrolls"
+
+msgid "VN__PENALTY"
+msgstr "Penalty"
+
+msgid "VN__PENALTIES"
+msgstr "Penalties"
+
+msgid "VN__PERIOD_FROM"
+msgstr "Period from"
+
+msgid "HT__PERIOD_FROM"
+msgstr "Period from"
+
+msgid "VN__PERIOD_TO"
+msgstr "Period to"
+
+msgid "HT__PERIOD_TO"
+msgstr "Period to"
+
+msgid "VN__CHARGED_TIME"
+msgstr "Charged time"
+
+msgid "HT__CHARGED_TIME"
+msgstr "Charged time"
+
+msgid "VN__TAXES"
+msgstr "Taxes"
+
+msgid "HT__TAXES"
+msgstr "Taxes"
+
+msgid "HT__BONUS"
+msgstr "Bonus"
+
+msgid "HT__PENALTY"
+msgstr "Penalty"
+
+msgid "VN__TOTAL"
+msgstr "Total"
+
+msgid "HT__TOTAL"
+msgstr "Total"
+
+msgid "VN__PAYED"
+msgstr "Payed"
+
+msgid "HT__PAYED"
+msgstr "Payed"
+
+msgid "VN__COMMENTS"
+msgstr "Comments"
+
+msgid "HT__COMMENTS"
+msgstr "Comments"
+
+msgid "VN__SALARIES"
+msgstr "Salaries"
+
+msgid "VN__CUSTOMER_SUM"
+msgstr "Customer sum"
+
+msgid "HT__CUSTOMER_SUM"
+msgstr "Customer sum"
+
+msgid "VN__RATE"
+msgstr "Rate"
+
+msgid "HT__RATE"
+msgstr "Rate"
+
+msgid "VN__CUSTOMER_RATE"
+msgstr "Customer rate"
+
+msgid "HT__CUSTOMER_RATE"
+msgstr "Customer rate"
+
+msgid "VN__TIME_SPENT"
+msgstr "Spent time"
+
+msgid "HT__TIME_SPENT"
+msgstr "Spent time"
+
+msgid "VN__SPENT_TIME"
+msgstr "Spent time"
+
+msgid "VN__SPENT_TIMES"
+msgstr "Spent times"
+
+msgid "CH_DAYOFF"
+msgstr "dayoff"
+
+msgid "CH_VACATION"
+msgstr "vacation"
+
+msgid "CH_DISEASES"
+msgstr "diseases"
+
+msgid "VN__DATE_FROM"
+msgstr "From"
+
+msgid "HT__DATE_FROM"
+msgstr "From"
+
+msgid "VN__DATE_TO"
+msgstr "To"
+
+msgid "HT__DATE_TO"
+msgstr "To"
+
+msgid "VN__REASON"
+msgstr "Reason"
+
+msgid "HT__REASON"
+msgstr "Reason"
+
+msgid "VN__COMMENT"
+msgstr "Comment"
+
+msgid "HT__COMMENT"
+msgstr "Comment"
+
+msgid "VN__WORKBREAK"
+msgstr "Workbreak"
+
+msgid "VN__WORKBREAKS"
+msgstr "Workbreaks"
+
+msgid "VN__USERS"
+msgstr "Users"
+
+msgid "VN__USER_MUST_HAVE_A_LOGIN"
+msgstr "User must have a login"
+
+msgid "VN__TOKEN"
+msgstr "Token"
+
+msgid "VN__TOKENS"
+msgstr "Tokens"
+
+msgid "CH_TEAM_LEADER"
+msgstr "Team leader"
+
+msgid "CH_PROJECT_MANAGER"
+msgstr "Project manager"
+
+msgid "CH_SHAREHOLDER"
+msgstr "Shareholder"
+
+msgid "VN__LOGIN"
+msgstr "Login"
+
+msgid "HT__LOGIN"
+msgstr "Login"
+
+msgid "VN__NAME"
+msgstr "Name"
+
+msgid "HT__NAME"
+msgstr "Name"
+
+msgid "VN__EMAIL"
+msgstr "Email"
+
+msgid "HT__EMAIL"
+msgstr "Email"
+
+msgid "VN__HOUR_RATE"
+msgstr "Hour rate, ₽"
+
+msgid "HT__HOUR_RATE"
+msgstr "Hour rate, ₽"
+
+msgid "VN__CUSTOMER_HOUR_RATE"
+msgstr "Customer hour rate, $"
+
+msgid "HT__CUSTOMER_HOUR_RATE"
+msgstr "Customer hour rate, $"
+
+msgid "VN__IS_STAFF"
+msgstr "Is Staff"
+
+msgid "HT__IS_STAFF"
+msgstr "Is Staff"
+
+msgid "VN__IS_ACTIVE"
+msgstr "Is Active"
+
+msgid "HT__IS_ACTIVE"
+msgstr "Is Active"
+
 msgid "VN__PERSONAL_GITLAB_TOKEN"
 msgstr "Personal gitlab token"
 
-#: server/apps/users/models/user.py:115
 msgid "HT__PERSONAL_GITLAB_TOKEN"
 msgstr "Personal gitlab token"
 
-#: server/apps/users/rest/serializers.py:26
 msgid "MSG_UNABLE_TO_LOGIN_WITH_PROVIDED_CREDENTIALS"
 msgstr "Unable login with provided credentials"
 
-#: server/apps/users/rest/serializers.py:28
 msgid "MSG_MUST_INCLUDE_LOGIN_AND_PASSWORD"
 msgstr "Must include login and password"
 
-#: server/settings/components/i18n.py:14
 msgid "MSG__ENGLISH"
 msgstr "English"
 
-#: server/templates/admin/submit_line.html:4
 msgid "Force sync"
 msgstr "Force sync"
 
-#: server/templates/admin/submit_line.html:5
 msgid "Save"
 msgstr "Save"
 
-#: server/templates/admin/submit_line.html:8
 msgid "Delete"
 msgstr "Delete"
 
-#: server/templates/admin/submit_line.html:10
 msgid "Save as new"
 msgstr "Save as new"
 
-#: server/templates/admin/submit_line.html:11
 msgid "Save and add another"
 msgstr "Save and add another"
 
-#: server/templates/admin/submit_line.html:12
 msgid "Save and continue editing"
 msgstr "Save and continue editing"
 
-#: server/templates/admin/submit_line.html:12
 msgid "Save and view"
 msgstr "Save and view"
 
-#: server/templates/admin/submit_line.html:13
 msgid "Close"
 msgstr "Close"
 
-#: server/urls.py:12
 msgid "VN__ADMIN_DASHBOARD"
 msgstr "Admin Dashboard"

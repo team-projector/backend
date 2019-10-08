@@ -8,9 +8,8 @@ from apps.development.graphql.types import TicketType
 
 
 class TicketsQueries(graphene.ObjectType):
-    """
-    Class representing list of available fields for ticket queries.
-    """
+    """Class representing list of available fields for ticket queries."""
+
     all_tickets = DataSourceConnectionField(
         TicketType,
         filterset_class=TicketsFilterSet,

@@ -14,9 +14,8 @@ class CreateTicketMutation(
     ArgumentsValidationMixin,
     BaseMutation,
 ):
-    """
-    Create ticket mutation.
-    """
+    """Create ticket mutation."""
+
     permission_classes = (AllowProjectManager,)
     form_class = TicketForm
 
@@ -32,9 +31,7 @@ class CreateTicketMutation(
 
     @classmethod
     def perform_mutate(cls, info, data):
-        """
-        Create and return ticket.
-        """
+        """Create and return ticket."""
         ticket = Ticket.objects.create(**data)
 
         return CreateTicketMutation(
@@ -46,9 +43,8 @@ class UpdateTicketMutation(
     ArgumentsValidationMixin,
     BaseMutation,
 ):
-    """
-    Update ticket mutation.
-    """
+    """Update ticket mutation."""
+
     permission_classes = (AllowProjectManager,)
     form_class = TicketForm
 
@@ -65,9 +61,7 @@ class UpdateTicketMutation(
 
     @classmethod
     def perform_mutate(cls, info, data):
-        """
-        Update and return ticket.
-        """
+        """Update and return ticket."""
         ticket = get_object_or_404(
             Ticket.objects.all(),
             pk=data['id'],

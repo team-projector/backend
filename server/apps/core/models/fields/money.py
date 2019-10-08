@@ -4,9 +4,8 @@ from django.db import models
 
 
 class MoneyField(models.DecimalField):
-    """
-    Money filed.
-    """
+    """Money filed."""
+
     def __init__(self, *args, **kwargs):
         kwargs['max_digits'] = 14
         kwargs['decimal_places'] = 2

@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+from contextlib import suppress
+
 from django.contrib import admin
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models.fields.related import OneToOneRel
@@ -15,9 +17,8 @@ from .filters import HasSalaryFilter
 
 @admin.register(Payroll)
 class PayrollAdmin(BaseModelAdmin):
-    """
-    A class representing Payroll model for admin dashboard.
-    """
+    """A class representing Payroll model for admin dashboard."""
+
     list_display = ('user', 'created_by', 'created_at', 'sum')
     list_filter = (UserFilter, HasSalaryFilter)
     search_fields = ('user__login', 'user__email')
@@ -30,16 +31,12 @@ class PayrollAdmin(BaseModelAdmin):
     )
 
     def inheritance(self, payroll):
-        """
-        Get link to Bonus, Penalty etc.
-        """
+        """Get link to Bonus, Penalty etc."""
         for field in self._get_accessor_names(self.model):
             node = None
 
-            try:
+            with suppress(ObjectDoesNotExist):
                 node = getattr(payroll, field)
-            except ObjectDoesNotExist:
-                pass
 
             if node:
                 return self._get_inheritance_link(node)

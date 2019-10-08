@@ -16,9 +16,8 @@ class MergeRequestAdmin(
     ForceSyncEntityMixin,
     BaseModelAdmin,
 ):
-    """
-    A class representing Merge Request model for admin dashboard.
-    """
+    """A class representing Merge Request model for admin dashboard."""
+
     list_display = (
         'title', 'user', 'author', 'state', 'created_at', 'gl_last_sync',
     )
@@ -29,9 +28,7 @@ class MergeRequestAdmin(
     inlines = (NoteInline,)
 
     def sync_handler(self, obj):
-        """
-        Syncing merge request.
-        """
+        """Syncing merge request."""
         sync_project_merge_request.delay(
             obj.project.gl_id,
             obj.gl_iid,

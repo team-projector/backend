@@ -4,9 +4,8 @@ import graphene
 
 
 class IssueMetricsType(graphene.ObjectType):
-    """
-    Issue metrics type.
-    """
+    """Issue metrics type."""
+
     remains = graphene.Int()
     efficiency = graphene.Float()
     payroll = graphene.Float()

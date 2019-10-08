@@ -10,9 +10,8 @@ from .inlines import TeamMemberInline
 
 @admin.register(Team)
 class TeamAdmin(BaseModelAdmin):
-    """
-    A class representing Project Group model for admin dashboard.
-    """
+    """A class representing Project Group model for admin dashboard."""
+
     list_display = ('title',)
     search_fields = ('title',)
     inlines = (TeamMemberInline,)

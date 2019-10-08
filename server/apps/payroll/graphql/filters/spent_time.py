@@ -10,16 +10,13 @@ from apps.users.models import User
 
 
 class TeamFilter(django_filters.ModelChoiceFilter):
-    """
-    Filter spent times by team.
-    """
+    """Filter spent times by team."""
+
     def __init__(self) -> None:
         super().__init__(queryset=Team.objects.all())
 
     def filter(self, queryset, value) -> QuerySet:
-        """
-        Do filtering.
-        """
+        """Do filtering."""
         if not value:
             return queryset
 
@@ -28,16 +25,13 @@ class TeamFilter(django_filters.ModelChoiceFilter):
 
 
 class ProjectFilter(django_filters.ModelChoiceFilter):
-    """
-    Filter spent times by project.
-    """
+    """Filter spent times by project."""
+
     def __init__(self) -> None:
         super().__init__(queryset=Project.objects.all())
 
     def filter(self, queryset, value) -> QuerySet:
-        """
-        Do filtering.
-        """
+        """Do filtering."""
         if not value:
             return queryset
 
@@ -49,13 +43,10 @@ class ProjectFilter(django_filters.ModelChoiceFilter):
 
 
 class StateFilter(django_filters.CharFilter):
-    """
-    Filter spent times by state.
-    """
+    """Filter spent times by state."""
+
     def filter(self, queryset, value) -> QuerySet:
-        """
-        Do filtering.
-        """
+        """Do filtering."""
         if not value:
             return queryset
 
@@ -67,9 +58,8 @@ class StateFilter(django_filters.CharFilter):
 
 
 class SpentTimeFilterSet(django_filters.FilterSet):
-    """
-    Set of filters for Spent Time.
-    """
+    """Set of filters for Spent Time."""
+
     user = django_filters.ModelChoiceFilter(queryset=User.objects.all())
     project = ProjectFilter()
     team = TeamFilter()

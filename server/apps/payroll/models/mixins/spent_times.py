@@ -6,9 +6,8 @@ from django.utils.translation import gettext_lazy as _
 
 
 class SpentTimesMixin(models.Model):
-    """
-    Spent time mixin.
-    """
+    """Spent time mixin."""
+
     time_spents = GenericRelation(
         'payroll.SpentTime',
         related_query_name='%(class)ss',

@@ -17,9 +17,8 @@ from .team_metrics import TeamMetricsType
 
 
 class TeamType(BaseDjangoObjectType):
-    """
-    Team type.
-    """
+    """Team type."""
+
     metrics = graphene.Field(TeamMetricsType)
     members = DataSourceConnectionField(
         TeamMemberType,
@@ -38,9 +37,7 @@ class TeamType(BaseDjangoObjectType):
         queryset,
         info,
     ) -> QuerySet:
-        """
-        Get teams.
-        """
+        """Get teams."""
         queryset = filter_allowed_for_user(
             queryset,
             info.context.user,
@@ -49,13 +46,9 @@ class TeamType(BaseDjangoObjectType):
         return queryset
 
     def resolve_metrics(self, info, **kwargs):
-        """
-        Get team metrics.
-        """
+        """Get team metrics."""
         return get_team_metrics(self)
 
     def resolve_members(self, info, **kwargs):
-        """
-        Get team members.
-        """
+        """Get team members."""
         return self.teammember_set

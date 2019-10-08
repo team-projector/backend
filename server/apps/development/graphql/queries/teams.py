@@ -13,9 +13,8 @@ from apps.development.graphql.types import (
 
 
 class TeamsQueries(graphene.ObjectType):
-    """
-    Class representing list of available fields for team queries.
-    """
+    """Class representing list of available fields for team queries."""
+
     team = DatasourceRelayNode.Field(TeamType)
 
     all_teams = DataSourceConnectionField(

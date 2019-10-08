@@ -4,9 +4,8 @@ import graphene
 
 
 class MilestoneOwner(graphene.Interface):
-    """
-    Milestone owner interface.
-    """
+    """Milestone owner interface."""
+
     id = graphene.ID(required=True)
     title = graphene.String()
     full_title = graphene.String()

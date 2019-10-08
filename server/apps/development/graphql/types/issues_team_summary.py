@@ -7,8 +7,7 @@ from .team import TeamType
 
 
 class IssuesTeamSummary(graphene.ObjectType):
-    """
-    Issues team summary.
-    """
+    """Issues team summary."""
+
     team = graphene.Field(TeamType)
     issues = graphene.Field(ProjectIssuesSummary)

@@ -4,9 +4,8 @@ import graphene
 
 
 class UserProgressMetricsType(graphene.ObjectType):
-    """
-    User progress metrics type.
-    """
+    """User progress metrics type."""
+
     start = graphene.Date()
     end = graphene.Date()
     time_estimate = graphene.Int()

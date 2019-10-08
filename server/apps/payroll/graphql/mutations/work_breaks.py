@@ -16,9 +16,8 @@ User = get_user_model()
 
 
 class ApproveWorkBreakMutation(BaseMutation):
-    """
-    Approve work break mutation.
-    """
+    """Approve work break mutation."""
+
     permission_classes = (CanApproveDeclineWorkBreak,)
 
     class Arguments:
@@ -28,9 +27,7 @@ class ApproveWorkBreakMutation(BaseMutation):
 
     @classmethod
     def do_mutate(cls, root, info, **kwargs):
-        """
-        Approve work break after validation.
-        """
+        """Approve work break after validation."""
         work_break = get_object_or_404(
             WorkBreak.objects.all(),
             pk=kwargs['id'],
@@ -47,9 +44,8 @@ class CreateWorkBreakMutation(
     ArgumentsValidationMixin,
     BaseMutation,
 ):
-    """
-    Create work break mutation.
-    """
+    """Create work break mutation."""
+
     form_class = WorkBreakForm
 
     class Arguments:
@@ -63,18 +59,15 @@ class CreateWorkBreakMutation(
 
     @classmethod
     def perform_mutate(cls, info, data):
-        """
-        Create work break after validation.
-        """
+        """Create work break after validation."""
         work_break = WorkBreak.objects.create(**data)
 
         return CreateWorkBreakMutation(work_break=work_break)
 
 
 class DeclineWorkBreakMutation(BaseMutation):
-    """
-    Decline work break mutation.
-    """
+    """Decline work break mutation."""
+
     permission_classes = (CanApproveDeclineWorkBreak,)
 
     class Arguments:
@@ -85,9 +78,7 @@ class DeclineWorkBreakMutation(BaseMutation):
 
     @classmethod
     def do_mutate(cls, root, info, **kwargs):
-        """
-        Decline work break after validation.
-        """
+        """Decline work break after validation."""
         work_break = get_object_or_404(
             WorkBreak.objects.all(),
             pk=kwargs['id'],
@@ -107,9 +98,8 @@ class UpdateWorkBreakMutation(
     ArgumentsValidationMixin,
     BaseMutation,
 ):
-    """
-    Update work break after validation.
-    """
+    """Update work break after validation."""
+
     permission_classes = (CanManageWorkBreak,)
     form_class = WorkBreakForm
 
@@ -124,9 +114,7 @@ class UpdateWorkBreakMutation(
 
     @classmethod
     def perform_mutate(cls, info, data):
-        """
-        Update work break.
-        """
+        """Update work break."""
         work_break = get_object_or_404(
             WorkBreak.objects.all(),
             pk=data['id'],
@@ -143,9 +131,8 @@ class UpdateWorkBreakMutation(
 
 
 class DeleteWorkBreakMutation(BaseMutation):
-    """
-    Delete work break after validation.
-    """
+    """Delete work break after validation."""
+
     permission_classes = (CanManageWorkBreak,)
 
     class Arguments:
@@ -155,11 +142,7 @@ class DeleteWorkBreakMutation(BaseMutation):
 
     @classmethod
     def do_mutate(cls, root, info, **kwargs):
-        """
-        Delete work break.
-
-        If successful delete return "True".
-        """
+        """Delete work break.If successful delete return "True"."""
         work_break = get_object_or_404(
             WorkBreak.objects.all(),
             pk=kwargs['id'],

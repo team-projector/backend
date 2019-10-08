@@ -20,27 +20,24 @@ from apps.development.models.issue import ISSUE_STATES
 
 
 class TeamIssuesSummary:
-    """
-    Team issues summary.
-    """
+    """Team issues summary."""
+
     opened_count: int = 0
     percentage: float = 0.0
     remains: int = 0
 
 
 class IssuesTeamSummary:
-    """
-    Issues team summary.
-    """
+    """Issues team summary."""
+
     team: Team
     issues: TeamIssuesSummary
     order_by: str
 
 
 class IssuesTeamSummaryProvider:
-    """
-    Issues team summary provider.
-    """
+    """Issues team summary provider."""
+
     def __init__(
         self,
         queryset: QuerySet,
@@ -50,9 +47,7 @@ class IssuesTeamSummaryProvider:
         self.order_by = order_by
 
     def execute(self) -> List[IssuesTeamSummary]:
-        """
-        Calculate and return summary.
-        """
+        """Calculate and return summary."""
         summaries_qs = self._get_summaries_qs()
 
         summaries = {
@@ -92,8 +87,8 @@ class IssuesTeamSummaryProvider:
         return self.queryset.annotate(
             time_remains=Case(
                 When(
-                    Q(time_estimate__gt=F('total_time_spent')) &  # noqa:W504
-                    ~Q(state=ISSUE_STATES.closed),
+                    Q(time_estimate__gt=F('total_time_spent'))
+                    & ~Q(state=ISSUE_STATES.closed),
                     then=F('time_estimate') - F('total_time_spent'),
                 ),
                 default=Value(0),

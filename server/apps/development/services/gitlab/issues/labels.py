@@ -12,6 +12,7 @@ def load_issue_labels(
     gl_issue: GlProjectIssue,
 ) -> None:
     project_labels = getattr(gl_project, '_cache_labels', None)
+
     if project_labels is None:
         project_labels = gl_project.labels.list(all=True)
         gl_project._cache_labels = project_labels
@@ -22,14 +23,17 @@ def load_issue_labels(
         label = Label.objects.filter(
             title=label_title,
         ).first()
+
         if not label:
-            gl_label = next((
-                item
-                for item in project_labels
-                if item.name == label_title
-            ),
+            gl_label = next(
+                (
+                    item
+                    for item in project_labels
+                    if item.name == label_title
+                ),
                 None,
             )
+
             if gl_label:
                 label = Label.objects.create(
                     title=label_title,

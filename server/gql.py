@@ -28,7 +28,7 @@ from apps.users.graphql.mutations import AuthMutations
 from apps.users.graphql.queries import UsersQueries
 
 
-class Query(
+class Query(  # noqa WPS215
     IssuesQueries,
     TicketsQueries,
     MergeRequestQueries,
@@ -42,16 +42,15 @@ class Query(
     UsersQueries,
     graphene.ObjectType,
 ):
-    """
-    Class representing all available queries.
-    """
+    """Class representing all available queries."""
+
     debug = graphene.Field(
         DjangoDebug,
         name='_debug',
     )
 
 
-class Mutation(
+class Mutation(  # noqa WPS215
     IssuesMutations,
     MilestonesMutations,
     TicketsMutations,
@@ -59,10 +58,7 @@ class Mutation(
     AuthMutations,
     graphene.ObjectType,
 ):
-    """
-    Class representing all available mutations.
-    """
-    pass
+    """Class representing all available mutations."""
 
 
 schema = graphene.Schema(

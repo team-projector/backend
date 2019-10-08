@@ -33,27 +33,24 @@ def _get_key(milestone):
 
 
 class ProjectIssuesSummary:
-    """
-    Project issues summary.
-    """
+    """Project issues summary."""
+
     opened_count: int = 0
     percentage: float = 0.0
     remains: int = 0
 
 
 class IssuesProjectSummary:
-    """
-    Issues project summary.
-    """
+    """Issues project summary."""
+
     project: Project
     issues: ProjectIssuesSummary
     order_by: str
 
 
 class IssuesProjectSummaryProvider:
-    """
-    Issues project summary provider.
-    """
+    """Issues project summary provider."""
+
     def __init__(
         self,
         queryset: QuerySet,
@@ -63,9 +60,7 @@ class IssuesProjectSummaryProvider:
         self.order_by = order_by
 
     def execute(self) -> List[IssuesProjectSummary]:
-        """
-        Calculate and return summary.
-        """
+        """Calculate and return summary."""
         summaries_qs = self._get_summaries_qs()
 
         summaries = {
@@ -76,11 +71,9 @@ class IssuesProjectSummaryProvider:
 
         total_issues_count = self._get_total_issues_count(summaries_qs)
 
-        projects_qs = self._get_project_qs(summaries_qs)
-
         ret = []
 
-        for project in projects_qs:
+        for project in self._get_project_qs(summaries_qs):
             summary = IssuesProjectSummary()
             summary.project = project
 
@@ -105,8 +98,8 @@ class IssuesProjectSummaryProvider:
         return self.queryset.annotate(
             time_remains=Case(
                 When(
-                    Q(time_estimate__gt=F('total_time_spent')) &  # noqa:W504
-                    ~Q(state=ISSUE_STATES.closed),
+                    Q(time_estimate__gt=F('total_time_spent'))
+                    & ~Q(state=ISSUE_STATES.closed),
                     then=F('time_estimate') - F('total_time_spent'),
                 ),
                 default=Value(0),

@@ -4,9 +4,8 @@ from model_utils import Choices as ModelChoices
 
 
 class Choices(ModelChoices):
-    """
-    Choices.
-    """
+    """Choices."""
+
     def __eq__(self, other):
         if isinstance(other, (tuple, list)) and self._doubles == list(other):
             return True
@@ -14,9 +13,7 @@ class Choices(ModelChoices):
         return super().__eq__(other)
 
     def keys(self):
-        """
-        Get list of keys.
-        """
+        """Get list of keys."""
         return [
             choice[0]
             for choice in self._doubles
