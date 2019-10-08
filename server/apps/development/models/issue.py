@@ -5,7 +5,6 @@ from typing import Optional
 
 from django.conf import settings
 from django.db import models
-from django.db.models import Max
 from django.utils.functional import cached_property
 from django.utils.translation import gettext_lazy as _
 
@@ -150,7 +149,7 @@ class Issue(
     def last_note_date(self) -> datetime:
         """Return last note date."""
         return self.notes.aggregate(
-            last_created=Max('created_at'),
+            last_created=models.Max('created_at'),
         )['last_created']
 
     @property

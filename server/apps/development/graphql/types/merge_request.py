@@ -2,14 +2,10 @@
 
 import graphene
 from django.contrib.auth import get_user_model
-from django.db.models import Prefetch, QuerySet
+from django.db import models
 
-from apps.core.graphql.connections import DataSourceConnection
-from apps.core.graphql.relay_nodes import DatasourceRelayNode
-from apps.core.graphql.types import BaseDjangoObjectType
-from apps.core.graphql.utils import is_field_selected
-from apps.development.graphql.types.interfaces import WorkItem
-from apps.development.models import Issue, Label, MergeRequest
+from apps.core import graphql
+from apps.development import models as development_models
 from apps.development.services.allowed.merge_requests import (
     filter_allowed_for_user,
 )
@@ -20,19 +16,21 @@ from apps.development.services.problems.merge_request import (
     get_merge_request_problems,
 )
 
+from ... import graphql as development_graphql
+from .interfaces import WorkItem
 from .merge_request_metrics import MergeRequestMetricsType
 
 
-class MergeRequestType(BaseDjangoObjectType):
+class MergeRequestType(graphql.BaseDjangoObjectType):
     """Merge request type."""
 
     metrics = graphene.Field(MergeRequestMetricsType)
     problems = graphene.List(graphene.String)
 
     class Meta:
-        model = MergeRequest
-        interfaces = (DatasourceRelayNode, WorkItem)
-        connection_class = DataSourceConnection
+        model = development_models.MergeRequest
+        interfaces = (graphql.DatasourceRelayNode, WorkItem)
+        connection_class = graphql.DataSourceConnection
         name = 'MergeRequest'
 
     def resolve_metrics(self, info, **kwargs):
@@ -56,44 +54,44 @@ class MergeRequestType(BaseDjangoObjectType):
         return getattr(self, '_issues_', self.issues)
 
     @classmethod
-    def get_queryset(cls, queryset, info) -> QuerySet:
+    def get_queryset(cls, queryset, info) -> models.QuerySet:
         """Get queryset."""
         queryset = filter_allowed_for_user(
             queryset,
             info.context.user,
         )
 
-        if is_field_selected(info, 'edges.node.user'):
+        if graphql.is_field_selected(info, 'edges.node.user'):
             queryset = queryset.select_related('user')
 
         # TODO: condsider using graphene_django_optimizer here
-        if is_field_selected(info, 'edges.node.participants'):
+        if graphql.is_field_selected(info, 'edges.node.participants'):
             from apps.users.graphql.types import UserType
 
             users = get_user_model().objects
-            queryset = queryset.prefetch_related(Prefetch(
+            queryset = queryset.prefetch_related(models.Prefetch(
                 'participants',
                 queryset=UserType.get_queryset(users, info).all(),
                 to_attr='_participants_',
             ))
 
         # TODO: condsider using graphene_django_optimizer here
-        if is_field_selected(info, 'edges.node.labels'):
-            from apps.development.graphql.types import LabelType
-
-            queryset = queryset.prefetch_related(Prefetch(
+        if graphql.is_field_selected(info, 'edges.node.labels'):
+            queryset = queryset.prefetch_related(models.Prefetch(
                 'labels',
-                queryset=LabelType.get_queryset(Label.objects, info).all(),
+                queryset=development_graphql.types.LabelType.get_queryset(
+                    development_models.Label.objects, info,
+                ).all(),
                 to_attr='_labels_',
             ))
 
         # TODO: condsider using graphene_django_optimizer here
-        if is_field_selected(info, 'edges.node.issues'):
-            from apps.development.graphql.types import IssueType
-
-            queryset = queryset.prefetch_related(Prefetch(
+        if graphql.is_field_selected(info, 'edges.node.issues'):
+            queryset = queryset.prefetch_related(models.Prefetch(
                 'issues',
-                queryset=IssueType.get_queryset(Issue.objects, info).all(),
+                queryset=development_graphql.types.IssueType.get_queryset(
+                    development_models.Issue.objects, info,
+                ).all(),
                 to_attr='_issues_',
             ))
 

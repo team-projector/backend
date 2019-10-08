@@ -4,8 +4,7 @@ import logging
 
 from django.utils import timezone
 from gitlab import GitlabGetError
-from gitlab.v4.objects import MergeRequest as GlMergeRequest
-from gitlab.v4.objects import Project as GlProject
+from gitlab.v4 import objects as gl_objects
 from rest_framework import status
 
 from apps.core.activity.verbs import ACTION_GITLAB_CALL_API
@@ -13,7 +12,7 @@ from apps.core.gitlab import get_gitlab_client
 from apps.core.tasks import add_action
 from apps.users.models import User
 
-from ...models import Label, MergeRequest, Milestone, Note, Project
+from ... import models
 from .parsers import parse_gl_datetime
 from .users import extract_user_from_data, load_user
 
@@ -21,7 +20,7 @@ logger = logging.getLogger(__name__)
 
 
 def load_merge_requests(full_reload: bool = False) -> None:
-    for project in Project.objects.all():
+    for project in models.Project.objects.all():
         try:
             load_project_merge_requests(project, full_reload)
         except GitlabGetError as error:
@@ -30,7 +29,7 @@ def load_merge_requests(full_reload: bool = False) -> None:
 
 
 def load_project_merge_requests(
-    project: Project,
+    project: models.Project,
     full_reload: bool = False,
 ) -> None:
     gl = get_gitlab_client()
@@ -55,10 +54,10 @@ def load_project_merge_requests(
 
 
 def load_project_merge_request(
-    project: Project,
-    gl_project: GlProject,
-    gl_mr: GlMergeRequest,
-) -> MergeRequest:
+    project: models.Project,
+    gl_project: gl_objects.Project,
+    gl_mr: gl_objects.MergeRequest,
+) -> models.MergeRequest:
     time_stats = gl_mr.time_stats()
 
     params = {
@@ -78,14 +77,14 @@ def load_project_merge_request(
     }
 
     if gl_mr.milestone:
-        milestone = Milestone.objects.filter(
+        milestone = models.Milestone.objects.filter(
             gl_id=gl_mr.milestone['id'],
         ).first()
 
         if milestone:
             params['milestone'] = milestone
 
-    merge_request, _ = MergeRequest.objects.sync_gitlab(**params)
+    merge_request, _ = models.MergeRequest.objects.sync_gitlab(**params)
 
     load_merge_request_labels(merge_request, gl_project, gl_mr)
     load_merge_request_notes(merge_request, gl_mr)
@@ -97,9 +96,9 @@ def load_project_merge_request(
 
 
 def load_merge_request_labels(
-    merge_request: MergeRequest,
-    gl_project: GlProject,
-    gl_merge_request: GlMergeRequest,
+    merge_request: models.MergeRequest,
+    gl_project: gl_objects.Project,
+    gl_merge_request: gl_objects.MergeRequest,
 ) -> None:
     project_labels = getattr(gl_project, '_cache_labels', None)
     if project_labels is None:
@@ -109,7 +108,7 @@ def load_merge_request_labels(
     labels = []
 
     for label_title in gl_merge_request.labels:
-        label = Label.objects.filter(title=label_title).first()
+        label = models.Label.objects.filter(title=label_title).first()
         if not label:
             gl_label = next((
                 item
@@ -119,7 +118,7 @@ def load_merge_request_labels(
                 None,
             )
             if gl_label:
-                label = Label.objects.create(
+                label = models.Label.objects.create(
                     title=label_title,
                     color=gl_label.color,
                 )
@@ -131,18 +130,18 @@ def load_merge_request_labels(
 
 
 def load_merge_request_notes(
-    merge_request: MergeRequest,
-    gl_merge_request: GlMergeRequest,
+    merge_request: models.MergeRequest,
+    gl_merge_request: gl_objects.MergeRequest,
 ) -> None:
     for gl_note in gl_merge_request.notes.list(as_list=False, system=True):
-        Note.objects.sync_gitlab(gl_note, merge_request)
+        models.Note.objects.sync_gitlab(gl_note, merge_request)
 
     merge_request.adjust_spent_times()
 
 
 def load_merge_request_participants(
-    merge_request: MergeRequest,
-    gl_merge_request: GlMergeRequest,
+    merge_request: models.MergeRequest,
+    gl_merge_request: gl_objects.MergeRequest,
 ) -> None:
     merge_request.participants.set((
         _get_user(user['id'])
