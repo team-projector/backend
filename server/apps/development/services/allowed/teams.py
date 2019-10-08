@@ -9,6 +9,7 @@ def filter_allowed_for_user(
     queryset: QuerySet,
     user: User,
 ) -> QuerySet:
+    """Get allowed teams for user."""
     return queryset.filter(
         members=user,
     )

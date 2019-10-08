@@ -11,6 +11,7 @@ def filter_allowed_for_user(
     queryset: QuerySet,
     user: User,
 ) -> QuerySet:
+    """Get allowed issues for user."""
     from apps.development.models import TeamMember
 
     allowed_users = {user}
@@ -35,6 +36,7 @@ def filter_allowed_for_user(
 
 
 def check_allow_project_manager(user: User) -> None:
+    """Check whether user is a project manager."""
     if not user.roles.project_manager:
         raise PermissionDenied(
             'Only project managers can view project resources',

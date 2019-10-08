@@ -7,6 +7,7 @@ from apps.development.models.milestone import MILESTONE_STATES
 
 
 def get_group_active_milestones(group):
+    """Get active milestones for group."""
     ret = group.milestones.filter(state=MILESTONE_STATES.active)
     if not ret:
         return _get_group_milestones(group)

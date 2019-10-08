@@ -18,6 +18,7 @@ logger = logging.getLogger(__name__)
 
 
 def load_issues(full_reload: bool = False) -> None:
+    """Load issues for all projects."""
     for project in Project.objects.all():
         try:
             load_project_issues(project, full_reload)
@@ -31,6 +32,7 @@ def load_project_issues(
     full_reload: bool = False,
     check_deleted: bool = True,
 ) -> None:
+    """Load project issues."""
     gl = get_gitlab_client()
 
     logger.info(f'Syncing project "{project}" issues')

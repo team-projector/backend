@@ -22,6 +22,7 @@ def load_project_issue(
     gl_project: GlProject,
     gl_issue: GlProjectIssue,
 ) -> None:
+    """Load full info for project issue."""
     time_stats = gl_issue.time_stats()
 
     params = {

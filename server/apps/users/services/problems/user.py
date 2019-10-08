@@ -12,6 +12,7 @@ checkers = [
 
 
 def get_user_problems(user: User) -> Iterable[str]:
+    """Get problems for user."""
     problems = []
 
     for checker in checkers:

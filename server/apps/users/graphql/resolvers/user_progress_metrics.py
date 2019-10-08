@@ -12,6 +12,7 @@ from apps.users.services.allowed.user_progress_metrics import (
 
 
 def resolve_user_progress_metrics(parent, info, **kwargs):
+    """Resolve progress metrics for user."""
     user = get_object_or_404(
         filter_allowed_for_user(
             User.objects.all(), info.context.user,
