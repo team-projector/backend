@@ -93,6 +93,9 @@ class UpdateTicketMutation(
         if data.get('due_date'):
             ticket.due_date = data['due_date']
 
+        if data.get('url'):
+            ticket.url = data['url']
+
         if data.get('milestone'):
             ticket.milestone = data['milestone']
 

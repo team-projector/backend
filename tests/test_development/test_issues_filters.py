@@ -7,8 +7,12 @@ from apps.development.graphql.filters import IssuesFilterSet
 from apps.development.models import TeamMember
 from apps.development.models.issue import Issue, ISSUE_STATES
 from tests.test_development.factories import (
-    IssueFactory, TicketFactory, ProjectFactory, ProjectMilestoneFactory,
-    TeamFactory, TeamMemberFactory
+    IssueFactory,
+    TicketFactory,
+    ProjectFactory,
+    ProjectMilestoneFactory,
+    TeamFactory,
+    TeamMemberFactory
 )
 from tests.test_users.factories import UserFactory
 
@@ -235,6 +239,13 @@ def test_filter_by_problems(user):
 
     assert results.count() == 5
     assert any(issue in issue_problems for issue in results) is False
+
+    results = IssuesFilterSet(
+        data={'problems': 'incorrect value'},
+        queryset=Issue.objects.all()
+    ).qs
+
+    assert results.count() == 7
 
 
 def test_search(user):

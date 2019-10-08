@@ -1,12 +1,16 @@
 from pytest import raises
 from django.core.exceptions import PermissionDenied
 
-from apps.development.models import Milestone, ProjectMember
+from apps.development.models import Milestone
 from apps.development.models.project_member import PROJECT_MEMBER_ROLES
-from apps.development.services.allowed.milestones import filter_allowed_for_user
+from apps.development.services.allowed.milestones import (
+    filter_allowed_for_user,
+)
 from tests.test_development.factories import (
-    ProjectFactory, ProjectGroupFactory, ProjectMemberFactory,
-    ProjectMilestoneFactory
+    ProjectFactory,
+    ProjectGroupFactory,
+    ProjectMemberFactory,
+    ProjectMilestoneFactory,
 )
 
 

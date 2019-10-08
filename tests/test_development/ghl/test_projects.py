@@ -2,7 +2,9 @@ from apps.development.graphql.resolvers import ProjectMilestonesResolver
 from apps.development.graphql.types.project import ProjectType
 from apps.development.models.milestone import MILESTONE_STATES
 from tests.test_development.factories import (
-    ProjectFactory, ProjectGroupFactory, ProjectMilestoneFactory,
+    ProjectFactory,
+    ProjectGroupFactory,
+    ProjectMilestoneFactory,
     ProjectGroupMilestoneFactory
 )
 from tests.test_development.factories_gitlab import AttrDict
@@ -130,6 +132,30 @@ def test_project_group_parent_milestones(user, client):
         info=info,
         active=False
     ).execute()
+
+    assert milestones.count() == 1
+    assert milestones.first() == milestone_2
+
+
+def test_resolve_milestones(user, client):
+    project = ProjectFactory.create()
+
+    ProjectMilestoneFactory.create(
+        owner=project,
+        state=MILESTONE_STATES.active
+    )
+    milestone_2 = ProjectMilestoneFactory.create(
+        owner=project,
+        state=MILESTONE_STATES.closed
+    )
+
+    client.user = user
+    info = AttrDict({'context': client})
+
+    parent = ProjectType.get_node(info, obj_id=project.id)
+    parent.parent_type = None
+
+    milestones = ProjectType.resolve_milestones(parent, info, active=False)
 
     assert milestones.count() == 1
     assert milestones.first() == milestone_2
