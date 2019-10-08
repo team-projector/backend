@@ -240,13 +240,6 @@ def test_filter_by_problems(user):
     assert results.count() == 5
     assert any(issue in issue_problems for issue in results) is False
 
-    results = IssuesFilterSet(
-        data={'problems': 'incorrect value'},
-        queryset=Issue.objects.all()
-    ).qs
-
-    assert results.count() == 7
-
 
 def test_search(user):
     issue_1 = IssueFactory.create(title='create', user=user)

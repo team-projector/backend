@@ -73,7 +73,7 @@ class UpdateTicketMutation(
             ticket=ticket,
         )
 
-    @classmethod
+    @classmethod  # noqa C901
     def _update_ticket(cls, ticket, data):
         if data.get('title'):
             ticket.title = data['title']

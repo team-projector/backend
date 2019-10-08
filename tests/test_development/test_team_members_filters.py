@@ -62,3 +62,10 @@ def test_filter_by_role(user):
     ).qs
 
     assert results.count() == 4
+
+    results = TeamMembersFilterSet(
+        data={'roles': None},
+        queryset=TeamMember.objects.all()
+    ).qs
+
+    assert results.count() == 4

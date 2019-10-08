@@ -1,4 +1,4 @@
-from apps.development.graphql.types.issue import IssueType
+from apps.development.graphql.types import IssueType, IssuesProjectSummary
 from apps.development.graphql.mutations.issues import UpdateIssueMutation
 from apps.development.models.issue import Issue
 from tests.test_development.factories import (
@@ -98,3 +98,11 @@ def test_resolve_labels(user, client):
 
     assert labels.count() == 2
     assert set(labels.all()) == {label_1, label_2}
+
+
+def test_resolve_project(user):
+    issue = IssueFactory.create(user=user)
+
+    project = IssuesProjectSummary.resolve_project(issue, None)
+
+    assert project == issue.project
