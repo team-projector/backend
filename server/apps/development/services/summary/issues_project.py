@@ -21,6 +21,7 @@ from apps.development.models.issue import ISSUE_STATES
 
 
 def get_min_due_date(project):
+    """Get minimum due date."""
     sorted_milestones = sorted(project.active_milestones, key=_get_key)
     if sorted_milestones:
         return sorted_milestones[0].due_date or datetime.max.date()
@@ -140,6 +141,7 @@ def get_project_summaries(
     queryset: QuerySet,
     order_by: str = None,
 ) -> List[IssuesProjectSummary]:
+    """Get summaries for project."""
     provider = IssuesProjectSummaryProvider(
         queryset,
         order_by,

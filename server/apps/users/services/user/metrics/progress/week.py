@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from datetime import date, timedelta
-from typing import Iterable, List
+from typing import List
 
 from django.db.models import Count, F, FloatField, Sum
 from django.db.models.functions import Cast, Coalesce, TruncDate, TruncWeek
@@ -11,15 +11,15 @@ from apps.core.utils.date import begin_of_week, date2datetime
 from apps.development.models.issue import ISSUE_STATES, Issue
 from apps.payroll.models import SpentTime
 
-from .base import ProgressMetricsProvider, UserProgressMetrics
+from . import base
 
 WEEK_STEP = timedelta(weeks=1)
 
 
-class WeekMetricsProvider(ProgressMetricsProvider):
+class WeekMetricsProvider(base.ProgressMetricsProvider):
     """Week metrics provider."""
 
-    def get_metrics(self) -> Iterable[UserProgressMetrics]:
+    def get_metrics(self) -> base.UserProgressMetricsList:
         """Calculate and return metrics."""
         metrics = []
 
@@ -29,7 +29,7 @@ class WeekMetricsProvider(ProgressMetricsProvider):
         payrolls_stats = self._get_payrolls_stats()
 
         for week in self._get_weeks():
-            metric = UserProgressMetrics()
+            metric = base.UserProgressMetrics()
             metrics.append(metric)
 
             metric.start = week

@@ -9,10 +9,12 @@ from ..models import Token, User
 
 
 def create_user_token(user: User) -> Token:
+    """Create token for user."""
     return Token.objects.create(user=user)
 
 
 def clear_tokens() -> None:
+    """Deletes expired tokens."""
     if settings.TOKEN_EXPIRE_PERIOD is None:
         return
 

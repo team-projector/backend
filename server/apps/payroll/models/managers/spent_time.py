@@ -7,7 +7,7 @@ from django.db.models import Case, F, FloatField, Q, QuerySet, Sum, When
 from django.db.models.functions import Coalesce
 from django.db.models.manager import BaseManager
 
-from apps.payroll.services.allowed.spent_time import filter_allowed_for_user
+from apps.payroll.services.spent_time.allowed import filter_allowed_for_user
 
 
 class SpentTimeQuerySet(models.QuerySet):

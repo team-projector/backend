@@ -103,6 +103,7 @@ def get_issues_summary(
     queryset: QuerySet,
     **kwargs,
 ) -> IssuesSummary:
+    """Get summary for issues."""
     return IssuesSummaryProvider(
         queryset,
         **kwargs,

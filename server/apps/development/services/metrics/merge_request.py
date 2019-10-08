@@ -12,7 +12,8 @@ class MergeRequestMetrics:
     paid: float = 0
 
 
-def get_merge_request_metrcis(merge_request) -> MergeRequestMetrics:
+def get_merge_request_metrics(merge_request) -> MergeRequestMetrics:
+    """Get metrics for merge request."""
     payroll = SpentTime.objects.filter(
         mergerequests__id=merge_request.id,
     ).aggregate_payrolls()

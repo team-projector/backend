@@ -8,7 +8,7 @@ from apps.core.graphql.relay_nodes import DatasourceRelayNode
 from apps.core.graphql.types import BaseDjangoObjectType
 from apps.development.graphql.types.interfaces import WorkItem
 from apps.payroll.models import SpentTime
-from apps.payroll.services.allowed.spent_time import filter_allowed_for_user
+from apps.payroll.services.spent_time.allowed import filter_allowed_for_user
 
 
 class SpentTimeType(BaseDjangoObjectType):

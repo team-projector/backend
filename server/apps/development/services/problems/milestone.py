@@ -41,6 +41,7 @@ checkers = [
 
 
 def get_milestone_problems(milestone: Milestone) -> List[str]:
+    """Get problems for milestone."""
     problems = []
 
     for checker in checkers:

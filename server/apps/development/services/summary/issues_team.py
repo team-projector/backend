@@ -126,6 +126,7 @@ def get_team_summaries(
     queryset: QuerySet,
     order_by: str = None,
 ) -> List[IssuesTeamSummary]:
+    """Get summaries for team."""
     provider = IssuesTeamSummaryProvider(
         queryset,
         order_by,

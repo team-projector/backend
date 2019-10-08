@@ -11,38 +11,38 @@ from apps.users.models import User
 def filter_allowed_for_user(
     queryset: QuerySet,
     user: User,
-) -> QuerySet:
-    users = filter_by_roles(
-        TeamMember.objects.filter(user=user),
-        [
-            TeamMember.roles.leader,
-        ],
+):
+    """Get work breaks for user."""
+    users = TeamMember.objects.filter(
+        user=user,
+        roles=TeamMember.roles.leader,
     ).values_list(
         'team__members',
         flat=True,
     )
 
     return queryset.filter(
-        user__in={*users, user.id},
+        user__in=(*users, user.id),
     )
 
 
-def check_allowed_filtering_by_team(
+def check_allow_filtering_by_team(
     team: Team,
     user: User,
 ) -> None:
-    queryset = TeamMember.objects.filter(
+    """Check whether user can get work breaks by team."""
+    members = TeamMember.objects.filter(
         team=team,
         user=user,
     )
 
-    can_filter = filter_by_roles(
-        queryset,
+    allowed_members = filter_by_roles(
+        members,
         [
             TeamMember.roles.leader,
             TeamMember.roles.watcher,
         ],
     ).exists()
 
-    if not can_filter:
-        raise PermissionDenied
+    if not allowed_members:
+        raise PermissionDenied("You can't filter by team")

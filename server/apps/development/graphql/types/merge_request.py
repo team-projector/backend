@@ -10,7 +10,7 @@ from apps.development.services.allowed.merge_requests import (
     filter_allowed_for_user,
 )
 from apps.development.services.metrics.merge_request import (
-    get_merge_request_metrcis,
+    get_merge_request_metrics,
 )
 from apps.development.services.problems.merge_request import (
     get_merge_request_problems,
@@ -35,7 +35,7 @@ class MergeRequestType(graphql.BaseDjangoObjectType):
 
     def resolve_metrics(self, info, **kwargs):
         """Get merge request metrics."""
-        return get_merge_request_metrcis(self)
+        return get_merge_request_metrics(self)
 
     def resolve_problems(self, info, **kwargs):
         """Get merge request problems."""

@@ -7,7 +7,7 @@ from apps.core.graphql.filters.ordering import OrderingFilter
 from apps.development.models import Team, TeamMember
 from apps.payroll.models import WorkBreak
 from apps.payroll.models.mixins.approved import APPROVED_STATES
-from apps.payroll.services.allowed.work_break import (
+from apps.payroll.services.work_break.allowed import (
     check_allow_filtering_by_team,
 )
 from apps.users.models import User

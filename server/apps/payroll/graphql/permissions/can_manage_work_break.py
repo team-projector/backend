@@ -7,7 +7,7 @@ from rest_framework.generics import get_object_or_404
 
 from apps.development.models import TeamMember
 from apps.payroll.models import WorkBreak
-from apps.payroll.services.users import user_related_with_another_by_team_roles
+from apps.users.services import user as user_service
 
 
 class CanManageWorkBreak:
@@ -25,7 +25,7 @@ class CanManageWorkBreak:
             pk=kwargs['id'],
         )
 
-        return user_related_with_another_by_team_roles(
+        return user_service.is_related_with_another_by_team_roles(
             info.context.user,
             work_break.user,
             [TeamMember.roles.leader],

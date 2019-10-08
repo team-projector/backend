@@ -12,6 +12,7 @@ def load_group_milestones(
     project_group_id: int,
     gl_group_id: int,
 ) -> None:
+    """Load milestones for group."""
     gl = get_gitlab_client()
     gl_group = gl.groups.get(gl_group_id)
 
@@ -28,6 +29,7 @@ def load_gl_project_milestones(
     project_id: int,
     gl_project_id: int,
 ) -> None:
+    """Load milestones for Gitlab project."""
     gl = get_gitlab_client()
     gl_project = gl.projects.get(gl_project_id)
 
@@ -45,6 +47,7 @@ def load_project_milestone(
     project_id: int,
     milestone_id: int,
 ) -> None:
+    """Load milestone for project."""
     gl = get_gitlab_client()
     gl_project = gl.projects.get(project_id)
 
@@ -63,6 +66,7 @@ def load_group_milestone(
     group_id: int,
     milestone_id: int,
 ) -> None:
+    """Load milestone for group."""
     gl = get_gitlab_client()
     gl_group = gl.groups.get(group_id)
 

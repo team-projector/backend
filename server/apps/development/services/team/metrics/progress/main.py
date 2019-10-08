@@ -16,6 +16,7 @@ def create_provider(
     end: date,
     group: str,
 ) -> ProgressMetricsProvider:
+    """Create progress metrics provider."""
     if group == 'day':
         return DayMetricsProvider(team, start, end)
     elif group == 'week':
@@ -27,11 +28,12 @@ def create_provider(
 TeamMemberProgressMetricsList = Iterable[TeamMemberProgressMetrics]
 
 
-def get_team_progress_metrics(
+def get_progress_metrics(
     team: Team,
     start: date,
     end: date,
     grp: str,
 ) -> TeamMemberProgressMetricsList:
+    """Get progress metrics for team member."""
     provider = create_provider(team, start, end, grp)
     return provider.get_metrics()

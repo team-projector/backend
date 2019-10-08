@@ -14,6 +14,7 @@ def resolve_issues_summary(
     info,
     **kwargs,
 ):
+    """Resolve issues summary."""
     filterset = IssuesFilterSet(
         data=kwargs,
         queryset=Issue.objects.allowed_for_user(
@@ -33,6 +34,7 @@ def resolve_issues_project_summaries(
     info,
     **kwargs,
 ):
+    """Resolve issues project summaries."""
     return get_project_summaries(
         parent.queryset,
         **kwargs,
@@ -44,6 +46,7 @@ def resolve_issues_team_summaries(
     info,
     **kwargs,
 ):
+    """Resolve issues team summaries."""
     return get_team_summaries(
         parent.queryset,
         **kwargs,

@@ -18,11 +18,13 @@ logger = logging.getLogger(__name__)
 
 
 def load_projects() -> None:
+    """Load all projects."""
     for group in ProjectGroup.objects.all():
         load_group_projects(group)
 
 
 def load_group_projects(group: ProjectGroup) -> None:
+    """Load projects for group."""
     gl = get_gitlab_client()
 
     add_action.delay(verb=ACTION_GITLAB_CALL_API)
@@ -42,6 +44,7 @@ def load_project(
     group: ProjectGroup,
     gl_project: GlProject,
 ) -> None:
+    """Load project."""
     msg = f'Syncing project "{gl_project.name}"...'
 
     logger.info(f'{msg}')
@@ -67,6 +70,7 @@ def check_project_webhooks_if_need(
     gl: Gitlab,
     gl_project: GlProject,
 ):
+    """Check whether webhooks for project are needed."""
     if not settings.GITLAB_CHECK_WEBHOOKS:
         return
 
@@ -77,6 +81,7 @@ def check_project_webhooks_if_need(
 
 
 def check_project_webhooks(gl_project: GlProject) -> None:
+    """Validate webhooks for project."""
     hooks = gl_project.hooks.list()
 
     webhook_url = f'https://{settings.DOMAIN_NAME}{reverse("api:gl-webhook")}'
@@ -111,6 +116,7 @@ def validate_webhook(
     webhook,
     webhook_url: str,
 ) -> bool:
+    """Validate webhook."""
     return (
         webhook.url == webhook_url
         and webhook.issues_events

@@ -32,6 +32,7 @@ def seconds_handler(
     bag: DefaultDict[str, int],
     val: int,
 ) -> None:
+    """Handle seconds."""
     bag['seconds'] += val
 
 
@@ -39,6 +40,7 @@ def minutes_handler(
     bag: DefaultDict[str, int],
     val: int,
 ) -> None:
+    """Handle minutes."""
     bag['minutes'] += val
 
 
@@ -46,6 +48,7 @@ def hours_handler(
     bag: DefaultDict[str, int],
     val: int,
 ) -> None:
+    """Handle hours."""
     bag['hours'] += val
 
 
@@ -53,6 +56,7 @@ def days_handler(
     bag: DefaultDict[str, int],
     val: int,
 ) -> None:
+    """Handle days."""
     bag['hours'] += val * HOURS_PER_DAY
 
 
@@ -60,6 +64,7 @@ def weeks_handler(
     bag: DefaultDict[str, int],
     val: int,
 ) -> None:
+    """Handle weeks."""
     bag['hours'] += val * DAYS_PER_WEEK * HOURS_PER_DAY
 
 
@@ -67,6 +72,7 @@ def months_handler(
     bag: DefaultDict[str, int],
     val: int,
 ) -> None:
+    """Handle months."""
     bag['hours'] += val * WEEK_PER_MONTH * DAYS_PER_WEEK * HOURS_PER_DAY
 
 
@@ -83,6 +89,7 @@ NoteReadResult = namedtuple('NoteReadResult', ['type', 'data'])
 
 
 def parse_spend(spent: str) -> int:
+    """Parse spent time."""
     # specs https://docs.gitlab.com/ee/workflow/time_tracking.html
     spent = spent or ''
     spent = spent.strip()
@@ -182,6 +189,7 @@ _notes_parsers = [
 
 
 def read_note(gl_note) -> Optional[NoteReadResult]:
+    """Read note."""
     for parser in _notes_parsers:
         parse_data = parser.parse(gl_note)
         if parse_data:

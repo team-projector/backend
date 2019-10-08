@@ -6,6 +6,7 @@ from typing import Iterable, List
 
 
 def get_module_url_patterns(*modules: str) -> Iterable:
+    """Get url_patterns of modules."""
     patterns: List = []
 
     for module in modules:
@@ -19,5 +20,6 @@ def load_module_from_app(
     app: str,
     module: str,
 ):
+    """Load module from application."""
     with suppress(ModuleNotFoundError):
         return import_module(f'{app}.{module}')

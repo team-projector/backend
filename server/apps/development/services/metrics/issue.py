@@ -13,7 +13,8 @@ class IssueMetrics:
     paid: float = 0
 
 
-def get_issue_metrcis(issue: Issue) -> IssueMetrics:
+def get_issue_metrics(issue: Issue) -> IssueMetrics:
+    """Get metrics for issue."""
     payroll = SpentTime.objects.filter(
         issues__id=issue.id,
     ).aggregate_payrolls()

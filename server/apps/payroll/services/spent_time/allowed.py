@@ -10,6 +10,7 @@ def filter_allowed_for_user(
     queryset: QuerySet,
     user: User,
 ) -> QuerySet:
+    """Get spent time for user."""
     from apps.development.models import TeamMember
 
     users = filter_by_roles(

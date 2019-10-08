@@ -27,6 +27,9 @@ class UserProgressMetrics:
     planned_work_hours: int = 0
 
 
+UserProgressMetricsList = Iterable[UserProgressMetrics]
+
+
 class ProgressMetricsProvider:
     """User progress metrics provider."""
 

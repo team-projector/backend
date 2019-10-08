@@ -11,12 +11,14 @@ from ..services.salary.notifications import (
 
 @app.task
 def send_salary_report(salary_id: int) -> None:
+    """Send salary report."""
     send_salary_email_report.delay(salary_id)
     send_salary_slack_report.delay(salary_id)
 
 
 @app.task
 def send_salary_email_report(salary_id: int) -> None:
+    """Send salary email report."""
     salary = Salary.objects.get(id=salary_id)
 
     send_email_report(salary)
@@ -24,6 +26,7 @@ def send_salary_email_report(salary_id: int) -> None:
 
 @app.task
 def send_salary_slack_report(salary_id: int) -> None:
+    """Send salary slack report."""
     salary = Salary.objects.get(id=salary_id)
 
     send_slack_report(salary)

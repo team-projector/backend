@@ -97,4 +97,5 @@ class TicketMetricsProvider:
 
 
 def get_ticket_metrics(ticket: Ticket) -> TicketMetrics:
+    """Get metrics for ticket."""
     return TicketMetricsProvider(ticket).get_metrics()

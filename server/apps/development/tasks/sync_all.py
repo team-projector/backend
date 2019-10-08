@@ -11,6 +11,7 @@ from .milestones import sync_groups_milestones, sync_projects_milestones
 
 @app.task(queue='low_priority')
 def sync() -> None:
+    """Syncing everything."""
     load_groups()
     sync_groups_milestones.delay()
 

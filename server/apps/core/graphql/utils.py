@@ -7,6 +7,7 @@ def collect_fields(
     node,
     fragments,
 ) -> dict:
+    """Collect fields."""
     field = {}
 
     if node.get('selection_set'):
@@ -24,6 +25,7 @@ def collect_fields(
 
 
 def get_fields_from_info(info) -> dict:
+    """Get fields from info."""
     fragments = {}
     node = ast_to_dict(info.field_asts[0])
 
@@ -37,6 +39,7 @@ def is_field_selected(
     info,
     path: str,
 ) -> bool:
+    """Is field selected."""
     fields = get_fields_from_info(info)
 
     for key in path.split('.'):

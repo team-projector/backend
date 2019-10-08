@@ -99,7 +99,8 @@ class SpentTimesSummaryProvider:
         )
 
 
-def get_spent_times_summary(queryset: QuerySet) -> SpentTimesSummary:
+def get_summary(queryset: QuerySet) -> SpentTimesSummary:
+    """Get summary about spent times."""
     return SpentTimesSummaryProvider(
         queryset,
     ).execute()
