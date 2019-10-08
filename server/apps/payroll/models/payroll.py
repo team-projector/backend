@@ -9,6 +9,8 @@ from apps.core.models.mixins import Timestamps
 
 
 class Payroll(Timestamps):
+    """The payroll model."""
+
     created_by = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         models.CASCADE,
@@ -41,6 +43,7 @@ class Payroll(Timestamps):
     )
 
     def __str__(self):
+        """Returns object string representation."""
         return f'{self.user} [{self.created_at}]: {self.sum}'
 
     class Meta:

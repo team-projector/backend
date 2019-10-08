@@ -3,6 +3,10 @@ from datetime import datetime, timedelta
 from django.utils import timezone
 
 from apps.development.graphql.resolvers import resolve_issues_summary
+from apps.development.graphql.resolvers.issues_summary import (
+    resolve_issues_project_summaries,
+    resolve_issues_team_summaries,
+)
 from apps.development.models import Team, TeamMember, Project
 from apps.development.models.issue import Issue, ISSUE_STATES
 from apps.development.models.milestone import MILESTONE_STATES
@@ -10,12 +14,17 @@ from apps.development.services.summary.issues import (
     get_issues_summary, IssuesSummary
 )
 from apps.development.services.summary.issues_project import (
-    get_min_due_date, get_project_summaries
+    get_min_due_date,
+    get_project_summaries,
 )
 from apps.development.services.summary.issues_team import get_team_summaries
 from tests.test_development.factories import (
-    IssueFactory, ProjectFactory, TeamFactory, TeamMemberFactory,
-    ProjectMilestoneFactory, ProjectGroupFactory
+    IssueFactory,
+    ProjectFactory,
+    TeamFactory,
+    TeamMemberFactory,
+    ProjectMilestoneFactory,
+    ProjectGroupFactory,
 )
 from tests.test_development.factories_gitlab import AttrDict
 from tests.test_payroll.factories import IssueSpentTimeFactory
@@ -538,6 +547,55 @@ def test_resolver(user, client):
     )
 
     _check_summary(summary, 5, 5, 0, 0, 0)
+
+
+def test_resolve_issues_project_summaries(user):
+    project = ProjectFactory()
+
+    IssueFactory.create_batch(
+        5,
+        user=user,
+        total_time_spent=300,
+        time_estimate=400,
+        project=project,
+        due_date=datetime.now().date()
+    )
+
+    parent = AttrDict({
+        'queryset': Issue.objects.all()
+    })
+
+    issues = resolve_issues_project_summaries(parent, None)[0].issues
+
+    assert issues.opened_count == 5
+    assert issues.percentage == 1.0
+    assert issues.remains == 500
+
+
+def test_resolve_issues_team_summaries(user):
+    team = TeamFactory.create()
+    TeamMemberFactory.create(
+        user=user,
+        team=team,
+        roles=TeamMember.roles.developer
+    )
+    IssueFactory.create_batch(
+        5,
+        user=user,
+        total_time_spent=300,
+        time_estimate=400,
+        due_date=datetime.now().date()
+    )
+
+    parent = AttrDict({
+        'queryset': Issue.objects.all()
+    })
+
+    issues = resolve_issues_team_summaries(parent, None)[0].issues
+
+    assert issues.opened_count == 5
+    assert issues.percentage == 1.0
+    assert issues.remains == 500
 
 
 def _check_summary(data: IssuesSummary,

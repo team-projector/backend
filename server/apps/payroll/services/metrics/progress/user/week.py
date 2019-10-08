@@ -17,7 +17,10 @@ WEEK_STEP = timedelta(weeks=1)
 
 
 class WeekMetricsProvider(ProgressMetricsProvider):
+    """Week metrics provider."""
+
     def get_metrics(self) -> Iterable[UserProgressMetrics]:
+        """Calculate and return metrics."""
         metrics = []
 
         time_spents = self._get_time_spents()

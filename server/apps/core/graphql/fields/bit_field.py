@@ -6,8 +6,11 @@ from graphene_django.converter import convert_django_field
 
 
 class BitField(graphene.Scalar):
+    """Bit field."""
+
     @staticmethod
     def serialize(vals):
+        """Serialize."""
         return [
             val
             for val, setted in vals
@@ -16,11 +19,13 @@ class BitField(graphene.Scalar):
 
     @staticmethod
     def parse_literal(node):
+        """Parse literal."""
         # TODO implement
         return str(node)
 
     @staticmethod
     def parse_value(value):
+        """Parse value."""
         # TODO implement
         return value
 

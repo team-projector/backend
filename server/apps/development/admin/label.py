@@ -10,6 +10,8 @@ from ..models import Label
 
 @admin.register(Label)
 class LabelAdmin(BaseModelAdmin):
+    """A class representing Label model for admin dashboard."""
+
     list_display = ('title', 'color_square')
     search_fields = ('title',)
 
@@ -23,6 +25,7 @@ class LabelAdmin(BaseModelAdmin):
 
     @mark_safe
     def color_square(self, obj):
+        """Show current label with colored square near."""
         return f"""
                 <div style="float: left;"> {obj.color} </div>
                 <div style="background-color: {obj.color};

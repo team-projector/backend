@@ -8,6 +8,8 @@ from .user import User
 
 
 class Token(BaseToken):
+    """The authorization token model."""
+
     user = models.ForeignKey(
         User,
         models.CASCADE,

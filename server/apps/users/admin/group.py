@@ -12,6 +12,8 @@ admin.site.unregister(Group)
 
 @admin.register(Group)
 class GroupAdmin(BaseModelAdmin):
+    """A class representing Group model for admin dashboard."""
+
     list_display = ('name',)
     form = GroupAdminForm
     search_fields = ('name',)

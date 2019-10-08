@@ -19,6 +19,8 @@ WORK_BREAK_REASON_MAX_LENGTH = 15
 
 
 class WorkBreak(ApprovedMixin, Timestamps):
+    """The work break model."""
+
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         models.CASCADE,
@@ -58,6 +60,7 @@ class WorkBreak(ApprovedMixin, Timestamps):
         ordering = ('-from_date',)
 
     def __str__(self):
+        """Returns object string representation."""
         period = f'{self.from_date} - {self.to_date}'
 
         return f'{self.user}: {self.reason} ({period})'

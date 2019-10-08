@@ -5,6 +5,8 @@ from django.utils.translation import gettext_lazy as _
 
 
 class GitlabEntityMixin(models.Model):
+    """A mixin for Gitlab entity."""
+
     gl_id = models.PositiveIntegerField(
         unique=True,
         verbose_name=_('VN__GITLAB_ID'),

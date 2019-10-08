@@ -6,6 +6,8 @@ from apps.users.models import Token
 
 
 class TokenType(BaseDjangoObjectType):
+    """Token type."""
+
     permission_classes = (AllowAny,)
 
     class Meta:

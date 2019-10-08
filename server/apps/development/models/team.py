@@ -10,6 +10,8 @@ from .team_member import TeamMember
 
 
 class Team(models.Model):
+    """The team model."""
+
     title = models.CharField(
         max_length=DEFAULT_TITLE_LENGTH,
         verbose_name=_('VN__TITLE'),
@@ -29,4 +31,5 @@ class Team(models.Model):
         ordering = ('title',)
 
     def __str__(self):
+        """Returns object string representation."""
         return self.title

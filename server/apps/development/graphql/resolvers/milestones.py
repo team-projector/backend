@@ -7,12 +7,15 @@ from apps.development.models import Milestone
 
 
 class ProjectMilestonesResolver:
+    """Project milestones resolver."""
+
     def __init__(self, project, info, **kwargs):
         self.project = project
         self.request = info.context
         self.kwargs = kwargs
 
     def execute(self) -> QuerySet:
+        """Get project or group milestones."""
         milestones = self._get_milestones(project__pk=self.project.id)
         if milestones.exists() or not self.project.group:
             return milestones

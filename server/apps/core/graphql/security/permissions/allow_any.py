@@ -8,8 +8,8 @@ from graphql import ResolveInfo
 class AllowAny:
     """
     Default authentication class.
-    Allows any user for any action.
-    Subclass it and override methods below.
+
+    Allows any user for any action. Subclass it and override methods below.
     """
 
     @staticmethod
@@ -17,6 +17,7 @@ class AllowAny:
         info: ResolveInfo,
         obj_id: str,
     ) -> bool:
+        """Check has node permission."""
         return True
 
     @staticmethod
@@ -25,8 +26,10 @@ class AllowAny:
         info: ResolveInfo,
         **kwargs,
     ) -> bool:
+        """Check has mutation permission."""
         return True
 
     @staticmethod
     def has_filter_permission(info: ResolveInfo) -> bool:
+        """Check has filter permission."""
         return True

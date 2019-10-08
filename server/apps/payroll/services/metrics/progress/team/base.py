@@ -11,11 +11,15 @@ from apps.payroll.services.metrics.progress.user import (
 
 
 class TeamMemberProgressMetrics:
+    """Team member progress metrics."""
+
     user: User
     metrics: Iterable[UserProgressMetrics] = []
 
 
 class ProgressMetricsProvider:
+    """Progress metrics provider."""
+
     def __init__(
         self,
         team: Team,
@@ -27,6 +31,7 @@ class ProgressMetricsProvider:
         self.end = end
 
     def get_metrics(self) -> Iterable[TeamMemberProgressMetrics]:
+        """Calculate and return metrics."""
         metrics: List[TeamMemberProgressMetrics] = []
         for member in self.team.members.all():
             user_metrics = TeamMemberProgressMetrics()
@@ -39,4 +44,5 @@ class ProgressMetricsProvider:
         return metrics
 
     def get_user_metrics(self, user: User) -> Iterable[UserProgressMetrics]:
+        """Method should be implemented in subclass."""
         raise NotImplementedError

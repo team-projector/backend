@@ -11,5 +11,7 @@ class BaseGenericTabularInline(
     AdminFormFieldsOverridesMixin,
     GenericTabularInline,
 ):
+    """A base class generic tabular inline."""
+
     extra = 0
     show_change_link = True

@@ -4,14 +4,16 @@ import graphene
 
 
 class WorkItemUserMetricsType(graphene.ObjectType):
+    """Work item user metrics type."""
+
     opened_count = graphene.Int()
     closed_spent = graphene.Float()
     opened_spent = graphene.Float()
 
 
 class IssueUserMetricsType(WorkItemUserMetricsType):
-    pass
+    """Issue user metrics type."""
 
 
 class MergeRequestUserMetricsType(WorkItemUserMetricsType):
-    pass
+    """Merge request user metrics type."""

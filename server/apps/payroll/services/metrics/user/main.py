@@ -11,20 +11,24 @@ from apps.users.models import User
 
 
 class WorkItemUserMetrics:
+    """Work item user metrics uses for issues or merge requests."""
+
     opened_count: int = 0
     closed_spent: float = 0
     opened_spent: float = 0
 
 
 class IssueUserMetrics(WorkItemUserMetrics):
-    pass
+    """Issue user metrics."""
 
 
 class MergeRequestUserMetrics(WorkItemUserMetrics):
-    pass
+    """Merge Request user metrics."""
 
 
 class UserMetrics:
+    """User metrics fields."""
+
     payroll_closed: float = 0
     payroll_opened: float = 0
     bonus: float = 0
@@ -34,7 +38,10 @@ class UserMetrics:
 
 
 class UserMetricsProvider:
+    """User metrics provider."""
+
     def get_metrics(self, user: User) -> UserMetrics:
+        """Calculate and return metrics."""
         metrics = UserMetrics()
 
         metrics.bonus = self._get_bonus(user)

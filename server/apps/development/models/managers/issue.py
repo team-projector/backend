@@ -11,7 +11,10 @@ from apps.users.models import User
 
 
 class IssueManager(models.Manager):
+    """The issue model manager."""
+
     def sync_gitlab(self, gl_id, **kwargs) -> Tuple[Any, bool]:
+        """Save issue by Gitlab id."""
         kwargs['gl_last_sync'] = timezone.now()
 
         return self.update_or_create(
@@ -20,4 +23,5 @@ class IssueManager(models.Manager):
         )
 
     def allowed_for_user(self, user: User) -> QuerySet:
+        """Issues allowed for team leader and watchers."""
         return filter_allowed_for_user(self, user)

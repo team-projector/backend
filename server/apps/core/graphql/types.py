@@ -10,6 +10,8 @@ class BaseDjangoObjectType(
     AuthNode,
     DjangoObjectType,
 ):
+    """A base class Django object type."""
+
     permission_classes = (AllowAuthenticated,)
 
     class Meta:

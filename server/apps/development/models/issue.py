@@ -11,10 +11,9 @@ from django.utils.translation import gettext_lazy as _
 from apps.core.consts import DEFAULT_TITLE_LENGTH
 from apps.core.models.mixins import GitlabEntityMixin, GitlabInternalIdMixin
 from apps.core.models.utils import Choices
-from apps.payroll.models.mixins import SpentTimesMixin
+from apps.development.models.mixins import TrackableMixin
 
 from .managers import IssueManager
-from .mixins import NotableMixin
 
 ISSUE_STATES = Choices(
     ('opened', 'opened'),
@@ -25,11 +24,16 @@ ISSUE_STATE_MAX_LENGTH = 255
 
 
 class Issue(
-    NotableMixin,
-    SpentTimesMixin,
+    TrackableMixin,
     GitlabEntityMixin,
     GitlabInternalIdMixin,
 ):
+    """
+    The issue model.
+
+    Fill from Gitlab.
+    """
+
     title = models.CharField(
         max_length=DEFAULT_TITLE_LENGTH,
         verbose_name=_('VN__TITLE'),
@@ -138,26 +142,31 @@ class Issue(
         ordering = ('-created_at',)
 
     def __str__(self):
+        """Returns object string representation."""
         return self.title
 
     @cached_property
     def last_note_date(self) -> datetime:
+        """Return last note date."""
         return self.notes.aggregate(
             last_created=models.Max('created_at'),
         )['last_created']
 
     @property
     def time_remains(self) -> Optional[int]:
+        """Return the difference between estimate and spent time."""
         if self.time_estimate is not None and self.total_time_spent is not None:
             return max(self.time_estimate - self.total_time_spent, 0)
 
     @property
     def efficiency(self) -> Optional[float]:
+        """Return ratio of estimate and spent time only for closed issues."""
         if self.efficiency_available:
             return self.time_estimate / self.total_time_spent
 
     @property
     def efficiency_available(self) -> bool:
+        """Helper for efficiency method."""
         return (
             self.state == ISSUE_STATES.closed
             and self.total_time_spent

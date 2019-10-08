@@ -16,6 +16,8 @@ TEAM_MEMBER_ROLES = Choices(
 
 
 class TeamMember(models.Model):
+    """The team member model."""
+
     team = models.ForeignKey(
         'Team',
         models.CASCADE,
@@ -43,4 +45,5 @@ class TeamMember(models.Model):
         unique_together = ('team', 'user')
 
     def __str__(self):
+        """Returns object string representation."""
         return f'{self.team}: {self.user}'

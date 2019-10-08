@@ -10,6 +10,8 @@ from ..models import Bonus
 
 @admin.register(Bonus)
 class BonusAdmin(BaseModelAdmin):
+    """A class representing Bonus model for admin dashboard."""
+
     list_display = ('user', 'created_by', 'created_at', 'sum')
     list_filter = (UserFilter,)
     search_fields = ('user__login', 'user__email')

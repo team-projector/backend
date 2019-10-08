@@ -6,7 +6,10 @@ from django.db import models
 
 
 class NoteManager(models.Manager):
+    """The note model manager."""
+
     def sync_gitlab(self, gl_note, issue) -> Any:
+        """Parse note and save from Gitlab."""
         from ...services.gitlab.users import extract_user_from_data
         from ...services.gitlab.notes import read_note
         from ...services.gitlab.parsers import parse_gl_datetime

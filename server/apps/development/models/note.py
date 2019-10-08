@@ -22,6 +22,12 @@ NOTE_TYPE_MAX_LENGTH = 20
 
 
 class Note(models.Model):
+    """
+    The milestone model.
+
+    Fill from Gitlab when loading issues or merge requests.
+    """
+
     object_id = models.IntegerField()
 
     content_object = GenericForeignKey()
@@ -78,4 +84,5 @@ class Note(models.Model):
         ordering = ('-created_at',)
 
     def __str__(self):
+        """Returns object string representation."""
         return f'{self.user} [{self.created_at}]: {self.type}'

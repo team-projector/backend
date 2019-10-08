@@ -19,6 +19,8 @@ class DataSourceConnectionField(
     AuthFilter,
     DjangoFilterConnectionField,
 ):
+    """Data source connection field."""
+
     permission_classes = (AllowAuthenticated,)
 
     def __init__(self, model_type, *args, **kwargs):
@@ -33,6 +35,7 @@ class DataSourceConnectionField(
         args,
         iterable,
     ):
+        """Resolve connection."""
         if iterable is None:
             iterable = default_manager
 
@@ -61,7 +64,7 @@ class DataSourceConnectionField(
         connection.length = items_count
         return connection
 
-    @classmethod
+    @classmethod  # noqa: WPS211
     def _connection_from_list_slice(
         cls,
         list_slice,

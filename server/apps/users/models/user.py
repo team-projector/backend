@@ -22,6 +22,8 @@ USER_GITLAB_TOKEN_MAX_LENGTH = 128
 
 
 class User(AbstractBaseUser, PermissionsMixin):
+    """The User model."""
+
     USERNAME_FIELD = 'login'  # noqa WPS115
 
     login = models.CharField(
@@ -133,7 +135,9 @@ class User(AbstractBaseUser, PermissionsMixin):
         ordering = ('login',)
 
     def __str__(self):
+        """Returns object string representation."""
         return self.login
 
     def get_short_name(self):
+        """Return the short name for the user."""
         return self.login

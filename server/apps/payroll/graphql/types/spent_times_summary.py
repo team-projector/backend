@@ -4,12 +4,16 @@ import graphene
 
 
 class IssuesSpentTimesSummaryType(graphene.ObjectType):
+    """Issues spent time summary type."""
+
     spent = graphene.Int()
     closed_spent = graphene.Int()
     opened_spent = graphene.Int()
 
 
 class MergeRequestsSpentTimesSummaryType(graphene.ObjectType):
+    """Merge requests spent times summary type."""
+
     spent = graphene.Int()
     closed_spent = graphene.Int()
     opened_spent = graphene.Int()
@@ -17,6 +21,8 @@ class MergeRequestsSpentTimesSummaryType(graphene.ObjectType):
 
 
 class SpentTimesSummaryType(graphene.ObjectType):
+    """Spent times summary type."""
+
     spent = graphene.Int()
     opened_spent = graphene.Int()
     issues = graphene.Field(IssuesSpentTimesSummaryType)

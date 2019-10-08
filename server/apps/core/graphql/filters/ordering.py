@@ -10,4 +10,4 @@ class OrderingFilter(
     NullsAlwaysLastOrderingMixin,
     BaseOrderingFilter,
 ):
-    pass
+    """Ordering filter."""

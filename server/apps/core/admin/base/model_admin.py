@@ -11,7 +11,9 @@ class BaseModelAdmin(
     AdminFormFieldsOverridesMixin,
     admin.ModelAdmin,
 ):
+    """A base class for admin dashboard."""
+
     list_per_page = 20
 
     class Media:
-        pass
+        pass  # noqa WPS604

@@ -14,7 +14,10 @@ from apps.users.models import User
 
 
 class ApprovingFilter(django_filters.BooleanFilter):
+    """Filter work breaks by approved state."""
+
     def filter(self, queryset, value) -> QuerySet:
+        """Do filtering."""
         if not value:
             return queryset
 
@@ -42,10 +45,13 @@ class ApprovingFilter(django_filters.BooleanFilter):
 
 
 class TeamFilter(django_filters.ModelChoiceFilter):
+    """Filter work breaks by team."""
+
     def __init__(self) -> None:
         super().__init__(queryset=Team.objects.all())
 
     def filter(self, queryset, value) -> QuerySet:
+        """Do filtering."""
         if not value:
             return queryset
 
@@ -55,6 +61,8 @@ class TeamFilter(django_filters.ModelChoiceFilter):
 
 
 class WorkBreakFilterSet(django_filters.FilterSet):
+    """Set of filters for Work Break."""
+
     approving = ApprovingFilter()
     team = TeamFilter()
     user = django_filters.ModelChoiceFilter(queryset=User.objects.all())

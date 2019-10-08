@@ -12,7 +12,10 @@ from ...services.allowed.merge_requests import filter_allowed_for_user
 
 
 class MergeRequestManager(models.Manager):
+    """The merge request model manager."""
+
     def sync_gitlab(self, gl_id, **kwargs) -> Tuple[Any, bool]:
+        """Save merge request by Gitlab id."""
         kwargs['gl_last_sync'] = timezone.now()
 
         return self.update_or_create(
@@ -21,4 +24,5 @@ class MergeRequestManager(models.Manager):
         )
 
     def allowed_for_user(self, user: User) -> QuerySet:
+        """Issues allowed for team leader and watchers."""
         return filter_allowed_for_user(self, user)

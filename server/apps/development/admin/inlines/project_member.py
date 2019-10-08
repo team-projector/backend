@@ -6,4 +6,6 @@ from ...models import ProjectMember
 
 
 class ProjectMemberInline(BaseGenericTabularInline):
+    """Project member inline."""
+
     model = ProjectMember

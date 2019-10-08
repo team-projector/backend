@@ -10,8 +10,20 @@ from apps.users.services.token import create_user_token
 
 
 class GitLabOAuth2Backend(SocialGitLabOAuth2):
+    """
+    GitLab OAuth authentication backend.
+
+    After successful authentication, a token is created.
+    Create application: https://gitlab.com/profile/applications
+    """
+
     @handle_http_errors
     def auth_complete(self, *args, **kwargs):
+        """
+        Do GitLab OAuth and return token.
+
+        User must be exist in DB.
+        """
         user = super().auth_complete(*args, **kwargs)
 
         if not user:
@@ -25,13 +37,20 @@ class GitLabOAuth2Backend(SocialGitLabOAuth2):
         return token  # noqa WPS331
 
     def get_redirect_uri(self, state=None):
+        """Callback URL after approving access on Gitlab."""
         return self.setting('REDIRECT_URI')
 
     def authenticate(self, *args, **kwargs):
+        """Return authenticated user."""
         if 'response' in kwargs:
             return User.objects.filter(
                 login=kwargs['response']['username'],
             ).first()
 
     def set_data(self, **kwargs):
+        """
+        Set data.
+
+        For example "state" and "code" values returned from Gitlab.
+        """
         self.data = kwargs

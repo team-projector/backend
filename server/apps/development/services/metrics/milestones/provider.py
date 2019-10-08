@@ -10,6 +10,8 @@ from ..provider import IssuesContainerMetrics, IssuesContainerMetricsProvider
 
 
 class MilestoneMetrics(IssuesContainerMetrics):
+    """Milestone metrics."""
+
     budget: float = 0
     budget_spent: float = 0
     budget_remains: float = 0
@@ -18,13 +20,17 @@ class MilestoneMetrics(IssuesContainerMetrics):
 
 
 class MilestoneMetricsProvider(IssuesContainerMetricsProvider):
+    """Milestone metrics provider."""
+
     def __init__(self, milestone: Milestone):
         self.milestone = milestone
 
     def filter_issues(self, queryset: QuerySet) -> QuerySet:
+        """Filter issues."""
         return queryset.filter(milestone=self.milestone)
 
     def get_metrics(self) -> MilestoneMetrics:
+        """Calculate and return metrics."""
         metrics = MilestoneMetrics()
 
         self.fill_issues_metrics(metrics)

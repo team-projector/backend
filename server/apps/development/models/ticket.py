@@ -21,6 +21,8 @@ TICKET_TYPE_MAX_LENGTH = 50
 
 
 class Ticket(Timestamps):
+    """The ticket model."""
+
     type = models.CharField(
         choices=TICKET_TYPES,
         max_length=TICKET_TYPE_MAX_LENGTH,

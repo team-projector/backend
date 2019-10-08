@@ -7,10 +7,13 @@ from apps.users.models import User
 
 
 class WorkBreakManager:
+    """The Work Break manager."""
+
     def __init__(self, work_break):
         self.work_break = work_break
 
     def approve(self, approved_by: User) -> None:
+        """Approve work break."""
         self.work_break.approve_state = APPROVED_STATES.approved
         self.work_break.approved_by = approved_by
         self.work_break.approved_at = timezone.now()
@@ -21,6 +24,7 @@ class WorkBreakManager:
         approved_by: User,
         decline_reason: str,
     ) -> None:
+        """Decline work break."""
         self.work_break.approve_state = APPROVED_STATES.declined
         self.work_break.approved_by = approved_by
         self.work_break.approved_at = timezone.now()

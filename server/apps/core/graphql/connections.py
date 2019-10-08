@@ -4,9 +4,12 @@ from graphene import Connection, Int
 
 
 class DataSourceConnection(Connection):
+    """Data source connection."""
+
     count = Int()
 
     def resolve_count(self, info):
+        """Get count."""
         return self.length
 
     class Meta:

@@ -9,6 +9,8 @@ from .work_item_user_metrics import (
 
 
 class UserMetricsType(graphene.ObjectType):
+    """User metrics type."""
+
     payroll_closed = graphene.Float()
     payroll_opened = graphene.Float()
     bonus = graphene.Float()

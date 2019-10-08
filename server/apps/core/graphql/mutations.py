@@ -11,6 +11,8 @@ class BaseMutation(
     AuthMutation,
     graphene.Mutation,
 ):
+    """A base class mutation."""
+
     permission_classes = (AllowAuthenticated,)
 
     class Meta:
@@ -18,23 +20,29 @@ class BaseMutation(
 
     @classmethod
     def mutate(cls, root, info, **kwargs):
+        """Mutate."""
         cls.check_premissions(root, info, **kwargs)
 
         return cls.do_mutate(root, info, **kwargs)
 
     @classmethod
     def check_premissions(cls, root, info, **kwargs):
+        """Check premissions."""
         if not cls.has_permission(root, info, **kwargs):
             raise PermissionDenied()
 
     @classmethod
     def do_mutate(cls, root, info, **kwargs):
+        """Method should be implemente in subclass."""
         raise NotImplementedError
 
 
 class ArgumentsValidationMixin:
+    """A Mixin validates input fields in mutations."""
+
     @classmethod
     def do_mutate(cls, root, info, **kwargs):
+        """Do mutate."""
         form = cls.form_class(data=kwargs)
 
         if not form.is_valid():
@@ -44,4 +52,5 @@ class ArgumentsValidationMixin:
 
     @classmethod
     def perform_mutate(cls, info, data):
+        """Method should be implemente in subclass."""
         raise NotImplementedError

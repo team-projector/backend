@@ -4,4 +4,4 @@ from django import forms
 
 
 class BaseModelForm(forms.ModelForm):
-    pass
+    """A base class model form."""

@@ -15,6 +15,8 @@ from .issue_metrics import IssueMetricsType
 
 
 class IssueType(graphql.BaseDjangoObjectType):
+    """Issue type."""
+
     metrics = graphene.Field(IssueMetricsType)
     problems = graphene.List(graphene.String)
 
@@ -26,15 +28,19 @@ class IssueType(graphql.BaseDjangoObjectType):
         name = 'Issue'
 
     def resolve_problems(self, info, **kwargs):
+        """Get issue problems."""
         return get_issue_problems(self)
 
     def resolve_metrics(self, info, **kwargs):
+        """Get issue metrics."""
         return get_issue_metrcis(self)
 
     def resolve_participants(self, info, **kwargs):
+        """Get issue participants."""
         return getattr(self, '_participants_', self.participants)
 
     def resolve_labels(self, info, **kwargs):
+        """Get issue labels."""
         return getattr(self, '_labels_', self.labels)
 
     @classmethod
@@ -43,6 +49,7 @@ class IssueType(graphql.BaseDjangoObjectType):
         queryset,
         info,
     ) -> QuerySet:
+        """Get issues."""
         queryset = filter_allowed_for_user(
             queryset,
             info.context.user,

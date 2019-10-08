@@ -12,6 +12,8 @@ from apps.development.graphql.types import (
 
 
 class MergeRequestQueries(graphene.ObjectType):
+    """Class representing list of available fields for merge request queries."""
+
     all_merge_requests = DataSourceConnectionField(
         MergeRequestType,
         filterset_class=MergeRequestFilterSet,

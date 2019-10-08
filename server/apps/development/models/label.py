@@ -9,6 +9,12 @@ COLOR_MAX_LENGTH = 10
 
 
 class Label(models.Model):
+    """
+    The label model.
+
+    Fill from Gitlab.
+    """
+
     title = models.CharField(
         max_length=DEFAULT_TITLE_LENGTH,
         verbose_name=_('VN__TITLE'),
@@ -26,4 +32,5 @@ class Label(models.Model):
         verbose_name_plural = _('VN__LABELS')
 
     def __str__(self):
+        """Returns object string representation."""
         return self.title

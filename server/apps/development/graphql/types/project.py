@@ -15,12 +15,15 @@ from apps.development.services.summary.issues import IssuesProjectSummary
 
 
 class ProjectType(BaseDjangoObjectType):
+    """Project type."""
+
     milestones = DataSourceConnectionField(
         MilestoneType,
         filterset_class=MilestonesFilterSet,
     )
 
     def resolve_milestones(self: Project, info, **kwargs):
+        """Get project milestones."""
         if isinstance(getattr(self, 'parent_type', None), IssuesProjectSummary):
             ret = self.active_milestones
 

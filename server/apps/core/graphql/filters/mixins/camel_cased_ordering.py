@@ -16,6 +16,7 @@ class CamelCasedOrderingMixin:
 
     @classmethod
     def normalize_fields(cls, fields):
+        """Normalize fields."""
         ret = super().normalize_fields(fields)  # type: ignore
 
         return OrderedDict([

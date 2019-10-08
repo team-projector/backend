@@ -11,12 +11,15 @@ from apps.payroll.services.users import user_related_with_another_by_team_roles
 
 
 class CanManageWorkBreak:
+    """Permissions can manage work break."""
+
     @staticmethod
     def has_mutation_permission(
         root: Any,
         info: ResolveInfo,
         **kwargs,
     ) -> bool:
+        """Only team leader can approve or decline work break."""
         work_break = get_object_or_404(
             WorkBreak.objects.all(),
             pk=kwargs['id'],

@@ -12,6 +12,8 @@ from apps.users.models import User
 
 
 class UserProgressMetrics:
+    """User progress metrics."""
+
     start: Optional[date] = None
     end: Optional[date] = None
     time_spent: int = 0
@@ -26,6 +28,8 @@ class UserProgressMetrics:
 
 
 class ProgressMetricsProvider:
+    """User progress metrics provider."""
+
     def __init__(
         self,
         user: User,
@@ -38,12 +42,15 @@ class ProgressMetricsProvider:
 
     @cached_property
     def max_day_loading(self):
+        """Get day loading."""
         return seconds(hours=self.user.daily_work_hours)
 
     def get_metrics(self) -> Iterable[UserProgressMetrics]:
+        """Method should be implemented in subclass."""
         raise NotImplementedError
 
     def get_active_issues(self) -> List[Dict[str, Any]]:
+        """Get open issues with time remains."""
         return list(
             Issue.objects.annotate(
                 remaining=F('time_estimate') - F('total_time_spent'),

@@ -14,10 +14,13 @@ class MilestoneAdmin(
     ForceSyncEntityMixin,
     BaseModelAdmin,
 ):
+    """A class representing Milestone model for admin dashboard."""
+
     list_display = ('id', 'title', 'start_date', 'due_date', 'budget', 'state')
     search_fields = ('title',)
 
     def sync_handler(self, obj):
+        """Syncing milestone."""
         if obj.content_type.model_class() == Project:
             sync_project_milestone.delay(
                 obj.owner.gl_id,
