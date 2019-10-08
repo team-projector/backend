@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from datetime import date, datetime, timedelta
-from typing import Iterable, List
+from typing import List
 
 from django.conf import settings
 from django.db.models import Case, Count, F, IntegerField, Q, Sum, Value, When
@@ -10,15 +10,15 @@ from django.db.models.functions import Coalesce, TruncDay
 from apps.development.models.issue import ISSUE_STATES, Issue
 from apps.payroll.models import SpentTime
 
-from .base import ProgressMetricsProvider, UserProgressMetrics
+from . import base
 
 DAY_STEP = timedelta(days=1)
 
 
-class DayMetricsProvider(ProgressMetricsProvider):
+class DayMetricsProvider(base.ProgressMetricsProvider):
     """Day metrics provider."""
 
-    def get_metrics(self) -> Iterable[UserProgressMetrics]:
+    def get_metrics(self) -> base.UserProgressMetricsList:
         """Calculate and return metrics."""
         now = datetime.now().date()
 
@@ -35,7 +35,7 @@ class DayMetricsProvider(ProgressMetricsProvider):
         metrics = []
 
         while current <= self.end:
-            metric = UserProgressMetrics()
+            metric = base.UserProgressMetrics()
             metrics.append(metric)
 
             metric.start = current
@@ -64,7 +64,7 @@ class DayMetricsProvider(ProgressMetricsProvider):
             if not active_issues:
                 return
 
-            metric = UserProgressMetrics()
+            metric = base.UserProgressMetrics()
             metric.start = current
             metric.end = current
 
@@ -76,7 +76,7 @@ class DayMetricsProvider(ProgressMetricsProvider):
     def _apply_due_day_stats(
         self,
         day: date,
-        metric: UserProgressMetrics,
+        metric: base.UserProgressMetrics,
         due_day_stats: dict,
     ) -> None:
         if day not in due_day_stats:
@@ -91,7 +91,7 @@ class DayMetricsProvider(ProgressMetricsProvider):
     def _apply_time_spents(
         self,
         day: date,
-        metric: UserProgressMetrics,
+        metric: base.UserProgressMetrics,
         time_spents: dict,
     ) -> None:
         if day not in time_spents:
@@ -103,7 +103,7 @@ class DayMetricsProvider(ProgressMetricsProvider):
     def _apply_payrols_stats(
         self,
         day: date,
-        metric: UserProgressMetrics,
+        metric: base.UserProgressMetrics,
         payrols_stats: dict,
     ) -> None:
         if day not in payrols_stats:
@@ -188,7 +188,7 @@ class DayMetricsProvider(ProgressMetricsProvider):
 
     def _update_loading(
         self,
-        metric: UserProgressMetrics,
+        metric: base.UserProgressMetrics,
         active_issues: List[dict],
     ) -> None:
         if not active_issues:
@@ -211,7 +211,7 @@ class DayMetricsProvider(ProgressMetricsProvider):
 
     def _apply_deadline_issues_loading(
         self,
-        metric: UserProgressMetrics,
+        metric: base.UserProgressMetrics,
         active_issues: List[dict],
     ) -> None:
         deadline_issues = [
@@ -226,7 +226,7 @@ class DayMetricsProvider(ProgressMetricsProvider):
 
     def _apply_active_issues_loading(
         self,
-        metric: UserProgressMetrics,
+        metric: base.UserProgressMetrics,
         active_issues: List[dict],
     ) -> None:
         for issue in active_issues[:]:

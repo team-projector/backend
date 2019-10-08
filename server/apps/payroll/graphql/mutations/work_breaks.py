@@ -8,7 +8,7 @@ from apps.core.graphql.mutations import ArgumentsValidationMixin, BaseMutation
 from apps.payroll.graphql.forms import WorkBreakForm
 from apps.payroll.graphql.types import WorkBreakType
 from apps.payroll.models import WorkBreak
-from apps.payroll.services.work_break import WorkBreakManager
+from apps.payroll.services import work_break as work_break_service
 
 from ..permissions import CanApproveDeclineWorkBreak, CanManageWorkBreak
 
@@ -33,7 +33,7 @@ class ApproveWorkBreakMutation(BaseMutation):
             pk=kwargs['id'],
         )
 
-        WorkBreakManager(work_break).approve(
+        work_break_service.Manager(work_break).approve(
             approved_by=info.context.user,
         )
 
@@ -84,7 +84,7 @@ class DeclineWorkBreakMutation(BaseMutation):
             pk=kwargs['id'],
         )
 
-        WorkBreakManager(work_break).decline(
+        work_break_service.Manager(work_break).decline(
             approved_by=info.context.user,
             decline_reason=kwargs['decline_reason'],
         )

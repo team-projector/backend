@@ -8,9 +8,7 @@ from typing import Dict
 from apps.core.utils.time import seconds
 from apps.development.models import TeamMember
 from apps.development.models.issue import ISSUE_STATES
-from apps.payroll.services.metrics.progress.team import (
-    get_team_progress_metrics, ProgressMetricsProvider
-)
+from apps.development.services import team as team_service
 from tests.base import format_date
 from tests.test_development.factories import (
     IssueFactory, TeamFactory, TeamMemberFactory
@@ -65,7 +63,7 @@ def test_simple(user):
 
     start = timezone.now().date() - timedelta(days=5)
     end = timezone.now().date() + timedelta(days=5)
-    metrics = get_team_progress_metrics(team, start, end, 'day')
+    metrics = team_service.get_progress_metrics(team, start, end, 'day')
 
     assert len(metrics) == 2
 
@@ -126,7 +124,7 @@ def test_negative_remains(user):
 
     start = timezone.now().date() - timedelta(days=5)
     end = timezone.now().date() + timedelta(days=5)
-    metrics = get_team_progress_metrics(team, start, end, 'day')
+    metrics = team_service.get_progress_metrics(team, start, end, 'day')
 
     assert len(metrics) == 2
 
@@ -197,7 +195,7 @@ def test_loading_day_already_has_spends(user):
 
     start = timezone.now().date() - timedelta(days=5)
     end = timezone.now().date() + timedelta(days=5)
-    metrics = get_team_progress_metrics(team, start, end, 'day')
+    metrics = team_service.get_progress_metrics(team, start, end, 'day')
 
     assert len(metrics) == 2
 
@@ -267,7 +265,7 @@ def test_not_in_range(user):
 
     start = timezone.now().date() - timedelta(days=3)
     end = timezone.now().date() + timedelta(days=3)
-    metrics = get_team_progress_metrics(team, start, end, 'day')
+    metrics = team_service.get_progress_metrics(team, start, end, 'day')
 
     developer_metrics = next(
         item.metrics for item in metrics if item.user == developer)
@@ -331,7 +329,7 @@ def test_another_user_not_in_team(user):
 
     start = timezone.now().date() - timedelta(days=5)
     end = timezone.now().date() + timedelta(days=5)
-    metrics = get_team_progress_metrics(team, start, end, 'day')
+    metrics = team_service.get_progress_metrics(team, start, end, 'day')
 
     assert len(metrics) == 2
     assert any(item.user == another_user for item in metrics) is False
@@ -386,7 +384,7 @@ def test_another_user_in_team(user):
 
     start = timezone.now().date() - timedelta(days=5)
     end = timezone.now().date() + timedelta(days=5)
-    metrics = get_team_progress_metrics(team, start, end, 'day')
+    metrics = team_service.get_progress_metrics(team, start, end, 'day')
 
     assert len(metrics) == 3
 
@@ -430,7 +428,7 @@ def test_another_user_in_team(user):
 
 def test_bad_group(db):
     with raises(ValueError):
-        get_team_progress_metrics(
+        team_service.get_progress_metrics(
             TeamFactory.create(),
             timezone.now().date() - timedelta(days=5),
             timezone.now().date() + timedelta(days=5),
@@ -440,7 +438,7 @@ def test_bad_group(db):
 
 def test_provider_not_implemented(user):
     with raises(NotImplementedError):
-        ProgressMetricsProvider(
+        team_service.ProgressMetricsProvider(
             TeamFactory.create(),
             datetime.now().date() - timedelta(days=5),
             datetime.now().date() + timedelta(days=5),

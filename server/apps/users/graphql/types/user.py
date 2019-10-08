@@ -6,8 +6,8 @@ from django.db.models import QuerySet
 from apps.core.graphql.connections import DataSourceConnection
 from apps.core.graphql.relay_nodes import DatasourceRelayNode
 from apps.core.graphql.types import BaseDjangoObjectType
-from apps.payroll.services.metrics.user import UserMetricsProvider
 from apps.users.models import User
+from apps.users.services import user as user_service
 from apps.users.services.problems.user import get_user_problems
 
 from .user_metrics import UserMetricsType
@@ -28,7 +28,7 @@ class UserType(BaseDjangoObjectType):
 
     def resolve_metrics(self, info, **kwargs):
         """Get user metrics."""
-        provider = UserMetricsProvider()
+        provider = user_service.UserMetricsProvider()
         return provider.get_metrics(self)
 
     def resolve_problems(self, info, **kwargs):

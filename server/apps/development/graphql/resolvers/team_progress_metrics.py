@@ -2,12 +2,10 @@
 
 from rest_framework.generics import get_object_or_404
 
+from apps.development.models import Team
+from apps.development.services import team as team_service
 from apps.development.services.allowed.team_progress_metrics import (
     check_allow_get_metrics_by_user,
-)
-from apps.payroll.services.metrics.progress.team import (
-    Team,
-    get_team_progress_metrics,
 )
 
 
@@ -19,7 +17,7 @@ def resolve_team_progress_metrics(parent, info, **kwargs):
 
     check_allow_get_metrics_by_user(team, info.context.user)
 
-    return get_team_progress_metrics(
+    return team_service.get_progress_metrics(
         team,
         kwargs['start'],
         kwargs['end'],

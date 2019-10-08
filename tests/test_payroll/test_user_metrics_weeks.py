@@ -8,9 +8,7 @@ from django.utils import timezone
 from apps.core.utils.date import begin_of_week
 from apps.core.utils.time import seconds
 from apps.development.models.issue import ISSUE_STATES
-from apps.payroll.services.metrics.progress.user import (
-    get_user_progress_metrics
-)
+from apps.users.services import user as user_service
 from tests.base import format_date
 from tests.test_development.factories import IssueFactory
 from tests.test_payroll.factories import IssueSpentTimeFactory
@@ -61,7 +59,7 @@ def test_simple(user):
 
     start = monday - timedelta(days=5)
     end = monday + timedelta(days=5)
-    metrics = get_user_progress_metrics(user, start, end, 'week')
+    metrics = user_service.get_progress_metrics(user, start, end, 'week')
 
     assert len(metrics) == 2
     _check_metrics(metrics,
@@ -120,7 +118,7 @@ def test_efficiency_more_1(user):
 
     start = monday - timedelta(days=5)
     end = monday + timedelta(days=5)
-    metrics = get_user_progress_metrics(user, start, end, 'week')
+    metrics = user_service.get_progress_metrics(user, start, end, 'week')
 
     assert len(metrics) == 2
     _check_metrics(metrics,
@@ -181,7 +179,7 @@ def test_efficiency_less_1(user):
 
     start = monday - timedelta(days=5)
     end = monday + timedelta(days=5)
-    metrics = get_user_progress_metrics(user, start, end, 'week')
+    metrics = user_service.get_progress_metrics(user, start, end, 'week')
 
     assert len(metrics) == 2
 
@@ -242,7 +240,7 @@ def test_efficiency_zero_estimate(user):
 
     start = monday - timedelta(days=5)
     end = monday + timedelta(days=5)
-    metrics = get_user_progress_metrics(user, start, end, 'week')
+    metrics = user_service.get_progress_metrics(user, start, end, 'week')
 
     assert len(metrics) == 2
 
@@ -273,7 +271,7 @@ def test_efficiency_zero_spend(user):
 
     start = monday - timedelta(days=5)
     end = monday + timedelta(days=5)
-    metrics = get_user_progress_metrics(user, start, end, 'week')
+    metrics = user_service.get_progress_metrics(user, start, end, 'week')
 
     assert len(metrics) == 2
 
@@ -330,7 +328,7 @@ def test_many_weeks(user):
 
     start = monday - timedelta(days=5)
     end = monday + timedelta(days=5)
-    metrics = get_user_progress_metrics(user, start, end, 'week')
+    metrics = user_service.get_progress_metrics(user, start, end, 'week')
 
     assert len(metrics) == 2
 
@@ -389,7 +387,7 @@ def test_not_in_range(user):
 
     start = monday
     end = monday + timedelta(weeks=1, days=5)
-    metrics = get_user_progress_metrics(user, start, end, 'week')
+    metrics = user_service.get_progress_metrics(user, start, end, 'week')
 
     assert len(metrics) == 2
 
@@ -449,7 +447,7 @@ def test_another_user(user):
 
     start = monday - timedelta(days=5)
     end = monday + timedelta(days=5)
-    metrics = get_user_progress_metrics(user, start, end, 'week')
+    metrics = user_service.get_progress_metrics(user, start, end, 'week')
 
     assert len(metrics) == 2
 
@@ -519,7 +517,7 @@ def test_many_issues(user):
 
     start = monday - timedelta(days=5)
     end = monday + timedelta(days=5)
-    metrics = get_user_progress_metrics(user, start, end, 'week')
+    metrics = user_service.get_progress_metrics(user, start, end, 'week')
 
     assert len(metrics) == 2
 
