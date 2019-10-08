@@ -12,6 +12,7 @@ from apps.payroll.services.metrics.progress.team import (
 
 
 def resolve_team_progress_metrics(parent, info, **kwargs):
+    """Resolve progress metrics for team."""
     team = get_object_or_404(
         Team.objects.all(),
         pk=kwargs['team'],

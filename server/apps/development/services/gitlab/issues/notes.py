@@ -9,6 +9,7 @@ def load_issue_notes(
     issue: Issue,
     gl_issue: GlProjectIssue,
 ) -> None:
+    """Load notes for issue."""
     for gl_note in gl_issue.notes.list(as_list=False, system=True):
         Note.objects.sync_gitlab(gl_note, issue)
 

@@ -12,6 +12,7 @@ def filter_allowed_for_user(
     queryset: QuerySet,
     user: User,
 ) -> QuerySet:
+    """Get milestones for user."""
     members = get_members(user)
 
     project_milestones = Milestone.objects.filter(
@@ -28,6 +29,7 @@ def filter_allowed_for_user(
 
 
 def get_members(user: User) -> list:
+    """Get project managers."""
     members = ProjectMember.objects.filter(
         user=user,
         role=PROJECT_MEMBER_ROLES.project_manager,
@@ -45,6 +47,7 @@ def get_group_milestones(
     groups: QuerySet,
     milestones_ids: list,
 ) -> list:
+    """Get milestones of groups."""
     milestones_on_level = Milestone.objects.filter(
         Q(project_group__in=groups) | Q(project__group__in=groups),
     ).values('id')

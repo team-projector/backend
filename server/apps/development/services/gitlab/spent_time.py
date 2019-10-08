@@ -13,6 +13,7 @@ def add_spent_time(
     issue: Issue,
     seconds: int,
 ) -> None:
+    """Add spent time for issue."""
     gl = get_gitlab_client(user.gl_token)
 
     gl_project = gl.projects.get(issue.project.gl_id)

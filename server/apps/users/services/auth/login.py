@@ -14,6 +14,7 @@ def login_user(
     password: str,
     request,
 ) -> Token:
+    """Login user."""
     if login and password:
         user = authenticate(
             request=request,

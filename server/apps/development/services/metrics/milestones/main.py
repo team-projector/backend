@@ -6,4 +6,5 @@ from .provider import MilestoneMetrics, MilestoneMetricsProvider
 
 
 def get_milestone_metrics(milestone: Milestone) -> MilestoneMetrics:
+    """Get metrics for milestone."""
     return MilestoneMetricsProvider(milestone).get_metrics()

@@ -14,6 +14,7 @@ def user_related_with_another_by_team_roles(
     target_user: User,
     roles: Iterable[str],
 ) -> bool:
+    """Check whether user can manage by target_user."""
     allowed = filter_by_roles(
         TeamMember.objects.filter(
             team_id=OuterRef('id'),

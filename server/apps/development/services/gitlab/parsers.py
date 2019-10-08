@@ -11,6 +11,7 @@ STATE_MERGED = 'merged'
 
 
 def parse_gl_datetime(value: str) -> Optional[datetime]:
+    """Get a naive datetime.datetime from gitlab datetime."""
     if not value:
         return None
 
@@ -18,6 +19,7 @@ def parse_gl_datetime(value: str) -> Optional[datetime]:
 
 
 def parse_gl_date(value: str) -> Optional[date]:
+    """Get a naive datetime.datetime from gitlab date."""
     if not value:
         return None
 
@@ -25,6 +27,7 @@ def parse_gl_date(value: str) -> Optional[date]:
 
 
 def parse_state_merged(states: list) -> bool:
+    """Check whether state merged is exists."""
     if not states:
         return False
 

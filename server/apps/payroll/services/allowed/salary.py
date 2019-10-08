@@ -12,6 +12,7 @@ def filter_allowed_for_user(
     queryset: QuerySet,
     user: User,
 ) -> QuerySet:
+    """Get salaries for user."""
     users = filter_by_roles(
         TeamMember.objects.filter(user=user),
         [
@@ -31,6 +32,7 @@ def check_allowed_filtering_by_team(
     team: Team,
     user: User,
 ) -> None:
+    """Check whether user can get salaries by team."""
     queryset = TeamMember.objects.filter(
         team=team,
         user=user,

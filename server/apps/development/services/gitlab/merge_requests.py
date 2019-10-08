@@ -20,6 +20,7 @@ logger = logging.getLogger(__name__)
 
 
 def load_merge_requests(full_reload: bool = False) -> None:
+    """Load merge requests from all projects."""
     for project in models.Project.objects.all():
         try:
             load_project_merge_requests(project, full_reload)
@@ -32,6 +33,7 @@ def load_project_merge_requests(
     project: models.Project,
     full_reload: bool = False,
 ) -> None:
+    """Load merge requests from project."""
     gl = get_gitlab_client()
 
     logger.info(f'Syncing project "{project}" merge_requests')
@@ -58,6 +60,7 @@ def load_project_merge_request(
     gl_project: gl_objects.Project,
     gl_mr: gl_objects.MergeRequest,
 ) -> models.MergeRequest:
+    """Load full info for merge request for project."""
     time_stats = gl_mr.time_stats()
 
     params = {
@@ -100,6 +103,7 @@ def load_merge_request_labels(
     gl_project: gl_objects.Project,
     gl_merge_request: gl_objects.MergeRequest,
 ) -> None:
+    """Load labels for merge request."""
     project_labels = getattr(gl_project, '_cache_labels', None)
     if project_labels is None:
         project_labels = gl_project.labels.list(all=True)
@@ -133,6 +137,7 @@ def load_merge_request_notes(
     merge_request: models.MergeRequest,
     gl_merge_request: gl_objects.MergeRequest,
 ) -> None:
+    """Load notes for merge request."""
     for gl_note in gl_merge_request.notes.list(as_list=False, system=True):
         models.Note.objects.sync_gitlab(gl_note, merge_request)
 
@@ -143,6 +148,7 @@ def load_merge_request_participants(
     merge_request: models.MergeRequest,
     gl_merge_request: gl_objects.MergeRequest,
 ) -> None:
+    """Load participants for merge request."""
     merge_request.participants.set((
         _get_user(user['id'])
         for user in gl_merge_request.participants()

@@ -12,6 +12,7 @@ from .milestones import load_project_milestones
 
 @app.task
 def sync_project(group_id: int, gl_id: int, project_id: int) -> None:
+    """Syncing project from Gitlab."""
     gl = get_gitlab_client()
     gl_project = gl.projects.get(gl_id)
 

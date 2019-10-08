@@ -8,7 +8,7 @@ from apps.core import graphql
 from apps.development.graphql.types.interfaces import WorkItem
 from apps.development.models import Issue, Label
 from apps.development.services.allowed.issues import filter_allowed_for_user
-from apps.development.services.metrics.issue import get_issue_metrcis
+from apps.development.services.metrics.issue import get_issue_metrics
 from apps.development.services.problems.issue import get_issue_problems
 
 from .issue_metrics import IssueMetricsType
@@ -33,7 +33,7 @@ class IssueType(graphql.BaseDjangoObjectType):
 
     def resolve_metrics(self, info, **kwargs):
         """Get issue metrics."""
-        return get_issue_metrcis(self)
+        return get_issue_metrics(self)
 
     def resolve_participants(self, info, **kwargs):
         """Get issue participants."""

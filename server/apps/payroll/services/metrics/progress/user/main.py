@@ -30,5 +30,6 @@ def get_user_progress_metrics(
     end: date,
     grp: str,
 ) -> Iterable[UserProgressMetrics]:
+    """Get user progress."""
     provider = _create_provider(user, start, end, grp)
     return provider.get_metrics()

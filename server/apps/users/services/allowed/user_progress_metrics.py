@@ -11,6 +11,7 @@ def filter_allowed_for_user(
     queryset: QuerySet,
     user: User,
 ) -> QuerySet:
+    """Get progress metrics for user."""
     allowed_users = filter_by_roles(
         TeamMember.objects.filter(user=user),
         [

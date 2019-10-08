@@ -15,6 +15,7 @@ logger = logging.getLogger(__name__)
 
 
 def check_projects_deleted_issues() -> None:
+    """Whether issues were deleted from all projects."""
     gl = get_gitlab_client()
 
     for project in Project.objects.all():
@@ -33,6 +34,7 @@ def check_project_deleted_issues(
     project: Project,
     gl_project: GlProject,
 ) -> None:
+    """Whether issues were deleted from project."""
     gl_issues = set()
     for gl_issue in gl_project.issues.list(as_list=False):
         gl_issues.add(gl_issue.id)

@@ -12,6 +12,7 @@ def filter_by_roles(
     queryset: QuerySet,
     roles: Iterable[Union[str, Bit]],
 ) -> QuerySet:
+    """Get team members by role."""
     from apps.development.models import TeamMember
 
     roles = [

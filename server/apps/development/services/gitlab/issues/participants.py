@@ -12,6 +12,7 @@ def load_issue_participants(
     issue: Issue,
     gl_issue: GlProjectIssue,
 ) -> None:
+    """Load participants for issue."""
     issue.participants.set((
         _get_user(user['id'])
         for user in gl_issue.participants()
