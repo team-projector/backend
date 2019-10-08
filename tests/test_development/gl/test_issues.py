@@ -152,10 +152,48 @@ def test_load_project_issue(db, gl_mocker):
     gl_mocker.registry_get(f'/users/{gl_assignee.id}', gl_assignee)
 
     gl_milestone = AttrDict(GlProjectMilestoneFactory())
+
+    gl_issue = AttrDict(GlIssueFactory(
+        project_id=gl_project.id,
+        assignee=gl_assignee,
+        state='closed',
+        milestone=gl_milestone
+    ))
+    _registry_issue(gl_mocker, gl_project, gl_issue)
+
+    gl_project_loaded = gl.projects.get(id=project.gl_id)
+    gl_issue_loaded = gl_project_loaded.issues.get(id=gl_issue.iid)
+
+    load_project_issue(project, gl_project_loaded, gl_issue_loaded)
+
+    issue = Issue.objects.first()
+
+    check_issue(issue, gl_issue)
+    check_user(issue.user, gl_assignee)
+    assert issue.milestone is None
+
+
+@override_settings(GITLAB_TOKEN='GITLAB_TOKEN')
+def test_load_project_issue_without_milistone(db, gl_mocker):
+    gl_mocker.registry_get('/user', GlUserFactory())
+    gl = get_gitlab_client()
+
+    gl_project = AttrDict(GlProjectFactory())
+    project = ProjectFactory.create(gl_id=gl_project.id)
+    gl_mocker.registry_get(f'/projects/{gl_project.id}', gl_project)
+
+    gl_assignee = AttrDict(GlUserFactory())
+    gl_mocker.registry_get(f'/users/{gl_assignee.id}', gl_assignee)
+
+    gl_milestone = AttrDict(GlProjectMilestoneFactory())
     milestone = ProjectMilestoneFactory.create(gl_id=gl_milestone.id)
 
-    gl_issue = AttrDict(GlIssueFactory(project_id=gl_project.id, assignee=gl_assignee, state='closed',
-                                       milestone=gl_milestone))
+    gl_issue = AttrDict(GlIssueFactory(
+        project_id=gl_project.id,
+        assignee=gl_assignee,
+        state='closed',
+        milestone=gl_milestone
+    ))
     _registry_issue(gl_mocker, gl_project, gl_issue)
 
     gl_project_loaded = gl.projects.get(id=project.gl_id)
