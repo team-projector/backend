@@ -13,6 +13,7 @@ class SearchFilter(CharFilter):
     """Search filter."""
 
     def __init__(self, *args, **kwargs):
+        """Initialize self."""
         super().__init__()
         self.fields = kwargs.pop('fields', {})
 

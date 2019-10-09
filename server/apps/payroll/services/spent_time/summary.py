@@ -16,6 +16,7 @@ class IssuesSpentTimesSummary:
         closed_spent=0,
         opened_spent=0,
     ) -> None:
+        """Initialize self."""
         self.spent = spent  # noqa WPS601
         self.closed_spent = closed_spent  # noqa WPS601
         self.opened_spent = opened_spent  # noqa WPS601
@@ -36,6 +37,7 @@ class MergeRequestsSpentTimesSummary:
         opened_spent=0,
         merged_spent=0,
     ) -> None:
+        """Initialize self."""
         self.spent = spent  # noqa WPS601
         self.closed_spent = closed_spent  # noqa WPS601
         self.opened_spent = opened_spent  # noqa WPS601
@@ -53,6 +55,7 @@ class SpentTimesSummary:
         issues: IssuesSpentTimesSummary,
         merge_requests: MergeRequestsSpentTimesSummary,
     ):
+        """Initialize self."""
         self.issues = issues
         self.merge_requests = merge_requests
 
@@ -74,6 +77,7 @@ class SpentTimesSummaryProvider:
         self,
         queryset: QuerySet,
     ):
+        """Initialize self."""
         self.queryset = queryset
 
     def execute(self) -> SpentTimesSummary:

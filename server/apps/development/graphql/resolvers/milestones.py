@@ -10,6 +10,7 @@ class ProjectMilestonesResolver:
     """Project milestones resolver."""
 
     def __init__(self, project, info, **kwargs):
+        """Initialize self."""
         self.project = project
         self.request = info.context
         self.kwargs = kwargs

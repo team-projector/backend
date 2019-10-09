@@ -13,6 +13,7 @@ class TeamFilter(django_filters.ModelChoiceFilter):
     """Filter spent times by team."""
 
     def __init__(self) -> None:
+        """Initialize self."""
         super().__init__(queryset=Team.objects.all())
 
     def filter(self, queryset, value) -> QuerySet:
@@ -28,6 +29,7 @@ class ProjectFilter(django_filters.ModelChoiceFilter):
     """Filter spent times by project."""
 
     def __init__(self) -> None:
+        """Initialize self."""
         super().__init__(queryset=Project.objects.all())
 
     def filter(self, queryset, value) -> QuerySet:

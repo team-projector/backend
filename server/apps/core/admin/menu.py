@@ -8,6 +8,11 @@ class AdminMenu(Menu):
     """A class representing menu admin dashboard."""
 
     def __init__(self, **kwargs):
+        """
+        Initialize self.
+
+        Add menu item in Admin Dashboard.
+        """
         super().__init__(**kwargs)
 
         self.children += [

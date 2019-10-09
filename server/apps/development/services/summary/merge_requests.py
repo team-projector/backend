@@ -18,6 +18,7 @@ class MergeRequestsSummaryProvider:
     """Merge requests summary provider."""
 
     def __init__(self, queryset: QuerySet):
+        """Initialize self."""
         self.queryset = queryset
 
     def execute(self) -> MergeRequestsSummary:

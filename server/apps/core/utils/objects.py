@@ -16,6 +16,7 @@ class ObjectView:
     """Object view."""
 
     def __init__(self, dictionary: Dict):
+        """Initialize self."""
         self.__dict__ = dictionary
 
 
