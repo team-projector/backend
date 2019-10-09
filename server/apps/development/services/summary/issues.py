@@ -37,6 +37,7 @@ class IssuesSummaryProvider:
         queryset: QuerySet,
         **kwargs,
     ):
+        """Initialize self."""
         self._queryset = queryset
         self._options = kwargs
 

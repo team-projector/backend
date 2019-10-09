@@ -14,6 +14,7 @@ class TeamFilter(django_filters.ModelChoiceFilter):
     """Filter salaries by team."""
 
     def __init__(self) -> None:
+        """Initialize self."""
         super().__init__(queryset=Team.objects.all())
 
     def filter(self, queryset, value) -> QuerySet:

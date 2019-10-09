@@ -11,6 +11,7 @@ class SlackClient:
     """A class representing client for Slack."""
 
     def __init__(self):
+        """Initialize self."""
         self.client = get_slack_client()
 
     def get_channel_user_by_email(self, email: str):

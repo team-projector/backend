@@ -24,6 +24,7 @@ class TicketMetricsProvider:
     """Ticket metrics provider."""
 
     def __init__(self, ticket: Ticket):
+        """Initialize self."""
         self.ticket = ticket
 
     def get_metrics(self) -> TicketMetrics:
