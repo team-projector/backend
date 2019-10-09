@@ -13,8 +13,8 @@ from apps.users.services import user as user_service
 class CanManageWorkBreak:
     """Permissions can manage work break."""
 
-    @staticmethod
     def has_mutation_permission(
+        self,
         root: Any,
         info: ResolveInfo,
         **kwargs,

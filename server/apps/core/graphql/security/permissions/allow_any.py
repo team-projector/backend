@@ -12,16 +12,16 @@ class AllowAny:
     Allows any user for any action. Subclass it and override methods below.
     """
 
-    @staticmethod
     def has_node_permission(
+        self,
         info: ResolveInfo,
         obj_id: str,
     ) -> bool:
         """Check has node permission."""
         return True
 
-    @staticmethod
     def has_mutation_permission(
+        self,
         root: Any,
         info: ResolveInfo,
         **kwargs,
@@ -29,7 +29,9 @@ class AllowAny:
         """Check has mutation permission."""
         return True
 
-    @staticmethod
-    def has_filter_permission(info: ResolveInfo) -> bool:
+    def has_filter_permission(
+        self,
+        info: ResolveInfo,
+    ) -> bool:
         """Check has filter permission."""
         return True

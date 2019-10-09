@@ -179,8 +179,8 @@ class DayMetricsProvider(base.ProgressMetricsProvider):
             for stats in queryset
         }
 
-    @staticmethod
     def _is_apply_loading(
+        self,
         day: date,
         now: date,
     ) -> bool:
