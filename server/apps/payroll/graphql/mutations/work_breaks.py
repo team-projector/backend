@@ -6,11 +6,13 @@ from rest_framework.generics import get_object_or_404
 
 from apps.core.graphql.mutations import ArgumentsValidationMixin, BaseMutation
 from apps.payroll.graphql.forms import WorkBreakForm
+from apps.payroll.graphql.permissions import (
+    CanApproveDeclineWorkBreak,
+    CanManageWorkBreak,
+)
 from apps.payroll.graphql.types import WorkBreakType
 from apps.payroll.models import WorkBreak
 from apps.payroll.services import work_break as work_break_service
-
-from ..permissions import CanApproveDeclineWorkBreak, CanManageWorkBreak
 
 User = get_user_model()
 

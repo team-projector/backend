@@ -3,9 +3,8 @@
 from django.contrib import admin
 
 from apps.core.admin.base import BaseModelAdmin
+from apps.payroll.models import Penalty
 from apps.users.admin.filters import UserFilter
-
-from ..models import Penalty
 
 
 @admin.register(Penalty)

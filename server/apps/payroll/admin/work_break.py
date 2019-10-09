@@ -3,9 +3,8 @@
 from django.contrib import admin
 
 from apps.core.admin.base import BaseModelAdmin
+from apps.payroll.models import WorkBreak
 from apps.users.admin.filters import UserFilter
-
-from ..models import WorkBreak
 
 
 @admin.register(WorkBreak)

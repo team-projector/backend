@@ -9,10 +9,9 @@ from django.urls import reverse
 from django.utils.html import mark_safe
 
 from apps.core.admin.base import BaseModelAdmin
+from apps.payroll.admin.filters import HasSalaryFilter
+from apps.payroll.models import Payroll
 from apps.users.admin.filters import UserFilter
-
-from ..models import Payroll
-from .filters import HasSalaryFilter
 
 
 @admin.register(Payroll)
@@ -42,13 +41,15 @@ class PayrollAdmin(BaseModelAdmin):
                 return self._get_inheritance_link(node)
 
     def _get_inheritance_link(self, node):
+        meta = node._meta  # noqa WPS437
+
         url = reverse(
-            f'admin:{node._meta.app_label}_{node._meta.model_name}_change',  # noqa WPS437
+            f'admin:{meta.app_label}_{meta.model_name}_change',
             args=[node.id],
         )
 
         return mark_safe(
-            f'<a href={url}>{node._meta.model_name.capitalize()}: '  # noqa WPS437
+            f'<a href={url}>{meta.model_name.capitalize()}: '
             + f'{node}</a>',
         )
 
