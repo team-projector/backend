@@ -18,7 +18,7 @@ class DatasourceRelayNode(relay.Node):
             return None
 
         # We make sure the ObjectType implements the "Node" interface
-        if cls not in only_type._meta.interfaces:
+        if cls not in only_type._meta.interfaces:  # noqa WPS437
             return None
 
         get_node = getattr(only_type, 'get_node', None)
