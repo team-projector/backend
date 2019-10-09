@@ -10,8 +10,8 @@ from django.template.loader import get_template
 class SystemEmailDispatcher:
     """A class for sending emails."""
 
-    @staticmethod
     def mail_users(
+        self,
         subject: str,
         text: str,
         recipient_list: List[str],

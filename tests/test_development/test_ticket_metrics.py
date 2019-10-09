@@ -1,3 +1,6 @@
+from pytest import raises
+from django.core.exceptions import PermissionDenied
+
 from apps.core.utils.time import seconds
 from apps.development.graphql.types import TicketType
 from apps.development.models.issue import ISSUE_STATES
@@ -89,7 +92,7 @@ def test_budget_estimated(db):
     assert metrics.budget_estimate == 19
 
 
-def test_resolver(user, client):
+def test_resolve_metrics(user, client):
     user.roles.project_manager = True
     user.save()
 
@@ -109,3 +112,20 @@ def test_resolver(user, client):
 
     assert metrics.issues_count == 1
     assert metrics.time_estimate == seconds(hours=1)
+
+
+def test_resolve_metrics_not_pm(user, client):
+    ticket = TicketFactory.create()
+
+    IssueFactory.create(
+        ticket=ticket,
+        state=ISSUE_STATES.opened,
+        total_time_spent=0,
+        time_estimate=seconds(hours=1)
+    )
+
+    client.user = user
+    info = AttrDict({'context': client})
+
+    with raises(PermissionDenied):
+        TicketType.resolve_metrics(ticket, info=info)

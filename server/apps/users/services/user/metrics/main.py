@@ -76,8 +76,7 @@ class UserMetricsProvider:
 
         return metrics
 
-    @staticmethod
-    def _get_bonus(user: User) -> float:
+    def _get_bonus(self, user: User) -> float:
         return Bonus.objects.filter(
             user=user,
             salary__isnull=True,
@@ -85,8 +84,7 @@ class UserMetricsProvider:
             total_bonus=Coalesce(Sum('sum'), 0),
         )['total_bonus']
 
-    @staticmethod
-    def _get_penalty(user: User) -> float:
+    def _get_penalty(self, user: User) -> float:
         return Penalty.objects.filter(
             user=user,
             salary__isnull=True,
@@ -94,8 +92,7 @@ class UserMetricsProvider:
             total_penalty=Coalesce(Sum('sum'), 0),
         )['total_penalty']
 
-    @staticmethod
-    def _get_payroll_opened(user: User) -> float:
+    def _get_payroll_opened(self, user: User) -> float:
         return SpentTime.objects.filter(
             Q(issues__state=ISSUE_STATES.opened)
             | Q(mergerequests__state=ISSUE_STATES.opened),
@@ -105,8 +102,7 @@ class UserMetricsProvider:
             total_sum=Coalesce(Sum('sum'), 0),
         )['total_sum']
 
-    @staticmethod
-    def _get_payroll_closed(user: User) -> float:
+    def _get_payroll_closed(self, user: User) -> float:
         return SpentTime.objects.filter(
             Q(issues__state=ISSUE_STATES.closed)
             | Q(mergerequests__state__in=(
@@ -119,15 +115,13 @@ class UserMetricsProvider:
             total_sum=Coalesce(Sum('sum'), 0),
         )['total_sum']
 
-    @staticmethod
-    def _get_issues_opened_count(user: User) -> int:
+    def _get_issues_opened_count(self, user: User) -> int:
         return Issue.objects.filter(
             user=user,
             state=ISSUE_STATES.opened,
         ).count()
 
-    @staticmethod
-    def _get_issues_closed_spent(user: User) -> float:
+    def _get_issues_closed_spent(self, user: User) -> float:
         return SpentTime.objects.filter(
             salary__isnull=True,
             user=user,
@@ -136,8 +130,7 @@ class UserMetricsProvider:
             total_time_spent=Coalesce(Sum('time_spent'), 0),
         )['total_time_spent']
 
-    @staticmethod
-    def _get_issues_opened_spent(user: User) -> float:
+    def _get_issues_opened_spent(self, user: User) -> float:
         return SpentTime.objects.filter(
             salary__isnull=True,
             user=user,
@@ -146,15 +139,13 @@ class UserMetricsProvider:
             total_time_spent=Coalesce(Sum('time_spent'), 0),
         )['total_time_spent']
 
-    @staticmethod
-    def _get_merge_requests_opened_count(user: User) -> int:
+    def _get_merge_requests_opened_count(self, user: User) -> int:
         return MergeRequest.objects.filter(
             user=user,
             state=ISSUE_STATES.opened,
         ).count()
 
-    @staticmethod
-    def _get_merge_requests_closed_spent(user: User) -> float:
+    def _get_merge_requests_closed_spent(self, user: User) -> float:
         return SpentTime.objects.filter(
             salary__isnull=True,
             user=user,
@@ -166,8 +157,7 @@ class UserMetricsProvider:
             total_time_spent=Coalesce(Sum('time_spent'), 0),
         )['total_time_spent']
 
-    @staticmethod
-    def _get_merge_requests_opened_spent(user: User) -> float:
+    def _get_merge_requests_opened_spent(self, user: User) -> float:
         return SpentTime.objects.filter(
             salary__isnull=True,
             user=user,

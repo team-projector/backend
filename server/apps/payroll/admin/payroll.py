@@ -52,8 +52,7 @@ class PayrollAdmin(BaseModelAdmin):
             + f'{node}</a>',
         )
 
-    @staticmethod
-    def _get_accessor_names(model):
+    def _get_accessor_names(self, model):
         related_objects = [
             item for item in model._meta.get_fields()  # noqa WPS437
             if isinstance(

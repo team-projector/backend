@@ -42,8 +42,7 @@ class MergeRequestsSummaryProvider:
             merged_count=self._count(state=MERGE_REQUESTS_STATES.merged),
         )
 
-    @staticmethod
-    def _count(**filters) -> Count:
+    def _count(self, **filters) -> Count:
         return Count('id', filter=Q(**filters))
 
 
