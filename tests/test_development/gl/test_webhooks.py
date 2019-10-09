@@ -1,18 +1,24 @@
 from pytest import raises
 from django.test import override_settings
-from rest_framework import status
 from rest_framework.exceptions import AuthenticationFailed
 
 from apps.development.api.views.gl_webhook import gl_webhook
-from apps.development.models import Issue, MergeRequest
+from apps.development.models import Issue, MergeRequest, Project
 from tests.test_development.checkers_gitlab import (
-    check_issue, check_merge_request, check_user
+    check_issue,
+    check_merge_request,
+    check_user,
 )
 from tests.test_development.factories import ProjectFactory
 from tests.test_development.factories_gitlab import (
-    AttrDict, GlIssueFactory, GlIssueWebhookFactory,
-    GlMergeRequestWebhookFactory, GlMergeRequestFactory, GlProjectFactory,
-    GlTimeStats, GlUserFactory
+    AttrDict,
+    GlIssueFactory,
+    GlIssueWebhookFactory,
+    GlMergeRequestWebhookFactory,
+    GlMergeRequestFactory,
+    GlProjectFactory,
+    GlTimeStats,
+    GlUserFactory
 )
 
 
@@ -39,11 +45,10 @@ def test_sync_issues(db, gl_mocker, client):
 
     assert Issue.objects.count() == 0
 
-    response = gl_webhook(client.post('/', data=webhook, format='json'))
+    gl_webhook(client.post('/', data=webhook, format='json'))
 
     issue = Issue.objects.first()
 
-    assert response.status_code == status.HTTP_200_OK
     check_issue(issue, gl_issue)
     check_user(issue.user, gl_assignee)
 
@@ -71,14 +76,34 @@ def test_sync_merge_request(db, gl_mocker, client):
 
     assert MergeRequest.objects.count() == 0
 
-    response = gl_webhook(client.post('/', data=webhook, format='json'))
+    gl_webhook(client.post('/', data=webhook, format='json'))
 
     merge_request = MergeRequest.objects.first()
 
-    assert response.status_code == status.HTTP_200_OK
     check_user(merge_request.author, gl_user)
     check_user(merge_request.user, gl_user)
     check_merge_request(merge_request, gl_merge_request)
+
+
+@override_settings(GITLAB_TOKEN='GITLAB_TOKEN')
+@override_settings(WEBHOOK_SECRET_TOKEN=None)
+def test_sync_another_kind_object(db, gl_mocker, client):
+    gl_mocker.registry_get('/user', GlUserFactory())
+
+    gl_project = AttrDict(GlProjectFactory())
+    gl_mocker.registry_get(f'/projects/{gl_project.id}', gl_project)
+
+    webhook = AttrDict(GlIssueWebhookFactory(
+        object_kind='project',
+        project=gl_project,
+        object_attributes=gl_project,
+    ))
+
+    assert Project.objects.count() == 0
+
+    gl_webhook(client.post('/', data=webhook, format='json'))
+
+    assert Project.objects.count() == 0
 
 
 @override_settings(GITLAB_TOKEN='GITLAB_TOKEN')
@@ -113,13 +138,15 @@ def test_sync_merge_request_with_secret_token(db, gl_mocker, client):
 
     assert MergeRequest.objects.count() == 0
 
-    response = gl_webhook(client.post(
-        '/', data=webhook, format='json', HTTP_X_GITLAB_TOKEN='WEBHOOK_SECRET_TOKEN'
+    gl_webhook(client.post(
+        '/',
+        data=webhook,
+        format='json',
+        HTTP_X_GITLAB_TOKEN='WEBHOOK_SECRET_TOKEN'
     ))
 
     merge_request = MergeRequest.objects.first()
 
-    assert response.status_code == status.HTTP_200_OK
     check_user(merge_request.author, gl_user)
     check_user(merge_request.user, gl_user)
     check_merge_request(merge_request, gl_merge_request)
