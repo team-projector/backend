@@ -3,10 +3,12 @@
 from datetime import date
 
 from apps.users.models import User
-
-from .base import ProgressMetricsProvider, UserProgressMetricsList
-from .day import DayMetricsProvider
-from .week import WeekMetricsProvider
+from apps.users.services.user.metrics.progress.base import (
+    ProgressMetricsProvider,
+    UserProgressMetricsList,
+)
+from apps.users.services.user.metrics.progress.day import DayMetricsProvider
+from apps.users.services.user.metrics.progress.week import WeekMetricsProvider
 
 
 def _create_provider(

@@ -1,9 +1,11 @@
 # -*- coding: utf-8 -*-
 
-from .gitlab.complete_gitlab_auth import CompleteGitlabAuthMutation
-from .gitlab.login import LoginGitlabMutation
-from .login import LoginMutation
-from .logout import LogoutMutation
+from apps.users.graphql.mutations.gitlab.complete_gitlab_auth import (
+    CompleteGitlabAuthMutation,
+)
+from apps.users.graphql.mutations.gitlab.login import LoginGitlabMutation
+from apps.users.graphql.mutations.login import LoginMutation
+from apps.users.graphql.mutations.logout import LogoutMutation
 
 
 class AuthMutations:

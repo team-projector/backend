@@ -6,8 +6,7 @@ from social_core.actions import do_auth
 
 from apps.core.graphql.mutations import BaseMutation
 from apps.core.graphql.security.permissions import AllowAny
-
-from .auth import psa
+from apps.users.graphql.mutations.gitlab.auth import psa
 
 
 class LoginGitlabMutation(BaseMutation):

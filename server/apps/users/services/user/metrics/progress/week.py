@@ -10,8 +10,7 @@ from django.utils.timezone import make_aware
 from apps.core.utils.date import begin_of_week, date2datetime
 from apps.development.models.issue import ISSUE_STATES, Issue
 from apps.payroll.models import SpentTime
-
-from . import base
+from apps.users.services.user.metrics.progress import base
 
 WEEK_STEP = timedelta(weeks=1)
 

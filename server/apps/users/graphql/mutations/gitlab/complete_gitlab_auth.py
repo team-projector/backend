@@ -7,9 +7,8 @@ from social_django.views import _do_login  # noqa WPS436
 
 from apps.core.graphql.mutations import BaseMutation
 from apps.core.graphql.security.permissions import AllowAny
+from apps.users.graphql.mutations.gitlab.auth import psa
 from apps.users.graphql.types import TokenType
-
-from .auth import psa
 
 
 class CompleteGitlabAuthMutation(BaseMutation):

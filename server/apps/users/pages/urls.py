@@ -3,7 +3,7 @@
 from django.urls import path
 from social_django import views
 
-from .views import auth_complete
+from apps.users.pages.views import auth_complete
 
 app_name = 'social'
 
