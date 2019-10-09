@@ -18,7 +18,7 @@ def send_email_report(salary: Salary) -> None:
     subject = 'Salary Report'
     text = 'Salary has been paid.'
 
-    SystemEmailDispatcher.mail_users(
+    SystemEmailDispatcher().mail_users(
         subject=subject,
         text=text,
         recipient_list=[salary.user.email],
