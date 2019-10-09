@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from .work_breaks import (
+from apps.payroll.graphql.mutations.work_breaks import (
     ApproveWorkBreakMutation,
     CreateWorkBreakMutation,
     DeclineWorkBreakMutation,

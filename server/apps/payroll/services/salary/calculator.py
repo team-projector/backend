@@ -10,9 +10,8 @@ from django.db.models import Q, Sum
 from apps.development.models.issue import ISSUE_STATES
 from apps.development.models.merge_request import MERGE_REQUESTS_STATES
 from apps.payroll.models import Bonus, Penalty, Salary, SpentTime
+from apps.payroll.services.salary.exceptions import EmptySalaryException
 from apps.users.models import User
-
-from .exceptions import EmptySalaryException
 
 
 class SalaryCalculator:

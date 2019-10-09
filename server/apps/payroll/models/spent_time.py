@@ -6,9 +6,8 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 
 from apps.core.models.fields import MoneyField
+from apps.payroll.models import Payroll
 from apps.payroll.models.managers import SpentTimeManager
-
-from .payroll import Payroll
 
 SECS_IN_HOUR = 60 * 60
 

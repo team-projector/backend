@@ -8,12 +8,11 @@ from django.urls import path, reverse
 
 from apps.core.admin.base import BaseModelAdmin
 from apps.payroll.admin.forms import GenerateSalaryForm
+from apps.payroll.models import Salary
 from apps.payroll.services.salary.calculator import SalaryCalculator
 from apps.payroll.services.salary.notifications import is_payed
 from apps.payroll.tasks import send_salary_report
 from apps.users.admin.filters import UserFilter
-
-from ..models import Salary
 
 
 @admin.register(Salary)
