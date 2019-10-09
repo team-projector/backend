@@ -36,6 +36,5 @@ class SearchFilter(CharFilter):
 
         return reduce(operator.or_, queries)
 
-    @staticmethod
-    def _construct_search(search_field) -> str:
+    def _construct_search(self, search_field) -> str:
         return LOOKUP_SEP.join([six.text_type(search_field), 'icontains'])

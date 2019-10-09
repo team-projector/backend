@@ -76,8 +76,7 @@ class SpentTimeQuerySet(models.QuerySet):
 
         return queryset
 
-    @staticmethod
-    def _sum(**filters) -> Coalesce:
+    def _sum(self, **filters) -> Coalesce:
         return Coalesce(Sum('time_spent', filter=Q(**filters)), 0)
 
 

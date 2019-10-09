@@ -80,8 +80,8 @@ class SalaryCalculator:
 
         return salary
 
-    @staticmethod
     def _lock_payrolls(
+        self,
         user: User,
         salary: Salary,
     ) -> int:

@@ -85,12 +85,10 @@ class TeamMetricsProvider:
 
         return merge_requests
 
-    @staticmethod
-    def _get_opened_count(workitems) -> int:
+    def _get_opened_count(self, workitems) -> int:
         return workitems.filter(state=ISSUE_STATES.opened).count()
 
-    @staticmethod
-    def _get_opened_estimated(workitems) -> int:
+    def _get_opened_estimated(self, workitems) -> int:
         return workitems.filter(
             state=ISSUE_STATES.opened,
         ).aggregate(
