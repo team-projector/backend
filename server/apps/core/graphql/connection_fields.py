@@ -24,6 +24,7 @@ class DataSourceConnectionField(
     permission_classes = (AllowAuthenticated,)
 
     def __init__(self, model_type, *args, **kwargs):
+        """Initialize self."""
         kwargs.setdefault('offset', Int())
         super().__init__(model_type, *args, **kwargs)
 

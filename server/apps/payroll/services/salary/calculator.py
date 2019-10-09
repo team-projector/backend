@@ -24,6 +24,7 @@ class SalaryCalculator:
         period_from: date,
         period_to: date,
     ):
+        """Initialize self."""
         self.initiator = initiator
         self.period_from = period_from
         self.period_to = period_to

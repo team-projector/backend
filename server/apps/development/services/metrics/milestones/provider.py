@@ -23,6 +23,7 @@ class MilestoneMetricsProvider(IssuesContainerMetricsProvider):
     """Milestone metrics provider."""
 
     def __init__(self, milestone: Milestone):
+        """Initialize self."""
         self.milestone = milestone
 
     def filter_issues(self, queryset: QuerySet) -> QuerySet:

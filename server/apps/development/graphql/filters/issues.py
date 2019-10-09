@@ -22,6 +22,11 @@ class TicketFilter(django_filters.ModelChoiceFilter):
     """Filter issues by ticket."""
 
     def __init__(self) -> None:
+        """
+        Initialize self.
+
+        Set queryset.
+        """
         super().__init__(queryset=Ticket.objects.all())
 
     def filter(self, queryset, value) -> QuerySet:
@@ -38,6 +43,7 @@ class MilestoneFilter(django_filters.ModelChoiceFilter):
     """Filter issues by milestone."""
 
     def __init__(self) -> None:
+        """Initialize self."""
         super().__init__(queryset=Milestone.objects.all())
 
     def filter(self, queryset, value) -> QuerySet:
@@ -72,6 +78,7 @@ class TeamFilter(django_filters.ModelChoiceFilter):
     """Filter issues by team."""
 
     def __init__(self) -> None:
+        """Initialize self."""
         super().__init__(queryset=Team.objects.all())
 
     def filter(self, queryset, value) -> QuerySet:

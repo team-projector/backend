@@ -24,6 +24,7 @@ class ProgressMetricsProvider:
         start: date,
         end: date,
     ):
+        """Initialize self."""
         self.team = team
         self.start = start
         self.end = end

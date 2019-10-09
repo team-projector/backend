@@ -42,6 +42,7 @@ class TeamMetricsProvider:
         issues: Issue,
         merge_requests: MergeRequest,
     ):
+        """Initialize self."""
         self.issues = issues
         self.merge_requests = merge_requests
 

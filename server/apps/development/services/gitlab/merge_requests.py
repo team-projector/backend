@@ -104,10 +104,10 @@ def load_merge_request_labels(
     gl_merge_request: gl_objects.MergeRequest,
 ) -> None:
     """Load labels for merge request."""
-    project_labels = getattr(gl_project, '_cache_labels', None)
+    project_labels = getattr(gl_project, 'cached_labels', None)
     if project_labels is None:
         project_labels = gl_project.labels.list(all=True)
-        gl_project._cache_labels = project_labels
+        gl_project.cached_labels = project_labels
 
     labels = []
 

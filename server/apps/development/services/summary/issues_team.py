@@ -43,6 +43,7 @@ class IssuesTeamSummaryProvider:
         queryset: QuerySet,
         order_by: Optional[str],
     ):
+        """Initialize self."""
         self.queryset = queryset
         self.order_by = order_by
 

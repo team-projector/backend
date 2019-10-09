@@ -10,6 +10,7 @@ class Manager:
     """The Work Break manager."""
 
     def __init__(self, work_break):
+        """Initialize self."""
         self.work_break = work_break
 
     def approve(self, approved_by: User) -> None:
