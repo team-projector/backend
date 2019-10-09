@@ -8,8 +8,10 @@ from apps.core.utils.time import seconds
 from apps.development.models import Note
 from apps.development.models.note import NOTE_TYPES
 from apps.development.services.gitlab.notes import SPEND_RESET_MESSAGE
-from apps.development.services.parsers import GITLAB_DATETIME_FORMAT, \
-    GITLAB_DATE_FORMAT
+from apps.development.services.parsers import (
+    GITLAB_DATETIME_FORMAT,
+    GITLAB_DATE_FORMAT,
+)
 from apps.users.models import User
 from tests.test_development.factories import IssueFactory
 
@@ -197,3 +199,31 @@ class TimeSpendNoteTypeTests(TestCase):
         }), self.issue)
 
         self.assertEqual(Note.objects.count(), 1)
+
+    def test_load_spend_added_body_without_date(self):
+        note_date = date.today()
+
+        body = 'added 1h 1m of time spent'
+
+        Note.objects.sync_gitlab(dict2obj({
+            'id': 2,
+            'body': body,
+            'created_at': datetime.strftime(datetime.now(),
+                                            GITLAB_DATETIME_FORMAT),
+            'updated_at': datetime.strftime(datetime.now(),
+                                            GITLAB_DATETIME_FORMAT),
+            'author': {
+                'id': self.user.gl_id
+            }
+        }), self.issue)
+
+        self.assertEqual(Note.objects.count(), 1)
+
+        note = Note.objects.first()
+        self.assertEqual(note.gl_id, 2)
+        self.assertEqual(note.user, self.user)
+        self.assertEqual(note.type, NOTE_TYPES.time_spend)
+        self.assertEqual(note.body, body)
+        self.assertEqual(note.data['spent'], seconds(hours=1, minutes=1))
+        self.assertEqual(note.data['date'],
+                         note_date.strftime(GITLAB_DATE_FORMAT))
