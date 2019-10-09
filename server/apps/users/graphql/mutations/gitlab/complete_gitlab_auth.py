@@ -9,7 +9,7 @@ from apps.core.graphql.mutations import BaseMutation
 from apps.core.graphql.security.permissions import AllowAny
 from apps.users.graphql.types import TokenType
 
-from .psa import psa
+from .auth import psa
 
 
 class CompleteGitlabAuthMutation(BaseMutation):
