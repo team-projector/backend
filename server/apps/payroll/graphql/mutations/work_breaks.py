@@ -23,7 +23,7 @@ class ApproveWorkBreakMutation(BaseMutation):
     permission_classes = (CanApproveDeclineWorkBreak,)
 
     class Arguments:
-        id = graphene.ID(required=True)
+        id = graphene.ID(required=True)  # noqa A003
 
     work_break = graphene.Field(WorkBreakType)
 
@@ -73,7 +73,7 @@ class DeclineWorkBreakMutation(BaseMutation):
     permission_classes = (CanApproveDeclineWorkBreak,)
 
     class Arguments:
-        id = graphene.ID(required=True)
+        id = graphene.ID(required=True)  # noqa A003
         decline_reason = graphene.String(required=True)
 
     work_break = graphene.Field(WorkBreakType)
@@ -106,7 +106,7 @@ class UpdateWorkBreakMutation(
     form_class = WorkBreakForm
 
     class Arguments:
-        id = graphene.ID(required=True)
+        id = graphene.ID(required=True)  # noqa A003
         comment = graphene.String(required=True)
         from_date = graphene.DateTime(required=True)
         reason = graphene.String(required=True)
@@ -138,7 +138,7 @@ class DeleteWorkBreakMutation(BaseMutation):
     permission_classes = (CanManageWorkBreak,)
 
     class Arguments:
-        id = graphene.ID(required=True)
+        id = graphene.ID(required=True)  # noqa A003
 
     ok = graphene.Boolean()
 

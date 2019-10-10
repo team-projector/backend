@@ -13,7 +13,7 @@ class SyncMilestoneMutation(BaseMutation):
     """Syncing milestone mutation."""
 
     class Arguments:
-        id = graphene.ID()
+        id = graphene.ID()  # noqa A003
 
     milestone = graphene.Field(MilestoneType)
 

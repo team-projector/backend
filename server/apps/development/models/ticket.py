@@ -23,7 +23,7 @@ TICKET_TYPE_MAX_LENGTH = 50
 class Ticket(Timestamps):
     """The ticket model."""
 
-    type = models.CharField(
+    type = models.CharField(  # noqa A003
         choices=TICKET_TYPES,
         max_length=TICKET_TYPE_MAX_LENGTH,
         blank=True,

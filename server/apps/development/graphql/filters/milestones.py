@@ -10,7 +10,7 @@ from apps.development.models.milestone import MILESTONE_STATES
 class ActiveFilter(django_filters.BooleanFilter):
     """Filter milestone by active state."""
 
-    def filter(self, queryset, value) -> QuerySet:
+    def filter(self, queryset, value) -> QuerySet:  # noqa A003
         """Do filtering."""
         if value is None:
             return queryset
