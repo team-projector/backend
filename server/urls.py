@@ -13,7 +13,7 @@ admin.site.site_header = _('VN__ADMIN_DASHBOARD')
 
 urlpatterns = [
     path('ht/', include('health_check.urls')),
-    path('graphql', get_graphql_view()),
+    path('graphql/', get_graphql_view()),
     path('api/graphql', csrf_exempt(get_api_graphql_view())),
     path('api/', include('apps.development.api.urls', namespace='api')),
     path('api/', include('apps.users.pages.urls', namespace='social')),
