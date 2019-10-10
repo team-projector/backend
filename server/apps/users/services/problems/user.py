@@ -3,11 +3,14 @@
 from typing import Iterable
 
 from apps.users.models import User
-from apps.users.services.problems.checkers import PayrollOpenedOverflowChecker
+from apps.users.services.problems.checkers import (
+    NotEnoughTasksChecker,
+    PayrollOpenedOverflowChecker,
+)
 
 checkers = [
     checker_class()
-    for checker_class in (PayrollOpenedOverflowChecker,)
+    for checker_class in (NotEnoughTasksChecker, PayrollOpenedOverflowChecker)
 ]
 
 
