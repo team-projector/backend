@@ -7,7 +7,7 @@ from apps.core.utils.objects import dict2obj
 from apps.core.utils.time import seconds
 from apps.development.models import Note
 from apps.development.models.note import NOTE_TYPES
-from apps.development.services.gitlab.notes import SPEND_RESET_MESSAGE
+from apps.development.services.note.gitlab import SPEND_RESET_MESSAGE
 from apps.development.services.parsers import (
     GITLAB_DATETIME_FORMAT,
     GITLAB_DATE_FORMAT,

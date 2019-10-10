@@ -8,11 +8,7 @@ from apps.core.graphql.relay_nodes import DatasourceRelayNode
 from apps.core.graphql.types import BaseDjangoObjectType
 from apps.development.graphql.types.interfaces import MilestoneOwner
 from apps.development.models import Milestone
-from apps.development.services.allowed.milestones import (
-    filter_allowed_for_user,
-)
-from apps.development.services.metrics.milestones import get_milestone_metrics
-from apps.development.services.problems.milestone import get_milestone_problems
+from apps.development.services import milestone as milestone_service
 
 from .milestone_metrics import MilestoneMetricsType
 
@@ -32,11 +28,11 @@ class MilestoneType(BaseDjangoObjectType):
 
     def resolve_metrics(self, info, **kwargs):
         """Get milestone metrics."""
-        return get_milestone_metrics(self)
+        return milestone_service.get_metrics(self)
 
     def resolve_problems(self, info, **kwargs):
         """Get milestone problems."""
-        return get_milestone_problems(self)
+        return milestone_service.get_problems(self)
 
     @classmethod
     def get_queryset(
@@ -45,7 +41,7 @@ class MilestoneType(BaseDjangoObjectType):
         info,
     ) -> QuerySet:
         """Get milestones."""
-        queryset = filter_allowed_for_user(
+        queryset = milestone_service.filter_allowed_for_user(
             queryset,
             info.context.user,
         )

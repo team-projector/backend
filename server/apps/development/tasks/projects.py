@@ -3,10 +3,10 @@
 from apps.core.activity.verbs import ACTION_GITLAB_CALL_API
 from apps.core.gitlab import get_gitlab_client
 from apps.core.tasks import add_action
+from apps.development.services.project.gitlab import load_project
 from celery_app import app
 
 from ..models import ProjectGroup
-from ..services.gitlab.projects import load_project
 from .milestones import load_project_milestones
 
 

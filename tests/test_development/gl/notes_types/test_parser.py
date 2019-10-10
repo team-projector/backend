@@ -1,6 +1,6 @@
 from pytest import raises
 
-from apps.development.services.gitlab.notes import BaseNoteParser
+from apps.development.services.note.gitlab import BaseNoteParser
 
 
 def test_base_parser():

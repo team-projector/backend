@@ -11,7 +11,7 @@ from apps.development.graphql.resolvers import ProjectMilestonesResolver
 from apps.development.graphql.types.interfaces import MilestoneOwner
 from apps.development.graphql.types.milestone import MilestoneType
 from apps.development.models import Project
-from apps.development.services.summary.issues import IssuesProjectSummary
+from apps.development.services.issue import IssuesProjectSummary
 
 
 class ProjectType(BaseDjangoObjectType):

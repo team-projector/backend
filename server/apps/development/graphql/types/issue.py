@@ -7,9 +7,7 @@ from django.db.models import Prefetch, QuerySet
 from apps.core import graphql
 from apps.development.graphql.types.interfaces import WorkItem
 from apps.development.models import Issue, Label
-from apps.development.services.allowed.issues import filter_allowed_for_user
-from apps.development.services.metrics.issue import get_issue_metrics
-from apps.development.services.problems.issue import get_issue_problems
+from apps.development.services import issue as issue_service
 
 from .issue_metrics import IssueMetricsType
 
@@ -29,11 +27,11 @@ class IssueType(graphql.BaseDjangoObjectType):
 
     def resolve_problems(self, info, **kwargs):
         """Get issue problems."""
-        return get_issue_problems(self)
+        return issue_service.get_problems(self)
 
     def resolve_metrics(self, info, **kwargs):
         """Get issue metrics."""
-        return get_issue_metrics(self)
+        return issue_service.get_metrics(self)
 
     def resolve_participants(self, info, **kwargs):
         """Get issue participants."""
@@ -50,7 +48,7 @@ class IssueType(graphql.BaseDjangoObjectType):
         info,
     ) -> QuerySet:
         """Get issues."""
-        queryset = filter_allowed_for_user(
+        queryset = issue_service.filter_allowed_for_user(
             queryset,
             info.context.user,
         )
