@@ -24,7 +24,7 @@ def test_load_project_group_milestone(db, gl_mocker):
     gl_mocker.registry_get(f'/groups/{gl_group.id}/milestones'
                            f'/{gl_milestone.id}', gl_milestone)
 
-    milestone_service.load_project_group_milestone(group, gl_group.id, gl_milestone.id)
+    milestone_service.load_for_project_group(group, gl_group.id, gl_milestone.id)
 
     milestone = Milestone.objects.get(gl_id=gl_milestone.id)
     check_milestone(milestone, gl_milestone, group)

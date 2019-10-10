@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 
 from .checkers import *
-from .issue import *
-from .labels import *
-from .load_all import *
-from .merge_requests import *
-from .notes import *
-from .participants import *
+from .issue import load_for_project
+from .labels import load_issue_labels
+from .load_all import load_issues, load_for_project_all
+from .merge_requests import load_merge_requests
+from .notes import load_issue_notes
+from .participants import load_issue_participants
