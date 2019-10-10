@@ -16,7 +16,7 @@ class AddSpendIssueMutation(BaseMutation):
     """Add spend issue mutation."""
 
     class Arguments:
-        id = graphene.ID(required=True)
+        id = graphene.ID(required=True)  # noqa A003
         seconds = graphene.Int(required=True)
 
     issue = graphene.Field(IssueType)
@@ -50,7 +50,7 @@ class SyncIssueMutation(BaseMutation):
     """Syncing issue mutation."""
 
     class Arguments:
-        id = graphene.ID(required=True)
+        id = graphene.ID(required=True)  # noqa A003
 
     issue = graphene.Field(IssueType)
 
@@ -74,7 +74,7 @@ class UpdateIssueMutation(BaseMutation):
     """Update issue mutation."""
 
     class Arguments:
-        id = graphene.ID(required=True)
+        id = graphene.ID(required=True)  # noqa A003
         ticket = graphene.ID(required=True)
 
     issue = graphene.Field(IssueType)

@@ -10,7 +10,7 @@ from apps.development.models.ticket import TICKET_TYPES
 class TicketForm(forms.Form):
     """Ticket form used for validation input data mutations."""
 
-    id = forms.IntegerField(
+    id = forms.IntegerField(  # noqa A003
         required=False,
         min_value=0,
     )
