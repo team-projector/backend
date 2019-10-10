@@ -27,6 +27,9 @@ class IssuesContainerMetricsProvider:
         issues = Issue.objects.all()
         issues = self.filter_issues(issues)
 
+        if not issues:
+            return
+
         stats = issues.aggregate(
             time_estimate=Coalesce(Sum('time_estimate'), 0),
             time_spent=Coalesce(Sum('total_time_spent'), 0),
@@ -38,9 +41,6 @@ class IssuesContainerMetricsProvider:
             ),
             issues_count=Count('*'),
         )
-
-        if not stats:
-            return
 
         metrics.time_estimate = stats['time_estimate']
         metrics.time_remains = stats['time_estimate'] - stats['time_spent']
