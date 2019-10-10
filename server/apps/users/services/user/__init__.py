@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+from .gitlab import *
 from .metrics.main import *
 from .metrics.progress import *
 from .relations import is_related_with_another_by_team_roles

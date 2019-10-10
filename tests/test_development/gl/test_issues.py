@@ -6,29 +6,10 @@ from django.test import override_settings
 from django.utils import timezone
 
 from apps.core.gitlab import get_gitlab_client
-from apps.development.models import Issue, Note
+from apps.development.models import Issue
 from apps.development.models.note import NOTE_TYPES
-from apps.development.services.gitlab.issues.participants import (
-    load_issue_participants
-)
-from apps.development.services.gitlab.issues.notes import (
-    load_issue_notes
-)
-from apps.development.services.gitlab.issues.labels import (
-    load_issue_labels
-)
-from apps.development.services.gitlab.issues.checkers import (
-    check_projects_deleted_issues
-)
-from apps.development.services.gitlab.issues.load_all import (
-    load_project_issues, load_issues
-)
-from apps.development.services.gitlab.issues.issue import (
-    load_project_issue
-)
-from apps.development.services.gitlab.issues.merge_requests import (
-    load_merge_requests
-)
+from apps.development.services import issue as issue_service
+
 from tests.test_development.checkers_gitlab import (
     check_issue, check_user
 )
@@ -66,7 +47,7 @@ def test_load_issue_participants(db, gl_mocker):
     gl_project = gl.projects.get(id=project.gl_id)
     gl_issue = gl_project.issues.get(id=issue.gl_iid)
 
-    load_issue_participants(issue, gl_issue)
+    issue_service.load_issue_participants(issue, gl_issue)
 
     participant_1 = issue.participants.get(login=gl_participant_1.username)
     participant_2 = issue.participants.get(login=gl_participant_2.username)
@@ -97,7 +78,7 @@ def test_load_issue_notes(db, gl_mocker):
     gl_project = gl.projects.get(id=project.gl_id)
     gl_issue = gl_project.issues.get(id=issue.gl_iid)
 
-    load_issue_notes(issue, gl_issue)
+    issue_service.load_issue_notes(issue, gl_issue)
 
     note = issue.notes.first()
 
@@ -131,7 +112,7 @@ def test_load_issue_labels(db, gl_mocker):
     gl_project_loaded = gl.projects.get(id=project.gl_id)
     gl_issue_loaded = gl_project_loaded.issues.get(id=issue.gl_iid)
 
-    load_issue_labels(issue, gl_project_loaded, gl_issue_loaded)
+    issue_service.load_issue_labels(issue, gl_project_loaded, gl_issue_loaded)
 
     issue = Issue.objects.first()
 
@@ -140,7 +121,7 @@ def test_load_issue_labels(db, gl_mocker):
 
 
 @override_settings(GITLAB_TOKEN='GITLAB_TOKEN')
-def test_load_project_issue(db, gl_mocker):
+def test_load_for_project(db, gl_mocker):
     gl_mocker.registry_get('/user', GlUserFactory())
     gl = get_gitlab_client()
 
@@ -164,7 +145,7 @@ def test_load_project_issue(db, gl_mocker):
     gl_project_loaded = gl.projects.get(id=project.gl_id)
     gl_issue_loaded = gl_project_loaded.issues.get(id=gl_issue.iid)
 
-    load_project_issue(project, gl_project_loaded, gl_issue_loaded)
+    issue_service.load_for_project(project, gl_project_loaded, gl_issue_loaded)
 
     issue = Issue.objects.first()
 
@@ -174,7 +155,7 @@ def test_load_project_issue(db, gl_mocker):
 
 
 @override_settings(GITLAB_TOKEN='GITLAB_TOKEN')
-def test_load_project_issue_without_milistone(db, gl_mocker):
+def test_load_for_project_without_milistone(db, gl_mocker):
     gl_mocker.registry_get('/user', GlUserFactory())
     gl = get_gitlab_client()
 
@@ -199,7 +180,7 @@ def test_load_project_issue_without_milistone(db, gl_mocker):
     gl_project_loaded = gl.projects.get(id=project.gl_id)
     gl_issue_loaded = gl_project_loaded.issues.get(id=gl_issue.iid)
 
-    load_project_issue(project, gl_project_loaded, gl_issue_loaded)
+    issue_service.load_for_project(project, gl_project_loaded, gl_issue_loaded)
 
     issue = Issue.objects.first()
 
@@ -209,7 +190,7 @@ def test_load_project_issue_without_milistone(db, gl_mocker):
 
 
 @override_settings(GITLAB_TOKEN='GITLAB_TOKEN')
-def test_load_project_issues(db, gl_mocker):
+def test_load_for_project_all(db, gl_mocker):
     gl_mocker.registry_get('/user', GlUserFactory())
 
     gl_project = AttrDict(GlProjectFactory())
@@ -223,7 +204,7 @@ def test_load_project_issues(db, gl_mocker):
     gl_issue = AttrDict(GlIssueFactory(project_id=gl_project.id, assignee=gl_assignee))
     _registry_issue(gl_mocker, gl_project, gl_issue)
 
-    load_project_issues(project, check_deleted=False)
+    issue_service.load_for_project_all(project, check_deleted=False)
 
     issue = Issue.objects.first()
 
@@ -247,7 +228,7 @@ def test_load_issues(db, gl_mocker):
     gl_issue = AttrDict(GlIssueFactory(project_id=gl_project.id, assignee=gl_assignee))
     _registry_issue(gl_mocker, gl_project, gl_issue)
 
-    load_issues()
+    issue_service.load_issues()
 
     issue = Issue.objects.first()
 
@@ -264,7 +245,7 @@ def test_load_issues_server_error(db, gl_mocker):
     gl_mocker.registry_get(f'/projects/{gl_project.id}', status_code=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     with pytest.raises(GitlabGetError):
-        load_issues()
+        issue_service.load_issues()
 
 
 @override_settings(GITLAB_TOKEN='GITLAB_TOKEN')
@@ -275,7 +256,7 @@ def test_load_issues_not_found(db, gl_mocker):
     ProjectFactory.create(gl_id=gl_project.id)
     gl_mocker.registry_get(f'/projects/{gl_project.id}', status_code=status.HTTP_404_NOT_FOUND)
 
-    load_issues()
+    issue_service.load_issues()
 
 
 @override_settings(GITLAB_TOKEN='GITLAB_TOKEN')
@@ -294,7 +275,7 @@ def test_check_projects_deleted_issues(db, gl_mocker):
 
     IssueFactory.create_batch(5, project=project)
 
-    check_projects_deleted_issues()
+    issue_service.check_projects_deleted_issues()
 
 
 @override_settings(GITLAB_TOKEN='GITLAB_TOKEN')
@@ -306,7 +287,7 @@ def test_check_projects_deleted_issues_server_error(db, gl_mocker):
     gl_mocker.registry_get(f'/projects/{gl_project.id}', status_code=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     with pytest.raises(GitlabGetError):
-        check_projects_deleted_issues()
+        issue_service.check_projects_deleted_issues()
 
 
 @override_settings(GITLAB_TOKEN='GITLAB_TOKEN')
@@ -317,7 +298,7 @@ def test_check_projects_deleted_issues_not_found(db, gl_mocker):
     ProjectFactory.create(gl_id=gl_project.id)
     gl_mocker.registry_get(f'/projects/{gl_project.id}', status_code=status.HTTP_404_NOT_FOUND)
 
-    check_projects_deleted_issues()
+    issue_service.check_projects_deleted_issues()
 
 
 @override_settings(GITLAB_TOKEN='GITLAB_TOKEN')
@@ -348,7 +329,7 @@ def test_load_merge_requests(db, gl_mocker):
 
     assert issue.merge_requests.count() == 0
 
-    load_merge_requests(issue, project, gl_issue, gl_project)
+    issue_service.load_merge_requests(issue, project, gl_issue, gl_project)
 
     issue = Issue.objects.first()
 

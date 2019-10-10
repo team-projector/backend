@@ -2,11 +2,7 @@
 
 from apps.development.graphql.filters import IssuesFilterSet
 from apps.development.models import Issue
-from apps.development.services.summary.issues import get_issues_summary
-from apps.development.services.summary.issues_project import (
-    get_project_summaries,
-)
-from apps.development.services.summary.issues_team import get_team_summaries
+from apps.development.services import issue as issue_service
 
 
 def resolve_issues_summary(
@@ -23,7 +19,7 @@ def resolve_issues_summary(
         request=info.context,
     )
 
-    return get_issues_summary(
+    return issue_service.get_issues_summary(
         filterset.qs,
         **filterset.form.cleaned_data,
     )
@@ -35,7 +31,7 @@ def resolve_issues_project_summaries(
     **kwargs,
 ):
     """Resolve issues project summaries."""
-    return get_project_summaries(
+    return issue_service.get_project_summaries(
         parent.queryset,
         **kwargs,
     )
@@ -47,7 +43,7 @@ def resolve_issues_team_summaries(
     **kwargs,
 ):
     """Resolve issues team summaries."""
-    return get_team_summaries(
+    return issue_service.get_team_summaries(
         parent.queryset,
         **kwargs,
     )

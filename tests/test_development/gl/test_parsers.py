@@ -1,4 +1,4 @@
-from apps.development.services.gitlab.parsers import (
+from apps.core.gitlab.parsers import (
     parse_gl_date,
     parse_gl_datetime,
     parse_state_merged,

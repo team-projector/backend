@@ -6,7 +6,6 @@ from django.db import models
 from django.db.models import QuerySet
 from django.utils import timezone
 
-from apps.development.services.allowed.issues import filter_allowed_for_user
 from apps.users.models import User
 
 
@@ -24,4 +23,6 @@ class IssueManager(models.Manager):
 
     def allowed_for_user(self, user: User) -> QuerySet:
         """Issues allowed for team leader and watchers."""
-        return filter_allowed_for_user(self, user)
+        from apps.development.services import issue
+
+        return issue.filter_allowed_for_user(self, user)

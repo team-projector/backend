@@ -8,8 +8,6 @@ from django.utils import timezone
 
 from apps.users.models import User
 
-from ...services.allowed.merge_requests import filter_allowed_for_user
-
 
 class MergeRequestManager(models.Manager):
     """The merge request model manager."""
@@ -25,4 +23,6 @@ class MergeRequestManager(models.Manager):
 
     def allowed_for_user(self, user: User) -> QuerySet:
         """Issues allowed for team leader and watchers."""
+        from ...services.merge_request import filter_allowed_for_user
+
         return filter_allowed_for_user(self, user)

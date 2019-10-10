@@ -8,8 +8,8 @@ from rest_framework.generics import get_object_or_404
 from apps.core.graphql.mutations import BaseMutation
 from apps.development.graphql.types import IssueType
 from apps.development.models import Issue, Ticket
-from apps.development.services.gitlab.spent_time import add_spent_time
 from apps.development.tasks import sync_project_issue
+from apps.payroll.services.spent_time.gitlab import add_spent_time
 
 
 class AddSpendIssueMutation(BaseMutation):

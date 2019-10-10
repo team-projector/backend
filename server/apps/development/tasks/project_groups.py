@@ -6,7 +6,7 @@ from apps.core.tasks import add_action
 from celery_app import app
 
 from ..models import ProjectGroup
-from ..services.gitlab.groups import load_single_group
+from ..services.project_group.gitlab import load_single_group
 
 
 @app.task

@@ -1,7 +1,7 @@
 from apps.development.graphql.resolvers import resolve_merge_requests_summary
 from apps.development.models import MergeRequest, TeamMember
 from apps.development.models.merge_request import MERGE_REQUESTS_STATES
-from apps.development.services.summary.merge_requests import (
+from apps.development.services.merge_request.summary import (
     get_merge_requests_summary
 )
 from tests.test_development.factories import (

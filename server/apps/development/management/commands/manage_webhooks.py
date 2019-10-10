@@ -5,7 +5,7 @@ from django.core.management.base import BaseCommand
 
 from apps.core.gitlab import get_gitlab_client
 from apps.development.models import Project
-from apps.development.services.gitlab.projects import check_project_webhooks
+from apps.development.services.project.gitlab import check_project_webhooks
 
 
 class Command(BaseCommand):

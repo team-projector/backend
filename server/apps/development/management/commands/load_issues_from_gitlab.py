@@ -2,7 +2,7 @@
 
 from django.core.management.base import BaseCommand
 
-from apps.development.services.gitlab.issues import load_issues
+from apps.development.services.issue.gitlab import load_issues
 
 
 class Command(BaseCommand):

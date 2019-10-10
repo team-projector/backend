@@ -3,7 +3,6 @@
 from django.core.management.base import BaseCommand
 
 from apps.core.gitlab import get_gitlab_client
-from apps.development.services.gitlab.issues import load_issues
 
 
 class Command(BaseCommand):

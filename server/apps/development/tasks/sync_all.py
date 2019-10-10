@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 
+from apps.development.services.project.gitlab import load_projects
+from apps.development.services.project_group.gitlab import load_groups
 from celery_app import app
 
-from ..services.gitlab.groups import load_groups
-from ..services.gitlab.projects import load_projects
 from .issues import sync_issues
 from .merge_requests import sync_merge_requests
 from .milestones import sync_groups_milestones, sync_projects_milestones
