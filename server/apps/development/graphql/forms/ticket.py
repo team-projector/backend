@@ -15,7 +15,7 @@ class TicketForm(forms.Form):
         min_value=0,
     )
 
-    type = forms.ChoiceField(
+    type = forms.ChoiceField(  # noqa A003
         required=False,
         choices=TICKET_TYPES,
     )

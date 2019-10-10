@@ -20,7 +20,7 @@ class CreateTicketMutation(
     form_class = TicketForm
 
     class Arguments:
-        type = graphene.String(required=True)
+        type = graphene.String(required=True)  # noqa A003
         title = graphene.String(required=True)
         start_date = graphene.Date(required=True)
         due_date = graphene.Date(required=True)
@@ -50,7 +50,7 @@ class UpdateTicketMutation(
 
     class Arguments:
         id = graphene.ID(required=True)  # noqa A003
-        type = graphene.String()
+        type = graphene.String()  # noqa A003
         title = graphene.String()
         start_date = graphene.Date()
         due_date = graphene.Date()

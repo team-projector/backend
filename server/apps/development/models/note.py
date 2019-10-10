@@ -65,7 +65,7 @@ class Note(models.Model):
         null=True,
     )
 
-    type = models.CharField(
+    type = models.CharField(  # noqa A003
         choices=NOTE_TYPES,
         max_length=NOTE_TYPE_MAX_LENGTH,
         verbose_name=_('VN__TYPE'),
