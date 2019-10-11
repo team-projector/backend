@@ -1366,6 +1366,14 @@ version = "2.0.18"
 
 [[package]]
 category = "main"
+description = "uWSGI top-like interface"
+name = "uwsgitop"
+optional = false
+python-versions = "*"
+version = "0.11"
+
+[[package]]
+category = "main"
 description = "Promises, promises, promises."
 name = "vine"
 optional = false
@@ -1449,7 +1457,7 @@ version = "0.6.0"
 more-itertools = "*"
 
 [metadata]
-content-hash = "d64ce72bd973138485af77ce986bf3071c58b988fdf13f6a290da8e044b6b43a"
+content-hash = "cf7e7ea7085df892c9bf805c6677e28997f709b633e972553b2a05ae5061bbcf"
 python-versions = "^3.6"
 
 [metadata.hashes]
@@ -1582,6 +1590,7 @@ typing = ["91dfe6f3f706ee8cc32d38edbbf304e9b7583fb37108fef38229617f8b3eba23", "c
 typing-extensions = ["2ed632b30bb54fc3941c382decfd0ee4148f5c591651c9272473fea2c6397d95", "b1edbbf0652660e32ae780ac9433f4231e7339c7f9a8057d0f042fcbcea49b87", "d8179012ec2c620d3791ca6fe2bf7979d979acdbef1fca0bc56b37411db682ed"]
 urllib3 = ["3de946ffbed6e6746608990594d08faac602528ac7015ac28d33cee6a45b7398", "9a107b99a5393caf59c7aa3c1249c16e6879447533d0887f4336dde834c7be86"]
 uwsgi = ["4972ac538800fb2d421027f49b4a1869b66048839507ccf0aa2fda792d99f583"]
+uwsgitop = ["99ca245119e4a0600840a62b7b4e020c9870fe90952b24eecfff0c9090c75d14"]
 vine = ["133ee6d7a9016f177ddeaf191c1f58421a1dcc6ee9a42c58b34bed40e1d2cd87", "ea4947cc56d1fd6f2095c8d543ee25dad966f78692528e68b4fada11ba3f98af"]
 wcwidth = ["3df37372226d6e63e1b1e1eda15c594bca98a22d33a23832a90998faa96bc65e", "f4ebe71925af7b40a864553f761ed559b43544f8f71746c2d756c7fe788ade7c"]
 wemake-python-styleguide = ["6b915c03640aab209970e10ed2b4d66de5978ad533b30b69d7b5e2956de15eaa", "6dd62183cb227b5e5ad96d17b12b08fcebd22802cde6e5fb7e21bd73c3f69a20"]

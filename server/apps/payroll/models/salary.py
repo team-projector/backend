@@ -66,7 +66,7 @@ class Salary(Timestamps):
         help_text=_('HT__PENALTY'),
     )
 
-    sum = MoneyField(
+    sum = MoneyField(  # noqa A003
         default=0,
         verbose_name=_('VN__SUM'),
         help_text=_('HT__SUM'),

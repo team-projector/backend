@@ -11,7 +11,7 @@ from ..project import ProjectType
 class WorkItem(graphene.Interface):
     """Work item interface."""
 
-    id = graphene.ID(required=True)
+    id = graphene.ID(required=True)  # noqa A003
     title = graphene.String()
     gl_id = graphene.Int()
     gl_url = graphene.String()
