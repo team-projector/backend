@@ -10,4 +10,4 @@ def test_base_mutation():
 
 def test_arguments_validation():
     with raises(NotImplementedError):
-        ArgumentsValidationMixin().perform_mutate(info=None, data=None)
+        ArgumentsValidationMixin().perform_mutate(info=None, cleaned_data=None)

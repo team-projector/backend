@@ -3,6 +3,9 @@ import pytest
 from apps.core.utils.time import seconds
 from apps.development.graphql.types.milestone import MilestoneType
 from apps.development.services import milestone as milestone_service
+from apps.development.services.issue.metrics import (
+    IssuesContainerMetricsProvider,
+)
 from tests.test_development.factories import (
     IssueFactory, MergeRequestFactory, ProjectMilestoneFactory
 )
@@ -15,6 +18,28 @@ from tests.test_payroll.factories import UserFactory
 @pytest.fixture
 def user(db):
     yield UserFactory.create(customer_hour_rate=100, hour_rate=1000)
+
+
+def test_filter_issues_not_implemented():
+    with pytest.raises(NotImplementedError):
+        IssuesContainerMetricsProvider().filter_issues(queryset=None)
+
+
+def test_metrics_issues_without_milestone(user):
+    milestone = ProjectMilestoneFactory.create(budget=10000)
+
+    IssueFactory.create_batch(3, user=user)
+    issue = IssueFactory.create(user=user)
+    IssueSpentTimeFactory.create(
+        user=user, base=issue, time_spent=seconds(hours=1)
+    )
+
+    metrics = milestone_service.get_metrics(milestone)
+
+    assert metrics.budget == 10000
+    assert metrics.issues_count == 0
+    assert metrics.payroll == 0
+    assert metrics.budget_spent == 0
 
 
 def test_payrolls(user):
