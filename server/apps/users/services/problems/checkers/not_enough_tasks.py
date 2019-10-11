@@ -35,9 +35,6 @@ class NotEnoughTasksChecker(BaseProblemChecker):
             state=MERGE_REQUESTS_STATES.opened,
         )
 
-        if not issues and not merge_requests:
-            return False
-
         issues_time_remains = self._aggregate_time_remains(issues)
         mrs_time_remains = self._aggregate_time_remains(merge_requests)
 

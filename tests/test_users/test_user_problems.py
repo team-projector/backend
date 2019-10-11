@@ -25,45 +25,21 @@ def user(db):
 
 
 def test_no_problems(user):
-    assert get_user_problems(user) == []
-
-
-def test_payroll_opened_overflow(user):
-    IssueSpentTimeFactory.create(
+    IssueFactory.create(
         user=user,
-        time_spent=seconds(hours=5)
+        time_estimate=seconds(hours=5),
+        total_time_spent=seconds(hours=1),
+        state=ISSUE_STATES.opened,
     )
 
-    IssueSpentTimeFactory.create(
+    IssueFactory.create(
         user=user,
-        time_spent=seconds(hours=8)
-    )
-
-    assert get_user_problems(user) == [PROBLEM_PAYROLL_OPENED_OVERFLOW]
-
-
-def test_no_payroll_opened_overflow(user):
-    IssueSpentTimeFactory.create(
-        user=user,
-        time_spent=seconds(hours=4)
-    )
-
-    IssueSpentTimeFactory.create(
-        user=user,
-        time_spent=seconds(hours=8)
+        time_estimate=seconds(hours=4),
+        total_time_spent=0,
+        state=ISSUE_STATES.opened,
     )
 
     assert get_user_problems(user) == []
-
-
-def test_resolver(user):
-    IssueSpentTimeFactory.create(
-        user=user,
-        time_spent=seconds(hours=16)
-    )
-
-    problems = UserType.resolve_problems(user, None)
-    assert problems == [PROBLEM_PAYROLL_OPENED_OVERFLOW]
 
 
 def test_not_enough_tasks_issues(user):
@@ -141,26 +117,27 @@ def test_not_enough_tasks_complex(user):
     assert get_user_problems(user) == [PROBLEM_NOT_ENOUGH_TASKS]
 
 
-def test_not_enough_tasks_is_not_problem(user):
-    IssueFactory.create(
+def test_payroll_opened_overflow(user):
+    IssueSpentTimeFactory.create(
         user=user,
-        time_estimate=seconds(hours=5),
-        total_time_spent=seconds(hours=1),
-        state=ISSUE_STATES.opened,
+        time_spent=seconds(hours=5),
     )
 
-    IssueFactory.create(
+    IssueSpentTimeFactory.create(
         user=user,
-        time_estimate=seconds(hours=4),
-        total_time_spent=0,
-        state=ISSUE_STATES.opened,
+        time_spent=seconds(hours=8),
     )
 
-    IssueFactory.create(
+    assert get_user_problems(user) == [PROBLEM_NOT_ENOUGH_TASKS,
+                                       PROBLEM_PAYROLL_OPENED_OVERFLOW]
+
+
+def test_resolver(user):
+    IssueSpentTimeFactory.create(
         user=user,
-        time_estimate=seconds(hours=7),
-        total_time_spent=seconds(hours=3),
-        state=ISSUE_STATES.closed,
+        time_spent=seconds(hours=16)
     )
 
-    assert get_user_problems(user) == []
+    problems = UserType.resolve_problems(user, None)
+    assert problems == [PROBLEM_NOT_ENOUGH_TASKS,
+                        PROBLEM_PAYROLL_OPENED_OVERFLOW]
