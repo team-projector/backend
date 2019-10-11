@@ -65,19 +65,19 @@ class UserAdmin(
     change_password_form = AdminPasswordChangeForm
 
     @admin_field('Change password')
-    def change_password_link(self, obj):
+    def change_password_link(self, user):
         """Show "Change password" on change form page."""
         return format_html(
             '<a href="{}">change password</a>',  # noqa P103
             reverse(
                 'admin:auth_user_password_change',
-                kwargs={'id': obj.pk},
+                kwargs={'id': user.pk},
             ),
         )
 
-    def sync_handler(self, obj):
+    def sync_handler(self, user):
         """Syncing user from Gitlab."""
-        sync_user.delay(obj.gl_id)
+        sync_user.delay(user.gl_id)
 
     def changelist_view(self, request, extra_context=None):
         """Show only active user by default on change list page."""

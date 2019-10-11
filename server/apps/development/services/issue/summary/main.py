@@ -40,13 +40,13 @@ class IssuesSummaryProvider:
         summary = IssuesSummary()
         summary.queryset = self._queryset
 
-        for item in self._get_counts_by_state():
-            summary.count += item['count']
+        for count_state in self._get_counts_by_state():
+            summary.count += count_state['count']
 
-            if item['state'] == ISSUE_STATES.opened:
-                summary.opened_count = item['count']
-            elif item['state'] == ISSUE_STATES.closed:
-                summary.closed_count = item['count']
+            if count_state['state'] == ISSUE_STATES.opened:
+                summary.opened_count = count_state['count']
+            elif count_state['state'] == ISSUE_STATES.closed:
+                summary.closed_count = count_state['count']
 
         summary.time_spent = self._get_time_spent()
         summary.problems_count = self._get_problems_count()

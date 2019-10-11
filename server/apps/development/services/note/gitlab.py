@@ -29,50 +29,50 @@ HOURS_PER_DAY = 8
 
 def seconds_handler(
     bag: DefaultDict[str, int],
-    val: int,
+    seconds_value: int,
 ) -> None:
     """Handle seconds."""
-    bag['seconds'] += val
+    bag['seconds'] += seconds_value
 
 
 def minutes_handler(
     bag: DefaultDict[str, int],
-    val: int,
+    minutes: int,
 ) -> None:
     """Handle minutes."""
-    bag['minutes'] += val
+    bag['minutes'] += minutes
 
 
 def hours_handler(
     bag: DefaultDict[str, int],
-    val: int,
+    hours: int,
 ) -> None:
     """Handle hours."""
-    bag['hours'] += val
+    bag['hours'] += hours
 
 
 def days_handler(
     bag: DefaultDict[str, int],
-    val: int,
+    days: int,
 ) -> None:
     """Handle days."""
-    bag['hours'] += val * HOURS_PER_DAY
+    bag['hours'] += days * HOURS_PER_DAY
 
 
 def weeks_handler(
     bag: DefaultDict[str, int],
-    val: int,
+    weeks: int,
 ) -> None:
     """Handle weeks."""
-    bag['hours'] += val * DAYS_PER_WEEK * HOURS_PER_DAY
+    bag['hours'] += weeks * DAYS_PER_WEEK * HOURS_PER_DAY
 
 
 def months_handler(
     bag: DefaultDict[str, int],
-    val: int,
+    months: int,
 ) -> None:
     """Handle months."""
-    bag['hours'] += val * WEEK_PER_MONTH * DAYS_PER_WEEK * HOURS_PER_DAY
+    bag['hours'] += months * WEEK_PER_MONTH * DAYS_PER_WEEK * HOURS_PER_DAY
 
 
 GITLAB_SPEND_HANDLERS = types.MappingProxyType({

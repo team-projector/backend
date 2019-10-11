@@ -13,12 +13,12 @@ from apps.users.models import User
 logger = logging.getLogger(__name__)
 
 
-def extract_user_from_data(data: dict) -> Optional[User]:
-    """Retrieve Gitlab user from data."""
-    if not data:
+def extract_user_from_data(gl_user: dict) -> Optional[User]:
+    """Retrieve Gitlab user."""
+    if not gl_user:
         return None
 
-    user_id = data['id']
+    user_id = gl_user['id']
 
     user = User.objects.filter(gl_id=user_id).first()
     if not user:

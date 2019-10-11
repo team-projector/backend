@@ -15,10 +15,10 @@ from apps.development.services.team_members import filter_by_roles
 class TeamRolesFilter(django_filters.CharFilter):
     """Filter team by roles."""
 
-    def filter(self, queryset, value) -> QuerySet:  # noqa A003
+    def filter(self, queryset, roles) -> QuerySet:  # noqa A003
         """Do filtering."""
-        roles = self._parse_roles(value)
-        if not roles:
+        parsed_roles = self._parse_roles(roles)
+        if not parsed_roles:
             return queryset
 
         team_members = filter_by_roles(
@@ -26,7 +26,7 @@ class TeamRolesFilter(django_filters.CharFilter):
                 team=OuterRef('pk'),
                 user=self.parent.request.user,
             ),
-            roles,
+            parsed_roles,
         )
 
         queryset = queryset.annotate(
@@ -37,14 +37,14 @@ class TeamRolesFilter(django_filters.CharFilter):
 
         return queryset
 
-    def _parse_roles(self, value: str) -> List[str]:
-        if not value:
+    def _parse_roles(self, roles: str) -> List[str]:
+        if not roles:
             return []
 
         return [
-            val.strip()
-            for val in value.split(',')
-            if val.strip() in TEAM_MEMBER_ROLES
+            role.strip()
+            for role in roles.split(',')
+            if role.strip() in TEAM_MEMBER_ROLES
         ]
 
 

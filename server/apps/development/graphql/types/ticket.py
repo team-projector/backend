@@ -16,7 +16,7 @@ class TicketType(BaseDjangoObjectType):
 
     metrics = graphene.Field(TicketMetricsType)
 
-    def resolve_metrics(self, info, **kwargs):
+    def resolve_metrics(self, info, **kwargs):  # noqa WPS110
         """Get metrics."""
         ticket_service.check_project_manager(info.context.user)
 
@@ -32,7 +32,7 @@ class TicketType(BaseDjangoObjectType):
     def get_queryset(
         cls,
         queryset,
-        info,
+        info,  # noqa WPS110
     ) -> QuerySet:
         """Get tickets."""
         return queryset

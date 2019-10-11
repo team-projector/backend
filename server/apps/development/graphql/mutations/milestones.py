@@ -18,7 +18,7 @@ class SyncMilestoneMutation(BaseMutation):
     milestone = graphene.Field(MilestoneType)
 
     @classmethod
-    def do_mutate(cls, root, info, **kwargs):
+    def do_mutate(cls, root, info, **kwargs):  # noqa WPS110
         """Syncing milestone."""
         milestone = get_object_or_404(
             Milestone.objects.all(),

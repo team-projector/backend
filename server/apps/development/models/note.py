@@ -72,11 +72,11 @@ class Note(models.Model):
         help_text=_('HT__TYPE'),
     )
 
-    data = JSONField(
+    data = JSONField(  # noqa WPS110
         encoder=DjangoJSONEncoder,
     )
 
-    objects = NoteManager()
+    objects = NoteManager()  # noqa WPS110
 
     class Meta:
         verbose_name = _('VN__NOTE')

@@ -9,7 +9,7 @@ from apps.development.models import Milestone
 class ProjectMilestonesResolver:
     """Project milestones resolver."""
 
-    def __init__(self, project, info, **kwargs):
+    def __init__(self, project, info, **kwargs):  # noqa WPS110
         """Initialize self."""
         self.project = project
         self.request = info.context

@@ -26,12 +26,12 @@ class UserType(BaseDjangoObjectType):
         connection_class = DataSourceConnection
         name = 'User'
 
-    def resolve_metrics(self, info, **kwargs):
+    def resolve_metrics(self, info, **kwargs):  # noqa WPS110
         """Get user metrics."""
         provider = user_service.UserMetricsProvider()
         return provider.get_metrics(self)
 
-    def resolve_problems(self, info, **kwargs):
+    def resolve_problems(self, info, **kwargs):  # noqa WPS110
         """Get user problems."""
         return get_user_problems(self)
 
@@ -39,7 +39,7 @@ class UserType(BaseDjangoObjectType):
     def get_queryset(
         cls,
         queryset: QuerySet,
-        info,
+        info,  # noqa WPS110
     ) -> QuerySet:
         """Get queryset."""
         # TODO fix it (team members case)

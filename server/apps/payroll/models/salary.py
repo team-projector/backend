@@ -91,7 +91,7 @@ class Salary(Timestamps):
         help_text=_('HT__COMMENTS'),
     )
 
-    objects = SalaryManager()
+    objects = SalaryManager()  # noqa WPS110
 
     field_tracker = FieldTracker()
 

@@ -12,7 +12,7 @@ class IssuesProjectSummary(graphene.ObjectType):
     project = graphene.Field(ProjectType)
     issues = graphene.Field(ProjectIssuesSummary)
 
-    def resolve_project(self, info, **kwargs):
+    def resolve_project(self, info, **kwargs):  # noqa WPS110
         """Get project."""
         # we need this to apply IssuesProjectSummary specific behaviour
         self.project.parent_type = self

@@ -28,9 +28,9 @@ def load_issue_labels(
         if not label:
             gl_label = next(
                 (
-                    item
-                    for item in project_labels
-                    if item.name == label_title
+                    project_label
+                    for project_label in project_labels
+                    if project_label.name == label_title
                 ),
                 None,
             )

@@ -15,8 +15,8 @@ def load_merge_requests(
 ) -> None:
     """Load merge requests for issue."""
     issue.merge_requests.set((
-        _get_merge_request(item['id'], item['iid'], project, gl_project)
-        for item in gl_issue.closed_by()
+        _get_merge_request(mr['id'], mr['iid'], project, gl_project)
+        for mr in gl_issue.closed_by()
     ))
 
 

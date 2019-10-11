@@ -9,7 +9,7 @@ class DatasourceRelayNode(relay.Node):
     """Datasource relay node."""
 
     @classmethod
-    def get_node_from_global_id(cls, info, global_id, only_type=None):
+    def get_node_from_global_id(cls, info, global_id, only_type=None):  # noqa WPS110
         """Get node."""
         with suppress(Exception):
             object_id = cls.from_global_id(global_id)

@@ -22,8 +22,8 @@ class CamelCasedOrderingMixin:
         return OrderedDict([
             (key, '__'.join(
                 to_camel_case(choice)
-                for choice in value.split('__')
+                for choice in choice_field.split('__')
             ))
-            for key, value in
+            for key, choice_field in
             ret.items()
         ])
