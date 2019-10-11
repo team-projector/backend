@@ -72,7 +72,7 @@ class Project(GitlabEntityMixin):
         related_query_name='project',
     )
 
-    objects = ProjectManager()
+    objects = ProjectManager()  # noqa WPS110
 
     class Meta:
         verbose_name = _('VN__PROJECT')

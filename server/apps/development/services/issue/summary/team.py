@@ -107,8 +107,8 @@ class IssuesTeamSummaryProvider:
         summaries_qs: QuerySet,
     ) -> int:
         return sum(
-            item['issues_opened_count']
-            for item in summaries_qs
+            summary['issues_opened_count']
+            for summary in summaries_qs
         )
 
     def _get_team_qs(
@@ -116,8 +116,8 @@ class IssuesTeamSummaryProvider:
         summaries_qs: QuerySet,
     ) -> QuerySet:
         team_ids = [
-            item['user__teams']
-            for item in summaries_qs
+            summary['user__teams']
+            for summary in summaries_qs
         ]
 
         return Team.objects.filter(id__in=team_ids)

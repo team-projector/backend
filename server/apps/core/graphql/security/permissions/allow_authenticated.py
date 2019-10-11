@@ -10,7 +10,7 @@ class AllowAuthenticated:
 
     def has_node_permission(
         self,
-        info: ResolveInfo,
+        info: ResolveInfo,  # noqa WPS110
         obj_id: str,
     ) -> bool:
         """Check has node permission."""
@@ -19,7 +19,7 @@ class AllowAuthenticated:
     def has_mutation_permission(
         self,
         root: Any,
-        info: ResolveInfo,
+        info: ResolveInfo,  # noqa WPS110
         **kwargs,
     ) -> bool:
         """Check has mutation permission."""
@@ -27,7 +27,7 @@ class AllowAuthenticated:
 
     def has_filter_permission(
         self,
-        info: ResolveInfo,
+        info: ResolveInfo,  # noqa WPS110
     ) -> bool:
         """Check has filter permission."""
         return info.context.user.is_authenticated

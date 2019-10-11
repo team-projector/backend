@@ -57,7 +57,7 @@ class ProjectGroup(GitlabEntityMixin):
         related_query_name='project_group',
     )
 
-    objects = ProjectGroupManager()
+    objects = ProjectGroupManager()  # noqa WPS110
 
     class Meta:
         verbose_name = _('VN__PROJECT_GROUP')

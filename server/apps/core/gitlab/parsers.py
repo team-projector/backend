@@ -10,20 +10,20 @@ GITLAB_DATE_FORMAT = '%Y-%m-%d'
 STATE_MERGED = 'merged'
 
 
-def parse_gl_datetime(value: str) -> Optional[datetime]:
+def parse_gl_datetime(gl_datetime: str) -> Optional[datetime]:
     """Get a naive datetime.datetime from gitlab datetime."""
-    if not value:
+    if not gl_datetime:
         return None
 
-    return make_aware(datetime.strptime(value, GITLAB_DATETIME_FORMAT))
+    return make_aware(datetime.strptime(gl_datetime, GITLAB_DATETIME_FORMAT))
 
 
-def parse_gl_date(value: str) -> Optional[date]:
+def parse_gl_date(gl_date: str) -> Optional[date]:
     """Get a naive datetime.datetime from gitlab date."""
-    if not value:
+    if not gl_date:
         return None
 
-    return make_aware(datetime.strptime(value, GITLAB_DATE_FORMAT)).date()
+    return make_aware(datetime.strptime(gl_date, GITLAB_DATE_FORMAT)).date()
 
 
 def parse_state_merged(states: list) -> bool:
@@ -31,4 +31,4 @@ def parse_state_merged(states: list) -> bool:
     if not states:
         return False
 
-    return any(item.get('state') == STATE_MERGED for item in states)
+    return any(state.get('state') == STATE_MERGED for state in states)

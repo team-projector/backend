@@ -20,21 +20,21 @@ class ForceSyncEntityMixin(BaseModelAdmin):
             request, object_id, form_url, extra_context=extra_context,
         )
 
-    def response_change(self, request, obj):
+    def response_change(self, request, instance):
         """Handling "_force_sync"."""
         if '_force_sync' in request.POST:
-            self._sync_obj(request, obj)
+            self._sync_obj(request, instance)
             return HttpResponseRedirect(request.path)
 
-        return super().response_change(request, obj)
+        return super().response_change(request, instance)
 
-    def sync_handler(self, obj):
+    def sync_handler(self, instance):
         """Handler should be implemented in child class."""
         raise NotImplementedError
 
-    def _sync_obj(self, request, obj):
-        self.sync_handler(obj)
+    def _sync_obj(self, request, instance):
+        self.sync_handler(instance)
         self.message_user(
             request,
-            f'{obj._meta.verbose_name} "{obj}" is syncing',  # noqa WPS437
+            f'{instance._meta.verbose_name} "{instance}" is syncing',  # noqa WPS437
         )

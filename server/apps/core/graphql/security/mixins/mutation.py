@@ -16,7 +16,7 @@ class AuthMutation:
     def has_permission(
         cls,
         root: Any,
-        info: ResolveInfo,
+        info: ResolveInfo,  # noqa WPS110
         **kwargs,
     ) -> bool:
         """Check has permission."""

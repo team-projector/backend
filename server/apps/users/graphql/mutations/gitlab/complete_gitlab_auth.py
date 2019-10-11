@@ -23,7 +23,7 @@ class CompleteGitlabAuthMutation(BaseMutation):
         state = graphene.String(required=True)
 
     @classmethod
-    def do_mutate(cls, root, info, code, state):
+    def do_mutate(cls, root, info, code, state):  # noqa WPS110
         """After successful login return token."""
         request = psa(info.context)
         request.backend.set_data(code=code, state=state)

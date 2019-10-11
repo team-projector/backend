@@ -27,9 +27,9 @@ class MergeRequestAdmin(
     ordering = ('-gl_last_sync',)
     inlines = (NoteInline,)
 
-    def sync_handler(self, obj):
+    def sync_handler(self, merge_request):
         """Syncing merge request."""
         sync_project_merge_request.delay(
-            obj.project.gl_id,
-            obj.gl_iid,
+            merge_request.project.gl_id,
+            merge_request.gl_iid,
         )

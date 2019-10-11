@@ -19,15 +19,15 @@ class MilestoneAdmin(
     list_display = ('id', 'title', 'start_date', 'due_date', 'budget', 'state')
     search_fields = ('title',)
 
-    def sync_handler(self, obj):
+    def sync_handler(self, milestone):
         """Syncing milestone."""
-        if obj.content_type.model_class() == Project:
+        if milestone.content_type.model_class() == Project:
             sync_project_milestone.delay(
-                obj.owner.gl_id,
-                obj.gl_id,
+                milestone.owner.gl_id,
+                milestone.gl_id,
             )
-        elif obj.content_type.model_class() == ProjectGroup:
+        elif milestone.content_type.model_class() == ProjectGroup:
             sync_group_milestone.delay(
-                obj.owner.gl_id,
-                obj.gl_id,
+                milestone.owner.gl_id,
+                milestone.gl_id,
             )

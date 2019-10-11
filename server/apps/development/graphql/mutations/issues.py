@@ -55,7 +55,7 @@ class SyncIssueMutation(BaseMutation):
     issue = graphene.Field(IssueType)
 
     @classmethod
-    def do_mutate(cls, root, info, **kwargs):
+    def do_mutate(cls, root, info, **kwargs):  # noqa WPS110
         """Syncing issue."""
         issue = get_object_or_404(
             Issue.objects.allowed_for_user(info.context.user),
@@ -80,7 +80,7 @@ class UpdateIssueMutation(BaseMutation):
     issue = graphene.Field(IssueType)
 
     @classmethod
-    def do_mutate(cls, root, info, **kwargs):
+    def do_mutate(cls, root, info, **kwargs):  # noqa WPS110
         """Update issue."""
         issue = get_object_or_404(
             Issue.objects.allowed_for_user(info.context.user),

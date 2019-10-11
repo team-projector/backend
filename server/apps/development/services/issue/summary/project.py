@@ -119,8 +119,8 @@ class IssuesProjectSummaryProvider:
         summaries_qs: QuerySet,
     ) -> int:
         return sum(
-            item['issues_opened_count']
-            for item in summaries_qs
+            summary['issues_opened_count']
+            for summary in summaries_qs
         )
 
     def _get_project_qs(
@@ -128,8 +128,8 @@ class IssuesProjectSummaryProvider:
         summaries_qs: QuerySet,
     ) -> list:
         project_ids = [
-            item['project']
-            for item in summaries_qs
+            summary['project']
+            for summary in summaries_qs
         ]
 
         projects_qs = Project.objects.filter(id__in=project_ids)

@@ -13,7 +13,7 @@ class AuthFilter(DjangoFilterConnectionField):
     permission_classes = (AllowAny,)
 
     @classmethod
-    def has_permission(cls, info: ResolveInfo) -> bool:
+    def has_permission(cls, info: ResolveInfo) -> bool:  # noqa WPS110
         """Check has permission."""
         return all((
             perm().has_filter_permission(info) for perm in
@@ -31,7 +31,7 @@ class AuthFilter(DjangoFilterConnectionField):
         filterset_class,
         filtering_args,
         root,
-        info,
+        info,  # noqa WPS110
         **args,
     ):
         """Connection resolver."""
@@ -39,8 +39,8 @@ class AuthFilter(DjangoFilterConnectionField):
             raise PermissionDenied()
 
         filter_kwargs = {
-            key: value
-            for key, value in args.items()
+            key: arg_value
+            for key, arg_value in args.items()
             if key in filtering_args
         }
 

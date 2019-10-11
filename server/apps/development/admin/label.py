@@ -24,11 +24,11 @@ class LabelAdmin(BaseModelAdmin):
     readonly_fields = ('title', 'color_square')
 
     @mark_safe
-    def color_square(self, obj):
+    def color_square(self, label):
         """Show current label with colored square near."""
         return f"""
-                <div style="float: left;"> {obj.color} </div>
-                <div style="background-color: {obj.color};
+                <div style="float: left;"> {label.color} </div>
+                <div style="background-color: {label.color};
                 float: left;
                 margin-left: 6px;
                 width: 14px;

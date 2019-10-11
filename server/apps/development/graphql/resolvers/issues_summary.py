@@ -7,7 +7,7 @@ from apps.development.services import issue as issue_service
 
 def resolve_issues_summary(
     parent,
-    info,
+    info,  # noqa WPS110
     **kwargs,
 ):
     """Resolve issues summary."""
@@ -27,7 +27,7 @@ def resolve_issues_summary(
 
 def resolve_issues_project_summaries(
     parent,
-    info,
+    info,  # noqa WPS110
     **kwargs,
 ):
     """Resolve issues project summaries."""
@@ -39,7 +39,7 @@ def resolve_issues_project_summaries(
 
 def resolve_issues_team_summaries(
     parent,
-    info,
+    info,  # noqa WPS110
     **kwargs,
 ):
     """Resolve issues team summaries."""

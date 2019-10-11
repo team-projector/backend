@@ -53,4 +53,4 @@ class GitLabOAuth2Backend(SocialGitLabOAuth2):
 
         For example "state" and "code" values returned from Gitlab.
         """
-        self.data = kwargs
+        self.data = kwargs  # noqa WPS110

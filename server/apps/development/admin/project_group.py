@@ -21,6 +21,6 @@ class ProjectGroupAdmin(
     search_fields = ('title',)
     inlines = (ProjectMemberInline,)
 
-    def sync_handler(self, obj):
+    def sync_handler(self, project_group):
         """Syncing group."""
-        sync_project_group.delay(obj.gl_id)
+        sync_project_group.delay(project_group.gl_id)
