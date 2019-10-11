@@ -8,23 +8,23 @@ from graphene_django.converter import convert_django_field
 class BitField(graphene.Scalar):
     """Bit field."""
 
-    @staticmethod # noqa WPS602
-    def serialize(vals):
+    @staticmethod  # noqa WPS602
+    def serialize(bit):
         """Serialize."""
         return [
-            val
-            for val, setted in vals
+            key
+            for key, setted in bit
             if setted
         ]
 
-    @staticmethod # noqa WPS602
+    @staticmethod  # noqa WPS602
     def parse_literal(node):
         """Parse literal."""
         # TODO implement
         return str(node)
 
-    @staticmethod # noqa WPS602
-    def parse_value(value):
+    @staticmethod  # noqa WPS602
+    def parse_value(value):  # noqa WPS110
         """Parse value."""
         # TODO implement
         return value

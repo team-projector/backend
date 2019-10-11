@@ -117,7 +117,7 @@ def test_sync_merge_requests(db, gl_mocker):
 
 
 @override_settings(GITLAB_TOKEN='GITLAB_TOKEN')
-def test_load_gl_project_milestones(db, gl_mocker):
+def test_load_for_project_all(db, gl_mocker):
     gl_mocker.registry_get('/user', GlUserFactory())
 
     gl_project = AttrDict(GlGroupFactory())

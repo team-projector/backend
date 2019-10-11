@@ -28,10 +28,11 @@ flower = "*"
 redis = "2.10.6"
 xlsxwriter = "*"
 tornado = "5.*"
-uWSGI = "*"
 kombu = "4.3"
 graphene-django = "^2.3"
 slackclient = "^2.1"
+uwsgi = "*"
+uwsgitop = "^0.11.0"
 
 [tool.poetry.dev-dependencies]
 pytest = "*"

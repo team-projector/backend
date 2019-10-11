@@ -11,7 +11,7 @@ from apps.development.graphql.resolvers import ProjectMilestonesResolver
 from apps.development.graphql.types.interfaces import MilestoneOwner
 from apps.development.graphql.types.milestone import MilestoneType
 from apps.development.models import Project
-from apps.development.services.summary.issues import IssuesProjectSummary
+from apps.development.services.issue import IssuesProjectSummary
 
 
 class ProjectType(BaseDjangoObjectType):
@@ -22,20 +22,23 @@ class ProjectType(BaseDjangoObjectType):
         filterset_class=MilestonesFilterSet,
     )
 
-    def resolve_milestones(self: Project, info, **kwargs):
+    def resolve_milestones(self: Project, info, **kwargs):  # noqa WPS110
         """Get project milestones."""
         if isinstance(getattr(self, 'parent_type', None), IssuesProjectSummary):
             ret = self.active_milestones
 
             if kwargs.get('order_by') == 'due_date':
                 default = datetime.max.date()
-                ret = sorted(ret, key=lambda item: item.due_date or default)
+                ret = sorted(
+                    ret,
+                    key=lambda milestone: milestone.due_date or default,
+                )
 
             elif kwargs.get('order_by') == '-due_date':
                 default = datetime.min.date()
                 ret = sorted(
                     ret,
-                    key=lambda item: item.due_date or default,
+                    key=lambda milestone: milestone.due_date or default,
                     reverse=True,
                 )
 

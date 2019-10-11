@@ -9,8 +9,7 @@ from django.db.models.functions import Coalesce, TruncDay
 
 from apps.development.models.issue import ISSUE_STATES, Issue
 from apps.payroll.models import SpentTime
-
-from . import base
+from apps.users.services.user.metrics.progress import base
 
 DAY_STEP = timedelta(days=1)
 

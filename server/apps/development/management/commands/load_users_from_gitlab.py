@@ -2,7 +2,7 @@
 
 from django.core.management.base import BaseCommand
 
-from apps.development.services.gitlab.users import update_users
+from apps.users.services.user.gitlab import update_users
 
 
 class Command(BaseCommand):

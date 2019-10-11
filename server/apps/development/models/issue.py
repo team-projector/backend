@@ -134,7 +134,7 @@ class Issue(
         related_name='issues',
     )
 
-    objects = IssueManager()
+    objects = IssueManager()  # noqa WPS110
 
     class Meta:
         verbose_name = _('VN__ISSUE')

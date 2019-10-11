@@ -6,9 +6,7 @@ from rest_framework import status
 
 from apps.core.gitlab import get_gitlab_client
 from apps.development.models import Project
-from apps.development.services.gitlab.projects import (
-    load_project, load_group_projects, load_projects
-)
+from apps.development.services import project as project_service
 from tests.test_development.checkers_gitlab import check_project
 from tests.test_development.factories import ProjectGroupFactory
 from tests.test_development.factories_gitlab import (
@@ -27,7 +25,7 @@ def test_load_project(db, gl_mocker):
 
     gl = get_gitlab_client()
 
-    load_project(gl, group, gl_project)
+    project_service.load_project(gl, group, gl_project)
 
     project = Project.objects.first()
 
@@ -53,7 +51,7 @@ def test_load_project_with_check_webhooks(db, gl_mocker):
 
     gl = get_gitlab_client()
 
-    load_project(gl, group, gl_project)
+    project_service.load_project(gl, group, gl_project)
 
     project = Project.objects.first()
 
@@ -61,7 +59,7 @@ def test_load_project_with_check_webhooks(db, gl_mocker):
 
     gl_mocker.registry_get(f'/projects/{gl_project.id}/hooks', [gl_hook_2])
 
-    load_project(gl, group, gl_project)
+    project_service.load_project(gl, group, gl_project)
 
 
 @override_settings(GITLAB_TOKEN='GITLAB_TOKEN')
@@ -79,7 +77,7 @@ def test_load_group_projects(db, gl_mocker):
     gl_mocker.registry_get(f'/groups/{gl_group.id}/projects',
                            [gl_project_1, gl_project_2])
 
-    load_group_projects(group)
+    project_service.load_group_projects(group)
 
     project = Project.objects.get(gl_id=gl_project_1.id)
     check_project(project, gl_project_1, group)
@@ -106,7 +104,7 @@ def test_load_projects(db, gl_mocker):
     gl_mocker.registry_get(f'/groups/{gl_group_2.id}', gl_group_2)
     gl_mocker.registry_get(f'/groups/{gl_group_2.id}/projects', [gl_project_2])
 
-    load_projects()
+    project_service.load_projects()
 
     project = Project.objects.get(gl_id=gl_project_1.id)
     check_project(project, gl_project_1, group_1)
@@ -125,7 +123,7 @@ def test_load_group_projects_server_error(db, gl_mocker):
                            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     with pytest.raises(GitlabGetError):
-        load_group_projects(group)
+        project_service.load_group_projects(group)
 
 
 @override_settings(GITLAB_TOKEN='GITLAB_TOKEN')
@@ -137,4 +135,4 @@ def test_load_group_projects_not_found(db, gl_mocker):
     gl_mocker.registry_get(f'/groups/{gl_group.id}',
                            status_code=status.HTTP_404_NOT_FOUND)
 
-    load_group_projects(group)
+    project_service.load_group_projects(group)

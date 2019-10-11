@@ -18,7 +18,7 @@ spec:
         - name: flower
           resources:
             requests:
-              memory: "130Mi"
+              memory: "50Mi"
               cpu: "10m"
           image: {{ .Values.image.name }}:{{ .Values.image.tag }}
           command: ["celery"]

@@ -3,9 +3,7 @@ from django.core.exceptions import PermissionDenied
 
 from apps.development.models import Milestone
 from apps.development.models.project_member import PROJECT_MEMBER_ROLES
-from apps.development.services.allowed.milestones import (
-    filter_allowed_for_user,
-)
+from apps.development.services import milestone as milestone_service
 from tests.test_development.factories import (
     ProjectFactory,
     ProjectGroupFactory,
@@ -34,7 +32,7 @@ def test_not_pm(user):
     ProjectMilestoneFactory.create(owner=group)
 
     with raises(PermissionDenied):
-        filter_allowed_for_user(Milestone.objects.all(), user)
+        milestone_service.filter_allowed_for_user(Milestone.objects.all(), user)
 
 
 def test_projects(user):
@@ -59,7 +57,9 @@ def test_projects(user):
 
     ProjectMilestoneFactory.create_batch(10)
 
-    queryset = filter_allowed_for_user(Milestone.objects.all(), user)
+    queryset = milestone_service.filter_allowed_for_user(
+        Milestone.objects.all(), user
+    )
 
     assert queryset.count() == 3
     assert set(queryset) == {milestone_1, milestone_2, milestone_3}
@@ -87,7 +87,9 @@ def test_groups(user):
 
     ProjectMilestoneFactory.create_batch(10)
 
-    queryset = filter_allowed_for_user(Milestone.objects.all(), user)
+    queryset = milestone_service.filter_allowed_for_user(
+        Milestone.objects.all(), user
+    )
 
     assert queryset.count() == 3
     assert set(queryset) == {milestone_1, milestone_2, milestone_3}
@@ -115,7 +117,9 @@ def test_group_and_projects(user):
 
     ProjectMilestoneFactory.create_batch(10)
 
-    queryset = filter_allowed_for_user(Milestone.objects.all(), user)
+    queryset = milestone_service.filter_allowed_for_user(
+        Milestone.objects.all(), user
+    )
 
     assert queryset.count() == 3
     assert set(queryset) == {milestone_1, milestone_2, milestone_3}
@@ -140,7 +144,9 @@ def test_group_with_projects(user):
 
     ProjectMilestoneFactory.create_batch(10)
 
-    queryset = filter_allowed_for_user(Milestone.objects.all(), user)
+    queryset = milestone_service.filter_allowed_for_user(
+        Milestone.objects.all(), user
+    )
 
     assert queryset.count() == 4
     assert set(queryset) == {milestone_1, milestone_2,
@@ -164,7 +170,9 @@ def test_parent_group_with_groups(user):
 
     ProjectMilestoneFactory.create_batch(10)
 
-    queryset = filter_allowed_for_user(Milestone.objects.all(), user)
+    queryset = milestone_service.filter_allowed_for_user(
+        Milestone.objects.all(), user
+    )
 
     assert queryset.count() == 3
     assert set(queryset) == {milestone_1, milestone_2, milestone_3}
@@ -194,7 +202,9 @@ def test_parent_group_with_groups_and_projects(user):
 
     ProjectMilestoneFactory.create_batch(10)
 
-    queryset = filter_allowed_for_user(Milestone.objects.all(), user)
+    queryset = milestone_service.filter_allowed_for_user(
+        Milestone.objects.all(), user
+    )
 
     assert queryset.count() == 5
     assert set(queryset) == {milestone_1, milestone_2, milestone_3,

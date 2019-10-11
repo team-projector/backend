@@ -1,8 +1,7 @@
 # -*- coding: utf-8 -*-
 
+from apps.users.services.user.gitlab import load_user
 from celery_app import app
-
-from ..services.gitlab.users import load_user
 
 
 @app.task

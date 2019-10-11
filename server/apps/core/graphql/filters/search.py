@@ -17,20 +17,20 @@ class SearchFilter(CharFilter):
         super().__init__()
         self.fields = kwargs.pop('fields', {})
 
-    def filter(self, queryset, value) -> QuerySet:
+    def filter(self, queryset, search_value) -> QuerySet:  # noqa A003
         """Do filtering."""
-        if not value or not self.fields:
+        if not search_value or not self.fields:
             return queryset
 
-        return queryset.filter(self._construct_condition(value))
+        return queryset.filter(self._construct_condition(search_value))
 
-    def _construct_condition(self, value) -> Q:
+    def _construct_condition(self, search_value) -> Q:
         orm_lookups = [
             self._construct_search(search_field)
             for search_field in self.fields
         ]
         queries = [
-            Q(**{orm_lookup: value})
+            Q(**{orm_lookup: search_value})
             for orm_lookup in orm_lookups
         ]
 

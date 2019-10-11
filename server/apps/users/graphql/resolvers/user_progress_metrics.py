@@ -9,7 +9,7 @@ from apps.users.services.allowed.user_progress_metrics import (
 )
 
 
-def resolve_user_progress_metrics(parent, info, **kwargs):
+def resolve_user_progress_metrics(parent, info, **kwargs):  # noqa WPS110
     """Resolve progress metrics for user."""
     user = get_object_or_404(
         filter_allowed_for_user(

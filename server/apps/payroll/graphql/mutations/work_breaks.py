@@ -23,12 +23,12 @@ class ApproveWorkBreakMutation(BaseMutation):
     permission_classes = (CanApproveDeclineWorkBreak,)
 
     class Arguments:
-        id = graphene.ID(required=True)
+        id = graphene.ID(required=True)  # noqa A003
 
     work_break = graphene.Field(WorkBreakType)
 
     @classmethod
-    def do_mutate(cls, root, info, **kwargs):
+    def do_mutate(cls, root, info, **kwargs):  # noqa WPS110
         """Approve work break after validation."""
         work_break = get_object_or_404(
             WorkBreak.objects.all(),
@@ -60,9 +60,9 @@ class CreateWorkBreakMutation(
     work_break = graphene.Field(WorkBreakType)
 
     @classmethod
-    def perform_mutate(cls, info, data):
+    def perform_mutate(cls, info, cleaned_data):  # noqa WPS110
         """Create work break after validation."""
-        work_break = WorkBreak.objects.create(**data)
+        work_break = WorkBreak.objects.create(**cleaned_data)
 
         return CreateWorkBreakMutation(work_break=work_break)
 
@@ -73,13 +73,13 @@ class DeclineWorkBreakMutation(BaseMutation):
     permission_classes = (CanApproveDeclineWorkBreak,)
 
     class Arguments:
-        id = graphene.ID(required=True)
+        id = graphene.ID(required=True)  # noqa A003
         decline_reason = graphene.String(required=True)
 
     work_break = graphene.Field(WorkBreakType)
 
     @classmethod
-    def do_mutate(cls, root, info, **kwargs):
+    def do_mutate(cls, root, info, **kwargs):  # noqa WPS110
         """Decline work break after validation."""
         work_break = get_object_or_404(
             WorkBreak.objects.all(),
@@ -106,7 +106,7 @@ class UpdateWorkBreakMutation(
     form_class = WorkBreakForm
 
     class Arguments:
-        id = graphene.ID(required=True)
+        id = graphene.ID(required=True)  # noqa A003
         comment = graphene.String(required=True)
         from_date = graphene.DateTime(required=True)
         reason = graphene.String(required=True)
@@ -115,17 +115,17 @@ class UpdateWorkBreakMutation(
     work_break = graphene.Field(WorkBreakType)
 
     @classmethod
-    def perform_mutate(cls, info, data):
+    def perform_mutate(cls, info, cleaned_data):  # noqa WPS110
         """Update work break."""
         work_break = get_object_or_404(
             WorkBreak.objects.all(),
-            pk=data['id'],
+            pk=cleaned_data['id'],
         )
 
-        work_break.comment = data['comment']
-        work_break.from_date = data['from_date']
-        work_break.reason = data['reason']
-        work_break.to_date = data['to_date']
+        work_break.comment = cleaned_data['comment']
+        work_break.from_date = cleaned_data['from_date']
+        work_break.reason = cleaned_data['reason']
+        work_break.to_date = cleaned_data['to_date']
 
         return UpdateWorkBreakMutation(
             work_break=work_break,
@@ -138,12 +138,12 @@ class DeleteWorkBreakMutation(BaseMutation):
     permission_classes = (CanManageWorkBreak,)
 
     class Arguments:
-        id = graphene.ID(required=True)
+        id = graphene.ID(required=True)  # noqa A003
 
     ok = graphene.Boolean()
 
     @classmethod
-    def do_mutate(cls, root, info, **kwargs):
+    def do_mutate(cls, root, info, **kwargs):  # noqa WPS110
         """Delete work break.If successful delete return "True"."""
         work_break = get_object_or_404(
             WorkBreak.objects.all(),

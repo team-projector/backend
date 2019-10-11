@@ -7,8 +7,7 @@ from apps.core.consts import SECONDS_PER_HOUR
 from apps.development.models.issue import ISSUE_STATES
 from apps.payroll.models import SpentTime
 from apps.users.models import User
-
-from .base import BaseProblemChecker
+from apps.users.services.problems.checkers import BaseProblemChecker
 
 PROBLEM_PAYROLL_OPENED_OVERFLOW = 'payroll_opened_overflow'
 PROBLEM_PAYROLL_OVERFLOW_RATIO = 1.5

@@ -6,8 +6,7 @@ from social_core.actions import do_auth
 
 from apps.core.graphql.mutations import BaseMutation
 from apps.core.graphql.security.permissions import AllowAny
-
-from .auth import psa
+from apps.users.graphql.mutations.gitlab.auth import psa
 
 
 class LoginGitlabMutation(BaseMutation):
@@ -18,7 +17,7 @@ class LoginGitlabMutation(BaseMutation):
     redirect_url = graphene.String()
 
     @classmethod
-    def do_mutate(cls, root, info):
+    def do_mutate(cls, root, info):  # noqa WPS110
         """Returns url for Gitlab with app ID, callback url and state."""
         request = psa(info.context)
 

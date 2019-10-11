@@ -13,12 +13,12 @@ class SyncMilestoneMutation(BaseMutation):
     """Syncing milestone mutation."""
 
     class Arguments:
-        id = graphene.ID()
+        id = graphene.ID()  # noqa A003
 
     milestone = graphene.Field(MilestoneType)
 
     @classmethod
-    def do_mutate(cls, root, info, **kwargs):
+    def do_mutate(cls, root, info, **kwargs):  # noqa WPS110
         """Syncing milestone."""
         milestone = get_object_or_404(
             Milestone.objects.all(),

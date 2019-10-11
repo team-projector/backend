@@ -3,10 +3,10 @@
 from apps.core.activity.verbs import ACTION_GITLAB_CALL_API
 from apps.core.gitlab import get_gitlab_client
 from apps.core.tasks import add_action
+from apps.development.services import issue as issue_service
 from celery_app import app
 
 from ..models import Project
-from ..services.gitlab.issues import load_project_issue, load_project_issues
 
 
 @app.task(queue='low_priority')
@@ -20,7 +20,7 @@ def sync_issues() -> None:
 def sync_project_issues(project_id: int) -> None:
     """Syncing issues for project from Gitlab."""
     project = Project.objects.get(id=project_id)
-    load_project_issues(project)
+    issue_service.load_for_project_all(project)
 
 
 @app.task
@@ -35,4 +35,4 @@ def sync_project_issue(project_id: int, iid: int) -> None:
 
     gl_issue = gl_project.issues.get(iid)
 
-    load_project_issue(project, gl_project, gl_issue)
+    issue_service.load_for_project(project, gl_project, gl_issue)

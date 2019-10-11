@@ -2,7 +2,7 @@
 
 from django.core.management.base import BaseCommand
 
-from apps.development.services.gitlab.groups import load_groups
+from apps.development.services.project_group.gitlab import load_groups
 
 
 class Command(BaseCommand):

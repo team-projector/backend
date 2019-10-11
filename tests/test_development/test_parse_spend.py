@@ -2,7 +2,7 @@ from datetime import timedelta
 
 from django.test import TestCase
 
-from apps.development.services.gitlab.notes import parse_spend
+from apps.development.services.note.gitlab import parse_spend
 
 PARSE_MAP = [
     ('1d 1m', timedelta(hours=8, minutes=1)),

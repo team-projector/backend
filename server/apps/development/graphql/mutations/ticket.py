@@ -20,7 +20,7 @@ class CreateTicketMutation(
     form_class = TicketForm
 
     class Arguments:
-        type = graphene.String(required=True)
+        type = graphene.String(required=True)  # noqa A003
         title = graphene.String(required=True)
         start_date = graphene.Date(required=True)
         due_date = graphene.Date(required=True)
@@ -30,9 +30,9 @@ class CreateTicketMutation(
     ticket = graphene.Field(TicketType)
 
     @classmethod
-    def perform_mutate(cls, info, data):
+    def perform_mutate(cls, info, cleaned_data):  # noqa WPS110
         """Create and return ticket."""
-        ticket = Ticket.objects.create(**data)
+        ticket = Ticket.objects.create(**cleaned_data)
 
         return CreateTicketMutation(
             ticket=ticket,
@@ -49,8 +49,8 @@ class UpdateTicketMutation(
     form_class = TicketForm
 
     class Arguments:
-        id = graphene.ID(required=True)
-        type = graphene.String()
+        id = graphene.ID(required=True)  # noqa A003
+        type = graphene.String()  # noqa A003
         title = graphene.String()
         start_date = graphene.Date()
         due_date = graphene.Date()
@@ -60,38 +60,38 @@ class UpdateTicketMutation(
     ticket = graphene.Field(TicketType)
 
     @classmethod
-    def perform_mutate(cls, info, data):
+    def perform_mutate(cls, info, cleaned_data):  # noqa WPS110
         """Update and return ticket."""
         ticket = get_object_or_404(
             Ticket.objects.all(),
-            pk=data['id'],
+            pk=cleaned_data['id'],
         )
 
-        cls._update_ticket(ticket, data)
+        cls._update_ticket(ticket, cleaned_data)
 
         return UpdateTicketMutation(
             ticket=ticket,
         )
 
     @classmethod  # noqa C901
-    def _update_ticket(cls, ticket, data):
-        if data.get('title'):
-            ticket.title = data['title']
+    def _update_ticket(cls, ticket, cleaned_data):
+        if cleaned_data.get('title'):
+            ticket.title = cleaned_data['title']
 
-        if data.get('type'):
-            ticket.type = data['type']
+        if cleaned_data.get('type'):
+            ticket.type = cleaned_data['type']
 
-        if data.get('start_date'):
-            ticket.start_date = data['start_date']
+        if cleaned_data.get('start_date'):
+            ticket.start_date = cleaned_data['start_date']
 
-        if data.get('due_date'):
-            ticket.due_date = data['due_date']
+        if cleaned_data.get('due_date'):
+            ticket.due_date = cleaned_data['due_date']
 
-        if data.get('url'):
-            ticket.url = data['url']
+        if cleaned_data.get('url'):
+            ticket.url = cleaned_data['url']
 
-        if data.get('milestone'):
-            ticket.milestone = data['milestone']
+        if cleaned_data.get('milestone'):
+            ticket.milestone = cleaned_data['milestone']
 
         ticket.save()
 

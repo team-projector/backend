@@ -8,8 +8,7 @@ from apps.core.graphql.relay_nodes import DatasourceRelayNode
 from apps.core.graphql.types import BaseDjangoObjectType
 from apps.development.graphql.types.ticket_metrics import TicketMetricsType
 from apps.development.models import Ticket
-from apps.development.services.allowed.ticket import check_project_manager
-from apps.development.services.metrics.ticket import get_ticket_metrics
+from apps.development.services import ticket as ticket_service
 
 
 class TicketType(BaseDjangoObjectType):
@@ -17,11 +16,11 @@ class TicketType(BaseDjangoObjectType):
 
     metrics = graphene.Field(TicketMetricsType)
 
-    def resolve_metrics(self, info, **kwargs):
+    def resolve_metrics(self, info, **kwargs):  # noqa WPS110
         """Get metrics."""
-        check_project_manager(info.context.user)
+        ticket_service.check_project_manager(info.context.user)
 
-        return get_ticket_metrics(self)
+        return ticket_service.get_ticket_metrics(self)
 
     class Meta:
         model = Ticket
@@ -33,7 +32,7 @@ class TicketType(BaseDjangoObjectType):
     def get_queryset(
         cls,
         queryset,
-        info,
+        info,  # noqa WPS110
     ) -> QuerySet:
         """Get tickets."""
         return queryset

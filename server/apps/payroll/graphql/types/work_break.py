@@ -19,7 +19,7 @@ class WorkBreakType(BaseDjangoObjectType):
         name = 'WorkBreak'
 
     @classmethod
-    def get_queryset(cls, queryset, info) -> QuerySet:
+    def get_queryset(cls, queryset, info) -> QuerySet:  # noqa WPS110
         """Get work breaks."""
         return filter_allowed_for_user(
             queryset,

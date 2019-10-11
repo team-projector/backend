@@ -8,15 +8,15 @@ from rest_framework.generics import get_object_or_404
 from apps.core.graphql.mutations import BaseMutation
 from apps.development.graphql.types import IssueType
 from apps.development.models import Issue, Ticket
-from apps.development.services.gitlab.spent_time import add_spent_time
 from apps.development.tasks import sync_project_issue
+from apps.payroll.services.spent_time.gitlab import add_spent_time
 
 
 class AddSpendIssueMutation(BaseMutation):
     """Add spend issue mutation."""
 
     class Arguments:
-        id = graphene.ID(required=True)
+        id = graphene.ID(required=True)  # noqa A003
         seconds = graphene.Int(required=True)
 
     issue = graphene.Field(IssueType)
@@ -50,12 +50,12 @@ class SyncIssueMutation(BaseMutation):
     """Syncing issue mutation."""
 
     class Arguments:
-        id = graphene.ID(required=True)
+        id = graphene.ID(required=True)  # noqa A003
 
     issue = graphene.Field(IssueType)
 
     @classmethod
-    def do_mutate(cls, root, info, **kwargs):
+    def do_mutate(cls, root, info, **kwargs):  # noqa WPS110
         """Syncing issue."""
         issue = get_object_or_404(
             Issue.objects.allowed_for_user(info.context.user),
@@ -74,13 +74,13 @@ class UpdateIssueMutation(BaseMutation):
     """Update issue mutation."""
 
     class Arguments:
-        id = graphene.ID(required=True)
+        id = graphene.ID(required=True)  # noqa A003
         ticket = graphene.ID(required=True)
 
     issue = graphene.Field(IssueType)
 
     @classmethod
-    def do_mutate(cls, root, info, **kwargs):
+    def do_mutate(cls, root, info, **kwargs):  # noqa WPS110
         """Update issue."""
         issue = get_object_or_404(
             Issue.objects.allowed_for_user(info.context.user),

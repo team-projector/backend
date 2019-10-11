@@ -5,7 +5,7 @@ from datetime import timedelta
 from django.conf import settings
 from django.utils import timezone
 
-from ..models import Token, User
+from apps.users.models import Token, User
 
 
 def create_user_token(user: User) -> Token:

@@ -9,8 +9,7 @@ from apps.core.graphql.relay_nodes import DatasourceRelayNode
 from apps.core.graphql.types import BaseDjangoObjectType
 from apps.development.graphql.filters import TeamMembersFilterSet
 from apps.development.models import Team
-from apps.development.services.allowed.teams import filter_allowed_for_user
-from apps.development.services.metrics.team import get_team_metrics
+from apps.development.services import team as team_service
 
 from .team_member import TeamMemberType
 from .team_metrics import TeamMetricsType
@@ -35,20 +34,20 @@ class TeamType(BaseDjangoObjectType):
     def get_queryset(
         cls,
         queryset,
-        info,
+        info,  # noqa WPS110
     ) -> QuerySet:
         """Get teams."""
-        queryset = filter_allowed_for_user(
+        queryset = team_service.filter_allowed_for_user(
             queryset,
             info.context.user,
         )
 
         return queryset
 
-    def resolve_metrics(self, info, **kwargs):
+    def resolve_metrics(self, info, **kwargs):  # noqa WPS110
         """Get team metrics."""
-        return get_team_metrics(self)
+        return team_service.get_metrics(self)
 
-    def resolve_members(self, info, **kwargs):
+    def resolve_members(self, info, **kwargs):  # noqa WPS110
         """Get team members."""
         return self.teammember_set
