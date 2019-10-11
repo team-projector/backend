@@ -139,3 +139,28 @@ def test_not_enough_tasks_complex(user):
     )
 
     assert get_user_problems(user) == [PROBLEM_NOT_ENOUGH_TASKS]
+
+
+def test_not_enough_tasks_is_not_problem(user):
+    IssueFactory.create(
+        user=user,
+        time_estimate=seconds(hours=5),
+        total_time_spent=seconds(hours=1),
+        state=ISSUE_STATES.opened,
+    )
+
+    IssueFactory.create(
+        user=user,
+        time_estimate=seconds(hours=4),
+        total_time_spent=0,
+        state=ISSUE_STATES.opened,
+    )
+
+    IssueFactory.create(
+        user=user,
+        time_estimate=seconds(hours=7),
+        total_time_spent=seconds(hours=3),
+        state=ISSUE_STATES.closed,
+    )
+
+    assert get_user_problems(user) == []
