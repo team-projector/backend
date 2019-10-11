@@ -26,11 +26,11 @@ class MilestoneType(BaseDjangoObjectType):
         connection_class = DataSourceConnection
         name = 'Milestone'
 
-    def resolve_metrics(self, info, **kwargs):
+    def resolve_metrics(self, info, **kwargs):  # noqa WPS110
         """Get milestone metrics."""
         return milestone_service.get_metrics(self)
 
-    def resolve_problems(self, info, **kwargs):
+    def resolve_problems(self, info, **kwargs):  # noqa WPS110
         """Get milestone problems."""
         return milestone_service.get_problems(self)
 
@@ -38,7 +38,7 @@ class MilestoneType(BaseDjangoObjectType):
     def get_queryset(
         cls,
         queryset,
-        info,
+        info,  # noqa WPS110
     ) -> QuerySet:
         """Get milestones."""
         queryset = milestone_service.filter_allowed_for_user(

@@ -28,9 +28,9 @@ class IssueAdmin(
     ordering = ('-gl_last_sync',)
     inlines = (NoteInline,)
 
-    def sync_handler(self, obj):
+    def sync_handler(self, issue):
         """Syncing issue."""
         sync_project_issue.delay(
-            obj.project.gl_id,
-            obj.gl_iid,
+            issue.project.gl_id,
+            issue.gl_iid,
         )

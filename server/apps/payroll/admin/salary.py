@@ -66,13 +66,13 @@ class SalaryAdmin(BaseModelAdmin):
             context,
         )
 
-    def save_model(self, request, obj, form, change):
+    def save_model(self, request, salary, form, change):
         """
         Save salary.
 
         Send notification to user if salary is payed.
         """
-        if change and is_payed(obj):
-            transaction.on_commit(lambda: send_salary_report.delay(obj.id))
+        if change and is_payed(salary):
+            transaction.on_commit(lambda: send_salary_report.delay(salary.id))
 
-        super().save_model(request, obj, form, change)
+        super().save_model(request, salary, form, change)

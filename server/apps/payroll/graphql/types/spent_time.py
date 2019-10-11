@@ -22,12 +22,12 @@ class SpentTimeType(BaseDjangoObjectType):
         connection_class = DataSourceConnection
         name = 'SpentTime'
 
-    def resolve_owner(self, info, **kwargs):
+    def resolve_owner(self, info, **kwargs):  # noqa WPS110
         """Get spent time owner: issue or merge request."""
         return self.base
 
     @classmethod
-    def get_queryset(cls, queryset, info) -> QuerySet:
+    def get_queryset(cls, queryset, info) -> QuerySet:  # noqa WPS110
         """Get spent times."""
         return filter_allowed_for_user(
             queryset,

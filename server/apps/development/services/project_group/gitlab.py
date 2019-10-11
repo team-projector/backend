@@ -17,8 +17,8 @@ def load_groups() -> None:
     gl = get_gitlab_client()
     gl_groups = gl.groups.list(all=True)
     gl_groups_map = {
-        item.id: item
-        for item in gl_groups
+        gl_group.id: gl_group
+        for gl_group in gl_groups
     }
 
     while gl_groups:

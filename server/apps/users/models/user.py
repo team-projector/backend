@@ -127,7 +127,7 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     daily_work_hours = models.PositiveIntegerField(default=8)
 
-    objects = UserManager()
+    objects = UserManager()  # noqa WPS110
 
     class Meta:
         verbose_name = _('VN__USER')

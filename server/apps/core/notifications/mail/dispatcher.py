@@ -21,9 +21,9 @@ class SystemEmailDispatcher:
 
         Sending text in two formats: simple and html.
         """
-        content = get_template('system_email_template.html')
+        template = get_template('system_email_template.html')
 
-        renderer = content.render(context={
+        renderer = template.render(context={
             'title': subject,
             'text': text.replace('\n', '<br/>'),
         })

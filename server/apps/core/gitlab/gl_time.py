@@ -20,12 +20,12 @@ GITLAB_TIME_INTERVALS = (
 
 def gl_duration(seconds: int) -> str:
     """Get Gitlab durations."""
-    result = []
+    durations = []
 
     for name, count in GITLAB_TIME_INTERVALS:
-        value = seconds // count
-        if value:
-            seconds -= value * count
-            result.append(f'{value}{name}')
+        duration = seconds // count
+        if duration:
+            seconds -= duration * count
+            durations.append(f'{duration}{name}')
 
-    return ''.join(result)
+    return ''.join(durations)

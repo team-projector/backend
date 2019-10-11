@@ -62,7 +62,7 @@ def load_for_project(
     """Load full info for merge request for project."""
     time_stats = gl_mr.time_stats()
 
-    params = {
+    fields = {
         'gl_id': gl_mr.id,
         'gl_iid': gl_mr.iid,
         'gl_url': gl_mr.web_url,
@@ -84,9 +84,9 @@ def load_for_project(
         ).first()
 
         if milestone:
-            params['milestone'] = milestone
+            fields['milestone'] = milestone
 
-    merge_request, _ = models.MergeRequest.objects.sync_gitlab(**params)
+    merge_request, _ = models.MergeRequest.objects.sync_gitlab(**fields)
 
     load_labels(merge_request, gl_project, gl_mr)
     load_notes(merge_request, gl_mr)
@@ -114,9 +114,9 @@ def load_labels(
         label = models.Label.objects.filter(title=label_title).first()
         if not label:
             gl_label = next((
-                item
-                for item in project_labels
-                if item.name == label_title
+                project_label
+                for project_label in project_labels
+                if project_label.name == label_title
             ),
                 None,
             )

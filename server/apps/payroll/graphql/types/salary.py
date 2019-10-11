@@ -23,7 +23,7 @@ class SalaryType(BaseDjangoObjectType):
         name = 'Salary'
 
     @classmethod
-    def get_queryset(cls, queryset, info) -> QuerySet:
+    def get_queryset(cls, queryset, info) -> QuerySet:  # noqa WPS110
         """Get salaries."""
         return filter_allowed_for_user(
             queryset,

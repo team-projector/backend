@@ -59,7 +59,7 @@ class SpentTime(Payroll):
         related_name='time_spend',
     )
 
-    objects = SpentTimeManager()
+    objects = SpentTimeManager()  # noqa WPS110
 
     def __str__(self):
         """Returns object string representation."""

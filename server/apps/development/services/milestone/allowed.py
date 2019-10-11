@@ -19,7 +19,7 @@ def filter_allowed_for_user(
         project__members__in=members,
     ).values('id')
 
-    milestones_ids = [item.get('id') for item in project_milestones]
+    milestones_ids = [milestone.get('id') for milestone in project_milestones]
 
     groups = ProjectGroup.objects.filter(members__in=members)
 
@@ -52,8 +52,8 @@ def get_group_milestones(
         Q(project_group__in=groups) | Q(project__group__in=groups),
     ).values('id')
 
-    for item in milestones_on_level:
-        milestones_ids.append(item.get('id'))
+    for milestone in milestones_on_level:
+        milestones_ids.append(milestone.get('id'))
 
     children_groups = ProjectGroup.objects.filter(
         parent__in=groups,

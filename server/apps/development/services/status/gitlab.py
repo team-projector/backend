@@ -68,26 +68,26 @@ class GlStatusProvider:
             if issubclass(model, GitlabEntityMixin)
         ]
 
-        value = querysets[0].union(
+        gl_last_sync_qs = querysets[0].union(
             *querysets[1:],
         ).order_by(
             '-gl_last_sync',
         ).first() or {}
 
-        return value.get('gl_last_sync')  # type: ignore
+        return gl_last_sync_qs.get('gl_last_sync')  # type: ignore
 
     @classmethod
     def _get_services_stats(cls) -> Iterable[GlServiceStatus]:
         stats = []
 
-        for key, value in ACTIONS_MAPS.items():
-            action = Action.objects.filter(verb=value).order_by(
+        for name, verb in ACTIONS_MAPS.items():
+            action = Action.objects.filter(verb=verb).order_by(
                 '-timestamp',
             ).first()
 
             if action:
                 service_status = GlServiceStatus()
-                service_status.name = key
+                service_status.name = name
                 service_status.time = action.timestamp
 
                 stats.append(service_status)

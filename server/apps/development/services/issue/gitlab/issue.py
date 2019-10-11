@@ -25,7 +25,7 @@ def load_for_project(
     """Load full info for project issue."""
     time_stats = gl_issue.time_stats()
 
-    params = {
+    fields = {
         'gl_id': gl_issue.id,
         'gl_iid': gl_issue.iid,
         'gl_url': gl_issue.web_url,
@@ -42,17 +42,15 @@ def load_for_project(
         'is_merged': gitlab.parse_state_merged(gl_issue.closed_by()),
     }
 
-    params['milestone'] = None
-
     if gl_issue.milestone:
         milestone = Milestone.objects.filter(
             gl_id=gl_issue.milestone['id'],
         ).first()
 
         if milestone:
-            params['milestone'] = milestone
+            fields['milestone'] = milestone
 
-    issue, _ = Issue.objects.sync_gitlab(**params)
+    issue, _ = Issue.objects.sync_gitlab(**fields)
 
     load_issue_labels(issue, gl_project, gl_issue)
     load_issue_notes(issue, gl_issue)

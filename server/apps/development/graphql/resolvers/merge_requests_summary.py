@@ -6,7 +6,7 @@ from apps.development.models import MergeRequest
 from ...services.merge_request.summary import get_merge_requests_summary
 
 
-def resolve_merge_requests_summary(parent, info, **kwargs):
+def resolve_merge_requests_summary(parent, info, **kwargs):  # noqa WPS110
     """Resolve merge requests summary."""
     filterset = MergeRequestFilterSet(
         data=kwargs,
