@@ -47,6 +47,7 @@ class AuthFilter(DjangoFilterConnectionField):
         qs = filterset_class(
             data=filter_kwargs,
             queryset=default_manager.get_queryset(),
+            request=info.context,
         ).qs
 
         return super(  # noqa WPS608
