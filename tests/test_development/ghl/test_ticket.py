@@ -19,6 +19,16 @@ from tests.test_development.factories import (
 from tests.test_development.factories_gitlab import AttrDict
 
 
+def test_ticket(user, client):
+    ticket = TicketFactory.create()
+    TicketFactory.create_batch(3)
+
+    client.user = user
+    info = AttrDict({'context': client})
+
+    assert TicketType().get_node(info, ticket.id) == ticket
+
+
 def test_tickets(user, client):
     TicketFactory.create_batch(5)
 
