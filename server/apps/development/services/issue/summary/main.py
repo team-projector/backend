@@ -83,6 +83,9 @@ class IssuesSummaryProvider:
                 issues__milestone=self._options['milestone'],
             )
 
+        if self._options.get('ticket'):
+            queryset = queryset.filter(issues__ticket=self._options['ticket'])
+
         return queryset.aggregate(
             total_time_spent=Sum('time_spent'),
         )['total_time_spent'] or 0

@@ -18,6 +18,7 @@ from tests.test_development.factories import (
     TeamMemberFactory,
     ProjectMilestoneFactory,
     ProjectGroupFactory,
+    TicketFactory,
 )
 from tests.test_development.factories_gitlab import AttrDict
 from tests.test_payroll.factories import IssueSpentTimeFactory
@@ -40,12 +41,7 @@ def test_issue_counts(user):
 
     summary = issue_service.get_issues_summary(
         Issue.objects.filter(user=user),
-        due_date=None,
         user=user,
-        team=None,
-        project=None,
-        state=None,
-        milestone=None
     )
 
     _check_summary(summary, 8, 5, 3, 0, 0)
@@ -72,12 +68,7 @@ def test_problems(user):
 
     summary = issue_service.get_issues_summary(
         Issue.objects.filter(user=user),
-        due_date=None,
         user=user,
-        team=None,
-        project=None,
-        state=None,
-        milestone=None
     )
 
     _check_summary(summary, 5, 5, 0, 0, 4)
@@ -109,10 +100,6 @@ def test_project_summary(user):
         Issue.objects.filter(user=user),
         due_date=datetime.now().date(),
         user=user,
-        team=None,
-        project=None,
-        state=None,
-        milestone=None
     )
 
     summary.projects = issue_service.get_project_summaries(summary.queryset)
@@ -168,12 +155,6 @@ def test_team_summary(db):
 
     summary = issue_service.get_issues_summary(
         Issue.objects.all(),
-        due_date=None,
-        user=None,
-        team=None,
-        project=None,
-        state=None,
-        milestone=None
     )
 
     summary.teams = issue_service.get_team_summaries(summary.queryset)
@@ -272,10 +253,6 @@ def test_time_spents_by_user(user):
         Issue.objects.filter(user=user),
         due_date=datetime.now().date(),
         user=user,
-        team=None,
-        project=None,
-        state=None,
-        milestone=None
     )
 
     _check_summary(summary, 5, 5, 0, 100, 0)
@@ -329,9 +306,6 @@ def test_time_spents_by_team(user):
         due_date=datetime.now().date(),
         user=user,
         team=team,
-        project=None,
-        state=None,
-        milestone=None
     )
 
     _check_summary(summary, 5, 5, 0, 100, 0)
@@ -381,10 +355,7 @@ def test_time_spents_by_project(user):
         Issue.objects.filter(user=user),
         due_date=datetime.now().date(),
         user=user,
-        team=None,
         project=project_1,
-        state=None,
-        milestone=None
     )
 
     _check_summary(summary, 5, 5, 0, 100, 0)
@@ -393,10 +364,7 @@ def test_time_spents_by_project(user):
         Issue.objects.filter(user=another_user),
         due_date=datetime.now().date(),
         user=another_user,
-        team=None,
         project=project_2,
-        state=None,
-        milestone=None
     )
 
     _check_summary(summary, 1, 1, 0, 300, 0)
@@ -439,10 +407,7 @@ def test_time_spents_by_state(user):
         Issue.objects.filter(user=user),
         due_date=datetime.now().date(),
         user=user,
-        team=None,
-        project=None,
         state=ISSUE_STATES.opened,
-        milestone=None
     )
 
     _check_summary(summary, 2, 1, 1, 100, 0)
@@ -451,10 +416,7 @@ def test_time_spents_by_state(user):
         Issue.objects.filter(user=user),
         due_date=datetime.now().date(),
         user=user,
-        team=None,
-        project=None,
         state=ISSUE_STATES.closed,
-        milestone=None
     )
 
     _check_summary(summary, 2, 1, 1, 400, 0)
@@ -493,9 +455,6 @@ def test_time_spents_by_milestone(user):
         Issue.objects.filter(user=user),
         due_date=datetime.now().date(),
         user=user,
-        team=None,
-        project=None,
-        state=None,
         milestone=milestone_1.id
     )
 
@@ -505,16 +464,68 @@ def test_time_spents_by_milestone(user):
         Issue.objects.filter(user=user),
         due_date=datetime.now().date(),
         user=user,
-        team=None,
-        project=None,
-        state=None,
         milestone=milestone_2.id
     )
 
     _check_summary(summary, 2, 2, 0, 300, 0)
 
 
-def test_resolver(user, client):
+def test_time_spents_by_ticket(user):
+    ticket_1 = TicketFactory.create()
+    issue_1 = IssueFactory.create(
+        user=user,
+        due_date=datetime.now(),
+        state=ISSUE_STATES.opened,
+        ticket=ticket_1,
+    )
+    IssueSpentTimeFactory.create(
+        date=datetime.now(),
+        user=user,
+        base=issue_1,
+        time_spent=100
+    )
+
+    ticket_2 = TicketFactory.create()
+    issue_2 = IssueFactory.create(
+        user=user,
+        due_date=datetime.now(),
+        state=ISSUE_STATES.opened,
+        ticket=ticket_2
+    )
+    IssueSpentTimeFactory.create(
+        date=datetime.now(),
+        user=user,
+        base=issue_2,
+        time_spent=300
+    )
+
+    IssueFactory.create_batch(
+        size=3,
+        due_date=datetime.now(),
+        state=ISSUE_STATES.opened,
+        ticket=TicketFactory.create()
+    )
+
+    summary = issue_service.get_issues_summary(
+        Issue.objects.filter(user=user),
+        due_date=datetime.now().date(),
+        user=user,
+        ticket=ticket_1
+    )
+
+    _check_summary(summary, 2, 2, 0, 100, 0)
+
+    summary = issue_service.get_issues_summary(
+        Issue.objects.filter(user=user),
+        due_date=datetime.now().date(),
+        user=user,
+        ticket=ticket_2.id
+    )
+
+    _check_summary(summary, 2, 2, 0, 300, 0)
+
+
+def test_resolve_issues_summary(user, client):
     IssueFactory.create_batch(
         5, user=user,
         state=ISSUE_STATES.opened,
