@@ -13,7 +13,9 @@ def resolve_issues_summary(
     """Resolve issues summary."""
     filterset = IssuesFilterSet(
         data=kwargs,
-        queryset=Issue.objects.all(),
+        queryset=Issue.objects.allowed_for_user(
+            info.context.user,
+        ),
         request=info.context,
     )
 
