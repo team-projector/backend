@@ -1,19 +1,12 @@
 # -*- coding: utf-8 -*-
 
-import getpass
 import os
-import sys
 
-from django.contrib.auth.management import get_default_username
 from django.contrib.auth.management.commands import createsuperuser
 from django.contrib.auth.management.commands.createsuperuser import (
     PASSWORD_FIELD,
-    NotRunningInTTYException,
 )
-from django.contrib.auth.password_validation import validate_password
-from django.core import exceptions
 from django.core.management.base import CommandError
-from django.utils.text import capfirst
 
 
 # TODO: use createsuperuser after Django upgraded to 3 version
