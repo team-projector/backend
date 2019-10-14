@@ -15,6 +15,7 @@ class TicketType(BaseDjangoObjectType):
     """Class representing list of available fields for ticket queries."""
 
     metrics = graphene.Field(TicketMetricsType)
+    type = graphene.String()
 
     def resolve_metrics(self, info, **kwargs):  # noqa WPS110
         """Get metrics."""
