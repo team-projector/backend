@@ -10,6 +10,15 @@ from tests.test_development.factories_gitlab import AttrDict
 from tests.test_users.factories import UserFactory
 
 
+def test_metrics_without_issues(db):
+    ticket = TicketFactory.create()
+
+    metrics = get_ticket_metrics(ticket)
+
+    assert metrics.issues_count == 0
+    assert metrics.time_spent == 0
+
+
 def test_metrics(db):
     ticket = TicketFactory.create()
 

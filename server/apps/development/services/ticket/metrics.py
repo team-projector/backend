@@ -44,6 +44,9 @@ class TicketMetricsProvider:
     ) -> None:
         issues = Issue.objects.filter(ticket=self.ticket)
 
+        if not issues:
+            return
+
         stats = issues.aggregate(
             time_estimate=Coalesce(Sum('time_estimate'), 0),
             time_spent=Coalesce(Sum('total_time_spent'), 0),
@@ -63,9 +66,6 @@ class TicketMetricsProvider:
                 ), 0,
             ),
         )
-
-        if not stats:
-            return
 
         metrics.time_estimate = stats['time_estimate']
         metrics.time_remains = stats['time_estimate'] - stats['time_spent']
