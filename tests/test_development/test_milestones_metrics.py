@@ -25,7 +25,7 @@ def test_filter_issues_not_implemented():
         IssuesContainerMetricsProvider().filter_issues(queryset=None)
 
 
-def test_metrics_issues_without_milestone(user):
+def test_metrics_without_issues(user):
     milestone = ProjectMilestoneFactory.create(budget=10000)
 
     IssueFactory.create_batch(3, user=user)
@@ -40,6 +40,27 @@ def test_metrics_issues_without_milestone(user):
     assert metrics.issues_count == 0
     assert metrics.payroll == 0
     assert metrics.budget_spent == 0
+    assert metrics.time_spent == 0
+
+
+def test_metrics_issues(user):
+    milestone = ProjectMilestoneFactory.create(budget=10000)
+
+    IssueFactory.create_batch(
+        3,
+        user=user,
+        milestone=milestone,
+        total_time_spent=0,
+    )
+
+    metrics = milestone_service.get_metrics(milestone)
+
+    assert metrics.issues_count == 3
+    assert metrics.issues_opened_count == 3
+    assert metrics.issues_closed_count == 0
+    assert metrics.payroll == 0
+    assert metrics.budget_spent == 0
+    assert metrics.time_spent == 0
 
 
 def test_payrolls(user):

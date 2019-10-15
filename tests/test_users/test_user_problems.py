@@ -3,6 +3,7 @@ import pytest
 from apps.core.utils.time import seconds
 from apps.development.models.issue import ISSUE_STATES
 from apps.development.models.merge_request import MERGE_REQUESTS_STATES
+from apps.users.services.problems.checkers.base import BaseProblemChecker
 from apps.users.services.problems.checkers.payroll_opened_overflow import (
     PROBLEM_PAYROLL_OPENED_OVERFLOW,
 )
@@ -22,6 +23,11 @@ from tests.test_users.factories import UserFactory
 @pytest.fixture
 def user(db):
     yield UserFactory.create(daily_work_hours=8)
+
+
+def test_base_checker():
+    with pytest.raises(NotImplementedError):
+        BaseProblemChecker().has_problem(user=None)
 
 
 def test_no_problems(user):

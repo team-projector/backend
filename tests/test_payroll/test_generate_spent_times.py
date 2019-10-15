@@ -1,202 +1,248 @@
 from collections import defaultdict
-from datetime import timedelta
-
-from django.test import TestCase
+from datetime import datetime, timedelta
 from django.utils import timezone
 
 from apps.development.models.note import NOTE_TYPES
 from apps.development.services.parsers import parse_date
 from apps.payroll.models import SpentTime
-from apps.users.models import User
 from tests.test_development.factories import IssueFactory, IssueNoteFactory
+from tests.test_users.factories import UserFactory
 
 
-class AdjustSpentTimesTests(TestCase):
-    def setUp(self):
-        self.issue = IssueFactory.create()
-        self.user = User.objects.create_user(login='user', gl_id=10)
+def test_parse_date():
+    assert parse_date('') is None
+    assert parse_date('2000-01-01') == datetime(2000, 1, 1).date()
 
-    def test_simple(self):
-        self._create_note(NOTE_TYPES.time_spend,
-                          timezone.now() - timedelta(hours=2),
-                          timedelta(hours=1))
-        self._create_note(NOTE_TYPES.time_spend,
-                          timezone.now() - timedelta(hours=1),
-                          timedelta(hours=5))
-        self._create_note(NOTE_TYPES.time_spend,
-                          timezone.now() - timedelta(hours=1),
-                          -timedelta(hours=3))
-        self._create_note(NOTE_TYPES.reset_spend,
-                          timezone.now() - timedelta(minutes=30))
 
-        self.issue.adjust_spent_times()
+def test_simple(user):
+    issue = IssueFactory.create()
 
-        self._check_generated_time_spents()
+    _create_note(user, issue,
+                 NOTE_TYPES.time_spend,
+                 timezone.now() - timedelta(hours=2),
+                 timedelta(hours=1))
+    _create_note(user, issue,
+                 NOTE_TYPES.time_spend,
+                 timezone.now() - timedelta(hours=1),
+                 timedelta(hours=5))
+    _create_note(user, issue,
+                 NOTE_TYPES.time_spend,
+                 timezone.now() - timedelta(hours=1),
+                 -timedelta(hours=3))
+    _create_note(user, issue,
+                 NOTE_TYPES.reset_spend,
+                 timezone.now() - timedelta(minutes=30))
 
-    def test_different_created_at_and_date(self):
-        self._create_note(NOTE_TYPES.time_spend,
-                          timezone.now() - timedelta(hours=2),
-                          timedelta(hours=1),
-                          date=(timezone.now() - timedelta(days=1)).date())
-        self._create_note(NOTE_TYPES.time_spend,
-                          timezone.now() - timedelta(hours=1),
-                          timedelta(hours=5),
-                          date=(timezone.now() - timedelta(days=2)).date())
-        self._create_note(NOTE_TYPES.time_spend,
-                          timezone.now() - timedelta(hours=1),
-                          -timedelta(hours=3),
-                          date=(timezone.now() - timedelta(days=3)).date())
-        self._create_note(NOTE_TYPES.reset_spend,
-                          timezone.now() - timedelta(minutes=30),
-                          date=(timezone.now() - timedelta(days=5)).date())
+    issue.adjust_spent_times()
 
-        self.issue.adjust_spent_times()
+    _check_generated_time_spents(issue)
 
-        self._check_generated_time_spents()
 
-    def test_many_resets(self):
-        self._create_note(NOTE_TYPES.time_spend,
-                          timezone.now() - timedelta(hours=2),
-                          timedelta(hours=1))
-        self._create_note(NOTE_TYPES.time_spend,
-                          timezone.now() - timedelta(hours=1),
-                          timedelta(hours=5))
-        self._create_note(NOTE_TYPES.time_spend,
-                          timezone.now() - timedelta(hours=1),
-                          -timedelta(hours=3))
-        self._create_note(NOTE_TYPES.reset_spend,
-                          timezone.now() - timedelta(minutes=30))
+def test_different_created_at_and_date(user):
+    issue = IssueFactory.create()
 
-        self._create_note(NOTE_TYPES.time_spend,
-                          timezone.now() - timedelta(hours=5),
-                          -timedelta(hours=3))
-        self._create_note(NOTE_TYPES.time_spend,
-                          timezone.now() - timedelta(hours=6),
-                          timedelta(hours=4))
+    _create_note(user, issue,
+                 NOTE_TYPES.time_spend,
+                 timezone.now() - timedelta(hours=2),
+                 timedelta(hours=1),
+                 date=(timezone.now() - timedelta(days=1)).date())
+    _create_note(user, issue,
+                 NOTE_TYPES.time_spend,
+                 timezone.now() - timedelta(hours=1),
+                 timedelta(hours=5),
+                 date=(timezone.now() - timedelta(days=2)).date())
+    _create_note(user, issue,
+                 NOTE_TYPES.time_spend,
+                 timezone.now() - timedelta(hours=1),
+                 -timedelta(hours=3),
+                 date=(timezone.now() - timedelta(days=3)).date())
+    _create_note(user, issue,
+                 NOTE_TYPES.reset_spend,
+                 timezone.now() - timedelta(minutes=30),
+                 date=(timezone.now() - timedelta(days=5)).date())
 
-        self.issue.adjust_spent_times()
-        self._check_generated_time_spents()
+    issue.adjust_spent_times()
 
-    def test_only_reset(self):
-        self._create_note(NOTE_TYPES.reset_spend,
-                          timezone.now() - timedelta(minutes=30))
+    _check_generated_time_spents(issue)
 
-        self.issue.adjust_spent_times()
 
-        self._check_generated_time_spents()
+def test_many_resets(user):
+    issue = IssueFactory.create()
 
-    def test_multi_user_reset(self):
-        user_2 = User.objects.create_user(login='user 2', gl_id=11)
+    _create_note(user, issue,
+                 NOTE_TYPES.time_spend,
+                 timezone.now() - timedelta(hours=2),
+                 timedelta(hours=1))
+    _create_note(user, issue,
+                 NOTE_TYPES.time_spend,
+                 timezone.now() - timedelta(hours=1),
+                 timedelta(hours=5))
+    _create_note(user, issue,
+                 NOTE_TYPES.time_spend,
+                 timezone.now() - timedelta(hours=1),
+                 -timedelta(hours=3))
+    _create_note(user, issue,
+                 NOTE_TYPES.reset_spend,
+                 timezone.now() - timedelta(minutes=30))
 
-        self._create_note(NOTE_TYPES.time_spend,
-                          timezone.now() - timedelta(hours=6),
-                          timedelta(hours=4), user=user_2)
-        self._create_note(NOTE_TYPES.time_spend,
-                          timezone.now() - timedelta(hours=5),
-                          -timedelta(hours=3), user=user_2)
-        self._create_note(NOTE_TYPES.reset_spend,
-                          timezone.now() - timedelta(hours=4), user=user_2)
+    _create_note(user, issue,
+                 NOTE_TYPES.time_spend,
+                 timezone.now() - timedelta(hours=5),
+                 -timedelta(hours=3))
+    _create_note(user, issue,
+                 NOTE_TYPES.time_spend,
+                 timezone.now() - timedelta(hours=6),
+                 timedelta(hours=4))
 
-        self._create_note(NOTE_TYPES.time_spend,
-                          timezone.now() - timedelta(hours=4),
-                          timedelta(hours=5))
-        self._create_note(NOTE_TYPES.time_spend,
-                          timezone.now() - timedelta(hours=2),
-                          timedelta(hours=1))
-        self._create_note(NOTE_TYPES.time_spend,
-                          timezone.now() - timedelta(hours=1),
-                          timedelta(hours=5))
-        self._create_note(NOTE_TYPES.time_spend,
-                          timezone.now() - timedelta(hours=1),
-                          -timedelta(hours=3))
-        self._create_note(NOTE_TYPES.reset_spend,
-                          timezone.now() - timedelta(minutes=30))
+    issue.adjust_spent_times()
+    _check_generated_time_spents(issue)
 
-        self._create_note(NOTE_TYPES.time_spend,
-                          timezone.now() - timedelta(hours=1),
-                          timedelta(hours=5), user=user_2)
-        self._create_note(NOTE_TYPES.reset_spend,
-                          timezone.now() - timedelta(minutes=30), user=user_2)
 
-        self.issue.adjust_spent_times()
+def test_only_reset(user):
+    issue = IssueFactory.create()
 
-        self._check_generated_time_spents()
+    _create_note(user, issue,
+                 NOTE_TYPES.reset_spend,
+                 timezone.now() - timedelta(minutes=30))
 
-    def test_spents_but_moved_from(self):
-        spent_before = self._create_note(NOTE_TYPES.time_spend,
-                                         timezone.now() - timedelta(hours=2),
-                                         timedelta(hours=1))
+    issue.adjust_spent_times()
 
-        moved_from = self._create_note(NOTE_TYPES.moved_from,
-                                       timezone.now() - timedelta(hours=1))
+    _check_generated_time_spents(issue)
 
-        spent_after = self._create_note(NOTE_TYPES.time_spend,
-                                        timezone.now() - timedelta(minutes=30),
-                                        timedelta(hours=5))
 
-        self.issue.adjust_spent_times()
+def test_multi_user_reset(user):
+    issue = IssueFactory.create()
 
-        self.assertFalse(SpentTime.objects.filter(note=spent_before).exists())
-        self.assertFalse(SpentTime.objects.filter(note=moved_from).exists())
-        self.assertTrue(SpentTime.objects.filter(note=spent_after).exists())
+    user_2 = UserFactory.create()
 
-    def test_spents_with_resets_but_moved_from(self):
-        spent_before = self._create_note(NOTE_TYPES.time_spend,
-                                         timezone.now() - timedelta(hours=2),
-                                         timedelta(hours=1))
+    _create_note(user_2, issue,
+                 NOTE_TYPES.time_spend,
+                 timezone.now() - timedelta(hours=6),
+                 timedelta(hours=4))
+    _create_note(user_2, issue,
+                 NOTE_TYPES.time_spend,
+                 timezone.now() - timedelta(hours=5),
+                 -timedelta(hours=3))
+    _create_note(user_2, issue,
+                 NOTE_TYPES.reset_spend,
+                 timezone.now() - timedelta(hours=4))
 
-        moved_from = self._create_note(NOTE_TYPES.moved_from,
-                                       timezone.now() - timedelta(hours=1))
+    _create_note(user, issue,
+                 NOTE_TYPES.time_spend,
+                 timezone.now() - timedelta(hours=4),
+                 timedelta(hours=5))
+    _create_note(user, issue,
+                 NOTE_TYPES.time_spend,
+                 timezone.now() - timedelta(hours=2),
+                 timedelta(hours=1))
+    _create_note(user, issue,
+                 NOTE_TYPES.time_spend,
+                 timezone.now() - timedelta(hours=1),
+                 timedelta(hours=5))
+    _create_note(user, issue,
+                 NOTE_TYPES.time_spend,
+                 timezone.now() - timedelta(hours=1),
+                 -timedelta(hours=3))
+    _create_note(user, issue,
+                 NOTE_TYPES.reset_spend,
+                 timezone.now() - timedelta(minutes=30))
 
-        spent_after = self._create_note(NOTE_TYPES.time_spend,
-                                        timezone.now() - timedelta(minutes=30),
-                                        timedelta(hours=5))
+    _create_note(user_2, issue,
+                 NOTE_TYPES.time_spend,
+                 timezone.now() - timedelta(hours=1),
+                 timedelta(hours=5))
+    _create_note(user_2, issue,
+                 NOTE_TYPES.reset_spend,
+                 timezone.now() - timedelta(minutes=30))
 
-        reset_spend = self._create_note(NOTE_TYPES.reset_spend,
-                                        timezone.now() - timedelta(minutes=15))
+    issue.adjust_spent_times()
 
-        self.issue.adjust_spent_times()
+    _check_generated_time_spents(issue)
 
-        self.assertFalse(SpentTime.objects.filter(note=spent_before).exists())
-        self.assertFalse(SpentTime.objects.filter(note=moved_from).exists())
-        self.assertTrue(SpentTime.objects.filter(note=spent_after).exists())
 
-        reset_spent_time = SpentTime.objects.filter(note=reset_spend).first()
-        self.assertIsNotNone(reset_spent_time)
-        self.assertEqual(
-            -timedelta(hours=5).total_seconds(),
-            reset_spent_time.time_spent
-        )
+def test_spents_but_moved_from(user):
+    issue = IssueFactory.create()
 
-    def _create_note(self, note_type, created_at, spent: timedelta = None,
-                     date=None, user=None):
-        return IssueNoteFactory.create(
-            type=note_type,
-            created_at=created_at,
-            updated_at=created_at,
-            user=user or self.user,
-            content_object=self.issue,
-            data={
-                'spent': spent.total_seconds(),
-                'date': date or created_at.date()
-            } if spent else {}
-        )
+    spent_before = _create_note(user, issue,
+                                NOTE_TYPES.time_spend,
+                                timezone.now() - timedelta(hours=2),
+                                timedelta(hours=1))
 
-    def _check_generated_time_spents(self):
-        users_spents = defaultdict(int)
+    moved_from = _create_note(user, issue,
+                              NOTE_TYPES.moved_from,
+                              timezone.now() - timedelta(hours=1))
 
-        for note in self.issue.notes.all().order_by('created_at'):
-            spent_time = SpentTime.objects.filter(note=note).first()
+    spent_after = _create_note(user, issue,
+                               NOTE_TYPES.time_spend,
+                               timezone.now() - timedelta(minutes=30),
+                               timedelta(hours=5))
 
-            self.assertIsNotNone(spent_time)
+    issue.adjust_spent_times()
 
-            if note.type == NOTE_TYPES.reset_spend:
-                self.assertEqual(
-                    spent_time.time_spent,
-                    -users_spents[note.user_id]
-                )
-                users_spents[note.user_id] = 0
-            elif note.type == NOTE_TYPES.time_spend:
-                self.assertEqual(spent_time.time_spent, note.data['spent'])
-                self.assertEqual(spent_time.date, parse_date(note.data['date']))
-                users_spents[note.user_id] += note.data['spent']
+    assert SpentTime.objects.filter(note=spent_before).exists() is False
+    assert SpentTime.objects.filter(note=moved_from).exists() is False
+    assert SpentTime.objects.filter(note=spent_after).exists() is True
+
+
+def test_spents_with_resets_but_moved_from(user):
+    issue = IssueFactory.create()
+
+    spent_before = _create_note(user, issue,
+                                NOTE_TYPES.time_spend,
+                                timezone.now() - timedelta(hours=2),
+                                timedelta(hours=1))
+
+    moved_from = _create_note(user, issue,
+                              NOTE_TYPES.moved_from,
+                              timezone.now() - timedelta(hours=1))
+
+    spent_after = _create_note(user, issue,
+                               NOTE_TYPES.time_spend,
+                               timezone.now() - timedelta(minutes=30),
+                               timedelta(hours=5))
+
+    reset_spend = _create_note(user, issue,
+                               NOTE_TYPES.reset_spend,
+                               timezone.now() - timedelta(minutes=15))
+
+    issue.adjust_spent_times()
+
+    assert SpentTime.objects.filter(note=spent_before).exists() is False
+    assert SpentTime.objects.filter(note=moved_from).exists() is False
+    assert SpentTime.objects.filter(note=spent_after).exists() is True
+
+    reset_spent_time = SpentTime.objects.filter(note=reset_spend).first()
+    assert reset_spent_time is not None
+    assert -timedelta(hours=5).total_seconds() == reset_spent_time.time_spent
+
+
+def _create_note(user, issue, note_type, created_at,
+                 spent: timedelta = None, date=None, ):
+    return IssueNoteFactory.create(
+        type=note_type,
+        created_at=created_at,
+        updated_at=created_at,
+        user=user,
+        content_object=issue,
+        data={
+            'spent': spent.total_seconds(),
+            'date': date or created_at.date()
+        } if spent else {}
+    )
+
+
+def _check_generated_time_spents(issue):
+    users_spents = defaultdict(int)
+
+    for note in issue.notes.all().order_by('created_at'):
+        spent_time = SpentTime.objects.filter(note=note).first()
+
+        assert spent_time is not None
+
+        if note.type == NOTE_TYPES.reset_spend:
+            assert spent_time.time_spent == -users_spents[note.user_id]
+            users_spents[note.user_id] = 0
+        elif note.type == NOTE_TYPES.time_spend:
+            assert spent_time.time_spent == note.data['spent']
+            assert spent_time.date == parse_date(note.data['date'])
+            users_spents[note.user_id] += note.data['spent']
