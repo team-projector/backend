@@ -30,7 +30,7 @@ def test_counts_by_state(user):
 
     MergeRequestFactory.create_batch(
         2, user=user,
-        state=None,
+        state='',
         total_time_spent=0
     )
     MergeRequestFactory.create_batch(
