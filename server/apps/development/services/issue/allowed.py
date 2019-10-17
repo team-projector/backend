@@ -18,7 +18,7 @@ def check_allow_project_manager(user: User) -> None:
 
 def filter_allowed_for_user(
     queryset: QuerySet,
-    user: User
+    user: User,
 ) -> QuerySet:
     """Get allowed issues for user."""
     team_member_issues = filter_by_team_member_role(queryset, user)
@@ -30,7 +30,7 @@ def filter_allowed_for_user(
 
 def filter_by_project_member_role(
     queryset: QuerySet,
-    user: User
+    user: User,
 ) -> QuerySet:
     """Get issues for project manager."""
     return queryset.filter(
@@ -41,7 +41,7 @@ def filter_by_project_member_role(
 
 def filter_by_team_member_role(
     queryset: QuerySet,
-    user: User
+    user: User,
 ) -> QuerySet:
     """
     Get allowed issues for user.
