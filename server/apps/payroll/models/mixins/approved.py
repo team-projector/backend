@@ -44,7 +44,6 @@ class ApprovedMixin(models.Model):
     )
 
     decline_reason = models.TextField(
-        null=True,
         blank=True,
         verbose_name=_('VN__DECLINE_REASON'),
         help_text=_('HT__DECLINE_REASON'),

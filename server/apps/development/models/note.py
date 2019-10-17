@@ -61,9 +61,7 @@ class Note(models.Model):
         blank=True,
     )
 
-    body = models.TextField(
-        null=True,
-    )
+    body = models.TextField()
 
     type = models.CharField(  # noqa A003
         choices=NOTE_TYPES,

@@ -27,7 +27,6 @@ class Ticket(Timestamps):
         choices=TICKET_TYPES,
         max_length=TICKET_TYPE_MAX_LENGTH,
         blank=True,
-        null=True,
         verbose_name=_('VN__TYPE'),
         help_text=_('HT__TYPE'),
     )

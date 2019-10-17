@@ -85,7 +85,6 @@ class Salary(Timestamps):
     )
 
     comments = models.TextField(
-        null=True,
         blank=True,
         verbose_name=_('VN__COMMENTS'),
         help_text=_('HT__COMMENTS'),

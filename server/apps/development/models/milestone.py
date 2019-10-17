@@ -41,7 +41,6 @@ class Milestone(
     )
 
     description = models.TextField(
-        null=True,
         blank=True,
         verbose_name=_('VN__DESCRIPTION'),
         help_text=_('HT__DESCRIPTION'),
@@ -57,7 +56,6 @@ class Milestone(
     state = models.CharField(
         choices=MILESTONE_STATES,
         max_length=MILESTONE_STATE_MAX_LENGTH,
-        null=True,
         blank=True,
         verbose_name=_('VN__STATE'),
         help_text=_('HT__STATE'),
