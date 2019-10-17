@@ -3,10 +3,8 @@
 from typing import Iterable
 
 from apps.users.models import User
-from apps.users.services.problems.checkers import (
-    NotEnoughTasksChecker,
-    PayrollOpenedOverflowChecker,
-)
+
+from .checkers import NotEnoughTasksChecker, PayrollOpenedOverflowChecker
 
 checkers = [
     checker_class()
@@ -14,7 +12,7 @@ checkers = [
 ]
 
 
-def get_user_problems(user: User) -> Iterable[str]:
+def get_problems(user: User) -> Iterable[str]:
     """Get problems for user."""
     problems = []
 

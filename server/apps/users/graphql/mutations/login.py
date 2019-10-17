@@ -5,7 +5,7 @@ import graphene
 from apps.core.graphql.mutations import BaseMutation
 from apps.core.graphql.security.permissions import AllowAny
 from apps.users.graphql.types import TokenType
-from apps.users.services.auth import login_user
+from apps.users.services import user as user_service
 
 
 class LoginMutation(BaseMutation):
@@ -22,7 +22,7 @@ class LoginMutation(BaseMutation):
     @classmethod
     def do_mutate(cls, root, info, login, password):  # noqa WPS110
         """After successful login return token."""
-        token = login_user(
+        token = user_service.login_user(
             login,
             password,
             info.context,
