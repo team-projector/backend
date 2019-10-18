@@ -119,7 +119,6 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     gl_token = models.CharField(
         max_length=USER_GITLAB_TOKEN_MAX_LENGTH,
-        null=True,
         blank=True,
         verbose_name=_('VN__PERSONAL_GITLAB_TOKEN'),
         help_text=_('HT__PERSONAL_GITLAB_TOKEN'),

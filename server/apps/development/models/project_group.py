@@ -25,7 +25,6 @@ class ProjectGroup(GitlabEntityMixin):
 
     full_title = models.CharField(
         max_length=DEFAULT_TITLE_LENGTH,
-        null=True,
         blank=True,
         verbose_name=_('VN__FULL_TITLE'),
         help_text=_('HT__FULL_TITLE'),

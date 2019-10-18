@@ -20,7 +20,7 @@ from tests.test_users.factories import UserFactory
 def test_filter_by_state(user):
     issue_opened = IssueFactory.create(user=user, state=ISSUE_STATES.opened)
     issue_closed = IssueFactory.create(user=user, state=ISSUE_STATES.closed)
-    IssueFactory.create_batch(5, user=user, state=None)
+    IssueFactory.create_batch(5, user=user, state='')
 
     results = IssuesFilterSet(
         data={'state': ISSUE_STATES.opened},

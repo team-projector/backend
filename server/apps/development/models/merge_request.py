@@ -56,7 +56,6 @@ class MergeRequest(
     state = models.CharField(
         choices=MERGE_REQUESTS_STATES,
         max_length=MERGE_REQUESTS_STATE_MAX_LENGTH,
-        null=True,
         blank=True,
         verbose_name=_('VN__STATE'),
         help_text=_('HT__STATE'),
