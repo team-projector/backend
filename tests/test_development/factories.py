@@ -128,7 +128,5 @@ class MergeRequestFactory(GitlabFieldMixin):
 
 
 class ProjectMemberFactory(factory.django.DjangoModelFactory):
-    user = factory.SubFactory(UserFactory)
-
     class Meta:
         model = ProjectMember
