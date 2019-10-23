@@ -20,6 +20,8 @@ spec:
             requests:
               memory: "100Mi"
               cpu: "10m"
+            limits:
+              memory: "200Mi"
           image: {{ .Values.image.name }}:{{ .Values.image.tag }}
           command: ["celery"]
           args: ["-A", "server.celery_app", "worker"]

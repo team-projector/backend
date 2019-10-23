@@ -8,5 +8,4 @@ spec:
   ports:
     - name: http
       port: 5555
-      # nodePort: 30011
   type: ClusterIP
