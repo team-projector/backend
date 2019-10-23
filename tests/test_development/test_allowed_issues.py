@@ -4,6 +4,9 @@ from tests.test_development.factories import (
     IssueFactory,
     ProjectFactory,
     ProjectMemberFactory,
+    ProjectMilestoneFactory,
+    ProjectGroupFactory,
+    ProjectGroupMilestoneFactory,
     TeamFactory,
     TeamMemberFactory,
 )
@@ -91,15 +94,17 @@ def test_by_team_watcher(user):
     assert allowed.count() == 4
 
 
-def test_by_project_manager(db):
+def test_by_project_manager_project_milestone(db):
     project_1 = ProjectFactory.create()
     pm_1 = ProjectMemberFactory.create(
         role=PROJECT_MEMBER_ROLES.project_manager,
         owner=project_1,
     )
 
-    issue_1 = IssueFactory.create(project=project_1)
-    issue_2 = IssueFactory.create(project=project_1)
+    milestone_1 = ProjectMilestoneFactory.create(owner=project_1)
+
+    issue_1 = IssueFactory.create(milestone=milestone_1)
+    issue_2 = IssueFactory.create(milestone=milestone_1)
 
     project_2 = ProjectFactory.create()
     pm_2 = ProjectMemberFactory.create(
@@ -107,8 +112,10 @@ def test_by_project_manager(db):
         owner=project_2,
     )
 
-    issue_3 = IssueFactory.create(project=project_2)
-    issue_4 = IssueFactory.create(project=project_2)
+    milestone_2 = ProjectMilestoneFactory.create(owner=project_2)
+
+    issue_3 = IssueFactory.create(milestone=milestone_2)
+    issue_4 = IssueFactory.create(milestone=milestone_2)
 
     project_3 = ProjectFactory.create()
     pm_3 = ProjectMemberFactory.create(
@@ -116,7 +123,9 @@ def test_by_project_manager(db):
         owner=project_3,
     )
 
-    IssueFactory.create_batch(3, project=project_3)
+    milestone_3 = ProjectMilestoneFactory.create(owner=project_3)
+
+    IssueFactory.create_batch(3, milestone=milestone_3)
 
     project_4 = ProjectFactory.create()
     pm_4 = ProjectMemberFactory.create(
@@ -124,7 +133,9 @@ def test_by_project_manager(db):
         owner=project_4,
     )
 
-    IssueFactory.create_batch(3, project=project_4)
+    milestone_4 = ProjectMilestoneFactory.create(owner=project_4)
+
+    IssueFactory.create_batch(3, milestone=milestone_4)
 
     allowed = Issue.objects.allowed_for_user(pm_1.user)
 
@@ -143,6 +154,112 @@ def test_by_project_manager(db):
     allowed = Issue.objects.allowed_for_user(pm_4.user)
 
     assert allowed.count() == 0
+
+
+def test_by_project_manager_group_milestone(db):
+    group_1 = ProjectGroupFactory.create()
+    pm_1 = ProjectMemberFactory.create(
+        role=PROJECT_MEMBER_ROLES.project_manager,
+        owner=group_1,
+    )
+
+    milestone_1 = ProjectGroupMilestoneFactory.create(owner=group_1)
+
+    issue_1 = IssueFactory.create(milestone=milestone_1)
+    issue_2 = IssueFactory.create(milestone=milestone_1)
+
+    group_2 = ProjectGroupFactory.create()
+    pm_2 = ProjectMemberFactory.create(
+        role=PROJECT_MEMBER_ROLES.project_manager,
+        owner=group_2,
+    )
+
+    milestone_2 = ProjectGroupMilestoneFactory.create(owner=group_2)
+
+    issue_3 = IssueFactory.create(milestone=milestone_2)
+    issue_4 = IssueFactory.create(milestone=milestone_2)
+
+    group_3 = ProjectGroupFactory.create()
+    pm_3 = ProjectMemberFactory.create(
+        role=PROJECT_MEMBER_ROLES.developer,
+        owner=group_3,
+    )
+
+    milestone_3 = ProjectGroupMilestoneFactory.create(owner=group_3)
+
+    IssueFactory.create_batch(3, milestone=milestone_3)
+
+    group_4 = ProjectGroupFactory.create()
+    pm_4 = ProjectMemberFactory.create(
+        role=PROJECT_MEMBER_ROLES.customer,
+        owner=group_4,
+    )
+
+    milestone_4 = ProjectGroupMilestoneFactory.create(owner=group_4)
+
+    IssueFactory.create_batch(3, milestone=milestone_4)
+
+    allowed = Issue.objects.allowed_for_user(pm_1.user)
+
+    assert allowed.count() == 2
+    assert set(allowed) == {issue_1, issue_2}
+
+    allowed = Issue.objects.allowed_for_user(pm_2.user)
+
+    assert allowed.count() == 2
+    assert set(allowed) == {issue_3, issue_4}
+
+    allowed = Issue.objects.allowed_for_user(pm_3.user)
+
+    assert allowed.count() == 0
+
+    allowed = Issue.objects.allowed_for_user(pm_4.user)
+
+    assert allowed.count() == 0
+
+
+def test_by_project_manager_group_hier_milestone(db):
+    group_level_3 = ProjectGroupFactory.create()
+    pm_1 = ProjectMemberFactory.create(
+        role=PROJECT_MEMBER_ROLES.project_manager,
+        owner=group_level_3,
+    )
+    pm_2 = ProjectMemberFactory.create(
+        role=PROJECT_MEMBER_ROLES.developer,
+        owner=group_level_3,
+    )
+
+    milestone_1 = ProjectGroupMilestoneFactory.create(owner=group_level_3)
+
+    issue_1 = IssueFactory.create(milestone=milestone_1)
+    issue_2 = IssueFactory.create(milestone=milestone_1)
+
+    group_level_2 = ProjectGroupFactory.create(parent=group_level_3)
+    pm_3 = ProjectMemberFactory.create(
+        role=PROJECT_MEMBER_ROLES.project_manager,
+        owner=group_level_2,
+    )
+
+    milestone_2 = ProjectGroupMilestoneFactory.create(owner=group_level_2)
+
+    issue_3 = IssueFactory.create(milestone=milestone_2)
+
+    group_level_1 = ProjectGroupFactory.create(parent=group_level_2)
+
+    milestone_3 = ProjectGroupMilestoneFactory.create(owner=group_level_1)
+
+    issue_4 = IssueFactory.create(milestone=milestone_3)
+
+    allowed = Issue.objects.allowed_for_user(pm_1.user)
+    assert allowed.count() == 4
+    assert set(allowed) == {issue_1, issue_2, issue_3, issue_4}
+
+    allowed = Issue.objects.allowed_for_user(pm_2.user)
+    assert allowed.count() == 0
+
+    allowed = Issue.objects.allowed_for_user(pm_3.user)
+    assert allowed.count() == 2
+    assert set(allowed) == {issue_3, issue_4}
 
 
 def test_project_members_team_members(db):
@@ -185,10 +302,12 @@ def test_project_members_team_members(db):
         owner=project_1,
     )
 
-    issue_1 = IssueFactory.create(project=project_1, user=user_pm)
-    issue_2 = IssueFactory.create(project=project_1, user=user_lead)
-    issue_3 = IssueFactory.create(project=project_1, user=user_dev)
-    issue_4 = IssueFactory.create(project=project_1, user=None)
+    milestone_1 = ProjectMilestoneFactory.create(owner=project_1)
+
+    issue_1 = IssueFactory.create(milestone=milestone_1, user=user_pm)
+    issue_2 = IssueFactory.create(milestone=milestone_1, user=user_lead)
+    issue_3 = IssueFactory.create(milestone=milestone_1, user=user_dev)
+    issue_4 = IssueFactory.create(milestone=milestone_1, user=None)
 
     project_2 = ProjectFactory.create()
     ProjectMemberFactory.create(
@@ -207,9 +326,11 @@ def test_project_members_team_members(db):
         owner=project_2,
     )
 
-    issue_5 = IssueFactory.create(project=project_2, user=user_dev)
-    issue_6 = IssueFactory.create(project=project_2, user=user_dev)
-    issue_7 = IssueFactory.create(project=project_2, user=None)
+    milestone_2 = ProjectMilestoneFactory.create(owner=project_2)
+
+    issue_5 = IssueFactory.create(milestone=milestone_2, user=user_dev)
+    issue_6 = IssueFactory.create(milestone=milestone_2, user=user_dev)
+    issue_7 = IssueFactory.create(milestone=milestone_2, user=None)
 
     project_3 = ProjectFactory.create()
     ProjectMemberFactory.create(
@@ -217,7 +338,10 @@ def test_project_members_team_members(db):
         role=PROJECT_MEMBER_ROLES.developer,
         owner=project_3,
     )
-    IssueFactory.create_batch(10, project=project_3)
+
+    milestone_3 = ProjectMilestoneFactory.create(owner=project_3)
+
+    IssueFactory.create_batch(10, milestone=milestone_3)
 
     allowed = Issue.objects.allowed_for_user(user_pm)
 
