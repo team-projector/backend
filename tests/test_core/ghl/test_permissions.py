@@ -5,6 +5,8 @@ from apps.core.graphql.security.permissions import (
     AllowAuthenticated,
     AllowProjectManager,
 )
+from apps.development.graphql.types.issue import IssueType
+from tests.test_development.factories import IssueFactory
 from tests.test_development.factories_gitlab import AttrDict
 
 
@@ -49,3 +51,21 @@ def test_project_manager(client, user):
     assert bool(perms.has_node_permission(info=info, obj_id='1')) is True
     assert bool(perms.has_mutation_permission(root=None, info=info)) is True
     assert bool(perms.has_filter_permission(info=info)) is True
+
+
+def test_auth_node(client, user):
+    issue = IssueFactory.create(user=user)
+
+    client.user = AnonymousUser()
+
+    info = AttrDict({
+        'context': client,
+        'field_asts': [{}],
+        'fragments': {},
+    })
+
+    assert IssueType().get_node(info, issue.id) is None
+
+    client.user = user
+
+    assert IssueType().get_node(info, issue.id) == issue
