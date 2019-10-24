@@ -24,7 +24,7 @@ class CreateTicketMutation(
         title = graphene.String(required=True)
         start_date = graphene.Date(required=True)
         due_date = graphene.Date(required=True)
-        url = graphene.String(required=True)
+        url = graphene.String()
         milestone = graphene.ID()
 
     ticket = graphene.Field(TicketType)

@@ -10,7 +10,8 @@ from apps.development.graphql.types.ticket import TicketType
 from apps.development.models.ticket import (
     Ticket,
     TYPE_FEATURE,
-    TYPE_BUG_FIXING,)
+    TYPE_BUG_FIXING,
+)
 
 from tests.test_development.factories import (
     TicketFactory,
