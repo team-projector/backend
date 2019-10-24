@@ -43,7 +43,7 @@ def test_order_by_due_date(db):
     )
 
     results = TicketsFilterSet(
-        data={'order_by': 'due_date'},
+        data={'order_by': 'dueDate'},
         queryset=Ticket.objects.all(),
     ).qs
 
@@ -51,7 +51,7 @@ def test_order_by_due_date(db):
     assert list(results) == [ticket_1, ticket_3, ticket_2]
 
     results = TicketsFilterSet(
-        data={'order_by': '-due_date'},
+        data={'order_by': '-dueDate'},
         queryset=Ticket.objects.all(),
     ).qs
 
