@@ -2,6 +2,7 @@
 
 import django_filters
 
+from apps.core.graphql.filters.ordering import OrderingFilter
 from apps.development.models import Milestone, Ticket
 
 
@@ -11,7 +12,7 @@ class TicketsFilterSet(django_filters.FilterSet):
     milestone = django_filters.ModelChoiceFilter(
         queryset=Milestone.objects.all(),
     )
-    order_by = django_filters.OrderingFilter(
+    order_by = OrderingFilter(
         fields=('due_date',),
     )
 
