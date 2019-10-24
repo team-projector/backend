@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+from typing import Iterable
+
 from django.core.exceptions import PermissionDenied
 from django.db.models import Exists, OuterRef, QuerySet
 
@@ -24,62 +26,50 @@ def filter_allowed_for_user(
     """Get allowed issues for user."""
     team_member_issues = filter_by_team_member_role(queryset, user)
 
-    project_member_issues = filter_by_project_member_role(queryset, user)
+    project_member_issues = queryset.filter(
+        project__in=get_allowed_projects(user),
+    )
 
     return queryset.filter(id__in=team_member_issues | project_member_issues)
 
 
-def filter_by_project_member_role(
-    queryset: QuerySet,
-    user: User,
-) -> QuerySet:
-    """Get issues for project manager."""
-    projects = []
-
+def get_allowed_projects(user) -> Iterable[Project]:
+    """Get allowed projects for user."""
     members = ProjectMember.objects.filter(
         user=user,
         role=PROJECT_MEMBER_ROLES.project_manager,
         id=OuterRef('members__id'),
     )
 
-    projects_by_managers = Project.objects.annotate(
+    projects = list(Project.objects.annotate(
+        is_allowed=Exists(members),
+    ).filter(
+        is_allowed=True,
+    ))
+
+    groups = ProjectGroup.objects.annotate(
         is_allowed=Exists(members),
     ).filter(
         is_allowed=True,
     )
 
-    for project in projects_by_managers:
-        projects.append(project)
+    for group in groups:
+        projects.extend(get_projects_from_group(group))
 
-    groups_by_managers = ProjectGroup.objects.annotate(
-        is_allowed=Exists(members),
-    ).filter(
-        is_allowed=True,
-    )
-
-    projects = get_project_from_groups(groups_by_managers, projects)
-
-    return queryset.filter(project__in=projects)
+    return set(projects)
 
 
-def get_project_from_groups(
-    groups: QuerySet,
-    projects: list,
-) -> list:
-    """Get milestones of groups."""
-    projects_on_level = Project.objects.filter(
-        group__in=groups,
-    )
+def get_projects_from_group(
+    group: ProjectGroup,
+) -> Iterable[Project]:
+    """Get projects from group."""
+    projects = list(Project.objects.filter(group=group))
 
-    for project in projects_on_level:
-        projects.append(project)
+    child_groups = ProjectGroup.objects.filter(parent=group)
+    for child_group in child_groups:
+        projects.extend(get_projects_from_group(child_group))
 
-    children_groups = ProjectGroup.objects.filter(parent__in=groups)
-
-    if children_groups.exists():
-        get_project_from_groups(children_groups, projects)
-
-    return projects
+    return set(projects)
 
 
 def filter_by_team_member_role(

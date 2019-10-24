@@ -1,4 +1,4 @@
-from apps.development.models import Issue, TeamMember
+from apps.development.models import Issue, TeamMember, Project, ProjectGroup
 from apps.development.models.project_member import PROJECT_MEMBER_ROLES
 from tests.test_development.factories import (
     IssueFactory,
@@ -210,8 +210,9 @@ def test_pm_customer_group(db):
     assert allowed.count() == 0
 
 
-def test_pm_managers_group_hierarchy(db):
+def test_pm_manager_group_hierarchy(db):
     group_level_1 = ProjectGroupFactory.create()
+
     manager_1 = ProjectMemberFactory.create(
         role=PROJECT_MEMBER_ROLES.project_manager,
         owner=group_level_1,
@@ -222,10 +223,6 @@ def test_pm_managers_group_hierarchy(db):
     issue_2 = IssueFactory.create(project=project_1)
 
     group_level_0 = ProjectGroupFactory.create(parent=group_level_1)
-    manager_2 = ProjectMemberFactory.create(
-        role=PROJECT_MEMBER_ROLES.project_manager,
-        owner=group_level_0,
-    )
     project_2 = ProjectFactory.create(group=group_level_0)
 
     issue_3 = IssueFactory.create(project=project_2)
@@ -239,12 +236,8 @@ def test_pm_managers_group_hierarchy(db):
     assert allowed.count() == 3
     assert set(allowed) == {issue_1, issue_2, issue_3}
 
-    allowed = Issue.objects.allowed_for_user(manager_2.user)
-    assert allowed.count() == 1
-    assert set(allowed) == {issue_3}
 
-
-def test_complex(db):
+def test_pm_and_tm_complex(db):
     manager = UserFactory.create()
     leader = UserFactory.create()
     developer = UserFactory.create()
