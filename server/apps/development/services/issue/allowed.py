@@ -1,9 +1,14 @@
 # -*- coding: utf-8 -*-
 
 from django.core.exceptions import PermissionDenied
-from django.db.models import Q, QuerySet
+from django.db.models import Exists, OuterRef, Q, QuerySet
 
-from apps.development.models import Milestone, ProjectGroup
+from apps.development.models import (
+    Milestone,
+    Project,
+    ProjectGroup,
+    ProjectMember,
+)
 from apps.development.models.project_member import PROJECT_MEMBER_ROLES
 from apps.development.services.team_members import filter_by_roles
 from apps.users.models import User
@@ -36,17 +41,26 @@ def filter_by_project_member_role(
     """Get issues for project manager."""
     milestones = []
 
-    project_milestones = Milestone.objects.filter(
-        project__members__user=user,
-        project__members__role=PROJECT_MEMBER_ROLES.project_manager,
+    members = ProjectMember.objects.filter(
+        user=user,
+        role=PROJECT_MEMBER_ROLES.project_manager,
+        id=OuterRef('members__id'),
     )
 
-    for milestone in project_milestones:
-        milestones.append(milestone)
+    projects = Project.objects.annotate(
+        is_allowed=Exists(members),
+    ).filter(
+        is_allowed=True,
+    )
 
-    groups = ProjectGroup.objects.filter(
-        members__user=user,
-        members__role=PROJECT_MEMBER_ROLES.project_manager,
+    for project in projects:
+        for milestone in project.milestones.all():
+            milestones.append(milestone)
+
+    groups = ProjectGroup.objects.annotate(
+        is_allowed=Exists(members),
+    ).filter(
+        is_allowed=True,
     )
 
     milestones = get_group_milestones(groups, milestones)
@@ -68,7 +82,7 @@ def get_group_milestones(
 
     children_groups = ProjectGroup.objects.filter(parent__in=groups)
 
-    if children_groups:
+    if children_groups.exists():
         get_group_milestones(children_groups, milestones)
 
     return milestones
