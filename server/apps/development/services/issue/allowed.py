@@ -1,14 +1,9 @@
 # -*- coding: utf-8 -*-
 
 from django.core.exceptions import PermissionDenied
-from django.db.models import Exists, OuterRef, Q, QuerySet
+from django.db.models import Exists, OuterRef, QuerySet
 
-from apps.development.models import (
-    Milestone,
-    Project,
-    ProjectGroup,
-    ProjectMember,
-)
+from apps.development.models import Project, ProjectGroup, ProjectMember
 from apps.development.models.project_member import PROJECT_MEMBER_ROLES
 from apps.development.services.team_members import filter_by_roles
 from apps.users.models import User
@@ -39,7 +34,7 @@ def filter_by_project_member_role(
     user: User,
 ) -> QuerySet:
     """Get issues for project manager."""
-    milestones = []
+    projects = []
 
     members = ProjectMember.objects.filter(
         user=user,
@@ -47,45 +42,44 @@ def filter_by_project_member_role(
         id=OuterRef('members__id'),
     )
 
-    projects = Project.objects.annotate(
+    projects_by_managers = Project.objects.annotate(
         is_allowed=Exists(members),
     ).filter(
         is_allowed=True,
     )
 
-    for project in projects:
-        for milestone in project.milestones.all():
-            milestones.append(milestone)
+    for project in projects_by_managers:
+        projects.append(project)
 
-    groups = ProjectGroup.objects.annotate(
+    groups_by_managers = ProjectGroup.objects.annotate(
         is_allowed=Exists(members),
     ).filter(
         is_allowed=True,
     )
 
-    milestones = get_group_milestones(groups, milestones)
+    projects = get_project_from_groups(groups_by_managers, projects)
 
-    return queryset.filter(milestone__in=milestones)
+    return queryset.filter(project__in=projects)
 
 
-def get_group_milestones(
+def get_project_from_groups(
     groups: QuerySet,
-    milestones: list,
+    projects: list,
 ) -> list:
     """Get milestones of groups."""
-    milestones_on_level = Milestone.objects.filter(
-        Q(project_group__in=groups) | Q(project__group__in=groups),
+    projects_on_level = Project.objects.filter(
+        group__in=groups,
     )
 
-    for milestone in milestones_on_level:
-        milestones.append(milestone)
+    for project in projects_on_level:
+        projects.append(project)
 
     children_groups = ProjectGroup.objects.filter(parent__in=groups)
 
     if children_groups.exists():
-        get_group_milestones(children_groups, milestones)
+        get_project_from_groups(children_groups, projects)
 
-    return milestones
+    return projects
 
 
 def filter_by_team_member_role(
