@@ -30,7 +30,9 @@ def filter_allowed_for_user(
         project__in=get_allowed_projects(user),
     )
 
-    return queryset.filter(id__in=team_member_issues | project_member_issues)
+    return queryset.filter(
+        id__in=team_member_issues | project_member_issues,
+    )
 
 
 def get_allowed_projects(user) -> Iterable[Project]:
@@ -77,7 +79,7 @@ def filter_by_team_member_role(
     user: User,
 ) -> QuerySet:
     """
-    Get allowed issues for user.
+    Get allowed issues for user from teams.
 
     Allow for current user, team leader or watcher.
     """
