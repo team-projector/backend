@@ -2,14 +2,10 @@
 
 from django.urls import path
 
-from . import views
+from apps.development.api import views
 
 app_name = 'development'
 
 urlpatterns = [
-    path(
-        'gl-webhook',
-        views.gl_webhook,
-        name='gl-webhook',
-    ),
+    path('gl-webhook', views.gl_webhook, name='gl-webhook'),
 ]
