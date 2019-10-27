@@ -8,9 +8,8 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 
 from apps.core.models.utils import Choices
+from apps.development.models.managers import NoteManager
 from apps.users.models import User
-
-from .managers import NoteManager
 
 NOTE_TYPES = Choices(
     ('time_spend', 'Time spend'),

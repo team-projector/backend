@@ -23,6 +23,8 @@ class MergeRequestManager(models.Manager):
 
     def allowed_for_user(self, user: User) -> QuerySet:
         """Issues allowed for team leader and watchers."""
-        from ...services.merge_request import filter_allowed_for_user
+        from apps.development.services.merge_request import (
+            filter_allowed_for_user,
+        )
 
         return filter_allowed_for_user(self, user)

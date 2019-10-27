@@ -5,8 +5,7 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 
 from apps.core.consts import DEFAULT_TITLE_LENGTH
-
-from .team_member import TeamMember
+from apps.development.models.team_member import TeamMember
 
 
 class Team(models.Model):

@@ -6,8 +6,7 @@ from django.utils.translation import gettext_lazy as _
 
 from apps.core.consts import DEFAULT_TITLE_LENGTH
 from apps.core.models.mixins import GitlabEntityMixin
-
-from .managers import ProjectGroupManager
+from apps.development.models.managers import ProjectGroupManager
 
 
 class ProjectGroup(GitlabEntityMixin):

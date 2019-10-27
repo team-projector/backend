@@ -12,8 +12,7 @@ from apps.core.models.mixins import (
     Timestamps,
 )
 from apps.core.models.utils import Choices
-
-from .managers import MilestoneManager
+from apps.development.models.managers import MilestoneManager
 
 MILESTONE_STATES = Choices(
     ('active', 'active'),

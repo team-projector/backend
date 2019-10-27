@@ -7,9 +7,8 @@ from django.utils.translation import gettext_lazy as _
 
 from apps.core.consts import DEFAULT_TITLE_LENGTH
 from apps.core.models.mixins import GitlabEntityMixin
+from apps.development.models.managers import ProjectManager
 from apps.development.models.milestone import MILESTONE_STATES
-
-from .managers import ProjectManager
 
 
 class Project(GitlabEntityMixin):
@@ -96,7 +95,7 @@ class Project(GitlabEntityMixin):
 
         If milestones not found return milestones from parent group.
         """
-        from ..services.project_group import load_for_group
+        from apps.development.services.project_group import load_for_group
 
         ret = self.milestones.filter(state=MILESTONE_STATES.active)
 
