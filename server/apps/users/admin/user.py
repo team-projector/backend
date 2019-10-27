@@ -14,8 +14,7 @@ from apps.core.admin.mixins import (
     ForceSyncEntityMixin,
 )
 from apps.development.tasks import sync_user
-
-from ..models import User
+from apps.users.models import User
 
 
 @admin.register(User)

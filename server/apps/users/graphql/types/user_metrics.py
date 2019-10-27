@@ -2,7 +2,7 @@
 
 import graphene
 
-from .work_item_user_metrics import (
+from apps.users.graphql.types.work_item_user_metrics import (
     IssueUserMetricsType,
     MergeRequestUserMetricsType,
 )

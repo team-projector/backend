@@ -6,10 +6,9 @@ from django.db.models import QuerySet
 from apps.core.graphql.connections import DataSourceConnection
 from apps.core.graphql.relay_nodes import DatasourceRelayNode
 from apps.core.graphql.types import BaseDjangoObjectType
+from apps.users.graphql.types.user_metrics import UserMetricsType
 from apps.users.models import User
 from apps.users.services import user as user_service
-
-from .user_metrics import UserMetricsType
 
 
 class UserType(BaseDjangoObjectType):

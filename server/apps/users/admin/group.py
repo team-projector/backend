@@ -4,8 +4,7 @@ from django.contrib import admin
 from django.contrib.auth.models import Group
 
 from apps.core.admin.base import BaseModelAdmin
-
-from .forms import GroupAdminForm
+from apps.users.admin.forms import GroupAdminForm
 
 admin.site.unregister(Group)
 
@@ -14,6 +13,6 @@ admin.site.unregister(Group)
 class GroupAdmin(BaseModelAdmin):
     """A class representing Group model for admin dashboard."""
 
-    list_display = ('name',)
     form = GroupAdminForm
+    list_display = ('name',)
     search_fields = ('name',)
