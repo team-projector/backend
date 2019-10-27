@@ -7,8 +7,8 @@ from apps.core.graphql.connections import DataSourceConnection
 from apps.core.graphql.relay_nodes import DatasourceRelayNode
 from apps.core.graphql.types import BaseDjangoObjectType
 from apps.development.graphql.filters import MilestonesFilterSet
+from apps.development.graphql.interfaces import MilestoneOwner
 from apps.development.graphql.resolvers import ProjectMilestonesResolver
-from apps.development.graphql.types.interfaces import MilestoneOwner
 from apps.development.graphql.types.milestone import MilestoneType
 from apps.development.models import Project
 from apps.development.services.issue import IssuesProjectSummary
@@ -27,14 +27,15 @@ class ProjectType(BaseDjangoObjectType):
         if isinstance(getattr(self, 'parent_type', None), IssuesProjectSummary):
             ret = self.active_milestones
 
-            if kwargs.get('order_by') == 'due_date':
+            ordering = kwargs.get('order_by')
+
+            if ordering == 'due_date':
                 default = datetime.max.date()
                 ret = sorted(
                     ret,
                     key=lambda milestone: milestone.due_date or default,
                 )
-
-            elif kwargs.get('order_by') == '-due_date':
+            elif ordering == '-due_date':
                 default = datetime.min.date()
                 ret = sorted(
                     ret,

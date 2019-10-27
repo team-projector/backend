@@ -5,11 +5,10 @@ from django.contrib.auth import get_user_model
 from django.db.models import Prefetch, QuerySet
 
 from apps.core import graphql
-from apps.development.graphql.types.interfaces import WorkItem
+from apps.development.graphql.interfaces import WorkItem
+from apps.development.graphql.types.issue_metrics import IssueMetricsType
 from apps.development.models import Issue, Label
 from apps.development.services import issue as issue_service
-
-from .issue_metrics import IssueMetricsType
 
 
 class IssueType(graphql.BaseDjangoObjectType):

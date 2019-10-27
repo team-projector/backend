@@ -2,8 +2,10 @@
 
 import graphene
 
-from .project import ProjectType
-from .project_issues_summary import ProjectIssuesSummary
+from apps.development.graphql.types.project import ProjectType
+from apps.development.graphql.types.project_issues_summary import (
+    ProjectIssuesSummary,
+)
 
 
 class IssuesProjectSummary(graphene.ObjectType):

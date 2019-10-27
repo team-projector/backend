@@ -5,12 +5,13 @@ from django.contrib.auth import get_user_model
 from django.db import models
 
 from apps.core import graphql
+from apps.development import graphql as development_graphql
 from apps.development import models as development_models
+from apps.development.graphql.interfaces import WorkItem
+from apps.development.graphql.types.merge_request_metrics import (
+    MergeRequestMetricsType,
+)
 from apps.development.services import merge_request as merge_request_service
-
-from ... import graphql as development_graphql
-from .interfaces import WorkItem
-from .merge_request_metrics import MergeRequestMetricsType
 
 
 class MergeRequestType(graphql.BaseDjangoObjectType):

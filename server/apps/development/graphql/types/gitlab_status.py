@@ -3,9 +3,10 @@
 import graphene
 
 from apps.core.graphql.connection_fields import DataSourceConnectionField
-
-from .gitlab_service_status import GitlabServiceStatusType
-from .issue import IssueType
+from apps.development.graphql.types.gitlab_service_status import (
+    GitlabServiceStatusType,
+)
+from apps.development.graphql.types.issue import IssueType
 
 
 class GitlabStatusType(graphene.ObjectType):

@@ -3,9 +3,8 @@
 import graphene
 
 from apps.core.graphql.connection_fields import DataSourceConnectionField
-
-from ..label import LabelType
-from ..project import ProjectType
+from apps.development.graphql.types.label import LabelType
+from apps.development.graphql.types.project import ProjectType
 
 
 class WorkItem(graphene.Interface):
