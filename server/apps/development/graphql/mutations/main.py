@@ -1,12 +1,15 @@
 # -*- coding: utf-8 -*-
 
-from .issues import (
+from apps.development.graphql.mutations.issues import (
     AddSpendIssueMutation,
     SyncIssueMutation,
     UpdateIssueMutation,
 )
-from .milestones import SyncMilestoneMutation
-from .ticket import CreateTicketMutation, UpdateTicketMutation
+from apps.development.graphql.mutations.milestones import SyncMilestoneMutation
+from apps.development.graphql.mutations.ticket import (
+    CreateTicketMutation,
+    UpdateTicketMutation,
+)
 
 
 class IssuesMutations:

@@ -6,9 +6,15 @@ from django.db.models import QuerySet
 
 from apps.core.graphql.filters import SearchFilter
 from apps.core.graphql.filters.ordering import OrderingFilter
-
-from ...models import Issue, Milestone, Project, Team, TeamMember, Ticket
-from ...services import issue as issue_service
+from apps.development.models import (
+    Issue,
+    Milestone,
+    Project,
+    Team,
+    TeamMember,
+    Ticket,
+)
+from apps.development.services import issue as issue_service
 
 User = get_user_model()
 

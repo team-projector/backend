@@ -2,8 +2,9 @@
 
 from apps.development.graphql.filters import MergeRequestFilterSet
 from apps.development.models import MergeRequest
-
-from ...services.merge_request.summary import get_merge_requests_summary
+from apps.development.services.merge_request.summary import (
+    get_merge_requests_summary,
+)
 
 
 def resolve_merge_requests_summary(parent, info, **kwargs):  # noqa WPS110
