@@ -4,10 +4,16 @@ from datetime import date
 from typing import Iterable
 
 from apps.development.models import Team
-
-from .base import ProgressMetricsProvider, TeamMemberProgressMetrics
-from .day import DayMetricsProvider
-from .week import WeekMetricsProvider
+from apps.development.services.team.metrics.progress.base import (
+    ProgressMetricsProvider,
+    TeamMemberProgressMetrics,
+)
+from apps.development.services.team.metrics.progress.day import (
+    DayMetricsProvider,
+)
+from apps.development.services.team.metrics.progress.week import (
+    WeekMetricsProvider,
+)
 
 
 def create_provider(

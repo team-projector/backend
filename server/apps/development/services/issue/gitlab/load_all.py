@@ -10,9 +10,10 @@ from apps.core.activity.verbs import ACTION_GITLAB_CALL_API
 from apps.core.gitlab import get_gitlab_client
 from apps.core.tasks import add_action
 from apps.development.models import Project
-
-from .checkers import check_project_deleted_issues
-from .issue import load_for_project
+from apps.development.services.issue.gitlab.checkers import (
+    check_project_deleted_issues,
+)
+from apps.development.services.issue.gitlab.issue import load_for_project
 
 logger = logging.getLogger(__name__)
 

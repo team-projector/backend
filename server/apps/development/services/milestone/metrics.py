@@ -4,9 +4,8 @@ from django.db.models import Q, QuerySet, Sum
 from django.db.models.functions import Coalesce
 
 from apps.development.models import Milestone
+from apps.development.services import issue
 from apps.payroll.models import SpentTime
-
-from .. import issue
 
 
 class MilestoneMetrics(issue.IssuesContainerMetrics):

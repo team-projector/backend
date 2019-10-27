@@ -7,12 +7,15 @@ from gitlab.v4.objects import ProjectIssue as GlProjectIssue
 
 from apps.core import gitlab
 from apps.development.models import Issue, Milestone, Project
+from apps.development.services.issue.gitlab.labels import load_issue_labels
+from apps.development.services.issue.gitlab.merge_requests import (
+    load_merge_requests,
+)
+from apps.development.services.issue.gitlab.notes import load_issue_notes
+from apps.development.services.issue.gitlab.participants import (
+    load_issue_participants,
+)
 from apps.users.services.user.gitlab import extract_user_from_data
-
-from .labels import load_issue_labels
-from .merge_requests import load_merge_requests
-from .notes import load_issue_notes
-from .participants import load_issue_participants
 
 logger = logging.getLogger(__name__)
 

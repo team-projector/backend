@@ -1,9 +1,11 @@
 # -*- coding: utf-8 -*-
 
+from apps.development.services.team.metrics.progress.base import (
+    ProgressMetricsProvider,
+    UserProgressMetricsList,
+)
 from apps.users.models import User
 from apps.users.services.user import get_progress_metrics
-
-from .base import ProgressMetricsProvider, UserProgressMetricsList
 
 
 class WeekMetricsProvider(ProgressMetricsProvider):
