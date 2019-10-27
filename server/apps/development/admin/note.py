@@ -3,8 +3,7 @@
 from django.contrib import admin
 
 from apps.core.admin.base import BaseModelAdmin
-
-from ..models import Note
+from apps.development.models import Note
 
 
 @admin.register(Note)

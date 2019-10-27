@@ -3,8 +3,7 @@
 from django.contrib import admin
 
 from apps.core.admin.base import BaseModelAdmin
-
-from ..models import Ticket
+from apps.development.models import Ticket
 
 
 @admin.register(Ticket)

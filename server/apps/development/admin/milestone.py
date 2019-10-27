@@ -4,9 +4,8 @@ from django.contrib import admin
 
 from apps.core.admin.base import BaseModelAdmin
 from apps.core.admin.mixins import ForceSyncEntityMixin
+from apps.development.models import Milestone, Project, ProjectGroup
 from apps.development.tasks import sync_group_milestone, sync_project_milestone
-
-from ..models import Milestone, Project, ProjectGroup
 
 
 @admin.register(Milestone)

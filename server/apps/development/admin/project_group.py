@@ -4,10 +4,9 @@ from django.contrib import admin
 
 from apps.core.admin.base import BaseModelAdmin
 from apps.core.admin.mixins import ForceSyncEntityMixin
+from apps.development.admin.inlines import ProjectMemberInline
+from apps.development.models import ProjectGroup
 from apps.development.tasks import sync_project_group
-
-from ..models import ProjectGroup
-from .inlines import ProjectMemberInline
 
 
 @admin.register(ProjectGroup)

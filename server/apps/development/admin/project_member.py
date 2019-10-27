@@ -3,8 +3,7 @@
 from django.contrib import admin
 
 from apps.core.admin.base import BaseModelAdmin
-
-from ..models import ProjectMember
+from apps.development.models import ProjectMember
 
 
 @admin.register(ProjectMember)

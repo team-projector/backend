@@ -4,11 +4,10 @@ from django.contrib import admin
 
 from apps.core.admin.base import BaseModelAdmin
 from apps.core.admin.mixins import ForceSyncEntityMixin
+from apps.development.admin.filters import ProjectFilter
+from apps.development.admin.inlines import NoteInline
+from apps.development.models import MergeRequest
 from apps.development.tasks import sync_project_merge_request
-
-from ..models import MergeRequest
-from .filters import ProjectFilter
-from .inlines import NoteInline
 
 
 @admin.register(MergeRequest)

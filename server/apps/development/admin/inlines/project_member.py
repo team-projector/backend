@@ -1,8 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from apps.core.admin.inlines import BaseGenericTabularInline
-
-from ...models import ProjectMember
+from apps.development.models import ProjectMember
 
 
 class ProjectMemberInline(BaseGenericTabularInline):

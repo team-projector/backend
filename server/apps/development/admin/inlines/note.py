@@ -1,8 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from apps.core.admin.inlines import BaseGenericStackedInline
-
-from ...models import Note
+from apps.development.models import Note
 
 
 class NoteInline(BaseGenericStackedInline):

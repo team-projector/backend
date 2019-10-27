@@ -4,12 +4,10 @@ from django.contrib import admin
 
 from apps.core.admin.base import BaseModelAdmin
 from apps.core.admin.mixins import ForceSyncEntityMixin
-from apps.development.admin.filters import MilestoneFilter
+from apps.development.admin.filters import MilestoneFilter, ProjectFilter
+from apps.development.admin.inlines import NoteInline
+from apps.development.models import Issue
 from apps.development.tasks import sync_project_issue
-
-from ..models import Issue
-from .filters import ProjectFilter
-from .inlines import NoteInline
 
 
 @admin.register(Issue)
