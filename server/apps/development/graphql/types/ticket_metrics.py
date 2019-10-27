@@ -2,7 +2,9 @@
 
 import graphene
 
-from .issues_container_metrics import IssuesContainerMetricsType
+from apps.development.graphql.types.issues_container_metrics import (
+    IssuesContainerMetricsType,
+)
 
 
 class TicketMetricsType(IssuesContainerMetricsType):

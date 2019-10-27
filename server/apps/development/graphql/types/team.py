@@ -8,11 +8,10 @@ from apps.core.graphql.connections import DataSourceConnection
 from apps.core.graphql.relay_nodes import DatasourceRelayNode
 from apps.core.graphql.types import BaseDjangoObjectType
 from apps.development.graphql.filters import TeamMembersFilterSet
+from apps.development.graphql.types.team_member import TeamMemberType
+from apps.development.graphql.types.team_metrics import TeamMetricsType
 from apps.development.models import Team
 from apps.development.services import team as team_service
-
-from .team_member import TeamMemberType
-from .team_metrics import TeamMetricsType
 
 
 class TeamType(BaseDjangoObjectType):
