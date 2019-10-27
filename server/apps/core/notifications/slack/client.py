@@ -4,7 +4,7 @@ from contextlib import suppress
 
 from slack.errors import SlackApiError
 
-from . import get_slack_client
+from apps.core.notifications.slack import get_slack_client
 
 
 class SlackClient:

@@ -1,12 +1,11 @@
 # -*- coding: utf-8 -*-
 
+from apps.payroll.models import Salary
 from apps.payroll.services.salary.notifications import (
     send_email_report,
     send_slack_report,
 )
 from celery_app import app
-
-from ..models.salary import Salary
 
 
 @app.task
