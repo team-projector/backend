@@ -3,8 +3,9 @@ import pytest
 from apps.core.utils.time import seconds
 from apps.development.models.issue import ISSUE_STATES
 from apps.development.models.merge_request import MERGE_REQUESTS_STATES
-from apps.users.services import user as user_service
 from apps.users.graphql.types.user import UserType
+from apps.users.services import user as user_service
+from apps.users.services.user.problems.checkers.base import BaseProblemChecker
 from tests.test_development.factories import IssueFactory
 from tests.test_payroll.factories import (
     IssueSpentTimeFactory,
@@ -18,9 +19,9 @@ def user(db):
     yield UserFactory.create(daily_work_hours=8)
 
 
-def test_base_checker():
+def test_base_checker_not_implemented():
     with pytest.raises(NotImplementedError):
-        user_service.BaseProblemChecker().has_problem(user=None)
+        BaseProblemChecker().has_problem(user=None)
 
 
 def test_no_problems(user):
@@ -63,7 +64,8 @@ def test_not_enough_tasks_issues(user):
         state=ISSUE_STATES.closed,
     )
 
-    assert user_service.get_problems(user) == [user_service.PROBLEM_NOT_ENOUGH_TASKS]
+    assert user_service.get_problems(user) == [
+        user_service.PROBLEM_NOT_ENOUGH_TASKS]
 
 
 def test_not_enough_tasks_merge_requests(user):
@@ -95,7 +97,8 @@ def test_not_enough_tasks_merge_requests(user):
         state=MERGE_REQUESTS_STATES.merged,
     )
 
-    assert user_service.get_problems(user) == [user_service.PROBLEM_NOT_ENOUGH_TASKS]
+    assert user_service.get_problems(user) == [
+        user_service.PROBLEM_NOT_ENOUGH_TASKS]
 
 
 def test_not_enough_tasks_complex(user):
@@ -113,7 +116,8 @@ def test_not_enough_tasks_complex(user):
         state=MERGE_REQUESTS_STATES.opened,
     )
 
-    assert user_service.get_problems(user) == [user_service.PROBLEM_NOT_ENOUGH_TASKS]
+    assert user_service.get_problems(user) == [
+        user_service.PROBLEM_NOT_ENOUGH_TASKS]
 
 
 def test_payroll_opened_overflow(user):
@@ -127,8 +131,9 @@ def test_payroll_opened_overflow(user):
         time_spent=seconds(hours=8),
     )
 
-    assert user_service.get_problems(user) == [user_service.PROBLEM_NOT_ENOUGH_TASKS,
-                                               user_service.PROBLEM_PAYROLL_OPENED_OVERFLOW]
+    assert user_service.get_problems(user) == [
+        user_service.PROBLEM_NOT_ENOUGH_TASKS,
+        user_service.PROBLEM_PAYROLL_OPENED_OVERFLOW]
 
 
 def test_resolver(user):

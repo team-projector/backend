@@ -9,8 +9,7 @@ from apps.development.models.merge_request import (
     MergeRequest,
 )
 from apps.users.models import User
-
-from . import BaseProblemChecker
+from apps.users.services.user.problems.checkers.base import BaseProblemChecker
 
 PROBLEM_NOT_ENOUGH_TASKS = 'not_enough_tasks'
 

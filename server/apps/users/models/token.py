@@ -1,17 +1,16 @@
 # -*- coding: utf-8 -*-
 
+from django.conf import settings
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 from rest_framework.authtoken.models import Token as BaseToken
-
-from .user import User
 
 
 class Token(BaseToken):
     """The authorization token model."""
 
     user = models.ForeignKey(
-        User,
+        settings.AUTH_USER_MODEL,
         models.CASCADE,
     )
 
