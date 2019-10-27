@@ -3,10 +3,9 @@
 from apps.core.activity.verbs import ACTION_GITLAB_CALL_API
 from apps.core.gitlab import get_gitlab_client
 from apps.core.tasks import add_action
+from apps.development.models import Project
 from apps.development.services import merge_request
 from celery_app import app
-
-from ..models import Project
 
 
 @app.task(queue='low_priority')

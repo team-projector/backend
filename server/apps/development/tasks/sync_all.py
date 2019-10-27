@@ -2,11 +2,13 @@
 
 from apps.development.services.project.gitlab import load_projects
 from apps.development.services.project_group.gitlab import load_groups
+from apps.development.tasks.issues import sync_issues
+from apps.development.tasks.merge_requests import sync_merge_requests
+from apps.development.tasks.milestones import (
+    sync_groups_milestones,
+    sync_projects_milestones,
+)
 from celery_app import app
-
-from .issues import sync_issues
-from .merge_requests import sync_merge_requests
-from .milestones import sync_groups_milestones, sync_projects_milestones
 
 
 @app.task(queue='low_priority')

@@ -1,10 +1,8 @@
 # -*- coding: utf-8 -*-
 
-
+from apps.development.models import ProjectGroup, Project
+from apps.development.services import milestone as milestone_service
 from celery_app import app
-
-from ..models import Project, ProjectGroup
-from ..services import milestone as milestone_service
 
 
 @app.task(queue='low_priority')
