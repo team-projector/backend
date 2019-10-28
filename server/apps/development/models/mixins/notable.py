@@ -9,6 +9,7 @@ from django.utils.translation import gettext_lazy as _
 
 from apps.development.models.note import NOTE_TYPES, Note
 from apps.development.services.parsers import parse_date
+from apps.payroll.models import SpentTime
 
 
 class NotableMixin(models.Model):
@@ -25,7 +26,6 @@ class NotableMixin(models.Model):
 
     def adjust_spent_times(self) -> None:
         """Create spent times from parsed notes."""
-        from apps.payroll.models import SpentTime
 
         users_spents: DefaultDict[int, int] = defaultdict(int)
 

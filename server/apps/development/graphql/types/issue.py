@@ -7,8 +7,10 @@ from django.db.models import Prefetch, QuerySet
 from apps.core import graphql
 from apps.development.graphql.interfaces import WorkItem
 from apps.development.graphql.types.issue_metrics import IssueMetricsType
+from apps.development.graphql.types.label import LabelType
 from apps.development.models import Issue, Label
 from apps.development.services import issue as issue_service
+from apps.users.graphql.types import UserType
 
 
 class IssueType(graphql.BaseDjangoObjectType):
@@ -57,8 +59,6 @@ class IssueType(graphql.BaseDjangoObjectType):
 
         # TODO: condsider using graphene_django_optimizer here
         if graphql.is_field_selected(info, 'edges.node.participants'):
-            from apps.users.graphql.types import UserType
-
             users = get_user_model().objects
             queryset = queryset.prefetch_related(Prefetch(
                 'participants',
@@ -68,8 +68,6 @@ class IssueType(graphql.BaseDjangoObjectType):
 
         # TODO: condsider using graphene_django_optimizer here
         if graphql.is_field_selected(info, 'edges.node.labels'):
-            from apps.development.graphql.types import LabelType
-
             queryset = queryset.prefetch_related(Prefetch(
                 'labels',
                 queryset=LabelType.get_queryset(Label.objects, info).all(),

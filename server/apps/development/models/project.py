@@ -95,7 +95,9 @@ class Project(GitlabEntityMixin):
 
         If milestones not found return milestones from parent group.
         """
-        from apps.development.services.project_group import load_for_group
+        from apps.development.services.project_group import (  # noqa WPS433
+            load_for_group,
+        )
 
         ret = self.milestones.filter(state=MILESTONE_STATES.active)
 

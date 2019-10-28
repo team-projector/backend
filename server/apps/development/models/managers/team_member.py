@@ -9,11 +9,9 @@ class TeamMemberManager(models.Manager):
 
     def get_no_watchers(self, team) -> QuerySet:
         """Get all users without watchers for team."""
-        from apps.development.models import TeamMember
-
         return self.filter(
             team=team,
-            roles=~TeamMember.roles.watcher,
+            roles=~self.model.roles.watcher,
         ).values_list(
             'user',
             flat=True,

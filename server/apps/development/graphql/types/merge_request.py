@@ -12,6 +12,7 @@ from apps.development.graphql.types.merge_request_metrics import (
     MergeRequestMetricsType,
 )
 from apps.development.services import merge_request as merge_request_service
+from apps.users.graphql.types import UserType
 
 
 class MergeRequestType(graphql.BaseDjangoObjectType):
@@ -59,8 +60,6 @@ class MergeRequestType(graphql.BaseDjangoObjectType):
 
         # TODO: condsider using graphene_django_optimizer here
         if graphql.is_field_selected(info, 'edges.node.participants'):
-            from apps.users.graphql.types import UserType
-
             users = get_user_model().objects
             queryset = queryset.prefetch_related(models.Prefetch(
                 'participants',

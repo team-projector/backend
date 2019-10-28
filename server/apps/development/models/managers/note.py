@@ -4,15 +4,18 @@ from typing import Any
 
 from django.db import models
 
+from apps.core.gitlab.parsers import parse_gl_datetime
+
 
 class NoteManager(models.Manager):
     """The note model manager."""
 
     def sync_gitlab(self, gl_note, issue) -> Any:
         """Parse note and save from Gitlab."""
-        from apps.users.services.user.gitlab import extract_user_from_data
-        from apps.development.services.note.gitlab import read_note
-        from apps.core.gitlab.parsers import parse_gl_datetime
+        from apps.development.services.note.gitlab import read_note  # noqa WPS433
+        from apps.users.services.user.gitlab import (  # noqa WPS433
+            extract_user_from_data,
+        )
 
         last_date = issue.last_note_date
 
