@@ -26,7 +26,6 @@ class NotableMixin(models.Model):
 
     def adjust_spent_times(self) -> None:
         """Create spent times from parsed notes."""
-
         users_spents: DefaultDict[int, int] = defaultdict(int)
 
         for note in self._get_notes_for_processing():

@@ -5,7 +5,12 @@ from typing import Iterable
 from django.core.exceptions import PermissionDenied
 from django.db.models import Exists, OuterRef, QuerySet
 
-from apps.development.models import Project, ProjectGroup, ProjectMember
+from apps.development.models import (
+    Project,
+    ProjectGroup,
+    ProjectMember,
+    TeamMember,
+)
 from apps.development.models.project_member import PROJECT_MEMBER_ROLES
 from apps.development.services.team_members import filter_by_roles
 from apps.users.models import User
@@ -83,8 +88,6 @@ def filter_by_team_member_role(
 
     Allow for current user, team leader or watcher.
     """
-    from apps.development.models import TeamMember
-
     allowed_users = {user}
 
     members = filter_by_roles(
