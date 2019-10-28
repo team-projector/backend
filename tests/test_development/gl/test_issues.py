@@ -11,14 +11,24 @@ from apps.development.models.note import NOTE_TYPES
 from apps.development.services import issue as issue_service
 
 from tests.test_development.checkers_gitlab import (
-    check_issue, check_user
+    check_issue,
+    check_user,
 )
 from tests.test_development.factories import (
-    IssueFactory, ProjectFactory, ProjectMilestoneFactory
+    IssueFactory,
+    MergeRequestFactory,
+    ProjectFactory,
+    ProjectMilestoneFactory,
 )
 from tests.test_development.factories_gitlab import (
-    AttrDict, GlIssueFactory, GlLabelFactory, GlNoteFactory, GlProjectFactory,
-    GlProjectMilestoneFactory, GlTimeStats, GlUserFactory, GlMergeRequestFactory
+    AttrDict,
+    GlIssueFactory,
+    GlNoteFactory,
+    GlProjectFactory,
+    GlProjectMilestoneFactory,
+    GlTimeStats,
+    GlUserFactory,
+    GlMergeRequestFactory,
 )
 
 
@@ -94,33 +104,6 @@ def test_load_issue_notes(db, gl_mocker):
 
 
 @override_settings(GITLAB_TOKEN='GITLAB_TOKEN')
-def test_load_issue_labels(db, gl_mocker):
-    gl_mocker.registry_get('/user', GlUserFactory())
-    gl = get_gitlab_client()
-
-    gl_project = AttrDict(GlProjectFactory())
-    project = ProjectFactory.create(gl_id=gl_project.id)
-    gl_mocker.registry_get(f'/projects/{gl_project.id}', gl_project)
-
-    gl_label = AttrDict(GlLabelFactory())
-    gl_mocker.registry_get(f'/projects/{gl_project.id}/labels', [gl_label])
-
-    gl_issue = AttrDict(GlIssueFactory(project_id=gl_project.id), labels=[gl_label.name])
-    issue = IssueFactory.create(gl_id=gl_issue.id, gl_iid=gl_issue.iid, project=project)
-    gl_mocker.registry_get(f'/projects/{gl_project.id}/issues/{gl_issue.iid}', gl_issue)
-
-    gl_project_loaded = gl.projects.get(id=project.gl_id)
-    gl_issue_loaded = gl_project_loaded.issues.get(id=issue.gl_iid)
-
-    issue_service.load_issue_labels(issue, gl_project_loaded, gl_issue_loaded)
-
-    issue = Issue.objects.first()
-
-    assert issue.gl_id == gl_issue.id
-    assert issue.labels.first().title == gl_label.name
-
-
-@override_settings(GITLAB_TOKEN='GITLAB_TOKEN')
 def test_load_for_project(db, gl_mocker):
     gl_mocker.registry_get('/user', GlUserFactory())
     gl = get_gitlab_client()
@@ -155,7 +138,7 @@ def test_load_for_project(db, gl_mocker):
 
 
 @override_settings(GITLAB_TOKEN='GITLAB_TOKEN')
-def test_load_for_project_without_milistone(db, gl_mocker):
+def test_load_for_project_without_milestone(db, gl_mocker):
     gl_mocker.registry_get('/user', GlUserFactory())
     gl = get_gitlab_client()
 
@@ -319,6 +302,50 @@ def test_load_merge_requests(db, gl_mocker):
 
     gl_merge_request = AttrDict(GlMergeRequestFactory(project_id=gl_project.id, assignee=gl_user,
                                                       author=gl_user, state='closed'))
+    _registry_merge_request(gl_mocker, gl_project, gl_merge_request)
+
+    gl_mocker.registry_get(f'/projects/{gl_project.id}/issues/{gl_issue.iid}/closed_by',
+                           [gl_merge_request])
+
+    gl_project = gl.projects.get(id=project.gl_id)
+    gl_issue = gl_project.issues.get(id=issue.gl_iid)
+
+    assert issue.merge_requests.count() == 0
+
+    issue_service.load_merge_requests(issue, project, gl_issue, gl_project)
+
+    issue = Issue.objects.first()
+
+    assert issue.merge_requests.count() == 1
+    assert issue.merge_requests.first().gl_id == gl_merge_request.id
+
+
+@override_settings(GITLAB_TOKEN='GITLAB_TOKEN')
+def test_load_merge_request_existed(db, gl_mocker):
+    gl_mocker.registry_get('/user', GlUserFactory())
+    gl = get_gitlab_client()
+
+    gl_project = AttrDict(GlProjectFactory())
+    project = ProjectFactory.create(gl_id=gl_project.id)
+    gl_mocker.registry_get(f'/projects/{gl_project.id}', gl_project)
+
+    gl_issue = AttrDict(GlIssueFactory())
+    issue = IssueFactory.create(gl_id=gl_issue.id, gl_iid=gl_issue.iid, project=project)
+    gl_mocker.registry_get(f'/projects/{gl_project.id}/issues/{gl_issue.iid}', gl_issue)
+
+    gl_user = AttrDict(GlUserFactory())
+    gl_mocker.registry_get(f'/users/{gl_user.id}', gl_user)
+
+    gl_merge_request = AttrDict(GlMergeRequestFactory(
+        project_id=gl_project.id,
+        assignee=gl_user,
+        author=gl_user, state='closed')
+    )
+    MergeRequestFactory.create(
+        gl_id=gl_merge_request.id,
+        gl_iid=gl_merge_request.iid,
+        project=project
+    )
     _registry_merge_request(gl_mocker, gl_project, gl_merge_request)
 
     gl_mocker.registry_get(f'/projects/{gl_project.id}/issues/{gl_issue.iid}/closed_by',

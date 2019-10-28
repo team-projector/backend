@@ -27,9 +27,26 @@ def test_load_project(db, gl_mocker):
 
     project_service.load_project(gl, group, gl_project)
 
+    assert Project.objects.count() == 1
     project = Project.objects.first()
 
     check_project(project, gl_project, group)
+
+
+@override_settings(GITLAB_TOKEN='GITLAB_TOKEN')
+def test_load_project_bad(db, gl_mocker):
+    assert settings.GITLAB_CHECK_WEBHOOKS is False
+
+    group = ProjectGroupFactory.create()
+    gl_project = AttrDict(GlProjectFactory(id='bad_gl_id'))
+
+    gl_mocker.registry_get('/user', GlUserFactory())
+
+    gl = get_gitlab_client()
+
+    project_service.load_project(gl, group, gl_project)
+
+    assert Project.objects.count() == 0
 
 
 @override_settings(GITLAB_TOKEN='GITLAB_TOKEN',
