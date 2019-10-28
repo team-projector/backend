@@ -20,8 +20,10 @@ class SpentTimeQuerySet(models.QuerySet):
 
     def summaries(self):
         """Get spent time summaries."""
-        from apps.development.models import issue
-        from apps.development.models.merge_request import MERGE_REQUESTS_STATES
+        from apps.development.models import issue  # noqa WPS433
+        from apps.development.models.merge_request import (  # noqa WPS433
+            MERGE_REQUESTS_STATES,
+        )
 
         return self.aggregate(
             total_issues=self._sum(issues__isnull=False),

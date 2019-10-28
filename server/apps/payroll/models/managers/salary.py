@@ -8,7 +8,7 @@ class SalaryManager(models.Manager):
 
     def allowed_for_user(self, user):
         """Get user salaries allowed for current user and team leader."""
-        from apps.development.models import TeamMember
+        from apps.development.models import TeamMember  # noqa WPS433
 
         users = TeamMember.objects.filter(
             user=user,
