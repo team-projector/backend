@@ -12,11 +12,19 @@ from tests.test_development.checkers_gitlab import (
     check_merge_request, check_user
 )
 from tests.test_development.factories import (
-    ProjectFactory, MergeRequestFactory, ProjectMilestoneFactory
+    ProjectFactory,
+    MergeRequestFactory,
+    ProjectMilestoneFactory,
 )
 from tests.test_development.factories_gitlab import (
-    AttrDict, GlUserFactory, GlProjectFactory, GlMergeRequestFactory,
-    GlNoteFactory, GlLabelFactory, GlTimeStats, GlProjectMilestoneFactory,
+    AttrDict,
+    GlUserFactory,
+    GlProjectFactory,
+    GlMergeRequestFactory,
+    GlNoteFactory,
+    GlLabelFactory,
+    GlTimeStats,
+    GlProjectMilestoneFactory,
 )
 
 

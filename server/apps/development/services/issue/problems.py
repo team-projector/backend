@@ -135,15 +135,6 @@ def annotate_problems(queryset: QuerySet) -> QuerySet:
     return queryset
 
 
-def extract_problems_from_annotated(issue: Issue) -> List[str]:
-    """Get problems from annotated field."""
-    return [
-        checker.problem_code
-        for checker in checkers
-        if getattr(issue, checker.annotate_field, False)  # noqa WPS425
-    ]
-
-
 def filter_problems(queryset: QuerySet) -> QuerySet:
     """Get problems from issues."""
     return queryset.filter(reduce(or_, [
