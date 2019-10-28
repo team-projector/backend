@@ -7,8 +7,6 @@ from django.db.models import Case, F, FloatField, Q, QuerySet, Sum, When
 from django.db.models.functions import Coalesce
 from django.db.models.manager import BaseManager
 
-from apps.payroll.services.spent_time.allowed import filter_allowed_for_user
-
 
 class SpentTimeQuerySet(models.QuerySet):
     """Spent Time QuerySet."""
@@ -88,4 +86,7 @@ class SpentTimeManager(BaseSpentTimeManager):
 
     def allowed_for_user(self, user):
         """Get user spent times for current user, team leader or watcher."""
+        from apps.payroll.services.spent_time.allowed import (  # noqa WPS433
+            filter_allowed_for_user,
+        )
         return filter_allowed_for_user(self, user)

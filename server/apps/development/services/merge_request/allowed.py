@@ -2,6 +2,7 @@
 
 from django.db.models import QuerySet
 
+from apps.development.models import TeamMember
 from apps.development.services.team_members import filter_by_roles
 from apps.users.models import User
 
@@ -11,8 +12,6 @@ def filter_allowed_for_user(
     user: User,
 ) -> QuerySet:
     """Get allowed users for user."""
-    from apps.development.models import TeamMember
-
     allowed_users = {user}
 
     members = filter_by_roles(
