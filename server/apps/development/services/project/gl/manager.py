@@ -2,14 +2,11 @@
 
 import logging
 
-from django.conf import settings
-from django.urls import reverse
-from django.utils.functional import cached_property
-from gitlab import GitlabError
 from gitlab.v4 import objects as gl
 
 from apps.development.models import Project, ProjectGroup
 from apps.development.services.project.gl.provider import ProjectGlProvider
+from apps.development.services.project.gl.webhooks import ProjectWebhookManager
 from apps.development.services.project_group.gl.provider import (
     ProjectGroupGlProvider,
 )
@@ -24,11 +21,7 @@ class ProjectGlManager:
         """Initializing."""
         self.project_provider = ProjectGlProvider()
         self.group_provider = ProjectGroupGlProvider()
-
-    @cached_property
-    def webhook_url(self) -> str:
-        """Get webhook url."""
-        return f'https://{settings.DOMAIN_NAME}{reverse("api:gl-webhook")}'
+        self.webhook_manager = ProjectWebhookManager()
 
     def sync_all_projects(self) -> None:
         """Sync all projects."""
@@ -70,67 +63,6 @@ class ProjectGlManager:
         except Exception as error:
             logger.exception(str(error))
         else:
-            self._check_project_webhooks_if_need(project)
+            self.webhook_manager.check_project_webhooks(project)
 
         logger.info(f'{msg} done')
-
-    def _check_project_webhooks_if_need(
-        self,
-        project: Project,
-    ) -> None:
-        """Check whether webhooks for project are needed."""
-        if not settings.GITLAB_CHECK_WEBHOOKS:
-            return
-
-        gl_project = self.project_provider.get_gl_project(project)
-        if not gl_project:
-            return
-
-        try:
-            self._check_project_webhooks(gl_project)
-        except GitlabError as error:
-            logger.exception(str(error))
-
-    def _check_project_webhooks(
-        self,
-        gl_project: gl.Project,
-    ) -> None:
-        """Validate webhooks for project."""
-        hooks = gl_project.hooks.list()
-
-        tp_webhooks = [
-            hook
-            for hook in hooks
-            if hook.url == self.webhook_url
-        ]
-
-        has_valid = False
-
-        for webhook in tp_webhooks:
-            if has_valid:
-                webhook.delete()
-
-            if self._validate_webhook(webhook, self.webhook_url):
-                has_valid = True
-            else:
-                webhook.delete()
-
-        if not has_valid:
-            gl_project.hooks.create({
-                'url': self.webhook_url,
-                'token': settings.WEBHOOK_SECRET_TOKEN,
-                'issues_events': True,
-                'merge_requests_events': True,
-            })
-
-    def _validate_webhook(
-        self,
-        webhook,
-        webhook_url: str,
-    ) -> bool:
-        """Validate webhook."""
-        return (
-            webhook.url == webhook_url
-            and webhook.issues_events
-            and webhook.merge_requests_events
-        )
