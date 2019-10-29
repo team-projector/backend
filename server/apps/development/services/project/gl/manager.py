@@ -6,7 +6,7 @@ from django.conf import settings
 from django.urls import reverse
 from django.utils.functional import cached_property
 from gitlab import GitlabError
-from gitlab.v4.objects import Project as GlProject
+from gitlab.v4 import objects as gl
 
 from apps.development.models import Project, ProjectGroup
 from apps.development.services.project.gl.provider import ProjectGlProvider
@@ -50,7 +50,7 @@ class ProjectGlManager:
     def update_project(
         self,
         group: ProjectGroup,
-        gl_project: GlProject,
+        gl_project: gl.Project,
     ) -> None:
         """Update project based on gitlab data."""
         msg = f'Updating project "{gl_project.name}"...'
@@ -58,7 +58,7 @@ class ProjectGlManager:
         logger.info(f'{msg}')
 
         try:
-            Project.objects.update_from_gitlab(
+            project, _ = Project.objects.update_from_gitlab(
                 gl_id=gl_project.id,
                 gl_url=gl_project.web_url,
                 gl_avatar=gl_project.avatar_url,
@@ -70,16 +70,20 @@ class ProjectGlManager:
         except Exception as error:
             logger.exception(str(error))
         else:
-            self._check_project_webhooks_if_need(gl_project)
+            self._check_project_webhooks_if_need(project)
 
         logger.info(f'{msg} done')
 
     def _check_project_webhooks_if_need(
         self,
-        gl_project: GlProject,
+        project: Project,
     ) -> None:
         """Check whether webhooks for project are needed."""
         if not settings.GITLAB_CHECK_WEBHOOKS:
+            return
+
+        gl_project = self.project_provider.get_gl_project(project)
+        if not gl_project:
             return
 
         try:
@@ -89,7 +93,7 @@ class ProjectGlManager:
 
     def _check_project_webhooks(
         self,
-        gl_project: GlProject,
+        gl_project: gl.Project,
     ) -> None:
         """Validate webhooks for project."""
         hooks = gl_project.hooks.list()
