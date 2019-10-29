@@ -1,11 +1,13 @@
 # -*- coding: utf-8 -*-
 
+from apps.core.activity.decorators import gitlab_api_call
 from apps.core.gitlab.provider import BaseGlProvider
 
 
 class UserGlProvider(BaseGlProvider):
     """User gitlab provider."""
 
+    @gitlab_api_call
     def get_gl_user(
         self,
         gl_user_id: int,

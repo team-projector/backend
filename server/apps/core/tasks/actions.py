@@ -9,4 +9,7 @@ from celery_app import app
 @app.task
 def add_action_task(**kwargs) -> None:
     """Add action."""
-    action.send(kwargs.pop('sender_id', User.objects.system_user), **kwargs)
+    action.send(
+        kwargs.pop('sender_id', User.objects.system_user),
+        **kwargs,
+    )

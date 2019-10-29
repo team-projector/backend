@@ -73,8 +73,6 @@ def test_load_project_with_check_webhooks(db, gl_mocker, gl_client):
 
     check_project(project, gl_project, group)
 
-    gl_mocker.registry_get(f'/projects/{gl_project.id}/hooks', [gl_hook_2])
-
 
 @override_settings(GITLAB_TOKEN='GITLAB_TOKEN')
 def test_load_group_projects(db, gl_mocker, gl_client):

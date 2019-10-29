@@ -1,0 +1,18 @@
+# -*- coding: utf-8 -*-
+
+import functools
+
+from apps.core.activity.verbs import ACTION_GITLAB_CALL_API
+from apps.core.tasks import add_action_task
+
+
+def gitlab_api_call(func):
+    """Decorator for log gitlab api calls."""
+    @functools.wraps(func)  # noqa WPS430
+    def wrapper(*args, **kwargs):
+        func_result = func(*args, **kwargs)
+        add_action_task.delay(verb=ACTION_GITLAB_CALL_API)
+
+        return func_result  # noqa WPS331
+
+    return wrapper
