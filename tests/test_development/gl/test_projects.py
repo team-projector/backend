@@ -6,10 +6,14 @@ from rest_framework import status
 
 from apps.development.models import Project
 from apps.development.services.project.gl.manager import ProjectGlManager
+from apps.development.services.project.gl.provider import ProjectGlProvider
 from tests.test_development.checkers_gitlab import check_project
-from tests.test_development.factories import ProjectGroupFactory
+from tests.test_development.factories import ProjectFactory, ProjectGroupFactory
 from tests.test_development.factories_gitlab import (
-    AttrDict, GlUserFactory, GlGroupFactory, GlProjectFactory, GlHookFactory
+    AttrDict, GlGroupFactory,
+    GlHookFactory,
+    GlProjectFactory,
+    GlUserFactory,
 )
 
 
@@ -121,6 +125,36 @@ def test_load_projects(db, gl_mocker):
 
     project = Project.objects.get(gl_id=gl_project_2.id)
     check_project(project, gl_project_2, group_2)
+
+
+@override_settings(GITLAB_TOKEN='GITLAB_TOKEN')
+def test_deactivate_if_not_found(db, gl_mocker):
+    project = ProjectFactory()
+
+    assert project.is_active
+
+    gl_mocker.registry_get(
+        f'/projects/{project.gl_id}',
+        status_code=status.HTTP_404_NOT_FOUND,
+    )
+
+    ProjectGlProvider().get_gl_project(project)
+
+    project.refresh_from_db()
+
+    assert not project.is_active
+
+
+def test_for_sync(db, gl_mocker):
+    ProjectFactory()
+
+    assert Project.objects.for_sync().count() == 1
+
+
+def test_for_sync_but_inactive(db, gl_mocker):
+    ProjectFactory(is_active=False)
+
+    assert Project.objects.for_sync().count() == 0
 
 
 @override_settings(GITLAB_TOKEN='GITLAB_TOKEN')

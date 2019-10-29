@@ -51,6 +51,7 @@ class GlProjectFactory(factory.DictFactory):
     web_url = factory.Faker('url')
     avatar_url = factory.Faker('url')
     name_with_namespace = factory.Faker('word')
+    archived = False
 
 
 class GlProjectMilestoneFactory(factory.DictFactory):

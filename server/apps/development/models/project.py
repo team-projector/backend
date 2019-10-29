@@ -47,7 +47,7 @@ class Project(GitlabEntityMixin):
     )
 
     is_archived = models.BooleanField(
-        default=True,
+        default=False,
         verbose_name=_('VN__IS_ARCHIVED'),
         help_text=_('HT__IS_ARCHIVED'),
     )

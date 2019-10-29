@@ -16,7 +16,8 @@ class ProjectAdmin(
 ):
     """A class representing Project model for admin dashboard."""
 
-    list_display = ('title', 'group', 'gl_url', 'gl_last_sync')
+    list_display = ('title', 'group', 'is_active', 'gl_url', 'gl_last_sync')
+    list_filter = ('is_active', 'is_archived')
     search_fields = ('title', 'group__title', 'gl_url')
     inlines = (ProjectMemberInline,)
 

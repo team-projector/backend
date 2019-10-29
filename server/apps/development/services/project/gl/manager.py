@@ -32,7 +32,7 @@ class ProjectGlManager:
 
     def sync_all_projects(self) -> None:
         """Sync all projects."""
-        for group in ProjectGroup.objects.all():
+        for group in ProjectGroup.objects.for_sync():
             self.sync_group_projects(group)
 
     def sync_group_projects(
@@ -65,6 +65,7 @@ class ProjectGlManager:
                 group=group,
                 full_title=gl_project.name_with_namespace,
                 title=gl_project.name,
+                is_archived=gl_project.archived,
             )
         except Exception as error:
             logger.exception(str(error))
