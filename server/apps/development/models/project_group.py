@@ -30,7 +30,6 @@ class ProjectGroup(GitlabEntityMixin):
     )
 
     gl_avatar = models.URLField(
-        null=True,
         blank=True,
         verbose_name=_('VN__GITLAB_AVATAR'),
         help_text=_('HT__GITLAB_AVATAR'),

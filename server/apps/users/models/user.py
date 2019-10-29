@@ -28,7 +28,6 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     login = models.CharField(
         max_length=USER_LOGIN_MAX_LENGTH,
-        null=True,
         blank=True,
         unique=True,
         verbose_name=_('VN__LOGIN'),
@@ -37,18 +36,14 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     name = models.CharField(
         max_length=USER_LOGIN_MAX_LENGTH,
-        null=True,
         blank=True,
-        unique=True,
         verbose_name=_('VN__NAME'),
         help_text=_('HT__NAME'),
     )
 
     email = models.EmailField(
         max_length=USER_EMAIL_MAX_LENGTH,
-        null=True,
         blank=True,
-        unique=True,
         verbose_name=_('VN__EMAIL'),
         help_text=_('HT__EMAIL'),
     )
@@ -89,9 +84,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     )
 
     gl_avatar = models.URLField(
-        null=True,
         blank=True,
-        unique=True,
         verbose_name=_('VN__GITLAB_AVATAR'),
         help_text=_('HT__GITLAB_AVATAR'),
     )
@@ -104,7 +97,6 @@ class User(AbstractBaseUser, PermissionsMixin):
     )
 
     gl_url = models.URLField(
-        null=True,
         blank=True,
         verbose_name=_('VN__GITLAB_URL'),
         help_text=_('HT__GITLAB_URL'),

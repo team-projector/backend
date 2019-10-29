@@ -53,7 +53,6 @@ class Ticket(Timestamps):
 
     url = models.URLField(
         blank=True,
-        null=True,
         verbose_name=_('VN__URL'),
         help_text=_('HT__URL'),
     )
