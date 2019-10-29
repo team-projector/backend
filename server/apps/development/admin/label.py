@@ -6,6 +6,16 @@ from django.utils.safestring import mark_safe
 from apps.core.admin.base import BaseModelAdmin
 from apps.development.models import Label
 
+COLOR_TEMPLATE = """
+                <div style="float: left;"> {color} </div>
+                <div style="background-color: {color};
+                float: left;
+                margin-left: 6px;
+                width: 14px;
+                height: 14px;
+                border: 1.1px solid black;"> </div>
+               """
+
 
 @admin.register(Label)
 class LabelAdmin(BaseModelAdmin):
@@ -25,14 +35,8 @@ class LabelAdmin(BaseModelAdmin):
     @mark_safe
     def color_square(self, label):
         """Show current label with colored square near."""
-        return f"""
-                <div style="float: left;"> {label.color} </div>
-                <div style="background-color: {label.color};
-                float: left;
-                margin-left: 6px;
-                width: 14px;
-                height: 14px;
-                border: 1.1px solid black;"> </div>
-               """
+        return COLOR_TEMPLATE.format(
+            color=label.color,
+        )
 
     color_square.short_description = 'color'

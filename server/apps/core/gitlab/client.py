@@ -4,9 +4,14 @@ import gitlab
 from django.conf import settings
 
 
-def get_gitlab_client(token: str = None) -> gitlab.Gitlab:
-    """Get Gitlab client."""
-    gl = gitlab.Gitlab(settings.GITLAB_HOST, token or settings.GITLAB_TOKEN)
-    gl.auth()
+def get_gitlab_client(token: str) -> gitlab.Gitlab:
+    """Create Gitlab client."""
+    return gitlab.Gitlab(
+        settings.GITLAB_HOST,
+        token,
+    )
 
-    return gl
+
+def get_default_gitlab_client():
+    """Create default Gitlab client."""
+    return get_gitlab_client(settings.GITLAB_TOKEN)

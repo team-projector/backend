@@ -9,7 +9,7 @@ from django.utils import timezone
 class MilestoneManager(models.Manager):
     """The merge request model manager."""
 
-    def sync_gitlab(
+    def update_from_gitlab(
         self,
         gl_id,
         **kwargs,

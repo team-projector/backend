@@ -32,7 +32,7 @@ class GitLabOAuth2Backend(SocialGitLabOAuth2):
         token = create_user_token(user)
 
         user.last_login = timezone.now()
-        user.save(update_fields=['last_login'])
+        user.save(update_fields=('last_login',))
 
         return token  # noqa WPS331
 

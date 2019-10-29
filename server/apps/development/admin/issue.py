@@ -7,7 +7,7 @@ from apps.core.admin.mixins import ForceSyncEntityMixin
 from apps.development.admin.filters import MilestoneFilter, ProjectFilter
 from apps.development.admin.inlines import NoteInline
 from apps.development.models import Issue
-from apps.development.tasks import sync_project_issue
+from apps.development.tasks import sync_project_issue_task
 
 
 @admin.register(Issue)
@@ -28,7 +28,7 @@ class IssueAdmin(
 
     def sync_handler(self, issue):
         """Syncing issue."""
-        sync_project_issue.delay(
+        sync_project_issue_task.delay(
             issue.project.gl_id,
             issue.gl_iid,
         )

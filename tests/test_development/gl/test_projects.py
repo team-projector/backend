@@ -4,9 +4,8 @@ from django.test import override_settings
 from gitlab.exceptions import GitlabGetError
 from rest_framework import status
 
-from apps.core.gitlab import get_gitlab_client
 from apps.development.models import Project
-from apps.development.services import project as project_service
+from apps.development.services.project.gl.manager import ProjectGlManager
 from tests.test_development.checkers_gitlab import check_project
 from tests.test_development.factories import ProjectGroupFactory
 from tests.test_development.factories_gitlab import (
@@ -22,10 +21,7 @@ def test_load_project(db, gl_mocker):
     gl_project = AttrDict(GlProjectFactory())
 
     gl_mocker.registry_get('/user', GlUserFactory())
-
-    gl = get_gitlab_client()
-
-    project_service.load_project(gl, group, gl_project)
+    ProjectGlManager().update_project(group, gl_project)
 
     assert Project.objects.count() == 1
     project = Project.objects.first()
@@ -42,9 +38,7 @@ def test_load_project_bad(db, gl_mocker):
 
     gl_mocker.registry_get('/user', GlUserFactory())
 
-    gl = get_gitlab_client()
-
-    project_service.load_project(gl, group, gl_project)
+    ProjectGlManager().update_project(group, gl_project)
 
     assert Project.objects.count() == 0
 
@@ -52,10 +46,11 @@ def test_load_project_bad(db, gl_mocker):
 @override_settings(GITLAB_TOKEN='GITLAB_TOKEN',
                    GITLAB_CHECK_WEBHOOKS=True,
                    DOMAIN_NAME='test.com')
-def test_load_project_with_check_webhooks(db, gl_mocker):
+def test_load_project_with_check_webhooks(db, gl_mocker, gl_client):
     group = ProjectGroupFactory.create()
     gl_project = AttrDict(GlProjectFactory())
-    gl_hook_1 = AttrDict(GlHookFactory(url='https://test.com/api/gl-webhook'))
+    gl_hook_1 = AttrDict(
+        GlHookFactory(url='https://test.com/api/gl_client-webhook'))
     gl_hook_2 = AttrDict(GlHookFactory(url='https://test1.com/api/1'))
 
     gl_mocker.registry_get('/user', GlUserFactory())
@@ -66,9 +61,9 @@ def test_load_project_with_check_webhooks(db, gl_mocker):
     })
     gl_mocker.registry_delete(f'/projects/{gl_project.id}/hooks')
 
-    gl = get_gitlab_client()
+    gl_project_loaded = gl_client.projects.get(id=gl_project.id)
 
-    project_service.load_project(gl, group, gl_project)
+    ProjectGlManager().update_project(group, gl_project_loaded)
 
     project = Project.objects.first()
 
@@ -76,11 +71,9 @@ def test_load_project_with_check_webhooks(db, gl_mocker):
 
     gl_mocker.registry_get(f'/projects/{gl_project.id}/hooks', [gl_hook_2])
 
-    project_service.load_project(gl, group, gl_project)
-
 
 @override_settings(GITLAB_TOKEN='GITLAB_TOKEN')
-def test_load_group_projects(db, gl_mocker):
+def test_load_group_projects(db, gl_mocker, gl_client):
     assert settings.GITLAB_CHECK_WEBHOOKS is False
 
     gl_group = AttrDict(GlGroupFactory())
@@ -94,7 +87,7 @@ def test_load_group_projects(db, gl_mocker):
     gl_mocker.registry_get(f'/groups/{gl_group.id}/projects',
                            [gl_project_1, gl_project_2])
 
-    project_service.load_group_projects(group)
+    ProjectGlManager().sync_group_projects(group)
 
     project = Project.objects.get(gl_id=gl_project_1.id)
     check_project(project, gl_project_1, group)
@@ -121,7 +114,7 @@ def test_load_projects(db, gl_mocker):
     gl_mocker.registry_get(f'/groups/{gl_group_2.id}', gl_group_2)
     gl_mocker.registry_get(f'/groups/{gl_group_2.id}/projects', [gl_project_2])
 
-    project_service.load_projects()
+    ProjectGlManager().sync_all_projects()
 
     project = Project.objects.get(gl_id=gl_project_1.id)
     check_project(project, gl_project_1, group_1)
@@ -140,7 +133,7 @@ def test_load_group_projects_server_error(db, gl_mocker):
                            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     with pytest.raises(GitlabGetError):
-        project_service.load_group_projects(group)
+        ProjectGlManager().sync_group_projects(group)
 
 
 @override_settings(GITLAB_TOKEN='GITLAB_TOKEN')
@@ -152,4 +145,4 @@ def test_load_group_projects_not_found(db, gl_mocker):
     gl_mocker.registry_get(f'/groups/{gl_group.id}',
                            status_code=status.HTTP_404_NOT_FOUND)
 
-    project_service.load_group_projects(group)
+    ProjectGlManager().sync_group_projects(group)

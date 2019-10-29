@@ -12,7 +12,7 @@ from apps.users.models import User
 class MergeRequestManager(models.Manager):
     """The merge request model manager."""
 
-    def sync_gitlab(self, gl_id, **kwargs) -> Tuple[Any, bool]:
+    def update_from_gitlab(self, gl_id, **kwargs) -> Tuple[Any, bool]:
         """Save merge request by Gitlab id."""
         kwargs['gl_last_sync'] = timezone.now()
 

@@ -6,7 +6,7 @@ from apps.core.admin.base import BaseModelAdmin
 from apps.core.admin.mixins import ForceSyncEntityMixin
 from apps.development.admin.inlines import ProjectMemberInline
 from apps.development.models import ProjectGroup
-from apps.development.tasks import sync_project_group
+from apps.development.tasks import sync_project_group_task
 
 
 @admin.register(ProjectGroup)
@@ -22,4 +22,4 @@ class ProjectGroupAdmin(
 
     def sync_handler(self, project_group):
         """Syncing group."""
-        sync_project_group.delay(project_group.gl_id)
+        sync_project_group_task.delay(project_group.gl_id)

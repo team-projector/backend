@@ -7,7 +7,7 @@ from apps.core.admin.mixins import ForceSyncEntityMixin
 from apps.development.admin.filters import ProjectFilter
 from apps.development.admin.inlines import NoteInline
 from apps.development.models import MergeRequest
-from apps.development.tasks import sync_project_merge_request
+from apps.development.tasks import sync_project_merge_request_task
 
 
 @admin.register(MergeRequest)
@@ -28,7 +28,7 @@ class MergeRequestAdmin(
 
     def sync_handler(self, merge_request):
         """Syncing merge request."""
-        sync_project_merge_request.delay(
+        sync_project_merge_request_task.delay(
             merge_request.project.gl_id,
             merge_request.gl_iid,
         )

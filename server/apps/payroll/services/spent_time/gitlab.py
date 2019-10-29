@@ -3,7 +3,7 @@
 from apps.core.activity.verbs import ACTION_GITLAB_CALL_API
 from apps.core.gitlab import get_gitlab_client
 from apps.core.gitlab.gl_time import gl_duration
-from apps.core.tasks import add_action
+from apps.core.tasks import add_action_task
 from apps.development.models import Issue
 from apps.users.models import User
 
@@ -21,4 +21,4 @@ def add_spent_time(
 
     gl_issue.add_spent_time(duration=gl_duration(seconds))
 
-    add_action.delay(verb=ACTION_GITLAB_CALL_API)
+    add_action_task.delay(verb=ACTION_GITLAB_CALL_API)

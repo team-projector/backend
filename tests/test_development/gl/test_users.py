@@ -1,19 +1,20 @@
 from django.test import override_settings
 
-from apps.users.services import user as user_service
 from apps.users.models import User
-
+from apps.users.services.user.gl.manager import UserGlManager
 from tests.test_development.checkers_gitlab import check_user
 from tests.test_development.factories_gitlab import AttrDict, GlUserFactory
 from tests.test_users.factories import UserFactory
 
 
 def test_extract_user_from_data(user):
-    assert user_service.extract_user_from_data({}) is None
+    manager = UserGlManager()
+
+    assert manager.extract_user_from_data({}) is None
 
     gl_user = AttrDict(GlUserFactory(id=user.gl_id))
 
-    assert user_service.extract_user_from_data(gl_user) == user
+    assert manager.extract_user_from_data(gl_user) == user
 
 
 @override_settings(GITLAB_TOKEN='GITLAB_TOKEN')
@@ -23,7 +24,7 @@ def test_load_user(db, gl_mocker):
     gl_mocker.registry_get('/user', GlUserFactory())
     gl_mocker.registry_get(f'/users/{gl_user.id}', gl_user)
 
-    user_service.load_user(gl_user.id)
+    UserGlManager().sync_user(gl_user.id)
 
     user = User.objects.get(login=gl_user.username)
 
@@ -39,7 +40,7 @@ def test_load_user_without_gl_email(db, gl_mocker):
     gl_mocker.registry_get('/user', GlUserFactory(public_email='gitlab_email'))
     gl_mocker.registry_get(f'/users/{gl_user.id}', gl_user)
 
-    user_service.load_user(gl_user.id)
+    UserGlManager().sync_user(gl_user.id)
 
     user.refresh_from_db()
 
@@ -57,7 +58,7 @@ def test_update_users(db, gl_mocker):
     gl_mocker.registry_get('/user', GlUserFactory())
     gl_mocker.registry_get(f'/users/{gl_user.id}', gl_user)
 
-    user_service.update_users()
+    UserGlManager().sync_users()
 
     user = User.objects.get(gl_id=gl_user.id)
 

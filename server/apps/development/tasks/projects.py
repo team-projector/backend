@@ -1,23 +1,28 @@
 # -*- coding: utf-8 -*-
 
-from apps.core.activity.verbs import ACTION_GITLAB_CALL_API
-from apps.core.gitlab import get_gitlab_client
-from apps.core.tasks import add_action
-from apps.development.models import ProjectGroup
-from apps.development.services.project.gitlab import load_project
-from apps.development.tasks import load_project_milestones
+from apps.development.models import Project, ProjectGroup
+from apps.development.services.project.gl.manager import ProjectGlManager
+from apps.development.services.project.gl.provider import ProjectGlProvider
+from apps.development.tasks import sync_project_milestones_task
 from celery_app import app
 
 
 @app.task
-def sync_project(group_id: int, gl_id: int, project_id: int) -> None:
+def sync_project_task(
+    group_id: int,
+    project_id: int,
+) -> None:
     """Syncing project from Gitlab."""
-    gl = get_gitlab_client()
-    gl_project = gl.projects.get(gl_id)
+    project = Project.objects.get(id=project_id)
 
-    add_action.delay(verb=ACTION_GITLAB_CALL_API)
+    project_provider = ProjectGlProvider()
+    gl_project = project_provider.get_gl_project(project)
+    if not gl_project:
+        return
 
     group = ProjectGroup.objects.get(id=group_id)
 
-    load_project(gl, group, gl_project)
-    load_project_milestones(project_id)
+    manager = ProjectGlManager()
+    manager.update_project(group, gl_project)
+
+    sync_project_milestones_task.delay(project_id)

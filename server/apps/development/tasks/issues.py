@@ -1,37 +1,40 @@
 # -*- coding: utf-8 -*-
 
-from apps.core.activity.verbs import ACTION_GITLAB_CALL_API
-from apps.core.gitlab import get_gitlab_client
-from apps.core.tasks import add_action
 from apps.development.models import Project
-from apps.development.services import issue as issue_service
+from apps.development.services.issue.gl.manager import IssueGlManager
+from apps.development.services.project.gl.provider import ProjectGlProvider
 from celery_app import app
 
 
 @app.task(queue='low_priority')
-def sync_issues() -> None:
+def sync_issues_task() -> None:
     """Syncing issues from Gitlab."""
     for project_id in Project.objects.values_list('id', flat=True):
-        sync_project_issues.delay(project_id)
+        sync_project_issues_task.delay(project_id)
 
 
 @app.task(queue='low_priority')
-def sync_project_issues(project_id: int) -> None:
+def sync_project_issues_task(project_id: int) -> None:
     """Syncing issues for project from Gitlab."""
     project = Project.objects.get(id=project_id)
-    issue_service.load_for_project_all(project)
+
+    manager = IssueGlManager()
+    manager.sync_project_issues(project)
 
 
 @app.task
-def sync_project_issue(project_id: int, iid: int) -> None:
+def sync_project_issue_task(project_id: int, iid: int) -> None:
     """Syncing issue for project from Gitlab."""
     project = Project.objects.get(gl_id=project_id)
 
-    gl = get_gitlab_client()
-    gl_project = gl.projects.get(project_id)
+    project_provider = ProjectGlProvider()
+    gl_project = project_provider.get_gl_project(project)
+    if not gl_project:
+        return
 
-    add_action.delay(verb=ACTION_GITLAB_CALL_API)
-
-    gl_issue = gl_project.issues.get(iid)
-
-    issue_service.load_for_project(project, gl_project, gl_issue)
+    manager = IssueGlManager()
+    manager.update_project_issue(
+        project,
+        gl_project,
+        gl_project.issues.get(iid),
+    )

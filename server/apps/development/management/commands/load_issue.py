@@ -2,17 +2,18 @@
 
 from django.core.management.base import BaseCommand
 
-from apps.core.gitlab import get_gitlab_client
+from apps.core.gitlab.client import gl_client
+from apps.development.models import Project, ProjectGroup
 
 
 class Command(BaseCommand):
     def handle(self, *args, **options):
-        gl = get_gitlab_client()
+        group = ProjectGroup.objects.get(id=5)
 
-        junte_ui_project = gl.projects.get(id=9560752)
-        junte_ui_issue = junte_ui_project.issues.get(462)
+        gl_group = gl_client.groups.get(id=group.gl_id)
 
-        tp_project = gl.projects.get(id=9383004)
-        tp_issue = tp_project.issues.get(221)
+        project = Project.objects.get(id=92)
+
+        gl_project = gl_client.projects.get(id=project.gl_id)
 
         t = 0

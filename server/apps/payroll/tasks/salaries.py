@@ -9,14 +9,14 @@ from celery_app import app
 
 
 @app.task
-def send_salary_report(salary_id: int) -> None:
+def send_salary_report_task(salary_id: int) -> None:
     """Send salary report."""
-    send_salary_email_report.delay(salary_id)
-    send_salary_slack_report.delay(salary_id)
+    send_salary_email_report_task.delay(salary_id)
+    send_salary_slack_report_task.delay(salary_id)
 
 
 @app.task
-def send_salary_email_report(salary_id: int) -> None:
+def send_salary_email_report_task(salary_id: int) -> None:
     """Send salary email report."""
     salary = Salary.objects.get(id=salary_id)
 
@@ -24,7 +24,7 @@ def send_salary_email_report(salary_id: int) -> None:
 
 
 @app.task
-def send_salary_slack_report(salary_id: int) -> None:
+def send_salary_slack_report_task(salary_id: int) -> None:
     """Send salary slack report."""
     salary = Salary.objects.get(id=salary_id)
 

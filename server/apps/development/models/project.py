@@ -40,6 +40,18 @@ class Project(GitlabEntityMixin):
         help_text=_('HT__GROUP'),
     )
 
+    is_active = models.BooleanField(
+        default=True,
+        verbose_name=_('VN__IS_ACTIVE'),
+        help_text=_('HT__IS_ACTIVE'),
+    )
+
+    is_archived = models.BooleanField(
+        default=True,
+        verbose_name=_('VN__IS_ARCHIVED'),
+        help_text=_('HT__IS_ARCHIVED'),
+    )
+
     gl_avatar = models.URLField(
         null=True,
         blank=True,

@@ -26,7 +26,7 @@ class TimeSpendNoteTypeTests(TestCase):
 
         body = f'added 1h 1m of time spent at {note_date:{GITLAB_DATE_FORMAT}}'
 
-        Note.objects.sync_gitlab(dict2obj({
+        Note.objects.update_from_gitlab(dict2obj({
             'id': 2,
             'body': body,
             'created_at': datetime.strftime(datetime.now(),
@@ -53,7 +53,7 @@ class TimeSpendNoteTypeTests(TestCase):
         note_date = date.today()
 
         body = f'subtracted 1h 1m of time spent at {note_date:{GITLAB_DATE_FORMAT}}'
-        Note.objects.sync_gitlab(dict2obj({
+        Note.objects.update_from_gitlab(dict2obj({
             'id': 2,
             'body': body,
             'created_at': datetime.strftime(datetime.now(),
@@ -77,7 +77,7 @@ class TimeSpendNoteTypeTests(TestCase):
                          note_date.strftime(GITLAB_DATE_FORMAT))
 
     def test_load_spend_reset(self):
-        Note.objects.sync_gitlab(dict2obj({
+        Note.objects.update_from_gitlab(dict2obj({
             'id': 2,
             'body': SPEND_RESET_MESSAGE,
             'created_at': datetime.strftime(datetime.now(),
@@ -108,7 +108,7 @@ class TimeSpendNoteTypeTests(TestCase):
 
         self.assertEqual(Note.objects.count(), 1)
 
-        Note.objects.sync_gitlab(dict2obj({
+        Note.objects.update_from_gitlab(dict2obj({
             'id': 2,
             'body': f'added 1h 1m of time spent at {date.today():{GITLAB_DATE_FORMAT}}',
             'created_at': datetime.strftime(datetime.now(),
@@ -136,7 +136,7 @@ class TimeSpendNoteTypeTests(TestCase):
 
         self.assertEqual(Note.objects.count(), 1)
 
-        Note.objects.sync_gitlab(dict2obj({
+        Note.objects.update_from_gitlab(dict2obj({
             'id': 2,
             'body': f'added 1h 1m of time spent at {date.today():{GITLAB_DATE_FORMAT}}',
             'created_at': datetime.strftime(datetime.now(),
@@ -161,7 +161,7 @@ class TimeSpendNoteTypeTests(TestCase):
 
         self.assertEqual(Note.objects.count(), 1)
 
-        Note.objects.sync_gitlab(dict2obj({
+        Note.objects.update_from_gitlab(dict2obj({
             'id': 2,
             'body': f'added 1h 1m of time spent at {date.today():{GITLAB_DATE_FORMAT}}',
             'created_at': datetime.strftime(datetime.now(),
@@ -186,7 +186,7 @@ class TimeSpendNoteTypeTests(TestCase):
 
         self.assertEqual(Note.objects.count(), 1)
 
-        Note.objects.sync_gitlab(dict2obj({
+        Note.objects.update_from_gitlab(dict2obj({
             'id': 2,
             'body': f'added 1h 1m of time spent at {date.today():{GITLAB_DATE_FORMAT}}',
             'created_at': datetime.strftime(timezone.now() - timedelta(hours=1),
@@ -205,7 +205,7 @@ class TimeSpendNoteTypeTests(TestCase):
 
         body = 'added 1h 1m of time spent'
 
-        Note.objects.sync_gitlab(dict2obj({
+        Note.objects.update_from_gitlab(dict2obj({
             'id': 2,
             'body': body,
             'created_at': datetime.strftime(datetime.now(),

@@ -1,20 +1,24 @@
 # -*- coding: utf-8 -*-
 
-from .issues import sync_issues, sync_project_issue, sync_project_issues
+from .issues import (
+    sync_issues_task,
+    sync_project_issue_task,
+    sync_project_issues_task,
+)
 from .merge_requests import (
-    sync_merge_requests,
-    sync_project_merge_request,
-    sync_project_merge_requests,
+    sync_merge_requests_task,
+    sync_project_merge_request_task,
+    sync_project_merge_requests_task,
 )
 from .milestones import (
-    load_project_group_milestones,
-    load_project_milestones,
-    sync_group_milestone,
-    sync_groups_milestones,
-    sync_project_milestone,
-    sync_projects_milestones,
+    sync_project_group_milestones_task,
+    sync_project_milestones_task,
+    sync_project_group_milestone_task,
+    sync_groups_milestones_task,
+    sync_project_milestone_task,
+    sync_projects_milestones_task,
 )
-from .project_groups import sync_project_group
-from .projects import sync_project
-from .sync_all import sync
-from .users import sync_user
+from .project_groups import sync_project_group_task
+from .projects import sync_project_task
+from .sync_all import sync_all_task
+from .users import sync_user_task

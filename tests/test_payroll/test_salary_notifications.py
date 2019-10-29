@@ -1,7 +1,7 @@
 from django.conf import settings
 from django.core import mail
 
-from apps.payroll.tasks.salaries import send_salary_email_report
+from apps.payroll.tasks.salaries import send_salary_email_report_task
 from tests.test_payroll.factories import SalaryFactory
 from tests.test_users.factories import UserFactory
 
@@ -15,7 +15,7 @@ def test_send_salary_email_report(db):
 
     assert len(mail.outbox) == 0
 
-    send_salary_email_report(salary.id)
+    send_salary_email_report_task(salary.id)
 
     assert len(mail.outbox) == 1
     assert mail.outbox[0].body is not None
@@ -32,7 +32,7 @@ def test_without_email(db):
 
     assert len(mail.outbox) == 0
 
-    send_salary_email_report(salary.id)
+    send_salary_email_report_task(salary.id)
 
     assert len(mail.outbox) == 0
 

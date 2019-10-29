@@ -4,7 +4,7 @@ from django.utils import timezone
 from apps.core.activity.verbs import (
     ACTION_GITLAB_CALL_API, ACTION_GITLAB_WEBHOOK_TRIGGERED
 )
-from apps.core.tasks import add_action
+from apps.core.tasks import add_action_task
 from apps.development.graphql.resolvers import resolve_gitlab_status
 from apps.development.models import Issue, Project
 from apps.development.services.status.gitlab import get_gitlab_sync_status
@@ -20,8 +20,8 @@ def test_status(user):
     project.gl_last_sync = timezone.now() + timedelta(minutes=2)
     project.save()
 
-    add_action.delay(sender_id=user.id, verb=ACTION_GITLAB_WEBHOOK_TRIGGERED)
-    add_action.delay(sender_id=user.id, verb=ACTION_GITLAB_CALL_API)
+    add_action_task.delay(sender_id=user.id, verb=ACTION_GITLAB_WEBHOOK_TRIGGERED)
+    add_action_task.delay(sender_id=user.id, verb=ACTION_GITLAB_CALL_API)
 
     sync_status = get_gitlab_sync_status()
 
@@ -41,8 +41,8 @@ def test_resolver(user, client):
     project.gl_last_sync = timezone.now() + timedelta(minutes=2)
     project.save()
 
-    add_action.delay(sender_id=user.id, verb=ACTION_GITLAB_WEBHOOK_TRIGGERED)
-    add_action.delay(sender_id=user.id, verb=ACTION_GITLAB_CALL_API)
+    add_action_task.delay(sender_id=user.id, verb=ACTION_GITLAB_WEBHOOK_TRIGGERED)
+    add_action_task.delay(sender_id=user.id, verb=ACTION_GITLAB_CALL_API)
 
     client.user = user
     info = AttrDict({'context': client})
@@ -59,8 +59,8 @@ def test_resolver(user, client):
         Issue.objects.order_by('-updated_at')[:10].values_list('id', flat=True)
     )
 
-    add_action.delay(sender_id=user.id, verb=ACTION_GITLAB_WEBHOOK_TRIGGERED)
-    add_action.delay(sender_id=user.id, verb=ACTION_GITLAB_CALL_API)
+    add_action_task.delay(sender_id=user.id, verb=ACTION_GITLAB_WEBHOOK_TRIGGERED)
+    add_action_task.delay(sender_id=user.id, verb=ACTION_GITLAB_CALL_API)
 
     sync_status = get_gitlab_sync_status()
 

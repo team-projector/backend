@@ -12,7 +12,7 @@ from apps.users.models import User
 class IssueManager(models.Manager):
     """The issue model manager."""
 
-    def sync_gitlab(self, gl_id, **kwargs) -> Tuple[Any, bool]:
+    def update_from_gitlab(self, gl_id, **kwargs) -> Tuple[Any, bool]:
         """Save issue by Gitlab id."""
         kwargs['gl_last_sync'] = timezone.now()
 
