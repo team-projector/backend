@@ -7,8 +7,8 @@ from django.contrib.contenttypes.fields import GenericRelation
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
+from apps.core.gitlab import parse_gl_date
 from apps.development.models.note import NOTE_TYPES, Note
-from apps.development.services.parsers import parse_date
 
 
 class NotableMixin(models.Model):
@@ -38,7 +38,7 @@ class NotableMixin(models.Model):
                 users_spents[note.user_id] = 0
             elif note.type == NOTE_TYPES.time_spend:
                 time_spent = note.data['spent']
-                note_date = parse_date(note.data['date'])
+                note_date = parse_gl_date(note.data['date'])
 
                 users_spents[note.user_id] += note.data['spent']
 

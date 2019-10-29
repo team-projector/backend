@@ -2,9 +2,9 @@ from datetime import datetime
 
 from django.test import TestCase
 
+from apps.core.gitlab import GITLAB_DATETIME_FORMAT
 from apps.core.utils.objects import dict2obj
 from apps.development.models import Note
-from apps.development.services.parsers import GITLAB_DATETIME_FORMAT
 from apps.users.models import User
 from tests.test_development.factories import IssueFactory
 

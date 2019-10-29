@@ -1,17 +1,18 @@
 from collections import defaultdict
 from datetime import datetime, timedelta
+
 from django.utils import timezone
 
+from apps.core.gitlab import parse_gl_date
 from apps.development.models.note import NOTE_TYPES
-from apps.development.services.parsers import parse_date
 from apps.payroll.models import SpentTime
 from tests.test_development.factories import IssueFactory, IssueNoteFactory
 from tests.test_users.factories import UserFactory
 
 
 def test_parse_date():
-    assert parse_date('') is None
-    assert parse_date('2000-01-01') == datetime(2000, 1, 1).date()
+    assert parse_gl_date('') is None
+    assert parse_gl_date('2000-01-01') == datetime(2000, 1, 1).date()
 
 
 def test_simple(user):
@@ -244,5 +245,5 @@ def _check_generated_time_spents(issue):
             users_spents[note.user_id] = 0
         elif note.type == NOTE_TYPES.time_spend:
             assert spent_time.time_spent == note.data['spent']
-            assert spent_time.date == parse_date(note.data['date'])
+            assert spent_time.date == parse_gl_date(note.data['date'])
             users_spents[note.user_id] += note.data['spent']

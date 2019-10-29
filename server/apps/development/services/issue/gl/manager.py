@@ -6,35 +6,25 @@ from django.utils import timezone
 from gitlab.v4 import objects as gl
 
 from apps.core import gitlab
-from apps.development.models import (
-    Issue,
-    Label,
-    MergeRequest,
-    Milestone,
-    Note,
-    Project,
+from apps.development.models import Issue, MergeRequest, Milestone, Project
+from apps.development.services.gl.work_item_manager import (
+    BaseWorkItemGlManager,
 )
 from apps.development.services.merge_request.gl.manager import (
     MergeRequestGlManager,
 )
-from apps.development.services.project.gl.provider import ProjectGlProvider
-from apps.development.services.project_group.gl.provider import (
-    ProjectGroupGlProvider,
-)
-from apps.users.services.user.gl.manager import UserGlManager
 
 logger = logging.getLogger(__name__)
 
 
-class IssueGlManager:
+class IssueGlManager(BaseWorkItemGlManager):
     """Issues gitlab manager."""
 
     def __init__(self):
         """Initializing."""
-        self.project_provider = ProjectGlProvider()
-        self.group_provider = ProjectGroupGlProvider()
+        super().__init__()
+
         self.merge_requests_manager = MergeRequestGlManager()
-        self.user_manager = UserGlManager()
 
     def sync_issues(self, full_reload: bool = False) -> None:
         """Load issues for all projects."""
@@ -105,7 +95,7 @@ class IssueGlManager:
 
         issue, _ = Issue.objects.update_from_gitlab(**fields)
 
-        self.sync_labels(issue, gl_project, gl_issue)
+        self.sync_labels(issue, gl_issue, gl_project)
         self.sync_notes(issue, gl_issue)
         self.sync_participants(issue, gl_issue)
         self.sync_merge_requests(issue, project, gl_issue, gl_project)
@@ -132,69 +122,6 @@ class IssueGlManager:
             f'Project "{project}" deleted issues '
             + f'ckecked: removed {len(diff)} issues',
         )
-
-    def sync_labels(
-        self,
-        issue: Issue,
-        gl_project: gl.Project,
-        gl_issue: gl.ProjectIssue,
-    ) -> None:
-        """Load labels for issue."""
-        project_labels = getattr(gl_project, 'cached_labels', None)
-
-        if project_labels is None:
-            project_labels = gl_project.labels.list(all=True)
-            gl_project.cached_labels = project_labels
-
-        labels = []
-
-        for label_title in gl_issue.labels:
-            label = Label.objects.filter(
-                title=label_title,
-            ).first()
-
-            if not label:
-                gl_label = next(
-                    (
-                        project_label
-                        for project_label in project_labels
-                        if project_label.name == label_title
-                    ),
-                    None,
-                )
-
-                if gl_label:
-                    label = Label.objects.create(
-                        title=label_title,
-                        color=gl_label.color,
-                    )
-
-            if label:
-                labels.append(label)
-
-        issue.labels.set(labels)
-
-    def sync_notes(
-        self,
-        issue: Issue,
-        gl_issue: gl.ProjectIssue,
-    ) -> None:
-        """Load notes for issue."""
-        for gl_note in gl_issue.notes.list(as_list=False, system=True):
-            Note.objects.update_from_gitlab(gl_note, issue)
-
-        issue.adjust_spent_times()
-
-    def sync_participants(
-        self,
-        issue: Issue,
-        gl_issue: gl.ProjectIssue,
-    ) -> None:
-        """Load participants for issue."""
-        issue.participants.set((
-            self.user_manager.sync_user(user['id'])
-            for user in gl_issue.participants()
-        ))
 
     def sync_merge_requests(
         self,

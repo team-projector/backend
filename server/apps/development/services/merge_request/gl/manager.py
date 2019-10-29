@@ -8,23 +8,15 @@ from gitlab.v4 import objects as gl
 from apps.core.gitlab.parsers import parse_gl_datetime
 from apps.development import models
 from apps.development.models import MergeRequest
-from apps.development.services.project.gl.provider import ProjectGlProvider
-from apps.development.services.project_group.gl.provider import (
-    ProjectGroupGlProvider,
+from apps.development.services.gl.work_item_manager import (
+    BaseWorkItemGlManager,
 )
-from apps.users.services.user.gl.manager import UserGlManager
 
 logger = logging.getLogger(__name__)
 
 
-class MergeRequestGlManager:
+class MergeRequestGlManager(BaseWorkItemGlManager):
     """Merge requests gitlab manager."""
-
-    def __init__(self):
-        """Initializing."""
-        self.project_provider = ProjectGlProvider()
-        self.group_provider = ProjectGroupGlProvider()
-        self.user_manager = UserGlManager()
 
     def sync_merge_requests(
         self,
@@ -111,63 +103,3 @@ class MergeRequestGlManager:
         logger.info(f'Merge Request "{merge_request}" is synced')
 
         return merge_request
-
-    def sync_labels(
-        self,
-        merge_request: models.MergeRequest,
-        gl_merge_request: gl.MergeRequest,
-        gl_project: gl.Project,
-    ) -> None:
-        """Load labels for merge request."""
-        project_labels = getattr(gl_project, 'cached_labels', None)
-        if project_labels is None:
-            project_labels = gl_project.labels.list(all=True)
-            gl_project.cached_labels = project_labels
-
-        labels = []
-
-        for label_title in gl_merge_request.labels:
-            label = models.Label.objects.filter(title=label_title).first()
-            if not label:
-                gl_label = next((
-                    project_label
-                    for project_label in project_labels
-                    if project_label.name == label_title
-                ),
-                    None,
-                )
-                if gl_label:
-                    label = models.Label.objects.create(
-                        title=label_title,
-                        color=gl_label.color,
-                    )
-
-            if label:
-                labels.append(label)
-
-        merge_request.labels.set(labels)
-
-    def sync_notes(
-        self,
-        merge_request: models.MergeRequest,
-        gl_merge_request: gl.MergeRequest,
-    ) -> None:
-        """Load notes for merge request."""
-        for gl_note in gl_merge_request.notes.list(as_list=False, system=True):
-            models.Note.objects.update_from_gitlab(
-                gl_note,
-                merge_request,
-            )
-
-        merge_request.adjust_spent_times()
-
-    def sync_participants(
-        self,
-        merge_request: models.MergeRequest,
-        gl_merge_request: gl.MergeRequest,
-    ) -> None:
-        """Load participants for merge request."""
-        merge_request.participants.set((
-            self.user_manager.sync_user(user['id'])
-            for user in gl_merge_request.participants()
-        ))

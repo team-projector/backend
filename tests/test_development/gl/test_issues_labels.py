@@ -43,7 +43,7 @@ def test_load_issue_labels(db, gl_mocker, gl_client):
     gl_project_loaded = gl_client.projects.get(id=project.gl_id)
     gl_issue_loaded = gl_project_loaded.issues.get(id=issue.gl_iid)
 
-    IssueGlManager().sync_labels(issue, gl_project_loaded, gl_issue_loaded)
+    IssueGlManager().sync_labels(issue, gl_issue_loaded, gl_project_loaded)
 
     issue = Issue.objects.first()
 
@@ -81,8 +81,7 @@ def test_load_two_issues_with_cached_labels(db, gl_mocker, gl_client):
 
     assert getattr(gl_project_loaded, 'cached_labels', None) is None
 
-    IssueGlManager().sync_labels(issue_1, gl_project_loaded,
-                                 gl_issue_1_loaded)
+    IssueGlManager().sync_labels(issue_1, gl_issue_1_loaded, gl_project_loaded)
 
     assert gl_project_loaded.cached_labels is not None
 
@@ -105,8 +104,7 @@ def test_load_two_issues_with_cached_labels(db, gl_mocker, gl_client):
 
     gl_issue_2_loaded = gl_project_loaded.issues.get(id=issue_2.gl_iid)
 
-    IssueGlManager().sync_labels(issue_2, gl_project_loaded,
-                                 gl_issue_2_loaded)
+    IssueGlManager().sync_labels(issue_2, gl_issue_2_loaded, gl_project_loaded)
 
     issue_2.refresh_from_db()
     assert issue_2.labels.first().title == gl_label.name
@@ -140,7 +138,7 @@ def test_project_labels_is_empty(db, gl_mocker, gl_client):
     gl_project_loaded = gl_client.projects.get(id=project.gl_id)
     gl_issue_loaded = gl_project_loaded.issues.get(id=issue.gl_iid)
 
-    IssueGlManager().sync_labels(issue, gl_project_loaded, gl_issue_loaded)
+    IssueGlManager().sync_labels(issue, gl_issue_loaded, gl_project_loaded)
 
     issue = Issue.objects.first()
 
