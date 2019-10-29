@@ -1,7 +1,7 @@
 from django.test import override_settings
 
 from apps.development.models import Milestone
-from apps.development.services import milestone as milestone_service
+from apps.development.services.milestone.gl.manager import MilestoneGlManager
 from tests.test_development.checkers_gitlab import check_milestone
 from tests.test_development.factories import (
     ProjectFactory, ProjectGroupFactory
@@ -24,7 +24,7 @@ def test_load_project_group_milestone(db, gl_mocker):
     gl_mocker.registry_get(f'/groups/{gl_group.id}/milestones'
                            f'/{gl_milestone.id}', gl_milestone)
 
-    milestone_service.load_for_project_group(group, gl_group.id, gl_milestone.id)
+    MilestoneGlManager().sync_project_group_milestone(group, gl_milestone.id)
 
     milestone = Milestone.objects.get(gl_id=gl_milestone.id)
     check_milestone(milestone, gl_milestone, group)
@@ -42,7 +42,7 @@ def test_load_for_project(db, gl_mocker):
     gl_mocker.registry_get(f'/projects/{gl_project.id}/milestones'
                            f'/{gl_milestone.id}', gl_milestone)
 
-    milestone_service.load_for_project(project, gl_project.id, gl_milestone.id)
+    MilestoneGlManager().sync_project_milestone(project, gl_milestone.id)
 
     milestone = Milestone.objects.get(gl_id=gl_milestone.id)
     check_milestone(milestone, gl_milestone, project)
@@ -60,7 +60,7 @@ def test_load_for_project_group_all(db, gl_mocker):
     gl_mocker.registry_get(f'/groups/{gl_group.id}/milestones',
                            [gl_milestone])
 
-    milestone_service.load_for_project_group_all(group.id, gl_group.id)
+    MilestoneGlManager().sync_project_group_milestones(group)
 
     milestone = Milestone.objects.get(gl_id=gl_milestone.id)
     check_milestone(milestone, gl_milestone, group)
@@ -78,7 +78,7 @@ def test_load_for_project_all(db, gl_mocker):
     gl_mocker.registry_get(f'/projects/{gl_project.id}/milestones',
                            [gl_milestone])
 
-    milestone_service.load_for_project_all(project.id, gl_project.id)
+    MilestoneGlManager().sync_project_milestones(project)
 
     milestone = Milestone.objects.get(gl_id=gl_milestone.id)
     check_milestone(milestone, gl_milestone, project)

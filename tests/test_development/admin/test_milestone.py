@@ -84,7 +84,8 @@ def test_sync_project_milestone(db, gl_mocker):
 def test_not_syncing(user):
     ma_milestone = model_admin(Milestone)
 
-    milestone = ProjectMilestoneFactory.create(owner=user, description='not sync')
+    milestone = ProjectMilestoneFactory.create(owner=user,
+                                               description='not sync')
 
     ma_milestone.sync_handler(milestone)
 

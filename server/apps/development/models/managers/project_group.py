@@ -9,7 +9,7 @@ from django.utils import timezone
 class ProjectGroupManager(models.Manager):
     """The project group manager."""
 
-    def sync_gitlab(self, gl_id, **kwargs) -> Tuple[Any, bool]:
+    def update_from_gitlab(self, gl_id, **kwargs) -> Tuple[Any, bool]:
         """Save project group by Gitlab id."""
         kwargs['gl_last_sync'] = timezone.now()
 

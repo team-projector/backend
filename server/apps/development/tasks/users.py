@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 
-from apps.users.services.user.gitlab import load_user
+from apps.users.services.user.gl.manager import UserGlManager
 from celery_app import app
 
 
 @app.task
-def sync_user(gl_id: int) -> None:
+def sync_user_task(gl_id: int) -> None:
     """Syncing user from Gitlab."""
-    load_user(gl_id)
+    UserGlManager().sync_user(gl_id)

@@ -10,11 +10,13 @@ from apps.core.gitlab.parsers import parse_gl_datetime
 class NoteManager(models.Manager):
     """The note model manager."""
 
-    def sync_gitlab(self, gl_note, issue) -> Any:
+    def update_from_gitlab(self, gl_note, issue) -> Any:
         """Parse note and save from Gitlab."""
-        from apps.development.services.note.gitlab import read_note  # noqa WPS433
-        from apps.users.services.user.gitlab import (  # noqa WPS433
-            extract_user_from_data,
+        from apps.development.services.note.gitlab import (  # noqa WPS433
+            read_note,
+        )
+        from apps.users.services.user.gl.manager import (  # noqa WPS433
+            UserGlManager,
         )
 
         last_date = issue.last_note_date
@@ -36,7 +38,7 @@ class NoteManager(models.Manager):
             body=gl_note.body,
             created_at=parse_gl_datetime(gl_note.created_at),
             updated_at=parse_gl_datetime(gl_note.updated_at),
-            user=extract_user_from_data(gl_note.author),
+            user=UserGlManager().extract_user_from_data(gl_note.author),
             content_object=issue,
             data=parse_data.data,
         )

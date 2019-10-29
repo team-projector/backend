@@ -13,7 +13,7 @@ from apps.core.admin.mixins import (
     AdminFormFieldsOverridesMixin,
     ForceSyncEntityMixin,
 )
-from apps.development.tasks import sync_user
+from apps.development.tasks import sync_user_task
 from apps.users.models import User
 
 
@@ -76,7 +76,7 @@ class UserAdmin(
 
     def sync_handler(self, user):
         """Syncing user from Gitlab."""
-        sync_user.delay(user.gl_id)
+        sync_user_task.delay(user.gl_id)
 
     def changelist_view(self, request, extra_context=None):
         """Show only active user by default on change list page."""

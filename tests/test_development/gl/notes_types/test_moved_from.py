@@ -21,7 +21,7 @@ class MovedFromNoteTypeTests(TestCase):
     def test_success(self):
         body = 'moved from group/project#111'
 
-        Note.objects.sync_gitlab(dict2obj({
+        Note.objects.update_from_gitlab(dict2obj({
             'id': 2,
             'body': body,
             'created_at': datetime.strftime(
@@ -49,7 +49,7 @@ class MovedFromNoteTypeTests(TestCase):
     def test_no_system(self):
         body = 'moved from group/project#111'
 
-        Note.objects.sync_gitlab(dict2obj({
+        Note.objects.update_from_gitlab(dict2obj({
             'id': 2,
             'body': body,
             'created_at': datetime.strftime(
@@ -71,7 +71,7 @@ class MovedFromNoteTypeTests(TestCase):
     def test_bad_issue_number(self):
         body = 'moved from group/project#111b'
 
-        Note.objects.sync_gitlab(dict2obj({
+        Note.objects.update_from_gitlab(dict2obj({
             'id': 2,
             'body': body,
             'created_at': datetime.strftime(

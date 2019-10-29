@@ -4,10 +4,10 @@ from django.utils import timezone
 from gitlab.exceptions import GitlabGetError
 from rest_framework import status
 
-from apps.core.gitlab import get_gitlab_client
 from apps.development.models import MergeRequest
 from apps.development.models.note import NOTE_TYPES
-from apps.development.services import merge_request as merge_request_service
+from apps.development.services.merge_request.gl.manager import \
+    MergeRequestGlManager
 from tests.test_development.checkers_gitlab import (
     check_merge_request, check_user
 )
@@ -29,9 +29,8 @@ from tests.test_development.factories_gitlab import (
 
 
 @override_settings(GITLAB_TOKEN='GITLAB_TOKEN')
-def test_load_participants(db, gl_mocker):
+def test_load_participants(db, gl_mocker, gl_client):
     gl_mocker.registry_get('/user', GlUserFactory())
-    gl = get_gitlab_client()
 
     gl_project = AttrDict(GlProjectFactory())
     project = ProjectFactory.create(gl_id=gl_project.id)
@@ -55,10 +54,10 @@ def test_load_participants(db, gl_mocker):
         f'/projects/{gl_project.id}/merge_requests/{gl_merge_request.iid}/participants',
         [gl_participant_1, gl_participant_2])
 
-    gl_project = gl.projects.get(id=project.gl_id)
+    gl_project = gl_client.projects.get(id=project.gl_id)
     gl_merge_request = gl_project.mergerequests.get(id=merge_request.gl_iid)
 
-    merge_request_service.load_participants(merge_request, gl_merge_request)
+    MergeRequestGlManager().sync_participants(merge_request, gl_merge_request)
 
     participant_1 = merge_request.participants.get(
         login=gl_participant_1.username)
@@ -70,18 +69,19 @@ def test_load_participants(db, gl_mocker):
 
 
 @override_settings(GITLAB_TOKEN='GITLAB_TOKEN')
-def test_load_notes(db, gl_mocker):
+def test_load_notes(db, gl_mocker, gl_client):
     gl_mocker.registry_get('/user', GlUserFactory())
-    gl = get_gitlab_client()
 
     gl_project = AttrDict(GlProjectFactory())
     project = ProjectFactory.create(gl_id=gl_project.id)
     gl_mocker.registry_get(f'/projects/{gl_project.id}', gl_project)
 
     gl_merge_request = AttrDict(GlMergeRequestFactory(project_id=gl_project.id))
-    merge_request = MergeRequestFactory.create(gl_id=gl_merge_request.id,
-                                               gl_iid=gl_merge_request.iid,
-                                               project=project)
+    merge_request = MergeRequestFactory.create(
+        gl_id=gl_merge_request.id,
+        gl_iid=gl_merge_request.iid,
+        project=project
+    )
     gl_mocker.registry_get(
         f'/projects/{gl_project.id}/merge_requests/{gl_merge_request.iid}',
         gl_merge_request)
@@ -95,11 +95,11 @@ def test_load_notes(db, gl_mocker):
         f'/projects/{gl_project.id}/merge_requests/{gl_merge_request.iid}/notes',
         [gl_note])
 
-    gl_project_loaded = gl.projects.get(id=project.gl_id)
+    gl_project_loaded = gl_client.projects.get(id=project.gl_id)
     gl_merge_request_loaded = gl_project_loaded.mergerequests.get(
         id=merge_request.gl_iid)
 
-    merge_request_service.load_notes(merge_request, gl_merge_request_loaded)
+    MergeRequestGlManager().sync_notes(merge_request, gl_merge_request_loaded)
 
     note = merge_request.notes.first()
 
@@ -115,9 +115,8 @@ def test_load_notes(db, gl_mocker):
 
 
 @override_settings(GITLAB_TOKEN='GITLAB_TOKEN')
-def test_load_labels(db, gl_mocker):
+def test_load_labels(db, gl_mocker, gl_client):
     gl_mocker.registry_get('/user', GlUserFactory())
-    gl = get_gitlab_client()
 
     gl_project = AttrDict(GlProjectFactory())
     project = ProjectFactory.create(gl_id=gl_project.id)
@@ -135,12 +134,15 @@ def test_load_labels(db, gl_mocker):
         f'/projects/{gl_project.id}/merge_requests/{gl_merge_request.iid}',
         gl_merge_request)
 
-    gl_project_loaded = gl.projects.get(id=project.gl_id)
+    gl_project_loaded = gl_client.projects.get(id=project.gl_id)
     gl_merge_request_loaded = gl_project_loaded.mergerequests.get(
         id=merge_request.gl_iid)
 
-    merge_request_service.load_labels(merge_request, gl_project_loaded,
-                                      gl_merge_request_loaded)
+    MergeRequestGlManager().sync_labels(
+        merge_request,
+        gl_merge_request_loaded,
+        gl_project_loaded,
+    )
 
     merge_request = MergeRequest.objects.first()
 
@@ -149,9 +151,8 @@ def test_load_labels(db, gl_mocker):
 
 
 @override_settings(GITLAB_TOKEN='GITLAB_TOKEN')
-def test_load_for_project(db, gl_mocker):
+def test_load_for_project(db, gl_mocker, gl_client):
     gl_mocker.registry_get('/user', GlUserFactory())
-    gl = get_gitlab_client()
 
     gl_project = AttrDict(GlProjectFactory())
     project = ProjectFactory.create(gl_id=gl_project.id)
@@ -169,12 +170,14 @@ def test_load_for_project(db, gl_mocker):
                               state='closed', milestone=gl_milestone))
     _registry_merge_request(gl_mocker, gl_project, gl_merge_request)
 
-    gl_project_loaded = gl.projects.get(id=project.gl_id)
+    gl_project_loaded = gl_client.projects.get(id=project.gl_id)
     gl_merge_request_loaded = gl_project_loaded.mergerequests.get(
         id=gl_merge_request.iid)
 
-    merge_request_service.load_for_project(project, gl_project_loaded,
-                                           gl_merge_request_loaded)
+    MergeRequestGlManager().sync_project_merge_requests(
+        project,
+        gl_merge_request_loaded,
+    )
 
     merge_request = MergeRequest.objects.first()
 
@@ -201,7 +204,10 @@ def test_load_for_project_all(db, gl_mocker):
                               author=gl_user))
     _registry_merge_request(gl_mocker, gl_project, gl_merge_request)
 
-    merge_request_service.load_for_project_all(project, full_reload=True)
+    MergeRequestGlManager().sync_project_merge_requests(
+        project,
+        full_reload=True,
+    )
 
     merge_request = MergeRequest.objects.first()
 
@@ -226,7 +232,7 @@ def test_load_merge_requests(db, gl_mocker):
                               author=gl_user, state='closed'))
     _registry_merge_request(gl_mocker, gl_project, gl_merge_request)
 
-    merge_request_service.load_merge_requests()
+    MergeRequestGlManager().sync_merge_requests()
 
     merge_request = MergeRequest.objects.first()
 
@@ -247,7 +253,7 @@ def test_load_merge_requests_server_error(db, gl_mocker):
                            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     with pytest.raises(GitlabGetError):
-        merge_request_service.load_merge_requests()
+        MergeRequestGlManager().sync_merge_requests()
 
 
 @override_settings(GITLAB_TOKEN='GITLAB_TOKEN')
@@ -259,7 +265,7 @@ def test_load_merge_requests_not_found(db, gl_mocker):
     gl_mocker.registry_get(f'/projects/{gl_project.id}',
                            status_code=status.HTTP_404_NOT_FOUND)
 
-    merge_request_service.load_merge_requests()
+    MergeRequestGlManager().sync_merge_requests()
 
 
 def _registry_merge_request(gl_mocker, gl_project, gl_merge_request):

@@ -11,7 +11,7 @@ from apps.payroll.admin.forms import GenerateSalaryForm
 from apps.payroll.models import Salary
 from apps.payroll.services.salary.calculator import SalaryCalculator
 from apps.payroll.services.salary.notifications import is_payed
-from apps.payroll.tasks import send_salary_report
+from apps.payroll.tasks import send_salary_report_task
 from apps.users.admin.filters import UserFilter
 
 
@@ -73,6 +73,8 @@ class SalaryAdmin(BaseModelAdmin):
         Send notification to user if salary is payed.
         """
         if change and is_payed(salary):
-            transaction.on_commit(lambda: send_salary_report.delay(salary.id))
+            transaction.on_commit(
+                lambda: send_salary_report_task.delay(salary.id),
+            )
 
         super().save_model(request, salary, form, change)

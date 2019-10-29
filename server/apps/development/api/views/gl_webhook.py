@@ -9,10 +9,10 @@ from django.views.decorators.csrf import csrf_exempt
 from rest_framework.exceptions import AuthenticationFailed
 
 from apps.core.activity.verbs import ACTION_GITLAB_WEBHOOK_TRIGGERED
-from apps.core.tasks import add_action
+from apps.core.tasks import add_action_task
 from apps.development.tasks import (
-    sync_project_issue,
-    sync_project_merge_request,
+    sync_project_issue_task,
+    sync_project_merge_request_task,
 )
 
 logger = logging.getLogger(__name__)
@@ -40,28 +40,28 @@ def _sync_issue(body: dict) -> None:
     project_id = body['project']['id']
     issue_id = body['object_attributes']['iid']
 
-    sync_project_issue.delay(project_id, issue_id)
+    sync_project_issue_task.delay(project_id, issue_id)
 
     logger.info(
         f'gitlab webhook was triggered: project_id = {project_id}, '
         + f'issue_id = {issue_id}',
     )
 
-    add_action.delay(verb=ACTION_GITLAB_WEBHOOK_TRIGGERED)
+    add_action_task.delay(verb=ACTION_GITLAB_WEBHOOK_TRIGGERED)
 
 
 def _sync_merge_request(body: dict) -> None:
     project_id = body['project']['id']
     issue_id = body['object_attributes']['iid']
 
-    sync_project_merge_request.delay(project_id, issue_id)
+    sync_project_merge_request_task.delay(project_id, issue_id)
 
     logger.info(
         f'gitlab webhook was triggered: project_id = {project_id}, '
         + f'merge_request_id = {issue_id}',
     )
 
-    add_action.delay(verb=ACTION_GITLAB_WEBHOOK_TRIGGERED)
+    add_action_task.delay(verb=ACTION_GITLAB_WEBHOOK_TRIGGERED)
 
 
 def _check_webhook_secret_token(secret_token: str) -> None:

@@ -10,7 +10,6 @@ from .problems import (
     PROBLEM_OVER_DUE_DAY
 )
 
-from .gitlab import *
 from .summary.team import *
 from .summary.project import *
 from .summary.main import *

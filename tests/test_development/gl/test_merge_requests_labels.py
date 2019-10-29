@@ -1,9 +1,8 @@
 from django.test import override_settings
 
-from apps.core.gitlab import get_gitlab_client
 from apps.development.models import MergeRequest
-from apps.development.services import merge_request as merge_request_service
-
+from apps.development.services.merge_request.gl.manager import \
+    MergeRequestGlManager
 from tests.test_development.factories import (
     ProjectFactory, MergeRequestFactory,
 )
@@ -17,10 +16,7 @@ from tests.test_development.factories_gitlab import (
 
 
 @override_settings(GITLAB_TOKEN='GITLAB_TOKEN')
-def test_load_labels(db, gl_mocker):
-    gl_mocker.registry_get('/user', GlUserFactory())
-    gl = get_gitlab_client()
-
+def test_load_labels(db, gl_mocker, gl_client):
     gl_project = AttrDict(GlProjectFactory())
     project = ProjectFactory.create(gl_id=gl_project.id)
     gl_mocker.registry_get(f'/projects/{gl_project.id}', gl_project)
@@ -41,12 +37,15 @@ def test_load_labels(db, gl_mocker):
         f'/projects/{gl_project.id}/merge_requests/{gl_merge_request.iid}',
         gl_merge_request)
 
-    gl_project_loaded = gl.projects.get(id=project.gl_id)
+    gl_project_loaded = gl_client.projects.get(id=project.gl_id)
     gl_merge_request_loaded = gl_project_loaded.mergerequests.get(
         id=merge_request.gl_iid)
 
-    merge_request_service.load_labels(merge_request, gl_project_loaded,
-                                      gl_merge_request_loaded)
+    MergeRequestGlManager().sync_labels(
+        merge_request,
+        gl_merge_request_loaded,
+        gl_project_loaded,
+    )
 
     merge_request = MergeRequest.objects.first()
 
@@ -55,9 +54,8 @@ def test_load_labels(db, gl_mocker):
 
 
 @override_settings(GITLAB_TOKEN='GITLAB_TOKEN')
-def test_load_two_merge_requests_with_cached_labels(db, gl_mocker):
+def test_load_two_merge_requests_with_cached_labels(db, gl_mocker, gl_client):
     gl_mocker.registry_get('/user', GlUserFactory())
-    gl = get_gitlab_client()
 
     gl_project = AttrDict(GlProjectFactory())
     project = ProjectFactory.create(gl_id=gl_project.id)
@@ -80,15 +78,17 @@ def test_load_two_merge_requests_with_cached_labels(db, gl_mocker):
         gl_merge_request_1,
     )
 
-    gl_project_loaded = gl.projects.get(id=project.gl_id)
+    gl_project_loaded = gl_client.projects.get(id=project.gl_id)
     gl_merge_request_loaded = gl_project_loaded.mergerequests.get(
         id=merge_request_1.gl_iid,
     )
 
     assert getattr(gl_project_loaded, 'cached_labels', None) is None
 
-    merge_request_service.load_labels(
-        merge_request_1, gl_project_loaded, gl_merge_request_loaded,
+    MergeRequestGlManager().sync_labels(
+        merge_request_1,
+        gl_merge_request_loaded,
+        gl_project_loaded,
     )
 
     assert gl_project_loaded.cached_labels is not None
@@ -115,8 +115,10 @@ def test_load_two_merge_requests_with_cached_labels(db, gl_mocker):
         id=merge_request_2.gl_iid,
     )
 
-    merge_request_service.load_labels(
-        merge_request_2, gl_project_loaded, gl_merge_request_loaded,
+    MergeRequestGlManager().sync_labels(
+        merge_request_2,
+        gl_merge_request_loaded,
+        gl_project_loaded,
     )
 
     merge_request_2.refresh_from_db()
@@ -125,9 +127,8 @@ def test_load_two_merge_requests_with_cached_labels(db, gl_mocker):
 
 
 @override_settings(GITLAB_TOKEN='GITLAB_TOKEN')
-def test_project_labels_is_empty(db, gl_mocker):
+def test_project_labels_is_empty(db, gl_mocker, gl_client):
     gl_mocker.registry_get('/user', GlUserFactory())
-    gl = get_gitlab_client()
 
     gl_project = AttrDict(GlProjectFactory())
     project = ProjectFactory.create(gl_id=gl_project.id)
@@ -150,13 +151,15 @@ def test_project_labels_is_empty(db, gl_mocker):
         gl_merge_request,
     )
 
-    gl_project_loaded = gl.projects.get(id=project.gl_id)
+    gl_project_loaded = gl_client.projects.get(id=project.gl_id)
     gl_merge_request_loaded = gl_project_loaded.mergerequests.get(
         id=merge_request.gl_iid,
     )
 
-    merge_request_service.load_labels(
-        merge_request, gl_project_loaded, gl_merge_request_loaded,
+    MergeRequestGlManager().sync_labels(
+        merge_request,
+        gl_merge_request_loaded,
+        gl_project_loaded,
     )
 
     merge_request = MergeRequest.objects.first()

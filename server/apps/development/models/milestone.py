@@ -27,11 +27,7 @@ class Milestone(
     GitlabInternalIdMixin,
     Timestamps,
 ):
-    """
-    The milestone model.
-
-    Fill from Gitlab.
-    """
+    """The milestone model."""
 
     title = models.CharField(
         max_length=DEFAULT_TITLE_LENGTH,

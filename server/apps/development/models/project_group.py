@@ -36,6 +36,12 @@ class ProjectGroup(GitlabEntityMixin):
         help_text=_('HT__GITLAB_AVATAR'),
     )
 
+    is_active = models.BooleanField(
+        default=True,
+        verbose_name=_('VN__IS_ACTIVE'),
+        help_text=_('HT__IS_ACTIVE'),
+    )
+
     parent = models.ForeignKey(
         'self',
         models.CASCADE,

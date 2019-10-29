@@ -17,7 +17,7 @@ class ResetSpendNoteType(TestCase):
         self.user = User.objects.create_user(login='user', gl_id=10)
 
     def test_load_spend_reset(self):
-        Note.objects.sync_gitlab(dict2obj({
+        Note.objects.update_from_gitlab(dict2obj({
             'id': 2,
             'body': SPEND_RESET_MESSAGE,
             'created_at': datetime.strftime(datetime.now(),

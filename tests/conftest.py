@@ -2,10 +2,13 @@ import httpretty
 import pytest
 from django.contrib.auth.models import AnonymousUser
 from graphene.test import Client as GQLClient
+
+from apps.core.gitlab.client import get_default_gitlab_client
 from apps.users.models import User
 from gql import schema
 from tests.base import Client, create_user, USER_LOGIN, USER_PASSWORD
 from tests.mocks import GitlabMock
+from tests.test_development.factories_gitlab import GlUserFactory
 
 
 def pytest_addoption(parser):
@@ -16,7 +19,8 @@ def pytest_addoption(parser):
 
 def pytest_collection_modifyitems(config, items):
     if config.getoption('--runslow'):
-        skip = pytest.mark.skip(reason='--runslow runs only marked as slow tests')
+        skip = pytest.mark.skip(
+            reason='--runslow runs only marked as slow tests')
         for item in items:
             if 'slow' not in item.keywords:
                 item.add_marker(skip)
@@ -46,6 +50,14 @@ def gl_mocker():
     yield GitlabMock()
 
     httpretty.disable()
+
+
+@pytest.fixture()
+def gl_client(gl_mocker):
+    print('calling gl_client fixture')
+    gl_mocker.registry_get('/user', GlUserFactory())
+
+    return get_default_gitlab_client()
 
 
 @pytest.fixture()
