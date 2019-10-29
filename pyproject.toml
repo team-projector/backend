@@ -47,6 +47,7 @@ wemake-python-styleguide = "*"
 polint = "^0.4.0"
 dennis = "^0.9.0"
 safety = "^1.8"
+flake8-django = "^0.0.4"
 
 [build-system]
 requires = ["poetry>=0.12"]

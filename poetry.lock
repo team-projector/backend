@@ -479,6 +479,17 @@ pycodestyle = "*"
 
 [[package]]
 category = "dev"
+description = "Plugin to catch bad style specific to Django Projects"
+name = "flake8-django"
+optional = false
+python-versions = "*"
+version = "0.0.4"
+
+[package.dependencies]
+flake8 = "*"
+
+[[package]]
+category = "dev"
 description = "Extension for flake8 which uses pydocstyle to check docstrings"
 name = "flake8-docstrings"
 optional = false
@@ -1457,7 +1468,7 @@ version = "0.6.0"
 more-itertools = "*"
 
 [metadata]
-content-hash = "cf7e7ea7085df892c9bf805c6677e28997f709b633e972553b2a05ae5061bbcf"
+content-hash = "1fb35a9854a004a2ee7700dc421d31a8977899d8c35350792944b258bc7bdf50"
 python-versions = "^3.6"
 
 [metadata.hashes]
@@ -1507,6 +1518,7 @@ flake8-coding = ["79704112c44d09d4ab6c8965e76a20c3f7073d52146db60303bce777d96122
 flake8-commas = ["d3005899466f51380387df7151fb59afec666a0f4f4a2c6a8995b975de0f44b7", "ee2141a3495ef9789a3894ed8802d03eff1eaaf98ce6d8653a7c573ef101935e"]
 flake8-comprehensions = ["7b174ded3d7e73edf587e942458b6c1a7c3456d512d9c435deae367236b9562c", "e36fc12bd3833e0b34fe0639b7a817d32c86238987f532078c57eafdc7a8a219"]
 flake8-debugger = ["be4fb88de3ee8f6dd5053a2d347e2c0a2b54bab6733a2280bb20ebd3c4ca1d97"]
+flake8-django = ["7329ec2e2b8b194e8109639c534359014c79df4d50b14f4b85b8395edc5d6760"]
 flake8-docstrings = ["1666dd069c9c457ee57e80af3c1a6b37b00cc1801c6fde88e455131bb2e186cd", "9c0db5a79a1affd70fdf53b8765c8a26bf968e59e0252d7f2fc546b41c0cda06"]
 flake8-eradicate = ["86804c682f9805a689379307939f350140fe9c015c3e600baff37fb23f7f21cc", "cc2c3300a6643f8347988cc828478c347975f7bf9c8fc1f8a7027da41ab9bdbd"]
 flake8-executable = ["968618c475a23a538ced9b957a741b818d37610838f99f6abcea249e4de7c9ec", "a636ff78b14b63b1245d1c4d509db2f6ea0f2e27a86ee7eb848f3827bef7e16d"]
