@@ -23,9 +23,9 @@ class DayMetricsProvider(base.ProgressMetricsProvider):
 
         active_issues = self.get_active_issues() if now <= self.end else []
 
-        time_spents = self._get_time_spents()
-        due_day_stats = self._get_due_day_stats()
-        payrols_stats = self._get_payrolls_stats()
+        time_spents = _get_time_spents(self.user, self.start, self.end)
+        due_day_stats = _get_due_day_stats(self.user)
+        payrols_stats = _get_payrolls_stats(self.user)
 
         if self.start > now:
             self._replay_loading(now, active_issues)
@@ -41,9 +41,10 @@ class DayMetricsProvider(base.ProgressMetricsProvider):
             metric.end = current
             metric.planned_work_hours = self.user.daily_work_hours
 
-            self._apply_due_day_stats(current, metric, due_day_stats)
-            self._apply_time_spents(current, metric, time_spents)
-            self._apply_payrols_stats(current, metric, payrols_stats)
+            if current in time_spents:
+                metric.time_spent = time_spents[current]['period_spent']
+
+            self._apply_stats(current, metric, due_day_stats, payrols_stats)
 
             if self._is_apply_loading(current, now):
                 self._update_loading(metric, active_issues)
@@ -72,111 +73,23 @@ class DayMetricsProvider(base.ProgressMetricsProvider):
 
             current += DAY_STEP
 
-    def _apply_due_day_stats(
+    def _apply_stats(
         self,
         day: date,
         metric: base.UserProgressMetrics,
         due_day_stats: dict,
+        payrolls_stats: dict,
     ) -> None:
-        if day not in due_day_stats:
-            return
+        if day in due_day_stats:
+            progress = due_day_stats[day]
+            metric.issues_count = progress['issues_count']
+            metric.time_estimate = progress['total_time_estimate']
+            metric.time_remains = progress['total_time_remains']
 
-        progress = due_day_stats[day]
-
-        metric.issues_count = progress['issues_count']
-        metric.time_estimate = progress['total_time_estimate']
-        metric.time_remains = progress['total_time_remains']
-
-    def _apply_time_spents(
-        self,
-        day: date,
-        metric: base.UserProgressMetrics,
-        time_spents: dict,
-    ) -> None:
-        if day not in time_spents:
-            return
-
-        spent = time_spents[day]
-        metric.time_spent = spent['period_spent']
-
-    def _apply_payrols_stats(
-        self,
-        day: date,
-        metric: base.UserProgressMetrics,
-        payrols_stats: dict,
-    ) -> None:
-        if day not in payrols_stats:
-            return
-
-        payrolls = payrols_stats[day]
-        metric.payroll = payrolls['total_payroll']
-        metric.paid = payrolls['total_paid']
-
-    def _get_time_spents(self) -> dict:
-        queryset = SpentTime.objects.annotate(
-            day=TruncDay('date'),
-        ).filter(
-            user=self.user,
-            date__range=(self.start, self.end),
-            day__isnull=False,
-        ).values(
-            'day',
-        ).annotate(
-            period_spent=Sum('time_spent'),
-        ).order_by()
-
-        return {
-            stats['day']: stats
-            for stats in queryset
-        }
-
-    def _get_due_day_stats(self) -> dict:
-        queryset = Issue.objects.annotate(
-            due_date_truncated=TruncDay('due_date'),
-            time_remains=Case(
-                When(
-                    Q(time_estimate__gt=F('total_time_spent')) &  # noqa:W504
-                    ~Q(state=ISSUE_STATES.closed),
-                    then=F('time_estimate') - F('total_time_spent'),
-                ),
-                default=Value(0),
-                output_field=IntegerField(),
-            ),
-        ).filter(
-            user=self.user,
-            due_date_truncated__isnull=False,
-        ).values(
-            'due_date_truncated',
-        ).annotate(
-            issues_count=Count('*'),
-            total_time_estimate=Coalesce(Sum('time_estimate'), 0),
-            total_time_remains=Coalesce(Sum('time_remains'), 0),
-        ).order_by()
-
-        return {
-            stats['due_date_truncated']: stats
-            for stats in queryset
-        }
-
-    def _get_payrolls_stats(self) -> dict:
-        queryset = SpentTime.objects.annotate(
-            date_truncated=TruncDay('date'),
-        ).annotate_payrolls()
-
-        queryset = queryset.filter(
-            user=self.user,
-            date_truncated__isnull=False,
-        ).values(
-            'date_truncated',
-        ).annotate(
-            total_payroll=Coalesce(Sum('payroll'), 0),
-            total_paid=Coalesce(Sum('paid'), 0),
-        ).order_by()
-
-        return {
-            stats['date_truncated']: stats
-            for stats in queryset
-        }
+        if day in payrolls_stats:
+            payrolls = payrolls_stats[day]
+            metric.payroll = payrolls['total_payroll']
+            metric.paid = payrolls['total_paid']
 
     def _is_apply_loading(
         self,
@@ -238,3 +151,72 @@ class DayMetricsProvider(base.ProgressMetricsProvider):
             issue['remaining'] -= loading
             if not issue['remaining']:
                 active_issues.remove(issue)
+
+
+def _get_time_spents(user, start, end) -> dict:
+    queryset = SpentTime.objects.annotate(
+        day=TruncDay('date'),
+    ).filter(
+        user=user,
+        date__range=(start, end),
+        day__isnull=False,
+    ).values(
+        'day',
+    ).annotate(
+        period_spent=Sum('time_spent'),
+    ).order_by()
+
+    return {
+        stats['day']: stats
+        for stats in queryset
+    }
+
+
+def _get_due_day_stats(user) -> dict:
+    queryset = Issue.objects.annotate(
+        due_date_truncated=TruncDay('due_date'),
+        time_remains=Case(
+            When(
+                Q(time_estimate__gt=F('total_time_spent')) &  # noqa:W504
+                ~Q(state=ISSUE_STATES.closed),
+                then=F('time_estimate') - F('total_time_spent'),
+            ),
+            default=Value(0),
+            output_field=IntegerField(),
+        ),
+    ).filter(
+        user=user,
+        due_date_truncated__isnull=False,
+    ).values(
+        'due_date_truncated',
+    ).annotate(
+        issues_count=Count('*'),
+        total_time_estimate=Coalesce(Sum('time_estimate'), 0),
+        total_time_remains=Coalesce(Sum('time_remains'), 0),
+    ).order_by()
+
+    return {
+        stats['due_date_truncated']: stats
+        for stats in queryset
+    }
+
+
+def _get_payrolls_stats(user) -> dict:
+    queryset = SpentTime.objects.annotate(
+        date_truncated=TruncDay('date'),
+    ).annotate_payrolls()
+
+    queryset = queryset.filter(
+        user=user,
+        date_truncated__isnull=False,
+    ).values(
+        'date_truncated',
+    ).annotate(
+        total_payroll=Coalesce(Sum('payroll'), 0),
+        total_paid=Coalesce(Sum('paid'), 0),
+    ).order_by()
+
+    return {
+        stats['date_truncated']: stats
+        for stats in queryset
+    }
