@@ -1,8 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from functools import reduce
-from operator import and_, or_
-from typing import ClassVar, List
+from typing import ClassVar
 
 from django.db.models import Case, NullBooleanField, Q, QuerySet, When
 from django.utils.timezone import localdate
@@ -104,48 +102,3 @@ class EmptyEstimateChecker(BaseProblemChecker):
             not issue.time_estimate
             and issue.state == ISSUE_STATES.opened
         )
-
-
-checkers = [
-    checker_class()
-    for checker_class in (
-        EmptyDueDateChecker,
-        OverdueDueDateChecker,
-        EmptyEstimateChecker,
-    )
-]
-
-
-def get_problems(issue: Issue) -> List[str]:
-    """Get problems for issue."""
-    problems = []
-
-    for checker in checkers:
-        if checker.issue_has_problem(issue):
-            problems.append(checker.problem_code)
-
-    return problems
-
-
-def annotate_problems(queryset: QuerySet) -> QuerySet:
-    """Annotate issues problems."""
-    for checker in checkers:
-        queryset = checker.setup_queryset(queryset)
-
-    return queryset
-
-
-def filter_problems(queryset: QuerySet) -> QuerySet:
-    """Get problems from issues."""
-    return queryset.filter(reduce(or_, [
-        Q(**{checker.annotate_field: True})
-        for checker in checkers
-    ]))
-
-
-def exclude_problems(queryset: QuerySet) -> QuerySet:
-    """Exclude problems from issues."""
-    return queryset.filter(reduce(and_, [
-        Q(**{checker.annotate_field: None})
-        for checker in checkers
-    ]))

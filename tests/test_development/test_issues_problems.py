@@ -7,7 +7,7 @@ from apps.development.services.issue import (
     get_problems, PROBLEM_OVER_DUE_DAY,
     PROBLEM_EMPTY_DUE_DAY, PROBLEM_EMPTY_ESTIMATE,
 )
-from apps.development.services.issue.problems import BaseProblemChecker
+from apps.development.services.issue.problems.checkers import BaseProblemChecker
 from tests.test_development.factories import IssueFactory
 
 
