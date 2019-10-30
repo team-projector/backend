@@ -3,6 +3,7 @@
 import re
 import types
 from collections import defaultdict, namedtuple
+from functools import partial
 from typing import DefaultDict, Optional, Pattern
 
 from apps.core.gitlab.parsers import parse_gl_date, parse_gl_datetime
@@ -25,63 +26,29 @@ RE_MOVED_FROM: Pattern = re.compile(r'^moved from .+#\d+$')
 WEEK_PER_MONTH = 4
 DAYS_PER_WEEK = 5
 HOURS_PER_DAY = 8
+HOURS_PER_WEEK = DAYS_PER_WEEK * HOURS_PER_DAY
+HOURS_PER_MONTH = WEEK_PER_MONTH * HOURS_PER_WEEK
 
 
-def seconds_handler(
+def spend_handler_helper(
     bag: DefaultDict[str, int],
-    seconds_value: int,
-) -> None:
-    """Handle seconds."""
-    bag['seconds'] += seconds_value
+    time_value: int,
+    key: str,
+    multiplier: int = 1,
+):
+    """Helps to handle different units of time via multiplier."""
+    bag[key] += time_value * multiplier
 
 
-def minutes_handler(
-    bag: DefaultDict[str, int],
-    minutes: int,
-) -> None:
-    """Handle minutes."""
-    bag['minutes'] += minutes
-
-
-def hours_handler(
-    bag: DefaultDict[str, int],
-    hours: int,
-) -> None:
-    """Handle hours."""
-    bag['hours'] += hours
-
-
-def days_handler(
-    bag: DefaultDict[str, int],
-    days: int,
-) -> None:
-    """Handle days."""
-    bag['hours'] += days * HOURS_PER_DAY
-
-
-def weeks_handler(
-    bag: DefaultDict[str, int],
-    weeks: int,
-) -> None:
-    """Handle weeks."""
-    bag['hours'] += weeks * DAYS_PER_WEEK * HOURS_PER_DAY
-
-
-def months_handler(
-    bag: DefaultDict[str, int],
-    months: int,
-) -> None:
-    """Handle months."""
-    bag['hours'] += months * WEEK_PER_MONTH * DAYS_PER_WEEK * HOURS_PER_DAY
-
+hours_helper = partial(spend_handler_helper, key='hours')
 
 GITLAB_SPEND_HANDLERS = types.MappingProxyType({
-    'mo': months_handler,
-    'w': weeks_handler,
-    'd': days_handler,
-    'h': hours_handler,
-    'm': minutes_handler,
-    's': seconds_handler,
+    'mo': partial(hours_helper, multiplier=HOURS_PER_MONTH),
+    'w': partial(hours_helper, multiplier=HOURS_PER_WEEK),
+    'd': partial(hours_helper, multiplier=HOURS_PER_DAY),
+    'h': hours_helper,
+    'm': partial(spend_handler_helper, key='minutes'),
+    's': partial(spend_handler_helper, key='seconds'),
 })
 
 NoteReadResult = namedtuple('NoteReadResult', ['type', 'data'])
