@@ -24,7 +24,7 @@ def test_send_salary_email_report(db):
 
 
 def test_without_email(db):
-    user = UserFactory.create(email=None)
+    user = UserFactory.create(email='')
 
     salary = SalaryFactory.create(user=user, payed=True)
 
