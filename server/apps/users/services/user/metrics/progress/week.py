@@ -20,13 +20,26 @@ class WeekMetricsProvider(base.ProgressMetricsProvider):
 
     def get_metrics(self) -> base.UserProgressMetricsList:
         """Calculate and return metrics."""
-        metrics = []
+        metrics: base.UserProgressMetricsList = []
 
-        time_spents = self._get_time_spents()
-        deadline_stats = self._get_deadlines_stats()
-        efficiency_stats = self._get_efficiency_stats()
-        payrolls_stats = self._get_payrolls_stats()
+        metrics = self._get_metrics(
+            metrics,
+            time_spents=self._get_time_spents(),
+            deadline_stats=self._get_deadlines_stats(),
+            efficiency_stats=self._get_efficiency_stats(),
+            payrolls_stats=self._get_payrolls_stats(),
+        )
 
+        return metrics
+
+    def _get_metrics(  # noqa WPS211
+        self,
+        metrics: base.UserProgressMetricsList,
+        time_spents: dict,
+        deadline_stats: dict,
+        efficiency_stats: dict,
+        payrolls_stats: dict,
+    ) -> base.UserProgressMetricsList:
         for week in self._get_weeks():
             metric = base.UserProgressMetrics()
             metrics.append(metric)
@@ -35,25 +48,43 @@ class WeekMetricsProvider(base.ProgressMetricsProvider):
             metric.end = week + timedelta(weeks=1)
             metric.planned_work_hours = self.user.daily_work_hours
 
-            if week in deadline_stats:
-                stats = deadline_stats[week]
-                metric.issues_count = stats['issues_count']
-                metric.time_estimate = stats['total_time_estimate']
-
-            if week in efficiency_stats:
-                stats = efficiency_stats[week]
-                metric.efficiency = stats['avg_efficiency']
-
-            if week in payrolls_stats:
-                stats = payrolls_stats[week]
-                metric.payroll = stats['total_payroll']
-                metric.paid = stats['total_paid']
-
-            if week in time_spents:
-                spent = time_spents[week]
-                metric.time_spent = spent['period_spent']
+            self._apply_stats(
+                week,
+                metric,
+                time_spents,
+                deadline_stats,
+                efficiency_stats,
+                payrolls_stats,
+            )
 
         return metrics
+
+    def _apply_stats(  # noqa WPS211
+        self,
+        week: date,
+        metric: base.UserProgressMetrics,
+        time_spents: dict,
+        deadline_stats: dict,
+        efficiency_stats: dict,
+        payrolls_stats: dict,
+    ) -> None:
+        if week in deadline_stats:
+            deadline = deadline_stats[week]
+            metric.issues_count = deadline['issues_count']
+            metric.time_estimate = deadline['total_time_estimate']
+
+        if week in efficiency_stats:
+            efficiency = efficiency_stats[week]
+            metric.efficiency = efficiency['avg_efficiency']
+
+        if week in payrolls_stats:
+            payrolls = payrolls_stats[week]
+            metric.payroll = payrolls['total_payroll']
+            metric.paid = payrolls['total_paid']
+
+        if week in time_spents:
+            spent = time_spents[week]
+            metric.time_spent = spent['period_spent']
 
     def _get_time_spents(self) -> dict:
         queryset = SpentTime.objects.annotate(

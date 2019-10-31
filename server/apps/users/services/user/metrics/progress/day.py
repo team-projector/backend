@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from datetime import date, datetime, timedelta
-from typing import List
+from typing import Any, Dict, List
 
 from django.conf import settings
 from django.db.models import Case, Count, F, IntegerField, Q, Sum, Value, When
@@ -23,15 +23,32 @@ class DayMetricsProvider(base.ProgressMetricsProvider):
 
         active_issues = self.get_active_issues() if now <= self.end else []
 
-        time_spents = _get_time_spents(self.user, self.start, self.end)
-        due_day_stats = _get_due_day_stats(self.user)
-        payrols_stats = _get_payrolls_stats(self.user)
-
         if self.start > now:
             self._replay_loading(now, active_issues)
 
+        metrics: base.UserProgressMetricsList = []
+
+        metrics = self._get_metrics(
+            metrics,
+            now,
+            active_issues,
+            time_spents=_get_time_spents(self.user, self.start, self.end),
+            due_day_stats=_get_due_day_stats(self.user),
+            payrolls_stats=_get_payrolls_stats(self.user),
+        )
+
+        return metrics
+
+    def _get_metrics(  # noqa WPS211
+        self,
+        metrics: base.UserProgressMetricsList,
+        now: date,
+        active_issues: List[Dict[str, Any]],
+        time_spents: dict,
+        due_day_stats: dict,
+        payrolls_stats: dict,
+    ) -> base.UserProgressMetricsList:
         current = self.start
-        metrics = []
 
         while current <= self.end:
             metric = base.UserProgressMetrics()
@@ -44,7 +61,12 @@ class DayMetricsProvider(base.ProgressMetricsProvider):
             if current in time_spents:
                 metric.time_spent = time_spents[current]['period_spent']
 
-            self._apply_stats(current, metric, due_day_stats, payrols_stats)
+            self._apply_stats(
+                current,
+                metric,
+                due_day_stats,
+                payrolls_stats,
+            )
 
             if self._is_apply_loading(current, now):
                 self._update_loading(metric, active_issues)

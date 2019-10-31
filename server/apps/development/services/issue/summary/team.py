@@ -51,38 +51,62 @@ class IssuesTeamSummaryProvider:
         """Calculate and return summary."""
         summaries_qs = self._get_summaries_qs()
 
-        summaries = {
+        total_issues_count = self._get_total_issues_count(summaries_qs)
+
+        summaries: List[IssuesTeamSummary] = []
+
+        summaries = self._apply_summary(
+            summaries,
+            summaries_qs,
+            total_issues_count,
+        )
+
+        return summaries
+
+    def _apply_summary(
+        self,
+        summaries: List[IssuesTeamSummary],
+        summaries_qs: QuerySet,
+        total_issues_count: int,
+    ):
+        summaries_team = {
             summary['user__teams']: summary
             for summary in
             summaries_qs
         }
 
-        total_issues_count = self._get_total_issues_count(summaries_qs)
-
         team_qs = self._get_team_qs(summaries_qs)
-
-        ret = []
 
         for team in team_qs:
             summary = IssuesTeamSummary()
-            summary.team = team
+            summaries.append(summary)
 
-            issues_summary = TeamIssuesSummary()
-            issues_summary.opened_count = summaries[team.id][
-                'issues_opened_count'
-            ]
-            issues_summary.remains = summaries[team.id][
-                'total_time_remains'
-            ]
-            issues_summary.percentage = (
-                issues_summary.opened_count / total_issues_count
+            summary.team = team
+            summary.issues = self._get_issues_summary(
+                summaries_team,
+                team,
+                total_issues_count,
             )
 
-            summary.issues = issues_summary
+        return summaries
 
-            ret.append(summary)
-
-        return ret
+    def _get_issues_summary(
+        self,
+        summaries: dict,
+        team: Team,
+        total_issues_count: int,
+    ) -> TeamIssuesSummary:
+        issues_summary = TeamIssuesSummary()
+        issues_summary.opened_count = summaries[team.id][
+            'issues_opened_count'
+        ]
+        issues_summary.remains = summaries[team.id][
+            'total_time_remains'
+        ]
+        issues_summary.percentage = (
+            issues_summary.opened_count / total_issues_count
+        )
+        return issues_summary
 
     def _get_summaries_qs(self) -> QuerySet:
         return self.queryset.annotate(
