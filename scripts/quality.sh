@@ -4,9 +4,9 @@ set -o errexit
 set -o nounset
 
 run_checkers() {
-  flake8 server
-
   mypy server
+
+  flake8 server
 
   # Run checks to be sure settings are correct (production flag is required):
 #  DJANGO_ENV=production python manage.py check --deploy --fail-level WARNING

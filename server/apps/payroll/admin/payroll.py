@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from contextlib import suppress
+from typing import Iterable
 
 from django.contrib import admin
 from django.core.exceptions import ObjectDoesNotExist
@@ -40,7 +41,7 @@ class PayrollAdmin(BaseModelAdmin):
             if node:
                 return self._get_inheritance_link(node)
 
-    def _get_inheritance_link(self, node):
+    def _get_inheritance_link(self, node) -> str:
         meta = node._meta  # noqa WPS437
 
         url = reverse(
@@ -53,7 +54,7 @@ class PayrollAdmin(BaseModelAdmin):
             + f'{node}</a>',
         )
 
-    def _get_accessor_names(self, model):
+    def _get_accessor_names(self, model) -> Iterable[str]:
         related_objects = [
             item for item in model._meta.get_fields()  # noqa WPS437
             if isinstance(

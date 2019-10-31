@@ -28,13 +28,13 @@ class ForceSyncEntityMixin(BaseModelAdmin):
 
         return super().response_change(request, instance)
 
-    def sync_handler(self, instance):
+    def sync_handler(self, instance) -> None:
         """Handler should be implemented in child class."""
         raise NotImplementedError
 
-    def _sync_obj(self, request, instance):
+    def _sync_obj(self, request, instance) -> None:
         self.sync_handler(instance)
         self.message_user(
             request,
-            f'{instance._meta.verbose_name} "{instance}" is syncing',  # noqa WPS437
+            f'{instance._meta.verbose_name} "{instance}" is syncing', # noqa WPS437
         )

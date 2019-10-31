@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+from typing import Dict
+
 import graphene
 from rest_framework.generics import get_object_or_404
 
@@ -74,7 +76,11 @@ class UpdateTicketMutation(
         )
 
     @classmethod  # noqa C901
-    def _update_ticket(cls, ticket, cleaned_data):
+    def _update_ticket(
+        cls,
+        ticket: Ticket,
+        cleaned_data: Dict,
+    ):
         if cleaned_data.get('title'):
             ticket.title = cleaned_data['title']
 

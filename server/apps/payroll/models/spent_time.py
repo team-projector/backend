@@ -61,11 +61,16 @@ class SpentTime(Payroll):
 
     objects = SpentTimeManager()  # noqa WPS110
 
+    class Meta:
+        verbose_name = _('VN__SPENT_TIME')
+        verbose_name_plural = _('VN__SPENT_TIMES')
+        ordering = ('-date',)
+
     def __str__(self):
         """Returns object string representation."""
         return f'{self.user} [{self.base}]: {self.time_spent}'
 
-    def save(self, *args, **kwargs):
+    def save(self, *args, **kwargs) -> None:
         """Save spent time."""
         self.created_by = self.user
         self.rate = self.user.hour_rate  # noqa WPS601
@@ -75,11 +80,6 @@ class SpentTime(Payroll):
 
         super().save(*args, **kwargs)
 
-    def _adjust_sums(self):
+    def _adjust_sums(self) -> None:
         self.sum = self.time_spent / SECS_IN_HOUR * self.rate
         self.customer_sum = self.time_spent / SECS_IN_HOUR * self.customer_rate  # noqa WPS601
-
-    class Meta:
-        verbose_name = _('VN__SPENT_TIME')
-        verbose_name_plural = _('VN__SPENT_TIMES')
-        ordering = ('-date',)

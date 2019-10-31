@@ -87,7 +87,7 @@ class UserAdmin(
         return super().changelist_view(request, extra_context)
 
     @classmethod
-    def _apply_default_filter_if_need(cls, request, referer):
+    def _apply_default_filter_if_need(cls, request, referer: str) -> None:
         if cls._is_apply_default_filter(referer):
             query = request.GET.copy()
             query['is_active__exact'] = '1'
@@ -95,7 +95,7 @@ class UserAdmin(
             request.META['QUERY_STRING'] = request.GET.urlencode()
 
     @classmethod
-    def _is_apply_default_filter(cls, referer) -> bool:
+    def _is_apply_default_filter(cls, referer: str) -> bool:
         return (
             not referer or  # noqa: W504
             urlparse(referer).path != reverse('admin:users_user_changelist')

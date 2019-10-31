@@ -73,10 +73,10 @@ class DataSourceConnectionField(
         connection_type=None,
         edge_type=None,
         pageinfo_type=None,
-        slice_start=0,
-        list_length=0,
-        list_slice_length=None,
-    ):
+        slice_start: int = 0,
+        list_length: int = 0,
+        list_slice_length: int = None,
+    ) -> Connection:
 
         # implemented support for offsets
 

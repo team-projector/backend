@@ -11,8 +11,8 @@ class UserManager(BaseUserManager):
 
     def create_user(
         self,
-        login,
-        password=None,
+        login: str,
+        password: str = None,
         **kwargs,
     ):
         """Create user."""
@@ -23,9 +23,14 @@ class UserManager(BaseUserManager):
 
         user.set_password(password)
         user.save(using=self._db)
+
         return user
 
-    def create_superuser(self, login, password):
+    def create_superuser(
+        self,
+        login: str,
+        password: str,
+    ):
         """Create superuser."""
         user = self.create_user(
             login,
@@ -34,6 +39,7 @@ class UserManager(BaseUserManager):
         user.is_admin = True
         user.is_superuser = True
         user.save(using=self._db)
+
         return user
 
     @cached_property
