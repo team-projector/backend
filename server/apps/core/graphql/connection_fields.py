@@ -14,6 +14,8 @@ from graphql_relay.connection.connectiontypes import Edge
 from apps.core.graphql.security.mixins.filter import AuthFilter
 from apps.core.graphql.security.permissions import AllowAuthenticated
 
+MAX_SIZE = graphene_settings.RELAY_CONNECTION_MAX_LIMIT
+
 
 class DataSourceConnectionField(
     AuthFilter,
@@ -70,9 +72,9 @@ class DataSourceConnectionField(
         cls,
         list_slice,
         args=None,
-        connection_type=None,
-        edge_type=None,
-        pageinfo_type=None,
+        connection_type=Connection,
+        edge_type=Edge,
+        pageinfo_type=PageInfo,
         slice_start: int = 0,
         list_length: int = 0,
         list_slice_length: int = None,
@@ -80,21 +82,9 @@ class DataSourceConnectionField(
 
         # implemented support for offsets
 
-        connection_type = connection_type or Connection
-        edge_type = edge_type or Edge
-        pageinfo_type = pageinfo_type or PageInfo
-
         args = args or {}
-
-        before = args.get('before')
-        after = args.get('after')
-        first = args.get('first')
-        last = args.get('last')
-        if list_slice_length is None:
-            list_slice_length = len(list_slice)
-        slice_end = slice_start + list_slice_length
-        before_offset = get_offset_with_default(before, list_length)
-        after_offset = get_offset_with_default(after, -1)
+        before_offset = get_offset_with_default(args.get('before'), list_length)
+        after_offset = get_offset_with_default(args.get('after'), -1)
 
         start_offset = max(
             slice_start - 1,
@@ -102,28 +92,53 @@ class DataSourceConnectionField(
             -1,
         ) + 1
         end_offset = min(
-            slice_end,
+            slice_start + (list_slice_length or len(list_slice)),
             before_offset,
             list_length,
         )
-        if isinstance(first, int):
+        if isinstance(args.get('first'), int):
             end_offset = min(
                 end_offset,
-                start_offset + first,
+                start_offset + args.get('first'),
             )
-        if isinstance(last, int):
+        if isinstance(args.get('last'), int):
             start_offset = max(
                 start_offset,
-                end_offset - last,
+                end_offset - args.get('last'),
             )
 
         # It is differences from original function `connection_from_list_slice`
-        max_size = graphene_settings.RELAY_CONNECTION_MAX_LIMIT
-        if end_offset - start_offset > max_size:
-            end_offset = start_offset + max_size
+        if end_offset - start_offset > MAX_SIZE:
+            end_offset = start_offset + MAX_SIZE
+
+        return cls._build_connection_type(
+            connection_type,
+            pageinfo_type,
+            edge_type,
+            list_length,
+            list_slice,
+            args.get('first'),
+            args.get('last'),
+            args.get('before'),
+            args.get('after'),
+            before_offset,
+            after_offset,
+            start_offset,
+            end_offset,
+        )
+
+    @classmethod
+    def _get_edges(
+        cls,
+        edge_type,
+        list_slice,
+        start_offset,
+        end_offset,
+    ) -> list:
 
         slice_fragment = list_slice[start_offset:end_offset]
-        edges = [
+
+        return [
             edge_type(
                 node=node,
                 cursor=offset_to_cursor(start_offset + index),
@@ -131,21 +146,67 @@ class DataSourceConnectionField(
             for index, node in enumerate(slice_fragment)
         ]
 
-        first_edge_cursor = edges[0].cursor if edges else None
-        last_edge_cursor = edges[-1].cursor if edges else None
+    @classmethod
+    def _has_previous_page(
+        cls,
+        after_offset,
+        after,
+        last,
+        start_offset,
+    ) -> bool:
         lower_bound = after_offset + 1 if after else 0
+
+        return isinstance(last, int) and start_offset > lower_bound
+
+    @classmethod  # noqa: WPS211
+    def _has_next_page(
+        cls,
+        before_offset,
+        before,
+        first,
+        end_offset,
+        list_length,
+    ) -> bool:
         upper_bound = before_offset if before else list_length
+
+        return isinstance(first, int) and end_offset < upper_bound
+
+    @classmethod  # noqa: WPS211
+    def _build_connection_type(
+        cls,
+        connection_type,
+        pageinfo_type,
+        edge_type,
+        list_length,
+        list_slice,
+        first,
+        last,
+        before,
+        after,
+        before_offset,
+        after_offset,
+        start_offset,
+        end_offset,
+    ) -> Connection:
+        edges = cls._get_edges(edge_type, list_slice, start_offset, end_offset)
 
         return connection_type(
             edges=edges,
             page_info=pageinfo_type(
-                start_cursor=first_edge_cursor,
-                end_cursor=last_edge_cursor,
-                has_previous_page=(
-                    isinstance(last, int) and start_offset > lower_bound
+                start_cursor=edges[0].cursor if edges else None,
+                end_cursor=edges[-1].cursor if edges else None,
+                has_previous_page=cls._has_previous_page(
+                    after_offset,
+                    after,
+                    last,
+                    start_offset,
                 ),
-                has_next_page=(
-                    isinstance(first, int) and end_offset < upper_bound
+                has_next_page=cls._has_next_page(
+                    before_offset,
+                    before,
+                    first,
+                    end_offset,
+                    list_length,
                 ),
             ),
         )
