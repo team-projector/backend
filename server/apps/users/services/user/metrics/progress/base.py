@@ -4,7 +4,6 @@ from datetime import date
 from typing import Any, Dict, Iterable, List, Optional
 
 from django.db.models import F
-from django.utils.functional import cached_property
 
 from apps.core.utils.time import seconds
 from apps.development.models.issue import ISSUE_STATES, Issue
@@ -44,7 +43,7 @@ class ProgressMetricsProvider:
         self.start = start
         self.end = end
 
-    @cached_property
+    @property
     def max_day_loading(self):
         """Get day loading."""
         return seconds(hours=self.user.daily_work_hours)

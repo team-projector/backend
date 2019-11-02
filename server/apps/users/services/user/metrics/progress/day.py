@@ -23,75 +23,93 @@ class DayMetricsProvider(base.ProgressMetricsProvider):
 
         active_issues = self.get_active_issues() if now <= self.end else []
 
-        if self.start > now:
-            self._replay_loading(now, active_issues)
-
-        metrics: base.UserProgressMetricsList = []
-
-        metrics = self._get_metrics(
-            metrics,
+        metrics_generator = _UserMetricsGenerator(
+            self.user,
+            self.start,
+            self.end,
             now,
+            self.max_day_loading,
             active_issues,
-            time_spents=_get_time_spents(self.user, self.start, self.end),
-            due_day_stats=_get_due_day_stats(self.user),
-            payrolls_stats=_get_payrolls_stats(self.user),
         )
 
-        return metrics
+        if self.start > now:
+            metrics_generator.replay_loading()
+
+        return self._get_metrics(metrics_generator)
 
     def _get_metrics(  # noqa WPS211
         self,
-        metrics: base.UserProgressMetricsList,
-        now: date,
-        active_issues: List[Dict[str, Any]],
-        time_spents: dict,
-        due_day_stats: dict,
-        payrolls_stats: dict,
+        metrics_generator: '_UserMetricsGenerator',
     ) -> base.UserProgressMetricsList:
         current = self.start
 
+        metrics: base.UserProgressMetricsList = []
+
         while current <= self.end:
-            metric = base.UserProgressMetrics()
+            metric = metrics_generator.generate(current)
             metrics.append(metric)
-
-            metric.start = current
-            metric.end = current
-            metric.planned_work_hours = self.user.daily_work_hours
-
-            if current in time_spents:
-                metric.time_spent = time_spents[current]['period_spent']
-
-            self._apply_stats(
-                current,
-                metric,
-                due_day_stats,
-                payrolls_stats,
-            )
-
-            if self._is_apply_loading(current, now):
-                self._update_loading(metric, active_issues)
 
             current += DAY_STEP
 
         return metrics
 
-    def _replay_loading(
+
+class _UserMetricsGenerator:
+    def __init__(
         self,
+        user,
+        start,
+        end,
         now: date,
-        active_issues: List[dict],
-    ) -> None:
-        current = now
+        max_day_loading,
+        active_issues: List[Dict[str, Any]],
+    ):
+        self.user = user
+        self.now = now
+        self.start = start
+        self.end = end
+        self.max_day_loading = max_day_loading
+        self.active_issues = active_issues
+
+        stats = _StatsProvider()
+        self.time_spents = stats.get_time_spents(
+            self.user,
+            self.start,
+            self.end,
+        )
+        self.due_day_stats = stats.get_due_day_stats(self.user)
+        self.payrolls_stats = stats.get_payrolls_stats(self.user)
+
+    def generate(self, current) -> base.UserProgressMetrics:
+        metric = base.UserProgressMetrics()
+
+        metric.start = current
+        metric.end = current
+        metric.planned_work_hours = self.user.daily_work_hours
+
+        if current in self.time_spents:
+            metric.time_spent = self.time_spents[current]['period_spent']
+
+        self._apply_stats(current, metric)
+
+        if self._is_apply_loading(current):
+            self._update_loading(metric)
+
+        return metric
+
+    def replay_loading(self) -> None:
+        current = self.now
 
         while current < self.start:
-            if not active_issues:
+            if not self.active_issues:
                 return
 
             metric = base.UserProgressMetrics()
             metric.start = current
             metric.end = current
 
-            if self._is_apply_loading(current, now):
-                self._update_loading(metric, active_issues)
+            if self._is_apply_loading(current):
+                self._update_loading(metric)
 
             current += DAY_STEP
 
@@ -99,40 +117,39 @@ class DayMetricsProvider(base.ProgressMetricsProvider):
         self,
         day: date,
         metric: base.UserProgressMetrics,
-        due_day_stats: dict,
-        payrolls_stats: dict,
     ) -> None:
-        if day in due_day_stats:
-            progress = due_day_stats[day]
+        if day in self.due_day_stats:
+            progress = self.due_day_stats[day]
             metric.issues_count = progress['issues_count']
             metric.time_estimate = progress['total_time_estimate']
             metric.time_remains = progress['total_time_remains']
 
-        if day in payrolls_stats:
-            payrolls = payrolls_stats[day]
+        if day in self.payrolls_stats:
+            payrolls = self.payrolls_stats[day]
             metric.payroll = payrolls['total_payroll']
             metric.paid = payrolls['total_paid']
 
     def _is_apply_loading(
         self,
         day: date,
-        now: date,
     ) -> bool:
-        return day >= now and day.weekday() not in settings.TP_WEEKENDS_DAYS
+        return (
+            day >= self.now
+            and day.weekday() not in settings.TP_WEEKENDS_DAYS
+        )
 
     def _update_loading(
         self,
         metric: base.UserProgressMetrics,
-        active_issues: List[dict],
     ) -> None:
-        if not active_issues:
+        if not self.active_issues:
             return
 
         metric.loading = metric.time_spent
 
         self._apply_deadline_issues_loading(
             metric,
-            active_issues,
+            self.active_issues,
         )
 
         if metric.loading > self.max_day_loading:
@@ -140,7 +157,7 @@ class DayMetricsProvider(base.ProgressMetricsProvider):
 
         self._apply_active_issues_loading(
             metric,
-            active_issues,
+            self.active_issues,
         )
 
     def _apply_deadline_issues_loading(
@@ -175,70 +192,72 @@ class DayMetricsProvider(base.ProgressMetricsProvider):
                 active_issues.remove(issue)
 
 
-def _get_time_spents(user, start, end) -> dict:
-    queryset = SpentTime.objects.annotate(
-        day=TruncDay('date'),
-    ).filter(
-        user=user,
-        date__range=(start, end),
-        day__isnull=False,
-    ).values(
-        'day',
-    ).annotate(
-        period_spent=Sum('time_spent'),
-    ).order_by()
+class _StatsProvider():
+    def get_time_spents(self, user, start, end) -> dict:
+        """Get user time spents in range."""
+        queryset = SpentTime.objects.annotate(
+            day=TruncDay('date'),
+        ).filter(
+            user=user,
+            date__range=(start, end),
+            day__isnull=False,
+        ).values(
+            'day',
+        ).annotate(
+            period_spent=Sum('time_spent'),
+        ).order_by()
 
-    return {
-        stats['day']: stats
-        for stats in queryset
-    }
+        return {
+            stats['day']: stats
+            for stats in queryset
+        }
 
-
-def _get_due_day_stats(user) -> dict:
-    queryset = Issue.objects.annotate(
-        due_date_truncated=TruncDay('due_date'),
-        time_remains=Case(
-            When(
-                Q(time_estimate__gt=F('total_time_spent')) &  # noqa:W504
-                ~Q(state=ISSUE_STATES.closed),
-                then=F('time_estimate') - F('total_time_spent'),
+    def get_due_day_stats(self, user) -> dict:
+        """Get user due days."""
+        queryset = Issue.objects.annotate(
+            due_date_truncated=TruncDay('due_date'),
+            time_remains=Case(
+                When(
+                    Q(time_estimate__gt=F('total_time_spent')) &  # noqa:W504
+                    ~Q(state=ISSUE_STATES.closed),
+                    then=F('time_estimate') - F('total_time_spent'),
+                ),
+                default=Value(0),
+                output_field=IntegerField(),
             ),
-            default=Value(0),
-            output_field=IntegerField(),
-        ),
-    ).filter(
-        user=user,
-        due_date_truncated__isnull=False,
-    ).values(
-        'due_date_truncated',
-    ).annotate(
-        issues_count=Count('*'),
-        total_time_estimate=Coalesce(Sum('time_estimate'), 0),
-        total_time_remains=Coalesce(Sum('time_remains'), 0),
-    ).order_by()
+        ).filter(
+            user=user,
+            due_date_truncated__isnull=False,
+        ).values(
+            'due_date_truncated',
+        ).annotate(
+            issues_count=Count('*'),
+            total_time_estimate=Coalesce(Sum('time_estimate'), 0),
+            total_time_remains=Coalesce(Sum('time_remains'), 0),
+        ).order_by()
 
-    return {
-        stats['due_date_truncated']: stats
-        for stats in queryset
-    }
+        return {
+            stats['due_date_truncated']: stats
+            for stats in queryset
+        }
 
+    def get_payrolls_stats(self, user) -> dict:
+        """Get user payrolls."""
+        queryset = SpentTime.objects.annotate(
+            date_truncated=TruncDay('date'),
+        ).annotate_payrolls()
 
-def _get_payrolls_stats(user) -> dict:
-    queryset = SpentTime.objects.annotate(
-        date_truncated=TruncDay('date'),
-    ).annotate_payrolls()
+        queryset = queryset.filter(
+            user=user,
+            date_truncated__isnull=False,
+        ).values(
+            'date_truncated',
+        ).annotate(
+            total_payroll=Coalesce(Sum('payroll'), 0),
+            total_paid=Coalesce(Sum('paid'), 0),
+        ).order_by()
 
-    queryset = queryset.filter(
-        user=user,
-        date_truncated__isnull=False,
-    ).values(
-        'date_truncated',
-    ).annotate(
-        total_payroll=Coalesce(Sum('payroll'), 0),
-        total_paid=Coalesce(Sum('paid'), 0),
-    ).order_by()
-
-    return {
-        stats['date_truncated']: stats
-        for stats in queryset
-    }
+        return {
+            stats['date_truncated']: stats
+            for stats in queryset
+        }

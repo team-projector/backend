@@ -10,6 +10,7 @@ from django.utils.timezone import make_aware
 from apps.core.utils.date import begin_of_week, date2datetime
 from apps.development.models.issue import ISSUE_STATES, Issue
 from apps.payroll.models import SpentTime
+from apps.users.models import User
 from apps.users.services.user.metrics.progress import base
 
 WEEK_STEP = timedelta(weeks=1)
@@ -20,78 +21,97 @@ class WeekMetricsProvider(base.ProgressMetricsProvider):
 
     def get_metrics(self) -> base.UserProgressMetricsList:
         """Calculate and return metrics."""
-        metrics: base.UserProgressMetricsList = []
-
-        metrics = self._get_metrics(
-            metrics,
-            time_spents=self._get_time_spents(),
-            deadline_stats=self._get_deadlines_stats(),
-            efficiency_stats=self._get_efficiency_stats(),
-            payrolls_stats=self._get_payrolls_stats(),
+        generator = _MetricsGenerator(
+            self.user,
+            self.start,
+            self.end,
         )
 
-        return metrics
+        return [
+            generator.generate_metric(week)
+            for week in self._get_weeks()
+        ]
 
-    def _get_metrics(  # noqa WPS211
+    def _get_weeks(self) -> List[date]:
+        ret: List[date] = []
+        current = self.start
+
+        while current <= self.end:
+            ret.append(begin_of_week(current))
+            current += WEEK_STEP
+
+        return ret
+
+
+class _MetricsGenerator:
+    def __init__(
         self,
-        metrics: base.UserProgressMetricsList,
-        time_spents: dict,
-        deadline_stats: dict,
-        efficiency_stats: dict,
-        payrolls_stats: dict,
-    ) -> base.UserProgressMetricsList:
-        for week in self._get_weeks():
-            metric = base.UserProgressMetrics()
-            metrics.append(metric)
+        user,
+        start: date,
+        end: User,
+    ):
+        self._user = user
+        self._start = start
+        self._end = end
 
-            metric.start = week
-            metric.end = week + timedelta(weeks=1)
-            metric.planned_work_hours = self.user.daily_work_hours
+        stats_provider = _StatsProvider(user, start, end)
+        self._time_spents = stats_provider.get_time_spents()
+        self._deadline_stats = stats_provider.get_deadlines_stats()
+        self._efficiency_stats = stats_provider.get_efficiency_stats()
+        self._payrolls_stats = stats_provider.get_payrolls_stats()
 
-            self._apply_stats(
-                week,
-                metric,
-                time_spents,
-                deadline_stats,
-                efficiency_stats,
-                payrolls_stats,
-            )
+    def generate_metric(self, week) -> base.UserProgressMetrics:
+        metric = base.UserProgressMetrics()
 
-        return metrics
+        metric.start = week
+        metric.end = week + timedelta(weeks=1)
+        metric.planned_work_hours = self._user.daily_work_hours
+
+        self._apply_stats(
+            week,
+            metric,
+        )
+
+        return metric
 
     def _apply_stats(  # noqa WPS211
         self,
         week: date,
         metric: base.UserProgressMetrics,
-        time_spents: dict,
-        deadline_stats: dict,
-        efficiency_stats: dict,
-        payrolls_stats: dict,
     ) -> None:
-        if week in deadline_stats:
-            deadline = deadline_stats[week]
+        if week in self._deadline_stats:
+            deadline = self._deadline_stats[week]
             metric.issues_count = deadline['issues_count']
             metric.time_estimate = deadline['total_time_estimate']
 
-        if week in efficiency_stats:
-            efficiency = efficiency_stats[week]
+        if week in self._efficiency_stats:
+            efficiency = self._efficiency_stats[week]
             metric.efficiency = efficiency['avg_efficiency']
 
-        if week in payrolls_stats:
-            payrolls = payrolls_stats[week]
+        if week in self._payrolls_stats:
+            payrolls = self._payrolls_stats[week]
             metric.payroll = payrolls['total_payroll']
             metric.paid = payrolls['total_paid']
 
-        if week in time_spents:
-            spent = time_spents[week]
+        if week in self._time_spents:
+            spent = self._time_spents[week]
             metric.time_spent = spent['period_spent']
 
-    def _get_time_spents(self) -> dict:
+
+class _StatsProvider:
+    def __init__(self, user, start, end):
+        """Initializing."""
+        self._user = user
+        self._start = start
+        self._end = end
+
+    def get_time_spents(self) -> dict:
+        """Get user time spents."""
         queryset = SpentTime.objects.annotate(
             week=TruncWeek('date'),
         ).filter(
-            user=self.user,
-            date__range=(self.start, self.end),
+            user=self._user,
+            date__range=(self._start, self._end),
             week__isnull=False,
         ).values(
             'week',
@@ -104,13 +124,14 @@ class WeekMetricsProvider(base.ProgressMetricsProvider):
             for stats in queryset
         }
 
-    def _get_deadlines_stats(self) -> dict:
+    def get_deadlines_stats(self) -> dict:
+        """Get user deadlines."""
         queryset = Issue.objects.annotate(
             week=TruncWeek('due_date'),
         ).filter(
-            user=self.user,
-            due_date__gte=self.start,
-            due_date__lt=self.end,
+            user=self._user,
+            due_date__gte=self._start,
+            due_date__lt=self._end,
             week__isnull=False,
         ).values(
             'week',
@@ -124,14 +145,15 @@ class WeekMetricsProvider(base.ProgressMetricsProvider):
             for stats in queryset
         }
 
-    def _get_efficiency_stats(self) -> dict:
+    def get_efficiency_stats(self) -> dict:
+        """Get user efficiency."""
         queryset = Issue.objects.annotate(
             week=TruncWeek(TruncDate('closed_at')),
         ).filter(
-            user=self.user,
+            user=self._user,
             closed_at__range=(
-                make_aware(date2datetime(self.start)),
-                make_aware(date2datetime(self.end)),
+                make_aware(date2datetime(self._start)),
+                make_aware(date2datetime(self._end)),
             ),
             state=ISSUE_STATES.closed,
             total_time_spent__gt=0,
@@ -152,14 +174,15 @@ class WeekMetricsProvider(base.ProgressMetricsProvider):
             for stats in queryset
         }
 
-    def _get_payrolls_stats(self) -> dict:
+    def get_payrolls_stats(self) -> dict:
+        """Get user payrolls."""
         queryset = SpentTime.objects.annotate(
             week=TruncWeek('date'),
         ).annotate_payrolls()
 
         queryset = queryset.filter(
-            user=self.user,
-            date__range=(self.start, self.end),
+            user=self._user,
+            date__range=(self._start, self._end),
             week__isnull=False,
         ).values(
             'week',
@@ -172,13 +195,3 @@ class WeekMetricsProvider(base.ProgressMetricsProvider):
             stats['week']: stats
             for stats in queryset
         }
-
-    def _get_weeks(self) -> List[date]:
-        ret: List[date] = []
-        current = self.start
-
-        while current <= self.end:
-            ret.append(begin_of_week(current))
-            current += WEEK_STEP
-
-        return ret
