@@ -1,105 +1,26 @@
 # -*- coding: utf-8 -*-
 
-from datetime import date, timedelta
-from typing import List
+from datetime import date
 
 from django.db.models import Count, F, FloatField, Sum
 from django.db.models.functions import Cast, Coalesce, TruncDate, TruncWeek
 from django.utils.timezone import make_aware
 
-from apps.core.utils.date import begin_of_week, date2datetime
+from apps.core.utils.date import date2datetime
 from apps.development.models.issue import ISSUE_STATES, Issue
 from apps.payroll.models import SpentTime
 from apps.users.models import User
-from apps.users.services.user.metrics.progress import base
-
-WEEK_STEP = timedelta(weeks=1)
 
 
-class WeekMetricsProvider(base.ProgressMetricsProvider):
-    """Week metrics provider."""
+class UserWeekStatsProvider:
+    """User per week stats."""
 
-    def get_metrics(self) -> base.UserProgressMetricsList:
-        """Calculate and return metrics."""
-        generator = _MetricsGenerator(
-            self.user,
-            self.start,
-            self.end,
-        )
-
-        return [
-            generator.generate_metric(week)
-            for week in self._get_weeks()
-        ]
-
-    def _get_weeks(self) -> List[date]:
-        ret: List[date] = []
-        current = self.start
-
-        while current <= self.end:
-            ret.append(begin_of_week(current))
-            current += WEEK_STEP
-
-        return ret
-
-
-class _MetricsGenerator:
     def __init__(
         self,
-        user,
+        user: User,
         start: date,
-        end: User,
+        end: date,
     ):
-        self._user = user
-        self._start = start
-        self._end = end
-
-        stats_provider = _StatsProvider(user, start, end)
-        self._time_spents = stats_provider.get_time_spents()
-        self._deadline_stats = stats_provider.get_deadlines_stats()
-        self._efficiency_stats = stats_provider.get_efficiency_stats()
-        self._payrolls_stats = stats_provider.get_payrolls_stats()
-
-    def generate_metric(self, week) -> base.UserProgressMetrics:
-        metric = base.UserProgressMetrics()
-
-        metric.start = week
-        metric.end = week + timedelta(weeks=1)
-        metric.planned_work_hours = self._user.daily_work_hours
-
-        self._apply_stats(
-            week,
-            metric,
-        )
-
-        return metric
-
-    def _apply_stats(  # noqa WPS211
-        self,
-        week: date,
-        metric: base.UserProgressMetrics,
-    ) -> None:
-        if week in self._deadline_stats:
-            deadline = self._deadline_stats[week]
-            metric.issues_count = deadline['issues_count']
-            metric.time_estimate = deadline['total_time_estimate']
-
-        if week in self._efficiency_stats:
-            efficiency = self._efficiency_stats[week]
-            metric.efficiency = efficiency['avg_efficiency']
-
-        if week in self._payrolls_stats:
-            payrolls = self._payrolls_stats[week]
-            metric.payroll = payrolls['total_payroll']
-            metric.paid = payrolls['total_paid']
-
-        if week in self._time_spents:
-            spent = self._time_spents[week]
-            metric.time_spent = spent['period_spent']
-
-
-class _StatsProvider:
-    def __init__(self, user, start, end):
         """Initializing."""
         self._user = user
         self._start = start
