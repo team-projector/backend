@@ -2,9 +2,11 @@
 
 from django.core.management.base import BaseCommand
 
-from apps.development.services.project.gitlab import load_projects
+from apps.development.services.project.gl.manager import ProjectGlManager
+from apps.development.tasks import sync_projects_milestones_task
 
 
 class Command(BaseCommand):
     def handle(self, *args, **options):
-        load_projects()
+        ProjectGlManager().sync_all_projects()
+        sync_projects_milestones_task()

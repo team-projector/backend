@@ -53,8 +53,8 @@ class ProjectGlManager:
         try:
             project, _ = Project.objects.update_from_gitlab(
                 gl_id=gl_project.id,
-                gl_url=gl_project.web_url,
-                gl_avatar=gl_project.avatar_url,
+                gl_url=gl_project.web_url or '',
+                gl_avatar=gl_project.avatar_url or '',
                 group=group,
                 full_title=gl_project.name_with_namespace,
                 title=gl_project.name,
