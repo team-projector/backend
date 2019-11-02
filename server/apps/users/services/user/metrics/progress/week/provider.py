@@ -30,8 +30,8 @@ class WeekMetricsProvider(provider.ProgressMetricsProvider):
 
     def _get_weeks(self) -> List[date]:
         ret: List[date] = []
-        current = self.start
 
+        current = self.start
         while current <= self.end:
             ret.append(begin_of_week(current))
             current += WEEK_STEP

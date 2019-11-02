@@ -8,7 +8,7 @@ from apps.payroll.models import SpentTime
 
 
 class UserDayStatsProvider:
-    """User per day stats provider"""
+    """User per day stats provider."""
 
     def get_time_spents(
         self,

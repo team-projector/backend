@@ -3,6 +3,10 @@
 from datetime import datetime, timedelta
 from typing import Any, Dict, List
 
+from django.db.models import F
+
+from apps.development.models import Issue
+from apps.development.models.issue import ISSUE_STATES
 from apps.users.services.user.metrics.progress import provider
 from apps.users.services.user.metrics.progress.day.metrics import (
     UserDaysMetricsGenerator,
@@ -18,14 +22,16 @@ class DayMetricsProvider(provider.ProgressMetricsProvider):
         """Calculate and return metrics."""
         now = datetime.now().date()
 
-        active_issues = self.get_active_issues() if now <= self.end else []
+        active_issues = (
+            self._get_active_issues()
+            if now <= self.end
+            else []
+        )
 
-        metrics_generator = UserDaysMetricsGenerator(
+        generator = UserDaysMetricsGenerator(
             self.user,
             self.start,
             self.end,
-            now,
-            self.max_day_loading,
             active_issues,
         )
 
@@ -33,21 +39,21 @@ class DayMetricsProvider(provider.ProgressMetricsProvider):
             self._replay_loading(
                 now,
                 active_issues,
-                metrics_generator,
+                generator,
             )
 
-        return self._get_metrics(metrics_generator)
+        return self._get_metrics(generator)
 
     def _get_metrics(  # noqa WPS211
         self,
-        metrics_generator: UserDaysMetricsGenerator,
+        generator: UserDaysMetricsGenerator,
     ) -> provider.UserProgressMetricsList:
         current = self.start
 
         metrics: provider.UserProgressMetricsList = []
 
         while current <= self.end:
-            metric = metrics_generator.generate(current)
+            metric = generator.generate(current)
             metrics.append(metric)
 
             current += DAY_STEP
@@ -58,7 +64,7 @@ class DayMetricsProvider(provider.ProgressMetricsProvider):
         self,
         now,
         active_issues: List[Dict[str, Any]],
-        metrics_generator: UserDaysMetricsGenerator,
+        generator: UserDaysMetricsGenerator,
     ) -> None:
         current = now
 
@@ -66,6 +72,19 @@ class DayMetricsProvider(provider.ProgressMetricsProvider):
             if not active_issues:
                 return
 
-            metrics_generator.replay_loading(current)
+            generator.replay_loading(current)
 
             current += DAY_STEP
+
+    def _get_active_issues(self) -> List[Dict[str, Any]]:
+        """Get open issues with time remains."""
+        return list(
+            Issue.objects.annotate(
+                remaining=F('time_estimate') - F('total_time_spent'),
+            ).filter(
+                user=self.user,
+                remaining__gt=0,
+            ).exclude(
+                state=ISSUE_STATES.closed,
+            ).values('id', 'due_date', 'remaining'),
+        )

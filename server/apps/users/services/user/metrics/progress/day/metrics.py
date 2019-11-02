@@ -1,11 +1,13 @@
 # -*- coding: utf-8 -*-
 
 
-from datetime import date
+from datetime import date, datetime
 from typing import Any, Dict, List
 
 from django.conf import settings
 
+from apps.core.utils.time import seconds
+from apps.users.models import User
 from apps.users.services.user.metrics.progress import provider
 from apps.users.services.user.metrics.progress.day.stats import (
     UserDayStatsProvider,
@@ -13,45 +15,42 @@ from apps.users.services.user.metrics.progress.day.stats import (
 
 
 class UserDaysMetricsGenerator:
+    """User days metrics generator."""
+
     def __init__(
         self,
-        user,
-        start,
-        end,
-        now: date,
-        max_day_loading,
+        user: User,
+        start: date,
+        end: date,
         active_issues: List[Dict[str, Any]],
     ):
-        self.user = user
-        self.now = now
-        self.start = start
-        self.end = end
-        self.max_day_loading = max_day_loading
-        self.active_issues = active_issues
+        """Initializing."""
+        self._user = user
+        self._start = start
+        self._end = end
+        self._active_issues = active_issues
+        self._now = datetime.now().date()
+        self._max_day_loading = seconds(hours=self._user.daily_work_hours)
 
         stats = UserDayStatsProvider()
         self.time_spents = stats.get_time_spents(
-            self.user,
-            self.start,
-            self.end,
+            self._user,
+            self._start,
+            self._end,
         )
-        self.due_day_stats = stats.get_due_day_stats(self.user)
-        self.payrolls_stats = stats.get_payrolls_stats(self.user)
+        self.due_day_stats = stats.get_due_day_stats(self._user)
+        self.payrolls_stats = stats.get_payrolls_stats(self._user)
 
     def generate(self, current) -> provider.UserProgressMetrics:
+        """Generate user metrics."""
         metric = provider.UserProgressMetrics()
 
         metric.start = current
         metric.end = current
-        metric.planned_work_hours = self.user.daily_work_hours
-
-        if current in self.time_spents:
-            metric.time_spent = self.time_spents[current]['period_spent']
+        metric.planned_work_hours = self._user.daily_work_hours
 
         self._apply_stats(current, metric)
-
-        if self._is_apply_loading(current):
-            self._update_loading(metric)
+        self._update_loading(current, metric)
 
         return metric
 
@@ -61,14 +60,16 @@ class UserDaysMetricsGenerator:
         metric.start = current
         metric.end = current
 
-        if self._is_apply_loading(current):
-            self._update_loading(metric)
+        self._update_loading(current, metric)
 
     def _apply_stats(
         self,
         day: date,
         metric: provider.UserProgressMetrics,
     ) -> None:
+        if day in self.time_spents:
+            metric.time_spent = self.time_spents[day]['period_spent']
+
         if day in self.due_day_stats:
             progress = self.due_day_stats[day]
             metric.issues_count = progress['issues_count']
@@ -80,35 +81,35 @@ class UserDaysMetricsGenerator:
             metric.payroll = payrolls['total_payroll']
             metric.paid = payrolls['total_paid']
 
-    def _is_apply_loading(
-        self,
-        day: date,
-    ) -> bool:
-        return (
-            day >= self.now
-            and day.weekday() not in settings.TP_WEEKENDS_DAYS
-        )
-
     def _update_loading(
         self,
+        current,
         metric: provider.UserProgressMetrics,
     ) -> None:
-        if not self.active_issues:
+        is_update_loading = (
+            current >= self._now
+            and current.weekday() not in settings.TP_WEEKENDS_DAYS
+        )
+
+        if not is_update_loading:
+            return
+
+        if not self._active_issues:
             return
 
         metric.loading = metric.time_spent
 
         self._apply_deadline_issues_loading(
             metric,
-            self.active_issues,
+            self._active_issues,
         )
 
-        if metric.loading > self.max_day_loading:
+        if metric.loading > self._max_day_loading:
             return
 
         self._apply_active_issues_loading(
             metric,
-            self.active_issues,
+            self._active_issues,
         )
 
     def _apply_deadline_issues_loading(
@@ -132,7 +133,7 @@ class UserDaysMetricsGenerator:
         active_issues: List[dict],
     ) -> None:
         for issue in active_issues[:]:
-            available_time = self.max_day_loading - metric.loading
+            available_time = self._max_day_loading - metric.loading
 
             loading = min(available_time, issue['remaining'])
 
