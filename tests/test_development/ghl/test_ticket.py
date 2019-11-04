@@ -4,6 +4,7 @@ from rest_framework.exceptions import PermissionDenied, ValidationError
 
 from apps.development.graphql.mutations.ticket import (
     CreateTicketMutation,
+    DeleteTicketMutation,
     UpdateTicketMutation,
 )
 from apps.development.graphql.types.ticket import TicketType
@@ -178,3 +179,23 @@ def test_ticket_update_not_pm(user, client):
         info=info,
         id=ticket.id,
     )
+
+
+def test_delete_ticket(user, client):
+    user.roles.project_manager = True
+    user.save()
+
+    ticket = TicketFactory.create()
+
+    client.user = user
+    info = AttrDict({'context': client})
+
+    assert Ticket.objects.count() == 1
+
+    DeleteTicketMutation.mutate(
+        None,
+        info,
+        id=ticket.id,
+    )
+
+    assert Ticket.objects.count() == 0
