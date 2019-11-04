@@ -8,6 +8,7 @@ from apps.development.graphql.mutations.issues import (
 from apps.development.graphql.mutations.milestones import SyncMilestoneMutation
 from apps.development.graphql.mutations.ticket import (
     CreateTicketMutation,
+    DeleteTicketMutation,
     UpdateTicketMutation,
 )
 
@@ -24,6 +25,7 @@ class TicketsMutations:
     """Class representing list of available fields for tickets mutations."""
 
     create_ticket = CreateTicketMutation.Field()
+    delete_ticket = DeleteTicketMutation.Field()
     update_ticket = UpdateTicketMutation.Field()
 
 
