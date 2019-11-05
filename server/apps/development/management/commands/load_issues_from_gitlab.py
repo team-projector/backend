@@ -2,9 +2,9 @@
 
 from django.core.management.base import BaseCommand
 
-from apps.development.services.issue.gitlab import load_issues
+from apps.development.services.issue.gl.manager import IssueGlManager
 
 
 class Command(BaseCommand):
     def handle(self, *args, **options):
-        load_issues(True)
+        IssueGlManager().sync_issues(True)
