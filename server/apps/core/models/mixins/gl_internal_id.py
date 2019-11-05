@@ -15,3 +15,7 @@ class GitlabInternalIdMixin(models.Model):
 
     class Meta:
         abstract = True
+
+    def __str__(self):
+        """Returns object string representation."""
+        return self.gl_iid
