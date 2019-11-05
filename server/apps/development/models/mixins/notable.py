@@ -54,6 +54,10 @@ class NotableMixin(models.Model):
                 base=self,
             )
 
+    def __str__(self):
+        """Returns object string representation."""
+        return ''
+
     def _get_notes_for_processing(self) -> Iterable[Note]:
         notes: List[Note] = []
 
