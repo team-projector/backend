@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from typing import Union
+from typing import List, Optional, Union
 
 from gitlab.v4 import objects as gl
 
@@ -37,25 +37,7 @@ class BaseWorkItemGlManager:
         labels = []
 
         for label_title in gl_target.labels:
-            label = Label.objects.filter(
-                title=label_title,
-            ).first()
-
-            if not label:
-                gl_label = next(
-                    (
-                        project_label
-                        for project_label in project_labels
-                        if project_label.name == label_title
-                    ),
-                    None,
-                )
-
-                if gl_label:
-                    label = Label.objects.create(
-                        title=label_title,
-                        color=gl_label.color,
-                    )
+            label = self._get_or_create_label(label_title, project_labels)
 
             if label:
                 labels.append(label)
@@ -83,3 +65,34 @@ class BaseWorkItemGlManager:
             self.user_manager.sync_user(user['id'])
             for user in gl_target.participants()
         ))
+
+    def _get_or_create_label(
+        self,
+        label_title: gl.ProjectLabel,
+        project_labels: List[gl.ProjectLabel],
+    ) -> Optional[Label]:
+        label = Label.objects.filter(
+            title=label_title,
+        ).first()
+
+        return label or self._create_label(label_title, project_labels)
+
+    def _create_label(
+        self,
+        label_title: gl.ProjectLabel,
+        project_labels: List[gl.ProjectLabel],
+    ) -> Optional[Label]:
+        gl_label = next(
+            (
+                project_label
+                for project_label in project_labels
+                if project_label.name == label_title
+            ),
+            None,
+        )
+
+        if gl_label:
+            return Label.objects.create(
+                title=label_title,
+                color=gl_label.color,
+            )
