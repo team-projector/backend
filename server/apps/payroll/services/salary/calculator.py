@@ -5,7 +5,7 @@ from datetime import date
 from decimal import Decimal
 
 from django.db import transaction
-from django.db.models import Q, Sum
+from django.db.models import Q, QuerySet, Sum
 
 from apps.development.models.issue import ISSUE_STATES
 from apps.development.models.merge_request import MERGE_REQUESTS_STATES
@@ -48,27 +48,14 @@ class SalaryCalculator:
         if locked == 0:
             raise EmptySalaryException
 
-        spent_data = SpentTime.objects.filter(
-            salary=salary,
-        ).aggregate(
-            total_sum=Sum('sum'),
-            total_time_spent=Sum('time_spent'),
-        )
+        spent_data = self._get_spent_data(salary)
 
         salary.sum = spent_data['total_sum'] or 0
         salary.charged_time = spent_data['total_time_spent'] or 0
 
-        salary.penalty = Penalty.objects.filter(
-            salary=salary,
-        ).aggregate(
-            total_sum=Sum('sum'),
-        )['total_sum'] or 0
+        salary.penalty = self._get_penalty(salary)
 
-        salary.bonus = Bonus.objects.filter(
-            salary=salary,
-        ).aggregate(
-            total_sum=Sum('sum'),
-        )['total_sum'] or 0
+        salary.bonus = self._get_bonus(salary)
 
         salary.total = salary.sum + salary.bonus - salary.penalty
 
@@ -78,6 +65,28 @@ class SalaryCalculator:
         salary.save()
 
         return salary
+
+    def _get_spent_data(self, salary: Salary) -> QuerySet:
+        return SpentTime.objects.filter(
+            salary=salary,
+        ).aggregate(
+            total_sum=Sum('sum'),
+            total_time_spent=Sum('time_spent'),
+        )
+
+    def _get_penalty(self, salary: Salary) -> QuerySet:
+        return Penalty.objects.filter(
+            salary=salary,
+        ).aggregate(
+            total_sum=Sum('sum'),
+        )['total_sum'] or 0
+
+    def _get_bonus(self, salary: Salary) -> QuerySet:
+        return Bonus.objects.filter(
+            salary=salary,
+        ).aggregate(
+            total_sum=Sum('sum'),
+        )['total_sum'] or 0
 
     def _lock_payrolls(
         self,
