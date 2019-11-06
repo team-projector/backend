@@ -107,10 +107,6 @@ class DataSourceConnectionField(
                 end_offset - args.get('last'),
             )
 
-        # It is differences from original function `connection_from_list_slice`
-        if end_offset - start_offset > MAX_SIZE:
-            end_offset = start_offset + MAX_SIZE
-
         return cls._build_connection_type(
             connection_type,
             pageinfo_type,
@@ -188,6 +184,10 @@ class DataSourceConnectionField(
         start_offset,
         end_offset,
     ) -> Connection:
+        # It is differences from original function `connection_from_list_slice`
+        if end_offset - start_offset > MAX_SIZE:
+            end_offset = start_offset + MAX_SIZE
+
         edges = cls._get_edges(edge_type, list_slice, start_offset, end_offset)
 
         return connection_type(
