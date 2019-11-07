@@ -14,4 +14,4 @@ class Timestamps(models.Model):
 
     def __str__(self):
         """Returns object string representation."""
-        return self.created_at
+        return str(self.created_at)

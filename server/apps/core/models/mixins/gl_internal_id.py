@@ -18,4 +18,4 @@ class GitlabInternalIdMixin(models.Model):
 
     def __str__(self):
         """Returns object string representation."""
-        return self.gl_iid
+        return str(self.gl_iid)

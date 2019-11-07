@@ -33,4 +33,4 @@ class GitlabEntityMixin(models.Model):
 
     def __str__(self):
         """Returns object string representation."""
-        return self.gl_url
+        return str(self.gl_id)
