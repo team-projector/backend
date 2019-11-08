@@ -7,6 +7,7 @@ from django.utils.translation import gettext_lazy as _
 
 from apps.core.models.utils import Choices
 from apps.users.models.managers import UserManager
+from apps.users.models.validators.user import validate_email
 
 USER_ROLES = Choices(
     ('developer', _('CH_DEVELOPER')),
@@ -46,6 +47,7 @@ class User(AbstractBaseUser, PermissionsMixin):
         blank=True,
         verbose_name=_('VN__EMAIL'),
         help_text=_('HT__EMAIL'),
+        validators=[validate_email],
     )
 
     hour_rate = models.FloatField(
