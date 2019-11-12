@@ -89,4 +89,4 @@ class Milestone(
 
     def __str__(self):
         """Returns object string representation."""
-        return f'{self.owner.title} / {self.title}'
+        return '{0} / {1}'.format(self.owner.title, self.title)

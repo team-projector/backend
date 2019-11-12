@@ -46,9 +46,9 @@ class ProjectGlManager:
         gl_project: gl.Project,
     ) -> None:
         """Update project based on gitlab data."""
-        msg = f'Updating project "{gl_project.name}"...'
+        msg = 'Updating project "{0}"...'.format(gl_project.name)
 
-        logger.info(f'{msg}')
+        logger.info(msg)
 
         try:
             project, _ = Project.objects.update_from_gitlab(
@@ -65,4 +65,4 @@ class ProjectGlManager:
         else:
             self.webhook_manager.check_project_webhooks(project)
 
-        logger.info(f'{msg} done')
+        logger.info('{0} done'.format(msg))

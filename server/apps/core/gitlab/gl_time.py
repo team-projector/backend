@@ -26,6 +26,6 @@ def gl_duration(seconds: int) -> str:
         duration = seconds // count
         if duration:
             seconds -= duration * count
-            durations.append(f'{duration}{name}')
+            durations.append('{0}{1}'.format(duration, name))
 
     return ''.join(durations)

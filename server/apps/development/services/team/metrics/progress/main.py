@@ -28,7 +28,7 @@ def create_provider(
     elif group == 'week':
         return WeekMetricsProvider(team, start, end)
 
-    raise ValueError(f'Bad group "{group}"')
+    raise ValueError('Bad group "{0}"'.format(group))
 
 
 TeamMemberProgressMetricsList = Iterable[TeamMemberProgressMetrics]

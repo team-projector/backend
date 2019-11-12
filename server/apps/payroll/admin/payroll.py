@@ -45,13 +45,13 @@ class PayrollAdmin(BaseModelAdmin):
         meta = node._meta  # noqa WPS437
 
         url = reverse(
-            f'admin:{meta.app_label}_{meta.model_name}_change',
+            'admin:{0}_{1}_change'.format(meta.app_label, meta.model_name),
             args=[node.id],
         )
 
         return mark_safe(
-            f'<a href={url}>{meta.model_name.capitalize()}: '
-            + f'{node}</a>',
+            '<a href={0}>{1}: '.format(url, meta.model_name.capitalize())
+            + '{0}</a>'.format(node),
         )
 
     def _get_accessor_names(self, model) -> Iterable[str]:

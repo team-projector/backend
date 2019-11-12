@@ -38,7 +38,7 @@ class IssueGlManager(BaseWorkItemGlManager):
         check_deleted: bool = True,
     ) -> None:
         """Load project issues."""
-        logger.info(f'Syncing project "{project}" issues')
+        logger.info('Syncing project "{0}" issues'.format(project))
         gl_project = self.project_provider.get_gl_project(project)
         if not gl_project:
             return
@@ -100,7 +100,7 @@ class IssueGlManager(BaseWorkItemGlManager):
         self.sync_participants(issue, gl_issue)
         self.sync_merge_requests(issue, project, gl_issue, gl_project)
 
-        logger.info(f'Issue "{issue}" is synced')
+        logger.info('Issue "{0}" is synced'.format(issue))
 
     def check_project_deleted_issues(
         self,
@@ -119,8 +119,8 @@ class IssueGlManager(BaseWorkItemGlManager):
         project.issues.filter(gl_id__in=diff).delete()
 
         logger.info(
-            f'Project "{project}" deleted issues '
-            + f'ckecked: removed {len(diff)} issues',
+            'Project "{0}" deleted issues '.format(project)
+            + 'ckecked: removed {0} issues'.format(len(diff)),
         )
 
     def sync_merge_requests(

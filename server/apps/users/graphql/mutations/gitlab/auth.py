@@ -8,7 +8,7 @@ from social_django.views import NAMESPACE
 
 def psa(request: HttpRequest) -> HttpRequest:
     """Page social auth."""
-    uri = reverse(f'{NAMESPACE}:complete', args=('gitlab',))
+    uri = reverse('{0}:complete'.format(NAMESPACE), args=('gitlab',))
     request.social_strategy = load_strategy(request)
 
     request.strategy = getattr(

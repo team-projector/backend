@@ -26,7 +26,7 @@ def _create_provider(
     elif group == 'week':
         return WeekMetricsProvider(user, start, end)
 
-    raise ValueError(f'Bad group "{group}"')
+    raise ValueError('Bad group "{0}"'.format(group))
 
 
 def get_progress_metrics(
