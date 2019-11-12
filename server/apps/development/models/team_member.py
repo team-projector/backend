@@ -46,4 +46,4 @@ class TeamMember(models.Model):
 
     def __str__(self):
         """Returns object string representation."""
-        return f'{self.team}: {self.user}'
+        return '{0}: {1}'.format(self.team, self.user)

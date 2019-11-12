@@ -43,8 +43,8 @@ def _sync_issue(body: dict) -> None:
     sync_project_issue_task.delay(project_id, issue_id)
 
     logger.info(
-        f'gitlab webhook was triggered: project_id = {project_id}, '
-        + f'issue_id = {issue_id}',
+        'gitlab webhook was triggered: project_id = {0}, '.format(project_id)
+        + 'issue_id = {0}'.format(issue_id),
     )
 
     add_action_task.delay(verb=ACTION_GITLAB_WEBHOOK_TRIGGERED)
@@ -57,8 +57,8 @@ def _sync_merge_request(body: dict) -> None:
     sync_project_merge_request_task.delay(project_id, issue_id)
 
     logger.info(
-        f'gitlab webhook was triggered: project_id = {project_id}, '
-        + f'merge_request_id = {issue_id}',
+        'gitlab webhook was triggered: project_id = {0}, '.format(project_id)
+        + 'merge_request_id = {0}'.format(issue_id),
     )
 
     add_action_task.delay(verb=ACTION_GITLAB_WEBHOOK_TRIGGERED)

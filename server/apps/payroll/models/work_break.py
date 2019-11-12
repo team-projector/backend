@@ -61,6 +61,6 @@ class WorkBreak(ApprovedMixin, Timestamps):
 
     def __str__(self):
         """Returns object string representation."""
-        period = f'{self.from_date} - {self.to_date}'
+        period = '{0} - {1}'.format(self.from_date, self.to_date)
 
-        return f'{self.user}: {self.reason} ({period})'
+        return '{0}: {1} ({2})'.format(self.user, self.reason, period)

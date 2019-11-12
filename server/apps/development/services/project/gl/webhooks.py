@@ -24,7 +24,10 @@ class ProjectWebhookManager:
     @cached_property
     def webhook_url(self) -> str:
         """Get webhook url."""
-        return f'https://{settings.DOMAIN_NAME}{reverse("api:gl-webhook")}'
+        return 'https://{domain}{path}'.format(
+            domain=settings.DOMAIN_NAME,
+            path=reverse('api:gl-webhook'),
+        )
 
     def check_project_webhooks(
         self,

@@ -82,4 +82,4 @@ class Note(models.Model):
 
     def __str__(self):
         """Returns object string representation."""
-        return f'{self.user} [{self.created_at}]: {self.type}'
+        return '{0} [{1}]: {2}'.format(self.user, self.created_at, self.type)

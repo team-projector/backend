@@ -68,7 +68,7 @@ class SpentTime(Payroll):
 
     def __str__(self):
         """Returns object string representation."""
-        return f'{self.user} [{self.base}]: {self.time_spent}'
+        return '{0} [{1}]: {2}'.format(self.user, self.base, self.time_spent)
 
     def save(self, *args, **kwargs) -> None:
         """Save spent time."""
