@@ -14,6 +14,7 @@ from apps.core.admin.mixins import (
     ForceSyncEntityMixin,
 )
 from apps.development.tasks import sync_user_task
+from apps.users.admin.forms import UserAdminForm
 from apps.users.models import User
 
 
@@ -41,6 +42,7 @@ class UserAdmin(
     )
 
     exclude = ('user_permissions',)
+    form = UserAdminForm
     fieldsets = (
         (None, {
             'fields': (
