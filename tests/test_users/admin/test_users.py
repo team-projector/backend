@@ -10,9 +10,10 @@ from tests.test_development.checkers_gitlab import check_user
 def test_change_password_link(admin_user):
     ma_user = model_admin(User)
 
-    assert ma_user.change_password_link(admin_user) == \
-           f'<a href="/admin/users/user/{admin_user.id}/password/">' \
-           f'change password</a>'
+    link = ma_user.change_password_link(admin_user)
+
+    assert link == f'<a href="/admin/users/user/{admin_user.id}/password/">' \
+                   f'change password</a>'
 
 
 @override_settings(GITLAB_TOKEN='GITLAB_TOKEN')
@@ -66,3 +67,72 @@ def test_user_instance_str(db):
 
     assert str(user) == 'test_login'
     assert user.get_short_name() == 'test_login'
+
+
+def test_update_email_self_new_value(admin_client):
+    ma_user = model_admin(User)
+
+    user = UserFactory.create(email='old_@mail.com')
+
+    data = {
+        'email': 'new_@mail.com',
+        'hour_rate': user.hour_rate,
+        'customer_hour_rate': user.customer_hour_rate,
+        'taxes': user.taxes,
+        'daily_work_hours': user.daily_work_hours,
+    }
+
+    ma_user.changeform_view(
+        admin_client.post('/admin/users/user/', data),
+        object_id=str(user.id)
+    )
+
+    user.refresh_from_db()
+    assert user.email == 'new_@mail.com'
+
+
+def test_update_email_self(admin_client):
+    ma_user = model_admin(User)
+
+    user = UserFactory.create(email='test@mail.com')
+
+    data = {
+        'email': 'test@mail.com',
+        'hour_rate': user.hour_rate,
+        'customer_hour_rate': user.customer_hour_rate,
+        'taxes': user.taxes,
+        'daily_work_hours': user.daily_work_hours,
+    }
+
+    ma_user.changeform_view(
+        admin_client.post('/admin/users/user/', data),
+        object_id=str(user.id)
+    )
+
+    user.refresh_from_db()
+    assert user.email == 'test@mail.com'
+
+
+def test_update_email_check_uniaue(admin_client):
+    ma_user = model_admin(User)
+
+    user_1 = UserFactory.create(email='user_1@mail.com')
+    user_2 = UserFactory.create(email='user_2@mail.com')
+
+    data = {
+        'email': user_1.email,
+        'hour_rate': user_2.hour_rate,
+        'customer_hour_rate': user_2.customer_hour_rate,
+        'taxes': user_2.taxes,
+        'daily_work_hours': user_2.daily_work_hours,
+    }
+
+    response = ma_user.changeform_view(
+        admin_client.post('/admin/users/user/', data),
+        object_id=str(user_2.id)
+    )
+
+    assert response.context_data['errors'] is not None
+
+    user_2.refresh_from_db()
+    assert user_2.email == 'user_2@mail.com'
