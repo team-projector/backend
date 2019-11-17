@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+# noqa WPS412
 
 from os import environ
 

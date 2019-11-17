@@ -2,6 +2,8 @@
 
 from decouple import config
 
+PG_PORT = 5432
+
 SECRET_KEY = config('DJANGO_SECRET_KEY')
 DOMAIN_NAME = config('DOMAIN_NAME')
 
@@ -14,7 +16,7 @@ DATABASES = {
         'USER': config('POSTGRES_USER'),
         'PASSWORD': config('POSTGRES_PASSWORD'),
         'HOST': config('DJANGO_DATABASE_HOST'),
-        'PORT': config('DJANGO_DATABASE_PORT', cast=int, default=5432),
+        'PORT': config('DJANGO_DATABASE_PORT', cast=int, default=PG_PORT),
         'CONN_MAX_AGE': config('CONN_MAX_AGE', cast=int, default=60),
     },
 }
