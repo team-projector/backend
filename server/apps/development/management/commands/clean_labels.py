@@ -152,7 +152,7 @@ class Command(BaseCommand):
         self.sync_labels(root_group, subgroups, sync_root_projects=False)
 
     def _update_issues(self, gl_project, old_label, label_for_add):
-        issues = gl_project.issues.list(all=True, labels=[old_label])
+        issues = gl_project.issues.list(as_list=False, labels=[old_label])
 
         for issue_iid in {i.iid for i in issues if
                           label_for_add not in i.labels}:
