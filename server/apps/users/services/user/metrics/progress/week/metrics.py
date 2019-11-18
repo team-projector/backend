@@ -37,10 +37,7 @@ class UserWeekMetricsGenerator:
         metric.end = week + timedelta(weeks=1)
         metric.planned_work_hours = self._user.daily_work_hours
 
-        self._apply_stats(
-            week,
-            metric,
-        )
+        self._apply_stats(week, metric)
 
         return metric
 
@@ -49,20 +46,20 @@ class UserWeekMetricsGenerator:
         week: date,
         metric: provider.UserProgressMetrics,
     ) -> None:
-        if week in self._deadline_stats:
-            deadline = self._deadline_stats[week]
+        deadline = self._deadline_stats.get(week)
+        if deadline:
             metric.issues_count = deadline['issues_count']
             metric.time_estimate = deadline['total_time_estimate']
 
-        if week in self._efficiency_stats:
-            efficiency = self._efficiency_stats[week]
+        efficiency = self._efficiency_stats.get(week)
+        if efficiency:
             metric.efficiency = efficiency['avg_efficiency']
 
-        if week in self._payrolls_stats:
-            payrolls = self._payrolls_stats[week]
+        payrolls = self._payrolls_stats.get(week)
+        if payrolls:
             metric.payroll = payrolls['total_payroll']
             metric.paid = payrolls['total_paid']
 
-        if week in self._time_spents:
-            spent = self._time_spents[week]
-            metric.time_spent = spent['period_spent']
+        time_spent = self._time_spents.get(week)
+        if time_spent:
+            metric.time_spent = time_spent['period_spent']

@@ -33,13 +33,13 @@ class UserDaysMetricsGenerator:
         self._max_day_loading = seconds(hours=self._user.daily_work_hours)
 
         stats = UserDayStatsProvider()
-        self.time_spents = stats.get_time_spents(
+        self._time_spents = stats.get_time_spents(
             self._user,
             self._start,
             self._end,
         )
-        self.due_day_stats = stats.get_due_day_stats(self._user)
-        self.payrolls_stats = stats.get_payrolls_stats(self._user)
+        self._due_day_stats = stats.get_due_day_stats(self._user)
+        self._payrolls_stats = stats.get_payrolls_stats(self._user)
 
     def generate(self, current) -> provider.UserProgressMetrics:
         """Generate user metrics."""
@@ -67,17 +67,18 @@ class UserDaysMetricsGenerator:
         day: date,
         metric: provider.UserProgressMetrics,
     ) -> None:
-        if day in self.time_spents:
-            metric.time_spent = self.time_spents[day]['period_spent']
+        time_spent = self._time_spents.get(day)
+        if time_spent:
+            metric.time_spent = time_spent['period_spent']
 
-        if day in self.due_day_stats:
-            progress = self.due_day_stats[day]
-            metric.issues_count = progress['issues_count']
-            metric.time_estimate = progress['total_time_estimate']
-            metric.time_remains = progress['total_time_remains']
+        due_day_stats = self._due_day_stats.get(day)
+        if due_day_stats:
+            metric.issues_count = due_day_stats['issues_count']
+            metric.time_estimate = due_day_stats['total_time_estimate']
+            metric.time_remains = due_day_stats['total_time_remains']
 
-        if day in self.payrolls_stats:
-            payrolls = self.payrolls_stats[day]
+        payrolls = self._payrolls_stats.get(day)
+        if payrolls:
             metric.payroll = payrolls['total_payroll']
             metric.paid = payrolls['total_paid']
 

@@ -42,9 +42,11 @@ class GitLabOAuth2Backend(SocialGitLabOAuth2):
 
     def authenticate(self, *args, **kwargs):
         """Return authenticated user."""
-        if 'response' in kwargs:
+        response = kwargs.get('response')
+
+        if response:
             return User.objects.filter(
-                login=kwargs['response']['username'],
+                login=response['username'],
             ).first()
 
     def set_data(self, **kwargs):
