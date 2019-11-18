@@ -25,30 +25,32 @@ class ProjectType(BaseDjangoObjectType):
     def resolve_milestones(self: Project, info, **kwargs):  # noqa WPS110
         """Get project milestones."""
         if isinstance(getattr(self, 'parent_type', None), IssuesProjectSummary):
-            return self._handle_summary(**kwargs)
+            return ProjectType.handle_within_summary(self, **kwargs)
 
         resolver = ProjectMilestonesResolver(self, info, **kwargs)
 
         return resolver.execute()
 
-    def _handle_summary(self: Project, **kwargs):
+    @classmethod
+    def handle_within_summary(cls, project: Project, **kwargs):
+        """Handle project milestones within issues project summary."""
         ordering = kwargs.get('order_by')
 
         if ordering == 'due_date':
             default = datetime.max.date()
             return sorted(
-                self.active_milestones,
+                project.active_milestones,
                 key=lambda milestone: milestone.due_date or default,
             )
         elif ordering == '-due_date':
             default = datetime.min.date()
             return sorted(
-                self.active_milestones,
+                project.active_milestones,
                 key=lambda milestone: milestone.due_date or default,
                 reverse=True,
             )
 
-        return self.active_milestones
+        return project.active_milestones
 
     class Meta:
         model = Project
