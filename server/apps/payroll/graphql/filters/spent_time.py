@@ -49,7 +49,7 @@ class StateFilter(django_filters.CharFilter):
 
     def filter(self, queryset, value) -> QuerySet:  # noqa A003
         """Do filtering."""
-        if not value:
+        if not value or value == 'all':
             return queryset
 
         return queryset.filter(

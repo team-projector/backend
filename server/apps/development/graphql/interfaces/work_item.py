@@ -18,3 +18,4 @@ class WorkItem(graphene.Interface):
     gl_iid = graphene.Int()
     project = graphene.Field(ProjectType)
     labels = DataSourceConnectionField(LabelType)
+    state = graphene.String()

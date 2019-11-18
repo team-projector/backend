@@ -339,3 +339,30 @@ def test_filter_by_state(user):
     ).qs
 
     assert Counter(results) == Counter([i_opened, m_opened])
+
+
+def test_filter_by_state_all(user):
+    issue = IssueFactory.create(user=user)
+
+    spend_1 = IssueSpentTimeFactory.create(
+        user=user,
+        base=issue,
+        time_spent=int(seconds(hours=5))
+    )
+
+    merge_request = MergeRequestFactory.create(user=user)
+
+    spend_2 = MergeRequestSpentTimeFactory.create(
+        user=user,
+        base=merge_request,
+        time_spent=int(seconds(hours=4)),
+    )
+
+    results = SpentTimeFilterSet(
+        data={'state': 'all'},
+        queryset=SpentTime.objects.all(),
+        request=None,
+    ).qs
+
+    assert len(results) == 2
+    assert Counter(results) == Counter([spend_1, spend_2])
