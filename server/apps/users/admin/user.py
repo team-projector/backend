@@ -60,7 +60,6 @@ class UserAdmin(
                 'hour_rate', 'customer_hour_rate', 'taxes', 'daily_work_hours',
             ),
         }),
-
     )
     readonly_fields = ('last_login',)
     change_password_form = AdminPasswordChangeForm
