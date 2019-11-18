@@ -69,6 +69,15 @@ class SpentTimesSummary:
         """Return total spent opened issues and opened merge requests."""
         return self.issues.opened_spent + self.merge_requests.opened_spent
 
+    @property
+    def closed_spent(self) -> int:
+        """Return total spent closed issues and closed merge requests."""
+        return (
+            self.issues.closed_spent
+            + self.merge_requests.closed_spent
+            + self.merge_requests.merged_spent
+        )
+
 
 class SpentTimesSummaryProvider:
     """Spent times summary provider."""

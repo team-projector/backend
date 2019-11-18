@@ -74,6 +74,7 @@ def test_issues_spents(user):
 
     assert summary.spent == seconds(hours=8)
     assert summary.opened_spent == seconds(hours=5)
+    assert summary.closed_spent == seconds(hours=3)
 
 
 def test_merge_requests_spents(user):
@@ -135,6 +136,7 @@ def test_merge_requests_spents(user):
 
     assert summary.spent == seconds(hours=14)
     assert summary.opened_spent == seconds(hours=5)
+    assert summary.closed_spent == seconds(hours=9)
 
 
 def test_complex_spents(user):
@@ -186,6 +188,7 @@ def test_complex_spents(user):
 
     assert summary.spent == seconds(hours=22)
     assert summary.opened_spent == seconds(hours=10)
+    assert summary.closed_spent == seconds(hours=12)
 
 
 def test_resolver(user, client):
