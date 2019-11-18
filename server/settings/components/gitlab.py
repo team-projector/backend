@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
 
-import os
-
 from decouple import config
 
 GITLAB_HOST = config(
@@ -17,6 +15,10 @@ GITLAB_CHECK_WEBHOOKS = config(
 
 GITLAB_TOKEN = None
 
-WEBHOOK_SECRET_TOKEN = None
+GITLAB_NO_SYNC = config(
+    'DJANGO_GITLAB_NO_SYNC',
+    default=False,
+    cast=bool,
+)
 
-GITLAB_NO_SYNC = bool(os.environ.get('GITLAB_NO_SYNC'))
+WEBHOOK_SECRET_TOKEN = None
