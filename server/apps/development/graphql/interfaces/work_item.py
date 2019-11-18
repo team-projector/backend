@@ -5,6 +5,7 @@ import graphene
 from apps.core.graphql.connection_fields import DataSourceConnectionField
 from apps.development.graphql.types.label import LabelType
 from apps.development.graphql.types.project import ProjectType
+from apps.users.graphql.types import UserType
 
 
 class WorkItem(graphene.Interface):
@@ -19,3 +20,4 @@ class WorkItem(graphene.Interface):
     project = graphene.Field(ProjectType)
     labels = DataSourceConnectionField(LabelType)
     state = graphene.String()
+    user = graphene.Field(UserType)
