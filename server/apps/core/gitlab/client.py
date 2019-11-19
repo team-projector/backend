@@ -12,6 +12,6 @@ def get_gitlab_client(token: str) -> gitlab.Gitlab:
     )
 
 
-def get_default_gitlab_client():
+def get_default_gitlab_client() -> gitlab.Gitlab:
     """Create default Gitlab client."""
     return get_gitlab_client(settings.GITLAB_TOKEN)

@@ -1,25 +1,20 @@
 # -*- coding: utf-8 -*-
 
-import logging
 import time
 
 from django.conf import settings
 from django.core.management.base import BaseCommand
 
-from apps.core.gitlab.client import get_default_gitlab_client
 from apps.development.services.project.gl.manager import (
     ProjectGlManager,
 )
 from apps.development.services.project_group.gl.manager import (
     ProjectGroupGlManager,
 )
-from apps.development.services.project_group.gl.provider import (
-    ProjectGroupGlProvider,
-)
+from apps.development.services.project_group.gl.provider import \
+    ProjectGroupGlProvider
 
 DELAY = .5  # sec
-
-logger = logging.getLogger(__name__)
 
 
 class Command(BaseCommand):
@@ -49,15 +44,13 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         self._parse_params(*args, **options)
 
-        logger.info('starting sync')
-
         if not settings.GITLAB_NO_SYNC:
-            logger.error('GITLAB_NO_SYNC is False, available only mode log')
+            print('GITLAB_NO_SYNC is False, available only mode log\n')
             self.only_log = True
 
         # self._prepare_data()
         self.start_sync()
-        logger.info('sync complete')
+        print('\nsync complete')
 
     def start_sync(self):
         if self.group_for_sync:
@@ -221,7 +214,9 @@ class Command(BaseCommand):
         return updated_labels
 
     def _prepare_data(self):
-        gl_client = get_default_gitlab_client()
+        group_manager = ProjectGroupGlManager()
+
+        gl_client = group_manager.provider.gl_client
 
         main_group_data = {'name': 'main-root-group', 'path': 'main-root-group',
                            'description': 'Main root group'}
