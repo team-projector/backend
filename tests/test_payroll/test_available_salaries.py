@@ -149,5 +149,8 @@ def test_my_salaries_and_as_leader_with_queryset(user):
     )
 
 
-def _assert_salaries(queryset, results=[]):
+def _assert_salaries(queryset, results=None):
+    if results is None:
+        results = []
+        
     assert set(queryset) == set(results)
