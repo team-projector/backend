@@ -56,6 +56,9 @@ class Project:
         if len(label_name.split('__')) != 3:
             return label_name
 
+        if not splitted[1].isnumeric():
+            return label_name
+
         label_id = int(splitted[1])
         label = self.labels.get(label_id)
         return label.name if label else label_name
