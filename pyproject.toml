@@ -33,6 +33,7 @@ graphene-django = "^2.3"
 slackclient = "^2.1"
 uwsgi = "*"
 uwsgitop = "^0.11.0"
+tqdm = "^4.39"
 
 [tool.poetry.dev-dependencies]
 pytest = "*"

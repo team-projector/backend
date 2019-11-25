@@ -1,4 +1,5 @@
 from django.core.management import BaseCommand
+from tqdm import tqdm
 
 from apps.core.gitlab.client import get_default_gitlab_client
 from apps.development.services.gl.labels import LabelsCleaner
@@ -25,6 +26,19 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         self._parse_params(*args, **options)
+        client = get_default_gitlab_client()
 
-        cleaner = LabelsCleaner(client=get_default_gitlab_client())
-        cleaner.clean_group(self.group_for_sync, self.only_log)
+        gr = client.groups.get(self.group_for_sync)
+        stats = client.http_get('/groups/{0}/issues_statistics'.format(gr.id))
+        issues_count = stats.get('statistics').get('counts').get('all')
+        mergerequests = gr.mergerequests.list(all=True)
+        total = len(mergerequests) + issues_count
+
+        cleaner = LabelsCleaner(client=client)
+
+        with tqdm(total=total) as pbar:
+            cleaner.clean_group(
+                self.group_for_sync,
+                adjust_element_callback=pbar.update,
+                dry_run=self.only_log,
+            )
