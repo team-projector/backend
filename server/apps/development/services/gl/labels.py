@@ -28,7 +28,7 @@ class Project:
         self.parent = parent
         self.initial_labels = get_labels(gl_api_object)
 
-    def adjust_nested_labels(self) -> None:
+    def adjust_nested_labels(self, callback=None) -> None:
         """
         Adjusts labels in every issue and merge_request of the project.
 
@@ -48,8 +48,15 @@ class Project:
                     in gl_api_obj.labels
                 })
 
-                if initial != gl_api_obj.labels:
+                if initial != sorted(gl_api_obj.labels):
                     gl_api_obj.save()
+                    logger.debug(
+                        'Change labels for {0}:\n'.format(gl_api_obj.web_url)
+                        + '{0} -> {1}'.format(initial, gl_api_obj.labels),
+                    )
+
+                if callback:
+                    callback()
 
     def _replace_label_by_id(self, label_name) -> str:
         splitted = label_name.split('__')
@@ -84,13 +91,13 @@ class Group:
         self.subgroups = self._get_subgroups_for_group()
         self.initial_labels = get_labels(gl_api_object)
 
-    def adjust_projects_nested_labels(self) -> None:
+    def adjust_projects_nested_labels(self, callback=None) -> None:
         """This runs adjust_nested_labels() for all projects in group."""
         for project in self.projects:
-            project.adjust_nested_labels()
+            project.adjust_nested_labels(callback)
 
         for subgroup in self.subgroups:
-            subgroup.adjust_projects_nested_labels()
+            subgroup.adjust_projects_nested_labels(callback)
 
     def _get_subgroups_for_group(self) -> List['Group']:
         ret = []
@@ -163,7 +170,12 @@ class LabelsCleaner:
             client = get_default_gitlab_client()
         self._client = client
 
-    def clean_group(self, group_key, dry_run=True):
+    def clean_group(
+        self,
+        group_key,
+        adjust_element_callback=None,
+        dry_run=True,
+    ):
         """Cleans the group with a given key from duplicate labels."""
         gl_group = self._client.groups.get(group_key)
         group = Group(
@@ -175,7 +187,7 @@ class LabelsCleaner:
         self._mark_gl_group_redundant_labels(group, dry_run)
 
         if not dry_run:
-            group.adjust_projects_nested_labels()
+            group.adjust_projects_nested_labels(adjust_element_callback)
 
         self._clear_gl_group_from_marked_labels(group, dry_run)
 
