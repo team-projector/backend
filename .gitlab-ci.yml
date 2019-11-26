@@ -125,8 +125,6 @@ deploy_jserver:
     - cd deploy/helm
     - helm repo update
   script:
-    - kubectl get po
-    - helm ls
     - export RELEASE_NAME=team-projector_backend
     - export DEPLOYS=$(helm ls | grep $RELEASE_NAME | wc -l)
     - if [ ${DEPLOYS} -eq 0 ]; then helm install --set image.tag=$CI_PIPELINE_IID --name=${RELEASE_NAME} -f $K8S_HELM_OVERRIDES --namespace $K8S_NS . ; else helm upgrade ${RELEASE_NAME} --set image.tag=$CI_PIPELINE_IID -f $K8S_HELM_OVERRIDES --namespace $K8S_NS .; fi
