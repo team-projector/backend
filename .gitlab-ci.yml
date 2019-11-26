@@ -125,6 +125,7 @@ deploy_jserver:
     - cd deploy/helm
     - helm repo update
   script:
+    - kubectl get po
     - helm ls
     - export RELEASE_NAME=team-projector_backend
     - export DEPLOYS=$(helm ls | grep $RELEASE_NAME | wc -l)
