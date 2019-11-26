@@ -24,6 +24,6 @@ spec:
               memory: "300Mi"
           image: {{ .Values.image.name }}:{{ .Values.image.tag }}
           command: ["celery"]
-          args: ["-A", "server.celery_app", "worker", "-Q", "low_priority,celery"]
+          args: ["-A", "server.celery_app", "worker", "-Q", "low_priority,celery", "--concurrency", "2"]
           env:
           {{- include "env" . | nindent 12 }}
