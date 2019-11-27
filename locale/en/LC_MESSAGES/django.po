@@ -450,13 +450,13 @@ msgid "VN__SPENT_TIMES"
 msgstr "Spent times"
 
 msgid "CH_DAYOFF"
-msgstr "dayoff"
+msgstr "Dayoff"
 
 msgid "CH_VACATION"
-msgstr "vacation"
+msgstr "Vacation"
 
-msgid "CH_DISEASES"
-msgstr "diseases"
+msgid "CH_DISEASE"
+msgstr "Disease"
 
 msgid "VN__DATE_FROM"
 msgstr "From"

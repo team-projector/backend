@@ -1,9 +1,3 @@
-flake8:
-	@flake8 server
-
-mypy:
-	@mypy server
-
 check_quality:
 	@./scripts/quality.sh
 
