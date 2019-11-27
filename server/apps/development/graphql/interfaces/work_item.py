@@ -21,3 +21,10 @@ class WorkItem(graphene.Interface):
     labels = DataSourceConnectionField(LabelType)
     state = graphene.String()
     user = graphene.Field(UserType)
+
+    def resolve_state(self, info, **kwargs):  # noqa WPS110
+        """Get work item state."""
+        if self.state:
+            return self.state.upper()
+
+        return None

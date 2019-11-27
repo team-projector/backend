@@ -15,8 +15,8 @@ from apps.development.models.managers import IssueManager
 from apps.development.models.mixins import TrackableMixin
 
 ISSUE_STATES = Choices(
-    ('opened', 'opened'),
-    ('closed', 'closed'),
+    ('opened', _('CH_OPENED')),
+    ('closed', _('CH_CLOSED')),
 )
 
 ISSUE_STATE_MAX_LENGTH = 255
@@ -52,6 +52,7 @@ class Issue(
     )
 
     state = models.CharField(
+        choices=ISSUE_STATES,
         max_length=ISSUE_STATE_MAX_LENGTH,
         blank=True,
         verbose_name=_('VN__STATE'),
