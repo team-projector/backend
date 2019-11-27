@@ -70,24 +70,15 @@ publish_master:
     - master
 
 deploy_master:
-  image: dtzar/helm-kubectl:2.16.1
+  image: junte/helm-deploy:1.2-helm2.16.1
   stage: deploy
   dependencies: []
   variables:
     GIT_DEPTH: 5
     GIT_STRATEGY: fetch
-  before_script:
-    - kubectl config set-cluster prod --server="${K8S_URL}" --insecure-skip-tls-verify
-    - kubectl config set-credentials deploy --token="$K8S_TOKEN"
-    - kubectl config set-context default-context --cluster=prod --user=deploy
-    - kubectl config use-context default-context
-    - helm init --client-only
-    - cd deploy/helm
-    - helm repo update
+    HELM_IMAGE_TAG: $CI_PIPELINE_IID
   script:
-    - export RELEASE_NAME=team-projector--backend
-    - export DEPLOYS=$(helm ls | grep $RELEASE_NAME | wc -l)
-    - if [ ${DEPLOYS} -eq 0 ]; then helm install --set image.tag=$CI_PIPELINE_IID --name=${RELEASE_NAME} -f $K8S_HELM_OVERRIDES --namespace $K8S_NS . ; else helm upgrade ${RELEASE_NAME} --set image.tag=$CI_PIPELINE_IID -f $K8S_HELM_OVERRIDES --namespace $K8S_NS .; fi
+    - helm_deploy
   environment:
     name: production
     url: $SITE_ADDRESS
