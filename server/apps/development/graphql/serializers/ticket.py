@@ -71,6 +71,7 @@ class TicketCreateSerializer(TicketBaseSerializer):
 class TicketUpdateSerializer(TicketBaseSerializer):
     """Ticket update serializer."""
 
+    id = serializers.CharField()  # noqa A003
     attach_issues = serializers.PrimaryKeyRelatedField(
         many=True,
         required=False,
@@ -102,14 +103,17 @@ class TicketUpdateSerializer(TicketBaseSerializer):
 
     def update(self, instance, validated_data):
         """Updates ticket and returns updated object."""
-        issues = validated_data.pop('attach_issues', None)
+        attach_issues = validated_data.pop('attach_issues', None)
+        issues = validated_data.pop('issues', None)
 
         ticket = super().update(instance, validated_data)
 
-        if not issues:
-            return ticket
+        if attach_issues:
+            ticket.issues.add(*attach_issues)
 
-        ticket.issues.add(*issues)
+        if issues:
+            Issue.objects.filter(ticket=ticket).update(ticket=None)
+            ticket.issues.add(*issues)
 
         return ticket
 
