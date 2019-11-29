@@ -2,8 +2,8 @@
 
 import graphene
 from django.db.models import QuerySet
-from graphene import relay
 
+from apps.core.graphql import DatasourceRelayNode
 from apps.core.graphql.connections import DataSourceConnection
 from apps.core.graphql.types import BaseDjangoObjectType
 from apps.development.graphql.types.ticket_metrics import TicketMetricsType
@@ -25,7 +25,7 @@ class TicketType(BaseDjangoObjectType):
 
     class Meta:
         model = Ticket
-        interfaces = (relay.Node,)
+        interfaces = (DatasourceRelayNode,)
         connection_class = DataSourceConnection
         name = 'Ticket'
 
