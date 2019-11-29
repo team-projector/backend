@@ -15,8 +15,8 @@ from apps.development.models.managers import IssueManager
 from apps.development.models.mixins import TrackableMixin
 
 ISSUE_STATES = Choices(
-    ('opened', _('CH_OPENED')),
-    ('closed', _('CH_CLOSED')),
+    ('OPENED', _('CH_OPENED')),
+    ('CLOSED', _('CH_CLOSED')),
 )
 
 ISSUE_STATE_MAX_LENGTH = 255
@@ -167,7 +167,7 @@ class Issue(
     def efficiency_available(self) -> bool:
         """Helper for efficiency method."""
         return (
-            self.state == ISSUE_STATES.closed
+            self.state == ISSUE_STATES.CLOSED
             and self.total_time_spent
             and self.time_estimate
         )

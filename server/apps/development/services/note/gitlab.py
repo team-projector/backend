@@ -115,7 +115,7 @@ class SpendAddedParser(BaseNoteParser):
             date = datetime.date() if datetime is not None else None
 
         return NoteReadResult(
-            NOTE_TYPES.time_spend, {
+            NOTE_TYPES.TIME_SPEND, {
                 'spent': spent,
                 'date': date,
             },
@@ -131,7 +131,7 @@ class SpendResetParser(BaseNoteParser):
     ) -> Optional[NoteReadResult]:
         """Parse note."""
         if gl_note.body == SPEND_RESET_MESSAGE:
-            return NoteReadResult(NOTE_TYPES.reset_spend, {})
+            return NoteReadResult(NOTE_TYPES.RESET_SPEND, {})
 
 
 class MovedFromParser(BaseNoteParser):
@@ -144,7 +144,7 @@ class MovedFromParser(BaseNoteParser):
         """Parse note."""
         is_system = getattr(gl_note, 'system', False)  # noqa WPS425
         if is_system and RE_MOVED_FROM.match(gl_note.body):
-            return NoteReadResult(NOTE_TYPES.moved_from, {})
+            return NoteReadResult(NOTE_TYPES.MOVED_FROM, {})
 
 
 _notes_parsers = [

@@ -85,6 +85,6 @@ class DayMetricsProvider(provider.ProgressMetricsProvider):
                 user=self.user,
                 remaining__gt=0,
             ).exclude(
-                state=ISSUE_STATES.closed,
+                state=ISSUE_STATES.CLOSED,
             ).values('id', 'due_date', 'remaining'),
         )

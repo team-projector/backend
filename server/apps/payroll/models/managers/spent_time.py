@@ -27,20 +27,20 @@ class SpentTimeQuerySet(models.QuerySet):
 
         return self.aggregate(
             total_issues=self._sum(issues__isnull=False),
-            opened_issues=self._sum(issues__state=issue.ISSUE_STATES.opened),
-            closed_issues=self._sum(issues__state=issue.ISSUE_STATES.closed),
+            opened_issues=self._sum(issues__state=issue.ISSUE_STATES.OPENED),
+            closed_issues=self._sum(issues__state=issue.ISSUE_STATES.CLOSED),
 
             total_merges=self._sum(
                 mergerequests__isnull=False,
             ),
             opened_merges=self._sum(
-                mergerequests__state=MERGE_REQUESTS_STATES.opened,
+                mergerequests__state=MERGE_REQUESTS_STATES.OPENED,
             ),
             closed_merges=self._sum(
-                mergerequests__state=MERGE_REQUESTS_STATES.closed,
+                mergerequests__state=MERGE_REQUESTS_STATES.CLOSED,
             ),
             merged_merges=self._sum(
-                mergerequests__state=MERGE_REQUESTS_STATES.merged,
+                mergerequests__state=MERGE_REQUESTS_STATES.MERGED,
             ),
         )
 

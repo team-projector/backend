@@ -17,14 +17,14 @@ def test_user_progress_metrics(user, client):
     TeamMemberFactory.create(
         user=user,
         team=team,
-        roles=TeamMember.roles.leader
+        roles=TeamMember.roles.LEADER
     )
 
     user_2 = UserFactory.create()
     TeamMemberFactory.create(
         user=user_2,
         team=team,
-        roles=TeamMember.roles.developer
+        roles=TeamMember.roles.DEVELOPER
     )
 
     client.user = user
@@ -48,14 +48,14 @@ def test_user_progress_metrics_not_leader(user, client):
     TeamMemberFactory.create(
         user=user,
         team=team,
-        roles=TeamMember.roles.developer
+        roles=TeamMember.roles.DEVELOPER
     )
 
     user_2 = UserFactory.create()
     TeamMemberFactory.create(
         user=user_2,
         team=team,
-        roles=TeamMember.roles.developer
+        roles=TeamMember.roles.DEVELOPER
     )
 
     client.user = user

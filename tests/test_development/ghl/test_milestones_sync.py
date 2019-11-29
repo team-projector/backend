@@ -1,6 +1,7 @@
 from django.test import override_settings
 
 from apps.development.graphql.mutations.milestones import SyncMilestoneMutation
+from apps.development.models.milestone import MILESTONE_STATES
 from tests.test_development.factories import (
     ProjectGroupFactory, ProjectGroupMilestoneFactory, ProjectFactory,
     ProjectMilestoneFactory
@@ -16,9 +17,9 @@ def test_sync_milestone_group(user, client, gl_mocker):
     gl_group = AttrDict(GlGroupFactory())
     group = ProjectGroupFactory.create(gl_id=gl_group.id)
 
-    gl_milestone = AttrDict(GlGroupMilestoneFactory(state='closed'))
+    gl_milestone = AttrDict(GlGroupMilestoneFactory(state=MILESTONE_STATES.CLOSED))
     milestone = ProjectGroupMilestoneFactory.create(
-        gl_id=gl_milestone.id, owner=group, state='active'
+        gl_id=gl_milestone.id, owner=group, state=MILESTONE_STATES.ACTIVE
     )
 
     gl_mocker.registry_get('/user', GlUserFactory())
@@ -27,7 +28,7 @@ def test_sync_milestone_group(user, client, gl_mocker):
         f'/groups/{gl_group.id}/milestones/{gl_milestone.id}', gl_milestone
     )
 
-    assert milestone.state == 'active'
+    assert milestone.state == MILESTONE_STATES.ACTIVE
 
     client.user = user
     info = AttrDict({
@@ -42,7 +43,7 @@ def test_sync_milestone_group(user, client, gl_mocker):
     assert milestone_mutated.gl_id == milestone_mutated.gl_id
 
     milestone.refresh_from_db()
-    assert milestone.state == 'closed'
+    assert milestone.state == MILESTONE_STATES.CLOSED
 
 
 @override_settings(GITLAB_TOKEN='GITLAB_TOKEN')
@@ -50,9 +51,9 @@ def test_sync_milestone_project(user, client, gl_mocker):
     gl_project = AttrDict(GlProjectFactory())
     project = ProjectFactory.create(gl_id=gl_project.id)
 
-    gl_milestone = AttrDict(GlProjectMilestoneFactory(state='closed'))
+    gl_milestone = AttrDict(GlProjectMilestoneFactory(state=MILESTONE_STATES.CLOSED))
     milestone = ProjectMilestoneFactory.create(
-        gl_id=gl_milestone.id, owner=project, state='active'
+        gl_id=gl_milestone.id, owner=project, state=MILESTONE_STATES.ACTIVE
     )
 
     gl_mocker.registry_get('/user', GlUserFactory())
@@ -61,7 +62,7 @@ def test_sync_milestone_project(user, client, gl_mocker):
         f'/projects/{gl_project.id}/milestones/{gl_milestone.id}', gl_milestone
     )
 
-    assert milestone.state == 'active'
+    assert milestone.state == MILESTONE_STATES.ACTIVE
 
     client.user = user
     info = AttrDict({
@@ -76,12 +77,12 @@ def test_sync_milestone_project(user, client, gl_mocker):
     assert milestone_mutated.gl_id == milestone_mutated.gl_id
 
     milestone.refresh_from_db()
-    assert milestone.state == 'closed'
+    assert milestone.state == MILESTONE_STATES.CLOSED
 
 
 def test_sync_milestone_inccorect_owner(user, client):
     milestone = ProjectMilestoneFactory.create(
-        owner=user, state='active'
+        owner=user, state=MILESTONE_STATES.ACTIVE
     )
 
     client.user = user
@@ -94,4 +95,4 @@ def test_sync_milestone_inccorect_owner(user, client):
     )
 
     milestone.refresh_from_db()
-    assert milestone.state == 'active'
+    assert milestone.state == MILESTONE_STATES.ACTIVE

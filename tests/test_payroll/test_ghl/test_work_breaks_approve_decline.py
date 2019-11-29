@@ -17,12 +17,12 @@ def test_approve_by_teamlead(user, client):
 
     TeamMemberFactory.create(team=team,
                              user=user,
-                             roles=TeamMember.roles.leader)
+                             roles=TeamMember.roles.LEADER)
 
     user_2 = UserFactory.create()
     TeamMemberFactory.create(team=team,
                              user=user_2,
-                             roles=TeamMember.roles.developer)
+                             roles=TeamMember.roles.DEVELOPER)
 
     work_break = WorkBreakFactory.create(user=user_2)
 
@@ -35,7 +35,7 @@ def test_approve_by_teamlead(user, client):
         id=work_break.id
     ).work_break
 
-    assert work_break_mutated.approve_state == APPROVED_STATES.approved
+    assert work_break_mutated.approve_state == APPROVED_STATES.APPROVED
     assert work_break_mutated.approved_by == user
 
 
@@ -43,13 +43,13 @@ def test_approve_by_other_team_teamlead(user, client):
     team_1 = TeamFactory.create()
     TeamMemberFactory.create(team=team_1,
                              user=user,
-                             roles=TeamMember.roles.leader)
+                             roles=TeamMember.roles.LEADER)
 
     team_2 = TeamFactory.create()
     user_2 = UserFactory.create()
     TeamMemberFactory.create(team=team_2,
                              user=user_2,
-                             roles=TeamMember.roles.developer)
+                             roles=TeamMember.roles.DEVELOPER)
 
     work_break = WorkBreakFactory.create(user=user_2)
 
@@ -84,12 +84,12 @@ def test_decline_by_teamlead(user, client):
 
     TeamMemberFactory.create(team=team,
                              user=user,
-                             roles=TeamMember.roles.leader)
+                             roles=TeamMember.roles.LEADER)
 
     user_2 = UserFactory.create()
     TeamMemberFactory.create(team=team,
                              user=user_2,
-                             roles=TeamMember.roles.developer)
+                             roles=TeamMember.roles.DEVELOPER)
 
     work_break = WorkBreakFactory.create(user=user_2)
 
@@ -103,7 +103,7 @@ def test_decline_by_teamlead(user, client):
         decline_reason='reason'
     ).work_break
 
-    assert work_break_mutated.approve_state == APPROVED_STATES.declined
+    assert work_break_mutated.approve_state == APPROVED_STATES.DECLINED
     assert work_break_mutated.approved_by == user
     assert work_break_mutated.decline_reason == 'reason'
 
@@ -112,13 +112,13 @@ def test_decline_by_other_team_teamlead(user, client):
     team_1 = TeamFactory.create()
     TeamMemberFactory.create(team=team_1,
                              user=user,
-                             roles=TeamMember.roles.leader)
+                             roles=TeamMember.roles.LEADER)
 
     team_2 = TeamFactory.create()
     user_2 = UserFactory.create()
     TeamMemberFactory.create(team=team_2,
                              user=user_2,
-                             roles=TeamMember.roles.developer)
+                             roles=TeamMember.roles.DEVELOPER)
 
     work_break = WorkBreakFactory.create(user=user_2)
 

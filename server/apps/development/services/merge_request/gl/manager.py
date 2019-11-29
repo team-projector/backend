@@ -72,7 +72,7 @@ class MergeRequestGlManager(BaseWorkItemGlManager):
             'title': gl_merge_request.title,
             'total_time_spent': time_stats['total_time_spent'],
             'time_estimate': time_stats['time_estimate'],
-            'state': gl_merge_request.state,
+            'state': gl_merge_request.state.upper(),
             'created_at': parse_gl_datetime(gl_merge_request.created_at),
             'updated_at': parse_gl_datetime(gl_merge_request.updated_at),
             'closed_at': parse_gl_datetime(gl_merge_request.closed_at),

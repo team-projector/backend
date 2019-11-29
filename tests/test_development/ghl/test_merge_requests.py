@@ -21,9 +21,9 @@ def test_merge_requests(user, client):
 
     team = TeamFactory.create()
     TeamMemberFactory.create(user=user, team=team,
-                             roles=TeamMember.roles.leader)
+                             roles=TeamMember.roles.LEADER)
     TeamMemberFactory.create(user=user_2, team=team,
-                             roles=TeamMember.roles.developer)
+                             roles=TeamMember.roles.DEVELOPER)
 
     client.user = user
     info = AttrDict({
@@ -47,9 +47,9 @@ def test_merge_requests_not_teamlead(user, client):
 
     team = TeamFactory.create()
     TeamMemberFactory.create(user=user, team=team,
-                             roles=TeamMember.roles.developer)
+                             roles=TeamMember.roles.DEVELOPER)
     TeamMemberFactory.create(user=user_2, team=team,
-                             roles=TeamMember.roles.developer)
+                             roles=TeamMember.roles.DEVELOPER)
 
     client.user = user
     info = AttrDict({

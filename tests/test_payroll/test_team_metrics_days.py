@@ -25,9 +25,9 @@ def test_simple(user):
 
     team = TeamFactory.create()
     TeamMemberFactory.create(team=team, user=developer,
-                             roles=TeamMember.roles.developer)
+                             roles=TeamMember.roles.DEVELOPER)
     TeamMemberFactory.create(team=team, user=user,
-                             roles=TeamMember.roles.leader)
+                             roles=TeamMember.roles.LEADER)
 
     IssueSpentTimeFactory.create(
         date=timezone.now() - timedelta(days=4),
@@ -57,7 +57,7 @@ def test_simple(user):
     issue.time_estimate = seconds(hours=15)
     issue.total_time_spent = \
         issue.time_spents.aggregate(spent=Sum('time_spent'))['spent']
-    issue.state = ISSUE_STATES.opened
+    issue.state = ISSUE_STATES.OPENED
     issue.due_date = timezone.now() + timedelta(days=1)
     issue.save()
 
@@ -104,9 +104,9 @@ def test_negative_remains(user):
 
     team = TeamFactory.create()
     TeamMemberFactory.create(team=team, user=developer,
-                             roles=TeamMember.roles.developer)
+                             roles=TeamMember.roles.DEVELOPER)
     TeamMemberFactory.create(team=team, user=user,
-                             roles=TeamMember.roles.leader)
+                             roles=TeamMember.roles.LEADER)
 
     IssueSpentTimeFactory.create(
         date=timezone.now() - timedelta(days=4, hours=5),
@@ -118,7 +118,7 @@ def test_negative_remains(user):
     issue.time_estimate = seconds(hours=2)
     issue.total_time_spent = \
         issue.time_spents.aggregate(spent=Sum('time_spent'))['spent']
-    issue.state = ISSUE_STATES.opened
+    issue.state = ISSUE_STATES.OPENED
     issue.due_date = timezone.now() + timedelta(days=1)
     issue.save()
 
@@ -153,12 +153,12 @@ def test_loading_day_already_has_spends(user):
 
     team = TeamFactory.create()
     TeamMemberFactory.create(team=team, user=developer,
-                             roles=TeamMember.roles.developer)
+                             roles=TeamMember.roles.DEVELOPER)
     TeamMemberFactory.create(team=team, user=user,
-                             roles=TeamMember.roles.leader)
+                             roles=TeamMember.roles.LEADER)
 
     issue_2 = IssueFactory.create(user=developer,
-                                  state=ISSUE_STATES.opened,
+                                  state=ISSUE_STATES.OPENED,
                                   total_time_spent=timedelta(
                                       hours=3).total_seconds(),
                                   time_estimate=timedelta(
@@ -185,7 +185,7 @@ def test_loading_day_already_has_spends(user):
 
     issue.time_estimate = int(seconds(hours=4))
     issue.total_time_spent = int(seconds(hours=3))
-    issue.state = ISSUE_STATES.opened
+    issue.state = ISSUE_STATES.OPENED
     issue.due_date = timezone.now()
     issue.save()
 
@@ -229,13 +229,13 @@ def test_not_in_range(user):
 
     team = TeamFactory.create()
     TeamMemberFactory.create(team=team, user=developer,
-                             roles=TeamMember.roles.developer)
+                             roles=TeamMember.roles.DEVELOPER)
     TeamMemberFactory.create(team=team, user=user,
-                             roles=TeamMember.roles.leader)
+                             roles=TeamMember.roles.LEADER)
 
     issue.time_estimate = 0
     issue.total_time_spent = 0
-    issue.state = ISSUE_STATES.opened
+    issue.state = ISSUE_STATES.OPENED
     issue.save()
 
     IssueSpentTimeFactory.create(
@@ -291,13 +291,13 @@ def test_another_user_not_in_team(user):
 
     team = TeamFactory.create()
     TeamMemberFactory.create(team=team, user=developer,
-                             roles=TeamMember.roles.developer)
+                             roles=TeamMember.roles.DEVELOPER)
     TeamMemberFactory.create(team=team, user=user,
-                             roles=TeamMember.roles.leader)
+                             roles=TeamMember.roles.LEADER)
 
     issue.time_estimate = 0
     issue.total_time_spent = 0
-    issue.state = ISSUE_STATES.opened
+    issue.state = ISSUE_STATES.OPENED
     issue.save()
 
     another_user = UserFactory.create()
@@ -343,13 +343,13 @@ def test_another_user_in_team(user):
 
     team = TeamFactory.create()
     TeamMemberFactory.create(team=team, user=developer,
-                             roles=TeamMember.roles.developer)
+                             roles=TeamMember.roles.DEVELOPER)
     TeamMemberFactory.create(team=team, user=user,
-                             roles=TeamMember.roles.leader)
+                             roles=TeamMember.roles.LEADER)
 
     another_user = UserFactory.create()
     TeamMemberFactory.create(team=team, user=another_user,
-                             roles=TeamMember.roles.developer)
+                             roles=TeamMember.roles.DEVELOPER)
 
     IssueSpentTimeFactory.create(
         date=timezone.now() - timedelta(days=2, hours=3),
@@ -378,7 +378,7 @@ def test_another_user_in_team(user):
 
     issue.time_estimate = seconds(hours=4)
     issue.total_time_spent = 0
-    issue.state = ISSUE_STATES.opened
+    issue.state = ISSUE_STATES.OPENED
     issue.save()
     issue.save()
 

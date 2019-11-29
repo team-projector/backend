@@ -20,13 +20,13 @@ def test_work_break(user, client):
 
     TeamMemberFactory.create(team=team,
                              user=user,
-                             roles=TeamMember.roles.leader)
+                             roles=TeamMember.roles.LEADER)
     work_break_1 = WorkBreakFactory.create(user=user)
 
     user_2 = UserFactory.create()
     TeamMemberFactory.create(team=team,
                              user=user_2,
-                             roles=TeamMember.roles.developer)
+                             roles=TeamMember.roles.DEVELOPER)
     work_break_2 = WorkBreakFactory.create(user=user_2)
 
     client.user = user
@@ -41,13 +41,13 @@ def test_work_break_not_team_lead(user, client):
 
     TeamMemberFactory.create(team=team,
                              user=user,
-                             roles=TeamMember.roles.leader)
+                             roles=TeamMember.roles.LEADER)
     work_break_1 = WorkBreakFactory.create(user=user)
 
     user_2 = UserFactory.create()
     TeamMemberFactory.create(team=team,
                              user=user_2,
-                             roles=TeamMember.roles.developer)
+                             roles=TeamMember.roles.DEVELOPER)
     work_break_2 = WorkBreakFactory.create(user=user_2)
 
     client.user = user_2
@@ -62,12 +62,12 @@ def test_work_breaks(user, client):
 
     TeamMemberFactory.create(team=team,
                              user=user,
-                             roles=TeamMember.roles.leader)
+                             roles=TeamMember.roles.LEADER)
 
     user_2 = UserFactory.create()
     TeamMemberFactory.create(team=team,
                              user=user_2,
-                             roles=TeamMember.roles.developer)
+                             roles=TeamMember.roles.DEVELOPER)
     WorkBreakFactory.create_batch(5, user=user_2)
 
     client.user = user_2
@@ -87,7 +87,7 @@ def test_create_work_break(user, client):
         info,
         comment='created',
         from_date=str(datetime.now()),
-        reason=WORK_BREAK_REASONS.dayoff,
+        reason=WORK_BREAK_REASONS.DAYOFF,
         to_date=str(datetime.now()),
         user=user.id
     ).work_break
@@ -95,7 +95,7 @@ def test_create_work_break(user, client):
     assert WorkBreak.objects.count() == 1
     assert work_break_created.comment == 'created'
     assert work_break_created.from_date is not None
-    assert work_break_created.reason == WORK_BREAK_REASONS.dayoff
+    assert work_break_created.reason == WORK_BREAK_REASONS.DAYOFF
     assert work_break_created.to_date is not None
     assert work_break_created.user == user
 
@@ -112,7 +112,7 @@ def test_update_work_break(user, client):
         id=work_break.id,
         comment='updated',
         from_date=str(datetime.now()),
-        reason=WORK_BREAK_REASONS.vacation,
+        reason=WORK_BREAK_REASONS.VACATION,
         to_date=str(datetime.now()),
         user=user.id
     ).work_break
@@ -127,12 +127,12 @@ def test_update_work_break_another_user(user, client):
 
     TeamMemberFactory.create(team=team,
                              user=user,
-                             roles=TeamMember.roles.developer)
+                             roles=TeamMember.roles.DEVELOPER)
 
     user_2 = UserFactory.create()
     TeamMemberFactory.create(team=team,
                              user=user_2,
-                             roles=TeamMember.roles.developer)
+                             roles=TeamMember.roles.DEVELOPER)
 
     work_break = WorkBreakFactory.create(user=user_2, comment='created')
 
@@ -146,7 +146,7 @@ def test_update_work_break_another_user(user, client):
             id=work_break.id,
             comment='updated',
             from_date=str(datetime.now()),
-            reason=WORK_BREAK_REASONS.vacation,
+            reason=WORK_BREAK_REASONS.VACATION,
             to_date=str(datetime.now())
         ).work_break
 
@@ -156,12 +156,12 @@ def test_update_work_break_another_user_but_teamlead(user, client):
 
     TeamMemberFactory.create(team=team,
                              user=user,
-                             roles=TeamMember.roles.leader)
+                             roles=TeamMember.roles.LEADER)
 
     user_2 = UserFactory.create()
     TeamMemberFactory.create(team=team,
                              user=user_2,
-                             roles=TeamMember.roles.developer)
+                             roles=TeamMember.roles.DEVELOPER)
 
     work_break = WorkBreakFactory.create(user=user_2, comment='created')
 
@@ -174,7 +174,7 @@ def test_update_work_break_another_user_but_teamlead(user, client):
         id=work_break.id,
         comment='updated',
         from_date=str(datetime.now()),
-        reason=WORK_BREAK_REASONS.vacation,
+        reason=WORK_BREAK_REASONS.VACATION,
         to_date=str(datetime.now())
     ).work_break
 

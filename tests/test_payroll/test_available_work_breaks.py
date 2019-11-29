@@ -38,7 +38,7 @@ def test_as_team_leader(user):
     team.members.set([user, user_2])
 
     TeamMember.objects.filter(user=user).update(
-        roles=TeamMember.roles.leader
+        roles=TeamMember.roles.LEADER
     )
 
     salary = WorkBreakFactory.create(user=user_2)
@@ -55,7 +55,7 @@ def test_as_team_watcher(user):
     team.members.set([user, user_2])
 
     TeamMember.objects.filter(user=user).update(
-        roles=TeamMember.roles.watcher
+        roles=TeamMember.roles.WATCHER
     )
 
     WorkBreakFactory.create(user=user_2)
@@ -74,7 +74,7 @@ def test_as_leader_another_team(user):
     team_2.members.add(user_2)
 
     TeamMember.objects.filter(user=user).update(
-        roles=TeamMember.roles.leader
+        roles=TeamMember.roles.LEADER
     )
 
     WorkBreakFactory.create(user=user_2)
@@ -93,7 +93,7 @@ def test_as_watcher_another_team(user):
     team_2.members.add(user_2)
 
     TeamMember.objects.filter(user=user).update(
-        roles=TeamMember.roles.watcher
+        roles=TeamMember.roles.WATCHER
     )
 
     WorkBreakFactory.create(user=user_2)
@@ -112,7 +112,7 @@ def test_my_work_breaks_and_as_leader(user):
     team_2.members.set([user, user_2])
 
     TeamMember.objects.filter(user=user, team=team_2).update(
-        roles=TeamMember.roles.leader
+        roles=TeamMember.roles.LEADER
     )
 
     work_breaks_my = WorkBreakFactory.create_batch(size=3, user=user)
@@ -135,7 +135,7 @@ def test_my_work_breaks_and_as_leader_with_queryset(user):
     user_3 = UserFactory.create()
 
     TeamMember.objects.filter(user=user, team=team_2).update(
-        roles=TeamMember.roles.leader
+        roles=TeamMember.roles.LEADER
     )
 
     WorkBreakFactory.create_batch(size=3, user=user)
@@ -155,12 +155,12 @@ def test_double_work_breaks(user):
     TeamMemberFactory.create(
         team=TeamFactory.create(),
         user=user,
-        roles=TeamMember.roles.leader
+        roles=TeamMember.roles.LEADER
     )
     TeamMemberFactory.create(
         team=TeamFactory.create(),
         user=user,
-        roles=TeamMember.roles.leader
+        roles=TeamMember.roles.LEADER
     )
 
     _assert_work_breaks(

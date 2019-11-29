@@ -29,13 +29,13 @@ def test_tm_leader(user):
     TeamMemberFactory.create(
         user=leader,
         team=team,
-        roles=TeamMember.roles.leader
+        roles=TeamMember.roles.LEADER
     )
 
     TeamMemberFactory.create(
         user=user,
         team=team,
-        roles=TeamMember.roles.developer
+        roles=TeamMember.roles.DEVELOPER
     )
 
     IssueFactory.create_batch(4, user=user)
@@ -52,13 +52,13 @@ def test_tm_leader_and_developer(user):
     TeamMemberFactory.create(
         user=leader,
         team=team,
-        roles=TeamMember.roles.leader
+        roles=TeamMember.roles.LEADER
     )
 
     TeamMemberFactory.create(
         user=user,
         team=team,
-        roles=TeamMember.roles.developer
+        roles=TeamMember.roles.DEVELOPER
     )
 
     IssueFactory.create_batch(4, user=user)
@@ -76,13 +76,13 @@ def test_tm_watcher(user):
     TeamMemberFactory.create(
         user=watcher,
         team=team,
-        roles=TeamMember.roles.watcher
+        roles=TeamMember.roles.WATCHER
     )
 
     TeamMemberFactory.create(
         user=user,
         team=team,
-        roles=TeamMember.roles.developer
+        roles=TeamMember.roles.DEVELOPER
     )
 
     IssueFactory.create_batch(4, user=user)
@@ -95,7 +95,7 @@ def test_tm_watcher(user):
 def test_pm_manager_projects(db):
     project_1 = ProjectFactory.create()
     manager = ProjectMemberFactory.create(
-        role=PROJECT_MEMBER_ROLES.project_manager,
+        role=PROJECT_MEMBER_ROLES.PROJECT_MANAGER,
         owner=project_1,
     )
 
@@ -105,7 +105,7 @@ def test_pm_manager_projects(db):
     project_2 = ProjectFactory.create()
     ProjectMemberFactory.create(
         user=manager.user,
-        role=PROJECT_MEMBER_ROLES.project_manager,
+        role=PROJECT_MEMBER_ROLES.PROJECT_MANAGER,
         owner=project_2,
     )
 
@@ -123,7 +123,7 @@ def test_pm_manager_projects(db):
 def test_pm_developer_projects(db):
     project = ProjectFactory.create()
     developer = ProjectMemberFactory.create(
-        role=PROJECT_MEMBER_ROLES.developer,
+        role=PROJECT_MEMBER_ROLES.DEVELOPER,
         owner=project,
     )
 
@@ -137,7 +137,7 @@ def test_pm_developer_projects(db):
 def test_pm_customer_projects(db):
     project = ProjectFactory.create()
     customer = ProjectMemberFactory.create(
-        role=PROJECT_MEMBER_ROLES.customer,
+        role=PROJECT_MEMBER_ROLES.CUSTOMER,
         owner=project,
     )
 
@@ -151,7 +151,7 @@ def test_pm_customer_projects(db):
 def test_pm_manager_groups(db):
     group_1 = ProjectGroupFactory.create()
     manager = ProjectMemberFactory.create(
-        role=PROJECT_MEMBER_ROLES.project_manager,
+        role=PROJECT_MEMBER_ROLES.PROJECT_MANAGER,
         owner=group_1,
     )
     project_1 = ProjectFactory.create(group=group_1)
@@ -162,7 +162,7 @@ def test_pm_manager_groups(db):
     group_2 = ProjectGroupFactory.create()
     ProjectMemberFactory.create(
         user=manager.user,
-        role=PROJECT_MEMBER_ROLES.project_manager,
+        role=PROJECT_MEMBER_ROLES.PROJECT_MANAGER,
         owner=group_2,
     )
     project_2 = ProjectFactory.create(group=group_2)
@@ -183,7 +183,7 @@ def test_pm_manager_groups(db):
 def test_pm_developer_groups(db):
     group = ProjectGroupFactory.create()
     developer = ProjectMemberFactory.create(
-        role=PROJECT_MEMBER_ROLES.developer,
+        role=PROJECT_MEMBER_ROLES.DEVELOPER,
         owner=group,
     )
     project = ProjectFactory.create(group=group)
@@ -198,7 +198,7 @@ def test_pm_developer_groups(db):
 def test_pm_customer_group(db):
     group = ProjectGroupFactory.create()
     customer = ProjectMemberFactory.create(
-        role=PROJECT_MEMBER_ROLES.customer,
+        role=PROJECT_MEMBER_ROLES.CUSTOMER,
         owner=group,
     )
     project = ProjectFactory.create(group=group)
@@ -214,7 +214,7 @@ def test_pm_manager_group_hierarchy(db):
     group_level_1 = ProjectGroupFactory.create()
 
     manager_1 = ProjectMemberFactory.create(
-        role=PROJECT_MEMBER_ROLES.project_manager,
+        role=PROJECT_MEMBER_ROLES.PROJECT_MANAGER,
         owner=group_level_1,
     )
     project_1 = ProjectFactory.create(group=group_level_1)
@@ -247,33 +247,33 @@ def test_pm_and_tm_complex(db):
     TeamMemberFactory.create(
         user=manager,
         team=team,
-        roles=TeamMember.roles.watcher
+        roles=TeamMember.roles.WATCHER
     )
     TeamMemberFactory.create(
         user=leader,
         team=team,
-        roles=TeamMember.roles.leader
+        roles=TeamMember.roles.LEADER
     )
     TeamMemberFactory.create(
         user=developer,
         team=team,
-        roles=TeamMember.roles.developer
+        roles=TeamMember.roles.DEVELOPER
     )
 
     project_1 = ProjectFactory.create()
     ProjectMemberFactory.create(
         user=manager,
-        role=PROJECT_MEMBER_ROLES.project_manager,
+        role=PROJECT_MEMBER_ROLES.PROJECT_MANAGER,
         owner=project_1,
     )
     ProjectMemberFactory.create(
         user=leader,
-        role=PROJECT_MEMBER_ROLES.developer,
+        role=PROJECT_MEMBER_ROLES.DEVELOPER,
         owner=project_1,
     )
     ProjectMemberFactory.create(
         user=developer,
-        role=PROJECT_MEMBER_ROLES.developer,
+        role=PROJECT_MEMBER_ROLES.DEVELOPER,
         owner=project_1,
     )
 
@@ -285,17 +285,17 @@ def test_pm_and_tm_complex(db):
     project_2 = ProjectFactory.create()
     ProjectMemberFactory.create(
         user=manager,
-        role=PROJECT_MEMBER_ROLES.project_manager,
+        role=PROJECT_MEMBER_ROLES.PROJECT_MANAGER,
         owner=project_2,
     )
     ProjectMemberFactory.create(
         user=leader,
-        role=PROJECT_MEMBER_ROLES.developer,
+        role=PROJECT_MEMBER_ROLES.DEVELOPER,
         owner=project_2,
     )
     ProjectMemberFactory.create(
         user=developer,
-        role=PROJECT_MEMBER_ROLES.developer,
+        role=PROJECT_MEMBER_ROLES.DEVELOPER,
         owner=project_2,
     )
 
@@ -306,7 +306,7 @@ def test_pm_and_tm_complex(db):
     project_3 = ProjectFactory.create()
     ProjectMemberFactory.create(
         user=leader,
-        role=PROJECT_MEMBER_ROLES.developer,
+        role=PROJECT_MEMBER_ROLES.DEVELOPER,
         owner=project_3,
     )
 

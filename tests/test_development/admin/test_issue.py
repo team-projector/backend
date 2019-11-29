@@ -24,11 +24,11 @@ def test_sync_handler(db, gl_mocker):
 
     gl_issue = AttrDict(GlIssueFactory(
         project_id=gl_project.id, assignee=gl_assignee,
-        state=ISSUE_STATES.opened,
+        state=ISSUE_STATES.OPENED,
     ))
     issue = IssueFactory.create(
         gl_id=gl_issue.id, gl_iid=gl_issue.iid, project=project,
-        state=ISSUE_STATES.closed,
+        state=ISSUE_STATES.CLOSED,
     )
     gl_mocker.registry_get(f'/projects/{gl_project.id}/issues/{gl_issue.iid}',
                            gl_issue)

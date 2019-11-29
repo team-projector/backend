@@ -10,9 +10,9 @@ from apps.core.models.mixins import Timestamps
 from apps.core.models.utils import Choices
 
 PROJECT_MEMBER_ROLES = Choices(
-    ('developer', _('CH_DEVELOPER')),
-    ('project_manager', _('CH_PM')),
-    ('customer', _('CH_CUSTOMER')),
+    ('DEVELOPER', _('CH_DEVELOPER')),
+    ('PROJECT_MANAGER', _('CH_PM')),
+    ('CUSTOMER', _('CH_CUSTOMER')),
 )
 
 PROJECT_MEMBER_ROLE_MAX_LENGTH = 20

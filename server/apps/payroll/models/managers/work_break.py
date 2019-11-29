@@ -12,7 +12,7 @@ class WorkBreakManager(models.Manager):
 
         users = TeamMember.objects.filter(
             user=user,
-            roles=TeamMember.roles.leader,
+            roles=TeamMember.roles.LEADER,
         ).values_list(
             'team__members',
             flat=True,

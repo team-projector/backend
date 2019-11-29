@@ -76,7 +76,7 @@ class IssueGlManager(BaseWorkItemGlManager):
             'title': gl_issue.title,
             'total_time_spent': time_stats['total_time_spent'],
             'time_estimate': time_stats['time_estimate'],
-            'state': gl_issue.state,
+            'state': gl_issue.state.upper(),
             'due_date': gitlab.parse_gl_date(gl_issue.due_date),
             'created_at': gitlab.parse_gl_datetime(gl_issue.created_at),
             'updated_at': gitlab.parse_gl_datetime(gl_issue.updated_at),

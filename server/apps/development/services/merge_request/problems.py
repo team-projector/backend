@@ -33,7 +33,7 @@ class EmptyEstimateChecker(BaseProblemChecker):
                 Q(time_estimate__isnull=True)
                 | Q(time_estimate=0),
             )
-            & Q(state=MERGE_REQUESTS_STATES.opened),
+            & Q(state=MERGE_REQUESTS_STATES.OPENED),
         ).exists()
 
 
@@ -55,7 +55,7 @@ class NotAssignedChecker(BaseProblemChecker):
     ) -> bool:
         return merge_request.issues.filter(
             labels__title__iexact='done',
-            state=MERGE_REQUESTS_STATES.opened,
+            state=MERGE_REQUESTS_STATES.OPENED,
         ).exists()
 
 

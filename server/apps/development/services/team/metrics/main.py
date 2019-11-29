@@ -83,11 +83,11 @@ class TeamMetricsProvider:
         return merge_requests
 
     def _get_opened_count(self, workitems) -> int:
-        return workitems.filter(state=ISSUE_STATES.opened).count()
+        return workitems.filter(state=ISSUE_STATES.OPENED).count()
 
     def _get_opened_estimated(self, workitems) -> int:
         return workitems.filter(
-            state=ISSUE_STATES.opened,
+            state=ISSUE_STATES.OPENED,
         ).aggregate(
             total_time_estimate=Sum('time_estimate'),
         )['total_time_estimate']

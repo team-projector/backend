@@ -23,7 +23,7 @@ class BulkGenerateSalariesTests(TestCase):
                                            period_to=timezone.now())
 
     def test_single(self):
-        issue = IssueFactory.create(state=ISSUE_STATES.closed)
+        issue = IssueFactory.create(state=ISSUE_STATES.CLOSED)
 
         IssueSpentTimeFactory.create(user=self.user, base=issue,
                                      time_spent=seconds(hours=1))
@@ -40,9 +40,9 @@ class BulkGenerateSalariesTests(TestCase):
         self.assertEqual(salary.total, self.user.hour_rate * 4)
 
     def test_many(self):
-        issue_1 = IssueFactory.create(state=ISSUE_STATES.closed)
-        issue_2 = IssueFactory.create(state=ISSUE_STATES.closed)
-        issue_3 = IssueFactory.create(state=ISSUE_STATES.closed)
+        issue_1 = IssueFactory.create(state=ISSUE_STATES.CLOSED)
+        issue_2 = IssueFactory.create(state=ISSUE_STATES.CLOSED)
+        issue_3 = IssueFactory.create(state=ISSUE_STATES.CLOSED)
 
         user_2 = UserFactory.create()
         user_3 = UserFactory.create()

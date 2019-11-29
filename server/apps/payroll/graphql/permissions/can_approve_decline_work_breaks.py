@@ -28,5 +28,5 @@ class CanApproveDeclineWorkBreak:
         return user_service.is_related_with_another_by_team_roles(
             info.context.user,
             work_break.user,
-            [TeamMember.roles.leader],
+            [TeamMember.roles.LEADER],
         )

@@ -29,14 +29,14 @@ def test_no_problems(user):
         user=user,
         time_estimate=seconds(hours=5),
         total_time_spent=seconds(hours=1),
-        state=ISSUE_STATES.opened,
+        state=ISSUE_STATES.OPENED,
     )
 
     IssueFactory.create(
         user=user,
         time_estimate=seconds(hours=4),
         total_time_spent=0,
-        state=ISSUE_STATES.opened,
+        state=ISSUE_STATES.OPENED,
     )
 
     assert user_service.get_problems(user) == []
@@ -47,21 +47,21 @@ def test_not_enough_tasks_issues(user):
         user=user,
         time_estimate=seconds(hours=3),
         total_time_spent=seconds(hours=1),
-        state=ISSUE_STATES.opened,
+        state=ISSUE_STATES.OPENED,
     )
 
     IssueFactory.create(
         user=user,
         time_estimate=seconds(hours=2),
         total_time_spent=seconds(hours=1),
-        state=ISSUE_STATES.opened,
+        state=ISSUE_STATES.OPENED,
     )
 
     IssueFactory.create(
         user=user,
         time_estimate=seconds(hours=8),
         total_time_spent=0,
-        state=ISSUE_STATES.closed,
+        state=ISSUE_STATES.CLOSED,
     )
 
     assert user_service.get_problems(user) == [
@@ -73,28 +73,28 @@ def test_not_enough_tasks_merge_requests(user):
         user=user,
         time_estimate=seconds(hours=3),
         total_time_spent=seconds(hours=1),
-        state=MERGE_REQUESTS_STATES.opened,
+        state=MERGE_REQUESTS_STATES.OPENED,
     )
 
     MergeRequestFactory.create(
         user=user,
         time_estimate=seconds(hours=2),
         total_time_spent=seconds(hours=1),
-        state=MERGE_REQUESTS_STATES.opened,
+        state=MERGE_REQUESTS_STATES.OPENED,
     )
 
     MergeRequestFactory.create(
         user=user,
         time_estimate=seconds(hours=8),
         total_time_spent=0,
-        state=MERGE_REQUESTS_STATES.closed,
+        state=MERGE_REQUESTS_STATES.CLOSED,
     )
 
     MergeRequestFactory.create(
         user=user,
         time_estimate=seconds(hours=8),
         total_time_spent=0,
-        state=MERGE_REQUESTS_STATES.merged,
+        state=MERGE_REQUESTS_STATES.MERGED,
     )
 
     assert user_service.get_problems(user) == [
@@ -106,14 +106,14 @@ def test_not_enough_tasks_complex(user):
         user=user,
         time_estimate=seconds(hours=3),
         total_time_spent=seconds(hours=1),
-        state=ISSUE_STATES.opened,
+        state=ISSUE_STATES.OPENED,
     )
 
     MergeRequestFactory.create(
         user=user,
         time_estimate=seconds(hours=2),
         total_time_spent=seconds(hours=1),
-        state=MERGE_REQUESTS_STATES.opened,
+        state=MERGE_REQUESTS_STATES.OPENED,
     )
 
     assert user_service.get_problems(user) == [

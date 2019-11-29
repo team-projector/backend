@@ -16,7 +16,7 @@ def test_metrics(db):
     issue_1 = IssueFactory.create(
         ticket=ticket,
         user=user,
-        state=ISSUE_STATES.opened,
+        state=ISSUE_STATES.OPENED,
         total_time_spent=seconds(hours=1),
         time_estimate=seconds(hours=2)
     )
@@ -30,7 +30,7 @@ def test_metrics(db):
     issue_2 = IssueFactory.create(
         ticket=ticket,
         user=user,
-        state=ISSUE_STATES.closed,
+        state=ISSUE_STATES.CLOSED,
         total_time_spent=seconds(hours=2),
         time_estimate=seconds(hours=2)
     )
