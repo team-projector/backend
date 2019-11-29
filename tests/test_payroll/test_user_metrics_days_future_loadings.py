@@ -17,7 +17,7 @@ def test_replay(user):
         due_date=datetime.now() + timedelta(days=10),
         time_estimate=seconds(hours=15),
         total_time_spent=0,
-        state=ISSUE_STATES.opened
+        state=ISSUE_STATES.OPENED
     )
 
     start = datetime.now().date() + timedelta(days=1)
@@ -37,7 +37,7 @@ def test_has_spents(user):
         due_date=datetime.now() + timedelta(days=10),
         time_estimate=seconds(hours=15),
         total_time_spent=seconds(hours=2),
-        state=ISSUE_STATES.opened
+        state=ISSUE_STATES.OPENED
     )
 
     start = datetime.now().date() + timedelta(days=1)
@@ -57,7 +57,7 @@ def test_replay_without_active_issues(user):
         due_date=datetime.now() + timedelta(days=10),
         time_estimate=seconds(hours=3),
         total_time_spent=3,
-        state=ISSUE_STATES.closed
+        state=ISSUE_STATES.CLOSED
     )
 
     start = datetime.now().date() + timedelta(days=1)
@@ -77,7 +77,7 @@ def test_not_apply_loading_weekends(user):
         due_date=datetime.now() + timedelta(days=10),
         time_estimate=seconds(hours=15),
         total_time_spent=0,
-        state=ISSUE_STATES.opened
+        state=ISSUE_STATES.OPENED
     )
 
     start = datetime.now().date() + timedelta(days=1)

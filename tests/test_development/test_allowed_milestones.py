@@ -16,7 +16,7 @@ def test_not_pm(user):
     project = ProjectFactory.create()
     ProjectMemberFactory.create(
         user=user,
-        role=PROJECT_MEMBER_ROLES.developer,
+        role=PROJECT_MEMBER_ROLES.DEVELOPER,
         owner=project
     )
 
@@ -25,7 +25,7 @@ def test_not_pm(user):
     group = ProjectGroupFactory.create()
     ProjectMemberFactory.create(
         user=user,
-        role=PROJECT_MEMBER_ROLES.customer,
+        role=PROJECT_MEMBER_ROLES.CUSTOMER,
         owner=group
     )
 
@@ -39,7 +39,7 @@ def test_projects(user):
     project_1 = ProjectFactory.create()
     ProjectMemberFactory.create(
         user=user,
-        role=PROJECT_MEMBER_ROLES.project_manager,
+        role=PROJECT_MEMBER_ROLES.PROJECT_MANAGER,
         owner=project_1
     )
 
@@ -49,7 +49,7 @@ def test_projects(user):
     project_2 = ProjectFactory.create()
     ProjectMemberFactory.create(
         user=user,
-        role=PROJECT_MEMBER_ROLES.project_manager,
+        role=PROJECT_MEMBER_ROLES.PROJECT_MANAGER,
         owner=project_2
     )
 
@@ -69,7 +69,7 @@ def test_groups(user):
     group_1 = ProjectGroupFactory.create()
     ProjectMemberFactory.create(
         user=user,
-        role=PROJECT_MEMBER_ROLES.project_manager,
+        role=PROJECT_MEMBER_ROLES.PROJECT_MANAGER,
         owner=group_1
     )
 
@@ -79,7 +79,7 @@ def test_groups(user):
     group_2 = ProjectGroupFactory.create()
     ProjectMemberFactory.create(
         user=user,
-        role=PROJECT_MEMBER_ROLES.project_manager,
+        role=PROJECT_MEMBER_ROLES.PROJECT_MANAGER,
         owner=group_2
     )
 
@@ -99,7 +99,7 @@ def test_group_and_projects(user):
     group = ProjectGroupFactory.create()
     ProjectMemberFactory.create(
         user=user,
-        role=PROJECT_MEMBER_ROLES.project_manager,
+        role=PROJECT_MEMBER_ROLES.PROJECT_MANAGER,
         owner=group
     )
 
@@ -109,7 +109,7 @@ def test_group_and_projects(user):
     project = ProjectFactory.create()
     ProjectMemberFactory.create(
         user=user,
-        role=PROJECT_MEMBER_ROLES.project_manager,
+        role=PROJECT_MEMBER_ROLES.PROJECT_MANAGER,
         owner=project
     )
 
@@ -129,7 +129,7 @@ def test_group_with_projects(user):
     group = ProjectGroupFactory.create()
     ProjectMemberFactory.create(
         user=user,
-        role=PROJECT_MEMBER_ROLES.project_manager,
+        role=PROJECT_MEMBER_ROLES.PROJECT_MANAGER,
         owner=group
     )
 
@@ -157,7 +157,7 @@ def test_parent_group_with_groups(user):
     parent_group = ProjectGroupFactory.create()
     ProjectMemberFactory.create(
         user=user,
-        role=PROJECT_MEMBER_ROLES.project_manager,
+        role=PROJECT_MEMBER_ROLES.PROJECT_MANAGER,
         owner=parent_group
     )
 
@@ -182,7 +182,7 @@ def test_parent_group_with_groups_and_projects(user):
     parent_group = ProjectGroupFactory.create()
     ProjectMemberFactory.create(
         user=user,
-        role=PROJECT_MEMBER_ROLES.project_manager,
+        role=PROJECT_MEMBER_ROLES.PROJECT_MANAGER,
         owner=parent_group
     )
 

@@ -9,11 +9,11 @@ from apps.core.models.utils import Choices
 from apps.users.models.managers import UserManager
 
 USER_ROLES = Choices(
-    ('developer', _('CH_DEVELOPER')),
-    ('team_leader', _('CH_TEAM_LEADER')),
-    ('project_manager', _('CH_PROJECT_MANAGER')),
-    ('customer', _('CH_CUSTOMER')),
-    ('shareholder', _('CH_SHAREHOLDER')),
+    ('DEVELOPER', _('CH_DEVELOPER')),
+    ('TEAM_LEADER', _('CH_TEAM_LEADER')),
+    ('PROJECT_MANAGER', _('CH_PROJECT_MANAGER')),
+    ('CUSTOMER', _('CH_CUSTOMER')),
+    ('SHAREHOLDER', _('CH_SHAREHOLDER')),
 )
 
 USER_LOGIN_MAX_LENGTH = 150

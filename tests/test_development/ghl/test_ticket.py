@@ -95,7 +95,7 @@ def test_ticket_create_not_pm(user, client):
             url='test url'
         )
 
-    user.roles.project_manager = True
+    user.roles.PROJECT_MANAGER = True
     user.save()
 
     CreateTicketMutation.mutate(
@@ -171,7 +171,7 @@ def test_ticket_update_not_pm(user, client):
             id=ticket.id,
         )
 
-    user.roles.project_manager = True
+    user.roles.PROJECT_MANAGER = True
     user.save()
 
     UpdateTicketMutation.mutate(
@@ -182,7 +182,7 @@ def test_ticket_update_not_pm(user, client):
 
 
 def test_delete_ticket(user, client):
-    user.roles.project_manager = True
+    user.roles.PROJECT_MANAGER = True
     user.save()
 
     ticket = TicketFactory.create()

@@ -12,9 +12,9 @@ from apps.development.models.managers import NoteManager
 from apps.users.models import User
 
 NOTE_TYPES = Choices(
-    ('time_spend', 'Time spend'),
-    ('reset_spend', 'Reset spend'),
-    ('moved_from', 'Moved from'),
+    ('TIME_SPEND', 'Time spend'),
+    ('RESET_SPEND', 'Reset spend'),
+    ('MOVED_FROM', 'Moved from'),
 )
 
 NOTE_TYPE_MAX_LENGTH = 20
@@ -82,4 +82,6 @@ class Note(models.Model):
 
     def __str__(self):
         """Returns object string representation."""
-        return '{0} [{1}]: {2}'.format(self.user, self.created_at, self.type)
+        return '{0} [{1}]: {2}'.format(
+            self.user, self.created_at, self.get_type_display(),
+        )

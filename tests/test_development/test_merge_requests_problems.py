@@ -20,7 +20,7 @@ def test_base_checker():
 def test_empty_estimate(user):
     problem_issue = IssueFactory.create(
         user=user,
-        state=ISSUE_STATES.opened,
+        state=ISSUE_STATES.OPENED,
         time_estimate=None
     )
 
@@ -35,7 +35,7 @@ def test_empty_estimate(user):
 def test_empty_estimate_but_closed(user):
     problem_issue = IssueFactory.create(
         user=user,
-        state=ISSUE_STATES.closed,
+        state=ISSUE_STATES.CLOSED,
         time_estimate=None
     )
 
@@ -50,7 +50,7 @@ def test_empty_estimate_but_closed(user):
 def test_zero_estimate(user):
     problem_issue = IssueFactory.create(
         user=user,
-        state=ISSUE_STATES.opened,
+        state=ISSUE_STATES.OPENED,
         time_estimate=0
     )
 
@@ -67,7 +67,7 @@ def test_not_assigned(user):
 
     problem_issue = IssueFactory.create(
         user=user,
-        state=ISSUE_STATES.opened,
+        state=ISSUE_STATES.OPENED,
         time_estimate=seconds(hours=1),
     )
     problem_issue.labels.add(label_done)
@@ -85,7 +85,7 @@ def test_not_assigned_but_closed(user):
 
     problem_issue = IssueFactory.create(
         user=user,
-        state=ISSUE_STATES.closed,
+        state=ISSUE_STATES.CLOSED,
         time_estimate=seconds(hours=1),
     )
     problem_issue.labels.add(label_done)
@@ -103,7 +103,7 @@ def test_two_errors_per_merge_request(user):
 
     problem_issue = IssueFactory.create(
         user=user,
-        state=ISSUE_STATES.opened,
+        state=ISSUE_STATES.OPENED,
         time_estimate=0
     )
     problem_issue.labels.add(label_done)
@@ -119,7 +119,7 @@ def test_two_errors_per_merge_request(user):
 def test_resolver(user):
     problem_issue = IssueFactory.create(
         user=user,
-        state=ISSUE_STATES.opened,
+        state=ISSUE_STATES.OPENED,
         time_estimate=None
     )
 

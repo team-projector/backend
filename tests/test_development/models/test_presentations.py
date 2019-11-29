@@ -42,9 +42,9 @@ def test_milestone(db):
 def test_note(db):
   user = UserFactory.create(login='login_test')
 
-  note = IssueNoteFactory.create(user=user, type=NOTE_TYPES.time_spend)
+  note = IssueNoteFactory.create(user=user, type=NOTE_TYPES.TIME_SPEND)
 
-  assert str(note) == f'login_test [{note.created_at}]: time_spend'
+  assert str(note) == f'login_test [{note.created_at}]: Time spend'
 
 
 def test_project(db):

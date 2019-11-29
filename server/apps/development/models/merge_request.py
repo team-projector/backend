@@ -15,9 +15,9 @@ from apps.development.models.managers import MergeRequestManager
 from apps.development.models.mixins import TrackableMixin
 
 MERGE_REQUESTS_STATES = Choices(
-    ('opened', _('CH_OPENED')),
-    ('merged', _('CH_MERGED')),
-    ('closed', _('CH_CLOSED')),
+    ('OPENED', _('CH_OPENED')),
+    ('MERGED', _('CH_MERGED')),
+    ('CLOSED', _('CH_CLOSED')),
 )
 
 MERGE_REQUESTS_STATE_MAX_LENGTH = 255
@@ -162,7 +162,7 @@ class MergeRequest(
     def efficiency_available(self) -> bool:
         """Helper for efficiency method."""
         return (
-            self.state == MERGE_REQUESTS_STATES.closed
+            self.state == MERGE_REQUESTS_STATES.CLOSED
             and self.total_time_spent
             and self.time_estimate
         )

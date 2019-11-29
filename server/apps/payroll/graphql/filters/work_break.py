@@ -23,7 +23,7 @@ class ApprovingFilter(django_filters.BooleanFilter):
 
         teams = TeamMember.objects.filter(
             user=self.parent.request.user,
-            roles=TeamMember.roles.leader,
+            roles=TeamMember.roles.LEADER,
         ).values_list(
             'team',
             flat=True,
@@ -38,7 +38,7 @@ class ApprovingFilter(django_filters.BooleanFilter):
             user_is_team_member=Exists(subquery),
         ).filter(
             user_is_team_member=True,
-            approve_state=APPROVED_STATES.created,
+            approve_state=APPROVED_STATES.CREATED,
         )
 
         return queryset

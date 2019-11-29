@@ -58,9 +58,9 @@ class SalaryFactory(factory.django.DjangoModelFactory):
 class WorkBreakFactory(factory.django.DjangoModelFactory):
     user = factory.SubFactory(UserFactory)
     reason = random.choice((
-        WORK_BREAK_REASONS.dayoff,
-        WORK_BREAK_REASONS.vacation,
-        WORK_BREAK_REASONS.disease
+        WORK_BREAK_REASONS.DAYOFF,
+        WORK_BREAK_REASONS.VACATION,
+        WORK_BREAK_REASONS.DISEASE
     ))
 
     from_date = factory.Faker('date_time_this_year', before_now=True,

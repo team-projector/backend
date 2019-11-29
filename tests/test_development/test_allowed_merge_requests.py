@@ -23,13 +23,13 @@ def test_by_team_leader(user):
     TeamMemberFactory.create(
         user=leader,
         team=team,
-        roles=TeamMember.roles.leader
+        roles=TeamMember.roles.LEADER
     )
 
     TeamMemberFactory.create(
         user=user,
         team=team,
-        roles=TeamMember.roles.developer
+        roles=TeamMember.roles.DEVELOPER
     )
 
     MergeRequestFactory.create_batch(4, user=user)
@@ -46,13 +46,13 @@ def test_by_team_leader_and_user(user):
     TeamMemberFactory.create(
         user=leader,
         team=team,
-        roles=TeamMember.roles.leader
+        roles=TeamMember.roles.LEADER
     )
 
     TeamMemberFactory.create(
         user=user,
         team=team,
-        roles=TeamMember.roles.developer
+        roles=TeamMember.roles.DEVELOPER
     )
 
     MergeRequestFactory.create_batch(4, user=user)
@@ -70,13 +70,13 @@ def test_by_team_watcher(user):
     TeamMemberFactory.create(
         user=watcher,
         team=team,
-        roles=TeamMember.roles.watcher
+        roles=TeamMember.roles.WATCHER
     )
 
     TeamMemberFactory.create(
         user=user,
         team=team,
-        roles=TeamMember.roles.developer
+        roles=TeamMember.roles.DEVELOPER
     )
 
     MergeRequestFactory.create_batch(4, user=user)

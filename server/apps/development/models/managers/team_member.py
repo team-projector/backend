@@ -11,7 +11,7 @@ class TeamMemberManager(models.Manager):
         """Get all users without watchers for team."""
         return self.filter(
             team=team,
-            roles=~self.model.roles.watcher,
+            roles=~self.model.roles.WATCHER,
         ).values_list(
             'user',
             flat=True,

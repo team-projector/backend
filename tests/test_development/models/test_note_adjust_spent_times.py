@@ -10,7 +10,7 @@ from tests.test_payroll.factories import IssueSpentTimeFactory
 
 def test_reset_spend(user):
     IssueNoteFactory.create(
-        type=NOTE_TYPES.reset_spend,
+        type=NOTE_TYPES.RESET_SPEND,
         user=user,
     )
 
@@ -25,7 +25,7 @@ def test_reset_spend(user):
 
 def test_time_spend(user):
     IssueNoteFactory.create(
-        type=NOTE_TYPES.time_spend,
+        type=NOTE_TYPES.TIME_SPEND,
         user=user,
         data={
             'date': str(datetime.now().date()),
@@ -44,7 +44,7 @@ def test_time_spend(user):
 
 def test_moved_from(user):
     IssueNoteFactory.create(
-        type=NOTE_TYPES.moved_from,
+        type=NOTE_TYPES.MOVED_FROM,
         user=user,
     )
 
@@ -70,7 +70,7 @@ def test_type_not_exist(user):
 
 def test_spent_time_exists(user):
     note = IssueNoteFactory.create(
-        type=NOTE_TYPES.reset_spend,
+        type=NOTE_TYPES.RESET_SPEND,
         user=user,
     )
 

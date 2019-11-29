@@ -7,9 +7,9 @@ from apps.core.models.utils import Choices
 from apps.users.models import User
 
 APPROVED_STATES = Choices(
-    ('created', _('CH_CREATED')),
-    ('approved', _('CH_APPROVED')),
-    ('declined', _('CH_DECLINED')),
+    ('CREATED', _('CH_CREATED')),
+    ('APPROVED', _('CH_APPROVED')),
+    ('DECLINED', _('CH_DECLINED')),
 )
 
 APPROVED_STATE_MAX_LENGTH = 15
@@ -20,7 +20,7 @@ class ApprovedMixin(models.Model):
 
     approve_state = models.CharField(
         choices=APPROVED_STATES,
-        default='created',
+        default=APPROVED_STATES.CREATED,
         max_length=APPROVED_STATE_MAX_LENGTH,
         verbose_name=_('VN__APPROVE_STATE'),
         help_text=_('HT__APPROVE_STATE'),

@@ -15,7 +15,7 @@ def user(db):
 
 
 def test_paid(user):
-    issue = IssueFactory.create(user=user, state=ISSUE_STATES.opened)
+    issue = IssueFactory.create(user=user, state=ISSUE_STATES.OPENED)
     salary = SalaryFactory.create(user=user)
 
     IssueSpentTimeFactory.create(
@@ -40,7 +40,7 @@ def test_paid(user):
 
 
 def test_payroll_metrics(user):
-    issue = IssueFactory.create(user=user, state=ISSUE_STATES.opened)
+    issue = IssueFactory.create(user=user, state=ISSUE_STATES.OPENED)
 
     IssueSpentTimeFactory.create(
         user=user,

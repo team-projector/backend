@@ -24,19 +24,19 @@ def test_metrics(db):
 
     IssueFactory.create(
         ticket=ticket,
-        state=ISSUE_STATES.opened,
+        state=ISSUE_STATES.OPENED,
         total_time_spent=0,
         time_estimate=seconds(hours=1)
     )
     IssueFactory.create(
         ticket=ticket,
-        state=ISSUE_STATES.closed,
+        state=ISSUE_STATES.CLOSED,
         total_time_spent=seconds(hours=1),
         time_estimate=seconds(hours=2)
     )
     IssueFactory.create(
         ticket=ticket,
-        state=ISSUE_STATES.closed,
+        state=ISSUE_STATES.CLOSED,
         total_time_spent=seconds(hours=2),
         time_estimate=seconds(hours=2)
     )
@@ -57,14 +57,14 @@ def test_budget_estimated(db):
     IssueFactory.create(
         ticket=ticket,
         user=user_1,
-        state=ISSUE_STATES.opened,
+        state=ISSUE_STATES.OPENED,
         total_time_spent=0,
         time_estimate=seconds(hours=1)
     )
     IssueFactory.create(
         ticket=ticket,
         user=user_1,
-        state=ISSUE_STATES.closed,
+        state=ISSUE_STATES.CLOSED,
         total_time_spent=seconds(hours=1),
         time_estimate=seconds(hours=2)
     )
@@ -74,14 +74,14 @@ def test_budget_estimated(db):
     IssueFactory.create(
         ticket=ticket,
         user=user_2,
-        state=ISSUE_STATES.opened,
+        state=ISSUE_STATES.OPENED,
         total_time_spent=0,
         time_estimate=seconds(hours=1)
     )
     IssueFactory.create(
         ticket=ticket,
         user=user_2,
-        state=ISSUE_STATES.closed,
+        state=ISSUE_STATES.CLOSED,
         total_time_spent=seconds(hours=2),
         time_estimate=seconds(hours=1)
     )
@@ -89,7 +89,7 @@ def test_budget_estimated(db):
     IssueFactory.create(
         ticket=TicketFactory.create(),
         user=user_2,
-        state=ISSUE_STATES.opened,
+        state=ISSUE_STATES.OPENED,
         total_time_spent=seconds(hours=10),
         time_estimate=seconds(hours=10)
     )
@@ -102,14 +102,14 @@ def test_budget_estimated(db):
 
 
 def test_resolve_metrics(user, client):
-    user.roles.project_manager = True
+    user.roles.PROJECT_MANAGER = True
     user.save()
 
     ticket = TicketFactory.create()
 
     IssueFactory.create(
         ticket=ticket,
-        state=ISSUE_STATES.opened,
+        state=ISSUE_STATES.OPENED,
         total_time_spent=0,
         time_estimate=seconds(hours=1)
     )
@@ -128,7 +128,7 @@ def test_resolve_metrics_not_pm(user, client):
 
     IssueFactory.create(
         ticket=ticket,
-        state=ISSUE_STATES.opened,
+        state=ISSUE_STATES.OPENED,
         total_time_spent=0,
         time_estimate=seconds(hours=1)
     )

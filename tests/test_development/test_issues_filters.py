@@ -18,12 +18,12 @@ from tests.test_users.factories import UserFactory
 
 
 def test_filter_by_state(user):
-    issue_opened = IssueFactory.create(user=user, state=ISSUE_STATES.opened)
-    issue_closed = IssueFactory.create(user=user, state=ISSUE_STATES.closed)
+    issue_opened = IssueFactory.create(user=user, state=ISSUE_STATES.OPENED)
+    issue_closed = IssueFactory.create(user=user, state=ISSUE_STATES.CLOSED)
     IssueFactory.create_batch(5, user=user, state='')
 
     results = IssuesFilterSet(
-        data={'state': ISSUE_STATES.opened},
+        data={'state': ISSUE_STATES.OPENED},
         queryset=Issue.objects.all()
     ).qs
 
@@ -31,7 +31,7 @@ def test_filter_by_state(user):
     assert results.first() == issue_opened
 
     results = IssuesFilterSet(
-        data={'state': ISSUE_STATES.closed},
+        data={'state': ISSUE_STATES.CLOSED},
         queryset=Issue.objects.all()
     ).qs
 
@@ -56,29 +56,29 @@ def test_filter_by_due_date(user):
 def test_filter_by_due_date_and_state(user):
     issue = IssueFactory.create(
         user=user,
-        state=ISSUE_STATES.opened,
+        state=ISSUE_STATES.OPENED,
         due_date=datetime.now()
     )
     IssueFactory.create(
         user=user,
-        state=ISSUE_STATES.closed,
+        state=ISSUE_STATES.CLOSED,
         due_date=datetime.now()
     )
     IssueFactory.create(
         user=user,
-        state=ISSUE_STATES.closed,
+        state=ISSUE_STATES.CLOSED,
         due_date=datetime.now() - timedelta(days=1)
     )
     IssueFactory.create(
         user=user,
-        state=ISSUE_STATES.opened,
+        state=ISSUE_STATES.OPENED,
         due_date=datetime.now() - timedelta(days=1)
     )
 
     results = IssuesFilterSet(
         data={
             'due_date': datetime.now().date(),
-            'state': ISSUE_STATES.opened
+            'state': ISSUE_STATES.OPENED
         },
         queryset=Issue.objects.all()
     ).qs
@@ -120,7 +120,7 @@ def test_filter_by_team_with_one_member(user):
     TeamMemberFactory.create(
         user=user,
         team=team,
-        roles=TeamMember.roles.leader
+        roles=TeamMember.roles.LEADER
     )
 
     IssueFactory.create_batch(2, user=user)
@@ -141,7 +141,7 @@ def test_filter_by_team_with_many_members(user):
     TeamMemberFactory.create(
         user=user,
         team=team,
-        roles=TeamMember.roles.leader
+        roles=TeamMember.roles.LEADER
     )
     IssueFactory.create_batch(2, user=user)
 
@@ -151,7 +151,7 @@ def test_filter_by_team_with_many_members(user):
     TeamMemberFactory.create(
         user=another_user,
         team=team,
-        roles=TeamMember.roles.developer
+        roles=TeamMember.roles.DEVELOPER
     )
 
     IssueFactory.create_batch(4, user=UserFactory.create())
@@ -172,7 +172,7 @@ def test_filter_by_team_with_watcher(user):
     TeamMemberFactory.create(
         user=user,
         team=team,
-        roles=TeamMember.roles.leader
+        roles=TeamMember.roles.LEADER
     )
     IssueFactory.create_batch(2, user=user)
 
@@ -183,13 +183,13 @@ def test_filter_by_team_with_watcher(user):
     TeamMemberFactory.create(
         user=user,
         team=another_team,
-        roles=TeamMember.roles.watcher
+        roles=TeamMember.roles.WATCHER
     )
 
     TeamMemberFactory.create(
         user=another_user,
         team=another_team,
-        roles=TeamMember.roles.developer
+        roles=TeamMember.roles.DEVELOPER
     )
 
     results = IssuesFilterSet(
@@ -313,7 +313,7 @@ def test_order_by_due_date(user):
 
 
 def test_filter_by_milestone(user, client):
-    user.roles.project_manager = True
+    user.roles.PROJECT_MANAGER = True
     user.save()
 
     milestone_1 = ProjectMilestoneFactory.create()
@@ -358,7 +358,7 @@ def test_filter_by_milestone_not_pm(user, client):
 
 
 def test_filter_by_ticket(user, client):
-    user.roles.project_manager = True
+    user.roles.PROJECT_MANAGER = True
     user.save()
 
     ticket_1 = TicketFactory.create()

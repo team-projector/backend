@@ -45,7 +45,7 @@ def test_project_manager(client, user):
     assert bool(perms.has_mutation_permission(root=None, info=info)) is False
     assert bool(perms.has_filter_permission(info=info)) is False
 
-    user.roles.project_manager = True
+    user.roles.PROJECT_MANAGER = True
     user.save()
 
     assert bool(perms.has_node_permission(info=info, obj_id='1')) is True

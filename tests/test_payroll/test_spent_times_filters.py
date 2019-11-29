@@ -205,7 +205,7 @@ def test_filter_by_team(user):
     TeamMemberFactory.create(
         user=user,
         team=team_1,
-        roles=TeamMember.roles.leader
+        roles=TeamMember.roles.LEADER
     )
 
     another_user = UserFactory.create()
@@ -213,7 +213,7 @@ def test_filter_by_team(user):
     TeamMemberFactory.create(
         user=another_user,
         team=team_2,
-        roles=TeamMember.roles.leader
+        roles=TeamMember.roles.LEADER
     )
 
     issue = IssueFactory.create(user=another_user)
@@ -317,7 +317,7 @@ def test_filter_by_state(user):
             time_spent=int(seconds(hours=1))
         )
         for state
-        in (ISSUE_STATES.opened, ISSUE_STATES.closed)
+        in (ISSUE_STATES.OPENED, ISSUE_STATES.CLOSED)
     ]
 
     m_opened, _, _ = [MergeRequestSpentTimeFactory(
@@ -327,13 +327,13 @@ def test_filter_by_state(user):
     )
         for state
         in (
-            MERGE_REQUESTS_STATES.opened,
-            MERGE_REQUESTS_STATES.closed,
-            MERGE_REQUESTS_STATES.merged
+            MERGE_REQUESTS_STATES.OPENED,
+            MERGE_REQUESTS_STATES.CLOSED,
+            MERGE_REQUESTS_STATES.MERGED
         )]
 
     results = SpentTimeFilterSet(
-        data={'state': 'opened'},
+        data={'state': 'OPENED'},
         queryset=SpentTime.objects.all(),
         request=None,
     ).qs

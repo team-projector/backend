@@ -16,7 +16,7 @@ def filter_allowed_for_user(
     users = filter_by_roles(
         TeamMember.objects.filter(user=user),
         [
-            TeamMember.roles.leader,
+            TeamMember.roles.LEADER,
         ],
     ).values_list(
         'team__members',
@@ -41,8 +41,8 @@ def check_allowed_filtering_by_team(
     can_filter = filter_by_roles(
         queryset,
         [
-            TeamMember.roles.leader,
-            TeamMember.roles.watcher,
+            TeamMember.roles.LEADER,
+            TeamMember.roles.WATCHER,
         ],
     ).exists()
 

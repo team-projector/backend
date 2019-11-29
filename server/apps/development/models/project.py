@@ -110,7 +110,7 @@ class Project(GitlabEntityMixin):
             load_for_group,
         )
 
-        ret = self.milestones.filter(state=MILESTONE_STATES.active)
+        ret = self.milestones.filter(state=MILESTONE_STATES.ACTIVE)
 
         if not ret and self.group:
             return load_for_group(self.group)

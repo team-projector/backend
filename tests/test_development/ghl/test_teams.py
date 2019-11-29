@@ -30,11 +30,11 @@ def test_team_not_member(user, client):
 def test_teams(user, client):
     team_1 = TeamFactory.create()
     TeamMemberFactory.create(user=user, team=team_1,
-                             roles=TeamMember.roles.developer)
+                             roles=TeamMember.roles.DEVELOPER)
 
     team_2 = TeamFactory.create()
     TeamMemberFactory.create(user=user, team=team_2,
-                             roles=TeamMember.roles.developer)
+                             roles=TeamMember.roles.DEVELOPER)
     TeamFactory.create_batch(5)
 
     client.user = user
@@ -48,11 +48,11 @@ def test_teams(user, client):
 def test_teams_not_member(user, client):
     team_1 = TeamFactory.create()
     TeamMemberFactory.create(user=user, team=team_1,
-                             roles=TeamMember.roles.developer)
+                             roles=TeamMember.roles.DEVELOPER)
 
     team_2 = TeamFactory.create()
     TeamMemberFactory.create(user=UserFactory.create(), team=team_2,
-                             roles=TeamMember.roles.developer)
+                             roles=TeamMember.roles.DEVELOPER)
     TeamFactory.create_batch(5)
 
     client.user = user

@@ -15,8 +15,8 @@ from apps.core.models.utils import Choices
 from apps.development.models.managers import MilestoneManager
 
 MILESTONE_STATES = Choices(
-    ('active', 'active'),
-    ('closed', 'closed'),
+    ('ACTIVE', 'active'),
+    ('CLOSED', 'closed'),
 )
 
 MILESTONE_STATE_MAX_LENGTH = 20

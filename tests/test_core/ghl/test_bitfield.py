@@ -11,15 +11,15 @@ def test_bit_field_serialize():
 
     bit = BitHandler(1, keys)
 
-    assert BitField().serialize(bit) == ['leader']
+    assert BitField().serialize(bit) == ['LEADER']
 
     bit = BitHandler(2, keys)
 
-    assert BitField().serialize(bit) == ['developer']
+    assert BitField().serialize(bit) == ['DEVELOPER']
 
     bit = BitHandler(3, keys)
 
-    assert BitField().serialize(bit) == ['leader', 'developer']
+    assert BitField().serialize(bit) == ['LEADER', 'DEVELOPER']
 
 
 def test_convert_field_to_float():

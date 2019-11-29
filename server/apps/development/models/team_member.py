@@ -9,9 +9,9 @@ from apps.core.models.utils import Choices
 from apps.development.models.managers import TeamMemberManager
 
 TEAM_MEMBER_ROLES = Choices(
-    ('leader', _('CH_LEADER')),
-    ('developer', _('CH_DEVELOPER')),
-    ('watcher', _('CH_WATCHER')),
+    ('LEADER', _('CH_LEADER')),
+    ('DEVELOPER', _('CH_DEVELOPER')),
+    ('WATCHER', _('CH_WATCHER')),
 )
 
 

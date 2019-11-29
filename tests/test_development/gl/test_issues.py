@@ -95,7 +95,7 @@ def test_load_issue_notes(db, gl_mocker, gl_client):
     note = issue.notes.first()
 
     assert note.gl_id == gl_note.id
-    assert note.type == NOTE_TYPES.time_spend
+    assert note.type == NOTE_TYPES.TIME_SPEND
     assert note.body == 'added 1h of time spent at 2000-01-01'
     assert note.created_at is not None
     assert note.updated_at is not None

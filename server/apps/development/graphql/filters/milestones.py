@@ -16,7 +16,7 @@ class ActiveFilter(django_filters.BooleanFilter):
             return queryset
 
         return queryset.filter(
-            state=MILESTONE_STATES.active if value else MILESTONE_STATES.closed,
+            state=MILESTONE_STATES.ACTIVE if value else MILESTONE_STATES.CLOSED,
         )
 
 

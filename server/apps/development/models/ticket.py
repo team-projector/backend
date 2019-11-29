@@ -7,9 +7,9 @@ from apps.core.consts import DEFAULT_TITLE_LENGTH
 from apps.core.models.mixins import Timestamps
 from apps.core.models.utils import Choices
 
-TYPE_FEATURE = 'feature'
-TYPE_IMPROVEMENT = 'improvement'
-TYPE_BUG_FIXING = 'bug_fixing'
+TYPE_FEATURE = 'FEATURE'
+TYPE_IMPROVEMENT = 'IMPROVEMENT'
+TYPE_BUG_FIXING = 'BUG_FIXING'
 
 TICKET_TYPES = Choices(
     (TYPE_FEATURE, _('CH_FEATURE')),

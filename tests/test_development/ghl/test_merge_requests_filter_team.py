@@ -51,7 +51,7 @@ def test_merge_requests_filter_by_team_watcher_empty(user, client):
     TeamMember.objects.filter(
         team=team_1
     ).update(
-        roles=TeamMember.roles.watcher
+        roles=TeamMember.roles.WATCHER
     )
 
     MergeRequestFactory.create(user=user)
@@ -84,12 +84,12 @@ def test_merge_requests_filter_by_team_leader(user, client):
     TeamMember.objects.filter(
         user=user_1, team=team_1
     ).update(
-        roles=TeamMember.roles.leader
+        roles=TeamMember.roles.LEADER
     )
     TeamMember.objects.filter(
         user=user, team=team_1
     ).update(
-        roles=TeamMember.roles.watcher
+        roles=TeamMember.roles.WATCHER
     )
 
     merge_request_1 = MergeRequestFactory.create(user=user_1)
@@ -125,7 +125,7 @@ def test_one_member(user, client):
     TeamMemberFactory.create(
         user=user,
         team=team,
-        roles=TeamMember.roles.leader
+        roles=TeamMember.roles.LEADER
     )
 
     MergeRequestFactory.create_batch(2, user=user)
@@ -157,7 +157,7 @@ def test_many_members(user, client):
     TeamMemberFactory.create(
         user=user,
         team=team,
-        roles=TeamMember.roles.leader
+        roles=TeamMember.roles.LEADER
     )
 
     MergeRequestFactory.create_batch(2, user=user)
@@ -168,7 +168,7 @@ def test_many_members(user, client):
     TeamMemberFactory.create(
         user=another_user,
         team=team,
-        roles=TeamMember.roles.developer
+        roles=TeamMember.roles.DEVELOPER
     )
 
     client.user = user
@@ -195,7 +195,7 @@ def test_many_teams(user, client):
     TeamMemberFactory.create(
         user=user,
         team=team,
-        roles=TeamMember.roles.leader
+        roles=TeamMember.roles.LEADER
     )
 
     another_user = UserFactory.create()
@@ -207,13 +207,13 @@ def test_many_teams(user, client):
     TeamMemberFactory.create(
         user=user,
         team=another_team,
-        roles=TeamMember.roles.watcher
+        roles=TeamMember.roles.WATCHER
     )
 
     TeamMemberFactory.create(
         user=another_user,
         team=another_team,
-        roles=TeamMember.roles.developer
+        roles=TeamMember.roles.DEVELOPER
     )
 
     client.user = user

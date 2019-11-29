@@ -15,13 +15,13 @@ def test_filter_by_user(user):
     TeamMemberFactory.create(
         user=user,
         team=team,
-        roles=TeamMember.roles.leader
+        roles=TeamMember.roles.LEADER
     )
 
     TeamMemberFactory.create(
         user=user_2,
         team=team,
-        roles=TeamMember.roles.developer
+        roles=TeamMember.roles.DEVELOPER
     )
 
     MergeRequestFactory.create(user=user_2)
@@ -46,14 +46,14 @@ def test_filter_by_user(user):
 
 def test_filter_by_state(user):
     merge_request_opened = MergeRequestFactory.create(
-        user=user, state=MERGE_REQUESTS_STATES.opened
+        user=user, state=MERGE_REQUESTS_STATES.OPENED
     )
     merge_request_closed = MergeRequestFactory.create(
-        user=user, state=MERGE_REQUESTS_STATES.closed
+        user=user, state=MERGE_REQUESTS_STATES.CLOSED
     )
 
     results = MergeRequestFilterSet(
-        data={'state': MERGE_REQUESTS_STATES.closed},
+        data={'state': MERGE_REQUESTS_STATES.CLOSED},
         queryset=MergeRequest.objects.all(),
     ).qs
 
@@ -61,7 +61,7 @@ def test_filter_by_state(user):
     assert results.first() == merge_request_closed
 
     results = MergeRequestFilterSet(
-        data={'state': MERGE_REQUESTS_STATES.opened},
+        data={'state': MERGE_REQUESTS_STATES.OPENED},
         queryset=MergeRequest.objects.all(),
     ).qs
 

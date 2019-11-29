@@ -15,7 +15,7 @@ def filter_allowed_for_user(
     """Get work breaks for user."""
     users = TeamMember.objects.filter(
         user=user,
-        roles=TeamMember.roles.leader,
+        roles=TeamMember.roles.LEADER,
     ).values_list(
         'team__members',
         flat=True,
@@ -39,8 +39,8 @@ def check_allow_filtering_by_team(
     allowed_members = filter_by_roles(
         members,
         [
-            TeamMember.roles.leader,
-            TeamMember.roles.watcher,
+            TeamMember.roles.LEADER,
+            TeamMember.roles.WATCHER,
         ],
     ).exists()
 

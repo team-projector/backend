@@ -27,7 +27,7 @@ def check_allow_get_metrics_by_user(
         team=team,
         user=user,
     ),
-        [TeamMember.roles.leader, TeamMember.roles.watcher],
+        [TeamMember.roles.LEADER, TeamMember.roles.WATCHER],
     ).exists()
 
     if not can_filter:

@@ -43,7 +43,7 @@ class MovedFromNoteTypeTests(TestCase):
         note = Note.objects.first()
         self.assertEqual(note.gl_id, 2)
         self.assertEqual(note.user, self.user)
-        self.assertEqual(note.type, NOTE_TYPES.moved_from)
+        self.assertEqual(note.type, NOTE_TYPES.MOVED_FROM)
         self.assertEqual(note.body, body)
 
     def test_no_system(self):

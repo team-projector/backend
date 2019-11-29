@@ -50,7 +50,7 @@ def test_spent_time(db):
 
 def test_work_break(db):
   user = UserFactory.create(login='login_test')
-  work_break = WorkBreakFactory.create(reason=WORK_BREAK_REASONS.dayoff, user=user)
+  work_break = WorkBreakFactory.create(reason=WORK_BREAK_REASONS.DAYOFF, user=user)
 
-  assert str(work_break) == f'login_test: {WORK_BREAK_REASONS.dayoff} ' \
+  assert str(work_break) == f'login_test: {WORK_BREAK_REASONS.DAYOFF} ' \
                             f'({work_break.from_date} - {work_break.to_date})'

@@ -23,14 +23,14 @@ def test_issues(user):
         user=user_1,
         due_date=datetime.now() + timedelta(days=1),
         time_estimate=seconds(hours=2),
-        state=ISSUE_STATES.opened
+        state=ISSUE_STATES.OPENED
     )
     IssueFactory.create_batch(
         size=4,
         user=user_2,
         due_date=datetime.now() + timedelta(days=2),
         time_estimate=seconds(hours=3),
-        state=ISSUE_STATES.closed
+        state=ISSUE_STATES.CLOSED
     )
 
     IssueFactory.create_batch(size=5)
@@ -56,19 +56,19 @@ def test_merge_requests(user):
         2,
         user=user_1,
         time_estimate=seconds(hours=2),
-        state=MERGE_REQUESTS_STATES.opened
+        state=MERGE_REQUESTS_STATES.OPENED
     )
     MergeRequestFactory.create_batch(
         3,
         user=user_1,
         time_estimate=seconds(hours=3),
-        state=MERGE_REQUESTS_STATES.closed
+        state=MERGE_REQUESTS_STATES.CLOSED
     )
     MergeRequestFactory.create_batch(
         3,
         user=user_2,
         time_estimate=seconds(hours=4),
-        state=MERGE_REQUESTS_STATES.closed
+        state=MERGE_REQUESTS_STATES.CLOSED
     )
 
     MergeRequestFactory.create_batch(size=5)
@@ -92,27 +92,27 @@ def test_issues_problems(user):
     IssueFactory.create(
         user=user_1,
         due_date=None,
-        state=ISSUE_STATES.opened,
+        state=ISSUE_STATES.OPENED,
         title='issue_problem_1'
     )
     IssueFactory.create(
         user=user_1,
         due_date=datetime.now() - timedelta(days=3),
-        state=ISSUE_STATES.opened,
+        state=ISSUE_STATES.OPENED,
         title='issue_problem_2'
     )
     IssueFactory.create(
         user=user_1,
         time_estimate=None,
         title='issue_problem_3',
-        state=ISSUE_STATES.opened
+        state=ISSUE_STATES.OPENED
     )
     IssueFactory.create_batch(
         size=4,
         user=user_2,
         due_date=datetime.now() + timedelta(days=3),
         time_estimate=seconds(hours=3),
-        state=ISSUE_STATES.closed
+        state=ISSUE_STATES.CLOSED
     )
 
     IssueFactory.create_batch(size=5)
@@ -132,7 +132,7 @@ def test_resolver(user):
         user=user,
         due_date=datetime.now() + timedelta(days=1),
         time_estimate=seconds(hours=2),
-        state=ISSUE_STATES.opened
+        state=ISSUE_STATES.OPENED
     )
 
     metrics = TeamType.resolve_metrics(team, None)

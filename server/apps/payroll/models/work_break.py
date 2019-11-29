@@ -10,9 +10,9 @@ from apps.payroll.models.managers import WorkBreakManager
 from apps.payroll.models.mixins import ApprovedMixin
 
 WORK_BREAK_REASONS = Choices(
-    ('dayoff', _('CH_DAYOFF')),
-    ('vacation', _('CH_VACATION')),
-    ('disease', _('CH_DISEASE')),
+    ('DAYOFF', _('CH_DAYOFF')),
+    ('VACATION', _('CH_VACATION')),
+    ('DISEASE', _('CH_DISEASE')),
 )
 
 WORK_BREAK_REASON_MAX_LENGTH = 15

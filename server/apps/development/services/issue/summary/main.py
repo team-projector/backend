@@ -43,9 +43,9 @@ class IssuesSummaryProvider:
         for count_state in self._get_counts_by_state():
             summary.count += count_state['count']
 
-            if count_state['state'] == ISSUE_STATES.opened:
+            if count_state['state'] == ISSUE_STATES.OPENED:
                 summary.opened_count = count_state['count']
-            elif count_state['state'] == ISSUE_STATES.closed:
+            elif count_state['state'] == ISSUE_STATES.CLOSED:
                 summary.closed_count = count_state['count']
 
         summary.time_spent = self._get_time_spent()

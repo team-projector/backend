@@ -71,7 +71,7 @@ class IssueFactory(GitlabFieldMixin):
     total_time_spent = factory.Faker('random_int')
     created_at = factory.Faker('date_time_this_year', before_now=True,
                                after_now=False, tzinfo=pytz.UTC)
-    state = ISSUE_STATES.opened
+    state = ISSUE_STATES.OPENED
 
     class Meta:
         model = Issue
@@ -110,7 +110,7 @@ class TicketFactory(factory.django.DjangoModelFactory):
 
 
 class MergeRequestFactory(GitlabFieldMixin):
-    state = MERGE_REQUESTS_STATES.opened
+    state = MERGE_REQUESTS_STATES.OPENED
     title = factory.Faker('text', max_nb_chars=200)
     time_estimate = factory.Faker('random_int')
     milestone = factory.SubFactory(ProjectGroupMilestoneFactory)
