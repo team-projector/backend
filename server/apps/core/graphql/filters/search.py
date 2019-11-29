@@ -37,4 +37,16 @@ class SearchFilter(CharFilter):
         return reduce(operator.or_, queries)
 
     def _construct_search(self, search_field) -> str:
-        return LOOKUP_SEP.join([six.text_type(search_field), 'icontains'])
+        field = six.text_type(search_field)
+
+        if field.startswith('^'):
+            search_type = 'istartswith'
+            field = field[1:]
+
+        elif field.startswith('='):
+            search_type = 'iexact'
+            field = field[1:]
+        else:
+            search_type = 'icontains'
+
+        return LOOKUP_SEP.join([field, search_type])

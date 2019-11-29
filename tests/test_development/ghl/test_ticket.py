@@ -1,12 +1,15 @@
 from datetime import datetime
+
+import pytest
 from pytest import raises
-from rest_framework.exceptions import PermissionDenied, ValidationError
+from rest_framework.exceptions import PermissionDenied
 
 from apps.development.graphql.mutations.ticket import (
     CreateTicketMutation,
     DeleteTicketMutation,
     UpdateTicketMutation,
 )
+from apps.development.graphql.serializers.ticket import ISSUES_PARAM_ERROR
 from apps.development.graphql.types.ticket import TicketType
 from apps.development.models.ticket import (
     Ticket,
@@ -16,13 +19,21 @@ from apps.development.models.ticket import (
 
 from tests.test_development.factories import (
     TicketFactory,
-    ProjectMilestoneFactory
+    ProjectMilestoneFactory,
+    IssueFactory
 )
 from tests.test_development.factories_gitlab import AttrDict
 
 
+@pytest.fixture
+def project_manager(user):
+    user.roles.PROJECT_MANAGER = True
+    user.save()
+    yield user
+
+
 def test_ticket(user, client):
-    ticket = TicketFactory.create()
+    ticket = TicketFactory()
     TicketFactory.create_batch(3)
 
     client.user = user
@@ -42,20 +53,22 @@ def test_tickets(user, client):
     assert tickets.count() == 5
 
 
-def test_ticket_create(user, client):
-    client.user = user
+def test_ticket_create(project_manager, client):
+    client.user = project_manager
     info = AttrDict({'context': client})
+    iss_1, iss_2 = IssueFactory.create_batch(size=2, user=project_manager)
 
-    CreateTicketMutation.do_mutate(
+    result = CreateTicketMutation.mutate_and_get_payload(
         root=None,
         info=info,
         title='test ticket',
         type=TYPE_FEATURE,
         start_date=str(datetime.now().date()),
         due_date=str(datetime.now().date()),
-        url='test1.com'
+        url='http://test1.com',
+        issues=[iss_1.id, iss_2.id]
     )
-
+    assert not result.errors
     assert Ticket.objects.count() == 1
 
     ticket = Ticket.objects.first()
@@ -63,21 +76,26 @@ def test_ticket_create(user, client):
     assert ticket.start_date is not None
     assert ticket.due_date is not None
 
+    iss_1.refresh_from_db(), iss_2.refresh_from_db()
+    assert iss_1.ticket == ticket
+    assert iss_2.ticket == ticket
 
-def test_ticket_create_invalid(user, client):
-    client.user = user
+
+def test_ticket_create_invalid(project_manager, client):
+    client.user = project_manager
     info = AttrDict({'context': client})
 
-    with raises(ValidationError):
-        CreateTicketMutation.do_mutate(
-            root=None,
-            info=info,
-            title='test ticket',
-            type='invalid type',
-            start_date=str(datetime.now().date()),
-            due_date=str(datetime.now().date()),
-            url='invalid url'
-        )
+    result = CreateTicketMutation.mutate_and_get_payload(
+        root=None,
+        info=info,
+        title='test ticket',
+        type='invalid type',
+        start_date=str(datetime.now().date()),
+        due_date=str(datetime.now().date()),
+        url='invalid url'
+    )
+
+    assert {'url', 'type'} == {err.field for err in result.errors}
 
 
 def test_ticket_create_not_pm(user, client):
@@ -85,7 +103,7 @@ def test_ticket_create_not_pm(user, client):
     info = AttrDict({'context': client})
 
     with raises(PermissionDenied):
-        CreateTicketMutation.mutate(
+        CreateTicketMutation.mutate_and_get_payload(
             root=None,
             info=info,
             title='test ticket',
@@ -98,7 +116,7 @@ def test_ticket_create_not_pm(user, client):
     user.roles.PROJECT_MANAGER = True
     user.save()
 
-    CreateTicketMutation.mutate(
+    CreateTicketMutation.mutate_and_get_payload(
         root=None,
         info=info,
         title='test ticket',
@@ -109,17 +127,18 @@ def test_ticket_create_not_pm(user, client):
     )
 
 
-def test_ticket_update(user, client):
-    client.user = user
+def test_ticket_update(project_manager, client):
+    client.user = project_manager
     info = AttrDict({'context': client})
 
-    ticket = TicketFactory.create(
+    ticket = TicketFactory(
         title='title created',
         type=TYPE_BUG_FIXING,
         url='http://created.test',
     )
+    iss_1, iss_2 = IssueFactory.create_batch(size=2, user=project_manager)
 
-    UpdateTicketMutation.do_mutate(
+    UpdateTicketMutation.mutate_and_get_payload(
         root=None,
         info=info,
         id=ticket.id,
@@ -128,6 +147,7 @@ def test_ticket_update(user, client):
         start_date=str(datetime.now().date()),
         due_date=str(datetime.now().date()),
         url='http://updated.test',
+        issues=[iss_1.id, iss_2.id]
     )
 
     assert Ticket.objects.count() == 1
@@ -138,16 +158,20 @@ def test_ticket_update(user, client):
     assert ticket.due_date is not None
     assert ticket.url == 'http://updated.test'
 
+    iss_1.refresh_from_db(), iss_2.refresh_from_db()
+    assert iss_1.ticket == ticket
+    assert iss_2.ticket == ticket
 
-def test_ticket_update_milestone(user, client):
-    client.user = user
+
+def test_ticket_update_milestone(project_manager, client):
+    client.user = project_manager
     info = AttrDict({'context': client})
 
-    ticket = TicketFactory.create(milestone=ProjectMilestoneFactory.create())
+    ticket = TicketFactory(milestone=ProjectMilestoneFactory.create())
 
     milestone = ProjectMilestoneFactory.create()
 
-    UpdateTicketMutation.do_mutate(
+    UpdateTicketMutation.mutate_and_get_payload(
         root=None,
         info=info,
         id=ticket.id,
@@ -158,14 +182,54 @@ def test_ticket_update_milestone(user, client):
     assert Ticket.objects.first().milestone == milestone
 
 
+def test_ticket_attach_issues(project_manager, client):
+    client.user = project_manager
+    info = AttrDict({'context': client})
+
+    ticket = TicketFactory()
+    iss_1 = IssueFactory(ticket=ticket, user=project_manager)
+    iss_2 = IssueFactory(user=project_manager)
+
+    result = UpdateTicketMutation.mutate_and_get_payload(
+        root=None,
+        info=info,
+        id=ticket.id,
+        attach_issues=[iss_2.id]
+    )
+
+    assert not result.errors
+    iss_1.refresh_from_db(), iss_2.refresh_from_db()
+    assert ticket == iss_1.ticket
+    assert ticket == iss_2.ticket
+
+
+def test_ticket_both_params_attach_and_issues(project_manager, client):
+    client.user = project_manager
+    info = AttrDict({'context': client})
+
+    ticket = TicketFactory()
+    iss_1 = IssueFactory(user=project_manager)
+
+    result = UpdateTicketMutation.mutate_and_get_payload(
+        root=None,
+        info=info,
+        id=ticket.id,
+        attach_issues=[iss_1.id],
+        issues=[iss_1.id],
+    )
+
+    assert result.errors[0].field == 'non_field_errors'
+    assert result.errors[0].messages[0] == ISSUES_PARAM_ERROR
+
+
 def test_ticket_update_not_pm(user, client):
-    ticket = TicketFactory.create()
+    ticket = TicketFactory()
 
     client.user = user
     info = AttrDict({'context': client})
 
     with raises(PermissionDenied):
-        UpdateTicketMutation.mutate(
+        UpdateTicketMutation.mutate_and_get_payload(
             root=None,
             info=info,
             id=ticket.id,
@@ -174,7 +238,7 @@ def test_ticket_update_not_pm(user, client):
     user.roles.PROJECT_MANAGER = True
     user.save()
 
-    UpdateTicketMutation.mutate(
+    UpdateTicketMutation.mutate_and_get_payload(
         root=None,
         info=info,
         id=ticket.id,
@@ -185,7 +249,7 @@ def test_delete_ticket(user, client):
     user.roles.PROJECT_MANAGER = True
     user.save()
 
-    ticket = TicketFactory.create()
+    ticket = TicketFactory()
 
     client.user = user
     info = AttrDict({'context': client})

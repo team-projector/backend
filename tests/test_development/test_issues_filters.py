@@ -242,7 +242,7 @@ def test_filter_by_problems(user):
 
 
 def test_search(user):
-    issue_1 = IssueFactory.create(title='create', user=user)
+    issue_1 = IssueFactory.create(title='create', user=user, gl_url='foobar')
     issue_2 = IssueFactory.create(title='react', user=user)
     IssueFactory.create(title='test0', user=user)
 
@@ -268,6 +268,14 @@ def test_search(user):
     ).qs
 
     assert results.count() == 0
+
+    results = IssuesFilterSet(
+        data={'q': 'foobar'},
+        queryset=Issue.objects.all()
+    ).qs
+
+    assert results.count() == 1
+    assert results.first() == issue_1
 
 
 def test_order_by_title(user):
