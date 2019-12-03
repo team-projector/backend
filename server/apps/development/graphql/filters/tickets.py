@@ -13,7 +13,7 @@ class TicketsFilterSet(django_filters.FilterSet):
         queryset=Milestone.objects.all(),
     )
     order_by = OrderingFilter(
-        fields=('due_date',),
+        fields=('due_date', 'title'),
     )
 
     class Meta:
