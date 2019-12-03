@@ -38,9 +38,9 @@ class MergeRequestsSummaryProvider:
         """Get counts by state."""
         return self.queryset.aggregate(
             count=self._count(),
-            opened_count=self._count(state=MERGE_REQUESTS_STATES.opened),
-            closed_count=self._count(state=MERGE_REQUESTS_STATES.closed),
-            merged_count=self._count(state=MERGE_REQUESTS_STATES.merged),
+            opened_count=self._count(state=MERGE_REQUESTS_STATES.OPENED),
+            closed_count=self._count(state=MERGE_REQUESTS_STATES.CLOSED),
+            merged_count=self._count(state=MERGE_REQUESTS_STATES.MERGED),
         )
 
     def _count(self, **filters) -> Count:

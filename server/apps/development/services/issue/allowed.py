@@ -18,7 +18,7 @@ from apps.users.models import User
 
 def check_allow_project_manager(user: User) -> None:
     """Check whether user is a project manager."""
-    if not user.roles.project_manager:
+    if not user.roles.PROJECT_MANAGER:
         raise PermissionDenied(
             'Only project managers can view project resources',
         )
@@ -44,7 +44,7 @@ def get_allowed_projects(user) -> Iterable[Project]:
     """Get allowed projects for user."""
     members = ProjectMember.objects.filter(
         user=user,
-        role=PROJECT_MEMBER_ROLES.project_manager,
+        role=PROJECT_MEMBER_ROLES.PROJECT_MANAGER,
         id=OuterRef('members__id'),
     )
 
@@ -93,8 +93,8 @@ def filter_by_team_member_role(
     members = filter_by_roles(
         TeamMember.objects.filter(user=user),
         [
-            TeamMember.roles.leader,
-            TeamMember.roles.watcher,
+            TeamMember.roles.LEADER,
+            TeamMember.roles.WATCHER,
         ],
     ).values_list(
         'team__members',

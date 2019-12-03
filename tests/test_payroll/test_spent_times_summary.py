@@ -14,12 +14,12 @@ from tests.test_payroll.factories import (
 def test_without_spents(user):
     IssueFactory.create_batch(
         5, user=user,
-        state=ISSUE_STATES.opened,
+        state=ISSUE_STATES.OPENED,
         total_time_spent=1000
     )
     MergeRequestFactory.create_batch(
         5, user=user,
-        state=MERGE_REQUESTS_STATES.opened,
+        state=MERGE_REQUESTS_STATES.OPENED,
         total_time_spent=1000
     )
 
@@ -34,7 +34,7 @@ def test_without_spents(user):
 
 
 def test_issues_spents(user):
-    issue_opened = IssueFactory.create(user=user, state=ISSUE_STATES.opened)
+    issue_opened = IssueFactory.create(user=user, state=ISSUE_STATES.OPENED)
 
     IssueSpentTimeFactory.create(
         user=user,
@@ -48,7 +48,7 @@ def test_issues_spents(user):
         time_spent=seconds(hours=3)
     )
 
-    issue_closed = IssueFactory.create(user=user, state=ISSUE_STATES.closed)
+    issue_closed = IssueFactory.create(user=user, state=ISSUE_STATES.CLOSED)
 
     IssueSpentTimeFactory.create(
         user=user,
@@ -79,7 +79,7 @@ def test_issues_spents(user):
 
 def test_merge_requests_spents(user):
     mr_opened = MergeRequestFactory.create(user=user,
-                                           state=MERGE_REQUESTS_STATES.opened)
+                                           state=MERGE_REQUESTS_STATES.OPENED)
 
     MergeRequestSpentTimeFactory.create(
         user=user,
@@ -94,7 +94,7 @@ def test_merge_requests_spents(user):
     )
 
     mr_closed = MergeRequestFactory.create(user=user,
-                                           state=MERGE_REQUESTS_STATES.closed)
+                                           state=MERGE_REQUESTS_STATES.CLOSED)
 
     MergeRequestSpentTimeFactory.create(
         user=user,
@@ -109,7 +109,7 @@ def test_merge_requests_spents(user):
     )
 
     mr_merged = MergeRequestFactory.create(user=user,
-                                           state=MERGE_REQUESTS_STATES.merged)
+                                           state=MERGE_REQUESTS_STATES.MERGED)
 
     MergeRequestSpentTimeFactory.create(
         user=user,
@@ -142,34 +142,34 @@ def test_merge_requests_spents(user):
 def test_complex_spents(user):
     IssueSpentTimeFactory.create(
         user=user,
-        base=IssueFactory.create(user=user, state=ISSUE_STATES.opened),
+        base=IssueFactory.create(user=user, state=ISSUE_STATES.OPENED),
         time_spent=seconds(hours=5)
     )
 
     IssueSpentTimeFactory.create(
         user=user,
-        base=IssueFactory.create(user=user, state=ISSUE_STATES.closed),
+        base=IssueFactory.create(user=user, state=ISSUE_STATES.CLOSED),
         time_spent=seconds(hours=3)
     )
 
     MergeRequestSpentTimeFactory.create(
         user=user,
         base=MergeRequestFactory.create(user=user,
-                                        state=MERGE_REQUESTS_STATES.opened),
+                                        state=MERGE_REQUESTS_STATES.OPENED),
         time_spent=seconds(hours=5)
     )
 
     MergeRequestSpentTimeFactory.create(
         user=user,
         base=MergeRequestFactory.create(user=user,
-                                        state=MERGE_REQUESTS_STATES.closed),
+                                        state=MERGE_REQUESTS_STATES.CLOSED),
         time_spent=seconds(hours=3)
     )
 
     MergeRequestSpentTimeFactory.create(
         user=user,
         base=MergeRequestFactory.create(user=user,
-                                        state=MERGE_REQUESTS_STATES.merged),
+                                        state=MERGE_REQUESTS_STATES.MERGED),
         time_spent=seconds(hours=6)
     )
 
@@ -194,12 +194,12 @@ def test_complex_spents(user):
 def test_resolver(user, client):
     IssueSpentTimeFactory.create(
         user=user,
-        base=IssueFactory.create(user=user, state=ISSUE_STATES.opened),
+        base=IssueFactory.create(user=user, state=ISSUE_STATES.OPENED),
         time_spent=seconds(hours=2)
     )
     IssueSpentTimeFactory.create(
         user=user,
-        base=IssueFactory.create(user=user, state=ISSUE_STATES.closed),
+        base=IssueFactory.create(user=user, state=ISSUE_STATES.CLOSED),
         time_spent=seconds(hours=1)
     )
 
@@ -209,7 +209,7 @@ def test_resolver(user, client):
     summary = resolve_spent_times_summary(
         parent=None,
         info=info,
-        state=ISSUE_STATES.opened
+        state=ISSUE_STATES.OPENED
     )
 
     assert summary.merge_requests.spent == 0

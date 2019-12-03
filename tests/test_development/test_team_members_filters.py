@@ -15,42 +15,42 @@ def test_filter_by_role(user):
     TeamMemberFactory.create(
         user=user_1,
         team=team_1,
-        roles=TeamMember.roles.leader
+        roles=TeamMember.roles.LEADER
     )
     TeamMemberFactory.create(
         user=user_2,
         team=team_1,
-        roles=TeamMember.roles.developer
+        roles=TeamMember.roles.DEVELOPER
     )
 
     team_2 = TeamFactory.create()
     TeamMemberFactory.create(
         user=user_1,
         team=team_2,
-        roles=TeamMember.roles.watcher
+        roles=TeamMember.roles.WATCHER
     )
     TeamMemberFactory.create(
         user=user_2,
         team=team_2,
-        roles=TeamMember.roles.developer
+        roles=TeamMember.roles.DEVELOPER
     )
 
     results = TeamMembersFilterSet(
-        data={'roles': 'developer'},
+        data={'roles': 'DEVELOPER'},
         queryset=TeamMember.objects.all()
     ).qs
 
     assert results.count() == 2
 
     results = TeamMembersFilterSet(
-        data={'roles': 'leader'},
+        data={'roles': 'LEADER'},
         queryset=TeamMember.objects.all()
     ).qs
 
     assert results.count() == 1
 
     results = TeamMembersFilterSet(
-        data={'roles': 'watcher'},
+        data={'roles': 'WATCHER'},
         queryset=TeamMember.objects.all()
     ).qs
 

@@ -3,6 +3,11 @@
 from typing import Dict
 
 import graphene
+from graphene_django.rest_framework.mutation import SerializerMutation
+from graphene_django.rest_framework.serializer_converter import (
+    get_graphene_type_from_serializer_field,
+)
+from rest_framework import serializers
 from rest_framework.exceptions import PermissionDenied, ValidationError
 
 from apps.core.graphql.security.mixins.mutation import AuthMutation
@@ -39,6 +44,24 @@ class BaseMutation(
         raise NotImplementedError
 
 
+class RestrictedAccessSerializerMutation(
+    AuthMutation,
+    SerializerMutation,
+):
+    """A base class for mutations requiring restricted access."""
+
+    class Meta:
+        abstract = True
+
+    @classmethod
+    def mutate_and_get_payload(cls, root, info, **input):  # noqa WPS110
+        """Mutates object and returns a payload."""
+        if not cls.has_permission(root, info, **input):
+            raise PermissionDenied()
+
+        return super().mutate_and_get_payload(root, info, **input)
+
+
 class ArgumentsValidationMixin(BaseMutation):
     """A Mixin validates input fields in mutations."""
 
@@ -56,3 +79,9 @@ class ArgumentsValidationMixin(BaseMutation):
     def perform_mutate(cls, info, cleaned_data: Dict) -> None:  # noqa WPS110
         """Method should be implemente in subclass."""
         raise NotImplementedError
+
+
+@get_graphene_type_from_serializer_field.register(serializers.ManyRelatedField)
+def convert_list_serializer_to_field(field):
+    """Defines graphql field type for serializers.ManyRelatedField."""
+    return (graphene.List, graphene.String)

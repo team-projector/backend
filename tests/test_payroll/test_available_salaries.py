@@ -38,7 +38,7 @@ def test_as_team_leader(user):
     team.members.set([user, user_2])
 
     TeamMember.objects.filter(user=user).update(
-        roles=TeamMember.roles.leader
+        roles=TeamMember.roles.LEADER
     )
 
     salary = SalaryFactory.create(user=user_2)
@@ -55,7 +55,7 @@ def test_as_team_watcher(user):
     team.members.set([user, user_2])
 
     TeamMember.objects.filter(user=user).update(
-        roles=TeamMember.roles.watcher
+        roles=TeamMember.roles.WATCHER
     )
 
     SalaryFactory.create(user=user_2)
@@ -74,7 +74,7 @@ def test_as_leader_another_team(user):
     team_2.members.add(user_2)
 
     TeamMember.objects.filter(user=user).update(
-        roles=TeamMember.roles.leader
+        roles=TeamMember.roles.LEADER
     )
 
     SalaryFactory.create(user=user_2)
@@ -93,7 +93,7 @@ def test_as_watcher_another_team(user):
     team_2.members.add(user_2)
 
     TeamMember.objects.filter(user=user).update(
-        roles=TeamMember.roles.watcher
+        roles=TeamMember.roles.WATCHER
     )
 
     SalaryFactory.create(user=user_2)
@@ -112,7 +112,7 @@ def test_my_salaries_and_as_leader(user):
     team_2.members.set([user, user_2])
 
     TeamMember.objects.filter(user=user, team=team_2).update(
-        roles=TeamMember.roles.leader
+        roles=TeamMember.roles.LEADER
     )
 
     salaries_my = SalaryFactory.create_batch(size=3, user=user)
@@ -135,7 +135,7 @@ def test_my_salaries_and_as_leader_with_queryset(user):
     user_3 = UserFactory.create()
 
     TeamMember.objects.filter(user=user, team=team_2).update(
-        roles=TeamMember.roles.leader
+        roles=TeamMember.roles.LEADER
     )
 
     SalaryFactory.create_batch(size=3, user=user)
@@ -152,5 +152,5 @@ def test_my_salaries_and_as_leader_with_queryset(user):
 def _assert_salaries(queryset, results=None):
     if results is None:
         results = []
-        
+
     assert set(queryset) == set(results)

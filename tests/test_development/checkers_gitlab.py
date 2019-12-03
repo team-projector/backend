@@ -16,7 +16,7 @@ def check_issue(issue, gl_issue):
     assert issue.gl_iid == gl_issue.iid
     assert issue.gl_url == gl_issue.web_url
     assert issue.title == gl_issue.title
-    assert issue.state == gl_issue.state
+    assert issue.state == gl_issue.state.upper()
     assert issue.created_at is not None
     assert issue.updated_at is not None
 
@@ -31,7 +31,7 @@ def check_milestone(milestone, gl_milestone, owner):
     assert milestone.due_date is not None
     assert milestone.created_at is not None
     assert milestone.updated_at is not None
-    assert milestone.state == gl_milestone.state
+    assert milestone.state == gl_milestone.state.upper()
     assert milestone.owner == owner
 
 
@@ -40,7 +40,7 @@ def check_merge_request(merge_request, gl_merge_request):
     assert merge_request.gl_iid == gl_merge_request.iid
     assert merge_request.gl_url == gl_merge_request.web_url
     assert merge_request.title == gl_merge_request.title
-    assert merge_request.state == gl_merge_request.state
+    assert merge_request.state == gl_merge_request.state.upper()
     assert merge_request.created_at is not None
     assert merge_request.updated_at is not None
 

@@ -15,7 +15,7 @@ class Manager:
 
     def approve(self, approved_by: User) -> None:
         """Approve work break."""
-        self.work_break.approve_state = APPROVED_STATES.approved
+        self.work_break.approve_state = APPROVED_STATES.APPROVED
         self.work_break.approved_by = approved_by
         self.work_break.approved_at = timezone.now()
         self.work_break.save()
@@ -26,7 +26,7 @@ class Manager:
         decline_reason: str,
     ) -> None:
         """Decline work break."""
-        self.work_break.approve_state = APPROVED_STATES.declined
+        self.work_break.approve_state = APPROVED_STATES.DECLINED
         self.work_break.approved_by = approved_by
         self.work_break.approved_at = timezone.now()
         self.work_break.decline_reason = decline_reason

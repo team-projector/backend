@@ -30,7 +30,7 @@ class OverdueDueDateChecker(BaseProblemChecker):
         return (
             milestone.due_date
             and milestone.due_date < localdate()
-            and milestone.state == MILESTONE_STATES.active
+            and milestone.state == MILESTONE_STATES.ACTIVE
         )
 
 

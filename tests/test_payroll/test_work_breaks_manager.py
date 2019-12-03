@@ -12,12 +12,12 @@ def test_approve_by_teamlead(user):
 
     TeamMemberFactory.create(team=team,
                              user=user,
-                             roles=TeamMember.roles.leader)
+                             roles=TeamMember.roles.LEADER)
 
     user_2 = UserFactory.create()
     TeamMemberFactory.create(team=team,
                              user=user_2,
-                             roles=TeamMember.roles.developer)
+                             roles=TeamMember.roles.DEVELOPER)
 
     work_break = WorkBreakFactory.create(user=user_2)
 
@@ -27,7 +27,7 @@ def test_approve_by_teamlead(user):
 
     work_break.refresh_from_db()
 
-    assert work_break.approve_state == APPROVED_STATES.approved
+    assert work_break.approve_state == APPROVED_STATES.APPROVED
     assert work_break.approved_by == user
 
 
@@ -36,12 +36,12 @@ def test_decline_by_teamlead(user):
 
     TeamMemberFactory.create(team=team,
                              user=user,
-                             roles=TeamMember.roles.leader)
+                             roles=TeamMember.roles.LEADER)
 
     user_2 = UserFactory.create()
     TeamMemberFactory.create(team=team,
                              user=user_2,
-                             roles=TeamMember.roles.developer)
+                             roles=TeamMember.roles.DEVELOPER)
 
     work_break = WorkBreakFactory.create(user=user_2)
 
@@ -52,6 +52,6 @@ def test_decline_by_teamlead(user):
 
     work_break.refresh_from_db()
 
-    assert work_break.approve_state == APPROVED_STATES.declined
+    assert work_break.approve_state == APPROVED_STATES.DECLINED
     assert work_break.approved_by == user
     assert work_break.decline_reason == 'reason'

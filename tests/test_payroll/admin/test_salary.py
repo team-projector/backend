@@ -31,7 +31,7 @@ def test_get_urls():
 def test_generate_salaries_get_form(admin_client):
     ma_salary = model_admin(Salary)
 
-    issue = IssueFactory.create(state=ISSUE_STATES.closed)
+    issue = IssueFactory.create(state=ISSUE_STATES.CLOSED)
     IssueSpentTimeFactory.create(
         user=UserFactory.create(),
         base=issue,
@@ -54,7 +54,7 @@ def test_generate_salaries(admin_client):
 
     user = UserFactory.create()
 
-    issue = IssueFactory.create(state=ISSUE_STATES.closed)
+    issue = IssueFactory.create(state=ISSUE_STATES.CLOSED)
     IssueSpentTimeFactory.create(
         user=user,
         base=issue,
@@ -84,7 +84,7 @@ def test_generate_salaries_invalid_form(admin_client):
 
     user = UserFactory.create()
 
-    issue = IssueFactory.create(state=ISSUE_STATES.closed)
+    issue = IssueFactory.create(state=ISSUE_STATES.CLOSED)
     IssueSpentTimeFactory.create(
         user=user,
         base=issue,

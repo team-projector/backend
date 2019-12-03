@@ -14,17 +14,17 @@ from tests.test_users.factories import UserFactory
 def test_counts_by_state(user):
     MergeRequestFactory.create_batch(
         7, user=user,
-        state=MERGE_REQUESTS_STATES.opened,
+        state=MERGE_REQUESTS_STATES.OPENED,
         total_time_spent=0
     )
     MergeRequestFactory.create_batch(
         5, user=user,
-        state=MERGE_REQUESTS_STATES.closed,
+        state=MERGE_REQUESTS_STATES.CLOSED,
         total_time_spent=0
     )
     MergeRequestFactory.create_batch(
         3, user=user,
-        state=MERGE_REQUESTS_STATES.merged,
+        state=MERGE_REQUESTS_STATES.MERGED,
         total_time_spent=0
     )
 
@@ -35,7 +35,7 @@ def test_counts_by_state(user):
     )
     MergeRequestFactory.create_batch(
         2, user=UserFactory.create(),
-        state=MERGE_REQUESTS_STATES.opened,
+        state=MERGE_REQUESTS_STATES.OPENED,
         total_time_spent=0
     )
 
@@ -52,17 +52,17 @@ def test_counts_by_state(user):
 def test_resolver_summary(user, client):
     team = TeamFactory.create()
     TeamMemberFactory.create(user=user, team=team,
-                             roles=TeamMember.roles.leader)
+                             roles=TeamMember.roles.LEADER)
 
     MergeRequestFactory.create_batch(
         7, user=user,
-        state=MERGE_REQUESTS_STATES.opened,
+        state=MERGE_REQUESTS_STATES.OPENED,
         total_time_spent=0
     )
 
     MergeRequestFactory.create_batch(
         3, user=UserFactory(),
-        state=MERGE_REQUESTS_STATES.closed,
+        state=MERGE_REQUESTS_STATES.CLOSED,
         total_time_spent=0
     )
 

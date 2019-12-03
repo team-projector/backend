@@ -11,7 +11,7 @@ def test_milestones(user, client):
     project = ProjectFactory.create()
     ProjectMemberFactory.create(
         user=user,
-        role=PROJECT_MEMBER_ROLES.project_manager,
+        role=PROJECT_MEMBER_ROLES.PROJECT_MANAGER,
         owner=project
     )
 
@@ -34,7 +34,7 @@ def test_milestone(user, client):
     project = ProjectFactory.create()
     ProjectMemberFactory.create(
         user=user,
-        role=PROJECT_MEMBER_ROLES.project_manager,
+        role=PROJECT_MEMBER_ROLES.PROJECT_MANAGER,
         owner=project
     )
 

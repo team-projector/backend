@@ -35,5 +35,5 @@ class ResetSpendNoteType(TestCase):
         self.assertEqual(note.gl_id, 2)
         self.assertEqual(note.user, self.user)
         self.assertEqual(note.body, SPEND_RESET_MESSAGE)
-        self.assertEqual(note.type, NOTE_TYPES.reset_spend)
+        self.assertEqual(note.type, NOTE_TYPES.RESET_SPEND)
         self.assertEqual(note.data, {})

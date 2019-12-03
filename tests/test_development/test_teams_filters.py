@@ -8,12 +8,12 @@ def test_filter_by_role(user, client):
     team = TeamFactory.create()
 
     TeamMemberFactory.create(user=user, team=team,
-                             roles=TeamMember.roles.leader)
+                             roles=TeamMember.roles.LEADER)
 
     client.user = user
 
     results = TeamsFilterSet(
-        data={'roles': 'developer'},
+        data={'roles': 'DEVELOPER'},
         queryset=Team.objects.all(),
         request=client,
     ).qs
@@ -21,7 +21,7 @@ def test_filter_by_role(user, client):
     assert results.count() == 0
 
     results = TeamsFilterSet(
-        data={'roles': 'leader'},
+        data={'roles': 'LEADER'},
         queryset=Team.objects.all(),
         request=client,
     ).qs
@@ -37,13 +37,13 @@ def test_filter_many_roles(user, client):
     TeamMemberFactory.create(
         user=user,
         team=team,
-        roles=TeamMember.roles.leader | TeamMember.roles.developer
+        roles=TeamMember.roles.LEADER | TeamMember.roles.DEVELOPER
     )
 
     client.user = user
 
     results = TeamsFilterSet(
-        data={'roles': 'leader'},
+        data={'roles': 'LEADER'},
         queryset=Team.objects.all(),
         request=client,
     ).qs
@@ -52,7 +52,7 @@ def test_filter_many_roles(user, client):
     assert results.first() == team
 
     results = TeamsFilterSet(
-        data={'roles': 'developer'},
+        data={'roles': 'DEVELOPER'},
         queryset=Team.objects.all(),
         request=client,
     ).qs
@@ -60,7 +60,7 @@ def test_filter_many_roles(user, client):
     assert results.first() == team
 
     results = TeamsFilterSet(
-        data={'roles': 'watcher'},
+        data={'roles': 'WATCHER'},
         queryset=Team.objects.all(),
         request=client,
     ).qs
@@ -75,13 +75,13 @@ def test_filter_by_user_and_many_roles(user, client):
     TeamMemberFactory.create(
         user=user,
         team=team,
-        roles=TeamMember.roles.leader | TeamMember.roles.developer
+        roles=TeamMember.roles.LEADER | TeamMember.roles.DEVELOPER
     )
 
     client.user = user
 
     results = TeamsFilterSet(
-        data={'roles': 'leader,watcher'},
+        data={'roles': 'LEADER,WATCHER'},
         queryset=Team.objects.all(),
         request=client,
     ).qs
@@ -96,11 +96,11 @@ def test_search(user):
     team_3 = TeamFactory.create(title='test0')
 
     TeamMemberFactory.create(user=user, team=team_1,
-                             roles=TeamMember.roles.leader)
+                             roles=TeamMember.roles.LEADER)
     TeamMemberFactory.create(user=user, team=team_2,
-                             roles=TeamMember.roles.leader)
+                             roles=TeamMember.roles.LEADER)
     TeamMemberFactory.create(user=user, team=team_3,
-                             roles=TeamMember.roles.leader)
+                             roles=TeamMember.roles.LEADER)
 
     results = TeamsFilterSet(
         data={'q': 'ate'},
@@ -132,11 +132,11 @@ def test_order_by_title(user):
     team_3 = TeamFactory.create(title='bar')
 
     TeamMemberFactory.create(user=user, team=team_1,
-                             roles=TeamMember.roles.leader)
+                             roles=TeamMember.roles.LEADER)
     TeamMemberFactory.create(user=user, team=team_2,
-                             roles=TeamMember.roles.leader)
+                             roles=TeamMember.roles.LEADER)
     TeamMemberFactory.create(user=user, team=team_3,
-                             roles=TeamMember.roles.leader)
+                             roles=TeamMember.roles.LEADER)
 
     results = TeamsFilterSet(
         data={'order_by': 'title'},

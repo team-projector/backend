@@ -15,8 +15,8 @@ def filter_allowed_for_user(
     users = filter_by_roles(
         TeamMember.objects.filter(user=user),
         [
-            TeamMember.roles.leader,
-            TeamMember.roles.watcher,
+            TeamMember.roles.LEADER,
+            TeamMember.roles.WATCHER,
         ],
     ).values_list(
         'team__members',

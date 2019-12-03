@@ -68,4 +68,4 @@ def test_sync_project(user, client, gl_mocker, gl_client):
     assert issue_mutated.gl_id == issue.gl_id
 
     issue.refresh_from_db()
-    assert issue.state == 'closed'
+    assert issue.state == 'CLOSED'

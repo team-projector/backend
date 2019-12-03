@@ -3,8 +3,8 @@
 import graphene
 from django.db.models import QuerySet
 
+from apps.core.graphql import DatasourceRelayNode
 from apps.core.graphql.connections import DataSourceConnection
-from apps.core.graphql.relay_nodes import DatasourceRelayNode
 from apps.core.graphql.types import BaseDjangoObjectType
 from apps.development.graphql.types.ticket_metrics import TicketMetricsType
 from apps.development.models import Ticket

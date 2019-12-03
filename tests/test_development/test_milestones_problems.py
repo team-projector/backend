@@ -17,7 +17,7 @@ def test_base_checker():
 
 def test_overdue_due_day(db):
     problem_milestone = ProjectMilestoneFactory.create(
-        state=MILESTONE_STATES.active,
+        state=MILESTONE_STATES.ACTIVE,
         due_date=datetime.now().date() - timedelta(days=1)
     )
 
@@ -26,7 +26,7 @@ def test_overdue_due_day(db):
 
 def test_overdue_due_day_but_closed(db):
     milestone = ProjectMilestoneFactory.create(
-        state=MILESTONE_STATES.closed,
+        state=MILESTONE_STATES.CLOSED,
         due_date=datetime.now().date() - timedelta(days=1)
     )
 
@@ -35,7 +35,7 @@ def test_overdue_due_day_but_closed(db):
 
 def test_resolver(db):
     problem_milestone = ProjectMilestoneFactory.create(
-        state=MILESTONE_STATES.active,
+        state=MILESTONE_STATES.ACTIVE,
         due_date=datetime.now().date() - timedelta(days=1)
     )
 

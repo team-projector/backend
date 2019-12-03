@@ -53,7 +53,7 @@ def test_simple(user):
     issue.time_estimate = seconds(hours=15)
     issue.total_time_spent = \
         issue.time_spents.aggregate(spent=Sum('time_spent'))['spent']
-    issue.state = ISSUE_STATES.opened
+    issue.state = ISSUE_STATES.OPENED
     issue.due_date = monday + timedelta(days=1)
     issue.save()
 
@@ -111,7 +111,7 @@ def test_efficiency_more_1(user):
     issue.total_time_spent = issue.time_spents.aggregate(
         spent=Sum('time_spent')
     )['spent']
-    issue.state = ISSUE_STATES.closed
+    issue.state = ISSUE_STATES.CLOSED
     issue.due_date = monday + timedelta(days=1)
     issue.closed_at = monday + timedelta(days=1)
     issue.save()
@@ -172,7 +172,7 @@ def test_efficiency_less_1(user):
     issue.total_time_spent = issue.time_spents.aggregate(
         spent=Sum('time_spent')
     )['spent']
-    issue.state = ISSUE_STATES.closed
+    issue.state = ISSUE_STATES.CLOSED
     issue.due_date = monday + timedelta(days=1)
     issue.closed_at = monday + timedelta(days=1)
     issue.save()
@@ -233,7 +233,7 @@ def test_efficiency_zero_estimate(user):
     issue.time_estimate = 0
     issue.total_time_spent = \
         issue.time_spents.aggregate(spent=Sum('time_spent'))['spent']
-    issue.state = ISSUE_STATES.closed
+    issue.state = ISSUE_STATES.CLOSED
     issue.due_date = monday + timedelta(days=1)
     issue.closed_at = monday + timedelta(days=1)
     issue.save()
@@ -264,7 +264,7 @@ def test_efficiency_zero_spend(user):
 
     issue.time_estimate = seconds(hours=2)
     issue.total_time_spent = 0
-    issue.state = ISSUE_STATES.closed
+    issue.state = ISSUE_STATES.CLOSED
     issue.due_date = monday + timedelta(days=1)
     issue.closed_at = monday + timedelta(days=1)
     issue.save()
@@ -322,7 +322,7 @@ def test_many_weeks(user):
     issue.time_estimate = seconds(hours=15)
     issue.total_time_spent = \
         issue.time_spents.aggregate(spent=Sum('time_spent'))['spent']
-    issue.state = ISSUE_STATES.opened
+    issue.state = ISSUE_STATES.OPENED
     issue.due_date = monday + timedelta(days=2)
     issue.save()
 
@@ -381,7 +381,7 @@ def test_not_in_range(user):
     issue.time_estimate = seconds(hours=15)
     issue.total_time_spent = \
         issue.time_spents.aggregate(spent=Sum('time_spent'))['spent']
-    issue.state = ISSUE_STATES.opened
+    issue.state = ISSUE_STATES.OPENED
     issue.due_date = monday + timedelta(days=1)
     issue.save()
 
@@ -441,7 +441,7 @@ def test_another_user(user):
     issue.time_estimate = seconds(hours=15)
     issue.total_time_spent = \
         issue.time_spents.aggregate(spent=Sum('time_spent'))['spent']
-    issue.state = ISSUE_STATES.opened
+    issue.state = ISSUE_STATES.OPENED
     issue.due_date = monday + timedelta(days=1)
     issue.save()
 
@@ -471,7 +471,7 @@ def test_many_issues(user):
 
     monday = begin_of_week(datetime.now().date())
     another_issue = IssueFactory.create(user=user,
-                                        state=ISSUE_STATES.opened,
+                                        state=ISSUE_STATES.OPENED,
                                         due_date=monday + timedelta(days=4),
                                         total_time_spent=timedelta(
                                             hours=3).total_seconds(),
@@ -506,7 +506,7 @@ def test_many_issues(user):
     issue.time_estimate = seconds(hours=15)
     issue.total_time_spent = \
         issue.time_spents.aggregate(spent=Sum('time_spent'))['spent']
-    issue.state = ISSUE_STATES.opened
+    issue.state = ISSUE_STATES.OPENED
     issue.due_date = monday + timedelta(days=1)
     issue.save()
 

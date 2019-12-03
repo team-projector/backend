@@ -13,7 +13,7 @@ def test_team_progress_metrics(user, client):
     TeamMemberFactory.create(
         user=user,
         team=team,
-        roles=TeamMember.roles.leader
+        roles=TeamMember.roles.LEADER
     )
 
     client.user = user
@@ -36,7 +36,7 @@ def test_another_team(user, client):
     TeamMemberFactory.create(
         user=user,
         team=team,
-        roles=TeamMember.roles.leader
+        roles=TeamMember.roles.LEADER
     )
 
     another_team = TeamFactory.create()
@@ -60,7 +60,7 @@ def test_not_leader(user, client):
     TeamMemberFactory.create(
         user=user,
         team=team,
-        roles=TeamMember.roles.developer
+        roles=TeamMember.roles.DEVELOPER
     )
 
     client.user = user

@@ -7,9 +7,9 @@ from django.utils.timezone import localdate
 
 from apps.development.models.issue import ISSUE_STATES, Issue
 
-PROBLEM_EMPTY_DUE_DAY = 'empty_due_date'
-PROBLEM_OVER_DUE_DAY = 'over_due_date'
-PROBLEM_EMPTY_ESTIMATE = 'empty_estimate'
+PROBLEM_EMPTY_DUE_DAY = 'EMPTY_DUE_DATE'
+PROBLEM_OVER_DUE_DAY = 'OVER_DUE_DATE'
+PROBLEM_EMPTY_ESTIMATE = 'EMPTY_ESTIMATE'
 
 
 class BaseProblemChecker:
@@ -45,7 +45,7 @@ class EmptyDueDateChecker(BaseProblemChecker):
     def get_condition(self) -> When:
         """Get condition."""
         return When(
-            Q(due_date__isnull=True, state=ISSUE_STATES.opened),
+            Q(due_date__isnull=True, state=ISSUE_STATES.OPENED),
             then=True,
         )
 
@@ -53,7 +53,7 @@ class EmptyDueDateChecker(BaseProblemChecker):
         """Current issue has problem."""
         return (
             not issue.due_date
-            and issue.state == ISSUE_STATES.opened
+            and issue.state == ISSUE_STATES.OPENED
         )
 
 
@@ -66,7 +66,7 @@ class OverdueDueDateChecker(BaseProblemChecker):
     def get_condition(self) -> When:
         """Get condition."""
         return When(
-            Q(due_date__lt=localdate(), state=ISSUE_STATES.opened),
+            Q(due_date__lt=localdate(), state=ISSUE_STATES.OPENED),
             then=True,
         )
 
@@ -75,7 +75,7 @@ class OverdueDueDateChecker(BaseProblemChecker):
         return (
             issue.due_date
             and issue.due_date < localdate()
-            and issue.state == ISSUE_STATES.opened
+            and issue.state == ISSUE_STATES.OPENED
         )
 
 
@@ -92,7 +92,7 @@ class EmptyEstimateChecker(BaseProblemChecker):
                 Q(time_estimate__isnull=True)
                 | Q(time_estimate=0),
             )
-            & Q(state=ISSUE_STATES.opened),
+            & Q(state=ISSUE_STATES.OPENED),
             then=True,
         )
 
@@ -100,5 +100,5 @@ class EmptyEstimateChecker(BaseProblemChecker):
         """Current issue has problem."""
         return (
             not issue.time_estimate
-            and issue.state == ISSUE_STATES.opened
+            and issue.state == ISSUE_STATES.OPENED
         )

@@ -31,13 +31,13 @@ def test_sync_handler(db, gl_mocker):
         project_id=gl_project.id,
         assignee=gl_user,
         author=gl_user,
-        state=MERGE_REQUESTS_STATES.closed
+        state=MERGE_REQUESTS_STATES.CLOSED
     ))
     merge_request = MergeRequestFactory.create(
         gl_id=gl_merge_request.id,
         gl_iid=gl_merge_request.iid,
         project=project,
-        state=MERGE_REQUESTS_STATES.opened
+        state=MERGE_REQUESTS_STATES.OPENED
     )
     _registry_merge_request(gl_mocker, gl_project, gl_merge_request)
 

@@ -32,7 +32,7 @@ def get_members(user: User) -> list:
     """Get project managers."""
     members = ProjectMember.objects.filter(
         user=user,
-        role=PROJECT_MEMBER_ROLES.project_manager,
+        role=PROJECT_MEMBER_ROLES.PROJECT_MANAGER,
     )
 
     if not members:

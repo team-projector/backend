@@ -53,7 +53,7 @@ def test_opened(user):
         time_spent=-seconds(hours=3)
     )
 
-    issue.state = ISSUE_STATES.opened
+    issue.state = ISSUE_STATES.OPENED
     issue.save()
 
     start = monday - timedelta(days=5)
@@ -117,7 +117,7 @@ def test_paid(user):
         time_spent=-seconds(hours=3)
     )
 
-    issue.state = ISSUE_STATES.closed
+    issue.state = ISSUE_STATES.CLOSED
     issue.save()
 
     start = monday - timedelta(days=5)
@@ -173,7 +173,7 @@ def test_closed(user):
         time_spent=-seconds(hours=3)
     )
 
-    issue.state = ISSUE_STATES.closed
+    issue.state = ISSUE_STATES.CLOSED
     issue.save()
 
     start = monday - timedelta(days=5)
@@ -200,9 +200,9 @@ def test_complex(user):
     salary = SalaryFactory.create(user=user)
 
     closed_issue = IssueFactory.create(user=user, due_date=datetime.now(),
-                                       state=ISSUE_STATES.closed)
+                                       state=ISSUE_STATES.CLOSED)
     opened_issue = IssueFactory.create(user=user, due_date=datetime.now(),
-                                       state=ISSUE_STATES.opened)
+                                       state=ISSUE_STATES.OPENED)
 
     IssueSpentTimeFactory.create(
         date=monday,

@@ -15,7 +15,7 @@ def user(db):
 
 
 def test_payroll_metrics(user):
-    issue = IssueFactory.create(user=user, state=ISSUE_STATES.opened)
+    issue = IssueFactory.create(user=user, state=ISSUE_STATES.OPENED)
 
     IssueSpentTimeFactory.create(
         user=user,
@@ -45,7 +45,7 @@ def test_payroll_metrics(user):
 
 
 def test_paid_metrics(user):
-    issue = IssueFactory.create(user=user, state=ISSUE_STATES.opened)
+    issue = IssueFactory.create(user=user, state=ISSUE_STATES.OPENED)
     salary = SalaryFactory.create(user=user)
 
     IssueSpentTimeFactory.create(
@@ -80,7 +80,7 @@ def test_paid_metrics(user):
 
 
 def test_complex_metrics(user):
-    issue = IssueFactory.create(user=user, state=ISSUE_STATES.opened)
+    issue = IssueFactory.create(user=user, state=ISSUE_STATES.OPENED)
     salary = SalaryFactory.create(user=user)
 
     IssueSpentTimeFactory.create(
@@ -115,19 +115,19 @@ def test_complex_metrics(user):
 def test_remains(user):
     issue_1 = IssueFactory.create(
         user=user,
-        state=ISSUE_STATES.opened,
+        state=ISSUE_STATES.OPENED,
         time_estimate=seconds(hours=4),
         total_time_spent=seconds(hours=2),
     )
     issue_2 = IssueFactory.create(
         user=user,
-        state=ISSUE_STATES.closed,
+        state=ISSUE_STATES.CLOSED,
         time_estimate=seconds(hours=4),
         total_time_spent=seconds(hours=8),
     )
     issue_3 = IssueFactory.create(
         user=user,
-        state=ISSUE_STATES.closed,
+        state=ISSUE_STATES.CLOSED,
         total_time_spent=seconds(hours=3),
     )
 
@@ -144,19 +144,19 @@ def test_remains(user):
 def test_efficiency(user):
     issue_1 = IssueFactory.create(
         user=user,
-        state=ISSUE_STATES.closed,
+        state=ISSUE_STATES.CLOSED,
         time_estimate=seconds(hours=4),
         total_time_spent=seconds(hours=2),
     )
     issue_2 = IssueFactory.create(
         user=user,
-        state=ISSUE_STATES.closed,
+        state=ISSUE_STATES.CLOSED,
         time_estimate=seconds(hours=4),
         total_time_spent=seconds(hours=8),
     )
     issue_3 = IssueFactory.create(
         user=user,
-        state=ISSUE_STATES.opened,
+        state=ISSUE_STATES.OPENED,
         time_estimate=seconds(hours=4),
         total_time_spent=seconds(hours=2),
     )
@@ -172,7 +172,7 @@ def test_efficiency(user):
 
 
 def test_resolver(user):
-    issue = IssueFactory.create(user=user, state=ISSUE_STATES.opened)
+    issue = IssueFactory.create(user=user, state=ISSUE_STATES.OPENED)
 
     IssueSpentTimeFactory.create(
         user=user,

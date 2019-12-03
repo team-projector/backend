@@ -8,10 +8,10 @@ from tests.test_development.factories import ProjectMilestoneFactory
 
 def test_filter_by_state(db):
     milestone_active = ProjectMilestoneFactory.create(
-        state=MILESTONE_STATES.active
+        state=MILESTONE_STATES.ACTIVE
     )
     milestone_closed = ProjectMilestoneFactory.create(
-        state=MILESTONE_STATES.closed
+        state=MILESTONE_STATES.CLOSED
     )
 
     results = MilestonesFilterSet(

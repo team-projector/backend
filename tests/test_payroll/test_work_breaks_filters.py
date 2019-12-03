@@ -15,13 +15,13 @@ def test_filter_by_user(user):
 
     TeamMemberFactory.create(team=team,
                              user=user,
-                             roles=TeamMember.roles.leader)
+                             roles=TeamMember.roles.LEADER)
     work_break_1 = WorkBreakFactory.create(user=user)
 
     user_2 = UserFactory.create()
     TeamMemberFactory.create(team=team,
                              user=user_2,
-                             roles=TeamMember.roles.developer)
+                             roles=TeamMember.roles.DEVELOPER)
     work_break_2 = WorkBreakFactory.create(user=user_2)
 
     results = WorkBreakFilterSet(
@@ -52,7 +52,7 @@ def test_filter_by_team(user, client):
     team.members.set([user, user_2])
 
     TeamMember.objects.filter(user=user, team=team).update(
-        roles=TeamMember.roles.leader
+        roles=TeamMember.roles.LEADER
     )
 
     client.user = user
@@ -92,15 +92,15 @@ def test_approving_list(user, client):
 
     TeamMemberFactory.create(team=team,
                              user=user,
-                             roles=TeamMember.roles.leader)
+                             roles=TeamMember.roles.LEADER)
 
     TeamMemberFactory.create(team=team,
                              user=user_2,
-                             roles=TeamMember.roles.developer)
+                             roles=TeamMember.roles.DEVELOPER)
 
     WorkBreakFactory.create_batch(5, user=user_2)
     WorkBreakFactory.create_batch(4, user=user_2,
-                                  approve_state=APPROVED_STATES.approved)
+                                  approve_state=APPROVED_STATES.APPROVED)
     WorkBreakFactory.create_batch(3, user=user_3)
 
     client.user = user
@@ -130,16 +130,16 @@ def test_approving_list_not_teamlead(user, client):
 
     TeamMemberFactory.create(team=team,
                              user=user,
-                             roles=TeamMember.roles.developer)
+                             roles=TeamMember.roles.DEVELOPER)
 
     TeamMemberFactory.create(team=team,
                              user=user_2,
-                             roles=TeamMember.roles.developer)
+                             roles=TeamMember.roles.DEVELOPER)
 
     WorkBreakFactory.create_batch(5, user=user)
     WorkBreakFactory.create_batch(5, user=user_2)
     WorkBreakFactory.create_batch(4, user=user_2,
-                                  approve_state=APPROVED_STATES.approved)
+                                  approve_state=APPROVED_STATES.APPROVED)
     WorkBreakFactory.create_batch(3, user=user_3)
 
     client.user = user

@@ -126,7 +126,7 @@ class IssuesProjectSummaryProvider:
             time_remains=Case(
                 When(
                     Q(time_estimate__gt=F('total_time_spent'))
-                    & ~Q(state=ISSUE_STATES.closed),
+                    & ~Q(state=ISSUE_STATES.CLOSED),
                     then=F('time_estimate') - F('total_time_spent'),
                 ),
                 default=Value(0),

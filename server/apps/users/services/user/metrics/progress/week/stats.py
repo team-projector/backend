@@ -76,7 +76,7 @@ class UserWeekStatsProvider:
                 make_aware(date2datetime(self._start)),
                 make_aware(date2datetime(self._end)),
             ),
-            state=ISSUE_STATES.closed,
+            state=ISSUE_STATES.CLOSED,
             total_time_spent__gt=0,
             time_estimate__gt=0,
             week__isnull=False,
