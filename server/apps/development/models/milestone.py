@@ -80,7 +80,7 @@ class Milestone(
 
     object_id = models.PositiveIntegerField()
 
-    objects = MilestoneManager()  # noqa WPS110
+    objects = MilestoneManager()  # noqa: WPS110
 
     class Meta:
         verbose_name = _('VN__MILESTONE')

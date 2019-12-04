@@ -16,13 +16,13 @@ class AddSpendIssueMutation(BaseMutation):
     """Add spend issue mutation."""
 
     class Arguments:
-        id = graphene.ID(required=True)  # noqa A003
+        id = graphene.ID(required=True)  # noqa: A003
         seconds = graphene.Int(required=True)
 
     issue = graphene.Field(IssueType)
 
     @classmethod
-    def do_mutate(cls, root, info, **kwargs):  # noqa A002
+    def do_mutate(cls, root, info, **kwargs):  # noqa: A002, WPS110
         """Add spend and return issue."""
         if not info.context.user.gl_token:
             raise ValidationError(_('MSG_PLEASE_PROVIDE_PERSONAL_GL_TOKEN'))
@@ -50,12 +50,12 @@ class SyncIssueMutation(BaseMutation):
     """Syncing issue mutation."""
 
     class Arguments:
-        id = graphene.ID(required=True)  # noqa A003
+        id = graphene.ID(required=True)  # noqa: A003
 
     issue = graphene.Field(IssueType)
 
     @classmethod
-    def do_mutate(cls, root, info, **kwargs):  # noqa WPS110
+    def do_mutate(cls, root, info, **kwargs):  # noqa: WPS110
         """Syncing issue."""
         issue = get_object_or_404(
             Issue.objects.allowed_for_user(info.context.user),
@@ -74,13 +74,13 @@ class UpdateIssueMutation(BaseMutation):
     """Update issue mutation."""
 
     class Arguments:
-        id = graphene.ID(required=True)  # noqa A003
+        id = graphene.ID(required=True)  # noqa: A003
         ticket = graphene.ID(required=True)
 
     issue = graphene.Field(IssueType)
 
     @classmethod
-    def do_mutate(cls, root, info, **kwargs):  # noqa WPS110
+    def do_mutate(cls, root, info, **kwargs):  # noqa: WPS110
         """Update issue."""
         issue = get_object_or_404(
             Issue.objects.allowed_for_user(info.context.user),

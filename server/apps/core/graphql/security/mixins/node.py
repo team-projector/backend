@@ -20,7 +20,7 @@ class AuthNode:
     @classmethod
     def get_node(
         cls,
-        info: ResolveInfo,  # noqa WPS110
+        info: ResolveInfo,  # noqa: WPS110
         obj_id: str,
     ) -> Optional[Model]:
         """Get node."""

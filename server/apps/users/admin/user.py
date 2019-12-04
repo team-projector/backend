@@ -68,7 +68,7 @@ class UserAdmin(
     def change_password_link(self, user):
         """Show "Change password" on change form page."""
         return format_html(
-            '<a href="{}">change password</a>',  # noqa P103
+            '<a href="{}">change password</a>',  # noqa: P103
             reverse(
                 'admin:auth_user_password_change',
                 kwargs={'id': user.pk},
@@ -98,6 +98,6 @@ class UserAdmin(
     @classmethod
     def _is_apply_default_filter(cls, referer: str) -> bool:
         return (
-            not referer or  # noqa: W504
+            not referer or  # noqa:: W504
             urlparse(referer).path != reverse('admin:users_user_changelist')
         )

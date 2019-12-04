@@ -17,9 +17,9 @@ class IssuesSpentTimesSummary:
         opened_spent=0,
     ) -> None:
         """Initialize self."""
-        self.spent = spent  # noqa WPS601
-        self.closed_spent = closed_spent  # noqa WPS601
-        self.opened_spent = opened_spent  # noqa WPS601
+        self.spent = spent  # noqa: WPS601
+        self.closed_spent = closed_spent  # noqa: WPS601
+        self.opened_spent = opened_spent  # noqa: WPS601
 
 
 class MergeRequestsSpentTimesSummary:
@@ -38,10 +38,10 @@ class MergeRequestsSpentTimesSummary:
         merged_spent=0,
     ) -> None:
         """Initialize self."""
-        self.spent = spent  # noqa WPS601
-        self.closed_spent = closed_spent  # noqa WPS601
-        self.opened_spent = opened_spent  # noqa WPS601
-        self.merged_spent = merged_spent  # noqa WPS601
+        self.spent = spent  # noqa: WPS601
+        self.closed_spent = closed_spent  # noqa: WPS601
+        self.opened_spent = opened_spent  # noqa: WPS601
+        self.merged_spent = merged_spent  # noqa: WPS601
 
 
 class SpentTimesSummary:

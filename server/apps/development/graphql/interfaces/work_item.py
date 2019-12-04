@@ -11,7 +11,7 @@ from apps.users.graphql.types import UserType
 class WorkItem(graphene.Interface):
     """Work item interface."""
 
-    id = graphene.ID(required=True)  # noqa A003
+    id = graphene.ID(required=True)  # noqa: A003
     title = graphene.String()
     gl_id = graphene.Int()
     gl_url = graphene.String()
@@ -22,7 +22,7 @@ class WorkItem(graphene.Interface):
     state = graphene.String()
     user = graphene.Field(UserType)
 
-    def resolve_state(self, info, **kwargs):  # noqa WPS110
+    def resolve_state(self, info, **kwargs):  # noqa: WPS110
         """Get work item state."""
         if self.state:
             return self.state.upper()

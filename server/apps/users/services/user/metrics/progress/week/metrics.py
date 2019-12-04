@@ -41,7 +41,7 @@ class UserWeekMetricsGenerator:
 
         return metric
 
-    def _apply_stats(  # noqa WPS211
+    def _apply_stats(  # noqa: WPS211
         self,
         week: date,
         metric: provider.UserProgressMetrics,

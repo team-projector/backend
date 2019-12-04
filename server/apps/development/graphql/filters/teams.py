@@ -15,7 +15,7 @@ from apps.development.services.team_members import filter_by_roles
 class TeamRolesFilter(django_filters.CharFilter):
     """Filter team by roles."""
 
-    def filter(self, queryset, roles) -> QuerySet:  # noqa A003
+    def filter(self, queryset, roles) -> QuerySet:  # noqa: A003
         """Do filtering."""
         parsed_roles = self._parse_roles(roles)
         if not parsed_roles:
@@ -55,7 +55,7 @@ class TeamsFilterSet(django_filters.FilterSet):
     order_by = OrderingFilter(
         fields=('title',),
     )
-    q = SearchFilter(fields=('title',))  # noqa WPS111
+    q = SearchFilter(fields=('title',))  # noqa: WPS111
 
     class Meta:
         model = Team

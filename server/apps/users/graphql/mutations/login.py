@@ -20,7 +20,7 @@ class LoginMutation(BaseMutation):
         password = graphene.String(required=True)
 
     @classmethod
-    def do_mutate(cls, root, info, login, password):  # noqa WPS110
+    def do_mutate(cls, root, info, login, password):  # noqa: WPS110
         """After successful login return token."""
         token = user_service.login_user(
             login,

@@ -67,7 +67,7 @@ class DataSourceConnectionField(
         connection.length = items_count
         return connection
 
-    @classmethod  # noqa: WPS211
+    @classmethod  # noqa:: WPS211
     def _connection_from_list_slice(
         cls,
         list_slice,
@@ -154,7 +154,7 @@ class DataSourceConnectionField(
 
         return isinstance(last, int) and start_offset > lower_bound
 
-    @classmethod  # noqa: WPS211
+    @classmethod  # noqa:: WPS211
     def _has_next_page(
         cls,
         before_offset,
@@ -167,7 +167,7 @@ class DataSourceConnectionField(
 
         return isinstance(first, int) and end_offset < upper_bound
 
-    @classmethod  # noqa: WPS211
+    @classmethod  # noqa:: WPS211
     def _build_connection_type(
         cls,
         connection_type,

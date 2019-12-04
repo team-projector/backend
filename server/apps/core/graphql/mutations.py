@@ -26,20 +26,20 @@ class BaseMutation(
         abstract = True
 
     @classmethod
-    def mutate(cls, root, info, **kwargs):  # noqa WPS110
+    def mutate(cls, root, info, **kwargs):  # noqa: WPS110
         """Mutate."""
         cls.check_premissions(root, info, **kwargs)
 
         return cls.do_mutate(root, info, **kwargs)
 
     @classmethod
-    def check_premissions(cls, root, info, **kwargs) -> None:  # noqa WPS110
+    def check_premissions(cls, root, info, **kwargs) -> None:  # noqa: WPS110
         """Check premissions."""
         if not cls.has_permission(root, info, **kwargs):
             raise PermissionDenied()
 
     @classmethod
-    def do_mutate(cls, root, info, **kwargs) -> None:  # noqa WPS110
+    def do_mutate(cls, root, info, **kwargs) -> None:  # noqa: WPS110
         """Method should be implemente in subclass."""
         raise NotImplementedError
 
@@ -54,7 +54,7 @@ class RestrictedAccessSerializerMutation(
         abstract = True
 
     @classmethod
-    def mutate_and_get_payload(cls, root, info, **input):  # noqa WPS110
+    def mutate_and_get_payload(cls, root, info, **input):  # noqa: WPS110
         """Mutates object and returns a payload."""
         if not cls.has_permission(root, info, **input):
             raise PermissionDenied()
@@ -66,7 +66,7 @@ class ArgumentsValidationMixin(BaseMutation):
     """A Mixin validates input fields in mutations."""
 
     @classmethod
-    def do_mutate(cls, root, info, **kwargs):  # noqa WPS110
+    def do_mutate(cls, root, info, **kwargs):  # noqa: WPS110
         """Do mutate."""
         form = cls.form_class(data=kwargs)
 
@@ -76,7 +76,7 @@ class ArgumentsValidationMixin(BaseMutation):
         return cls.perform_mutate(info, form.cleaned_data)
 
     @classmethod
-    def perform_mutate(cls, info, cleaned_data: Dict) -> None:  # noqa WPS110
+    def perform_mutate(cls, info, cleaned_data: Dict) -> None:  # noqa: WPS110
         """Method should be implemente in subclass."""
         raise NotImplementedError
 

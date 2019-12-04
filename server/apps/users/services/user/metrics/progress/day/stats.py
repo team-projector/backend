@@ -40,7 +40,7 @@ class UserDayStatsProvider:
             due_date_truncated=TruncDay('due_date'),
             time_remains=Case(
                 When(
-                    Q(time_estimate__gt=F('total_time_spent')) &  # noqa:W504
+                    Q(time_estimate__gt=F('total_time_spent')) &  # noqa::W504
                     ~Q(state=ISSUE_STATES.CLOSED),
                     then=F('time_estimate') - F('total_time_spent'),
                 ),

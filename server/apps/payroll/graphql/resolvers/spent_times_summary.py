@@ -7,7 +7,7 @@ from apps.payroll.services import spent_time as spent_time_service
 
 def resolve_spent_times_summary(
     parent,
-    info,  # noqa WPS110
+    info,  # noqa: WPS110
     **kwargs,
 ):
     """Resolve spent times summary."""

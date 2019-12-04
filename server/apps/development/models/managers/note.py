@@ -12,10 +12,10 @@ class NoteManager(models.Manager):
 
     def update_from_gitlab(self, gl_note, issue) -> Any:
         """Parse note and save from Gitlab."""
-        from apps.development.services.note.gitlab import (  # noqa WPS433
+        from apps.development.services.note.gitlab import (  # noqa: WPS433
             read_note,
         )
-        from apps.users.services.user.gl.manager import (  # noqa WPS433
+        from apps.users.services.user.gl.manager import (  # noqa: WPS433
             UserGlManager,
         )
 

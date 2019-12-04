@@ -21,8 +21,8 @@ app.autodiscover_tasks(lambda: settings.INSTALLED_APPS)
 def setup_periodic_tasks(sender, **kwargs):
     """Add periodic tasks."""
     # TODO implement mechanizm for registration periodic tasks
-    from apps.development.tasks import sync_all_task  # noqa WPS433
-    from apps.users.tasks import clear_expired_tokens_task  # noqa WPS433
+    from apps.development.tasks import sync_all_task  # noqa: WPS433
+    from apps.users.tasks import clear_expired_tokens_task  # noqa: WPS433
 
     sender.add_periodic_task(
         60 * 60,

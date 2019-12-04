@@ -5,7 +5,7 @@ from django.core.exceptions import ValidationError
 
 def validate_email(email: str) -> None:
     """Validate user email."""
-    from apps.users.models import User  # noqa WPS433
+    from apps.users.models import User  # noqa: WPS433
 
     if not email:
         return

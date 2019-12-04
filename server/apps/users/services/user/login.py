@@ -32,6 +32,6 @@ def login_user(
         user.last_login = timezone.now()
         user.save(update_fields=('last_login',))
 
-        return token  # noqa WPS331
+        return token  # noqa: WPS331
 
     raise AuthenticationFailed(_('MSG_MUST_INCLUDE_LOGIN_AND_PASSWORD'))

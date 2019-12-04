@@ -14,7 +14,7 @@ from apps.development.services.team_members import filter_by_roles
 class TeamMemberRolesFilter(django_filters.CharFilter):
     """Filter team members by roles."""
 
-    def filter(self, queryset, roles) -> QuerySet:  # noqa A003
+    def filter(self, queryset, roles) -> QuerySet:  # noqa: A003
         """Do filtering."""
         parsed_roles = self._parse_roles(roles)
         if not parsed_roles:

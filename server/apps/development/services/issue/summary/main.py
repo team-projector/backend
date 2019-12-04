@@ -60,7 +60,7 @@ class IssuesSummaryProvider:
             count=Count('*'),
         ).order_by()
 
-    def _get_time_spent(self) -> int:  # noqa: C901
+    def _get_time_spent(self) -> int:  # noqa:: C901
         queryset = SpentTime.objects.filter(issues__isnull=False)
 
         if self._options.get('due_date'):

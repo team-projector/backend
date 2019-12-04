@@ -11,7 +11,7 @@ class LogoutMutation(BaseMutation):
     ok = graphene.Boolean()
 
     @classmethod
-    def do_mutate(cls, root, info):  # noqa WPS110
+    def do_mutate(cls, root, info):  # noqa: WPS110
         """After successful logout return "ok"."""
         info.context.auth.delete()
 

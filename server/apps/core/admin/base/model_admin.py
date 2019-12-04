@@ -16,4 +16,4 @@ class BaseModelAdmin(
     list_per_page = 20
 
     class Media:
-        pass  # noqa WPS604
+        """Media."""

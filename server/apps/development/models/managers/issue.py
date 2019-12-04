@@ -23,6 +23,6 @@ class IssueManager(models.Manager):
 
     def allowed_for_user(self, user: User) -> QuerySet:
         """Issues allowed for team leader and watchers."""
-        from apps.development.services import issue  # noqa WPS433
+        from apps.development.services import issue  # noqa: WPS433
 
         return issue.filter_allowed_for_user(self, user)

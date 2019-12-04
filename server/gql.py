@@ -28,7 +28,7 @@ from apps.users.graphql.mutations import AuthMutations
 from apps.users.graphql.queries import UsersQueries
 
 
-class Query(  # noqa WPS215
+class Query(  # noqa: WPS215
     IssuesQueries,
     TicketsQueries,
     MergeRequestQueries,
@@ -50,7 +50,7 @@ class Query(  # noqa WPS215
     )
 
 
-class Mutation(  # noqa WPS215
+class Mutation(  # noqa: WPS215
     IssuesMutations,
     MilestonesMutations,
     TicketsMutations,

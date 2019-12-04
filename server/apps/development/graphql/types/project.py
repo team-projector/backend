@@ -22,7 +22,7 @@ class ProjectType(BaseDjangoObjectType):
         filterset_class=MilestonesFilterSet,
     )
 
-    def resolve_milestones(self: Project, info, **kwargs):  # noqa WPS110
+    def resolve_milestones(self: Project, info, **kwargs):  # noqa: WPS110
         """Get project milestones."""
         if isinstance(getattr(self, 'parent_type', None), IssuesProjectSummary):
             return ProjectType.handle_within_summary(self, **kwargs)

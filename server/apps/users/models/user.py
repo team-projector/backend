@@ -24,7 +24,7 @@ USER_GITLAB_TOKEN_MAX_LENGTH = 128
 class User(AbstractBaseUser, PermissionsMixin):
     """The User model."""
 
-    USERNAME_FIELD = 'login'  # noqa WPS115
+    USERNAME_FIELD = 'login'  # noqa: WPS115
 
     login = models.CharField(
         max_length=USER_LOGIN_MAX_LENGTH,
@@ -118,7 +118,7 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     daily_work_hours = models.PositiveIntegerField(default=8)
 
-    objects = UserManager()  # noqa WPS110
+    objects = UserManager()  # noqa: WPS110
 
     class Meta:
         verbose_name = _('VN__USER')

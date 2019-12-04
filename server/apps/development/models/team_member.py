@@ -37,7 +37,7 @@ class TeamMember(models.Model):
         default=0,
     )
 
-    objects = TeamMemberManager()  # noqa WPS110
+    objects = TeamMemberManager()  # noqa: WPS110
 
     class Meta:
         verbose_name = _('VN__TEAM_MEMBER')

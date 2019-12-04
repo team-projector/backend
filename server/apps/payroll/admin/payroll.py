@@ -42,7 +42,7 @@ class PayrollAdmin(BaseModelAdmin):
                 return self._get_inheritance_link(node)
 
     def _get_inheritance_link(self, node) -> str:
-        meta = node._meta  # noqa WPS437
+        meta = node._meta  # noqa: WPS437
 
         url = reverse(
             'admin:{0}_{1}_change'.format(meta.app_label, meta.model_name),
@@ -56,7 +56,7 @@ class PayrollAdmin(BaseModelAdmin):
 
     def _get_accessor_names(self, model) -> Iterable[str]:
         related_objects = [
-            item for item in model._meta.get_fields()  # noqa WPS437
+            item for item in model._meta.get_fields()  # noqa: WPS437, WPS110
             if isinstance(
                 item, OneToOneRel,
             ) and issubclass(

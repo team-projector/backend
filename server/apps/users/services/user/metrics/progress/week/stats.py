@@ -84,7 +84,7 @@ class UserWeekStatsProvider:
             'week',
         ).annotate(
             avg_efficiency=Coalesce(
-                Cast(Sum(F('time_estimate')), FloatField()) /  # noqa:W504
+                Cast(Sum(F('time_estimate')), FloatField()) /  # noqa::W504
                 Cast(Sum(F('total_time_spent')), FloatField()),
                 0,
             ),

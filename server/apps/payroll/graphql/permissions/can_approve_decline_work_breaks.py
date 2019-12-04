@@ -16,7 +16,7 @@ class CanApproveDeclineWorkBreak:
     def has_mutation_permission(
         self,
         root: Any,
-        info: ResolveInfo,  # noqa WPS110
+        info: ResolveInfo,  # noqa: WPS110
         **kwargs,
     ) -> bool:
         """Only team leader can approve or decline work break."""

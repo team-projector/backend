@@ -36,5 +36,8 @@ class ForceSyncEntityMixin(BaseModelAdmin):
         self.sync_handler(instance)
         self.message_user(
             request,
-            f'{instance._meta.verbose_name} "{instance}" is syncing', # noqa WPS437
+            '{0} "{1}" is syncing'.format(
+                instance._meta.verbose_name,  # noqa: WPS437
+                instance,
+            ),
         )

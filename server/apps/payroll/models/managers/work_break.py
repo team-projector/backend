@@ -8,7 +8,7 @@ class WorkBreakManager(models.Manager):
 
     def allowed_for_user(self, user):
         """Get user work breaks allowed for current user and team leader."""
-        from apps.development.models import TeamMember  # noqa WPS433
+        from apps.development.models import TeamMember  # noqa: WPS433
 
         users = TeamMember.objects.filter(
             user=user,

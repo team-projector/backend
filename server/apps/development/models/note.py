@@ -62,18 +62,18 @@ class Note(models.Model):
 
     body = models.TextField()
 
-    type = models.CharField(  # noqa A003
+    type = models.CharField(  # noqa: A003
         choices=NOTE_TYPES,
         max_length=NOTE_TYPE_MAX_LENGTH,
         verbose_name=_('VN__TYPE'),
         help_text=_('HT__TYPE'),
     )
 
-    data = JSONField(  # noqa WPS110
+    data = JSONField(  # noqa: WPS110
         encoder=DjangoJSONEncoder,
     )
 
-    objects = NoteManager()  # noqa WPS110
+    objects = NoteManager()  # noqa: WPS110
 
     class Meta:
         verbose_name = _('VN__NOTE')

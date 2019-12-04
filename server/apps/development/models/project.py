@@ -81,7 +81,7 @@ class Project(GitlabEntityMixin):
         related_query_name='project',
     )
 
-    objects = ProjectManager()  # noqa WPS110
+    objects = ProjectManager()  # noqa: WPS110
 
     class Meta:
         verbose_name = _('VN__PROJECT')
@@ -95,7 +95,7 @@ class Project(GitlabEntityMixin):
     def save(self, *args, **kwargs) -> None:
         """Save the current project."""
         if not self.full_title:
-            self.full_title = self.title  # noqa WPS601
+            self.full_title = self.title  # noqa: WPS601
 
         super().save(*args, **kwargs)
 
@@ -106,7 +106,7 @@ class Project(GitlabEntityMixin):
 
         If milestones not found return milestones from parent group.
         """
-        from apps.development.services.project_group import (  # noqa WPS433
+        from apps.development.services.project_group import (  # noqa: WPS433
             load_for_group,
         )
 

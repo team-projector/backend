@@ -8,7 +8,7 @@ class DataSourceConnection(Connection):
 
     count = Int()
 
-    def resolve_count(self, info):  # noqa WPS110
+    def resolve_count(self, info):  # noqa: WPS110
         """Get count."""
         return self.length
 

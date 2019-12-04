@@ -29,7 +29,7 @@ def filter_allowed_for_user(
     return queryset.filter(id__in={*allowed_users, user.id})
 
 
-def resolve_user_progress_metrics(parent, info, **kwargs):  # noqa WPS110
+def resolve_user_progress_metrics(parent, info, **kwargs):  # noqa: WPS110
     """Resolve progress metrics for user."""
     user = get_object_or_404(
         filter_allowed_for_user(

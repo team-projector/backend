@@ -98,7 +98,7 @@ class SpendAddedParser(BaseNoteParser):
     ) -> Optional[NoteReadResult]:
         """Parse note."""
         match = (
-            RE_SPEND_FULL.match(gl_note.body) or  # noqa W504
+            RE_SPEND_FULL.match(gl_note.body) or  # noqa: W504
             RE_SPEND_SHORT.match(gl_note.body)
         )
         if not match:
@@ -142,7 +142,7 @@ class MovedFromParser(BaseNoteParser):
         gl_note,
     ) -> Optional[NoteReadResult]:
         """Parse note."""
-        is_system = getattr(gl_note, 'system', False)  # noqa WPS425
+        is_system = getattr(gl_note, 'system', False)  # noqa: WPS425
         if is_system and RE_MOVED_FROM.match(gl_note.body):
             return NoteReadResult(NOTE_TYPES.MOVED_FROM, {})
 

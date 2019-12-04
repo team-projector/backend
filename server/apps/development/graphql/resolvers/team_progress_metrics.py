@@ -6,7 +6,7 @@ from apps.development.models import Team
 from apps.development.services import team as team_service
 
 
-def resolve_team_progress_metrics(parent, info, **kwargs):  # noqa WPS110
+def resolve_team_progress_metrics(parent, info, **kwargs):  # noqa: WPS110
     """Resolve progress metrics for team."""
     team = get_object_or_404(
         Team.objects.all(),

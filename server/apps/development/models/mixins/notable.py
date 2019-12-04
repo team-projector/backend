@@ -25,7 +25,7 @@ class NotableMixin(models.Model):
 
     def adjust_spent_times(self) -> None:
         """Create spent times from parsed notes."""
-        from apps.payroll.models import SpentTime  # noqa WPS433
+        from apps.payroll.models import SpentTime  # noqa: WPS433
 
         users_spents: DefaultDict[int, int] = defaultdict(int)
 

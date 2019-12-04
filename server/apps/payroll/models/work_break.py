@@ -52,7 +52,7 @@ class WorkBreak(ApprovedMixin, Timestamps):
         help_text=_('HT__COMMENT'),
     )
 
-    objects = WorkBreakManager()  # noqa WPS110
+    objects = WorkBreakManager()  # noqa: WPS110
 
     class Meta:
         verbose_name = _('VN__WORKBREAK')

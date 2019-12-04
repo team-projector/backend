@@ -34,7 +34,7 @@ class GitLabOAuth2Backend(SocialGitLabOAuth2):
         user.last_login = timezone.now()
         user.save(update_fields=('last_login',))
 
-        return token  # noqa WPS331
+        return token  # noqa: WPS331
 
     def get_redirect_uri(self, state=None):
         """Callback URL after approving access on Gitlab."""
@@ -55,4 +55,4 @@ class GitLabOAuth2Backend(SocialGitLabOAuth2):
 
         For example "state" and "code" values returned from Gitlab.
         """
-        self.data = kwargs  # noqa WPS110
+        self.data = kwargs  # noqa: WPS110

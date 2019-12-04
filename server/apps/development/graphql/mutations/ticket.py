@@ -26,7 +26,7 @@ class BaseTicketMutation(RestrictedAccessSerializerMutation):
         abstract = True
 
     @classmethod
-    def perform_mutate(cls, serializer, info):  # noqa WPS110
+    def perform_mutate(cls, serializer, info):  # noqa: WPS110
         """Performs ticket mutation and returns a payload."""
         ticket = serializer.save()
         return cls(errors=None, ticket=ticket)
@@ -52,12 +52,12 @@ class DeleteTicketMutation(BaseMutation):
     permission_classes = (AllowProjectManager,)
 
     class Arguments:
-        id = graphene.ID(required=True)  # noqa A003
+        id = graphene.ID(required=True)  # noqa: A003
 
     ok = graphene.Boolean()
 
     @classmethod
-    def do_mutate(cls, root, info, **kwargs):  # noqa WPS110
+    def do_mutate(cls, root, info, **kwargs):  # noqa: WPS110
         """Delete ticket."""
         ticket = get_object_or_404(
             Ticket.objects.all(),

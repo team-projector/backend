@@ -23,7 +23,7 @@ class TicketBaseSerializer(serializers.ModelSerializer):
     # choice fields. It creates enums types for these which leads to an error:
     # "AssertionError: Found different types with the same name in the schema:
     # type, type."
-    type = serializers.CharField(  # noqa A003
+    type = serializers.CharField(  # noqa: A003
         required=False,
         max_length=TICKET_TYPE_MAX_LENGTH,
     )
@@ -71,7 +71,7 @@ class TicketCreateSerializer(TicketBaseSerializer):
 class TicketUpdateSerializer(TicketBaseSerializer):
     """Ticket update serializer."""
 
-    id = serializers.CharField()  # noqa A003
+    id = serializers.CharField()  # noqa: A003
     attach_issues = serializers.PrimaryKeyRelatedField(
         many=True,
         required=False,

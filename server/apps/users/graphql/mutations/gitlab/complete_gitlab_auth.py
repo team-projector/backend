@@ -3,7 +3,7 @@
 import graphene
 from django.contrib.auth import REDIRECT_FIELD_NAME
 from social_core.actions import do_complete
-from social_django.views import _do_login  # noqa WPS436
+from social_django.views import _do_login  # noqa: WPS436
 
 from apps.core.graphql.mutations import BaseMutation
 from apps.core.graphql.security.permissions import AllowAny
@@ -23,7 +23,7 @@ class CompleteGitlabAuthMutation(BaseMutation):
         state = graphene.String(required=True)
 
     @classmethod
-    def do_mutate(cls, root, info, code, state):  # noqa WPS110
+    def do_mutate(cls, root, info, code, state):  # noqa: WPS110
         """After successful login return token."""
         request = psa(info.context)
         request.backend.set_data(code=code, state=state)

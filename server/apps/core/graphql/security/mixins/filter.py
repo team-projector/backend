@@ -13,14 +13,14 @@ class AuthFilter(DjangoFilterConnectionField):
     permission_classes = (AllowAny,)
 
     @classmethod
-    def has_permission(cls, info: ResolveInfo) -> bool:  # noqa WPS110
+    def has_permission(cls, info: ResolveInfo) -> bool:  # noqa: WPS110
         """Check has permission."""
         return all((
             perm().has_filter_permission(info) for perm in
             cls.permission_classes
         ))
 
-    @classmethod  # noqa: WPS211
+    @classmethod  # noqa:: WPS211
     def connection_resolver(
         cls,
         resolver,
@@ -31,7 +31,7 @@ class AuthFilter(DjangoFilterConnectionField):
         filterset_class,
         filtering_args,
         root,
-        info,  # noqa WPS110
+        info,  # noqa: WPS110
         **args,
     ):
         """Connection resolver."""
@@ -50,7 +50,7 @@ class AuthFilter(DjangoFilterConnectionField):
             request=info.context,
         ).qs
 
-        return super(  # noqa WPS608
+        return super(  # noqa: WPS608
             DjangoFilterConnectionField, cls,
         ).connection_resolver(
             resolver,

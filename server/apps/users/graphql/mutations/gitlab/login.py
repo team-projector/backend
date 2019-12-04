@@ -17,7 +17,7 @@ class LoginGitlabMutation(BaseMutation):
     redirect_url = graphene.String()
 
     @classmethod
-    def do_mutate(cls, root, info):  # noqa WPS110
+    def do_mutate(cls, root, info):  # noqa: WPS110
         """Returns url for Gitlab with app ID, callback url and state."""
         request = psa(info.context)
 

@@ -20,8 +20,8 @@ class SpentTimeQuerySet(models.QuerySet):
 
     def summaries(self):
         """Get spent time summaries."""
-        from apps.development.models import issue  # noqa WPS433
-        from apps.development.models.merge_request import (  # noqa WPS433
+        from apps.development.models import issue  # noqa: WPS433
+        from apps.development.models.merge_request import (  # noqa: WPS433
             MERGE_REQUESTS_STATES,
         )
 
@@ -88,7 +88,7 @@ class SpentTimeManager(BaseSpentTimeManager):
 
     def allowed_for_user(self, user):
         """Get user spent times for current user, team leader or watcher."""
-        from apps.payroll.services.spent_time.allowed import (  # noqa WPS433
+        from apps.payroll.services.spent_time.allowed import (  # noqa: WPS433
             filter_allowed_for_user,
         )
         return filter_allowed_for_user(self, user)

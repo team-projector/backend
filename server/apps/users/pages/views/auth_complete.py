@@ -7,7 +7,7 @@ from django.views.decorators.csrf import csrf_exempt
 from social_core.actions import do_complete
 from social_core.utils import setting_name
 from social_django.utils import psa
-from social_django.views import _do_login  # noqa WPS436
+from social_django.views import _do_login  # noqa: WPS436
 
 NAMESPACE = getattr(settings, setting_name('URL_NAMESPACE'), None) or 'social'
 

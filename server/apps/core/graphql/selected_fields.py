@@ -24,7 +24,7 @@ def collect_fields(
     return field
 
 
-def get_fields_from_info(info) -> dict:  # noqa WPS110
+def get_fields_from_info(info) -> dict:  # noqa: WPS110
     """Get fields from info."""
     fragments = {}
     node = ast_to_dict(info.field_asts[0])
@@ -36,7 +36,7 @@ def get_fields_from_info(info) -> dict:  # noqa WPS110
 
 
 def is_field_selected(
-    info,  # noqa WPS110
+    info,  # noqa: WPS110
     path: str,
 ) -> bool:
     """Is field selected."""

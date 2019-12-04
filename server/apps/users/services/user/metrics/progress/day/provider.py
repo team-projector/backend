@@ -44,7 +44,7 @@ class DayMetricsProvider(provider.ProgressMetricsProvider):
 
         return self._get_metrics(generator)
 
-    def _get_metrics(  # noqa WPS211
+    def _get_metrics(  # noqa: WPS211
         self,
         generator: UserDaysMetricsGenerator,
     ) -> provider.UserProgressMetricsList:

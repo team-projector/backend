@@ -33,7 +33,7 @@ class TeamType(BaseDjangoObjectType):
     def get_queryset(
         cls,
         queryset,
-        info,  # noqa WPS110
+        info,  # noqa: WPS110
     ) -> QuerySet:
         """Get teams."""
         queryset = team_service.filter_allowed_for_user(
@@ -43,10 +43,10 @@ class TeamType(BaseDjangoObjectType):
 
         return queryset
 
-    def resolve_metrics(self, info, **kwargs):  # noqa WPS110
+    def resolve_metrics(self, info, **kwargs):  # noqa: WPS110
         """Get team metrics."""
         return team_service.get_metrics(self)
 
-    def resolve_members(self, info, **kwargs):  # noqa WPS110
+    def resolve_members(self, info, **kwargs):  # noqa: WPS110
         """Get team members."""
         return self.teammember_set

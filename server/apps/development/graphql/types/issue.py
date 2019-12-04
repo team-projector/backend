@@ -26,19 +26,19 @@ class IssueType(graphql.BaseDjangoObjectType):
         connection_class = graphql.DataSourceConnection
         name = 'Issue'
 
-    def resolve_problems(self, info, **kwargs):  # noqa WPS110
+    def resolve_problems(self, info, **kwargs):  # noqa: WPS110
         """Get issue problems."""
         return issue_service.get_problems(self)
 
-    def resolve_metrics(self, info, **kwargs):  # noqa WPS110
+    def resolve_metrics(self, info, **kwargs):  # noqa: WPS110
         """Get issue metrics."""
         return issue_service.get_metrics(self)
 
-    def resolve_participants(self, info, **kwargs):  # noqa WPS110
+    def resolve_participants(self, info, **kwargs):  # noqa: WPS110
         """Get issue participants."""
         return getattr(self, '_participants_', self.participants)
 
-    def resolve_labels(self, info, **kwargs):  # noqa WPS110
+    def resolve_labels(self, info, **kwargs):  # noqa: WPS110
         """Get issue labels."""
         return getattr(self, '_labels_', self.labels)
 
@@ -46,7 +46,7 @@ class IssueType(graphql.BaseDjangoObjectType):
     def get_queryset(
         cls,
         queryset,
-        info,  # noqa WPS110
+        info,  # noqa: WPS110
     ) -> QuerySet:
         """Get issues."""
         queryset = issue_service.filter_allowed_for_user(
