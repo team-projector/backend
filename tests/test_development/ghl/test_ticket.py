@@ -202,6 +202,23 @@ def test_ticket_attach_issues(project_manager, client):
     assert ticket == iss_1.ticket
     assert ticket == iss_2.ticket
 
+def test_ticket_clear_issues(project_manager, client):
+    client.user = project_manager
+    info = AttrDict({'context': client})
+
+    ticket = TicketFactory()
+    issue = IssueFactory(ticket=ticket, user=project_manager)
+
+    result = UpdateTicketMutation.mutate_and_get_payload(
+        root=None,
+        info=info,
+        id=ticket.id,
+        issues=[]
+    )
+
+    assert not result.errors
+    issue.refresh_from_db()
+    assert not issue.ticket
 
 def test_ticket_both_params_attach_and_issues(project_manager, client):
     client.user = project_manager
