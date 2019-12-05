@@ -111,8 +111,11 @@ class TicketUpdateSerializer(TicketBaseSerializer):
         if attach_issues:
             ticket.issues.add(*attach_issues)
 
-        if issues:
-            Issue.objects.filter(ticket=ticket).update(ticket=None)
+        if issues is not None:
+            Issue.objects.filter(ticket=ticket).exclude(
+                id__in=[iss.id for iss in issues],
+            ).update(ticket=None)
+
             ticket.issues.add(*issues)
 
         return ticket
