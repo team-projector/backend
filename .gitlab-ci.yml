@@ -96,7 +96,7 @@ deploy_demo:
   script:
     - echo $HELM_NAMESPACE
     - echo $HELM_RELEASE
-    - helm_deploy
+#    - helm_deploy
   environment:
     name: demo
     url: $DEMO_SITE_ADDRESS
