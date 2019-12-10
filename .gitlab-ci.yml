@@ -37,7 +37,7 @@ quality:
     - export PATH="$PATH:$HOME/.poetry/bin"
     - make check_quality
 
-test:
+.test:
   image: $DOCKER_TEST_IMAGE
   stage: test
   variables:
