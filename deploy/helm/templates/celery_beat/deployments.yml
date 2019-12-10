@@ -27,10 +27,3 @@ spec:
           args: ["-A", "server.celery_app", "beat",  "-s", "/var/run/celerybeat-schedule"]
           env:
           {{- include "env" . | nindent 12 }}
-          volumeMounts:
-            - name: celery-beat-data
-              mountPath: /var/run
-      volumes:
-        - name: celery-beat-data
-          persistentVolumeClaim:
-            claimName: celery-beat-data-pvc
