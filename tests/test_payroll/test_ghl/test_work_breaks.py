@@ -117,9 +117,10 @@ def test_update_work_break(user, client):
         user=user.id
     ).work_break
 
+    work_break.refresh_from_db()
     assert WorkBreak.objects.count() == 1
-    assert work_break_mutated.comment == 'updated'
-    assert work_break_mutated.user == user
+    assert work_break.comment == 'updated'
+    assert work_break.user == user
 
 
 def test_update_work_break_another_user(user, client):
@@ -178,9 +179,10 @@ def test_update_work_break_another_user_but_teamlead(user, client):
         to_date=str(datetime.now())
     ).work_break
 
+    work_break.refresh_from_db()
     assert WorkBreak.objects.count() == 1
-    assert work_break_mutated.comment == 'updated'
-    assert work_break_mutated.user == user_2
+    assert work_break.comment == 'updated'
+    assert work_break.user == user_2
 
 
 def test_delete_work_break(user, client):

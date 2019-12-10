@@ -126,6 +126,7 @@ class UpdateWorkBreakMutation(
         work_break.from_date = cleaned_data['from_date']
         work_break.reason = cleaned_data['reason']
         work_break.to_date = cleaned_data['to_date']
+        work_break.save()
 
         return UpdateWorkBreakMutation(
             work_break=work_break,
