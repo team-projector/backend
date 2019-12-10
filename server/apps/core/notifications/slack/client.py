@@ -12,7 +12,7 @@ class SlackClient:
 
     def __init__(self):
         """Initialize self."""
-        self.client = get_slack_client()
+        self._client = get_slack_client()
 
     def get_channel_user_by_email(self, email: str):
         """
@@ -21,8 +21,8 @@ class SlackClient:
         https://api.slack.com/methods/users.lookupByEmail
         """
         with suppress(TypeError, SlackApiError):
-            return self.client.im_open(
-                user=self.client.users_lookupByEmail(
+            return self._client.im_open(
+                user=self._client.users_lookupByEmail(
                     email=email,
                 ).get('user').get('id'),
             ).get('channel')
@@ -38,7 +38,7 @@ class SlackClient:
 
         https://api.slack.com/methods/chat.postMessage
         """
-        self.client.chat_postMessage(
+        self._client.chat_postMessage(
             channel=channel,
             text=msg,
             **kwargs,

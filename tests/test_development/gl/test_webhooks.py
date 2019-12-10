@@ -23,7 +23,7 @@ from tests.test_development.factories_gitlab import (
 
 
 @override_settings(GITLAB_TOKEN='GITLAB_TOKEN')
-@override_settings(WEBHOOK_SECRET_TOKEN=None)
+@override_settings(GITLAB_WEBHOOK_SECRET_TOKEN=None)
 def test_sync_issues(db, gl_mocker, client):
     gl_mocker.registry_get('/user', GlUserFactory())
 
@@ -54,7 +54,7 @@ def test_sync_issues(db, gl_mocker, client):
 
 
 @override_settings(GITLAB_TOKEN='GITLAB_TOKEN')
-@override_settings(WEBHOOK_SECRET_TOKEN=None)
+@override_settings(GITLAB_WEBHOOK_SECRET_TOKEN=None)
 def test_sync_merge_request(db, gl_mocker, client):
     gl_mocker.registry_get('/user', GlUserFactory())
 
@@ -86,7 +86,7 @@ def test_sync_merge_request(db, gl_mocker, client):
 
 
 @override_settings(GITLAB_TOKEN='GITLAB_TOKEN')
-@override_settings(WEBHOOK_SECRET_TOKEN=None)
+@override_settings(GITLAB_WEBHOOK_SECRET_TOKEN=None)
 def test_sync_another_kind_object(db, gl_mocker, client):
     gl_mocker.registry_get('/user', GlUserFactory())
 
@@ -107,7 +107,7 @@ def test_sync_another_kind_object(db, gl_mocker, client):
 
 
 @override_settings(GITLAB_TOKEN='GITLAB_TOKEN')
-@override_settings(WEBHOOK_SECRET_TOKEN='WEBHOOK_SECRET_TOKEN')
+@override_settings(GITLAB_WEBHOOK_SECRET_TOKEN='GITLAB_WEBHOOK_SECRET_TOKEN')
 def test_webhook_secret_token(client):
     webhook = AttrDict(GlIssueWebhookFactory())
 
@@ -116,7 +116,7 @@ def test_webhook_secret_token(client):
 
 
 @override_settings(GITLAB_TOKEN='GITLAB_TOKEN')
-@override_settings(WEBHOOK_SECRET_TOKEN='WEBHOOK_SECRET_TOKEN')
+@override_settings(GITLAB_WEBHOOK_SECRET_TOKEN='GITLAB_WEBHOOK_SECRET_TOKEN')
 def test_sync_merge_request_with_secret_token(db, gl_mocker, client):
     gl_mocker.registry_get('/user', GlUserFactory())
 
@@ -142,7 +142,7 @@ def test_sync_merge_request_with_secret_token(db, gl_mocker, client):
         '/',
         data=webhook,
         format='json',
-        HTTP_X_GITLAB_TOKEN='WEBHOOK_SECRET_TOKEN'
+        HTTP_X_GITLAB_TOKEN='GITLAB_WEBHOOK_SECRET_TOKEN'
     ))
 
     merge_request = MergeRequest.objects.first()

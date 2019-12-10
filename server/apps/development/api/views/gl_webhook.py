@@ -68,8 +68,8 @@ def _sync_merge_request(body: dict) -> None:
 
 
 def _check_webhook_secret_token(secret_token: str) -> None:
-    if not settings.WEBHOOK_SECRET_TOKEN:
+    if not settings.GITLAB_WEBHOOK_SECRET_TOKEN:
         return
 
-    if settings.WEBHOOK_SECRET_TOKEN != secret_token:
+    if settings.GITLAB_WEBHOOK_SECRET_TOKEN != secret_token:
         raise AuthenticationFailed('Invalid token')

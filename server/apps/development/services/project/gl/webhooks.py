@@ -73,7 +73,7 @@ class ProjectWebhookManager:
         if not has_valid:
             gl_project.hooks.create({
                 'url': self.webhook_url,
-                'token': settings.WEBHOOK_SECRET_TOKEN,
+                'token': settings.GITLAB_WEBHOOK_SECRET_TOKEN,
                 'issues_events': True,
                 'merge_requests_events': True,
             })

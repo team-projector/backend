@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from apps.core.notifications.mail.dispatcher import SystemEmailDispatcher
+from apps.core.notifications.email.dispatcher import SystemEmailDispatcher
 from apps.core.notifications.slack.client import SlackClient
 from apps.payroll.models.salary import Salary
 
