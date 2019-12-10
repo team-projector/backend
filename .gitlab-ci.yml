@@ -94,9 +94,7 @@ deploy_demo:
     GIT_STRATEGY: fetch
     HELM_IMAGE_TAG: $CI_PIPELINE_IID
   script:
-    - echo $HELM_NAMESPACE
-    - echo $HELM_RELEASE
-#    - helm_deploy
+    - helm_deploy
   environment:
     name: demo
     url: $DEMO_SITE_ADDRESS
