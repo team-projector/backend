@@ -2,7 +2,7 @@
 
 import types
 from datetime import datetime
-from typing import Iterable
+from typing import Iterable, List
 
 from actstream.models import Action
 from django.apps import apps
@@ -55,7 +55,7 @@ class GlStatusProvider:
         return status
 
     @classmethod
-    def _get_last_issues(cls, count: int = 10) -> Iterable[Issue]:
+    def _get_last_issues(cls, count: int = 10) -> List[Issue]:
         return list(Issue.objects.order_by('-gl_last_sync')[:count])
 
     @classmethod
