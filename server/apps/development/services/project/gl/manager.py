@@ -61,7 +61,7 @@ class ProjectGlManager:
                 title=gl_project.name,
                 is_archived=gl_project.archived,
             )
-        except DatabaseError:
+        except (DatabaseError, ValueError):
             logger.exception('Error on update project from gitlab')
         else:
             self.webhook_manager.check_project_webhooks(project)

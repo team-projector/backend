@@ -7,3 +7,5 @@
 run/
 *.mo
 development.py
+htmlcov
+.coverage
