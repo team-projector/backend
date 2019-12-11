@@ -3,7 +3,7 @@ from datetime import date, datetime, timedelta
 from django.test import TestCase
 from django.utils import timezone
 
-from apps.core.gitlab import GITLAB_DATETIME_FORMAT, GITLAB_DATE_FORMAT
+from apps.core.gitlab.parsers import GITLAB_DATETIME_FORMAT, GITLAB_DATE_FORMAT
 from apps.core.utils.objects import dict2obj
 from apps.core.utils.time import seconds
 from apps.development.models import Note
@@ -18,7 +18,7 @@ class TimeSpendNoteTypeTests(TestCase):
         self.issue = IssueFactory.create()
         self.user = User.objects.create_user(login='user', gl_id=10)
 
-    def test_load_spend_added(self):
+    def test_load_spend_added(self, GITLAB_DATE_FORMAT=None):
         note_date = date.today()
 
         body = f'added 1h 1m of time spent at {note_date:{GITLAB_DATE_FORMAT}}'
