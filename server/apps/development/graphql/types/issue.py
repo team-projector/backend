@@ -1,16 +1,13 @@
 # -*- coding: utf-8 -*-
 
 import graphene
-from django.contrib.auth import get_user_model
-from django.db.models import Prefetch, QuerySet
+from django.db.models import QuerySet
 
 from apps.core import graphql
 from apps.development.graphql.interfaces import WorkItem
 from apps.development.graphql.types.issue_metrics import IssueMetricsType
-from apps.development.graphql.types.label import LabelType
-from apps.development.models import Issue, Label
+from apps.development.models import Issue
 from apps.development.services import issue as issue_service
-from apps.users.graphql.types import UserType
 
 
 class IssueType(graphql.BaseDjangoObjectType):
@@ -34,14 +31,6 @@ class IssueType(graphql.BaseDjangoObjectType):
         """Get issue metrics."""
         return issue_service.get_metrics(self)
 
-    def resolve_participants(self, info, **kwargs):  # noqa: WPS110
-        """Get issue participants."""
-        return getattr(self, '_participants_', self.participants)
-
-    def resolve_labels(self, info, **kwargs):  # noqa: WPS110
-        """Get issue labels."""
-        return getattr(self, '_labels_', self.labels)
-
     @classmethod
     def get_queryset(
         cls,
@@ -56,22 +45,5 @@ class IssueType(graphql.BaseDjangoObjectType):
 
         if graphql.is_field_selected(info, 'edges.node.user'):
             queryset = queryset.select_related('user')
-
-        # TODO: condsider using graphene_django_optimizer here
-        if graphql.is_field_selected(info, 'edges.node.participants'):
-            users = get_user_model().objects
-            queryset = queryset.prefetch_related(Prefetch(
-                'participants',
-                queryset=UserType.get_queryset(users, info).all(),
-                to_attr='_participants_',
-            ))
-
-        # TODO: condsider using graphene_django_optimizer here
-        if graphql.is_field_selected(info, 'edges.node.labels'):
-            queryset = queryset.prefetch_related(Prefetch(
-                'labels',
-                queryset=LabelType.get_queryset(Label.objects, info).all(),
-                to_attr='_labels_',
-            ))
 
         return queryset
