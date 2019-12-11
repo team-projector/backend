@@ -60,46 +60,6 @@ def test_update_issue_ticket(user, client):
     assert issue_mutated.ticket == ticket
 
 
-def test_resolve_participants(user, client):
-    issue = IssueFactory.create(user=user)
-
-    user_1 = UserFactory.create()
-    user_2 = UserFactory.create()
-    issue.participants.add(user_1, user_2)
-
-    client.user = user
-    info = AttrDict({
-        'context': client,
-        'field_asts': [{}],
-        'fragments': {},
-    })
-
-    participants = IssueType.resolve_participants(issue, info)
-
-    assert participants.count() == 2
-    assert set(participants.all()) == {user_1, user_2}
-
-
-def test_resolve_labels(user, client):
-    issue = IssueFactory.create(user=user)
-
-    label_1 = LabelFactory.create()
-    label_2 = LabelFactory.create()
-    issue.labels.add(label_1, label_2)
-
-    client.user = user
-    info = AttrDict({
-        'context': client,
-        'field_asts': [{}],
-        'fragments': {},
-    })
-
-    labels = IssueType.resolve_labels(issue, info)
-
-    assert labels.count() == 2
-    assert set(labels.all()) == {label_1, label_2}
-
-
 def test_resolve_project(user):
     issue = IssueFactory.create(user=user)
 
