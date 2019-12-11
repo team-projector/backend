@@ -51,8 +51,12 @@ class Project:
                 if initial != sorted(gl_api_obj.labels):
                     gl_api_obj.save()
                     logger.debug(
-                        'Change labels for {0}:\n'.format(gl_api_obj.web_url)
-                        + '{0} -> {1}'.format(initial, gl_api_obj.labels),
+                        'Change labels for {url}:\n{old} -> {new}',
+                        extra={
+                            'url': gl_api_obj.web_url,
+                            'old': initial,
+                            'new': gl_api_obj.labels,
+                        },
                     )
 
                 if callback:
@@ -275,8 +279,8 @@ class LabelsCleaner:
 
             try:
                 gl_api_obj.labels.delete(label.id)
-            except GitlabDeleteError as exc:
-                logger.debug(str(exc))
+            except GitlabDeleteError:
+                logger.debug('error', exc_info=True)
 
     def _rename_redundant_labels(self, group_or_project, dry_run=True) -> None:
         gl_api_obj = group_or_project.gl_api_object

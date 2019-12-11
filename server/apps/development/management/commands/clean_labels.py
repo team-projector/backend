@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from django.core.management import BaseCommand
 from tqdm import tqdm
 
@@ -6,10 +8,6 @@ from apps.development.services.gl.labels import LabelsCleaner
 
 
 class Command(BaseCommand):
-    def _parse_params(self, *args, **options):
-        self.group_for_sync = options.get('group')
-        self.only_log = options.get('log')
-
     def add_arguments(self, parser):
         parser.add_argument(
             '--group',
@@ -21,7 +19,7 @@ class Command(BaseCommand):
             '--log',
             action='store_true',
             default=False,
-            help='Show only log, without apply'
+            help='Show only log, without apply',
         )
 
     def handle(self, *args, **options):
@@ -42,3 +40,7 @@ class Command(BaseCommand):
                 adjust_element_callback=pbar.update,
                 dry_run=self.only_log,
             )
+
+    def _parse_params(self, *args, **options):
+        self.group_for_sync = options.get('group')
+        self.only_log = options.get('log')

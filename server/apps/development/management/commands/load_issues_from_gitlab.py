@@ -7,4 +7,4 @@ from apps.development.services.issue.gl.manager import IssueGlManager
 
 class Command(BaseCommand):
     def handle(self, *args, **options):
-        IssueGlManager().sync_issues(True)
+        IssueGlManager().sync_issues(full_reload=True)

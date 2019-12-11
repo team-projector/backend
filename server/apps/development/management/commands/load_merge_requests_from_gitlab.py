@@ -9,4 +9,4 @@ from apps.development.services.merge_request.gl.manager import (
 
 class Command(BaseCommand):
     def handle(self, *args, **options):
-        MergeRequestGlManager().sync_merge_requests(True)
+        MergeRequestGlManager().sync_merge_requests(full_reload=True)

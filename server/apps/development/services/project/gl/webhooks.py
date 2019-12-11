@@ -43,8 +43,8 @@ class ProjectWebhookManager:
 
         try:
             self._check_project_webhooks(gl_project)
-        except GitlabError as error:
-            logger.exception(str(error))
+        except GitlabError:
+            logger.exception('Error on check project webhook')
 
     def _check_project_webhooks(
         self,

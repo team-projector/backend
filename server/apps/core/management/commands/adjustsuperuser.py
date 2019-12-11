@@ -29,11 +29,12 @@ class Command(createsuperuser.Command):
 
         self._fill_user_data_required_fields(user_data, options)
 
-        database = options['database']
-        self.UserModel._default_manager.db_manager(database).create_superuser(**user_data)
+        self.UserModel.objects.create_superuser(
+            **user_data,
+        )
 
         if options['verbosity'] >= 1:
-            self.stdout.write("Superuser created successfully.")
+            self.stdout.write('Superuser created successfully.')
 
     def _fill_user_data_required_fields(self, user_data, options) -> None:
         for field_name in self.UserModel.REQUIRED_FIELDS:
@@ -41,7 +42,7 @@ class Command(createsuperuser.Command):
             value = options[field_name] or os.environ.get(env_var)
             if not value:
                 raise CommandError(
-                    'You must use --%s with --noinput.' % field_name
+                    'You must use --{0} with --noinput.'.format(field_name),
                 )
-            field = self.UserModel._meta.get_field(field_name)
+            field = self.UserModel._meta.get_field(field_name)  # noqa: WPS437
             user_data[field_name] = field.clean(value, None)

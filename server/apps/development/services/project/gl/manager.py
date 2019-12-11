@@ -2,6 +2,7 @@
 
 import logging
 
+from django.db import DatabaseError
 from gitlab.v4 import objects as gl
 
 from apps.development.models import Project, ProjectGroup
@@ -60,8 +61,8 @@ class ProjectGlManager:
                 title=gl_project.name,
                 is_archived=gl_project.archived,
             )
-        except Exception as error:
-            logger.exception(str(error))
+        except DatabaseError:
+            logger.exception('Error on update project from gitlab')
         else:
             self.webhook_manager.check_project_webhooks(project)
 

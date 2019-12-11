@@ -119,8 +119,10 @@ class IssueGlManager(BaseWorkItemGlManager):
         project.issues.filter(gl_id__in=diff).delete()
 
         logger.info(
-            'Project "{0}" deleted issues '.format(project)
-            + 'ckecked: removed {0} issues'.format(len(diff)),
+            'Project "{project}" deleted issues ckecked: removed {removed}', {
+                'project': project,
+                'removed': len(diff),
+            },
         )
 
     def sync_merge_requests(
