@@ -8,7 +8,7 @@ class NullsAlwaysLastOrderingMixin:
 
     def get_ordering_value(self, choice):
         """Get ordering value."""
-        ord_value = super().get_ordering_value(choice)  # type: ignore
+        ord_value = super().get_ordering_value(choice)
 
         descending = ord_value.startswith('-')
         normalized_value = ord_value[1:] if descending else ord_value

@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 
-from .not_enough_tasks import NotEnoughTasksChecker, PROBLEM_NOT_ENOUGH_TASKS
+from .not_enough_tasks import PROBLEM_NOT_ENOUGH_TASKS, NotEnoughTasksChecker
 from .payroll_opened_overflow import (
-    PayrollOpenedOverflowChecker, PROBLEM_PAYROLL_OPENED_OVERFLOW,
-    PROBLEM_PAYROLL_OVERFLOW_RATIO
+    PROBLEM_PAYROLL_OPENED_OVERFLOW,
+    PROBLEM_PAYROLL_OVERFLOW_RATIO,
+    PayrollOpenedOverflowChecker,
 )

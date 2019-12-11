@@ -165,7 +165,7 @@ class IssuesProjectSummaryProvider:
 
 def get_project_summaries(
     queryset: QuerySet,
-    order_by: str = None,
+    order_by: Optional[str] = None,
 ) -> List[IssuesProjectSummary]:
     """Get summaries for project."""
     provider = IssuesProjectSummaryProvider(
