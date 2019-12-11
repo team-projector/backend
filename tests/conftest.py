@@ -6,7 +6,7 @@ from graphene.test import Client as GQLClient
 from apps.core.gitlab.client import get_default_gitlab_client
 from apps.users.models import User
 from gql import schema
-from tests.base import Client, create_user, USER_LOGIN, USER_PASSWORD
+from tests.base import Client, USER_LOGIN, USER_PASSWORD, create_user
 from tests.mocks import GitlabMock
 from tests.test_development.factories_gitlab import GlUserFactory
 
@@ -85,7 +85,7 @@ def gql_client_authenticated(rf, admin_user):
     request = rf.post('/')
     request.user = admin_user
 
-    return GQLClient(schema, context_value=request)
+    return GQLClient(schema, context=request)
 
 
 @pytest.fixture
@@ -93,4 +93,4 @@ def gql_client_anonymous(rf):
     request = rf.post('/')
     request.user = AnonymousUser()
 
-    return GQLClient(schema, context_value=request)
+    return GQLClient(schema, context=request)
