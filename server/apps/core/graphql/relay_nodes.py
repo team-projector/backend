@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
 
-from contextlib import suppress
-
 from graphene import relay
 
 
@@ -15,20 +13,20 @@ class DatasourceRelayNode(relay.Node):
         global_id,
         only_type=None,
     ):
-        """Get node."""
-        with suppress(Exception):
-            object_id = cls.from_global_id(global_id)
+        """Get node by global id."""
+        is_invalid_node = (
+            not global_id
+            or not only_type
+            # We make sure the ObjectType implements the "Node" interface
+            or cls not in only_type._meta.interfaces  # noqa: WPS437
+        )
 
-        if not object_id or not only_type:
-            return None
-
-        # We make sure the ObjectType implements the "Node" interface
-        if cls not in only_type._meta.interfaces:  # noqa: WPS437
+        if is_invalid_node:  # noqa: WPS437
             return None
 
         get_node = getattr(only_type, 'get_node', None)
         if get_node:
-            return get_node(info, object_id)
+            return get_node(info, global_id)
 
     @classmethod
     def from_global_id(cls, global_id: int) -> int:

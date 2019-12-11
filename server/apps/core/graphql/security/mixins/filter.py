@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+from typing import Optional
+
 from graphene_django.filter import DjangoFilterConnectionField
 from graphql import ResolveInfo
 from rest_framework.exceptions import PermissionDenied
@@ -13,49 +15,39 @@ class AuthFilter(DjangoFilterConnectionField):
     permission_classes = (AllowAny,)
 
     @classmethod
-    def has_permission(cls, info: ResolveInfo) -> bool:  # noqa: WPS110
-        """Check has permission."""
-        return all((
-            perm().has_filter_permission(info) for perm in
-            cls.permission_classes
-        ))
+    def has_permission(
+        cls,
+        info: ResolveInfo,  # noqa: WPS110
+    ) -> bool:
+        return all(
+            perm().has_filter_permission(info)
+            for perm in cls.permission_classes
+        )
 
-    @classmethod  # noqa:: WPS211
+    @classmethod  # noqa: WPS211
     def connection_resolver(
         cls,
         resolver,
         connection,
         default_manager,
+        queryset_resolver,
         max_limit,
         enforce_first_or_last,
-        filterset_class,
-        filtering_args,
-        root,
-        info,  # noqa: WPS110
+        root: Optional[object],
+        info: ResolveInfo,  # noqa: WPS110
         **args,
     ):
-        """Connection resolver."""
         if not cls.has_permission(info):
             raise PermissionDenied()
 
-        filter_kwargs = {
-            key: arg_value
-            for key, arg_value in args.items()
-            if key in filtering_args
-        }
-
-        qs = filterset_class(
-            data=filter_kwargs,
-            queryset=default_manager.get_queryset(),
-            request=info.context,
-        ).qs
-
         return super(  # noqa: WPS608
-            DjangoFilterConnectionField, cls,
+            DjangoFilterConnectionField,
+            cls,
         ).connection_resolver(
             resolver,
             connection,
-            qs,
+            default_manager,
+            queryset_resolver,
             max_limit,
             enforce_first_or_last,
             root,

@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+from typing import Optional
+
 from django.conf import settings
 from django.contrib.auth.base_user import BaseUserManager
 from django.utils.functional import cached_property
@@ -12,7 +14,7 @@ class UserManager(BaseUserManager):
     def create_user(
         self,
         login: str,
-        password: str = None,
+        password: Optional[str] = None,
         **kwargs,
     ):
         """Create user."""

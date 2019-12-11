@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
 
+from typing import List, Optional
+
 from django.db.models import QuerySet
-from graphene import Connection, Int, PageInfo
+from graphene import Connection, Int, ObjectType, PageInfo
 from graphene_django.filter import DjangoFilterConnectionField
 from graphene_django.settings import graphene_settings
 from graphene_django.utils import maybe_queryset
@@ -34,19 +36,12 @@ class DataSourceConnectionField(
     def resolve_connection(
         cls,
         connection,
-        default_manager,
         args,
         iterable,
     ):
         """Resolve connection."""
-        if iterable is None:
-            iterable = default_manager
-
         iterable = maybe_queryset(iterable)
         if isinstance(iterable, QuerySet):
-            if iterable.model.objects is not default_manager:
-                default_queryset = maybe_queryset(default_manager)
-                iterable = cls.merge_querysets(default_queryset, iterable)
             items_count = iterable.count()
         else:
             items_count = len(iterable)
@@ -67,7 +62,7 @@ class DataSourceConnectionField(
         connection.length = items_count
         return connection
 
-    @classmethod  # noqa:: WPS211
+    @classmethod  # noqa: WPS211
     def _connection_from_list_slice(
         cls,
         list_slice,
@@ -77,7 +72,7 @@ class DataSourceConnectionField(
         pageinfo_type=PageInfo,
         slice_start: int = 0,
         list_length: int = 0,
-        list_slice_length: int = None,
+        list_slice_length: Optional[int] = None,
     ) -> Connection:
 
         # implemented support for offsets
@@ -130,8 +125,7 @@ class DataSourceConnectionField(
         list_slice,
         start_offset,
         end_offset,
-    ) -> list:
-
+    ) -> List[ObjectType]:
         slice_fragment = list_slice[start_offset:end_offset]
 
         return [
@@ -154,7 +148,7 @@ class DataSourceConnectionField(
 
         return isinstance(last, int) and start_offset > lower_bound
 
-    @classmethod  # noqa:: WPS211
+    @classmethod  # noqa: WPS211
     def _has_next_page(
         cls,
         before_offset,
@@ -167,7 +161,7 @@ class DataSourceConnectionField(
 
         return isinstance(first, int) and end_offset < upper_bound
 
-    @classmethod  # noqa:: WPS211
+    @classmethod  # noqa: WPS211
     def _build_connection_type(
         cls,
         connection_type,
