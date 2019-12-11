@@ -18,7 +18,7 @@ class TimeSpendNoteTypeTests(TestCase):
         self.issue = IssueFactory.create()
         self.user = User.objects.create_user(login='user', gl_id=10)
 
-    def test_load_spend_added(self, GITLAB_DATE_FORMAT=None):
+    def test_load_spend_added(self):
         note_date = date.today()
 
         body = f'added 1h 1m of time spent at {note_date:{GITLAB_DATE_FORMAT}}'
@@ -205,10 +205,14 @@ class TimeSpendNoteTypeTests(TestCase):
         Note.objects.update_from_gitlab(dict2obj({
             'id': 2,
             'body': body,
-            'created_at': datetime.strftime(datetime.now(),
-                                            GITLAB_DATETIME_FORMAT),
-            'updated_at': datetime.strftime(datetime.now(),
-                                            GITLAB_DATETIME_FORMAT),
+            'created_at': datetime.strftime(
+                datetime.now(),
+                GITLAB_DATETIME_FORMAT,
+            ),
+            'updated_at': datetime.strftime(
+                datetime.now(),
+                GITLAB_DATETIME_FORMAT,
+            ),
             'author': {
                 'id': self.user.gl_id
             }
@@ -222,5 +226,7 @@ class TimeSpendNoteTypeTests(TestCase):
         self.assertEqual(note.type, NOTE_TYPES.TIME_SPEND)
         self.assertEqual(note.body, body)
         self.assertEqual(note.data['spent'], seconds(hours=1, minutes=1))
-        self.assertEqual(note.data['date'],
-                         note_date.strftime(GITLAB_DATE_FORMAT))
+        self.assertEqual(
+            note.data['date'],
+            note_date.strftime(GITLAB_DATE_FORMAT),
+        )
