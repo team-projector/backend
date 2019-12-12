@@ -203,7 +203,7 @@ def test_salary_another_field_changed(admin_client):
     salary.refresh_from_db()
 
     assert salary.sum == 10.0
-    assert mail.outbox
+    assert not mail.outbox
 
 
 def test_salary_another_field_changed_and_payed(admin_client):
