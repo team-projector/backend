@@ -2,7 +2,7 @@
 
 from django.utils.translation import gettext_lazy as _
 
-from apps.core.apps import BaseAppConfig
+from apps.core.utils.apps import BaseAppConfig
 
 
 class AppConfig(BaseAppConfig):

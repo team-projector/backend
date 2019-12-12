@@ -1,10 +1,13 @@
 # -*- coding: utf-8 -*-
 
+from apps.users.models import User
+
 GHL_QUERY_ME = """
 query {
     me {
         id
         login
+        roles
     }
 }
 """
@@ -12,11 +15,15 @@ query {
 
 def test_query(user, ghl_client):
     """Test me raw query."""
+    user.roles = User.roles.DEVELOPER | User.roles.PROJECT_MANAGER
+    user.save()
+
     ghl_client.set_user(user)
 
     response = ghl_client.execute(GHL_QUERY_ME)
 
     assert response['data']['me']['id'] == str(user.id)
+    assert response['data']['me']['roles'] == ['DEVELOPER', 'PROJECT_MANAGER']
 
 
 def test_resolver(user, ghl_auth_mock_info, me_query):

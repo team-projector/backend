@@ -4,8 +4,10 @@ from apps.users.graphql.mutations.gitlab.login import LoginGitlabMutation
 from tests.test_development.factories_gitlab import AttrDict
 
 
-@override_settings(SOCIAL_AUTH_GITLAB_KEY='TEST_KEY',
-                   SOCIAL_AUTH_GITLAB_REDIRECT_URI='TEST_URI')
+@override_settings(
+    SOCIAL_AUTH_GITLAB_KEY='TEST_KEY',
+    SOCIAL_AUTH_GITLAB_REDIRECT_URI='TEST_URI',
+)
 def test_login(user, client):
     client.user = user
     client.session = {}
