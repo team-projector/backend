@@ -1,6 +1,6 @@
-from apps.users.services.token import create_user_token
-
 from tests.test_users.factories.user import UserFactory
+
+from apps.users.services.token import create_user_token
 
 
 def test_token(db):

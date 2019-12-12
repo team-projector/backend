@@ -1,8 +1,9 @@
-from apps.development.graphql.types import TeamType
-from apps.development.models import TeamMember, Team
 from tests.test_development.factories import TeamFactory, TeamMemberFactory
 from tests.test_development.factories_gitlab import AttrDict
 from tests.test_users.factories.user import UserFactory
+
+from apps.development.graphql.types import TeamType
+from apps.development.models import Team, TeamMember
 
 
 def test_team(user, client):

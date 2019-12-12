@@ -1,17 +1,19 @@
 from django.test import override_settings
-
-from apps.development.models import MergeRequest
-from apps.development.services.merge_request.gl.manager import \
-    MergeRequestGlManager
 from tests.test_development.factories import (
-    ProjectFactory, MergeRequestFactory,
+    MergeRequestFactory,
+    ProjectFactory,
 )
 from tests.test_development.factories_gitlab import (
     AttrDict,
-    GlUserFactory,
-    GlProjectFactory,
-    GlMergeRequestFactory,
     GlLabelFactory,
+    GlMergeRequestFactory,
+    GlProjectFactory,
+    GlUserFactory,
+)
+
+from apps.development.models import MergeRequest
+from apps.development.services.merge_request.gl.manager import (
+    MergeRequestGlManager,
 )
 
 

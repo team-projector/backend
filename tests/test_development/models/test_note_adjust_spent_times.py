@@ -1,11 +1,12 @@
 from datetime import datetime
 
+from tests.test_development.factories import IssueNoteFactory
+from tests.test_payroll.factories import IssueSpentTimeFactory
+
 from apps.core.utils.time import seconds
 from apps.development.models import Issue
 from apps.development.models.note import NOTE_TYPES
 from apps.payroll.models import SpentTime
-from tests.test_development.factories import IssueNoteFactory
-from tests.test_payroll.factories import IssueSpentTimeFactory
 
 
 def test_reset_spend(user):

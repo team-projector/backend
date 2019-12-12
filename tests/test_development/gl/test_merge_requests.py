@@ -3,28 +3,30 @@ from django.test import override_settings
 from django.utils import timezone
 from gitlab.exceptions import GitlabGetError
 from rest_framework import status
-
-from apps.development.models import MergeRequest
-from apps.development.models.note import NOTE_TYPES
-from apps.development.services.merge_request.gl.manager import \
-    MergeRequestGlManager
 from tests.test_development.checkers_gitlab import (
-    check_merge_request, check_user
+    check_merge_request,
+    check_user,
 )
 from tests.test_development.factories import (
-    ProjectFactory,
     MergeRequestFactory,
+    ProjectFactory,
     ProjectMilestoneFactory,
 )
 from tests.test_development.factories_gitlab import (
     AttrDict,
-    GlUserFactory,
-    GlProjectFactory,
+    GlLabelFactory,
     GlMergeRequestFactory,
     GlNoteFactory,
-    GlLabelFactory,
-    GlTimeStats,
+    GlProjectFactory,
     GlProjectMilestoneFactory,
+    GlTimeStats,
+    GlUserFactory,
+)
+
+from apps.development.models import MergeRequest
+from apps.development.models.note import NOTE_TYPES
+from apps.development.services.merge_request.gl.manager import (
+    MergeRequestGlManager,
 )
 
 

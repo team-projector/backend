@@ -2,15 +2,19 @@ from datetime import datetime, timedelta
 
 from django.core.exceptions import PermissionDenied
 from pytest import raises
+from tests.test_development.factories import (
+    IssueFactory,
+    ProjectFactory,
+    ProjectMilestoneFactory,
+    TeamFactory,
+    TeamMemberFactory,
+    TicketFactory,
+)
+from tests.test_users.factories.user import UserFactory
 
 from apps.development.graphql.filters import IssuesFilterSet
 from apps.development.models import TeamMember
 from apps.development.models.issue import ISSUE_STATES, Issue
-from tests.test_development.factories import (IssueFactory, ProjectFactory,
-                                              ProjectMilestoneFactory,
-                                              TeamFactory, TeamMemberFactory,
-                                              TicketFactory)
-from tests.test_users.factories.user import UserFactory
 
 
 def test_filter_by_state(user):

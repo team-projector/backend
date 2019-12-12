@@ -2,9 +2,9 @@
 
 from pytest import raises
 from rest_framework.exceptions import AuthenticationFailed
+from tests.fixtures.users import DEFAULT_USER_PASSWORD, DEFAULT_USERNAME
 
 from apps.users.models import Token
-from tests.fixtures.users import DEFAULT_USER_PASSWORD, DEFAULT_USERNAME
 
 GHL_QUERY_LOGIN = """
 mutation {{

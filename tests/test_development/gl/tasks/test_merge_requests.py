@@ -1,18 +1,18 @@
 from django.test import override_settings
-
-from apps.development.models import MergeRequest
-from apps.development.tasks import (
-    sync_project_merge_request_task,
-    sync_merge_requests_task,
-)
 from tests.test_development.checkers_gitlab import check_merge_request
 from tests.test_development.factories import ProjectFactory
 from tests.test_development.factories_gitlab import (
     AttrDict,
+    GlMergeRequestFactory,
     GlProjectFactory,
     GlTimeStats,
     GlUserFactory,
-    GlMergeRequestFactory
+)
+
+from apps.development.models import MergeRequest
+from apps.development.tasks import (
+    sync_merge_requests_task,
+    sync_project_merge_request_task,
 )
 
 

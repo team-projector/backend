@@ -2,10 +2,10 @@
 
 import httpretty
 import pytest
-
-from apps.core.gitlab.client import get_default_gitlab_client
 from tests.helpers.mocks.gitlab import GitlabMock
 from tests.test_development.factories_gitlab import GlUserFactory
+
+from apps.core.gitlab.client import get_default_gitlab_client
 
 
 @pytest.fixture()

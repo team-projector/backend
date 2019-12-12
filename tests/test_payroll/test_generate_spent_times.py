@@ -2,12 +2,12 @@ from collections import defaultdict
 from datetime import datetime, timedelta
 
 from django.utils import timezone
+from tests.test_development.factories import IssueFactory, IssueNoteFactory
+from tests.test_users.factories.user import UserFactory
 
 from apps.core.gitlab import parse_gl_date
 from apps.development.models.note import NOTE_TYPES
 from apps.payroll.models import SpentTime
-from tests.test_development.factories import IssueFactory, IssueNoteFactory
-from tests.test_users.factories.user import UserFactory
 
 
 def test_parse_date():

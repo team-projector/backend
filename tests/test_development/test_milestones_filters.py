@@ -1,9 +1,10 @@
-from datetime import timedelta, datetime
+from datetime import datetime, timedelta
+
+from tests.test_development.factories import ProjectMilestoneFactory
 
 from apps.development.graphql.filters import MilestonesFilterSet
 from apps.development.models import Milestone
 from apps.development.models.milestone import MILESTONE_STATES
-from tests.test_development.factories import ProjectMilestoneFactory
 
 
 def test_filter_by_state(db):

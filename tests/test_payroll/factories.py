@@ -1,13 +1,19 @@
 import random
 
-import factory
 import pytz
-
-from apps.payroll.models import Bonus, Payment, Penalty, Salary, SpentTime, \
-    WorkBreak
-from apps.payroll.models.work_break import WORK_BREAK_REASONS
 from tests.test_development.factories import IssueFactory, MergeRequestFactory
 from tests.test_users.factories.user import UserFactory
+
+import factory
+from apps.payroll.models import (
+    Bonus,
+    Payment,
+    Penalty,
+    Salary,
+    SpentTime,
+    WorkBreak,
+)
+from apps.payroll.models.work_break import WORK_BREAK_REASONS
 
 
 class BaseSpentTimeFactory(factory.django.DjangoModelFactory):

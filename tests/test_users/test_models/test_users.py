@@ -1,10 +1,10 @@
 import pytest
 from django.core.exceptions import ValidationError
+from tests.fixtures.users import DEFAULT_USER_PASSWORD, DEFAULT_USERNAME
+from tests.test_users.factories.user import UserFactory
 
 from apps.users.models import User
 from apps.users.models.validators.user import validate_email
-from tests.fixtures.users import DEFAULT_USERNAME, DEFAULT_USER_PASSWORD
-from tests.test_users.factories.user import UserFactory
 
 
 def test_create_user(db):

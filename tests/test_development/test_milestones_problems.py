@@ -1,13 +1,15 @@
 from datetime import datetime, timedelta
+
 from pytest import raises
+from tests.test_development.factories import ProjectMilestoneFactory
 
 from apps.development.graphql.types.milestone import MilestoneType
 from apps.development.models.milestone import MILESTONE_STATES
 from apps.development.services.milestone import (
-    get_problems, PROBLEM_OVER_DUE_DAY
+    PROBLEM_OVER_DUE_DAY,
+    get_problems,
 )
 from apps.development.services.milestone.problems import BaseProblemChecker
-from tests.test_development.factories import ProjectMilestoneFactory
 
 
 def test_base_checker():

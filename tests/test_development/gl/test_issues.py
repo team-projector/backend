@@ -3,14 +3,7 @@ from django.test import override_settings
 from django.utils import timezone
 from gitlab.exceptions import GitlabGetError
 from rest_framework import status
-
-from apps.development.models import Issue
-from apps.development.models.note import NOTE_TYPES
-from apps.development.services.issue.gl.manager import IssueGlManager
-from tests.test_development.checkers_gitlab import (
-    check_issue,
-    check_user,
-)
+from tests.test_development.checkers_gitlab import check_issue, check_user
 from tests.test_development.factories import (
     IssueFactory,
     MergeRequestFactory,
@@ -20,13 +13,17 @@ from tests.test_development.factories import (
 from tests.test_development.factories_gitlab import (
     AttrDict,
     GlIssueFactory,
+    GlMergeRequestFactory,
     GlNoteFactory,
     GlProjectFactory,
     GlProjectMilestoneFactory,
     GlTimeStats,
     GlUserFactory,
-    GlMergeRequestFactory,
 )
+
+from apps.development.models import Issue
+from apps.development.models.note import NOTE_TYPES
+from apps.development.services.issue.gl.manager import IssueGlManager
 
 
 @override_settings(GITLAB_TOKEN='GITLAB_TOKEN')

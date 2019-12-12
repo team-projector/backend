@@ -1,13 +1,16 @@
 from django.test import override_settings
 from pytest import raises
 from rest_framework.exceptions import ValidationError
-
-from apps.development.graphql.mutations.issues import AddSpendIssueMutation
 from tests.test_development.factories import IssueFactory, ProjectFactory
 from tests.test_development.factories_gitlab import (
-    AttrDict, GlIssueFactory, GlIssueAddSpentTimeFactory, GlProjectFactory,
-    GlUserFactory
+    AttrDict,
+    GlIssueAddSpentTimeFactory,
+    GlIssueFactory,
+    GlProjectFactory,
+    GlUserFactory,
 )
+
+from apps.development.graphql.mutations.issues import AddSpendIssueMutation
 
 
 def test_user_without_gl_token(user, client):

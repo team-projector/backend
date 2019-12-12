@@ -1,9 +1,9 @@
 from django.utils import timezone
 from django_filters import OrderingFilter as BaseOrderingFilter
+from tests.test_development.factories import IssueFactory
 
 from apps.core.graphql.filters.mixins import NullsAlwaysLastOrderingMixin
 from apps.development.models import Issue
-from tests.test_development.factories import IssueFactory
 
 
 class OrderingFilter(NullsAlwaysLastOrderingMixin, BaseOrderingFilter):

@@ -1,13 +1,13 @@
-from datetime import timedelta, datetime, date
+from datetime import date, datetime, timedelta
 from typing import Dict
 
 from django.test import override_settings
+from tests.helpers.base import format_date
+from tests.test_development.factories import IssueFactory
 
 from apps.core.utils.time import seconds
 from apps.development.models.issue import ISSUE_STATES
 from apps.users.services import user as user_service
-from tests.helpers.base import format_date
-from tests.test_development.factories import IssueFactory
 
 
 @override_settings(TP_WEEKENDS_DAYS=[])

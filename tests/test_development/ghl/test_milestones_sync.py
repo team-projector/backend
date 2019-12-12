@@ -1,15 +1,21 @@
 from django.test import override_settings
+from tests.test_development.factories import (
+    ProjectFactory,
+    ProjectGroupFactory,
+    ProjectGroupMilestoneFactory,
+    ProjectMilestoneFactory,
+)
+from tests.test_development.factories_gitlab import (
+    AttrDict,
+    GlGroupFactory,
+    GlGroupMilestoneFactory,
+    GlProjectFactory,
+    GlProjectMilestoneFactory,
+    GlUserFactory,
+)
 
 from apps.development.graphql.mutations.milestones import SyncMilestoneMutation
 from apps.development.models.milestone import MILESTONE_STATES
-from tests.test_development.factories import (
-    ProjectGroupFactory, ProjectGroupMilestoneFactory, ProjectFactory,
-    ProjectMilestoneFactory
-)
-from tests.test_development.factories_gitlab import (
-    AttrDict, GlUserFactory, GlGroupFactory, GlGroupMilestoneFactory,
-    GlProjectFactory, GlProjectMilestoneFactory
-)
 
 
 @override_settings(GITLAB_TOKEN='GITLAB_TOKEN')

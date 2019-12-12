@@ -1,10 +1,10 @@
 from django.test import override_settings
+from tests.helpers.base import model_admin
+from tests.test_development.checkers_gitlab import check_user
+from tests.test_development.factories_gitlab import AttrDict, GlUserFactory
+from tests.test_users.factories.user import UserFactory
 
 from apps.users.models import User
-from tests.helpers.base import model_admin
-from tests.test_users.factories.user import UserFactory
-from tests.test_development.factories_gitlab import AttrDict, GlUserFactory
-from tests.test_development.checkers_gitlab import check_user
 
 
 def test_change_password_link(admin_user):

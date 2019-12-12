@@ -3,8 +3,8 @@ from datetime import timedelta
 from django.test import override_settings
 from django.utils import timezone
 
-from apps.users.services import token as token_service
 from apps.users.models import Token
+from apps.users.services import token as token_service
 from apps.users.tasks import clear_expired_tokens_task
 
 

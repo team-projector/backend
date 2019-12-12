@@ -1,15 +1,15 @@
 from django.test import override_settings
-
-from apps.development.models import ProjectGroup
-from apps.development.services.project_group.gl.manager import (
-    ProjectGroupGlManager,
-)
 from tests.test_development.checkers_gitlab import check_group
 from tests.test_development.factories import ProjectGroupFactory
 from tests.test_development.factories_gitlab import (
     AttrDict,
-    GlUserFactory,
     GlGroupFactory,
+    GlUserFactory,
+)
+
+from apps.development.models import ProjectGroup
+from apps.development.services.project_group.gl.manager import (
+    ProjectGroupGlManager,
 )
 
 

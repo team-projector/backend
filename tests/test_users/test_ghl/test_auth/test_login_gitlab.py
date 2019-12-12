@@ -1,7 +1,7 @@
 from django.test import override_settings
+from tests.test_development.factories_gitlab import AttrDict
 
 from apps.users.graphql.mutations.gitlab.login import LoginGitlabMutation
-from tests.test_development.factories_gitlab import AttrDict
 
 
 @override_settings(

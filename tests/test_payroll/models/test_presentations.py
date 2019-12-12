@@ -1,15 +1,15 @@
-from apps.payroll.models.work_break import WORK_BREAK_REASONS
-
 from tests.test_development.factories import IssueFactory
 from tests.test_payroll.factories import (
-  BonusFactory,
-  PaymentFactory,
-  PenaltyFactory,
-  SalaryFactory,
-  IssueSpentTimeFactory,
-  WorkBreakFactory,
+    BonusFactory,
+    IssueSpentTimeFactory,
+    PaymentFactory,
+    PenaltyFactory,
+    SalaryFactory,
+    WorkBreakFactory,
 )
 from tests.test_users.factories.user import UserFactory
+
+from apps.payroll.models.work_break import WORK_BREAK_REASONS
 
 
 def test_bonus(db):

@@ -1,8 +1,9 @@
-from apps.users.models import Token
-from apps.users.graphql.mutations.gitlab.complete_gitlab_auth import (
-    CompleteGitlabAuthMutation
-)
 from tests.test_development.factories_gitlab import AttrDict
+
+from apps.users.graphql.mutations.gitlab.complete_gitlab_auth import (
+    CompleteGitlabAuthMutation,
+)
+from apps.users.models import Token
 
 
 def test_complete_auth(user, client, gl_mocker):

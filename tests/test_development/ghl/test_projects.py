@@ -1,13 +1,14 @@
-from apps.development.graphql.resolvers import ProjectMilestonesResolver
-from apps.development.graphql.types.project import ProjectType
-from apps.development.models.milestone import MILESTONE_STATES
 from tests.test_development.factories import (
     ProjectFactory,
     ProjectGroupFactory,
+    ProjectGroupMilestoneFactory,
     ProjectMilestoneFactory,
-    ProjectGroupMilestoneFactory
 )
 from tests.test_development.factories_gitlab import AttrDict
+
+from apps.development.graphql.resolvers import ProjectMilestonesResolver
+from apps.development.graphql.types.project import ProjectType
+from apps.development.models.milestone import MILESTONE_STATES
 
 
 def test_project(user, client):

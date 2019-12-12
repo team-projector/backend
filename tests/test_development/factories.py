@@ -1,14 +1,23 @@
-import factory
 import pytz
 from django.contrib.contenttypes.models import ContentType
+from tests.test_users.factories.user import UserFactory
 
+import factory
 from apps.development.models import (
-    Ticket, Issue, Label, MergeRequest, Milestone, Note, Project, ProjectGroup,
-    ProjectMember, Team, TeamMember,
+    Issue,
+    Label,
+    MergeRequest,
+    Milestone,
+    Note,
+    Project,
+    ProjectGroup,
+    ProjectMember,
+    Team,
+    TeamMember,
+    Ticket,
 )
 from apps.development.models.issue import ISSUE_STATES
 from apps.development.models.merge_request import MERGE_REQUESTS_STATES
-from tests.test_users.factories.user import UserFactory
 
 
 class GitlabFieldMixin(factory.django.DjangoModelFactory):

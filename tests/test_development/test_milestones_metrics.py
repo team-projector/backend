@@ -1,4 +1,14 @@
 import pytest
+from tests.test_development.factories import (
+    IssueFactory,
+    MergeRequestFactory,
+    ProjectMilestoneFactory,
+)
+from tests.test_payroll.factories import (
+    IssueSpentTimeFactory,
+    MergeRequestSpentTimeFactory,
+    UserFactory,
+)
 
 from apps.core.utils.time import seconds
 from apps.development.graphql.types.milestone import MilestoneType
@@ -6,13 +16,6 @@ from apps.development.services import milestone as milestone_service
 from apps.development.services.issue.metrics import (
     IssuesContainerMetricsProvider,
 )
-from tests.test_development.factories import (
-    IssueFactory, MergeRequestFactory, ProjectMilestoneFactory
-)
-from tests.test_payroll.factories import (
-    IssueSpentTimeFactory, MergeRequestSpentTimeFactory
-)
-from tests.test_payroll.factories import UserFactory
 
 
 @pytest.fixture

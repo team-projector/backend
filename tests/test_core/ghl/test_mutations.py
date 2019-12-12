@@ -1,6 +1,6 @@
 from pytest import raises
 
-from apps.core.graphql.mutations import BaseMutation, ArgumentsValidationMixin
+from apps.core.graphql.mutations import ArgumentsValidationMixin, BaseMutation
 
 
 def test_base_mutation():

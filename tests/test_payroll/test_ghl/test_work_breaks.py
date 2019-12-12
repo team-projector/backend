@@ -1,18 +1,21 @@
 from datetime import datetime
+
 from pytest import raises
 from rest_framework.exceptions import PermissionDenied
-
-from apps.development.models import TeamMember
-from apps.payroll.models import WorkBreak
-from apps.payroll.graphql.mutations.work_breaks import (
-    CreateWorkBreakMutation, DeleteWorkBreakMutation, UpdateWorkBreakMutation
-)
-from apps.payroll.graphql.queries.work_breaks import WorkBreakType
-from apps.payroll.models.work_break import WORK_BREAK_REASONS
 from tests.test_development.factories import TeamFactory, TeamMemberFactory
 from tests.test_development.factories_gitlab import AttrDict
 from tests.test_payroll.factories import WorkBreakFactory
 from tests.test_users.factories.user import UserFactory
+
+from apps.development.models import TeamMember
+from apps.payroll.graphql.mutations.work_breaks import (
+    CreateWorkBreakMutation,
+    DeleteWorkBreakMutation,
+    UpdateWorkBreakMutation,
+)
+from apps.payroll.graphql.queries.work_breaks import WorkBreakType
+from apps.payroll.models import WorkBreak
+from apps.payroll.models.work_break import WORK_BREAK_REASONS
 
 
 def test_work_break(user, client):

@@ -1,12 +1,15 @@
 from django.test import override_settings
-
-from apps.development.graphql.mutations.issues import SyncIssueMutation
 from tests.test_development.factories import IssueFactory, ProjectFactory
 from tests.test_development.factories_gitlab import (
-    AttrDict, GlTimeStats, GlUserFactory, GlProjectFactory,
-    GlIssueFactory
+    AttrDict,
+    GlIssueFactory,
+    GlProjectFactory,
+    GlTimeStats,
+    GlUserFactory,
 )
 from tests.test_users.factories.user import UserFactory
+
+from apps.development.graphql.mutations.issues import SyncIssueMutation
 
 
 @override_settings(GITLAB_TOKEN='GITLAB_TOKEN')

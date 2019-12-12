@@ -1,9 +1,9 @@
 from django.conf import settings
 from django.core import mail
-
-from apps.payroll.tasks.salaries import send_salary_email_report_task
 from tests.test_payroll.factories import SalaryFactory
 from tests.test_users.factories.user import UserFactory
+
+from apps.payroll.tasks.salaries import send_salary_email_report_task
 
 
 def test_send_salary_email_report(db):

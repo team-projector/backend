@@ -1,16 +1,19 @@
 import pytest
 from django.contrib.auth import get_user_model
+from tests.test_development.factories import IssueFactory, MergeRequestFactory
+from tests.test_payroll.factories import (
+    BonusFactory,
+    IssueSpentTimeFactory,
+    MergeRequestSpentTimeFactory,
+    PenaltyFactory,
+    SalaryFactory,
+)
+from tests.test_users.factories.user import UserFactory
 
 from apps.core.utils.time import seconds
 from apps.development.models.issue import ISSUE_STATES
-from apps.users.services import user as user_service
 from apps.users.graphql.types.user import UserType
-from tests.test_development.factories import IssueFactory, MergeRequestFactory
-from tests.test_payroll.factories import (
-    BonusFactory, IssueSpentTimeFactory, MergeRequestSpentTimeFactory,
-    PenaltyFactory, SalaryFactory
-)
-from tests.test_users.factories.user import UserFactory
+from apps.users.services import user as user_service
 
 calculator = user_service.UserMetricsProvider()
 

@@ -1,15 +1,17 @@
 from datetime import timedelta
+
 from django.utils import timezone
+from tests.test_development.factories import IssueFactory
+from tests.test_development.factories_gitlab import AttrDict
 
 from apps.core.activity.verbs import (
-    ACTION_GITLAB_CALL_API, ACTION_GITLAB_WEBHOOK_TRIGGERED
+    ACTION_GITLAB_CALL_API,
+    ACTION_GITLAB_WEBHOOK_TRIGGERED,
 )
 from apps.core.tasks import add_action_task
 from apps.development.graphql.resolvers import resolve_gitlab_status
 from apps.development.models import Issue, Project
 from apps.development.services.status.gitlab import get_gitlab_sync_status
-from tests.test_development.factories import IssueFactory
-from tests.test_development.factories_gitlab import AttrDict
 
 
 def test_status(user):

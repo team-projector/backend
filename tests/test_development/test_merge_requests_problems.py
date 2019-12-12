@@ -1,15 +1,19 @@
 from pytest import raises
+from tests.test_development.factories import (
+    IssueFactory,
+    LabelFactory,
+    MergeRequestFactory,
+)
 
 from apps.core.utils.time import seconds
 from apps.development.graphql.types import MergeRequestType
 from apps.development.models.issue import ISSUE_STATES
 from apps.development.services.merge_request import (
-    get_problems, PROBLEM_EMPTY_ESTIMATE, PROBLEM_NOT_ASSIGNED
+    PROBLEM_EMPTY_ESTIMATE,
+    PROBLEM_NOT_ASSIGNED,
+    get_problems,
 )
 from apps.development.services.merge_request.problems import BaseProblemChecker
-from tests.test_development.factories import (
-    IssueFactory, LabelFactory, MergeRequestFactory
-)
 
 
 def test_base_checker():

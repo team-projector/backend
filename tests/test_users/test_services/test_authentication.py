@@ -4,12 +4,12 @@ from django.conf import settings
 from django.utils import timezone
 from pytest import raises
 from rest_framework.exceptions import AuthenticationFailed
+from tests.fixtures.users import DEFAULT_USER_PASSWORD
 
 from apps.core.graphql.security.authentication import TokenAuthentication
 from apps.users.models import Token
 from apps.users.services import token as token_service
 from apps.users.services import user as user_service
-from tests.fixtures.users import DEFAULT_USER_PASSWORD
 
 
 def test_login_user(user):

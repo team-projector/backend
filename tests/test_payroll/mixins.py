@@ -2,7 +2,6 @@ from datetime import datetime, timedelta
 from typing import Dict
 
 from django.test import testcases
-
 from tests.helpers.base import format_date
 
 

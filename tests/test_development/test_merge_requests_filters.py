@@ -1,11 +1,14 @@
-from apps.development.models import TeamMember
-from apps.development.models import MergeRequest
-from apps.development.graphql.filters import MergeRequestFilterSet
-from apps.development.models.merge_request import MERGE_REQUESTS_STATES
 from tests.test_development.factories import (
-    MergeRequestFactory, ProjectFactory, TeamFactory, TeamMemberFactory
+    MergeRequestFactory,
+    ProjectFactory,
+    TeamFactory,
+    TeamMemberFactory,
 )
 from tests.test_users.factories.user import UserFactory
+
+from apps.development.graphql.filters import MergeRequestFilterSet
+from apps.development.models import MergeRequest, TeamMember
+from apps.development.models.merge_request import MERGE_REQUESTS_STATES
 
 
 def test_filter_by_user(user):

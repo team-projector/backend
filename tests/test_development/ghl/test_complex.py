@@ -60,6 +60,3 @@ def test_relay_node(admin_user, gql_client_authenticated):
     data = gql_client_authenticated.execute(query)['data']
 
     assert int(data['issue']['id']) == 1
-
-
-

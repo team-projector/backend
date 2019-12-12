@@ -1,20 +1,23 @@
-from datetime import timedelta, datetime
+from datetime import datetime, timedelta
+from typing import Dict
+
 from django.db.models import Sum
 from django.test import override_settings
 from django.utils import timezone
 from pytest import raises
-from typing import Dict
+from tests.helpers.base import format_date
+from tests.test_development.factories import (
+    IssueFactory,
+    TeamFactory,
+    TeamMemberFactory,
+)
+from tests.test_payroll.factories import IssueSpentTimeFactory
+from tests.test_users.factories.user import UserFactory
 
 from apps.core.utils.time import seconds
 from apps.development.models import TeamMember
 from apps.development.models.issue import ISSUE_STATES
 from apps.development.services import team as team_service
-from tests.helpers.base import format_date
-from tests.test_development.factories import (
-    IssueFactory, TeamFactory, TeamMemberFactory
-)
-from tests.test_payroll.factories import IssueSpentTimeFactory
-from tests.test_users.factories.user import UserFactory
 
 
 @override_settings(TP_WEEKENDS_DAYS=[])

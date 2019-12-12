@@ -1,7 +1,4 @@
 from django.test import override_settings
-
-from apps.development.models import Issue
-from apps.development.tasks import sync_issues_task
 from tests.test_development.checkers_gitlab import check_issue
 from tests.test_development.factories import ProjectFactory
 from tests.test_development.factories_gitlab import (
@@ -11,6 +8,9 @@ from tests.test_development.factories_gitlab import (
     GlTimeStats,
     GlUserFactory,
 )
+
+from apps.development.models import Issue
+from apps.development.tasks import sync_issues_task
 
 
 @override_settings(GITLAB_TOKEN='GITLAB_TOKEN')

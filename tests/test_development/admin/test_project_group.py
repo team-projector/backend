@@ -1,9 +1,6 @@
-from pytest import raises
 from django.test import override_settings
+from pytest import raises
 from rest_framework import status
-
-from apps.core.admin.mixins.force_sync_entity import ForceSyncEntityMixin
-from apps.development.models import ProjectGroup
 from tests.helpers.base import model_admin
 from tests.test_development.checkers_gitlab import check_group
 from tests.test_development.factories import ProjectGroupFactory
@@ -12,6 +9,9 @@ from tests.test_development.factories_gitlab import (
     GlGroupFactory,
     GlUserFactory,
 )
+
+from apps.core.admin.mixins.force_sync_entity import ForceSyncEntityMixin
+from apps.development.models import ProjectGroup
 
 
 @override_settings(GITLAB_TOKEN='GITLAB_TOKEN')

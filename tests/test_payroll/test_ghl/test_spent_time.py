@@ -1,15 +1,14 @@
 from datetime import timedelta
-from django.utils import timezone
 
-from apps.payroll.models.spent_time import SpentTime
-from apps.payroll.graphql.filters import SpentTimeFilterSet
-from apps.payroll.graphql.types.spent_time import SpentTimeType
-from apps.core.utils.time import seconds
-from tests.test_development.factories import (
-    IssueFactory, MergeRequestFactory
-)
+from django.utils import timezone
+from tests.test_development.factories import IssueFactory, MergeRequestFactory
 from tests.test_development.factories_gitlab import AttrDict
 from tests.test_payroll.factories import IssueSpentTimeFactory
+
+from apps.core.utils.time import seconds
+from apps.payroll.graphql.filters import SpentTimeFilterSet
+from apps.payroll.graphql.types.spent_time import SpentTimeType
+from apps.payroll.models.spent_time import SpentTime
 
 
 def test_list(user, client):

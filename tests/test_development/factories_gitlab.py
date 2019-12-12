@@ -1,8 +1,7 @@
 from datetime import datetime
 
 import factory
-
-from apps.core.gitlab.parsers import GITLAB_DATETIME_FORMAT, GITLAB_DATE_FORMAT
+from apps.core.gitlab.parsers import GITLAB_DATE_FORMAT, GITLAB_DATETIME_FORMAT
 
 
 def gl_format_date(date):

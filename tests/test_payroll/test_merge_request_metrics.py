@@ -1,12 +1,12 @@
-from apps.development.models.merge_request import MERGE_REQUESTS_STATES
-from apps.development.services.merge_request.metrics import (
-    get_metrics
-)
-from apps.core.utils.time import seconds
 from tests.test_development.factories import MergeRequestFactory
 from tests.test_payroll.factories import (
-    MergeRequestSpentTimeFactory, SalaryFactory
+    MergeRequestSpentTimeFactory,
+    SalaryFactory,
 )
+
+from apps.core.utils.time import seconds
+from apps.development.models.merge_request import MERGE_REQUESTS_STATES
+from apps.development.services.merge_request.metrics import get_metrics
 
 
 def test_payroll_metrics(user):

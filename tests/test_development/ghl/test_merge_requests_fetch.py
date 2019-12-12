@@ -1,11 +1,11 @@
-from graphql.language.ast import Field, Name, SelectionSet
 from django.db import connection
 from django.test import override_settings
+from graphql.language.ast import Field, Name, SelectionSet
+from tests.test_development.factories import MergeRequestFactory
+from tests.test_development.factories_gitlab import AttrDict
 
 from apps.development.graphql.types.merge_request import MergeRequestType
 from apps.development.models import MergeRequest
-from tests.test_development.factories import MergeRequestFactory
-from tests.test_development.factories_gitlab import AttrDict
 
 
 @override_settings(DEBUG=True)
