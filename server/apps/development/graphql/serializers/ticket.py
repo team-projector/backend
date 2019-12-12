@@ -27,6 +27,7 @@ class TicketBaseSerializer(serializers.ModelSerializer):
         required=False,
         max_length=TICKET_TYPE_MAX_LENGTH,
     )
+
     issues = serializers.PrimaryKeyRelatedField(
         many=True,
         required=False,
@@ -37,7 +38,7 @@ class TicketBaseSerializer(serializers.ModelSerializer):
     class Meta:
         model = Ticket
         fields = [
-            'type', 'title', 'start_date', 'due_date', 'url', 'milestone',
+            'type', 'title', 'start_date', 'due_date', 'url',
             'issues',
         ]
 
@@ -50,6 +51,7 @@ class TicketBaseSerializer(serializers.ModelSerializer):
                 self.context['request'].user,
             )
             fields['issues'].child_relation.queryset = issues_qs
+
         return fields
 
     def validate_type(self, type_):
@@ -67,11 +69,23 @@ class TicketBaseSerializer(serializers.ModelSerializer):
 class TicketCreateSerializer(TicketBaseSerializer):
     """Ticket create serializer."""
 
+    class Meta(TicketBaseSerializer.Meta):
+        fields = [*TicketBaseSerializer.Meta.fields, 'milestone']
+
+    def get_fields(self) -> Dict[str, Field]:
+        """Returns serializer fields."""
+        fields = super().get_fields()
+
+        fields['milestone'].required = True
+        fields['milestone'].allow_null = False
+        return fields
+
 
 class TicketUpdateSerializer(TicketBaseSerializer):
     """Ticket update serializer."""
 
     id = serializers.CharField()  # noqa: A003
+
     attach_issues = serializers.PrimaryKeyRelatedField(
         many=True,
         required=False,
