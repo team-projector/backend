@@ -1,15 +1,13 @@
 from django.utils import timezone
-
-from apps.core.graphql.filters.mixins import NullsAlwaysLastOrderingMixin
 from django_filters import OrderingFilter as BaseOrderingFilter
 
+from apps.core.graphql.filters.mixins import NullsAlwaysLastOrderingMixin
 from apps.development.models import Issue
 from tests.test_development.factories import IssueFactory
 
 
-class OrderingFilter(NullsAlwaysLastOrderingMixin,
-                     BaseOrderingFilter):
-    pass
+class OrderingFilter(NullsAlwaysLastOrderingMixin, BaseOrderingFilter):
+    """Test ordering filter."""
 
 
 def test_nulls_last_asc(db):

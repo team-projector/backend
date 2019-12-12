@@ -9,7 +9,8 @@ from rest_framework import status
 from apps.core.utils.time import seconds
 from apps.development.models.issue import ISSUE_STATES
 from apps.payroll.models import Salary
-from tests.helpers.base import trigger_on_commit, model_to_dict_form, model_admin
+from tests.helpers.base import model_admin, model_to_dict_form, \
+    trigger_on_commit
 from tests.test_development.factories import IssueFactory
 from tests.test_payroll.factories import IssueSpentTimeFactory, SalaryFactory
 from tests.test_users.factories.user import UserFactory
@@ -25,7 +26,7 @@ def test_salary_instance_str(db):
 def test_get_urls():
     ma_salary = model_admin(Salary)
 
-    assert 'generate-salaries' in [p.name for p in ma_salary.get_urls()]
+    assert any(p.name == 'generate-salaries' for p in ma_salary.get_urls())
 
 
 def test_generate_salaries_get_form(admin_client):
@@ -157,7 +158,7 @@ def test_salary_payed_changed_to_false(admin_client):
     salary.refresh_from_db()
 
     assert salary.payed is False
-    assert len(mail.outbox) == 0
+    assert not mail.outbox
 
 
 def test_user_without_email_but_payed(admin_client):
@@ -178,7 +179,7 @@ def test_user_without_email_but_payed(admin_client):
     salary.refresh_from_db()
 
     assert salary.payed is True
-    assert len(mail.outbox) == 0
+    assert not mail.outbox
 
 
 def test_salary_another_field_changed(admin_client):
@@ -199,7 +200,7 @@ def test_salary_another_field_changed(admin_client):
     salary.refresh_from_db()
 
     assert salary.sum == 10.0
-    assert len(mail.outbox) == 0
+    assert mail.outbox
 
 
 def test_salary_another_field_changed_and_payed(admin_client):

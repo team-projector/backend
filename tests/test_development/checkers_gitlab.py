@@ -5,10 +5,10 @@ def check_group(group, gl_group, parent=None):
     assert group.title == gl_group.name
     assert group.full_title == gl_group.full_name
 
-    if not parent:
-        assert group.parent is None
-    else:
+    if parent:
         assert group.parent == parent
+    else:
+        assert group.parent is None
 
 
 def check_issue(issue, gl_issue):
@@ -52,10 +52,10 @@ def check_project(project, gl_project, group=None):
     assert project.title == gl_project.name
     assert project.full_title == gl_project.name_with_namespace
 
-    if not group:
-        assert project.group is None
-    else:
+    if group:
         assert project.group == group
+    else:
+        assert project.group is None
 
 
 def check_user(user, gl_user):

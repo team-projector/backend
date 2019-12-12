@@ -320,7 +320,7 @@ def test_filter_by_state(user):
         in (ISSUE_STATES.OPENED, ISSUE_STATES.CLOSED)
     ]
 
-    m_opened, _, _ = [MergeRequestSpentTimeFactory(
+    m_opened, m_closed, m_merged = [MergeRequestSpentTimeFactory(
         user=user,
         base=MergeRequestFactory(state=state),
         time_spent=int(seconds(hours=5))

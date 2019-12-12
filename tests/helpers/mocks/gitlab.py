@@ -43,8 +43,8 @@ class GitlabMock:
             priority=1
         )
 
-    @staticmethod
     def _registry_url(
+        self,
         method,
         uri,
         data=None,
@@ -67,6 +67,5 @@ class GitlabMock:
             priority=priority
         )
 
-    @staticmethod
-    def _prepare_uri(path):
+    def _prepare_uri(self, path):
         return f'{BASE_GL_API_URL}{path}'

@@ -13,7 +13,7 @@ def test_send_salary_email_report(db):
 
     SalaryFactory.create_batch(3, user=user, payed=False)
 
-    assert len(mail.outbox) == 0
+    assert not mail.outbox
 
     send_salary_email_report_task(salary.id)
 
@@ -30,9 +30,8 @@ def test_without_email(db):
 
     SalaryFactory.create_batch(3, user=user, payed=False)
 
-    assert len(mail.outbox) == 0
+    assert not mail.outbox
 
     send_salary_email_report_task(salary.id)
 
-    assert len(mail.outbox) == 0
-
+    assert not mail.outbox

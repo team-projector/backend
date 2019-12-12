@@ -1,19 +1,15 @@
-from datetime import timedelta, datetime
+from datetime import datetime, timedelta
 
 from django.core.exceptions import PermissionDenied
 from pytest import raises
 
 from apps.development.graphql.filters import IssuesFilterSet
 from apps.development.models import TeamMember
-from apps.development.models.issue import Issue, ISSUE_STATES
-from tests.test_development.factories import (
-    IssueFactory,
-    TicketFactory,
-    ProjectFactory,
-    ProjectMilestoneFactory,
-    TeamFactory,
-    TeamMemberFactory
-)
+from apps.development.models.issue import ISSUE_STATES, Issue
+from tests.test_development.factories import (IssueFactory, ProjectFactory,
+                                              ProjectMilestoneFactory,
+                                              TeamFactory, TeamMemberFactory,
+                                              TicketFactory)
 from tests.test_users.factories.user import UserFactory
 
 
@@ -162,8 +158,10 @@ def test_filter_by_team_with_many_members(user):
     ).qs
 
     assert results.count() == 5
-    assert all(issue.user == user or issue.user == another_user for issue in
-               results) is True
+    assert all(
+        issue.user in {user, another_user}
+        for issue in results
+    )
 
 
 def test_filter_by_team_with_watcher(user):

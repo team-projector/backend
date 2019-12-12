@@ -4,7 +4,7 @@ from django.test import TestCase
 
 from apps.development.services.note.gitlab import parse_spend
 
-PARSE_MAP = [
+PARSE_MAP = (
     ('1d 1m', timedelta(hours=8, minutes=1)),
     (' 1d  1m  5s', timedelta(hours=8, minutes=1, seconds=5)),
     ('1m', timedelta(minutes=1)),
@@ -15,11 +15,12 @@ PARSE_MAP = [
     ('0', timedelta(seconds=0)),
     ('', timedelta(seconds=0)),
     (None, timedelta(seconds=0)),
-]
+)
 
 
 class ParseSpendTests(TestCase):
     def test_parse(self):
         for src, dest in PARSE_MAP:
             target_seconds = dest.total_seconds()
-            self.assertEqual(parse_spend(src), target_seconds, f'{src} = {target_seconds} secs')
+            self.assertEqual(parse_spend(src), target_seconds,
+                             f'{src} = {target_seconds} secs')
