@@ -3,6 +3,13 @@ from datetime import date, timedelta
 
 import pytest
 from django.utils import timezone
+
+from apps.core.utils.time import seconds
+from apps.development.models import TeamMember
+from apps.development.models.issue import ISSUE_STATES
+from apps.development.models.merge_request import MERGE_REQUESTS_STATES
+from apps.payroll.graphql.filters import SpentTimeFilterSet
+from apps.payroll.models import SpentTime
 from tests.test_development.factories import (
     IssueFactory,
     MergeRequestFactory,
@@ -16,13 +23,6 @@ from tests.test_payroll.factories import (
     SalaryFactory,
 )
 from tests.test_users.factories.user import UserFactory
-
-from apps.core.utils.time import seconds
-from apps.development.models import TeamMember
-from apps.development.models.issue import ISSUE_STATES
-from apps.development.models.merge_request import MERGE_REQUESTS_STATES
-from apps.payroll.graphql.filters import SpentTimeFilterSet
-from apps.payroll.models import SpentTime
 
 
 @pytest.fixture

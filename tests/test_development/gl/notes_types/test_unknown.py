@@ -1,12 +1,12 @@
 from datetime import datetime
 
 from django.test import TestCase
-from tests.test_development.factories import IssueFactory
 
 from apps.core.gitlab import GITLAB_DATETIME_FORMAT
 from apps.core.utils.objects import dict2obj
 from apps.development.models import Note
 from apps.users.models import User
+from tests.test_development.factories import IssueFactory
 
 
 class UnknownNoteTypeTests(TestCase):

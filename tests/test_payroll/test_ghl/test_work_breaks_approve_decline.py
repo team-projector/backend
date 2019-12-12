@@ -1,9 +1,5 @@
 from pytest import raises
 from rest_framework.exceptions import PermissionDenied
-from tests.test_development.factories import TeamFactory, TeamMemberFactory
-from tests.test_development.factories_gitlab import AttrDict
-from tests.test_payroll.factories import WorkBreakFactory
-from tests.test_users.factories.user import UserFactory
 
 from apps.development.models import TeamMember
 from apps.payroll.graphql.mutations.work_breaks import (
@@ -11,6 +7,10 @@ from apps.payroll.graphql.mutations.work_breaks import (
     DeclineWorkBreakMutation,
 )
 from apps.payroll.models.mixins.approved import APPROVED_STATES
+from tests.test_development.factories import TeamFactory, TeamMemberFactory
+from tests.test_development.factories_gitlab import AttrDict
+from tests.test_payroll.factories import WorkBreakFactory
+from tests.test_users.factories.user import UserFactory
 
 
 def test_approve_by_teamlead(user, client):

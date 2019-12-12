@@ -1,4 +1,6 @@
 from django.test import override_settings
+
+from apps.development.tasks import sync_all_task
 from tests.test_development.factories import ProjectGroupFactory
 from tests.test_development.factories_gitlab import (
     AttrDict,
@@ -10,8 +12,6 @@ from tests.test_development.factories_gitlab import (
     GlTimeStats,
     GlUserFactory,
 )
-
-from apps.development.tasks import sync_all_task
 
 
 @override_settings(GITLAB_TOKEN='GITLAB_TOKEN')

@@ -1,3 +1,5 @@
+from apps.payroll.admin.filters import HasSalaryFilter
+from apps.payroll.models import Payroll, Salary
 from tests.helpers.base import model_admin
 from tests.test_payroll.factories import (
     BonusFactory,
@@ -7,9 +9,6 @@ from tests.test_payroll.factories import (
     SalaryFactory,
 )
 from tests.test_users.factories.user import UserFactory
-
-from apps.payroll.admin.filters import HasSalaryFilter
-from apps.payroll.models import Payroll, Salary
 
 
 def test_payroll_instance_str(db):

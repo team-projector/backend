@@ -1,3 +1,9 @@
+from apps.development.graphql.resolvers import resolve_merge_requests_summary
+from apps.development.models import MergeRequest, TeamMember
+from apps.development.models.merge_request import MERGE_REQUESTS_STATES
+from apps.development.services.merge_request.summary import (
+    get_merge_requests_summary,
+)
 from tests.test_development.factories import (
     MergeRequestFactory,
     TeamFactory,
@@ -5,13 +11,6 @@ from tests.test_development.factories import (
 )
 from tests.test_development.factories_gitlab import AttrDict
 from tests.test_users.factories.user import UserFactory
-
-from apps.development.graphql.resolvers import resolve_merge_requests_summary
-from apps.development.models import MergeRequest, TeamMember
-from apps.development.models.merge_request import MERGE_REQUESTS_STATES
-from apps.development.services.merge_request.summary import (
-    get_merge_requests_summary,
-)
 
 
 def test_counts_by_state(user):

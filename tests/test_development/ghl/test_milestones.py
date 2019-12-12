@@ -1,13 +1,12 @@
+from apps.development.graphql.types.milestone import MilestoneType
+from apps.development.models import Milestone
+from apps.development.models.project_member import PROJECT_MEMBER_ROLES
 from tests.test_development.factories import (
     ProjectFactory,
     ProjectMemberFactory,
     ProjectMilestoneFactory,
 )
 from tests.test_development.factories_gitlab import AttrDict
-
-from apps.development.graphql.types.milestone import MilestoneType
-from apps.development.models import Milestone
-from apps.development.models.project_member import PROJECT_MEMBER_ROLES
 
 
 def test_milestones(user, client):

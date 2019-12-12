@@ -3,6 +3,10 @@ from django.conf import settings
 from django.test import override_settings
 from gitlab.exceptions import GitlabGetError
 from rest_framework import status
+
+from apps.development.models import Project
+from apps.development.services.project.gl.manager import ProjectGlManager
+from apps.development.services.project.gl.provider import ProjectGlProvider
 from tests.test_development.checkers_gitlab import check_project
 from tests.test_development.factories import (
     ProjectFactory,
@@ -15,10 +19,6 @@ from tests.test_development.factories_gitlab import (
     GlProjectFactory,
     GlUserFactory,
 )
-
-from apps.development.models import Project
-from apps.development.services.project.gl.manager import ProjectGlManager
-from apps.development.services.project.gl.provider import ProjectGlProvider
 
 
 @override_settings(GITLAB_TOKEN='GITLAB_TOKEN')

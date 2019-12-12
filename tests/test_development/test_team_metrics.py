@@ -1,17 +1,16 @@
 from datetime import datetime, timedelta
 
+from apps.core.utils.time import seconds
+from apps.development.graphql.types.team import TeamType
+from apps.development.models.issue import ISSUE_STATES
+from apps.development.models.merge_request import MERGE_REQUESTS_STATES
+from apps.development.services.team.metrics.main import get_metrics
 from tests.test_development.factories import (
     IssueFactory,
     MergeRequestFactory,
     TeamFactory,
 )
 from tests.test_users.factories.user import UserFactory
-
-from apps.core.utils.time import seconds
-from apps.development.graphql.types.team import TeamType
-from apps.development.models.issue import ISSUE_STATES
-from apps.development.models.merge_request import MERGE_REQUESTS_STATES
-from apps.development.services.team.metrics.main import get_metrics
 
 
 def test_issues(user):

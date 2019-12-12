@@ -1,3 +1,6 @@
+from apps.development.graphql.filters import MergeRequestFilterSet
+from apps.development.graphql.types.merge_request import MergeRequestType
+from apps.development.models import MergeRequest, TeamMember
 from tests.test_development.factories import (
     MergeRequestFactory,
     TeamFactory,
@@ -5,10 +8,6 @@ from tests.test_development.factories import (
 )
 from tests.test_development.factories_gitlab import AttrDict
 from tests.test_users.factories.user import UserFactory
-
-from apps.development.graphql.filters import MergeRequestFilterSet
-from apps.development.graphql.types.merge_request import MergeRequestType
-from apps.development.models import MergeRequest, TeamMember
 
 
 def test_merge_requests_filter_by_team_empty(user, client):

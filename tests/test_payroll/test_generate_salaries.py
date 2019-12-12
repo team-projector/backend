@@ -3,6 +3,13 @@ from decimal import Decimal
 
 from django.test import TestCase
 from django.utils import timezone
+
+from apps.core.utils.time import seconds
+from apps.development.models.issue import ISSUE_STATES
+from apps.payroll.models import Payroll, Salary
+from apps.payroll.services.salary.calculator import SalaryCalculator
+from apps.payroll.services.salary.exceptions import EmptySalaryException
+from apps.users.models import User
 from tests.test_development.factories import IssueFactory, MergeRequestFactory
 from tests.test_payroll.factories import (
     BonusFactory,
@@ -12,13 +19,6 @@ from tests.test_payroll.factories import (
     SalaryFactory,
 )
 from tests.test_users.factories.user import UserFactory
-
-from apps.core.utils.time import seconds
-from apps.development.models.issue import ISSUE_STATES
-from apps.payroll.models import Payroll, Salary
-from apps.payroll.services.salary.calculator import SalaryCalculator
-from apps.payroll.services.salary.exceptions import EmptySalaryException
-from apps.users.models import User
 
 
 class GenerateSalariesTests(TestCase):

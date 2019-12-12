@@ -1,6 +1,5 @@
-from tests.test_development.factories import IssueFactory
-
 from apps.core.utils.time import seconds
+from tests.test_development.factories import IssueFactory
 
 
 def test_time_remains(db):

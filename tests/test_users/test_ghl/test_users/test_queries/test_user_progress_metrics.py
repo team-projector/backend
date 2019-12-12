@@ -2,12 +2,12 @@ from datetime import datetime
 
 from django.http.response import Http404
 from pytest import raises
-from tests.test_development.factories import TeamFactory, TeamMemberFactory
-from tests.test_development.factories_gitlab import AttrDict
-from tests.test_users.factories.user import UserFactory
 
 from apps.development.models import TeamMember
 from apps.users.graphql.resolvers import resolve_user_progress_metrics
+from tests.test_development.factories import TeamFactory, TeamMemberFactory
+from tests.test_development.factories_gitlab import AttrDict
+from tests.test_users.factories.user import UserFactory
 
 
 def test_user_progress_metrics(user, client):

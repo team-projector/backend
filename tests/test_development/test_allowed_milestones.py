@@ -1,15 +1,15 @@
 from django.core.exceptions import PermissionDenied
 from pytest import raises
+
+from apps.development.models import Milestone
+from apps.development.models.project_member import PROJECT_MEMBER_ROLES
+from apps.development.services import milestone as milestone_service
 from tests.test_development.factories import (
     ProjectFactory,
     ProjectGroupFactory,
     ProjectMemberFactory,
     ProjectMilestoneFactory,
 )
-
-from apps.development.models import Milestone
-from apps.development.models.project_member import PROJECT_MEMBER_ROLES
-from apps.development.services import milestone as milestone_service
 
 
 def test_not_pm(user):

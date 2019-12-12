@@ -1,3 +1,5 @@
+from apps.development.models import Issue, Project, ProjectGroup, TeamMember
+from apps.development.models.project_member import PROJECT_MEMBER_ROLES
 from tests.test_development.factories import (
     IssueFactory,
     ProjectFactory,
@@ -7,9 +9,6 @@ from tests.test_development.factories import (
     TeamMemberFactory,
 )
 from tests.test_users.factories.user import UserFactory
-
-from apps.development.models import Issue, Project, ProjectGroup, TeamMember
-from apps.development.models.project_member import PROJECT_MEMBER_ROLES
 
 
 def test_tm_assignee(user):

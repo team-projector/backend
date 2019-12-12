@@ -1,12 +1,11 @@
 from datetime import datetime, timedelta
 
+from apps.development.graphql.filters import TicketsFilterSet
+from apps.development.models import Ticket
 from tests.test_development.factories import (
     ProjectMilestoneFactory,
     TicketFactory,
 )
-
-from apps.development.graphql.filters import TicketsFilterSet
-from apps.development.models import Ticket
 
 
 def test_filter_by_milestone(db):

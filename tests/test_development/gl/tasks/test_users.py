@@ -1,9 +1,9 @@
 from django.test import override_settings
-from tests.test_development.checkers_gitlab import check_user
-from tests.test_development.factories_gitlab import AttrDict, GlUserFactory
 
 from apps.development.tasks import sync_user_task
 from apps.users.models import User
+from tests.test_development.checkers_gitlab import check_user
+from tests.test_development.factories_gitlab import AttrDict, GlUserFactory
 
 
 @override_settings(GITLAB_TOKEN='GITLAB_TOKEN')

@@ -1,7 +1,6 @@
 from datetime import datetime, timedelta
 
 from pytest import raises
-from tests.test_development.factories import IssueFactory
 
 from apps.development.graphql.types.issue import IssueType
 from apps.development.models.issue import ISSUE_STATES
@@ -14,6 +13,7 @@ from apps.development.services.issue import (
 from apps.development.services.issue.problems.checkers import (
     BaseProblemChecker,
 )
+from tests.test_development.factories import IssueFactory
 
 
 def test_base_checker():

@@ -1,13 +1,13 @@
 from django.core.exceptions import PermissionDenied
 from pytest import raises
-from tests.test_development.factories import TeamFactory, TeamMemberFactory
-from tests.test_payroll.factories import WorkBreakFactory
-from tests.test_users.factories.user import UserFactory
 
 from apps.development.models import TeamMember
 from apps.payroll.graphql.filters import WorkBreakFilterSet
 from apps.payroll.models import WorkBreak
 from apps.payroll.models.mixins.approved import APPROVED_STATES
+from tests.test_development.factories import TeamFactory, TeamMemberFactory
+from tests.test_payroll.factories import WorkBreakFactory
+from tests.test_users.factories.user import UserFactory
 
 
 def test_filter_by_user(user):

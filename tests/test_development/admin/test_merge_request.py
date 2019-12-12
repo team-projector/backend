@@ -1,4 +1,9 @@
 from django.test import override_settings
+
+from apps.development.models.merge_request import (
+    MERGE_REQUESTS_STATES,
+    MergeRequest,
+)
 from tests.helpers.base import model_admin
 from tests.test_development.checkers_gitlab import check_merge_request
 from tests.test_development.factories import (
@@ -11,11 +16,6 @@ from tests.test_development.factories_gitlab import (
     GlProjectFactory,
     GlTimeStats,
     GlUserFactory,
-)
-
-from apps.development.models.merge_request import (
-    MERGE_REQUESTS_STATES,
-    MergeRequest,
 )
 
 

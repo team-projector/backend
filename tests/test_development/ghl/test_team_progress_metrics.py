@@ -2,11 +2,11 @@ from datetime import datetime
 
 from django.core.exceptions import PermissionDenied
 from pytest import raises
-from tests.test_development.factories import TeamFactory, TeamMemberFactory
-from tests.test_development.factories_gitlab import AttrDict
 
 from apps.development.graphql.resolvers import resolve_team_progress_metrics
 from apps.development.models import TeamMember
+from tests.test_development.factories import TeamFactory, TeamMemberFactory
+from tests.test_development.factories_gitlab import AttrDict
 
 
 def test_team_progress_metrics(user, client):

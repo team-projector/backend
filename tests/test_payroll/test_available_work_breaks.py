@@ -1,9 +1,8 @@
+from apps.development.models import TeamMember
+from apps.payroll.models import WorkBreak
 from tests.test_development.factories import TeamFactory, TeamMemberFactory
 from tests.test_payroll.factories import WorkBreakFactory
 from tests.test_users.factories.user import UserFactory
-
-from apps.development.models import TeamMember
-from apps.payroll.models import WorkBreak
 
 
 def test_my_work_breaks(user):

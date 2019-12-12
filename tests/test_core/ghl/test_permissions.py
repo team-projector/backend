@@ -1,6 +1,4 @@
 from django.contrib.auth.models import AnonymousUser
-from tests.test_development.factories import IssueFactory
-from tests.test_development.factories_gitlab import AttrDict
 
 from apps.core.graphql.security.permissions import (
     AllowAny,
@@ -8,6 +6,8 @@ from apps.core.graphql.security.permissions import (
     AllowProjectManager,
 )
 from apps.development.graphql.types.issue import IssueType
+from tests.test_development.factories import IssueFactory
+from tests.test_development.factories_gitlab import AttrDict
 
 
 def test_any(client):

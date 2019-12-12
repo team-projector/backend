@@ -1,10 +1,4 @@
 import pytest
-from tests.test_development.factories import IssueFactory
-from tests.test_payroll.factories import (
-    IssueSpentTimeFactory,
-    MergeRequestFactory,
-)
-from tests.test_users.factories.user import UserFactory
 
 from apps.core.utils.time import seconds
 from apps.development.models.issue import ISSUE_STATES
@@ -12,6 +6,12 @@ from apps.development.models.merge_request import MERGE_REQUESTS_STATES
 from apps.users.graphql.types.user import UserType
 from apps.users.services import user as user_service
 from apps.users.services.user.problems.checkers.base import BaseProblemChecker
+from tests.test_development.factories import IssueFactory
+from tests.test_payroll.factories import (
+    IssueSpentTimeFactory,
+    MergeRequestFactory,
+)
+from tests.test_users.factories.user import UserFactory
 
 
 @pytest.fixture

@@ -1,7 +1,6 @@
-from tests.test_development.factories import TeamFactory, TeamMemberFactory
-
 from apps.development.graphql.filters import TeamsFilterSet
 from apps.development.models import Team, TeamMember
+from tests.test_development.factories import TeamFactory, TeamMemberFactory
 
 
 def test_filter_by_role(user, client):

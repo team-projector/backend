@@ -1,8 +1,7 @@
+import factory
 import pytz
 from django.contrib.contenttypes.models import ContentType
-from tests.test_users.factories.user import UserFactory
 
-import factory
 from apps.development.models import (
     Issue,
     Label,
@@ -18,6 +17,7 @@ from apps.development.models import (
 )
 from apps.development.models.issue import ISSUE_STATES
 from apps.development.models.merge_request import MERGE_REQUESTS_STATES
+from tests.test_users.factories.user import UserFactory
 
 
 class GitlabFieldMixin(factory.django.DjangoModelFactory):

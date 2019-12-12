@@ -1,8 +1,7 @@
-from tests.test_development.factories_gitlab import AttrDict
-from tests.test_users.factories.user import UserFactory
-
 from apps.users.graphql.types.user import UserType
 from apps.users.models import User
+from tests.test_development.factories_gitlab import AttrDict
+from tests.test_users.factories.user import UserFactory
 
 
 def test_user(user, client):

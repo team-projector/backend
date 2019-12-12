@@ -1,4 +1,6 @@
 from django.test import override_settings
+
+from apps.development.models import Project
 from tests.helpers.base import model_admin
 from tests.test_development.checkers_gitlab import check_project
 from tests.test_development.factories import (
@@ -10,8 +12,6 @@ from tests.test_development.factories_gitlab import (
     GlGroupFactory,
     GlProjectFactory,
 )
-
-from apps.development.models import Project
 
 
 @override_settings(GITLAB_TOKEN='GITLAB_TOKEN')

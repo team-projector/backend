@@ -5,9 +5,9 @@ from django.contrib.auth.models import AnonymousUser
 from graphene.test import Client as GQLClient
 from graphene_django.rest_framework.tests.test_mutation import mock_info
 from graphql import ResolveInfo
-from tests.helpers.ghl_client import GraphQLClient
 
 from gql import schema
+from tests.helpers.ghl_client import GraphQLClient
 
 
 @pytest.fixture

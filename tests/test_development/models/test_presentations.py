@@ -1,3 +1,4 @@
+from apps.development.models.note import NOTE_TYPES
 from tests.test_development.factories import (
     IssueFactory,
     IssueNoteFactory,
@@ -10,8 +11,6 @@ from tests.test_development.factories import (
     TeamMemberFactory,
 )
 from tests.test_users.factories.user import UserFactory
-
-from apps.development.models.note import NOTE_TYPES
 
 
 def test_issue(db):

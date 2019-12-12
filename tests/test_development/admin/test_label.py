@@ -1,7 +1,6 @@
+from apps.development.models import Label
 from tests.helpers.base import model_admin
 from tests.test_development.factories import LabelFactory
-
-from apps.development.models import Label
 
 
 def test_color_square(db):

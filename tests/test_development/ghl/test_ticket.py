@@ -3,12 +3,6 @@ from datetime import datetime
 import pytest
 from pytest import raises
 from rest_framework.exceptions import PermissionDenied
-from tests.test_development.factories import (
-    IssueFactory,
-    ProjectMilestoneFactory,
-    TicketFactory,
-)
-from tests.test_development.factories_gitlab import AttrDict
 
 from apps.development.graphql.mutations.ticket import (
     CreateTicketMutation,
@@ -22,6 +16,12 @@ from apps.development.models.ticket import (
     TYPE_FEATURE,
     Ticket,
 )
+from tests.test_development.factories import (
+    IssueFactory,
+    ProjectMilestoneFactory,
+    TicketFactory,
+)
+from tests.test_development.factories_gitlab import AttrDict
 
 
 @pytest.fixture

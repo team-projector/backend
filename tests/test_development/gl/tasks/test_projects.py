@@ -1,4 +1,7 @@
 from django.test import override_settings
+
+from apps.development.models import Project
+from apps.development.tasks import sync_project_task
 from tests.test_development.checkers_gitlab import check_project
 from tests.test_development.factories import (
     ProjectFactory,
@@ -10,9 +13,6 @@ from tests.test_development.factories_gitlab import (
     GlProjectFactory,
     GlProjectMilestoneFactory,
 )
-
-from apps.development.models import Project
-from apps.development.tasks import sync_project_task
 
 
 @override_settings(GITLAB_TOKEN='GITLAB_TOKEN')

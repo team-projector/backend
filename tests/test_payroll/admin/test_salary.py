@@ -5,6 +5,10 @@ from django.core import mail
 from django.utils import timezone
 from pytest import raises
 from rest_framework import status
+
+from apps.core.utils.time import seconds
+from apps.development.models.issue import ISSUE_STATES
+from apps.payroll.models import Salary
 from tests.helpers.base import (
     model_admin,
     model_to_dict_form,
@@ -13,10 +17,6 @@ from tests.helpers.base import (
 from tests.test_development.factories import IssueFactory
 from tests.test_payroll.factories import IssueSpentTimeFactory, SalaryFactory
 from tests.test_users.factories.user import UserFactory
-
-from apps.core.utils.time import seconds
-from apps.development.models.issue import ISSUE_STATES
-from apps.payroll.models import Salary
 
 
 def test_salary_instance_str(db):

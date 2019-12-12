@@ -2,7 +2,6 @@ from datetime import date, datetime, timedelta
 
 from django.test import TestCase
 from django.utils import timezone
-from tests.test_development.factories import IssueFactory
 
 from apps.core.gitlab.parsers import GITLAB_DATE_FORMAT, GITLAB_DATETIME_FORMAT
 from apps.core.utils.objects import dict2obj
@@ -11,6 +10,7 @@ from apps.development.models import Note
 from apps.development.models.note import NOTE_TYPES
 from apps.development.services.note.gitlab import SPEND_RESET_MESSAGE
 from apps.users.models import User
+from tests.test_development.factories import IssueFactory
 
 
 class TimeSpendNoteTypeTests(TestCase):

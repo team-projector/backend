@@ -1,6 +1,16 @@
 from datetime import datetime, timedelta
 
 from django.utils import timezone
+
+from apps.development.graphql.resolvers import resolve_issues_summary
+from apps.development.graphql.resolvers.issues_summary import (
+    resolve_issues_project_summaries,
+    resolve_issues_team_summaries,
+)
+from apps.development.models import Project, Team, TeamMember
+from apps.development.models.issue import ISSUE_STATES, Issue
+from apps.development.models.milestone import MILESTONE_STATES
+from apps.development.services import issue as issue_service
 from tests.test_development.factories import (
     IssueFactory,
     ProjectFactory,
@@ -13,16 +23,6 @@ from tests.test_development.factories import (
 from tests.test_development.factories_gitlab import AttrDict
 from tests.test_payroll.factories import IssueSpentTimeFactory
 from tests.test_users.factories.user import UserFactory
-
-from apps.development.graphql.resolvers import resolve_issues_summary
-from apps.development.graphql.resolvers.issues_summary import (
-    resolve_issues_project_summaries,
-    resolve_issues_team_summaries,
-)
-from apps.development.models import Project, Team, TeamMember
-from apps.development.models.issue import ISSUE_STATES, Issue
-from apps.development.models.milestone import MILESTONE_STATES
-from apps.development.services import issue as issue_service
 
 
 def test_issue_counts(user):

@@ -1,12 +1,12 @@
 from django.core.exceptions import PermissionDenied
 from pytest import raises
-from tests.test_development.factories import TeamFactory
-from tests.test_payroll.factories import SalaryFactory
-from tests.test_users.factories.user import UserFactory
 
 from apps.development.models import TeamMember
 from apps.payroll.graphql.filters import SalaryFilterSet
 from apps.payroll.models.salary import Salary
+from tests.test_development.factories import TeamFactory
+from tests.test_payroll.factories import SalaryFactory
+from tests.test_users.factories.user import UserFactory
 
 
 def test_salaries_filter_by_user(user):

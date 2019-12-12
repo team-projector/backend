@@ -3,14 +3,14 @@ from typing import Dict
 
 from django.test import override_settings
 from django.utils import timezone
-from tests.helpers.base import format_date
-from tests.test_development.factories import IssueFactory
-from tests.test_payroll.factories import IssueSpentTimeFactory, SalaryFactory
 
 from apps.core.utils.date import begin_of_week
 from apps.core.utils.time import seconds
 from apps.development.models.issue import ISSUE_STATES
 from apps.users.services import user as user_service
+from tests.helpers.base import format_date
+from tests.test_development.factories import IssueFactory
+from tests.test_payroll.factories import IssueSpentTimeFactory, SalaryFactory
 
 
 @override_settings(TP_WEEKENDS_DAYS=[])

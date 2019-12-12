@@ -1,4 +1,10 @@
 from django.test import override_settings
+
+from apps.development.models import Milestone
+from apps.development.tasks import (
+    sync_groups_milestones_task,
+    sync_projects_milestones_task,
+)
 from tests.test_development.checkers_gitlab import check_milestone
 from tests.test_development.factories import (
     ProjectFactory,
@@ -8,12 +14,6 @@ from tests.test_development.factories_gitlab import (
     AttrDict,
     GlGroupFactory,
     GlProjectMilestoneFactory,
-)
-
-from apps.development.models import Milestone
-from apps.development.tasks import (
-    sync_groups_milestones_task,
-    sync_projects_milestones_task,
 )
 
 

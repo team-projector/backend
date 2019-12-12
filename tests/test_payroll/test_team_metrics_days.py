@@ -5,6 +5,11 @@ from django.db.models import Sum
 from django.test import override_settings
 from django.utils import timezone
 from pytest import raises
+
+from apps.core.utils.time import seconds
+from apps.development.models import TeamMember
+from apps.development.models.issue import ISSUE_STATES
+from apps.development.services import team as team_service
 from tests.helpers.base import format_date
 from tests.test_development.factories import (
     IssueFactory,
@@ -13,11 +18,6 @@ from tests.test_development.factories import (
 )
 from tests.test_payroll.factories import IssueSpentTimeFactory
 from tests.test_users.factories.user import UserFactory
-
-from apps.core.utils.time import seconds
-from apps.development.models import TeamMember
-from apps.development.models.issue import ISSUE_STATES
-from apps.development.services import team as team_service
 
 
 @override_settings(TP_WEEKENDS_DAYS=[])
