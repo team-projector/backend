@@ -201,6 +201,7 @@ def test_ticket_attach_issues(project_manager, client):
     assert ticket == iss_1.ticket
     assert ticket == iss_2.ticket
 
+
 def test_ticket_clear_issues(project_manager, client):
     client.user = project_manager
     info = AttrDict({'context': client})
@@ -218,6 +219,7 @@ def test_ticket_clear_issues(project_manager, client):
     assert not result.errors
     issue.refresh_from_db()
     assert not issue.ticket
+
 
 def test_ticket_both_params_attach_and_issues(project_manager, client):
     client.user = project_manager

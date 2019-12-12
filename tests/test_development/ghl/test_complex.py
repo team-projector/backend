@@ -4,7 +4,7 @@ from tests.test_development.factories import IssueFactory
 def test_connection_anonymous(user, gql_client_anonymous):
     IssueFactory.create_batch(5, user=user)
 
-    query = '''
+    query = """
     {
       allIssues(state: "opened") {
         edges {
@@ -13,7 +13,7 @@ def test_connection_anonymous(user, gql_client_anonymous):
           }
         }
       }
-    }'''
+    }"""
 
     data = gql_client_anonymous.execute(query)['data']
 
@@ -24,11 +24,11 @@ def test_connection_authenticated(admin_user, gql_client_authenticated):
     IssueFactory.create_batch(5, user=admin_user)
     IssueFactory.create_batch(3)
 
-    query = '''
+    query = """
     fragment issueFields on Issue {
       title
     }
-    
+
     {
       allIssues(first:5, last:1, state: "opened") {
         count
@@ -39,7 +39,7 @@ def test_connection_authenticated(admin_user, gql_client_authenticated):
           }
         }
       }
-    }'''
+    }"""
 
     data = gql_client_authenticated.execute(query)['data']
 
@@ -50,12 +50,12 @@ def test_relay_node(admin_user, gql_client_authenticated):
     IssueFactory.create(id=1, user=admin_user)
     IssueFactory.create_batch(3)
 
-    query = '''
+    query = """
     {
       issue(id: 1) {
         id
       }
-    }'''
+    }"""
 
     data = gql_client_authenticated.execute(query)['data']
 

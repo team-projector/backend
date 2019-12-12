@@ -22,15 +22,14 @@ def test_status(user):
     project.gl_last_sync = timezone.now() + timedelta(minutes=2)
     project.save()
 
-    add_action_task.delay(sender_id=user.id, verb=ACTION_GITLAB_WEBHOOK_TRIGGERED)
+    add_action_task.delay(sender_id=user.id,
+                          verb=ACTION_GITLAB_WEBHOOK_TRIGGERED)
     add_action_task.delay(sender_id=user.id, verb=ACTION_GITLAB_CALL_API)
 
     sync_status = get_gitlab_sync_status()
 
     assert sync_status.last_sync == project.gl_last_sync
-    assert set(
-        x.id for x in sync_status.last_issues
-    ) == set(
+    assert {x.id for x in sync_status.last_issues} == set(
         Issue.objects.order_by('-updated_at')[:10].values_list('id', flat=True)
     )
 
@@ -43,7 +42,8 @@ def test_resolver(user, client):
     project.gl_last_sync = timezone.now() + timedelta(minutes=2)
     project.save()
 
-    add_action_task.delay(sender_id=user.id, verb=ACTION_GITLAB_WEBHOOK_TRIGGERED)
+    add_action_task.delay(sender_id=user.id,
+                          verb=ACTION_GITLAB_WEBHOOK_TRIGGERED)
     add_action_task.delay(sender_id=user.id, verb=ACTION_GITLAB_CALL_API)
 
     client.user = user
@@ -55,20 +55,17 @@ def test_resolver(user, client):
     )
 
     assert sync_status.last_sync == project.gl_last_sync
-    assert set(
-        x.id for x in sync_status.last_issues
-    ) == set(
+    assert {x.id for x in sync_status.last_issues} == set(
         Issue.objects.order_by('-updated_at')[:10].values_list('id', flat=True)
     )
 
-    add_action_task.delay(sender_id=user.id, verb=ACTION_GITLAB_WEBHOOK_TRIGGERED)
+    add_action_task.delay(sender_id=user.id,
+                          verb=ACTION_GITLAB_WEBHOOK_TRIGGERED)
     add_action_task.delay(sender_id=user.id, verb=ACTION_GITLAB_CALL_API)
 
     sync_status = get_gitlab_sync_status()
 
     assert sync_status.last_sync == project.gl_last_sync
-    assert set(
-        x.id for x in sync_status.last_issues
-    ) == set(
+    assert {x.id for x in sync_status.last_issues} == set(
         Issue.objects.order_by('-updated_at')[:10].values_list('id', flat=True)
     )

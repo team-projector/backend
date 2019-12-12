@@ -341,7 +341,7 @@ def test_filter_by_milestone(user, client):
     ).qs
 
     assert results.count() == 3
-    assert all([item.milestone == milestone_1 for item in results]) is True
+    assert all(item.milestone == milestone_1 for item in results)
 
     results = IssuesFilterSet(
         data={'milestone': milestone_2.id},
@@ -350,7 +350,7 @@ def test_filter_by_milestone(user, client):
     ).qs
 
     assert results.count() == 2
-    assert all([item.milestone == milestone_2 for item in results]) is True
+    assert all(item.milestone == milestone_2 for item in results)
 
 
 def test_filter_by_milestone_not_pm(user, client):
@@ -386,7 +386,7 @@ def test_filter_by_ticket(user, client):
     ).qs
 
     assert results.count() == 3
-    assert all([item.ticket == ticket_1 for item in results]) is True
+    assert all(item.ticket == ticket_1 for item in results)
 
     results = IssuesFilterSet(
         data={'ticket': ticket_2.id},
@@ -395,7 +395,7 @@ def test_filter_by_ticket(user, client):
     ).qs
 
     assert results.count() == 2
-    assert all([item.ticket == ticket_2 for item in results]) is True
+    assert all(item.ticket == ticket_2 for item in results)
 
 
 def test_filter_by_ticket_not_pm(user, client):

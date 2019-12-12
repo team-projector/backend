@@ -16,8 +16,6 @@ from tests.test_development.factories_gitlab import (
 
 @override_settings(GITLAB_TOKEN='GITLAB_TOKEN')
 def test_sync_handler(db, gl_mocker, gl_client):
-    # gl_mocker.registry_get('/user', GlUserFactory())
-
     gl_group = AttrDict(GlGroupFactory())
     group = ProjectGroupFactory.create(gl_id=gl_group.id)
     gl_mocker.registry_get(f'/groups/{gl_group.id}', gl_group)
