@@ -9,13 +9,13 @@ from apps.core.graphql.security.authentication import TokenAuthentication
 from apps.users.models import Token
 from apps.users.services import token as token_service
 from apps.users.services import user as user_service
-from tests.base import USER_PASSWORD
+from tests.fixtures.users import DEFAULT_USER_PASSWORD
 
 
 def test_login_user(user):
     assert Token.objects.count() == 0
 
-    token = user_service.login_user(user.login, USER_PASSWORD, None)
+    token = user_service.login_user(user.login, DEFAULT_USER_PASSWORD, None)
 
     assert token is not None
     assert Token.objects.count() == 1
@@ -26,12 +26,12 @@ def test_login_user_not_active(user):
     user.save()
 
     with raises(AuthenticationFailed):
-        user_service.login_user(user.login, USER_PASSWORD, None)
+        user_service.login_user(user.login, DEFAULT_USER_PASSWORD, None)
 
 
 def test_login_invalid_password(user):
     with raises(AuthenticationFailed):
-        user_service.login_user(user.login, f'{USER_PASSWORD}bla', None)
+        user_service.login_user(user.login, f'{DEFAULT_USER_PASSWORD}bla', None)
 
 
 def test_login_empty_password(user):
@@ -41,22 +41,22 @@ def test_login_empty_password(user):
 
 def test_login_user_invalid_login(user):
     with raises(AuthenticationFailed):
-        user_service.login_user(f'{user.login}bla', USER_PASSWORD, None)
+        user_service.login_user(f'{user.login}bla', DEFAULT_USER_PASSWORD, None)
 
 
 def test_login_empty_user(user):
     with raises(AuthenticationFailed):
-        user_service.login_user('', USER_PASSWORD, None)
+        user_service.login_user('', DEFAULT_USER_PASSWORD, None)
 
 
 def test_multitokens(user):
     assert Token.objects.count() == 0
 
-    user_service.login_user(user.login, USER_PASSWORD, None)
+    user_service.login_user(user.login, DEFAULT_USER_PASSWORD, None)
 
     assert Token.objects.filter(user=user).count() == 1
 
-    user_service.login_user(user.login, USER_PASSWORD, None)
+    user_service.login_user(user.login, DEFAULT_USER_PASSWORD, None)
 
     assert Token.objects.filter(user=user).count() == 2
 

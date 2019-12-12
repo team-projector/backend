@@ -10,7 +10,7 @@ from apps.payroll.services.salary.calculator import SalaryCalculator
 from apps.users.models import User
 from tests.test_development.factories import IssueFactory
 from tests.test_payroll.factories import IssueSpentTimeFactory
-from tests.test_users.factories import UserFactory
+from tests.test_users.factories.user import UserFactory
 
 
 class BulkGenerateSalariesTests(TestCase):

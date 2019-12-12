@@ -14,7 +14,7 @@ from tests.test_development.factories import (
     TeamFactory,
     TeamMemberFactory
 )
-from tests.test_users.factories import UserFactory
+from tests.test_users.factories.user import UserFactory
 
 
 def test_filter_by_state(user):

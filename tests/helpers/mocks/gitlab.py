@@ -1,6 +1,5 @@
 import json
 import re
-from functools import partial
 
 import httpretty
 from django.conf import settings
@@ -8,7 +7,6 @@ from rest_framework import status
 
 RE_GITLAB_URL = re.compile(r'https://gitlab\.com.*')
 BASE_GL_API_URL = f'{settings.GITLAB_HOST}/api/v4'
-
 
 
 class GitlabMock:
@@ -72,9 +70,3 @@ class GitlabMock:
     @staticmethod
     def _prepare_uri(path):
         return f'{BASE_GL_API_URL}{path}'
-
-
-activate_httpretty = partial(
-    httpretty.activate,
-    allow_net_connect=False,
-)

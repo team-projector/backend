@@ -9,7 +9,7 @@ from apps.payroll.models.mixins.approved import APPROVED_STATES
 from tests.test_development.factories import TeamFactory, TeamMemberFactory
 from tests.test_development.factories_gitlab import AttrDict
 from tests.test_payroll.factories import WorkBreakFactory
-from tests.test_users.factories import UserFactory
+from tests.test_users.factories.user import UserFactory
 
 
 def test_approve_by_teamlead(user, client):

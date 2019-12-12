@@ -9,10 +9,10 @@ from rest_framework import status
 from apps.core.utils.time import seconds
 from apps.development.models.issue import ISSUE_STATES
 from apps.payroll.models import Salary
-from tests.base import trigger_on_commit, model_to_dict_form, model_admin
+from tests.helpers.base import trigger_on_commit, model_to_dict_form, model_admin
 from tests.test_development.factories import IssueFactory
 from tests.test_payroll.factories import IssueSpentTimeFactory, SalaryFactory
-from tests.test_users.factories import UserFactory
+from tests.test_users.factories.user import UserFactory
 
 
 def test_salary_instance_str(db):

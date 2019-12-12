@@ -8,7 +8,7 @@ from apps.development.services.team.metrics.main import get_metrics
 from tests.test_development.factories import (
     IssueFactory, MergeRequestFactory, TeamFactory
 )
-from tests.test_users.factories import UserFactory
+from tests.test_users.factories.user import UserFactory
 
 
 def test_issues(user):

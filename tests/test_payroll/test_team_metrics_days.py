@@ -9,12 +9,12 @@ from apps.core.utils.time import seconds
 from apps.development.models import TeamMember
 from apps.development.models.issue import ISSUE_STATES
 from apps.development.services import team as team_service
-from tests.base import format_date
+from tests.helpers.base import format_date
 from tests.test_development.factories import (
     IssueFactory, TeamFactory, TeamMemberFactory
 )
 from tests.test_payroll.factories import IssueSpentTimeFactory
-from tests.test_users.factories import UserFactory
+from tests.test_users.factories.user import UserFactory
 
 
 @override_settings(TP_WEEKENDS_DAYS=[])

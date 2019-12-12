@@ -7,7 +7,7 @@ from apps.development.models.issue import ISSUE_STATES
 from apps.development.services.ticket.metrics import get_ticket_metrics
 from tests.test_development.factories import IssueFactory, TicketFactory
 from tests.test_development.factories_gitlab import AttrDict
-from tests.test_users.factories import UserFactory
+from tests.test_users.factories.user import UserFactory
 
 
 def test_metrics_without_issues(db):

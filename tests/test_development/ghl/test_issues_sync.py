@@ -6,7 +6,7 @@ from tests.test_development.factories_gitlab import (
     AttrDict, GlTimeStats, GlUserFactory, GlProjectFactory,
     GlIssueFactory
 )
-from tests.test_users.factories import UserFactory
+from tests.test_users.factories.user import UserFactory
 
 
 @override_settings(GITLAB_TOKEN='GITLAB_TOKEN')

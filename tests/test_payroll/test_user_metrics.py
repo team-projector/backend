@@ -10,7 +10,7 @@ from tests.test_payroll.factories import (
     BonusFactory, IssueSpentTimeFactory, MergeRequestSpentTimeFactory,
     PenaltyFactory, SalaryFactory
 )
-from tests.test_users.factories import UserFactory
+from tests.test_users.factories.user import UserFactory
 
 calculator = user_service.UserMetricsProvider()
 

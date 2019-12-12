@@ -22,7 +22,7 @@ from tests.test_development.factories import (
 )
 from tests.test_development.factories_gitlab import AttrDict
 from tests.test_payroll.factories import IssueSpentTimeFactory
-from tests.test_users.factories import UserFactory
+from tests.test_users.factories.user import UserFactory
 
 
 def test_issue_counts(user):

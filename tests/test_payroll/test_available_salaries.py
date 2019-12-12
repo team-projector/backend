@@ -2,7 +2,7 @@ from apps.development.models import TeamMember
 from apps.payroll.models import Salary
 from tests.test_development.factories import TeamFactory
 from tests.test_payroll.factories import SalaryFactory
-from tests.test_users.factories import UserFactory
+from tests.test_users.factories.user import UserFactory
 
 
 def test_my_salaries(user):

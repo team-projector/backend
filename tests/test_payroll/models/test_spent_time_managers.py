@@ -6,7 +6,7 @@ from apps.development.models.issue import ISSUE_STATES
 from apps.payroll.models import SpentTime
 from tests.test_development.factories import IssueFactory
 from tests.test_payroll.factories import IssueSpentTimeFactory, SalaryFactory
-from tests.test_users.factories import UserFactory
+from tests.test_users.factories.user import UserFactory
 
 
 @pytest.fixture

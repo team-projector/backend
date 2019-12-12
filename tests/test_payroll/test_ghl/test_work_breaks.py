@@ -12,7 +12,7 @@ from apps.payroll.models.work_break import WORK_BREAK_REASONS
 from tests.test_development.factories import TeamFactory, TeamMemberFactory
 from tests.test_development.factories_gitlab import AttrDict
 from tests.test_payroll.factories import WorkBreakFactory
-from tests.test_users.factories import UserFactory
+from tests.test_users.factories.user import UserFactory
 
 
 def test_work_break(user, client):

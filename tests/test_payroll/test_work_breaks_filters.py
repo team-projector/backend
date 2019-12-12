@@ -7,7 +7,7 @@ from apps.payroll.models import WorkBreak
 from apps.payroll.models.mixins.approved import APPROVED_STATES
 from tests.test_development.factories import TeamFactory, TeamMemberFactory
 from tests.test_payroll.factories import WorkBreakFactory
-from tests.test_users.factories import UserFactory
+from tests.test_users.factories.user import UserFactory
 
 
 def test_filter_by_user(user):

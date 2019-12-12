@@ -1,7 +1,7 @@
 from django.test import override_settings
 
 from apps.development.models import Milestone
-from tests.base import model_admin
+from tests.helpers.base import model_admin
 from tests.test_development.checkers_gitlab import check_milestone
 from tests.test_development.factories import (
     ProjectFactory,

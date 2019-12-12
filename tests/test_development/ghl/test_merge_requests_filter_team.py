@@ -6,7 +6,7 @@ from tests.test_development.factories import (
     MergeRequestFactory, TeamFactory, TeamMemberFactory
 )
 from tests.test_development.factories_gitlab import AttrDict
-from tests.test_users.factories import UserFactory
+from tests.test_users.factories.user import UserFactory
 
 
 def test_merge_requests_filter_by_team_empty(user, client):

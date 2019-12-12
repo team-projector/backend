@@ -4,7 +4,7 @@ from apps.payroll.services import work_break as work_break_service
 
 from tests.test_development.factories import TeamFactory, TeamMemberFactory
 from tests.test_payroll.factories import WorkBreakFactory
-from tests.test_users.factories import UserFactory
+from tests.test_users.factories.user import UserFactory
 
 
 def test_approve_by_teamlead(user):

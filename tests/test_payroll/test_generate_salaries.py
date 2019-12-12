@@ -15,7 +15,7 @@ from tests.test_payroll.factories import (
     BonusFactory, IssueSpentTimeFactory,
     PenaltyFactory, SalaryFactory, MergeRequestSpentTimeFactory
 )
-from tests.test_users.factories import UserFactory
+from tests.test_users.factories.user import UserFactory
 
 
 class GenerateSalariesTests(TestCase):

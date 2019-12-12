@@ -5,7 +5,7 @@ from apps.development.models.merge_request import MERGE_REQUESTS_STATES
 from tests.test_development.factories import (
     MergeRequestFactory, ProjectFactory, TeamFactory, TeamMemberFactory
 )
-from tests.test_users.factories import UserFactory
+from tests.test_users.factories.user import UserFactory
 
 
 def test_filter_by_user(user):

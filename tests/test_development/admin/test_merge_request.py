@@ -3,7 +3,7 @@ from django.test import override_settings
 from apps.development.models.merge_request import (
     MergeRequest, MERGE_REQUESTS_STATES,
 )
-from tests.base import model_admin
+from tests.helpers.base import model_admin
 from tests.test_development.checkers_gitlab import check_merge_request
 from tests.test_development.factories import (
     MergeRequestFactory, ProjectFactory

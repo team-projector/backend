@@ -1,7 +1,7 @@
 from django.test import override_settings
 
 from apps.development.models import Project
-from tests.base import model_admin
+from tests.helpers.base import model_admin
 from tests.test_development.checkers_gitlab import check_project
 from tests.test_development.factories import (
     ProjectGroupFactory, ProjectFactory

@@ -2,7 +2,7 @@ from django.test import override_settings
 
 from apps.development.models.issue import Issue, ISSUE_STATES
 from tests.test_development.checkers_gitlab import check_issue
-from tests.base import model_admin
+from tests.helpers.base import model_admin
 from tests.test_development.factories import IssueFactory, ProjectFactory
 from tests.test_development.factories_gitlab import (
     AttrDict, GlIssueFactory, GlProjectFactory, GlTimeStats, GlUserFactory,

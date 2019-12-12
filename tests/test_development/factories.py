@@ -8,7 +8,7 @@ from apps.development.models import (
 )
 from apps.development.models.issue import ISSUE_STATES
 from apps.development.models.merge_request import MERGE_REQUESTS_STATES
-from tests.test_users.factories import UserFactory
+from tests.test_users.factories.user import UserFactory
 
 
 class GitlabFieldMixin(factory.django.DjangoModelFactory):

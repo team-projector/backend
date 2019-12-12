@@ -8,7 +8,7 @@ from tests.test_development.factories import (
     LabelFactory,
 )
 from tests.test_development.factories_gitlab import AttrDict
-from tests.test_users.factories import UserFactory
+from tests.test_users.factories.user import UserFactory
 
 
 def test_issue(user, client):

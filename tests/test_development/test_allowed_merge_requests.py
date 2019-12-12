@@ -2,7 +2,7 @@ from apps.development.models import MergeRequest, TeamMember
 from tests.test_development.factories import (
     MergeRequestFactory, TeamFactory, TeamMemberFactory
 )
-from tests.test_users.factories import UserFactory
+from tests.test_users.factories.user import UserFactory
 
 
 def test_by_assignee(user):

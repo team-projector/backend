@@ -9,7 +9,7 @@ from tests.test_payroll.factories import (
   IssueSpentTimeFactory,
   WorkBreakFactory,
 )
-from tests.test_users.factories import UserFactory
+from tests.test_users.factories.user import UserFactory
 
 
 def test_bonus(db):

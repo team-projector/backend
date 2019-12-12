@@ -4,7 +4,7 @@ from apps.users.models import User
 from apps.users.services.user.gl.manager import UserGlManager
 from tests.test_development.checkers_gitlab import check_user
 from tests.test_development.factories_gitlab import AttrDict, GlUserFactory
-from tests.test_users.factories import UserFactory
+from tests.test_users.factories.user import UserFactory
 
 
 def test_extract_user_from_data(user):

@@ -3,7 +3,7 @@ from typing import Dict
 
 from django.test import testcases
 
-from tests.base import format_date
+from tests.helpers.base import format_date
 
 
 class CheckUserProgressMetricsMixin(testcases.TestCase):

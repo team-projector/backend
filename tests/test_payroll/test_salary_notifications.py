@@ -3,7 +3,7 @@ from django.core import mail
 
 from apps.payroll.tasks.salaries import send_salary_email_report_task
 from tests.test_payroll.factories import SalaryFactory
-from tests.test_users.factories import UserFactory
+from tests.test_users.factories.user import UserFactory
 
 
 def test_send_salary_email_report(db):

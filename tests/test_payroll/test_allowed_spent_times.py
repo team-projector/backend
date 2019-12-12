@@ -2,7 +2,7 @@ from apps.development.models import TeamMember
 from apps.payroll.models import SpentTime
 from tests.test_development.factories import TeamFactory, TeamMemberFactory
 from tests.test_payroll.factories import IssueSpentTimeFactory
-from tests.test_users.factories import UserFactory
+from tests.test_users.factories.user import UserFactory
 
 
 def test_by_assignee(user):
