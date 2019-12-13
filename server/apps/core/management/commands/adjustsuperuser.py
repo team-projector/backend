@@ -38,7 +38,7 @@ class Command(createsuperuser.Command):
 
     def _fill_user_data_required_fields(self, user_data, options) -> None:
         for field_name in self.UserModel.REQUIRED_FIELDS:
-            env_var = 'DJANGO_SUPERUSER_' + field_name.upper()
+            env_var = 'DJANGO_SUPERUSER_{0}'.format(field_name.upper())
             value = options[field_name] or os.environ.get(env_var)
             if not value:
                 raise CommandError(
