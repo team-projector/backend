@@ -15,6 +15,8 @@ class BaseProblemChecker:
         if self.has_problem(user):
             return self.problem_code
 
+        return None
+
     def has_problem(self, user: User) -> bool:
         """Problem condition should be implemented in subclasses."""
         raise NotImplementedError
