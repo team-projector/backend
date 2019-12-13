@@ -41,6 +41,6 @@ class Command(BaseCommand):
                 dry_run=self.only_log,
             )
 
-    def _parse_params(self, *args, **options):
+    def _parse_params(self, *args, **options) -> None:
         self.group_for_sync = options.get('group')
         self.only_log = options.get('log')

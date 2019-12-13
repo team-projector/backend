@@ -2,10 +2,11 @@
 
 from collections import OrderedDict
 
+from django_filters import OrderingFilter
 from graphene.utils.str_converters import to_camel_case
 
 
-class CamelCasedOrderingMixin:
+class CamelCasedOrderingMixin(OrderingFilter):
     """
     Examples.
 

@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
 
 from django.db.models import F
+from django_filters import OrderingFilter
 
 
-class NullsAlwaysLastOrderingMixin:
+class NullsAlwaysLastOrderingMixin(OrderingFilter):
     """Nulls always last odering mixin."""
 
     def get_ordering_value(self, choice):
