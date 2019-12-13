@@ -148,6 +148,8 @@ class MergeRequest(
         if self.time_estimate is not None and self.total_time_spent is not None:
             return max(self.time_estimate - self.total_time_spent, 0)
 
+        return None
+
     @property
     def efficiency(self) -> Optional[float]:
         """
@@ -157,6 +159,8 @@ class MergeRequest(
         """
         if self.efficiency_available:
             return self.time_estimate / self.total_time_spent
+
+        return None
 
     @property
     def efficiency_available(self) -> bool:

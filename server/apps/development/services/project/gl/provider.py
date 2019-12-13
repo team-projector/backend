@@ -24,3 +24,5 @@ class ProjectGlProvider(BaseGlProvider):
                 project.save(update_fields=('is_active',))
             else:
                 raise
+
+        return None

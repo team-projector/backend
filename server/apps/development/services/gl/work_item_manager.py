@@ -92,7 +92,6 @@ class BaseWorkItemGlManager:
         )
 
         if gl_label:
-            return Label.objects.create(
-                title=label_title,
-                color=gl_label.color,
-            )
+            return Label.objects.create(title=label_title, color=gl_label.color)
+
+        return None

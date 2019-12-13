@@ -29,3 +29,5 @@ class ProjectGroupGlProvider(BaseGlProvider):
                 group.save(update_fields=('is_active',))
             else:
                 raise
+
+        return None

@@ -2,7 +2,7 @@
 
 import logging
 from collections import namedtuple
-from typing import Dict, List, Set, Union
+from typing import Dict, List, Optional, Set, Union
 
 from gitlab import GitlabDeleteError, GitlabUpdateError
 from gitlab.v4.objects import Group as GitlabGroup
@@ -301,31 +301,49 @@ class LabelsCleaner:
             else:
                 match = get_label_match(list(renamed_labels.values()), label)
 
-            if match:
-                new_label = rename_label(
-                    manager=gl_api_obj.labels,
-                    old=label,
-                    new=match,
-                    dry_run=dry_run,
-                )
-                logger.debug('"{0}" will be renamed to "{1}"'.format(
-                    label.name, new_label.name,
-                ))
-                renamed_labels[new_label.id] = new_label
-            else:
-                renamed_labels[label.id] = label
+            _adjust_label_match(
+                match,
+                label,
+                gl_api_obj,
+                dry_run,
+                renamed_labels,
+            )
 
         group_or_project.labels = renamed_labels
         if group_or_project.parent:
             group_or_project.labels.update(group_or_project.parent.labels)
 
 
-def rename_label(
+def _adjust_label_match(
+    match,
+    label,
+    gl_api_obj,
+    dry_run,
+    renamed_labels,
+) -> None:
+    if match:
+        new_label = _rename_label(
+            manager=gl_api_obj.labels,
+            old=label,
+            new=match,
+            dry_run=dry_run,
+        )
+
+        if new_label:
+            logger.debug('"{0}" will be renamed to "{1}"'.format(
+                label.name, new_label.name,
+            ))
+            renamed_labels[new_label.id] = new_label
+    else:
+        renamed_labels[label.id] = label
+
+
+def _rename_label(
     manager: Union[GroupLabelManager, ProjectLabelManager],
     old: Label,
     new: Label,
     dry_run: bool,
-) -> Label:
+) -> Optional[Label]:
     """Renames label to the form which helps us to set right parent labels."""
     counter = 1
     while counter:
@@ -336,9 +354,9 @@ def rename_label(
 
         try:
             manager.update(old.id, {'new_name': new_name})
-
         except GitlabUpdateError:
             counter += 1
-
         else:
             return Label(old.id, new_name)
+
+    return None

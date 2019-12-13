@@ -133,6 +133,8 @@ class SpendResetParser(BaseNoteParser):
         if gl_note.body == SPEND_RESET_MESSAGE:
             return NoteReadResult(NOTE_TYPES.RESET_SPEND, {})
 
+        return None
+
 
 class MovedFromParser(BaseNoteParser):
     """Moved from parser."""
@@ -145,6 +147,8 @@ class MovedFromParser(BaseNoteParser):
         is_system = getattr(gl_note, 'system', False)  # noqa: WPS425
         if is_system and RE_MOVED_FROM.match(gl_note.body):
             return NoteReadResult(NOTE_TYPES.MOVED_FROM, {})
+
+        return None
 
 
 _notes_parsers = [
@@ -160,3 +164,5 @@ def read_note(gl_note) -> Optional[NoteReadResult]:
         parse_data = parser.parse(gl_note)
         if parse_data:
             return parse_data
+
+    return None
