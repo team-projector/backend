@@ -8,7 +8,8 @@ ENV PYTHONFAULTHANDLER=1 \
   PIPENV_HIDE_EMOJIS=true \
   PIPENV_COLORBLIND=true \
   PIPENV_NOSPIN=true \
-  C_FORCE_ROOT=true
+  C_FORCE_ROOT=true \
+  POETRY_VERSION=0.12.17
 
 WORKDIR /app
 
@@ -20,7 +21,7 @@ RUN apt update \
                       gettext \
                       nginx \
                       make \
-    && curl -sSL https://raw.githubusercontent.com/sdispater/poetry/master/get-poetry.py | python \
+    && curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/${POETRY_VERSION}/get-poetry.py | python \
     && export PATH="$PATH:$HOME/.poetry/bin" \
     && poetry config settings.virtualenvs.create false \
     && poetry install --no-dev --no-interaction --no-ansi \
