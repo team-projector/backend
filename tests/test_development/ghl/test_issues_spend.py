@@ -65,16 +65,21 @@ def test_spend(user, client, gl_mocker):
         GlUserFactory()
     )
     gl_mocker.registry_get(
-        f'/projects/{gl_project.id}',
+        '/projects/{0}'.format(gl_project.id),
         gl_project
     )
     gl_mocker.registry_get(
-        f'/projects/{gl_project.id}/issues/{gl_project_issue.iid}',
+        '/projects/{0}/issues/{1}'.format(
+            gl_project.id,
+            gl_project_issue.iid,
+        ),
         gl_project_issue
     )
     gl_mocker.registry_post(
-        f'/projects/{gl_project.id}/issues/{gl_project_issue.iid}'
-        f'/add_spent_time',
+        '/projects/{0}/issues/{1}/add_spent_time'.format(
+            gl_project.id,
+            gl_project_issue.iid,
+        ),
         GlIssueAddSpentTimeFactory())
 
     client.user = user

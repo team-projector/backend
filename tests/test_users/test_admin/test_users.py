@@ -12,8 +12,9 @@ def test_change_password_link(admin_user):
 
     link = ma_user.change_password_link(admin_user)
 
-    assert link == f'<a href="/admin/users/user/{admin_user.id}/password/">' \
-                   f'change password</a>'
+    assert link == (
+        '<a href="/admin/users/user/{0}/password/">change password</a>'
+    ).format(admin_user.id)
 
 
 @override_settings(GITLAB_TOKEN='GITLAB_TOKEN')

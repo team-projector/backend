@@ -29,7 +29,8 @@ def test_merge_requests_filter_by_team_empty(user, client):
         'fragments': {},
     })
 
-    merge_requests = MergeRequestType().get_queryset(MergeRequest.objects.all(), info)
+    merge_requests = MergeRequestType().get_queryset(MergeRequest.objects.all(),
+                                                     info)
 
     results = MergeRequestFilterSet(
         data={'team': team_1.id},
@@ -64,7 +65,8 @@ def test_merge_requests_filter_by_team_watcher_empty(user, client):
         'fragments': {},
     })
 
-    merge_requests = MergeRequestType().get_queryset(MergeRequest.objects.all(), info)
+    merge_requests = MergeRequestType().get_queryset(MergeRequest.objects.all(),
+                                                     info)
 
     results = MergeRequestFilterSet(
         data={'team': team_1.id},
@@ -103,7 +105,10 @@ def test_merge_requests_filter_by_team_leader(user, client):
         'fragments': {},
     })
 
-    merge_requests = MergeRequestType().get_queryset(MergeRequest.objects.all(), info)
+    merge_requests = MergeRequestType().get_queryset(
+        MergeRequest.objects.all(),
+        info,
+    )
 
     results_filtered = MergeRequestFilterSet(
         data={'team': team_1.id},
@@ -111,13 +116,10 @@ def test_merge_requests_filter_by_team_leader(user, client):
         request=client
     ).qs
 
-    results_ids = [x.id for x in [merge_request_1]]
-    results_ids.sort()
-
     response_ids = [x.id for x in results_filtered]
     response_ids.sort()
 
-    assert results_ids == response_ids
+    assert response_ids == [merge_request_1.id]
 
 
 def test_one_member(user, client):
@@ -141,7 +143,8 @@ def test_one_member(user, client):
         'fragments': {},
     })
 
-    merge_requests = MergeRequestType().get_queryset(MergeRequest.objects.all(), info)
+    merge_requests = MergeRequestType().get_queryset(MergeRequest.objects.all(),
+                                                     info)
 
     results = MergeRequestFilterSet(
         data={'team': team.id},
@@ -179,7 +182,8 @@ def test_many_members(user, client):
         'fragments': {},
     })
 
-    merge_requests = MergeRequestType().get_queryset(MergeRequest.objects.all(), info)
+    merge_requests = MergeRequestType().get_queryset(MergeRequest.objects.all(),
+                                                     info)
 
     results = MergeRequestFilterSet(
         data={'team': team.id},
@@ -224,7 +228,8 @@ def test_many_teams(user, client):
         'fragments': {},
     })
 
-    merge_requests = MergeRequestType().get_queryset(MergeRequest.objects.all(), info)
+    merge_requests = MergeRequestType().get_queryset(MergeRequest.objects.all(),
+                                                     info)
 
     results = MergeRequestFilterSet(
         data={'team': team.id},

@@ -61,10 +61,10 @@ def test_user_not_existed(db, client, gl_mocker):
         info=info,
         code='test_code',
         state='test_state'
-    ).token
+    )
 
     assert Token.objects.count() == 0
 
 
 def _build_absolute_uri(location=None):
-    return
+    """Mock build."""

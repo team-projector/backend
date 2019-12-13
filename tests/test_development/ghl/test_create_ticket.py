@@ -27,7 +27,7 @@ mutation ($input: CreateTicketMutationInput!) {
 """
 
 
-@pytest.fixture
+@pytest.fixture()
 def project_manager(user):
     user.roles.PROJECT_MANAGER = True
     user.save()
@@ -66,14 +66,16 @@ def test_success(project_manager, ghl_client, ticket):
     dto = response['data']['createTicket']['ticket']
     assert dto['title'] == 'test ticket'
 
-    iss_1.refresh_from_db(), iss_2.refresh_from_db()
+    iss_1.refresh_from_db()
+    iss_2.refresh_from_db()
+
     assert iss_1.ticket_id == int(dto['id'])
     assert iss_2.ticket_id == int(dto['id'])
 
 
 def test_ticket_create_invalid(project_manager, ghl_client, ticket):
     ghl_client.set_user(project_manager)
-    milestone = ProjectMilestoneFactory()
+    ProjectMilestoneFactory()
 
     response = ghl_client.execute(
         GHL_QUERY_CREATE_TICKET,
@@ -92,7 +94,7 @@ def test_ticket_create_invalid(project_manager, ghl_client, ticket):
         in response['data']['createTicket']['errors']
     }
 
-    assert {'url', 'type', 'milestone'} == fields_with_errors
+    assert fields_with_errors == {'url', 'type', 'milestone'}
 
 
 def test_without_permissions(user, ghl_client, ticket):

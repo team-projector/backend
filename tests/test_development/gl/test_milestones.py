@@ -25,8 +25,11 @@ def test_load_project_group_milestone(db, gl_mocker):
     gl_mocker.registry_get(f'/groups/{gl_group.id}', gl_group)
 
     gl_milestone = AttrDict(GlProjectMilestoneFactory())
-    gl_mocker.registry_get(f'/groups/{gl_group.id}/milestones'
-                           f'/{gl_milestone.id}', gl_milestone)
+    gl_mocker.registry_get(
+        '/groups/{0}/milestones/{1}'.format(
+            gl_group.id,
+            gl_milestone.id,
+        ), gl_milestone)
 
     MilestoneGlManager().sync_project_group_milestone(group, gl_milestone.id)
 
@@ -43,8 +46,13 @@ def test_load_for_project(db, gl_mocker):
     gl_mocker.registry_get(f'/projects/{gl_project.id}', gl_project)
 
     gl_milestone = AttrDict(GlProjectMilestoneFactory())
-    gl_mocker.registry_get(f'/projects/{gl_project.id}/milestones'
-                           f'/{gl_milestone.id}', gl_milestone)
+    gl_mocker.registry_get(
+        '/projects/{0}/milestones/{1}'.format(
+            gl_project.id,
+            gl_milestone.id
+        ),
+        gl_milestone,
+    )
 
     MilestoneGlManager().sync_project_milestone(project, gl_milestone.id)
 
@@ -61,8 +69,10 @@ def test_load_for_project_group_all(db, gl_mocker):
     gl_mocker.registry_get(f'/groups/{gl_group.id}', gl_group)
 
     gl_milestone = AttrDict(GlProjectMilestoneFactory())
-    gl_mocker.registry_get(f'/groups/{gl_group.id}/milestones',
-                           [gl_milestone])
+    gl_mocker.registry_get(
+        '/groups/{0}/milestones'.format(gl_group.id),
+        [gl_milestone],
+    )
 
     MilestoneGlManager().sync_project_group_milestones(group)
 

@@ -78,7 +78,7 @@ def test_active_milestones_not_due_date_sort(user, client):
     info = AttrDict({'context': client})
 
     m1 = ProjectMilestoneFactory(state=MILESTONE_STATES.ACTIVE)
-    m2 = ProjectMilestoneFactory(
+    ProjectMilestoneFactory(
         state=MILESTONE_STATES.ACTIVE,
         owner=m1.owner,
         due_date=timezone.now() + timezone.timedelta(days=2)

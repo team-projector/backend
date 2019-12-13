@@ -59,8 +59,9 @@ def test_simple(user):
     )
 
     issue.time_estimate = seconds(hours=15)
-    issue.total_time_spent = \
-        issue.time_spents.aggregate(spent=Sum('time_spent'))['spent']
+    issue.total_time_spent = issue.time_spents.aggregate(
+        spent=Sum('time_spent'),
+    )['spent']
     issue.state = ISSUE_STATES.OPENED
     issue.due_date = monday + timedelta(days=1)
     issue.save()
@@ -266,8 +267,9 @@ def test_efficiency_zero_estimate(user):
     )
 
     issue.time_estimate = 0
-    issue.total_time_spent = \
-        issue.time_spents.aggregate(spent=Sum('time_spent'))['spent']
+    issue.total_time_spent = issue.time_spents.aggregate(
+        spent=Sum('time_spent'),
+    )['spent']
     issue.state = ISSUE_STATES.CLOSED
     issue.due_date = monday + timedelta(days=1)
     issue.closed_at = monday + timedelta(days=1)
@@ -316,7 +318,10 @@ def test_efficiency_zero_spend(user):
     metrics = team_service.get_progress_metrics(team, start, end, 'week')
 
     developer_metrics = next(
-        item.metrics for item in metrics if item.user == developer)
+        item.metrics
+        for item in metrics
+        if item.user == developer
+    )
 
     assert len(developer_metrics) == 2
 
@@ -369,8 +374,9 @@ def test_many_weeks(user):
     )
 
     issue.time_estimate = seconds(hours=15)
-    issue.total_time_spent = \
-        issue.time_spents.aggregate(spent=Sum('time_spent'))['spent']
+    issue.total_time_spent = issue.time_spents.aggregate(
+        spent=Sum('time_spent'),
+    )['spent']
     issue.state = ISSUE_STATES.OPENED
     issue.due_date = monday + timedelta(days=2)
     issue.save()
@@ -435,8 +441,9 @@ def test_not_in_range(user):
     )
 
     issue.time_estimate = seconds(hours=15)
-    issue.total_time_spent = \
-        issue.time_spents.aggregate(spent=Sum('time_spent'))['spent']
+    issue.total_time_spent = issue.time_spents.aggregate(
+        spent=Sum('time_spent'),
+    )['spent']
     issue.state = ISSUE_STATES.OPENED
     issue.due_date = monday + timedelta(days=1)
     issue.save()
@@ -446,7 +453,10 @@ def test_not_in_range(user):
     metrics = team_service.get_progress_metrics(team, start, end, 'week')
 
     developer_metrics = next(
-        item.metrics for item in metrics if item.user == developer)
+        item.metrics
+        for item in metrics
+        if item.user == developer
+    )
 
     assert len(developer_metrics) == 2
 
@@ -502,8 +512,9 @@ def test_another_user(user):
     )
 
     issue.time_estimate = seconds(hours=15)
-    issue.total_time_spent = \
-        issue.time_spents.aggregate(spent=Sum('time_spent'))['spent']
+    issue.total_time_spent = issue.time_spents.aggregate(
+        spent=Sum('time_spent'),
+    )['spent']
     issue.state = ISSUE_STATES.OPENED
     issue.due_date = monday + timedelta(days=1)
     issue.save()
@@ -574,15 +585,16 @@ def test_many_issues(user):
     )
 
     issue.time_estimate = seconds(hours=15)
-    issue.total_time_spent = \
-        issue.time_spents.aggregate(spent=Sum('time_spent'))['spent']
+    issue.total_time_spent = issue.time_spents.aggregate(
+        spent=Sum('time_spent'),
+    )['spent']
     issue.state = ISSUE_STATES.OPENED
     issue.due_date = monday + timedelta(days=1)
     issue.save()
 
-    another_issue.total_time_spent = \
-        another_issue.time_spents.aggregate(spent=Sum('time_spent'))[
-            'spent']
+    another_issue.total_time_spent = another_issue.time_spents.aggregate(
+        spent=Sum('time_spent'),
+    )['spent']
     another_issue.save()
 
     start = monday - timedelta(days=5)

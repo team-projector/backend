@@ -45,8 +45,9 @@ def test_simple(user):
     )
 
     issue.time_estimate = seconds(hours=15)
-    issue.total_time_spent = \
-        issue.time_spents.aggregate(spent=Sum('time_spent'))['spent']
+    issue.total_time_spent = issue.time_spents.aggregate(
+        spent=Sum('time_spent'),
+    )['spent']
     issue.state = ISSUE_STATES.OPENED
     issue.due_date = datetime.now() + timedelta(days=1)
     issue.save()
@@ -86,8 +87,9 @@ def test_negative_remains(user):
     )
 
     issue.time_estimate = seconds(hours=2)
-    issue.total_time_spent = \
-        issue.time_spents.aggregate(spent=Sum('time_spent'))['spent']
+    issue.total_time_spent = issue.time_spents.aggregate(
+        spent=Sum('time_spent'),
+    )['spent']
     issue.state = ISSUE_STATES.OPENED
     issue.due_date = datetime.now() + timedelta(days=1)
     issue.save()
@@ -110,10 +112,12 @@ def test_negative_remains(user):
 @override_settings(TP_WEEKENDS_DAYS=[])
 def test_loading_day_already_has_spends(user):
     issue = IssueFactory.create(user=user, due_date=datetime.now())
-    issue_2 = IssueFactory.create(user=user,
-                                  state=ISSUE_STATES.OPENED,
-                                  total_time_spent=seconds(hours=3),
-                                  time_estimate=seconds(hours=10))
+    issue_2 = IssueFactory.create(
+        user=user,
+        state=ISSUE_STATES.OPENED,
+        total_time_spent=seconds(hours=3),
+        time_estimate=seconds(hours=10),
+    )
 
     IssueSpentTimeFactory.create(
         date=datetime.now(),
@@ -140,8 +144,9 @@ def test_loading_day_already_has_spends(user):
     issue.due_date = datetime.now()
     issue.save()
 
-    issue_2.total_time_spent = \
-        issue_2.time_spents.aggregate(spent=Sum('time_spent'))['spent']
+    issue_2.total_time_spent = issue_2.time_spents.aggregate(
+        spent=Sum('time_spent'),
+    )['spent']
     issue_2.save()
 
     start = datetime.now().date() - timedelta(days=5)

@@ -26,8 +26,7 @@ def test_inheritance_bonus(db):
     payroll = Payroll.objects.first()
     inheritance = ma_payroll.inheritance(payroll)
 
-    assert f'<a href=/admin/payroll/bonus/{bonus.id}/change/>' \
-           in inheritance
+    assert f'<a href=/admin/payroll/bonus/{bonus.id}/change/>' in inheritance
 
 
 def test_inheritance_payment(db):
@@ -38,8 +37,9 @@ def test_inheritance_payment(db):
     payroll = Payroll.objects.first()
     inheritance = ma_payroll.inheritance(payroll)
 
-    assert f'<a href=/admin/payroll/payment/{payment.id}/change/>' \
-           in inheritance
+    assert (
+        f'<a href=/admin/payroll/payment/{payment.id}/change/>' in inheritance
+    )
 
 
 def test_inheritance_penalty(db):
@@ -50,8 +50,9 @@ def test_inheritance_penalty(db):
     payroll = Payroll.objects.first()
     inheritance = ma_payroll.inheritance(payroll)
 
-    assert f'<a href=/admin/payroll/penalty/{penalty.id}/change/>' \
-           in inheritance
+    assert (
+        f'<a href=/admin/payroll/penalty/{penalty.id}/change/>' in inheritance
+    )
 
 
 def test_inheritance_spenttime(db):
@@ -62,8 +63,10 @@ def test_inheritance_spenttime(db):
     payroll = Payroll.objects.first()
     inheritance = ma_payroll.inheritance(payroll)
 
-    assert f'<a href=/admin/payroll/spenttime/{spenttime.id}/change/>' \
-           in inheritance
+    assert (
+        f'<a href=/admin/payroll/spenttime/{spenttime.id}/change/>'
+        in inheritance
+    )
 
 
 def test_inheritance_payroll(db):
@@ -82,43 +85,45 @@ def test_salary_filter_has_salary(admin_client):
     user = UserFactory.create()
 
     payroll_1 = Payroll.objects.create(created_by=user, user=user)
-    payroll_2 = Payroll.objects.create(created_by=user,
-                                       user=user,
-                                       salary=SalaryFactory.create(user=user))
+    payroll_2 = Payroll.objects.create(
+        created_by=user,
+        user=user,
+        salary=SalaryFactory.create(user=user),
+    )
 
-    filter = HasSalaryFilter(
+    has_salary_filter = HasSalaryFilter(
         request=admin_client.get('/admin/payroll/salary/'),
         params={'has_salary': True},
         model=Salary,
         model_admin=ma_salary
     )
 
-    assert filter.has_output() is True
+    assert has_salary_filter.has_output() is True
 
-    payroll_with_salaries = filter.queryset(None, Payroll.objects)
+    payroll_with_salaries = has_salary_filter.queryset(None, Payroll.objects)
 
     assert payroll_with_salaries.count() == 1
     assert payroll_with_salaries.first() == payroll_2
 
-    filter = HasSalaryFilter(
+    has_salary_filter = HasSalaryFilter(
         request=admin_client.get('/admin/payroll/salary/'),
         params={'has_salary': False},
         model=Salary,
         model_admin=ma_salary
     )
 
-    payroll_without_salaries = filter.queryset(None, Payroll.objects)
+    payroll_without_salaries = has_salary_filter.queryset(None, Payroll.objects)
 
     assert payroll_without_salaries.count() == 1
     assert payroll_without_salaries.first() == payroll_1
 
-    filter = HasSalaryFilter(
+    has_salary_filter = HasSalaryFilter(
         request=admin_client.get('/admin/payroll/salary/'),
         params={},
         model=Salary,
         model_admin=ma_salary
     )
 
-    payroll_all = filter.queryset(None, Payroll.objects)
+    payroll_all = has_salary_filter.queryset(None, Payroll.objects)
 
     assert payroll_all.count() == 2

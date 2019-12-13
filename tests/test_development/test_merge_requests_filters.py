@@ -32,7 +32,6 @@ def test_filter_by_user(user):
     results = MergeRequestFilterSet(
         data={'user': user_2.id},
         queryset=MergeRequest.objects.all(),
-
     ).qs
 
     assert results.count() == 1

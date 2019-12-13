@@ -61,7 +61,7 @@ def test_opened(user):
 
     _check_metrics(metrics,
                    {
-                       monday: 6 * user.hour_rate
+                       monday: 6 * user.hour_rate,
                    }, {
                        monday: 0
                    })
@@ -124,7 +124,7 @@ def test_paid(user):
                    {
                        monday: 0
                    }, {
-                       monday: 6 * user.hour_rate
+                       monday: 6 * user.hour_rate,
                    })
 
 
@@ -176,7 +176,7 @@ def test_closed(user):
 
     _check_metrics(metrics,
                    {
-                       monday: 6 * user.hour_rate
+                       monday: 6 * user.hour_rate,
                    }, {
                        monday: 0
                    })
@@ -240,9 +240,9 @@ def test_complex(user):
 
     _check_metrics(metrics,
                    {
-                       monday: 12 * user.hour_rate
+                       monday: 12 * user.hour_rate,
                    }, {
-                       monday: 3 * user.hour_rate
+                       monday: 3 * user.hour_rate,
                    })
 
 

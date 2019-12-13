@@ -77,7 +77,7 @@ def test_filter_by_team_not_teamlead(user, client):
     client.user = user
 
     with raises(PermissionDenied):
-        WorkBreakFilterSet(
+        WorkBreakFilterSet(  # noqa: WPS428
             data={'team': team.id},
             queryset=WorkBreak.objects.all(),
             request=client

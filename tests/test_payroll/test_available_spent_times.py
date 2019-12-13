@@ -150,5 +150,5 @@ def test_my_spents_and_as_leader_with_queryset(user):
     )
 
 
-def _assert_spents(queryset, spents=[]):
-    assert set(queryset) == set(spents)
+def _assert_spents(queryset, spents=None):
+    assert set(queryset) == set(spents or [])

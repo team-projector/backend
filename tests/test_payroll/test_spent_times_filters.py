@@ -25,17 +25,17 @@ from tests.test_payroll.factories import (
 from tests.test_users.factories.user import UserFactory
 
 
-@pytest.fixture
+@pytest.fixture()
 def user_2(db):
     yield UserFactory.create()
 
 
-@pytest.fixture
+@pytest.fixture()
 def issue(db):
     yield IssueFactory.create()
 
 
-@pytest.fixture
+@pytest.fixture()
 def salary(db, user):
     yield SalaryFactory.create(user=user)
 
@@ -325,17 +325,18 @@ def test_filter_by_state(user):
         in (ISSUE_STATES.OPENED, ISSUE_STATES.CLOSED)
     ]
 
-    m_opened, m_closed, m_merged = [MergeRequestSpentTimeFactory(
-        user=user,
-        base=MergeRequestFactory(state=state),
-        time_spent=int(seconds(hours=5))
-    )
-        for state
-        in (
+    m_opened, m_closed, m_merged = [
+        MergeRequestSpentTimeFactory(
+            user=user,
+            base=MergeRequestFactory(state=state),
+            time_spent=int(seconds(hours=5))
+        )
+        for state in (
             MERGE_REQUESTS_STATES.OPENED,
             MERGE_REQUESTS_STATES.CLOSED,
-            MERGE_REQUESTS_STATES.MERGED
-        )]
+            MERGE_REQUESTS_STATES.MERGED,
+        )
+    ]
 
     results = SpentTimeFilterSet(
         data={'state': 'OPENED'},

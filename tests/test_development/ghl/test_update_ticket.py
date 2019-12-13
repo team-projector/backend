@@ -113,7 +113,8 @@ def test_attach_issues(project_manager, ghl_client, ticket):
     assert 'errors' not in response
     assert not response['data']['updateTicket']['errors']
 
-    iss_1.refresh_from_db(), iss_2.refresh_from_db()
+    iss_1.refresh_from_db()
+    iss_2.refresh_from_db()
     assert ticket == iss_1.ticket
     assert ticket == iss_2.ticket
 

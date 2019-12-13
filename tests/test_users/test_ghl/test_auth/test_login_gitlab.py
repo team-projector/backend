@@ -26,4 +26,4 @@ def test_login(user, client):
 
 
 def _build_absolute_uri(location=None):
-    return
+    """Mock build."""

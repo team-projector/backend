@@ -58,8 +58,9 @@ def test_simple(user):
     )
 
     issue.time_estimate = seconds(hours=15)
-    issue.total_time_spent = \
-        issue.time_spents.aggregate(spent=Sum('time_spent'))['spent']
+    issue.total_time_spent = issue.time_spents.aggregate(
+        spent=Sum('time_spent'),
+    )['spent']
     issue.state = ISSUE_STATES.OPENED
     issue.due_date = timezone.now() + timedelta(days=1)
     issue.save()
@@ -119,8 +120,9 @@ def test_negative_remains(user):
     )
 
     issue.time_estimate = seconds(hours=2)
-    issue.total_time_spent = \
-        issue.time_spents.aggregate(spent=Sum('time_spent'))['spent']
+    issue.total_time_spent = issue.time_spents.aggregate(
+        spent=Sum('time_spent'),
+    )['spent']
     issue.state = ISSUE_STATES.OPENED
     issue.due_date = timezone.now() + timedelta(days=1)
     issue.save()
@@ -192,8 +194,9 @@ def test_loading_day_already_has_spends(user):
     issue.due_date = timezone.now()
     issue.save()
 
-    issue_2.total_time_spent = \
-        issue_2.time_spents.aggregate(spent=Sum('time_spent'))['spent']
+    issue_2.total_time_spent = issue_2.time_spents.aggregate(
+        spent=Sum('time_spent'),
+    )['spent']
     issue_2.save()
 
     start = timezone.now().date() - timedelta(days=5)
@@ -271,7 +274,10 @@ def test_not_in_range(user):
     metrics = team_service.get_progress_metrics(team, start, end, 'day')
 
     developer_metrics = next(
-        item.metrics for item in metrics if item.user == developer)
+        item.metrics
+        for item in metrics
+        if item.user == developer
+    )
 
     assert len(developer_metrics) == (end - start).days + 1
 
@@ -415,7 +421,10 @@ def test_another_user_in_team(user):
                    })
 
     another_user_metrics = next(
-        item.metrics for item in metrics if item.user == another_user)
+        item.metrics
+        for item in metrics
+        if item.user == another_user
+    )
 
     assert len(another_user_metrics) == (end - start).days + 1
 
@@ -448,13 +457,15 @@ def test_provider_not_implemented(user):
         ).get_user_metrics(user)
 
 
-def _check_metrics(metrics,
-                   spents: Dict[datetime, timedelta],
-                   loadings: Dict[datetime, timedelta],
-                   issues_counts: Dict[datetime, int],
-                   time_estimates: Dict[datetime, timedelta],
-                   time_remains: Dict[datetime, timedelta],
-                   planned_work_hours: int = 8):
+def _check_metrics(
+    metrics,
+    spents: Dict[datetime, timedelta],
+    loadings: Dict[datetime, timedelta],
+    issues_counts: Dict[datetime, int],
+    time_estimates: Dict[datetime, timedelta],
+    time_remains: Dict[datetime, timedelta],
+    planned_work_hours: int = 8,
+):
     spents = _prepare_metrics(spents)
     loadings = _prepare_metrics(loadings)
     time_estimates = _prepare_metrics(time_estimates)

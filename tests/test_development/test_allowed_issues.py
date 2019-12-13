@@ -1,4 +1,4 @@
-from apps.development.models import Issue, Project, ProjectGroup, TeamMember
+from apps.development.models import Issue, TeamMember
 from apps.development.models.project_member import PROJECT_MEMBER_ROLES
 from tests.test_development.factories import (
     IssueFactory,

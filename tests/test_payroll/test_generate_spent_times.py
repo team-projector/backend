@@ -214,11 +214,17 @@ def test_spents_with_resets_but_moved_from(user):
 
     reset_spent_time = SpentTime.objects.filter(note=reset_spend).first()
     assert reset_spent_time is not None
-    assert -timedelta(hours=5).total_seconds() == reset_spent_time.time_spent
+    assert reset_spent_time.time_spent == -timedelta(hours=5).total_seconds()
 
 
-def _create_note(user, issue, note_type, created_at,
-                 spent: timedelta = None, date=None, ):
+def _create_note(
+    user,
+    issue,
+    note_type,
+    created_at,
+    spent: timedelta = None,
+    date=None,
+):
     return IssueNoteFactory.create(
         type=note_type,
         created_at=created_at,

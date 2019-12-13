@@ -90,8 +90,7 @@ def test_expired_token(user, client):
 
     with raises(AuthenticationFailed) as error:
         TokenAuthentication().authenticate(request)
-
-    assert str(error.value) == 'Token has expired'
+        assert str(error.value) == 'Token has expired'
 
 
 def test_invalid_token(user, client):
@@ -103,5 +102,4 @@ def test_invalid_token(user, client):
 
     with raises(AuthenticationFailed) as error:
         TokenAuthentication().authenticate(request)
-
-    assert str(error.value) == 'Invalid token.'
+        assert str(error.value) == 'Invalid token.'

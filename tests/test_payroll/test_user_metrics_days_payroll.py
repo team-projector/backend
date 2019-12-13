@@ -64,7 +64,7 @@ def test_opened(user):
                    {
                        monday: 3 * user.hour_rate,
                        monday + timedelta(days=1): user.hour_rate,
-                       monday + timedelta(days=2): 2 * user.hour_rate
+                       monday + timedelta(days=2): 2 * user.hour_rate,
                    }, {
                        monday: 0
                    })
@@ -130,7 +130,7 @@ def test_paid(user):
                    }, {
                        monday: 3 * user.hour_rate,
                        monday + timedelta(days=1): user.hour_rate,
-                       monday + timedelta(days=2): 2 * user.hour_rate
+                       monday + timedelta(days=2): 2 * user.hour_rate,
                    })
 
 
@@ -184,7 +184,7 @@ def test_closed(user):
                    {
                        monday: 3 * user.hour_rate,
                        monday + timedelta(days=1): user.hour_rate,
-                       monday + timedelta(days=2): 2 * user.hour_rate
+                       monday + timedelta(days=2): 2 * user.hour_rate,
                    }, {
                        monday: 0
                    })

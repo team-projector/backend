@@ -18,7 +18,7 @@ from tests.test_users.factories.user import UserFactory
 calculator = user_service.UserMetricsProvider()
 
 
-@pytest.fixture
+@pytest.fixture()
 def user(db):
     yield get_user_model().objects.create_user(login='user', hour_rate=100)
 
@@ -139,7 +139,8 @@ def test_penalty_another_user(user):
 
 def test_payroll_opened(user):
     issue = IssueFactory.create(state=ISSUE_STATES.OPENED)
-    mr = MergeRequestFactory.create(state=user_service.MERGE_REQUESTS_STATES.OPENED)
+    mr = MergeRequestFactory.create(
+        state=user_service.MERGE_REQUESTS_STATES.OPENED)
 
     IssueSpentTimeFactory.create(user=user, base=issue,
                                  time_spent=seconds(hours=1))
@@ -160,13 +161,14 @@ def test_payroll_opened(user):
         metrics,
         payroll_opened=user.hour_rate * 9,
         issues_opened_spent=seconds(hours=4),
-        mr_opened_spent=seconds(hours=5)
+        mr_opened_spent=seconds(hours=5),
     )
 
 
 def test_payroll_opened_has_salary(user):
     issue = IssueFactory.create(state=ISSUE_STATES.OPENED)
-    mr = MergeRequestFactory.create(state=user_service.MERGE_REQUESTS_STATES.OPENED)
+    mr = MergeRequestFactory.create(
+        state=user_service.MERGE_REQUESTS_STATES.OPENED)
 
     salary = SalaryFactory.create(user=user)
 
@@ -174,7 +176,7 @@ def test_payroll_opened_has_salary(user):
         user=user,
         base=issue,
         time_spent=seconds(hours=4),
-        salary=salary
+        salary=salary,
     )
 
     IssueSpentTimeFactory.create(user=user, base=issue,
@@ -221,7 +223,7 @@ def test_payroll_opened_has_closed(user):
         payroll_opened=user.hour_rate * 5,
         issues_opened_spent=seconds(hours=5),
         payroll_closed=user.hour_rate * 6,
-        issues_closed_spent=seconds(hours=6)
+        issues_closed_spent=seconds(hours=6),
     )
 
 
@@ -242,7 +244,7 @@ def test_payroll_opened_another_user(user):
     _check_metrics(
         metrics,
         payroll_opened=user.hour_rate * 5,
-        issues_opened_spent=seconds(hours=5)
+        issues_opened_spent=seconds(hours=5),
     )
 
 
@@ -261,7 +263,7 @@ def test_payroll_closed(user):
     _check_metrics(
         metrics,
         payroll_closed=user.hour_rate * 4,
-        issues_closed_spent=seconds(hours=4)
+        issues_closed_spent=seconds(hours=4),
     )
 
 
@@ -281,7 +283,7 @@ def test_payroll_closed_has_salary(user):
     _check_metrics(
         metrics,
         payroll_closed=user.hour_rate * 7,
-        issues_closed_spent=seconds(hours=7)
+        issues_closed_spent=seconds(hours=7),
     )
 
 
@@ -293,7 +295,8 @@ def test_payroll_opened_has_opened(user):
     IssueSpentTimeFactory.create(user=user, base=issue,
                                  time_spent=seconds(hours=2))
     IssueSpentTimeFactory.create(user=user,
-                                 base=IssueFactory.create(state=ISSUE_STATES.CLOSED),
+                                 base=IssueFactory.create(
+                                     state=ISSUE_STATES.CLOSED),
                                  time_spent=seconds(hours=5))
 
     metrics = calculator.get_metrics(user)
@@ -303,7 +306,7 @@ def test_payroll_opened_has_opened(user):
         payroll_closed=user.hour_rate * 5,
         issues_closed_spent=seconds(hours=5),
         payroll_opened=user.hour_rate * 6,
-        issues_opened_spent=seconds(hours=6)
+        issues_opened_spent=seconds(hours=6),
     )
 
 
@@ -323,7 +326,7 @@ def test_payroll_closed_another_user(user):
     MergeRequestSpentTimeFactory.create(
         user=user,
         base=mr,
-        time_spent=seconds(hours=2)
+        time_spent=seconds(hours=2),
     )
 
     metrics = calculator.get_metrics(user)
@@ -360,7 +363,7 @@ def test_complex(user):
         payroll_closed=user.hour_rate * 5,
         issues_closed_spent=seconds(hours=5),
         payroll_opened=user.hour_rate * 6,
-        issues_opened_spent=seconds(hours=6)
+        issues_opened_spent=seconds(hours=6),
     )
 
 
@@ -372,17 +375,19 @@ def test_resolver(user):
     _check_metrics(metrics, issues_opened_count=10)
 
 
-def _check_metrics(metrics: user_service.UserMetrics,
-                   bonus=0,
-                   penalty=0,
-                   payroll_opened=0,
-                   payroll_closed=0,
-                   issues_opened_count=0,
-                   issues_closed_spent=0.0,
-                   issues_opened_spent=0.0,
-                   mr_opened_count=0,
-                   mr_closed_spent=0.0,
-                   mr_opened_spent=0.0):
+def _check_metrics(
+    metrics: user_service.UserMetrics,
+    bonus=0,
+    penalty=0,
+    payroll_opened=0,
+    payroll_closed=0,
+    issues_opened_count=0,
+    issues_closed_spent=0.0,
+    issues_opened_spent=0.0,
+    mr_opened_count=0,
+    mr_closed_spent=0.0,
+    mr_opened_spent=0.0,
+):
     assert bonus == metrics.bonus
     assert penalty == metrics.penalty
     assert payroll_opened == metrics.payroll_opened

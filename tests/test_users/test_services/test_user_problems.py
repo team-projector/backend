@@ -14,7 +14,7 @@ from tests.test_payroll.factories import (
 from tests.test_users.factories.user import UserFactory
 
 
-@pytest.fixture
+@pytest.fixture()
 def user(db):
     yield UserFactory.create(daily_work_hours=8)
 

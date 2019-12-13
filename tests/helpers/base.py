@@ -10,7 +10,7 @@ from apps.users.services.token import create_user_token
 
 class MockStorageMessages:
     def add(self, level, message, extra_tags):
-        return
+        """Mocked add."""
 
 
 class Client:

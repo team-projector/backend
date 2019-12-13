@@ -168,7 +168,10 @@ def test_double_work_breaks(user):
     )
 
 
-def _assert_work_breaks(queryset, results=[]):
+def _assert_work_breaks(queryset, results=None):
+    if results is None:
+        results = []
+
     original = list(queryset)
     original.sort(key=lambda x: x.id)
     results.sort(key=lambda x: x.id)

@@ -18,9 +18,12 @@ from tests.test_payroll.factories import (
 )
 
 
-@pytest.fixture
+@pytest.fixture()
 def user(db):
-    yield UserFactory.create(customer_hour_rate=100, hour_rate=1000)
+    yield UserFactory.create(
+        customer_hour_rate=100,
+        hour_rate=1000,
+    )
 
 
 def test_filter_issues_not_implemented():

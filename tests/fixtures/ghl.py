@@ -10,7 +10,7 @@ from gql import schema
 from tests.helpers.ghl_client import GraphQLClient
 
 
-@pytest.fixture
+@pytest.fixture()  # delete
 def gql_client_authenticated(rf, admin_user):
     request = rf.post('/')
     request.user = admin_user
@@ -18,7 +18,7 @@ def gql_client_authenticated(rf, admin_user):
     return GQLClient(schema, context=request)
 
 
-@pytest.fixture
+@pytest.fixture()  # delete
 def gql_client_anonymous(rf):
     request = rf.post('/')
     request.user = AnonymousUser()

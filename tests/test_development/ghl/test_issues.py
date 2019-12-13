@@ -3,12 +3,10 @@ from apps.development.graphql.types import IssuesProjectSummary, IssueType
 from apps.development.models.issue import Issue
 from tests.test_development.factories import (
     IssueFactory,
-    LabelFactory,
     ProjectGroupMilestoneFactory,
     TicketFactory,
 )
 from tests.test_development.factories_gitlab import AttrDict
-from tests.test_users.factories.user import UserFactory
 
 
 def test_issue(user, client):

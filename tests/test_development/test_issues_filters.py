@@ -98,7 +98,6 @@ def test_filter_by_project(user):
     results = IssuesFilterSet(
         data={'project': project_1.id},
         queryset=Issue.objects.all(),
-
     ).qs
 
     assert results.count() == 1
@@ -107,7 +106,6 @@ def test_filter_by_project(user):
     results = IssuesFilterSet(
         data={'project': project_2.id},
         queryset=Issue.objects.all(),
-
     ).qs
 
     assert results.count() == 1
@@ -360,7 +358,7 @@ def test_filter_by_milestone_not_pm(user, client):
     client.user = user
 
     with raises(PermissionDenied):
-        IssuesFilterSet(
+        IssuesFilterSet(  # noqa: WPS428
             data={'milestone': milestone_1.id},
             queryset=Issue.objects.all(),
             request=client
@@ -405,7 +403,7 @@ def test_filter_by_ticket_not_pm(user, client):
     client.user = user
 
     with raises(PermissionDenied):
-        IssuesFilterSet(
+        IssuesFilterSet(  # noqa: WPS428
             data={'ticket': ticket_1.id},
             queryset=Issue.objects.all(),
             request=client

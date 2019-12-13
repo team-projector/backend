@@ -59,7 +59,7 @@ def test_load_project_with_check_webhooks(db, gl_mocker, gl_client):
     gl_project = AttrDict(GlProjectFactory())
     gl_hook_1 = AttrDict(
         GlHookFactory(url='https://test.com/api/gl_client-webhook'))
-    gl_hook_2 = AttrDict(GlHookFactory(url='https://test1.com/api/1'))
+    AttrDict(GlHookFactory(url='https://test1.com/api/1'))
 
     gl_mocker.registry_get('/user', GlUserFactory())
     gl_mocker.registry_get(f'/projects/{gl_project.id}', gl_project)

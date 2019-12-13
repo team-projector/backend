@@ -64,7 +64,7 @@ def test_salaries_filter_by_team_not_leader(user, client):
     client.user = user
 
     with raises(PermissionDenied):
-        SalaryFilterSet(
+        SalaryFilterSet(  # noqa: WPS428
             data={'team': team.id},
             queryset=Salary.objects.all(),
             request=client,

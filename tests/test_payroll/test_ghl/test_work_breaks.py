@@ -109,7 +109,7 @@ def test_update_work_break(user, client):
     client.user = user
     info = AttrDict({'context': client})
 
-    work_break_mutated = UpdateWorkBreakMutation.mutate(
+    UpdateWorkBreakMutation.mutate(
         None,
         info,
         id=work_break.id,
@@ -118,7 +118,7 @@ def test_update_work_break(user, client):
         reason=WORK_BREAK_REASONS.VACATION,
         to_date=str(datetime.now()),
         user=user.id
-    ).work_break
+    )
 
     work_break.refresh_from_db()
     assert WorkBreak.objects.count() == 1
@@ -129,9 +129,11 @@ def test_update_work_break(user, client):
 def test_update_work_break_another_user(user, client):
     team = TeamFactory.create()
 
-    TeamMemberFactory.create(team=team,
-                             user=user,
-                             roles=TeamMember.roles.DEVELOPER)
+    TeamMemberFactory.create(
+        team=team,
+        user=user,
+        roles=TeamMember.roles.DEVELOPER,
+    )
 
     user_2 = UserFactory.create()
     TeamMemberFactory.create(team=team,
@@ -152,27 +154,31 @@ def test_update_work_break_another_user(user, client):
             from_date=str(datetime.now()),
             reason=WORK_BREAK_REASONS.VACATION,
             to_date=str(datetime.now())
-        ).work_break
+        )
 
 
 def test_update_work_break_another_user_but_teamlead(user, client):
     team = TeamFactory.create()
 
-    TeamMemberFactory.create(team=team,
-                             user=user,
-                             roles=TeamMember.roles.LEADER)
+    TeamMemberFactory.create(
+        team=team,
+        user=user,
+        roles=TeamMember.roles.LEADER,
+    )
 
     user_2 = UserFactory.create()
-    TeamMemberFactory.create(team=team,
-                             user=user_2,
-                             roles=TeamMember.roles.DEVELOPER)
+    TeamMemberFactory.create(
+        team=team,
+        user=user_2,
+        roles=TeamMember.roles.DEVELOPER,
+    )
 
     work_break = WorkBreakFactory.create(user=user_2, comment='created')
 
     client.user = user
     info = AttrDict({'context': client})
 
-    work_break_mutated = UpdateWorkBreakMutation.mutate(
+    UpdateWorkBreakMutation.mutate(
         None,
         info,
         id=work_break.id,
@@ -180,7 +186,7 @@ def test_update_work_break_another_user_but_teamlead(user, client):
         from_date=str(datetime.now()),
         reason=WORK_BREAK_REASONS.VACATION,
         to_date=str(datetime.now())
-    ).work_break
+    )
 
     work_break.refresh_from_db()
     assert WorkBreak.objects.count() == 1
