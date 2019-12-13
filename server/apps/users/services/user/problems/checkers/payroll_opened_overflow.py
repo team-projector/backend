@@ -9,7 +9,7 @@ from apps.payroll.models import SpentTime
 from apps.users.models import User
 from apps.users.services.user.problems.checkers.base import BaseProblemChecker
 
-PROBLEM_PAYROLL_OPENED_OVERFLOW = 'payroll_opened_overflow'
+PROBLEM_PAYROLL_OPENED_OVERFLOW = 'PAYROLL_OPENED_OVERFLOW'
 PROBLEM_PAYROLL_OVERFLOW_RATIO = 1.5
 
 

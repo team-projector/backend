@@ -7,7 +7,7 @@ from django.utils.timezone import localdate
 from apps.development.models import Milestone
 from apps.development.models.milestone import MILESTONE_STATES
 
-PROBLEM_OVER_DUE_DAY = 'over_due_date'
+PROBLEM_OVER_DUE_DAY = 'OVER_DUE_DATE'
 
 
 class BaseProblemChecker:

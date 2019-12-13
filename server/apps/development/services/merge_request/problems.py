@@ -7,8 +7,8 @@ from django.db.models import Q
 from apps.development.models import MergeRequest
 from apps.development.models.merge_request import MERGE_REQUESTS_STATES
 
-PROBLEM_EMPTY_ESTIMATE = 'empty_estimate'
-PROBLEM_NOT_ASSIGNED = 'not_assigned'
+PROBLEM_EMPTY_ESTIMATE = 'EMPTY_ESTIMATE'
+PROBLEM_NOT_ASSIGNED = 'NOT_ASSIGNED'
 
 
 class BaseProblemChecker:
