@@ -4,7 +4,8 @@ import graphene
 from django.contrib.auth import get_user_model
 from rest_framework.generics import get_object_or_404
 
-from apps.core.graphql.mutations import ArgumentsValidationMixin, BaseMutation
+from apps.core.graphql.mutations import BaseMutation
+from apps.core.graphql.mutations.mixins import ArgumentsValidationMixin
 from apps.payroll.graphql.forms import WorkBreakForm
 from apps.payroll.graphql.permissions import (
     CanApproveDeclineWorkBreak,

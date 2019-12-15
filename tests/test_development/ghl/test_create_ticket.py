@@ -12,8 +12,14 @@ from tests.test_development.factories import (
 )
 
 GHL_QUERY_CREATE_TICKET = """
-mutation ($input: CreateTicketMutationInput!) {
-  createTicket(input: $input) {
+mutation (
+    $milestone: String!, $type: String!, $title: String!,
+    $startDate: Date, $dueDate: Date, $url: String, $issues: [String!]
+) {
+createTicket(
+    milestone: $milestone, type: $type, title: $title, startDate: $startDate,
+    dueDate: $dueDate, url: $url, issues: $issues
+) {
     errors{
       field
       messages
@@ -48,15 +54,13 @@ def test_success(project_manager, ghl_client, ticket):
     response = ghl_client.execute(
         GHL_QUERY_CREATE_TICKET,
         variables={
-            'input': {
-                'title': 'test ticket',
-                'type': TYPE_FEATURE,
-                'startDate': str(datetime.now().date()),
-                'dueDate': str(datetime.now().date()),
-                'url': 'http://test1.com',
-                'milestone': str(milestone.id),
-                'issues': [str(iss_1.id), str(iss_2.id)]
-            }
+            'title': 'test ticket',
+            'type': TYPE_FEATURE,
+            'startDate': str(datetime.now().date()),
+            'dueDate': str(datetime.now().date()),
+            'url': 'http://test1.com',
+            'milestone': str(milestone.id),
+            'issues': [str(iss_1.id), str(iss_2.id)]
         }
     )
 
@@ -80,12 +84,10 @@ def test_ticket_create_invalid(project_manager, ghl_client, ticket):
     response = ghl_client.execute(
         GHL_QUERY_CREATE_TICKET,
         variables={
-            'input': {
-                'title': 'test ticket',
-                'type': 'invalid type',
-                'url': 'invalid url',
-                'milestone': ''
-            }
+            'title': 'test ticket',
+            'type': 'invalid type',
+            'url': 'invalid url',
+            'milestone': ''
         }
     )
     fields_with_errors = {

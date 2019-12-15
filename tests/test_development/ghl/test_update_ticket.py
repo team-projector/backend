@@ -9,8 +9,14 @@ from tests.test_development.factories import (
 )
 
 GHL_QUERY_UPDATE_TICKET = """
-mutation ($input: UpdateTicketMutationInput!) {
-  updateTicket(input: $input) {
+mutation (
+    $ticket: String!, $attachIssues: [String!], $type: String, $title: String,
+    $startDate: Date, $dueDate: Date, $url: String, $issues: [String!]
+) {
+updateTicket(
+    ticket: $ticket, attachIssues: $attachIssues, type: $type, title: $title,
+    startDate: $startDate, dueDate: $dueDate, url: $url, issues: $issues
+) {
     errors{
       field
       messages
@@ -43,10 +49,8 @@ def test_success(project_manager, ghl_client, ticket):
     response = ghl_client.execute(
         GHL_QUERY_UPDATE_TICKET,
         variables={
-            'input': {
-                'id': str(ticket.id),
-                'title': new_title,
-            }
+            'ticket': str(ticket.id),
+            'title': new_title,
         }
     )
 
@@ -68,26 +72,8 @@ def test_without_permissions(user, ghl_client, ticket):
     response = ghl_client.execute(
         GHL_QUERY_UPDATE_TICKET,
         variables={
-            'input': {
-                'id': str(ticket.id),
-                'title': new_title,
-            }
-        }
-    )
-
-    assert 'errors' in response
-
-
-def test_update_milestone(project_manager, ghl_client, ticket):
-    ghl_client.set_user(project_manager)
-
-    response = ghl_client.execute(
-        GHL_QUERY_UPDATE_TICKET,
-        variables={
-            'input': {
-                'id': str(ticket.id),
-                'milestone': str(ProjectMilestoneFactory().id),
-            }
+            'ticket': str(ticket.id),
+            'title': new_title,
         }
     )
 
@@ -103,10 +89,8 @@ def test_attach_issues(project_manager, ghl_client, ticket):
     response = ghl_client.execute(
         GHL_QUERY_UPDATE_TICKET,
         variables={
-            'input': {
-                'id': str(ticket.id),
-                'attachIssues': [str(iss_2.id)],
-            }
+            'ticket': str(ticket.id),
+            'attachIssues': [str(iss_2.id)],
         }
     )
 
@@ -127,10 +111,8 @@ def test_clear_issues(project_manager, ghl_client, ticket):
     response = ghl_client.execute(
         GHL_QUERY_UPDATE_TICKET,
         variables={
-            'input': {
-                'id': str(ticket.id),
-                'issues': [],
-            }
+            'ticket': str(ticket.id),
+            'issues': [],
         }
     )
 
@@ -149,11 +131,9 @@ def test_both_params_attach_and_issues(project_manager, ghl_client, ticket):
     response = ghl_client.execute(
         GHL_QUERY_UPDATE_TICKET,
         variables={
-            'input': {
-                'id': str(ticket.id),
-                'issues': [str(issue.id)],
-                'attachIssues': [str(issue.id)],
-            }
+            'ticket': str(ticket.id),
+            'issues': [str(issue.id)],
+            'attachIssues': [str(issue.id)],
         }
     )
 
