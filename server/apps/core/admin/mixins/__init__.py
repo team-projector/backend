@@ -1,4 +1,4 @@
 # -*- coding: utf-8 -*-
 
-from .admin_form_fields_overrides import AdminFormFieldsOverridesMixin
+from .admin_fields_overrides import AdminFieldsOverridesMixin
 from .force_sync_entity import ForceSyncEntityMixin

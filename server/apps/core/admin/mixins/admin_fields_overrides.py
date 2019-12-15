@@ -4,7 +4,7 @@ from bitfield import BitField
 from bitfield.forms import BitFieldCheckboxSelectMultiple
 
 
-class AdminFormFieldsOverridesMixin:
+class AdminFieldsOverridesMixin:
     """A mixin with form fields overrides."""
 
     formfield_overrides = {

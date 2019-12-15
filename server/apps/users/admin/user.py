@@ -1,18 +1,17 @@
 # -*- coding: utf-8 -*-
 
-from urllib.parse import urlparse
+from typing import Dict
 
 from admin_tools.decorators import admin_field
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as DjUserAdmin
 from django.contrib.auth.forms import AdminPasswordChangeForm
+from django.http import HttpRequest
 from django.urls import reverse
 from django.utils.html import format_html
 
-from apps.core.admin.mixins import (
-    AdminFormFieldsOverridesMixin,
-    ForceSyncEntityMixin,
-)
+from apps.core.admin.base import BaseModelAdmin
+from apps.core.admin.mixins import ForceSyncEntityMixin
 from apps.development.tasks import sync_user_task
 from apps.users.admin.forms import UserAdminForm
 from apps.users.models import User
@@ -20,9 +19,9 @@ from apps.users.models import User
 
 @admin.register(User)
 class UserAdmin(
-    AdminFormFieldsOverridesMixin,
     ForceSyncEntityMixin,
     DjUserAdmin,
+    BaseModelAdmin,
 ):
     """A class representing User model for admin dashboard."""
 
@@ -65,13 +64,13 @@ class UserAdmin(
     change_password_form = AdminPasswordChangeForm
 
     @admin_field('Change password')
-    def change_password_link(self, user):
+    def change_password_link(self, instance):
         """Show "Change password" on change form page."""
         return format_html(
             '<a href="{}">change password</a>',  # noqa: P103
             reverse(
                 'admin:auth_user_password_change',
-                kwargs={'id': user.pk},
+                kwargs={'id': instance.pk},
             ),
         )
 
@@ -79,25 +78,8 @@ class UserAdmin(
         """Syncing user from Gitlab."""
         sync_user_task.delay(user.gl_id)
 
-    def changelist_view(self, request, extra_context=None):
-        """Show only active user by default on change list page."""
-        referer = request.META.get('HTTP_REFERER')
-
-        self._apply_default_filter_if_need(request, referer)
-
-        return super().changelist_view(request, extra_context)
-
-    @classmethod
-    def _apply_default_filter_if_need(cls, request, referer: str) -> None:
-        if cls._is_apply_default_filter(referer):
-            query = request.GET.copy()
-            query['is_active__exact'] = '1'
-            request.GET = query
-            request.META['QUERY_STRING'] = request.GET.urlencode()
-
-    @classmethod
-    def _is_apply_default_filter(cls, referer: str) -> bool:
-        return (
-            not referer or  # noqa:: W504
-            urlparse(referer).path != reverse('admin:users_user_changelist')
-        )
+    def get_default_filters(self, request: HttpRequest) -> Dict[str, str]:
+        """Set default filters to the page."""
+        return {
+            'is_active__exact': '1',
+        }

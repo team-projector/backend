@@ -3,12 +3,12 @@
 from admin_tools.mixins import AdminAutocompleteFieldsMixin
 from django.contrib.contenttypes.admin import GenericStackedInline
 
-from apps.core.admin.mixins import AdminFormFieldsOverridesMixin
+from apps.core.admin.mixins import AdminFieldsOverridesMixin
 
 
 class BaseGenericStackedInline(
     AdminAutocompleteFieldsMixin,
-    AdminFormFieldsOverridesMixin,
+    AdminFieldsOverridesMixin,
     GenericStackedInline,
 ):
     """A base class generic stacked inline."""

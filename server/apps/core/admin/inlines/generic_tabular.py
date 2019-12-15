@@ -3,12 +3,12 @@
 from admin_tools.mixins import AdminAutocompleteFieldsMixin
 from django.contrib.contenttypes.admin import GenericTabularInline
 
-from apps.core.admin.mixins import AdminFormFieldsOverridesMixin
+from apps.core.admin.mixins import AdminFieldsOverridesMixin
 
 
 class BaseGenericTabularInline(
     AdminAutocompleteFieldsMixin,
-    AdminFormFieldsOverridesMixin,
+    AdminFieldsOverridesMixin,
     GenericTabularInline,
 ):
     """A base class generic tabular inline."""
