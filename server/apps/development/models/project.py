@@ -106,7 +106,7 @@ class Project(GitlabEntityMixin):
 
         If milestones not found return milestones from parent group.
         """
-        from apps.development.services.project_group import (  # noqa: WPS433
+        from apps.development.services.project_group.active_milestones import (  # noqa: WPS433, E501
             load_for_group,
         )
 
