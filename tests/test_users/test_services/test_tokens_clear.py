@@ -5,41 +5,35 @@ from django.utils import timezone
 
 from apps.users.models import Token
 from apps.users.services import token as token_service
-from apps.users.tasks import clear_expired_tokens_task
 
 
 @override_settings(TOKEN_EXPIRE_PERIOD=None)
-def test_settings_token_expire_none(user):
+def test_no_expire(user):
+    """Test if no expiration."""
     token_service.create_user_token(user)
 
     token_service.clear_tokens()
 
-    assert Token.objects.first() is not None
+    assert Token.objects.exists()
 
 
 @override_settings(TOKEN_EXPIRE_PERIOD=1)
-def test_clear_tokens(user):
-    token_expired = token_service.create_user_token(user)
-    token_expired.created = timezone.now() - timedelta(minutes=3)
-    token_expired.save(update_fields=['created'])
-
-    token_fresh = token_service.create_user_token(user)
+def test_expired_setted(user):
+    """Test with expiration period."""
+    token_service.create_user_token(user)
 
     token_service.clear_tokens()
 
-    assert Token.objects.count() == 1
-    assert Token.objects.first() == token_fresh
+    assert Token.objects.exists()
 
 
 @override_settings(TOKEN_EXPIRE_PERIOD=1)
-def test_task_clear_expired_tokens(user):
+def test_clear_expired(user):
+    """Test with expiration period."""
     token_expired = token_service.create_user_token(user)
     token_expired.created = timezone.now() - timedelta(minutes=3)
     token_expired.save(update_fields=['created'])
 
-    token_fresh = token_service.create_user_token(user)
+    token_service.clear_tokens()
 
-    clear_expired_tokens_task()
-
-    assert Token.objects.count() == 1
-    assert Token.objects.first() == token_fresh
+    assert not Token.objects.exists()
