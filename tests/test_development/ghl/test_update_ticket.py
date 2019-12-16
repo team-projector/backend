@@ -10,11 +10,11 @@ from tests.test_development.factories import (
 
 GHL_QUERY_UPDATE_TICKET = """
 mutation (
-    $ticket: ID!, $attachIssues: [ID!], $type: String, $title: String,
+    $id: ID!, $attachIssues: [ID!], $type: String, $title: String,
     $startDate: Date, $dueDate: Date, $url: String, $issues: [ID!]
 ) {
 updateTicket(
-    ticket: $ticket, attachIssues: $attachIssues, type: $type, title: $title,
+    id: $id, attachIssues: $attachIssues, type: $type, title: $title,
     startDate: $startDate, dueDate: $dueDate, url: $url, issues: $issues
 ) {
     errors{
@@ -49,7 +49,7 @@ def test_success(project_manager, ghl_client, ticket):
     response = ghl_client.execute(
         GHL_QUERY_UPDATE_TICKET,
         variables={
-            'ticket': str(ticket.id),
+            'id': str(ticket.id),
             'title': new_title,
         }
     )
@@ -72,7 +72,7 @@ def test_without_permissions(user, ghl_client, ticket):
     response = ghl_client.execute(
         GHL_QUERY_UPDATE_TICKET,
         variables={
-            'ticket': str(ticket.id),
+            'id': str(ticket.id),
             'title': new_title,
         }
     )
@@ -89,7 +89,7 @@ def test_attach_issues(project_manager, ghl_client, ticket):
     response = ghl_client.execute(
         GHL_QUERY_UPDATE_TICKET,
         variables={
-            'ticket': str(ticket.id),
+            'id': str(ticket.id),
             'attachIssues': [str(iss_2.id)],
         }
     )
@@ -111,7 +111,7 @@ def test_clear_issues(project_manager, ghl_client, ticket):
     response = ghl_client.execute(
         GHL_QUERY_UPDATE_TICKET,
         variables={
-            'ticket': str(ticket.id),
+            'id': str(ticket.id),
             'issues': [],
         }
     )
@@ -131,7 +131,7 @@ def test_both_params_attach_and_issues(project_manager, ghl_client, ticket):
     response = ghl_client.execute(
         GHL_QUERY_UPDATE_TICKET,
         variables={
-            'ticket': str(ticket.id),
+            'id': str(ticket.id),
             'issues': [str(issue.id)],
             'attachIssues': [str(issue.id)],
         }

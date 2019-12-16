@@ -23,10 +23,10 @@ class TicketUpdateInput(TicketBaseInput):
         queryset=Issue.objects,
     )
 
-    ticket = serializers.PrimaryKeyRelatedField(queryset=Ticket.objects.all())
+    id = serializers.PrimaryKeyRelatedField(queryset=Ticket.objects.all())
 
     class Meta(TicketBaseInput.Meta):
-        fields = ['ticket', *TicketBaseInput.Meta.fields, 'attach_issues']
+        fields = ['id', *TicketBaseInput.Meta.fields, 'attach_issues']
 
     def get_fields(self) -> Dict[str, Field]:
         """Returns serializer fields."""
@@ -49,3 +49,9 @@ class TicketUpdateInput(TicketBaseInput):
             raise ValidationError(ISSUES_PARAM_ERROR)
 
         return attrs
+
+    @property
+    def validated_data(self):
+        ret = super().validated_data
+        ret['ticket'] = ret.pop('id', None)
+        return ret
