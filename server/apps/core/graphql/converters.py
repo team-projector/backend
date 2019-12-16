@@ -14,7 +14,7 @@ def convert_list_serializer_to_field(field):
 
 
 @get_graphene_type_from_serializer_field.register(
-    serializers.PrimaryKeyRelatedField
+    serializers.PrimaryKeyRelatedField,
 )
 def convert_serializer_field_to_id(field):
     """Defines graphql field type for serializers.ManyRelatedField."""
