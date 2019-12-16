@@ -9,7 +9,15 @@ from apps.development.graphql.interfaces import WorkItem
 from apps.development.graphql.types.merge_request_metrics import (
     MergeRequestMetricsType,
 )
-from apps.development.services import merge_request as merge_request_service
+from apps.development.services.merge_request.allowed import (
+    filter_allowed_for_user,
+)
+from apps.development.services.merge_request.metrics import (
+    get_merge_request_metrics,
+)
+from apps.development.services.merge_request.problems import (
+    get_merge_request_problems,
+)
 
 
 class MergeRequestType(graphql.BaseDjangoObjectType):
@@ -26,16 +34,16 @@ class MergeRequestType(graphql.BaseDjangoObjectType):
 
     def resolve_metrics(self, info, **kwargs):  # noqa: WPS110
         """Get merge request metrics."""
-        return merge_request_service.get_metrics(self)
+        return get_merge_request_metrics(self)
 
     def resolve_problems(self, info, **kwargs):  # noqa: WPS110
         """Get merge request problems."""
-        return merge_request_service.get_problems(self)
+        return get_merge_request_problems(self)
 
     @classmethod
     def get_queryset(cls, queryset, info) -> models.QuerySet:  # noqa: WPS110
         """Get queryset."""
-        queryset = merge_request_service.filter_allowed_for_user(
+        queryset = filter_allowed_for_user(
             queryset,
             info.context.user,
         )

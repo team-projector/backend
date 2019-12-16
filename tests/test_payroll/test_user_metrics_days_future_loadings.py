@@ -5,7 +5,7 @@ from django.test import override_settings
 
 from apps.core.utils.time import seconds
 from apps.development.models.issue import ISSUE_STATES
-from apps.users.services import user as user_service
+from apps.users.services.user.metrics import get_progress_metrics
 from tests.helpers.base import format_date
 from tests.test_development.factories import IssueFactory
 
@@ -22,7 +22,7 @@ def test_replay(user):
 
     start = datetime.now().date() + timedelta(days=1)
     end = datetime.now().date() + timedelta(days=5)
-    metrics = user_service.get_progress_metrics(user, start, end, 'day')
+    metrics = get_progress_metrics(user, start, end, 'day')
 
     assert len(metrics) == (end - start).days + 1
     _check_metrics(metrics, {
@@ -42,7 +42,7 @@ def test_has_spents(user):
 
     start = datetime.now().date() + timedelta(days=1)
     end = datetime.now().date() + timedelta(days=5)
-    metrics = user_service.get_progress_metrics(user, start, end, 'day')
+    metrics = get_progress_metrics(user, start, end, 'day')
 
     assert len(metrics) == (end - start).days + 1
     _check_metrics(metrics, {
@@ -62,7 +62,7 @@ def test_replay_without_active_issues(user):
 
     start = datetime.now().date() + timedelta(days=1)
     end = datetime.now().date() + timedelta(days=3)
-    metrics = user_service.get_progress_metrics(user, start, end, 'day')
+    metrics = get_progress_metrics(user, start, end, 'day')
 
     assert len(metrics) == (end - start).days + 1
     _check_metrics(metrics, {
@@ -82,7 +82,7 @@ def test_not_apply_loading_weekends(user):
 
     start = datetime.now().date() + timedelta(days=1)
     end = datetime.now().date() + timedelta(days=5)
-    metrics = user_service.get_progress_metrics(user, start, end, 'day')
+    metrics = get_progress_metrics(user, start, end, 'day')
 
     assert len(metrics) == (end - start).days + 1
     _check_metrics(metrics, {

@@ -6,7 +6,7 @@ from social_core.backends.gitlab import GitLabOAuth2 as SocialGitLabOAuth2
 from social_core.utils import handle_http_errors
 
 from apps.users.models import User
-from apps.users.services.token import create_user_token
+from apps.users.services.token.create import create_user_token
 
 
 class GitLabOAuth2Backend(SocialGitLabOAuth2):

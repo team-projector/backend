@@ -2,7 +2,10 @@
 
 from apps.core.utils.time import seconds
 from apps.users.graphql.types.user import UserType
-from apps.users.services import user as user_service
+from apps.users.services.user.problems.checkers import (
+    PROBLEM_NOT_ENOUGH_TASKS,
+    PROBLEM_PAYROLL_OPENED_OVERFLOW,
+)
 from tests.test_payroll.factories import IssueSpentTimeFactory
 
 
@@ -15,6 +18,6 @@ def test_resolver(user):
 
     problems = UserType.resolve_problems(user, None)
     assert problems == [
-        user_service.PROBLEM_NOT_ENOUGH_TASKS,
-        user_service.PROBLEM_PAYROLL_OPENED_OVERFLOW,
+        PROBLEM_NOT_ENOUGH_TASKS,
+        PROBLEM_PAYROLL_OPENED_OVERFLOW,
     ]

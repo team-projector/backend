@@ -8,7 +8,7 @@ from apps.core.graphql.connections import DataSourceConnection
 from apps.core.graphql.types import BaseDjangoObjectType
 from apps.development.graphql.types.ticket_metrics import TicketMetricsType
 from apps.development.models import Ticket
-from apps.development.services import ticket as ticket_service
+from apps.development.services.ticket import allowed, metrics
 
 
 class TicketType(BaseDjangoObjectType):
@@ -19,9 +19,8 @@ class TicketType(BaseDjangoObjectType):
 
     def resolve_metrics(self, info, **kwargs):  # noqa: WPS110
         """Get metrics."""
-        ticket_service.check_project_manager(info.context.user)
-
-        return ticket_service.get_ticket_metrics(self)
+        allowed.check_project_manager(info.context.user)
+        return metrics.get_ticket_metrics(self)
 
     class Meta:
         model = Ticket

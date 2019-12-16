@@ -11,6 +11,8 @@ from django.core.management.base import CommandError
 
 # TODO: use createsuperuser after Django upgraded to 3 version
 class Command(createsuperuser.Command):
+    """Create superuser in database."""
+
     def handle(self, *args, **options):
         """
         Create superuser in Non-interactive mode.

@@ -7,7 +7,7 @@ from django.utils import timezone
 from apps.core.utils.date import begin_of_week
 from apps.core.utils.time import seconds
 from apps.development.models.issue import ISSUE_STATES
-from apps.users.services import user as user_service
+from apps.users.services.user.metrics import get_progress_metrics
 from tests.helpers.base import format_date
 from tests.test_development.factories import IssueFactory
 from tests.test_payroll.factories import IssueSpentTimeFactory, SalaryFactory
@@ -58,7 +58,7 @@ def test_opened(user):
 
     start = monday - timedelta(days=5)
     end = monday + timedelta(days=5)
-    metrics = user_service.get_progress_metrics(user, start, end, 'day')
+    metrics = get_progress_metrics(user, start, end, 'day')
 
     _check_metrics(metrics,
                    {
@@ -122,7 +122,7 @@ def test_paid(user):
 
     start = monday - timedelta(days=5)
     end = monday + timedelta(days=5)
-    metrics = user_service.get_progress_metrics(user, start, end, 'day')
+    metrics = get_progress_metrics(user, start, end, 'day')
 
     _check_metrics(metrics,
                    {
@@ -178,7 +178,7 @@ def test_closed(user):
 
     start = monday - timedelta(days=5)
     end = monday + timedelta(days=5)
-    metrics = user_service.get_progress_metrics(user, start, end, 'day')
+    metrics = get_progress_metrics(user, start, end, 'day')
 
     _check_metrics(metrics,
                    {
@@ -244,7 +244,7 @@ def test_complex(user):
 
     start = monday - timedelta(days=5)
     end = monday + timedelta(days=5)
-    metrics = user_service.get_progress_metrics(user, start, end, 'day')
+    metrics = get_progress_metrics(user, start, end, 'day')
 
     _check_metrics(metrics,
                    {

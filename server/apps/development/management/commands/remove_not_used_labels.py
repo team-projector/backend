@@ -6,7 +6,10 @@ from apps.development.models import Label
 
 
 class Command(BaseCommand):
+    """Remove not used labels."""
+
     def handle(self, *args, **options):
+        """Call function."""
         deleted, _ = Label.objects.filter(
             merge_requests__isnull=True,
             issues__isnull=True,

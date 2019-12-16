@@ -8,7 +8,10 @@ from pytest import raises
 
 from apps.core.utils.time import seconds
 from apps.development.models.issue import ISSUE_STATES
-from apps.users.services import user as user_service
+from apps.users.services.user.metrics import get_progress_metrics
+from apps.users.services.user.metrics.progress.provider import (
+    ProgressMetricsProvider,
+)
 from tests.helpers.base import format_date
 from tests.test_development.factories import IssueFactory
 from tests.test_payroll.factories import IssueSpentTimeFactory
@@ -54,7 +57,7 @@ def test_simple(user):
 
     start = datetime.now().date() - timedelta(days=5)
     end = datetime.now().date() + timedelta(days=5)
-    metrics = user_service.get_progress_metrics(user, start, end, 'day')
+    metrics = get_progress_metrics(user, start, end, 'day')
 
     assert len(metrics) == (end - start).days + 1
     _check_metrics(metrics,
@@ -96,7 +99,7 @@ def test_negative_remains(user):
 
     start = datetime.now().date() - timedelta(days=5)
     end = datetime.now().date() + timedelta(days=5)
-    metrics = user_service.get_progress_metrics(user, start, end, 'day')
+    metrics = get_progress_metrics(user, start, end, 'day')
 
     assert len(metrics) == (end - start).days + 1
     _check_metrics(metrics,
@@ -151,7 +154,7 @@ def test_loading_day_already_has_spends(user):
 
     start = datetime.now().date() - timedelta(days=5)
     end = datetime.now().date() + timedelta(days=5)
-    metrics = user_service.get_progress_metrics(user, start, end, 'day')
+    metrics = get_progress_metrics(user, start, end, 'day')
 
     assert len(metrics) == (end - start).days + 1
     _check_metrics(metrics,
@@ -205,7 +208,7 @@ def test_not_in_range(user):
 
     start = datetime.now().date() - timedelta(days=3)
     end = datetime.now().date() + timedelta(days=3)
-    metrics = user_service.get_progress_metrics(user, start, end, 'day')
+    metrics = get_progress_metrics(user, start, end, 'day')
 
     assert len(metrics) == (end - start).days + 1
     _check_metrics(metrics,
@@ -254,7 +257,7 @@ def test_another_user(user):
 
     start = datetime.now().date() - timedelta(days=5)
     end = datetime.now().date() + timedelta(days=5)
-    metrics = user_service.get_progress_metrics(user, start, end, 'day')
+    metrics = get_progress_metrics(user, start, end, 'day')
 
     assert len(metrics) == (end - start).days + 1
     _check_metrics(metrics,
@@ -288,7 +291,7 @@ def test_not_loading_over_daily_work_hours(user):
 
     start = datetime.now().date() - timedelta(days=1)
     end = datetime.now().date() + timedelta(days=1)
-    metrics = user_service.get_progress_metrics(user, start, end, 'day')
+    metrics = get_progress_metrics(user, start, end, 'day')
 
     assert len(metrics) == (end - start).days + 1
     _check_metrics(metrics,
@@ -307,7 +310,7 @@ def test_not_loading_over_daily_work_hours(user):
 
 def test_bad_group(user):
     with raises(ValueError):
-        user_service.get_progress_metrics(
+        get_progress_metrics(
             user,
             datetime.now().date() - timedelta(days=5),
             datetime.now().date() + timedelta(days=5),
@@ -317,7 +320,7 @@ def test_bad_group(user):
 
 def test_provider_not_implemented(user):
     with raises(NotImplementedError):
-        user_service.ProgressMetricsProvider(
+        ProgressMetricsProvider(
             user,
             datetime.now().date() - timedelta(days=5),
             datetime.now().date() + timedelta(days=5),

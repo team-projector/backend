@@ -1,6 +1,8 @@
 from apps.core.utils.time import seconds
 from apps.development.models.merge_request import MERGE_REQUESTS_STATES
-from apps.development.services.merge_request.metrics import get_metrics
+from apps.development.services.merge_request.metrics import (
+    get_merge_request_metrics,
+)
 from tests.test_development.factories import MergeRequestFactory
 from tests.test_payroll.factories import (
     MergeRequestSpentTimeFactory,
@@ -34,7 +36,7 @@ def test_payroll_metrics(user):
         time_spent=-seconds(hours=3)
     )
 
-    metrics = get_metrics(mergerequest)
+    metrics = get_merge_request_metrics(mergerequest)
 
     assert metrics.payroll == 6 * user.hour_rate
     assert metrics.paid == 0
@@ -71,7 +73,7 @@ def test_paid_metrics(user):
         time_spent=-seconds(hours=3)
     )
 
-    metrics = get_metrics(mergerequest)
+    metrics = get_merge_request_metrics(mergerequest)
 
     assert metrics.payroll == 0
     assert metrics.paid == 6 * user.hour_rate
@@ -106,7 +108,7 @@ def test_complex_metrics(user):
         time_spent=-seconds(hours=3)
     )
 
-    metrics = get_metrics(mergerequest)
+    metrics = get_merge_request_metrics(mergerequest)
 
     assert metrics.payroll == user.hour_rate
     assert metrics.paid == 5 * user.hour_rate
@@ -131,13 +133,13 @@ def test_remains(user):
         total_time_spent=seconds(hours=3),
     )
 
-    metrics = get_metrics(mergerequest_1)
+    metrics = get_merge_request_metrics(mergerequest_1)
     assert metrics.remains == seconds(hours=2)
 
-    metrics = get_metrics(mergerequest_2)
+    metrics = get_merge_request_metrics(mergerequest_2)
     assert metrics.remains == 0
 
-    metrics = get_metrics(mergerequest_3)
+    metrics = get_merge_request_metrics(mergerequest_3)
     assert metrics.remains == 0
 
 
@@ -161,11 +163,11 @@ def test_efficiency(user):
         total_time_spent=seconds(hours=2),
     )
 
-    metrics = get_metrics(mergerequest_1)
+    metrics = get_merge_request_metrics(mergerequest_1)
     assert metrics.efficiency == 2.0
 
-    metrics = get_metrics(mergerequest_2)
+    metrics = get_merge_request_metrics(mergerequest_2)
     assert metrics.remains == 0
 
-    metrics = get_metrics(mergerequest_3)
+    metrics = get_merge_request_metrics(mergerequest_3)
     assert metrics.efficiency is None

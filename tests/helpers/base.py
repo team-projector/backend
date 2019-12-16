@@ -5,7 +5,7 @@ from django.db import transaction
 from django.forms.models import model_to_dict
 from rest_framework.test import APIRequestFactory
 
-from apps.users.services.token import create_user_token
+from apps.users.services.token.create import create_user_token
 
 
 class MockStorageMessages:

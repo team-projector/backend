@@ -5,7 +5,7 @@ from typing import Iterable, List
 
 from apps.development.models import Team
 from apps.users.models import User
-from apps.users.services.user import UserProgressMetricsList
+from apps.users.services.user.metrics import UserProgressMetricsList
 
 
 class TeamMemberProgressMetrics:

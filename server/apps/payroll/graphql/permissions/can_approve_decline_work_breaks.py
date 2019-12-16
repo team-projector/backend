@@ -7,7 +7,9 @@ from rest_framework.generics import get_object_or_404
 
 from apps.development.models import TeamMember
 from apps.payroll.models import WorkBreak
-from apps.users.services import user as user_service
+from apps.users.services.user.relations import (
+    is_related_with_another_by_team_roles,
+)
 
 
 class CanApproveDeclineWorkBreak:
@@ -25,7 +27,7 @@ class CanApproveDeclineWorkBreak:
             pk=kwargs['id'],
         )
 
-        return user_service.is_related_with_another_by_team_roles(
+        return is_related_with_another_by_team_roles(
             info.context.user,
             work_break.user,
             [TeamMember.roles.LEADER],

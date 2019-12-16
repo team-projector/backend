@@ -2,7 +2,7 @@
 
 from apps.core.utils.time import seconds
 from apps.development.models.issue import ISSUE_STATES
-from apps.users.services import user as user_service
+from apps.users.services.user.problems import get_user_problems
 from tests.test_development.factories import IssueFactory
 
 
@@ -22,4 +22,4 @@ def test_no_problems(user):
         state=ISSUE_STATES.OPENED,
     )
 
-    assert user_service.get_problems(user) == []
+    assert get_user_problems(user) == []

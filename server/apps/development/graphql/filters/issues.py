@@ -14,7 +14,12 @@ from apps.development.models import (
     TeamMember,
     Ticket,
 )
-from apps.development.services import issue as issue_service
+from apps.development.services.issue.allowed import check_allow_project_manager
+from apps.development.services.issue.problems import (
+    annotate_issue_problems,
+    exclude_issue_problems,
+    filter_issue_problems,
+)
 
 User = get_user_model()
 
@@ -35,7 +40,7 @@ class TicketFilter(django_filters.ModelChoiceFilter):
         if not value:
             return queryset
 
-        issue_service.check_allow_project_manager(self.parent.request.user)
+        check_allow_project_manager(self.parent.request.user)
 
         return queryset.filter(ticket=value)
 
@@ -52,7 +57,7 @@ class MilestoneFilter(django_filters.ModelChoiceFilter):
         if not value:
             return queryset
 
-        issue_service.check_allow_project_manager(self.parent.request.user)
+        check_allow_project_manager(self.parent.request.user)
 
         return queryset.filter(milestone=value)
 
@@ -65,12 +70,12 @@ class ProblemsFilter(django_filters.BooleanFilter):
         if value is None:
             return queryset
 
-        queryset = issue_service.annotate_problems(queryset)
+        queryset = annotate_issue_problems(queryset)
 
         if value is True:
-            queryset = issue_service.filter_problems(queryset)
+            queryset = filter_issue_problems(queryset)
         elif value is False:
-            queryset = issue_service.exclude_problems(queryset)
+            queryset = exclude_issue_problems(queryset)
 
         return queryset
 

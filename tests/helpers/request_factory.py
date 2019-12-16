@@ -7,7 +7,7 @@ from django.http import HttpRequest
 from django.test.client import RequestFactory as DjangoRequestFactory
 
 from apps.users.models import Token, User
-from apps.users.services.token import create_user_token
+from apps.users.services.token.create import create_user_token
 
 
 class RequestFactory(DjangoRequestFactory):

@@ -24,6 +24,7 @@ class BaseModelAdmin(
         """Media."""
 
     def changelist_view(self, request: HttpRequest, extra_context=None):
+        """The 'change list' admin view for this model."""
         ref = request.META.get('HTTP_REFERER', '')
         path = request.META.get('PATH_INFO', '')
 

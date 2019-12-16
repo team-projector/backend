@@ -14,7 +14,7 @@ checkers = [
 ]
 
 
-def get_problems(user: User) -> Iterable[str]:
+def get_user_problems(user: User) -> Iterable[str]:
     """Get problems for user."""
     problems = []
 

@@ -19,7 +19,7 @@ issue_problem_checkers = [
 ]
 
 
-def get_problems(issue: Issue) -> List[str]:
+def get_issue_problems(issue: Issue) -> List[str]:
     """Get problems for issue."""
     problems = []
 
@@ -30,7 +30,7 @@ def get_problems(issue: Issue) -> List[str]:
     return problems
 
 
-def annotate_problems(queryset: QuerySet) -> QuerySet:
+def annotate_issue_problems(queryset: QuerySet) -> QuerySet:
     """Annotate issues problems."""
     for checker in issue_problem_checkers:
         queryset = checker.setup_queryset(queryset)
@@ -38,7 +38,7 @@ def annotate_problems(queryset: QuerySet) -> QuerySet:
     return queryset
 
 
-def filter_problems(queryset: QuerySet) -> QuerySet:
+def filter_issue_problems(queryset: QuerySet) -> QuerySet:
     """Get problems from issues."""
     return queryset.filter(reduce(or_, [
         Q(**{checker.annotate_field: True})
@@ -46,7 +46,7 @@ def filter_problems(queryset: QuerySet) -> QuerySet:
     ]))
 
 
-def exclude_problems(queryset: QuerySet) -> QuerySet:
+def exclude_issue_problems(queryset: QuerySet) -> QuerySet:
     """Exclude problems from issues."""
     return queryset.filter(reduce(and_, [
         Q(**{checker.annotate_field: None})

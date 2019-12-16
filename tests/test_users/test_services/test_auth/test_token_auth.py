@@ -11,7 +11,7 @@ from rest_framework.exceptions import AuthenticationFailed
 
 from apps.core.graphql.security.authentication import TokenAuthentication
 from apps.users.models import Token, User
-from apps.users.services.token import create_user_token
+from apps.users.services.token.create import create_user_token
 
 
 @pytest.fixture()  # type: ignore

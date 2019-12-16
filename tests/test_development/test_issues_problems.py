@@ -4,13 +4,11 @@ from pytest import raises
 
 from apps.development.graphql.types.issue import IssueType
 from apps.development.models.issue import ISSUE_STATES
-from apps.development.services.issue import (
+from apps.development.services.issue.problems import get_issue_problems
+from apps.development.services.issue.problems.checkers import (
     PROBLEM_EMPTY_DUE_DAY,
     PROBLEM_EMPTY_ESTIMATE,
     PROBLEM_OVER_DUE_DAY,
-    get_problems,
-)
-from apps.development.services.issue.problems.checkers import (
     BaseProblemChecker,
 )
 from tests.test_development.factories import IssueFactory
@@ -27,13 +25,13 @@ def test_base_checker():
 def test_empty_due_day(user):
     problem_issue = IssueFactory.create(user=user)
 
-    assert get_problems(problem_issue) == [PROBLEM_EMPTY_DUE_DAY]
+    assert get_issue_problems(problem_issue) == [PROBLEM_EMPTY_DUE_DAY]
 
 
 def test_empty_due_day_but_closed(user):
     issue = IssueFactory.create(user=user, state=ISSUE_STATES.CLOSED)
 
-    assert get_problems(issue) == []
+    assert get_issue_problems(issue) == []
 
 
 def test_overdue_due_day(user):
@@ -42,7 +40,7 @@ def test_overdue_due_day(user):
         due_date=datetime.now().date() - timedelta(days=1)
     )
 
-    assert get_problems(problem_issue) == [PROBLEM_OVER_DUE_DAY]
+    assert get_issue_problems(problem_issue) == [PROBLEM_OVER_DUE_DAY]
 
 
 def test_overdue_due_day_but_closed(user):
@@ -52,7 +50,7 @@ def test_overdue_due_day_but_closed(user):
         state=ISSUE_STATES.CLOSED
     )
 
-    assert get_problems(issue) == []
+    assert get_issue_problems(issue) == []
 
 
 def test_empty_estimate(user):
@@ -62,7 +60,7 @@ def test_empty_estimate(user):
         time_estimate=None
     )
 
-    assert get_problems(problem_issue) == [PROBLEM_EMPTY_ESTIMATE]
+    assert get_issue_problems(problem_issue) == [PROBLEM_EMPTY_ESTIMATE]
 
 
 def test_zero_estimate(user):
@@ -72,13 +70,13 @@ def test_zero_estimate(user):
         time_estimate=0
     )
 
-    assert get_problems(problem_issue) == [PROBLEM_EMPTY_ESTIMATE]
+    assert get_issue_problems(problem_issue) == [PROBLEM_EMPTY_ESTIMATE]
 
 
 def test_two_errors_per_issue(user):
     problem_issue = IssueFactory.create(user=user, time_estimate=None)
 
-    problems = get_problems(problem_issue)
+    problems = get_issue_problems(problem_issue)
     assert set(problems) == {PROBLEM_EMPTY_ESTIMATE, PROBLEM_EMPTY_DUE_DAY}
 
 

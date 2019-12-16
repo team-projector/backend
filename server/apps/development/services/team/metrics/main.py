@@ -4,7 +4,10 @@ from django.db.models import Sum
 
 from apps.development.models import Issue, MergeRequest, Team, TeamMember
 from apps.development.models.issue import ISSUE_STATES
-from apps.development.services import issue as issue_service
+from apps.development.services.issue.problems import (
+    annotate_issue_problems,
+    filter_issue_problems,
+)
 
 
 class WorkItemTeamMetrics:
@@ -50,8 +53,8 @@ class TeamMetricsProvider:
         metrics.issues = self._get_issues_metrics()
         metrics.merge_requests = self._get_merge_requests_metrics()
 
-        problems_issues = issue_service.annotate_problems(self.issues)
-        problems_issues = issue_service.filter_problems(problems_issues)
+        problems_issues = annotate_issue_problems(self.issues)
+        problems_issues = filter_issue_problems(problems_issues)
         metrics.problems_count = problems_issues.count()
 
         return metrics
@@ -93,7 +96,7 @@ class TeamMetricsProvider:
         )['total_time_estimate']
 
 
-def get_metrics(team: Team) -> TeamMetrics:
+def get_team_metrics(team: Team) -> TeamMetrics:
     """Get metrics for team."""
     users = TeamMember.objects.get_no_watchers(team)
 

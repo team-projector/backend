@@ -5,7 +5,7 @@ from django.db.models.functions import Coalesce
 
 from apps.development.models import Issue, Ticket
 from apps.development.models.issue import ISSUE_STATES
-from apps.development.services.issue import IssuesContainerMetrics
+from apps.development.services.issue.metrics import IssuesContainerMetrics
 from apps.payroll.models.spent_time import SECS_IN_HOUR, SpentTime
 
 

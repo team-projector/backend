@@ -6,7 +6,7 @@ from django.utils.translation import gettext_lazy as _
 from rest_framework.exceptions import AuthenticationFailed
 
 from apps.users.models import Token
-from apps.users.services.token import create_user_token
+from apps.users.services.token.create import create_user_token
 
 
 def login_user(

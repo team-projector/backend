@@ -4,7 +4,7 @@ from apps.core.utils.time import seconds
 from apps.development.graphql.types.team import TeamType
 from apps.development.models.issue import ISSUE_STATES
 from apps.development.models.merge_request import MERGE_REQUESTS_STATES
-from apps.development.services.team.metrics.main import get_metrics
+from apps.development.services.team.metrics.main import get_team_metrics
 from tests.test_development.factories import (
     IssueFactory,
     MergeRequestFactory,
@@ -37,7 +37,7 @@ def test_issues(user):
 
     IssueFactory.create_batch(size=5)
 
-    metrics = get_metrics(team)
+    metrics = get_team_metrics(team)
 
     assert metrics.problems_count == 0
     assert metrics.merge_requests.count == 0
@@ -75,7 +75,7 @@ def test_merge_requests(user):
 
     MergeRequestFactory.create_batch(size=5)
 
-    metrics = get_metrics(team)
+    metrics = get_team_metrics(team)
 
     assert metrics.issues.count == 0
 
@@ -119,7 +119,7 @@ def test_issues_problems(user):
 
     IssueFactory.create_batch(size=5)
 
-    metrics = get_metrics(team)
+    metrics = get_team_metrics(team)
 
     assert metrics.issues.count == 7
     assert metrics.problems_count == 3

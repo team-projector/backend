@@ -14,16 +14,6 @@ class AuthFilter(DjangoFilterConnectionField):
 
     permission_classes = (AllowAny,)
 
-    @classmethod
-    def has_permission(
-        cls,
-        info: ResolveInfo,  # noqa: WPS110
-    ) -> bool:
-        return all(
-            perm().has_filter_permission(info)
-            for perm in cls.permission_classes
-        )
-
     @classmethod  # noqa: WPS211
     def connection_resolver(
         cls,
@@ -37,6 +27,7 @@ class AuthFilter(DjangoFilterConnectionField):
         info: ResolveInfo,  # noqa: WPS110
         **args,
     ):
+        """Check if user has permissions."""
         if not cls.has_permission(info):
             raise PermissionDenied()
 
@@ -53,4 +44,15 @@ class AuthFilter(DjangoFilterConnectionField):
             root,
             info,
             **args,
+        )
+
+    @classmethod
+    def has_permission(
+        cls,
+        info: ResolveInfo,  # noqa: WPS110
+    ) -> bool:
+        """Check if user has permissions."""
+        return all(
+            perm().has_filter_permission(info)
+            for perm in cls.permission_classes
         )

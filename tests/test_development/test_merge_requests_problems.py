@@ -3,12 +3,12 @@ from pytest import raises
 from apps.core.utils.time import seconds
 from apps.development.graphql.types import MergeRequestType
 from apps.development.models.issue import ISSUE_STATES
-from apps.development.services.merge_request import (
+from apps.development.services.merge_request.problems import (
     PROBLEM_EMPTY_ESTIMATE,
     PROBLEM_NOT_ASSIGNED,
-    get_problems,
+    BaseProblemChecker,
+    get_merge_request_problems,
 )
-from apps.development.services.merge_request.problems import BaseProblemChecker
 from tests.test_development.factories import (
     IssueFactory,
     LabelFactory,
@@ -31,7 +31,7 @@ def test_empty_estimate(user):
     merge_request = MergeRequestFactory.create(user=user)
     merge_request.issues.add(problem_issue)
 
-    problems = get_problems(merge_request)
+    problems = get_merge_request_problems(merge_request)
 
     assert problems == [PROBLEM_EMPTY_ESTIMATE]
 
@@ -46,7 +46,7 @@ def test_empty_estimate_but_closed(user):
     merge_request = MergeRequestFactory.create(user=user)
     merge_request.issues.add(problem_issue)
 
-    problems = get_problems(merge_request)
+    problems = get_merge_request_problems(merge_request)
 
     assert problems == []
 
@@ -61,7 +61,7 @@ def test_zero_estimate(user):
     merge_request = MergeRequestFactory.create(user=user)
     merge_request.issues.add(problem_issue)
 
-    problems = get_problems(merge_request)
+    problems = get_merge_request_problems(merge_request)
 
     assert problems == [PROBLEM_EMPTY_ESTIMATE]
 
@@ -79,7 +79,7 @@ def test_not_assigned(user):
     merge_request = MergeRequestFactory.create(user=None)
     merge_request.issues.add(problem_issue)
 
-    problems = get_problems(merge_request)
+    problems = get_merge_request_problems(merge_request)
 
     assert problems == [PROBLEM_NOT_ASSIGNED]
 
@@ -97,7 +97,7 @@ def test_not_assigned_but_closed(user):
     merge_request = MergeRequestFactory.create(user=None)
     merge_request.issues.add(problem_issue)
 
-    problems = get_problems(merge_request)
+    problems = get_merge_request_problems(merge_request)
 
     assert problems == []
 
@@ -115,7 +115,7 @@ def test_two_errors_per_merge_request(user):
     merge_request = MergeRequestFactory.create(user=None)
     merge_request.issues.add(problem_issue)
 
-    problems = get_problems(merge_request)
+    problems = get_merge_request_problems(merge_request)
 
     assert problems == [PROBLEM_EMPTY_ESTIMATE, PROBLEM_NOT_ASSIGNED]
 

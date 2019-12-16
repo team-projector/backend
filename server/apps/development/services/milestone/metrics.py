@@ -4,11 +4,14 @@ from django.db.models import Q, QuerySet, Sum
 from django.db.models.functions import Coalesce
 
 from apps.development.models import Milestone
-from apps.development.services import issue
+from apps.development.services.issue.metrics import (
+    IssuesContainerMetrics,
+    IssuesContainerMetricsProvider,
+)
 from apps.payroll.models import SpentTime
 
 
-class MilestoneMetrics(issue.IssuesContainerMetrics):
+class MilestoneMetrics(IssuesContainerMetrics):
     """Milestone metrics."""
 
     budget: float = 0
@@ -18,7 +21,7 @@ class MilestoneMetrics(issue.IssuesContainerMetrics):
     profit: float = 0
 
 
-class MilestoneMetricsProvider(issue.IssuesContainerMetricsProvider):
+class MilestoneMetricsProvider(IssuesContainerMetricsProvider):
     """Milestone metrics provider."""
 
     def __init__(self, milestone: Milestone):
@@ -56,6 +59,6 @@ class MilestoneMetricsProvider(issue.IssuesContainerMetricsProvider):
         metrics.budget_spent = payroll['total_customer_sum']
 
 
-def get_metrics(milestone: Milestone) -> MilestoneMetrics:
+def get_milestone_metrics(milestone: Milestone) -> MilestoneMetrics:
     """Get metrics for milestone."""
     return MilestoneMetricsProvider(milestone).get_metrics()

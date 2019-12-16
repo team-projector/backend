@@ -3,8 +3,12 @@ from django.contrib.auth import get_user_model
 
 from apps.core.utils.time import seconds
 from apps.development.models.issue import ISSUE_STATES
+from apps.development.models.merge_request import MERGE_REQUESTS_STATES
 from apps.users.graphql.types.user import UserType
-from apps.users.services import user as user_service
+from apps.users.services.user.metrics.main import (
+    UserMetrics,
+    UserMetricsProvider,
+)
 from tests.test_development.factories import IssueFactory, MergeRequestFactory
 from tests.test_payroll.factories import (
     BonusFactory,
@@ -15,7 +19,7 @@ from tests.test_payroll.factories import (
 )
 from tests.test_users.factories.user import UserFactory
 
-calculator = user_service.UserMetricsProvider()
+calculator = UserMetricsProvider()
 
 
 @pytest.fixture()
@@ -140,7 +144,7 @@ def test_penalty_another_user(user):
 def test_payroll_opened(user):
     issue = IssueFactory.create(state=ISSUE_STATES.OPENED)
     mr = MergeRequestFactory.create(
-        state=user_service.MERGE_REQUESTS_STATES.OPENED)
+        state=MERGE_REQUESTS_STATES.OPENED)
 
     IssueSpentTimeFactory.create(user=user, base=issue,
                                  time_spent=seconds(hours=1))
@@ -168,7 +172,7 @@ def test_payroll_opened(user):
 def test_payroll_opened_has_salary(user):
     issue = IssueFactory.create(state=ISSUE_STATES.OPENED)
     mr = MergeRequestFactory.create(
-        state=user_service.MERGE_REQUESTS_STATES.OPENED)
+        state=MERGE_REQUESTS_STATES.OPENED)
 
     salary = SalaryFactory.create(user=user)
 
@@ -376,7 +380,7 @@ def test_resolver(user):
 
 
 def _check_metrics(
-    metrics: user_service.UserMetrics,
+    metrics: UserMetrics,
     bonus=0,
     penalty=0,
     payroll_opened=0,

@@ -1,4 +1,4 @@
-from apps.users.services.token import create_user_token
+from apps.users.services.token.create import create_user_token
 from tests.test_users.factories.user import UserFactory
 
 

@@ -9,6 +9,9 @@ from apps.development.tasks import sync_groups_milestones_task
 
 
 class Command(BaseCommand):
+    """Load groups from gitlab."""
+
     def handle(self, *args, **options):
+        """Call function."""
         ProjectGroupGlManager().sync_all_groups()
         sync_groups_milestones_task()

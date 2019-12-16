@@ -3,7 +3,7 @@ import pytest
 from apps.core.utils.time import seconds
 from apps.development.graphql.types.issue import IssueType
 from apps.development.models.issue import ISSUE_STATES
-from apps.development.services.issue.metrics import get_metrics
+from apps.development.services.issue.metrics import get_issue_metrics
 from tests.test_development.factories import IssueFactory
 from tests.test_payroll.factories import IssueSpentTimeFactory, SalaryFactory
 from tests.test_users.factories.user import UserFactory
@@ -38,7 +38,7 @@ def test_payroll_metrics(user):
         time_spent=-seconds(hours=3)
     )
 
-    metrics = get_metrics(issue)
+    metrics = get_issue_metrics(issue)
 
     assert metrics.payroll == 6 * user.hour_rate
     assert metrics.paid == 0
@@ -73,7 +73,7 @@ def test_paid_metrics(user):
         time_spent=-seconds(hours=3)
     )
 
-    metrics = get_metrics(issue)
+    metrics = get_issue_metrics(issue)
 
     assert metrics.payroll == 0
     assert metrics.paid == 6 * user.hour_rate
@@ -106,7 +106,7 @@ def test_complex_metrics(user):
         time_spent=-seconds(hours=3)
     )
 
-    metrics = get_metrics(issue)
+    metrics = get_issue_metrics(issue)
 
     assert metrics.payroll == user.hour_rate
     assert metrics.paid == 5 * user.hour_rate
@@ -131,13 +131,13 @@ def test_remains(user):
         total_time_spent=seconds(hours=3),
     )
 
-    metrics = get_metrics(issue_1)
+    metrics = get_issue_metrics(issue_1)
     assert metrics.remains == seconds(hours=2)
 
-    metrics = get_metrics(issue_2)
+    metrics = get_issue_metrics(issue_2)
     assert metrics.remains == 0
 
-    metrics = get_metrics(issue_3)
+    metrics = get_issue_metrics(issue_3)
     assert metrics.remains == 0
 
 
@@ -161,13 +161,13 @@ def test_efficiency(user):
         total_time_spent=seconds(hours=2),
     )
 
-    metrics = get_metrics(issue_1)
+    metrics = get_issue_metrics(issue_1)
     assert metrics.efficiency == 2.0
 
-    metrics = get_metrics(issue_2)
+    metrics = get_issue_metrics(issue_2)
     assert metrics.remains == 0
 
-    metrics = get_metrics(issue_3)
+    metrics = get_issue_metrics(issue_3)
     assert metrics.efficiency is None
 
 

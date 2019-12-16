@@ -28,6 +28,7 @@ class AuthNode:
             perm().has_node_permission(info, obj_id)
             for perm in cls.permission_classes
         ))
+
         if has_node_permission:
             try:
                 return cls.get_queryset(  # type: ignore

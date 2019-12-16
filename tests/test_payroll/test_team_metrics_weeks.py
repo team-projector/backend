@@ -9,7 +9,9 @@ from apps.core.utils.date import begin_of_week
 from apps.core.utils.time import seconds
 from apps.development.models import TeamMember
 from apps.development.models.issue import ISSUE_STATES
-from apps.development.services import team as team_service
+from apps.development.services.team.metrics.progress import (
+    get_progress_metrics,
+)
 from tests.helpers.base import format_date
 from tests.test_development.factories import (
     IssueFactory,
@@ -68,7 +70,7 @@ def test_simple(user):
 
     start = monday - timedelta(days=5)
     end = monday + timedelta(days=5)
-    metrics = team_service.get_progress_metrics(team, start, end, 'week')
+    metrics = get_progress_metrics(team, start, end, 'week')
 
     assert len(metrics) == 2
 
@@ -137,7 +139,7 @@ def test_efficiency_more_1(user):
 
     start = monday - timedelta(days=5)
     end = monday + timedelta(days=5)
-    metrics = team_service.get_progress_metrics(team, start, end, 'week')
+    metrics = get_progress_metrics(team, start, end, 'week')
 
     assert len(metrics) == 2
 
@@ -208,7 +210,7 @@ def test_efficiency_less_1(user):
 
     start = monday - timedelta(days=5)
     end = monday + timedelta(days=5)
-    metrics = team_service.get_progress_metrics(team, start, end, 'week')
+    metrics = get_progress_metrics(team, start, end, 'week')
 
     developer_metrics = next(
         item.metrics for item in metrics if item.user == developer)
@@ -277,7 +279,7 @@ def test_efficiency_zero_estimate(user):
 
     start = monday - timedelta(days=5)
     end = monday + timedelta(days=5)
-    metrics = team_service.get_progress_metrics(team, start, end, 'week')
+    metrics = get_progress_metrics(team, start, end, 'week')
 
     developer_metrics = next(
         item.metrics for item in metrics if item.user == developer)
@@ -315,7 +317,7 @@ def test_efficiency_zero_spend(user):
 
     start = monday - timedelta(days=5)
     end = monday + timedelta(days=5)
-    metrics = team_service.get_progress_metrics(team, start, end, 'week')
+    metrics = get_progress_metrics(team, start, end, 'week')
 
     developer_metrics = next(
         item.metrics
@@ -383,7 +385,7 @@ def test_many_weeks(user):
 
     start = monday - timedelta(days=5)
     end = monday + timedelta(days=5)
-    metrics = team_service.get_progress_metrics(team, start, end, 'week')
+    metrics = get_progress_metrics(team, start, end, 'week')
 
     developer_metrics = next(
         item.metrics for item in metrics if item.user == developer)
@@ -450,7 +452,7 @@ def test_not_in_range(user):
 
     start = monday
     end = monday + timedelta(weeks=1, days=5)
-    metrics = team_service.get_progress_metrics(team, start, end, 'week')
+    metrics = get_progress_metrics(team, start, end, 'week')
 
     developer_metrics = next(
         item.metrics
@@ -521,7 +523,7 @@ def test_another_user(user):
 
     start = monday - timedelta(days=5)
     end = monday + timedelta(days=5)
-    metrics = team_service.get_progress_metrics(team, start, end, 'week')
+    metrics = get_progress_metrics(team, start, end, 'week')
 
     developer_metrics = next(
         item.metrics for item in metrics if item.user == developer)
@@ -599,7 +601,7 @@ def test_many_issues(user):
 
     start = monday - timedelta(days=5)
     end = monday + timedelta(days=5)
-    metrics = team_service.get_progress_metrics(team, start, end, 'week')
+    metrics = get_progress_metrics(team, start, end, 'week')
 
     developer_metrics = next(
         item.metrics for item in metrics if item.user == developer)

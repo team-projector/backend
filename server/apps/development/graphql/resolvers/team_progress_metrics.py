@@ -3,7 +3,12 @@
 from rest_framework.generics import get_object_or_404
 
 from apps.development.models import Team
-from apps.development.services import team as team_service
+from apps.development.services.team.allowed import (
+    check_allow_get_metrics_by_user,
+)
+from apps.development.services.team.metrics.progress import (
+    get_progress_metrics,
+)
 
 
 def resolve_team_progress_metrics(parent, info, **kwargs):  # noqa: WPS110
@@ -13,9 +18,9 @@ def resolve_team_progress_metrics(parent, info, **kwargs):  # noqa: WPS110
         pk=kwargs['team'],
     )
 
-    team_service.check_allow_get_metrics_by_user(team, info.context.user)
+    check_allow_get_metrics_by_user(team, info.context.user)
 
-    return team_service.get_progress_metrics(
+    return get_progress_metrics(
         team,
         kwargs['start'],
         kwargs['end'],

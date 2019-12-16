@@ -5,7 +5,14 @@ from typing import List
 from django.db.models import Count, QuerySet, Sum
 
 from apps.development.models.issue import ISSUE_STATES
-from apps.development.services import issue as issue_service
+from apps.development.services.issue.problems import (
+    annotate_issue_problems,
+    filter_issue_problems,
+)
+from apps.development.services.issue.summary import (
+    IssuesProjectSummary,
+    IssuesTeamSummary,
+)
 from apps.payroll.models import SpentTime
 
 
@@ -17,8 +24,8 @@ class IssuesSummary:
     closed_count: int = 0
     time_spent: int = 0
     problems_count: int = 0
-    projects: List[issue_service.IssuesProjectSummary] = []
-    teams: List[issue_service.IssuesTeamSummary] = []
+    projects: List[IssuesProjectSummary] = []
+    teams: List[IssuesTeamSummary] = []
 
     queryset: QuerySet
 
@@ -91,8 +98,8 @@ class IssuesSummaryProvider:
         )['total_time_spent'] or 0
 
     def _get_problems_count(self) -> int:
-        queryset = issue_service.annotate_problems(self._queryset)
-        queryset = issue_service.filter_problems(queryset)
+        queryset = annotate_issue_problems(self._queryset)
+        queryset = filter_issue_problems(queryset)
 
         return queryset.count()
 
@@ -102,7 +109,4 @@ def get_issues_summary(
     **kwargs,
 ) -> IssuesSummary:
     """Get summary for issues."""
-    return IssuesSummaryProvider(
-        queryset,
-        **kwargs,
-    ).execute()
+    return IssuesSummaryProvider(queryset, **kwargs).execute()

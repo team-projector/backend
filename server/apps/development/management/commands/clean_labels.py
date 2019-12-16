@@ -8,7 +8,10 @@ from apps.development.services.gl.labels import LabelsCleaner
 
 
 class Command(BaseCommand):
+    """Cleanup labels."""
+
     def add_arguments(self, parser):
+        """Add call arguments."""
         parser.add_argument(
             '--group',
             type=str,
@@ -23,6 +26,7 @@ class Command(BaseCommand):
         )
 
     def handle(self, *args, **options):
+        """Call function."""
         self._parse_params(*args, **options)
         client = get_default_gitlab_client()
 

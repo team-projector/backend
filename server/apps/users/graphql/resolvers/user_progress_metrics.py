@@ -7,7 +7,7 @@ from rest_framework.generics import get_object_or_404
 from apps.development.models import TeamMember
 from apps.development.services.team_members import filter_by_roles
 from apps.users.models import User
-from apps.users.services import user as user_service
+from apps.users.services.user.metrics import get_progress_metrics
 
 
 def filter_allowed_for_user(
@@ -38,7 +38,7 @@ def resolve_user_progress_metrics(parent, info, **kwargs):  # noqa: WPS110
         pk=kwargs['user'],
     )
 
-    return user_service.get_progress_metrics(
+    return get_progress_metrics(
         user,
         kwargs['start'],
         kwargs['end'],

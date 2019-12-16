@@ -3,7 +3,8 @@
 from apps.core.utils.time import seconds
 from apps.development.models.issue import ISSUE_STATES
 from apps.development.models.merge_request import MERGE_REQUESTS_STATES
-from apps.users.services import user as user_service
+from apps.users.services.user.problems import get_user_problems
+from apps.users.services.user.problems.checkers import PROBLEM_NOT_ENOUGH_TASKS
 from tests.test_development.factories import IssueFactory
 from tests.test_payroll.factories import MergeRequestFactory
 
@@ -31,8 +32,8 @@ def test_issues(user):
         state=ISSUE_STATES.CLOSED,
     )
 
-    assert user_service.get_problems(user) == [
-        user_service.PROBLEM_NOT_ENOUGH_TASKS,
+    assert get_user_problems(user) == [
+        PROBLEM_NOT_ENOUGH_TASKS,
     ]
 
 
@@ -66,9 +67,7 @@ def test_merge_requests(user):
         state=MERGE_REQUESTS_STATES.MERGED,
     )
 
-    assert user_service.get_problems(user) == [
-        user_service.PROBLEM_NOT_ENOUGH_TASKS,
-    ]
+    assert get_user_problems(user) == [PROBLEM_NOT_ENOUGH_TASKS]
 
 
 def test_complex(user):
@@ -87,6 +86,4 @@ def test_complex(user):
         state=MERGE_REQUESTS_STATES.OPENED,
     )
 
-    assert user_service.get_problems(user) == [
-        user_service.PROBLEM_NOT_ENOUGH_TASKS,
-    ]
+    assert get_user_problems(user) == [PROBLEM_NOT_ENOUGH_TASKS]

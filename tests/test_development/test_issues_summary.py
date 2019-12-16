@@ -10,7 +10,13 @@ from apps.development.graphql.resolvers.issues_summary import (
 from apps.development.models import Project, Team, TeamMember
 from apps.development.models.issue import ISSUE_STATES, Issue
 from apps.development.models.milestone import MILESTONE_STATES
-from apps.development.services import issue as issue_service
+from apps.development.services.issue.summary import (
+    get_issues_summary,
+    get_project_summaries,
+    get_team_summaries,
+)
+from apps.development.services.issue.summary.issue import IssuesSummary
+from apps.development.services.issue.summary.project import get_min_due_date
 from tests.helpers.objects import AttrDict
 from tests.test_development.factories import (
     IssueFactory,
@@ -39,7 +45,7 @@ def test_issue_counts(user):
         due_date=datetime.now()
     )
 
-    summary = issue_service.get_issues_summary(
+    summary = get_issues_summary(
         Issue.objects.filter(user=user),
         user=user,
     )
@@ -66,7 +72,7 @@ def test_problems(user):
         total_time_spent=0
     )
 
-    summary = issue_service.get_issues_summary(
+    summary = get_issues_summary(
         Issue.objects.filter(user=user),
         user=user,
     )
@@ -96,13 +102,13 @@ def test_project_summary(user):
         due_date=datetime.now().date()
     )
 
-    summary = issue_service.get_issues_summary(
+    summary = get_issues_summary(
         Issue.objects.filter(user=user),
         due_date=datetime.now().date(),
         user=user,
     )
 
-    summary.projects = issue_service.get_project_summaries(summary.queryset)
+    summary.projects = get_project_summaries(summary.queryset)
 
     assert len(summary.projects) == 2
     _check_project_stats(
@@ -153,11 +159,11 @@ def test_team_summary(db):
         due_date=datetime.now().date()
     )
 
-    summary = issue_service.get_issues_summary(
+    summary = get_issues_summary(
         Issue.objects.all(),
     )
 
-    summary.teams = issue_service.get_team_summaries(summary.queryset)
+    summary.teams = get_team_summaries(summary.queryset)
 
     assert len(summary.teams) == 2
     _check_team_stats(
@@ -192,7 +198,7 @@ def test_sort_projects_by_milestone_flat(db):
 
         projs.append(m.owner)
 
-    results = sorted(projs, key=issue_service.get_min_due_date)
+    results = sorted(projs, key=get_min_due_date)
     assert [projs[0].id, projs[1].id, projs[2].id] == [p.id for p in results]
 
 
@@ -216,7 +222,7 @@ def test_sort_projects_by_milestone_neested(db):
 
         projs.append(proj)
 
-    results = sorted(projs, key=issue_service.get_min_due_date)
+    results = sorted(projs, key=get_min_due_date)
     assert [projs[2].id, projs[1].id, projs[0].id] == [p.id for p in results]
 
 
@@ -249,7 +255,7 @@ def test_time_spents_by_user(user):
         time_spent=200
     )
 
-    summary = issue_service.get_issues_summary(
+    summary = get_issues_summary(
         Issue.objects.filter(user=user),
         due_date=datetime.now().date(),
         user=user,
@@ -301,7 +307,7 @@ def test_time_spents_by_team(user):
         time_spent=200
     )
 
-    summary = issue_service.get_issues_summary(
+    summary = get_issues_summary(
         Issue.objects.filter(user=user),
         due_date=datetime.now().date(),
         user=user,
@@ -351,7 +357,7 @@ def test_time_spents_by_project(user):
         time_spent=300
     )
 
-    summary = issue_service.get_issues_summary(
+    summary = get_issues_summary(
         Issue.objects.filter(user=user),
         due_date=datetime.now().date(),
         user=user,
@@ -360,7 +366,7 @@ def test_time_spents_by_project(user):
 
     _check_summary(summary, 5, 5, 0, 100, 0)
 
-    summary = issue_service.get_issues_summary(
+    summary = get_issues_summary(
         Issue.objects.filter(user=another_user),
         due_date=datetime.now().date(),
         user=another_user,
@@ -403,7 +409,7 @@ def test_time_spents_by_state(user):
         time_spent=400
     )
 
-    summary = issue_service.get_issues_summary(
+    summary = get_issues_summary(
         Issue.objects.filter(user=user),
         due_date=datetime.now().date(),
         user=user,
@@ -412,7 +418,7 @@ def test_time_spents_by_state(user):
 
     _check_summary(summary, 2, 1, 1, 100, 0)
 
-    summary = issue_service.get_issues_summary(
+    summary = get_issues_summary(
         Issue.objects.filter(user=user),
         due_date=datetime.now().date(),
         user=user,
@@ -451,7 +457,7 @@ def test_time_spents_by_milestone(user):
         time_spent=300
     )
 
-    summary = issue_service.get_issues_summary(
+    summary = get_issues_summary(
         Issue.objects.filter(user=user),
         due_date=datetime.now().date(),
         user=user,
@@ -460,7 +466,7 @@ def test_time_spents_by_milestone(user):
 
     _check_summary(summary, 2, 2, 0, 100, 0)
 
-    summary = issue_service.get_issues_summary(
+    summary = get_issues_summary(
         Issue.objects.filter(user=user),
         due_date=datetime.now().date(),
         user=user,
@@ -506,7 +512,7 @@ def test_time_spents_by_ticket(user):
         ticket=TicketFactory.create()
     )
 
-    summary = issue_service.get_issues_summary(
+    summary = get_issues_summary(
         Issue.objects.filter(user=user),
         due_date=datetime.now().date(),
         user=user,
@@ -515,7 +521,7 @@ def test_time_spents_by_ticket(user):
 
     _check_summary(summary, 2, 2, 0, 100, 0)
 
-    summary = issue_service.get_issues_summary(
+    summary = get_issues_summary(
         Issue.objects.filter(user=user),
         due_date=datetime.now().date(),
         user=user,
@@ -603,7 +609,7 @@ def test_resolve_issues_team_summaries(user):
 
 
 def _check_summary(
-    data: issue_service.IssuesSummary,
+    data: IssuesSummary,
     count: int,
     opened_count: int,
     closed_count: int,
@@ -618,7 +624,7 @@ def _check_summary(
 
 
 def _check_project_stats(
-    data: issue_service.IssuesSummary,
+    data: IssuesSummary,
     project: Project,
     issues_opened_count: int,
     percentage: float,
@@ -637,7 +643,7 @@ def _check_project_stats(
 
 
 def _check_team_stats(
-    data: issue_service.IssuesSummary,
+    data: IssuesSummary,
     team: Team,
     issues_opened_count: int,
     percentage: float,

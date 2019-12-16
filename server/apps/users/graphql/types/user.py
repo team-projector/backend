@@ -8,7 +8,8 @@ from apps.core.graphql.relay_nodes import DatasourceRelayNode
 from apps.core.graphql.types import BaseDjangoObjectType
 from apps.users.graphql.types.user_metrics import UserMetricsType
 from apps.users.models import User
-from apps.users.services import user as user_service
+from apps.users.services.user.metrics.main import UserMetricsProvider
+from apps.users.services.user.problems import get_user_problems
 
 
 class UserType(BaseDjangoObjectType):
@@ -26,12 +27,12 @@ class UserType(BaseDjangoObjectType):
 
     def resolve_metrics(self, info, **kwargs):  # noqa: WPS110
         """Get user metrics."""
-        provider = user_service.UserMetricsProvider()
+        provider = UserMetricsProvider()
         return provider.get_metrics(self)
 
     def resolve_problems(self, info, **kwargs):  # noqa: WPS110
         """Get user problems."""
-        return user_service.get_problems(self)
+        return get_user_problems(self)
 
     @classmethod
     def get_queryset(

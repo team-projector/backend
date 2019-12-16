@@ -40,7 +40,7 @@ checkers = [
 ]
 
 
-def get_problems(milestone: Milestone) -> List[str]:
+def get_milestone_problems(milestone: Milestone) -> List[str]:
     """Get problems for milestone."""
     problems = []
 

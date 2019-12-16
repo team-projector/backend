@@ -1,20 +1,12 @@
 from datetime import datetime, timedelta
 
-from pytest import raises
-
 from apps.development.graphql.types.milestone import MilestoneType
 from apps.development.models.milestone import MILESTONE_STATES
-from apps.development.services.milestone import (
+from apps.development.services.milestone.problems import (
     PROBLEM_OVER_DUE_DAY,
-    get_problems,
+    get_milestone_problems,
 )
-from apps.development.services.milestone.problems import BaseProblemChecker
 from tests.test_development.factories import ProjectMilestoneFactory
-
-
-def test_base_checker():
-    with raises(NotImplementedError):
-        BaseProblemChecker().milestone_has_problem(None)
 
 
 def test_overdue_due_day(db):
@@ -23,7 +15,7 @@ def test_overdue_due_day(db):
         due_date=datetime.now().date() - timedelta(days=1)
     )
 
-    assert get_problems(problem_milestone) == [PROBLEM_OVER_DUE_DAY]
+    assert get_milestone_problems(problem_milestone) == [PROBLEM_OVER_DUE_DAY]
 
 
 def test_overdue_due_day_but_closed(db):
@@ -32,7 +24,7 @@ def test_overdue_due_day_but_closed(db):
         due_date=datetime.now().date() - timedelta(days=1)
     )
 
-    assert get_problems(milestone) == []
+    assert get_milestone_problems(milestone) == []
 
 
 def test_resolver(db):
