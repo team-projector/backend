@@ -13,7 +13,7 @@ from django.core.management.base import CommandError
 class Command(createsuperuser.Command):
     """Create superuser in database."""
 
-    def handle(self, *args, **options):
+    def handle(self, *args, **options):  # noqa: WPS110
         """
         Create superuser in Non-interactive mode.
 
@@ -41,10 +41,11 @@ class Command(createsuperuser.Command):
     def _fill_user_data_required_fields(self, user_data, options) -> None:
         for field_name in self.UserModel.REQUIRED_FIELDS:
             env_var = 'DJANGO_SUPERUSER_{0}'.format(field_name.upper())
-            value = options[field_name] or os.environ.get(env_var)
-            if not value:
+
+            username = options[field_name] or os.environ.get(env_var)
+            if not username:
                 raise CommandError(
                     'You must use --{0} with --noinput.'.format(field_name),
                 )
             field = self.UserModel._meta.get_field(field_name)  # noqa: WPS437
-            user_data[field_name] = field.clean(value, None)
+            user_data[field_name] = field.clean(username, None)

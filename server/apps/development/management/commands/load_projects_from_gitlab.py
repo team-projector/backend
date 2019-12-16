@@ -9,7 +9,7 @@ from apps.development.tasks import sync_projects_milestones_task
 class Command(BaseCommand):
     """Load projects from gitlab."""
 
-    def handle(self, *args, **options):
+    def handle(self, *args, **options):  # noqa: WPS110
         """Call function."""
         ProjectGlManager().sync_all_projects()
         sync_projects_milestones_task()

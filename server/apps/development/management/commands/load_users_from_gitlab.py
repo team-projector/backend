@@ -8,6 +8,6 @@ from apps.users.services.user.gl.manager import UserGlManager
 class Command(BaseCommand):
     """Sync users with gitlab."""
 
-    def handle(self, *args, **options):
+    def handle(self, *args, **options):  # noqa: WPS110
         """Call function."""
         UserGlManager().sync_users()

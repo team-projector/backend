@@ -25,7 +25,7 @@ class Command(BaseCommand):
             help='Show only log, without apply',
         )
 
-    def handle(self, *args, **options):
+    def handle(self, *args, **options):  # noqa: WPS110
         """Call function."""
         self._parse_params(*args, **options)
         client = get_default_gitlab_client()

@@ -8,6 +8,6 @@ from apps.development.services.issue.gl.manager import IssueGlManager
 class Command(BaseCommand):
     """Load issues from gitlab."""
 
-    def handle(self, *args, **options):
+    def handle(self, *args, **options):  # noqa: WPS110
         """Call function."""
         IssueGlManager().sync_issues(full_reload=True)

@@ -10,6 +10,6 @@ from apps.development.services.merge_request.gl.manager import (
 class Command(BaseCommand):
     """Load merge requests from gitlab."""
 
-    def handle(self, *args, **options):
+    def handle(self, *args, **options):  # noqa: WPS110
         """Call function."""
         MergeRequestGlManager().sync_merge_requests(full_reload=True)
