@@ -30,12 +30,7 @@ class Command(BaseCommand):
         self._parse_params(*args, **options)
         client = get_default_gitlab_client()
 
-        gr = client.groups.get(self.group_for_sync)
-        stats = client.http_get('/groups/{0}/issues_statistics'.format(gr.id))
-        issues_count = stats.get('statistics').get('counts').get('all')
-        mergerequests = gr.mergerequests.list(all=True)
-        total = len(mergerequests) + issues_count
-
+        total = self._get_total(client)
         cleaner = LabelsCleaner(client=client)
 
         with tqdm(total=total) as pbar:
@@ -44,6 +39,13 @@ class Command(BaseCommand):
                 adjust_element_callback=pbar.update,
                 dry_run=self.only_log,
             )
+
+    def _get_total(self, client) -> int:
+        gr = client.groups.get(self.group_for_sync)
+        stats = client.http_get('/groups/{0}/issues_statistics'.format(gr.id))
+        issues_count = stats.get('statistics').get('counts').get('all')
+        mergerequests = gr.mergerequests.list(all=True)
+        return len(mergerequests) + issues_count
 
     def _parse_params(self, *args, **options) -> None:
         self.group_for_sync = options.get('group')

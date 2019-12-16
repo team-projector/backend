@@ -10,8 +10,7 @@ from django.http import HttpRequest
 from django.urls import reverse
 from django.utils.html import format_html
 
-from apps.core.admin.base import BaseModelAdmin
-from apps.core.admin.mixins import ForceSyncEntityMixin
+from apps.core.admin import base, mixins
 from apps.development.tasks import sync_user_task
 from apps.users.admin.forms import UserAdminForm
 from apps.users.models import User
@@ -19,9 +18,9 @@ from apps.users.models import User
 
 @admin.register(User)
 class UserAdmin(
-    ForceSyncEntityMixin,
+    mixins.ForceSyncEntityMixin,
     DjUserAdmin,
-    BaseModelAdmin,
+    base.BaseModelAdmin,
 ):
     """A class representing User model for admin dashboard."""
 
