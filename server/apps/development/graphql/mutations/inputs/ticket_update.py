@@ -23,7 +23,9 @@ class TicketUpdateInput(TicketBaseInput):
         queryset=Issue.objects,
     )
 
-    id = serializers.PrimaryKeyRelatedField(queryset=Ticket.objects.all())
+    id = serializers.PrimaryKeyRelatedField(  # noqa:A003
+        queryset=Ticket.objects.all(),
+    )
 
     class Meta(TicketBaseInput.Meta):
         fields = ['id', *TicketBaseInput.Meta.fields, 'attach_issues']
