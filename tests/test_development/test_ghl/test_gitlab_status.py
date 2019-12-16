@@ -10,8 +10,8 @@ from apps.core.tasks import add_action_task
 from apps.development.graphql.resolvers import resolve_gitlab_status
 from apps.development.models import Issue, Project
 from apps.development.services.status.gitlab import get_gitlab_sync_status
+from tests.helpers.objects import AttrDict
 from tests.test_development.factories import IssueFactory
-from tests.test_development.factories_gitlab import AttrDict
 
 
 def test_status(user):

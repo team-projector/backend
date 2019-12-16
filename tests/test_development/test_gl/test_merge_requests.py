@@ -9,25 +9,23 @@ from apps.development.models.note import NOTE_TYPES
 from apps.development.services.merge_request.gl.manager import (
     MergeRequestGlManager,
 )
-from tests.test_development.checkers_gitlab import (
-    check_merge_request,
-    check_user,
-)
+from tests.helpers.objects import AttrDict
 from tests.test_development.factories import (
     MergeRequestFactory,
     ProjectFactory,
     ProjectMilestoneFactory,
 )
-from tests.test_development.factories_gitlab import (
-    AttrDict,
+from tests.test_development.factories.gitlab import (
     GlLabelFactory,
     GlMergeRequestFactory,
     GlNoteFactory,
     GlProjectFactory,
     GlProjectMilestoneFactory,
     GlTimeStats,
-    GlUserFactory,
 )
+from tests.test_development.helpers.gitlab_checkers import check_merge_request
+from tests.test_users.factories.gitlab import GlUserFactory
+from tests.test_users.helpers.gitlab_checkers import check_user
 
 
 @override_settings(GITLAB_TOKEN='GITLAB_TOKEN')

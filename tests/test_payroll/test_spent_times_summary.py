@@ -4,8 +4,8 @@ from apps.development.models.merge_request import MERGE_REQUESTS_STATES
 from apps.payroll.graphql.resolvers import resolve_spent_times_summary
 from apps.payroll.models import SpentTime
 from apps.payroll.services import spent_time as spent_time_service
+from tests.helpers.objects import AttrDict
 from tests.test_development.factories import IssueFactory, MergeRequestFactory
-from tests.test_development.factories_gitlab import AttrDict
 from tests.test_payroll.factories import (
     IssueSpentTimeFactory,
     MergeRequestSpentTimeFactory,

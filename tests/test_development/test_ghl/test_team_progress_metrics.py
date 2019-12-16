@@ -5,8 +5,8 @@ from pytest import raises
 
 from apps.development.graphql.resolvers import resolve_team_progress_metrics
 from apps.development.models import TeamMember
+from tests.helpers.objects import AttrDict
 from tests.test_development.factories import TeamFactory, TeamMemberFactory
-from tests.test_development.factories_gitlab import AttrDict
 
 
 def test_team_progress_metrics(user, client):

@@ -3,8 +3,8 @@ from django.utils import timezone
 from apps.development.graphql.types import ProjectType
 from apps.development.models.milestone import MILESTONE_STATES
 from apps.development.services.issue import IssuesProjectSummary
+from tests.helpers.objects import AttrDict
 from tests.test_development.factories import ProjectMilestoneFactory
-from tests.test_development.factories_gitlab import AttrDict
 
 
 def test_active_milestones_sort(user, client):

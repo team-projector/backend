@@ -4,13 +4,11 @@ from apps.development.models import ProjectGroup
 from apps.development.services.project_group.gl.manager import (
     ProjectGroupGlManager,
 )
-from tests.test_development.checkers_gitlab import check_group
+from tests.helpers.objects import AttrDict
 from tests.test_development.factories import ProjectGroupFactory
-from tests.test_development.factories_gitlab import (
-    AttrDict,
-    GlGroupFactory,
-    GlUserFactory,
-)
+from tests.test_development.factories.gitlab import GlGroupFactory
+from tests.test_development.helpers.gitlab_checkers import check_group
+from tests.test_users.factories.gitlab import GlUserFactory
 
 
 def test_load_single_group(db):

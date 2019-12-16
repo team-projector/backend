@@ -5,13 +5,11 @@ from rest_framework import status
 from apps.core.admin.mixins.force_sync_entity import ForceSyncEntityMixin
 from apps.development.models import ProjectGroup
 from tests.helpers.base import model_admin
-from tests.test_development.checkers_gitlab import check_group
+from tests.helpers.objects import AttrDict
 from tests.test_development.factories import ProjectGroupFactory
-from tests.test_development.factories_gitlab import (
-    AttrDict,
-    GlGroupFactory,
-    GlUserFactory,
-)
+from tests.test_development.factories.gitlab import GlGroupFactory
+from tests.test_development.helpers.gitlab_checkers import check_group
+from tests.test_users.factories.gitlab import GlUserFactory
 
 
 @override_settings(GITLAB_TOKEN='GITLAB_TOKEN')
@@ -44,9 +42,11 @@ def test_force_sync(admin_client):
         'development-projectmember-content_type-object_id-TOTAL_FORMS': ['0'],
         'development-projectmember-content_type-object_id-INITIAL_FORMS': ['0'],
         'development-projectmember-content_type-object_id-MIN_NUM_FORMS': ['0'],
-        'development-projectmember-content_type-object_id-MAX_NUM_FORMS': ['1000'],
+        'development-projectmember-content_type-object_id-MAX_NUM_FORMS': [
+            '1000'],
         'development-projectmember-content_type-object_id-__prefix__-id': [''],
-        'development-projectmember-content_type-object_id-__prefix__-role': [''],
+        'development-projectmember-content_type-object_id-__prefix__-role': [
+            ''],
     }
 
     response = ma_group.change_view(
@@ -73,9 +73,11 @@ def test_sync_obj(admin_client):
         'development-projectmember-content_type-object_id-TOTAL_FORMS': ['0'],
         'development-projectmember-content_type-object_id-INITIAL_FORMS': ['0'],
         'development-projectmember-content_type-object_id-MIN_NUM_FORMS': ['0'],
-        'development-projectmember-content_type-object_id-MAX_NUM_FORMS': ['1000'],
+        'development-projectmember-content_type-object_id-MAX_NUM_FORMS': [
+            '1000'],
         'development-projectmember-content_type-object_id-__prefix__-id': [''],
-        'development-projectmember-content_type-object_id-__prefix__-role': [''],
+        'development-projectmember-content_type-object_id-__prefix__-role': [
+            ''],
     }
 
     response = ma_group.change_view(

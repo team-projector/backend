@@ -7,18 +7,18 @@ from rest_framework import status
 from apps.development.models import Project
 from apps.development.services.project.gl.manager import ProjectGlManager
 from apps.development.services.project.gl.provider import ProjectGlProvider
-from tests.test_development.checkers_gitlab import check_project
+from tests.helpers.objects import AttrDict
 from tests.test_development.factories import (
     ProjectFactory,
     ProjectGroupFactory,
 )
-from tests.test_development.factories_gitlab import (
-    AttrDict,
+from tests.test_development.factories.gitlab import (
     GlGroupFactory,
     GlHookFactory,
     GlProjectFactory,
-    GlUserFactory,
 )
+from tests.test_development.helpers.gitlab_checkers import check_project
+from tests.test_users.factories.gitlab import GlUserFactory
 
 
 @override_settings(GITLAB_TOKEN='GITLAB_TOKEN')

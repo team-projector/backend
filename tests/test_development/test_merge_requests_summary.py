@@ -4,12 +4,12 @@ from apps.development.models.merge_request import MERGE_REQUESTS_STATES
 from apps.development.services.merge_request.summary import (
     get_merge_requests_summary,
 )
+from tests.helpers.objects import AttrDict
 from tests.test_development.factories import (
     MergeRequestFactory,
     TeamFactory,
     TeamMemberFactory,
 )
-from tests.test_development.factories_gitlab import AttrDict
 from tests.test_users.factories.user import UserFactory
 
 

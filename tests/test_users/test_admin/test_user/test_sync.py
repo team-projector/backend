@@ -2,9 +2,9 @@
 
 from django.test import override_settings
 
-from tests.test_development.checkers_gitlab import check_user
-from tests.test_development.factories_gitlab import GlUserFactory
+from tests.test_users.factories.gitlab import GlUserFactory
 from tests.test_users.factories.user import UserFactory
+from tests.test_users.helpers.gitlab_checkers import check_user
 
 
 @override_settings(GITLAB_TOKEN='GITLAB_TOKEN')

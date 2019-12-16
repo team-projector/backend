@@ -5,14 +5,15 @@ from apps.core.graphql.security.permissions import (
     AllowAuthenticated,
     AllowProjectManager,
 )
+from apps.core.utils.objects import dict2obj
 from apps.development.graphql.types.issue import IssueType
+from tests.helpers.objects import AttrDict
 from tests.test_development.factories import IssueFactory
-from tests.test_development.factories_gitlab import AttrDict
 
 
 def test_any(client):
     client.user = AnonymousUser()
-    info = AttrDict({'context': client})
+    info = dict2obj({'context': client})
 
     perms = AllowAny()
     assert perms.has_node_permission(info=info, obj_id='1') is True

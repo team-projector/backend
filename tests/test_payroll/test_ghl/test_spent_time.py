@@ -6,8 +6,8 @@ from apps.core.utils.time import seconds
 from apps.payroll.graphql.filters import SpentTimeFilterSet
 from apps.payroll.graphql.types.spent_time import SpentTimeType
 from apps.payroll.models.spent_time import SpentTime
+from tests.helpers.objects import AttrDict
 from tests.test_development.factories import IssueFactory, MergeRequestFactory
-from tests.test_development.factories_gitlab import AttrDict
 from tests.test_payroll.factories import IssueSpentTimeFactory
 
 

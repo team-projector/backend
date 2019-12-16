@@ -143,5 +143,7 @@ def test_resolver(user):
     )
 
     problems = UserType.resolve_problems(user, None)
-    assert problems == [user_service.PROBLEM_NOT_ENOUGH_TASKS,
-                        user_service.PROBLEM_PAYROLL_OPENED_OVERFLOW]
+    assert problems == [
+        user_service.PROBLEM_NOT_ENOUGH_TASKS,
+        user_service.PROBLEM_PAYROLL_OPENED_OVERFLOW,
+    ]

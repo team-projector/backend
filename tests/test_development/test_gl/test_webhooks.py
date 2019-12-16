@@ -4,22 +4,22 @@ from rest_framework.exceptions import AuthenticationFailed
 
 from apps.development.api.views.gl_webhook import gl_webhook
 from apps.development.models import Issue, MergeRequest, Project
-from tests.test_development.checkers_gitlab import (
-    check_issue,
-    check_merge_request,
-    check_user,
-)
+from tests.helpers.objects import AttrDict
 from tests.test_development.factories import ProjectFactory
-from tests.test_development.factories_gitlab import (
-    AttrDict,
+from tests.test_development.factories.gitlab import (
     GlIssueFactory,
     GlIssueWebhookFactory,
     GlMergeRequestFactory,
     GlMergeRequestWebhookFactory,
     GlProjectFactory,
     GlTimeStats,
-    GlUserFactory,
 )
+from tests.test_development.helpers.gitlab_checkers import (
+    check_issue,
+    check_merge_request,
+)
+from tests.test_users.factories.gitlab import GlUserFactory
+from tests.test_users.helpers.gitlab_checkers import check_user
 
 
 @override_settings(GITLAB_TOKEN='GITLAB_TOKEN')

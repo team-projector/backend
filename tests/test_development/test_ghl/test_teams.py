@@ -1,7 +1,7 @@
 from apps.development.graphql.types import TeamType
 from apps.development.models import Team, TeamMember
+from tests.helpers.objects import AttrDict
 from tests.test_development.factories import TeamFactory, TeamMemberFactory
-from tests.test_development.factories_gitlab import AttrDict
 from tests.test_users.factories.user import UserFactory
 
 

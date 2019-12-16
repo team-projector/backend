@@ -11,6 +11,7 @@ from apps.development.models import Project, Team, TeamMember
 from apps.development.models.issue import ISSUE_STATES, Issue
 from apps.development.models.milestone import MILESTONE_STATES
 from apps.development.services import issue as issue_service
+from tests.helpers.objects import AttrDict
 from tests.test_development.factories import (
     IssueFactory,
     ProjectFactory,
@@ -20,7 +21,6 @@ from tests.test_development.factories import (
     TeamMemberFactory,
     TicketFactory,
 )
-from tests.test_development.factories_gitlab import AttrDict
 from tests.test_payroll.factories import IssueSpentTimeFactory
 from tests.test_users.factories.user import UserFactory
 
@@ -602,12 +602,14 @@ def test_resolve_issues_team_summaries(user):
     assert issues.remains == 500
 
 
-def _check_summary(data: issue_service.IssuesSummary,
-                   count: int,
-                   opened_count: int,
-                   closed_count: int,
-                   time_spent: int,
-                   problems_count: int):
+def _check_summary(
+    data: issue_service.IssuesSummary,
+    count: int,
+    opened_count: int,
+    closed_count: int,
+    time_spent: int,
+    problems_count: int,
+):
     assert data.count == count
     assert data.opened_count == opened_count
     assert data.closed_count == closed_count
@@ -615,11 +617,13 @@ def _check_summary(data: issue_service.IssuesSummary,
     assert data.problems_count == problems_count
 
 
-def _check_project_stats(data: issue_service.IssuesSummary,
-                         project: Project,
-                         issues_opened_count: int,
-                         percentage: float,
-                         remains: int):
+def _check_project_stats(
+    data: issue_service.IssuesSummary,
+    project: Project,
+    issues_opened_count: int,
+    percentage: float,
+    remains: int,
+):
     stats = next((
         item
         for item in data.projects
@@ -632,11 +636,13 @@ def _check_project_stats(data: issue_service.IssuesSummary,
     assert stats.issues.remains == remains
 
 
-def _check_team_stats(data: issue_service.IssuesSummary,
-                      team: Team,
-                      issues_opened_count: int,
-                      percentage: float,
-                      remains: int):
+def _check_team_stats(
+    data: issue_service.IssuesSummary,
+    team: Team,
+    issues_opened_count: int,
+    percentage: float,
+    remains: int,
+):
     stats = next((
         item
         for item in data.teams

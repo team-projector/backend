@@ -3,8 +3,8 @@ import pytest
 from apps.development.graphql.mutations.ticket import DeleteTicketMutation
 from apps.development.graphql.types.ticket import TicketType
 from apps.development.models.ticket import Ticket
+from tests.helpers.objects import AttrDict
 from tests.test_development.factories import TicketFactory
-from tests.test_development.factories_gitlab import AttrDict
 
 
 @pytest.fixture()

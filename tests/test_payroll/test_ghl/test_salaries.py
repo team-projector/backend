@@ -1,8 +1,8 @@
 from apps.payroll.graphql.filters import SalaryFilterSet
 from apps.payroll.graphql.types import SalaryType
 from apps.payroll.models.salary import Salary
+from tests.helpers.objects import AttrDict
 from tests.test_development.factories import TeamFactory, TeamMemberFactory
-from tests.test_development.factories_gitlab import AttrDict
 from tests.test_payroll.factories import SalaryFactory
 from tests.test_users.factories.user import UserFactory
 

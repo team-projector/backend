@@ -5,15 +5,15 @@ from apps.development.tasks import (
     sync_merge_requests_task,
     sync_project_merge_request_task,
 )
-from tests.test_development.checkers_gitlab import check_merge_request
+from tests.helpers.objects import AttrDict
 from tests.test_development.factories import ProjectFactory
-from tests.test_development.factories_gitlab import (
-    AttrDict,
+from tests.test_development.factories.gitlab import (
     GlMergeRequestFactory,
     GlProjectFactory,
     GlTimeStats,
-    GlUserFactory,
 )
+from tests.test_development.helpers.gitlab_checkers import check_merge_request
+from tests.test_users.factories.gitlab import GlUserFactory
 
 
 @override_settings(GITLAB_TOKEN='GITLAB_TOKEN')

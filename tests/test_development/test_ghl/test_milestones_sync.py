@@ -2,20 +2,20 @@ from django.test import override_settings
 
 from apps.development.graphql.mutations.milestones import SyncMilestoneMutation
 from apps.development.models.milestone import MILESTONE_STATES
+from tests.helpers.objects import AttrDict
 from tests.test_development.factories import (
     ProjectFactory,
     ProjectGroupFactory,
     ProjectGroupMilestoneFactory,
     ProjectMilestoneFactory,
 )
-from tests.test_development.factories_gitlab import (
-    AttrDict,
+from tests.test_development.factories.gitlab import (
     GlGroupFactory,
     GlGroupMilestoneFactory,
     GlProjectFactory,
     GlProjectMilestoneFactory,
-    GlUserFactory,
 )
+from tests.test_users.factories.gitlab import GlUserFactory
 
 
 @override_settings(GITLAB_TOKEN='GITLAB_TOKEN')
@@ -23,7 +23,8 @@ def test_sync_milestone_group(user, client, gl_mocker):
     gl_group = AttrDict(GlGroupFactory())
     group = ProjectGroupFactory.create(gl_id=gl_group.id)
 
-    gl_milestone = AttrDict(GlGroupMilestoneFactory(state=MILESTONE_STATES.CLOSED))
+    gl_milestone = AttrDict(
+        GlGroupMilestoneFactory(state=MILESTONE_STATES.CLOSED))
     milestone = ProjectGroupMilestoneFactory.create(
         gl_id=gl_milestone.id, owner=group, state=MILESTONE_STATES.ACTIVE
     )
@@ -57,7 +58,8 @@ def test_sync_milestone_project(user, client, gl_mocker):
     gl_project = AttrDict(GlProjectFactory())
     project = ProjectFactory.create(gl_id=gl_project.id)
 
-    gl_milestone = AttrDict(GlProjectMilestoneFactory(state=MILESTONE_STATES.CLOSED))
+    gl_milestone = AttrDict(
+        GlProjectMilestoneFactory(state=MILESTONE_STATES.CLOSED))
     milestone = ProjectMilestoneFactory.create(
         gl_id=gl_milestone.id, owner=project, state=MILESTONE_STATES.ACTIVE
     )

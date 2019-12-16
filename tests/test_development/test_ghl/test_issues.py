@@ -1,12 +1,12 @@
 from apps.development.graphql.mutations.issues import UpdateIssueMutation
 from apps.development.graphql.types import IssuesProjectSummary, IssueType
 from apps.development.models.issue import Issue
+from tests.helpers.objects import AttrDict
 from tests.test_development.factories import (
     IssueFactory,
     ProjectGroupMilestoneFactory,
     TicketFactory,
 )
-from tests.test_development.factories_gitlab import AttrDict
 
 
 def test_issue(user, client):

@@ -5,16 +5,16 @@ from apps.development.tasks import (
     sync_groups_milestones_task,
     sync_projects_milestones_task,
 )
-from tests.test_development.checkers_gitlab import check_milestone
+from tests.helpers.objects import AttrDict
 from tests.test_development.factories import (
     ProjectFactory,
     ProjectGroupFactory,
 )
-from tests.test_development.factories_gitlab import (
-    AttrDict,
+from tests.test_development.factories.gitlab import (
     GlGroupFactory,
     GlProjectMilestoneFactory,
 )
+from tests.test_development.helpers.gitlab_checkers import check_milestone
 
 
 @override_settings(GITLAB_TOKEN='GITLAB_TOKEN')

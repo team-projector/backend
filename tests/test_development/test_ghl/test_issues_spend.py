@@ -3,14 +3,14 @@ from pytest import raises
 from rest_framework.exceptions import ValidationError
 
 from apps.development.graphql.mutations.issues import AddSpendIssueMutation
+from tests.helpers.objects import AttrDict
 from tests.test_development.factories import IssueFactory, ProjectFactory
-from tests.test_development.factories_gitlab import (
-    AttrDict,
+from tests.test_development.factories.gitlab import (
     GlIssueAddSpentTimeFactory,
     GlIssueFactory,
     GlProjectFactory,
-    GlUserFactory,
 )
+from tests.test_users.factories.gitlab import GlUserFactory
 
 
 def test_user_without_gl_token(user, client):

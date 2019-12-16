@@ -2,9 +2,10 @@ from django.test import override_settings
 
 from apps.development.models import ProjectGroup
 from apps.development.tasks import sync_project_group_task
-from tests.test_development.checkers_gitlab import check_group
+from tests.helpers.objects import AttrDict
 from tests.test_development.factories import ProjectGroupFactory
-from tests.test_development.factories_gitlab import AttrDict, GlGroupFactory
+from tests.test_development.factories.gitlab import GlGroupFactory
+from tests.test_development.helpers.gitlab_checkers import check_group
 
 
 @override_settings(GITLAB_TOKEN='GITLAB_TOKEN')

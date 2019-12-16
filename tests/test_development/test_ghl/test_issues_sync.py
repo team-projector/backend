@@ -1,14 +1,14 @@
 from django.test import override_settings
 
 from apps.development.graphql.mutations.issues import SyncIssueMutation
+from tests.helpers.objects import AttrDict
 from tests.test_development.factories import IssueFactory, ProjectFactory
-from tests.test_development.factories_gitlab import (
-    AttrDict,
+from tests.test_development.factories.gitlab import (
     GlIssueFactory,
     GlProjectFactory,
     GlTimeStats,
-    GlUserFactory,
 )
+from tests.test_users.factories.gitlab import GlUserFactory
 from tests.test_users.factories.user import UserFactory
 
 

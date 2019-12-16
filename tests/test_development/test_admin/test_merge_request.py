@@ -5,18 +5,18 @@ from apps.development.models.merge_request import (
     MergeRequest,
 )
 from tests.helpers.base import model_admin
-from tests.test_development.checkers_gitlab import check_merge_request
+from tests.helpers.objects import AttrDict
 from tests.test_development.factories import (
     MergeRequestFactory,
     ProjectFactory,
 )
-from tests.test_development.factories_gitlab import (
-    AttrDict,
+from tests.test_development.factories.gitlab import (
     GlMergeRequestFactory,
     GlProjectFactory,
     GlTimeStats,
-    GlUserFactory,
 )
+from tests.test_development.helpers.gitlab_checkers import check_merge_request
+from tests.test_users.factories.gitlab import GlUserFactory
 
 
 @override_settings(GITLAB_TOKEN='GITLAB_TOKEN')
@@ -54,10 +54,21 @@ def test_sync_handler(db, gl_mocker):
 
 
 def _registry_merge_request(gl_mocker, gl_project, gl_merge_request):
-    gl_mocker.registry_get(f'/projects/{gl_project.id}/merge_requests', [gl_merge_request])
-    gl_mocker.registry_get(f'/projects/{gl_project.id}/merge_requests/{gl_merge_request.iid}', gl_merge_request)
-    gl_mocker.registry_get(f'/projects/{gl_project.id}/merge_requests/{gl_merge_request.iid}/time_stats', GlTimeStats())
-    gl_mocker.registry_get(f'/projects/{gl_project.id}/merge_requests/{gl_merge_request.iid}/closed_by', [])
+    gl_mocker.registry_get(f'/projects/{gl_project.id}/merge_requests',
+                           [gl_merge_request])
+    gl_mocker.registry_get(
+        f'/projects/{gl_project.id}/merge_requests/{gl_merge_request.iid}',
+        gl_merge_request)
+    gl_mocker.registry_get(
+        f'/projects/{gl_project.id}/merge_requests/{gl_merge_request.iid}/time_stats',
+        GlTimeStats())
+    gl_mocker.registry_get(
+        f'/projects/{gl_project.id}/merge_requests/{gl_merge_request.iid}/closed_by',
+        [])
     gl_mocker.registry_get(f'/projects/{gl_project.id}/labels', [])
-    gl_mocker.registry_get(f'/projects/{gl_project.id}/merge_requests/{gl_merge_request.iid}/notes', [])
-    gl_mocker.registry_get(f'/projects/{gl_project.id}/merge_requests/{gl_merge_request.iid}/participants', [])
+    gl_mocker.registry_get(
+        f'/projects/{gl_project.id}/merge_requests/{gl_merge_request.iid}/notes',
+        [])
+    gl_mocker.registry_get(
+        f'/projects/{gl_project.id}/merge_requests/{gl_merge_request.iid}/participants',
+        [])

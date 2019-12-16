@@ -4,17 +4,17 @@ from apps.development.models import MergeRequest
 from apps.development.services.merge_request.gl.manager import (
     MergeRequestGlManager,
 )
+from tests.helpers.objects import AttrDict
 from tests.test_development.factories import (
     MergeRequestFactory,
     ProjectFactory,
 )
-from tests.test_development.factories_gitlab import (
-    AttrDict,
+from tests.test_development.factories.gitlab import (
     GlLabelFactory,
     GlMergeRequestFactory,
     GlProjectFactory,
-    GlUserFactory,
 )
+from tests.test_users.factories.gitlab import GlUserFactory
 
 
 @override_settings(GITLAB_TOKEN='GITLAB_TOKEN')

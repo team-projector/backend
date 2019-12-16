@@ -2,14 +2,14 @@ from django.test import override_settings
 
 from apps.development.models import Issue
 from apps.development.services.issue.gl.manager import IssueGlManager
+from tests.helpers.objects import AttrDict
 from tests.test_development.factories import IssueFactory, ProjectFactory
-from tests.test_development.factories_gitlab import (
-    AttrDict,
+from tests.test_development.factories.gitlab import (
     GlIssueFactory,
     GlLabelFactory,
     GlProjectFactory,
-    GlUserFactory,
 )
+from tests.test_users.factories.gitlab import GlUserFactory
 
 
 @override_settings(GITLAB_TOKEN='GITLAB_TOKEN')

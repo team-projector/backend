@@ -3,7 +3,7 @@ from apps.users.graphql.mutations.gitlab.complete_gitlab_auth import (
 )
 from apps.users.models import Token
 from tests.helpers.httpretty_mock import RequestCallbackFactory
-from tests.test_development.factories_gitlab import AttrDict
+from tests.helpers.objects import AttrDict
 
 
 def test_complete_auth(user, client, gl_mocker):

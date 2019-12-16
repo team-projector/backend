@@ -2,18 +2,18 @@ from django.test import override_settings
 
 from apps.development.models import Milestone
 from apps.development.services.milestone.gl.manager import MilestoneGlManager
-from tests.test_development.checkers_gitlab import check_milestone
+from tests.helpers.objects import AttrDict
 from tests.test_development.factories import (
     ProjectFactory,
     ProjectGroupFactory,
 )
-from tests.test_development.factories_gitlab import (
-    AttrDict,
+from tests.test_development.factories.gitlab import (
     GlGroupFactory,
     GlProjectFactory,
     GlProjectMilestoneFactory,
-    GlUserFactory,
 )
+from tests.test_development.helpers.gitlab_checkers import check_milestone
+from tests.test_users.factories.gitlab import GlUserFactory
 
 
 @override_settings(GITLAB_TOKEN='GITLAB_TOKEN')
