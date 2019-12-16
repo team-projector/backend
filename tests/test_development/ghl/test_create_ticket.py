@@ -13,8 +13,8 @@ from tests.test_development.factories import (
 
 GHL_QUERY_CREATE_TICKET = """
 mutation (
-    $milestone: String!, $type: String!, $title: String!,
-    $startDate: Date, $dueDate: Date, $url: String, $issues: [String!]
+    $milestone: ID!, $type: String!, $title: String!,
+    $startDate: Date, $dueDate: Date, $url: String, $issues: [ID!]
 ) {
 createTicket(
     milestone: $milestone, type: $type, title: $title, startDate: $startDate,

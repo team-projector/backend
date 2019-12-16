@@ -10,8 +10,8 @@ from tests.test_development.factories import (
 
 GHL_QUERY_UPDATE_TICKET = """
 mutation (
-    $ticket: String!, $attachIssues: [String!], $type: String, $title: String,
-    $startDate: Date, $dueDate: Date, $url: String, $issues: [String!]
+    $ticket: ID!, $attachIssues: [ID!], $type: String, $title: String,
+    $startDate: Date, $dueDate: Date, $url: String, $issues: [ID!]
 ) {
 updateTicket(
     ticket: $ticket, attachIssues: $attachIssues, type: $type, title: $title,
