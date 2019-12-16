@@ -16,7 +16,7 @@ from tests.test_users.factories.user import UserFactory
 
 @pytest.fixture()
 def user(db):
-    yield UserFactory.create(daily_work_hours=8)
+    return UserFactory.create(daily_work_hours=8)
 
 
 def test_base_checker_not_implemented():
