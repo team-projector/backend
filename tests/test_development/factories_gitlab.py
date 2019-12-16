@@ -2,7 +2,7 @@ from datetime import datetime
 
 import factory
 
-from apps.core.gitlab.parsers import GITLAB_DATE_FORMAT, GITLAB_DATETIME_FORMAT
+from apps.core.gitlab.parsers import GITLAB_DATETIME_FORMAT, GITLAB_DATE_FORMAT
 
 
 def gl_format_date(date):
@@ -17,8 +17,8 @@ class GlGroupFactory(factory.DictFactory):
     id = factory.Faker('random_int')
     web_url = factory.Faker('url')
     avatar_url = factory.Faker('url')
-    name = factory.Sequence(lambda n: f'Group {n}')
-    full_name = factory.Sequence(lambda n: f'Test / Group {n}')
+    name = factory.Sequence(lambda seq: 'Group {0}'.format(seq))
+    full_name = factory.Sequence(lambda seq: 'Test / Group {0}'.format(seq))
     description = factory.Faker('word')
     parent_id = None
 
@@ -28,7 +28,7 @@ class GlGroupMilestoneFactory(factory.DictFactory):
     iid = factory.Faker('random_int')
     web_url = factory.Faker('url')
     group_id = factory.Faker('random_int')
-    title = factory.Sequence(lambda n: f'Milestone {n}')
+    title = factory.Sequence(lambda seq: 'Milestone {0}'.format(seq))
     description = factory.Faker('word')
     start_date = gl_format_date(datetime.now())
     due_date = gl_format_date(datetime.now())
@@ -47,7 +47,7 @@ class GlIssueAddSpentTimeFactory(factory.DictFactory):
 class GlProjectFactory(factory.DictFactory):
     id = factory.Faker('random_int')
     description = factory.Faker('word')
-    name = factory.Sequence(lambda n: f'Project {n}')
+    name = factory.Sequence(lambda seq: 'Project {0}'.format(seq))
     web_url = factory.Faker('url')
     avatar_url = factory.Faker('url')
     name_with_namespace = factory.Faker('word')
@@ -59,7 +59,7 @@ class GlProjectMilestoneFactory(factory.DictFactory):
     iid = factory.Faker('random_int')
     web_url = factory.Faker('url')
     group_id = factory.Faker('random_int')
-    title = factory.Sequence(lambda n: f'Milestone {n}')
+    title = factory.Sequence(lambda seq: 'Milestone {0}'.format(seq))
     description = factory.Faker('word')
     start_date = gl_format_date(datetime.now())
     due_date = gl_format_date(datetime.now())
@@ -70,9 +70,11 @@ class GlProjectMilestoneFactory(factory.DictFactory):
 
 class GlUserFactory(factory.DictFactory):
     id = factory.Faker('random_int')
-    name = factory.Sequence(lambda n: f'User {n}')
-    public_email = factory.Sequence(lambda n: f'public.email{n}@test.com')
-    username = factory.Sequence(lambda n: f'user_name{n}')
+    name = factory.Sequence(lambda seq: 'User {0}'.format(seq))
+    public_email = factory.Sequence(
+        lambda seq: 'public.email{0}@test.com'.format(seq),
+    )
+    username = factory.Sequence(lambda seq: 'user_name{0}'.format(seq))
     state = 'active'
     avatar_url = factory.Faker('url')
     web_url = factory.Faker('url')
@@ -82,7 +84,7 @@ class GlIssueFactory(factory.DictFactory):
     id = factory.Faker('random_int')
     iid = factory.Faker('random_int')
     web_url = factory.Faker('url')
-    title = factory.Sequence(lambda n: f'Issue {n}')
+    title = factory.Sequence(lambda seq: 'Issue {0}'.format(seq))
     project_id = factory.Faker('random_int')
     state = 'opened'
     due_date = gl_format_date(datetime.now())
@@ -123,7 +125,7 @@ class GlMergeRequestFactory(factory.DictFactory):
     id = factory.Faker('random_int')
     iid = factory.Faker('random_int')
     web_url = factory.Faker('url')
-    title = factory.Sequence(lambda n: f'MergeRequest {n}')
+    title = factory.Sequence(lambda seq: 'MergeRequest {0}'.format(seq))
     project_id = factory.Faker('random_int')
     state = 'opened'
     due_date = gl_format_date(datetime.now())

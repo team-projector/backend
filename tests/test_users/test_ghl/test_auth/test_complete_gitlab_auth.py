@@ -2,16 +2,19 @@ from apps.users.graphql.mutations.gitlab.complete_gitlab_auth import (
     CompleteGitlabAuthMutation,
 )
 from apps.users.models import Token
+from tests.helpers.httpretty_mock import RequestCallbackFactory
 from tests.test_development.factories_gitlab import AttrDict
 
 
 def test_complete_auth(user, client, gl_mocker):
     gl_mocker.registry_get('/user', {'username': user.login})
 
-    gl_mocker._registry_url(
+    gl_mocker.registry_url(
         method='POST',
         uri='https://gitlab.com/oauth/token',
-        data={'access_token': 'TEST_TOKEN'},
+        request_callback=RequestCallbackFactory({
+            'access_token': 'TEST_TOKEN',
+        }),
         priority=1
     )
 
@@ -39,10 +42,12 @@ def test_complete_auth(user, client, gl_mocker):
 def test_user_not_existed(db, client, gl_mocker):
     gl_mocker.registry_get('/user', {'username': 'test user'})
 
-    gl_mocker._registry_url(
+    gl_mocker.registry_url(
         method='POST',
         uri='https://gitlab.com/oauth/token',
-        data={'access_token': 'TEST_TOKEN'},
+        request_callback=RequestCallbackFactory({
+            'access_token': 'TEST_TOKEN',
+        }),
         priority=1
     )
 

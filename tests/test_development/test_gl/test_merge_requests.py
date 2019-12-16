@@ -251,8 +251,10 @@ def test_load_merge_requests_server_error(db, gl_mocker):
 
     gl_project = AttrDict(GlProjectFactory())
     ProjectFactory.create(gl_id=gl_project.id)
-    gl_mocker.registry_get(f'/projects/{gl_project.id}',
-                           status_code=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    gl_mocker.registry_get(
+        f'/projects/{gl_project.id}',
+        status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+    )
 
     with pytest.raises(GitlabGetError):
         MergeRequestGlManager().sync_merge_requests()
@@ -264,8 +266,10 @@ def test_load_merge_requests_not_found(db, gl_mocker):
 
     gl_project = AttrDict(GlProjectFactory())
     ProjectFactory.create(gl_id=gl_project.id)
-    gl_mocker.registry_get(f'/projects/{gl_project.id}',
-                           status_code=status.HTTP_404_NOT_FOUND)
+    gl_mocker.registry_get(
+        f'/projects/{gl_project.id}',
+        status_code=status.HTTP_404_NOT_FOUND,
+    )
 
     MergeRequestGlManager().sync_merge_requests()
 
@@ -275,13 +279,16 @@ def _registry_merge_request(gl_mocker, gl_project, gl_merge_request):
                            [gl_merge_request])
     gl_mocker.registry_get(
         f'/projects/{gl_project.id}/merge_requests/{gl_merge_request.iid}',
-        gl_merge_request)
+        gl_merge_request,
+    )
     gl_mocker.registry_get(
         f'/projects/{gl_project.id}/merge_requests/{gl_merge_request.iid}/time_stats',
-        GlTimeStats())
+        GlTimeStats(),
+    )
     gl_mocker.registry_get(
         f'/projects/{gl_project.id}/merge_requests/{gl_merge_request.iid}/closed_by',
-        [])
+        [],
+    )
     gl_mocker.registry_get(f'/projects/{gl_project.id}/labels', [])
     gl_mocker.registry_get(
         f'/projects/{gl_project.id}/merge_requests/{gl_merge_request.iid}/notes',

@@ -21,8 +21,10 @@ from tests.test_users.factories.user import UserFactory
 
 
 class GitlabFieldMixin(factory.django.DjangoModelFactory):
-    gl_id = factory.Sequence(lambda i: i)
-    gl_url = factory.Sequence(lambda s: f'https://team-projector-{s}.com')
+    gl_id = factory.Sequence(lambda seq: seq)
+    gl_url = factory.Sequence(
+        lambda seq: 'https://team-projector-{0}.com'.format(seq),
+    )
 
 
 class ProjectGroupFactory(GitlabFieldMixin):

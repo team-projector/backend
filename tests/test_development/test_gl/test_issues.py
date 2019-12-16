@@ -104,8 +104,6 @@ def test_load_issue_notes(db, gl_mocker, gl_client):
 
 @override_settings(GITLAB_TOKEN='GITLAB_TOKEN')
 def test_load_for_project(db, gl_mocker, gl_client):
-    gl_mocker.registry_get('/user', GlUserFactory())
-
     gl_project = AttrDict(GlProjectFactory())
     project = ProjectFactory.create(gl_id=gl_project.id)
     gl_mocker.registry_get(f'/projects/{gl_project.id}', gl_project)
@@ -182,9 +180,10 @@ def test_load_for_project_all(db, gl_mocker):
     gl_mocker.registry_get('/user', GlUserFactory())
 
     gl_project = AttrDict(GlProjectFactory())
-    project = ProjectFactory.create(gl_id=gl_project.id,
-                                    gl_last_issues_sync=timezone.now() - timezone.timedelta(
-                                        days=10))
+    project = ProjectFactory.create(
+        gl_id=gl_project.id,
+        gl_last_issues_sync=timezone.now() - timezone.timedelta(days=10),
+    )
     gl_mocker.registry_get(f'/projects/{gl_project.id}', gl_project)
 
     gl_assignee = AttrDict(GlUserFactory())
@@ -235,8 +234,10 @@ def test_load_issues_server_error(db, gl_mocker):
 
     gl_project = AttrDict(GlProjectFactory())
     ProjectFactory.create(gl_id=gl_project.id)
-    gl_mocker.registry_get(f'/projects/{gl_project.id}',
-                           status_code=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    gl_mocker.registry_get(
+        f'/projects/{gl_project.id}',
+        status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+    )
 
     with pytest.raises(GitlabGetError):
         IssueGlManager().sync_issues()
@@ -303,8 +304,11 @@ def test_load_merge_requests(db, gl_mocker, gl_client):
     gl_mocker.registry_get(f'/projects/{gl_project.id}', gl_project)
 
     gl_issue = AttrDict(GlIssueFactory())
-    issue = IssueFactory.create(gl_id=gl_issue.id, gl_iid=gl_issue.iid,
-                                project=project)
+    issue = IssueFactory.create(
+        gl_id=gl_issue.id,
+        gl_iid=gl_issue.iid,
+        project=project,
+    )
     gl_mocker.registry_get(f'/projects/{gl_project.id}/issues/{gl_issue.iid}',
                            gl_issue)
 
@@ -312,8 +316,12 @@ def test_load_merge_requests(db, gl_mocker, gl_client):
     gl_mocker.registry_get(f'/users/{gl_user.id}', gl_user)
 
     gl_merge_request = AttrDict(
-        GlMergeRequestFactory(project_id=gl_project.id, assignee=gl_user,
-                              author=gl_user, state='closed'))
+        GlMergeRequestFactory(
+            project_id=gl_project.id,
+            assignee=gl_user,
+            author=gl_user,
+            state='closed'),
+    )
     _registry_merge_request(gl_mocker, gl_project, gl_merge_request)
 
     gl_mocker.registry_get(
@@ -380,7 +388,10 @@ def test_load_merge_request_existed(db, gl_mocker, gl_client):
 
 
 def _registry_issue(gl_mocker, gl_project, gl_issue):
-    gl_mocker.registry_get(f'/projects/{gl_project.id}/issues', [gl_issue])
+    gl_mocker.registry_get(
+        f'/projects/{gl_project.id}/issues',
+        [gl_issue],
+    )
     gl_mocker.registry_get(f'/projects/{gl_project.id}/issues/{gl_issue.iid}',
                            gl_issue)
     gl_mocker.registry_get(
@@ -388,7 +399,10 @@ def _registry_issue(gl_mocker, gl_project, gl_issue):
         GlTimeStats())
     gl_mocker.registry_get(
         f'/projects/{gl_project.id}/issues/{gl_issue.iid}/closed_by', [])
-    gl_mocker.registry_get(f'/projects/{gl_project.id}/labels', [])
+    gl_mocker.registry_get(
+        f'/projects/{gl_project.id}/labels',
+        [],
+    )
     gl_mocker.registry_get(
         f'/projects/{gl_project.id}/issues/{gl_issue.iid}/notes', [])
     gl_mocker.registry_get(

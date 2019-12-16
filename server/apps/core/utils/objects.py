@@ -11,6 +11,6 @@ class ObjectView:
         self.__dict__ = dictionary
 
 
-def dict2obj(dictionary: Dict) -> object:
+def dict2obj(dictionary: Dict) -> ObjectView:
     """Create ObjectView from dictionary."""
     return ObjectView(dictionary)

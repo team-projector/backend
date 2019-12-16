@@ -2,24 +2,20 @@
 
 from django.test import override_settings
 
-from apps.users.models import User
-from tests.helpers.base import model_admin
 from tests.test_development.checkers_gitlab import check_user
-from tests.test_development.factories_gitlab import AttrDict, GlUserFactory
+from tests.test_development.factories_gitlab import GlUserFactory
 from tests.test_users.factories.user import UserFactory
 
 
 @override_settings(GITLAB_TOKEN='GITLAB_TOKEN')
-def test_sync_handler(db, gl_mocker):
-    ma_user = model_admin(User)
+def test_sync_handler(user_admin, db, gl_mocker):
+    """Test user sync from admin."""
+    gl_user = GlUserFactory()
 
-    gl_mocker.registry_get('/user', GlUserFactory())
+    user = UserFactory.create(gl_id=gl_user['id'])
+    gl_mocker.registry_get('/users/{0}'.format(gl_user['id']), gl_user)
 
-    gl_user = AttrDict(GlUserFactory())
-    user = UserFactory.create(gl_id=gl_user.id)
-    gl_mocker.registry_get(f'/users/{gl_user.id}', gl_user)
-
-    ma_user.sync_handler(user)
+    user_admin.sync_handler(user)
 
     user.refresh_from_db()
     check_user(user, gl_user)
