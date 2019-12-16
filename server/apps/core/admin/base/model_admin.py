@@ -27,16 +27,16 @@ class BaseModelAdmin(
         ref = request.META.get('HTTP_REFERER', '')
         path = request.META.get('PATH_INFO', '')
 
-        if request.GET or (ref and ref.endswith(path)):
+        default_filters = self.get_default_filters(request)
+
+        if request.GET or (ref and ref.endswith(path)) or not default_filters:
             return super().changelist_view(
                 request,
                 extra_context=extra_context,
             )
 
-        default_filters = self.get_default_filters(request)
-        if default_filters:
-            query = urlencode(default_filters)
-            return redirect('{0}?{1}'.format(path, query))
+        query = urlencode(default_filters)
+        return redirect('{0}?{1}'.format(path, query))
 
     def get_default_filters(self, request: HttpRequest) -> Dict[str, str]:
         """Set default filters to the page."""
