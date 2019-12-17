@@ -66,4 +66,6 @@ class ProjectGlManager:
         else:
             self.webhook_manager.check_project_webhooks(project)
 
-        logger.info('{0} done'.format(msg))
+        logger.info('{msg} done', extra={
+            'msg': msg,
+        })

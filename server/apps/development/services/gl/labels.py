@@ -199,22 +199,28 @@ class LabelsCleaner:
 
     def _show_changes(self, parent, indent=0) -> None:
         logger.debug(
-            '{0} - {1}:'.format('\t' * indent, parent.gl_api_object.name),
+            '{indent} - {name}:', extra={
+                'indent': '\t' * indent,
+                'name': parent.gl_api_object.name,
+            },
         )
         indent += 1
-        logger.debug('{0} Before: {1}'.format(
-            '\t' * indent,
-            [label.name for label in parent.initial_labels.values()],
-        ))
-
-        logger.debug('{0} After: {1}\n'.format(
-            '\t' * indent,
-            [
+        logger.debug('{indent} Before: {labels}', extra={
+            'indent': '\t' * indent,
+            'labels': [
                 label.name
-                for label
-                in parent.labels.values() if len(label.name.split('__')) != 3
+                for label in parent.initial_labels.values()
             ],
-        ))
+        })
+
+        logger.debug('{indent} After: {labels}\n', extra={
+            'indent': '\t' * indent,
+            'labels': [
+                label.name
+                for label in parent.labels.values()
+                if len(label.name.split('__')) != 3
+            ],
+        })
 
         indent += 1
         if isinstance(parent, Group):
@@ -265,12 +271,10 @@ class LabelsCleaner:
             if len(label.name.split('__')) != 3:
                 continue
 
-            logger.debug(
-                'Removing label {0} from {1}'.format(
-                    label.name,
-                    gl_api_obj.web_url,
-                ),
-            )
+            logger.debug('Removing label {name} from {url}', extra={
+                'name': label.name,
+                'url': gl_api_obj.web_url,
+            })
 
             deleted.add(label.id)
 
@@ -330,9 +334,10 @@ def _adjust_label_match(
         )
 
         if new_label:
-            logger.debug('"{0}" will be renamed to "{1}"'.format(
-                label.name, new_label.name,
-            ))
+            logger.debug('"{name}" will be renamed to "{new_name}"', extra={
+                'name': label.name,
+                'new_name': new_label.name,
+            })
             renamed_labels[new_label.id] = new_label
     else:
         renamed_labels[label.id] = label
