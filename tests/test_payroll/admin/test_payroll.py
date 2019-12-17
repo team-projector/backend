@@ -15,7 +15,11 @@ def test_payroll_instance_str(db):
     user = UserFactory.create()
     payroll = Payroll.objects.create(created_by=user, user=user)
 
-    assert str(payroll) == f'{user} [{payroll.created_at}]: {payroll.sum}'
+    assert str(payroll) == '{0} [{1}]: {2}'.format(
+        user,
+        payroll.created_at,
+        payroll.sum,
+    )
 
 
 def test_inheritance_bonus(db):

@@ -23,7 +23,11 @@ def test_salary_instance_str(db):
     user = UserFactory.create()
     salary = SalaryFactory.create(user=user)
 
-    assert str(salary) == f'{user} [{salary.created_at}]: {salary.sum}'
+    assert str(salary) == '{0} [{1}]: {2}'.format(
+        user,
+        salary.created_at,
+        salary.sum,
+    )
 
 
 def test_get_urls():
