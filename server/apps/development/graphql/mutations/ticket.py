@@ -1,49 +1,82 @@
 # -*- coding: utf-8 -*-
 
+from typing import Any, Dict, Optional
+
 import graphene
+from graphql import ResolveInfo
 from rest_framework.generics import get_object_or_404
 
-from apps.core.graphql.mutations import (
-    BaseMutation,
-    RestrictedAccessSerializerMutation,
-)
+from apps.core.graphql.helpers.persisters import update_from_validated_data
+from apps.core.graphql.mutations import BaseMutation, SerializerMutation
 from apps.core.graphql.security.permissions import AllowProjectManager
-from apps.development.graphql.serializers.ticket import (
-    TicketCreateSerializer,
-    TicketUpdateSerializer,
+from apps.development.graphql.mutations.inputs.ticket_create import (
+    TicketCreateInput,
+)
+from apps.development.graphql.mutations.inputs.ticket_update import (
+    TicketUpdateInput,
 )
 from apps.development.graphql.types import TicketType
-from apps.development.models import Ticket
+from apps.development.models import Issue, Ticket
 
 
-class BaseTicketMutation(RestrictedAccessSerializerMutation):
-    """Base ticket mutation."""
-
-    permission_classes = (AllowProjectManager,)
-    ticket = graphene.Field(TicketType)
-
-    class Meta:
-        abstract = True
-
-    @classmethod
-    def perform_mutate(cls, serializer, info):  # noqa: WPS110
-        """Performs ticket mutation and returns a payload."""
-        ticket = serializer.save()
-        return cls(errors=None, ticket=ticket)
-
-
-class CreateTicketMutation(BaseTicketMutation):
+class CreateTicketMutation(SerializerMutation):
     """Create ticket mutation."""
 
+    ticket = graphene.Field(TicketType)
+    permission_classes = (AllowProjectManager,)
+
     class Meta:
-        serializer_class = TicketCreateSerializer
+        serializer_class = TicketCreateInput
+
+    @classmethod
+    def perform_mutate(
+        cls,
+        root: Optional[object],
+        info: ResolveInfo,  # noqa: WPS110
+        validated_data: Dict[str, Any],
+    ) -> 'CreateTicketMutation':
+        issues = validated_data.pop('issues', None)
+        ticket = Ticket.objects.create(**validated_data)
+
+        if issues:
+            ticket.issues.add(*issues)
+
+        return cls(ticket=ticket)
 
 
-class UpdateTicketMutation(BaseTicketMutation):
+class UpdateTicketMutation(SerializerMutation):
     """Update ticket mutation."""
 
+    ticket = graphene.Field(TicketType)
+    permission_classes = (AllowProjectManager,)
+
     class Meta:
-        serializer_class = TicketUpdateSerializer
+        serializer_class = TicketUpdateInput
+
+    @classmethod
+    def perform_mutate(
+        cls,
+        root: Optional[object],
+        info: ResolveInfo,  # noqa: WPS110ø
+        validated_data: Dict[str, Any],
+    ) -> 'UpdateTicketMutation':
+        ticket = validated_data.pop('ticket')
+        attach_issues = validated_data.pop('attach_issues', None)
+        issues = validated_data.pop('issues', None)
+
+        update_from_validated_data(ticket, validated_data)
+
+        if attach_issues:
+            ticket.issues.add(*attach_issues)
+
+        if issues is not None:
+            Issue.objects.filter(ticket=ticket).exclude(
+                id__in=[iss.id for iss in issues],
+            ).update(ticket=None)
+
+            ticket.issues.add(*issues)
+
+        return cls(ticket=ticket)
 
 
 class DeleteTicketMutation(BaseMutation):
