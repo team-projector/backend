@@ -55,7 +55,7 @@ class UserGlManager:
 
     def extract_user_from_data(
         self,
-        gl_user: dict,
+        gl_user,
     ) -> Optional[User]:
         """Retrieve Gitlab user."""
         if not gl_user:

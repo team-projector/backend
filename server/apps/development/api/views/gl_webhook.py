@@ -39,7 +39,7 @@ def gl_webhook(request):
     return HttpResponse()
 
 
-def _sync_issue(body: dict) -> None:
+def _sync_issue(body) -> None:
     project_id = body['project']['id']
     issue_id = body['object_attributes']['iid']
 
@@ -56,7 +56,7 @@ def _sync_issue(body: dict) -> None:
     add_action_task.delay(verb=ACTION_GITLAB_WEBHOOK_TRIGGERED)
 
 
-def _sync_merge_request(body: dict) -> None:
+def _sync_merge_request(body) -> None:
     project_id = body['project']['id']
     merge_request_id = body['object_attributes']['iid']
 

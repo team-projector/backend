@@ -104,7 +104,7 @@ class IssuesProjectSummaryProvider:
 
     def _get_issues_summary(
         self,
-        summaries: dict,
+        summaries,
         project: Project,
         total_issues_count: int,
     ) -> ProjectIssuesSummary:
@@ -151,7 +151,7 @@ class IssuesProjectSummaryProvider:
     def _get_project_qs(
         self,
         summaries_qs: QuerySet,
-    ) -> list:
+    ) -> List[Project]:
         project_ids = [
             summary['project']
             for summary in summaries_qs

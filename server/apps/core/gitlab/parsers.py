@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from datetime import date, datetime
-from typing import Optional
+from typing import Dict, List, Optional
 
 from django.utils.timezone import make_aware
 
@@ -26,7 +26,7 @@ def parse_gl_date(gl_date: str) -> Optional[date]:
     return make_aware(datetime.strptime(gl_date, GITLAB_DATE_FORMAT)).date()
 
 
-def parse_state_merged(states: list) -> bool:
+def parse_state_merged(states: List[Dict[str, str]]) -> bool:
     """Check whether state merged is exists."""
     if not states:
         return False

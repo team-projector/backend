@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from typing import Union
+from typing import Dict, Union
 
 from apps.core.gitlab.parsers import parse_gl_date, parse_gl_datetime
 from apps.development.models import Milestone, Project, ProjectGroup
@@ -91,7 +91,7 @@ class MilestoneGlManager:
     def _build_parameters(
         self,
         gl_milestone,
-    ) -> dict:
+    ) -> Dict[str, object]:
         return {
             'gl_id': gl_milestone.id,
             'gl_iid': gl_milestone.iid,

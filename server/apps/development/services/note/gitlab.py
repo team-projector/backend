@@ -10,18 +10,19 @@ from apps.core.gitlab.parsers import parse_gl_date, parse_gl_datetime
 from apps.core.utils.time import seconds
 from apps.development.models.note import NOTE_TYPES
 
-RE_SPEND_FULL: Pattern = re.compile(
+RE_SPEND_FULL: Pattern[str] = re.compile(
     r'^(?P<action>(added|subtracted)) (?P<spent>.+) '
     + r'of time spent at (?P<date>\d{4}-\d{2}-\d{2})$',
 )
-RE_SPEND_SHORT: Pattern = re.compile(
+RE_SPEND_SHORT: Pattern[str] = re.compile(
     r'^(?P<action>(added|subtracted)) (?P<spent>.+) of time spent$',
 )
-RE_SPEND_PART: Pattern = re.compile(r'(?P<value>\d+)(?P<part>(mo|w|d|h|m|s))')
+RE_SPEND_PART: Pattern[str] = re.compile(
+    r'(?P<value>\d+)(?P<part>(mo|w|d|h|m|s))',
+)
+RE_MOVED_FROM: Pattern[str] = re.compile(r'^moved from .+#\d+$')
 
 SPEND_RESET_MESSAGE = 'removed time spent'
-
-RE_MOVED_FROM: Pattern = re.compile(r'^moved from .+#\d+$')
 
 WEEK_PER_MONTH = 4
 DAYS_PER_WEEK = 5

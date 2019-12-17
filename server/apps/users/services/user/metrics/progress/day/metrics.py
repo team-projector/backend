@@ -115,7 +115,7 @@ class UserDaysMetricsGenerator:
     def _apply_deadline_issues_loading(
         self,
         metric: provider.UserProgressMetrics,
-        active_issues: List[dict],
+        active_issues: List[Dict[str, object]],
     ) -> None:
         deadline_issues = [
             issue
@@ -130,7 +130,7 @@ class UserDaysMetricsGenerator:
     def _apply_active_issues_loading(
         self,
         metric: provider.UserProgressMetrics,
-        active_issues: List[dict],
+        active_issues: List[Dict[str, object]],
     ) -> None:
         for issue in active_issues[:]:
             available_time = self._max_day_loading - metric.loading

@@ -1,17 +1,22 @@
 # -*- coding: utf-8 -*-
 
+from typing import Dict
+
+from graphql import ResolveInfo
 from graphql.utils.ast_to_dict import ast_to_dict
 
 
 def collect_fields(
     node,
-    fragments,
-) -> dict:
+    fragments: Dict[str, object],
+):
     """Collect fields."""
     field = {}
 
-    if node.get('selection_set'):
-        for leaf in node['selection_set']['selections']:
+    selection_set = node.get('selection_set')
+
+    if selection_set:
+        for leaf in selection_set['selections']:
             if leaf['kind'] == 'Field':
                 field.update({
                     leaf['name']['value']: collect_fields(leaf, fragments),
@@ -24,7 +29,7 @@ def collect_fields(
     return field
 
 
-def get_fields_from_info(info) -> dict:  # noqa: WPS110
+def get_fields_from_info(info: ResolveInfo):  # noqa: WPS110
     """Get fields from info."""
     fragments = {}
     node = ast_to_dict(info.field_asts[0])
@@ -36,7 +41,7 @@ def get_fields_from_info(info) -> dict:  # noqa: WPS110
 
 
 def is_field_selected(
-    info,  # noqa: WPS110
+    info: ResolveInfo,  # noqa: WPS110
     path: str,
 ) -> bool:
     """Is field selected."""

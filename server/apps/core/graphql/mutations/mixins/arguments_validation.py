@@ -3,6 +3,7 @@
 from typing import Dict, Type, Union
 
 from django.forms import Form
+from graphql import ResolveInfo
 from rest_framework.exceptions import ValidationError
 
 from apps.core.graphql.mutations import BaseMutation
@@ -29,6 +30,10 @@ class ArgumentsValidationMixin:
         return cls.perform_mutate(info, form.cleaned_data)
 
     @classmethod
-    def perform_mutate(cls, info, cleaned_data: Dict) -> None:  # noqa: WPS110
+    def perform_mutate(
+        cls,
+        info: ResolveInfo,  # noqa: WPS110
+        cleaned_data: Dict[str, object],
+    ) -> None:
         """Method should be implemente in subclass."""
         raise NotImplementedError

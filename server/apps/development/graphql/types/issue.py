@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+from typing import List
+
 import graphene
 from django.db.models import QuerySet
 
@@ -20,7 +22,7 @@ class IssueType(graphql.BaseDjangoObjectType):
 
     class Meta:
         model = Issue
-        filter_fields: list = []
+        filter_fields: List[str] = []
         interfaces = (graphql.DatasourceRelayNode, WorkItem)
         connection_class = graphql.DataSourceConnection
         name = 'Issue'

@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+from typing import List
+
 from django.core.exceptions import PermissionDenied
 from django.db.models import Q, QuerySet
 
@@ -28,7 +30,7 @@ def filter_allowed_for_user(
     return queryset.filter(id__in=milestones_ids)
 
 
-def get_members(user: User) -> list:
+def get_members(user: User) -> List[ProjectMember]:
     """Get project managers."""
     members = ProjectMember.objects.filter(
         user=user,
@@ -45,8 +47,8 @@ def get_members(user: User) -> list:
 
 def get_group_milestones(
     groups: QuerySet,
-    milestones_ids: list,
-) -> list:
+    milestones_ids: List[int],
+) -> List[int]:
     """Get milestones of groups."""
     milestones_on_level = Milestone.objects.filter(
         Q(project_group__in=groups) | Q(project__group__in=groups),

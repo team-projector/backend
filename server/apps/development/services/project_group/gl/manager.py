@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import logging
-from typing import Optional
+from typing import Dict, Optional
 
 from gitlab.v4 import objects as gl
 
@@ -39,7 +39,7 @@ class ProjectGroupGlManager:
         self,
         gl_group: gl.Group,
         gl_groups: gl.Group,
-        gl_groups_map: dict,
+        gl_groups_map: Dict[int, gl.Group],
     ) -> ProjectGroup:
         """Sync group with gitlab."""
         parent = None

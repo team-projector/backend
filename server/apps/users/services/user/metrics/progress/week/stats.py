@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from datetime import date
+from typing import Dict
 
 from django.db.models import Count, F, FloatField, Sum
 from django.db.models.functions import Cast, Coalesce, TruncDate, TruncWeek
@@ -26,7 +27,7 @@ class UserWeekStatsProvider:
         self._start = start
         self._end = end
 
-    def get_time_spents(self) -> dict:
+    def get_time_spents(self) -> Dict[date, Dict[str, int]]:
         """Get user time spents."""
         queryset = SpentTime.objects.annotate(
             week=TruncWeek('date'),
@@ -45,7 +46,7 @@ class UserWeekStatsProvider:
             for stats in queryset
         }
 
-    def get_deadlines_stats(self) -> dict:
+    def get_deadlines_stats(self) -> Dict[date, Dict[str, int]]:
         """Get user deadlines."""
         queryset = Issue.objects.annotate(
             week=TruncWeek('due_date'),
@@ -66,7 +67,7 @@ class UserWeekStatsProvider:
             for stats in queryset
         }
 
-    def get_efficiency_stats(self) -> dict:
+    def get_efficiency_stats(self) -> Dict[date, Dict[str, float]]:
         """Get user efficiency."""
         queryset = Issue.objects.annotate(
             week=TruncWeek(TruncDate('closed_at')),
@@ -95,7 +96,7 @@ class UserWeekStatsProvider:
             for stats in queryset
         }
 
-    def get_payrolls_stats(self) -> dict:
+    def get_payrolls_stats(self) -> Dict[date, Dict[str, float]]:
         """Get user payrolls."""
         queryset = SpentTime.objects.annotate(
             week=TruncWeek('date'),

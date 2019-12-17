@@ -92,7 +92,7 @@ class IssuesTeamSummaryProvider:
 
     def _get_issues_summary(
         self,
-        summaries: dict,
+        summaries,
         team: Team,
         total_issues_count: int,
     ) -> TeamIssuesSummary:
