@@ -1,8 +1,7 @@
 # -*- coding: utf-8 -*-
 
-
 from datetime import date, datetime
-from typing import Any, Dict, List
+from typing import Dict, List
 
 from django.conf import settings
 
@@ -22,7 +21,7 @@ class UserDaysMetricsGenerator:
         user: User,
         start: date,
         end: date,
-        active_issues: List[Dict[str, Any]],
+        active_issues: List[Dict[str, object]],
     ):
         """Initializing."""
         self._user = user

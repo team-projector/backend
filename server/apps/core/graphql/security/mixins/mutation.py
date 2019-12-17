@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from typing import Any
+from typing import Optional
 
 from graphql import ResolveInfo
 
@@ -15,7 +15,7 @@ class AuthMutation:
     @classmethod
     def has_permission(
         cls,
-        root: Any,
+        root: Optional[object],
         info: ResolveInfo,  # noqa: WPS110
         **kwargs,
     ) -> bool:

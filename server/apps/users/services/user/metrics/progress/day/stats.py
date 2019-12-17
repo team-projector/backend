@@ -1,10 +1,14 @@
 # -*- coding: utf-8 -*-
 
+from datetime import date
+from typing import Dict
+
 from django.db.models import Case, Count, F, IntegerField, Q, Sum, Value, When
 from django.db.models.functions import Coalesce, TruncDay
 
 from apps.development.models.issue import ISSUE_STATES, Issue
 from apps.payroll.models import SpentTime
+from apps.users.models import User
 
 
 class UserDayStatsProvider:
@@ -12,10 +16,10 @@ class UserDayStatsProvider:
 
     def get_time_spents(
         self,
-        user,
-        start,
-        end,
-    ) -> dict:
+        user: User,
+        start: date,
+        end: date,
+    ) -> Dict[date, Dict[str, int]]:
         """Get user time spents in range."""
         queryset = SpentTime.objects.annotate(
             day=TruncDay('date'),
@@ -34,7 +38,7 @@ class UserDayStatsProvider:
             for stats in queryset
         }
 
-    def get_due_day_stats(self, user) -> dict:
+    def get_due_day_stats(self, user: User) -> Dict[date, Dict[str, int]]:
         """Get user due days."""
         queryset = Issue.objects.annotate(
             due_date_truncated=TruncDay('due_date'),
@@ -63,7 +67,7 @@ class UserDayStatsProvider:
             for stats in queryset
         }
 
-    def get_payrolls_stats(self, user) -> dict:
+    def get_payrolls_stats(self, user: User) -> Dict[date, Dict[str, int]]:
         """Get user payrolls."""
         queryset = SpentTime.objects.annotate(
             date_truncated=TruncDay('date'),

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from typing import Any, Tuple
+from typing import Tuple
 
 from django.db import models
 from django.db.models import QuerySet
@@ -10,7 +10,7 @@ from django.utils import timezone
 class ProjectGroupManager(models.Manager):
     """The project group manager."""
 
-    def update_from_gitlab(self, gl_id, **kwargs) -> Tuple[Any, bool]:
+    def update_from_gitlab(self, gl_id, **kwargs) -> Tuple[models.Model, bool]:
         """Save project group by Gitlab id."""
         kwargs['gl_last_sync'] = timezone.now()
 

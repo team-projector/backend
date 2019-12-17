@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from typing import Any, Tuple
+from typing import Tuple
 
 from django.db import models
 from django.db.models import QuerySet
@@ -12,7 +12,7 @@ from apps.users.models import User
 class IssueManager(models.Manager):
     """The issue model manager."""
 
-    def update_from_gitlab(self, gl_id, **kwargs) -> Tuple[Any, bool]:
+    def update_from_gitlab(self, gl_id, **kwargs) -> Tuple[models.Model, bool]:
         """Save issue by Gitlab id."""
         kwargs['gl_last_sync'] = timezone.now()
 

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from datetime import datetime, timedelta
-from typing import Any, Dict, List
+from typing import Dict, List
 
 from django.db.models import F
 
@@ -63,7 +63,7 @@ class DayMetricsProvider(provider.ProgressMetricsProvider):
     def _replay_loading(
         self,
         now,
-        active_issues: List[Dict[str, Any]],
+        active_issues: List[Dict[str, object]],
         generator: UserDaysMetricsGenerator,
     ) -> None:
         current = now
@@ -76,7 +76,7 @@ class DayMetricsProvider(provider.ProgressMetricsProvider):
 
             current += DAY_STEP
 
-    def _get_active_issues(self) -> List[Dict[str, Any]]:
+    def _get_active_issues(self) -> List[Dict[str, object]]:
         """Get open issues with time remains."""
         return list(
             Issue.objects.annotate(

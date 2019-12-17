@@ -33,7 +33,7 @@ class CreateTicketMutation(SerializerMutation):
         cls,
         root: Optional[object],
         info: ResolveInfo,  # noqa: WPS110
-        validated_data: Dict[str, Any],
+        validated_data: Dict[str, object],
     ) -> 'CreateTicketMutation':
         """Overrideable mutation operation."""
         issues = validated_data.pop('issues', None)
@@ -55,7 +55,7 @@ class UpdateTicketMutation(SerializerMutation):
         serializer_class = TicketUpdateInput
 
     @classmethod
-    def perform_mutate(
+    def perform_mutate(  # type: ignore
         cls,
         root: Optional[object],
         info: ResolveInfo,  # noqa: WPS110ø

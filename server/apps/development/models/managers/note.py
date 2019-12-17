@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from typing import Any
+from typing import Optional
 
 from django.db import models
 
@@ -10,7 +10,7 @@ from apps.core.gitlab.parsers import parse_gl_datetime
 class NoteManager(models.Manager):
     """The note model manager."""
 
-    def update_from_gitlab(self, gl_note, issue) -> Any:
+    def update_from_gitlab(self, gl_note, issue) -> Optional[models.Model]:
         """Parse note and save from Gitlab."""
         from apps.development.services.note.gitlab import (  # noqa: WPS433
             read_note,

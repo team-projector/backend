@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from typing import Any, Tuple
+from typing import Tuple
 
 from django.db import models
 from django.utils import timezone
@@ -13,7 +13,7 @@ class MilestoneManager(models.Manager):
         self,
         gl_id,
         **kwargs,
-    ) -> Tuple[Any, bool]:
+    ) -> Tuple[models.Model, bool]:
         """Save milestone by Gitlab id."""
         kwargs['gl_last_sync'] = timezone.now()
 

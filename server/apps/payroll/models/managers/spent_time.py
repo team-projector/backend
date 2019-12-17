@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
 
-from typing import Any
-
 from django.db import models
 from django.db.models import Case, F, FloatField, Q, QuerySet, Sum, When
 from django.db.models.functions import Coalesce
@@ -80,10 +78,10 @@ class SpentTimeQuerySet(models.QuerySet):
         return Coalesce(Sum('time_spent', filter=Q(**filters)), 0)
 
 
-BaseSpentTimeManager: Any = BaseManager.from_queryset(SpentTimeQuerySet)
+BaseSpentTimeManager: type = BaseManager.from_queryset(SpentTimeQuerySet)
 
 
-class SpentTimeManager(BaseSpentTimeManager):
+class SpentTimeManager(BaseSpentTimeManager):  # type: ignore
     """The Spent Time model manager."""
 
     def allowed_for_user(self, user):
