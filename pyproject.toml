@@ -51,6 +51,7 @@ wemake-python-styleguide = "*"
 polint = "*"
 dennis = "*"
 safety = "*"
+xenon = "^0.7.0"
 
 
 [build-system]

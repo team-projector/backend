@@ -4,7 +4,7 @@ import re
 import types
 from collections import defaultdict, namedtuple
 from functools import partial
-from typing import DefaultDict, Optional, Pattern
+from typing import DefaultDict, Match, Optional, Pattern
 
 from apps.core.gitlab.parsers import parse_gl_date, parse_gl_datetime
 from apps.core.utils.time import seconds
@@ -82,10 +82,7 @@ def parse_spend(spent: str) -> int:
 class BaseNoteParser:
     """A base class note parser."""
 
-    def parse(
-        self,
-        gl_note,
-    ) -> Optional[NoteReadResult]:
+    def parse(self, gl_note) -> Optional[NoteReadResult]:
         """Method should be implemented."""
         raise NotImplementedError
 
@@ -93,10 +90,7 @@ class BaseNoteParser:
 class SpendAddedParser(BaseNoteParser):
     """Spend added parser."""
 
-    def parse(
-        self,
-        gl_note,
-    ) -> Optional[NoteReadResult]:
+    def parse(self, gl_note) -> Optional[NoteReadResult]:
         """Parse note."""
         match = (
             RE_SPEND_FULL.match(gl_note.body) or  # noqa: W504
@@ -109,27 +103,25 @@ class SpendAddedParser(BaseNoteParser):
         if match.group('action') == 'subtracted':
             spent *= -1
 
-        if match.lastgroup == 'date':
-            date = parse_gl_date(match.group('date'))
-        else:
-            datetime = parse_gl_datetime(gl_note.created_at)
-            date = datetime.date() if datetime is not None else None
-
         return NoteReadResult(
             NOTE_TYPES.TIME_SPEND, {
                 'spent': spent,
-                'date': date,
+                'date': self._extract_date(gl_note, match),
             },
         )
+
+    def _extract_date(self, gl_note, match: Match[str]):
+        if match.lastgroup == 'date':
+            return parse_gl_date(match.group('date'))
+
+        datetime = parse_gl_datetime(gl_note.created_at)
+        return datetime.date() if datetime is not None else None
 
 
 class SpendResetParser(BaseNoteParser):
     """Spend reset parser."""
 
-    def parse(
-        self,
-        gl_note,
-    ) -> Optional[NoteReadResult]:
+    def parse(self, gl_note) -> Optional[NoteReadResult]:
         """Parse note."""
         if gl_note.body == SPEND_RESET_MESSAGE:
             return NoteReadResult(NOTE_TYPES.RESET_SPEND, {})
@@ -140,10 +132,7 @@ class SpendResetParser(BaseNoteParser):
 class MovedFromParser(BaseNoteParser):
     """Moved from parser."""
 
-    def parse(
-        self,
-        gl_note,
-    ) -> Optional[NoteReadResult]:
+    def parse(self, gl_note) -> Optional[NoteReadResult]:
         """Parse note."""
         is_system = getattr(gl_note, 'system', False)  # noqa: WPS425
         if is_system and RE_MOVED_FROM.match(gl_note.body):

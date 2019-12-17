@@ -41,6 +41,7 @@ class IssueGlManager(BaseWorkItemGlManager):
         logger.info('Syncing project "{project}" issues', extra={
             'project': project,
         })
+
         gl_project = self.project_provider.get_gl_project(project)
         if not gl_project:
             return

@@ -46,10 +46,7 @@ class ProjectWebhookManager:
         except GitlabError:
             logger.exception('Error on check project webhook')
 
-    def _check_project_webhooks(
-        self,
-        gl_project: gl.Project,
-    ) -> None:
+    def _check_project_webhooks(self, gl_project: gl.Project) -> None:
         """Validate webhooks for project."""
         hooks = gl_project.hooks.list()
 
@@ -59,6 +56,17 @@ class ProjectWebhookManager:
             if hook.url == self.webhook_url
         ]
 
+        has_valid = self._check_webhooks(tp_webhooks)
+
+        if not has_valid:
+            gl_project.hooks.create({
+                'url': self.webhook_url,
+                'token': settings.GITLAB_WEBHOOK_SECRET_TOKEN,
+                'issues_events': True,
+                'merge_requests_events': True,
+            })
+
+    def _check_webhooks(self, tp_webhooks) -> bool:
         has_valid = False
 
         for webhook in tp_webhooks:
@@ -70,19 +78,9 @@ class ProjectWebhookManager:
             else:
                 webhook.delete()
 
-        if not has_valid:
-            gl_project.hooks.create({
-                'url': self.webhook_url,
-                'token': settings.GITLAB_WEBHOOK_SECRET_TOKEN,
-                'issues_events': True,
-                'merge_requests_events': True,
-            })
+        return has_valid
 
-    def _validate_webhook(
-        self,
-        webhook,
-        webhook_url: str,
-    ) -> bool:
+    def _validate_webhook(self, webhook, webhook_url: str) -> bool:
         """Validate webhook."""
         return (
             webhook.url == webhook_url
