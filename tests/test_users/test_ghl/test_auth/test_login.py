@@ -4,7 +4,7 @@ from pytest import raises
 from rest_framework.exceptions import AuthenticationFailed
 
 from apps.users.models import Token
-from tests.fixtures.users import DEFAULT_USERNAME, DEFAULT_USER_PASSWORD
+from tests.fixtures.users import DEFAULT_USER_PASSWORD, DEFAULT_USERNAME
 
 GHL_QUERY_LOGIN = """
 mutation ($login: String!, $password: String!) {
