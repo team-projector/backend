@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-11-27 17:23+0300\n"
+"POT-Creation-Date: 2019-12-18 10:18+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,6 +16,9 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgid "VN__CORE"
+msgstr "Core"
 
 msgid "VN__GITLAB_ID"
 msgstr "GitLab ID"
@@ -49,6 +52,12 @@ msgstr "Please fill personal gitlab token in profile"
 
 msgid "MSG_SPEND_SHOULD_BE_GREATER_THAN_ONE"
 msgstr "Spend should be greater than one"
+
+msgid "CH_OPENED"
+msgstr "opened"
+
+msgid "CH_CLOSED"
+msgstr "closed"
 
 msgid "VN__TITLE"
 msgstr "Title"
@@ -104,14 +113,8 @@ msgstr "Label"
 msgid "VN__LABELS"
 msgstr "Labels"
 
-msgid "CH_OPENED"
-msgstr "opened"
-
 msgid "CH_MERGED"
 msgstr "merged"
-
-msgid "CH_CLOSED"
-msgstr "closed"
 
 msgid "VN__AUTHOR"
 msgstr "Author"
