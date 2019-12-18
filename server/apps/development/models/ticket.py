@@ -18,6 +18,7 @@ TICKET_TYPES = Choices(
 )
 
 TICKET_TYPE_MAX_LENGTH = 50
+TICKET_ROLE_MAX_LENGTH = 50
 
 
 class Ticket(Timestamps):
@@ -63,6 +64,14 @@ class Ticket(Timestamps):
         related_name='ticket',
         blank=True,
         null=True,
+        verbose_name=_('VN__MILESTONE'),
+    )
+
+    role = models.CharField(
+        max_length=TICKET_ROLE_MAX_LENGTH,
+        blank=True,
+        verbose_name=_('VN__ROLE'),
+        help_text=_('HT__ROLE'),
     )
 
     class Meta:

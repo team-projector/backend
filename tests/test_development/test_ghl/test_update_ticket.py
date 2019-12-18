@@ -11,11 +11,13 @@ from tests.test_development.factories import (
 GHL_QUERY_UPDATE_TICKET = """
 mutation (
     $id: ID!, $attachIssues: [ID!], $type: String, $title: String,
-    $startDate: Date, $dueDate: Date, $url: String, $issues: [ID!]
+    $role: String, $startDate: Date, $dueDate: Date, $url: String,
+    $issues: [ID!]
 ) {
 updateTicket(
     id: $id, attachIssues: $attachIssues, type: $type, title: $title,
-    startDate: $startDate, dueDate: $dueDate, url: $url, issues: $issues
+    startDate: $startDate, dueDate: $dueDate, url: $url, issues: $issues,
+    role: $role
 ) {
     errors{
       field

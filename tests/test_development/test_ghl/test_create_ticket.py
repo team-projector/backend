@@ -13,12 +13,12 @@ from tests.test_development.factories import (
 
 GHL_QUERY_CREATE_TICKET = """
 mutation (
-    $milestone: ID!, $type: String!, $title: String!,
+    $milestone: ID!, $type: String!, $title: String!, $role: String,
     $startDate: Date, $dueDate: Date, $url: String, $issues: [ID!]
 ) {
 createTicket(
     milestone: $milestone, type: $type, title: $title, startDate: $startDate,
-    dueDate: $dueDate, url: $url, issues: $issues
+    dueDate: $dueDate, url: $url, issues: $issues, role: $role
 ) {
     errors{
       field
@@ -60,7 +60,8 @@ def test_success(project_manager, ghl_client, ticket):
             'dueDate': str(datetime.now().date()),
             'url': 'http://test1.com',
             'milestone': str(milestone.id),
-            'issues': [str(iss_1.id), str(iss_2.id)]
+            'issues': [str(iss_1.id), str(iss_2.id)],
+            'role': 'Manager'
         }
     )
 
