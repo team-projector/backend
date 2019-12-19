@@ -3,7 +3,8 @@
 from datetime import date
 from typing import Dict
 
-from django.db.models import Count, F, FloatField, Sum
+from django.db import models
+from django.db.models import Count, FloatField, Sum
 from django.db.models.functions import Cast, Coalesce, TruncDate, TruncWeek
 from django.utils.timezone import make_aware
 
@@ -85,8 +86,8 @@ class UserWeekStatsProvider:
             'week',
         ).annotate(
             avg_efficiency=Coalesce(
-                Cast(Sum(F('time_estimate')), FloatField()) /  # noqa::W504
-                Cast(Sum(F('total_time_spent')), FloatField()),
+                Cast(Sum(models.F('time_estimate')), FloatField())
+                / Cast(Sum(models.F('total_time_spent')), FloatField()),
                 0,
             ),
         ).order_by()

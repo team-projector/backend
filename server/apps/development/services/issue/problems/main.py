@@ -4,7 +4,8 @@ from functools import reduce
 from operator import and_, or_
 from typing import List
 
-from django.db.models import Q, QuerySet
+from django.db import models
+from django.db.models import QuerySet
 
 from apps.development.models.issue import Issue
 from apps.development.services.issue.problems import checkers
@@ -41,7 +42,7 @@ def annotate_issue_problems(queryset: QuerySet) -> QuerySet:
 def filter_issue_problems(queryset: QuerySet) -> QuerySet:
     """Get problems from issues."""
     return queryset.filter(reduce(or_, [
-        Q(**{checker.annotate_field: True})
+        models.Q(**{checker.annotate_field: True})
         for checker in issue_problem_checkers
     ]))
 
@@ -49,6 +50,6 @@ def filter_issue_problems(queryset: QuerySet) -> QuerySet:
 def exclude_issue_problems(queryset: QuerySet) -> QuerySet:
     """Exclude problems from issues."""
     return queryset.filter(reduce(and_, [
-        Q(**{checker.annotate_field: None})
+        models.Q(**{checker.annotate_field: None})
         for checker in issue_problem_checkers
     ]))

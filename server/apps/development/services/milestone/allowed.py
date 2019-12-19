@@ -3,7 +3,8 @@
 from typing import List
 
 from django.core.exceptions import PermissionDenied
-from django.db.models import Q, QuerySet
+from django.db import models
+from django.db.models import QuerySet
 
 from apps.development.models import Milestone, ProjectGroup, ProjectMember
 from apps.development.models.project_member import PROJECT_MEMBER_ROLES
@@ -51,7 +52,8 @@ def get_group_milestones(
 ) -> List[int]:
     """Get milestones of groups."""
     milestones_on_level = Milestone.objects.filter(
-        Q(project_group__in=groups) | Q(project__group__in=groups),
+        models.Q(project_group__in=groups)
+        | models.Q(project__group__in=groups),
     ).values('id')
 
     for milestone in milestones_on_level:

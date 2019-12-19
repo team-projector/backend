@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
-from django.db.models import Count, Q, QuerySet, Sum
+from django.db import models
+from django.db.models import Count, QuerySet, Sum
 from django.db.models.functions import Coalesce
 
 from apps.development.models import Issue
@@ -59,10 +60,10 @@ class IssuesContainerMetricsProvider:
             time_estimate=Coalesce(Sum('time_estimate'), 0),
             time_spent=Coalesce(Sum('total_time_spent'), 0),
             issues_closed_count=Coalesce(
-                Count('id', filter=Q(state=ISSUE_STATES.CLOSED)), 0,
+                Count('id', filter=models.Q(state=ISSUE_STATES.CLOSED)), 0,
             ),
             issues_opened_count=Coalesce(
-                Count('id', filter=Q(state=ISSUE_STATES.OPENED)), 0,
+                Count('id', filter=models.Q(state=ISSUE_STATES.OPENED)), 0,
             ),
             issues_count=Count('*'),
         )

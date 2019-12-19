@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from django.db import models
-from django.db.models import Case, F, FloatField, Q, QuerySet, Sum, When
+from django.db.models import Case, FloatField, QuerySet, Sum, When
 from django.db.models.functions import Coalesce
 from django.db.models.manager import BaseManager
 
@@ -54,7 +54,7 @@ class SpentTimeQuerySet(models.QuerySet):
             queryset = queryset.annotate(
                 paid=Case(
                     When(
-                        salary__isnull=False, then=F('sum'),
+                        salary__isnull=False, then=models.F('sum'),
                     ),
                     default=0,
                     output_field=FloatField(),
@@ -65,7 +65,7 @@ class SpentTimeQuerySet(models.QuerySet):
             queryset = queryset.annotate(
                 payroll=Case(
                     When(
-                        salary__isnull=True, then=F('sum'),
+                        salary__isnull=True, then=models.F('sum'),
                     ),
                     default=0,
                     output_field=FloatField(),
@@ -75,7 +75,7 @@ class SpentTimeQuerySet(models.QuerySet):
         return queryset
 
     def _sum(self, **filters) -> Coalesce:
-        return Coalesce(Sum('time_spent', filter=Q(**filters)), 0)
+        return Coalesce(Sum('time_spent', filter=models.Q(**filters)), 0)
 
 
 BaseSpentTimeManager: type = BaseManager.from_queryset(SpentTimeQuerySet)

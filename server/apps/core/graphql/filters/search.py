@@ -3,7 +3,8 @@
 import operator
 from functools import reduce
 
-from django.db.models import Q, QuerySet
+from django.db import models
+from django.db.models import QuerySet
 from django.db.models.constants import LOOKUP_SEP
 from django.utils import six
 from django_filters import CharFilter
@@ -24,13 +25,13 @@ class SearchFilter(CharFilter):
 
         return queryset.filter(self._construct_condition(search_value))
 
-    def _construct_condition(self, search_value) -> Q:
+    def _construct_condition(self, search_value) -> models.Q:
         orm_lookups = [
             self._construct_search(search_field)
             for search_field in self.fields
         ]
         queries = [
-            Q(**{orm_lookup: search_value})
+            models.Q(**{orm_lookup: search_value})
             for orm_lookup in orm_lookups
         ]
 

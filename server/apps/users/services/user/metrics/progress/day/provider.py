@@ -3,7 +3,7 @@
 from datetime import datetime, timedelta
 from typing import Dict, List
 
-from django.db.models import F
+from django.db import models
 
 from apps.development.models import Issue
 from apps.development.models.issue import ISSUE_STATES
@@ -80,7 +80,9 @@ class DayMetricsProvider(provider.ProgressMetricsProvider):
         """Get open issues with time remains."""
         return list(
             Issue.objects.annotate(
-                remaining=F('time_estimate') - F('total_time_spent'),
+                remaining=(
+                    models.F('time_estimate') - models.F('total_time_spent')
+                ),
             ).filter(
                 user=self.user,
                 remaining__gt=0,

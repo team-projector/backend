@@ -4,8 +4,8 @@ from contextlib import suppress
 from datetime import date
 from decimal import Decimal
 
-from django.db import transaction
-from django.db.models import Q, QuerySet, Sum
+from django.db import models, transaction
+from django.db.models import QuerySet, Sum
 
 from apps.development.models.issue import ISSUE_STATES
 from apps.development.models.merge_request import MERGE_REQUESTS_STATES
@@ -52,11 +52,8 @@ class SalaryCalculator:
 
         salary.sum = spent_data['total_sum'] or 0
         salary.charged_time = spent_data['total_time_spent'] or 0
-
         salary.penalty = self._get_penalty(salary)
-
         salary.bonus = self._get_bonus(salary)
-
         salary.total = salary.sum + salary.bonus - salary.penalty
 
         if user.taxes:
@@ -109,8 +106,8 @@ class SalaryCalculator:
             salary__isnull=True,
             user=user,
         ).filter(
-            Q(issues__state=ISSUE_STATES.CLOSED)
-            | Q(mergerequests__state__in=(
+            models.Q(issues__state=ISSUE_STATES.CLOSED)
+            | models.Q(mergerequests__state__in=(
                 MERGE_REQUESTS_STATES.CLOSED,
                 MERGE_REQUESTS_STATES.MERGED,
             )),

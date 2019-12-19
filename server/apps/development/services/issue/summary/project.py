@@ -3,12 +3,11 @@
 from datetime import datetime
 from typing import List, Optional
 
+from django.db import models
 from django.db.models import (
     Case,
     Count,
-    F,
     IntegerField,
-    Q,
     QuerySet,
     Sum,
     Value,
@@ -125,9 +124,11 @@ class IssuesProjectSummaryProvider:
         return self.queryset.annotate(
             time_remains=Case(
                 When(
-                    Q(time_estimate__gt=F('total_time_spent'))
-                    & ~Q(state=ISSUE_STATES.CLOSED),
-                    then=F('time_estimate') - F('total_time_spent'),
+                    models.Q(time_estimate__gt=models.F('total_time_spent'))
+                    & ~models.Q(state=ISSUE_STATES.CLOSED),
+                    then=(
+                        models.F('time_estimate') - models.F('total_time_spent')
+                    ),
                 ),
                 default=Value(0),
                 output_field=IntegerField(),

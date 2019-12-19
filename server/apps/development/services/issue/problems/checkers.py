@@ -2,7 +2,8 @@
 
 from typing import ClassVar
 
-from django.db.models import Case, NullBooleanField, Q, QuerySet, When
+from django.db import models
+from django.db.models import Case, NullBooleanField, QuerySet, When
 from django.utils.timezone import localdate
 
 from apps.development.models.issue import ISSUE_STATES, Issue
@@ -45,7 +46,7 @@ class EmptyDueDateChecker(BaseProblemChecker):
     def get_condition(self) -> When:
         """Get condition."""
         return When(
-            Q(due_date__isnull=True, state=ISSUE_STATES.OPENED),
+            models.Q(due_date__isnull=True, state=ISSUE_STATES.OPENED),
             then=True,
         )
 
@@ -66,7 +67,7 @@ class OverdueDueDateChecker(BaseProblemChecker):
     def get_condition(self) -> When:
         """Get condition."""
         return When(
-            Q(due_date__lt=localdate(), state=ISSUE_STATES.OPENED),
+            models.Q(due_date__lt=localdate(), state=ISSUE_STATES.OPENED),
             then=True,
         )
 
@@ -88,11 +89,11 @@ class EmptyEstimateChecker(BaseProblemChecker):
     def get_condition(self) -> When:
         """Get condition."""
         return When(
-            Q(
-                Q(time_estimate__isnull=True)
-                | Q(time_estimate=0),
+            models.Q(
+                models.Q(time_estimate__isnull=True)
+                | models.Q(time_estimate=0),
             )
-            & Q(state=ISSUE_STATES.OPENED),
+            & models.Q(state=ISSUE_STATES.OPENED),
             then=True,
         )
 

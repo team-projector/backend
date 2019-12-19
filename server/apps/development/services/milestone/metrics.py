@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
-from django.db.models import Q, QuerySet, Sum
+from django.db import models
+from django.db.models import QuerySet, Sum
 from django.db.models.functions import Coalesce
 
 from apps.development.models import Milestone
@@ -48,8 +49,8 @@ class MilestoneMetricsProvider(IssuesContainerMetricsProvider):
 
     def _fill_payroll_metrics(self, metrics: MilestoneMetrics) -> None:
         payroll = SpentTime.objects.filter(
-            Q(issues__milestone=self.milestone)
-            | Q(mergerequests__milestone=self.milestone),
+            models.Q(issues__milestone=self.milestone)
+            | models.Q(mergerequests__milestone=self.milestone),
         ).aggregate(
             total_sum=Coalesce(Sum('sum'), 0),
             total_customer_sum=Coalesce(Sum('customer_sum'), 0),

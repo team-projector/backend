@@ -3,7 +3,7 @@
 from collections import OrderedDict
 
 from django_filters import OrderingFilter
-from graphene.utils.str_converters import to_camel_case
+from graphene.utils import str_converters
 
 
 class CamelCasedOrderingMixin(OrderingFilter):
@@ -22,7 +22,7 @@ class CamelCasedOrderingMixin(OrderingFilter):
 
         return OrderedDict([
             (key, '__'.join(
-                to_camel_case(choice)
+                str_converters.to_camel_case(choice)
                 for choice in choice_field.split('__')
             ))
             for key, choice_field in

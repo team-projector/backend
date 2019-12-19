@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
-from django.db.models import Q, Sum
+from django.db import models
+from django.db.models import Sum
 from django.db.models.functions import Coalesce
 
 from apps.development.models import MergeRequest
@@ -135,8 +136,8 @@ class UserMetricsProvider:
 
     def _get_payroll_opened(self, user: User) -> float:
         return SpentTime.objects.filter(
-            Q(issues__state=ISSUE_STATES.OPENED)
-            | Q(mergerequests__state=ISSUE_STATES.OPENED),
+            models.Q(issues__state=ISSUE_STATES.OPENED)
+            | models.Q(mergerequests__state=ISSUE_STATES.OPENED),
             salary__isnull=True,
             user=user,
         ).aggregate(
@@ -145,8 +146,8 @@ class UserMetricsProvider:
 
     def _get_payroll_closed(self, user: User) -> float:
         return SpentTime.objects.filter(
-            Q(issues__state=ISSUE_STATES.CLOSED)
-            | Q(mergerequests__state__in=(
+            models.Q(issues__state=ISSUE_STATES.CLOSED)
+            | models.Q(mergerequests__state__in=(
                 MERGE_REQUESTS_STATES.CLOSED,
                 MERGE_REQUESTS_STATES.MERGED,
             )),

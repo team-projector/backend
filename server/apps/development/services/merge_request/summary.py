@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
-from django.db.models import Count, Q, QuerySet
+from django.db import models
+from django.db.models import Count, QuerySet
 
 from apps.development.models.merge_request import MERGE_REQUESTS_STATES
 
@@ -44,7 +45,7 @@ class MergeRequestsSummaryProvider:
         )
 
     def _count(self, **filters) -> Count:
-        return Count('id', filter=Q(**filters))
+        return Count('id', filter=models.Q(**filters))
 
 
 def get_merge_requests_summary(queryset: QuerySet) -> MergeRequestsSummary:

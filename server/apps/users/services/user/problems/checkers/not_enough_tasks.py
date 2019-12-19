@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
-from django.db.models import F, Sum
+from django.db import models
+from django.db.models import Sum
 
 from apps.core.consts import SECONDS_PER_HOUR
 from apps.development.models.issue import ISSUE_STATES, Issue
@@ -44,7 +45,9 @@ class NotEnoughTasksChecker(BaseProblemChecker):
 
     def _aggregate_time_remains(self, queryset) -> int:
         return queryset.annotate(
-            time_remains=F('time_estimate') - F('total_time_spent'),
+            time_remains=(
+                models.F('time_estimate') - models.F('total_time_spent')
+            ),
         ).aggregate(
             total_time_remains=Sum('time_remains'),
         )['total_time_remains'] or 0

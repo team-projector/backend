@@ -2,7 +2,7 @@
 
 from typing import ClassVar, List
 
-from django.db.models import Q
+from django.db import models
 
 from apps.development.models import MergeRequest
 from apps.development.models.merge_request import MERGE_REQUESTS_STATES
@@ -29,11 +29,11 @@ class EmptyEstimateChecker(BaseProblemChecker):
     def merge_request_has_problem(self, merge_request: MergeRequest) -> bool:
         """Current merge request has problem."""
         return merge_request.issues.filter(
-            Q(
-                Q(time_estimate__isnull=True)
-                | Q(time_estimate=0),
+            models.Q(
+                models.Q(time_estimate__isnull=True)
+                | models.Q(time_estimate=0),
             )
-            & Q(state=MERGE_REQUESTS_STATES.OPENED),
+            & models.Q(state=MERGE_REQUESTS_STATES.OPENED),
         ).exists()
 
 

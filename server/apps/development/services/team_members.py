@@ -5,7 +5,8 @@ from operator import or_
 from typing import Iterable, Union
 
 from bitfield import Bit
-from django.db.models import Q, QuerySet
+from django.db import models
+from django.db.models import QuerySet
 
 from apps.development.models import TeamMember
 
@@ -25,6 +26,6 @@ def filter_by_roles(
     return queryset.filter(
         reduce(
             or_,
-            [Q(roles=role) for role in roles],
+            [models.Q(roles=role) for role in roles],
         ),
     )

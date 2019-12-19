@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
-from django.db.models import Count, DecimalField, F, Q, Sum
+from django.db import models
+from django.db.models import Count, DecimalField, Sum
 from django.db.models.functions import Coalesce
 
 from apps.development.models import Issue, Ticket
@@ -51,17 +52,17 @@ class TicketMetricsProvider:
             time_estimate=Coalesce(Sum('time_estimate'), 0),
             time_spent=Coalesce(Sum('total_time_spent'), 0),
             issues_closed_count=Coalesce(
-                Count('id', filter=Q(state=ISSUE_STATES.CLOSED)), 0,
+                Count('id', filter=models.Q(state=ISSUE_STATES.CLOSED)), 0,
             ),
             issues_opened_count=Coalesce(
-                Count('id', filter=Q(state=ISSUE_STATES.OPENED)), 0,
+                Count('id', filter=models.Q(state=ISSUE_STATES.OPENED)), 0,
             ),
             issues_count=Count('*'),
             budget_estimate=Coalesce(
                 Sum(
-                    F('time_estimate')
+                    models.F('time_estimate')
                     / SECS_IN_HOUR
-                    * F('user__customer_hour_rate'),
+                    * models.F('user__customer_hour_rate'),
                     output_field=DecimalField(),
                 ), 0,
             ),

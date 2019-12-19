@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from django.db.models import F
+from django.db import models
 from django_filters import OrderingFilter
 
 
@@ -15,6 +15,6 @@ class NullsAlwaysLastOrderingMixin(OrderingFilter):
         normalized_value = ord_value[1:] if descending else ord_value
 
         if descending:
-            return F(normalized_value).desc(nulls_last=True)
+            return models.F(normalized_value).desc(nulls_last=True)
 
-        return F(normalized_value).asc(nulls_last=True)
+        return models.F(normalized_value).asc(nulls_last=True)

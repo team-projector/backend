@@ -3,7 +3,8 @@
 from datetime import date
 from typing import Dict
 
-from django.db.models import Case, Count, F, IntegerField, Q, Sum, Value, When
+from django.db import models
+from django.db.models import Case, Count, IntegerField, Sum, Value, When
 from django.db.models.functions import Coalesce, TruncDay
 
 from apps.development.models.issue import ISSUE_STATES, Issue
@@ -44,9 +45,12 @@ class UserDayStatsProvider:
             due_date_truncated=TruncDay('due_date'),
             time_remains=Case(
                 When(
-                    Q(time_estimate__gt=F('total_time_spent')) &  # noqa::W504
-                    ~Q(state=ISSUE_STATES.CLOSED),
-                    then=F('time_estimate') - F('total_time_spent'),
+                    models.Q(
+                        time_estimate__gt=models.F('total_time_spent'),
+                    ) & ~models.Q(state=ISSUE_STATES.CLOSED),
+                    then=(
+                        models.F('time_estimate') - models.F('total_time_spent')
+                    ),
                 ),
                 default=Value(0),
                 output_field=IntegerField(),
