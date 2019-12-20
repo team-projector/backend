@@ -67,31 +67,23 @@ class IssuesSummaryProvider:
             count=Count('*'),
         ).order_by()
 
-    def _get_time_spent(self) -> int:  # noqa:: C901
+    def _get_time_spent(self) -> int:
         queryset = SpentTime.objects.filter(issues__isnull=False)
 
-        if self._options.get('due_date'):
-            queryset = queryset.filter(date=self._options['due_date'])
+        filters_map = {
+            'due_date': 'date',
+            'user': 'user',
+            'team': 'user__teams',
+            'project': 'issues__project',
+            'state': 'issues__state',
+            'milestone': 'issues__milestone',
+            'ticket': 'issues__ticket',
+        }
 
-        if self._options.get('user'):
-            queryset = queryset.filter(user=self._options['user'])
-
-        if self._options.get('team'):
-            queryset = queryset.filter(user__teams=self._options['team'])
-
-        if self._options.get('project'):
-            queryset = queryset.filter(issues__project=self._options['project'])
-
-        if self._options.get('state'):
-            queryset = queryset.filter(issues__state=self._options['state'])
-
-        if self._options.get('milestone'):
-            queryset = queryset.filter(
-                issues__milestone=self._options['milestone'],
-            )
-
-        if self._options.get('ticket'):
-            queryset = queryset.filter(issues__ticket=self._options['ticket'])
+        for option, lookup in filters_map.items():
+            option_value = self._options.get(option)
+            if option_value:
+                queryset = queryset.filter(**{lookup: option_value})
 
         return queryset.aggregate(
             total_time_spent=Sum('time_spent'),
