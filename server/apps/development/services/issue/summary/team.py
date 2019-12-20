@@ -3,15 +3,6 @@
 from typing import List, Optional
 
 from django.db import models
-from django.db.models import (
-    Case,
-    Count,
-    IntegerField,
-    QuerySet,
-    Sum,
-    Value,
-    When,
-)
 from django.db.models.functions import Coalesce
 
 from apps.development.models import Team
@@ -39,7 +30,7 @@ class IssuesTeamSummaryProvider:
 
     def __init__(
         self,
-        queryset: QuerySet,
+        queryset: models.QuerySet,
         order_by: Optional[str],
     ):
         """Initialize self."""
@@ -65,7 +56,7 @@ class IssuesTeamSummaryProvider:
     def _apply_summary(
         self,
         summaries: List[IssuesTeamSummary],
-        summaries_qs: QuerySet,
+        summaries_qs: models.QuerySet,
         total_issues_count: int,
     ):
         summaries_team = {
@@ -107,29 +98,29 @@ class IssuesTeamSummaryProvider:
         )
         return issues_summary
 
-    def _get_summaries_qs(self) -> QuerySet:
+    def _get_summaries_qs(self) -> models.QuerySet:
         return self.queryset.annotate(
-            time_remains=Case(
-                When(
+            time_remains=models.Case(
+                models.When(
                     models.Q(time_estimate__gt=models.F('total_time_spent'))
                     & ~models.Q(state=ISSUE_STATES.CLOSED),
                     then=(
                         models.F('time_estimate') - models.F('total_time_spent')
                     ),
                 ),
-                default=Value(0),
-                output_field=IntegerField(),
+                default=models.Value(0),
+                output_field=models.IntegerField(),
             ),
         ).values(
             'user__teams',
         ).annotate(
-            issues_opened_count=Count('*'),
-            total_time_remains=Coalesce(Sum('time_remains'), 0),
+            issues_opened_count=models.Count('*'),
+            total_time_remains=Coalesce(models.Sum('time_remains'), 0),
         ).order_by()
 
     def _get_total_issues_count(
         self,
-        summaries_qs: QuerySet,
+        summaries_qs: models.QuerySet,
     ) -> int:
         return sum(
             summary['issues_opened_count']
@@ -138,8 +129,8 @@ class IssuesTeamSummaryProvider:
 
     def _get_team_qs(
         self,
-        summaries_qs: QuerySet,
-    ) -> QuerySet:
+        summaries_qs: models.QuerySet,
+    ) -> models.QuerySet:
         team_ids = [
             summary['user__teams']
             for summary in summaries_qs
@@ -149,7 +140,7 @@ class IssuesTeamSummaryProvider:
 
 
 def get_team_summaries(
-    queryset: QuerySet,
+    queryset: models.QuerySet,
     order_by: Optional[str] = None,
 ) -> List[IssuesTeamSummary]:
     """Get summaries for team."""

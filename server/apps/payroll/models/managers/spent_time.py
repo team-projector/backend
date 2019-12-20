@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 from django.db import models
-from django.db.models import Case, FloatField, QuerySet, Sum, When
 from django.db.models.functions import Coalesce
 from django.db.models.manager import BaseManager
 
@@ -12,8 +11,8 @@ class SpentTimeQuerySet(models.QuerySet):
     def aggregate_payrolls(self):
         """Get total sum payroll and paid."""
         return self.annotate_payrolls().aggregate(
-            total_payroll=Coalesce(Sum('payroll'), 0),
-            total_paid=Coalesce(Sum('paid'), 0),
+            total_payroll=Coalesce(models.Sum('payroll'), 0),
+            total_paid=Coalesce(models.Sum('paid'), 0),
         )
 
     def summaries(self):
@@ -46,36 +45,38 @@ class SpentTimeQuerySet(models.QuerySet):
         self,
         paid: bool = True,
         payroll: bool = True,
-    ) -> QuerySet:
+    ) -> models.QuerySet:
         """Get total sum payroll or paid."""
         queryset = self
 
         if paid:
             queryset = queryset.annotate(
-                paid=Case(
-                    When(
+                paid=models.Case(
+                    models.When(
                         salary__isnull=False, then=models.F('sum'),
                     ),
                     default=0,
-                    output_field=FloatField(),
+                    output_field=models.FloatField(),
                 ),
             )
 
         if payroll:
             queryset = queryset.annotate(
-                payroll=Case(
-                    When(
+                payroll=models.Case(
+                    models.When(
                         salary__isnull=True, then=models.F('sum'),
                     ),
                     default=0,
-                    output_field=FloatField(),
+                    output_field=models.FloatField(),
                 ),
             )
 
         return queryset
 
     def _sum(self, **filters) -> Coalesce:
-        return Coalesce(Sum('time_spent', filter=models.Q(**filters)), 0)
+        return Coalesce(
+            models.Sum('time_spent', filter=models.Q(**filters)), 0,
+        )
 
 
 BaseSpentTimeManager: type = BaseManager.from_queryset(SpentTimeQuerySet)

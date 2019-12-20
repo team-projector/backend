@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 from django.db import models
-from django.db.models import Count, QuerySet, Sum
 from django.db.models.functions import Coalesce
 
 from apps.development.models import Issue
@@ -57,15 +56,21 @@ class IssuesContainerMetricsProvider:
             return
 
         stats = issues.aggregate(
-            time_estimate=Coalesce(Sum('time_estimate'), 0),
-            time_spent=Coalesce(Sum('total_time_spent'), 0),
+            time_estimate=Coalesce(models.Sum('time_estimate'), 0),
+            time_spent=Coalesce(models.Sum('total_time_spent'), 0),
             issues_closed_count=Coalesce(
-                Count('id', filter=models.Q(state=ISSUE_STATES.CLOSED)), 0,
+                models.Count(
+                    'id',
+                    filter=models.Q(state=ISSUE_STATES.CLOSED),
+                ), 0,
             ),
             issues_opened_count=Coalesce(
-                Count('id', filter=models.Q(state=ISSUE_STATES.OPENED)), 0,
+                models.Count(
+                    'id',
+                    filter=models.Q(state=ISSUE_STATES.OPENED),
+                ), 0,
             ),
-            issues_count=Count('*'),
+            issues_count=models.Count('*'),
         )
 
         metrics.time_estimate = stats['time_estimate']
@@ -80,6 +85,6 @@ class IssuesContainerMetricsProvider:
         metrics.issues_opened_count = stats['issues_opened_count']
         metrics.issues_count = stats['issues_count']
 
-    def filter_issues(self, queryset: QuerySet) -> QuerySet:
+    def filter_issues(self, queryset: models.QuerySet) -> models.QuerySet:
         """Filter gitlab should be implemented in subclass."""
         raise NotImplementedError

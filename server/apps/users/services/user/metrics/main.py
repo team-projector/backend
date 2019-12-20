@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 from django.db import models
-from django.db.models import Sum
 from django.db.models.functions import Coalesce
 
 from apps.development.models import MergeRequest
@@ -40,7 +39,7 @@ class IssueUserMetrics(WorkItemUserMetrics):
             user=user,
             issues__state=ISSUE_STATES.CLOSED,
         ).aggregate(
-            total_time_spent=Coalesce(Sum('time_spent'), 0),
+            total_time_spent=Coalesce(models.Sum('time_spent'), 0),
         )['total_time_spent']
 
     def _get_issues_opened_spent(self, user: User) -> float:
@@ -49,7 +48,7 @@ class IssueUserMetrics(WorkItemUserMetrics):
             user=user,
             issues__state=ISSUE_STATES.OPENED,
         ).aggregate(
-            total_time_spent=Coalesce(Sum('time_spent'), 0),
+            total_time_spent=Coalesce(models.Sum('time_spent'), 0),
         )['total_time_spent']
 
 
@@ -77,7 +76,7 @@ class MergeRequestUserMetrics(WorkItemUserMetrics):
                 MERGE_REQUESTS_STATES.MERGED,
             ),
         ).aggregate(
-            total_time_spent=Coalesce(Sum('time_spent'), 0),
+            total_time_spent=Coalesce(models.Sum('time_spent'), 0),
         )['total_time_spent']
 
     def _get_merge_requests_opened_spent(self, user: User) -> float:
@@ -86,7 +85,7 @@ class MergeRequestUserMetrics(WorkItemUserMetrics):
             user=user,
             mergerequests__state=ISSUE_STATES.OPENED,
         ).aggregate(
-            total_time_spent=Coalesce(Sum('time_spent'), 0),
+            total_time_spent=Coalesce(models.Sum('time_spent'), 0),
         )['total_time_spent']
 
 
@@ -123,7 +122,7 @@ class UserMetricsProvider:
             user=user,
             salary__isnull=True,
         ).aggregate(
-            total_bonus=Coalesce(Sum('sum'), 0),
+            total_bonus=Coalesce(models.Sum('sum'), 0),
         )['total_bonus']
 
     def _get_penalty(self, user: User) -> float:
@@ -131,7 +130,7 @@ class UserMetricsProvider:
             user=user,
             salary__isnull=True,
         ).aggregate(
-            total_penalty=Coalesce(Sum('sum'), 0),
+            total_penalty=Coalesce(models.Sum('sum'), 0),
         )['total_penalty']
 
     def _get_payroll_opened(self, user: User) -> float:
@@ -141,7 +140,7 @@ class UserMetricsProvider:
             salary__isnull=True,
             user=user,
         ).aggregate(
-            total_sum=Coalesce(Sum('sum'), 0),
+            total_sum=Coalesce(models.Sum('sum'), 0),
         )['total_sum']
 
     def _get_payroll_closed(self, user: User) -> float:
@@ -154,5 +153,5 @@ class UserMetricsProvider:
             salary__isnull=True,
             user=user,
         ).aggregate(
-            total_sum=Coalesce(Sum('sum'), 0),
+            total_sum=Coalesce(models.Sum('sum'), 0),
         )['total_sum']

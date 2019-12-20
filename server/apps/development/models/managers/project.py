@@ -3,7 +3,6 @@
 from typing import Tuple
 
 from django.db import models
-from django.db.models import QuerySet
 from django.utils import timezone
 
 
@@ -19,6 +18,6 @@ class ProjectManager(models.Manager):
             defaults=kwargs,
         )
 
-    def for_sync(self) -> QuerySet:
+    def for_sync(self) -> models.QuerySet:
         """Get projects for full sync with gitlab."""
         return self.filter(is_active=True)

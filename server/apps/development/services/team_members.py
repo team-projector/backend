@@ -6,15 +6,14 @@ from typing import Iterable, Union
 
 from bitfield import Bit
 from django.db import models
-from django.db.models import QuerySet
 
 from apps.development.models import TeamMember
 
 
 def filter_by_roles(
-    queryset: QuerySet,
+    queryset: models.QuerySet,
     roles: Iterable[Union[str, Bit]],
-) -> QuerySet:
+) -> models.QuerySet:
     """Get team members by role."""
     roles = [
         role

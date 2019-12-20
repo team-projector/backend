@@ -4,7 +4,6 @@ import operator
 from functools import reduce
 
 from django.db import models
-from django.db.models import QuerySet
 from django.db.models.constants import LOOKUP_SEP
 from django.utils import six
 from django_filters import CharFilter
@@ -18,7 +17,7 @@ class SearchFilter(CharFilter):
         super().__init__()
         self.fields = kwargs.pop('fields', {})
 
-    def filter(self, queryset, search_value) -> QuerySet:  # noqa: A003
+    def filter(self, queryset, search_value) -> models.QuerySet:  # noqa: A003
         """Do filtering."""
         if not search_value or not self.fields:
             return queryset

@@ -5,7 +5,6 @@ from datetime import date
 from decimal import Decimal
 
 from django.db import models, transaction
-from django.db.models import QuerySet, Sum
 
 from apps.development.models.issue import ISSUE_STATES
 from apps.development.models.merge_request import MERGE_REQUESTS_STATES
@@ -63,26 +62,26 @@ class SalaryCalculator:
 
         return salary
 
-    def _get_spent_data(self, salary: Salary) -> QuerySet:
+    def _get_spent_data(self, salary: Salary) -> models.QuerySet:
         return SpentTime.objects.filter(
             salary=salary,
         ).aggregate(
-            total_sum=Sum('sum'),
-            total_time_spent=Sum('time_spent'),
+            total_sum=models.Sum('sum'),
+            total_time_spent=models.Sum('time_spent'),
         )
 
-    def _get_penalty(self, salary: Salary) -> QuerySet:
+    def _get_penalty(self, salary: Salary) -> models.QuerySet:
         return Penalty.objects.filter(
             salary=salary,
         ).aggregate(
-            total_sum=Sum('sum'),
+            total_sum=models.Sum('sum'),
         )['total_sum'] or 0
 
-    def _get_bonus(self, salary: Salary) -> QuerySet:
+    def _get_bonus(self, salary: Salary) -> models.QuerySet:
         return Bonus.objects.filter(
             salary=salary,
         ).aggregate(
-            total_sum=Sum('sum'),
+            total_sum=models.Sum('sum'),
         )['total_sum'] or 0
 
     def _lock_payrolls(

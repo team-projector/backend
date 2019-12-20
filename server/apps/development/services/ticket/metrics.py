@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 from django.db import models
-from django.db.models import Count, DecimalField, Sum
 from django.db.models.functions import Coalesce
 
 from apps.development.models import Issue, Ticket
@@ -49,21 +48,23 @@ class TicketMetricsProvider:
             return
 
         stats = issues.aggregate(
-            time_estimate=Coalesce(Sum('time_estimate'), 0),
-            time_spent=Coalesce(Sum('total_time_spent'), 0),
+            time_estimate=Coalesce(models.Sum('time_estimate'), 0),
+            time_spent=Coalesce(models.Sum('total_time_spent'), 0),
             issues_closed_count=Coalesce(
-                Count('id', filter=models.Q(state=ISSUE_STATES.CLOSED)), 0,
+                models.Count('id', filter=models.Q(state=ISSUE_STATES.CLOSED)),
+                0,
             ),
             issues_opened_count=Coalesce(
-                Count('id', filter=models.Q(state=ISSUE_STATES.OPENED)), 0,
+                models.Count('id', filter=models.Q(state=ISSUE_STATES.OPENED)),
+                0,
             ),
-            issues_count=Count('*'),
+            issues_count=models.Count('*'),
             budget_estimate=Coalesce(
-                Sum(
+                models.Sum(
                     models.F('time_estimate')
                     / SECS_IN_HOUR
                     * models.F('user__customer_hour_rate'),
-                    output_field=DecimalField(),
+                    output_field=models.DecimalField(),
                 ), 0,
             ),
         )
@@ -89,8 +90,8 @@ class TicketMetricsProvider:
         payroll = SpentTime.objects.filter(
             issues__ticket=self.ticket,
         ).aggregate(
-            total_sum=Coalesce(Sum('sum'), 0),
-            total_customer_sum=Coalesce(Sum('customer_sum'), 0),
+            total_sum=Coalesce(models.Sum('sum'), 0),
+            total_customer_sum=Coalesce(models.Sum('customer_sum'), 0),
         )
 
         metrics.payroll = payroll['total_sum']

@@ -3,7 +3,6 @@
 from typing import Tuple
 
 from django.db import models
-from django.db.models import QuerySet
 from django.utils import timezone
 
 from apps.users.models import User
@@ -21,7 +20,7 @@ class MergeRequestManager(models.Manager):
             defaults=kwargs,
         )
 
-    def allowed_for_user(self, user: User) -> QuerySet:
+    def allowed_for_user(self, user: User) -> models.QuerySet:
         """Issues allowed for team leader and watchers."""
         from apps.development.services.merge_request.allowed import (  # noqa: WPS433, E501
             filter_allowed_for_user,

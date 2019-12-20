@@ -4,7 +4,6 @@ from datetime import date
 from typing import Dict
 
 from django.db import models
-from django.db.models import Case, Count, IntegerField, Sum, Value, When
 from django.db.models.functions import Coalesce, TruncDay
 
 from apps.development.models.issue import ISSUE_STATES, Issue
@@ -31,7 +30,7 @@ class UserDayStatsProvider:
         ).values(
             'day',
         ).annotate(
-            period_spent=Sum('time_spent'),
+            period_spent=models.Sum('time_spent'),
         ).order_by()
 
         return {
@@ -43,8 +42,8 @@ class UserDayStatsProvider:
         """Get user due days."""
         queryset = Issue.objects.annotate(
             due_date_truncated=TruncDay('due_date'),
-            time_remains=Case(
-                When(
+            time_remains=models.Case(
+                models.When(
                     models.Q(
                         time_estimate__gt=models.F('total_time_spent'),
                     ) & ~models.Q(state=ISSUE_STATES.CLOSED),
@@ -52,8 +51,8 @@ class UserDayStatsProvider:
                         models.F('time_estimate') - models.F('total_time_spent')
                     ),
                 ),
-                default=Value(0),
-                output_field=IntegerField(),
+                default=models.Value(0),
+                output_field=models.IntegerField(),
             ),
         ).filter(
             user=user,
@@ -61,9 +60,9 @@ class UserDayStatsProvider:
         ).values(
             'due_date_truncated',
         ).annotate(
-            issues_count=Count('*'),
-            total_time_estimate=Coalesce(Sum('time_estimate'), 0),
-            total_time_remains=Coalesce(Sum('time_remains'), 0),
+            issues_count=models.Count('*'),
+            total_time_estimate=Coalesce(models.Sum('time_estimate'), 0),
+            total_time_remains=Coalesce(models.Sum('time_remains'), 0),
         ).order_by()
 
         return {
@@ -83,8 +82,8 @@ class UserDayStatsProvider:
         ).values(
             'date_truncated',
         ).annotate(
-            total_payroll=Coalesce(Sum('payroll'), 0),
-            total_paid=Coalesce(Sum('paid'), 0),
+            total_payroll=Coalesce(models.Sum('payroll'), 0),
+            total_paid=Coalesce(models.Sum('paid'), 0),
         ).order_by()
 
         return {

@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 from django.db import models
-from django.db.models import Count, QuerySet
 
 from apps.development.models.merge_request import MERGE_REQUESTS_STATES
 
@@ -18,7 +17,7 @@ class MergeRequestsSummary:
 class MergeRequestsSummaryProvider:
     """Merge requests summary provider."""
 
-    def __init__(self, queryset: QuerySet):
+    def __init__(self, queryset: models.QuerySet):
         """Initialize self."""
         self.queryset = queryset
 
@@ -35,7 +34,7 @@ class MergeRequestsSummaryProvider:
 
         return summary
 
-    def get_counts(self) -> QuerySet:
+    def get_counts(self) -> models.QuerySet:
         """Get counts by state."""
         return self.queryset.aggregate(
             count=self._count(),
@@ -44,10 +43,12 @@ class MergeRequestsSummaryProvider:
             merged_count=self._count(state=MERGE_REQUESTS_STATES.MERGED),
         )
 
-    def _count(self, **filters) -> Count:
-        return Count('id', filter=models.Q(**filters))
+    def _count(self, **filters) -> models.Count:
+        return models.Count('id', filter=models.Q(**filters))
 
 
-def get_merge_requests_summary(queryset: QuerySet) -> MergeRequestsSummary:
+def get_merge_requests_summary(
+    queryset: models.QuerySet,
+) -> MergeRequestsSummary:
     """Get summary for merge requests."""
     return MergeRequestsSummaryProvider(queryset).execute()

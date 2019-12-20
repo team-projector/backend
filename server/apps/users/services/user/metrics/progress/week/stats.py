@@ -4,7 +4,6 @@ from datetime import date
 from typing import Dict
 
 from django.db import models
-from django.db.models import Count, FloatField, Sum
 from django.db.models.functions import Cast, Coalesce, TruncDate, TruncWeek
 from django.utils.timezone import make_aware
 
@@ -39,7 +38,7 @@ class UserWeekStatsProvider:
         ).values(
             'week',
         ).annotate(
-            period_spent=Sum('time_spent'),
+            period_spent=models.Sum('time_spent'),
         ).order_by()
 
         return {
@@ -59,8 +58,8 @@ class UserWeekStatsProvider:
         ).values(
             'week',
         ).annotate(
-            issues_count=Count('*'),
-            total_time_estimate=Coalesce(Sum('time_estimate'), 0),
+            issues_count=models.Count('*'),
+            total_time_estimate=Coalesce(models.Sum('time_estimate'), 0),
         ).order_by()
 
         return {
@@ -86,9 +85,14 @@ class UserWeekStatsProvider:
             'week',
         ).annotate(
             avg_efficiency=Coalesce(
-                Cast(Sum(models.F('time_estimate')), FloatField())
-                / Cast(Sum(models.F('total_time_spent')), FloatField()),
-                0,
+                Cast(
+                    models.Sum(models.F('time_estimate')),
+                    models.FloatField(),
+                )
+                / Cast(
+                    models.Sum(models.F('total_time_spent')),
+                    models.FloatField(),
+                ), 0,
             ),
         ).order_by()
 
@@ -110,8 +114,8 @@ class UserWeekStatsProvider:
         ).values(
             'week',
         ).annotate(
-            total_payroll=Coalesce(Sum('payroll'), 0),
-            total_paid=Coalesce(Sum('paid'), 0),
+            total_payroll=Coalesce(models.Sum('payroll'), 0),
+            total_paid=Coalesce(models.Sum('paid'), 0),
         ).order_by()
 
         return {

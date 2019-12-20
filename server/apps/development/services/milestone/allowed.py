@@ -4,7 +4,6 @@ from typing import List
 
 from django.core.exceptions import PermissionDenied
 from django.db import models
-from django.db.models import QuerySet
 
 from apps.development.models import Milestone, ProjectGroup, ProjectMember
 from apps.development.models.project_member import PROJECT_MEMBER_ROLES
@@ -12,9 +11,9 @@ from apps.users.models import User
 
 
 def filter_allowed_for_user(
-    queryset: QuerySet,
+    queryset: models.QuerySet,
     user: User,
-) -> QuerySet:
+) -> models.QuerySet:
     """Get milestones for user."""
     members = get_members(user)
 
@@ -47,7 +46,7 @@ def get_members(user: User) -> List[ProjectMember]:
 
 
 def get_group_milestones(
-    groups: QuerySet,
+    groups: models.QuerySet,
     milestones_ids: List[int],
 ) -> List[int]:
     """Get milestones of groups."""

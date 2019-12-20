@@ -5,7 +5,6 @@ from operator import and_, or_
 from typing import List
 
 from django.db import models
-from django.db.models import QuerySet
 
 from apps.development.models.issue import Issue
 from apps.development.services.issue.problems import checkers
@@ -31,7 +30,7 @@ def get_issue_problems(issue: Issue) -> List[str]:
     return problems
 
 
-def annotate_issue_problems(queryset: QuerySet) -> QuerySet:
+def annotate_issue_problems(queryset: models.QuerySet) -> models.QuerySet:
     """Annotate issues problems."""
     for checker in issue_problem_checkers:
         queryset = checker.setup_queryset(queryset)
@@ -39,7 +38,7 @@ def annotate_issue_problems(queryset: QuerySet) -> QuerySet:
     return queryset
 
 
-def filter_issue_problems(queryset: QuerySet) -> QuerySet:
+def filter_issue_problems(queryset: models.QuerySet) -> models.QuerySet:
     """Get problems from issues."""
     return queryset.filter(reduce(or_, [
         models.Q(**{checker.annotate_field: True})
@@ -47,7 +46,7 @@ def filter_issue_problems(queryset: QuerySet) -> QuerySet:
     ]))
 
 
-def exclude_issue_problems(queryset: QuerySet) -> QuerySet:
+def exclude_issue_problems(queryset: models.QuerySet) -> models.QuerySet:
     """Exclude problems from issues."""
     return queryset.filter(reduce(and_, [
         models.Q(**{checker.annotate_field: None})
