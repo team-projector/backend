@@ -3,6 +3,8 @@
 from datetime import datetime
 
 import pytest
+from pytest import raises
+from rest_framework.exceptions import PermissionDenied
 
 from apps.development.models.ticket import TYPE_FEATURE
 from tests.test_development.factories import (
@@ -34,22 +36,17 @@ createTicket(
 
 
 @pytest.fixture()
-def project_manager(user):
-    user.roles.PROJECT_MANAGER = True
-    user.save()
-    yield user
-
-
-@pytest.fixture()
 def ticket():
     return TicketFactory(milestone=ProjectMilestoneFactory())
 
 
-def test_success(project_manager, ghl_client, ticket):
+def test_query(project_manager, ghl_client):
+    """Test create ticket raw query."""
     ghl_client.set_user(project_manager)
+
     milestone = ProjectMilestoneFactory()
 
-    iss_1, iss_2 = IssueFactory.create_batch(size=2, user=project_manager)
+    issues = IssueFactory.create_batch(size=2, user=project_manager)
 
     response = ghl_client.execute(
         GHL_QUERY_CREATE_TICKET,
@@ -60,7 +57,7 @@ def test_success(project_manager, ghl_client, ticket):
             'dueDate': str(datetime.now().date()),
             'url': 'http://test1.com',
             'milestone': str(milestone.id),
-            'issues': [str(iss_1.id), str(iss_2.id)],
+            'issues': [str(issue.pk) for issue in issues],
             'role': 'Manager'
         }
     )
@@ -71,51 +68,46 @@ def test_success(project_manager, ghl_client, ticket):
     dto = response['data']['createTicket']['ticket']
     assert dto['title'] == 'test ticket'
 
-    iss_1.refresh_from_db()
-    iss_2.refresh_from_db()
-
-    assert iss_1.ticket_id == int(dto['id'])
-    assert iss_2.ticket_id == int(dto['id'])
+    for issue in issues:
+        issue.refresh_from_db()
+        assert issue.ticket_id == int(dto['id'])
 
 
-def test_ticket_create_invalid(project_manager, ghl_client, ticket):
-    ghl_client.set_user(project_manager)
-    ProjectMilestoneFactory()
-
-    response = ghl_client.execute(
-        GHL_QUERY_CREATE_TICKET,
-        variables={
-            'title': 'test ticket',
-            'type': 'invalid type',
-            'url': 'invalid url',
-            'milestone': ''
-        }
+def test_invalid_parameters(
+    project_manager,
+    ghl_auth_mock_info,
+    create_ticket_mutation,
+):
+    """Test creation with invalid parameters."""
+    response = create_ticket_mutation(
+        root=None,
+        info=ghl_auth_mock_info,
+        title='test ticket',
+        type='invalid type',
+        url='invalid url',
+        milestone=''
     )
+
     fields_with_errors = {
-        f['field']
-        for f
-        in response['data']['createTicket']['errors']
+        error.field
+        for error in response.errors
     }
 
     assert fields_with_errors == {'url', 'type', 'milestone'}
 
 
-def test_without_permissions(user, ghl_client, ticket):
-    ghl_client.set_user(user)
+def test_without_permissions(user, ghl_auth_mock_info, create_ticket_mutation):
+    """Test deletion without permissions."""
     milestone = ProjectMilestoneFactory()
 
-    response = ghl_client.execute(
-        GHL_QUERY_CREATE_TICKET,
-        variables={
-            'input': {
-                'title': 'test ticket',
-                'type': TYPE_FEATURE,
-                'startDate': str(datetime.now().date()),
-                'dueDate': str(datetime.now().date()),
-                'url': 'http://test1.com',
-                'milestone': str(milestone.id),
-            }
-        }
-    )
-
-    assert 'errors' in response
+    with raises(PermissionDenied):
+        create_ticket_mutation(
+            root=None,
+            info=ghl_auth_mock_info,
+            title='test ticket',
+            startDate=datetime.now().date(),
+            dueDate=datetime.now().date(),
+            type=TYPE_FEATURE,
+            url='http://test1.com',
+            milestone=milestone.pk
+        )

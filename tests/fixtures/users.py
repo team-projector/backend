@@ -44,3 +44,12 @@ def admin_user(db, django_user_model, django_username_field):
             DEFAULT_USERNAME,
             DEFAULT_USER_PASSWORD,
         )
+
+
+@pytest.fixture()
+def project_manager(user):
+    """Provide project manager."""
+    user.roles.PROJECT_MANAGER = True
+    user.save()
+
+    return user

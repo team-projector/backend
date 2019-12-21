@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from datetime import datetime
 
 from django.http.response import Http404
@@ -5,12 +7,12 @@ from pytest import raises
 
 from apps.development.models import TeamMember
 from apps.users.graphql.resolvers import resolve_user_progress_metrics
-from tests.helpers.objects import AttrDict
 from tests.test_development.factories import TeamFactory, TeamMemberFactory
 from tests.test_users.factories.user import UserFactory
 
 
-def test_user_progress_metrics(user, client):
+def test_success(user, ghl_auth_mock_info):
+    """Test sucess user metrics resolving."""
     team = TeamFactory.create()
 
     TeamMemberFactory.create(
@@ -19,20 +21,17 @@ def test_user_progress_metrics(user, client):
         roles=TeamMember.roles.LEADER
     )
 
-    user_2 = UserFactory.create()
+    checked_user = UserFactory.create()
     TeamMemberFactory.create(
-        user=user_2,
+        user=checked_user,
         team=team,
         roles=TeamMember.roles.DEVELOPER
     )
 
-    client.user = user
-    info = AttrDict({'context': client})
-
     metrics = resolve_user_progress_metrics(
         parent=None,
-        info=info,
-        user=user_2.id,
+        info=ghl_auth_mock_info,
+        user=checked_user.pk,
         start=datetime.now().date(),
         end=datetime.now().date(),
         group='day'
@@ -41,7 +40,8 @@ def test_user_progress_metrics(user, client):
     assert len(metrics) == 1
 
 
-def test_user_progress_metrics_not_leader(user, client):
+def test_not_leader(user, ghl_auth_mock_info):
+    """Test if user is not a leader."""
     team = TeamFactory.create()
 
     TeamMemberFactory.create(
@@ -50,21 +50,18 @@ def test_user_progress_metrics_not_leader(user, client):
         roles=TeamMember.roles.DEVELOPER
     )
 
-    user_2 = UserFactory.create()
+    checked_user = UserFactory.create()
     TeamMemberFactory.create(
-        user=user_2,
+        user=checked_user,
         team=team,
         roles=TeamMember.roles.DEVELOPER
     )
 
-    client.user = user
-    info = AttrDict({'context': client})
-
     with raises(Http404):
         resolve_user_progress_metrics(
             parent=None,
-            info=info,
-            user=user_2.id,
+            info=ghl_auth_mock_info,
+            user=checked_user.pk,
             start=datetime.now().date(),
             end=datetime.now().date(),
             group='day'

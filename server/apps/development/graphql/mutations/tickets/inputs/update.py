@@ -6,7 +6,9 @@ from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 from rest_framework.fields import Field
 
-from apps.development.graphql.mutations.inputs import TicketBaseInput
+from apps.development.graphql.mutations.tickets.inputs.base import (
+    TicketBaseInput,
+)
 from apps.development.models import Issue
 from apps.development.models.ticket import Ticket
 

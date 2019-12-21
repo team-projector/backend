@@ -1,35 +1,17 @@
 # -*- coding: utf-8 -*-
 
-from apps.development.graphql.mutations.issues import (
-    AddSpendIssueMutation,
-    SyncIssueMutation,
-    UpdateIssueMutation,
-)
-from apps.development.graphql.mutations.milestones import SyncMilestoneMutation
-from apps.development.graphql.mutations.ticket import (
-    CreateTicketMutation,
-    DeleteTicketMutation,
-    UpdateTicketMutation,
-)
+from apps.development.graphql.mutations import issues, milestones, tickets
 
 
-class IssuesMutations:
-    """Class representing list of available fields for issues mutations."""
+class DevelopmentMutations:
+    """Class representing list of all mutations."""
 
-    add_spend_time_issue = AddSpendIssueMutation.Field()
-    sync_issue = SyncIssueMutation.Field()
-    update_issue = UpdateIssueMutation.Field()
+    sync_milestone = milestones.SyncMilestoneMutation.Field()
 
+    create_ticket = tickets.CreateTicketMutation.Field()
+    delete_ticket = tickets.DeleteTicketMutation.Field()
+    update_ticket = tickets.UpdateTicketMutation.Field()
 
-class TicketsMutations:
-    """Class representing list of available fields for tickets mutations."""
-
-    create_ticket = CreateTicketMutation.Field()
-    delete_ticket = DeleteTicketMutation.Field()
-    update_ticket = UpdateTicketMutation.Field()
-
-
-class MilestonesMutations:
-    """Class representing list of available fields for milestones mutations."""
-
-    sync_milestone = SyncMilestoneMutation.Field()
+    add_spend_time_issue = issues.AddSpendIssueMutation.Field()
+    sync_issue = issues.SyncIssueMutation.Field()
+    update_issue = issues.UpdateIssueMutation.Field()

@@ -1,3 +1,3 @@
 # -*- coding: utf-8 -*-
 
-from .main import IssuesMutations, MilestonesMutations, TicketsMutations
+from .main import DevelopmentMutations
