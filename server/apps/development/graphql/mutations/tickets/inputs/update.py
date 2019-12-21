@@ -15,7 +15,7 @@ from apps.development.models.ticket import Ticket
 ISSUES_PARAM_ERROR = 'Please, choose one parameter: "attachIssues" or "issues"'
 
 
-class TicketUpdateInput(TicketBaseInput):
+class UpdateTicketInput(TicketBaseInput):
     """Ticket update serializer."""
 
     attach_issues = serializers.PrimaryKeyRelatedField(

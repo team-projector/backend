@@ -9,7 +9,7 @@ from apps.development.graphql.mutations.tickets.inputs.base import (
 )
 
 
-class TicketCreateInput(TicketBaseInput):
+class CreateTicketInput(TicketBaseInput):
     """Ticket create serializer."""
 
     class Meta(TicketBaseInput.Meta):

@@ -1,31 +1,33 @@
 # -*- coding: utf-8 -*-
 
+from typing import Optional
+
 import graphene
-from rest_framework.generics import get_object_or_404
+from graphql import ResolveInfo
 
-from apps.core.graphql.mutations import BaseMutation
+from apps.core.graphql.mutations import SerializerMutation
 from apps.core.graphql.security.permissions import AllowProjectManager
-from apps.development.models import Ticket
+from apps.development.graphql.mutations.tickets.inputs import DeleteTicketInput
 
 
-class DeleteTicketMutation(BaseMutation):
+class DeleteTicketMutation(SerializerMutation):
     """Delete ticket."""
 
     permission_classes = (AllowProjectManager,)
 
-    class Arguments:
-        id = graphene.ID(required=True)  # noqa: A003
+    class Meta:
+        serializer_class = DeleteTicketInput
 
     ok = graphene.Boolean()
 
     @classmethod
-    def do_mutate(cls, root, info, **kwargs):  # noqa: WPS110
-        """Delete ticket."""
-        ticket = get_object_or_404(
-            Ticket.objects.all(),
-            pk=kwargs['id'],
-        )
+    def perform_mutate(
+        cls,
+        root: Optional[object],
+        info: ResolveInfo,  # noqa: WPS110
+        validated_data,
+    ) -> 'DeleteTicketMutation':
+        """Perform mutation implementation."""
+        validated_data['ticket'].delete()
 
-        ticket.delete()
-
-        return DeleteTicketMutation(ok=True)
+        return cls(ok=True)

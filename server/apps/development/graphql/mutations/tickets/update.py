@@ -9,7 +9,7 @@ from apps.core.graphql.helpers.persisters import update_from_validated_data
 from apps.core.graphql.mutations import SerializerMutation
 from apps.core.graphql.security.permissions import AllowProjectManager
 from apps.development.graphql.mutations.tickets.inputs.update import (
-    TicketUpdateInput,
+    UpdateTicketInput,
 )
 from apps.development.graphql.types import TicketType
 from apps.development.models import Issue
@@ -22,7 +22,7 @@ class UpdateTicketMutation(SerializerMutation):
     permission_classes = (AllowProjectManager,)
 
     class Meta:
-        serializer_class = TicketUpdateInput
+        serializer_class = UpdateTicketInput
 
     @classmethod
     def perform_mutate(  # type: ignore

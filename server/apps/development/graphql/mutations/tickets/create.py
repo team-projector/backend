@@ -7,7 +7,7 @@ from graphql import ResolveInfo
 
 from apps.core.graphql.mutations import SerializerMutation
 from apps.core.graphql.security.permissions import AllowProjectManager
-from apps.development.graphql.mutations.tickets.inputs import TicketCreateInput
+from apps.development.graphql.mutations.tickets.inputs import CreateTicketInput
 from apps.development.graphql.types import TicketType
 from apps.development.models import Ticket
 
@@ -19,7 +19,7 @@ class CreateTicketMutation(SerializerMutation):
     permission_classes = (AllowProjectManager,)
 
     class Meta:
-        serializer_class = TicketCreateInput
+        serializer_class = CreateTicketInput
 
     @classmethod
     def perform_mutate(

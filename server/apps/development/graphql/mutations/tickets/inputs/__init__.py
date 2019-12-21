@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
 
-from .create import TicketCreateInput
-from .update import TicketUpdateInput
+from .create import CreateTicketInput
+from .delete import DeleteTicketInput
+from .update import UpdateTicketInput
