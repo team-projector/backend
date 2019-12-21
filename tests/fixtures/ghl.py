@@ -53,7 +53,7 @@ def ghl_auth_mock_info(user, rf) -> ResolveInfo:
 
 
 @pytest.fixture()  # type: ignore
-def ghl_mock_info(user, rf) -> ResolveInfo:
+def ghl_mock_info(rf) -> ResolveInfo:
     request = rf.get('/graphql/')
 
     resolve_info = mock_info()
