@@ -11,6 +11,8 @@ from apps.core.graphql.security.permissions import AllowAuthenticated
 
 
 class NoInputMutation(AuthMutation, graphene.Mutation):
+    """Base for non parametrized mutations."""
+
     permission_classes = (AllowAuthenticated,)
 
     class Meta:
@@ -22,6 +24,7 @@ class NoInputMutation(AuthMutation, graphene.Mutation):
         root: Optional[object],
         info: ResolveInfo,  # noqa: WPS110
     ):
+        """Mutation handler."""
         cls.check_premissions(root, info)
 
         return cls.perform_mutate(root, info)
@@ -32,6 +35,7 @@ class NoInputMutation(AuthMutation, graphene.Mutation):
         root: Optional[object],
         info: ResolveInfo,  # noqa: WPS110
     ) -> None:
+        """Check permissions handler."""
         if not cls.has_permission(root, info):
             raise PermissionDenied()
 
@@ -41,4 +45,5 @@ class NoInputMutation(AuthMutation, graphene.Mutation):
         root: Optional[object],
         info: ResolveInfo,  # noqa: WPS110
     ) -> 'NoInputMutation':
+        """Overrideable mutation handler."""
         raise NotImplementedError
