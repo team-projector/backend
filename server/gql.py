@@ -6,21 +6,15 @@ from graphene_django.debug import DjangoDebug
 from apps.core.graphql.views import ApiGraphQLView, PlaygroundGraphQLView
 from apps.development.graphql.mutations import DevelopmentMutations
 from apps.development.graphql.queries import DevelopmentQueries
-from apps.payroll.graphql.mutations import WorkBreaksMutations
-from apps.payroll.graphql.queries import (
-    SalariesQueries,
-    TimeExpensesQueries,
-    WorkBreaksQueries,
-)
-from apps.users.graphql.mutations import AuthMutations
+from apps.payroll.graphql.mutations import PayrollMutations
+from apps.payroll.graphql.queries import PayrollQueries
+from apps.users.graphql.mutations import UsersMutations
 from apps.users.graphql.queries import UsersQueries
 
 
 class Query(  # noqa: WPS215
     DevelopmentQueries,
-    TimeExpensesQueries,
-    SalariesQueries,
-    WorkBreaksQueries,
+    PayrollQueries,
     UsersQueries,
     graphene.ObjectType,
 ):
@@ -34,8 +28,8 @@ class Query(  # noqa: WPS215
 
 class Mutation(  # noqa: WPS215
     DevelopmentMutations,
-    WorkBreaksMutations,
-    AuthMutations,
+    PayrollMutations,
+    UsersMutations,
     graphene.ObjectType,
 ):
     """Class representing all available mutations."""

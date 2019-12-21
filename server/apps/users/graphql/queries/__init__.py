@@ -1,3 +1,3 @@
 # -*- coding: utf-8 -*-
 
-from .users import UsersQueries
+from .main import UsersQueries

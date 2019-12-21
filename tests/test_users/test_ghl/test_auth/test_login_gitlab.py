@@ -1,6 +1,6 @@
 from django.test import override_settings
 
-from apps.users.graphql.mutations.gitlab.login import LoginGitlabMutation
+from apps.users.graphql.mutations.auth import LoginGitlabMutation
 from tests.helpers.objects import AttrDict
 
 

@@ -6,7 +6,7 @@ from social_django.utils import load_backend, load_strategy
 from social_django.views import NAMESPACE
 
 
-def psa(request: HttpRequest) -> HttpRequest:
+def page_social_auth(request: HttpRequest) -> HttpRequest:
     """Page social auth."""
     uri = reverse('{0}:complete'.format(NAMESPACE), args=('gitlab',))
     request.social_strategy = load_strategy(request)

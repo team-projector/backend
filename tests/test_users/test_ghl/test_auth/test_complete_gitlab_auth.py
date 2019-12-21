@@ -1,6 +1,6 @@
-from apps.users.graphql.mutations.gitlab.complete_gitlab_auth import (
-    CompleteGitlabAuthMutation,
-)
+# -*- coding: utf-8 -*-
+
+from apps.users.graphql.mutations.auth import CompleteGitlabAuthMutation
 from apps.users.models import Token
 from tests.helpers.httpretty_mock import RequestCallbackFactory
 from tests.helpers.objects import AttrDict

@@ -1,3 +1,3 @@
 # -*- coding: utf-8 -*-
 
-from .main import AuthMutations
+from .main import UsersMutations
