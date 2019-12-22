@@ -5,8 +5,7 @@ from apps.development.models.issue import ISSUE_STATES
 from apps.development.models.merge_request import MERGE_REQUESTS_STATES
 from apps.users.services.user.problems import get_user_problems
 from apps.users.services.user.problems.checkers import PROBLEM_NOT_ENOUGH_TASKS
-from tests.test_development.factories import IssueFactory
-from tests.test_payroll.factories import MergeRequestFactory
+from tests.test_development.factories import IssueFactory, MergeRequestFactory
 
 
 def test_issues(user):

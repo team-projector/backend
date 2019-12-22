@@ -14,8 +14,8 @@ from tests.test_development.factories import (
 from tests.test_payroll.factories import (
     IssueSpentTimeFactory,
     MergeRequestSpentTimeFactory,
-    UserFactory,
 )
+from tests.test_users.factories import UserFactory
 
 
 @pytest.fixture()

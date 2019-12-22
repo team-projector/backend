@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 import datetime
 
 from django.contrib.admin import site
@@ -86,7 +88,10 @@ def model_to_dict_form(data: dict) -> dict:
         return '' if value is None else value
 
     original = model_to_dict(data)
-    return {k: replace(v) for k, v in original.items()}
+    return {
+        k: replace(v)
+        for k, v in original.items()
+    }
 
 
 def format_date(d: datetime) -> str:
