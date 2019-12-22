@@ -8,8 +8,8 @@ from graphene_django.converter import convert_django_field
 class BitField(graphene.Scalar):
     """Bit field."""
 
-    @staticmethod  # noqa: WPS602
-    def serialize(bit):
+    @staticmethod
+    def serialize(bit):  # noqa: WPS602
         """Serialize."""
         return [
             key
