@@ -1,6 +1,6 @@
-from django.core.exceptions import PermissionDenied
 from pytest import raises
 
+from apps.core.graphql.errors import GraphQLPermissionDenied
 from apps.development.models import TeamMember
 from apps.payroll.graphql.filters import SalaryFilterSet
 from apps.payroll.models.salary import Salary
@@ -63,7 +63,7 @@ def test_salaries_filter_by_team_not_leader(user, client):
 
     client.user = user
 
-    with raises(PermissionDenied):
+    with raises(GraphQLPermissionDenied):
         SalaryFilterSet(  # noqa: WPS428
             data={'team': team.id},
             queryset=Salary.objects.all(),

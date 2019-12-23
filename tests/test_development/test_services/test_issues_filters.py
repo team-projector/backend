@@ -1,8 +1,8 @@
 from datetime import datetime, timedelta
 
-from django.core.exceptions import PermissionDenied
 from pytest import raises
 
+from apps.core.graphql.errors import GraphQLPermissionDenied
 from apps.development.graphql.filters import IssuesFilterSet
 from apps.development.models import TeamMember
 from apps.development.models.issue import ISSUE_STATES, Issue
@@ -357,7 +357,7 @@ def test_filter_by_milestone_not_pm(user, client):
 
     client.user = user
 
-    with raises(PermissionDenied):
+    with raises(GraphQLPermissionDenied):
         IssuesFilterSet(  # noqa: WPS428
             data={'milestone': milestone_1.id},
             queryset=Issue.objects.all(),
@@ -402,7 +402,7 @@ def test_filter_by_ticket_not_pm(user, client):
 
     client.user = user
 
-    with raises(PermissionDenied):
+    with raises(GraphQLPermissionDenied):
         IssuesFilterSet(  # noqa: WPS428
             data={'ticket': ticket_1.id},
             queryset=Issue.objects.all(),

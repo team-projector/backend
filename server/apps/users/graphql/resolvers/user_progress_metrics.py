@@ -2,8 +2,8 @@
 
 from django.contrib.auth import get_user_model
 from django.db.models import QuerySet
-from rest_framework.generics import get_object_or_404
 
+from apps.core.graphql.helpers.generics import get_object_or_not_found
 from apps.development.models import TeamMember
 from apps.development.services.team_members import filter_by_roles
 from apps.users.models import User
@@ -31,7 +31,7 @@ def filter_allowed_for_user(
 
 def resolve_user_progress_metrics(parent, info, **kwargs):  # noqa: WPS110
     """Resolve progress metrics for user."""
-    user = get_object_or_404(
+    user = get_object_or_not_found(
         filter_allowed_for_user(
             get_user_model().objects.all(), info.context.user,
         ),

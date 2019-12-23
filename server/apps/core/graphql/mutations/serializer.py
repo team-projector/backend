@@ -8,10 +8,9 @@ import graphene
 from graphene.types.mutation import MutationOptions
 from graphene.types.utils import yank_fields_from_attrs
 from graphene_django.rest_framework.mutation import fields_for_serializer
-from graphene_django.types import ErrorType
 from graphql import ResolveInfo
-from rest_framework.exceptions import PermissionDenied
 
+from apps.core.graphql.errors import GraphQLInputError, GraphQLPermissionDenied
 from apps.core.graphql.security.mixins.mutation import AuthMutation
 from apps.core.graphql.security.permissions import AllowAuthenticated
 
@@ -26,11 +25,6 @@ class SerializerMutation(AuthMutation, graphene.Mutation):
     """Serializer mutation."""
 
     permission_classes = (AllowAuthenticated,)
-
-    errors = graphene.List(
-        ErrorType,
-        description='May contain more than one error for same field.',
-    )
 
     class Meta:
         abstract = True
@@ -102,7 +96,7 @@ class SerializerMutation(AuthMutation, graphene.Mutation):
     ) -> None:
         """Check permissions."""
         if not cls.has_permission(root, info, **input):
-            raise PermissionDenied()
+            raise GraphQLPermissionDenied()
 
     @classmethod
     def mutate_and_get_payload(
@@ -122,9 +116,7 @@ class SerializerMutation(AuthMutation, graphene.Mutation):
                 serializer.validated_data,
             )
 
-        return cls(
-            errors=ErrorType.from_errors(serializer.errors),
-        )
+        raise GraphQLInputError(serializer.errors)
 
     @classmethod
     def get_serializer_kwargs(

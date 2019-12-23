@@ -3,8 +3,8 @@
 from typing import Optional
 
 from graphql import ResolveInfo
-from rest_framework.generics import get_object_or_404
 
+from apps.core.graphql.helpers.generics import get_object_or_not_found
 from apps.development.models import TeamMember
 from apps.payroll.models import WorkBreak
 from apps.users.services.user.relations import (
@@ -22,7 +22,7 @@ class CanManageWorkBreak:
         **kwargs,
     ) -> bool:
         """Only team leader can approve or decline work break."""
-        work_break = get_object_or_404(
+        work_break = get_object_or_not_found(
             WorkBreak.objects.all(),
             pk=kwargs['id'],
         )

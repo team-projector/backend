@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
 import graphene
-from rest_framework.generics import get_object_or_404
 
+from apps.core.graphql.helpers.generics import get_object_or_not_found
 from apps.core.graphql.mutations import BaseMutation
 from apps.development.graphql.types import IssueType
 from apps.development.models import Issue
@@ -20,7 +20,7 @@ class SyncIssueMutation(BaseMutation):
     @classmethod
     def do_mutate(cls, root, info, **kwargs):  # noqa: WPS110
         """Syncing issue."""
-        issue = get_object_or_404(
+        issue = get_object_or_not_found(
             Issue.objects.allowed_for_user(info.context.user),
             pk=kwargs['id'],
         )

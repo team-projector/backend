@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
-from django.core.exceptions import PermissionDenied
 from django.db.models import QuerySet
 
+from apps.core.graphql.errors import GraphQLPermissionDenied
 from apps.development.models import Team, TeamMember
 from apps.development.services.team_members import filter_by_roles
 from apps.users.models import User
@@ -45,4 +45,4 @@ def check_allow_filtering_by_team(
     ).exists()
 
     if not allowed_members:
-        raise PermissionDenied("You can't filter by team")
+        raise GraphQLPermissionDenied("You can't filter by team")

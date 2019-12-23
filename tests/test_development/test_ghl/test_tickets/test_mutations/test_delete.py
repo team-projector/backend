@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 
 from pytest import raises
-from rest_framework.exceptions import PermissionDenied
+
+from apps.core.graphql.errors import GraphQLPermissionDenied
 
 GHL_DELETE_TICKET = """
 mutation ($id: ID!) {
@@ -45,7 +46,7 @@ def test_success(
 
 def test_unauth(ghl_mock_info, delete_ticket_mutation):
     """Test unauth ticket deleting."""
-    with raises(PermissionDenied):
+    with raises(GraphQLPermissionDenied):
         delete_ticket_mutation(
             root=None,
             info=ghl_mock_info,
@@ -54,7 +55,7 @@ def test_unauth(ghl_mock_info, delete_ticket_mutation):
 
 def test_not_project_manager(ghl_auth_mock_info, delete_ticket_mutation):
     """Test not project manager ticket deleting."""
-    with raises(PermissionDenied):
+    with raises(GraphQLPermissionDenied):
         delete_ticket_mutation(
             root=None,
             info=ghl_auth_mock_info,

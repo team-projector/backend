@@ -4,8 +4,8 @@ from typing import Optional
 
 from graphene_django.filter import DjangoFilterConnectionField
 from graphql import ResolveInfo
-from rest_framework.exceptions import PermissionDenied
 
+from apps.core.graphql.errors import GraphQLPermissionDenied
 from apps.core.graphql.security.permissions import AllowAny
 
 
@@ -29,7 +29,7 @@ class AuthFilter(DjangoFilterConnectionField):
     ):
         """Check if user has permissions."""
         if not cls.has_permission(info):
-            raise PermissionDenied()
+            raise GraphQLPermissionDenied()
 
         return super(  # noqa: WPS608
             DjangoFilterConnectionField,

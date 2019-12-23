@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
 from pytest import raises
-from rest_framework.exceptions import PermissionDenied
 
+from apps.core.graphql.errors import GraphQLInputError, GraphQLPermissionDenied
 from tests.test_development.factories import IssueFactory
 
 GHL_QUERY_UPDATE_TICKET = """
@@ -16,10 +16,6 @@ updateTicket(
     startDate: $startDate, dueDate: $dueDate, url: $url, issues: $issues,
     role: $role
 ) {
-    errors{
-      field
-      messages
-    }
     ticket {
       id
       title
@@ -44,7 +40,6 @@ def test_query(project_manager, ghl_client, ticket):
     )
 
     assert 'errors' not in response
-    assert not response['data']['updateTicket']['errors']
 
     dto = response['data']['updateTicket']['ticket']
     assert dto['id'] == str(ticket.id)
@@ -61,7 +56,7 @@ def test_without_permissions(
     ticket,
 ):
     """Test non project manager."""
-    with raises(PermissionDenied):
+    with raises(GraphQLPermissionDenied):
         update_ticket_mutation(
             root=None,
             info=ghl_auth_mock_info,
@@ -80,14 +75,12 @@ def test_attach_issues(
     attached_issue = IssueFactory(ticket=ticket, user=project_manager)
     issue = IssueFactory(user=project_manager)
 
-    response = update_ticket_mutation(
+    update_ticket_mutation(
         root=None,
         info=ghl_auth_mock_info,
         id=ticket.id,
         attach_issues=[issue.id],
     )
-
-    assert not response.errors
 
     issue.refresh_from_db()
 
@@ -104,14 +97,12 @@ def test_clear_issues(
     """Test clear issues."""
     issue = IssueFactory(ticket=ticket, user=project_manager)
 
-    response = update_ticket_mutation(
+    update_ticket_mutation(
         root=None,
         info=ghl_auth_mock_info,
         id=ticket.id,
         issues=[],
     )
-
-    assert not response.errors
 
     issue.refresh_from_db()
     assert not issue.ticket
@@ -125,13 +116,16 @@ def test_both_params_attach_and_issues(
 ):
     """Test both attach and rewrite issues."""
     issue = IssueFactory(user=project_manager)
-    response = update_ticket_mutation(
-        root=None,
-        info=ghl_auth_mock_info,
-        id=ticket.pk,
-        issues=[issue.pk],
-        attach_issues=[issue.pk],
-    )
 
-    assert len(response.errors) == 1
-    assert response.errors[0].field == 'non_field_errors'
+    with raises(GraphQLInputError) as exc_info:
+        update_ticket_mutation(
+            root=None,
+            info=ghl_auth_mock_info,
+            id=ticket.pk,
+            issues=[issue.pk],
+            attach_issues=[issue.pk],
+        )
+
+    extensions = exc_info.value.extensions  # noqa: WPS441
+    assert len(extensions['fieldErrors']) == 1
+    assert extensions['fieldErrors'][0]['fieldName'] == 'nonFieldErrors'

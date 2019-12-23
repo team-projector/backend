@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
 from pytest import raises
-from rest_framework.exceptions import PermissionDenied
 
+from apps.core.graphql.errors import GraphQLPermissionDenied
 from tests.test_development.factories import TicketFactory
 
 GHL_QUERY_TICKET = """
@@ -49,7 +49,7 @@ def test_unauth(db, ghl_mock_info, ticket_query):
     """Test unauth ticket retrieving."""
     ticket = TicketFactory.create()
 
-    with raises(PermissionDenied):
+    with raises(GraphQLPermissionDenied):
         ticket_query(
             root=None,
             info=ghl_mock_info,

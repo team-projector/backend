@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
 import graphene
-from rest_framework.generics import get_object_or_404
 
+from apps.core.graphql.helpers.generics import get_object_or_not_found
 from apps.core.graphql.mutations import BaseMutation
 from apps.core.graphql.mutations.mixins import ArgumentsValidationMixin
 from apps.payroll.graphql.forms import WorkBreakForm
@@ -32,7 +32,7 @@ class UpdateWorkBreakMutation(
     @classmethod
     def perform_mutate(cls, info, cleaned_data):  # noqa: WPS110
         """Update work break."""
-        work_break = get_object_or_404(
+        work_break = get_object_or_not_found(
             WorkBreak.objects.all(),
             pk=cleaned_data['id'],
         )

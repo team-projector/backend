@@ -1,6 +1,6 @@
-from django.core.exceptions import PermissionDenied
 from pytest import raises
 
+from apps.core.graphql.errors import GraphQLPermissionDenied
 from apps.development.models import TeamMember
 from apps.payroll.graphql.filters import WorkBreakFilterSet
 from apps.payroll.models import WorkBreak
@@ -76,7 +76,7 @@ def test_filter_by_team_not_teamlead(user, client):
 
     client.user = user
 
-    with raises(PermissionDenied):
+    with raises(GraphQLPermissionDenied):
         WorkBreakFilterSet(  # noqa: WPS428
             data={'team': team.id},
             queryset=WorkBreak.objects.all(),

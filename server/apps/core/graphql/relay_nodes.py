@@ -2,8 +2,8 @@
 
 from graphene import relay
 from graphql import ResolveInfo
-from rest_framework.exceptions import PermissionDenied
 
+from apps.core.graphql.errors import GraphQLPermissionDenied
 from apps.core.graphql.security.permissions import AllowAuthenticated
 
 
@@ -31,7 +31,7 @@ class DatasourceRelayNode(relay.Node):
             return None
 
         if not cls.has_permission(info, global_id):
-            raise PermissionDenied()
+            raise GraphQLPermissionDenied()
 
         get_node = getattr(only_type, 'get_node', None)
         if get_node:

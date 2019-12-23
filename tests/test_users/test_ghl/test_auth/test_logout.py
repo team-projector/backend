@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
 from pytest import raises
-from rest_framework.exceptions import PermissionDenied
 
+from apps.core.graphql.errors import GraphQLPermissionDenied
 from apps.users.models import Token
 
 GHL_QUERY_LOGOUT = """
@@ -38,5 +38,5 @@ def test_success(user, ghl_auth_mock_info, logout_mutation):
 
 def test_non_auth(user, ghl_mock_info, logout_mutation):
     """Test logout if user is not logged."""
-    with raises(PermissionDenied):
+    with raises(GraphQLPermissionDenied):
         logout_mutation(root=None, info=ghl_mock_info)

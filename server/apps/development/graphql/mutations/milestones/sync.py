@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
 import graphene
-from rest_framework.generics import get_object_or_404
 
+from apps.core.graphql.helpers.generics import get_object_or_not_found
 from apps.core.graphql.mutations import BaseMutation
 from apps.development.graphql.types import MilestoneType
 from apps.development.models import Milestone, Project, ProjectGroup
@@ -23,7 +23,7 @@ class SyncMilestoneMutation(BaseMutation):
     @classmethod
     def do_mutate(cls, root, info, **kwargs):  # noqa: WPS110
         """Syncing milestone."""
-        milestone = get_object_or_404(
+        milestone = get_object_or_not_found(
             Milestone.objects.all(),
             pk=kwargs.get('id'),
         )

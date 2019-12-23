@@ -1,6 +1,6 @@
-from django.core.exceptions import PermissionDenied
 from pytest import raises
 
+from apps.core.graphql.errors import GraphQLPermissionDenied
 from apps.development.models import Milestone
 from apps.development.models.project_member import PROJECT_MEMBER_ROLES
 from apps.development.services.milestone.allowed import filter_allowed_for_user
@@ -31,7 +31,7 @@ def test_not_pm(user):
 
     ProjectMilestoneFactory.create(owner=group)
 
-    with raises(PermissionDenied):
+    with raises(GraphQLPermissionDenied):
         filter_allowed_for_user(Milestone.objects.all(), user)
 
 
