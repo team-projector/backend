@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
 import graphene
-from rest_framework.generics import get_object_or_404
 
+from apps.core.graphql.helpers.generics import get_object_or_not_found
 from apps.core.graphql.mutations import BaseMutation
 from apps.payroll.graphql.permissions import CanApproveDeclineWorkBreak
 from apps.payroll.graphql.types import WorkBreakType
@@ -23,7 +23,7 @@ class ApproveWorkBreakMutation(BaseMutation):
     @classmethod
     def do_mutate(cls, root, info, **kwargs):  # noqa: WPS110
         """Approve work break after validation."""
-        work_break = get_object_or_404(
+        work_break = get_object_or_not_found(
             WorkBreak.objects.all(),
             pk=kwargs['id'],
         )

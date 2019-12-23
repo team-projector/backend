@@ -4,8 +4,12 @@ from datetime import datetime
 
 import pytest
 from pytest import raises
-from rest_framework.exceptions import PermissionDenied
 
+from apps.core.graphql.errors import (
+    INPUT_ERROR,
+    GraphQLInputError,
+    GraphQLPermissionDenied,
+)
 from apps.development.models.ticket import TYPE_FEATURE
 from tests.test_development.factories import (
     IssueFactory,
@@ -22,10 +26,6 @@ createTicket(
     milestone: $milestone, type: $type, title: $title, startDate: $startDate,
     dueDate: $dueDate, url: $url, issues: $issues, role: $role
 ) {
-    errors{
-      field
-      messages
-    }
     ticket {
       id
       title
@@ -63,7 +63,6 @@ def test_query(project_manager, ghl_client):
     )
 
     assert 'errors' not in response
-    assert not response['data']['createTicket']['errors']
 
     dto = response['data']['createTicket']['ticket']
     assert dto['title'] == 'test ticket'
@@ -79,18 +78,22 @@ def test_invalid_parameters(
     create_ticket_mutation,
 ):
     """Test creation with invalid parameters."""
-    response = create_ticket_mutation(
-        root=None,
-        info=ghl_auth_mock_info,
-        title='test ticket',
-        type='invalid type',
-        url='invalid url',
-        milestone=''
-    )
+    with raises(GraphQLInputError) as exc_info:
+        create_ticket_mutation(
+            root=None,
+            info=ghl_auth_mock_info,
+            title='test ticket',
+            type='invalid type',
+            url='invalid url',
+            milestone=''
+        )
+
+    extensions = exc_info.value.extensions  # noqa:WPS441
+    assert extensions['code'] == INPUT_ERROR
 
     fields_with_errors = {
-        error.field
-        for error in response.errors
+        err['fieldName']
+        for err in extensions['fieldErrors']
     }
 
     assert fields_with_errors == {'url', 'type', 'milestone'}
@@ -100,7 +103,7 @@ def test_without_permissions(user, ghl_auth_mock_info, create_ticket_mutation):
     """Test deletion without permissions."""
     milestone = ProjectMilestoneFactory()
 
-    with raises(PermissionDenied):
+    with raises(GraphQLPermissionDenied):
         create_ticket_mutation(
             root=None,
             info=ghl_auth_mock_info,

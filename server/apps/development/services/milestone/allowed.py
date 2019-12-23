@@ -2,9 +2,9 @@
 
 from typing import List
 
-from django.core.exceptions import PermissionDenied
 from django.db import models
 
+from apps.core.graphql.errors import GraphQLPermissionDenied
 from apps.development.models import Milestone, ProjectGroup, ProjectMember
 from apps.development.models.project_member import PROJECT_MEMBER_ROLES
 from apps.users.models import User
@@ -38,7 +38,7 @@ def get_members(user: User) -> List[ProjectMember]:
     )
 
     if not members:
-        raise PermissionDenied(
+        raise GraphQLPermissionDenied(
             'Only project managers can view project resources',
         )
 

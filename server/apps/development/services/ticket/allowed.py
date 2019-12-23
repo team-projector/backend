@@ -1,13 +1,12 @@
 # -*- coding: utf-8 -*-
 
-from django.core.exceptions import PermissionDenied
-
+from apps.core.graphql.errors import GraphQLPermissionDenied
 from apps.users.models import User
 
 
 def check_project_manager(user: User) -> None:
     """Check whether the user is a project manager."""
     if not user.roles.PROJECT_MANAGER:
-        raise PermissionDenied(
+        raise GraphQLPermissionDenied(
             'Only project managers can view ticket metrics',
         )

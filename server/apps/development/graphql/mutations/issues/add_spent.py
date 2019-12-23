@@ -3,8 +3,8 @@
 import graphene
 from django.utils.translation import gettext_lazy as _
 from rest_framework.exceptions import ValidationError
-from rest_framework.generics import get_object_or_404
 
+from apps.core.graphql.helpers.generics import get_object_or_not_found
 from apps.core.graphql.mutations import BaseMutation
 from apps.development.graphql.types import IssueType
 from apps.development.models import Issue
@@ -29,7 +29,7 @@ class AddSpendIssueMutation(BaseMutation):
         if kwargs['seconds'] < 1:
             raise ValidationError(_('MSG_SPEND_SHOULD_BE_GREATER_THAN_ONE'))
 
-        issue = get_object_or_404(
+        issue = get_object_or_not_found(
             Issue.objects.allowed_for_user(info.context.user),
             pk=kwargs['id'],
         )

@@ -1,8 +1,8 @@
 from datetime import datetime
 
 from pytest import raises
-from rest_framework.exceptions import PermissionDenied
 
+from apps.core.graphql.errors import GraphQLPermissionDenied
 from apps.development.models import TeamMember
 from apps.payroll.graphql.mutations.work_breaks import (
     CreateWorkBreakMutation,
@@ -145,7 +145,7 @@ def test_update_work_break_another_user(user, client):
     client.user = user
     info = AttrDict({'context': client})
 
-    with raises(PermissionDenied):
+    with raises(GraphQLPermissionDenied):
         UpdateWorkBreakMutation.mutate(
             None,
             info,

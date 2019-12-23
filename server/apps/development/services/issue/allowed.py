@@ -2,9 +2,9 @@
 
 from typing import Iterable
 
-from django.core.exceptions import PermissionDenied
 from django.db.models import Exists, OuterRef, QuerySet
 
+from apps.core.graphql.errors import GraphQLPermissionDenied
 from apps.development.models import (
     Project,
     ProjectGroup,
@@ -19,7 +19,7 @@ from apps.users.models import User
 def check_allow_project_manager(user: User) -> None:
     """Check whether user is a project manager."""
     if not user.roles.PROJECT_MANAGER:
-        raise PermissionDenied(
+        raise GraphQLPermissionDenied(
             'Only project managers can view project resources',
         )
 

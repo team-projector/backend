@@ -1,6 +1,6 @@
-from django.core.exceptions import PermissionDenied
 from pytest import raises
 
+from apps.core.graphql.errors import GraphQLPermissionDenied
 from apps.core.utils.time import seconds
 from apps.development.graphql.types import TicketType
 from apps.development.models.issue import ISSUE_STATES
@@ -136,5 +136,5 @@ def test_resolve_metrics_not_pm(user, client):
     client.user = user
     info = AttrDict({'context': client})
 
-    with raises(PermissionDenied):
+    with raises(GraphQLPermissionDenied):
         TicketType.resolve_metrics(ticket, info=info)

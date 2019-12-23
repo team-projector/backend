@@ -2,9 +2,9 @@
 
 from datetime import datetime
 
-from django.http.response import Http404
 from pytest import raises
 
+from apps.core.graphql.errors import GraphQLNotFound
 from apps.development.models import TeamMember
 from apps.users.graphql.resolvers import resolve_user_progress_metrics
 from tests.test_development.factories import TeamFactory, TeamMemberFactory
@@ -57,7 +57,7 @@ def test_not_leader(user, ghl_auth_mock_info):
         roles=TeamMember.roles.DEVELOPER
     )
 
-    with raises(Http404):
+    with raises(GraphQLNotFound):
         resolve_user_progress_metrics(
             parent=None,
             info=ghl_auth_mock_info,

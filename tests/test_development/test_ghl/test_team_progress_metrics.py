@@ -1,8 +1,8 @@
 from datetime import datetime
 
-from django.core.exceptions import PermissionDenied
 from pytest import raises
 
+from apps.core.graphql.errors import GraphQLPermissionDenied
 from apps.development.graphql.resolvers import resolve_team_progress_metrics
 from apps.development.models import TeamMember
 from tests.helpers.objects import AttrDict
@@ -45,7 +45,7 @@ def test_another_team(user, client):
     client.user = user
     info = AttrDict({'context': client})
 
-    with raises(PermissionDenied):
+    with raises(GraphQLPermissionDenied):
         resolve_team_progress_metrics(
             parent=None,
             info=info,
@@ -67,7 +67,7 @@ def test_not_leader(user, client):
     client.user = user
     info = AttrDict({'context': client})
 
-    with raises(PermissionDenied):
+    with raises(GraphQLPermissionDenied):
         resolve_team_progress_metrics(
             parent=None,
             info=info,

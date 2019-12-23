@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from rest_framework.generics import get_object_or_404
-
+from apps.core.graphql.helpers.generics import get_object_or_not_found
 from apps.development.models import Team
 from apps.development.services.team.allowed import (
     check_allow_get_metrics_by_user,
@@ -13,7 +12,7 @@ from apps.development.services.team.metrics.progress import (
 
 def resolve_team_progress_metrics(parent, info, **kwargs):  # noqa: WPS110
     """Resolve progress metrics for team."""
-    team = get_object_or_404(
+    team = get_object_or_not_found(
         Team.objects.all(),
         pk=kwargs['team'],
     )
