@@ -1,6 +1,7 @@
-from django.test import override_settings
+from pytest import raises
 
-from apps.development.graphql.mutations.issues import SyncIssueMutation
+from apps.core.graphql.errors import GraphQLInputError
+from apps.development.models.issue import ISSUE_STATES
 from tests.helpers.objects import AttrDict
 from tests.test_development.factories import IssueFactory, ProjectFactory
 from tests.test_development.factories.gitlab import (
@@ -11,9 +12,24 @@ from tests.test_development.factories.gitlab import (
 from tests.test_users.factories.gitlab import GlUserFactory
 from tests.test_users.factories.user import UserFactory
 
+GHL_QUERY_SYNC_ISSUE = """
+mutation (
+    $id: ID!
+) {
+syncIssue(
+    id: $id
+) {
+    issue {
+      id
+      state
+      glIid
+      }
+    }
+  }
+"""
 
-@override_settings(GITLAB_TOKEN='GITLAB_TOKEN')
-def test_sync_project(user, client, gl_mocker, gl_client):
+
+def test_query(project_manager, ghl_client, gl_mocker, user):
     gl_project = AttrDict(GlProjectFactory())
     project = ProjectFactory.create(gl_id=gl_project.id)
 
@@ -58,17 +74,38 @@ def test_sync_project(user, client, gl_mocker, gl_client):
 
     assert issue.state == 'opened'
 
-    client.user = user
-    info = AttrDict({
-        'context': client
-    })
+    ghl_client.set_user(user)
 
-    issue_mutated = SyncIssueMutation().do_mutate(
-        None, info, id=issue.id
-    ).issue
+    response = ghl_client.execute(
+        GHL_QUERY_SYNC_ISSUE,
+        variables={
+            'id': issue.pk,
+        }
+    )
 
-    assert issue_mutated.id == issue.id
-    assert issue_mutated.gl_id == issue.gl_id
+    assert 'errors' not in response
+
+    dto = response['data']['syncIssue']['issue']
+    assert dto['id'] == str(issue.id)
 
     issue.refresh_from_db()
-    assert issue.state == 'CLOSED'
+    assert issue.state == ISSUE_STATES.CLOSED
+
+
+def test_without_access(
+    user,
+    ghl_auth_mock_info,
+    sync_issue_mutation,
+):
+    issue = IssueFactory()
+
+    with raises(GraphQLInputError) as exc_info:
+        sync_issue_mutation(
+            root=None,
+            info=ghl_auth_mock_info,
+            id=issue.id,
+        )
+
+    extensions = exc_info.value.extensions  # noqa: WPS441
+    assert len(extensions['fieldErrors']) == 1
+    assert extensions['fieldErrors'][0]['fieldName'] == 'id'

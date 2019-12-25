@@ -1,36 +1,36 @@
 # -*- coding: utf-8 -*-
 
+from typing import Any, Dict, Optional
+
 import graphene
+from graphql import ResolveInfo
 
-from apps.core.graphql.helpers.generics import get_object_or_not_found
-from apps.core.graphql.mutations import BaseMutation
+from apps.core.graphql.helpers.persisters import update_from_validated_data
+from apps.core.graphql.mutations import SerializerMutation
+from apps.development.graphql.mutations.issues.inputs.update import (
+    UpdateIssueInput,
+)
 from apps.development.graphql.types import IssueType
-from apps.development.models import Issue, Ticket
 
 
-class UpdateIssueMutation(BaseMutation):
+class UpdateIssueMutation(SerializerMutation):
     """Update issue mutation."""
 
-    class Arguments:
-        id = graphene.ID(required=True)  # noqa: A003
-        ticket = graphene.ID(required=True)
+    class Meta:
+        serializer_class = UpdateIssueInput
 
     issue = graphene.Field(IssueType)
 
     @classmethod
-    def do_mutate(cls, root, info, **kwargs):  # noqa: WPS110
-        """Update issue."""
-        issue = get_object_or_not_found(
-            Issue.objects.allowed_for_user(info.context.user),
-            pk=kwargs['id'],
-        )
+    def perform_mutate(  # type: ignore
+        cls,
+        root: Optional[object],
+        info: ResolveInfo,  # noqa: WPS110ø
+        validated_data: Dict[str, Any],
+    ) -> 'UpdateIssueMutation':
+        """Updating issue ticket."""
+        issue = validated_data.pop('issue')
 
-        ticket = get_object_or_not_found(
-            Ticket.objects.all(),
-            pk=kwargs.pop('ticket'),
-        )
-        issue.ticket = ticket
-
-        issue.save()
+        update_from_validated_data(issue, validated_data)
 
         return cls(issue=issue)
