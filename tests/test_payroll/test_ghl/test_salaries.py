@@ -1,3 +1,6 @@
+from pytest import raises
+
+from apps.core.graphql.errors import GraphQLNotFound
 from apps.payroll.graphql.filters import SalaryFilterSet
 from apps.payroll.graphql.types import SalaryType
 from apps.payroll.models.salary import Salary
@@ -34,7 +37,8 @@ def test_salary_another_user(user, client):
 
     info.context.user = user_2
 
-    assert SalaryType().get_node(info, salary.id) is None
+    with raises(GraphQLNotFound):
+        SalaryType().get_node(info, salary.id)
 
 
 def test_list(user, client):

@@ -3,7 +3,10 @@ from django.utils import timezone
 from apps.development.graphql.types import IssuesProjectSummary, ProjectType
 from apps.development.models.milestone import MILESTONE_STATES
 from tests.helpers.objects import AttrDict
-from tests.test_development.factories import ProjectMilestoneFactory
+from tests.test_development.factories import (
+    IssueFactory,
+    ProjectMilestoneFactory,
+)
 
 
 def test_active_milestones_sort(user, client):
@@ -35,3 +38,11 @@ def test_active_milestones_sort(user, client):
 
     assert len(milestones) == 3
     assert milestones[0].id == m3.id
+
+
+def test_resolve_project(user):
+    issue = IssueFactory.create(user=user)
+
+    project = IssuesProjectSummary.resolve_project(issue, None)
+
+    assert project == issue.project

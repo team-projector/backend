@@ -1,3 +1,6 @@
+from pytest import raises
+
+from apps.core.graphql.errors import GraphQLNotFound
 from apps.development.graphql.types import TeamType
 from apps.development.models import Team, TeamMember
 from tests.helpers.objects import AttrDict
@@ -24,7 +27,8 @@ def test_team_not_member(user, client):
     client.user = user
     info = AttrDict({'context': client})
 
-    assert TeamType().get_node(info, team.id) is None
+    with raises(GraphQLNotFound):
+        TeamType().get_node(info, team.id)
 
 
 def test_teams(user, client):

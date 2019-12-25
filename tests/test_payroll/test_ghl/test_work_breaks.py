@@ -2,7 +2,7 @@ from datetime import datetime
 
 from pytest import raises
 
-from apps.core.graphql.errors import GraphQLPermissionDenied
+from apps.core.graphql.errors import GraphQLNotFound, GraphQLPermissionDenied
 from apps.development.models import TeamMember
 from apps.payroll.graphql.mutations.work_breaks import (
     CreateWorkBreakMutation,
@@ -56,7 +56,9 @@ def test_work_break_not_team_lead(user, client):
     client.user = user_2
     info = AttrDict({'context': client})
 
-    assert WorkBreakType.get_node(info, work_break_1.id) is None
+    with raises(GraphQLNotFound):
+        WorkBreakType.get_node(info, work_break_1.id)
+
     assert WorkBreakType.get_node(info, work_break_2.id) == work_break_2
 
 

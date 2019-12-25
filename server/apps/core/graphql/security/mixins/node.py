@@ -5,6 +5,7 @@ from typing import Optional
 from django.db.models import Model
 from graphql import ResolveInfo
 
+from apps.core.graphql.helpers.generics import get_object_or_not_found
 from apps.core.graphql.security.permissions import AllowAny
 
 
@@ -30,13 +31,9 @@ class AuthNode:
         ))
 
         if has_node_permission:
-            try:
-                return cls.get_queryset(  # type: ignore
-                    cls._meta.model.objects,  # type: ignore
-                    info,
-                ).get(id=obj_id)
-            except cls._meta.model.DoesNotExist:  # type: ignore
-                return None
+            return get_object_or_not_found(
+                cls.get_queryset(cls._meta.model.objects, info),  # type: ignore
+                id=obj_id,
+            )
 
-        else:
-            return None
+        return None

@@ -10,6 +10,14 @@ from gql import schema
 from tests.helpers.ghl_client import GraphQLClient
 
 
+def _get_mock_info(request):
+    ret = mock_info()
+    ret.context = request
+    ret.field_asts = [{}]
+    ret.fragments = {}
+    return ret
+
+
 @pytest.fixture()  # delete
 def gql_client_authenticated(rf, admin_user):
     request = rf.post('/')
@@ -46,17 +54,11 @@ def ghl_auth_mock_info(user, rf) -> ResolveInfo:
     rf.set_user(user)
     request = rf.get('/graphql/')
 
-    resolve_info = mock_info()
-    resolve_info.context = request
-
-    return resolve_info
+    return _get_mock_info(request)
 
 
 @pytest.fixture()  # type: ignore
 def ghl_mock_info(rf) -> ResolveInfo:
     request = rf.get('/graphql/')
 
-    resolve_info = mock_info()
-    resolve_info.context = request
-
-    return resolve_info
+    return _get_mock_info(request)

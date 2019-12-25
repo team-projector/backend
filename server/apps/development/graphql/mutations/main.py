@@ -12,6 +12,6 @@ class DevelopmentMutations:
     delete_ticket = tickets.DeleteTicketMutation.Field()
     update_ticket = tickets.UpdateTicketMutation.Field()
 
-    add_spend_time_issue = issues.AddSpendIssueMutation.Field()
+    add_spend_time_issue = issues.AddSpentToIssueMutation.Field()
     sync_issue = issues.SyncIssueMutation.Field()
     update_issue = issues.UpdateIssueMutation.Field()

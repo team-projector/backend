@@ -2,7 +2,7 @@
 
 from pytest import raises
 
-from apps.core.graphql.errors import GraphQLPermissionDenied
+from apps.core.graphql.errors import GraphQLNotFound, GraphQLPermissionDenied
 from tests.test_development.factories import TicketFactory
 
 GHL_QUERY_TICKET = """
@@ -59,10 +59,9 @@ def test_unauth(db, ghl_mock_info, ticket_query):
 
 def test_not_found(ghl_auth_mock_info, ticket_query):
     """Test not found ticket retrieving."""
-    response = ticket_query(
-        root=None,
-        info=ghl_auth_mock_info,
-        id=1,
-    )
-
-    assert response is None
+    with raises(GraphQLNotFound):
+        ticket_query(
+            root=None,
+            info=ghl_auth_mock_info,
+            id=1,
+        )

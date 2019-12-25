@@ -1,33 +1,37 @@
 # -*- coding: utf-8 -*-
 
-import graphene
+from typing import Any, Dict, Optional
 
-from apps.core.graphql.helpers.generics import get_object_or_not_found
-from apps.core.graphql.mutations import BaseMutation
+import graphene
+from graphql import ResolveInfo
+
+from apps.core.graphql.mutations import SerializerMutation
+from apps.development.graphql.mutations.issues.inputs import SyncIssueInput
 from apps.development.graphql.types import IssueType
-from apps.development.models import Issue
 from apps.development.tasks import sync_project_issue_task
 
 
-class SyncIssueMutation(BaseMutation):
+class SyncIssueMutation(SerializerMutation):
     """Syncing issue mutation."""
 
-    class Arguments:
-        id = graphene.ID(required=True)  # noqa: A003
+    class Meta:
+        serializer_class = SyncIssueInput
 
     issue = graphene.Field(IssueType)
 
     @classmethod
-    def do_mutate(cls, root, info, **kwargs):  # noqa: WPS110
+    def perform_mutate(  # type: ignore
+        cls,
+        root: Optional[object],
+        info: ResolveInfo,  # noqa: WPS110ø
+        validated_data: Dict[str, Any],
+    ) -> 'SyncIssueMutation':
         """Syncing issue."""
-        issue = get_object_or_not_found(
-            Issue.objects.allowed_for_user(info.context.user),
-            pk=kwargs['id'],
-        )
+        issue = validated_data.pop('issue')
 
         sync_project_issue_task.delay(
             issue.project.gl_id,
             issue.gl_iid,
         )
 
-        return SyncIssueMutation(issue=issue)
+        return cls(issue=issue)
