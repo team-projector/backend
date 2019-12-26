@@ -4,14 +4,11 @@ from apps.core.graphql.errors import GraphQLInputError
 from apps.development.graphql.mutations.issues.inputs.add_spent import (
     ERROR_MSG_NO_GL_TOKEN,
 )
-from tests.helpers.objects import AttrDict
 from tests.test_development.factories import IssueFactory, ProjectFactory
 from tests.test_development.factories.gitlab import (
-    GlIssueAddSpentTimeFactory,
     GlIssueFactory,
     GlProjectFactory,
 )
-from tests.test_users.factories.gitlab import GlUserFactory
 
 GHL_QUERY_ADD_SPENT_TO_ISSUE = """
 mutation (
@@ -34,42 +31,17 @@ def test_query(project_manager, ghl_client, gl_mocker, user):
     user.gl_token = 'token'
     user.save()
 
-    gl_project = AttrDict(GlProjectFactory())
-    project = ProjectFactory.create(gl_id=gl_project.id)
+    gl_project = GlProjectFactory.create()
+    project = ProjectFactory.create(gl_id=gl_project['id'])
 
-    gl_project_issue = AttrDict(GlIssueFactory(id=gl_project.id))
+    gl_project_issue = GlIssueFactory.create(id=gl_project['id'])
     issue = IssueFactory.create(
-        gl_iid=gl_project_issue.iid,
+        gl_iid=gl_project_issue['iid'],
         user=user,
         project=project,
     )
 
     IssueFactory.create_batch(5, project=project)
-
-    gl_mocker.registry_get(
-        '/user',
-        GlUserFactory()
-    )
-    gl_mocker.registry_get(
-        '/projects/{0}'.format(gl_project.id),
-        gl_project
-    )
-    gl_mocker.registry_get(
-        '/projects/{0}/issues/{1}'.format(
-            gl_project.id,
-            gl_project_issue.iid,
-        ),
-        gl_project_issue
-    )
-
-    time_spent = GlIssueAddSpentTimeFactory()
-    gl_mocker.registry_post(
-        '/projects/{0}/issues/{1}/add_spent_time'.format(
-            gl_project.id,
-            gl_project_issue.iid,
-        ),
-        time_spent)
-
     ghl_client.set_user(user)
 
     response = ghl_client.execute(

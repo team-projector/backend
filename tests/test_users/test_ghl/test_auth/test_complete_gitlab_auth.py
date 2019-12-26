@@ -7,9 +7,9 @@ from tests.helpers.objects import AttrDict
 
 
 def test_complete_auth(user, client, gl_mocker):
-    gl_mocker.registry_get('/user', {'username': user.login})
+    gl_mocker.register_get('/user', {'username': user.login})
 
-    gl_mocker.registry_url(
+    gl_mocker.register_url(
         method='POST',
         uri='https://gitlab.com/oauth/token',
         request_callback=RequestCallbackFactory({
@@ -40,9 +40,9 @@ def test_complete_auth(user, client, gl_mocker):
 
 
 def test_user_not_existed(db, client, gl_mocker):
-    gl_mocker.registry_get('/user', {'username': 'test user'})
+    gl_mocker.register_get('/user', {'username': 'test user'})
 
-    gl_mocker.registry_url(
+    gl_mocker.register_url(
         method='POST',
         uri='https://gitlab.com/oauth/token',
         request_callback=RequestCallbackFactory({
