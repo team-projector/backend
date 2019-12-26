@@ -6,7 +6,7 @@ from django_filters import OrderingFilter as BaseOrderingFilter
 from apps.core.graphql.filters.mixins import CamelCasedOrderingMixin
 
 
-class TestFilter(CamelCasedOrderingMixin, BaseOrderingFilter):
+class DemoFilter(CamelCasedOrderingMixin, BaseOrderingFilter):
     """Test ordering filter."""
 
 
@@ -18,8 +18,6 @@ class TestFilter(CamelCasedOrderingMixin, BaseOrderingFilter):
 ])
 def test_convert(ordering, field):
     """Test camel case filtering."""
-    test_filter = TestFilter(fields=(
-        field,
-    ))
+    test_filter = DemoFilter(fields=(field,))
 
     assert test_filter.get_ordering_value(ordering) == field

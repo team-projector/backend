@@ -8,7 +8,7 @@ from apps.development.models import Issue
 from tests.test_development.factories import IssueFactory
 
 
-class TestFilter(NullsAlwaysLastOrderingMixin, BaseOrderingFilter):
+class DemoFilter(NullsAlwaysLastOrderingMixin, BaseOrderingFilter):
     """Test ordering filter."""
 
 
@@ -22,9 +22,7 @@ def test_asc_ordering(db):
         IssueFactory(due_date=None),
     ]
 
-    test_filter = TestFilter(fields=(
-        ('due_date',)
-    ))
+    test_filter = DemoFilter(fields=(('due_date',)))
 
     queryset = test_filter.filter(
         Issue.objects.all(),
@@ -44,9 +42,7 @@ def test_desc_ordering(db):
         IssueFactory(due_date=now),
     ]
 
-    test_filter = TestFilter(fields=(
-        ('due_date',)
-    ))
+    test_filter = DemoFilter(fields=(('due_date',)))
 
     queryset = test_filter.filter(
         Issue.objects.all(),

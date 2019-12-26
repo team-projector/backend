@@ -3,6 +3,9 @@ from datetime import datetime
 import factory
 
 from tests.helpers.gitlab import gl_format_date, gl_format_datetime
+from tests.test_development.factories.gitlab.project_milestone import (
+    GlProjectMilestoneFactory,
+)
 from tests.test_users.factories.gitlab import GlUserFactory
 
 
@@ -18,5 +21,5 @@ class GlIssueFactory(factory.DictFactory):
     updated_at = gl_format_datetime(datetime.now())
     closed_at = gl_format_datetime(datetime.now())
     assignee = factory.SubFactory(GlUserFactory)
-    milestone = None
     labels = []
+    milestone = factory.SubFactory(GlProjectMilestoneFactory)
