@@ -1,7 +1,5 @@
 from datetime import datetime, timedelta
 
-from pytest import raises
-
 from apps.development.graphql.types.issue import IssueType
 from apps.development.models.issue import ISSUE_STATES
 from apps.development.services.issue.problems import get_issue_problems
@@ -9,17 +7,8 @@ from apps.development.services.issue.problems.checkers import (
     PROBLEM_EMPTY_DUE_DAY,
     PROBLEM_EMPTY_ESTIMATE,
     PROBLEM_OVER_DUE_DAY,
-    BaseProblemChecker,
 )
 from tests.test_development.factories import IssueFactory
-
-
-def test_base_checker():
-    with raises(NotImplementedError):
-        BaseProblemChecker().issue_has_problem(None)
-
-    with raises(NotImplementedError):
-        BaseProblemChecker().get_condition()
 
 
 def test_empty_due_day(user):
