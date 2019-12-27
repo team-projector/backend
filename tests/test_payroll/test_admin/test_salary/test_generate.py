@@ -27,7 +27,7 @@ def issue_spent_time(user, issue):
     )
 
 
-def test_get_form(issue_spent_time, admin_client, salary_admin):
+def test_get_form(admin_client, salary_admin):
     response = salary_admin.generate_salaries(
         admin_client.get('/admin/payroll/salary/')
     )
