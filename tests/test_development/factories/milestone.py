@@ -9,7 +9,8 @@ class MilestoneFactory(GitlabFieldMixin):
     owner = factory.SubFactory(ProjectGroupFactory)
     object_id = factory.SelfAttribute('owner.id')
     content_type = factory.LazyAttribute(
-        lambda o: ContentType.objects.get_for_model(o.owner))
+        lambda o: ContentType.objects.get_for_model(o.owner),
+    )
 
     class Meta:
         abstract = True

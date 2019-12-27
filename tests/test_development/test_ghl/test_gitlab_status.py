@@ -22,8 +22,10 @@ def test_status(user):
     project.gl_last_sync = timezone.now() + timedelta(minutes=2)
     project.save()
 
-    add_action_task.delay(sender_id=user.id,
-                          verb=ACTION_GITLAB_WEBHOOK_TRIGGERED)
+    add_action_task.delay(
+        sender_id=user.id,
+        verb=ACTION_GITLAB_WEBHOOK_TRIGGERED,
+    )
     add_action_task.delay(sender_id=user.id, verb=ACTION_GITLAB_CALL_API)
 
     sync_status = get_gitlab_sync_status()

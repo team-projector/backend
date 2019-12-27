@@ -29,8 +29,10 @@ def test_merge_requests_filter_by_team_empty(user, client):
         'fragments': {},
     })
 
-    merge_requests = MergeRequestType().get_queryset(MergeRequest.objects.all(),
-                                                     info)
+    merge_requests = MergeRequestType().get_queryset(
+        MergeRequest.objects.all(),
+        info,
+    )
 
     results = MergeRequestFilterSet(
         data={'team': team_1.id},

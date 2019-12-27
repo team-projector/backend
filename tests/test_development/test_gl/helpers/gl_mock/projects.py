@@ -4,8 +4,8 @@ from http import HTTPStatus
 
 
 def register_project(mocker, project, status_code: int = HTTPStatus.OK):
-    mocker.register_get('/projects/{0}'.format(
-        project['id']),
+    mocker.register_get(
+        '/projects/{0}'.format(project['id']),
         project,
         status_code=status_code,
     )

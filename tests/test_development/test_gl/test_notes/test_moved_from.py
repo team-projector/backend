@@ -17,19 +17,14 @@ def test_success(user):
     Note.objects.update_from_gitlab(dict2obj({
         'id': 2,
         'body': body,
-        'created_at': datetime.strftime(
-            datetime.now(),
-            GITLAB_DATETIME_FORMAT,
-        ),
-        'updated_at': datetime.strftime(
-            datetime.now(),
-            GITLAB_DATETIME_FORMAT,
-        ),
+        'created_at': datetime.strftime(datetime.now(), GITLAB_DATETIME_FORMAT),
+        'updated_at': datetime.strftime(datetime.now(), GITLAB_DATETIME_FORMAT),
         'author': {
-            'id': user.gl_id
+            'id': user.gl_id,
         },
-        'system': True
-    }), issue)
+        'system': True,
+    }), issue,
+    )
 
     assert Note.objects.count() == 1
 
@@ -48,19 +43,14 @@ def test_no_system(user):
     Note.objects.update_from_gitlab(dict2obj({
         'id': 2,
         'body': body,
-        'created_at': datetime.strftime(
-            datetime.now(),
-            GITLAB_DATETIME_FORMAT,
-        ),
-        'updated_at': datetime.strftime(
-            datetime.now(),
-            GITLAB_DATETIME_FORMAT,
-        ),
+        'created_at': datetime.strftime(datetime.now(), GITLAB_DATETIME_FORMAT),
+        'updated_at': datetime.strftime(datetime.now(), GITLAB_DATETIME_FORMAT),
         'author': {
-            'id': user.gl_id
+            'id': user.gl_id,
         },
-        'system': False
-    }), issue)
+        'system': False,
+    }), issue,
+    )
 
     assert not Note.objects.exists()
 
@@ -73,18 +63,13 @@ def test_bad_issue_number(user):
     Note.objects.update_from_gitlab(dict2obj({
         'id': 2,
         'body': body,
-        'created_at': datetime.strftime(
-            datetime.now(),
-            GITLAB_DATETIME_FORMAT,
-        ),
-        'updated_at': datetime.strftime(
-            datetime.now(),
-            GITLAB_DATETIME_FORMAT,
-        ),
+        'created_at': datetime.strftime(datetime.now(), GITLAB_DATETIME_FORMAT),
+        'updated_at': datetime.strftime(datetime.now(), GITLAB_DATETIME_FORMAT),
         'author': {
-            'id': user.gl_id
+            'id': user.gl_id,
         },
-        'system': True
-    }), issue)
+        'system': True,
+    }), issue,
+    )
 
     assert not Note.objects.exists()
