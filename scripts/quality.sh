@@ -12,7 +12,7 @@ run_checkers() {
 #  DJANGO_ENV=production python manage.py check --deploy --fail-level WARNING
 
   # Running code-quality check:
-#  xenon --max-absolute A --max-modules A --max-average A server
+  xenon --max-absolute A --max-modules A --max-average A server
 
   # Check that all migrations worked fine:
   DJANGO_ENV=build python manage.py makemigrations --dry-run --check

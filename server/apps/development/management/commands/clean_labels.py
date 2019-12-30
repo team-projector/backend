@@ -1,10 +1,12 @@
 # -*- coding: utf-8 -*-
 
+from typing import Any, Tuple
+
 from django.core.management import BaseCommand
 from tqdm import tqdm
 
 from apps.core.gitlab.client import get_default_gitlab_client
-from apps.development.services.gl.labels import LabelsCleaner
+from apps.development.services.gl.labels.cleaner import LabelsCleaner, Project
 
 
 class Command(BaseCommand):
@@ -25,19 +27,49 @@ class Command(BaseCommand):
             help='Show only log, without apply',
         )
 
-    def handle(self, *args, **options):  # noqa: WPS110
+    def handle(self, *args, **options) -> None:  # noqa: WPS110, WPS210
         """Call function."""
         self._parse_params(*args, **options)
         client = get_default_gitlab_client()
 
+        operations = self._generate_operations(client)
+
+        if self.only_log:
+            return
+
+        with tqdm(total=len(operations), desc='Executing operations') as pbar:
+            for num, operation in enumerate(operations, start=1):
+                method, args, kwargs = operation
+
+                try:
+                    client.http_request(method, *args, **kwargs)
+
+                except Exception:
+                    self.stdout(
+                        'Failed on {0} operation: {1}'.format(num, operation),
+                    )
+
+                    self.stdout('Left operations:\n {0}'.format(
+                        '\n'.join(operations[num:]),
+                    ))
+                pbar.update()
+
+    def _generate_operations(self, client) -> Tuple[Any, ...]:  # type: ignore
         total = self._get_total(client)
         cleaner = LabelsCleaner(client=client)
 
-        with tqdm(total=total) as pbar:
-            cleaner.clean_group(
+        with tqdm(total=total, desc='Generating operations') as pbar:
+            original_f = Project._adjust_labels_for_single_item  # noqa: WPS437
+
+            def _wrapped(proj, gl_api_obj):  # noqa:WPS430
+                original_f(proj, gl_api_obj)
+                pbar.update()
+
+            Project._adjust_labels_for_single_item = _wrapped  # noqa: WPS437
+
+            return cleaner.clean_group(
                 self.group_for_sync,
-                adjust_element_callback=pbar.update,
-                dry_run=self.only_log,
+                dry_run=True,
             )
 
     def _get_total(self, client) -> int:

@@ -20,14 +20,7 @@ class DatasourceRelayNode(relay.Node):
         only_type=None,
     ):
         """Get node by global id."""
-        is_invalid_node = (
-            not global_id
-            or not only_type
-            # We make sure the ObjectType implements the "Node" interface
-            or cls not in only_type._meta.interfaces  # noqa: WPS437
-        )
-
-        if is_invalid_node:  # noqa: WPS437
+        if cls._is_invalid_node(global_id, only_type):
             return None
 
         if not cls.has_permission(info, global_id):
@@ -57,4 +50,13 @@ class DatasourceRelayNode(relay.Node):
         return all(
             perm().has_node_permission(info, obj_id)
             for perm in cls.permission_classes
+        )
+
+    @classmethod
+    def _is_invalid_node(cls, global_id, only_type=None) -> bool:
+        return (
+            not global_id
+            or not only_type
+            # We make sure the ObjectType implements the "Node" interface
+            or cls not in only_type._meta.interfaces  # noqa: WPS437
         )
