@@ -61,7 +61,7 @@ def test_load(db, context):
 
 
 def test_update_last_sync(db, context):
-    IssueGlManager().sync_project_issues(context.project, check_deleted=False)
+    IssueGlManager().sync_project_issues(context.project)
 
     issue = Issue.objects.first()
 

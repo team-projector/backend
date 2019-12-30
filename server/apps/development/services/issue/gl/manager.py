@@ -35,7 +35,6 @@ class IssueGlManager(BaseWorkItemGlManager):
         self,
         project: Project,
         full_reload: bool = False,
-        check_deleted: bool = True,
     ) -> None:
         """Load project issues."""
         logger.info('Syncing project "{project}" issues', extra={
@@ -59,8 +58,7 @@ class IssueGlManager(BaseWorkItemGlManager):
         for gl_issue in gl_project.issues.list(**args):
             self.update_project_issue(project, gl_project, gl_issue)
 
-        if check_deleted:
-            self.check_project_deleted_issues(project, gl_project)
+        self.check_project_deleted_issues(project, gl_project)
 
     def update_project_issue(
         self,

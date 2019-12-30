@@ -19,9 +19,7 @@ class NoteManager(models.Manager):
             UserGlManager,
         )
 
-        last_date = issue.last_note_date
-
-        if last_date and last_date > parse_gl_datetime(gl_note.created_at):
+        if self._notes_are_synced(gl_note, issue):
             return None
 
         parse_data = read_note(gl_note)
@@ -42,3 +40,8 @@ class NoteManager(models.Manager):
             content_object=issue,
             data=parse_data.data,
         )
+
+    @classmethod
+    def _notes_are_synced(cls, gl_note, issue) -> bool:
+        last_date = issue.last_note_date
+        return last_date and last_date > parse_gl_datetime(gl_note.created_at)
