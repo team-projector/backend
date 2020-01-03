@@ -1,6 +1,7 @@
+# -*- coding: utf-8 -*-
+
 from apps.development.models.note import NOTE_TYPES
 from tests.test_development.factories import (
-    IssueFactory,
     IssueNoteFactory,
     LabelFactory,
     MergeRequestFactory,
@@ -11,12 +12,6 @@ from tests.test_development.factories import (
     TeamMemberFactory,
 )
 from tests.test_users.factories.user import UserFactory
-
-
-def test_issue(db):
-    issue = IssueFactory.create(title='issue_title_test')
-
-    assert str(issue) == 'issue_title_test'
 
 
 def test_label(db):
