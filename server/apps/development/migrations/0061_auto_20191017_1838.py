@@ -6,56 +6,56 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('development', '0060_auto_20191004_1558'),
+        ("development", "0060_auto_20191004_1558"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='issue',
-            name='state',
-            field=models.CharField(blank=True, default='', help_text='HT__STATE', max_length=255, verbose_name='VN__STATE'),
+            model_name="issue",
+            name="state",
+            field=models.CharField(blank=True, default="", help_text="HT__STATE", max_length=255, verbose_name="VN__STATE"),
             preserve_default=False,
         ),
         migrations.AlterField(
-            model_name='mergerequest',
-            name='state',
-            field=models.CharField(blank=True, choices=[('opened', 'opened'), ('merged', 'merged'), ('closed', 'closed')], default='', help_text='HT__STATE', max_length=255, verbose_name='VN__STATE'),
+            model_name="mergerequest",
+            name="state",
+            field=models.CharField(blank=True, choices=[("opened", "opened"), ("merged", "merged"), ("closed", "closed")], default="", help_text="HT__STATE", max_length=255, verbose_name="VN__STATE"),
             preserve_default=False,
         ),
         migrations.AlterField(
-            model_name='milestone',
-            name='description',
-            field=models.TextField(blank=True, default='', help_text='HT__DESCRIPTION', verbose_name='VN__DESCRIPTION'),
+            model_name="milestone",
+            name="description",
+            field=models.TextField(blank=True, default="", help_text="HT__DESCRIPTION", verbose_name="VN__DESCRIPTION"),
             preserve_default=False,
         ),
         migrations.AlterField(
-            model_name='milestone',
-            name='state',
-            field=models.CharField(blank=True, choices=[('active', 'active'), ('closed', 'closed')], default='', help_text='HT__STATE', max_length=20, verbose_name='VN__STATE'),
+            model_name="milestone",
+            name="state",
+            field=models.CharField(blank=True, choices=[("active", "active"), ("closed", "closed")], default="", help_text="HT__STATE", max_length=20, verbose_name="VN__STATE"),
             preserve_default=False,
         ),
         migrations.AlterField(
-            model_name='note',
-            name='body',
-            field=models.TextField(default=''),
+            model_name="note",
+            name="body",
+            field=models.TextField(default=""),
             preserve_default=False,
         ),
         migrations.AlterField(
-            model_name='project',
-            name='full_title',
-            field=models.CharField(blank=True, default='', help_text='HT__FULL_TITLE', max_length=255, verbose_name='VN__FULL_TITLE'),
+            model_name="project",
+            name="full_title",
+            field=models.CharField(blank=True, default="", help_text="HT__FULL_TITLE", max_length=255, verbose_name="VN__FULL_TITLE"),
             preserve_default=False,
         ),
         migrations.AlterField(
-            model_name='projectgroup',
-            name='full_title',
-            field=models.CharField(blank=True, default='', help_text='HT__FULL_TITLE', max_length=255, verbose_name='VN__FULL_TITLE'),
+            model_name="projectgroup",
+            name="full_title",
+            field=models.CharField(blank=True, default="", help_text="HT__FULL_TITLE", max_length=255, verbose_name="VN__FULL_TITLE"),
             preserve_default=False,
         ),
         migrations.AlterField(
-            model_name='ticket',
-            name='type',
-            field=models.CharField(blank=True, choices=[('feature', 'CH_FEATURE'), ('improvement', 'CH_IMPROVEMENT'), ('bug_fixing', 'CH_BUG_FIXING')], default='', help_text='HT__TYPE', max_length=50, verbose_name='VN__TYPE'),
+            model_name="ticket",
+            name="type",
+            field=models.CharField(blank=True, choices=[("feature", "CH_FEATURE"), ("improvement", "CH_IMPROVEMENT"), ("bug_fixing", "CH_BUG_FIXING")], default="", help_text="HT__TYPE", max_length=50, verbose_name="VN__TYPE"),
             preserve_default=False,
         ),
     ]

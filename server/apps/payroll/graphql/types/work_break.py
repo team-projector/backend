@@ -16,7 +16,7 @@ class WorkBreakType(BaseDjangoObjectType):
         model = WorkBreak
         interfaces = (DatasourceRelayNode,)
         connection_class = DataSourceConnection
-        name = 'WorkBreak'
+        name = "WorkBreak"
 
     @classmethod
     def get_queryset(cls, queryset, info) -> QuerySet:  # noqa: WPS110

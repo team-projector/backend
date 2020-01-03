@@ -12,7 +12,7 @@ class MoneyField(models.DecimalField):
 
         Set restrictions.
         """
-        kwargs['max_digits'] = 14
-        kwargs['decimal_places'] = 2
+        kwargs["max_digits"] = 14
+        kwargs["decimal_places"] = 2
 
         super().__init__(*args, **kwargs)

@@ -553,9 +553,9 @@ def test_resolve_issues_summary(user, client):
 
     client.user = user
     info = AttrDict({
-        'context': client,
-        'field_asts': [{}],
-        'fragments': {},
+        "context": client,
+        "field_asts": [{}],
+        "fragments": {},
     })
 
     summary = resolve_issues_summary(
@@ -580,7 +580,7 @@ def test_resolve_issues_project_summaries(user):
     )
 
     parent = AttrDict({
-        'queryset': Issue.objects.all()
+        "queryset": Issue.objects.all()
     })
 
     issues = resolve_issues_project_summaries(parent, None)[0].issues
@@ -606,7 +606,7 @@ def test_resolve_issues_team_summaries(user):
     )
 
     parent = AttrDict({
-        'queryset': Issue.objects.all()
+        "queryset": Issue.objects.all()
     })
 
     issues = resolve_issues_team_summaries(parent, None)[0].issues

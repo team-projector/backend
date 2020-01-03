@@ -22,7 +22,7 @@ def test_all(db, gl_mocker):
 
     MilestoneGlManager().sync_project_milestones(project)
 
-    milestone = Milestone.objects.get(gl_id=gl_milestone['id'])
+    milestone = Milestone.objects.get(gl_id=gl_milestone["id"])
     gl_checkers.check_milestone(milestone, gl_milestone, project)
 
 
@@ -42,7 +42,7 @@ def test_single(db, gl_mocker):
         gl_milestone,
     )
 
-    MilestoneGlManager().sync_project_milestone(project, gl_milestone['id'])
+    MilestoneGlManager().sync_project_milestone(project, gl_milestone["id"])
 
-    milestone = Milestone.objects.get(gl_id=gl_milestone['id'])
+    milestone = Milestone.objects.get(gl_id=gl_milestone["id"])
     gl_checkers.check_milestone(milestone, gl_milestone, project)

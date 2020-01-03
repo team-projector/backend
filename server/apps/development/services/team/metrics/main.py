@@ -92,8 +92,8 @@ class TeamMetricsProvider:
         return workitems.filter(
             state=ISSUE_STATES.OPENED,
         ).aggregate(
-            total_time_estimate=Sum('time_estimate'),
-        )['total_time_estimate']
+            total_time_estimate=Sum("time_estimate"),
+        )["total_time_estimate"]
 
 
 def get_team_metrics(team: Team) -> TeamMetrics:

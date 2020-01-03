@@ -24,7 +24,7 @@ class CanApproveDeclineWorkBreak:
         """Only team leader can approve or decline work break."""
         work_break = get_object_or_not_found(
             WorkBreak.objects.all(),
-            pk=kwargs['id'],
+            pk=kwargs["id"],
         )
 
         return is_related_with_another_by_team_roles(

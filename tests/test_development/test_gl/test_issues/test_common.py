@@ -13,12 +13,12 @@ from tests.test_development.test_gl.helpers import (
 )
 from tests.test_users.factories.gitlab import GlUserFactory
 
-Context = namedtuple('Context', [
-    'project',
-    'gl_project',
-    'gl_assignee',
-    'issue',
-    'gl_issue'
+Context = namedtuple("Context", [
+    "project",
+    "gl_project",
+    "gl_assignee",
+    "issue",
+    "gl_issue"
 ])
 
 
@@ -30,7 +30,7 @@ def context(gl_mocker) -> Context:
         project,
         gl_project,
         gl_kwargs={
-            'assignee': gl_assignee,
+            "assignee": gl_assignee,
         },
     )
 
@@ -75,7 +75,7 @@ def test_update_last_sync(db, context):
 
 def test_no_milestone_in_db(db, context, gl_client):
     gl_project_loaded = gl_client.projects.get(id=context.project.gl_id)
-    gl_issue_manager = gl_project_loaded.issues.get(id=context.gl_issue['iid'])
+    gl_issue_manager = gl_project_loaded.issues.get(id=context.gl_issue["iid"])
 
     IssueGlManager().update_project_issue(
         context.project,
@@ -94,11 +94,11 @@ def test_no_milestone_in_db(db, context, gl_client):
 
 def test_milestone_in_db(db, context, gl_client):
     milestone = ProjectMilestoneFactory.create(
-        gl_id=context.gl_issue['milestone']['id'],
+        gl_id=context.gl_issue["milestone"]["id"],
     )
 
     gl_project_loaded = gl_client.projects.get(id=context.project.gl_id)
-    gl_issue_manager = gl_project_loaded.issues.get(id=context.gl_issue['iid'])
+    gl_issue_manager = gl_project_loaded.issues.get(id=context.gl_issue["iid"])
 
     IssueGlManager().update_project_issue(
         context.project,

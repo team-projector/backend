@@ -33,7 +33,7 @@ def test_work_break(user, client):
     work_break_2 = WorkBreakFactory.create(user=user_2)
 
     client.user = user
-    info = AttrDict({'context': client})
+    info = AttrDict({"context": client})
 
     assert WorkBreakType.get_node(info, work_break_1.id) == work_break_1
     assert WorkBreakType.get_node(info, work_break_2.id) == work_break_2
@@ -54,7 +54,7 @@ def test_work_break_not_team_lead(user, client):
     work_break_2 = WorkBreakFactory.create(user=user_2)
 
     client.user = user_2
-    info = AttrDict({'context': client})
+    info = AttrDict({"context": client})
 
     with raises(GraphQLNotFound):
         WorkBreakType.get_node(info, work_break_1.id)
@@ -76,7 +76,7 @@ def test_work_breaks(user, client):
     WorkBreakFactory.create_batch(5, user=user_2)
 
     client.user = user_2
-    info = AttrDict({'context': client})
+    info = AttrDict({"context": client})
 
     work_breaks = WorkBreakType.get_queryset(WorkBreak.objects.all(), info)
 
@@ -85,12 +85,12 @@ def test_work_breaks(user, client):
 
 def test_create_work_break(user, client):
     client.user = user
-    info = AttrDict({'context': client})
+    info = AttrDict({"context": client})
 
     work_break_created = CreateWorkBreakMutation.mutate(
         None,
         info,
-        comment='created',
+        comment="created",
         from_date=str(datetime.now()),
         reason=WORK_BREAK_REASONS.DAYOFF,
         to_date=str(datetime.now()),
@@ -98,7 +98,7 @@ def test_create_work_break(user, client):
     ).work_break
 
     assert WorkBreak.objects.count() == 1
-    assert work_break_created.comment == 'created'
+    assert work_break_created.comment == "created"
     assert work_break_created.from_date is not None
     assert work_break_created.reason == WORK_BREAK_REASONS.DAYOFF
     assert work_break_created.to_date is not None
@@ -106,16 +106,16 @@ def test_create_work_break(user, client):
 
 
 def test_update_work_break(user, client):
-    work_break = WorkBreakFactory.create(user=user, comment='created')
+    work_break = WorkBreakFactory.create(user=user, comment="created")
 
     client.user = user
-    info = AttrDict({'context': client})
+    info = AttrDict({"context": client})
 
     UpdateWorkBreakMutation.mutate(
         None,
         info,
         id=work_break.id,
-        comment='updated',
+        comment="updated",
         from_date=str(datetime.now()),
         reason=WORK_BREAK_REASONS.VACATION,
         to_date=str(datetime.now()),
@@ -124,7 +124,7 @@ def test_update_work_break(user, client):
 
     work_break.refresh_from_db()
     assert WorkBreak.objects.count() == 1
-    assert work_break.comment == 'updated'
+    assert work_break.comment == "updated"
     assert work_break.user == user
 
 
@@ -142,17 +142,17 @@ def test_update_work_break_another_user(user, client):
                              user=user_2,
                              roles=TeamMember.roles.DEVELOPER)
 
-    work_break = WorkBreakFactory.create(user=user_2, comment='created')
+    work_break = WorkBreakFactory.create(user=user_2, comment="created")
 
     client.user = user
-    info = AttrDict({'context': client})
+    info = AttrDict({"context": client})
 
     with raises(GraphQLPermissionDenied):
         UpdateWorkBreakMutation.mutate(
             None,
             info,
             id=work_break.id,
-            comment='updated',
+            comment="updated",
             from_date=str(datetime.now()),
             reason=WORK_BREAK_REASONS.VACATION,
             to_date=str(datetime.now())
@@ -175,16 +175,16 @@ def test_update_work_break_another_user_but_teamlead(user, client):
         roles=TeamMember.roles.DEVELOPER,
     )
 
-    work_break = WorkBreakFactory.create(user=user_2, comment='created')
+    work_break = WorkBreakFactory.create(user=user_2, comment="created")
 
     client.user = user
-    info = AttrDict({'context': client})
+    info = AttrDict({"context": client})
 
     UpdateWorkBreakMutation.mutate(
         None,
         info,
         id=work_break.id,
-        comment='updated',
+        comment="updated",
         from_date=str(datetime.now()),
         reason=WORK_BREAK_REASONS.VACATION,
         to_date=str(datetime.now())
@@ -192,15 +192,15 @@ def test_update_work_break_another_user_but_teamlead(user, client):
 
     work_break.refresh_from_db()
     assert WorkBreak.objects.count() == 1
-    assert work_break.comment == 'updated'
+    assert work_break.comment == "updated"
     assert work_break.user == user_2
 
 
 def test_delete_work_break(user, client):
-    work_break = WorkBreakFactory.create(user=user, comment='created')
+    work_break = WorkBreakFactory.create(user=user, comment="created")
 
     client.user = user
-    info = AttrDict({'context': client})
+    info = AttrDict({"context": client})
 
     assert WorkBreak.objects.count() == 1
 

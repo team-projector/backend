@@ -25,7 +25,7 @@ class ApproveWorkBreakMutation(BaseMutation):
         """Approve work break after validation."""
         work_break = get_object_or_not_found(
             WorkBreak.objects.all(),
-            pk=kwargs['id'],
+            pk=kwargs["id"],
         )
 
         work_break_service.Manager(work_break).approve(

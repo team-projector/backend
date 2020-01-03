@@ -11,26 +11,26 @@ class Migration(migrations.Migration):
 
     dependencies = [
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
-        ('development', '0033_auto_20190408_1225'),
+        ("development", "0033_auto_20190408_1225"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='ProjectMember',
+            name="ProjectMember",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('created_at', models.DateTimeField(auto_now_add=True)),
-                ('updated_at', models.DateTimeField(auto_now=True)),
-                ('role', models.CharField(choices=[('developer', 'CH_DEVELOPER'), ('team_leader', 'CH_TEAM_LEADER'), ('project_manager', 'CH_PM'), ('customer', 'CH_CUSTOMER')], help_text='HT__ROLE', max_length=20, verbose_name='VN__ROLE')),
-                ('user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
+                ("id", models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name="ID")),
+                ("created_at", models.DateTimeField(auto_now_add=True)),
+                ("updated_at", models.DateTimeField(auto_now=True)),
+                ("role", models.CharField(choices=[("developer", "CH_DEVELOPER"), ("team_leader", "CH_TEAM_LEADER"), ("project_manager", "CH_PM"), ("customer", "CH_CUSTOMER")], help_text="HT__ROLE", max_length=20, verbose_name="VN__ROLE")),
+                ("user", models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
             ],
             options={
-                'abstract': False,
+                "abstract": False,
             },
         ),
         migrations.AddField(
-            model_name='project',
-            name='members',
-            field=models.ManyToManyField(to='development.ProjectMember'),
+            model_name="project",
+            name="members",
+            field=models.ManyToManyField(to="development.ProjectMember"),
         ),
     ]

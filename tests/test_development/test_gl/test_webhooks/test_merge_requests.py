@@ -18,7 +18,7 @@ def test_success(db, gl_mocker, client):
     project, gl_project = initializers.init_project()
     gl_user = GlUserFactory.create()
     gl_merge_request = GlMergeRequestFactory.create(
-        project_id=gl_project['id'],
+        project_id=gl_project["id"],
         assignee=gl_user,
         author=gl_user,
     )
@@ -39,7 +39,7 @@ def test_success(db, gl_mocker, client):
         gl_merge_request,
     )
 
-    gl_webhook(client.post('/', data=webhook_data, format='json'))
+    gl_webhook(client.post("/", data=webhook_data, format="json"))
 
     merge_request = MergeRequest.objects.first()
 

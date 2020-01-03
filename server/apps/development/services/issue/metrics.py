@@ -26,8 +26,8 @@ def get_issue_metrics(issue: Issue) -> IssueMetrics:
     metrics = IssueMetrics()
     metrics.remains = issue.time_remains
     metrics.efficiency = issue.efficiency
-    metrics.payroll = payroll['total_payroll']
-    metrics.paid = payroll['total_paid']
+    metrics.payroll = payroll["total_payroll"]
+    metrics.paid = payroll["total_paid"]
 
     return metrics
 
@@ -56,34 +56,34 @@ class IssuesContainerMetricsProvider:
             return
 
         stats = issues.aggregate(
-            time_estimate=Coalesce(models.Sum('time_estimate'), 0),
-            time_spent=Coalesce(models.Sum('total_time_spent'), 0),
+            time_estimate=Coalesce(models.Sum("time_estimate"), 0),
+            time_spent=Coalesce(models.Sum("total_time_spent"), 0),
             issues_closed_count=Coalesce(
                 models.Count(
-                    'id',
+                    "id",
                     filter=models.Q(state=ISSUE_STATES.CLOSED),
                 ), 0,
             ),
             issues_opened_count=Coalesce(
                 models.Count(
-                    'id',
+                    "id",
                     filter=models.Q(state=ISSUE_STATES.OPENED),
                 ), 0,
             ),
-            issues_count=models.Count('*'),
+            issues_count=models.Count("*"),
         )
 
-        metrics.time_estimate = stats['time_estimate']
-        metrics.time_remains = stats['time_estimate'] - stats['time_spent']
+        metrics.time_estimate = stats["time_estimate"]
+        metrics.time_remains = stats["time_estimate"] - stats["time_spent"]
 
-        if stats['time_spent']:
-            metrics.efficiency = stats['time_estimate'] / stats['time_spent']
+        if stats["time_spent"]:
+            metrics.efficiency = stats["time_estimate"] / stats["time_spent"]
 
-        metrics.time_spent = stats['time_spent']
+        metrics.time_spent = stats["time_spent"]
 
-        metrics.issues_closed_count = stats['issues_closed_count']
-        metrics.issues_opened_count = stats['issues_opened_count']
-        metrics.issues_count = stats['issues_count']
+        metrics.issues_closed_count = stats["issues_closed_count"]
+        metrics.issues_opened_count = stats["issues_opened_count"]
+        metrics.issues_count = stats["issues_count"]
 
     def filter_issues(self, queryset: models.QuerySet) -> models.QuerySet:
         """Filter gitlab should be implemented in subclass."""

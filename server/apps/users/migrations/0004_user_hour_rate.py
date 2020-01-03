@@ -8,13 +8,13 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('users', '0003_remove_user_gl_username'),
+        ("users", "0003_remove_user_gl_username"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='user',
-            name='hour_rate',
-            field=models.PositiveIntegerField(default=0, help_text='HT__HOUR_RATE', verbose_name='VN__HOUR_RATE'),
+            model_name="user",
+            name="hour_rate",
+            field=models.PositiveIntegerField(default=0, help_text="HT__HOUR_RATE", verbose_name="VN__HOUR_RATE"),
         ),
     ]

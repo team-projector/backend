@@ -29,7 +29,7 @@ class DataSourceConnectionField(
 
     def __init__(self, model_type, *args, **kwargs):
         """Initialize self."""
-        kwargs.setdefault('offset', Int())
+        kwargs.setdefault("offset", Int())
         super().__init__(model_type, *args, **kwargs)
 
     @classmethod
@@ -50,7 +50,7 @@ class DataSourceConnectionField(
             iterable,
             args,
             # differences from original function
-            slice_start=args.get('offset', 0),
+            slice_start=args.get("offset", 0),
             list_length=items_count,
             list_slice_length=items_count,
             connection_type=connection,
@@ -78,8 +78,8 @@ class DataSourceConnectionField(
         # implemented support for offsets
 
         args = args or {}
-        before_offset = get_offset_with_default(args.get('before'), list_length)
-        after_offset = get_offset_with_default(args.get('after'), -1)
+        before_offset = get_offset_with_default(args.get("before"), list_length)
+        after_offset = get_offset_with_default(args.get("after"), -1)
 
         start_offset = max(
             slice_start - 1,
@@ -91,15 +91,15 @@ class DataSourceConnectionField(
             before_offset,
             list_length,
         )
-        if isinstance(args.get('first'), int):
+        if isinstance(args.get("first"), int):
             end_offset = min(
                 end_offset,
-                start_offset + args.get('first'),
+                start_offset + args.get("first"),
             )
-        if isinstance(args.get('last'), int):
+        if isinstance(args.get("last"), int):
             start_offset = max(
                 start_offset,
-                end_offset - args.get('last'),
+                end_offset - args.get("last"),
             )
 
         return cls._build_connection_type(
@@ -108,10 +108,10 @@ class DataSourceConnectionField(
             edge_type,
             list_length,
             list_slice,
-            args.get('first'),
-            args.get('last'),
-            args.get('before'),
-            args.get('after'),
+            args.get("first"),
+            args.get("last"),
+            args.get("before"),
+            args.get("after"),
             before_offset,
             after_offset,
             start_offset,

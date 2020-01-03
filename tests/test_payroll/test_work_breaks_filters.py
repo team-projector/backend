@@ -25,7 +25,7 @@ def test_filter_by_user(user):
     work_break_2 = WorkBreakFactory.create(user=user_2)
 
     results = WorkBreakFilterSet(
-        data={'user': user.id},
+        data={"user": user.id},
         queryset=WorkBreak.objects.all()
     ).qs
 
@@ -33,7 +33,7 @@ def test_filter_by_user(user):
     assert results.first() == work_break_1
 
     results = WorkBreakFilterSet(
-        data={'user': user_2.id},
+        data={"user": user_2.id},
         queryset=WorkBreak.objects.all()
     ).qs
 
@@ -58,7 +58,7 @@ def test_filter_by_team(user, client):
     client.user = user
 
     results = WorkBreakFilterSet(
-        data={'team': team.id},
+        data={"team": team.id},
         queryset=WorkBreak.objects.all(),
         request=client
     ).qs
@@ -78,7 +78,7 @@ def test_filter_by_team_not_teamlead(user, client):
 
     with raises(GraphQLPermissionDenied):
         WorkBreakFilterSet(  # noqa: WPS428
-            data={'team': team.id},
+            data={"team": team.id},
             queryset=WorkBreak.objects.all(),
             request=client
         ).qs
@@ -106,7 +106,7 @@ def test_approving_list(user, client):
     client.user = user
 
     results = WorkBreakFilterSet(
-        data={'approving': True},
+        data={"approving": True},
         queryset=WorkBreak.objects.all(),
         request=client
     ).qs
@@ -114,7 +114,7 @@ def test_approving_list(user, client):
     assert results.count() == 5
 
     results = WorkBreakFilterSet(
-        data={'approving': False},
+        data={"approving": False},
         queryset=WorkBreak.objects.all(),
         request=client
     ).qs
@@ -145,7 +145,7 @@ def test_approving_list_not_teamlead(user, client):
     client.user = user
 
     results = WorkBreakFilterSet(
-        data={'approving': True},
+        data={"approving": True},
         queryset=WorkBreak.objects.all(),
         request=client
     ).qs

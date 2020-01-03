@@ -33,11 +33,11 @@ class UserGlManager:
         user, created = User.objects.update_or_create(
             gl_id=gl_user.id,
             defaults={
-                'login': gl_user.username,
-                'name': gl_user.name,
-                'gl_avatar': gl_user.avatar_url,
-                'gl_url': gl_user.web_url,
-                'gl_last_sync': timezone.now(),
+                "login": gl_user.username,
+                "name": gl_user.name,
+                "gl_avatar": gl_user.avatar_url,
+                "gl_url": gl_user.web_url,
+                "gl_last_sync": timezone.now(),
             })
 
         if created:
@@ -47,10 +47,10 @@ class UserGlManager:
 
         if not user.email and gl_user.public_email:
             user.email = gl_user.public_email
-            user.save(update_fields=('email',))
+            user.save(update_fields=("email",))
 
-        logger.info('User "{user}" is synced', extra={
-            'user': user,
+        logger.info("User '{user}' is synced", extra={
+            "user": user,
         })
 
         return user
@@ -63,8 +63,8 @@ class UserGlManager:
         if not gl_user:
             return None
 
-        user = User.objects.filter(gl_id=gl_user['id']).first()
+        user = User.objects.filter(gl_id=gl_user["id"]).first()
         if not user:
-            user = self.sync_user(gl_user['id'])
+            user = self.sync_user(gl_user["id"])
 
         return user

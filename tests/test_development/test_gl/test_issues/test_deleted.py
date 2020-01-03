@@ -20,7 +20,7 @@ def test_check_deleted(db, gl_mocker, gl_client):
         project,
         gl_project,
         gl_kwargs={
-            'assignee': gl_assignee,
+            "assignee": gl_assignee,
         },
     )
     IssueFactory.create_batch(5, project=project)
@@ -39,7 +39,7 @@ def test_check_deleted(db, gl_mocker, gl_client):
 
 def test_server_error(db, gl_mocker, gl_client):
     gl_project = GlProjectFactory.create()
-    project = ProjectFactory.create(gl_id=gl_project['id'])
+    project = ProjectFactory.create(gl_id=gl_project["id"])
 
     gl_mock.register_project(
         gl_mocker,

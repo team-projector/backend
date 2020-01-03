@@ -8,18 +8,18 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('users', '0011_auto_20190314_1749'),
+        ("users", "0011_auto_20190314_1749"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='user',
-            name='taxes',
-            field=models.FloatField(default=0, help_text='HT__TAXES', verbose_name='VN__TAXES'),
+            model_name="user",
+            name="taxes",
+            field=models.FloatField(default=0, help_text="HT__TAXES", verbose_name="VN__TAXES"),
         ),
         migrations.AlterField(
-            model_name='user',
-            name='hour_rate',
-            field=models.FloatField(default=0, help_text='HT__HOUR_RATE', verbose_name='VN__HOUR_RATE'),
+            model_name="user",
+            name="hour_rate",
+            field=models.FloatField(default=0, help_text="HT__HOUR_RATE", verbose_name="VN__HOUR_RATE"),
         ),
     ]

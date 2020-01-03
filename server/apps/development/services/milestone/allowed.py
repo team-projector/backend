@@ -19,9 +19,9 @@ def filter_allowed_for_user(
 
     project_milestones = Milestone.objects.filter(
         project__members__in=members,
-    ).values('id')
+    ).values("id")
 
-    milestones_ids = [milestone.get('id') for milestone in project_milestones]
+    milestones_ids = [milestone.get("id") for milestone in project_milestones]
 
     groups = ProjectGroup.objects.filter(members__in=members)
 
@@ -39,7 +39,7 @@ def get_members(user: User) -> List[ProjectMember]:
 
     if not members:
         raise GraphQLPermissionDenied(
-            'Only project managers can view project resources',
+            "Only project managers can view project resources",
         )
 
     return list(members)
@@ -53,10 +53,10 @@ def get_group_milestones(
     milestones_on_level = Milestone.objects.filter(
         models.Q(project_group__in=groups)
         | models.Q(project__group__in=groups),
-    ).values('id')
+    ).values("id")
 
     for milestone in milestones_on_level:
-        milestones_ids.append(milestone.get('id'))
+        milestones_ids.append(milestone.get("id"))
 
     children_groups = ProjectGroup.objects.filter(
         parent__in=groups,

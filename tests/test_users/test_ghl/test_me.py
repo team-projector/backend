@@ -22,8 +22,8 @@ def test_query(user, ghl_client):
 
     response = ghl_client.execute(GHL_QUERY_ME)
 
-    assert response['data']['me']['id'] == str(user.id)
-    assert response['data']['me']['roles'] == ['DEVELOPER', 'PROJECT_MANAGER']
+    assert response["data"]["me"]["id"] == str(user.id)
+    assert response["data"]["me"]["roles"] == ["DEVELOPER", "PROJECT_MANAGER"]
 
 
 def test_resolver(user, ghl_auth_mock_info, me_query):

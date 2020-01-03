@@ -21,12 +21,12 @@ def _create_provider(
     end: date,
     group: str,
 ) -> ProgressMetricsProvider:
-    if group == 'day':
+    if group == "day":
         return DayMetricsProvider(user, start, end)
-    elif group == 'week':
+    elif group == "week":
         return WeekMetricsProvider(user, start, end)
 
-    raise ValueError('Bad group "{0}"'.format(group))
+    raise ValueError("Bad group '{0}'".format(group))
 
 
 def get_progress_metrics(

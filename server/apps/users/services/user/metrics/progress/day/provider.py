@@ -81,12 +81,12 @@ class DayMetricsProvider(provider.ProgressMetricsProvider):
         return list(
             Issue.objects.annotate(
                 remaining=(
-                    models.F('time_estimate') - models.F('total_time_spent')
+                    models.F("time_estimate") - models.F("total_time_spent")
                 ),
             ).filter(
                 user=self.user,
                 remaining__gt=0,
             ).exclude(
                 state=ISSUE_STATES.CLOSED,
-            ).values('id', 'due_date', 'remaining'),
+            ).values("id", "due_date", "remaining"),
         )

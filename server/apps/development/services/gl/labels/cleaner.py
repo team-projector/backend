@@ -33,22 +33,22 @@ class Label:
     def delete(self) -> None:
         """Deletes the label from gitlab."""
         logger.debug(
-            'Removing label %s from %s', self.name, self._parent.web_url,
+            "Removing label %s from %s", self.name, self._parent.web_url,
         )
 
         self._parent.labels.delete(self.id)
 
-    def alt_name_to(self, target: 'Label') -> None:
+    def alt_name_to(self, target: "Label") -> None:
         """Renames a label to the name containing id of similar parent label."""
-        new_name = '__{0}__{1}'.format(target.id, target.match_counter)
+        new_name = "__{0}__{1}".format(target.id, target.match_counter)
 
         logger.debug(
-            '"%s" will be renamed to "%s"', self.name, new_name,
+            "'%s' will be renamed to '%s'", self.name, new_name,
         )
 
         self.name = new_name
 
-    def find_match(self, label_list: List['Label']) -> Optional['Label']:
+    def find_match(self, label_list: List["Label"]) -> Optional["Label"]:
         """Having matching_label we look for the first match in label list."""
         for label in label_list:
             match_by_name = label.name.lower() == self.name.lower()
@@ -89,9 +89,9 @@ class LabelsContainer:
         )
 
         return {
-            gl_label.attributes.get('id'): Label(
-                id_=gl_label.attributes.get('id'),
-                name=gl_label.attributes.get('name'),
+            gl_label.attributes.get("id"): Label(
+                id_=gl_label.attributes.get("id"),
+                name=gl_label.attributes.get("name"),
                 parent=self.gl_api_object,
             )
             for gl_label
@@ -117,7 +117,7 @@ class Project(LabelsContainer):
         original parent label with id=23232212, so after running this the issue
         with labels ["__23232212__1"] will have ["__23232212__1", "To Do"]
         """
-        for attr_name in 'issues', 'mergerequests':
+        for attr_name in "issues", "mergerequests":
             manager = getattr(self.gl_api_object, attr_name)
             for gl_api_obj in manager.list(all=True):
                 self._adjust_labels_for_single_item(gl_api_obj)
@@ -133,15 +133,15 @@ class Project(LabelsContainer):
         if initial != sorted(gl_api_obj.labels):
             gl_api_obj.save()
             logger.debug(
-                'Change labels for %s:\n%s -> %s',
+                "Change labels for %s:\n%s -> %s",
                 gl_api_obj.web_url,
                 initial,
                 gl_api_obj.labels,
             )
 
     def _replace_label_by_id(self, label_name) -> str:
-        name_parts = label_name.split('__')
-        if len(label_name.split('__')) != 3:
+        name_parts = label_name.split("__")
+        if len(label_name.split("__")) != 3:
             return label_name
 
         if not name_parts[1].isnumeric():
@@ -160,7 +160,7 @@ class Group(LabelsContainer):
         """Returns group interface to work with gitlab api."""
         return self._client.groups.get(self._key)
 
-    def get_subgroups(self) -> List['Group']:
+    def get_subgroups(self) -> List["Group"]:
         """Returns subgroups."""
         return [
             Group(key=subgroup.get_id(), client=self._client)
@@ -177,7 +177,7 @@ class Group(LabelsContainer):
         ]
 
 
-TreeElement = namedtuple('TreeElement', ['container', 'children'])
+TreeElement = namedtuple("TreeElement", ["container", "children"])
 
 
 class LabelsContainerTree:
@@ -235,7 +235,7 @@ class LabelsContainerTree:
             label_id: label
             for label_id, label
             in element.container.labels.items()
-            if len(label.name.split('__')) == 3
+            if len(label.name.split("__")) == 3
         }
 
         for child in element.children:
@@ -271,7 +271,7 @@ class LabelsCleaner:
 
                 except Exception:
                     logger.exception(
-                        'Failed on %s operation: %s', num, operation,
+                        "Failed on %s operation: %s", num, operation,
                     )
                     break
 

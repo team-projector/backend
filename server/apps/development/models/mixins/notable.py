@@ -15,9 +15,9 @@ class NotableMixin(models.Model):
     """Create notes when loading issues or merge requests."""
 
     notes = GenericRelation(
-        'development.Note',
-        verbose_name=_('VN__NOTES'),
-        help_text=_('HT__NOTES'),
+        "development.Note",
+        verbose_name=_("VN__NOTES"),
+        help_text=_("HT__NOTES"),
     )
 
     class Meta:
@@ -37,10 +37,10 @@ class NotableMixin(models.Model):
                 time_spent = -users_spents[note.user_id]
                 users_spents[note.user_id] = 0
             elif note.type == NOTE_TYPES.TIME_SPEND:
-                time_spent = note.data['spent']
-                note_date = parse_gl_date(note.data['date'])
+                time_spent = note.data["spent"]
+                note_date = parse_gl_date(note.data["date"])
 
-                users_spents[note.user_id] += note.data['spent']
+                users_spents[note.user_id] += note.data["spent"]
 
             if SpentTime.objects.filter(note=note).exists():
                 continue
@@ -56,12 +56,12 @@ class NotableMixin(models.Model):
 
     def __str__(self):
         """Returns object string representation."""
-        return ''
+        return ""
 
     def _get_notes_for_processing(self) -> Iterable[Note]:
         notes: List[Note] = []
 
-        for note in self.notes.all().order_by('created_at'):
+        for note in self.notes.all().order_by("created_at"):
             if note.type == NOTE_TYPES.MOVED_FROM:
                 notes = []
             else:

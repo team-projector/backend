@@ -16,5 +16,5 @@ class DeleteTicketInput(serializers.Serializer):
     def validated_data(self):
         """Validated data changing."""
         ret = super().validated_data
-        ret['ticket'] = ret.pop('id', None)
+        ret["ticket"] = ret.pop("id", None)
         return ret

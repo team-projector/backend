@@ -8,21 +8,21 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('development', '0038_auto_20190416_1621'),
+        ("development", "0038_auto_20190416_1621"),
     ]
 
     operations = [
         migrations.AlterModelOptions(
-            name='epic',
-            options={'ordering': ('-created_at',), 'verbose_name': 'VN__EPIC', 'verbose_name_plural': 'VN__EPICS'},
+            name="epic",
+            options={"ordering": ("-created_at",), "verbose_name": "VN__EPIC", "verbose_name_plural": "VN__EPICS"},
         ),
         migrations.AlterModelOptions(
-            name='milestone',
-            options={'ordering': ('-created_at',), 'verbose_name': 'VN__MILESTONE', 'verbose_name_plural': 'VN__MILESTONES'},
+            name="milestone",
+            options={"ordering": ("-created_at",), "verbose_name": "VN__MILESTONE", "verbose_name_plural": "VN__MILESTONES"},
         ),
         migrations.AlterField(
-            model_name='epic',
-            name='description',
-            field=models.TextField(blank=True, help_text='HT__DESCRIPTION', null=True, verbose_name='VN__DESCRIPTION'),
+            model_name="epic",
+            name="description",
+            field=models.TextField(blank=True, help_text="HT__DESCRIPTION", null=True, verbose_name="VN__DESCRIPTION"),
         ),
     ]

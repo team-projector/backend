@@ -29,16 +29,16 @@ def test_query(issue, ticket, ghl_client, user):
     response = ghl_client.execute(
         GHL_QUERY_UPDATE_ISSUE,
         variables={
-            'id': issue.pk,
-            'ticket': ticket.pk,
+            "id": issue.pk,
+            "ticket": ticket.pk,
         }
     )
 
-    assert 'errors' not in response
+    assert "errors" not in response
 
-    dto = response['data']['updateIssue']['issue']
-    assert dto['id'] == str(issue.id)
-    assert dto['ticket']['id'] == str(ticket.id)
+    dto = response["data"]["updateIssue"]["issue"]
+    assert dto["id"] == str(issue.id)
+    assert dto["ticket"]["id"] == str(ticket.id)
 
     issue.refresh_from_db()
     assert issue.ticket == ticket
@@ -61,5 +61,5 @@ def test_without_access(
         )
 
     extensions = exc_info.value.extensions  # noqa: WPS441
-    assert len(extensions['fieldErrors']) == 1
-    assert extensions['fieldErrors'][0]['fieldName'] == 'id'
+    assert len(extensions["fieldErrors"]) == 1
+    assert extensions["fieldErrors"][0]["fieldName"] == "id"

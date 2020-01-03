@@ -47,25 +47,25 @@ class ProjectGlManager:
         gl_project: gl.Project,
     ) -> None:
         """Update project based on gitlab data."""
-        msg = 'Updating project "{0}"...'.format(gl_project.name)
+        msg = "Updating project '{0}'...".format(gl_project.name)
 
         logger.info(msg)
 
         try:
             project, _ = Project.objects.update_from_gitlab(
                 gl_id=gl_project.id,
-                gl_url=gl_project.web_url or '',
-                gl_avatar=gl_project.avatar_url or '',
+                gl_url=gl_project.web_url or "",
+                gl_avatar=gl_project.avatar_url or "",
                 group=group,
                 full_title=gl_project.name_with_namespace,
                 title=gl_project.name,
                 is_archived=gl_project.archived,
             )
         except (DatabaseError, ValueError):
-            logger.exception('Error on update project from gitlab')
+            logger.exception("Error on update project from gitlab")
         else:
             self.webhook_manager.check_project_webhooks(project)
 
-        logger.info('{action} done', extra={
-            'action': msg,
+        logger.info("{action} done", extra={
+            "action": msg,
         })

@@ -18,12 +18,12 @@ class MergeRequestAdmin(
     """A class representing Merge Request model for admin dashboard."""
 
     list_display = (
-        'title', 'user', 'author', 'state', 'created_at', 'gl_last_sync',
+        "title", "user", "author", "state", "created_at", "gl_last_sync",
     )
     list_filter = (ProjectFilter,)
-    search_fields = ('title', 'gl_id')
-    sortable_by = ('gl_last_sync', 'created_at')
-    ordering = ('-gl_last_sync',)
+    search_fields = ("title", "gl_id")
+    sortable_by = ("gl_last_sync", "created_at")
+    ordering = ("-gl_last_sync",)
     inlines = (NoteInline,)
 
     def sync_handler(self, merge_request):

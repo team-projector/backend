@@ -49,15 +49,15 @@ def test_simple(user):
 
     issue.time_estimate = seconds(hours=15)
     issue.total_time_spent = issue.time_spents.aggregate(
-        spent=Sum('time_spent'),
-    )['spent']
+        spent=Sum("time_spent"),
+    )["spent"]
     issue.state = ISSUE_STATES.OPENED
     issue.due_date = datetime.now() + timedelta(days=1)
     issue.save()
 
     start = datetime.now().date() - timedelta(days=5)
     end = datetime.now().date() + timedelta(days=5)
-    metrics = get_progress_metrics(user, start, end, 'day')
+    metrics = get_progress_metrics(user, start, end, "day")
 
     assert len(metrics) == (end - start).days + 1
     _check_metrics(metrics,
@@ -91,15 +91,15 @@ def test_negative_remains(user):
 
     issue.time_estimate = seconds(hours=2)
     issue.total_time_spent = issue.time_spents.aggregate(
-        spent=Sum('time_spent'),
-    )['spent']
+        spent=Sum("time_spent"),
+    )["spent"]
     issue.state = ISSUE_STATES.OPENED
     issue.due_date = datetime.now() + timedelta(days=1)
     issue.save()
 
     start = datetime.now().date() - timedelta(days=5)
     end = datetime.now().date() + timedelta(days=5)
-    metrics = get_progress_metrics(user, start, end, 'day')
+    metrics = get_progress_metrics(user, start, end, "day")
 
     assert len(metrics) == (end - start).days + 1
     _check_metrics(metrics,
@@ -148,13 +148,13 @@ def test_loading_day_already_has_spends(user):
     issue.save()
 
     issue_2.total_time_spent = issue_2.time_spents.aggregate(
-        spent=Sum('time_spent'),
-    )['spent']
+        spent=Sum("time_spent"),
+    )["spent"]
     issue_2.save()
 
     start = datetime.now().date() - timedelta(days=5)
     end = datetime.now().date() + timedelta(days=5)
-    metrics = get_progress_metrics(user, start, end, 'day')
+    metrics = get_progress_metrics(user, start, end, "day")
 
     assert len(metrics) == (end - start).days + 1
     _check_metrics(metrics,
@@ -208,7 +208,7 @@ def test_not_in_range(user):
 
     start = datetime.now().date() - timedelta(days=3)
     end = datetime.now().date() + timedelta(days=3)
-    metrics = get_progress_metrics(user, start, end, 'day')
+    metrics = get_progress_metrics(user, start, end, "day")
 
     assert len(metrics) == (end - start).days + 1
     _check_metrics(metrics,
@@ -257,7 +257,7 @@ def test_another_user(user):
 
     start = datetime.now().date() - timedelta(days=5)
     end = datetime.now().date() + timedelta(days=5)
-    metrics = get_progress_metrics(user, start, end, 'day')
+    metrics = get_progress_metrics(user, start, end, "day")
 
     assert len(metrics) == (end - start).days + 1
     _check_metrics(metrics,
@@ -291,7 +291,7 @@ def test_not_loading_over_daily_work_hours(user):
 
     start = datetime.now().date() - timedelta(days=1)
     end = datetime.now().date() + timedelta(days=1)
-    metrics = get_progress_metrics(user, start, end, 'day')
+    metrics = get_progress_metrics(user, start, end, "day")
 
     assert len(metrics) == (end - start).days + 1
     _check_metrics(metrics,
@@ -314,7 +314,7 @@ def test_bad_group(user):
             user,
             datetime.now().date() - timedelta(days=5),
             datetime.now().date() + timedelta(days=5),
-            'test_bad_group'
+            "test_bad_group"
         )
 
 
@@ -344,10 +344,10 @@ def _check_metrics(metrics,
         assert metric.start == metric.end
         assert metric.planned_work_hours == planned_work_hours
 
-        _check_metric(metric, 'time_spent', spents)
-        _check_metric(metric, 'time_estimate', time_estimates)
-        _check_metric(metric, 'loading', loadings)
-        _check_metric(metric, 'time_remains', time_remains)
+        _check_metric(metric, "time_spent", spents)
+        _check_metric(metric, "time_estimate", time_estimates)
+        _check_metric(metric, "loading", loadings)
+        _check_metric(metric, "time_remains", time_remains)
 
         if str(metric.start) in issues_counts:
             assert metric.issues_count == issues_counts[str(metric.start)]

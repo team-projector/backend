@@ -34,7 +34,7 @@ def test_success(user, ghl_auth_mock_info):
         user=checked_user.pk,
         start=datetime.now().date(),
         end=datetime.now().date(),
-        group='day'
+        group="day"
     )
 
     assert len(metrics) == 1
@@ -64,5 +64,5 @@ def test_not_leader(user, ghl_auth_mock_info):
             user=checked_user.pk,
             start=datetime.now().date(),
             end=datetime.now().date(),
-            group='day'
+            group="day"
         )

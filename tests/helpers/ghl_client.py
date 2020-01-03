@@ -29,9 +29,9 @@ class GraphQLClient(Client):
 
     def execute(self, *args, **kwargs):
         """Execute graphql request."""
-        kwargs['context'] = dict2obj({
-            'user': self._user or AnonymousUser(),
-            'auth': self._token,
+        kwargs["context"] = dict2obj({
+            "user": self._user or AnonymousUser(),
+            "auth": self._token,
         })
 
         return super().execute(*args, **kwargs)

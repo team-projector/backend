@@ -10,5 +10,5 @@ from apps.development.models import ProjectMember
 class ProjectMemberAdmin(BaseModelAdmin):
     """A class representing Project Member model for admin dashboard."""
 
-    list_display = ('id', 'user', 'role')
-    search_fields = ('user__login', 'user__email', 'role')
+    list_display = ("id", "user", "role")
+    search_fields = ("user__login", "user__email", "role")

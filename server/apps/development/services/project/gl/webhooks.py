@@ -24,9 +24,9 @@ class ProjectWebhookManager:
     @cached_property
     def webhook_url(self) -> str:
         """Get webhook url."""
-        return 'https://{domain}{path}'.format(
+        return "https://{domain}{path}".format(
             domain=settings.DOMAIN_NAME,
-            path=reverse('api:gl-webhook'),
+            path=reverse("api:gl-webhook"),
         )
 
     def check_project_webhooks(
@@ -44,7 +44,7 @@ class ProjectWebhookManager:
         try:
             self._check_project_webhooks(gl_project)
         except GitlabError:
-            logger.exception('Error on check project webhook')
+            logger.exception("Error on check project webhook")
 
     def _check_project_webhooks(self, gl_project: gl.Project) -> None:
         """Validate webhooks for project."""
@@ -60,10 +60,10 @@ class ProjectWebhookManager:
 
         if not has_valid:
             gl_project.hooks.create({
-                'url': self.webhook_url,
-                'token': settings.GITLAB_WEBHOOK_SECRET_TOKEN,
-                'issues_events': True,
-                'merge_requests_events': True,
+                "url": self.webhook_url,
+                "token": settings.GITLAB_WEBHOOK_SECRET_TOKEN,
+                "issues_events": True,
+                "merge_requests_events": True,
             })
 
     def _check_webhooks(self, tp_webhooks) -> bool:

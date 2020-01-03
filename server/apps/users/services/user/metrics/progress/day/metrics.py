@@ -68,18 +68,18 @@ class UserDaysMetricsGenerator:
     ) -> None:
         time_spent = self._time_spents.get(day)
         if time_spent:
-            metric.time_spent = time_spent['period_spent']
+            metric.time_spent = time_spent["period_spent"]
 
         due_day_stats = self._due_day_stats.get(day)
         if due_day_stats:
-            metric.issues_count = due_day_stats['issues_count']
-            metric.time_estimate = due_day_stats['total_time_estimate']
-            metric.time_remains = due_day_stats['total_time_remains']
+            metric.issues_count = due_day_stats["issues_count"]
+            metric.time_estimate = due_day_stats["total_time_estimate"]
+            metric.time_remains = due_day_stats["total_time_remains"]
 
         payrolls = self._payrolls_stats.get(day)
         if payrolls:
-            metric.payroll = payrolls['total_payroll']
-            metric.paid = payrolls['total_paid']
+            metric.payroll = payrolls["total_payroll"]
+            metric.paid = payrolls["total_paid"]
 
     def _update_loading(
         self,
@@ -120,11 +120,11 @@ class UserDaysMetricsGenerator:
         deadline_issues = [
             issue
             for issue in active_issues
-            if issue['due_date'] and issue['due_date'] <= metric.start
+            if issue["due_date"] and issue["due_date"] <= metric.start
         ]
 
         for issue in deadline_issues:
-            metric.loading += issue['remaining']
+            metric.loading += issue["remaining"]
             active_issues.remove(issue)
 
     def _apply_active_issues_loading(
@@ -135,10 +135,10 @@ class UserDaysMetricsGenerator:
         for issue in active_issues[:]:
             available_time = self._max_day_loading - metric.loading
 
-            loading = min(available_time, issue['remaining'])
+            loading = min(available_time, issue["remaining"])
 
             metric.loading += loading
 
-            issue['remaining'] -= loading
-            if not issue['remaining']:
+            issue["remaining"] -= loading
+            if not issue["remaining"]:
                 active_issues.remove(issue)

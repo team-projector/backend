@@ -24,8 +24,8 @@ class SlackClient:
             return self._client.im_open(
                 user=self._client.users_lookupByEmail(
                     email=email,
-                ).get('user').get('id'),
-            ).get('channel')
+                ).get("user").get("id"),
+            ).get("channel")
 
     def send_message_to_channel(
         self,

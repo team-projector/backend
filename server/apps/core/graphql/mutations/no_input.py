@@ -44,6 +44,6 @@ class NoInputMutation(AuthMutation, graphene.Mutation):
         cls,
         root: Optional[object],
         info: ResolveInfo,  # noqa: WPS110
-    ) -> 'NoInputMutation':
+    ) -> "NoInputMutation":
         """Overrideable mutation handler."""
         raise NotImplementedError

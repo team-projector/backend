@@ -13,7 +13,7 @@ from apps.users.models import Token
 class TokenAuthentication(DrfTokenAuth):
     """Token based authentication."""
 
-    keyword = 'Bearer'
+    keyword = "Bearer"
     model = Token
 
     def authenticate_credentials(self, key: str):
@@ -21,7 +21,7 @@ class TokenAuthentication(DrfTokenAuth):
         user, token = super().authenticate_credentials(key)
 
         if self._is_expired(token):
-            raise exceptions.AuthenticationFailed('Token has expired')
+            raise exceptions.AuthenticationFailed("Token has expired")
 
         return user, token
 

@@ -20,7 +20,7 @@ class SalaryType(BaseDjangoObjectType):
         model = Salary
         interfaces = (DatasourceRelayNode,)
         connection_class = DataSourceConnection
-        name = 'Salary'
+        name = "Salary"
 
     @classmethod
     def get_queryset(cls, queryset, info) -> QuerySet:  # noqa: WPS110

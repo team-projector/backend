@@ -16,7 +16,7 @@ def test_salary(user, client):
     salary = SalaryFactory.create(user=user)
 
     client.user = user
-    info = AttrDict({'context': client})
+    info = AttrDict({"context": client})
 
     assert SalaryType().get_node(info, salary.id) == salary
 
@@ -31,7 +31,7 @@ def test_salary_another_user(user, client):
     team.members.set([user, user_2])
 
     client.user = user
-    info = AttrDict({'context': client})
+    info = AttrDict({"context": client})
 
     assert SalaryType().get_node(info, salary.id) == salary
 
@@ -45,7 +45,7 @@ def test_list(user, client):
     SalaryFactory.create_batch(size=5, user=user)
 
     client.user = user
-    info = AttrDict({'context': client})
+    info = AttrDict({"context": client})
 
     salaries = SalaryType().get_queryset(Salary.objects.all(), info)
 
@@ -59,12 +59,12 @@ def test_list_another_user(user, client):
     SalaryFactory.create_batch(size=5, user=user_2)
 
     client.user = user
-    info = AttrDict({'context': client})
+    info = AttrDict({"context": client})
 
     salaries = SalaryType().get_queryset(Salary.objects.all(), info)
 
     results = SalaryFilterSet(
-        data={'user': user_2.id},
+        data={"user": user_2.id},
         queryset=salaries,
         request=client,
     ).qs

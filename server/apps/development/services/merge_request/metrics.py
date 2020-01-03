@@ -24,7 +24,7 @@ def get_merge_request_metrics(
     metrics = MergeRequestMetrics()
     metrics.remains = merge_request.time_remains
     metrics.efficiency = merge_request.efficiency
-    metrics.payroll = payroll['total_payroll']
-    metrics.paid = payroll['total_paid']
+    metrics.payroll = payroll["total_payroll"]
+    metrics.paid = payroll["total_paid"]
 
     return metrics

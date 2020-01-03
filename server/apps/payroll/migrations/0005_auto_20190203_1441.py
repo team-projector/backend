@@ -8,17 +8,17 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('payroll', '0004_auto_20190202_1715'),
+        ("payroll", "0004_auto_20190202_1715"),
     ]
 
     operations = [
         migrations.AlterModelOptions(
-            name='spenttime',
-            options={'ordering': ('-date',), 'verbose_name': 'VN__SPENT_TIME', 'verbose_name_plural': 'VN__SPENT_TIME'},
+            name="spenttime",
+            options={"ordering": ("-date",), "verbose_name": "VN__SPENT_TIME", "verbose_name_plural": "VN__SPENT_TIME"},
         ),
         migrations.RenameField(
-            model_name='spenttime',
-            old_name='salary',
-            new_name='earnings',
+            model_name="spenttime",
+            old_name="salary",
+            new_name="earnings",
         ),
     ]

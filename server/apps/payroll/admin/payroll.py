@@ -19,14 +19,14 @@ from apps.users.admin.filters import UserFilter
 class PayrollAdmin(BaseModelAdmin):
     """A class representing Payroll model for admin dashboard."""
 
-    list_display = ('user', 'created_by', 'created_at', 'sum')
+    list_display = ("user", "created_by", "created_at", "sum")
     list_filter = (UserFilter, HasSalaryFilter)
-    search_fields = ('user__login', 'user__email')
-    readonly_fields = ('inheritance',)
+    search_fields = ("user__login", "user__email")
+    readonly_fields = ("inheritance",)
 
     fieldsets = (
         (None, {
-            'fields': ('inheritance', 'created_by', 'sum', 'salary', 'user'),
+            "fields": ("inheritance", "created_by", "sum", "salary", "user"),
         }),
     )
 
@@ -45,13 +45,13 @@ class PayrollAdmin(BaseModelAdmin):
         meta = node._meta  # noqa: WPS437
 
         url = reverse(
-            'admin:{0}_{1}_change'.format(meta.app_label, meta.model_name),
+            "admin:{0}_{1}_change".format(meta.app_label, meta.model_name),
             args=[node.id],
         )
 
         return mark_safe(
-            '<a href={0}>{1}: '.format(url, meta.model_name.capitalize())
-            + '{0}</a>'.format(node),
+            "<a href={0}>{1}: ".format(url, meta.model_name.capitalize())
+            + "{0}</a>".format(node),
         )
 
     def _get_accessor_names(self, model) -> Iterable[str]:

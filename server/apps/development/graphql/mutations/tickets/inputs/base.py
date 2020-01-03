@@ -36,7 +36,7 @@ class TicketBaseInput(serializers.ModelSerializer):
     class Meta:
         model = Ticket
         fields = [
-            'type', 'title', 'start_date', 'due_date', 'url', 'issues', 'role',
+            "type", "title", "start_date", "due_date", "url", "issues", "role",
         ]
 
     def get_fields(self) -> Dict[str, Field]:
@@ -45,9 +45,9 @@ class TicketBaseInput(serializers.ModelSerializer):
 
         if self.context:
             issues_qs = Issue.objects.allowed_for_user(
-                self.context['request'].user,
+                self.context["request"].user,
             )
-            fields['issues'].child_relation.queryset = issues_qs
+            fields["issues"].child_relation.queryset = issues_qs
 
         return fields
 
@@ -55,8 +55,8 @@ class TicketBaseInput(serializers.ModelSerializer):
         """Validates type is one of the valid choices."""
         if type_ and type_ not in TICKET_TYPES.keys():
             raise ValidationError(
-                'type should be one of available choices: {0}'.format(
-                    ', '.join(TICKET_TYPES.keys()),
+                "type should be one of available choices: {0}".format(
+                    ", ".join(TICKET_TYPES.keys()),
                 ),
             )
 

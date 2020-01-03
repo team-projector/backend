@@ -8,22 +8,22 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('development', '0013_note'),
+        ("development", "0013_note"),
     ]
 
     operations = [
         migrations.RemoveField(
-            model_name='issue',
-            name='total_time_spent',
+            model_name="issue",
+            name="total_time_spent",
         ),
         migrations.AddField(
-            model_name='issue',
-            name='total_spent',
-            field=models.PositiveIntegerField(help_text='HT__TOTAL_SPENT', null=True, verbose_name='VN__TOTAL_SPENT'),
+            model_name="issue",
+            name="total_spent",
+            field=models.PositiveIntegerField(help_text="HT__TOTAL_SPENT", null=True, verbose_name="VN__TOTAL_SPENT"),
         ),
         migrations.AlterField(
-            model_name='note',
-            name='type',
-            field=models.CharField(choices=[('time_spend', 'Time spend'), ('reset_spend', 'Reset spend')], help_text='HT__TYPE', max_length=20, verbose_name='VN__TYPE'),
+            model_name="note",
+            name="type",
+            field=models.CharField(choices=[("time_spend", "Time spend"), ("reset_spend", "Reset spend")], help_text="HT__TYPE", max_length=20, verbose_name="VN__TYPE"),
         ),
     ]

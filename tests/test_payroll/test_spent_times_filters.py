@@ -72,7 +72,7 @@ def test_filter_by_salary(user, user_2, issue, salary):
     )
 
     results = SpentTimeFilterSet(
-        data={'salary': salary.id},
+        data={"salary": salary.id},
         queryset=SpentTime.objects.all(),
         request=None,
     ).qs
@@ -106,7 +106,7 @@ def test_filter_by_date(user, user_2, issue):
     )
 
     results = SpentTimeFilterSet(
-        data={'date': '2019-03-03'},
+        data={"date": "2019-03-03"},
         queryset=SpentTime.objects.all(),
         request=None,
     ).qs
@@ -147,8 +147,8 @@ def test_by_date_and_user(user, user_2, issue):
     )
 
     results = SpentTimeFilterSet(
-        data={'date': '2019-03-03',
-              'user': user.id},
+        data={"date": "2019-03-03",
+              "user": user.id},
         queryset=SpentTime.objects.all(),
         request=None,
     ).qs
@@ -189,7 +189,7 @@ def test_filter_by_project(user):
     )
 
     results = SpentTimeFilterSet(
-        data={'project': project_1.id},
+        data={"project": project_1.id},
         queryset=SpentTime.objects.all(),
         request=None,
     ).qs
@@ -197,7 +197,7 @@ def test_filter_by_project(user):
     assert set(results) == {spend_1, spend_2}
 
     results = SpentTimeFilterSet(
-        data={'project': project_2.id},
+        data={"project": project_2.id},
         queryset=SpentTime.objects.all(),
         request=None,
     ).qs
@@ -250,7 +250,7 @@ def test_filter_by_team(user):
     )
 
     results = SpentTimeFilterSet(
-        data={'team': team_1.id},
+        data={"team": team_1.id},
         queryset=SpentTime.objects.all(),
         request=None,
     ).qs
@@ -258,7 +258,7 @@ def test_filter_by_team(user):
     assert set(results) == {spend_1, spend_2}
 
     results = SpentTimeFilterSet(
-        data={'team': team_2.id},
+        data={"team": team_2.id},
         queryset=SpentTime.objects.all(),
         request=None,
     ).qs
@@ -298,7 +298,7 @@ def test_order_by_date(user, issue):
     )
 
     results = SpentTimeFilterSet(
-        data={'order_by': 'date'},
+        data={"order_by": "date"},
         queryset=SpentTime.objects.all(),
         request=None,
     ).qs
@@ -306,7 +306,7 @@ def test_order_by_date(user, issue):
     assert list(results) == [spend_1, spend_3, spend_2, spend_4]
 
     results = SpentTimeFilterSet(
-        data={'order_by': '-date'},
+        data={"order_by": "-date"},
         queryset=SpentTime.objects.all(),
         request=None,
     ).qs
@@ -339,7 +339,7 @@ def test_filter_by_state(user):
     ]
 
     results = SpentTimeFilterSet(
-        data={'state': 'OPENED'},
+        data={"state": "OPENED"},
         queryset=SpentTime.objects.all(),
         request=None,
     ).qs
@@ -365,7 +365,7 @@ def test_filter_by_state_all(user):
     )
 
     results = SpentTimeFilterSet(
-        data={'state': 'all'},
+        data={"state": "all"},
         queryset=SpentTime.objects.all(),
         request=None,
     ).qs

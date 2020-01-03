@@ -8,16 +8,16 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('development', '0041_merge_20190418_1612'),
+        ("development", "0041_merge_20190418_1612"),
     ]
 
     operations = [
         migrations.RemoveField(
-            model_name='project',
-            name='gl_iid',
+            model_name="project",
+            name="gl_iid",
         ),
         migrations.RemoveField(
-            model_name='projectgroup',
-            name='gl_iid',
+            model_name="projectgroup",
+            name="gl_iid",
         ),
     ]

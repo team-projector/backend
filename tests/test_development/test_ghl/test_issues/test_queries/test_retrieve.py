@@ -24,12 +24,12 @@ def test_query(user, ghl_client):
     response = ghl_client.execute(
         GHL_QUERY_ISSUE,
         variables={
-            'id': issue.pk,
+            "id": issue.pk,
         },
     )
 
-    assert 'errors' not in response
-    assert response['data']['issue']['id'] == str(issue.pk)
+    assert "errors" not in response
+    assert response["data"]["issue"]["id"] == str(issue.pk)
 
 
 def test_unauth(db, ghl_mock_info, issue_query):

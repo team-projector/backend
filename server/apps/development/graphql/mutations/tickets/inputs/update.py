@@ -30,7 +30,7 @@ class UpdateTicketInput(TicketBaseInput):
     )
 
     class Meta(TicketBaseInput.Meta):
-        fields = ['id', *TicketBaseInput.Meta.fields, 'attach_issues']
+        fields = ["id", *TicketBaseInput.Meta.fields, "attach_issues"]
 
     def get_fields(self) -> Dict[str, Field]:
         """Returns serializer fields."""
@@ -41,15 +41,15 @@ class UpdateTicketInput(TicketBaseInput):
 
         if self.context:
             issues_qs = Issue.objects.allowed_for_user(
-                self.context['request'].user,
+                self.context["request"].user,
             )
-            fields['attach_issues'].child_relation.queryset = issues_qs
+            fields["attach_issues"].child_relation.queryset = issues_qs
 
         return fields
 
     def validate(self, attrs):
         """Validates input parameters."""
-        if attrs.get('issues') and attrs.get('attach_issues'):
+        if attrs.get("issues") and attrs.get("attach_issues"):
             raise ValidationError(ISSUES_PARAM_ERROR)
 
         return attrs
@@ -58,5 +58,5 @@ class UpdateTicketInput(TicketBaseInput):
     def validated_data(self):
         """Validated data changing."""
         ret = super().validated_data
-        ret['ticket'] = ret.pop('id', None)
+        ret["ticket"] = ret.pop("id", None)
         return ret

@@ -6,14 +6,14 @@ from apps.development.services.project.gl.provider import ProjectGlProvider
 from celery_app import app
 
 
-@app.task(queue='low_priority')
+@app.task(queue="low_priority")
 def sync_issues_task() -> None:
     """Syncing issues from Gitlab."""
-    for project_id in Project.objects.values_list('id', flat=True):
+    for project_id in Project.objects.values_list("id", flat=True):
         sync_project_issues_task.delay(project_id)
 
 
-@app.task(queue='low_priority')
+@app.task(queue="low_priority")
 def sync_project_issues_task(project_id: int) -> None:
     """Syncing issues for project from Gitlab."""
     project = Project.objects.get(id=project_id)

@@ -8,13 +8,13 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('development', '0048_milestone_state'),
+        ("development", "0048_milestone_state"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='milestone',
-            name='description',
-            field=models.TextField(blank=True, help_text='HT__DESCRIPTION', null=True, verbose_name='VN__DESCRIPTION'),
+            model_name="milestone",
+            name="description",
+            field=models.TextField(blank=True, help_text="HT__DESCRIPTION", null=True, verbose_name="VN__DESCRIPTION"),
         ),
     ]

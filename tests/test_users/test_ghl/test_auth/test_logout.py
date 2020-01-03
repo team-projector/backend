@@ -22,8 +22,8 @@ def test_query(user, ghl_client):
 
     response = ghl_client.execute(GHL_QUERY_LOGOUT)
 
-    assert 'errors' not in response
-    assert response['data']['logout']['status'] == 'success'
+    assert "errors" not in response
+    assert response["data"]["logout"]["status"] == "success"
     assert not Token.objects.filter(user=user).exists()
 
 

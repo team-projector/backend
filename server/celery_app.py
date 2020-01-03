@@ -6,13 +6,13 @@ from celery import Celery
 from celery.schedules import crontab
 from django.conf import settings
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'server.settings')
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "server.settings")
 
-app = Celery('server')
+app = Celery("server")
 
-app.config_from_object('django.conf:settings', namespace='CELERY')
+app.config_from_object("django.conf:settings", namespace="CELERY")
 app.conf.update(worker_pool_restarts=True)
-app.conf.timezone = 'UTC'
+app.conf.timezone = "UTC"
 
 app.autodiscover_tasks(lambda: settings.INSTALLED_APPS)
 
@@ -27,11 +27,11 @@ def setup_periodic_tasks(sender, **kwargs):
     sender.add_periodic_task(
         60 * 60,
         sync_all_task.s(),
-        name='gitlab sync',
+        name="gitlab sync",
     )
 
     sender.add_periodic_task(
         crontab(minute=0, hour=0),
         clear_expired_tokens_task.s(),
-        name='clear expired tokens',
+        name="clear expired tokens",
     )

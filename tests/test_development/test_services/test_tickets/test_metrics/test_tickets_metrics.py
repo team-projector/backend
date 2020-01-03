@@ -115,7 +115,7 @@ def test_resolve_metrics(user, client):
     )
 
     client.user = user
-    info = AttrDict({'context': client})
+    info = AttrDict({"context": client})
 
     metrics = TicketType.resolve_metrics(ticket, info=info)
 
@@ -134,7 +134,7 @@ def test_resolve_metrics_not_pm(user, client):
     )
 
     client.user = user
-    info = AttrDict({'context': client})
+    info = AttrDict({"context": client})
 
     with raises(GraphQLPermissionDenied):
         TicketType.resolve_metrics(ticket, info=info)

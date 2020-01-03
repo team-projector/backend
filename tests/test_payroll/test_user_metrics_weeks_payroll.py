@@ -57,7 +57,7 @@ def test_opened(user):
 
     start = monday - timedelta(days=5)
     end = monday + timedelta(days=5)
-    metrics = get_progress_metrics(user, start, end, 'week')
+    metrics = get_progress_metrics(user, start, end, "week")
 
     _check_metrics(metrics,
                    {
@@ -118,7 +118,7 @@ def test_paid(user):
 
     start = monday - timedelta(days=5)
     end = monday + timedelta(days=5)
-    metrics = get_progress_metrics(user, start, end, 'week')
+    metrics = get_progress_metrics(user, start, end, "week")
 
     _check_metrics(metrics,
                    {
@@ -172,7 +172,7 @@ def test_closed(user):
 
     start = monday - timedelta(days=5)
     end = monday + timedelta(days=5)
-    metrics = get_progress_metrics(user, start, end, 'week')
+    metrics = get_progress_metrics(user, start, end, "week")
 
     _check_metrics(metrics,
                    {
@@ -236,7 +236,7 @@ def test_complex(user):
 
     start = monday - timedelta(days=5)
     end = monday + timedelta(days=5)
-    metrics = get_progress_metrics(user, start, end, 'week')
+    metrics = get_progress_metrics(user, start, end, "week")
 
     _check_metrics(metrics,
                    {
@@ -255,8 +255,8 @@ def _check_metrics(metrics,
     for metric in metrics:
         assert metric.end == metric.start + timedelta(weeks=1)
 
-        _check_metric(metric, 'payroll', payroll)
-        _check_metric(metric, 'paid', paid)
+        _check_metric(metric, "payroll", payroll)
+        _check_metric(metric, "paid", paid)
 
 
 def _prepare_metrics(metrics):

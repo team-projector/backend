@@ -15,7 +15,7 @@ class SearchFilter(CharFilter):
     def __init__(self, *args, **kwargs):
         """Initialize self."""
         super().__init__()
-        self.fields = kwargs.pop('fields', {})
+        self.fields = kwargs.pop("fields", {})
 
     def filter(self, queryset, search_value) -> models.QuerySet:  # noqa: A003
         """Do filtering."""
@@ -39,14 +39,14 @@ class SearchFilter(CharFilter):
     def _construct_search(self, search_field) -> str:
         field = six.text_type(search_field)
 
-        if field.startswith('^'):
-            search_type = 'istartswith'
+        if field.startswith("^"):
+            search_type = "istartswith"
             field = field[1:]
 
-        elif field.startswith('='):
-            search_type = 'iexact'
+        elif field.startswith("="):
+            search_type = "iexact"
             field = field[1:]
         else:
-            search_type = 'icontains'
+            search_type = "icontains"
 
         return LOOKUP_SEP.join([field, search_type])

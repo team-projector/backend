@@ -6,14 +6,14 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('users', '0015_user_gl_token'),
+        ("users", "0015_user_gl_token"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='user',
-            name='gl_token',
-            field=models.CharField(blank=True, default='', help_text='HT__PERSONAL_GITLAB_TOKEN', max_length=128, verbose_name='VN__PERSONAL_GITLAB_TOKEN'),
+            model_name="user",
+            name="gl_token",
+            field=models.CharField(blank=True, default="", help_text="HT__PERSONAL_GITLAB_TOKEN", max_length=128, verbose_name="VN__PERSONAL_GITLAB_TOKEN"),
             preserve_default=False,
         ),
     ]

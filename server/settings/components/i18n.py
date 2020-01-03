@@ -9,13 +9,13 @@ USE_L10N = True
 
 USE_TZ = True
 
-TIME_ZONE = 'Europe/Moscow'
-LANGUAGE_CODE = 'en'
+TIME_ZONE = "Europe/Moscow"
+LANGUAGE_CODE = "en"
 
 LANGUAGES = [
-    ('en', _('MSG__ENGLISH')),
+    ("en", _("MSG__ENGLISH")),
 ]
 
 LOCALE_PATHS = [
-    BASE_DIR.joinpath('locale'),
+    BASE_DIR.joinpath("locale"),
 ]

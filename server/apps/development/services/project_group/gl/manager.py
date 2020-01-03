@@ -68,15 +68,15 @@ class ProjectGroupGlManager:
         """Update project group data based on gitlab."""
         group, _ = ProjectGroup.objects.update_from_gitlab(
             gl_id=gl_group.id,
-            gl_url=gl_group.web_url or '',
-            gl_avatar=gl_group.avatar_url or '',
+            gl_url=gl_group.web_url or "",
+            gl_avatar=gl_group.avatar_url or "",
             parent=parent,
             title=gl_group.name,
             full_title=gl_group.full_name,
         )
 
-        logger.info('Group "{group}" is synced', extra={
-            'group': group,
+        logger.info("Group '{group}' is synced", extra={
+            "group": group,
         })
 
         return group

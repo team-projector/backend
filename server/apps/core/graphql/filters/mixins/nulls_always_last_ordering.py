@@ -11,7 +11,7 @@ class NullsAlwaysLastOrderingMixin(OrderingFilter):
         """Get ordering value."""
         ord_value = super().get_ordering_value(choice)
 
-        descending = ord_value.startswith('-')
+        descending = ord_value.startswith("-")
         normalized_value = ord_value[1:] if descending else ord_value
 
         if descending:

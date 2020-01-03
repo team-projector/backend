@@ -10,16 +10,16 @@ class Migration(migrations.Migration):
 
     dependencies = [
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
-        ('development', '0036_auto_20190416_1159'),
+        ("development", "0036_auto_20190416_1159"),
     ]
 
     operations = [
         migrations.AlterModelOptions(
-            name='projectmember',
-            options={'verbose_name': 'VN__PROJECT_MEMBER', 'verbose_name_plural': 'VN__PROJECT_MEMBERS'},
+            name="projectmember",
+            options={"verbose_name": "VN__PROJECT_MEMBER", "verbose_name_plural": "VN__PROJECT_MEMBERS"},
         ),
         migrations.AlterUniqueTogether(
-            name='projectmember',
-            unique_together={('user', 'role', 'object_id')},
+            name="projectmember",
+            unique_together={("user", "role", "object_id")},
         ),
     ]

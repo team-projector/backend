@@ -15,5 +15,5 @@ class Token(BaseToken):
     )
 
     class Meta:
-        verbose_name = _('VN__TOKEN')
-        verbose_name_plural = _('VN__TOKENS')
+        verbose_name = _("VN__TOKEN")
+        verbose_name_plural = _("VN__TOKENS")

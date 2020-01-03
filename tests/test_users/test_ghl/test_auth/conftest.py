@@ -3,11 +3,11 @@
 import pytest
 
 
-@pytest.fixture(scope='session')
+@pytest.fixture(scope="session")
 def login_mutation(ghl_mutations):
-    return ghl_mutations.fields['login'].resolver
+    return ghl_mutations.fields["login"].resolver
 
 
-@pytest.fixture(scope='session')
+@pytest.fixture(scope="session")
 def logout_mutation(ghl_mutations):
-    return ghl_mutations.fields['logout'].resolver
+    return ghl_mutations.fields["logout"].resolver

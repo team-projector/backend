@@ -13,9 +13,9 @@ class TicketsFilterSet(django_filters.FilterSet):
         queryset=Milestone.objects.all(),
     )
     order_by = OrderingFilter(
-        fields=('due_date', 'title'),
+        fields=("due_date", "title"),
     )
 
     class Meta:
         model = Ticket
-        fields = ('milestone',)
+        fields = ("milestone",)

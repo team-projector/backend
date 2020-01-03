@@ -11,17 +11,17 @@ from apps.users.admin.filters import UserFilter
 class WorkBreakAdmin(BaseModelAdmin):
     """A class representing Work Break model for admin dashboard."""
 
-    list_display = ('user', 'reason', 'from_date', 'to_date', 'approve_state')
+    list_display = ("user", "reason", "from_date", "to_date", "approve_state")
     list_filter = (UserFilter,)
-    search_fields = ('user__login', 'user__email')
+    search_fields = ("user__login", "user__email")
     fieldsets = (
         (None, {
-            'fields': ('user', 'reason', 'from_date', 'to_date', 'comment'),
+            "fields": ("user", "reason", "from_date", "to_date", "comment"),
         }),
-        ('Approve status', {
-            'fields': (
-                'approve_state', 'approved_at', 'approved_by',
-                'decline_reason',
+        ("Approve status", {
+            "fields": (
+                "approve_state", "approved_at", "approved_by",
+                "decline_reason",
             ),
         }),
     )

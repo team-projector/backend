@@ -8,13 +8,13 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('development', '0008_auto_20181212_2052'),
+        ("development", "0008_auto_20181212_2052"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='projectgroup',
-            name='full_title',
-            field=models.CharField(blank=True, help_text='HT__FULL_TITLE', max_length=255, null=True, verbose_name='VN__FULL_TITLE'),
+            model_name="projectgroup",
+            name="full_title",
+            field=models.CharField(blank=True, help_text="HT__FULL_TITLE", max_length=255, null=True, verbose_name="VN__FULL_TITLE"),
         ),
     ]

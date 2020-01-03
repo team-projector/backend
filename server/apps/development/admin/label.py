@@ -21,16 +21,16 @@ COLOR_TEMPLATE = """
 class LabelAdmin(BaseModelAdmin):
     """A class representing Label model for admin dashboard."""
 
-    list_display = ('title', 'color_square')
-    search_fields = ('title',)
+    list_display = ("title", "color_square")
+    search_fields = ("title",)
 
     fieldsets = (
         (None, {
-            'fields': ('title', 'color_square'),
+            "fields": ("title", "color_square"),
         }),
     )
 
-    readonly_fields = ('title', 'color_square')
+    readonly_fields = ("title", "color_square")
 
     @mark_safe
     def color_square(self, label):
@@ -39,4 +39,4 @@ class LabelAdmin(BaseModelAdmin):
             color=label.color,
         )
 
-    color_square.short_description = 'color'
+    color_square.short_description = "color"

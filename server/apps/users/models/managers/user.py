@@ -19,7 +19,7 @@ class UserManager(BaseUserManager):
     ):
         """Create user."""
         if not login:
-            raise ValueError(_('VN__USER_MUST_HAVE_A_LOGIN'))
+            raise ValueError(_("VN__USER_MUST_HAVE_A_LOGIN"))
 
         user = self.model(login=login, **kwargs)
 

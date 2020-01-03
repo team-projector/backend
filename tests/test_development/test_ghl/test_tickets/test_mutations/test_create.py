@@ -51,25 +51,25 @@ def test_query(project_manager, ghl_client):
     response = ghl_client.execute(
         GHL_QUERY_CREATE_TICKET,
         variables={
-            'title': 'test ticket',
-            'type': TYPE_FEATURE,
-            'startDate': str(datetime.now().date()),
-            'dueDate': str(datetime.now().date()),
-            'url': 'http://test1.com',
-            'milestone': str(milestone.id),
-            'issues': [str(issue.pk) for issue in issues],
-            'role': 'Manager'
+            "title": "test ticket",
+            "type": TYPE_FEATURE,
+            "startDate": str(datetime.now().date()),
+            "dueDate": str(datetime.now().date()),
+            "url": "http://test1.com",
+            "milestone": str(milestone.id),
+            "issues": [str(issue.pk) for issue in issues],
+            "role": "Manager"
         }
     )
 
-    assert 'errors' not in response
+    assert "errors" not in response
 
-    dto = response['data']['createTicket']['ticket']
-    assert dto['title'] == 'test ticket'
+    dto = response["data"]["createTicket"]["ticket"]
+    assert dto["title"] == "test ticket"
 
     for issue in issues:
         issue.refresh_from_db()
-        assert issue.ticket_id == int(dto['id'])
+        assert issue.ticket_id == int(dto["id"])
 
 
 def test_invalid_parameters(
@@ -82,21 +82,21 @@ def test_invalid_parameters(
         create_ticket_mutation(
             root=None,
             info=ghl_auth_mock_info,
-            title='test ticket',
-            type='invalid type',
-            url='invalid url',
-            milestone=''
+            title="test ticket",
+            type="invalid type",
+            url="invalid url",
+            milestone=""
         )
 
     extensions = exc_info.value.extensions  # noqa:WPS441
-    assert extensions['code'] == INPUT_ERROR
+    assert extensions["code"] == INPUT_ERROR
 
     fields_with_errors = {
-        err['fieldName']
-        for err in extensions['fieldErrors']
+        err["fieldName"]
+        for err in extensions["fieldErrors"]
     }
 
-    assert fields_with_errors == {'url', 'type', 'milestone'}
+    assert fields_with_errors == {"url", "type", "milestone"}
 
 
 def test_without_permissions(user, ghl_auth_mock_info, create_ticket_mutation):
@@ -107,10 +107,10 @@ def test_without_permissions(user, ghl_auth_mock_info, create_ticket_mutation):
         create_ticket_mutation(
             root=None,
             info=ghl_auth_mock_info,
-            title='test ticket',
+            title="test ticket",
             startDate=datetime.now().date(),
             dueDate=datetime.now().date(),
             type=TYPE_FEATURE,
-            url='http://test1.com',
+            url="http://test1.com",
             milestone=milestone.pk
         )

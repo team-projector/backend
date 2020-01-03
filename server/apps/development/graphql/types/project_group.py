@@ -15,4 +15,4 @@ class ProjectGroupType(DjangoObjectType):
         model = ProjectGroup
         interfaces = (DatasourceRelayNode, MilestoneOwner)
         connection_class = DataSourceConnection
-        name = 'ProjectGroup'
+        name = "ProjectGroup"

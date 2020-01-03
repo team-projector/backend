@@ -33,35 +33,35 @@ def test_filter_by_role(user):
     )
 
     results = TeamMembersFilterSet(
-        data={'roles': 'DEVELOPER'},
+        data={"roles": "DEVELOPER"},
         queryset=TeamMember.objects.all()
     ).qs
 
     assert results.count() == 2
 
     results = TeamMembersFilterSet(
-        data={'roles': 'LEADER'},
+        data={"roles": "LEADER"},
         queryset=TeamMember.objects.all()
     ).qs
 
     assert results.count() == 1
 
     results = TeamMembersFilterSet(
-        data={'roles': 'WATCHER'},
+        data={"roles": "WATCHER"},
         queryset=TeamMember.objects.all()
     ).qs
 
     assert results.count() == 1
 
     results = TeamMembersFilterSet(
-        data={'roles': 'incorrect value'},
+        data={"roles": "incorrect value"},
         queryset=TeamMember.objects.all()
     ).qs
 
     assert results.count() == 4
 
     results = TeamMembersFilterSet(
-        data={'roles': None},
+        data={"roles": None},
         queryset=TeamMember.objects.all()
     ).qs
 

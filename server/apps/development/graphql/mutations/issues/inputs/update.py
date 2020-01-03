@@ -14,4 +14,4 @@ class UpdateIssueInput(BaseIssueInput):
     )
 
     class Meta(BaseIssueInput.Meta):
-        fields = ('id', 'ticket')
+        fields = ("id", "ticket")

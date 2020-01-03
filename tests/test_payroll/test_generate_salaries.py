@@ -23,9 +23,9 @@ from tests.test_users.factories.user import UserFactory
 
 class GenerateSalariesTests(TestCase):
     def setUp(self):
-        self.initiator = User.objects.create_user(login='initiator')
+        self.initiator = User.objects.create_user(login="initiator")
         self.user = User.objects.create_user(
-            login='user',
+            login="user",
             hour_rate=100
         )
         self.calculator = SalaryCalculator(

@@ -60,7 +60,7 @@ class IssuesTeamSummaryProvider:
         total_issues_count: int,
     ):
         summaries_team = {
-            summary['user__teams']: summary
+            summary["user__teams"]: summary
             for summary in
             summaries_qs
         }
@@ -88,10 +88,10 @@ class IssuesTeamSummaryProvider:
     ) -> TeamIssuesSummary:
         issues_summary = TeamIssuesSummary()
         issues_summary.opened_count = summaries[team.id][
-            'issues_opened_count'
+            "issues_opened_count"
         ]
         issues_summary.remains = summaries[team.id][
-            'total_time_remains'
+            "total_time_remains"
         ]
         issues_summary.percentage = (
             issues_summary.opened_count / total_issues_count
@@ -102,20 +102,20 @@ class IssuesTeamSummaryProvider:
         return self.queryset.annotate(
             time_remains=models.Case(
                 models.When(
-                    models.Q(time_estimate__gt=models.F('total_time_spent'))
+                    models.Q(time_estimate__gt=models.F("total_time_spent"))
                     & ~models.Q(state=ISSUE_STATES.CLOSED),
                     then=(
-                        models.F('time_estimate') - models.F('total_time_spent')
+                        models.F("time_estimate") - models.F("total_time_spent")
                     ),
                 ),
                 default=models.Value(0),
                 output_field=models.IntegerField(),
             ),
         ).values(
-            'user__teams',
+            "user__teams",
         ).annotate(
-            issues_opened_count=models.Count('*'),
-            total_time_remains=Coalesce(models.Sum('time_remains'), 0),
+            issues_opened_count=models.Count("*"),
+            total_time_remains=Coalesce(models.Sum("time_remains"), 0),
         ).order_by()
 
     def _get_total_issues_count(
@@ -123,7 +123,7 @@ class IssuesTeamSummaryProvider:
         summaries_qs: models.QuerySet,
     ) -> int:
         return sum(
-            summary['issues_opened_count']
+            summary["issues_opened_count"]
             for summary in summaries_qs
         )
 
@@ -132,7 +132,7 @@ class IssuesTeamSummaryProvider:
         summaries_qs: models.QuerySet,
     ) -> models.QuerySet:
         team_ids = [
-            summary['user__teams']
+            summary["user__teams"]
             for summary in summaries_qs
         ]
 

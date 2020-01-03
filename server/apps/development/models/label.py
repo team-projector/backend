@@ -17,19 +17,19 @@ class Label(models.Model):
 
     title = models.CharField(
         max_length=DEFAULT_TITLE_LENGTH,
-        verbose_name=_('VN__TITLE'),
-        help_text=_('HT__TITLE'),
+        verbose_name=_("VN__TITLE"),
+        help_text=_("HT__TITLE"),
     )
 
     color = models.CharField(
         max_length=COLOR_MAX_LENGTH,
-        verbose_name=_('VN__COLOR'),
-        help_text=_('HT__COLOR'),
+        verbose_name=_("VN__COLOR"),
+        help_text=_("HT__COLOR"),
     )
 
     class Meta:
-        verbose_name = _('VN__LABEL')
-        verbose_name_plural = _('VN__LABELS')
+        verbose_name = _("VN__LABEL")
+        verbose_name_plural = _("VN__LABELS")
 
     def __str__(self):
         """Returns object string representation."""

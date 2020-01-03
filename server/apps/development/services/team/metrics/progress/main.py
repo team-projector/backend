@@ -23,12 +23,12 @@ def create_provider(
     group: str,
 ) -> ProgressMetricsProvider:
     """Create progress metrics provider."""
-    if group == 'day':
+    if group == "day":
         return DayMetricsProvider(team, start, end)
-    elif group == 'week':
+    elif group == "week":
         return WeekMetricsProvider(team, start, end)
 
-    raise ValueError('Bad group "{0}"'.format(group))
+    raise ValueError("Bad group '{0}'".format(group))
 
 
 TeamMemberProgressMetricsList = Iterable[TeamMemberProgressMetrics]

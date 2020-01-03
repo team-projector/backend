@@ -13,4 +13,4 @@ def validate_email(email: str) -> None:
     qs = User.objects.filter(email=email)
 
     if qs.exists():
-        raise ValidationError('Value should be unique or empty.')
+        raise ValidationError("Value should be unique or empty.")

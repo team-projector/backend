@@ -6,58 +6,58 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('development', '0064_auto_20191029_1919'),
+        ("development", "0064_auto_20191029_1919"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='issue',
-            name='gl_id',
-            field=models.PositiveIntegerField(blank=True, help_text='HT__GITLAB_ID', unique=True, verbose_name='VN__GITLAB_ID'),
+            model_name="issue",
+            name="gl_id",
+            field=models.PositiveIntegerField(blank=True, help_text="HT__GITLAB_ID", unique=True, verbose_name="VN__GITLAB_ID"),
         ),
         migrations.AlterField(
-            model_name='issue',
-            name='gl_url',
-            field=models.URLField(blank=True, help_text='HT__GITLAB_URL', unique=True, verbose_name='VN__GITLAB_URL'),
+            model_name="issue",
+            name="gl_url",
+            field=models.URLField(blank=True, help_text="HT__GITLAB_URL", unique=True, verbose_name="VN__GITLAB_URL"),
         ),
         migrations.AlterField(
-            model_name='mergerequest',
-            name='gl_id',
-            field=models.PositiveIntegerField(blank=True, help_text='HT__GITLAB_ID', unique=True, verbose_name='VN__GITLAB_ID'),
+            model_name="mergerequest",
+            name="gl_id",
+            field=models.PositiveIntegerField(blank=True, help_text="HT__GITLAB_ID", unique=True, verbose_name="VN__GITLAB_ID"),
         ),
         migrations.AlterField(
-            model_name='mergerequest',
-            name='gl_url',
-            field=models.URLField(blank=True, help_text='HT__GITLAB_URL', unique=True, verbose_name='VN__GITLAB_URL'),
+            model_name="mergerequest",
+            name="gl_url",
+            field=models.URLField(blank=True, help_text="HT__GITLAB_URL", unique=True, verbose_name="VN__GITLAB_URL"),
         ),
         migrations.AlterField(
-            model_name='milestone',
-            name='gl_id',
-            field=models.PositiveIntegerField(blank=True, help_text='HT__GITLAB_ID', unique=True, verbose_name='VN__GITLAB_ID'),
+            model_name="milestone",
+            name="gl_id",
+            field=models.PositiveIntegerField(blank=True, help_text="HT__GITLAB_ID", unique=True, verbose_name="VN__GITLAB_ID"),
         ),
         migrations.AlterField(
-            model_name='milestone',
-            name='gl_url',
-            field=models.URLField(blank=True, help_text='HT__GITLAB_URL', unique=True, verbose_name='VN__GITLAB_URL'),
+            model_name="milestone",
+            name="gl_url",
+            field=models.URLField(blank=True, help_text="HT__GITLAB_URL", unique=True, verbose_name="VN__GITLAB_URL"),
         ),
         migrations.AlterField(
-            model_name='project',
-            name='gl_id',
-            field=models.PositiveIntegerField(blank=True, help_text='HT__GITLAB_ID', unique=True, verbose_name='VN__GITLAB_ID'),
+            model_name="project",
+            name="gl_id",
+            field=models.PositiveIntegerField(blank=True, help_text="HT__GITLAB_ID", unique=True, verbose_name="VN__GITLAB_ID"),
         ),
         migrations.AlterField(
-            model_name='project',
-            name='gl_url',
-            field=models.URLField(blank=True, help_text='HT__GITLAB_URL', unique=True, verbose_name='VN__GITLAB_URL'),
+            model_name="project",
+            name="gl_url",
+            field=models.URLField(blank=True, help_text="HT__GITLAB_URL", unique=True, verbose_name="VN__GITLAB_URL"),
         ),
         migrations.AlterField(
-            model_name='projectgroup',
-            name='gl_id',
-            field=models.PositiveIntegerField(blank=True, help_text='HT__GITLAB_ID', unique=True, verbose_name='VN__GITLAB_ID'),
+            model_name="projectgroup",
+            name="gl_id",
+            field=models.PositiveIntegerField(blank=True, help_text="HT__GITLAB_ID", unique=True, verbose_name="VN__GITLAB_ID"),
         ),
         migrations.AlterField(
-            model_name='projectgroup',
-            name='gl_url',
-            field=models.URLField(blank=True, help_text='HT__GITLAB_URL', unique=True, verbose_name='VN__GITLAB_URL'),
+            model_name="projectgroup",
+            name="gl_url",
+            field=models.URLField(blank=True, help_text="HT__GITLAB_URL", unique=True, verbose_name="VN__GITLAB_URL"),
         ),
     ]

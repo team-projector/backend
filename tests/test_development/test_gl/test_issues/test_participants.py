@@ -31,5 +31,5 @@ def test_participants(db, gl_mocker, gl_client):
     IssueGlManager().sync_participants(issue, gl_issue)
 
     for gl_participant in gl_participants:
-        participant = issue.participants.get(login=gl_participant['username'])
+        participant = issue.participants.get(login=gl_participant["username"])
         gl_checkers.check_user(participant, gl_participant)

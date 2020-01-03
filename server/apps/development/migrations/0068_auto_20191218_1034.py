@@ -7,18 +7,18 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('development', '0067_auto_20191129_1255'),
+        ("development", "0067_auto_20191129_1255"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='ticket',
-            name='role',
-            field=models.CharField(blank=True, help_text='HT__ROLE', max_length=50, verbose_name='VN__ROLE'),
+            model_name="ticket",
+            name="role",
+            field=models.CharField(blank=True, help_text="HT__ROLE", max_length=50, verbose_name="VN__ROLE"),
         ),
         migrations.AlterField(
-            model_name='ticket',
-            name='milestone',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='ticket', to='development.Milestone', verbose_name='VN__MILESTONE'),
+            model_name="ticket",
+            name="milestone",
+            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, related_name="ticket", to="development.Milestone", verbose_name="VN__MILESTONE"),
         ),
     ]

@@ -29,21 +29,21 @@ def issue_spent_time(user, issue):
 
 def test_get_form(admin_client, salary_admin):
     response = salary_admin.generate_salaries(
-        admin_client.get('/admin/payroll/salary/')
+        admin_client.get("/admin/payroll/salary/")
     )
 
     assert response.status_code == HTTPStatus.OK
     assert Salary.objects.count() == 0
-    assert b'/admin/payroll/salary/generate/' in response.content
-    assert b'period_from' in response.content
-    assert b'period_to' in response.content
+    assert b"/admin/payroll/salary/generate/" in response.content
+    assert b"period_from" in response.content
+    assert b"period_to" in response.content
 
 
 def test_generate_salaries(issue_spent_time, admin_client, salary_admin):
     response = salary_admin.generate_salaries(
-        admin_client.post('/admin/payroll/salary/', {
-            'period_from': str(timezone.now().date() - timedelta(days=15)),
-            'period_to': str(timezone.now().date())
+        admin_client.post("/admin/payroll/salary/", {
+            "period_from": str(timezone.now().date() - timedelta(days=15)),
+            "period_to": str(timezone.now().date())
         })
     )
 

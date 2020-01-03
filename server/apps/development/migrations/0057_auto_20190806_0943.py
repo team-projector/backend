@@ -10,18 +10,18 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('development', '0056_auto_20190801_0858'),
+        ("development", "0056_auto_20190801_0858"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='project',
-            name='gl_avatar',
-            field=models.URLField(blank=True, help_text='HT__GITLAB_AVATAR', null=True, verbose_name='VN__GITLAB_AVATAR'),
+            model_name="project",
+            name="gl_avatar",
+            field=models.URLField(blank=True, help_text="HT__GITLAB_AVATAR", null=True, verbose_name="VN__GITLAB_AVATAR"),
         ),
         migrations.AddField(
-            model_name='projectgroup',
-            name='gl_avatar',
-            field=models.URLField(blank=True, help_text='HT__GITLAB_AVATAR', null=True, verbose_name='VN__GITLAB_AVATAR'),
+            model_name="projectgroup",
+            name="gl_avatar",
+            field=models.URLField(blank=True, help_text="HT__GITLAB_AVATAR", null=True, verbose_name="VN__GITLAB_AVATAR"),
         ),
     ]

@@ -8,13 +8,13 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('development', '0047_auto_20190522_1858'),
+        ("development", "0047_auto_20190522_1858"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='milestone',
-            name='state',
-            field=models.CharField(blank=True, choices=[('active', 'active'), ('closed', 'closed')], help_text='HT__STATE', max_length=20, null=True, verbose_name='VN__STATE'),
+            model_name="milestone",
+            name="state",
+            field=models.CharField(blank=True, choices=[("active", "active"), ("closed", "closed")], help_text="HT__STATE", max_length=20, null=True, verbose_name="VN__STATE"),
         ),
     ]

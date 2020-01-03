@@ -30,47 +30,47 @@ class UserWeekStatsProvider:
     def get_time_spents(self) -> Dict[date, Dict[str, int]]:
         """Get user time spents."""
         queryset = SpentTime.objects.annotate(
-            week=TruncWeek('date'),
+            week=TruncWeek("date"),
         ).filter(
             user=self._user,
             date__range=(self._start, self._end),
             week__isnull=False,
         ).values(
-            'week',
+            "week",
         ).annotate(
-            period_spent=models.Sum('time_spent'),
+            period_spent=models.Sum("time_spent"),
         ).order_by()
 
         return {
-            stats['week']: stats
+            stats["week"]: stats
             for stats in queryset
         }
 
     def get_deadlines_stats(self) -> Dict[date, Dict[str, int]]:
         """Get user deadlines."""
         queryset = Issue.objects.annotate(
-            week=TruncWeek('due_date'),
+            week=TruncWeek("due_date"),
         ).filter(
             user=self._user,
             due_date__gte=self._start,
             due_date__lt=self._end,
             week__isnull=False,
         ).values(
-            'week',
+            "week",
         ).annotate(
-            issues_count=models.Count('*'),
-            total_time_estimate=Coalesce(models.Sum('time_estimate'), 0),
+            issues_count=models.Count("*"),
+            total_time_estimate=Coalesce(models.Sum("time_estimate"), 0),
         ).order_by()
 
         return {
-            stats['week']: stats
+            stats["week"]: stats
             for stats in queryset
         }
 
     def get_efficiency_stats(self) -> Dict[date, Dict[str, float]]:
         """Get user efficiency."""
         queryset = Issue.objects.annotate(
-            week=TruncWeek(TruncDate('closed_at')),
+            week=TruncWeek(TruncDate("closed_at")),
         ).filter(
             user=self._user,
             closed_at__range=(
@@ -82,29 +82,29 @@ class UserWeekStatsProvider:
             time_estimate__gt=0,
             week__isnull=False,
         ).values(
-            'week',
+            "week",
         ).annotate(
             avg_efficiency=Coalesce(
                 Cast(
-                    models.Sum(models.F('time_estimate')),
+                    models.Sum(models.F("time_estimate")),
                     models.FloatField(),
                 )
                 / Cast(
-                    models.Sum(models.F('total_time_spent')),
+                    models.Sum(models.F("total_time_spent")),
                     models.FloatField(),
                 ), 0,
             ),
         ).order_by()
 
         return {
-            stats['week']: stats
+            stats["week"]: stats
             for stats in queryset
         }
 
     def get_payrolls_stats(self) -> Dict[date, Dict[str, float]]:
         """Get user payrolls."""
         queryset = SpentTime.objects.annotate(
-            week=TruncWeek('date'),
+            week=TruncWeek("date"),
         ).annotate_payrolls()
 
         queryset = queryset.filter(
@@ -112,13 +112,13 @@ class UserWeekStatsProvider:
             date__range=(self._start, self._end),
             week__isnull=False,
         ).values(
-            'week',
+            "week",
         ).annotate(
-            total_payroll=Coalesce(models.Sum('payroll'), 0),
-            total_paid=Coalesce(models.Sum('paid'), 0),
+            total_payroll=Coalesce(models.Sum("payroll"), 0),
+            total_paid=Coalesce(models.Sum("paid"), 0),
         ).order_by()
 
         return {
-            stats['week']: stats
+            stats["week"]: stats
             for stats in queryset
         }

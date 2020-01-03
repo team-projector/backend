@@ -24,12 +24,12 @@ def test_query(user, ghl_client):
     response = ghl_client.execute(
         GHL_QUERY_TICKET,
         variables={
-            'id': ticket.pk,
+            "id": ticket.pk,
         },
     )
 
-    assert 'errors' not in response
-    assert response['data']['ticket']['id'] == str(ticket.pk)
+    assert "errors" not in response
+    assert response["data"]["ticket"]["id"] == str(ticket.pk)
 
 
 def test_success(ghl_auth_mock_info, ticket_query):

@@ -11,12 +11,12 @@ from tests.test_development.factories import IssueFactory
 def test_unsupported(user):
     issue = IssueFactory.create()
     Note.objects.update_from_gitlab(dict2obj({
-        'id': 2,
-        'body': 'bla',
-        'created_at': datetime.strftime(datetime.now(), GITLAB_DATETIME_FORMAT),
-        'updated_at': datetime.strftime(datetime.now(), GITLAB_DATETIME_FORMAT),
-        'author': {
-            'id': user.gl_id
+        "id": 2,
+        "body": "bla",
+        "created_at": datetime.strftime(datetime.now(), GITLAB_DATETIME_FORMAT),
+        "updated_at": datetime.strftime(datetime.now(), GITLAB_DATETIME_FORMAT),
+        "author": {
+            "id": user.gl_id
         }
     }), issue)
 

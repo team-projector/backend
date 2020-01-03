@@ -9,6 +9,6 @@ def init_group(gl_kwargs=None, model_kwargs=None):
     model_kwargs = model_kwargs or {}
 
     gl_group = GlGroupFactory.create(**gl_kwargs)
-    group = ProjectGroupFactory.create(gl_id=gl_group['id'], **model_kwargs)
+    group = ProjectGroupFactory.create(gl_id=gl_group["id"], **model_kwargs)
 
     return group, gl_group

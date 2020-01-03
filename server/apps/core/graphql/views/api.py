@@ -28,5 +28,5 @@ class ApiGraphQLView(GraphQLView):
         view = super().as_view(*args, **kwargs)
         view = permission_classes((AllowAny,))(view)
         view = authentication_classes([TokenAuthentication])(view)
-        view = api_view(['GET', 'POST'])(view)
+        view = api_view(["GET", "POST"])(view)
         return view

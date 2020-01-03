@@ -10,28 +10,28 @@ import apps.core.models.fields
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('payroll', '0013_auto_20190314_1829'),
+        ("payroll", "0013_auto_20190314_1829"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='salary',
-            name='bonus',
-            field=apps.core.models.fields.MoneyField(decimal_places=2, default=0, help_text='HT__BONUS', max_digits=14, verbose_name='VN__BONUS'),
+            model_name="salary",
+            name="bonus",
+            field=apps.core.models.fields.MoneyField(decimal_places=2, default=0, help_text="HT__BONUS", max_digits=14, verbose_name="VN__BONUS"),
         ),
         migrations.AlterField(
-            model_name='salary',
-            name='sum',
-            field=apps.core.models.fields.MoneyField(decimal_places=2, default=0, help_text='HT__SUM', max_digits=14, verbose_name='VN__SUM'),
+            model_name="salary",
+            name="sum",
+            field=apps.core.models.fields.MoneyField(decimal_places=2, default=0, help_text="HT__SUM", max_digits=14, verbose_name="VN__SUM"),
         ),
         migrations.AlterField(
-            model_name='salary',
-            name='taxes',
-            field=apps.core.models.fields.MoneyField(decimal_places=2, default=0, help_text='HT__TAXES', max_digits=14, verbose_name='VN__TAXES'),
+            model_name="salary",
+            name="taxes",
+            field=apps.core.models.fields.MoneyField(decimal_places=2, default=0, help_text="HT__TAXES", max_digits=14, verbose_name="VN__TAXES"),
         ),
         migrations.AlterField(
-            model_name='salary',
-            name='total',
-            field=apps.core.models.fields.MoneyField(decimal_places=2, default=0, help_text='HT__TOTAL', max_digits=14, verbose_name='VN__TOTAL'),
+            model_name="salary",
+            name="total",
+            field=apps.core.models.fields.MoneyField(decimal_places=2, default=0, help_text="HT__TOTAL", max_digits=14, verbose_name="VN__TOTAL"),
         ),
     ]

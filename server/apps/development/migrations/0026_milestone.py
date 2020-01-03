@@ -9,30 +9,30 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('contenttypes', '0002_remove_content_type_name'),
-        ('development', '0025_auto_20190315_1838'),
+        ("contenttypes", "0002_remove_content_type_name"),
+        ("development", "0025_auto_20190315_1838"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='Milestone',
+            name="Milestone",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('gl_id', models.PositiveIntegerField(help_text='HT__GITLAB_ID', verbose_name='VN__GITLAB_ID')),
-                ('gl_url', models.URLField(help_text='HT__GITLAB_URL', verbose_name='VN__GITLAB_URL')),
-                ('gl_last_sync', models.DateTimeField(blank=True, help_text='HT__GITLAB_LAST_SYNC', null=True, verbose_name='VN__GITLAB_LAST_SYNC')),
-                ('created_at', models.DateTimeField(auto_now_add=True)),
-                ('updated_at', models.DateTimeField(auto_now=True)),
-                ('title', models.CharField(help_text='HT__TITLE', max_length=255, verbose_name='VN__TITLE')),
-                ('description', models.CharField(help_text='HT__DESCRIPTION', max_length=255, verbose_name='VN__DESCRIPTION')),
-                ('start_date', models.DateField(blank=True, null=True)),
-                ('due_date', models.DateField(blank=True, null=True)),
-                ('budget', models.DecimalField(decimal_places=2, default=0, help_text='HT__BUDGET', max_digits=12, verbose_name='VN__BUDGET')),
-                ('object_id', models.PositiveIntegerField()),
-                ('content_type', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='contenttypes.ContentType')),
+                ("id", models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name="ID")),
+                ("gl_id", models.PositiveIntegerField(help_text="HT__GITLAB_ID", verbose_name="VN__GITLAB_ID")),
+                ("gl_url", models.URLField(help_text="HT__GITLAB_URL", verbose_name="VN__GITLAB_URL")),
+                ("gl_last_sync", models.DateTimeField(blank=True, help_text="HT__GITLAB_LAST_SYNC", null=True, verbose_name="VN__GITLAB_LAST_SYNC")),
+                ("created_at", models.DateTimeField(auto_now_add=True)),
+                ("updated_at", models.DateTimeField(auto_now=True)),
+                ("title", models.CharField(help_text="HT__TITLE", max_length=255, verbose_name="VN__TITLE")),
+                ("description", models.CharField(help_text="HT__DESCRIPTION", max_length=255, verbose_name="VN__DESCRIPTION")),
+                ("start_date", models.DateField(blank=True, null=True)),
+                ("due_date", models.DateField(blank=True, null=True)),
+                ("budget", models.DecimalField(decimal_places=2, default=0, help_text="HT__BUDGET", max_digits=12, verbose_name="VN__BUDGET")),
+                ("object_id", models.PositiveIntegerField()),
+                ("content_type", models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to="contenttypes.ContentType")),
             ],
             options={
-                'abstract': False,
+                "abstract": False,
             },
         ),
     ]

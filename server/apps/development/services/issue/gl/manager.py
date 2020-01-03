@@ -37,8 +37,8 @@ class IssueGlManager(BaseWorkItemGlManager):
         full_reload: bool = False,
     ) -> None:
         """Load project issues."""
-        logger.info('Syncing project "{project}" issues', extra={
-            'project': project,
+        logger.info("Syncing project '{project}' issues", extra={
+            "project": project,
         })
 
         gl_project = self.project_provider.get_gl_project(project)
@@ -46,14 +46,14 @@ class IssueGlManager(BaseWorkItemGlManager):
             return
 
         args = {
-            'as_list': False,
+            "as_list": False,
         }
 
         if not full_reload and project.gl_last_issues_sync:
-            args['updated_after'] = project.gl_last_issues_sync
+            args["updated_after"] = project.gl_last_issues_sync
 
         project.gl_last_issues_sync = timezone.now()
-        project.save(update_fields=('gl_last_issues_sync',))
+        project.save(update_fields=("gl_last_issues_sync",))
 
         for gl_issue in gl_project.issues.list(**args):
             self.update_project_issue(project, gl_project, gl_issue)
@@ -70,29 +70,29 @@ class IssueGlManager(BaseWorkItemGlManager):
         time_stats = gl_issue.time_stats()
 
         fields = {
-            'gl_id': gl_issue.id,
-            'gl_iid': gl_issue.iid,
-            'gl_url': gl_issue.web_url,
-            'project': project,
-            'title': gl_issue.title,
-            'total_time_spent': time_stats['total_time_spent'],
-            'time_estimate': time_stats['time_estimate'],
-            'state': gl_issue.state.upper(),
-            'due_date': gitlab.parse_gl_date(gl_issue.due_date),
-            'created_at': gitlab.parse_gl_datetime(gl_issue.created_at),
-            'updated_at': gitlab.parse_gl_datetime(gl_issue.updated_at),
-            'closed_at': gitlab.parse_gl_datetime(gl_issue.closed_at),
-            'user': self.user_manager.extract_user_from_data(gl_issue.assignee),
-            'is_merged': gitlab.parse_state_merged(gl_issue.closed_by()),
+            "gl_id": gl_issue.id,
+            "gl_iid": gl_issue.iid,
+            "gl_url": gl_issue.web_url,
+            "project": project,
+            "title": gl_issue.title,
+            "total_time_spent": time_stats["total_time_spent"],
+            "time_estimate": time_stats["time_estimate"],
+            "state": gl_issue.state.upper(),
+            "due_date": gitlab.parse_gl_date(gl_issue.due_date),
+            "created_at": gitlab.parse_gl_datetime(gl_issue.created_at),
+            "updated_at": gitlab.parse_gl_datetime(gl_issue.updated_at),
+            "closed_at": gitlab.parse_gl_datetime(gl_issue.closed_at),
+            "user": self.user_manager.extract_user_from_data(gl_issue.assignee),
+            "is_merged": gitlab.parse_state_merged(gl_issue.closed_by()),
         }
 
         if gl_issue.milestone:
             milestone = Milestone.objects.filter(
-                gl_id=gl_issue.milestone['id'],
+                gl_id=gl_issue.milestone["id"],
             ).first()
 
             if milestone:
-                fields['milestone'] = milestone
+                fields["milestone"] = milestone
 
         issue, _ = Issue.objects.update_from_gitlab(**fields)
 
@@ -101,8 +101,8 @@ class IssueGlManager(BaseWorkItemGlManager):
         self.sync_participants(issue, gl_issue)
         self.sync_merge_requests(issue, project, gl_issue, gl_project)
 
-        logger.info('Issue "{issue}" is synced', extra={
-            'issue': issue,
+        logger.info("Issue '{issue}' is synced", extra={
+            "issue": issue,
         })
 
     def check_project_deleted_issues(
@@ -115,16 +115,16 @@ class IssueGlManager(BaseWorkItemGlManager):
         for gl_issue in gl_project.issues.list(as_list=False):
             gl_issues.add(gl_issue.id)
 
-        issues = set(project.issues.values_list('gl_id', flat=True))
+        issues = set(project.issues.values_list("gl_id", flat=True))
 
         diff = issues - gl_issues
 
         project.issues.filter(gl_id__in=diff).delete()
 
         logger.info(
-            'Project "{project}" deleted issues ckecked: removed {removed}', {
-                'project': project,
-                'removed': len(diff),
+            "Project '{project}' deleted issues ckecked: removed {removed}", {
+                "project": project,
+                "removed": len(diff),
             },
         )
 
@@ -138,8 +138,8 @@ class IssueGlManager(BaseWorkItemGlManager):
         """Load merge requests for issue."""
         issue.merge_requests.set((
             self._sync_merge_request(
-                mr['id'],
-                mr['iid'],
+                mr["id"],
+                mr["iid"],
                 project,
                 gl_project,
             )

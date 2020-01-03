@@ -26,7 +26,7 @@ class TicketType(BaseDjangoObjectType):
         model = Ticket
         interfaces = (DatasourceRelayNode,)
         connection_class = DataSourceConnection
-        name = 'Ticket'
+        name = "Ticket"
 
     @classmethod
     def get_queryset(

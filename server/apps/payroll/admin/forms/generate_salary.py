@@ -15,4 +15,4 @@ class GenerateSalaryForm(forms.Form):
     )
 
     class Media:
-        js = ('admin/js/core.js',)
+        js = ("admin/js/core.js",)

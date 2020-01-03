@@ -25,7 +25,7 @@ class RequestCallbackFactory:
         uri: str,
         response_headers: Dict[str, str],
     ) -> List[object]:
-        response_headers['Content-Type'] = 'application/json'
+        response_headers["Content-Type"] = "application/json"
 
         return [
             self._status_code,
@@ -37,7 +37,7 @@ class RequestCallbackFactory:
 class HttprettyMock:
     """Httpretty mocker."""
 
-    base_api_url = ''
+    base_api_url = ""
 
     def __init__(self) -> None:
         assert httpretty.is_enabled()
@@ -94,4 +94,4 @@ class HttprettyMock:
         )
 
     def _prepare_uri(self, path: str) -> str:
-        return '{0}{1}'.format(self.base_api_url, path)
+        return "{0}{1}".format(self.base_api_url, path)

@@ -21,7 +21,7 @@ class ProjectGlProvider(BaseGlProvider):
         except gl.GitlabGetError as error:
             if error.response_code == status.HTTP_404_NOT_FOUND:
                 project.is_active = False
-                project.save(update_fields=('is_active',))
+                project.save(update_fields=("is_active",))
             else:
                 raise
 

@@ -49,8 +49,8 @@ class SalaryCalculator:
 
         spent_data = self._get_spent_data(salary)
 
-        salary.sum = spent_data['total_sum'] or 0
-        salary.charged_time = spent_data['total_time_spent'] or 0
+        salary.sum = spent_data["total_sum"] or 0
+        salary.charged_time = spent_data["total_time_spent"] or 0
         salary.penalty = self._get_penalty(salary)
         salary.bonus = self._get_bonus(salary)
         salary.total = salary.sum + salary.bonus - salary.penalty
@@ -66,23 +66,23 @@ class SalaryCalculator:
         return SpentTime.objects.filter(
             salary=salary,
         ).aggregate(
-            total_sum=models.Sum('sum'),
-            total_time_spent=models.Sum('time_spent'),
+            total_sum=models.Sum("sum"),
+            total_time_spent=models.Sum("time_spent"),
         )
 
     def _get_penalty(self, salary: Salary) -> models.QuerySet:
         return Penalty.objects.filter(
             salary=salary,
         ).aggregate(
-            total_sum=models.Sum('sum'),
-        )['total_sum'] or 0
+            total_sum=models.Sum("sum"),
+        )["total_sum"] or 0
 
     def _get_bonus(self, salary: Salary) -> models.QuerySet:
         return Bonus.objects.filter(
             salary=salary,
         ).aggregate(
-            total_sum=models.Sum('sum'),
-        )['total_sum'] or 0
+            total_sum=models.Sum("sum"),
+        )["total_sum"] or 0
 
     def _lock_payrolls(
         self,

@@ -33,8 +33,8 @@ def test_paid(user):
 
     queryset = SpentTime.objects.annotate_payrolls(payroll=False)
     total_paid = queryset.aggregate(
-        total_paid=Sum('paid')
-    )['total_paid']
+        total_paid=Sum("paid")
+    )["total_paid"]
 
     assert total_paid == 2 * user.hour_rate
 
@@ -55,7 +55,7 @@ def test_payroll_metrics(user):
 
     queryset = SpentTime.objects.annotate_payrolls(paid=False)
     total_payroll = queryset.aggregate(
-        total_payroll=Sum('payroll')
-    )['total_payroll']
+        total_payroll=Sum("payroll")
+    )["total_payroll"]
 
     assert total_payroll == 2 * user.hour_rate

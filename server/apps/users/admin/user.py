@@ -25,51 +25,51 @@ class UserAdmin(
     """A class representing User model for admin dashboard."""
 
     list_display = (
-        'login', 'name', 'email', 'hour_rate', 'last_login', 'is_active',
-        'is_staff', 'change_password_link',
+        "login", "name", "email", "hour_rate", "last_login", "is_active",
+        "is_staff", "change_password_link",
     )
-    list_filter = ('is_active', 'is_staff')
-    ordering = ('login',)
+    list_filter = ("is_active", "is_staff")
+    ordering = ("login",)
     sortable_by = ()
-    search_fields = ('login',)
+    search_fields = ("login",)
     add_fieldsets = (
         (None, {
-            'classes': ('wide',),
-            'fields': ('login', 'password1', 'password2'),
+            "classes": ("wide",),
+            "fields": ("login", "password1", "password2"),
         }),
     )
 
-    exclude = ('user_permissions',)
+    exclude = ("user_permissions",)
     form = UserAdminForm
     fieldsets = (
         (None, {
-            'fields': (
-                'login', 'email', 'name', 'roles', 'is_superuser', 'is_staff',
-                'is_active', 'last_login',
+            "fields": (
+                "login", "email", "name", "roles", "is_superuser", "is_staff",
+                "is_active", "last_login",
             ),
         }),
-        ('GitLab', {
-            'fields': (
-                'gl_avatar', 'gl_id', 'gl_url', 'gl_last_sync', 'gl_token',
+        ("GitLab", {
+            "fields": (
+                "gl_avatar", "gl_id", "gl_url", "gl_last_sync", "gl_token",
             ),
         }),
-        ('Costs', {
-            'fields': (
-                'hour_rate', 'customer_hour_rate', 'taxes', 'daily_work_hours',
+        ("Costs", {
+            "fields": (
+                "hour_rate", "customer_hour_rate", "taxes", "daily_work_hours",
             ),
         }),
     )
-    readonly_fields = ('last_login',)
+    readonly_fields = ("last_login",)
     change_password_form = AdminPasswordChangeForm
 
-    @admin_field('Change password')
+    @admin_field("Change password")
     def change_password_link(self, instance):
         """Show "Change password" on change form page."""
         return format_html(
             '<a href="{}">change password</a>',  # noqa: P103
             reverse(
-                'admin:auth_user_password_change',
-                kwargs={'id': instance.pk},
+                "admin:auth_user_password_change",
+                kwargs={"id": instance.pk},
             ),
         )
 
@@ -80,5 +80,5 @@ class UserAdmin(
     def get_default_filters(self, request: HttpRequest) -> Dict[str, str]:
         """Set default filters to the page."""
         return {
-            'is_active__exact': '1',
+            "is_active__exact": "1",
         }

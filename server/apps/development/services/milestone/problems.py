@@ -7,13 +7,13 @@ from django.utils.timezone import localdate
 from apps.development.models import Milestone
 from apps.development.models.milestone import MILESTONE_STATES
 
-PROBLEM_OVER_DUE_DAY = 'OVER_DUE_DATE'
+PROBLEM_OVER_DUE_DAY = "OVER_DUE_DATE"
 
 
 class BaseProblemChecker:
     """A base class checks problems."""
 
-    problem_code: ClassVar[str] = ''
+    problem_code: ClassVar[str] = ""
 
     def milestone_has_problem(self, milestone: Milestone) -> bool:
         """Method should be implemented in subclass."""

@@ -11,6 +11,6 @@ from apps.users.admin.filters import UserFilter
 class BonusAdmin(BaseModelAdmin):
     """A class representing Bonus model for admin dashboard."""
 
-    list_display = ('user', 'created_by', 'created_at', 'sum')
+    list_display = ("user", "created_by", "created_at", "sum")
     list_filter = (UserFilter,)
-    search_fields = ('user__login', 'user__email')
+    search_fields = ("user__login", "user__email")

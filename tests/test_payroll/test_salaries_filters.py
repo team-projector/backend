@@ -16,7 +16,7 @@ def test_salaries_filter_by_user(user):
     salaries_user_2 = SalaryFactory.create_batch(size=5, user=user_2)
 
     results = SalaryFilterSet(
-        data={'user': user_2.id},
+        data={"user": user_2.id},
         queryset=Salary.objects.all(),
     ).qs
 
@@ -41,7 +41,7 @@ def test_salaries_filter_by_team(user, client):
     client.user = user
 
     results = SalaryFilterSet(
-        data={'team': team.id},
+        data={"team": team.id},
         queryset=Salary.objects.all(),
         request=client,
     ).qs
@@ -65,7 +65,7 @@ def test_salaries_filter_by_team_not_leader(user, client):
 
     with raises(GraphQLPermissionDenied):
         SalaryFilterSet(  # noqa: WPS428
-            data={'team': team.id},
+            data={"team": team.id},
             queryset=Salary.objects.all(),
             request=client,
         ).qs

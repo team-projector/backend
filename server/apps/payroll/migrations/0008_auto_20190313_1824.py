@@ -7,13 +7,13 @@ from django.db import migrations
 
 class Migration(migrations.Migration):
     dependencies = [
-        ('payroll', '0007_auto_20190204_1557'),
+        ("payroll", "0007_auto_20190204_1557"),
     ]
 
     operations = [
         migrations.RenameField(
-            model_name='spenttime',
-            old_name='employee',
-            new_name='user',
+            model_name="spenttime",
+            old_name="employee",
+            new_name="user",
         )
     ]

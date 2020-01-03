@@ -22,33 +22,33 @@ class UserDayStatsProvider:
     ) -> Dict[date, Dict[str, int]]:
         """Get user time spents in range."""
         queryset = SpentTime.objects.annotate(
-            day=TruncDay('date'),
+            day=TruncDay("date"),
         ).filter(
             user=user,
             date__range=(start, end),
             day__isnull=False,
         ).values(
-            'day',
+            "day",
         ).annotate(
-            period_spent=models.Sum('time_spent'),
+            period_spent=models.Sum("time_spent"),
         ).order_by()
 
         return {
-            stats['day']: stats
+            stats["day"]: stats
             for stats in queryset
         }
 
     def get_due_day_stats(self, user: User) -> Dict[date, Dict[str, int]]:
         """Get user due days."""
         queryset = Issue.objects.annotate(
-            due_date_truncated=TruncDay('due_date'),
+            due_date_truncated=TruncDay("due_date"),
             time_remains=models.Case(
                 models.When(
                     models.Q(
-                        time_estimate__gt=models.F('total_time_spent'),
+                        time_estimate__gt=models.F("total_time_spent"),
                     ) & ~models.Q(state=ISSUE_STATES.CLOSED),
                     then=(
-                        models.F('time_estimate') - models.F('total_time_spent')
+                        models.F("time_estimate") - models.F("total_time_spent")
                     ),
                 ),
                 default=models.Value(0),
@@ -58,35 +58,35 @@ class UserDayStatsProvider:
             user=user,
             due_date_truncated__isnull=False,
         ).values(
-            'due_date_truncated',
+            "due_date_truncated",
         ).annotate(
-            issues_count=models.Count('*'),
-            total_time_estimate=Coalesce(models.Sum('time_estimate'), 0),
-            total_time_remains=Coalesce(models.Sum('time_remains'), 0),
+            issues_count=models.Count("*"),
+            total_time_estimate=Coalesce(models.Sum("time_estimate"), 0),
+            total_time_remains=Coalesce(models.Sum("time_remains"), 0),
         ).order_by()
 
         return {
-            stats['due_date_truncated']: stats
+            stats["due_date_truncated"]: stats
             for stats in queryset
         }
 
     def get_payrolls_stats(self, user: User) -> Dict[date, Dict[str, int]]:
         """Get user payrolls."""
         queryset = SpentTime.objects.annotate(
-            date_truncated=TruncDay('date'),
+            date_truncated=TruncDay("date"),
         ).annotate_payrolls()
 
         queryset = queryset.filter(
             user=user,
             date_truncated__isnull=False,
         ).values(
-            'date_truncated',
+            "date_truncated",
         ).annotate(
-            total_payroll=Coalesce(models.Sum('payroll'), 0),
-            total_paid=Coalesce(models.Sum('paid'), 0),
+            total_payroll=Coalesce(models.Sum("payroll"), 0),
+            total_paid=Coalesce(models.Sum("paid"), 0),
         ).order_by()
 
         return {
-            stats['date_truncated']: stats
+            stats["date_truncated"]: stats
             for stats in queryset
         }

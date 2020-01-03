@@ -37,8 +37,8 @@ def get_gitlab_sync_status() -> GlStatus:
 
 
 ACTIONS_MAPS = types.MappingProxyType({
-    'web_hooks': ACTION_GITLAB_WEBHOOK_TRIGGERED,
-    'api': ACTION_GITLAB_CALL_API,
+    "web_hooks": ACTION_GITLAB_WEBHOOK_TRIGGERED,
+    "api": ACTION_GITLAB_CALL_API,
 })
 
 
@@ -56,14 +56,14 @@ class GlStatusProvider:
 
     @classmethod
     def _get_last_issues(cls, count: int = 10) -> List[Issue]:
-        return list(Issue.objects.order_by('-gl_last_sync')[:count])
+        return list(Issue.objects.order_by("-gl_last_sync")[:count])
 
     @classmethod
     def _get_last_sync(cls) -> datetime:
         querysets = [
             model.objects.filter(
                 gl_last_sync__isnull=False,
-            ).values('gl_last_sync')
+            ).values("gl_last_sync")
             for model in apps.get_models()
             if issubclass(model, GitlabEntityMixin)
         ]
@@ -71,10 +71,10 @@ class GlStatusProvider:
         gl_last_sync_qs = querysets[0].union(
             *querysets[1:],
         ).order_by(
-            '-gl_last_sync',
+            "-gl_last_sync",
         ).first() or {}
 
-        return gl_last_sync_qs.get('gl_last_sync')  # type: ignore
+        return gl_last_sync_qs.get("gl_last_sync")  # type: ignore
 
     @classmethod
     def _get_services_stats(cls) -> Iterable[GlServiceStatus]:
@@ -82,7 +82,7 @@ class GlStatusProvider:
 
         for name, verb in ACTIONS_MAPS.items():
             action = Action.objects.filter(verb=verb).order_by(
-                '-timestamp',
+                "-timestamp",
             ).first()
 
             if action:

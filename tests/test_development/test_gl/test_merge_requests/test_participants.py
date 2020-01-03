@@ -41,6 +41,6 @@ def test_participants(db, gl_mocker, gl_client):
 
     for gl_participant in gl_participants:
         participant = merge_request.participants.get(
-            login=gl_participant['username'],
+            login=gl_participant["username"],
         )
         gl_checkers.check_user(participant, gl_participant)

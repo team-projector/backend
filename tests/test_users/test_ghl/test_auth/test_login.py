@@ -24,16 +24,16 @@ def test_query(user, ghl_client):
     response = ghl_client.execute(
         GHL_QUERY_LOGIN,
         variables={
-            'login': DEFAULT_USERNAME,
-            'password': DEFAULT_USER_PASSWORD,
+            "login": DEFAULT_USERNAME,
+            "password": DEFAULT_USER_PASSWORD,
         },
     )
 
-    assert 'errors' not in response
+    assert "errors" not in response
 
     token = Token.objects.filter(user=user).first()
     assert token is not None
-    assert response['data']['login']['token']['key'] == token.key
+    assert response["data"]["login"]["token"]["key"] == token.key
 
 
 def test_success(user, ghl_mock_info, login_mutation):
@@ -58,7 +58,7 @@ def test_wrong_username(user, ghl_mock_info, login_mutation):
         login_mutation(
             None,
             ghl_mock_info,
-            login='wrong{0}'.format(DEFAULT_USERNAME),
+            login="wrong{0}".format(DEFAULT_USERNAME),
             password=DEFAULT_USER_PASSWORD,
         )
 
@@ -74,7 +74,7 @@ def test_wrong_password(user, ghl_mock_info, login_mutation):
             None,
             ghl_mock_info,
             login=DEFAULT_USERNAME,
-            password='wrong{0}'.format(DEFAULT_USER_PASSWORD),
+            password="wrong{0}".format(DEFAULT_USER_PASSWORD),
         )
 
     assert not Token.objects.filter(user=user).exists()

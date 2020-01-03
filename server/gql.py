@@ -22,7 +22,7 @@ class Query(  # noqa: WPS215
 
     debug = graphene.Field(
         DjangoDebug,
-        name='_debug',
+        name="_debug",
     )
 
 

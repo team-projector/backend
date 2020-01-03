@@ -12,6 +12,6 @@ class TeamMemberManager(models.Manager):
             team=team,
             roles=~self.model.roles.WATCHER,
         ).values_list(
-            'user',
+            "user",
             flat=True,
         )

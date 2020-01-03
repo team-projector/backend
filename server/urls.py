@@ -9,16 +9,16 @@ from django.views.decorators.csrf import csrf_exempt
 
 from gql import get_api_graphql_view, get_graphql_view
 
-admin.site.site_header = _('VN__ADMIN_DASHBOARD')
+admin.site.site_header = _("VN__ADMIN_DASHBOARD")
 
 urlpatterns = [
-    path('ht/', include('health_check.urls')),
-    path('graphql/', get_graphql_view()),
-    path('api/graphql', csrf_exempt(get_api_graphql_view())),
-    path('api/', include('apps.development.api.urls', namespace='api')),
-    path('api/', include('apps.users.pages.urls', namespace='social')),
-    path('admin_tools/', include('admin_tools.urls')),
-    path('admin/', admin.site.urls),
+    path("ht/", include("health_check.urls")),
+    path("graphql/", get_graphql_view()),
+    path("api/graphql", csrf_exempt(get_api_graphql_view())),
+    path("api/", include("apps.development.api.urls", namespace="api")),
+    path("api/", include("apps.users.pages.urls", namespace="social")),
+    path("admin_tools/", include("admin_tools.urls")),
+    path("admin/", admin.site.urls),
 ]
 
 if settings.DEBUG:

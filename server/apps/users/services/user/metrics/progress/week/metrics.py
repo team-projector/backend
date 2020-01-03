@@ -48,18 +48,18 @@ class UserWeekMetricsGenerator:
     ) -> None:
         deadline = self._deadline_stats.get(week)
         if deadline:
-            metric.issues_count = deadline['issues_count']
-            metric.time_estimate = deadline['total_time_estimate']
+            metric.issues_count = deadline["issues_count"]
+            metric.time_estimate = deadline["total_time_estimate"]
 
         efficiency = self._efficiency_stats.get(week)
         if efficiency:
-            metric.efficiency = efficiency['avg_efficiency']
+            metric.efficiency = efficiency["avg_efficiency"]
 
         payrolls = self._payrolls_stats.get(week)
         if payrolls:
-            metric.payroll = payrolls['total_payroll']
-            metric.paid = payrolls['total_paid']
+            metric.payroll = payrolls["total_payroll"]
+            metric.paid = payrolls["total_paid"]
 
         time_spent = self._time_spents.get(week)
         if time_spent:
-            metric.time_spent = time_spent['period_spent']
+            metric.time_spent = time_spent["period_spent"]

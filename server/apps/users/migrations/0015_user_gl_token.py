@@ -8,13 +8,13 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('users', '0014_user_customer_hour_rate'),
+        ("users", "0014_user_customer_hour_rate"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='user',
-            name='gl_token',
-            field=models.CharField(blank=True, help_text='HT__PERSONAL_GITLAB_TOKEN', max_length=128, null=True, verbose_name='VN__PERSONAL_GITLAB_TOKEN'),
+            model_name="user",
+            name="gl_token",
+            field=models.CharField(blank=True, help_text="HT__PERSONAL_GITLAB_TOKEN", max_length=128, null=True, verbose_name="VN__PERSONAL_GITLAB_TOKEN"),
         ),
     ]

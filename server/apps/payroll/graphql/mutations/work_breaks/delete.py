@@ -23,7 +23,7 @@ class DeleteWorkBreakMutation(BaseMutation):
         """Delete work break.If successful delete return "True"."""
         work_break = get_object_or_not_found(
             WorkBreak.objects.all(),
-            pk=kwargs['id'],
+            pk=kwargs["id"],
         )
 
         work_break.delete()

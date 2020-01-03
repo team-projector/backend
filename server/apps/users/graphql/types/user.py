@@ -20,10 +20,10 @@ class UserType(BaseDjangoObjectType):
 
     class Meta:
         model = User
-        exclude_fields = ('password',)
+        exclude_fields = ("password",)
         interfaces = (DatasourceRelayNode,)
         connection_class = DataSourceConnection
-        name = 'User'
+        name = "User"
 
     def resolve_metrics(self, info, **kwargs):  # noqa: WPS110
         """Get user metrics."""

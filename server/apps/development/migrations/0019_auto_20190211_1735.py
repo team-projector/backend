@@ -8,22 +8,22 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('development', '0018_auto_20190204_1557'),
+        ("development", "0018_auto_20190204_1557"),
     ]
 
     operations = [
         migrations.AlterModelOptions(
-            name='note',
-            options={'ordering': ('created_at',), 'verbose_name': 'VN__NOTE', 'verbose_name_plural': 'VN__NOTES'},
+            name="note",
+            options={"ordering": ("created_at",), "verbose_name": "VN__NOTE", "verbose_name_plural": "VN__NOTES"},
         ),
         migrations.AddField(
-            model_name='issue',
-            name='closed_at',
+            model_name="issue",
+            name="closed_at",
             field=models.DateTimeField(blank=True, null=True),
         ),
         migrations.AddField(
-            model_name='issue',
-            name='updated_at',
+            model_name="issue",
+            name="updated_at",
             field=models.DateTimeField(blank=True, null=True),
         ),
     ]

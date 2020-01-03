@@ -62,15 +62,15 @@ def test_simple(user):
 
     issue.time_estimate = seconds(hours=15)
     issue.total_time_spent = issue.time_spents.aggregate(
-        spent=Sum('time_spent'),
-    )['spent']
+        spent=Sum("time_spent"),
+    )["spent"]
     issue.state = ISSUE_STATES.OPENED
     issue.due_date = monday + timedelta(days=1)
     issue.save()
 
     start = monday - timedelta(days=5)
     end = monday + timedelta(days=5)
-    metrics = get_progress_metrics(team, start, end, 'week')
+    metrics = get_progress_metrics(team, start, end, "week")
 
     assert len(metrics) == 2
 
@@ -130,8 +130,8 @@ def test_efficiency_more_1(user):
 
     issue.time_estimate = seconds(hours=15)
     issue.total_time_spent = issue.time_spents.aggregate(
-        spent=Sum('time_spent')
-    )['spent']
+        spent=Sum("time_spent")
+    )["spent"]
     issue.state = ISSUE_STATES.CLOSED
     issue.due_date = monday + timedelta(days=1)
     issue.closed_at = monday + timedelta(days=1)
@@ -139,7 +139,7 @@ def test_efficiency_more_1(user):
 
     start = monday - timedelta(days=5)
     end = monday + timedelta(days=5)
-    metrics = get_progress_metrics(team, start, end, 'week')
+    metrics = get_progress_metrics(team, start, end, "week")
 
     assert len(metrics) == 2
 
@@ -201,8 +201,8 @@ def test_efficiency_less_1(user):
 
     issue.time_estimate = seconds(hours=3)
     issue.total_time_spent = issue.time_spents.aggregate(
-        spent=Sum('time_spent')
-    )['spent']
+        spent=Sum("time_spent")
+    )["spent"]
     issue.state = ISSUE_STATES.CLOSED
     issue.due_date = monday + timedelta(days=1)
     issue.closed_at = monday + timedelta(days=1)
@@ -210,7 +210,7 @@ def test_efficiency_less_1(user):
 
     start = monday - timedelta(days=5)
     end = monday + timedelta(days=5)
-    metrics = get_progress_metrics(team, start, end, 'week')
+    metrics = get_progress_metrics(team, start, end, "week")
 
     developer_metrics = next(
         item.metrics for item in metrics if item.user == developer)
@@ -270,8 +270,8 @@ def test_efficiency_zero_estimate(user):
 
     issue.time_estimate = 0
     issue.total_time_spent = issue.time_spents.aggregate(
-        spent=Sum('time_spent'),
-    )['spent']
+        spent=Sum("time_spent"),
+    )["spent"]
     issue.state = ISSUE_STATES.CLOSED
     issue.due_date = monday + timedelta(days=1)
     issue.closed_at = monday + timedelta(days=1)
@@ -279,7 +279,7 @@ def test_efficiency_zero_estimate(user):
 
     start = monday - timedelta(days=5)
     end = monday + timedelta(days=5)
-    metrics = get_progress_metrics(team, start, end, 'week')
+    metrics = get_progress_metrics(team, start, end, "week")
 
     developer_metrics = next(
         item.metrics for item in metrics if item.user == developer)
@@ -317,7 +317,7 @@ def test_efficiency_zero_spend(user):
 
     start = monday - timedelta(days=5)
     end = monday + timedelta(days=5)
-    metrics = get_progress_metrics(team, start, end, 'week')
+    metrics = get_progress_metrics(team, start, end, "week")
 
     developer_metrics = next(
         item.metrics
@@ -377,15 +377,15 @@ def test_many_weeks(user):
 
     issue.time_estimate = seconds(hours=15)
     issue.total_time_spent = issue.time_spents.aggregate(
-        spent=Sum('time_spent'),
-    )['spent']
+        spent=Sum("time_spent"),
+    )["spent"]
     issue.state = ISSUE_STATES.OPENED
     issue.due_date = monday + timedelta(days=2)
     issue.save()
 
     start = monday - timedelta(days=5)
     end = monday + timedelta(days=5)
-    metrics = get_progress_metrics(team, start, end, 'week')
+    metrics = get_progress_metrics(team, start, end, "week")
 
     developer_metrics = next(
         item.metrics for item in metrics if item.user == developer)
@@ -444,15 +444,15 @@ def test_not_in_range(user):
 
     issue.time_estimate = seconds(hours=15)
     issue.total_time_spent = issue.time_spents.aggregate(
-        spent=Sum('time_spent'),
-    )['spent']
+        spent=Sum("time_spent"),
+    )["spent"]
     issue.state = ISSUE_STATES.OPENED
     issue.due_date = monday + timedelta(days=1)
     issue.save()
 
     start = monday
     end = monday + timedelta(weeks=1, days=5)
-    metrics = get_progress_metrics(team, start, end, 'week')
+    metrics = get_progress_metrics(team, start, end, "week")
 
     developer_metrics = next(
         item.metrics
@@ -515,15 +515,15 @@ def test_another_user(user):
 
     issue.time_estimate = seconds(hours=15)
     issue.total_time_spent = issue.time_spents.aggregate(
-        spent=Sum('time_spent'),
-    )['spent']
+        spent=Sum("time_spent"),
+    )["spent"]
     issue.state = ISSUE_STATES.OPENED
     issue.due_date = monday + timedelta(days=1)
     issue.save()
 
     start = monday - timedelta(days=5)
     end = monday + timedelta(days=5)
-    metrics = get_progress_metrics(team, start, end, 'week')
+    metrics = get_progress_metrics(team, start, end, "week")
 
     developer_metrics = next(
         item.metrics for item in metrics if item.user == developer)
@@ -588,20 +588,20 @@ def test_many_issues(user):
 
     issue.time_estimate = seconds(hours=15)
     issue.total_time_spent = issue.time_spents.aggregate(
-        spent=Sum('time_spent'),
-    )['spent']
+        spent=Sum("time_spent"),
+    )["spent"]
     issue.state = ISSUE_STATES.OPENED
     issue.due_date = monday + timedelta(days=1)
     issue.save()
 
     another_issue.total_time_spent = another_issue.time_spents.aggregate(
-        spent=Sum('time_spent'),
-    )['spent']
+        spent=Sum("time_spent"),
+    )["spent"]
     another_issue.save()
 
     start = monday - timedelta(days=5)
     end = monday + timedelta(days=5)
-    metrics = get_progress_metrics(team, start, end, 'week')
+    metrics = get_progress_metrics(team, start, end, "week")
 
     developer_metrics = next(
         item.metrics for item in metrics if item.user == developer)
@@ -631,8 +631,8 @@ def _check_metrics(metrics,
     for metric in metrics:
         assert metric.end == metric.start + timedelta(weeks=1)
 
-        _check_metric(metric, 'time_spent', spents)
-        _check_metric(metric, 'time_estimate', time_estimates)
+        _check_metric(metric, "time_spent", spents)
+        _check_metric(metric, "time_estimate", time_estimates)
 
         start_dt = str(metric.start)
         if start_dt in efficiencies:

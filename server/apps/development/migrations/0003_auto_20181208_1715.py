@@ -9,28 +9,28 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('development', '0002_auto_20181208_1301'),
+        ("development", "0002_auto_20181208_1301"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='projectgroup',
-            name='parent',
-            field=models.ForeignKey(blank=True, help_text='HT__PARENT', null=True, on_delete=django.db.models.deletion.CASCADE, to='development.ProjectGroup', verbose_name='VN__PARENT'),
+            model_name="projectgroup",
+            name="parent",
+            field=models.ForeignKey(blank=True, help_text="HT__PARENT", null=True, on_delete=django.db.models.deletion.CASCADE, to="development.ProjectGroup", verbose_name="VN__PARENT"),
         ),
         migrations.AlterField(
-            model_name='issue',
-            name='gitlab_last_sync',
-            field=models.DateTimeField(blank=True, help_text='HT__GITLAB_LAST_SYNC', null=True, verbose_name='VN__GITLAB_LAST_SYNC'),
+            model_name="issue",
+            name="gitlab_last_sync",
+            field=models.DateTimeField(blank=True, help_text="HT__GITLAB_LAST_SYNC", null=True, verbose_name="VN__GITLAB_LAST_SYNC"),
         ),
         migrations.AlterField(
-            model_name='project',
-            name='gitlab_last_sync',
-            field=models.DateTimeField(blank=True, help_text='HT__GITLAB_LAST_SYNC', null=True, verbose_name='VN__GITLAB_LAST_SYNC'),
+            model_name="project",
+            name="gitlab_last_sync",
+            field=models.DateTimeField(blank=True, help_text="HT__GITLAB_LAST_SYNC", null=True, verbose_name="VN__GITLAB_LAST_SYNC"),
         ),
         migrations.AlterField(
-            model_name='projectgroup',
-            name='gitlab_last_sync',
-            field=models.DateTimeField(blank=True, help_text='HT__GITLAB_LAST_SYNC', null=True, verbose_name='VN__GITLAB_LAST_SYNC'),
+            model_name="projectgroup",
+            name="gitlab_last_sync",
+            field=models.DateTimeField(blank=True, help_text="HT__GITLAB_LAST_SYNC", null=True, verbose_name="VN__GITLAB_LAST_SYNC"),
         ),
     ]

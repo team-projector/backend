@@ -28,7 +28,7 @@ class TeamMemberRolesFilter(django_filters.CharFilter):
 
         return [
             role.strip()
-            for role in roles.split(',')
+            for role in roles.split(",")
             if role.strip() in TEAM_MEMBER_ROLES
         ]
 
@@ -38,9 +38,9 @@ class TeamMembersFilterSet(django_filters.FilterSet):
 
     roles = TeamMemberRolesFilter()
     order_by = OrderingFilter(
-        fields=('user__name',),
+        fields=("user__name",),
     )
 
     class Meta:
         model = TeamMember
-        fields = ('roles',)
+        fields = ("roles",)

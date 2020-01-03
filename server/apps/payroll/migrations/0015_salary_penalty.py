@@ -10,13 +10,13 @@ import apps.core.models.fields
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('payroll', '0014_auto_20190315_1838'),
+        ("payroll", "0014_auto_20190315_1838"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='salary',
-            name='penalty',
-            field=apps.core.models.fields.MoneyField(decimal_places=2, default=0, help_text='HT__PENALTY', max_digits=14, verbose_name='VN__PENALTY'),
+            model_name="salary",
+            name="penalty",
+            field=apps.core.models.fields.MoneyField(decimal_places=2, default=0, help_text="HT__PENALTY", max_digits=14, verbose_name="VN__PENALTY"),
         ),
     ]

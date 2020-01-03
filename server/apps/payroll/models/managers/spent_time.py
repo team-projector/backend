@@ -11,8 +11,8 @@ class SpentTimeQuerySet(models.QuerySet):
     def aggregate_payrolls(self):
         """Get total sum payroll and paid."""
         return self.annotate_payrolls().aggregate(
-            total_payroll=Coalesce(models.Sum('payroll'), 0),
-            total_paid=Coalesce(models.Sum('paid'), 0),
+            total_payroll=Coalesce(models.Sum("payroll"), 0),
+            total_paid=Coalesce(models.Sum("paid"), 0),
         )
 
     def summaries(self):
@@ -53,7 +53,7 @@ class SpentTimeQuerySet(models.QuerySet):
             queryset = queryset.annotate(
                 paid=models.Case(
                     models.When(
-                        salary__isnull=False, then=models.F('sum'),
+                        salary__isnull=False, then=models.F("sum"),
                     ),
                     default=0,
                     output_field=models.FloatField(),
@@ -64,7 +64,7 @@ class SpentTimeQuerySet(models.QuerySet):
             queryset = queryset.annotate(
                 payroll=models.Case(
                     models.When(
-                        salary__isnull=True, then=models.F('sum'),
+                        salary__isnull=True, then=models.F("sum"),
                     ),
                     default=0,
                     output_field=models.FloatField(),
@@ -75,7 +75,7 @@ class SpentTimeQuerySet(models.QuerySet):
 
     def _sum(self, **filters) -> Coalesce:
         return Coalesce(
-            models.Sum('time_spent', filter=models.Q(**filters)), 0,
+            models.Sum("time_spent", filter=models.Q(**filters)), 0,
         )
 
 

@@ -14,7 +14,7 @@ class WorkBreakManager(models.Manager):
             user=user,
             roles=TeamMember.roles.LEADER,
         ).values_list(
-            'team__members',
+            "team__members",
             flat=True,
         )
 

@@ -8,13 +8,13 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('development', '0058_auto_20190906_1546'),
+        ("development", "0058_auto_20190906_1546"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='issue',
-            name='merge_requests',
-            field=models.ManyToManyField(blank=True, related_name='issues', to='development.MergeRequest'),
+            model_name="issue",
+            name="merge_requests",
+            field=models.ManyToManyField(blank=True, related_name="issues", to="development.MergeRequest"),
         ),
     ]

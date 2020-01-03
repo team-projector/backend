@@ -8,13 +8,13 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('development', '0034_auto_20190416_1115'),
+        ("development", "0034_auto_20190416_1115"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='projectgroup',
-            name='members',
-            field=models.ManyToManyField(to='development.ProjectMember'),
+            model_name="projectgroup",
+            name="members",
+            field=models.ManyToManyField(to="development.ProjectMember"),
         ),
     ]

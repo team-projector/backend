@@ -20,7 +20,7 @@ def check_allow_project_manager(user: User) -> None:
     """Check whether user is a project manager."""
     if not user.roles.PROJECT_MANAGER:
         raise GraphQLPermissionDenied(
-            'Only project managers can view project resources',
+            "Only project managers can view project resources",
         )
 
 
@@ -45,7 +45,7 @@ def get_allowed_projects(user) -> Iterable[Project]:
     members = ProjectMember.objects.filter(
         user=user,
         role=PROJECT_MEMBER_ROLES.PROJECT_MANAGER,
-        id=OuterRef('members__id'),
+        id=OuterRef("members__id"),
     )
 
     projects = list(Project.objects.annotate(
@@ -97,7 +97,7 @@ def filter_by_team_member_role(
             TeamMember.roles.WATCHER,
         ],
     ).values_list(
-        'team__members',
+        "team__members",
         flat=True,
     )
 

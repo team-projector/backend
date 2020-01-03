@@ -8,7 +8,7 @@ def test_str(user):
         user=user,
     )
 
-    assert str(work_break) == '{0}: {1} ({2} - {3})'.format(
+    assert str(work_break) == "{0}: {1} ({2} - {3})".format(
         user.login,
         WORK_BREAK_REASONS.DAYOFF,
         work_break.from_date,

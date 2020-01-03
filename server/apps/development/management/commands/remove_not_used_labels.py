@@ -14,4 +14,4 @@ class Command(BaseCommand):
             merge_requests__isnull=True,
             issues__isnull=True,
         ).delete()
-        self.stdout.write('{0} labels were removed.'.format(deleted))
+        self.stdout.write("{0} labels were removed.".format(deleted))

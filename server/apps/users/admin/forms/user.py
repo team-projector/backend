@@ -9,7 +9,7 @@ class UserAdminForm(UserChangeForm):
 
     def clean_email(self):
         """Check unique email."""
-        email = self.cleaned_data.get('email')
+        email = self.cleaned_data.get("email")
 
         if email:
             qs = self._meta.model.objects.filter(
@@ -19,6 +19,6 @@ class UserAdminForm(UserChangeForm):
             )
 
             if qs.exists():
-                raise ValidationError('Value should be unique or empty.')
+                raise ValidationError("Value should be unique or empty.")
 
         return email

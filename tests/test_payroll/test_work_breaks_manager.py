@@ -46,11 +46,11 @@ def test_decline_by_teamlead(user):
 
     work_break_service.Manager(work_break).decline(
         approved_by=user,
-        decline_reason='reason'
+        decline_reason="reason"
     )
 
     work_break.refresh_from_db()
 
     assert work_break.approve_state == APPROVED_STATES.DECLINED
     assert work_break.approved_by == user
-    assert work_break.decline_reason == 'reason'
+    assert work_break.decline_reason == "reason"

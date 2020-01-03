@@ -27,26 +27,26 @@ class GitLabOAuth2Backend(SocialGitLabOAuth2):
         user = super().auth_complete(*args, **kwargs)
 
         if not user:
-            return HttpResponseBadRequest('Invalid token')
+            return HttpResponseBadRequest("Invalid token")
 
         token = create_user_token(user)
 
         user.last_login = timezone.now()
-        user.save(update_fields=('last_login',))
+        user.save(update_fields=("last_login",))
 
         return token  # noqa: WPS331
 
     def get_redirect_uri(self, state=None):
         """Callback URL after approving access on Gitlab."""
-        return self.setting('REDIRECT_URI')
+        return self.setting("REDIRECT_URI")
 
     def authenticate(self, *args, **kwargs):
         """Return authenticated user."""
-        response = kwargs.get('response')
+        response = kwargs.get("response")
 
         if response:
             return User.objects.filter(
-                login=response['username'],
+                login=response["username"],
             ).first()
 
     def set_data(self, **kwargs):

@@ -8,18 +8,18 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('payroll', '0005_auto_20190203_1441'),
+        ("payroll", "0005_auto_20190203_1441"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='spenttime',
-            name='created_at',
+            model_name="spenttime",
+            name="created_at",
             field=models.DateTimeField(blank=True, null=True),
         ),
         migrations.AlterField(
-            model_name='spenttime',
-            name='updated_at',
+            model_name="spenttime",
+            name="updated_at",
             field=models.DateTimeField(blank=True, null=True),
         ),
     ]

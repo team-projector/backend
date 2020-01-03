@@ -27,10 +27,10 @@ class AddSpentToIssueMutation(SerializerMutation):
         root: Optional[object],
         info: ResolveInfo,  # noqa: WPS110ø
         validated_data: Dict[str, Any],
-    ) -> 'AddSpentToIssueMutation':
+    ) -> "AddSpentToIssueMutation":
         """Add spent to issue."""
-        issue = validated_data.pop('issue')
-        seconds = validated_data.pop('seconds')
+        issue = validated_data.pop("issue")
+        seconds = validated_data.pop("seconds")
 
         add_spent_time(
             info.context.user,

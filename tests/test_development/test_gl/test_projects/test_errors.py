@@ -35,7 +35,7 @@ def test_not_found(db, gl_mocker):
 
 def test_deactivate_if_not_found(db, gl_mocker):
     project, gl_project = initializers.init_project(model_kwargs={
-        'is_active': False
+        "is_active": False
     })
 
     gl_mock.register_project(

@@ -16,7 +16,7 @@ def test_team(user, client):
     )
 
     client.user = user
-    info = AttrDict({'context': client})
+    info = AttrDict({"context": client})
 
     assert TeamType().get_node(info, team.id) == team
 
@@ -25,7 +25,7 @@ def test_team_not_member(user, client):
     team = TeamFactory.create()
 
     client.user = user
-    info = AttrDict({'context': client})
+    info = AttrDict({"context": client})
 
     with raises(GraphQLNotFound):
         TeamType().get_node(info, team.id)
@@ -42,7 +42,7 @@ def test_teams(user, client):
     TeamFactory.create_batch(5)
 
     client.user = user
-    info = AttrDict({'context': client})
+    info = AttrDict({"context": client})
 
     teams = TeamType().get_queryset(Team.objects, info)
 
@@ -60,7 +60,7 @@ def test_teams_not_member(user, client):
     TeamFactory.create_batch(5)
 
     client.user = user
-    info = AttrDict({'context': client})
+    info = AttrDict({"context": client})
 
     teams = TeamType().get_queryset(Team.objects, info)
 

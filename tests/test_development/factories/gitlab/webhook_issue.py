@@ -6,8 +6,8 @@ from tests.test_users.factories.gitlab import GlUserFactory
 
 
 class GlIssueWebhookFactory(factory.DictFactory):
-    object_kind = 'issue'
-    event_type = 'issue'
+    object_kind = "issue"
+    event_type = "issue"
     user = factory.SubFactory(GlUserFactory)
     project = factory.SubFactory(GlProjectFactory)
     object_attributes = factory.SubFactory(GlIssueFactory)

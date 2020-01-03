@@ -8,22 +8,22 @@ from tests.test_development.factories import (
 )
 
 
-@pytest.fixture(scope='session')
+@pytest.fixture(scope="session")
 def create_ticket_mutation(ghl_mutations):
     """Create ticket mutation."""
-    return ghl_mutations.fields['createTicket'].resolver
+    return ghl_mutations.fields["createTicket"].resolver
 
 
-@pytest.fixture(scope='session')
+@pytest.fixture(scope="session")
 def update_ticket_mutation(ghl_mutations):
     """Update ticket mutation."""
-    return ghl_mutations.fields['updateTicket'].resolver
+    return ghl_mutations.fields["updateTicket"].resolver
 
 
-@pytest.fixture(scope='session')
+@pytest.fixture(scope="session")
 def delete_ticket_mutation(ghl_mutations):
     """Delete ticket mutation."""
-    return ghl_mutations.fields['deleteTicket'].resolver
+    return ghl_mutations.fields["deleteTicket"].resolver
 
 
 @pytest.fixture()

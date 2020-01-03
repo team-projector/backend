@@ -107,14 +107,14 @@ class IssuesFilterSet(django_filters.FilterSet):
     user = django_filters.ModelChoiceFilter(queryset=User.objects.all())
 
     order_by = OrderingFilter(
-        fields=('due_date', 'title', 'created_at', 'closed_at'),
+        fields=("due_date", "title", "created_at", "closed_at"),
     )
 
-    q = SearchFilter(fields=('title', '=gl_url'))  # noqa: WPS111
+    q = SearchFilter(fields=("title", "=gl_url"))  # noqa: WPS111
 
     class Meta:
         model = Issue
         fields = (
-            'state', 'due_date', 'user', 'team', 'problems', 'project',
-            'milestone', 'ticket',
+            "state", "due_date", "user", "team", "problems", "project",
+            "milestone", "ticket",
         )

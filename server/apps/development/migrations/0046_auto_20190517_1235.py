@@ -9,13 +9,13 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('development', '0045_auto_20190514_2347'),
+        ("development", "0045_auto_20190514_2347"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='issue',
-            name='is_merged',
+            model_name="issue",
+            name="is_merged",
             field=models.BooleanField(default=False),
         ),
     ]

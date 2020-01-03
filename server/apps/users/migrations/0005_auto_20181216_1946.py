@@ -8,13 +8,13 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('users', '0004_user_hour_rate'),
+        ("users", "0004_user_hour_rate"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='user',
-            name='hour_rate',
-            field=models.DecimalField(decimal_places=2, default=0, help_text='HT__HOUR_RATE', max_digits=10, verbose_name='VN__HOUR_RATE'),
+            model_name="user",
+            name="hour_rate",
+            field=models.DecimalField(decimal_places=2, default=0, help_text="HT__HOUR_RATE", max_digits=10, verbose_name="VN__HOUR_RATE"),
         ),
     ]

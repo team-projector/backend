@@ -30,11 +30,11 @@ class UpdateTicketMutation(SerializerMutation):
         root: Optional[object],
         info: ResolveInfo,  # noqa: WPS110ø
         validated_data: Dict[str, Any],
-    ) -> 'UpdateTicketMutation':
+    ) -> "UpdateTicketMutation":
         """Overrideable mutation operation."""
-        ticket = validated_data.pop('ticket')
-        attach_issues = validated_data.pop('attach_issues', None)
-        issues = validated_data.pop('issues', None)
+        ticket = validated_data.pop("ticket")
+        attach_issues = validated_data.pop("attach_issues", None)
+        issues = validated_data.pop("issues", None)
 
         update_from_validated_data(ticket, validated_data)
 

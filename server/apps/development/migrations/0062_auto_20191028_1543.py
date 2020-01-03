@@ -6,23 +6,23 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('development', '0061_auto_20191017_1838'),
+        ("development", "0061_auto_20191017_1838"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='project',
-            name='is_active',
-            field=models.BooleanField(default=True, help_text='HT__IS_ACTIVE', verbose_name='VN__IS_ACTIVE'),
+            model_name="project",
+            name="is_active",
+            field=models.BooleanField(default=True, help_text="HT__IS_ACTIVE", verbose_name="VN__IS_ACTIVE"),
         ),
         migrations.AddField(
-            model_name='project',
-            name='is_archived',
-            field=models.BooleanField(default=True, help_text='HT__IS_ARCHIVED', verbose_name='VN__IS_ARCHIVED'),
+            model_name="project",
+            name="is_archived",
+            field=models.BooleanField(default=True, help_text="HT__IS_ARCHIVED", verbose_name="VN__IS_ARCHIVED"),
         ),
         migrations.AddField(
-            model_name='projectgroup',
-            name='is_active',
-            field=models.BooleanField(default=True, help_text='HT__IS_ACTIVE', verbose_name='VN__IS_ACTIVE'),
+            model_name="projectgroup",
+            name="is_active",
+            field=models.BooleanField(default=True, help_text="HT__IS_ACTIVE", verbose_name="VN__IS_ACTIVE"),
         ),
     ]

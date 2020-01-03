@@ -25,9 +25,9 @@ class SyncIssueMutation(SerializerMutation):
         root: Optional[object],
         info: ResolveInfo,  # noqa: WPS110ø
         validated_data: Dict[str, Any],
-    ) -> 'SyncIssueMutation':
+    ) -> "SyncIssueMutation":
         """Syncing issue."""
-        issue = validated_data.pop('issue')
+        issue = validated_data.pop("issue")
 
         sync_project_issue_task.delay(
             issue.project.gl_id,

@@ -23,7 +23,7 @@ class TeamRolesFilter(django_filters.CharFilter):
 
         team_members = filter_by_roles(
             TeamMember.objects.filter(
-                team=OuterRef('pk'),
+                team=OuterRef("pk"),
                 user=self.parent.request.user,
             ),
             parsed_roles,
@@ -43,7 +43,7 @@ class TeamRolesFilter(django_filters.CharFilter):
 
         return [
             role.strip()
-            for role in roles.split(',')
+            for role in roles.split(",")
             if role.strip() in TEAM_MEMBER_ROLES
         ]
 
@@ -53,10 +53,10 @@ class TeamsFilterSet(django_filters.FilterSet):
 
     roles = TeamRolesFilter()
     order_by = OrderingFilter(
-        fields=('title',),
+        fields=("title",),
     )
-    q = SearchFilter(fields=('title',))  # noqa: WPS111
+    q = SearchFilter(fields=("title",))  # noqa: WPS111
 
     class Meta:
         model = Team
-        fields = ('title', 'roles')
+        fields = ("title", "roles")

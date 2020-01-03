@@ -15,16 +15,16 @@ class Command(BaseCommand):
     def add_arguments(self, parser):
         """Add call arguments."""
         parser.add_argument(
-            '--group',
+            "--group",
             type=str,
-            help='Gitlab group_id for sync labels',
+            help="Gitlab group_id for sync labels",
         )
         parser.add_argument(
-            '-l',
-            '--log',
-            action='store_true',
+            "-l",
+            "--log",
+            action="store_true",
             default=False,
-            help='Show only log, without apply',
+            help="Show only log, without apply",
         )
 
     def handle(self, *args, **options) -> None:  # noqa: WPS110, WPS210
@@ -37,7 +37,7 @@ class Command(BaseCommand):
         if self.only_log:
             return
 
-        with tqdm(total=len(operations), desc='Executing operations') as pbar:
+        with tqdm(total=len(operations), desc="Executing operations") as pbar:
             for num, operation in enumerate(operations, start=1):
                 method, args, kwargs = operation
 
@@ -46,11 +46,11 @@ class Command(BaseCommand):
 
                 except Exception:
                     self.stdout(
-                        'Failed on {0} operation: {1}'.format(num, operation),
+                        "Failed on {0} operation: {1}".format(num, operation),
                     )
 
-                    self.stdout('Left operations:\n {0}'.format(
-                        '\n'.join(operations[num:]),
+                    self.stdout("Left operations:\n {0}".format(
+                        "\n".join(operations[num:]),
                     ))
                 pbar.update()
 
@@ -58,7 +58,7 @@ class Command(BaseCommand):
         total = self._get_total(client)
         cleaner = LabelsCleaner(client=client)
 
-        with tqdm(total=total, desc='Generating operations') as pbar:
+        with tqdm(total=total, desc="Generating operations") as pbar:
             original_f = Project._adjust_labels_for_single_item  # noqa: WPS437
 
             def _wrapped(proj, gl_api_obj):  # noqa:WPS430
@@ -74,11 +74,11 @@ class Command(BaseCommand):
 
     def _get_total(self, client) -> int:
         gr = client.groups.get(self.group_for_sync)
-        stats = client.http_get('/groups/{0}/issues_statistics'.format(gr.id))
-        issues_count = stats.get('statistics').get('counts').get('all')
+        stats = client.http_get("/groups/{0}/issues_statistics".format(gr.id))
+        issues_count = stats.get("statistics").get("counts").get("all")
         mergerequests = gr.mergerequests.list(all=True)
         return len(mergerequests) + issues_count
 
     def _parse_params(self, *args, **options) -> None:
-        self.group_for_sync = options.get('group')
-        self.only_log = options.get('log')
+        self.group_for_sync = options.get("group")
+        self.only_log = options.get("log")

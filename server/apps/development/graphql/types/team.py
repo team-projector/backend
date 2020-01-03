@@ -28,7 +28,7 @@ class TeamType(BaseDjangoObjectType):
         model = Team
         interfaces = (DatasourceRelayNode,)
         connection_class = DataSourceConnection
-        name = 'Team'
+        name = "Team"
 
     @classmethod
     def get_queryset(

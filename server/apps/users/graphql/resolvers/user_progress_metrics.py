@@ -22,7 +22,7 @@ def filter_allowed_for_user(
             TeamMember.roles.WATCHER,
         ],
     ).values_list(
-        'team__members',
+        "team__members",
         flat=True,
     )
 
@@ -35,12 +35,12 @@ def resolve_user_progress_metrics(parent, info, **kwargs):  # noqa: WPS110
         filter_allowed_for_user(
             get_user_model().objects.all(), info.context.user,
         ),
-        pk=kwargs['user'],
+        pk=kwargs["user"],
     )
 
     return get_progress_metrics(
         user,
-        kwargs['start'],
-        kwargs['end'],
-        kwargs['group'],
+        kwargs["start"],
+        kwargs["end"],
+        kwargs["group"],
     )

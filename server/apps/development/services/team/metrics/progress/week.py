@@ -13,4 +13,4 @@ class WeekMetricsProvider(ProgressMetricsProvider):
 
     def get_user_metrics(self, user: User) -> UserProgressMetricsList:
         """Get user progress metrics."""
-        return get_progress_metrics(user, self.start, self.end, 'week')
+        return get_progress_metrics(user, self.start, self.end, "week")

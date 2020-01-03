@@ -28,7 +28,7 @@ class BaseWorkItemGlManager:
         gl_project: gl.Project,
     ) -> None:
         """Load labels for work item."""
-        project_labels = getattr(gl_project, 'cached_labels', None)
+        project_labels = getattr(gl_project, "cached_labels", None)
 
         if project_labels is None:
             project_labels = gl_project.labels.list(all=True)
@@ -62,7 +62,7 @@ class BaseWorkItemGlManager:
     ) -> None:
         """Load participants for work item."""
         target.participants.set((
-            self.user_manager.sync_user(user['id'])
+            self.user_manager.sync_user(user["id"])
             for user in gl_target.participants()
         ))
 

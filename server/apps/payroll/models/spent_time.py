@@ -21,25 +21,25 @@ class SpentTime(Payroll):
 
     customer_sum = MoneyField(
         default=0,
-        verbose_name=_('VN__CUSTOMER_SUM'),
-        help_text=_('HT__CUSTOMER_SUM'),
+        verbose_name=_("VN__CUSTOMER_SUM"),
+        help_text=_("HT__CUSTOMER_SUM"),
     )
 
     rate = models.FloatField(
         null=True,
-        verbose_name=_('VN__RATE'),
-        help_text=_('HT__RATE'),
+        verbose_name=_("VN__RATE"),
+        help_text=_("HT__RATE"),
     )
 
     customer_rate = models.FloatField(
         null=True,
-        verbose_name=_('VN__CUSTOMER_RATE'),
-        help_text=_('HT__CUSTOMER_RATE'),
+        verbose_name=_("VN__CUSTOMER_RATE"),
+        help_text=_("HT__CUSTOMER_RATE"),
     )
 
     time_spent = models.IntegerField(
-        verbose_name=_('VN__TIME_SPENT'),
-        help_text=_('HT__TIME_SPENT'),
+        verbose_name=_("VN__TIME_SPENT"),
+        help_text=_("HT__TIME_SPENT"),
     )
 
     content_type = models.ForeignKey(
@@ -52,23 +52,23 @@ class SpentTime(Payroll):
     base = GenericForeignKey()
 
     note = models.OneToOneField(
-        'development.Note',
+        "development.Note",
         models.SET_NULL,
         null=True,
         blank=True,
-        related_name='time_spend',
+        related_name="time_spend",
     )
 
     objects = SpentTimeManager()  # noqa: WPS110
 
     class Meta:
-        verbose_name = _('VN__SPENT_TIME')
-        verbose_name_plural = _('VN__SPENT_TIMES')
-        ordering = ('-date',)
+        verbose_name = _("VN__SPENT_TIME")
+        verbose_name_plural = _("VN__SPENT_TIMES")
+        ordering = ("-date",)
 
     def __str__(self):
         """Returns object string representation."""
-        return '{0} [{1}]: {2}'.format(self.user, self.base, self.time_spent)
+        return "{0} [{1}]: {2}".format(self.user, self.base, self.time_spent)
 
     def save(self, *args, **kwargs) -> None:
         """Save spent time."""

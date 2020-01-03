@@ -11,8 +11,8 @@ from tests.test_users.factories.user import UserFactory
 
 
 def test_parse_date():
-    assert parse_gl_date('') is None
-    assert parse_gl_date('2000-01-01') == datetime(2000, 1, 1).date()
+    assert parse_gl_date("") is None
+    assert parse_gl_date("2000-01-01") == datetime(2000, 1, 1).date()
 
 
 def test_simple(user):
@@ -232,8 +232,8 @@ def _create_note(
         user=user,
         content_object=issue,
         data={
-            'spent': spent.total_seconds(),
-            'date': date or created_at.date()
+            "spent": spent.total_seconds(),
+            "date": date or created_at.date()
         } if spent else {}
     )
 
@@ -241,7 +241,7 @@ def _create_note(
 def _check_generated_time_spents(issue):
     users_spents = defaultdict(int)
 
-    for note in issue.notes.all().order_by('created_at'):
+    for note in issue.notes.all().order_by("created_at"):
         spent_time = SpentTime.objects.filter(note=note).first()
 
         assert spent_time is not None
@@ -250,6 +250,6 @@ def _check_generated_time_spents(issue):
             assert spent_time.time_spent == -users_spents[note.user_id]
             users_spents[note.user_id] = 0
         elif note.type == NOTE_TYPES.TIME_SPEND:
-            assert spent_time.time_spent == note.data['spent']
-            assert spent_time.date == parse_gl_date(note.data['date'])
-            users_spents[note.user_id] += note.data['spent']
+            assert spent_time.time_spent == note.data["spent"]
+            assert spent_time.date == parse_gl_date(note.data["date"])
+            users_spents[note.user_id] += note.data["spent"]

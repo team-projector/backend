@@ -9,38 +9,38 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('development', '0037_auto_20190416_1205'),
+        ("development", "0037_auto_20190416_1205"),
     ]
 
     operations = [
         migrations.RemoveField(
-            model_name='issue',
-            name='content_type',
+            model_name="issue",
+            name="content_type",
         ),
         migrations.RemoveField(
-            model_name='issue',
-            name='object_id',
+            model_name="issue",
+            name="object_id",
         ),
         migrations.AddField(
-            model_name='issue',
-            name='milestone',
-            field=models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, to='development.Milestone'),
+            model_name="issue",
+            name="milestone",
+            field=models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, to="development.Milestone"),
         ),
         migrations.CreateModel(
-            name='Epic',
+            name="Epic",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('created_at', models.DateTimeField(auto_now_add=True)),
-                ('updated_at', models.DateTimeField(auto_now=True)),
-                ('title', models.CharField(help_text='HT__TITLE', max_length=255, verbose_name='VN__TITLE')),
-                ('description', models.TextField(help_text='HT__DESCRIPTION', verbose_name='VN__DESCRIPTION')),
-                ('start_date', models.DateField(blank=True, help_text='HT__START_DATE', null=True, verbose_name='VN__START_DATE')),
-                ('due_date', models.DateField(blank=True, help_text='HT__DUE_DATE', null=True, verbose_name='VN__DUE_DATE')),
-                ('budget', models.DecimalField(decimal_places=2, default=0, help_text='HT__BUDGET', max_digits=12, verbose_name='VN__BUDGET')),
-                ('milestone', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='development.Milestone')),
+                ("id", models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name="ID")),
+                ("created_at", models.DateTimeField(auto_now_add=True)),
+                ("updated_at", models.DateTimeField(auto_now=True)),
+                ("title", models.CharField(help_text="HT__TITLE", max_length=255, verbose_name="VN__TITLE")),
+                ("description", models.TextField(help_text="HT__DESCRIPTION", verbose_name="VN__DESCRIPTION")),
+                ("start_date", models.DateField(blank=True, help_text="HT__START_DATE", null=True, verbose_name="VN__START_DATE")),
+                ("due_date", models.DateField(blank=True, help_text="HT__DUE_DATE", null=True, verbose_name="VN__DUE_DATE")),
+                ("budget", models.DecimalField(decimal_places=2, default=0, help_text="HT__BUDGET", max_digits=12, verbose_name="VN__BUDGET")),
+                ("milestone", models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to="development.Milestone")),
             ],
             options={
-                'abstract': False,
+                "abstract": False,
             },
         ),
     ]

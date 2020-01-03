@@ -14,7 +14,7 @@ def test_active_milestones_sort(user, client):
     user.save()
 
     client.user = user
-    info = AttrDict({'context': client})
+    info = AttrDict({"context": client})
 
     m1 = ProjectMilestoneFactory(state=MILESTONE_STATES.ACTIVE)
     ProjectMilestoneFactory(
@@ -33,7 +33,7 @@ def test_active_milestones_sort(user, client):
     milestones = ProjectType.resolve_milestones(
         parent,
         info,
-        order_by='due_date'
+        order_by="due_date"
     )
 
     assert len(milestones) == 3

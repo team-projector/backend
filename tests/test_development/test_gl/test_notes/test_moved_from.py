@@ -12,17 +12,17 @@ from tests.test_development.factories import IssueFactory
 def test_success(user):
     issue = IssueFactory.create()
 
-    body = 'moved from group/project#111'
+    body = "moved from group/project#111"
 
     Note.objects.update_from_gitlab(dict2obj({
-        'id': 2,
-        'body': body,
-        'created_at': datetime.strftime(datetime.now(), GITLAB_DATETIME_FORMAT),
-        'updated_at': datetime.strftime(datetime.now(), GITLAB_DATETIME_FORMAT),
-        'author': {
-            'id': user.gl_id,
+        "id": 2,
+        "body": body,
+        "created_at": datetime.strftime(datetime.now(), GITLAB_DATETIME_FORMAT),
+        "updated_at": datetime.strftime(datetime.now(), GITLAB_DATETIME_FORMAT),
+        "author": {
+            "id": user.gl_id,
         },
-        'system': True,
+        "system": True,
     }), issue,
     )
 
@@ -38,17 +38,17 @@ def test_success(user):
 def test_no_system(user):
     issue = IssueFactory.create()
 
-    body = 'moved from group/project#111'
+    body = "moved from group/project#111"
 
     Note.objects.update_from_gitlab(dict2obj({
-        'id': 2,
-        'body': body,
-        'created_at': datetime.strftime(datetime.now(), GITLAB_DATETIME_FORMAT),
-        'updated_at': datetime.strftime(datetime.now(), GITLAB_DATETIME_FORMAT),
-        'author': {
-            'id': user.gl_id,
+        "id": 2,
+        "body": body,
+        "created_at": datetime.strftime(datetime.now(), GITLAB_DATETIME_FORMAT),
+        "updated_at": datetime.strftime(datetime.now(), GITLAB_DATETIME_FORMAT),
+        "author": {
+            "id": user.gl_id,
         },
-        'system': False,
+        "system": False,
     }), issue,
     )
 
@@ -58,17 +58,17 @@ def test_no_system(user):
 def test_bad_issue_number(user):
     issue = IssueFactory.create()
 
-    body = 'moved from group/project#111b'
+    body = "moved from group/project#111b"
 
     Note.objects.update_from_gitlab(dict2obj({
-        'id': 2,
-        'body': body,
-        'created_at': datetime.strftime(datetime.now(), GITLAB_DATETIME_FORMAT),
-        'updated_at': datetime.strftime(datetime.now(), GITLAB_DATETIME_FORMAT),
-        'author': {
-            'id': user.gl_id,
+        "id": 2,
+        "body": body,
+        "created_at": datetime.strftime(datetime.now(), GITLAB_DATETIME_FORMAT),
+        "updated_at": datetime.strftime(datetime.now(), GITLAB_DATETIME_FORMAT),
+        "author": {
+            "id": user.gl_id,
         },
-        'system': True,
+        "system": True,
     }), issue,
     )
 

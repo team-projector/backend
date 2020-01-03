@@ -7,13 +7,13 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('users', '0019_auto_20191114_1037'),
+        ("users", "0019_auto_20191114_1037"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='user',
-            name='roles',
-            field=bitfield.models.BitField((('DEVELOPER', 'CH_DEVELOPER'), ('TEAM_LEADER', 'CH_TEAM_LEADER'), ('PROJECT_MANAGER', 'CH_PROJECT_MANAGER'), ('CUSTOMER', 'CH_CUSTOMER'), ('SHAREHOLDER', 'CH_SHAREHOLDER')), default=0),
+            model_name="user",
+            name="roles",
+            field=bitfield.models.BitField((("DEVELOPER", "CH_DEVELOPER"), ("TEAM_LEADER", "CH_TEAM_LEADER"), ("PROJECT_MANAGER", "CH_PROJECT_MANAGER"), ("CUSTOMER", "CH_CUSTOMER"), ("SHAREHOLDER", "CH_SHAREHOLDER")), default=0),
         ),
     ]

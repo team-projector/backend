@@ -30,8 +30,8 @@ def test_query(user, ghl_client):
         GHL_QUERY_ALL_TICKETS,
     )
 
-    assert 'errors' not in response
-    assert response['data']['allTickets']['count'] == 5
+    assert "errors" not in response
+    assert response["data"]["allTickets"]["count"] == 5
 
 
 def test_success(ghl_auth_mock_info, all_tickets_query):

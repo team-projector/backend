@@ -12,7 +12,7 @@ def test_bonus(user, payroll_admin):
 
     payroll = Payroll.objects.first()
     inheritance_link = payroll_admin.inheritance(payroll)
-    expected = '<a href=/admin/payroll/bonus/{0}/change/>'.format(bonus.pk)
+    expected = "<a href=/admin/payroll/bonus/{0}/change/>".format(bonus.pk)
 
     assert expected in inheritance_link
 
@@ -22,7 +22,7 @@ def test_payment(user, payroll_admin):
 
     payroll = Payroll.objects.first()
     inheritance_link = payroll_admin.inheritance(payroll)
-    expected = '<a href=/admin/payroll/payment/{0}/change/>'.format(payment.pk)
+    expected = "<a href=/admin/payroll/payment/{0}/change/>".format(payment.pk)
 
     assert expected in inheritance_link
 
@@ -32,7 +32,7 @@ def test_penalty(user, payroll_admin):
 
     payroll = Payroll.objects.first()
     inheritance_link = payroll_admin.inheritance(payroll)
-    expected = '<a href=/admin/payroll/penalty/{0}/change/>'.format(penalty.pk)
+    expected = "<a href=/admin/payroll/penalty/{0}/change/>".format(penalty.pk)
 
     assert expected in inheritance_link
 
@@ -42,7 +42,7 @@ def test_spenttime(user, payroll_admin):
 
     payroll = Payroll.objects.first()
     inheritance_link = payroll_admin.inheritance(payroll)
-    expected = '<a href=/admin/payroll/spenttime/{0}/change/>'.format(
+    expected = "<a href=/admin/payroll/spenttime/{0}/change/>".format(
         spenttime.pk,
     )
 

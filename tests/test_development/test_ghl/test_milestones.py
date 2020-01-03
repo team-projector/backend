@@ -20,7 +20,7 @@ def test_milestones(user, client):
     milestone = ProjectMilestoneFactory.create(owner=project)
 
     client.user = user
-    info = AttrDict({'context': client})
+    info = AttrDict({"context": client})
 
     ProjectMilestoneFactory.create_batch(5)
 
@@ -43,7 +43,7 @@ def test_milestone(user, client):
     milestone = ProjectMilestoneFactory.create(owner=project)
 
     client.user = user
-    info = AttrDict({'context': client})
+    info = AttrDict({"context": client})
 
     ProjectMilestoneFactory.create_batch(5)
 

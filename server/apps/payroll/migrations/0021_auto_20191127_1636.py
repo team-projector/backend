@@ -6,13 +6,13 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('payroll', '0020_auto_20191017_1838'),
+        ("payroll", "0020_auto_20191017_1838"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='workbreak',
-            name='reason',
-            field=models.CharField(choices=[('dayoff', 'CH_DAYOFF'), ('vacation', 'CH_VACATION'), ('disease', 'CH_DISEASE')], help_text='HT__REASON', max_length=15, verbose_name='VN__REASON'),
+            model_name="workbreak",
+            name="reason",
+            field=models.CharField(choices=[("dayoff", "CH_DAYOFF"), ("vacation", "CH_VACATION"), ("disease", "CH_DISEASE")], help_text="HT__REASON", max_length=15, verbose_name="VN__REASON"),
         ),
     ]

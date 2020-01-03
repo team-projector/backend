@@ -11,13 +11,13 @@ def _check_django_installed() -> None:
     except ImportError:
         raise ImportError(
             "Couldn't import Django. Are you sure it's installed and "
-            + 'available on your PYTHONPATH environment variable? Did you '
-            + 'forget to activate a virtual environment?',
+            + "available on your PYTHONPATH environment variable? Did you "
+            + "forget to activate a virtual environment?",
         )
 
 
-if __name__ == '__main__':
-    os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'server.settings')
+if __name__ == "__main__":
+    os.environ.setdefault("DJANGO_SETTINGS_MODULE", "server.settings")
     try:
         from django.core.management import (  # noqa: WPS433
             execute_from_command_line,

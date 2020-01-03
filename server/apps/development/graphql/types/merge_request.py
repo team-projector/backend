@@ -30,7 +30,7 @@ class MergeRequestType(graphql.BaseDjangoObjectType):
         model = development_models.MergeRequest
         interfaces = (graphql.DatasourceRelayNode, WorkItem)
         connection_class = graphql.DataSourceConnection
-        name = 'MergeRequest'
+        name = "MergeRequest"
 
     def resolve_metrics(self, info, **kwargs):  # noqa: WPS110
         """Get merge request metrics."""
@@ -48,7 +48,7 @@ class MergeRequestType(graphql.BaseDjangoObjectType):
             info.context.user,
         )
 
-        if graphql.is_field_selected(info, 'edges.node.user'):
-            queryset = queryset.select_related('user')
+        if graphql.is_field_selected(info, "edges.node.user"):
+            queryset = queryset.select_related("user")
 
         return queryset

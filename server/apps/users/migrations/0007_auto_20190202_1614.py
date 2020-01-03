@@ -8,12 +8,12 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('users', '0006_user_name'),
+        ("users", "0006_user_name"),
     ]
 
     operations = [
         migrations.AlterModelOptions(
-            name='user',
-            options={'ordering': ('login',), 'verbose_name': 'VN__USER', 'verbose_name_plural': 'VN__USERS'},
+            name="user",
+            options={"ordering": ("login",), "verbose_name": "VN__USER", "verbose_name_plural": "VN__USERS"},
         ),
     ]

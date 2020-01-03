@@ -26,8 +26,8 @@ class DeleteTicketMutation(SerializerMutation):
         root: Optional[object],
         info: ResolveInfo,  # noqa: WPS110
         validated_data,
-    ) -> 'DeleteTicketMutation':
+    ) -> "DeleteTicketMutation":
         """Perform mutation implementation."""
-        validated_data['ticket'].delete()
+        validated_data["ticket"].delete()
 
         return cls(ok=True)

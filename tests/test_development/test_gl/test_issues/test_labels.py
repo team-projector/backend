@@ -13,7 +13,7 @@ def test_labels(db, gl_mocker, gl_client):
         project,
         gl_project,
         gl_kwargs={
-            'labels': [gl_label['name']],
+            "labels": [gl_label["name"]],
         },
     )
 
@@ -35,9 +35,9 @@ def test_labels(db, gl_mocker, gl_client):
 
     issue.refresh_from_db()
 
-    assert issue.gl_id == gl_issue['id']
+    assert issue.gl_id == gl_issue["id"]
     assert issue.labels.count() == 1
-    assert issue.labels.first().title == gl_label['name']
+    assert issue.labels.first().title == gl_label["name"]
 
 
 def test_cached_labels(db, gl_mocker, gl_client):
@@ -47,7 +47,7 @@ def test_cached_labels(db, gl_mocker, gl_client):
         project,
         gl_project,
         gl_kwargs={
-            'labels': [gl_label['name']],
+            "labels": [gl_label["name"]],
         },
     )
 
@@ -64,7 +64,7 @@ def test_cached_labels(db, gl_mocker, gl_client):
         id=first_issue.gl_iid,
     )
 
-    assert getattr(gl_project_loaded_manager, 'cached_labels', None) is None
+    assert getattr(gl_project_loaded_manager, "cached_labels", None) is None
 
     IssueGlManager().sync_labels(
         first_issue,
@@ -75,13 +75,13 @@ def test_cached_labels(db, gl_mocker, gl_client):
     assert gl_project_loaded_manager.cached_labels is not None
 
     first_issue.refresh_from_db()
-    assert first_issue.labels.first().title == gl_label['name']
+    assert first_issue.labels.first().title == gl_label["name"]
 
     second_issue, gl_second_issue = initializers.init_issue(
         project,
         gl_project,
         gl_kwargs={
-            'labels': [gl_label['name']],
+            "labels": [gl_label["name"]],
         },
     )
 
@@ -103,7 +103,7 @@ def test_cached_labels(db, gl_mocker, gl_client):
     )
 
     second_issue.refresh_from_db()
-    assert second_issue.labels.first().title == gl_label['name']
+    assert second_issue.labels.first().title == gl_label["name"]
 
 
 def test_labels_is_empty(db, gl_mocker, gl_client):
@@ -113,7 +113,7 @@ def test_labels_is_empty(db, gl_mocker, gl_client):
         project,
         gl_project,
         gl_kwargs={
-            'labels': [gl_label['name']],
+            "labels": [gl_label["name"]],
         },
     )
 
@@ -131,5 +131,5 @@ def test_labels_is_empty(db, gl_mocker, gl_client):
 
     issue = Issue.objects.first()
 
-    assert issue.gl_id == gl_issue['id']
+    assert issue.gl_id == gl_issue["id"]
     assert not issue.labels.exists()

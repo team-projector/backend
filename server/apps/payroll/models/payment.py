@@ -9,6 +9,6 @@ class Payment(Payroll):
     """The payment model."""
 
     class Meta:
-        verbose_name = _('VN__PAYMENT')
-        verbose_name_plural = _('VN__PAYMENTS')
-        ordering = ('-created_at',)
+        verbose_name = _("VN__PAYMENT")
+        verbose_name_plural = _("VN__PAYMENTS")
+        ordering = ("-created_at",)

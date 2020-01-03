@@ -10,6 +10,6 @@ def admin_client(admin_user):
     return Client(admin_user)
 
 
-@pytest.fixture(scope='module')  # delete
+@pytest.fixture(scope="module")  # delete
 def client():
     return Client()

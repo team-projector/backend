@@ -27,10 +27,10 @@ class MergeRequestsSummaryProvider:
 
         merge_requests_counts = self.get_counts()
 
-        summary.count = merge_requests_counts['count']
-        summary.opened_count = merge_requests_counts['opened_count']
-        summary.closed_count = merge_requests_counts['closed_count']
-        summary.merged_count = merge_requests_counts['merged_count']
+        summary.count = merge_requests_counts["count"]
+        summary.opened_count = merge_requests_counts["opened_count"]
+        summary.closed_count = merge_requests_counts["closed_count"]
+        summary.merged_count = merge_requests_counts["merged_count"]
 
         return summary
 
@@ -44,7 +44,7 @@ class MergeRequestsSummaryProvider:
         )
 
     def _count(self, **filters) -> models.Count:
-        return models.Count('id', filter=models.Q(**filters))
+        return models.Count("id", filter=models.Q(**filters))
 
 
 def get_merge_requests_summary(

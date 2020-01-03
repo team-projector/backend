@@ -10,13 +10,13 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('development', '0017_note_updated_at'),
+        ("development", "0017_note_updated_at"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='note',
-            name='data',
+            model_name="note",
+            name="data",
             field=django.contrib.postgres.fields.jsonb.JSONField(encoder=django.core.serializers.json.DjangoJSONEncoder),
         ),
     ]

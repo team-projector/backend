@@ -17,7 +17,7 @@ def is_related_with_another_by_team_roles(
     """Check whether user can manage by target_user."""
     allowed = filter_by_roles(
         TeamMember.objects.filter(
-            team_id=OuterRef('id'),
+            team_id=OuterRef("id"),
             user=user,
         ),
         roles,

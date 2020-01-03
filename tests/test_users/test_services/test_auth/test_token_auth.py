@@ -26,16 +26,16 @@ def user_token(user: User) -> Token:
 
 def set_http_auth_header(request: HttpRequest, token: Token) -> None:
     request.META.update(
-        HTTP_AUTHORIZATION='Bearer {0}'.format(token.key),
+        HTTP_AUTHORIZATION="Bearer {0}".format(token.key),
     )
 
 
 def test_fail(rf, auth):
-    assert auth.authenticate(rf.get('/')) is None
+    assert auth.authenticate(rf.get("/")) is None
 
 
 def test_success(rf, auth, user_token):
-    request = rf.get('/')
+    request = rf.get("/")
     set_http_auth_header(request, user_token)
 
     assert auth.authenticate(request) is not None
@@ -47,20 +47,20 @@ def test_expired_token(rf, auth, user_token):
     )
     user_token.save()
 
-    request = rf.get('/')
+    request = rf.get("/")
     set_http_auth_header(request, user_token)
 
     with raises(AuthenticationFailed) as error:
         auth.authenticate(request)
-        assert str(error.value.detail) == 'Token has expired'
+        assert str(error.value.detail) == "Token has expired"
 
 
 def test_invalid_token(rf, auth, user_token):
-    user_token.key = '{0}123456'.format(user_token.key)
+    user_token.key = "{0}123456".format(user_token.key)
 
-    request = rf.get('/')
+    request = rf.get("/")
     set_http_auth_header(request, user_token)
 
     with raises(AuthenticationFailed) as error:
         auth.authenticate(request)
-        assert str(error.value.detail) == 'Invalid token.'
+        assert str(error.value.detail) == "Invalid token."

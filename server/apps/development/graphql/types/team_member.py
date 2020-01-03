@@ -13,4 +13,4 @@ class TeamMemberType(UserType):
         model = TeamMember
         interfaces = (DatasourceRelayNode,)
         connection_class = DataSourceConnection
-        name = 'TeamMember'
+        name = "TeamMember"

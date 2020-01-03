@@ -6,11 +6,11 @@ from django.db.models.functions import Upper
 
 def forwards(apps, schema_editor):
     to_change = [
-        ('workbreak', ['approve_state', 'reason']),
+        ("workbreak", ["approve_state", "reason"]),
     ]
 
     for model, fields in to_change:
-        model_class = apps.get_model('payroll', model)
+        model_class = apps.get_model("payroll", model)
         updates = {f: Upper(f) for f in fields}
         model_class.objects.all().update(**updates)
 
@@ -22,19 +22,19 @@ def backwards(apps, schema_editor):
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('payroll', '0021_auto_20191127_1636'),
+        ("payroll", "0021_auto_20191127_1636"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='workbreak',
-            name='approve_state',
-            field=models.CharField(choices=[('CREATED', 'CH_CREATED'), ('APPROVED', 'CH_APPROVED'), ('DECLINED', 'CH_DECLINED')], default='CREATED', help_text='HT__APPROVE_STATE', max_length=15, verbose_name='VN__APPROVE_STATE'),
+            model_name="workbreak",
+            name="approve_state",
+            field=models.CharField(choices=[("CREATED", "CH_CREATED"), ("APPROVED", "CH_APPROVED"), ("DECLINED", "CH_DECLINED")], default="CREATED", help_text="HT__APPROVE_STATE", max_length=15, verbose_name="VN__APPROVE_STATE"),
         ),
         migrations.AlterField(
-            model_name='workbreak',
-            name='reason',
-            field=models.CharField(choices=[('DAYOFF', 'CH_DAYOFF'), ('VACATION', 'CH_VACATION'), ('DISEASE', 'CH_DISEASE')], help_text='HT__REASON', max_length=15, verbose_name='VN__REASON'),
+            model_name="workbreak",
+            name="reason",
+            field=models.CharField(choices=[("DAYOFF", "CH_DAYOFF"), ("VACATION", "CH_VACATION"), ("DISEASE", "CH_DISEASE")], help_text="HT__REASON", max_length=15, verbose_name="VN__REASON"),
         ),
         migrations.RunPython(forwards, backwards)
     ]

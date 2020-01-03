@@ -7,12 +7,12 @@ from tests.test_users.factories.user import UserFactory
 
 def test_empty_email(db):
     """Test empty email."""
-    validate_email(email='')
+    validate_email(email="")
 
 
 def test_non_unique_email(db):
     """Test if email already used."""
-    UserFactory.create(email='user@mail.com')
+    UserFactory.create(email="user@mail.com")
 
     with pytest.raises(ValidationError):
-        validate_email(email='user@mail.com')
+        validate_email(email="user@mail.com")

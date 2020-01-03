@@ -18,7 +18,7 @@ def test_team_progress_metrics(user, client):
     )
 
     client.user = user
-    info = AttrDict({'context': client})
+    info = AttrDict({"context": client})
 
     metrics = resolve_team_progress_metrics(
         parent=None,
@@ -26,7 +26,7 @@ def test_team_progress_metrics(user, client):
         team=team.id,
         start=datetime.now().date(),
         end=datetime.now().date(),
-        group='day'
+        group="day"
     )
 
     assert len(metrics) == 1
@@ -43,7 +43,7 @@ def test_another_team(user, client):
     another_team = TeamFactory.create()
 
     client.user = user
-    info = AttrDict({'context': client})
+    info = AttrDict({"context": client})
 
     with raises(GraphQLPermissionDenied):
         resolve_team_progress_metrics(
@@ -52,7 +52,7 @@ def test_another_team(user, client):
             team=another_team.id,
             start=datetime.now().date(),
             end=datetime.now().date(),
-            group='day'
+            group="day"
         )
 
 
@@ -65,7 +65,7 @@ def test_not_leader(user, client):
     )
 
     client.user = user
-    info = AttrDict({'context': client})
+    info = AttrDict({"context": client})
 
     with raises(GraphQLPermissionDenied):
         resolve_team_progress_metrics(
@@ -74,5 +74,5 @@ def test_not_leader(user, client):
             team=team.id,
             start=datetime.now().date(),
             end=datetime.now().date(),
-            group='day'
+            group="day"
         )

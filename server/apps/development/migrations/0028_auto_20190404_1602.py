@@ -9,19 +9,19 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('contenttypes', '0002_remove_content_type_name'),
-        ('development', '0027_auto_20190404_1146'),
+        ("contenttypes", "0002_remove_content_type_name"),
+        ("development", "0027_auto_20190404_1146"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='issue',
-            name='content_type',
-            field=models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, to='contenttypes.ContentType'),
+            model_name="issue",
+            name="content_type",
+            field=models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, to="contenttypes.ContentType"),
         ),
         migrations.AddField(
-            model_name='issue',
-            name='object_id',
+            model_name="issue",
+            name="object_id",
             field=models.PositiveIntegerField(null=True),
         ),
     ]

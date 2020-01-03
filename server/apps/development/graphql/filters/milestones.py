@@ -26,5 +26,5 @@ class MilestonesFilterSet(django_filters.FilterSet):
     active = ActiveFilter()
 
     order_by = OrderingFilter(
-        fields=('due_date',),
+        fields=("due_date",),
     )

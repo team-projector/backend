@@ -24,9 +24,9 @@ class BaseModelAdmin(
         """Media."""
 
     def changelist_view(self, request: HttpRequest, extra_context=None):
-        """The 'change list' admin view for this model."""
-        ref = request.META.get('HTTP_REFERER', '')
-        path = request.META.get('PATH_INFO', '')
+        """The "change list" admin view for this model."""
+        ref = request.META.get("HTTP_REFERER", "")
+        path = request.META.get("PATH_INFO", "")
 
         default_filters = self.get_default_filters(request)
 
@@ -37,7 +37,7 @@ class BaseModelAdmin(
             )
 
         query = urlencode(default_filters)
-        return redirect('{0}?{1}'.format(path, query))
+        return redirect("{0}?{1}".format(path, query))
 
     def get_default_filters(self, request: HttpRequest) -> Dict[str, str]:
         """Set default filters to the page."""

@@ -7,7 +7,7 @@ from tests.test_development.factories import IssueFactory
 
 
 def test_no_problems(user):
-    """Test if user has't any problem."""
+    """Test if user has"t any problem."""
     IssueFactory.create(
         user=user,
         time_estimate=seconds(hours=5),

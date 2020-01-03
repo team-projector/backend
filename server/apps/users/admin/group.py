@@ -14,5 +14,5 @@ class GroupAdmin(BaseModelAdmin):
     """A class representing Group model for admin dashboard."""
 
     form = GroupAdminForm
-    list_display = ('name',)
-    search_fields = ('name',)
+    list_display = ("name",)
+    search_fields = ("name",)

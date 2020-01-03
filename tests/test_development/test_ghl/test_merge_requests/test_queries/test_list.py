@@ -50,8 +50,8 @@ def test_query(user, gql_client_authenticated):
         GHL_QUERY_ALL_MERGE_REQUESTS,
     )
 
-    assert 'errors' not in response
-    assert response['data']['allMergeRequests']['count'] == 2
+    assert "errors" not in response
+    assert response["data"]["allMergeRequests"]["count"] == 2
 
 
 def test_team_members_combined(

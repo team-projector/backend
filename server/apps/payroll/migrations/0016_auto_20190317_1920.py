@@ -9,18 +9,18 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('payroll', '0015_salary_penalty'),
+        ("payroll", "0015_salary_penalty"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='payroll',
-            name='salary',
-            field=models.ForeignKey(blank=True, help_text='HT__SALARY', null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='payrolls', to='payroll.Salary', verbose_name='VN__SALARY'),
+            model_name="payroll",
+            name="salary",
+            field=models.ForeignKey(blank=True, help_text="HT__SALARY", null=True, on_delete=django.db.models.deletion.SET_NULL, related_name="payrolls", to="payroll.Salary", verbose_name="VN__SALARY"),
         ),
         migrations.AlterField(
-            model_name='salary',
-            name='charged_time',
-            field=models.IntegerField(default=0, help_text='HT__CHARGED_TIME', verbose_name='VN__CHARGED_TIME'),
+            model_name="salary",
+            name="charged_time",
+            field=models.IntegerField(default=0, help_text="HT__CHARGED_TIME", verbose_name="VN__CHARGED_TIME"),
         ),
     ]

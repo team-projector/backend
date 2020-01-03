@@ -33,7 +33,7 @@ def test_clear_expired(user):
     """Test with expiration period."""
     token_expired = create_user_token(user)
     token_expired.created = timezone.now() - timedelta(minutes=3)
-    token_expired.save(update_fields=['created'])
+    token_expired.save(update_fields=["created"])
 
     clear_tokens()
 

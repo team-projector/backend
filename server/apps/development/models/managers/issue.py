@@ -13,7 +13,7 @@ class IssueManager(models.Manager):
 
     def update_from_gitlab(self, gl_id, **kwargs) -> Tuple[models.Model, bool]:
         """Save issue by Gitlab id."""
-        kwargs['gl_last_sync'] = timezone.now()
+        kwargs["gl_last_sync"] = timezone.now()
 
         return self.update_or_create(
             gl_id=gl_id,

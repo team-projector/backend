@@ -51,12 +51,12 @@ class MilestoneMetricsProvider(IssuesContainerMetricsProvider):
             models.Q(issues__milestone=self.milestone)
             | models.Q(mergerequests__milestone=self.milestone),
         ).aggregate(
-            total_sum=Coalesce(models.Sum('sum'), 0),
-            total_customer_sum=Coalesce(models.Sum('customer_sum'), 0),
+            total_sum=Coalesce(models.Sum("sum"), 0),
+            total_customer_sum=Coalesce(models.Sum("customer_sum"), 0),
         )
 
-        metrics.payroll = payroll['total_sum']
-        metrics.budget_spent = payroll['total_customer_sum']
+        metrics.payroll = payroll["total_sum"]
+        metrics.budget_spent = payroll["total_customer_sum"]
 
 
 def get_milestone_metrics(milestone: Milestone) -> MilestoneMetrics:

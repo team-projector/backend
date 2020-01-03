@@ -17,15 +17,15 @@ def test_added(user):
     issue = IssueFactory.create()
     date_str = date.today().strftime(GITLAB_DATE_FORMAT)
 
-    body = 'added 1h 1m of time spent at {0}'.format(date_str)
+    body = "added 1h 1m of time spent at {0}".format(date_str)
 
     Note.objects.update_from_gitlab(dict2obj({
-        'id': 2,
-        'body': body,
-        'created_at': datetime.strftime(datetime.now(), GITLAB_DATETIME_FORMAT),
-        'updated_at': datetime.strftime(datetime.now(), GITLAB_DATETIME_FORMAT),
-        'author': {
-            'id': user.gl_id,
+        "id": 2,
+        "body": body,
+        "created_at": datetime.strftime(datetime.now(), GITLAB_DATETIME_FORMAT),
+        "updated_at": datetime.strftime(datetime.now(), GITLAB_DATETIME_FORMAT),
+        "author": {
+            "id": user.gl_id,
         },
     }), issue)
 
@@ -36,22 +36,22 @@ def test_added(user):
     assert note.user == user
     assert note.type == NOTE_TYPES.TIME_SPEND
     assert note.body == body
-    assert note.data['spent'] == seconds(hours=1, minutes=1)
-    assert note.data['date'] == date_str
+    assert note.data["spent"] == seconds(hours=1, minutes=1)
+    assert note.data["date"] == date_str
 
 
 def test_subtracted(user):
     issue = IssueFactory.create()
     date_str = date.today().strftime(GITLAB_DATE_FORMAT)
 
-    body = 'subtracted 1h 1m of time spent at {0}'.format(date_str)
+    body = "subtracted 1h 1m of time spent at {0}".format(date_str)
     Note.objects.update_from_gitlab(dict2obj({
-        'id': 2,
-        'body': body,
-        'created_at': datetime.strftime(datetime.now(), GITLAB_DATETIME_FORMAT),
-        'updated_at': datetime.strftime(datetime.now(), GITLAB_DATETIME_FORMAT),
-        'author': {
-            'id': user.gl_id,
+        "id": 2,
+        "body": body,
+        "created_at": datetime.strftime(datetime.now(), GITLAB_DATETIME_FORMAT),
+        "updated_at": datetime.strftime(datetime.now(), GITLAB_DATETIME_FORMAT),
+        "author": {
+            "id": user.gl_id,
         },
     }), issue)
 
@@ -62,20 +62,20 @@ def test_subtracted(user):
     assert note.user == user
     assert note.body == body
     assert note.type == NOTE_TYPES.TIME_SPEND
-    assert note.data['spent'] == -seconds(hours=1, minutes=1)
-    assert note.data['date'] == date_str
+    assert note.data["spent"] == -seconds(hours=1, minutes=1)
+    assert note.data["date"] == date_str
 
 
 def test_removed(user):
     issue = IssueFactory.create()
 
     Note.objects.update_from_gitlab(dict2obj({
-        'id': 2,
-        'body': SPEND_RESET_MESSAGE,
-        'created_at': datetime.strftime(datetime.now(), GITLAB_DATETIME_FORMAT),
-        'updated_at': datetime.strftime(datetime.now(), GITLAB_DATETIME_FORMAT),
-        'author': {
-            'id': user.gl_id,
+        "id": 2,
+        "body": SPEND_RESET_MESSAGE,
+        "created_at": datetime.strftime(datetime.now(), GITLAB_DATETIME_FORMAT),
+        "updated_at": datetime.strftime(datetime.now(), GITLAB_DATETIME_FORMAT),
+        "author": {
+            "id": user.gl_id,
         },
     }), issue)
 
@@ -100,14 +100,14 @@ def test_already_exists(user):
     )
 
     Note.objects.update_from_gitlab(dict2obj({
-        'id': 2,
-        'body': 'added 1h 1m of time spent at {0}'.format(
+        "id": 2,
+        "body": "added 1h 1m of time spent at {0}".format(
             date.today().strftime(GITLAB_DATE_FORMAT),
         ),
-        'created_at': datetime.strftime(datetime.now(), GITLAB_DATETIME_FORMAT),
-        'updated_at': datetime.strftime(datetime.now(), GITLAB_DATETIME_FORMAT),
-        'author': {
-            'id': user.gl_id,
+        "created_at": datetime.strftime(datetime.now(), GITLAB_DATETIME_FORMAT),
+        "updated_at": datetime.strftime(datetime.now(), GITLAB_DATETIME_FORMAT),
+        "author": {
+            "id": user.gl_id,
         },
     }), issue)
 
@@ -129,14 +129,14 @@ def test_already_has_another(user):
     )
 
     Note.objects.update_from_gitlab(dict2obj({
-        'id': 2,
-        'body': 'added 1h 1m of time spent at {0}'.format(
+        "id": 2,
+        "body": "added 1h 1m of time spent at {0}".format(
             date.today().strftime(GITLAB_DATE_FORMAT),
         ),
-        'created_at': datetime.strftime(datetime.now(), GITLAB_DATETIME_FORMAT),
-        'updated_at': datetime.strftime(datetime.now(), GITLAB_DATETIME_FORMAT),
-        'author': {
-            'id': user.gl_id,
+        "created_at": datetime.strftime(datetime.now(), GITLAB_DATETIME_FORMAT),
+        "updated_at": datetime.strftime(datetime.now(), GITLAB_DATETIME_FORMAT),
+        "author": {
+            "id": user.gl_id,
         },
     }), issue)
 
@@ -155,14 +155,14 @@ def test_has_prior(user):
     )
 
     Note.objects.update_from_gitlab(dict2obj({
-        'id': 2,
-        'body': 'added 1h 1m of time spent at {0}'.format(
+        "id": 2,
+        "body": "added 1h 1m of time spent at {0}".format(
             date.today().strftime(GITLAB_DATE_FORMAT),
         ),
-        'created_at': datetime.strftime(datetime.now(), GITLAB_DATETIME_FORMAT),
-        'updated_at': datetime.strftime(datetime.now(), GITLAB_DATETIME_FORMAT),
-        'author': {
-            'id': user.gl_id
+        "created_at": datetime.strftime(datetime.now(), GITLAB_DATETIME_FORMAT),
+        "updated_at": datetime.strftime(datetime.now(), GITLAB_DATETIME_FORMAT),
+        "author": {
+            "id": user.gl_id
         }
     }), issue)
 
@@ -181,20 +181,20 @@ def test_has_after(user):
     )
 
     Note.objects.update_from_gitlab(dict2obj({
-        'id': 2,
-        'body': 'added 1h 1m of time spent at {0}'.format(
+        "id": 2,
+        "body": "added 1h 1m of time spent at {0}".format(
             date.today().strftime(GITLAB_DATE_FORMAT),
         ),
-        'created_at': datetime.strftime(
+        "created_at": datetime.strftime(
             timezone.now() - timedelta(hours=1),
             GITLAB_DATETIME_FORMAT,
         ),
-        'updated_at': datetime.strftime(
+        "updated_at": datetime.strftime(
             datetime.now(),
             GITLAB_DATETIME_FORMAT,
         ),
-        'author': {
-            'id': user.gl_id,
+        "author": {
+            "id": user.gl_id,
         },
     }), issue)
 
@@ -206,15 +206,15 @@ def test_body_without_date(user):
 
     note_date = date.today()
 
-    body = 'added 1h 1m of time spent'
+    body = "added 1h 1m of time spent"
 
     Note.objects.update_from_gitlab(dict2obj({
-        'id': 2,
-        'body': body,
-        'created_at': datetime.strftime(datetime.now(), GITLAB_DATETIME_FORMAT),
-        'updated_at': datetime.strftime(datetime.now(), GITLAB_DATETIME_FORMAT),
-        'author': {
-            'id': user.gl_id,
+        "id": 2,
+        "body": body,
+        "created_at": datetime.strftime(datetime.now(), GITLAB_DATETIME_FORMAT),
+        "updated_at": datetime.strftime(datetime.now(), GITLAB_DATETIME_FORMAT),
+        "author": {
+            "id": user.gl_id,
         },
     }), issue)
 
@@ -225,5 +225,5 @@ def test_body_without_date(user):
     assert note.user == user
     assert note.type == NOTE_TYPES.TIME_SPEND
     assert note.body == body
-    assert note.data['spent'] == seconds(hours=1, minutes=1)
-    assert note.data['date'] == note_date.strftime(GITLAB_DATE_FORMAT)
+    assert note.data["spent"] == seconds(hours=1, minutes=1)
+    assert note.data["date"] == note_date.strftime(GITLAB_DATE_FORMAT)

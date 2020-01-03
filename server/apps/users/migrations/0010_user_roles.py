@@ -9,13 +9,13 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('users', '0009_auto_20190204_1313'),
+        ("users", "0009_auto_20190204_1313"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='user',
-            name='roles',
-            field=bitfield.models.BitField((('developer', 'CH_DEVELOPER'), ('team_leader', 'CH_TEAM_LEADER'), ('project_manager', 'CH_PROJECT_MANAGER'), ('customer', 'CH_CUSTOMER'), ('shareholder', 'CH_SHAREHOLDER')), default=0),
+            model_name="user",
+            name="roles",
+            field=bitfield.models.BitField((("developer", "CH_DEVELOPER"), ("team_leader", "CH_TEAM_LEADER"), ("project_manager", "CH_PROJECT_MANAGER"), ("customer", "CH_CUSTOMER"), ("shareholder", "CH_SHAREHOLDER")), default=0),
         ),
     ]

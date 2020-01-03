@@ -15,4 +15,4 @@ class LogoutMutation(BaseMutation):
         """After successful logout return "success"."""
         info.context.auth.delete()
 
-        return LogoutMutation(status='success')
+        return LogoutMutation(status="success")

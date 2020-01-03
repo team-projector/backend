@@ -18,12 +18,12 @@ class IssueAdmin(
     """A class representing Issue model for admin dashboard."""
 
     list_display = (
-        'title', 'user', 'milestone', 'state', 'created_at', 'gl_last_sync',
+        "title", "user", "milestone", "state", "created_at", "gl_last_sync",
     )
-    list_filter = (ProjectFilter, MilestoneFilter, 'state')
-    search_fields = ('title', 'gl_id')
-    sortable_by = ('gl_last_sync', 'created_at')
-    ordering = ('-gl_last_sync',)
+    list_filter = (ProjectFilter, MilestoneFilter, "state")
+    search_fields = ("title", "gl_id")
+    sortable_by = ("gl_last_sync", "created_at")
+    ordering = ("-gl_last_sync",)
     inlines = (NoteInline,)
 
     def sync_handler(self, issue):

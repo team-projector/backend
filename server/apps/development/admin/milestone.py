@@ -18,8 +18,8 @@ class MilestoneAdmin(
 ):
     """A class representing Milestone model for admin dashboard."""
 
-    list_display = ('id', 'title', 'start_date', 'due_date', 'budget', 'state')
-    search_fields = ('title',)
+    list_display = ("id", "title", "start_date", "due_date", "budget", "state")
+    search_fields = ("title",)
 
     def sync_handler(self, milestone):
         """Syncing milestone."""

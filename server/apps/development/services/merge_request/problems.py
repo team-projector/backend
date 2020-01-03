@@ -7,14 +7,14 @@ from django.db import models
 from apps.development.models import MergeRequest
 from apps.development.models.merge_request import MERGE_REQUESTS_STATES
 
-PROBLEM_EMPTY_ESTIMATE = 'EMPTY_ESTIMATE'
-PROBLEM_NOT_ASSIGNED = 'NOT_ASSIGNED'
+PROBLEM_EMPTY_ESTIMATE = "EMPTY_ESTIMATE"
+PROBLEM_NOT_ASSIGNED = "NOT_ASSIGNED"
 
 
 class BaseProblemChecker:
     """A base class checks problems."""
 
-    problem_code: ClassVar[str] = ''
+    problem_code: ClassVar[str] = ""
 
     def merge_request_has_problem(self, merge_request: MergeRequest) -> bool:
         """Method should be implemented in subclass."""
@@ -54,7 +54,7 @@ class NotAssignedChecker(BaseProblemChecker):
         merge_request: MergeRequest,
     ) -> bool:
         return merge_request.issues.filter(
-            labels__title__iexact='done',
+            labels__title__iexact="done",
             state=MERGE_REQUESTS_STATES.OPENED,
         ).exists()
 

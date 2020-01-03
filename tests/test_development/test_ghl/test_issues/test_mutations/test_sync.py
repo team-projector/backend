@@ -28,18 +28,18 @@ def test_query(project_manager, ghl_client, gl_mocker, user):
     project, gl_project = initializers.init_project()
 
     gl_assignee = GlUserFactory.create()
-    UserFactory.create(gl_id=gl_assignee['id'])
+    UserFactory.create(gl_id=gl_assignee["id"])
 
     issue, gl_issue = initializers.init_issue(
         project,
         gl_project,
         model_kwargs={
-            'user': user,
-            'state': ISSUE_STATES.OPENED,
+            "user": user,
+            "state": ISSUE_STATES.OPENED,
         },
         gl_kwargs={
-            'assignee': gl_assignee,
-            'state': 'closed',
+            "assignee": gl_assignee,
+            "state": "closed",
         },
     )
 
@@ -58,14 +58,14 @@ def test_query(project_manager, ghl_client, gl_mocker, user):
     response = ghl_client.execute(
         GHL_QUERY_SYNC_ISSUE,
         variables={
-            'id': issue.pk,
+            "id": issue.pk,
         }
     )
 
-    assert 'errors' not in response
+    assert "errors" not in response
 
-    dto = response['data']['syncIssue']['issue']
-    assert dto['id'] == str(issue.id)
+    dto = response["data"]["syncIssue"]["issue"]
+    assert dto["id"] == str(issue.id)
 
     issue.refresh_from_db()
     assert issue.state == ISSUE_STATES.CLOSED
@@ -86,5 +86,5 @@ def test_without_access(
         )
 
     extensions = exc_info.value.extensions  # noqa: WPS441
-    assert len(extensions['fieldErrors']) == 1
-    assert extensions['fieldErrors'][0]['fieldName'] == 'id'
+    assert len(extensions["fieldErrors"]) == 1
+    assert extensions["fieldErrors"][0]["fieldName"] == "id"

@@ -8,7 +8,7 @@ from tests.test_development.factories.issue import IssueFactory
 class IssueNoteFactory(factory.django.DjangoModelFactory):
     gl_id = factory.Sequence(lambda seq: seq)
     created_at = factory.Faker(
-        'date_time_this_year',
+        "date_time_this_year",
         before_now=True,
         after_now=False,
         tzinfo=pytz.UTC,

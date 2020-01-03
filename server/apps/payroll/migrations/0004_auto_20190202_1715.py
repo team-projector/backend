@@ -10,46 +10,46 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('contenttypes', '0002_remove_content_type_name'),
+        ("contenttypes", "0002_remove_content_type_name"),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
-        ('development', '0016_auto_20190202_1614'),
-        ('payroll', '0003_auto_20190202_1654'),
+        ("development", "0016_auto_20190202_1614"),
+        ("payroll", "0003_auto_20190202_1654"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='SpentTime',
+            name="SpentTime",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('created_at', models.DateTimeField(auto_now_add=True)),
-                ('updated_at', models.DateTimeField(auto_now=True)),
-                ('date', models.DateTimeField(null=True)),
-                ('time_spent', models.IntegerField(help_text='HT__TIME_SPENT', verbose_name='VN__TIME_SPENT')),
-                ('object_id', models.PositiveIntegerField()),
-                ('salary', models.DecimalField(decimal_places=2, default=0, max_digits=10)),
-                ('content_type', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='contenttypes.ContentType')),
-                ('employee', models.ForeignKey(help_text='HT__EMPLOYEE', on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL, verbose_name='VN__EMPLOYEE')),
-                ('note', models.OneToOneField(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='time_spend', to='development.Note')),
+                ("id", models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name="ID")),
+                ("created_at", models.DateTimeField(auto_now_add=True)),
+                ("updated_at", models.DateTimeField(auto_now=True)),
+                ("date", models.DateTimeField(null=True)),
+                ("time_spent", models.IntegerField(help_text="HT__TIME_SPENT", verbose_name="VN__TIME_SPENT")),
+                ("object_id", models.PositiveIntegerField()),
+                ("salary", models.DecimalField(decimal_places=2, default=0, max_digits=10)),
+                ("content_type", models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to="contenttypes.ContentType")),
+                ("employee", models.ForeignKey(help_text="HT__EMPLOYEE", on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL, verbose_name="VN__EMPLOYEE")),
+                ("note", models.OneToOneField(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name="time_spend", to="development.Note")),
             ],
             options={
-                'verbose_name': 'VN__SPENT_TIME',
-                'verbose_name_plural': 'VN__SPENT_TIME',
-                'ordering': ('-created_at', 'employee'),
+                "verbose_name": "VN__SPENT_TIME",
+                "verbose_name_plural": "VN__SPENT_TIME",
+                "ordering": ("-created_at", "employee"),
             },
         ),
         migrations.RemoveField(
-            model_name='timespend',
-            name='content_type',
+            model_name="timespend",
+            name="content_type",
         ),
         migrations.RemoveField(
-            model_name='timespend',
-            name='employee',
+            model_name="timespend",
+            name="employee",
         ),
         migrations.RemoveField(
-            model_name='timespend',
-            name='note',
+            model_name="timespend",
+            name="note",
         ),
         migrations.DeleteModel(
-            name='TimeSpend',
+            name="TimeSpend",
         ),
     ]

@@ -36,16 +36,16 @@ class MergeRequestGlManager(BaseWorkItemGlManager):
         if not gl_project:
             return
 
-        logger.info('Syncing project "{project}" merge_requests', extra={
-            'project': project,
+        logger.info("Syncing project '{project}' merge_requests", extra={
+            "project": project,
         })
 
         args = {
-            'as_list': False,
+            "as_list": False,
         }
 
         if not full_reload and project.gl_last_merge_requests_sync:
-            args['updated_after'] = project.gl_last_merge_requests_sync
+            args["updated_after"] = project.gl_last_merge_requests_sync
 
         for gl_merge_request in gl_project.mergerequests.list(**args):
             self.update_merge_request(
@@ -55,7 +55,7 @@ class MergeRequestGlManager(BaseWorkItemGlManager):
             )
 
         project.gl_last_merge_requests_sync = timezone.now()
-        project.save(update_fields=('gl_last_merge_requests_sync',))
+        project.save(update_fields=("gl_last_merge_requests_sync",))
 
     def update_merge_request(
         self,
@@ -67,32 +67,32 @@ class MergeRequestGlManager(BaseWorkItemGlManager):
         time_stats = gl_merge_request.time_stats()
 
         fields = {
-            'gl_id': gl_merge_request.id,
-            'gl_iid': gl_merge_request.iid,
-            'gl_url': gl_merge_request.web_url,
-            'project': project,
-            'title': gl_merge_request.title,
-            'total_time_spent': time_stats['total_time_spent'],
-            'time_estimate': time_stats['time_estimate'],
-            'state': gl_merge_request.state.upper(),
-            'created_at': parse_gl_datetime(gl_merge_request.created_at),
-            'updated_at': parse_gl_datetime(gl_merge_request.updated_at),
-            'closed_at': parse_gl_datetime(gl_merge_request.closed_at),
-            'user': self.user_manager.extract_user_from_data(
+            "gl_id": gl_merge_request.id,
+            "gl_iid": gl_merge_request.iid,
+            "gl_url": gl_merge_request.web_url,
+            "project": project,
+            "title": gl_merge_request.title,
+            "total_time_spent": time_stats["total_time_spent"],
+            "time_estimate": time_stats["time_estimate"],
+            "state": gl_merge_request.state.upper(),
+            "created_at": parse_gl_datetime(gl_merge_request.created_at),
+            "updated_at": parse_gl_datetime(gl_merge_request.updated_at),
+            "closed_at": parse_gl_datetime(gl_merge_request.closed_at),
+            "user": self.user_manager.extract_user_from_data(
                 gl_merge_request.assignee,
             ),
-            'author': self.user_manager.extract_user_from_data(
+            "author": self.user_manager.extract_user_from_data(
                 gl_merge_request.author,
             ),
         }
 
         if gl_merge_request.milestone:
             milestone = models.Milestone.objects.filter(
-                gl_id=gl_merge_request.milestone['id'],
+                gl_id=gl_merge_request.milestone["id"],
             ).first()
 
             if milestone:
-                fields['milestone'] = milestone
+                fields["milestone"] = milestone
 
         merge_request, _ = models.MergeRequest.objects.update_from_gitlab(
             **fields,
@@ -102,8 +102,8 @@ class MergeRequestGlManager(BaseWorkItemGlManager):
         self.sync_notes(merge_request, gl_merge_request)
         self.sync_participants(merge_request, gl_merge_request)
 
-        logger.info('Merge Request "{merge_request}" is synced', extra={
-            'merge_request': merge_request,
+        logger.info("Merge Request '{merge_request}' is synced", extra={
+            "merge_request": merge_request,
         })
 
         return merge_request

@@ -12,7 +12,7 @@ from tests.test_users.factories.user import UserFactory
 
 class WorkBreakFactory(factory.django.DjangoModelFactory):
     user = factory.SubFactory(UserFactory)
-    comment = factory.Faker('text', max_nb_chars=200)
+    comment = factory.Faker("text", max_nb_chars=200)
     reason = random.choice((
         WORK_BREAK_REASONS.DAYOFF,
         WORK_BREAK_REASONS.VACATION,
@@ -20,19 +20,19 @@ class WorkBreakFactory(factory.django.DjangoModelFactory):
     ))
 
     from_date = factory.Faker(
-        'date_time_this_year',
+        "date_time_this_year",
         before_now=True,
         after_now=False,
         tzinfo=pytz.UTC,
     )
     to_date = factory.Faker(
-        'date_time_this_year',
+        "date_time_this_year",
         before_now=False,
         after_now=True,
         tzinfo=pytz.UTC,
     )
     created_at = factory.Faker(
-        'date_time_this_year',
+        "date_time_this_year",
         before_now=True,
         after_now=False,
         tzinfo=pytz.UTC,

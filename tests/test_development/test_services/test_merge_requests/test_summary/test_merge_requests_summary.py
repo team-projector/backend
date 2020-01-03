@@ -32,7 +32,7 @@ def test_counts_by_state(user):
 
     MergeRequestFactory.create_batch(
         2, user=user,
-        state='',
+        state="",
         total_time_spent=0
     )
     MergeRequestFactory.create_batch(
@@ -69,7 +69,7 @@ def test_resolver_summary(user, client):
     )
 
     client.user = user
-    info = AttrDict({'context': client})
+    info = AttrDict({"context": client})
 
     summary = resolve_merge_requests_summary(
         parent=None,

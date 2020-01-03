@@ -40,12 +40,12 @@ def test_list(user, client):
     )
 
     client.user = user
-    info = AttrDict({'context': client})
+    info = AttrDict({"context": client})
 
     spends = SpentTimeType().get_queryset(SpentTime.objects.all(), info)
 
     results = SpentTimeFilterSet(
-        data={'user': user.id},
+        data={"user": user.id},
         queryset=spends,
         request=client,
     ).qs

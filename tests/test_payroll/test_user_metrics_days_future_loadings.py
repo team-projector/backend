@@ -22,7 +22,7 @@ def test_replay(user):
 
     start = datetime.now().date() + timedelta(days=1)
     end = datetime.now().date() + timedelta(days=5)
-    metrics = get_progress_metrics(user, start, end, 'day')
+    metrics = get_progress_metrics(user, start, end, "day")
 
     assert len(metrics) == (end - start).days + 1
     _check_metrics(metrics, {
@@ -42,7 +42,7 @@ def test_has_spents(user):
 
     start = datetime.now().date() + timedelta(days=1)
     end = datetime.now().date() + timedelta(days=5)
-    metrics = get_progress_metrics(user, start, end, 'day')
+    metrics = get_progress_metrics(user, start, end, "day")
 
     assert len(metrics) == (end - start).days + 1
     _check_metrics(metrics, {
@@ -62,7 +62,7 @@ def test_replay_without_active_issues(user):
 
     start = datetime.now().date() + timedelta(days=1)
     end = datetime.now().date() + timedelta(days=3)
-    metrics = get_progress_metrics(user, start, end, 'day')
+    metrics = get_progress_metrics(user, start, end, "day")
 
     assert len(metrics) == (end - start).days + 1
     _check_metrics(metrics, {
@@ -82,7 +82,7 @@ def test_not_apply_loading_weekends(user):
 
     start = datetime.now().date() + timedelta(days=1)
     end = datetime.now().date() + timedelta(days=5)
-    metrics = get_progress_metrics(user, start, end, 'day')
+    metrics = get_progress_metrics(user, start, end, "day")
 
     assert len(metrics) == (end - start).days + 1
     _check_metrics(metrics, {
@@ -97,7 +97,7 @@ def _check_metrics(metrics,
     for metric in metrics:
         assert metric.start == metric.end
 
-        _check_metric(metric, 'loading', loadings)
+        _check_metric(metric, "loading", loadings)
 
 
 def _prepare_metrics(metrics):

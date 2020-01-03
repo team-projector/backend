@@ -49,7 +49,7 @@ class StateFilter(django_filters.CharFilter):
 
     def filter(self, queryset, value) -> QuerySet:  # noqa: A003, WPS110
         """Do filtering."""
-        if not value or value == 'all':
+        if not value or value == "all":
             return queryset
 
         return queryset.filter(
@@ -68,9 +68,9 @@ class SpentTimeFilterSet(django_filters.FilterSet):
     state = StateFilter()
 
     order_by = OrderingFilter(
-        fields=('date', 'created_at'),
+        fields=("date", "created_at"),
     )
 
     class Meta:
         model = SpentTime
-        fields = ('date', 'user', 'salary', 'team', 'state')
+        fields = ("date", "user", "salary", "team", "state")

@@ -24,7 +24,7 @@ calculator = UserMetricsProvider()
 
 @pytest.fixture()
 def user(db):
-    yield get_user_model().objects.create_user(login='user', hour_rate=100)
+    yield get_user_model().objects.create_user(login="user", hour_rate=100)
 
 
 def test_issues_opened_count(user):

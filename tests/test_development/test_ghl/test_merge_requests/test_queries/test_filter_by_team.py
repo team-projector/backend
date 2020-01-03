@@ -12,7 +12,7 @@ def test_merge_requests_filter_by_team_empty(
     ghl_auth_mock_info,
     all_merge_requests_query,
 ):
-    """Test team doesn't have merge requests."""
+    """Test team doesn"t have merge requests."""
     user_1 = UserFactory()
     user_2 = UserFactory()
 

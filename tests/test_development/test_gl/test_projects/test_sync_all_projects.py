@@ -19,7 +19,7 @@ def test_from_one_group(db, gl_mocker, gl_client):
     ProjectGlManager().sync_group_projects(group)
 
     for gl_project in gl_projects:
-        project = Project.objects.get(gl_id=gl_project['id'])
+        project = Project.objects.get(gl_id=gl_project["id"])
         gl_checkers.check_project(project, gl_project, group)
 
 
@@ -42,13 +42,13 @@ def test_from_many_groups(db, gl_mocker, gl_client):
     ProjectGlManager().sync_all_projects()
 
     gl_checkers.check_project(
-        Project.objects.get(gl_id=gl_projects[0]['id']),
+        Project.objects.get(gl_id=gl_projects[0]["id"]),
         gl_projects[0],
         first_group,
     )
 
     gl_checkers.check_project(
-        Project.objects.get(gl_id=gl_projects[1]['id']),
+        Project.objects.get(gl_id=gl_projects[1]["id"]),
         gl_projects[1],
         second_group,
     )

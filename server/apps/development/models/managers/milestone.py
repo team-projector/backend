@@ -15,7 +15,7 @@ class MilestoneManager(models.Manager):
         **kwargs,
     ) -> Tuple[models.Model, bool]:
         """Save milestone by Gitlab id."""
-        kwargs['gl_last_sync'] = timezone.now()
+        kwargs["gl_last_sync"] = timezone.now()
 
         return self.update_or_create(
             gl_id=gl_id,

@@ -9,22 +9,22 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('development', '0046_auto_20190517_1235'),
+        ("development", "0046_auto_20190517_1235"),
     ]
 
     operations = [
         migrations.AlterModelOptions(
-            name='feature',
-            options={'ordering': ('-created_at',), 'verbose_name': 'VN__FEATURE', 'verbose_name_plural': 'VN__FEATURES'},
+            name="feature",
+            options={"ordering": ("-created_at",), "verbose_name": "VN__FEATURE", "verbose_name_plural": "VN__FEATURES"},
         ),
         migrations.AlterField(
-            model_name='feature',
-            name='milestone',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='feature', to='development.Milestone'),
+            model_name="feature",
+            name="milestone",
+            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name="feature", to="development.Milestone"),
         ),
         migrations.AlterField(
-            model_name='issue',
-            name='milestone',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, to='development.Milestone'),
+            model_name="issue",
+            name="milestone",
+            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, to="development.Milestone"),
         ),
     ]

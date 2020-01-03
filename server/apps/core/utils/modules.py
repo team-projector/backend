@@ -10,4 +10,4 @@ def load_module_from_app(
 ):
     """Load module from application."""
     with suppress(ModuleNotFoundError):
-        return import_module('{0}.{1}'.format(app, dotted_path))
+        return import_module("{0}.{1}".format(app, dotted_path))

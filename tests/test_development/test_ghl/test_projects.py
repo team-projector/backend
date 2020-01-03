@@ -12,7 +12,7 @@ from tests.test_development.factories import (
 
 def test_project(user, client):
     client.user = user
-    info = AttrDict({'context': client})
+    info = AttrDict({"context": client})
 
     project = ProjectFactory.create()
 
@@ -32,7 +32,7 @@ def test_project_milestones(user, client):
     )
 
     client.user = user
-    info = AttrDict({'context': client})
+    info = AttrDict({"context": client})
 
     milestones = ProjectMilestonesResolver(
         project=project,
@@ -73,7 +73,7 @@ def test_project_group_milestones(user, client):
     )
 
     client.user = user
-    info = AttrDict({'context': client})
+    info = AttrDict({"context": client})
 
     milestones = ProjectMilestonesResolver(
         project=project,
@@ -116,7 +116,7 @@ def test_project_group_parent_milestones(user, client):
     )
 
     client.user = user
-    info = AttrDict({'context': client})
+    info = AttrDict({"context": client})
 
     milestones = ProjectMilestonesResolver(
         project=project,
@@ -150,7 +150,7 @@ def test_resolve_milestones(user, client):
     )
 
     client.user = user
-    info = AttrDict({'context': client})
+    info = AttrDict({"context": client})
 
     parent = ProjectType.get_node(info, obj_id=project.id)
     parent.parent_type = None

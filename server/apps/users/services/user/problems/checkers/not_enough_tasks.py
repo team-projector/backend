@@ -11,7 +11,7 @@ from apps.development.models.merge_request import (
 from apps.users.models import User
 from apps.users.services.user.problems.checkers.base import BaseProblemChecker
 
-PROBLEM_NOT_ENOUGH_TASKS = 'NOT_ENOUGH_TASKS'
+PROBLEM_NOT_ENOUGH_TASKS = "NOT_ENOUGH_TASKS"
 
 
 class NotEnoughTasksChecker(BaseProblemChecker):
@@ -23,8 +23,8 @@ class NotEnoughTasksChecker(BaseProblemChecker):
         """
         User has problem.
 
-        If user's daily work hours more than difference between
-        estimate and total user's time spent.
+        If user"s daily work hours more than difference between
+        estimate and total user"s time spent.
         """
         issues = Issue.objects.filter(
             user=user,
@@ -45,8 +45,8 @@ class NotEnoughTasksChecker(BaseProblemChecker):
     def _aggregate_time_remains(self, queryset) -> int:
         return queryset.annotate(
             time_remains=(
-                models.F('time_estimate') - models.F('total_time_spent')
+                models.F("time_estimate") - models.F("total_time_spent")
             ),
         ).aggregate(
-            total_time_remains=models.Sum('time_remains'),
-        )['total_time_remains'] or 0
+            total_time_remains=models.Sum("time_remains"),
+        )["total_time_remains"] or 0

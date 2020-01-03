@@ -10,9 +10,9 @@ class CamelCasedOrderingMixin(OrderingFilter):
     """
     Examples.
 
-    ('user__due_date',) becomes => {'user__due_date': 'user__dueDate'}
-    (('due_date', 'due_date'),) becomes => {'due_date': 'dueDate'}
-    {'due_date': 'due_date'} becomes => {'due_date': 'dueDate'}
+    ("user__due_date",) becomes => {"user__due_date": "user__dueDate"}
+    (("due_date", "due_date"),) becomes => {"due_date": "dueDate"}
+    {"due_date": "due_date"} becomes => {"due_date": "dueDate"}
     """
 
     @classmethod
@@ -21,9 +21,9 @@ class CamelCasedOrderingMixin(OrderingFilter):
         ret = super().normalize_fields(fields)
 
         return OrderedDict([
-            (key, '__'.join(
+            (key, "__".join(
                 str_converters.to_camel_case(choice)
-                for choice in choice_field.split('__')
+                for choice in choice_field.split("__")
             ))
             for key, choice_field in
             ret.items()

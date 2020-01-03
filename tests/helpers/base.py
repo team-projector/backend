@@ -66,7 +66,7 @@ class Client:
         if token is None:
             token = create_user_token(user)
 
-        self._credentials = {'HTTP_AUTHORIZATION': f'Bearer {token.key}'}
+        self._credentials = {"HTTP_AUTHORIZATION": f"Bearer {token.key}"}
 
 
 def trigger_on_commit():
@@ -85,7 +85,7 @@ def model_admin(model):
 
 def model_to_dict_form(data: dict) -> dict:
     def replace(value):
-        return '' if value is None else value
+        return "" if value is None else value
 
     original = model_to_dict(data)
     return {
@@ -95,8 +95,8 @@ def model_to_dict_form(data: dict) -> dict:
 
 
 def format_date(d: datetime) -> str:
-    return d.strftime('%Y-%m-%d')
+    return d.strftime("%Y-%m-%d")
 
 
 def parse_gl_date(s: str) -> datetime:
-    return datetime.datetime.strptime(s, '%Y-%m-%d')
+    return datetime.datetime.strptime(s, "%Y-%m-%d")

@@ -10,13 +10,13 @@ import apps.core.models.fields
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('payroll', '0012_spenttime'),
+        ("payroll", "0012_spenttime"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='payroll',
-            name='sum',
-            field=apps.core.models.fields.MoneyField(decimal_places=2, default=0, help_text='HT__SUM', max_digits=14, verbose_name='VN__SUM'),
+            model_name="payroll",
+            name="sum",
+            field=apps.core.models.fields.MoneyField(decimal_places=2, default=0, help_text="HT__SUM", max_digits=14, verbose_name="VN__SUM"),
         ),
     ]

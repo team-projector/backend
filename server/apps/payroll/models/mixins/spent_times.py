@@ -9,10 +9,10 @@ class SpentTimesMixin(models.Model):
     """Spent time mixin."""
 
     time_spents = GenericRelation(
-        'payroll.SpentTime',
-        related_query_name='%(class)ss',
-        verbose_name=_('VN__TIME_SPENTS'),
-        help_text=_('HT__TIME_SPENTS'),
+        "payroll.SpentTime",
+        related_query_name="%(class)ss",
+        verbose_name=_("VN__TIME_SPENTS"),
+        help_text=_("HT__TIME_SPENTS"),
     )
 
     class Meta:
@@ -20,4 +20,4 @@ class SpentTimesMixin(models.Model):
 
     def __str__(self):
         """Returns object string representation."""
-        return ''
+        return ""

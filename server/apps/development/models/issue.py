@@ -15,8 +15,8 @@ from apps.development.models.managers import IssueManager
 from apps.development.models.mixins import TrackableMixin
 
 ISSUE_STATES = Choices(
-    ('OPENED', _('CH_OPENED')),
-    ('CLOSED', _('CH_CLOSED')),
+    ("OPENED", _("CH_OPENED")),
+    ("CLOSED", _("CH_CLOSED")),
 )
 
 ISSUE_STATE_MAX_LENGTH = 255
@@ -35,28 +35,28 @@ class Issue(
 
     title = models.CharField(
         max_length=DEFAULT_TITLE_LENGTH,
-        verbose_name=_('VN__TITLE'),
-        help_text=_('HT__TITLE'),
+        verbose_name=_("VN__TITLE"),
+        help_text=_("HT__TITLE"),
     )
 
     time_estimate = models.PositiveIntegerField(
         null=True,
-        verbose_name=_('VN__TIME_ESTIMATE'),
-        help_text=_('HT__TIME_ESTIMATE'),
+        verbose_name=_("VN__TIME_ESTIMATE"),
+        help_text=_("HT__TIME_ESTIMATE"),
     )
 
     total_time_spent = models.PositiveIntegerField(
         null=True,
-        verbose_name=_('VN__TOTAL_TIME_SPENT'),
-        help_text=_('HT__TOTAL_TIME_SPENT'),
+        verbose_name=_("VN__TOTAL_TIME_SPENT"),
+        help_text=_("HT__TOTAL_TIME_SPENT"),
     )
 
     state = models.CharField(
         choices=ISSUE_STATES,
         max_length=ISSUE_STATE_MAX_LENGTH,
         blank=True,
-        verbose_name=_('VN__STATE'),
-        help_text=_('HT__STATE'),
+        verbose_name=_("VN__STATE"),
+        help_text=_("HT__STATE"),
     )
 
     created_at = models.DateTimeField(
@@ -80,19 +80,19 @@ class Issue(
     )
 
     labels = models.ManyToManyField(
-        'development.Label',
-        related_name='issues',
+        "development.Label",
+        related_name="issues",
         blank=True,
     )
 
     project = models.ForeignKey(
-        'development.Project',
+        "development.Project",
         models.SET_NULL,
         null=True,
         blank=True,
-        related_name='issues',
-        verbose_name=_('VN__PROJECT'),
-        help_text=_('HT__PROJECT'),
+        related_name="issues",
+        verbose_name=_("VN__PROJECT"),
+        help_text=_("HT__PROJECT"),
     )
 
     user = models.ForeignKey(
@@ -100,45 +100,45 @@ class Issue(
         models.SET_NULL,
         null=True,
         blank=True,
-        verbose_name=_('VN__USER'),
-        help_text=_('HT__USER'),
+        verbose_name=_("VN__USER"),
+        help_text=_("HT__USER"),
     )
 
     milestone = models.ForeignKey(
-        'development.Milestone',
+        "development.Milestone",
         models.CASCADE,
         null=True,
         blank=True,
     )
 
     ticket = models.ForeignKey(
-        'development.Ticket',
+        "development.Ticket",
         on_delete=models.SET_NULL,
         null=True,
         blank=True,
-        related_name='issues',
+        related_name="issues",
     )
 
     participants = models.ManyToManyField(
         settings.AUTH_USER_MODEL,
         blank=True,
-        related_name='participant_issues',
+        related_name="participant_issues",
     )
 
     is_merged = models.BooleanField(default=False)
 
     merge_requests = models.ManyToManyField(
-        'development.MergeRequest',
+        "development.MergeRequest",
         blank=True,
-        related_name='issues',
+        related_name="issues",
     )
 
     objects = IssueManager()  # noqa: WPS110
 
     class Meta:
-        verbose_name = _('VN__ISSUE')
-        verbose_name_plural = _('VN__ISSUES')
-        ordering = ('-created_at',)
+        verbose_name = _("VN__ISSUE")
+        verbose_name_plural = _("VN__ISSUES")
+        ordering = ("-created_at",)
 
     def __str__(self):
         """Returns object string representation."""
@@ -148,8 +148,8 @@ class Issue(
     def last_note_date(self) -> datetime:
         """Return last note date."""
         return self.notes.aggregate(
-            last_created=models.Max('created_at'),
-        )['last_created']
+            last_created=models.Max("created_at"),
+        )["last_created"]
 
     @property
     def time_remains(self) -> Optional[int]:

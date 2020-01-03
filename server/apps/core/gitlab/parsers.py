@@ -5,9 +5,9 @@ from typing import Dict, List, Optional
 
 from django.utils.timezone import make_aware
 
-GITLAB_DATETIME_FORMAT = '%Y-%m-%dT%H:%M:%S.%fZ'
-GITLAB_DATE_FORMAT = '%Y-%m-%d'
-STATE_MERGED = 'merged'
+GITLAB_DATETIME_FORMAT = "%Y-%m-%dT%H:%M:%S.%fZ"
+GITLAB_DATE_FORMAT = "%Y-%m-%d"
+STATE_MERGED = "merged"
 
 
 def parse_gl_datetime(gl_datetime: str) -> Optional[datetime]:
@@ -31,4 +31,4 @@ def parse_state_merged(states: List[Dict[str, str]]) -> bool:
     if not states:
         return False
 
-    return any(state.get('state') == STATE_MERGED for state in states)
+    return any(state.get("state") == STATE_MERGED for state in states)

@@ -2,16 +2,16 @@
 
 import pytest
 
-DEFAULT_USERNAME = 'user'
-DEFAULT_USER_PASSWORD = 'password'  # noqa: S105
+DEFAULT_USERNAME = "user"
+DEFAULT_USER_PASSWORD = "password"  # noqa: S105
 
 
 @pytest.fixture()
 def user(db, django_user_model, django_username_field):
     """A Django user.
 
-    This uses an existing user with username 'user', or creates a new one with
-    password 'password'.
+    This uses an existing user with username "user", or creates a new one with
+    password "password".
     """
     username_field = django_username_field
 
@@ -30,8 +30,8 @@ def user(db, django_user_model, django_username_field):
 def admin_user(db, django_user_model, django_username_field):
     """A Django admin user.
 
-    This uses an existing user with username 'user', or creates a new one with
-    password 'password'.
+    This uses an existing user with username "user", or creates a new one with
+    password "password".
     """
     username_field = django_username_field
 

@@ -13,12 +13,12 @@ class CreateTicketInput(TicketBaseInput):
     """Ticket create serializer."""
 
     class Meta(TicketBaseInput.Meta):
-        fields = [*TicketBaseInput.Meta.fields, 'milestone']
+        fields = [*TicketBaseInput.Meta.fields, "milestone"]
 
     def get_fields(self) -> Dict[str, Field]:
         """Returns serializer fields."""
         fields = super().get_fields()
 
-        fields['milestone'].required = True
-        fields['milestone'].allow_null = False
+        fields["milestone"].required = True
+        fields["milestone"].allow_null = False
         return fields

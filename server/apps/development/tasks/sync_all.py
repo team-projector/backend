@@ -15,7 +15,7 @@ from apps.development.tasks.milestones import (
 from celery_app import app
 
 
-@app.task(queue='low_priority')
+@app.task(queue="low_priority")
 def sync_all_task() -> None:
     """Syncing everything."""
     if settings.GITLAB_NO_SYNC:

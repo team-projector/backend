@@ -18,54 +18,54 @@ class ProjectGroup(GitlabEntityMixin):
 
     title = models.CharField(
         max_length=DEFAULT_TITLE_LENGTH,
-        verbose_name=_('VN__TITLE'),
-        help_text=_('HT__TITLE'),
+        verbose_name=_("VN__TITLE"),
+        help_text=_("HT__TITLE"),
     )
 
     full_title = models.CharField(
         max_length=DEFAULT_TITLE_LENGTH,
         blank=True,
-        verbose_name=_('VN__FULL_TITLE'),
-        help_text=_('HT__FULL_TITLE'),
+        verbose_name=_("VN__FULL_TITLE"),
+        help_text=_("HT__FULL_TITLE"),
     )
 
     gl_avatar = models.URLField(
         blank=True,
-        verbose_name=_('VN__GITLAB_AVATAR'),
-        help_text=_('HT__GITLAB_AVATAR'),
+        verbose_name=_("VN__GITLAB_AVATAR"),
+        help_text=_("HT__GITLAB_AVATAR"),
     )
 
     is_active = models.BooleanField(
         default=True,
-        verbose_name=_('VN__IS_ACTIVE'),
-        help_text=_('HT__IS_ACTIVE'),
+        verbose_name=_("VN__IS_ACTIVE"),
+        help_text=_("HT__IS_ACTIVE"),
     )
 
     parent = models.ForeignKey(
-        'self',
+        "self",
         models.CASCADE,
         null=True,
         blank=True,
-        verbose_name=_('VN__PARENT'),
-        help_text=_('HT__PARENT'),
+        verbose_name=_("VN__PARENT"),
+        help_text=_("HT__PARENT"),
     )
 
     milestones = GenericRelation(
-        'development.Milestone',
-        related_query_name='project_group',
+        "development.Milestone",
+        related_query_name="project_group",
     )
 
     members = GenericRelation(
-        'development.ProjectMember',
-        related_query_name='project_group',
+        "development.ProjectMember",
+        related_query_name="project_group",
     )
 
     objects = ProjectGroupManager()  # noqa: WPS110
 
     class Meta:
-        verbose_name = _('VN__PROJECT_GROUP')
-        verbose_name_plural = _('VN__PROJECT_GROUPS')
-        ordering = ('title',)
+        verbose_name = _("VN__PROJECT_GROUP")
+        verbose_name_plural = _("VN__PROJECT_GROUPS")
+        ordering = ("title",)
 
     def __str__(self):
         """Returns object string representation."""

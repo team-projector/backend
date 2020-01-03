@@ -5,6 +5,6 @@ import pytest
 from apps.payroll.models import Salary
 
 
-@pytest.fixture(scope='session')
+@pytest.fixture(scope="session")
 def salary_admin(admin_registry):
     return admin_registry[Salary]

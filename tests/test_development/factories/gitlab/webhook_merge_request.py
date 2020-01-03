@@ -8,8 +8,8 @@ from tests.test_users.factories.gitlab import GlUserFactory
 
 
 class GlMergeRequestWebhookFactory(factory.DictFactory):
-    object_kind = 'merge_request'
-    event_type = 'merge_request'
+    object_kind = "merge_request"
+    event_type = "merge_request"
     user = factory.SubFactory(GlUserFactory)
     project = factory.SubFactory(GlProjectFactory)
     object_attributes = factory.SubFactory(GlMergeRequestFactory)

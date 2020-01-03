@@ -10,11 +10,11 @@ class DemoFilter(CamelCasedOrderingMixin, BaseOrderingFilter):
     """Test ordering filter."""
 
 
-@pytest.mark.parametrize(('ordering', 'field'), [
-    ('fieldI18n', 'field_i18n'),
-    ('snakesOnA__plane', 'snakes_on_a__plane'),
-    ('dueDate', 'due_date'),
-    ('user__dueDate', 'user__due_date'),
+@pytest.mark.parametrize(("ordering", "field"), [
+    ("fieldI18n", "field_i18n"),
+    ("snakesOnA__plane", "snakes_on_a__plane"),
+    ("dueDate", "due_date"),
+    ("user__dueDate", "user__due_date"),
 ])
 def test_convert(ordering, field):
     """Test camel case filtering."""

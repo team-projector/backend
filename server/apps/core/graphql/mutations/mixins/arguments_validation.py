@@ -16,7 +16,7 @@ class ArgumentsValidationMixin:
 
     @classmethod
     def do_mutate(
-        cls: Union['ArgumentsValidationMixin', BaseMutation],
+        cls: Union["ArgumentsValidationMixin", BaseMutation],
         root,
         info,  # noqa: WPS110
         **kwargs,

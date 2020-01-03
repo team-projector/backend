@@ -20,7 +20,7 @@ class SpentTimeType(BaseDjangoObjectType):
         model = SpentTime
         interfaces = (DatasourceRelayNode,)
         connection_class = DataSourceConnection
-        name = 'SpentTime'
+        name = "SpentTime"
 
     def resolve_owner(self, info, **kwargs):  # noqa: WPS110
         """Get spent time owner: issue or merge request."""

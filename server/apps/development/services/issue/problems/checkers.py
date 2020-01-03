@@ -7,16 +7,16 @@ from django.utils.timezone import localdate
 
 from apps.development.models.issue import ISSUE_STATES, Issue
 
-PROBLEM_EMPTY_DUE_DAY = 'EMPTY_DUE_DATE'
-PROBLEM_OVER_DUE_DAY = 'OVER_DUE_DATE'
-PROBLEM_EMPTY_ESTIMATE = 'EMPTY_ESTIMATE'
+PROBLEM_EMPTY_DUE_DAY = "EMPTY_DUE_DATE"
+PROBLEM_OVER_DUE_DAY = "OVER_DUE_DATE"
+PROBLEM_EMPTY_ESTIMATE = "EMPTY_ESTIMATE"
 
 
 class BaseProblemChecker:
     """A base class checks issue problems."""
 
-    annotate_field: ClassVar[str] = ''
-    problem_code: ClassVar[str] = ''
+    annotate_field: ClassVar[str] = ""
+    problem_code: ClassVar[str] = ""
 
     def setup_queryset(self, queryset: models.QuerySet) -> models.QuerySet:
         """Setup queryset."""
@@ -39,7 +39,7 @@ class BaseProblemChecker:
 class EmptyDueDateChecker(BaseProblemChecker):
     """Check issue empty due date."""
 
-    annotate_field = 'problem_empty_due_date'
+    annotate_field = "problem_empty_due_date"
     problem_code = PROBLEM_EMPTY_DUE_DAY
 
     def get_condition(self) -> models.When:
@@ -60,7 +60,7 @@ class EmptyDueDateChecker(BaseProblemChecker):
 class OverdueDueDateChecker(BaseProblemChecker):
     """Check issue overdue due date."""
 
-    annotate_field = 'problem_over_due_date'
+    annotate_field = "problem_over_due_date"
     problem_code = PROBLEM_OVER_DUE_DAY
 
     def get_condition(self) -> models.When:
@@ -82,7 +82,7 @@ class OverdueDueDateChecker(BaseProblemChecker):
 class EmptyEstimateChecker(BaseProblemChecker):
     """Check issue empty estimate."""
 
-    annotate_field = 'problem_empty_estimate'
+    annotate_field = "problem_empty_estimate"
     problem_code = PROBLEM_EMPTY_ESTIMATE
 
     def get_condition(self) -> models.When:

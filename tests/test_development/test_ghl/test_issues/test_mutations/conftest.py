@@ -9,22 +9,22 @@ from tests.test_development.factories import (
 )
 
 
-@pytest.fixture(scope='session')
+@pytest.fixture(scope="session")
 def add_spent_issue_mutation(ghl_mutations):
     """Add spent to issue mutation."""
-    return ghl_mutations.fields['addSpendTimeIssue'].resolver
+    return ghl_mutations.fields["addSpendTimeIssue"].resolver
 
 
-@pytest.fixture(scope='session')
+@pytest.fixture(scope="session")
 def sync_issue_mutation(ghl_mutations):
     """Sync issue mutation."""
-    return ghl_mutations.fields['syncIssue'].resolver
+    return ghl_mutations.fields["syncIssue"].resolver
 
 
-@pytest.fixture(scope='session')
+@pytest.fixture(scope="session")
 def update_issue_mutation(ghl_mutations):
     """Update issue mutation."""
-    return ghl_mutations.fields['updateIssue'].resolver
+    return ghl_mutations.fields["updateIssue"].resolver
 
 
 @pytest.fixture()

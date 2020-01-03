@@ -29,21 +29,21 @@ def test_query(project_manager, ghl_client, ticket):
     """Test update ticket raw query."""
     ghl_client.set_user(project_manager)
 
-    new_title = 'new_{0}'.format(ticket.title)
+    new_title = "new_{0}".format(ticket.title)
 
     response = ghl_client.execute(
         GHL_QUERY_UPDATE_TICKET,
         variables={
-            'id': ticket.pk,
-            'title': new_title,
+            "id": ticket.pk,
+            "title": new_title,
         }
     )
 
-    assert 'errors' not in response
+    assert "errors" not in response
 
-    dto = response['data']['updateTicket']['ticket']
-    assert dto['id'] == str(ticket.id)
-    assert dto['title'] == new_title
+    dto = response["data"]["updateTicket"]["ticket"]
+    assert dto["id"] == str(ticket.id)
+    assert dto["title"] == new_title
 
     ticket.refresh_from_db()
     assert ticket.title == new_title
@@ -61,7 +61,7 @@ def test_without_permissions(
             root=None,
             info=ghl_auth_mock_info,
             id=ticket.id,
-            title='new_{0}'.format(ticket.title),
+            title="new_{0}".format(ticket.title),
         )
 
 
@@ -127,5 +127,5 @@ def test_both_params_attach_and_issues(
         )
 
     extensions = exc_info.value.extensions  # noqa: WPS441
-    assert len(extensions['fieldErrors']) == 1
-    assert extensions['fieldErrors'][0]['fieldName'] == 'nonFieldErrors'
+    assert len(extensions["fieldErrors"]) == 1
+    assert extensions["fieldErrors"][0]["fieldName"] == "nonFieldErrors"

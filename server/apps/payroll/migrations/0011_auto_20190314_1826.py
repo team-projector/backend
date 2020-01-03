@@ -7,11 +7,11 @@ from django.db import migrations
 
 class Migration(migrations.Migration):
     dependencies = [
-        ('payroll', '0010_auto_20190314_1810'),
+        ("payroll", "0010_auto_20190314_1810"),
     ]
 
     operations = [
         migrations.DeleteModel(
-            name='spenttime',
+            name="spenttime",
         ),
     ]

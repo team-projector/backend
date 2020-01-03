@@ -7,10 +7,10 @@ from django.db import migrations
 
 class Migration(migrations.Migration):
     dependencies = [
-        ('development', '0044_merge_20190429_1121'),
+        ("development", "0044_merge_20190429_1121"),
     ]
 
     operations = [
-        migrations.RenameModel('Epic', 'Feature'),
-        migrations.RenameField('Issue', 'epic', 'feature'),
+        migrations.RenameModel("Epic", "Feature"),
+        migrations.RenameField("Issue", "epic", "feature"),
     ]

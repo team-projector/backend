@@ -27,7 +27,7 @@ class MilestoneType(BaseDjangoObjectType):
         model = Milestone
         interfaces = (DatasourceRelayNode,)
         connection_class = DataSourceConnection
-        name = 'Milestone'
+        name = "Milestone"
 
     def resolve_metrics(self, info, **kwargs):  # noqa: WPS110
         """Get milestone metrics."""

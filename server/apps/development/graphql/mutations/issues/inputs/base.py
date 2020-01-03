@@ -15,13 +15,13 @@ class BaseIssueInput(serializers.ModelSerializer):
 
     class Meta:
         model = Issue
-        fields = ('id',)
+        fields = ("id",)
 
     def validate_id(self, issue):
         """Validates that user have permissions to mutate issue."""
         if issue:
             allowed_issue_qs = Issue.objects.allowed_for_user(
-                self.context['request'].user,
+                self.context["request"].user,
             ).filter(id=issue.id)
 
             if not allowed_issue_qs.exists():
@@ -35,5 +35,5 @@ class BaseIssueInput(serializers.ModelSerializer):
     def validated_data(self):
         """Validated data changing."""
         ret = super().validated_data
-        ret['issue'] = ret.pop('id', None)
+        ret["issue"] = ret.pop("id", None)
         return ret

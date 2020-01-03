@@ -30,8 +30,8 @@ def test_time_spend(user):
         type=NOTE_TYPES.TIME_SPEND,
         user=user,
         data={
-            'date': str(datetime.now().date()),
-            'spent': seconds(hours=2)
+            "date": str(datetime.now().date()),
+            "spent": seconds(hours=2)
         },
     )
 
@@ -60,7 +60,7 @@ def test_moved_from(user):
 
 def test_type_not_exist(user):
     IssueNoteFactory.create(
-        type='not_exist',
+        type="not_exist",
         user=user,
     )
 

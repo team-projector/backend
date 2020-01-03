@@ -20,10 +20,10 @@ from tests.test_users.factories.user import UserFactory
 def test_filter_by_state(user):
     issue_opened = IssueFactory.create(user=user, state=ISSUE_STATES.OPENED)
     issue_closed = IssueFactory.create(user=user, state=ISSUE_STATES.CLOSED)
-    IssueFactory.create_batch(5, user=user, state='')
+    IssueFactory.create_batch(5, user=user, state="")
 
     results = IssuesFilterSet(
-        data={'state': ISSUE_STATES.OPENED},
+        data={"state": ISSUE_STATES.OPENED},
         queryset=Issue.objects.all()
     ).qs
 
@@ -31,7 +31,7 @@ def test_filter_by_state(user):
     assert results.first() == issue_opened
 
     results = IssuesFilterSet(
-        data={'state': ISSUE_STATES.CLOSED},
+        data={"state": ISSUE_STATES.CLOSED},
         queryset=Issue.objects.all()
     ).qs
 
@@ -45,7 +45,7 @@ def test_filter_by_due_date(user):
     IssueFactory.create(user=user, due_date=datetime.now() - timedelta(days=1))
 
     results = IssuesFilterSet(
-        data={'due_date': datetime.now().date()},
+        data={"due_date": datetime.now().date()},
         queryset=Issue.objects.all()
     ).qs
 
@@ -77,8 +77,8 @@ def test_filter_by_due_date_and_state(user):
 
     results = IssuesFilterSet(
         data={
-            'due_date': datetime.now().date(),
-            'state': ISSUE_STATES.OPENED
+            "due_date": datetime.now().date(),
+            "state": ISSUE_STATES.OPENED
         },
         queryset=Issue.objects.all()
     ).qs
@@ -96,7 +96,7 @@ def test_filter_by_project(user):
     IssueFactory.create_batch(3, user=user)
 
     results = IssuesFilterSet(
-        data={'project': project_1.id},
+        data={"project": project_1.id},
         queryset=Issue.objects.all(),
     ).qs
 
@@ -104,7 +104,7 @@ def test_filter_by_project(user):
     assert results.first().project == project_1
 
     results = IssuesFilterSet(
-        data={'project': project_2.id},
+        data={"project": project_2.id},
         queryset=Issue.objects.all(),
     ).qs
 
@@ -125,7 +125,7 @@ def test_filter_by_team_with_one_member(user):
     IssueFactory.create_batch(5, user=UserFactory.create())
 
     results = IssuesFilterSet(
-        data={'team': team.id},
+        data={"team": team.id},
         queryset=Issue.objects.all()
     ).qs
 
@@ -155,7 +155,7 @@ def test_filter_by_team_with_many_members(user):
     IssueFactory.create_batch(4, user=UserFactory.create())
 
     results = IssuesFilterSet(
-        data={'team': team.id},
+        data={"team": team.id},
         queryset=Issue.objects.all()
     ).qs
 
@@ -193,7 +193,7 @@ def test_filter_by_team_with_watcher(user):
     )
 
     results = IssuesFilterSet(
-        data={'team': team.id},
+        data={"team": team.id},
         queryset=Issue.objects.all()
     ).qs
 
@@ -201,7 +201,7 @@ def test_filter_by_team_with_watcher(user):
     assert all(issue.user == user for issue in results) is True
 
     results = IssuesFilterSet(
-        data={'team': another_team.id},
+        data={"team": another_team.id},
         queryset=Issue.objects.all()
     ).qs
 
@@ -225,7 +225,7 @@ def test_filter_by_problems(user):
     assert results.count() == 7
 
     results = IssuesFilterSet(
-        data={'problems': True},
+        data={"problems": True},
         queryset=Issue.objects.all()
     ).qs
 
@@ -233,7 +233,7 @@ def test_filter_by_problems(user):
     assert set(results) == set(issue_problems)
 
     results = IssuesFilterSet(
-        data={'problems': False},
+        data={"problems": False},
         queryset=Issue.objects.all()
     ).qs
 
@@ -242,12 +242,12 @@ def test_filter_by_problems(user):
 
 
 def test_search(user):
-    issue_1 = IssueFactory.create(title='create', user=user, gl_url='foobar')
-    issue_2 = IssueFactory.create(title='react', user=user)
-    IssueFactory.create(title='test0', user=user)
+    issue_1 = IssueFactory.create(title="create", user=user, gl_url="foobar")
+    issue_2 = IssueFactory.create(title="react", user=user)
+    IssueFactory.create(title="test0", user=user)
 
     results = IssuesFilterSet(
-        data={'q': 'ate'},
+        data={"q": "ate"},
         queryset=Issue.objects.all()
     ).qs
 
@@ -255,7 +255,7 @@ def test_search(user):
     assert results.first() == issue_1
 
     results = IssuesFilterSet(
-        data={'q': 'rea'},
+        data={"q": "rea"},
         queryset=Issue.objects.all(),
     ).qs
 
@@ -263,14 +263,14 @@ def test_search(user):
     assert set(results) == {issue_1, issue_2}
 
     results = IssuesFilterSet(
-        data={'q': '012345'},
+        data={"q": "012345"},
         queryset=Issue.objects.all()
     ).qs
 
     assert results.count() == 0
 
     results = IssuesFilterSet(
-        data={'q': 'foobar'},
+        data={"q": "foobar"},
         queryset=Issue.objects.all()
     ).qs
 
@@ -279,19 +279,19 @@ def test_search(user):
 
 
 def test_order_by_title(user):
-    issue_1 = IssueFactory.create(title='agent', user=user)
-    issue_2 = IssueFactory.create(title='cloud', user=user)
-    issue_3 = IssueFactory.create(title='bar', user=user)
+    issue_1 = IssueFactory.create(title="agent", user=user)
+    issue_2 = IssueFactory.create(title="cloud", user=user)
+    issue_3 = IssueFactory.create(title="bar", user=user)
 
     results = IssuesFilterSet(
-        data={'order_by': 'title'},
+        data={"order_by": "title"},
         queryset=Issue.objects.all()
     ).qs
 
     assert list(results) == [issue_1, issue_3, issue_2]
 
     results = IssuesFilterSet(
-        data={'order_by': '-title'},
+        data={"order_by": "-title"},
         queryset=Issue.objects.all()
     ).qs
 
@@ -306,14 +306,14 @@ def test_order_by_due_date(user):
     issue_3 = IssueFactory.create(due_date=datetime.now(), user=user)
 
     results = IssuesFilterSet(
-        data={'order_by': 'dueDate'},
+        data={"order_by": "dueDate"},
         queryset=Issue.objects.all()
     ).qs
 
     assert list(results) == [issue_1, issue_3, issue_2]
 
     results = IssuesFilterSet(
-        data={'order_by': '-dueDate'},
+        data={"order_by": "-dueDate"},
         queryset=Issue.objects.all()
     ).qs
 
@@ -333,7 +333,7 @@ def test_filter_by_milestone(user, client):
     client.user = user
 
     results = IssuesFilterSet(
-        data={'milestone': milestone_1.id},
+        data={"milestone": milestone_1.id},
         queryset=Issue.objects.all(),
         request=client
     ).qs
@@ -342,7 +342,7 @@ def test_filter_by_milestone(user, client):
     assert all(item.milestone == milestone_1 for item in results)
 
     results = IssuesFilterSet(
-        data={'milestone': milestone_2.id},
+        data={"milestone": milestone_2.id},
         queryset=Issue.objects.all(),
         request=client
     ).qs
@@ -359,7 +359,7 @@ def test_filter_by_milestone_not_pm(user, client):
 
     with raises(GraphQLPermissionDenied):
         IssuesFilterSet(  # noqa: WPS428
-            data={'milestone': milestone_1.id},
+            data={"milestone": milestone_1.id},
             queryset=Issue.objects.all(),
             request=client
         ).qs
@@ -378,7 +378,7 @@ def test_filter_by_ticket(user, client):
     client.user = user
 
     results = IssuesFilterSet(
-        data={'ticket': ticket_1.id},
+        data={"ticket": ticket_1.id},
         queryset=Issue.objects.all(),
         request=client
     ).qs
@@ -387,7 +387,7 @@ def test_filter_by_ticket(user, client):
     assert all(item.ticket == ticket_1 for item in results)
 
     results = IssuesFilterSet(
-        data={'ticket': ticket_2.id},
+        data={"ticket": ticket_2.id},
         queryset=Issue.objects.all(),
         request=client
     ).qs
@@ -404,7 +404,7 @@ def test_filter_by_ticket_not_pm(user, client):
 
     with raises(GraphQLPermissionDenied):
         IssuesFilterSet(  # noqa: WPS428
-            data={'ticket': ticket_1.id},
+            data={"ticket": ticket_1.id},
             queryset=Issue.objects.all(),
             request=client
         ).qs

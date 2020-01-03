@@ -30,7 +30,7 @@ def test_filter_by_user(user):
     MergeRequestFactory.create_batch(3, user=user)
 
     results = MergeRequestFilterSet(
-        data={'user': user_2.id},
+        data={"user": user_2.id},
         queryset=MergeRequest.objects.all(),
     ).qs
 
@@ -38,7 +38,7 @@ def test_filter_by_user(user):
     assert results.first().user == user_2
 
     results = MergeRequestFilterSet(
-        data={'user': user.id},
+        data={"user": user.id},
         queryset=MergeRequest.objects.all(),
     ).qs
 
@@ -54,7 +54,7 @@ def test_filter_by_state(user):
     )
 
     results = MergeRequestFilterSet(
-        data={'state': MERGE_REQUESTS_STATES.CLOSED},
+        data={"state": MERGE_REQUESTS_STATES.CLOSED},
         queryset=MergeRequest.objects.all(),
     ).qs
 
@@ -62,7 +62,7 @@ def test_filter_by_state(user):
     assert results.first() == merge_request_closed
 
     results = MergeRequestFilterSet(
-        data={'state': MERGE_REQUESTS_STATES.OPENED},
+        data={"state": MERGE_REQUESTS_STATES.OPENED},
         queryset=MergeRequest.objects.all(),
     ).qs
 
@@ -82,7 +82,7 @@ def test_filter_by_projects(user):
     )
 
     results = MergeRequestFilterSet(
-        data={'project': project_1.id},
+        data={"project": project_1.id},
         queryset=MergeRequest.objects.all(),
     ).qs
 
@@ -90,7 +90,7 @@ def test_filter_by_projects(user):
     assert results.first().project == project_1
 
     results = MergeRequestFilterSet(
-        data={'project': project_2.id},
+        data={"project": project_2.id},
         queryset=MergeRequest.objects.all(),
     ).qs
 
@@ -99,19 +99,19 @@ def test_filter_by_projects(user):
 
 
 def test_ordering(user):
-    merge_request_1 = MergeRequestFactory.create(title='agent', user=user)
-    merge_request_2 = MergeRequestFactory.create(title='cloud', user=user)
-    merge_request_3 = MergeRequestFactory.create(title='bar', user=user)
+    merge_request_1 = MergeRequestFactory.create(title="agent", user=user)
+    merge_request_2 = MergeRequestFactory.create(title="cloud", user=user)
+    merge_request_3 = MergeRequestFactory.create(title="bar", user=user)
 
     results = MergeRequestFilterSet(
-        data={'order_by': 'title'},
+        data={"order_by": "title"},
         queryset=MergeRequest.objects.all(),
     ).qs
 
     assert list(results) == [merge_request_1, merge_request_3, merge_request_2]
 
     results = MergeRequestFilterSet(
-        data={'order_by': '-title'},
+        data={"order_by": "-title"},
         queryset=MergeRequest.objects.all(),
     ).qs
 

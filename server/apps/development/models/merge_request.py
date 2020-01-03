@@ -15,9 +15,9 @@ from apps.development.models.managers import MergeRequestManager
 from apps.development.models.mixins import TrackableMixin
 
 MERGE_REQUESTS_STATES = Choices(
-    ('OPENED', _('CH_OPENED')),
-    ('MERGED', _('CH_MERGED')),
-    ('CLOSED', _('CH_CLOSED')),
+    ("OPENED", _("CH_OPENED")),
+    ("MERGED", _("CH_MERGED")),
+    ("CLOSED", _("CH_CLOSED")),
 )
 
 MERGE_REQUESTS_STATE_MAX_LENGTH = 255
@@ -36,28 +36,28 @@ class MergeRequest(
 
     title = models.CharField(
         max_length=DEFAULT_TITLE_LENGTH,
-        verbose_name=_('VN__TITLE'),
-        help_text=_('HT__TITLE'),
+        verbose_name=_("VN__TITLE"),
+        help_text=_("HT__TITLE"),
     )
 
     time_estimate = models.PositiveIntegerField(
         null=True,
-        verbose_name=_('VN__TIME_ESTIMATE'),
-        help_text=_('HT__TIME_ESTIMATE'),
+        verbose_name=_("VN__TIME_ESTIMATE"),
+        help_text=_("HT__TIME_ESTIMATE"),
     )
 
     total_time_spent = models.PositiveIntegerField(
         null=True,
-        verbose_name=_('VN__TOTAL_TIME_SPENT'),
-        help_text=_('HT__TOTAL_TIME_SPENT'),
+        verbose_name=_("VN__TOTAL_TIME_SPENT"),
+        help_text=_("HT__TOTAL_TIME_SPENT"),
     )
 
     state = models.CharField(
         choices=MERGE_REQUESTS_STATES,
         max_length=MERGE_REQUESTS_STATE_MAX_LENGTH,
         blank=True,
-        verbose_name=_('VN__STATE'),
-        help_text=_('HT__STATE'),
+        verbose_name=_("VN__STATE"),
+        help_text=_("HT__STATE"),
     )
 
     created_at = models.DateTimeField(
@@ -76,43 +76,43 @@ class MergeRequest(
     )
 
     labels = models.ManyToManyField(
-        'development.Label',
-        related_name='merge_requests',
+        "development.Label",
+        related_name="merge_requests",
         blank=True,
     )
 
     project = models.ForeignKey(
-        'development.Project',
+        "development.Project",
         models.SET_NULL,
         null=True,
         blank=True,
-        related_name='merge_requests',
-        verbose_name=_('VN__PROJECT'),
-        help_text=_('HT__PROJECT'),
+        related_name="merge_requests",
+        verbose_name=_("VN__PROJECT"),
+        help_text=_("HT__PROJECT"),
     )
 
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         models.SET_NULL,
-        related_name='merge_requests',
+        related_name="merge_requests",
         null=True,
         blank=True,
-        verbose_name=_('VN__USER'),
-        help_text=_('HT__USER'),
+        verbose_name=_("VN__USER"),
+        help_text=_("HT__USER"),
     )
 
     author = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         models.SET_NULL,
-        related_name='author_merge_requests',
+        related_name="author_merge_requests",
         null=True,
         blank=True,
-        verbose_name=_('VN__AUTHOR'),
-        help_text=_('HT__AUTHOR'),
+        verbose_name=_("VN__AUTHOR"),
+        help_text=_("HT__AUTHOR"),
     )
 
     milestone = models.ForeignKey(
-        'development.Milestone',
+        "development.Milestone",
         models.CASCADE,
         null=True,
         blank=True,
@@ -121,15 +121,15 @@ class MergeRequest(
     participants = models.ManyToManyField(
         settings.AUTH_USER_MODEL,
         blank=True,
-        related_name='participant_merge_requests',
+        related_name="participant_merge_requests",
     )
 
     objects = MergeRequestManager()  # noqa: WPS110
 
     class Meta:
-        verbose_name = _('VN__MERGE_REQUEST')
-        verbose_name_plural = _('VN__MERGE_REQUESTS')
-        ordering = ('-created_at',)
+        verbose_name = _("VN__MERGE_REQUEST")
+        verbose_name_plural = _("VN__MERGE_REQUESTS")
+        ordering = ("-created_at",)
 
     def __str__(self):
         """Returns object string representation."""
@@ -139,8 +139,8 @@ class MergeRequest(
     def last_note_date(self) -> datetime:
         """Returns last note date."""
         return self.notes.aggregate(
-            last_created=models.Max('created_at'),
-        )['last_created']
+            last_created=models.Max("created_at"),
+        )["last_created"]
 
     @property
     def time_remains(self) -> Optional[int]:

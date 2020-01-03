@@ -11,23 +11,23 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('contenttypes', '0002_remove_content_type_name'),
+        ("contenttypes", "0002_remove_content_type_name"),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
-        ('development', '0012_issue_due_date'),
+        ("development", "0012_issue_due_date"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='Note',
+            name="Note",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('object_id', models.IntegerField()),
-                ('gl_id', models.PositiveIntegerField(help_text='HT__GITLAB_ID', verbose_name='VN__GITLAB_ID')),
-                ('created_at', models.DateTimeField(blank=True, null=True)),
-                ('type', models.CharField(choices=[('time_spend', 'Time spend'), ('reset_spend', 'reset_spend')], help_text='HT__TYPE', max_length=20, verbose_name='VN__TYPE')),
-                ('data', django.contrib.postgres.fields.jsonb.JSONField()),
-                ('content_type', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='contenttypes.ContentType')),
-                ('user', models.ForeignKey(blank=True, help_text='HT__EMPLOYEE', null=True, on_delete=django.db.models.deletion.SET_NULL, to=settings.AUTH_USER_MODEL, verbose_name='VN__EMPLOYEE')),
+                ("id", models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name="ID")),
+                ("object_id", models.IntegerField()),
+                ("gl_id", models.PositiveIntegerField(help_text="HT__GITLAB_ID", verbose_name="VN__GITLAB_ID")),
+                ("created_at", models.DateTimeField(blank=True, null=True)),
+                ("type", models.CharField(choices=[("time_spend", "Time spend"), ("reset_spend", "reset_spend")], help_text="HT__TYPE", max_length=20, verbose_name="VN__TYPE")),
+                ("data", django.contrib.postgres.fields.jsonb.JSONField()),
+                ("content_type", models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to="contenttypes.ContentType")),
+                ("user", models.ForeignKey(blank=True, help_text="HT__EMPLOYEE", null=True, on_delete=django.db.models.deletion.SET_NULL, to=settings.AUTH_USER_MODEL, verbose_name="VN__EMPLOYEE")),
             ],
         ),
     ]

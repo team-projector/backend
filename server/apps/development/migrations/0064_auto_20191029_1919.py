@@ -6,26 +6,26 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('development', '0063_auto_20191029_1544'),
+        ("development", "0063_auto_20191029_1544"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='project',
-            name='gl_avatar',
-            field=models.URLField(blank=True, default='', help_text='HT__GITLAB_AVATAR', verbose_name='VN__GITLAB_AVATAR'),
+            model_name="project",
+            name="gl_avatar",
+            field=models.URLField(blank=True, default="", help_text="HT__GITLAB_AVATAR", verbose_name="VN__GITLAB_AVATAR"),
             preserve_default=False,
         ),
         migrations.AlterField(
-            model_name='projectgroup',
-            name='gl_avatar',
-            field=models.URLField(blank=True, default='', help_text='HT__GITLAB_AVATAR', verbose_name='VN__GITLAB_AVATAR'),
+            model_name="projectgroup",
+            name="gl_avatar",
+            field=models.URLField(blank=True, default="", help_text="HT__GITLAB_AVATAR", verbose_name="VN__GITLAB_AVATAR"),
             preserve_default=False,
         ),
         migrations.AlterField(
-            model_name='ticket',
-            name='url',
-            field=models.URLField(blank=True, default='', help_text='HT__URL', verbose_name='VN__URL'),
+            model_name="ticket",
+            name="url",
+            field=models.URLField(blank=True, default="", help_text="HT__URL", verbose_name="VN__URL"),
             preserve_default=False,
         ),
     ]

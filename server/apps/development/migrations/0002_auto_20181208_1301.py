@@ -8,23 +8,23 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('development', '0001_initial'),
+        ("development", "0001_initial"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='issue',
-            name='gitlab_last_sync',
+            model_name="issue",
+            name="gitlab_last_sync",
             field=models.DateTimeField(blank=True, null=True),
         ),
         migrations.AddField(
-            model_name='project',
-            name='gitlab_last_sync',
+            model_name="project",
+            name="gitlab_last_sync",
             field=models.DateTimeField(blank=True, null=True),
         ),
         migrations.AddField(
-            model_name='projectgroup',
-            name='gitlab_last_sync',
+            model_name="projectgroup",
+            name="gitlab_last_sync",
             field=models.DateTimeField(blank=True, null=True),
         ),
     ]

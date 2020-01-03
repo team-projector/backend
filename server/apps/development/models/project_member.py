@@ -10,9 +10,9 @@ from apps.core.models.mixins import Timestamps
 from apps.core.models.utils import Choices
 
 PROJECT_MEMBER_ROLES = Choices(
-    ('DEVELOPER', _('CH_DEVELOPER')),
-    ('PROJECT_MANAGER', _('CH_PM')),
-    ('CUSTOMER', _('CH_CUSTOMER')),
+    ("DEVELOPER", _("CH_DEVELOPER")),
+    ("PROJECT_MANAGER", _("CH_PM")),
+    ("CUSTOMER", _("CH_CUSTOMER")),
 )
 
 PROJECT_MEMBER_ROLE_MAX_LENGTH = 20
@@ -29,8 +29,8 @@ class ProjectMember(Timestamps):
     role = models.CharField(
         choices=PROJECT_MEMBER_ROLES,
         max_length=PROJECT_MEMBER_ROLE_MAX_LENGTH,
-        verbose_name=_('VN__ROLE'),
-        help_text=_('HT__ROLE'),
+        verbose_name=_("VN__ROLE"),
+        help_text=_("HT__ROLE"),
     )
 
     owner = GenericForeignKey()
@@ -46,6 +46,6 @@ class ProjectMember(Timestamps):
     )
 
     class Meta:
-        verbose_name = _('VN__PROJECT_MEMBER')
-        verbose_name_plural = _('VN__PROJECT_MEMBERS')
-        unique_together = ('user', 'role', 'object_id')
+        verbose_name = _("VN__PROJECT_MEMBER")
+        verbose_name_plural = _("VN__PROJECT_MEMBERS")
+        unique_together = ("user", "role", "object_id")

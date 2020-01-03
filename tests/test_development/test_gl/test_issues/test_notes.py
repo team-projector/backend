@@ -17,7 +17,7 @@ def test_load_issue_notes(db, gl_mocker, gl_client):
     gl_author = GlUserFactory.create()
     gl_note = GlNoteFactory.create(
         author=gl_author,
-        body='added 1h of time spent at 2000-01-01',
+        body="added 1h of time spent at 2000-01-01",
     )
 
     gl_mock.register_user(gl_mocker, gl_author)
@@ -36,13 +36,13 @@ def test_load_issue_notes(db, gl_mocker, gl_client):
 
     note = issue.notes.first()
 
-    assert note.gl_id == gl_note['id']
+    assert note.gl_id == gl_note["id"]
     assert note.type == NOTE_TYPES.TIME_SPEND
-    assert note.body == 'added 1h of time spent at 2000-01-01'
+    assert note.body == "added 1h of time spent at 2000-01-01"
     assert note.created_at is not None
     assert note.updated_at is not None
-    assert note.user.login == gl_author['username']
+    assert note.user.login == gl_author["username"]
     assert note.content_object == issue
-    assert note.data == {'date': '2000-01-01', 'spent': 3600}
+    assert note.data == {"date": "2000-01-01", "spent": 3600}
 
     gl_checkers.check_user(note.user, gl_author)

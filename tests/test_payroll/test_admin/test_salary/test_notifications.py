@@ -9,7 +9,7 @@ from tests.test_users.factories.user import UserFactory
 
 
 def test_send_notification(admin_client, salary_admin):
-    user = UserFactory.create(email='test1@mail.com')
+    user = UserFactory.create(email="test1@mail.com")
 
     salary = SalaryFactory.create(user=user, payed=False)
     salary.payed = True
@@ -19,7 +19,7 @@ def test_send_notification(admin_client, salary_admin):
 
     salary_admin.changeform_view(
         admin_client.post(
-            '/admin/payroll/salary/{0}/change/'.format(salary.pk),
+            "/admin/payroll/salary/{0}/change/".format(salary.pk),
             model_to_dict_form(salary),
         ),
         object_id=str(salary.id)
@@ -36,14 +36,14 @@ def test_send_notification(admin_client, salary_admin):
 
 
 def test_payed_changed_to_false(admin_client, salary_admin):
-    user = UserFactory.create(email='test@mail.com')
+    user = UserFactory.create(email="test@mail.com")
 
     salary = SalaryFactory.create(user=user, payed=True)
     salary.payed = False
 
     salary_admin.changeform_view(
         admin_client.post(
-            '/admin/payroll/salary/{0}/change/'.format(salary.pk),
+            "/admin/payroll/salary/{0}/change/".format(salary.pk),
             model_to_dict_form(salary),
         ),
         object_id=str(salary.id)
@@ -63,7 +63,7 @@ def test_user_without_email_but_payed(admin_client, salary_admin):
 
     salary_admin.changeform_view(
         admin_client.post(
-            '/admin/payroll/salary/{0}/change/'.format(salary.pk),
+            "/admin/payroll/salary/{0}/change/".format(salary.pk),
             model_to_dict_form(salary),
         ),
         object_id=str(salary.id)
@@ -77,13 +77,13 @@ def test_user_without_email_but_payed(admin_client, salary_admin):
 
 
 def test_another_field_changed(admin_client, salary_admin):
-    user = UserFactory.create(email='test@mail.com')
+    user = UserFactory.create(email="test@mail.com")
     salary = SalaryFactory.create(user=user, payed=False)
     salary.sum = 10.0
 
     salary_admin.changeform_view(
         admin_client.post(
-            '/admin/payroll/salary/{0}/change/'.format(salary.pk),
+            "/admin/payroll/salary/{0}/change/".format(salary.pk),
             model_to_dict_form(salary),
         ),
         object_id=str(salary.id)
@@ -97,14 +97,14 @@ def test_another_field_changed(admin_client, salary_admin):
 
 
 def test_another_field_changed_and_payed(admin_client, salary_admin):
-    user = UserFactory.create(email='test@mail.com')
+    user = UserFactory.create(email="test@mail.com")
     salary = SalaryFactory.create(user=user, payed=False)
     salary.sum = 10.0
     salary.payed = True
 
     salary_admin.changeform_view(
         admin_client.post(
-            '/admin/payroll/salary/{0}/change/'.format(salary.pk),
+            "/admin/payroll/salary/{0}/change/".format(salary.pk),
             model_to_dict_form(salary),
         ),
         object_id=str(salary.id)

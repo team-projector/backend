@@ -12,7 +12,7 @@ def test_load_merge_requests(db, gl_mocker, gl_client):
     issue, gl_issue = initializers.init_issue(project, gl_project)
     gl_user = GlUserFactory.create()
     gl_merge_request = GlMergeRequestFactory.create(
-        project_id=gl_project['id'],
+        project_id=gl_project["id"],
         assignee=gl_user,
         author=gl_user,
     )
@@ -46,4 +46,4 @@ def test_load_merge_requests(db, gl_mocker, gl_client):
     issue = Issue.objects.first()
 
     assert issue.merge_requests.count() == 1
-    assert issue.merge_requests.first().gl_id == gl_merge_request['id']
+    assert issue.merge_requests.first().gl_id == gl_merge_request["id"]

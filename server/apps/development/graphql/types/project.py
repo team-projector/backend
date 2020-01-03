@@ -24,7 +24,7 @@ class ProjectType(BaseDjangoObjectType):
 
     def resolve_milestones(self: Project, info, **kwargs):  # noqa: WPS110
         """Get project milestones."""
-        if isinstance(getattr(self, 'parent_type', None), IssuesProjectSummary):
+        if isinstance(getattr(self, "parent_type", None), IssuesProjectSummary):
             return ProjectType.handle_within_summary(self, **kwargs)
 
         resolver = ProjectMilestonesResolver(self, info, **kwargs)
@@ -34,15 +34,15 @@ class ProjectType(BaseDjangoObjectType):
     @classmethod
     def handle_within_summary(cls, project: Project, **kwargs):
         """Handle project milestones within issues project summary."""
-        ordering = kwargs.get('order_by')
+        ordering = kwargs.get("order_by")
 
-        if ordering == 'due_date':
+        if ordering == "due_date":
             default = datetime.max.date()
             return sorted(
                 project.active_milestones,
                 key=lambda milestone: milestone.due_date or default,
             )
-        elif ordering == '-due_date':
+        elif ordering == "-due_date":
             default = datetime.min.date()
             return sorted(
                 project.active_milestones,
@@ -56,4 +56,4 @@ class ProjectType(BaseDjangoObjectType):
         model = Project
         interfaces = (DatasourceRelayNode, MilestoneOwner)
         connection_class = DataSourceConnection
-        name = 'Project'
+        name = "Project"

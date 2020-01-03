@@ -11,13 +11,13 @@ class Migration(migrations.Migration):
 
     dependencies = [
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
-        ('development', '0055_auto_20190719_1443'),
+        ("development", "0055_auto_20190719_1443"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='mergerequest',
-            name='participants',
-            field=models.ManyToManyField(blank=True, related_name='participant_merge_requests', to=settings.AUTH_USER_MODEL),
+            model_name="mergerequest",
+            name="participants",
+            field=models.ManyToManyField(blank=True, related_name="participant_merge_requests", to=settings.AUTH_USER_MODEL),
         ),
     ]

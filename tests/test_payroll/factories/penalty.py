@@ -9,11 +9,11 @@ from tests.test_users.factories.user import UserFactory
 
 class PenaltyFactory(factory.django.DjangoModelFactory):
     created_at = factory.Faker(
-        'date_time_this_year',
+        "date_time_this_year",
         before_now=True,
         after_now=False, tzinfo=pytz.UTC,
     )
-    sum = factory.Faker('random_int')
+    sum = factory.Faker("random_int")
     created_by = factory.SubFactory(UserFactory)
 
     class Meta:

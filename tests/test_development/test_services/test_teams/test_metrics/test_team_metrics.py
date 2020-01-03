@@ -95,18 +95,18 @@ def test_issues_problems(user):
         user=user_1,
         due_date=None,
         state=ISSUE_STATES.OPENED,
-        title='issue_problem_1'
+        title="issue_problem_1"
     )
     IssueFactory.create(
         user=user_1,
         due_date=datetime.now() - timedelta(days=3),
         state=ISSUE_STATES.OPENED,
-        title='issue_problem_2'
+        title="issue_problem_2"
     )
     IssueFactory.create(
         user=user_1,
         time_estimate=None,
-        title='issue_problem_3',
+        title="issue_problem_3",
         state=ISSUE_STATES.OPENED
     )
     IssueFactory.create_batch(

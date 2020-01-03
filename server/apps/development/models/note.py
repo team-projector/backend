@@ -12,9 +12,9 @@ from apps.development.models.managers import NoteManager
 from apps.users.models import User
 
 NOTE_TYPES = Choices(
-    ('TIME_SPEND', 'Time spend'),
-    ('RESET_SPEND', 'Reset spend'),
-    ('MOVED_FROM', 'Moved from'),
+    ("TIME_SPEND", "Time spend"),
+    ("RESET_SPEND", "Reset spend"),
+    ("MOVED_FROM", "Moved from"),
 )
 
 NOTE_TYPE_MAX_LENGTH = 20
@@ -37,8 +37,8 @@ class Note(models.Model):
     )
 
     gl_id = models.PositiveIntegerField(
-        verbose_name=_('VN__GITLAB_ID'),
-        help_text=_('HT__GITLAB_ID'),
+        verbose_name=_("VN__GITLAB_ID"),
+        help_text=_("HT__GITLAB_ID"),
     )
 
     user = models.ForeignKey(
@@ -46,8 +46,8 @@ class Note(models.Model):
         models.SET_NULL,
         null=True,
         blank=True,
-        verbose_name=_('VN__USER'),
-        help_text=_('HT__USER'),
+        verbose_name=_("VN__USER"),
+        help_text=_("HT__USER"),
     )
 
     created_at = models.DateTimeField(
@@ -65,8 +65,8 @@ class Note(models.Model):
     type = models.CharField(  # noqa: A003
         choices=NOTE_TYPES,
         max_length=NOTE_TYPE_MAX_LENGTH,
-        verbose_name=_('VN__TYPE'),
-        help_text=_('HT__TYPE'),
+        verbose_name=_("VN__TYPE"),
+        help_text=_("HT__TYPE"),
     )
 
     data = JSONField(  # noqa: WPS110
@@ -76,12 +76,12 @@ class Note(models.Model):
     objects = NoteManager()  # noqa: WPS110
 
     class Meta:
-        verbose_name = _('VN__NOTE')
-        verbose_name_plural = _('VN__NOTES')
-        ordering = ('-created_at',)
+        verbose_name = _("VN__NOTE")
+        verbose_name_plural = _("VN__NOTES")
+        ordering = ("-created_at",)
 
     def __str__(self):
         """Returns object string representation."""
-        return '{0} [{1}]: {2}'.format(
+        return "{0} [{1}]: {2}".format(
             self.user, self.created_at, self.get_type_display(),
         )

@@ -3,9 +3,9 @@
 
 def register_project_milestone(mocker, project, milestone):
     mocker.register_get(
-        '/projects/{0}/milestones/{1}'.format(
-            project['id'],
-            milestone['id']
+        "/projects/{0}/milestones/{1}".format(
+            project["id"],
+            milestone["id"]
         ),
         milestone,
     )

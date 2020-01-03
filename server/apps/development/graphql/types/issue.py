@@ -25,7 +25,7 @@ class IssueType(graphql.BaseDjangoObjectType):
         filter_fields: List[str] = []
         interfaces = (graphql.DatasourceRelayNode, WorkItem)
         connection_class = graphql.DataSourceConnection
-        name = 'Issue'
+        name = "Issue"
 
     def resolve_problems(self, info, **kwargs):  # noqa: WPS110
         """Get issue problems."""
@@ -50,7 +50,7 @@ class IssueType(graphql.BaseDjangoObjectType):
             info.context.user,
         )
 
-        if graphql.is_field_selected(info, 'edges.node.user'):
-            queryset = queryset.select_related('user')
+        if graphql.is_field_selected(info, "edges.node.user"):
+            queryset = queryset.select_related("user")
 
         return queryset

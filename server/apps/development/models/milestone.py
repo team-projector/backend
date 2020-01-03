@@ -15,8 +15,8 @@ from apps.core.models.utils import Choices
 from apps.development.models.managers import MilestoneManager
 
 MILESTONE_STATES = Choices(
-    ('ACTIVE', 'active'),
-    ('CLOSED', 'closed'),
+    ("ACTIVE", "active"),
+    ("CLOSED", "closed"),
 )
 
 MILESTONE_STATE_MAX_LENGTH = 20
@@ -31,44 +31,44 @@ class Milestone(
 
     title = models.CharField(
         max_length=DEFAULT_TITLE_LENGTH,
-        verbose_name=_('VN__TITLE'),
-        help_text=_('HT__TITLE'),
+        verbose_name=_("VN__TITLE"),
+        help_text=_("HT__TITLE"),
     )
 
     description = models.TextField(
         blank=True,
-        verbose_name=_('VN__DESCRIPTION'),
-        help_text=_('HT__DESCRIPTION'),
+        verbose_name=_("VN__DESCRIPTION"),
+        help_text=_("HT__DESCRIPTION"),
     )
 
     start_date = models.DateField(
         null=True,
         blank=True,
-        verbose_name=_('VN__START_DATE'),
-        help_text=_('HT__START_DATE'),
+        verbose_name=_("VN__START_DATE"),
+        help_text=_("HT__START_DATE"),
     )
 
     state = models.CharField(
         choices=MILESTONE_STATES,
         max_length=MILESTONE_STATE_MAX_LENGTH,
         blank=True,
-        verbose_name=_('VN__STATE'),
-        help_text=_('HT__STATE'),
+        verbose_name=_("VN__STATE"),
+        help_text=_("HT__STATE"),
     )
 
     due_date = models.DateField(
         null=True,
         blank=True,
-        verbose_name=_('VN__DUE_DATE'),
-        help_text=_('HT__DUE_DATE'),
+        verbose_name=_("VN__DUE_DATE"),
+        help_text=_("HT__DUE_DATE"),
     )
 
     budget = models.DecimalField(
         default=0,
         max_digits=DEFAULT_MAX_DIGITS,
         decimal_places=2,
-        verbose_name=_('VN__BUDGET'),
-        help_text=_('HT__BUDGET'),
+        verbose_name=_("VN__BUDGET"),
+        help_text=_("HT__BUDGET"),
     )
 
     owner = GenericForeignKey()
@@ -83,10 +83,10 @@ class Milestone(
     objects = MilestoneManager()  # noqa: WPS110
 
     class Meta:
-        verbose_name = _('VN__MILESTONE')
-        verbose_name_plural = _('VN__MILESTONES')
-        ordering = ('-created_at',)
+        verbose_name = _("VN__MILESTONE")
+        verbose_name_plural = _("VN__MILESTONES")
+        ordering = ("-created_at",)
 
     def __str__(self):
         """Returns object string representation."""
-        return '{0} / {1}'.format(self.owner.title, self.title)
+        return "{0} / {1}".format(self.owner.title, self.title)

@@ -16,9 +16,9 @@ class ProjectGroupAdmin(
 ):
     """A class representing Project Group model for admin dashboard."""
 
-    list_display = ('title', 'parent', 'is_active', 'gl_url', 'gl_last_sync')
-    list_filter = ('is_active',)
-    search_fields = ('title',)
+    list_display = ("title", "parent", "is_active", "gl_url", "gl_last_sync")
+    list_filter = ("is_active",)
+    search_fields = ("title",)
     inlines = (ProjectMemberInline,)
 
     def sync_handler(self, project_group):

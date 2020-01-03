@@ -13,17 +13,17 @@ def collect_fields(
     """Collect fields."""
     field = {}
 
-    selection_set = node.get('selection_set')
+    selection_set = node.get("selection_set")
 
     if selection_set:
-        for leaf in selection_set['selections']:
-            if leaf['kind'] == 'Field':
+        for leaf in selection_set["selections"]:
+            if leaf["kind"] == "Field":
                 field.update({
-                    leaf['name']['value']: collect_fields(leaf, fragments),
+                    leaf["name"]["value"]: collect_fields(leaf, fragments),
                 })
-            elif leaf['kind'] == 'FragmentSpread':
+            elif leaf["kind"] == "FragmentSpread":
                 field.update(
-                    collect_fields(fragments[leaf['name']['value']], fragments),
+                    collect_fields(fragments[leaf["name"]["value"]], fragments),
                 )
 
     return field
@@ -47,7 +47,7 @@ def is_field_selected(
     """Is field selected."""
     fields = get_fields_from_info(info)
 
-    for key in path.split('.'):
+    for key in path.split("."):
         try:
             fields = fields[key]
         except KeyError:

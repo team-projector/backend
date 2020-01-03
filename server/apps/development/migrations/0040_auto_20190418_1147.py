@@ -9,13 +9,13 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('development', '0039_auto_20190416_1757'),
+        ("development", "0039_auto_20190416_1757"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='epic',
-            name='milestone',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='epic', to='development.Milestone'),
+            model_name="epic",
+            name="milestone",
+            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name="epic", to="development.Milestone"),
         ),
     ]

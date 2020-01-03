@@ -13,21 +13,21 @@ class Team(models.Model):
 
     title = models.CharField(
         max_length=DEFAULT_TITLE_LENGTH,
-        verbose_name=_('VN__TITLE'),
-        help_text=_('HT__TITLE'),
+        verbose_name=_("VN__TITLE"),
+        help_text=_("HT__TITLE"),
         unique=True,
     )
 
     members = models.ManyToManyField(
         settings.AUTH_USER_MODEL,
         through=TeamMember,
-        related_name='teams',
+        related_name="teams",
     )
 
     class Meta:
-        verbose_name = _('VN__TEAM')
-        verbose_name_plural = _('VN__TEAMS')
-        ordering = ('title',)
+        verbose_name = _("VN__TEAM")
+        verbose_name_plural = _("VN__TEAMS")
+        ordering = ("title",)
 
     def __str__(self):
         """Returns object string representation."""

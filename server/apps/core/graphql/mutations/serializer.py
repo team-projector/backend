@@ -40,7 +40,7 @@ class SerializerMutation(AuthMutation, graphene.Mutation):
         """Inits subclass with meta."""
         if not serializer_class:
             raise Exception(
-                'serializer_class is required for the SerializerMutation',
+                "serializer_class is required for the SerializerMutation",
             )
 
         serializer = serializer_class()
@@ -54,13 +54,13 @@ class SerializerMutation(AuthMutation, graphene.Mutation):
 
         input_fields = yank_fields_from_attrs(input_fields)
 
-        base_name = re.sub('Payload$', '', cls.__name__)
+        base_name = re.sub("Payload$", "", cls.__name__)
 
         if not input_fields:
             input_fields = {}
 
         cls.Arguments = type(
-            '{0}Arguments'.format(base_name),
+            "{0}Arguments".format(base_name),
             (object,),
             OrderedDict(input_fields),
         )
@@ -70,7 +70,7 @@ class SerializerMutation(AuthMutation, graphene.Mutation):
 
         super().__init_subclass_with_meta__(
             output=None,
-            name='{0}Payload'.format(base_name),
+            name="{0}Payload".format(base_name),
             _meta=meta_options,
             **options,
         )
@@ -81,7 +81,7 @@ class SerializerMutation(AuthMutation, graphene.Mutation):
         root: Optional[object],
         info: ResolveInfo,  # noqa: WPS110
         **input,  # noqa: A002
-    ) -> 'SerializerMutation':
+    ) -> "SerializerMutation":
         """Mutate handler."""
         cls.check_premissions(root, info, **input)
 
@@ -104,7 +104,7 @@ class SerializerMutation(AuthMutation, graphene.Mutation):
         root: Optional[object],
         info: ResolveInfo,  # noqa: WPS110
         **input,
-    ) -> 'SerializerMutation':
+    ) -> "SerializerMutation":
         """Mutate and get payload."""
         kwargs = cls.get_serializer_kwargs(root, info, **input)
         serializer = cls._meta.serializer_class(**kwargs)
@@ -127,9 +127,9 @@ class SerializerMutation(AuthMutation, graphene.Mutation):
     ) -> Dict[str, object]:
         """Get serializer options."""
         return {
-            'data': input,
-            'context': {
-                'request': info.context,
+            "data": input,
+            "context": {
+                "request": info.context,
             },
         }
 
@@ -139,6 +139,6 @@ class SerializerMutation(AuthMutation, graphene.Mutation):
         root: Optional[object],
         info: ResolveInfo,  # noqa: WPS110
         validated_data,
-    ) -> 'SerializerMutation':
+    ) -> "SerializerMutation":
         """Overrideable mutation operation."""
         raise NotImplementedError

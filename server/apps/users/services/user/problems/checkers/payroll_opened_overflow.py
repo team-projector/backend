@@ -9,7 +9,7 @@ from apps.payroll.models import SpentTime
 from apps.users.models import User
 from apps.users.services.user.problems.checkers.base import BaseProblemChecker
 
-PROBLEM_PAYROLL_OPENED_OVERFLOW = 'PAYROLL_OPENED_OVERFLOW'
+PROBLEM_PAYROLL_OPENED_OVERFLOW = "PAYROLL_OPENED_OVERFLOW"
 PROBLEM_PAYROLL_OVERFLOW_RATIO = 1.5
 
 
@@ -25,8 +25,8 @@ class PayrollOpenedOverflowChecker(BaseProblemChecker):
             user=user,
             issues__state=ISSUE_STATES.OPENED,
         ).aggregate(
-            total_time_spent=Coalesce(Sum('time_spent'), 0),
-        )['total_time_spent']
+            total_time_spent=Coalesce(Sum("time_spent"), 0),
+        )["total_time_spent"]
 
         return total_spend > user.daily_work_hours * (
             SECONDS_PER_HOUR * PROBLEM_PAYROLL_OVERFLOW_RATIO

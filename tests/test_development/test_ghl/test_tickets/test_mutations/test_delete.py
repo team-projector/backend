@@ -20,12 +20,12 @@ def test_query(project_manager, ghl_client, ticket):
     response = ghl_client.execute(
         GHL_DELETE_TICKET,
         variables={
-            'id': ticket.pk,
+            "id": ticket.pk,
         },
     )
 
-    assert 'errors' not in response
-    assert response['data']['deleteTicket']['ok']
+    assert "errors" not in response
+    assert response["data"]["deleteTicket"]["ok"]
 
 
 def test_success(

@@ -25,31 +25,31 @@ def gl_webhook(request):
         return HttpResponse()
 
     _check_webhook_secret_token(
-        request.META.get('HTTP_X_GITLAB_TOKEN'),
+        request.META.get("HTTP_X_GITLAB_TOKEN"),
     )
 
-    body = json.loads(request.body.decode('utf-8'))
-    kind = body['object_kind']
+    body = json.loads(request.body.decode("utf-8"))
+    kind = body["object_kind"]
 
-    if kind == 'issue':
+    if kind == "issue":
         _sync_issue(body)
-    elif kind == 'merge_request':
+    elif kind == "merge_request":
         _sync_merge_request(body)
 
     return HttpResponse()
 
 
 def _sync_issue(body) -> None:
-    project_id = body['project']['id']
-    issue_id = body['object_attributes']['iid']
+    project_id = body["project"]["id"]
+    issue_id = body["object_attributes"]["iid"]
 
     sync_project_issue_task.delay(project_id, issue_id)
 
     logger.info(
-        'gitlab webhook was triggered: project = {project}, issue = {issue}',
+        "gitlab webhook was triggered: project = {project}, issue = {issue}",
         extra={
-            'project': project_id,
-            'issue': issue_id,
+            "project": project_id,
+            "issue": issue_id,
         },
     )
 
@@ -57,21 +57,21 @@ def _sync_issue(body) -> None:
 
 
 def _sync_merge_request(body) -> None:
-    project_id = body['project']['id']
-    merge_request_id = body['object_attributes']['iid']
+    project_id = body["project"]["id"]
+    merge_request_id = body["object_attributes"]["iid"]
 
     sync_project_merge_request_task.delay(project_id, merge_request_id)
 
     msg_tpl = (
-        'gitlab webhook was triggered: project = {project}, '
-        + 'merge_request = {issue}'
+        "gitlab webhook was triggered: project = {project}, "
+        + "merge_request = {issue}"
     )
 
     logger.info(
         msg_tpl,
         extra={
-            'project': project_id,
-            'merge_request': merge_request_id,
+            "project": project_id,
+            "merge_request": merge_request_id,
         },
     )
 
@@ -83,4 +83,4 @@ def _check_webhook_secret_token(secret_token: str) -> None:
         return
 
     if settings.GITLAB_WEBHOOK_SECRET_TOKEN != secret_token:
-        raise AuthenticationFailed('Invalid token')
+        raise AuthenticationFailed("Invalid token")

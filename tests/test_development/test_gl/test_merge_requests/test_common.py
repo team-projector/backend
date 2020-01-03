@@ -13,13 +13,13 @@ from tests.test_development.test_gl.helpers import (
 )
 from tests.test_users.factories.gitlab import GlUserFactory
 
-Context = namedtuple('Context', [
-    'project',
-    'gl_project',
-    'gl_assignee',
-    'gl_author',
-    'merge_request',
-    'gl_merge_request'
+Context = namedtuple("Context", [
+    "project",
+    "gl_project",
+    "gl_assignee",
+    "gl_author",
+    "merge_request",
+    "gl_merge_request"
 ])
 
 
@@ -31,8 +31,8 @@ def context(gl_mocker) -> Context:
         project,
         gl_project,
         gl_kwargs={
-            'assignee': gl_user,
-            'author': gl_user,
+            "assignee": gl_user,
+            "author": gl_user,
         },
     )
 
@@ -88,7 +88,7 @@ def test_no_milestone_in_db(db, context, gl_client):
 
 def test_milestone_in_db(db, context, gl_client):
     milestone = ProjectMilestoneFactory.create(
-        gl_id=context.gl_merge_request['milestone']['id'],
+        gl_id=context.gl_merge_request["milestone"]["id"],
     )
 
     gl_project_loaded = gl_client.projects.get(id=context.project.gl_id)

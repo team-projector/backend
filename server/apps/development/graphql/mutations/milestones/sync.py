@@ -25,7 +25,7 @@ class SyncMilestoneMutation(BaseMutation):
         """Syncing milestone."""
         milestone = get_object_or_not_found(
             Milestone.objects.all(),
-            pk=kwargs.get('id'),
+            pk=kwargs.get("id"),
         )
 
         if milestone.content_type.model_class() == Project:

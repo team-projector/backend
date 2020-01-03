@@ -10,4 +10,4 @@ class BaseAppConfig(AppConfig):
 
     def ready(self):
         """Run this code when Django starts."""
-        load_module_from_app(self.name, 'graphql.types')
+        load_module_from_app(self.name, "graphql.types")

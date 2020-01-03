@@ -20,7 +20,7 @@ def get_min_due_date(project):
 
 
 def _get_key(milestone):
-    return getattr(milestone, 'due_date', None) or datetime.max.date()
+    return getattr(milestone, "due_date", None) or datetime.max.date()
 
 
 class ProjectIssuesSummary:
@@ -74,7 +74,7 @@ class IssuesProjectSummaryProvider:
         total_issues_count: int,
     ) -> List[IssuesProjectSummary]:
         summaries_project = {
-            summary['project']: summary
+            summary["project"]: summary
             for summary in
             summaries_qs
         }
@@ -100,10 +100,10 @@ class IssuesProjectSummaryProvider:
     ) -> ProjectIssuesSummary:
         issues_summary = ProjectIssuesSummary()
         issues_summary.opened_count = summaries[project.id][
-            'issues_opened_count'
+            "issues_opened_count"
         ]
         issues_summary.remains = summaries[project.id][
-            'total_time_remains'
+            "total_time_remains"
         ]
         issues_summary.percentage = (
             issues_summary.opened_count / total_issues_count
@@ -115,20 +115,20 @@ class IssuesProjectSummaryProvider:
         return self.queryset.annotate(
             time_remains=models.Case(
                 models.When(
-                    models.Q(time_estimate__gt=models.F('total_time_spent'))
+                    models.Q(time_estimate__gt=models.F("total_time_spent"))
                     & ~models.Q(state=ISSUE_STATES.CLOSED),
                     then=(
-                        models.F('time_estimate') - models.F('total_time_spent')
+                        models.F("time_estimate") - models.F("total_time_spent")
                     ),
                 ),
                 default=models.Value(0),
                 output_field=models.IntegerField(),
             ),
         ).values(
-            'project',
+            "project",
         ).annotate(
-            issues_opened_count=models.Count('*'),
-            total_time_remains=Coalesce(models.Sum('time_remains'), 0),
+            issues_opened_count=models.Count("*"),
+            total_time_remains=Coalesce(models.Sum("time_remains"), 0),
         ).order_by()
 
     def _get_total_issues_count(
@@ -136,7 +136,7 @@ class IssuesProjectSummaryProvider:
         summaries_qs: models.QuerySet,
     ) -> int:
         return sum(
-            summary['issues_opened_count']
+            summary["issues_opened_count"]
             for summary in summaries_qs
         )
 
@@ -145,7 +145,7 @@ class IssuesProjectSummaryProvider:
         summaries_qs: models.QuerySet,
     ) -> List[Project]:
         project_ids = [
-            summary['project']
+            summary["project"]
             for summary in summaries_qs
         ]
 

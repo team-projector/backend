@@ -28,7 +28,7 @@ def test_approve_by_teamlead(user, client):
     work_break = WorkBreakFactory.create(user=user_2)
 
     client.user = user
-    info = AttrDict({'context': client})
+    info = AttrDict({"context": client})
 
     work_break_mutated = ApproveWorkBreakMutation.mutate(
         root=None,
@@ -55,7 +55,7 @@ def test_approve_by_other_team_teamlead(user, client):
     work_break = WorkBreakFactory.create(user=user_2)
 
     client.user = user
-    info = AttrDict({'context': client})
+    info = AttrDict({"context": client})
 
     with raises(GraphQLPermissionDenied):
         ApproveWorkBreakMutation.mutate(
@@ -69,14 +69,14 @@ def test_approve_by_current_user(user, client):
     work_break = WorkBreakFactory.create(user=user)
 
     client.user = user
-    info = AttrDict({'context': client})
+    info = AttrDict({"context": client})
 
     with raises(GraphQLPermissionDenied):
         ApproveWorkBreakMutation.mutate(
             root=None,
             info=info,
             id=work_break.id,
-            decline_reason='reason'
+            decline_reason="reason"
         )
 
 
@@ -95,18 +95,18 @@ def test_decline_by_teamlead(user, client):
     work_break = WorkBreakFactory.create(user=user_2)
 
     client.user = user
-    info = AttrDict({'context': client})
+    info = AttrDict({"context": client})
 
     work_break_mutated = DeclineWorkBreakMutation.mutate(
         root=None,
         info=info,
         id=work_break.id,
-        decline_reason='reason'
+        decline_reason="reason"
     ).work_break
 
     assert work_break_mutated.approve_state == APPROVED_STATES.DECLINED
     assert work_break_mutated.approved_by == user
-    assert work_break_mutated.decline_reason == 'reason'
+    assert work_break_mutated.decline_reason == "reason"
 
 
 def test_decline_by_other_team_teamlead(user, client):
@@ -124,14 +124,14 @@ def test_decline_by_other_team_teamlead(user, client):
     work_break = WorkBreakFactory.create(user=user_2)
 
     client.user = user
-    info = AttrDict({'context': client})
+    info = AttrDict({"context": client})
 
     with raises(GraphQLPermissionDenied):
         DeclineWorkBreakMutation.mutate(
             root=None,
             info=info,
             id=work_break.id,
-            decline_reason='reason'
+            decline_reason="reason"
         )
 
 
@@ -139,12 +139,12 @@ def test_decline_by_current_user(user, client):
     work_break = WorkBreakFactory.create(user=user)
 
     client.user = user
-    info = AttrDict({'context': client})
+    info = AttrDict({"context": client})
 
     with raises(GraphQLPermissionDenied):
         DeclineWorkBreakMutation.mutate(
             root=None,
             info=info,
             id=work_break.id,
-            decline_reason='reason'
+            decline_reason="reason"
         )

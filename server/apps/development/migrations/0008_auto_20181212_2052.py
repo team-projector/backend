@@ -8,17 +8,17 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('development', '0007_project_full_title'),
+        ("development", "0007_project_full_title"),
     ]
 
     operations = [
         migrations.AlterModelOptions(
-            name='project',
-            options={'ordering': ('full_title', 'title'), 'verbose_name': 'VN__PROJECT', 'verbose_name_plural': 'VN__PROJECTS'},
+            name="project",
+            options={"ordering": ("full_title", "title"), "verbose_name": "VN__PROJECT", "verbose_name_plural": "VN__PROJECTS"},
         ),
         migrations.AddField(
-            model_name='project',
-            name='gl_last_issues_sync',
-            field=models.DateTimeField(blank=True, help_text='HT__GITLAB_LAST_ISSUES_SYNC', null=True, verbose_name='VN__GITLAB_LAST_ISSUES_SYNC'),
+            model_name="project",
+            name="gl_last_issues_sync",
+            field=models.DateTimeField(blank=True, help_text="HT__GITLAB_LAST_ISSUES_SYNC", null=True, verbose_name="VN__GITLAB_LAST_ISSUES_SYNC"),
         ),
     ]

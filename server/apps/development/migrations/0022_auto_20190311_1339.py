@@ -10,17 +10,17 @@ class Migration(migrations.Migration):
 
     dependencies = [
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
-        ('development', '0021_auto_20190311_1326'),
+        ("development", "0021_auto_20190311_1326"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='team',
-            name='title',
-            field=models.CharField(help_text='HT__TITLE', max_length=255, unique=True, verbose_name='VN__TITLE'),
+            model_name="team",
+            name="title",
+            field=models.CharField(help_text="HT__TITLE", max_length=255, unique=True, verbose_name="VN__TITLE"),
         ),
         migrations.AlterUniqueTogether(
-            name='teammember',
-            unique_together={('team', 'user')},
+            name="teammember",
+            unique_together={("team", "user")},
         ),
     ]

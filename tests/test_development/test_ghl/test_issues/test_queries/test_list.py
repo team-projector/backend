@@ -28,8 +28,8 @@ def test_query(user, gql_client_authenticated):
         GHL_QUERY_ALL_ISSUES,
     )
 
-    assert 'errors' not in response
-    assert response['data']['allIssues']['count'] == 5
+    assert "errors" not in response
+    assert response["data"]["allIssues"]["count"] == 5
 
 
 def test_not_owned_issue(ghl_auth_mock_info, all_issues_query):

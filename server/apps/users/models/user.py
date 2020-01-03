@@ -9,11 +9,11 @@ from apps.core.models.utils import Choices
 from apps.users.models.managers import UserManager
 
 USER_ROLES = Choices(
-    ('DEVELOPER', _('CH_DEVELOPER')),
-    ('TEAM_LEADER', _('CH_TEAM_LEADER')),
-    ('PROJECT_MANAGER', _('CH_PROJECT_MANAGER')),
-    ('CUSTOMER', _('CH_CUSTOMER')),
-    ('SHAREHOLDER', _('CH_SHAREHOLDER')),
+    ("DEVELOPER", _("CH_DEVELOPER")),
+    ("TEAM_LEADER", _("CH_TEAM_LEADER")),
+    ("PROJECT_MANAGER", _("CH_PROJECT_MANAGER")),
+    ("CUSTOMER", _("CH_CUSTOMER")),
+    ("SHAREHOLDER", _("CH_SHAREHOLDER")),
 )
 
 USER_LOGIN_MAX_LENGTH = 150
@@ -24,46 +24,46 @@ USER_GITLAB_TOKEN_MAX_LENGTH = 128
 class User(AbstractBaseUser, PermissionsMixin):
     """The User model."""
 
-    USERNAME_FIELD = 'login'  # noqa: WPS115
+    USERNAME_FIELD = "login"  # noqa: WPS115
 
     login = models.CharField(
         max_length=USER_LOGIN_MAX_LENGTH,
         blank=True,
         unique=True,
-        verbose_name=_('VN__LOGIN'),
-        help_text=_('HT__LOGIN'),
+        verbose_name=_("VN__LOGIN"),
+        help_text=_("HT__LOGIN"),
     )
 
     name = models.CharField(
         max_length=USER_LOGIN_MAX_LENGTH,
         blank=True,
-        verbose_name=_('VN__NAME'),
-        help_text=_('HT__NAME'),
+        verbose_name=_("VN__NAME"),
+        help_text=_("HT__NAME"),
     )
 
     email = models.EmailField(
         max_length=USER_EMAIL_MAX_LENGTH,
         blank=True,
-        verbose_name=_('VN__EMAIL'),
-        help_text=_('HT__EMAIL'),
+        verbose_name=_("VN__EMAIL"),
+        help_text=_("HT__EMAIL"),
     )
 
     hour_rate = models.FloatField(
         default=0,
-        verbose_name=_('VN__HOUR_RATE'),
-        help_text=_('HT__HOUR_RATE'),
+        verbose_name=_("VN__HOUR_RATE"),
+        help_text=_("HT__HOUR_RATE"),
     )
 
     customer_hour_rate = models.FloatField(
         default=0,
-        verbose_name=_('VN__CUSTOMER_HOUR_RATE'),
-        help_text=_('HT__CUSTOMER_HOUR_RATE'),
+        verbose_name=_("VN__CUSTOMER_HOUR_RATE"),
+        help_text=_("HT__CUSTOMER_HOUR_RATE"),
     )
 
     taxes = models.FloatField(
         default=0,
-        verbose_name=_('VN__TAXES'),
-        help_text=_('HT__TAXES'),
+        verbose_name=_("VN__TAXES"),
+        help_text=_("HT__TAXES"),
     )
 
     roles = BitField(
@@ -73,47 +73,47 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     is_staff = models.BooleanField(
         default=True,
-        verbose_name=_('VN__IS_STAFF'),
-        help_text=_('HT__IS_STAFF'),
+        verbose_name=_("VN__IS_STAFF"),
+        help_text=_("HT__IS_STAFF"),
     )
 
     is_active = models.BooleanField(
         default=True,
-        verbose_name=_('VN__IS_ACTIVE'),
-        help_text=_('HT__IS_ACTIVE'),
+        verbose_name=_("VN__IS_ACTIVE"),
+        help_text=_("HT__IS_ACTIVE"),
     )
 
     gl_avatar = models.URLField(
         blank=True,
-        verbose_name=_('VN__GITLAB_AVATAR'),
-        help_text=_('HT__GITLAB_AVATAR'),
+        verbose_name=_("VN__GITLAB_AVATAR"),
+        help_text=_("HT__GITLAB_AVATAR"),
     )
 
     gl_id = models.PositiveIntegerField(
         null=True,
         blank=True,
-        verbose_name=_('VN__GITLAB_ID'),
-        help_text=_('HT__GITLAB_ID'),
+        verbose_name=_("VN__GITLAB_ID"),
+        help_text=_("HT__GITLAB_ID"),
     )
 
     gl_url = models.URLField(
         blank=True,
-        verbose_name=_('VN__GITLAB_URL'),
-        help_text=_('HT__GITLAB_URL'),
+        verbose_name=_("VN__GITLAB_URL"),
+        help_text=_("HT__GITLAB_URL"),
     )
 
     gl_last_sync = models.DateTimeField(
         null=True,
         blank=True,
-        verbose_name=_('VN__GITLAB_LAST_SYNC'),
-        help_text=_('HT__GITLAB_LAST_SYNC'),
+        verbose_name=_("VN__GITLAB_LAST_SYNC"),
+        help_text=_("HT__GITLAB_LAST_SYNC"),
     )
 
     gl_token = models.CharField(
         max_length=USER_GITLAB_TOKEN_MAX_LENGTH,
         blank=True,
-        verbose_name=_('VN__PERSONAL_GITLAB_TOKEN'),
-        help_text=_('HT__PERSONAL_GITLAB_TOKEN'),
+        verbose_name=_("VN__PERSONAL_GITLAB_TOKEN"),
+        help_text=_("HT__PERSONAL_GITLAB_TOKEN"),
     )
 
     daily_work_hours = models.PositiveIntegerField(default=8)
@@ -121,9 +121,9 @@ class User(AbstractBaseUser, PermissionsMixin):
     objects = UserManager()  # noqa: WPS110
 
     class Meta:
-        verbose_name = _('VN__USER')
-        verbose_name_plural = _('VN__USERS')
-        ordering = ('login',)
+        verbose_name = _("VN__USER")
+        verbose_name_plural = _("VN__USERS")
+        ordering = ("login",)
 
     def __str__(self):
         """Returns object string representation."""

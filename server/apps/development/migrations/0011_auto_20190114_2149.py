@@ -8,17 +8,17 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('development', '0010_label'),
+        ("development", "0010_label"),
     ]
 
     operations = [
         migrations.RemoveField(
-            model_name='issue',
-            name='labels',
+            model_name="issue",
+            name="labels",
         ),
         migrations.AddField(
-            model_name='issue',
-            name='labels',
-            field=models.ManyToManyField(blank=True, related_name='issues', to='development.Label'),
+            model_name="issue",
+            name="labels",
+            field=models.ManyToManyField(blank=True, related_name="issues", to="development.Label"),
         ),
     ]

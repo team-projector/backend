@@ -18,7 +18,7 @@ from tests.test_development.factories.gitlab import (
 from tests.test_users.factories.gitlab import GlUserFactory
 
 
-@override_settings(GITLAB_TOKEN='GITLAB_TOKEN')
+@override_settings(GITLAB_TOKEN="GITLAB_TOKEN")
 def test_sync_milestone_group(user, client, gl_mocker):
     gl_group = AttrDict(GlGroupFactory())
     group = ProjectGroupFactory.create(gl_id=gl_group.id)
@@ -29,17 +29,17 @@ def test_sync_milestone_group(user, client, gl_mocker):
         gl_id=gl_milestone.id, owner=group, state=MILESTONE_STATES.ACTIVE
     )
 
-    gl_mocker.register_get('/user', GlUserFactory())
-    gl_mocker.register_get(f'/groups/{gl_group.id}', gl_group)
+    gl_mocker.register_get("/user", GlUserFactory())
+    gl_mocker.register_get(f"/groups/{gl_group.id}", gl_group)
     gl_mocker.register_get(
-        f'/groups/{gl_group.id}/milestones/{gl_milestone.id}', gl_milestone
+        f"/groups/{gl_group.id}/milestones/{gl_milestone.id}", gl_milestone
     )
 
     assert milestone.state == MILESTONE_STATES.ACTIVE
 
     client.user = user
     info = AttrDict({
-        'context': client
+        "context": client
     })
 
     milestone_mutated = SyncMilestoneMutation().do_mutate(
@@ -53,7 +53,7 @@ def test_sync_milestone_group(user, client, gl_mocker):
     assert milestone.state == MILESTONE_STATES.CLOSED
 
 
-@override_settings(GITLAB_TOKEN='GITLAB_TOKEN')
+@override_settings(GITLAB_TOKEN="GITLAB_TOKEN")
 def test_sync_milestone_project(user, client, gl_mocker):
     gl_project = AttrDict(GlProjectFactory())
     project = ProjectFactory.create(gl_id=gl_project.id)
@@ -64,17 +64,17 @@ def test_sync_milestone_project(user, client, gl_mocker):
         gl_id=gl_milestone.id, owner=project, state=MILESTONE_STATES.ACTIVE
     )
 
-    gl_mocker.register_get('/user', GlUserFactory())
-    gl_mocker.register_get(f'/projects/{gl_project.id}', gl_project)
+    gl_mocker.register_get("/user", GlUserFactory())
+    gl_mocker.register_get(f"/projects/{gl_project.id}", gl_project)
     gl_mocker.register_get(
-        f'/projects/{gl_project.id}/milestones/{gl_milestone.id}', gl_milestone
+        f"/projects/{gl_project.id}/milestones/{gl_milestone.id}", gl_milestone
     )
 
     assert milestone.state == MILESTONE_STATES.ACTIVE
 
     client.user = user
     info = AttrDict({
-        'context': client
+        "context": client
     })
 
     milestone_mutated = SyncMilestoneMutation().do_mutate(
@@ -95,7 +95,7 @@ def test_sync_milestone_inccorect_owner(user, client):
 
     client.user = user
     info = AttrDict({
-        'context': client
+        "context": client
     })
 
     SyncMilestoneMutation().do_mutate(

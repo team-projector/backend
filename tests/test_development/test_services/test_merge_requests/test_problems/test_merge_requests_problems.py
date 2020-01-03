@@ -67,7 +67,7 @@ def test_zero_estimate(user):
 
 
 def test_not_assigned(user):
-    label_done = LabelFactory.create(title='Done')
+    label_done = LabelFactory.create(title="Done")
 
     problem_issue = IssueFactory.create(
         user=user,
@@ -85,7 +85,7 @@ def test_not_assigned(user):
 
 
 def test_not_assigned_but_closed(user):
-    label_done = LabelFactory.create(title='Done')
+    label_done = LabelFactory.create(title="Done")
 
     problem_issue = IssueFactory.create(
         user=user,
@@ -103,7 +103,7 @@ def test_not_assigned_but_closed(user):
 
 
 def test_two_errors_per_merge_request(user):
-    label_done = LabelFactory.create(title='Done')
+    label_done = LabelFactory.create(title="Done")
 
     problem_issue = IssueFactory.create(
         user=user,

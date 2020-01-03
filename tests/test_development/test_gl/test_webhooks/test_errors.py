@@ -14,11 +14,11 @@ def test_another_kind_object(db, gl_mocker, client):
     gl_mock.mock_project_endpoints(gl_mocker, gl_project)
 
     webhook_data = GlIssueWebhookFactory.create(
-        object_kind='project',
+        object_kind="project",
         project=gl_project,
         object_attributes=gl_project,
     )
 
-    gl_webhook(client.post('/', data=webhook_data, format='json'))
+    gl_webhook(client.post("/", data=webhook_data, format="json"))
 
     assert not Project.objects.exists()

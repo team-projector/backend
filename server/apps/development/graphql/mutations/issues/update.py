@@ -27,9 +27,9 @@ class UpdateIssueMutation(SerializerMutation):
         root: Optional[object],
         info: ResolveInfo,  # noqa: WPS110ø
         validated_data: Dict[str, Any],
-    ) -> 'UpdateIssueMutation':
+    ) -> "UpdateIssueMutation":
         """Updating issue ticket."""
-        issue = validated_data.pop('issue')
+        issue = validated_data.pop("issue")
 
         update_from_validated_data(issue, validated_data)
 

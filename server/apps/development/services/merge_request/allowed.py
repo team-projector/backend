@@ -21,7 +21,7 @@ def filter_allowed_for_user(
             TeamMember.roles.WATCHER,
         ],
     ).values_list(
-        'team__members',
+        "team__members",
         flat=True,
     )
 

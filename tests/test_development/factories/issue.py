@@ -9,12 +9,12 @@ from tests.test_development.factories.project import ProjectFactory
 
 class IssueFactory(GitlabFieldMixin):
     gl_iid = factory.Sequence(lambda seq: seq)
-    title = factory.Faker('text', max_nb_chars=200)
+    title = factory.Faker("text", max_nb_chars=200)
     project = factory.SubFactory(ProjectFactory)
-    time_estimate = factory.Faker('random_int')
-    total_time_spent = factory.Faker('random_int')
+    time_estimate = factory.Faker("random_int")
+    total_time_spent = factory.Faker("random_int")
     created_at = factory.Faker(
-        'date_time_this_year',
+        "date_time_this_year",
         before_now=True,
         after_now=False,
         tzinfo=pytz.UTC,

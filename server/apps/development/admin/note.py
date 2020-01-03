@@ -10,5 +10,5 @@ from apps.development.models import Note
 class NoteAdmin(BaseModelAdmin):
     """A class representing Note model for admin dashboard."""
 
-    list_display = ('type', 'created_at', 'user')
-    search_fields = ('user__login', 'user__email')
+    list_display = ("type", "created_at", "user")
+    search_fields = ("user__login", "user__email")

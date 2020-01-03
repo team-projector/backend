@@ -9,19 +9,19 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('development', '0016_auto_20190202_1614'),
-        ('payroll', '0001_initial'),
+        ("development", "0016_auto_20190202_1614"),
+        ("payroll", "0001_initial"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='timespend',
-            name='note',
-            field=models.OneToOneField(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='time_spent', to='development.Note'),
+            model_name="timespend",
+            name="note",
+            field=models.OneToOneField(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name="time_spent", to="development.Note"),
         ),
         migrations.AlterField(
-            model_name='timespend',
-            name='created_at',
+            model_name="timespend",
+            name="created_at",
             field=models.DateTimeField(),
         ),
     ]

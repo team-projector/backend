@@ -205,7 +205,7 @@ def test_resolver(user, client):
     )
 
     client.user = user
-    info = AttrDict({'context': client})
+    info = AttrDict({"context": client})
 
     summary = resolve_spent_times_summary(
         parent=None,

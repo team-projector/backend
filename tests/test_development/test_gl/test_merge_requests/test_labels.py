@@ -16,7 +16,7 @@ def test_load(db, gl_mocker, gl_client):
         project,
         gl_project,
         gl_kwargs={
-            'labels': [gl_label['name']],
+            "labels": [gl_label["name"]],
         },
     )
 
@@ -42,8 +42,8 @@ def test_load(db, gl_mocker, gl_client):
     merge_request = MergeRequest.objects.first()
 
     assert merge_request is not None
-    assert merge_request.gl_id == gl_merge_request['id']
-    assert merge_request.labels.first().title == gl_label['name']
+    assert merge_request.gl_id == gl_merge_request["id"]
+    assert merge_request.labels.first().title == gl_label["name"]
 
 
 def test_with_cached_labels(db, gl_mocker, gl_client):
@@ -56,7 +56,7 @@ def test_with_cached_labels(db, gl_mocker, gl_client):
             project,
             gl_project,
             gl_kwargs={
-                'labels': [gl_label['name']],
+                "labels": [gl_label["name"]],
             },
         )
     )
@@ -66,7 +66,7 @@ def test_with_cached_labels(db, gl_mocker, gl_client):
             project,
             gl_project,
             gl_kwargs={
-                'labels': [gl_label['name']],
+                "labels": [gl_label["name"]],
             },
         )
     )
@@ -90,7 +90,7 @@ def test_with_cached_labels(db, gl_mocker, gl_client):
         id=first_merge_request.gl_iid,
     )
 
-    assert getattr(gl_project_manager, 'cached_labels', None) is None
+    assert getattr(gl_project_manager, "cached_labels", None) is None
 
     MergeRequestGlManager().sync_labels(
         first_merge_request,
@@ -102,7 +102,7 @@ def test_with_cached_labels(db, gl_mocker, gl_client):
 
     first_merge_request.refresh_from_db()
 
-    assert first_merge_request.labels.first().title == gl_label['name']
+    assert first_merge_request.labels.first().title == gl_label["name"]
 
     gl_merge_request_manager = gl_project_manager.mergerequests.get(
         id=second_merge_request.gl_iid,
@@ -116,7 +116,7 @@ def test_with_cached_labels(db, gl_mocker, gl_client):
 
     second_merge_request.refresh_from_db()
 
-    assert second_merge_request.labels.first().title == gl_label['name']
+    assert second_merge_request.labels.first().title == gl_label["name"]
 
 
 def test_empty(db, gl_mocker, gl_client):
@@ -127,7 +127,7 @@ def test_empty(db, gl_mocker, gl_client):
         project,
         gl_project,
         gl_kwargs={
-            'labels': [gl_label['name']],
+            "labels": [gl_label["name"]],
         },
     )
 
@@ -152,5 +152,5 @@ def test_empty(db, gl_mocker, gl_client):
 
     merge_request = MergeRequest.objects.first()
 
-    assert merge_request.gl_id == gl_merge_request['id']
+    assert merge_request.gl_id == gl_merge_request["id"]
     assert merge_request.labels.count() == 0

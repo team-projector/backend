@@ -11,8 +11,8 @@ def test_true(user, admin_client, payroll_admin):
     )
 
     has_salary_filter = HasSalaryFilter(
-        request=admin_client.get('/admin/payroll/salary/'),
-        params={'has_salary': True},
+        request=admin_client.get("/admin/payroll/salary/"),
+        params={"has_salary": True},
         model=Salary,
         model_admin=payroll_admin
     )
@@ -29,8 +29,8 @@ def test_false(user, admin_client, payroll_admin):
     payroll = Payroll.objects.create(created_by=user, user=user)
 
     has_salary_filter = HasSalaryFilter(
-        request=admin_client.get('/admin/payroll/salary/'),
-        params={'has_salary': False},
+        request=admin_client.get("/admin/payroll/salary/"),
+        params={"has_salary": False},
         model=Salary,
         model_admin=payroll_admin
     )

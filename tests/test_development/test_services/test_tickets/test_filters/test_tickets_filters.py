@@ -16,7 +16,7 @@ def test_filter_by_milestone(db):
     TicketFactory.create(milestone=milestone_2)
 
     results = TicketsFilterSet(
-        data={'milestone': milestone_1.id},
+        data={"milestone": milestone_1.id},
         queryset=Ticket.objects.all(),
     ).qs
 
@@ -24,7 +24,7 @@ def test_filter_by_milestone(db):
     assert results.first().milestone == milestone_1
 
     results = TicketsFilterSet(
-        data={'milestone': milestone_2.id},
+        data={"milestone": milestone_2.id},
         queryset=Ticket.objects.all(),
     ).qs
 
@@ -44,7 +44,7 @@ def test_order_by_due_date(db):
     )
 
     results = TicketsFilterSet(
-        data={'order_by': 'dueDate'},
+        data={"order_by": "dueDate"},
         queryset=Ticket.objects.all(),
     ).qs
 
@@ -52,7 +52,7 @@ def test_order_by_due_date(db):
     assert list(results) == [ticket_1, ticket_3, ticket_2]
 
     results = TicketsFilterSet(
-        data={'order_by': '-dueDate'},
+        data={"order_by": "-dueDate"},
         queryset=Ticket.objects.all(),
     ).qs
 
@@ -60,12 +60,12 @@ def test_order_by_due_date(db):
 
 
 def test_order_by_title(db):
-    ticket_1 = TicketFactory.create(title='BB')
-    ticket_2 = TicketFactory.create(title='AA')
-    ticket_3 = TicketFactory.create(title='CC')
+    ticket_1 = TicketFactory.create(title="BB")
+    ticket_2 = TicketFactory.create(title="AA")
+    ticket_3 = TicketFactory.create(title="CC")
 
     results = TicketsFilterSet(
-        data={'order_by': 'title'},
+        data={"order_by": "title"},
         queryset=Ticket.objects.all(),
     ).qs
 
@@ -73,7 +73,7 @@ def test_order_by_title(db):
     assert list(results) == [ticket_2, ticket_1, ticket_3]
 
     results = TicketsFilterSet(
-        data={'order_by': '-title'},
+        data={"order_by": "-title"},
         queryset=Ticket.objects.all(),
     ).qs
 
@@ -82,17 +82,17 @@ def test_order_by_title(db):
 
 def test_order_by_due_date_and_title(db):
     ticket_1 = TicketFactory.create(
-        due_date=datetime.now() + timedelta(days=1), title='BB'
+        due_date=datetime.now() + timedelta(days=1), title="BB"
     )
     ticket_2 = TicketFactory.create(
-        due_date=datetime.now() + timedelta(days=1), title='AA'
+        due_date=datetime.now() + timedelta(days=1), title="AA"
     )
     ticket_3 = TicketFactory.create(
-        due_date=datetime.now() + timedelta(days=2), title='CC'
+        due_date=datetime.now() + timedelta(days=2), title="CC"
     )
 
     results = TicketsFilterSet(
-        data={'order_by': 'dueDate,title'},
+        data={"order_by": "dueDate,title"},
         queryset=Ticket.objects.all(),
     ).qs
 

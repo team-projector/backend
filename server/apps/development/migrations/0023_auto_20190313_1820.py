@@ -10,13 +10,13 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
     dependencies = [
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
-        ('development', '0022_auto_20190311_1339'),
+        ("development", "0022_auto_20190311_1339"),
     ]
 
     operations = [
         migrations.RenameField(
-            model_name='issue',
-            old_name='employee',
-            new_name='user',
+            model_name="issue",
+            old_name="employee",
+            new_name="user",
         )
     ]
