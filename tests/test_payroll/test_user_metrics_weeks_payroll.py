@@ -267,9 +267,9 @@ def _prepare_metrics(metrics):
 
 
 def _check_metric(metric, metric_name, values):
-    start_dt = str(metric.start)
+    start_dt = values.get(str(metric.start))
 
-    if start_dt in values:
-        assert getattr(metric, metric_name) == values[start_dt]
+    if start_dt:
+        assert getattr(metric, metric_name) == start_dt
     else:
         assert getattr(metric, metric_name) == 0

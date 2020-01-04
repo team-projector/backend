@@ -636,12 +636,12 @@ def _check_metrics(metrics,
 
         start_dt = str(metric.start)
         if start_dt in efficiencies:
-            assert efficiencies[start_dt] == metric.efficiency
+            assert efficiencies.get(start_dt) == metric.efficiency
         else:
             assert metric.efficiency == 0
 
         if start_dt in issues_counts:
-            assert issues_counts[start_dt] == metric.issues_count
+            assert issues_counts.get(start_dt) == metric.issues_count
         else:
             assert metric.issues_count == 0
 
@@ -657,6 +657,6 @@ def _check_metric(metric, metric_name, values):
     dt = str(metric.start)
 
     if dt in values:
-        assert getattr(metric, metric_name) == values[dt].total_seconds()
+        assert getattr(metric, metric_name) == values.get(dt).total_seconds()
     else:
         assert getattr(metric, metric_name) == 0

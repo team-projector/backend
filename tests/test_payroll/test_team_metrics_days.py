@@ -487,7 +487,7 @@ def _check_metrics(
         _check_metric(metric, "time_remains", time_remains)
 
         if str(metric.start) in issues_counts:
-            assert metric.issues_count == issues_counts[str(metric.start)]
+            assert metric.issues_count == issues_counts.get(str(metric.start))
         else:
             assert metric.issues_count == 0
 
@@ -503,6 +503,6 @@ def _check_metric(metric, metric_name, values):
     dt = str(metric.start)
 
     if dt in values:
-        assert getattr(metric, metric_name) == values[dt].total_seconds()
+        assert getattr(metric, metric_name) == values.get(dt).total_seconds()
     else:
         assert getattr(metric, metric_name) == 0

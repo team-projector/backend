@@ -90,8 +90,7 @@ def test_not_apply_loading_weekends(user):
     })
 
 
-def _check_metrics(metrics,
-                   loadings: Dict[date, timedelta]):
+def _check_metrics(metrics, loadings: Dict[date, timedelta]):
     loadings = _prepare_metrics(loadings)
 
     for metric in metrics:
@@ -108,9 +107,9 @@ def _prepare_metrics(metrics):
 
 
 def _check_metric(metric, metric_name, values):
-    dt = str(metric.start)
+    dt = values.get(str(metric.start))
 
-    if dt in values:
-        assert getattr(metric, metric_name) == values[dt].total_seconds()
+    if dt:
+        assert getattr(metric, metric_name) == dt.total_seconds()
     else:
         assert getattr(metric, metric_name) == 0

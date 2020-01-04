@@ -24,7 +24,7 @@ class CheckUserProgressMetricsMixin(testcases.TestCase):
         time_remains = self._prepare_metrics(time_remains)
 
         for metric in metrics:
-            self.assertEqual(metric["start"], metric["end"])
+            self.assertEqual(metric.get("start"), metric.get("end"))
             self.assertEqual(metric["planned_work_hours"], planned_work_hours)
 
             self._check_metric(metric, "time_spent", spents)
@@ -35,7 +35,7 @@ class CheckUserProgressMetricsMixin(testcases.TestCase):
             if metric["start"] in issues_counts:
                 self.assertEqual(
                     metric["issues_count"],
-                    issues_counts[metric["start"]],
+                    issues_counts[metric.get("start")],
                 )
             else:
                 self.assertEqual(metric["issues_count"], 0)
@@ -50,16 +50,16 @@ class CheckUserProgressMetricsMixin(testcases.TestCase):
         if metric["start"] in values:
             self.assertEqual(
                 metric[metric_name],
-                values[metric["start"]].total_seconds(),
+                values[metric.get("start")].total_seconds(),
                 f"bad {metric_name} for {metric['start']}: "
-                + f"expected - {values[metric['start']]}, "
+                + f"expected - {values[metric.get('start')]}, "
                 + f"actual - {timedelta(seconds=metric[metric_name])}",
             )
         else:
             self.assertEqual(
                 metric[metric_name],
                 0,
-                f"bad {metric_name} for {metric['start']}: "
+                f"bad {metric_name} for {metric.get('start')}: "
                 + "expected - 0, "
                 + f"actual - {timedelta(seconds=metric[metric_name])}",
             )
