@@ -50,9 +50,8 @@ def ghl_client() -> GraphQLClient:
 
 
 @pytest.fixture()  # type: ignore
-def ghl_auth_mock_info(user, rf) -> ResolveInfo:
-    rf.set_user(user)
-    request = rf.get("/graphql/")
+def ghl_auth_mock_info(user, auth_rf) -> ResolveInfo:
+    request = auth_rf.get("/graphql/")
 
     return _get_mock_info(request)
 
