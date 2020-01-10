@@ -75,8 +75,6 @@ class ProjectGroupGlManager:
             full_title=gl_group.full_name,
         )
 
-        logger.info("Group '{group}' is synced", extra={
-            "group": group,
-        })
+        logger.info("Group '%s' is synced", group)
 
         return group

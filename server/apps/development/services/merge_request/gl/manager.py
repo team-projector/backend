@@ -36,9 +36,7 @@ class MergeRequestGlManager(BaseWorkItemGlManager):
         if not gl_project:
             return
 
-        logger.info("Syncing project '{project}' merge_requests", extra={
-            "project": project,
-        })
+        logger.info("Syncing project '%s' merge_requests", project)
 
         args = {
             "as_list": False,
@@ -102,8 +100,6 @@ class MergeRequestGlManager(BaseWorkItemGlManager):
         self.sync_notes(merge_request, gl_merge_request)
         self.sync_participants(merge_request, gl_merge_request)
 
-        logger.info("Merge Request '{merge_request}' is synced", extra={
-            "merge_request": merge_request,
-        })
+        logger.info("Merge Request '%s' is synced", merge_request)
 
         return merge_request

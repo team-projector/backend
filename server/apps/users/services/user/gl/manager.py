@@ -49,9 +49,7 @@ class UserGlManager:
             user.email = gl_user.public_email
             user.save(update_fields=("email",))
 
-        logger.info("User '{user}' is synced", extra={
-            "user": user,
-        })
+        logger.info("User '%s' is synced", user)
 
         return user
 
