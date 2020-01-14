@@ -29,11 +29,11 @@ query ($id: ID!) {
 
 def test_list(user, ghl_client):
     """Test getting all tickets with problems."""
-    IssueFactory.create_batch(
-        5,
-        ticket=TicketFactory(due_date=timezone.now()),
-        due_date=timezone.now() + timezone.timedelta(days=1),
-    )
+    for ticket in TicketFactory.create_batch(5, due_date=timezone.now()):
+        IssueFactory(
+            ticket=ticket,
+            due_date=timezone.now() + timezone.timedelta(days=1),
+        )
 
     ghl_client.set_user(user)
 
