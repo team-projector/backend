@@ -43,8 +43,9 @@ def test_list(user, ghl_client):
 
     assert "errors" not in response
     assert response["data"]["allTickets"]["count"] == 5
-    for ticket in response["data"]["allTickets"]["edges"]:
-        assert ticket["node"]["problems"] == [PROBLEM_OVER_DUE_DATE]
+
+    for edge in response["data"]["allTickets"]["edges"]:
+        assert edge["node"]["problems"] == [PROBLEM_OVER_DUE_DATE]
 
 
 def test_retreive(user, ghl_client):
