@@ -1,29 +1,48 @@
-from django.test import override_settings
+# -*- coding: utf-8 -*-
 
-from apps.users.graphql.mutations.auth import LoginGitlabMutation
-from tests.helpers.objects import AttrDict
+import pytest
+from django.conf import settings
+from social_core.backends.gitlab import GitLabOAuth2
 
-
-@override_settings(
-    SOCIAL_AUTH_GITLAB_KEY="TEST_KEY",
-    SOCIAL_AUTH_GITLAB_REDIRECT_URI="TEST_URI",
-)
-def test_login(user, client):
-    client.user = user
-    client.session = {}
-    client.GET = {}
-    client.POST = {}
-    client.build_absolute_uri = _build_absolute_uri
-    client.method = ""
-
-    info = AttrDict({"context": client})
-
-    redirect_url = LoginGitlabMutation().mutate(None, info).redirect_url
-
-    assert "gitlab.com/oauth/authorize" in redirect_url
-    assert "client_id=TEST_KEY" in redirect_url
-    assert "redirect_uri=TEST_URI" in redirect_url
+GHL_QUERY_LOGIN_GITLAB = """
+mutation {
+  loginGitlab {
+    redirectUrl
+  }
+}
+"""
 
 
-def _build_absolute_uri(location=None):
-    """Mock build."""
+@pytest.fixture(scope="module", autouse=True)
+def _gitlab_login() -> None:
+    """Forces django to use gitlab settings."""
+    settings.SOCIAL_AUTH_GITLAB_REDIRECT_URI = "redirect_uri"
+    settings.SOCIAL_AUTH_GITLAB_KEY = "test_gitlab_key"
+    settings.SOCIAL_AUTH_GITLAB_SECRET = "test_gitlab_secret"
+
+
+def test_query(user, ghl_client):
+    """Test raw query."""
+    context = {
+        "session": {},
+        "GET": {},
+        "POST": {},
+        "build_absolute_uri": lambda mock: mock,
+        "method": "",
+    }
+
+    response = ghl_client.execute(
+        GHL_QUERY_LOGIN_GITLAB,
+        extra_context=context,
+    )
+
+    redirect_url = response["data"]["loginGitlab"]["redirectUrl"]
+
+    client = "client_id={0}".format(settings.SOCIAL_AUTH_GITLAB_KEY)
+    redirect = "redirect_uri={0}".format(
+        settings.SOCIAL_AUTH_GITLAB_REDIRECT_URI,
+    )
+
+    assert redirect_url.startswith(GitLabOAuth2.AUTHORIZATION_URL)
+    assert client in redirect_url
+    assert redirect in redirect_url
