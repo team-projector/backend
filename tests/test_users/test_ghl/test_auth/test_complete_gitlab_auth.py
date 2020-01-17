@@ -1,75 +1,67 @@
 # -*- coding: utf-8 -*-
 
-from apps.users.graphql.mutations.auth import CompleteGitlabAuthMutation
+from social_core.backends.gitlab import GitLabOAuth2
+
 from apps.users.models import Token
-from tests.helpers.httpretty_mock import RequestCallbackFactory
-from tests.helpers.objects import AttrDict
 
 
-def test_complete_auth(user, client, gl_mocker):
-    gl_mocker.register_get("/user", {"username": user.login})
+def test_complete_login(
+    user,
+    gl_mocker,
+    complete_gl_auth_mutation,
+    gl_token_request_info,
+):
+    """Test complete login."""
+    gl_mocker.register_get("/user", {
+        "id": user.pk,
+        "username": user.login,
+        "email": user.email,
+    })
 
-    gl_mocker.register_url(
-        method="POST",
-        uri="https://gitlab.com/oauth/token",
-        request_callback=RequestCallbackFactory({
-            "access_token": "TEST_TOKEN",
-        }),
-        priority=1
-    )
+    gl_mocker.base_api_url = GitLabOAuth2.ACCESS_TOKEN_URL
+    gl_mocker.register_post("", {
+        "access_token": "access_token",
+        "token_type": "bearer",
+        "expires_in": 7200,
+        "refresh_token": "refresh_token",
+    })
 
-    client.session = {"gitlab_state": "test_state"}
-    client.GET = {}
-    client.POST = {}
-    client.build_absolute_uri = _build_absolute_uri
-    client.method = ""
-
-    info = AttrDict({"context": client})
-
-    assert Token.objects.count() == 0
-
-    token = CompleteGitlabAuthMutation().mutate(
+    response = complete_gl_auth_mutation(
         root=None,
-        info=info,
+        info=gl_token_request_info,
         code="test_code",
-        state="test_state"
-    ).token
-
-    assert Token.objects.count() == 1
-    assert Token.objects.first() == token
-
-
-def test_user_not_existed(db, client, gl_mocker):
-    gl_mocker.register_get("/user", {"username": "test user"})
-
-    gl_mocker.register_url(
-        method="POST",
-        uri="https://gitlab.com/oauth/token",
-        request_callback=RequestCallbackFactory({
-            "access_token": "TEST_TOKEN",
-        }),
-        priority=1
+        state=gl_token_request_info.context.session["gitlab_state"],
     )
 
-    client.session = {"gitlab_state": "test_state"}
-    client.GET = {}
-    client.POST = {}
-    client.build_absolute_uri = _build_absolute_uri
-    client.method = ""
+    assert Token.objects.filter(pk=response.token.pk, user=user).exists()
 
-    info = AttrDict({"context": client})
 
-    assert Token.objects.count() == 0
+def test_not_login(
+    user,
+    gl_mocker,
+    complete_gl_auth_mutation,
+    gl_token_request_info,
+):
+    """Test not login user."""
+    gl_mocker.register_get("/user", {
+        "id": user.pk,
+        "username": "test_user",
+        "email": user.email,
+    })
 
-    CompleteGitlabAuthMutation().mutate(
+    gl_mocker.base_api_url = GitLabOAuth2.ACCESS_TOKEN_URL
+    gl_mocker.register_post("", {
+        "access_token": "access_token",
+        "token_type": "bearer",
+        "expires_in": 7200,
+        "refresh_token": "refresh_token",
+    })
+
+    response = complete_gl_auth_mutation(
         root=None,
-        info=info,
+        info=gl_token_request_info,
         code="test_code",
-        state="test_state"
+        state=gl_token_request_info.context.session["gitlab_state"],
     )
 
-    assert Token.objects.count() == 0
-
-
-def _build_absolute_uri(location=None):
-    """Mock build."""
+    assert not response.token
