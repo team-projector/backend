@@ -5,7 +5,7 @@ from typing import ClassVar
 from django.db import models
 
 from apps.development.models import Ticket
-from apps.development.models.issue import Issue, ISSUE_STATES
+from apps.development.models.issue import ISSUE_STATES, Issue
 
 PROBLEM_OVER_DUE_DATE = "OVER_DUE_DATE"
 
