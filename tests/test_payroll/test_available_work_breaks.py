@@ -173,7 +173,7 @@ def _assert_work_breaks(queryset, results=None):
         results = []
 
     original = list(queryset)
-    original.sort(key=lambda x: x.id)
-    results.sort(key=lambda x: x.id)
+    original.sort(key=lambda work_break: work_break.id)
+    results.sort(key=lambda work_break: work_break.id)
 
     assert set(original) == set(results)

@@ -89,14 +89,14 @@ def model_to_dict_form(data: dict) -> dict:
 
     original = model_to_dict(data)
     return {
-        k: replace(v)
-        for k, v in original.items()
+        key: replace(value)
+        for key, value in original.items()
     }
 
 
-def format_date(d: datetime) -> str:
-    return d.strftime("%Y-%m-%d")
+def format_date(date: datetime) -> str:
+    return date.strftime("%Y-%m-%d")
 
 
-def parse_gl_date(s: str) -> datetime:
-    return datetime.datetime.strptime(s, "%Y-%m-%d")
+def parse_gl_date(date_str: str) -> datetime:
+    return datetime.datetime.strptime(date_str, "%Y-%m-%d")

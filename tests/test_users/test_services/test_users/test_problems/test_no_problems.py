@@ -22,4 +22,4 @@ def test_no_problems(user):
         state=ISSUE_STATES.OPENED,
     )
 
-    assert get_user_problems(user) == []
+    assert not get_user_problems(user)

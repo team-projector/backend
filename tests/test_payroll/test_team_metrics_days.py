@@ -81,28 +81,29 @@ def test_simple(user):
 
     assert len(developer_metrics) == (end - start).days + 1
 
-    _check_metrics(developer_metrics,
-                   {
-                       timezone.now() - timedelta(days=4): timedelta(
-                           hours=3),
-                       timezone.now() - timedelta(days=2): timedelta(
-                           hours=2),
-                       timezone.now() - timedelta(days=1): timedelta(
-                           hours=1),
-                   }, {
-                       timezone.now(): timedelta(hours=8),
-                       timezone.now() + timedelta(days=1): timedelta(
-                           hours=1),
-                   }, {
-                       timezone.now() + timedelta(days=1): 1
-                   }, {
-                       timezone.now() + timedelta(days=1): timedelta(
-                           hours=15)
-                   }, {
-                       timezone.now() + timedelta(days=1):
-                           timedelta(
-                               seconds=issue.time_estimate - issue.total_time_spent)
-                   })
+    _check_metrics(
+        developer_metrics,
+        {
+            timezone.now() - timedelta(days=4): timedelta(
+                hours=3),
+            timezone.now() - timedelta(days=2): timedelta(
+                hours=2),
+            timezone.now() - timedelta(days=1): timedelta(
+                hours=1),
+        }, {
+            timezone.now(): timedelta(hours=8),
+            timezone.now() + timedelta(days=1): timedelta(
+                hours=1),
+        }, {
+            timezone.now() + timedelta(days=1): 1
+        }, {
+            timezone.now() + timedelta(days=1): timedelta(
+                hours=15)
+        }, {
+            timezone.now() + timedelta(days=1):
+                timedelta(seconds=issue.time_estimate - issue.total_time_spent)
+        },
+    )
 
 
 @override_settings(TP_WEEKENDS_DAYS=[])
@@ -494,8 +495,8 @@ def _check_metrics(
 
 def _prepare_metrics(metrics):
     return {
-        format_date(d): time
-        for d, time in metrics.items()
+        format_date(metric_date): time
+        for metric_date, time in metrics.items()
     }
 
 

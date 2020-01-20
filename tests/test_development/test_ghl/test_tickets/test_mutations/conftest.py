@@ -29,3 +29,12 @@ def delete_ticket_mutation(ghl_mutations):
 @pytest.fixture()
 def ticket():
     return TicketFactory(milestone=ProjectMilestoneFactory())
+
+
+@pytest.fixture()
+def project_manager(user):
+    """Provide project manager."""
+    user.roles.PROJECT_MANAGER = True
+    user.save()
+
+    return user

@@ -183,53 +183,53 @@ def test_team_summary(db):
 
 
 def test_sort_projects_by_milestone_flat(db):
-    projs = []
-    for n in range(3):
-        m = ProjectMilestoneFactory(state=MILESTONE_STATES.ACTIVE)
+    projects = []
+    for days in range(3):
+        milestone = ProjectMilestoneFactory(state=MILESTONE_STATES.ACTIVE)
         ProjectMilestoneFactory(
-            owner=m.owner,
-            due_date=timezone.now() - timezone.timedelta(days=n),
+            owner=milestone.owner,
+            due_date=timezone.now() - timezone.timedelta(days=days),
         )
         ProjectMilestoneFactory(
-            owner=m.owner,
-            due_date=timezone.now() + timezone.timedelta(days=n),
+            owner=milestone.owner,
+            due_date=timezone.now() + timezone.timedelta(days=days),
             state=MILESTONE_STATES.ACTIVE
         )
 
-        projs.append(m.owner)
+        projects.append(milestone.owner)
 
-    results = sorted(projs, key=get_min_due_date)
+    results = sorted(projects, key=get_min_due_date)
 
-    expected = [proj.id for proj in projs]
-    actual = [p.id for p in results]
+    expected = [project.id for project in projects]
+    actual = [project.id for project in results]
 
     assert expected == actual
 
 
 def test_sort_projects_by_milestone_neested(db):
-    projs = []
-    for n in range(3):
+    projects = []
+    for days in range(3):
         group = ProjectGroupFactory(parent=ProjectGroupFactory())
         proj = ProjectFactory(group=group)
 
         ProjectMilestoneFactory(state=MILESTONE_STATES.ACTIVE)
         ProjectMilestoneFactory(
             owner=group.parent,
-            due_date=timezone.now() - timezone.timedelta(days=n),
+            due_date=timezone.now() - timezone.timedelta(days=days),
             state=MILESTONE_STATES.ACTIVE
         )
         ProjectMilestoneFactory(
             owner=group.parent,
-            due_date=timezone.now() + timezone.timedelta(days=n),
+            due_date=timezone.now() + timezone.timedelta(days=days),
             state=MILESTONE_STATES.ACTIVE
         )
 
-        projs.append(proj)
+        projects.append(proj)
 
-    results = sorted(projs, key=get_min_due_date)
+    results = sorted(projects, key=get_min_due_date)
 
-    expected = [proj.id for proj in projs][::-1]
-    actual = [p.id for p in results]
+    expected = [project.id for project in projects][::-1]
+    actual = [project.id for project in results]
 
     assert expected == actual
 

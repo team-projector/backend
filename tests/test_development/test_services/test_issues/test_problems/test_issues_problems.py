@@ -20,7 +20,7 @@ def test_empty_due_day(user):
 def test_empty_due_day_but_closed(user):
     issue = IssueFactory.create(user=user, state=ISSUE_STATES.CLOSED)
 
-    assert get_issue_problems(issue) == []
+    assert not get_issue_problems(issue)
 
 
 def test_overdue_due_day(user):
@@ -39,7 +39,7 @@ def test_overdue_due_day_but_closed(user):
         state=ISSUE_STATES.CLOSED
     )
 
-    assert get_issue_problems(issue) == []
+    assert not get_issue_problems(issue)
 
 
 def test_empty_estimate(user):

@@ -24,7 +24,7 @@ def test_overdue_due_day_but_closed(db):
         due_date=datetime.now().date() - timedelta(days=1)
     )
 
-    assert get_milestone_problems(milestone) == []
+    assert not get_milestone_problems(milestone)
 
 
 def test_resolver(db):

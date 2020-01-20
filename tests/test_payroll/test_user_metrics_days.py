@@ -60,23 +60,24 @@ def test_simple(user):
     metrics = get_progress_metrics(user, start, end, "day")
 
     assert len(metrics) == (end - start).days + 1
-    _check_metrics(metrics,
-                   {
-                       datetime.now() - timedelta(days=4): timedelta(hours=3),
-                       datetime.now() - timedelta(days=2): timedelta(hours=2),
-                       datetime.now() - timedelta(days=1): timedelta(hours=1),
-                   }, {
-                       datetime.now(): timedelta(hours=8),
-                       datetime.now() + timedelta(days=1): timedelta(hours=1),
-                   }, {
-                       datetime.now() + timedelta(days=1): 1
-                   }, {
-                       datetime.now() + timedelta(days=1): timedelta(hours=15)
-                   }, {
-                       datetime.now() + timedelta(days=1):
-                           timedelta(
-                               seconds=issue.time_estimate - issue.total_time_spent)
-                   })
+    _check_metrics(
+        metrics,
+        {
+            datetime.now() - timedelta(days=4): timedelta(hours=3),
+            datetime.now() - timedelta(days=2): timedelta(hours=2),
+            datetime.now() - timedelta(days=1): timedelta(hours=1),
+        }, {
+            datetime.now(): timedelta(hours=8),
+            datetime.now() + timedelta(days=1): timedelta(hours=1),
+        }, {
+            datetime.now() + timedelta(days=1): 1
+        }, {
+            datetime.now() + timedelta(days=1): timedelta(hours=15)
+        }, {
+            datetime.now() + timedelta(days=1):
+                timedelta(seconds=issue.time_estimate - issue.total_time_spent)
+        }
+    )
 
 
 @override_settings(TP_WEEKENDS_DAYS=[])
@@ -357,8 +358,8 @@ def _check_metrics(metrics,
 
 def _prepare_metrics(metrics):
     return {
-        format_date(d): time
-        for d, time in metrics.items()
+        format_date(metric_date): time
+        for metric_date, time in metrics.items()
     }
 
 

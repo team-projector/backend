@@ -42,8 +42,8 @@ class CheckUserProgressMetricsMixin(testcases.TestCase):
 
     def _prepare_metrics(self, metrics):
         return {
-            format_date(d): time
-            for d, time in metrics.items()
+            format_date(metric_date): time
+            for metric_date, time in metrics.items()
         }
 
     def _check_metric(self, metric, metric_name, values):

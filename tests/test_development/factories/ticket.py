@@ -8,7 +8,7 @@ from tests.test_development.factories.project_group_milestone import (
 
 class TicketFactory(factory.django.DjangoModelFactory):
     title = factory.Faker("text", max_nb_chars=200)
-    url = factory.Sequence(lambda s: f"https://team-projector-{s}.com")
+    url = factory.Sequence(lambda seq: f"https://team-projector-{seq}.com")
     milestone = factory.SubFactory(ProjectGroupMilestoneFactory)
 
     class Meta:

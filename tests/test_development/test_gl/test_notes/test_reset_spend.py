@@ -30,4 +30,4 @@ def test_reset(user):
     assert note.user == user
     assert note.body == SPEND_RESET_MESSAGE
     assert note.type == NOTE_TYPES.RESET_SPEND
-    assert note.data == {}
+    assert not note.data

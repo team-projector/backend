@@ -352,10 +352,14 @@ def test_complex(user):
                                  time_spent=seconds(hours=4))
     IssueSpentTimeFactory.create(user=user, base=issue,
                                  time_spent=seconds(hours=2))
-    IssueSpentTimeFactory.create(user=user,
-                                 base=IssueFactory.create(user=user,
-                                                          state=ISSUE_STATES.CLOSED),
-                                 time_spent=seconds(hours=5))
+    IssueSpentTimeFactory.create(
+        user=user,
+        base=IssueFactory.create(
+            user=user,
+            state=ISSUE_STATES.CLOSED,
+        ),
+        time_spent=seconds(hours=5),
+    )
 
     metrics = calculator.get_metrics(user)
 

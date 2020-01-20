@@ -13,7 +13,7 @@ def api_ghl_view():
 
 
 def test_http_request(api_ghl_view):
-    assert api_ghl_view.parse_body(HttpRequest()) == {}
+    assert not api_ghl_view.parse_body(HttpRequest())
 
 
 def test_rest_request(api_ghl_view):

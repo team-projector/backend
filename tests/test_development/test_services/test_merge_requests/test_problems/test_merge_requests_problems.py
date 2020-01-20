@@ -47,8 +47,7 @@ def test_empty_estimate_but_closed(user):
     merge_request.issues.add(problem_issue)
 
     problems = get_merge_request_problems(merge_request)
-
-    assert problems == []
+    assert not problems
 
 
 def test_zero_estimate(user):
@@ -98,8 +97,7 @@ def test_not_assigned_but_closed(user):
     merge_request.issues.add(problem_issue)
 
     problems = get_merge_request_problems(merge_request)
-
-    assert problems == []
+    assert not problems
 
 
 def test_two_errors_per_merge_request(user):

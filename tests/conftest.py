@@ -8,4 +8,7 @@ pytest_plugins = (
     "tests.fixtures.clients",
     "tests.fixtures.requests",
     "tests.fixtures.admin",
+    "tests.fixtures.team",
+    "tests.fixtures.project",
+    "tests.fixtures.group",
 )

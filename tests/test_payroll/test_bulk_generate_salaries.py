@@ -17,10 +17,11 @@ class BulkGenerateSalariesTests(TestCase):
     def setUp(self):
         self.initiator = User.objects.create_user(login="initiator")
         self.user = User.objects.create_user(login="user", hour_rate=100)
-        self.calculator = SalaryCalculator(self.initiator,
-                                           period_from=timezone.now() - timedelta(
-                                               days=30),
-                                           period_to=timezone.now())
+        self.calculator = SalaryCalculator(
+            self.initiator,
+            period_from=timezone.now() - timedelta(days=30),
+            period_to=timezone.now(),
+        )
 
     def test_single(self):
         issue = IssueFactory.create(state=ISSUE_STATES.CLOSED)
