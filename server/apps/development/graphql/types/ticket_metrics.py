@@ -15,3 +15,4 @@ class TicketMetricsType(IssuesContainerMetricsType):
     budget_remains = graphene.Float()
     payroll = graphene.Float()
     profit = graphene.Float()
+    opened_time_remains = graphene.Int()

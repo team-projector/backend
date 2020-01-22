@@ -17,6 +17,7 @@ class TicketMetrics(IssuesContainerMetrics):
     budget_remains: float = 0
     payroll: float = 0.0
     profit: float = 0
+    opened_time_remains: int = 0
 
 
 class TicketMetricsProvider:
@@ -58,6 +59,20 @@ class TicketMetricsProvider:
                 models.Count("id", filter=models.Q(state=ISSUE_STATES.OPENED)),
                 0,
             ),
+            opened_time_estimate=Coalesce(
+                models.Sum(
+                    "time_estimate",
+                    filter=models.Q(state=ISSUE_STATES.OPENED),
+                ),
+                0,
+            ),
+            opened_time_spent=Coalesce(
+                models.Sum(
+                    "total_time_spent",
+                    filter=models.Q(state=ISSUE_STATES.OPENED),
+                ),
+                0,
+            ),
             issues_count=models.Count("*"),
             budget_estimate=Coalesce(
                 models.Sum(
@@ -71,6 +86,9 @@ class TicketMetricsProvider:
 
         metrics.time_estimate = stats["time_estimate"]
         metrics.time_remains = stats["time_estimate"] - stats["time_spent"]
+        metrics.opened_time_remains = (
+            stats["opened_time_estimate"] - stats["opened_time_spent"]
+        )
 
         if stats["time_spent"]:
             metrics.efficiency = stats["time_estimate"] / stats["time_spent"]
