@@ -4,7 +4,11 @@ from django.contrib import admin
 
 from apps.core.admin.base import BaseModelAdmin
 from apps.core.admin.mixins import ForceSyncEntityMixin
-from apps.development.admin.filters import MilestoneFilter, ProjectFilter
+from apps.development.admin.filters import (
+    MilestoneFilter,
+    ProjectFilter,
+    TicketFilter,
+)
 from apps.development.admin.inlines import NoteInline
 from apps.development.models import Issue
 from apps.development.tasks import sync_project_issue_task
@@ -20,7 +24,7 @@ class IssueAdmin(
     list_display = (
         "title", "user", "milestone", "state", "created_at", "gl_last_sync",
     )
-    list_filter = (ProjectFilter, MilestoneFilter, "state")
+    list_filter = (ProjectFilter, MilestoneFilter, TicketFilter, "state")
     search_fields = ("title", "gl_id")
     sortable_by = ("gl_last_sync", "created_at")
     ordering = ("-gl_last_sync",)
