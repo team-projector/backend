@@ -14,7 +14,7 @@ class AllowAuthenticated:
         obj_id: str,
     ) -> bool:
         """Check has node permission."""
-        return info.context.user.is_authenticated
+        return info.context.user.is_authenticated  # type:ignore
 
     def has_mutation_permission(
         self,
@@ -23,11 +23,11 @@ class AllowAuthenticated:
         **kwargs,
     ) -> bool:
         """Check has mutation permission."""
-        return info.context.user.is_authenticated
+        return info.context.user.is_authenticated  # type:ignore
 
     def has_filter_permission(
         self,
         info: ResolveInfo,  # noqa: WPS110
     ) -> bool:
         """Check has filter permission."""
-        return info.context.user.is_authenticated
+        return info.context.user.is_authenticated  # type:ignore

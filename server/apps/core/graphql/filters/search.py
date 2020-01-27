@@ -5,7 +5,6 @@ from functools import reduce
 
 from django.db import models
 from django.db.models.constants import LOOKUP_SEP
-from django.utils import six
 from django_filters import CharFilter
 
 
@@ -37,7 +36,7 @@ class SearchFilter(CharFilter):
         return reduce(operator.or_, queries)
 
     def _construct_search(self, search_field) -> str:
-        field = six.text_type(search_field)
+        field = str(search_field)
 
         if field.startswith("^"):
             search_type = "istartswith"

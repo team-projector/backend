@@ -28,7 +28,7 @@ class CanApproveDeclineWorkBreak:
         )
 
         return is_related_with_another_by_team_roles(
-            info.context.user,
+            info.context.user,  # type:ignore
             work_break.user,
             [TeamMember.roles.LEADER],
         )

@@ -14,7 +14,7 @@ class AllowProjectManager:
         obj_id: str,
     ) -> bool:
         """Check has node permission."""
-        return self._is_project_manager(info.context.user)
+        return self._is_project_manager(info.context.user)  # type:ignore
 
     def has_mutation_permission(
         self,
@@ -23,14 +23,14 @@ class AllowProjectManager:
         **kwargs,
     ) -> bool:
         """Check has mutation permission."""
-        return self._is_project_manager(info.context.user)
+        return self._is_project_manager(info.context.user)  # type:ignore
 
     def has_filter_permission(
         self,
         info: ResolveInfo,  # noqa: WPS110
     ) -> bool:
         """Check has filter permission."""
-        return self._is_project_manager(info.context.user)
+        return self._is_project_manager(info.context.user)  # type:ignore
 
     def _is_project_manager(self, user) -> bool:
         return user.is_authenticated and user.roles.PROJECT_MANAGER
