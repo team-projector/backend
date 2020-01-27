@@ -32,10 +32,10 @@ def collect_fields(
 def get_fields_from_info(info: ResolveInfo):  # noqa: WPS110
     """Get fields from info."""
     fragments = {}
-    node = ast_to_dict(info.field_asts[0])
+    node = ast_to_dict(info.field_asts[0])  # type:ignore
 
     for name, fragment_value in info.fragments.items():
-        fragments[name] = ast_to_dict(fragment_value)
+        fragments[name] = ast_to_dict(fragment_value)  # type:ignore
 
     return collect_fields(node, fragments)
 

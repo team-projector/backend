@@ -33,7 +33,7 @@ class AddSpentToIssueMutation(SerializerMutation):
         seconds = validated_data.pop("seconds")
 
         add_spent_time(
-            info.context.user,
+            info.context.user,  # type:ignore
             issue,
             seconds,
         )

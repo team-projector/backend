@@ -21,6 +21,7 @@ RUN apt update \
                       gettext \
                       nginx \
                       make \
+                      git \
     && curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/${POETRY_VERSION}/get-poetry.py | python \
     && export PATH="$PATH:$HOME/.poetry/bin" \
     && poetry config virtualenvs.create false \
