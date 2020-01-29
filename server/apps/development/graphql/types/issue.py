@@ -10,7 +10,10 @@ from apps.development.graphql.interfaces import WorkItem
 from apps.development.graphql.types.issue_metrics import IssueMetricsType
 from apps.development.models import Issue
 from apps.development.services.issue.allowed import filter_allowed_for_user
-from apps.development.services.issue.metrics import get_issue_metrics
+from apps.development.services.issue.metrics import (
+    get_issue_metrics,
+    get_user_time_spent,
+)
 from apps.development.services.issue.problems import get_issue_problems
 
 
@@ -19,6 +22,7 @@ class IssueType(graphql.BaseDjangoObjectType):
 
     metrics = graphene.Field(IssueMetricsType)
     problems = graphene.List(graphene.String)
+    time_spent = graphene.Field(graphene.Int)
 
     class Meta:
         model = Issue
@@ -34,6 +38,10 @@ class IssueType(graphql.BaseDjangoObjectType):
     def resolve_metrics(self, info, **kwargs):  # noqa: WPS110
         """Get issue metrics."""
         return get_issue_metrics(self)
+
+    def resolve_time_spent(self, info, **kwargs):  # noqa: WPS110
+        """Get user time spent."""
+        return get_user_time_spent(self, user=info.context.user)
 
     @classmethod
     def get_queryset(
