@@ -1,11 +1,13 @@
 # -*- coding: utf-8 -*-
 
 from django.db import models
+from django.db.models import Sum
 from django.db.models.functions import Coalesce
 
 from apps.development.models import Issue
 from apps.development.models.issue import ISSUE_STATES
 from apps.payroll.models import SpentTime
+from apps.users.models import User
 
 
 class IssueMetrics:
@@ -30,6 +32,15 @@ def get_issue_metrics(issue: Issue) -> IssueMetrics:
     metrics.paid = payroll["total_paid"]
 
     return metrics
+
+
+def get_user_time_spent(issue: Issue, user: User) -> int:
+    """Get time spent for issue."""
+    return issue.time_spents.filter(
+        user=user,
+    ).aggregate(
+        total_user_time_spent=Sum("time_spent"),
+    )["total_user_time_spent"] or 0
 
 
 class IssuesContainerMetrics:

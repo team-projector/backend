@@ -8,6 +8,7 @@ from apps.development.admin.filters import (
     MilestoneFilter,
     ProjectFilter,
     TicketFilter,
+    UserFilter,
 )
 from apps.development.admin.inlines import NoteInline
 from apps.development.models import Issue
@@ -24,7 +25,13 @@ class IssueAdmin(
     list_display = (
         "title", "user", "milestone", "state", "created_at", "gl_last_sync",
     )
-    list_filter = (ProjectFilter, MilestoneFilter, TicketFilter, "state")
+    list_filter = (
+        ProjectFilter,
+        MilestoneFilter,
+        TicketFilter,
+        UserFilter,
+        "state",
+    )
     search_fields = ("title", "gl_id")
     sortable_by = ("gl_last_sync", "created_at")
     ordering = ("-gl_last_sync",)
