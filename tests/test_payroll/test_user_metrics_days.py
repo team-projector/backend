@@ -1,9 +1,11 @@
 from datetime import datetime, timedelta
 from typing import Dict
 
+import pytest
 from django.db.models import Sum
 from django.test import override_settings
 from django.utils import timezone
+from freezegun import freeze_time
 from pytest import raises
 
 from apps.core.utils.time import seconds
@@ -18,8 +20,14 @@ from tests.test_payroll.factories import IssueSpentTimeFactory
 from tests.test_users.factories.user import UserFactory
 
 
+@pytest.fixture()
+def _freeze_to_noon():
+    with freeze_time("{0} 12:00:00".format(datetime.now().date())):
+        yield
+
+
 @override_settings(TP_WEEKENDS_DAYS=[])
-def test_simple(user):
+def test_simple(user, _freeze_to_noon):
     issue = IssueFactory.create(user=user, due_date=datetime.now())
 
     IssueSpentTimeFactory.create(
@@ -81,7 +89,7 @@ def test_simple(user):
 
 
 @override_settings(TP_WEEKENDS_DAYS=[])
-def test_negative_remains(user):
+def test_negative_remains(user, _freeze_to_noon):
     issue = IssueFactory.create(user=user, due_date=datetime.now())
     IssueSpentTimeFactory.create(
         date=datetime.now() - timedelta(days=4),
@@ -114,7 +122,7 @@ def test_negative_remains(user):
 
 
 @override_settings(TP_WEEKENDS_DAYS=[])
-def test_loading_day_already_has_spends(user):
+def test_loading_day_already_has_spends(user, _freeze_to_noon):
     issue = IssueFactory.create(user=user, due_date=datetime.now())
     issue_2 = IssueFactory.create(
         user=user,
@@ -175,7 +183,7 @@ def test_loading_day_already_has_spends(user):
 
 
 @override_settings(TP_WEEKENDS_DAYS=[])
-def test_not_in_range(user):
+def test_not_in_range(user, _freeze_to_noon):
     issue = IssueFactory.create(user=user, due_date=datetime.now())
     issue.time_estimate = 0
     issue.total_time_spent = 0
@@ -222,7 +230,7 @@ def test_not_in_range(user):
 
 
 @override_settings(TP_WEEKENDS_DAYS=[])
-def test_another_user(user):
+def test_another_user(user, _freeze_to_noon):
     issue = IssueFactory.create(user=user, due_date=datetime.now())
     issue.time_estimate = 0
     issue.total_time_spent = 0
@@ -271,7 +279,7 @@ def test_another_user(user):
 
 
 @override_settings(TP_WEEKENDS_DAYS=[])
-def test_not_loading_over_daily_work_hours(user):
+def test_not_loading_over_daily_work_hours(user, _freeze_to_noon):
     user.daily_work_hours = 4
     user.save()
 
@@ -309,7 +317,7 @@ def test_not_loading_over_daily_work_hours(user):
                    }, {}, 4)
 
 
-def test_bad_group(user):
+def test_bad_group(user, _freeze_to_noon):
     with raises(ValueError):
         get_progress_metrics(
             user,
@@ -319,7 +327,7 @@ def test_bad_group(user):
         )
 
 
-def test_provider_not_implemented(user):
+def test_provider_not_implemented(user, _freeze_to_noon):
     with raises(NotImplementedError):
         ProgressMetricsProvider(
             user,
