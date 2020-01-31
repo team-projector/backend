@@ -290,6 +290,7 @@ jsonfield = ["django-jsonfield (>=1.0.1)", "django-jsonfield-compat (>=0.4.4)"]
 reference = "41e643f8c0e91843a209bcc93ac117f669bbd0df"
 type = "git"
 url = "https://github.com/justquick/django-activity-stream.git"
+
 [[package]]
 category = "main"
 description = "django-cors-headers is a Django application for handling the server headers required for Cross-Origin Resource Sharing (CORS)."
@@ -1348,8 +1349,8 @@ category = "main"
 description = "Python client for Redis key-value store"
 name = "redis"
 optional = false
-python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*"
-version = "3.4.0"
+python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
+version = "3.3.11"
 
 [package.extras]
 hiredis = ["hiredis (>=0.1.3)"]
@@ -1714,7 +1715,7 @@ idna = ">=2.0"
 multidict = ">=4.0"
 
 [metadata]
-content-hash = "a803c38bacbf2ac62218b1676d9bdd7cdc5b8c5e86285a84eebfbf09c91ee29e"
+content-hash = "517e2efb2cba30c19cc6a4e5f19880008302061cd9b8d7ecdb85be24d3757166"
 python-versions = "^3.8"
 
 [metadata.files]
@@ -2256,8 +2257,8 @@ radon = [
     {file = "radon-4.1.0.tar.gz", hash = "sha256:56082c52206db45027d4a73612e1b21663c4cc2be3760fee769d966fd7efdd6d"},
 ]
 redis = [
-    {file = "redis-3.4.0-py2.py3-none-any.whl", hash = "sha256:e933bdb504c69cbd5bdf4e2bb819a99644a36731cef4c59aa637cebfd5ddd4f9"},
-    {file = "redis-3.4.0.tar.gz", hash = "sha256:7595976eb0b4e1fc3ad5478f1fd44215a814ee184a7820de92726f559bdff9cd"},
+    {file = "redis-3.3.11-py2.py3-none-any.whl", hash = "sha256:3613daad9ce5951e426f460deddd5caf469e08a3af633e9578fc77d362becf62"},
+    {file = "redis-3.3.11.tar.gz", hash = "sha256:8d0fc278d3f5e1249967cba2eb4a5632d19e45ce5c09442b8422d15ee2c22cc2"},
 ]
 requests = [
     {file = "requests-2.22.0-py2.py3-none-any.whl", hash = "sha256:9cf5292fcd0f598c671cfc1e0d7d1a7f13bb8085e9a590f48c010551dc6c4b31"},
