@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-12-18 10:18+0300\n"
+"POT-Creation-Date: 2020-02-04 17:08+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -19,6 +19,15 @@ msgstr ""
 
 msgid "VN__CORE"
 msgstr "Core"
+
+msgid "You do not have permission to perform this action."
+msgstr "You do not have permission to perform this action."
+
+msgid "Not found."
+msgstr "Not found."
+
+msgid "Input error."
+msgstr "Input error."
 
 msgid "VN__GITLAB_ID"
 msgstr "GitLab ID"
@@ -49,9 +58,6 @@ msgstr "Development"
 
 msgid "MSG_PLEASE_PROVIDE_PERSONAL_GL_TOKEN"
 msgstr "Please fill personal gitlab token in profile"
-
-msgid "MSG_SPEND_SHOULD_BE_GREATER_THAN_ONE"
-msgstr "Spend should be greater than one"
 
 msgid "CH_OPENED"
 msgstr "opened"
@@ -281,6 +287,24 @@ msgstr "Improvement"
 msgid "CH_BUG_FIXING"
 msgstr "Bug Fixing"
 
+msgid "CH_CREATED"
+msgstr "Created"
+
+msgid "CH_PLANNING"
+msgstr "Planning"
+
+msgid "CH_DOING"
+msgstr "Doing"
+
+msgid "CH_TESTING"
+msgstr "Testing"
+
+msgid "CH_ACCEPTING"
+msgstr "Accepting"
+
+msgid "CH_DONE"
+msgstr "Done"
+
 msgid "VN__URL"
 msgstr "Url"
 
@@ -307,9 +331,6 @@ msgstr "Bonus"
 
 msgid "VN__BONUSES"
 msgstr "Bonuses"
-
-msgid "CH_CREATED"
-msgstr "created"
 
 msgid "CH_APPROVED"
 msgstr "approved"
