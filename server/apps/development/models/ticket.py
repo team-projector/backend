@@ -17,8 +17,25 @@ TICKET_TYPES = Choices(
     (TYPE_BUG_FIXING, _("CH_BUG_FIXING")),
 )
 
+STATE_CREATED = "CREATED"
+STATE_PLANNING = "PLANNING"
+STATE_DOING = "DOING"
+STATE_TESTING = "TESTING"
+STATE_ACCEPTING = "ACCEPTING"
+STATE_DONE = "DONE"
+
+TICKET_STATES = Choices(
+    (STATE_CREATED, _("CH_CREATED")),
+    (STATE_PLANNING, _("CH_PLANNING")),
+    (STATE_DOING, _("CH_DOING")),
+    (STATE_TESTING, _("CH_TESTING")),
+    (STATE_ACCEPTING, _("CH_ACCEPTING")),
+    (STATE_DONE, _("CH_DONE")),
+)
+
 TICKET_TYPE_MAX_LENGTH = 50
 TICKET_ROLE_MAX_LENGTH = 50
+TICKET_STATE_MAX_LENGTH = 50
 
 
 class Ticket(Timestamps):
@@ -72,6 +89,14 @@ class Ticket(Timestamps):
         blank=True,
         verbose_name=_("VN__ROLE"),
         help_text=_("HT__ROLE"),
+    )
+
+    state = models.CharField(
+        choices=TICKET_STATES,
+        max_length=TICKET_STATE_MAX_LENGTH,
+        blank=True,
+        verbose_name=_("VN__STATE"),
+        help_text=_("HT__STATE"),
     )
 
     class Meta:
