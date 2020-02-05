@@ -26,6 +26,7 @@ class UpdateWorkBreakMutation(
         from_date = graphene.DateTime(required=True)
         reason = graphene.String(required=True)
         to_date = graphene.DateTime(required=True)
+        user = graphene.Int(required=True)
 
     work_break = graphene.Field(WorkBreakType)
 
@@ -41,6 +42,7 @@ class UpdateWorkBreakMutation(
         work_break.from_date = cleaned_data["from_date"]
         work_break.reason = cleaned_data["reason"]
         work_break.to_date = cleaned_data["to_date"]
+        work_break.user = cleaned_data["user"]
         work_break.save()
 
         return UpdateWorkBreakMutation(
