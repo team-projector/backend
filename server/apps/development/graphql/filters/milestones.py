@@ -3,6 +3,7 @@
 import django_filters
 from django.db.models import QuerySet
 
+from apps.core.graphql.filters import SearchFilter
 from apps.core.graphql.filters.ordering import OrderingFilter
 from apps.development.models.milestone import MILESTONE_STATES
 
@@ -28,3 +29,5 @@ class MilestonesFilterSet(django_filters.FilterSet):
     order_by = OrderingFilter(
         fields=("due_date",),
     )
+
+    q = SearchFilter(fields=("title", "=gl_url"))  # noqa: WPS111
