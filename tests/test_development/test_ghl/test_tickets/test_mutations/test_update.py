@@ -3,18 +3,23 @@
 from pytest import raises
 
 from apps.core.graphql.errors import GraphQLInputError, GraphQLPermissionDenied
+from apps.development.models.ticket import (
+    STATE_CREATED,
+    STATE_DOING,
+    STATE_PLANNING,
+)
 from tests.test_development.factories import IssueFactory
 
 GHL_QUERY_UPDATE_TICKET = """
 mutation (
     $id: ID!, $attachIssues: [ID!], $type: String, $title: String,
     $role: String, $startDate: Date, $dueDate: Date, $url: String,
-    $issues: [ID!]
+    $issues: [ID!], $state: String!
 ) {
 updateTicket(
     id: $id, attachIssues: $attachIssues, type: $type, title: $title,
     startDate: $startDate, dueDate: $dueDate, url: $url, issues: $issues,
-    role: $role
+    role: $role, state: $state
 ) {
     ticket {
       id
@@ -36,6 +41,7 @@ def test_query(project_manager, ghl_client, ticket):
         variables={
             "id": ticket.pk,
             "title": new_title,
+            "state": STATE_DOING,
         }
     )
 
@@ -129,3 +135,24 @@ def test_both_params_attach_and_issues(
     extensions = exc_info.value.extensions  # noqa: WPS441
     assert len(extensions["fieldErrors"]) == 1
     assert extensions["fieldErrors"][0]["fieldName"] == "nonFieldErrors"
+
+
+def test_update_state(
+    project_manager,
+    ghl_auth_mock_info,
+    update_ticket_mutation,
+    ticket,
+):
+    """Test update state."""
+    assert STATE_CREATED == ticket.state
+
+    update_ticket_mutation(
+        root=None,
+        info=ghl_auth_mock_info,
+        id=ticket.id,
+        state=STATE_PLANNING,
+    )
+
+    ticket.refresh_from_db()
+
+    assert STATE_PLANNING == ticket.state

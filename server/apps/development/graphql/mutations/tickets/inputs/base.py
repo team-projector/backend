@@ -8,6 +8,8 @@ from rest_framework.fields import Field
 
 from apps.development.models import Issue
 from apps.development.models.ticket import (
+    TICKET_STATE_MAX_LENGTH,
+    TICKET_STATES,
     TICKET_TYPE_MAX_LENGTH,
     TICKET_TYPES,
     Ticket,
@@ -26,6 +28,10 @@ class TicketBaseInput(serializers.ModelSerializer):
         max_length=TICKET_TYPE_MAX_LENGTH,
     )
 
+    state = serializers.CharField(
+        max_length=TICKET_STATE_MAX_LENGTH,
+    )
+
     issues = serializers.PrimaryKeyRelatedField(
         many=True,
         required=False,
@@ -37,6 +43,7 @@ class TicketBaseInput(serializers.ModelSerializer):
         model = Ticket
         fields = [
             "type", "title", "start_date", "due_date", "url", "issues", "role",
+            "state",
         ]
 
     def get_fields(self) -> Dict[str, Field]:
@@ -61,3 +68,14 @@ class TicketBaseInput(serializers.ModelSerializer):
             )
 
         return type_
+
+    def validate_state(self, state):
+        """Validates state is one of the valid choices."""
+        if state and state not in TICKET_STATES.keys():
+            raise ValidationError(
+                "state should be one of available choices: {0}".format(
+                    ", ".join(TICKET_STATES.keys()),
+                ),
+            )
+
+        return state

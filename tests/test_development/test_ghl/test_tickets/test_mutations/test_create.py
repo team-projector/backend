@@ -10,7 +10,7 @@ from apps.core.graphql.errors import (
     GraphQLInputError,
     GraphQLPermissionDenied,
 )
-from apps.development.models.ticket import TYPE_FEATURE
+from apps.development.models.ticket import STATE_DOING, TYPE_FEATURE
 from tests.test_development.factories import (
     IssueFactory,
     ProjectMilestoneFactory,
@@ -20,11 +20,12 @@ from tests.test_development.factories import (
 GHL_QUERY_CREATE_TICKET = """
 mutation (
     $milestone: ID!, $type: String!, $title: String!, $role: String,
-    $startDate: Date, $dueDate: Date, $url: String, $issues: [ID!]
+    $startDate: Date, $dueDate: Date, $url: String, $issues: [ID!],
+    $state: String!
 ) {
 createTicket(
     milestone: $milestone, type: $type, title: $title, startDate: $startDate,
-    dueDate: $dueDate, url: $url, issues: $issues, role: $role
+    dueDate: $dueDate, url: $url, issues: $issues, role: $role, state: $state
 ) {
     ticket {
       id
@@ -58,7 +59,8 @@ def test_query(project_manager, ghl_client):
             "url": "http://test1.com",
             "milestone": str(milestone.id),
             "issues": [str(issue.pk) for issue in issues],
-            "role": "Manager"
+            "role": "Manager",
+            "state": STATE_DOING,
         }
     )
 
@@ -85,7 +87,8 @@ def test_invalid_parameters(
             title="test ticket",
             type="invalid type",
             url="invalid url",
-            milestone=""
+            milestone="",
+            state="invalid state",
         )
 
     extensions = exc_info.value.extensions  # noqa:WPS441
@@ -96,7 +99,7 @@ def test_invalid_parameters(
         for err in extensions["fieldErrors"]
     }
 
-    assert fields_with_errors == {"url", "type", "milestone"}
+    assert fields_with_errors == {"url", "type", "milestone", "state"}
 
 
 def test_without_permissions(user, ghl_auth_mock_info, create_ticket_mutation):
