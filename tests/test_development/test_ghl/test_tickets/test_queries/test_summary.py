@@ -25,9 +25,9 @@ query {
 @pytest.fixture()
 def tickets(db):
     return (
-        TicketFactory(state=STATE_TESTING),
-        TicketFactory(state=STATE_ACCEPTING),
-        TicketFactory(state=STATE_DONE),
+        TicketFactory.create(state=STATE_TESTING),
+        TicketFactory.create(state=STATE_ACCEPTING),
+        TicketFactory.create(state=STATE_DONE),
     )
 
 

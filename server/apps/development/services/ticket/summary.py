@@ -28,9 +28,9 @@ class TicketsSummaryProvider:
         if self._fields:
             fields_set = set(self._fields)
             aggregations = {
-                name: aggr for name, aggr
-                in aggregations.items()
-                if name in fields_set
+                name: aggr
+                for name, aggr
+                in aggregations.items() if name in fields_set
             }
 
         return self._queryset.aggregate(**aggregations)
@@ -39,14 +39,12 @@ class TicketsSummaryProvider:
     def _get_fields_expressions(cls) -> Dict[str, Aggregate]:
         state_fields = {
             "{0}_count".format(state.lower()): state
-            for state
-            in TICKET_STATES.keys()
+            for state in TICKET_STATES.keys()
         }
 
         state_expressions = {
             field: models.Count("id", filter=models.Q(state=state))
-            for field, state
-            in state_fields.items()
+            for field, state in state_fields.items()
         }
 
         return {"count": models.Count("*"), **state_expressions}
