@@ -11,6 +11,5 @@ class _TicketsSummaryBase(graphene.ObjectType):
 
 TicketsSummaryType = type("TicketsSummaryType", (_TicketsSummaryBase,), {
     "{0}_count".format(state.lower()): graphene.Int()
-    for state
-    in TICKET_STATES.keys()
+    for state in TICKET_STATES.keys()
 })

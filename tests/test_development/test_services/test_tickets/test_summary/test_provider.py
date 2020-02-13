@@ -9,13 +9,15 @@ from tests.test_development.factories import (
 
 def test_all_fields(db):
     summary = TicketsSummaryProvider(Ticket.objects.all()).get_data()
-    assert summary == {"accepting_count": 0,
-                       "count": 0,
-                       "created_count": 0,
-                       "doing_count": 0,
-                       "done_count": 0,
-                       "planning_count": 0,
-                       "testing_count": 0}
+    assert summary == {
+        "accepting_count": 0,
+        "count": 0,
+        "created_count": 0,
+        "doing_count": 0,
+        "done_count": 0,
+        "planning_count": 0,
+        "testing_count": 0
+    }
 
 
 def test_selected_fields(db):
@@ -23,21 +25,27 @@ def test_selected_fields(db):
         Ticket.objects.all(),
         fields=("count", "doing_count"),
     ).get_data()
-    assert summary == {"count": 0,
-                       "doing_count": 0}
+
+    assert summary == {
+        "count": 0,
+        "doing_count": 0
+    }
 
 
 def test_prefiltered_qs(db):
-    milestone = ProjectGroupMilestoneFactory()
-    TicketFactory(state=STATE_PLANNING, milestone=milestone)
-    TicketFactory(state=STATE_PLANNING)
-    TicketFactory(state=STATE_CREATED, milestone=milestone)
-    TicketFactory(state=STATE_CREATED)
+    milestone = ProjectGroupMilestoneFactory.create()
+    TicketFactory.create(state=STATE_PLANNING, milestone=milestone)
+    TicketFactory.create(state=STATE_PLANNING)
+    TicketFactory.create(state=STATE_CREATED, milestone=milestone)
+    TicketFactory.create(state=STATE_CREATED)
 
     summary = TicketsSummaryProvider(
         Ticket.objects.filter(milestone=milestone),
         fields=("count", "planning_count", "created_count"),
     ).get_data()
-    assert summary == {"count": 2,
-                       "planning_count": 1,
-                       "created_count": 1}
+
+    assert summary == {
+        "count": 2,
+        "planning_count": 1,
+        "created_count": 1
+    }
