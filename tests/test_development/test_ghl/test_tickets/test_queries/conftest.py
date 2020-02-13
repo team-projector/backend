@@ -11,3 +11,8 @@ def ticket_query(ghl_queries):
 @pytest.fixture(scope="session")
 def all_tickets_query(ghl_queries):
     return ghl_queries.fields["allTickets"].resolver
+
+
+@pytest.fixture(scope="session")
+def tickets_summary_query(ghl_queries):
+    return ghl_queries.fields["ticketsSummary"].resolver
