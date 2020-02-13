@@ -2,6 +2,7 @@
 
 from typing import Dict
 
+from graphene.utils import str_converters
 from graphql import ResolveInfo
 from graphql.utils.ast_to_dict import ast_to_dict
 
@@ -18,9 +19,8 @@ def collect_fields(
     if selection_set:
         for leaf in selection_set["selections"]:
             if leaf["kind"] == "Field":
-                field.update({
-                    leaf["name"]["value"]: collect_fields(leaf, fragments),
-                })
+                name = str_converters.to_snake_case(leaf["name"]["value"])
+                field[name] = collect_fields(leaf, fragments)
             elif leaf["kind"] == "FragmentSpread":
                 field.update(
                     collect_fields(fragments[leaf["name"]["value"]], fragments),

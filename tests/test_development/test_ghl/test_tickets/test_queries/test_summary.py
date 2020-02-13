@@ -1,0 +1,73 @@
+import pytest
+
+from apps.development.models.ticket import (
+    STATE_ACCEPTING,
+    STATE_DONE,
+    STATE_TESTING,
+)
+from tests.test_development.factories import TicketFactory
+
+GHL_QUERY_TICKETS_SUMMARY = """
+query {
+    ticketsSummary {
+        count
+        createdCount
+        planningCount
+        doingCount
+        testingCount
+        acceptingCount
+        doneCount
+    }
+}
+"""
+
+
+@pytest.fixture()
+def tickets(db):
+    return (
+        TicketFactory(state=STATE_TESTING),
+        TicketFactory(state=STATE_ACCEPTING),
+        TicketFactory(state=STATE_DONE),
+    )
+
+
+def test_raw_query(ghl_client, tickets):
+    response = ghl_client.execute(
+        GHL_QUERY_TICKETS_SUMMARY,
+    )
+
+    assert "errors" not in response
+
+    dto = response["data"]["ticketsSummary"]
+    assert dto == {
+        "count": 3,
+        "createdCount": 0,
+        "planningCount": 0,
+        "doingCount": 0,
+        "testingCount": 1,
+        "acceptingCount": 1,
+        "doneCount": 1
+    }
+
+
+def test_filter_by_milestone(
+    tickets_summary_query,
+    ghl_auth_mock_info,
+    tickets,
+):
+    response = tickets_summary_query(
+        parent=None,
+        root=None,
+        info=ghl_auth_mock_info,
+        milestone=tickets[0].milestone.id
+    )
+
+    assert response == {
+        "count": 1,
+        "created_count": 0,
+        "planning_count": 0,
+        "doing_count": 0,
+        "testing_count": 1,
+        "accepting_count": 0,
+        "done_count": 0
+    }
