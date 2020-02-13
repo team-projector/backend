@@ -18,4 +18,4 @@ class TicketsFilterSet(django_filters.FilterSet):
 
     class Meta:
         model = Ticket
-        fields = ("milestone",)
+        fields = ("milestone", "state")
