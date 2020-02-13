@@ -2,7 +2,7 @@
 
 import graphene
 
-from apps.development.models.ticket import TICKET_STATES
+from apps.development.models.ticket import TicketState
 
 
 class _TicketsSummaryBase(graphene.ObjectType):
@@ -11,5 +11,6 @@ class _TicketsSummaryBase(graphene.ObjectType):
 
 TicketsSummaryType = type("TicketsSummaryType", (_TicketsSummaryBase,), {
     "{0}_count".format(state.lower()): graphene.Int()
-    for state in TICKET_STATES.keys()
+    for state in TicketState.values
+    if state
 })

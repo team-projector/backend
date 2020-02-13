@@ -3,17 +3,11 @@
 from typing import Dict
 
 from rest_framework import serializers
-from rest_framework.exceptions import ValidationError
 from rest_framework.fields import Field
 
+from apps.core.drf.fields.choices_field import ChoicesField
 from apps.development.models import Issue
-from apps.development.models.ticket import (
-    TICKET_STATE_MAX_LENGTH,
-    TICKET_STATES,
-    TICKET_TYPE_MAX_LENGTH,
-    TICKET_TYPES,
-    Ticket,
-)
+from apps.development.models.ticket import TICKET_TYPES, Ticket, TicketState
 
 
 class TicketBaseInput(serializers.ModelSerializer):
@@ -23,13 +17,14 @@ class TicketBaseInput(serializers.ModelSerializer):
     # choice fields. It creates enums types for these which leads to an error:
     # "AssertionError: Found different types with the same name in the schema:
     # type, type."
-    type = serializers.CharField(  # noqa: A003
+    type = ChoicesField(  # noqa: A003
         required=False,
-        max_length=TICKET_TYPE_MAX_LENGTH,
+        choices=TICKET_TYPES.keys(),
     )
 
-    state = serializers.CharField(
-        max_length=TICKET_STATE_MAX_LENGTH,
+    state = ChoicesField(
+        choices=TicketState.values,
+        required=False,
     )
 
     issues = serializers.PrimaryKeyRelatedField(
@@ -57,25 +52,3 @@ class TicketBaseInput(serializers.ModelSerializer):
             fields["issues"].child_relation.queryset = issues_qs
 
         return fields
-
-    def validate_type(self, type_):
-        """Validates type is one of the valid choices."""
-        if type_ and type_ not in TICKET_TYPES.keys():
-            raise ValidationError(
-                "type should be one of available choices: {0}".format(
-                    ", ".join(TICKET_TYPES.keys()),
-                ),
-            )
-
-        return type_
-
-    def validate_state(self, state):
-        """Validates state is one of the valid choices."""
-        if state and state not in TICKET_STATES.keys():
-            raise ValidationError(
-                "state should be one of available choices: {0}".format(
-                    ", ".join(TICKET_STATES.keys()),
-                ),
-            )
-
-        return state

@@ -10,5 +10,5 @@ from apps.development.models import Ticket
 class TicketAdmin(BaseModelAdmin):
     """A class representing Ticket model for admin dashboard."""
 
-    list_display = ("id", "title", "start_date", "due_date", "url")
+    list_display = ("title", "start_date", "due_date", "url")
     search_fields = ("title",)

@@ -10,7 +10,7 @@ from apps.core.graphql.errors import (
     GraphQLInputError,
     GraphQLPermissionDenied,
 )
-from apps.development.models.ticket import STATE_DOING, TYPE_FEATURE
+from apps.development.models.ticket import TYPE_FEATURE, TicketState
 from tests.test_development.factories import (
     IssueFactory,
     ProjectMilestoneFactory,
@@ -60,7 +60,7 @@ def test_query(project_manager, ghl_client):
             "milestone": str(milestone.id),
             "issues": [str(issue.pk) for issue in issues],
             "role": "Manager",
-            "state": STATE_DOING,
+            "state": TicketState.DOING,
         }
     )
 

@@ -5,7 +5,7 @@ from typing import Dict
 from django.db import models
 from django.db.models import Aggregate
 
-from apps.development.models.ticket import TICKET_STATES
+from apps.development.models.ticket import TicketState
 
 
 class TicketsSummaryProvider:
@@ -39,7 +39,7 @@ class TicketsSummaryProvider:
     def _get_fields_expressions(cls) -> Dict[str, Aggregate]:
         state_fields = {
             "{0}_count".format(state.lower()): state
-            for state in TICKET_STATES.keys()
+            for state in TicketState.values
         }
 
         state_expressions = {

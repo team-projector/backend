@@ -17,25 +17,20 @@ TICKET_TYPES = Choices(
     (TYPE_BUG_FIXING, _("CH_BUG_FIXING")),
 )
 
-STATE_CREATED = "CREATED"
-STATE_PLANNING = "PLANNING"
-STATE_DOING = "DOING"
-STATE_TESTING = "TESTING"
-STATE_ACCEPTING = "ACCEPTING"
-STATE_DONE = "DONE"
-
-TICKET_STATES = Choices(
-    (STATE_CREATED, _("CH_CREATED")),
-    (STATE_PLANNING, _("CH_PLANNING")),
-    (STATE_DOING, _("CH_DOING")),
-    (STATE_TESTING, _("CH_TESTING")),
-    (STATE_ACCEPTING, _("CH_ACCEPTING")),
-    (STATE_DONE, _("CH_DONE")),
-)
-
 TICKET_TYPE_MAX_LENGTH = 50
 TICKET_ROLE_MAX_LENGTH = 50
 TICKET_STATE_MAX_LENGTH = 50
+
+
+class TicketState(models.TextChoices):
+    """Ticket states choices."""
+
+    CREATED = "CREATED", _("CH_CREATED")  # noqa: WPS115
+    PLANNING = "PLANNING", _("CH_PLANNING")  # noqa: WPS115
+    DOING = "DOING", _("CH_DOING")  # noqa: WPS115
+    TESTING = "TESTING", _("CH_TESTING")  # noqa: WPS115
+    ACCEPTING = "ACCEPTING", _("CH_ACCEPTING")  # noqa: WPS115
+    DONE = "DONE", _("CH_DONE")  # noqa: WPS115
 
 
 class Ticket(Timestamps):
@@ -92,7 +87,8 @@ class Ticket(Timestamps):
     )
 
     state = models.CharField(
-        choices=TICKET_STATES,
+        choices=TicketState.choices,
+        default=TicketState.CREATED,
         max_length=TICKET_STATE_MAX_LENGTH,
         blank=True,
         verbose_name=_("VN__STATE"),
@@ -103,3 +99,7 @@ class Ticket(Timestamps):
         verbose_name = _("VN__TICKET")
         verbose_name_plural = _("VN__TICKETS")
         ordering = ("-created_at",)
+
+    def __str__(self):
+        """String representation."""
+        return self.title
