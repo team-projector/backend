@@ -41,7 +41,9 @@ class IssueType(graphql.BaseDjangoObjectType):
 
     def resolve_time_spent(self, info, **kwargs):  # noqa: WPS110
         """Get user time spent."""
-        return get_user_time_spent(self, user=info.context.user)
+        if self.user:
+            return get_user_time_spent(self, user=self.user)
+        return 0
 
     @classmethod
     def get_queryset(
