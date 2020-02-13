@@ -1,5 +1,5 @@
 from apps.development.models import Ticket
-from apps.development.models.ticket import STATE_CREATED, STATE_PLANNING
+from apps.development.models.ticket import TicketState
 from apps.development.services.ticket.summary import TicketsSummaryProvider
 from tests.test_development.factories import (
     ProjectGroupMilestoneFactory,
@@ -34,10 +34,10 @@ def test_selected_fields(db):
 
 def test_prefiltered_qs(db):
     milestone = ProjectGroupMilestoneFactory.create()
-    TicketFactory.create(state=STATE_PLANNING, milestone=milestone)
-    TicketFactory.create(state=STATE_PLANNING)
-    TicketFactory.create(state=STATE_CREATED, milestone=milestone)
-    TicketFactory.create(state=STATE_CREATED)
+    TicketFactory.create(state=TicketState.PLANNING, milestone=milestone)
+    TicketFactory.create(state=TicketState.PLANNING)
+    TicketFactory.create(state=TicketState.CREATED, milestone=milestone)
+    TicketFactory.create(state=TicketState.CREATED)
 
     summary = TicketsSummaryProvider(
         Ticket.objects.filter(milestone=milestone),

@@ -1,10 +1,6 @@
 import pytest
 
-from apps.development.models.ticket import (
-    STATE_ACCEPTING,
-    STATE_DONE,
-    STATE_TESTING,
-)
+from apps.development.models.ticket import TicketState
 from tests.test_development.factories import TicketFactory
 
 GHL_QUERY_TICKETS_SUMMARY = """
@@ -25,9 +21,9 @@ query {
 @pytest.fixture()
 def tickets(db):
     return (
-        TicketFactory.create(state=STATE_TESTING),
-        TicketFactory.create(state=STATE_ACCEPTING),
-        TicketFactory.create(state=STATE_DONE),
+        TicketFactory.create(state=TicketState.TESTING),
+        TicketFactory.create(state=TicketState.ACCEPTING),
+        TicketFactory.create(state=TicketState.DONE),
     )
 
 

@@ -3,11 +3,7 @@
 from pytest import raises
 
 from apps.core.graphql.errors import GraphQLInputError, GraphQLPermissionDenied
-from apps.development.models.ticket import (
-    STATE_CREATED,
-    STATE_DOING,
-    STATE_PLANNING,
-)
+from apps.development.models.ticket import TicketState
 from tests.test_development.factories import IssueFactory
 
 GHL_QUERY_UPDATE_TICKET = """
@@ -41,7 +37,7 @@ def test_query(project_manager, ghl_client, ticket):
         variables={
             "id": ticket.pk,
             "title": new_title,
-            "state": STATE_DOING,
+            "state": TicketState.DOING,
         }
     )
 
@@ -144,15 +140,15 @@ def test_update_state(
     ticket,
 ):
     """Test update state."""
-    assert STATE_CREATED == ticket.state
+    assert TicketState.CREATED == ticket.state
 
     update_ticket_mutation(
         root=None,
         info=ghl_auth_mock_info,
         id=ticket.id,
-        state=STATE_PLANNING,
+        state=TicketState.PLANNING,
     )
 
     ticket.refresh_from_db()
 
-    assert STATE_PLANNING == ticket.state
+    assert TicketState.PLANNING == ticket.state

@@ -3,7 +3,7 @@
 from distutils.util import strtobool
 
 from django.contrib.admin.filters import SimpleListFilter
-from django.utils.translation import ugettext as _
+from django.utils.translation import gettext as _
 
 
 class HasSalaryFilter(SimpleListFilter):
