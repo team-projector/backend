@@ -10,15 +10,17 @@ from django.utils.translation import gettext_lazy as _
 
 from apps.core.consts import DEFAULT_TITLE_LENGTH
 from apps.core.models.mixins import GitlabEntityMixin, GitlabInternalIdMixin
-from apps.core.models.utils import Choices
 from apps.development.models.managers import MergeRequestManager
 from apps.development.models.mixins import TrackableMixin
 
-MERGE_REQUESTS_STATES = Choices(
-    ("OPENED", _("CH_OPENED")),
-    ("MERGED", _("CH_MERGED")),
-    ("CLOSED", _("CH_CLOSED")),
-)
+
+class MergeRequestState(models.TextChoices):
+    """Merge request state choices."""
+
+    OPENED = "OPENED", _("CH_OPENED")  # noqa: WPS115
+    MERGED = "MERGED", _("CH_MERGED")  # noqa: WPS115
+    CLOSED = "CLOSED", _("CH_CLOSED")  # noqa: WPS115
+
 
 MERGE_REQUESTS_STATE_MAX_LENGTH = 255
 
@@ -53,7 +55,7 @@ class MergeRequest(
     )
 
     state = models.CharField(
-        choices=MERGE_REQUESTS_STATES,
+        choices=MergeRequestState.choices,
         max_length=MERGE_REQUESTS_STATE_MAX_LENGTH,
         blank=True,
         verbose_name=_("VN__STATE"),
@@ -166,7 +168,7 @@ class MergeRequest(
     def efficiency_available(self) -> bool:
         """Helper for efficiency method."""
         return (
-            self.state == MERGE_REQUESTS_STATES.CLOSED
+            self.state == MergeRequestState.CLOSED
             and self.total_time_spent
             and self.time_estimate
         )

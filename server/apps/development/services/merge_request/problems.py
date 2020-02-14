@@ -5,7 +5,7 @@ from typing import ClassVar, List
 from django.db import models
 
 from apps.development.models import MergeRequest
-from apps.development.models.merge_request import MERGE_REQUESTS_STATES
+from apps.development.models.merge_request import MergeRequestState
 
 PROBLEM_EMPTY_ESTIMATE = "EMPTY_ESTIMATE"
 PROBLEM_NOT_ASSIGNED = "NOT_ASSIGNED"
@@ -33,7 +33,7 @@ class EmptyEstimateChecker(BaseProblemChecker):
                 models.Q(time_estimate__isnull=True)
                 | models.Q(time_estimate=0),
             )
-            & models.Q(state=MERGE_REQUESTS_STATES.OPENED),
+            & models.Q(state=MergeRequestState.OPENED),
         ).exists()
 
 
@@ -55,7 +55,7 @@ class NotAssignedChecker(BaseProblemChecker):
     ) -> bool:
         return merge_request.issues.filter(
             labels__title__iexact="done",
-            state=MERGE_REQUESTS_STATES.OPENED,
+            state=MergeRequestState.OPENED,
         ).exists()
 
 

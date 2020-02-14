@@ -1,5 +1,5 @@
 from apps.core.utils.time import seconds
-from apps.development.models.merge_request import MERGE_REQUESTS_STATES
+from apps.development.models.merge_request import MergeRequestState
 from apps.development.services.merge_request.metrics import (
     get_merge_request_metrics,
 )
@@ -12,7 +12,7 @@ from tests.test_payroll.factories import (
 
 def test_payroll_metrics(user):
     mergerequest = MergeRequestFactory.create(
-        user=user, state=MERGE_REQUESTS_STATES.OPENED
+        user=user, state=MergeRequestState.OPENED
     )
 
     MergeRequestSpentTimeFactory.create(
@@ -44,7 +44,7 @@ def test_payroll_metrics(user):
 
 def test_paid_metrics(user):
     mergerequest = MergeRequestFactory.create(
-        user=user, state=MERGE_REQUESTS_STATES.OPENED
+        user=user, state=MergeRequestState.OPENED
     )
     salary = SalaryFactory.create(user=user)
 
@@ -81,7 +81,7 @@ def test_paid_metrics(user):
 
 def test_complex_metrics(user):
     mergerequest = MergeRequestFactory.create(
-        user=user, state=MERGE_REQUESTS_STATES.OPENED
+        user=user, state=MergeRequestState.OPENED
     )
     salary = SalaryFactory.create(user=user)
 
@@ -117,19 +117,19 @@ def test_complex_metrics(user):
 def test_remains(user):
     mergerequest_1 = MergeRequestFactory.create(
         user=user,
-        state=MERGE_REQUESTS_STATES.OPENED,
+        state=MergeRequestState.OPENED,
         time_estimate=seconds(hours=4),
         total_time_spent=seconds(hours=2),
     )
     mergerequest_2 = MergeRequestFactory.create(
         user=user,
-        state=MERGE_REQUESTS_STATES.CLOSED,
+        state=MergeRequestState.CLOSED,
         time_estimate=seconds(hours=4),
         total_time_spent=seconds(hours=8),
     )
     mergerequest_3 = MergeRequestFactory.create(
         user=user,
-        state=MERGE_REQUESTS_STATES.CLOSED,
+        state=MergeRequestState.CLOSED,
         total_time_spent=seconds(hours=3),
         time_estimate=seconds(hours=3),
     )
@@ -147,19 +147,19 @@ def test_remains(user):
 def test_efficiency(user):
     mergerequest_1 = MergeRequestFactory.create(
         user=user,
-        state=MERGE_REQUESTS_STATES.CLOSED,
+        state=MergeRequestState.CLOSED,
         time_estimate=seconds(hours=4),
         total_time_spent=seconds(hours=2),
     )
     mergerequest_2 = MergeRequestFactory.create(
         user=user,
-        state=MERGE_REQUESTS_STATES.CLOSED,
+        state=MergeRequestState.CLOSED,
         time_estimate=seconds(hours=4),
         total_time_spent=seconds(hours=8),
     )
     mergerequest_3 = MergeRequestFactory.create(
         user=user,
-        state=MERGE_REQUESTS_STATES.OPENED,
+        state=MergeRequestState.OPENED,
         time_estimate=seconds(hours=4),
         total_time_spent=seconds(hours=2),
     )

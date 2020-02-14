@@ -7,7 +7,7 @@ from django.utils import timezone
 from apps.core.utils.time import seconds
 from apps.development.models import TeamMember
 from apps.development.models.issue import IssueState
-from apps.development.models.merge_request import MERGE_REQUESTS_STATES
+from apps.development.models.merge_request import MergeRequestState
 from apps.payroll.graphql.filters import SpentTimeFilterSet
 from apps.payroll.models import SpentTime
 from tests.test_development.factories import (
@@ -332,9 +332,9 @@ def test_filter_by_state(user):
             time_spent=int(seconds(hours=5))
         )
         for state in (
-            MERGE_REQUESTS_STATES.OPENED,
-            MERGE_REQUESTS_STATES.CLOSED,
-            MERGE_REQUESTS_STATES.MERGED,
+            MergeRequestState.OPENED,
+            MergeRequestState.CLOSED,
+            MergeRequestState.MERGED,
         )
     ]
 

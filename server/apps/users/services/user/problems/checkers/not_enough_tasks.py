@@ -5,8 +5,8 @@ from django.db import models
 from apps.core.consts import SECONDS_PER_HOUR
 from apps.development.models.issue import Issue, IssueState
 from apps.development.models.merge_request import (
-    MERGE_REQUESTS_STATES,
     MergeRequest,
+    MergeRequestState,
 )
 from apps.users.models import User
 from apps.users.services.user.problems.checkers.base import BaseProblemChecker
@@ -32,7 +32,7 @@ class NotEnoughTasksChecker(BaseProblemChecker):
         )
         merge_requests = MergeRequest.objects.filter(
             user=user,
-            state=MERGE_REQUESTS_STATES.OPENED,
+            state=MergeRequestState.OPENED,
         )
 
         issues_time_remains = self._aggregate_time_remains(issues)

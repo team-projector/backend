@@ -2,7 +2,7 @@
 
 from django.db import models
 
-from apps.development.models.merge_request import MERGE_REQUESTS_STATES
+from apps.development.models.merge_request import MergeRequestState
 
 
 class MergeRequestsSummary:
@@ -38,9 +38,9 @@ class MergeRequestsSummaryProvider:
         """Get counts by state."""
         return self.queryset.aggregate(
             count=self._count(),
-            opened_count=self._count(state=MERGE_REQUESTS_STATES.OPENED),
-            closed_count=self._count(state=MERGE_REQUESTS_STATES.CLOSED),
-            merged_count=self._count(state=MERGE_REQUESTS_STATES.MERGED),
+            opened_count=self._count(state=MergeRequestState.OPENED),
+            closed_count=self._count(state=MergeRequestState.CLOSED),
+            merged_count=self._count(state=MergeRequestState.MERGED),
         )
 
     def _count(self, **filters) -> models.Count:

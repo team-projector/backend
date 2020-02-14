@@ -5,7 +5,7 @@ from django.db.models.functions import Coalesce
 
 from apps.development.models import MergeRequest
 from apps.development.models.issue import Issue, IssueState
-from apps.development.models.merge_request import MERGE_REQUESTS_STATES
+from apps.development.models.merge_request import MergeRequestState
 from apps.payroll.models import Bonus, Penalty, SpentTime
 from apps.users.models import User
 
@@ -72,8 +72,8 @@ class MergeRequestUserMetrics(WorkItemUserMetrics):
             salary__isnull=True,
             user=user,
             mergerequests__state__in=(
-                MERGE_REQUESTS_STATES.CLOSED,
-                MERGE_REQUESTS_STATES.MERGED,
+                MergeRequestState.CLOSED,
+                MergeRequestState.MERGED,
             ),
         ).aggregate(
             total_time_spent=Coalesce(models.Sum("time_spent"), 0),
@@ -147,8 +147,8 @@ class UserMetricsProvider:
         return SpentTime.objects.filter(
             models.Q(issues__state=IssueState.CLOSED)
             | models.Q(mergerequests__state__in=(
-                MERGE_REQUESTS_STATES.CLOSED,
-                MERGE_REQUESTS_STATES.MERGED,
+                MergeRequestState.CLOSED,
+                MergeRequestState.MERGED,
             )),
             salary__isnull=True,
             user=user,

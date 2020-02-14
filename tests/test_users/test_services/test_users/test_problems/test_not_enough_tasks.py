@@ -2,7 +2,7 @@
 
 from apps.core.utils.time import seconds
 from apps.development.models.issue import IssueState
-from apps.development.models.merge_request import MERGE_REQUESTS_STATES
+from apps.development.models.merge_request import MergeRequestState
 from apps.users.services.user.problems import get_user_problems
 from apps.users.services.user.problems.checkers import PROBLEM_NOT_ENOUGH_TASKS
 from tests.test_development.factories import IssueFactory, MergeRequestFactory
@@ -42,28 +42,28 @@ def test_merge_requests(user):
         user=user,
         time_estimate=seconds(hours=3),
         total_time_spent=seconds(hours=1),
-        state=MERGE_REQUESTS_STATES.OPENED,
+        state=MergeRequestState.OPENED,
     )
 
     MergeRequestFactory.create(
         user=user,
         time_estimate=seconds(hours=2),
         total_time_spent=seconds(hours=1),
-        state=MERGE_REQUESTS_STATES.OPENED,
+        state=MergeRequestState.OPENED,
     )
 
     MergeRequestFactory.create(
         user=user,
         time_estimate=seconds(hours=8),
         total_time_spent=0,
-        state=MERGE_REQUESTS_STATES.CLOSED,
+        state=MergeRequestState.CLOSED,
     )
 
     MergeRequestFactory.create(
         user=user,
         time_estimate=seconds(hours=8),
         total_time_spent=0,
-        state=MERGE_REQUESTS_STATES.MERGED,
+        state=MergeRequestState.MERGED,
     )
 
     assert get_user_problems(user) == [PROBLEM_NOT_ENOUGH_TASKS]
@@ -82,7 +82,7 @@ def test_complex(user):
         user=user,
         time_estimate=seconds(hours=2),
         total_time_spent=seconds(hours=1),
-        state=MERGE_REQUESTS_STATES.OPENED,
+        state=MergeRequestState.OPENED,
     )
 
     assert get_user_problems(user) == [PROBLEM_NOT_ENOUGH_TASKS]

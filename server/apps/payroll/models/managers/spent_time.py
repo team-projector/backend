@@ -19,7 +19,7 @@ class SpentTimeQuerySet(models.QuerySet):
         """Get spent time summaries."""
         from apps.development.models import issue  # noqa: WPS433
         from apps.development.models.merge_request import (  # noqa: WPS433
-            MERGE_REQUESTS_STATES,
+            MergeRequestState,
         )
 
         return self.aggregate(
@@ -31,13 +31,13 @@ class SpentTimeQuerySet(models.QuerySet):
                 mergerequests__isnull=False,
             ),
             opened_merges=self._sum(
-                mergerequests__state=MERGE_REQUESTS_STATES.OPENED,
+                mergerequests__state=MergeRequestState.OPENED,
             ),
             closed_merges=self._sum(
-                mergerequests__state=MERGE_REQUESTS_STATES.CLOSED,
+                mergerequests__state=MergeRequestState.CLOSED,
             ),
             merged_merges=self._sum(
-                mergerequests__state=MERGE_REQUESTS_STATES.MERGED,
+                mergerequests__state=MergeRequestState.MERGED,
             ),
         )
 

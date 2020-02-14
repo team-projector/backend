@@ -3,7 +3,7 @@ from django.contrib.auth import get_user_model
 
 from apps.core.utils.time import seconds
 from apps.development.models.issue import IssueState
-from apps.development.models.merge_request import MERGE_REQUESTS_STATES
+from apps.development.models.merge_request import MergeRequestState
 from apps.users.graphql.types.user import UserType
 from apps.users.services.user.metrics.main import (
     UserMetrics,
@@ -144,7 +144,7 @@ def test_penalty_another_user(user):
 def test_payroll_opened(user):
     issue = IssueFactory.create(state=IssueState.OPENED)
     mr = MergeRequestFactory.create(
-        state=MERGE_REQUESTS_STATES.OPENED)
+        state=MergeRequestState.OPENED)
 
     IssueSpentTimeFactory.create(user=user, base=issue,
                                  time_spent=seconds(hours=1))
@@ -172,7 +172,7 @@ def test_payroll_opened(user):
 def test_payroll_opened_has_salary(user):
     issue = IssueFactory.create(state=IssueState.OPENED)
     mr = MergeRequestFactory.create(
-        state=MERGE_REQUESTS_STATES.OPENED)
+        state=MergeRequestState.OPENED)
 
     salary = SalaryFactory.create(user=user)
 

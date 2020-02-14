@@ -7,7 +7,7 @@ from decimal import Decimal
 from django.db import models, transaction
 
 from apps.development.models.issue import IssueState
-from apps.development.models.merge_request import MERGE_REQUESTS_STATES
+from apps.development.models.merge_request import MergeRequestState
 from apps.payroll.models import Bonus, Penalty, Salary, SpentTime
 from apps.payroll.services.salary.exceptions import EmptySalaryException
 from apps.users.models import User
@@ -108,8 +108,8 @@ class SalaryCalculator:
         ).filter(
             models.Q(issues__state=IssueState.CLOSED)
             | models.Q(mergerequests__state__in=(
-                MERGE_REQUESTS_STATES.CLOSED,
-                MERGE_REQUESTS_STATES.MERGED,
+                MergeRequestState.CLOSED,
+                MergeRequestState.MERGED,
             )),
         ).update(
             salary=salary,

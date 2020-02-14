@@ -1,6 +1,6 @@
 from apps.development.graphql.resolvers import resolve_merge_requests_summary
 from apps.development.models import MergeRequest, TeamMember
-from apps.development.models.merge_request import MERGE_REQUESTS_STATES
+from apps.development.models.merge_request import MergeRequestState
 from apps.development.services.merge_request.summary import (
     get_merge_requests_summary,
 )
@@ -16,17 +16,17 @@ from tests.test_users.factories.user import UserFactory
 def test_counts_by_state(user):
     MergeRequestFactory.create_batch(
         7, user=user,
-        state=MERGE_REQUESTS_STATES.OPENED,
+        state=MergeRequestState.OPENED,
         total_time_spent=0
     )
     MergeRequestFactory.create_batch(
         5, user=user,
-        state=MERGE_REQUESTS_STATES.CLOSED,
+        state=MergeRequestState.CLOSED,
         total_time_spent=0
     )
     MergeRequestFactory.create_batch(
         3, user=user,
-        state=MERGE_REQUESTS_STATES.MERGED,
+        state=MergeRequestState.MERGED,
         total_time_spent=0
     )
 
@@ -37,7 +37,7 @@ def test_counts_by_state(user):
     )
     MergeRequestFactory.create_batch(
         2, user=UserFactory.create(),
-        state=MERGE_REQUESTS_STATES.OPENED,
+        state=MergeRequestState.OPENED,
         total_time_spent=0
     )
 
@@ -58,13 +58,13 @@ def test_resolver_summary(user, client):
 
     MergeRequestFactory.create_batch(
         7, user=user,
-        state=MERGE_REQUESTS_STATES.OPENED,
+        state=MergeRequestState.OPENED,
         total_time_spent=0
     )
 
     MergeRequestFactory.create_batch(
         3, user=UserFactory(),
-        state=MERGE_REQUESTS_STATES.CLOSED,
+        state=MergeRequestState.CLOSED,
         total_time_spent=0
     )
 

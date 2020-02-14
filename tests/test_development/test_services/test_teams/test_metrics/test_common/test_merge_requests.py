@@ -1,6 +1,6 @@
 from apps.core.utils.time import seconds
 from apps.development.models import Team
-from apps.development.models.merge_request import MERGE_REQUESTS_STATES
+from apps.development.models.merge_request import MergeRequestState
 from apps.development.services.team.metrics.main import get_team_metrics
 from tests.test_development.factories import MergeRequestFactory
 from tests.test_development.test_services.test_teams.test_metrics.test_common.checker import (  # noqa: E501
@@ -13,19 +13,19 @@ def test_basic(team: Team):
         2,
         user=team.members.all()[0],
         time_estimate=seconds(hours=2),
-        state=MERGE_REQUESTS_STATES.OPENED
+        state=MergeRequestState.OPENED
     )
     MergeRequestFactory.create_batch(
         3,
         user=team.members.all()[0],
         time_estimate=seconds(hours=3),
-        state=MERGE_REQUESTS_STATES.CLOSED
+        state=MergeRequestState.CLOSED
     )
     MergeRequestFactory.create_batch(
         3,
         user=team.members.all()[1],
         time_estimate=seconds(hours=4),
-        state=MERGE_REQUESTS_STATES.CLOSED
+        state=MergeRequestState.CLOSED
     )
 
     MergeRequestFactory.create_batch(size=5)
