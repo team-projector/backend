@@ -3,14 +3,16 @@
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
-from apps.core.models.utils import Choices
 from apps.users.models import User
 
-APPROVED_STATES = Choices(
-    ("CREATED", _("CH_CREATED")),
-    ("APPROVED", _("CH_APPROVED")),
-    ("DECLINED", _("CH_DECLINED")),
-)
+
+class ApprovedState(models.TextChoices):
+    """Approved state choices."""
+
+    CREATED = "CREATED", _("CH_CREATED")  # noqa: WPS115
+    APPROVED = "APPROVED", _("CH_APPROVED")  # noqa: WPS115
+    DECLINED = "DECLINED", _("CH_DECLINED")  # noqa: WPS115
+
 
 APPROVED_STATE_MAX_LENGTH = 15
 
@@ -19,8 +21,8 @@ class ApprovedMixin(models.Model):
     """A mixin for approving or decline work break."""
 
     approve_state = models.CharField(
-        choices=APPROVED_STATES,
-        default=APPROVED_STATES.CREATED,
+        choices=ApprovedState.choices,
+        default=ApprovedState.CREATED,
         max_length=APPROVED_STATE_MAX_LENGTH,
         verbose_name=_("VN__APPROVE_STATE"),
         help_text=_("HT__APPROVE_STATE"),

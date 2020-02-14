@@ -6,7 +6,7 @@ import factory
 import pytz
 
 from apps.payroll.models import WorkBreak
-from apps.payroll.models.work_break import WORK_BREAK_REASONS
+from apps.payroll.models.work_break import WorkBreakReason
 from tests.test_users.factories.user import UserFactory
 
 
@@ -14,9 +14,9 @@ class WorkBreakFactory(factory.django.DjangoModelFactory):
     user = factory.SubFactory(UserFactory)
     comment = factory.Faker("text", max_nb_chars=200)
     reason = random.choice((
-        WORK_BREAK_REASONS.DAYOFF,
-        WORK_BREAK_REASONS.VACATION,
-        WORK_BREAK_REASONS.DISEASE
+        WorkBreakReason.DAYOFF,
+        WorkBreakReason.VACATION,
+        WorkBreakReason.DISEASE
     ))
 
     from_date = factory.Faker(

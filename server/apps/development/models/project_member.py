@@ -43,9 +43,7 @@ class ProjectMember(Timestamps):
         null=True,
     )
 
-    object_id = models.PositiveIntegerField(
-        null=True,
-    )
+    object_id = models.PositiveIntegerField(null=True)
 
     class Meta:
         verbose_name = _("VN__PROJECT_MEMBER")

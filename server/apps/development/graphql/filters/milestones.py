@@ -5,7 +5,7 @@ from django.db.models import QuerySet
 
 from apps.core.graphql.filters import SearchFilter
 from apps.core.graphql.filters.ordering import OrderingFilter
-from apps.development.models.milestone import MILESTONE_STATES
+from apps.development.models.milestone import MilestoneState
 
 
 class ActiveFilter(django_filters.BooleanFilter):
@@ -17,7 +17,7 @@ class ActiveFilter(django_filters.BooleanFilter):
             return queryset
 
         return queryset.filter(
-            state=MILESTONE_STATES.ACTIVE if value else MILESTONE_STATES.CLOSED,
+            state=MilestoneState.ACTIVE if value else MilestoneState.CLOSED,
         )
 
 

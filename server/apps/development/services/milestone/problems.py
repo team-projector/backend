@@ -5,7 +5,7 @@ from typing import ClassVar, List
 from django.utils.timezone import localdate
 
 from apps.development.models import Milestone
-from apps.development.models.milestone import MILESTONE_STATES
+from apps.development.models.milestone import MilestoneState
 
 PROBLEM_OVER_DUE_DAY = "OVER_DUE_DATE"
 
@@ -30,7 +30,7 @@ class OverdueDueDateChecker(BaseProblemChecker):
         return (
             milestone.due_date
             and milestone.due_date < localdate()
-            and milestone.state == MILESTONE_STATES.ACTIVE
+            and milestone.state == MilestoneState.ACTIVE
         )
 
 

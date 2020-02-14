@@ -5,15 +5,17 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 
 from apps.core.models.mixins import Timestamps
-from apps.core.models.utils import Choices
 from apps.payroll.models.managers import WorkBreakManager
 from apps.payroll.models.mixins import ApprovedMixin
 
-WORK_BREAK_REASONS = Choices(
-    ("DAYOFF", _("CH_DAYOFF")),
-    ("VACATION", _("CH_VACATION")),
-    ("DISEASE", _("CH_DISEASE")),
-)
+
+class WorkBreakReason(models.TextChoices):
+    """Work break reason choices."""
+
+    DAYOFF = "DAYOFF", _("CH_DAYOFF")  # noqa: WPS115
+    VACATION = "VACATION", _("CH_VACATION")  # noqa: WPS115
+    DISEASE = "DISEASE", _("CH_DISEASE")  # noqa: WPS115
+
 
 WORK_BREAK_REASON_MAX_LENGTH = 15
 
@@ -40,7 +42,7 @@ class WorkBreak(ApprovedMixin, Timestamps):
     )
 
     reason = models.CharField(
-        choices=WORK_BREAK_REASONS,
+        choices=WorkBreakReason.choices,
         blank=False,
         max_length=WORK_BREAK_REASON_MAX_LENGTH,
         verbose_name=_("VN__REASON"),
@@ -61,6 +63,9 @@ class WorkBreak(ApprovedMixin, Timestamps):
 
     def __str__(self):
         """Returns object string representation."""
-        period = "{0} - {1}".format(self.from_date, self.to_date)
-
-        return "{0}: {1} ({2})".format(self.user, self.reason, period)
+        return "{0}: {1} ({2} - {3})".format(
+            self.user,
+            self.reason,
+            self.from_date,
+            self.to_date,
+        )

@@ -7,7 +7,7 @@ from pytest import raises
 
 from apps.core.graphql.errors import GraphQLPermissionDenied
 from apps.development.models import TeamMember
-from apps.payroll.models.work_break import WORK_BREAK_REASONS, WorkBreak
+from apps.payroll.models.work_break import WorkBreak, WorkBreakReason
 from apps.users.models import User
 from tests.test_development.factories import TeamFactory, TeamMemberFactory
 from tests.test_payroll.factories import WorkBreakFactory
@@ -54,7 +54,7 @@ def test_query(user, ghl_client):
         "user": user.id,
         "fromDate": _date_strftime(timezone.now()),
         "toDate": _date_strftime(timezone.now() + timedelta(minutes=10)),
-        "reason": WORK_BREAK_REASONS.DAYOFF,
+        "reason": WorkBreakReason.DAYOFF,
         "comment": "test comment",
     }
 
@@ -80,7 +80,7 @@ def test_work_break_not_team_lead(
         "user": ghl_auth_mock_info.context.user.id,
         "from_date": timezone.now(),
         "to_date": timezone.now(),
-        "reason": WORK_BREAK_REASONS.DAYOFF,
+        "reason": WorkBreakReason.DAYOFF,
         "comment": "test comment",
     }
 
@@ -121,7 +121,7 @@ def test_update_work_break_another_user(
         "user": ghl_auth_mock_info.context.user.id,
         "from_date": timezone.now(),
         "to_date": timezone.now(),
-        "reason": WORK_BREAK_REASONS.DAYOFF,
+        "reason": WorkBreakReason.DAYOFF,
         "comment": "test comment",
     }
 
@@ -159,7 +159,7 @@ def test_update_work_break_another_user_but_team_lead(
         "user": user_2.id,
         "from_date": timezone.now(),
         "to_date": timezone.now(),
-        "reason": WORK_BREAK_REASONS.DAYOFF,
+        "reason": WorkBreakReason.DAYOFF,
         "comment": "updated",
     }
 
@@ -199,7 +199,7 @@ def test_change_work_break_user(ghl_auth_mock_info, update_work_break_mutation):
         "user": user_3.id,
         "from_date": timezone.now(),
         "to_date": timezone.now(),
-        "reason": WORK_BREAK_REASONS.DAYOFF,
+        "reason": WorkBreakReason.DAYOFF,
         "comment": "updated",
     }
 

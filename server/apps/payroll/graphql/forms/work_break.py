@@ -3,7 +3,7 @@
 from django import forms
 from django.contrib.auth import get_user_model
 
-from apps.payroll.models.work_break import WORK_BREAK_REASONS
+from apps.payroll.models.work_break import WorkBreakReason
 
 User = get_user_model()
 
@@ -31,7 +31,7 @@ class WorkBreakForm(forms.Form):
 
     reason = forms.ChoiceField(
         required=False,
-        choices=WORK_BREAK_REASONS,
+        choices=WorkBreakReason.choices,
     )
 
     comment = forms.CharField(

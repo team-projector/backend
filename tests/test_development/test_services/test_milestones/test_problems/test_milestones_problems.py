@@ -1,7 +1,7 @@
 from datetime import datetime, timedelta
 
 from apps.development.graphql.types.milestone import MilestoneType
-from apps.development.models.milestone import MILESTONE_STATES
+from apps.development.models.milestone import MilestoneState
 from apps.development.services.milestone.problems import (
     PROBLEM_OVER_DUE_DAY,
     get_milestone_problems,
@@ -11,7 +11,7 @@ from tests.test_development.factories import ProjectMilestoneFactory
 
 def test_overdue_due_day(db):
     problem_milestone = ProjectMilestoneFactory.create(
-        state=MILESTONE_STATES.ACTIVE,
+        state=MilestoneState.ACTIVE,
         due_date=datetime.now().date() - timedelta(days=1)
     )
 
@@ -20,7 +20,7 @@ def test_overdue_due_day(db):
 
 def test_overdue_due_day_but_closed(db):
     milestone = ProjectMilestoneFactory.create(
-        state=MILESTONE_STATES.CLOSED,
+        state=MilestoneState.CLOSED,
         due_date=datetime.now().date() - timedelta(days=1)
     )
 
@@ -29,7 +29,7 @@ def test_overdue_due_day_but_closed(db):
 
 def test_resolver(db):
     problem_milestone = ProjectMilestoneFactory.create(
-        state=MILESTONE_STATES.ACTIVE,
+        state=MilestoneState.ACTIVE,
         due_date=datetime.now().date() - timedelta(days=1)
     )
 

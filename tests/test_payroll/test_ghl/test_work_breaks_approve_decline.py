@@ -6,7 +6,7 @@ from apps.payroll.graphql.mutations.work_breaks import (
     ApproveWorkBreakMutation,
     DeclineWorkBreakMutation,
 )
-from apps.payroll.models.mixins.approved import APPROVED_STATES
+from apps.payroll.models.mixins.approved import ApprovedState
 from tests.helpers.objects import AttrDict
 from tests.test_development.factories import TeamFactory, TeamMemberFactory
 from tests.test_payroll.factories import WorkBreakFactory
@@ -36,7 +36,7 @@ def test_approve_by_teamlead(user, client):
         id=work_break.id
     ).work_break
 
-    assert work_break_mutated.approve_state == APPROVED_STATES.APPROVED
+    assert work_break_mutated.approve_state == ApprovedState.APPROVED
     assert work_break_mutated.approved_by == user
 
 
@@ -104,7 +104,7 @@ def test_decline_by_teamlead(user, client):
         decline_reason="reason"
     ).work_break
 
-    assert work_break_mutated.approve_state == APPROVED_STATES.DECLINED
+    assert work_break_mutated.approve_state == ApprovedState.DECLINED
     assert work_break_mutated.approved_by == user
     assert work_break_mutated.decline_reason == "reason"
 

@@ -9,7 +9,7 @@ from apps.development.graphql.resolvers.issues_summary import (
 )
 from apps.development.models import Project, Team, TeamMember
 from apps.development.models.issue import Issue, IssueState
-from apps.development.models.milestone import MILESTONE_STATES
+from apps.development.models.milestone import MilestoneState
 from apps.development.services.issue.summary import (
     get_issues_summary,
     get_project_summaries,
@@ -185,7 +185,7 @@ def test_team_summary(db):
 def test_sort_projects_by_milestone_flat(db):
     projects = []
     for days in range(3):
-        milestone = ProjectMilestoneFactory(state=MILESTONE_STATES.ACTIVE)
+        milestone = ProjectMilestoneFactory(state=MilestoneState.ACTIVE)
         ProjectMilestoneFactory(
             owner=milestone.owner,
             due_date=timezone.now() - timezone.timedelta(days=days),
@@ -193,7 +193,7 @@ def test_sort_projects_by_milestone_flat(db):
         ProjectMilestoneFactory(
             owner=milestone.owner,
             due_date=timezone.now() + timezone.timedelta(days=days),
-            state=MILESTONE_STATES.ACTIVE
+            state=MilestoneState.ACTIVE
         )
 
         projects.append(milestone.owner)
@@ -212,16 +212,16 @@ def test_sort_projects_by_milestone_neested(db):
         group = ProjectGroupFactory(parent=ProjectGroupFactory())
         proj = ProjectFactory(group=group)
 
-        ProjectMilestoneFactory(state=MILESTONE_STATES.ACTIVE)
+        ProjectMilestoneFactory(state=MilestoneState.ACTIVE)
         ProjectMilestoneFactory(
             owner=group.parent,
             due_date=timezone.now() - timezone.timedelta(days=days),
-            state=MILESTONE_STATES.ACTIVE
+            state=MilestoneState.ACTIVE
         )
         ProjectMilestoneFactory(
             owner=group.parent,
             due_date=timezone.now() + timezone.timedelta(days=days),
-            state=MILESTONE_STATES.ACTIVE
+            state=MilestoneState.ACTIVE
         )
 
         projects.append(proj)

@@ -4,7 +4,7 @@ from pytest import raises
 
 from apps.core.graphql.errors import GraphQLPermissionDenied
 from apps.development.models import TeamMember
-from apps.payroll.models.mixins.approved import APPROVED_STATES
+from apps.payroll.models.mixins.approved import ApprovedState
 from tests.test_development.factories import TeamFactory, TeamMemberFactory
 from tests.test_payroll.factories import WorkBreakFactory
 from tests.test_users.factories import UserFactory
@@ -54,7 +54,7 @@ def test_query(user, ghl_client):
     )
     assert work_break.approved_by == user
     assert work_break.decline_reason == "reason"
-    assert work_break.approve_state == APPROVED_STATES.DECLINED
+    assert work_break.approve_state == ApprovedState.DECLINED
 
 
 def test_not_team_lead(ghl_auth_mock_info, decline_work_break_mutation):
@@ -70,7 +70,7 @@ def test_not_team_lead(ghl_auth_mock_info, decline_work_break_mutation):
     work_break.refresh_from_db()
 
     assert not work_break.approved_by
-    assert work_break.approve_state == APPROVED_STATES.CREATED
+    assert work_break.approve_state == ApprovedState.CREATED
 
 
 def test_owner(ghl_auth_mock_info, decline_work_break_mutation):
@@ -86,4 +86,4 @@ def test_owner(ghl_auth_mock_info, decline_work_break_mutation):
     work_break.refresh_from_db()
 
     assert not work_break.approved_by
-    assert work_break.approve_state == APPROVED_STATES.CREATED
+    assert work_break.approve_state == ApprovedState.CREATED

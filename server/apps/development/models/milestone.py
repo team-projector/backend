@@ -11,13 +11,15 @@ from apps.core.models.mixins import (
     GitlabInternalIdMixin,
     Timestamps,
 )
-from apps.core.models.utils import Choices
 from apps.development.models.managers import MilestoneManager
 
-MILESTONE_STATES = Choices(
-    ("ACTIVE", "active"),
-    ("CLOSED", "closed"),
-)
+
+class MilestoneState(models.TextChoices):
+    """Milestone state choices."""
+
+    ACTIVE = "ACTIVE", _("CH_ACTIVE")  # noqa: WPS115
+    CLOSED = "CLOSED", _("CH_CLOSED")  # noqa: WPS115
+
 
 MILESTONE_STATE_MAX_LENGTH = 20
 
@@ -49,7 +51,7 @@ class Milestone(
     )
 
     state = models.CharField(
-        choices=MILESTONE_STATES,
+        choices=MilestoneState.choices,
         max_length=MILESTONE_STATE_MAX_LENGTH,
         blank=True,
         verbose_name=_("VN__STATE"),

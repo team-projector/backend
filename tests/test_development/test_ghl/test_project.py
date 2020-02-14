@@ -1,7 +1,7 @@
 from django.utils import timezone
 
 from apps.development.graphql.types import IssuesProjectSummary, ProjectType
-from apps.development.models.milestone import MILESTONE_STATES
+from apps.development.models.milestone import MilestoneState
 from tests.helpers.objects import AttrDict
 from tests.test_development.factories import (
     IssueFactory,
@@ -16,13 +16,13 @@ def test_active_milestones_sort(user, client):
     client.user = user
     info = AttrDict({"context": client})
 
-    m1 = ProjectMilestoneFactory(state=MILESTONE_STATES.ACTIVE)
+    m1 = ProjectMilestoneFactory(state=MilestoneState.ACTIVE)
     ProjectMilestoneFactory(
-        state=MILESTONE_STATES.ACTIVE,
+        state=MilestoneState.ACTIVE,
         owner=m1.owner
     )
     m3 = ProjectMilestoneFactory(
-        state=MILESTONE_STATES.ACTIVE,
+        state=MilestoneState.ACTIVE,
         owner=m1.owner,
         due_date=timezone.now()
     )

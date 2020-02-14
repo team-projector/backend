@@ -1,5 +1,5 @@
 from apps.development.models import TeamMember
-from apps.payroll.models.mixins.approved import APPROVED_STATES
+from apps.payroll.models.mixins.approved import ApprovedState
 from apps.payroll.services import work_break as work_break_service
 from tests.test_development.factories import TeamFactory, TeamMemberFactory
 from tests.test_payroll.factories import WorkBreakFactory
@@ -26,7 +26,7 @@ def test_approve_by_teamlead(user):
 
     work_break.refresh_from_db()
 
-    assert work_break.approve_state == APPROVED_STATES.APPROVED
+    assert work_break.approve_state == ApprovedState.APPROVED
     assert work_break.approved_by == user
 
 
@@ -51,6 +51,6 @@ def test_decline_by_teamlead(user):
 
     work_break.refresh_from_db()
 
-    assert work_break.approve_state == APPROVED_STATES.DECLINED
+    assert work_break.approve_state == ApprovedState.DECLINED
     assert work_break.approved_by == user
     assert work_break.decline_reason == "reason"

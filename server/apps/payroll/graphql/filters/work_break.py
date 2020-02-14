@@ -6,7 +6,7 @@ from django.db.models import Exists, OuterRef, QuerySet
 from apps.core.graphql.filters.ordering import OrderingFilter
 from apps.development.models import Team, TeamMember
 from apps.payroll.models import WorkBreak
-from apps.payroll.models.mixins.approved import APPROVED_STATES
+from apps.payroll.models.mixins.approved import ApprovedState
 from apps.payroll.services.work_break.allowed import (
     check_allow_filtering_by_team,
 )
@@ -38,7 +38,7 @@ class ApprovingFilter(django_filters.BooleanFilter):
             user_is_team_member=Exists(subquery),
         ).filter(
             user_is_team_member=True,
-            approve_state=APPROVED_STATES.CREATED,
+            approve_state=ApprovedState.CREATED,
         )
 
         return queryset

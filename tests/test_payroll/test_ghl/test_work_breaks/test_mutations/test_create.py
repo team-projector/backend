@@ -4,7 +4,7 @@ from datetime import timedelta
 
 from django.utils import timezone
 
-from apps.payroll.models.work_break import WORK_BREAK_REASONS, WorkBreak
+from apps.payroll.models.work_break import WorkBreak, WorkBreakReason
 
 GHL_QUERY_CREATE_WORK_BREAK = """
 mutation ($user: ID!, $fromDate: DateTime!, $toDate: DateTime!,
@@ -34,7 +34,7 @@ def test_query(user, ghl_client):
         "user": user.id,
         "fromDate": _date_strftime(timezone.now()),
         "toDate": _date_strftime(timezone.now() + timedelta(seconds=10)),
-        "reason": WORK_BREAK_REASONS.DAYOFF,
+        "reason": WorkBreakReason.DAYOFF,
         "comment": "test comment",
     }
 
