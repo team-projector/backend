@@ -6,7 +6,7 @@ from django.db import models
 
 from apps.core.graphql.errors import GraphQLPermissionDenied
 from apps.development.models import Milestone, ProjectGroup, ProjectMember
-from apps.development.models.project_member import PROJECT_MEMBER_ROLES
+from apps.development.models.project_member import ProjectMemberRole
 from apps.users.models import User
 
 
@@ -34,7 +34,7 @@ def get_members(user: User) -> List[ProjectMember]:
     """Get project managers."""
     members = ProjectMember.objects.filter(
         user=user,
-        role=PROJECT_MEMBER_ROLES.PROJECT_MANAGER,
+        role=ProjectMemberRole.PROJECT_MANAGER,
     )
 
     if not members:

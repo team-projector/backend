@@ -7,13 +7,15 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 
 from apps.core.models.mixins import Timestamps
-from apps.core.models.utils import Choices
 
-PROJECT_MEMBER_ROLES = Choices(
-    ("DEVELOPER", _("CH_DEVELOPER")),
-    ("PROJECT_MANAGER", _("CH_PM")),
-    ("CUSTOMER", _("CH_CUSTOMER")),
-)
+
+class ProjectMemberRole(models.TextChoices):
+    """Project member role choices."""
+
+    DEVELOPER = "DEVELOPER", _("CH_DEVELOPER")  # noqa: WPS115
+    PROJECT_MANAGER = "PROJECT_MANAGER", _("CH_PROJECT_MANAGER")  # noqa: WPS115
+    CUSTOMER = "CUSTOMER", _("CH_CUSTOMER")  # noqa: WPS115
+
 
 PROJECT_MEMBER_ROLE_MAX_LENGTH = 20
 
@@ -27,7 +29,7 @@ class ProjectMember(Timestamps):
     )
 
     role = models.CharField(
-        choices=PROJECT_MEMBER_ROLES,
+        choices=ProjectMemberRole.choices,
         max_length=PROJECT_MEMBER_ROLE_MAX_LENGTH,
         verbose_name=_("VN__ROLE"),
         help_text=_("HT__ROLE"),

@@ -11,7 +11,7 @@ from apps.development.models import (
     ProjectMember,
     TeamMember,
 )
-from apps.development.models.project_member import PROJECT_MEMBER_ROLES
+from apps.development.models.project_member import ProjectMemberRole
 from apps.development.services.team_members import filter_by_roles
 from apps.users.models import User
 
@@ -44,7 +44,7 @@ def get_allowed_projects(user) -> Iterable[Project]:
     """Get allowed projects for user."""
     members = ProjectMember.objects.filter(
         user=user,
-        role=PROJECT_MEMBER_ROLES.PROJECT_MANAGER,
+        role=ProjectMemberRole.PROJECT_MANAGER,
         id=OuterRef("members__id"),
     )
 

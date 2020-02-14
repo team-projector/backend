@@ -2,7 +2,7 @@
 
 import pytest
 
-from apps.development.models.project_member import PROJECT_MEMBER_ROLES
+from apps.development.models.project_member import ProjectMemberRole
 from tests.test_development.factories import (
     ProjectGroupFactory,
     ProjectMemberFactory,
@@ -56,7 +56,7 @@ def _make_group_manager(group, user=None):
     """Create or bind group manager."""
     return _add_or_update_user_in_group(
         group,
-        PROJECT_MEMBER_ROLES.PROJECT_MANAGER,
+        ProjectMemberRole.PROJECT_MANAGER,
         user,
     )
 
@@ -65,7 +65,7 @@ def _make_group_developer(group, user=None):
     """Create or bind group developer."""
     return _add_or_update_user_in_group(
         group,
-        PROJECT_MEMBER_ROLES.DEVELOPER,
+        ProjectMemberRole.DEVELOPER,
         user,
     )
 
@@ -74,7 +74,7 @@ def _make_group_customer(group, user=None):
     """Create or bind group customer."""
     return _add_or_update_user_in_group(
         group,
-        PROJECT_MEMBER_ROLES.CUSTOMER,
+        ProjectMemberRole.CUSTOMER,
         user,
     )
 

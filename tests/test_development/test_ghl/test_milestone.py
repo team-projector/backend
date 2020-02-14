@@ -1,6 +1,6 @@
 from apps.development.graphql.types.milestone import MilestoneType
 from apps.development.models import Milestone
-from apps.development.models.project_member import PROJECT_MEMBER_ROLES
+from apps.development.models.project_member import ProjectMemberRole
 from tests.helpers.objects import AttrDict
 from tests.test_development.factories import (
     ProjectFactory,
@@ -13,7 +13,7 @@ def test_milestones(user, client):
     project = ProjectFactory.create()
     ProjectMemberFactory.create(
         user=user,
-        role=PROJECT_MEMBER_ROLES.PROJECT_MANAGER,
+        role=ProjectMemberRole.PROJECT_MANAGER,
         owner=project
     )
 
@@ -36,7 +36,7 @@ def test_milestone(user, client):
     project = ProjectFactory.create()
     ProjectMemberFactory.create(
         user=user,
-        role=PROJECT_MEMBER_ROLES.PROJECT_MANAGER,
+        role=ProjectMemberRole.PROJECT_MANAGER,
         owner=project
     )
 
