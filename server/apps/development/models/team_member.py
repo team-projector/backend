@@ -5,14 +5,15 @@ from django.conf import settings
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
-from apps.core.models.utils import Choices
 from apps.development.models.managers import TeamMemberManager
 
-TEAM_MEMBER_ROLES = Choices(
-    ("LEADER", _("CH_LEADER")),
-    ("DEVELOPER", _("CH_DEVELOPER")),
-    ("WATCHER", _("CH_WATCHER")),
-)
+
+class TeamMemberRole(models.TextChoices):
+    """Team member roles choices."""
+
+    LEADER = "LEADER", _("CH_LEADER")  # noqa: WPS115
+    DEVELOPER = "DEVELOPER", _("CH_DEVELOPER")  # noqa: WPS115
+    WATCHER = "WATCHER", _("CH_WATCHER")  # noqa: WPS115
 
 
 class TeamMember(models.Model):
@@ -33,7 +34,7 @@ class TeamMember(models.Model):
     )
 
     roles = BitField(
-        flags=TEAM_MEMBER_ROLES,
+        flags=TeamMemberRole.choices,
         default=0,
     )
 

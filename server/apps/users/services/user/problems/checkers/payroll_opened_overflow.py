@@ -4,7 +4,7 @@ from django.db.models import Sum
 from django.db.models.functions import Coalesce
 
 from apps.core.consts import SECONDS_PER_HOUR
-from apps.development.models.issue import ISSUE_STATES
+from apps.development.models.issue import IssueState
 from apps.payroll.models import SpentTime
 from apps.users.models import User
 from apps.users.services.user.problems.checkers.base import BaseProblemChecker
@@ -23,7 +23,7 @@ class PayrollOpenedOverflowChecker(BaseProblemChecker):
         total_spend = SpentTime.objects.filter(
             salary__isnull=True,
             user=user,
-            issues__state=ISSUE_STATES.OPENED,
+            issues__state=IssueState.OPENED,
         ).aggregate(
             total_time_spent=Coalesce(Sum("time_spent"), 0),
         )["total_time_spent"]

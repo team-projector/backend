@@ -4,7 +4,7 @@ from django.db import models
 from django.db.models.functions import Coalesce
 
 from apps.development.models import Issue, Ticket
-from apps.development.models.issue import ISSUE_STATES
+from apps.development.models.issue import IssueState
 from apps.development.services.issue.metrics import IssuesContainerMetrics
 from apps.payroll.models.spent_time import SECS_IN_HOUR, SpentTime
 
@@ -52,24 +52,24 @@ class TicketMetricsProvider:
             time_estimate=Coalesce(models.Sum("time_estimate"), 0),
             time_spent=Coalesce(models.Sum("total_time_spent"), 0),
             issues_closed_count=Coalesce(
-                models.Count("id", filter=models.Q(state=ISSUE_STATES.CLOSED)),
+                models.Count("id", filter=models.Q(state=IssueState.CLOSED)),
                 0,
             ),
             issues_opened_count=Coalesce(
-                models.Count("id", filter=models.Q(state=ISSUE_STATES.OPENED)),
+                models.Count("id", filter=models.Q(state=IssueState.OPENED)),
                 0,
             ),
             opened_time_estimate=Coalesce(
                 models.Sum(
                     "time_estimate",
-                    filter=models.Q(state=ISSUE_STATES.OPENED),
+                    filter=models.Q(state=IssueState.OPENED),
                 ),
                 0,
             ),
             opened_time_spent=Coalesce(
                 models.Sum(
                     "total_time_spent",
-                    filter=models.Q(state=ISSUE_STATES.OPENED),
+                    filter=models.Q(state=IssueState.OPENED),
                 ),
                 0,
             ),

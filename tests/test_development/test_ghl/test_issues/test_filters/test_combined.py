@@ -3,36 +3,36 @@
 from datetime import datetime, timedelta
 
 from apps.development.graphql.filters import IssuesFilterSet
-from apps.development.models.issue import ISSUE_STATES, Issue
+from apps.development.models.issue import IssueState, Issue
 from tests.test_development.factories import IssueFactory
 
 
 def test_filter_by_due_date_and_state(user):
     issue = IssueFactory.create(
         user=user,
-        state=ISSUE_STATES.OPENED,
+        state=IssueState.OPENED,
         due_date=datetime.now()
     )
     IssueFactory.create(
         user=user,
-        state=ISSUE_STATES.CLOSED,
+        state=IssueState.CLOSED,
         due_date=datetime.now()
     )
     IssueFactory.create(
         user=user,
-        state=ISSUE_STATES.CLOSED,
+        state=IssueState.CLOSED,
         due_date=datetime.now() - timedelta(days=1)
     )
     IssueFactory.create(
         user=user,
-        state=ISSUE_STATES.OPENED,
+        state=IssueState.OPENED,
         due_date=datetime.now() - timedelta(days=1)
     )
 
     results = IssuesFilterSet(
         data={
             "due_date": datetime.now().date(),
-            "state": ISSUE_STATES.OPENED
+            "state": IssueState.OPENED
         },
         queryset=Issue.objects.all()
     ).qs

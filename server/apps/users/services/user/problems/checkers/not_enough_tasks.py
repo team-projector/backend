@@ -3,7 +3,7 @@
 from django.db import models
 
 from apps.core.consts import SECONDS_PER_HOUR
-from apps.development.models.issue import ISSUE_STATES, Issue
+from apps.development.models.issue import Issue, IssueState
 from apps.development.models.merge_request import (
     MERGE_REQUESTS_STATES,
     MergeRequest,
@@ -28,7 +28,7 @@ class NotEnoughTasksChecker(BaseProblemChecker):
         """
         issues = Issue.objects.filter(
             user=user,
-            state=ISSUE_STATES.OPENED,
+            state=IssueState.OPENED,
         )
         merge_requests = MergeRequest.objects.filter(
             user=user,

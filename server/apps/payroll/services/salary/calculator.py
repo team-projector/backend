@@ -6,7 +6,7 @@ from decimal import Decimal
 
 from django.db import models, transaction
 
-from apps.development.models.issue import ISSUE_STATES
+from apps.development.models.issue import IssueState
 from apps.development.models.merge_request import MERGE_REQUESTS_STATES
 from apps.payroll.models import Bonus, Penalty, Salary, SpentTime
 from apps.payroll.services.salary.exceptions import EmptySalaryException
@@ -101,11 +101,12 @@ class SalaryCalculator:
         ).update(
             salary=salary,
         )
+
         locked += SpentTime.objects.filter(
             salary__isnull=True,
             user=user,
         ).filter(
-            models.Q(issues__state=ISSUE_STATES.CLOSED)
+            models.Q(issues__state=IssueState.CLOSED)
             | models.Q(mergerequests__state__in=(
                 MERGE_REQUESTS_STATES.CLOSED,
                 MERGE_REQUESTS_STATES.MERGED,

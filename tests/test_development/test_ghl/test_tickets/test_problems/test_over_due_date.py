@@ -1,7 +1,7 @@
 from django.utils import timezone
 
 from apps.development.models import Ticket
-from apps.development.models.issue import ISSUE_STATES
+from apps.development.models.issue import IssueState
 from apps.development.services.ticket.problems import (
     annotate_ticket_problems,
     checkers,
@@ -23,7 +23,7 @@ def test_issue_state_closed(db):
     issue = IssueFactory(
         ticket=TicketFactory(due_date=timezone.now()),
         due_date=timezone.now() + timezone.timedelta(days=1),
-        state=ISSUE_STATES.CLOSED,
+        state=IssueState.CLOSED,
     )
     assert not _over_due_date_checker.ticket_has_problem(issue.ticket)
 
@@ -54,7 +54,7 @@ def test_prefetched_issue_state_closed(db, django_db_blocker):
     issue = IssueFactory(
         ticket=TicketFactory(due_date=timezone.now()),
         due_date=timezone.now() + timezone.timedelta(days=1),
-        state=ISSUE_STATES.CLOSED,
+        state=IssueState.CLOSED,
     )
 
     ticket = annotate_ticket_problems(

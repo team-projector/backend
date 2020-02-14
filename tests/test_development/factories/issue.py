@@ -2,7 +2,7 @@ import factory
 import pytz
 
 from apps.development.models import Issue
-from apps.development.models.issue import ISSUE_STATES
+from apps.development.models.issue import IssueState
 from tests.test_development.factories.mixins.gl_field import GitlabFieldMixin
 from tests.test_development.factories.project import ProjectFactory
 
@@ -19,7 +19,7 @@ class IssueFactory(GitlabFieldMixin):
         after_now=False,
         tzinfo=pytz.UTC,
     )
-    state = ISSUE_STATES.OPENED
+    state = IssueState.OPENED
 
     class Meta:
         model = Issue

@@ -10,14 +10,16 @@ from django.utils.translation import gettext_lazy as _
 
 from apps.core.consts import DEFAULT_TITLE_LENGTH
 from apps.core.models.mixins import GitlabEntityMixin, GitlabInternalIdMixin
-from apps.core.models.utils import Choices
 from apps.development.models.managers import IssueManager
 from apps.development.models.mixins import TrackableMixin
 
-ISSUE_STATES = Choices(
-    ("OPENED", _("CH_OPENED")),
-    ("CLOSED", _("CH_CLOSED")),
-)
+
+class IssueState(models.TextChoices):
+    """Issue state choices."""
+
+    OPENED = "OPENED", _("CH_OPENED")  # noqa: WPS115
+    CLOSED = "CLOSED", _("CH_CLOSED")  # noqa: WPS115
+
 
 ISSUE_STATE_MAX_LENGTH = 255
 
@@ -52,7 +54,7 @@ class Issue(
     )
 
     state = models.CharField(
-        choices=ISSUE_STATES,
+        choices=IssueState.choices,
         max_length=ISSUE_STATE_MAX_LENGTH,
         blank=True,
         verbose_name=_("VN__STATE"),
@@ -171,7 +173,7 @@ class Issue(
     def efficiency_available(self) -> bool:
         """Helper for efficiency method."""
         return (
-            self.state == ISSUE_STATES.CLOSED
+            self.state == IssueState.CLOSED
             and self.total_time_spent
             and self.time_estimate
         )

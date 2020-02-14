@@ -24,8 +24,8 @@ class SpentTimeQuerySet(models.QuerySet):
 
         return self.aggregate(
             total_issues=self._sum(issues__isnull=False),
-            opened_issues=self._sum(issues__state=issue.ISSUE_STATES.OPENED),
-            closed_issues=self._sum(issues__state=issue.ISSUE_STATES.CLOSED),
+            opened_issues=self._sum(issues__state=issue.IssueState.OPENED),
+            closed_issues=self._sum(issues__state=issue.IssueState.CLOSED),
 
             total_merges=self._sum(
                 mergerequests__isnull=False,

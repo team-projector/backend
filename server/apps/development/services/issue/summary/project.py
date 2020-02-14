@@ -7,7 +7,7 @@ from django.db import models
 from django.db.models.functions import Coalesce
 
 from apps.development.models import Project
-from apps.development.models.issue import ISSUE_STATES
+from apps.development.models.issue import IssueState
 
 
 def get_min_due_date(project):
@@ -116,7 +116,7 @@ class IssuesProjectSummaryProvider:
             time_remains=models.Case(
                 models.When(
                     models.Q(time_estimate__gt=models.F("total_time_spent"))
-                    & ~models.Q(state=ISSUE_STATES.CLOSED),
+                    & ~models.Q(state=IssueState.CLOSED),
                     then=(
                         models.F("time_estimate") - models.F("total_time_spent")
                     ),

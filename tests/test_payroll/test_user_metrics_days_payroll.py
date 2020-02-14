@@ -6,7 +6,7 @@ from django.utils import timezone
 
 from apps.core.utils.date import begin_of_week
 from apps.core.utils.time import seconds
-from apps.development.models.issue import ISSUE_STATES
+from apps.development.models.issue import IssueState
 from apps.users.services.user.metrics import get_progress_metrics
 from tests.helpers.base import format_date
 from tests.test_development.factories import IssueFactory
@@ -53,7 +53,7 @@ def test_opened(user):
         time_spent=-seconds(hours=3)
     )
 
-    issue.state = ISSUE_STATES.OPENED
+    issue.state = IssueState.OPENED
     issue.save()
 
     start = monday - timedelta(days=5)
@@ -117,7 +117,7 @@ def test_paid(user):
         time_spent=-seconds(hours=3)
     )
 
-    issue.state = ISSUE_STATES.CLOSED
+    issue.state = IssueState.CLOSED
     issue.save()
 
     start = monday - timedelta(days=5)
@@ -173,7 +173,7 @@ def test_closed(user):
         time_spent=-seconds(hours=3)
     )
 
-    issue.state = ISSUE_STATES.CLOSED
+    issue.state = IssueState.CLOSED
     issue.save()
 
     start = monday - timedelta(days=5)
@@ -200,9 +200,9 @@ def test_complex(user):
     salary = SalaryFactory.create(user=user)
 
     closed_issue = IssueFactory.create(user=user, due_date=datetime.now(),
-                                       state=ISSUE_STATES.CLOSED)
+                                       state=IssueState.CLOSED)
     opened_issue = IssueFactory.create(user=user, due_date=datetime.now(),
-                                       state=ISSUE_STATES.OPENED)
+                                       state=IssueState.OPENED)
 
     IssueSpentTimeFactory.create(
         date=monday,

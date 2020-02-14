@@ -8,7 +8,7 @@ from django.db.models import Exists, OuterRef, QuerySet
 from apps.core.graphql.filters import SearchFilter
 from apps.core.graphql.filters.ordering import OrderingFilter
 from apps.development.models import Team, TeamMember
-from apps.development.models.team_member import TEAM_MEMBER_ROLES
+from apps.development.models.team_member import TeamMemberRole
 from apps.development.services.team_members import filter_by_roles
 
 
@@ -44,7 +44,7 @@ class TeamRolesFilter(django_filters.CharFilter):
         return [
             role.strip()
             for role in roles.split(",")
-            if role.strip() in TEAM_MEMBER_ROLES
+            if role.strip() in TeamMemberRole
         ]
 
 

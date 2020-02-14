@@ -8,7 +8,7 @@ from apps.development.graphql.resolvers.issues_summary import (
     resolve_issues_team_summaries,
 )
 from apps.development.models import Project, Team, TeamMember
-from apps.development.models.issue import ISSUE_STATES, Issue
+from apps.development.models.issue import IssueState, Issue
 from apps.development.models.milestone import MILESTONE_STATES
 from apps.development.services.issue.summary import (
     get_issues_summary,
@@ -34,13 +34,13 @@ from tests.test_users.factories.user import UserFactory
 def test_issue_counts(user):
     IssueFactory.create_batch(
         5, user=user,
-        state=ISSUE_STATES.OPENED,
+        state=IssueState.OPENED,
         total_time_spent=0,
         due_date=datetime.now()
     )
     IssueFactory.create_batch(
         3, user=user,
-        state=ISSUE_STATES.CLOSED,
+        state=IssueState.CLOSED,
         total_time_spent=0,
         due_date=datetime.now()
     )
@@ -237,7 +237,7 @@ def test_sort_projects_by_milestone_neested(db):
 def test_time_spents_by_user(user):
     issues = IssueFactory.create_batch(
         5, user=user,
-        state=ISSUE_STATES.OPENED,
+        state=IssueState.OPENED,
         due_date=datetime.now()
     )
 
@@ -275,7 +275,7 @@ def test_time_spents_by_user(user):
 def test_time_spents_by_team(user):
     issues = IssueFactory.create_batch(
         5, user=user,
-        state=ISSUE_STATES.OPENED,
+        state=IssueState.OPENED,
         due_date=datetime.now()
     )
 
@@ -331,7 +331,7 @@ def test_time_spents_by_project(user):
 
     issues = IssueFactory.create_batch(
         5, user=user,
-        state=ISSUE_STATES.OPENED,
+        state=IssueState.OPENED,
         due_date=datetime.now(),
         project=project_1
     )
@@ -353,7 +353,7 @@ def test_time_spents_by_project(user):
     another_user = UserFactory.create()
     issue_another_user = IssueFactory.create(
         user=another_user,
-        state=ISSUE_STATES.OPENED,
+        state=IssueState.OPENED,
         due_date=datetime.now(),
         project=project_2
     )
@@ -388,7 +388,7 @@ def test_time_spents_by_state(user):
     issue_opened = IssueFactory.create(
         user=user,
         due_date=datetime.now(),
-        state=ISSUE_STATES.OPENED
+        state=IssueState.OPENED
     )
 
     IssueSpentTimeFactory.create(
@@ -407,7 +407,7 @@ def test_time_spents_by_state(user):
     issue_closed = IssueFactory.create(
         user=user,
         due_date=datetime.now(),
-        state=ISSUE_STATES.CLOSED
+        state=IssueState.CLOSED
     )
 
     IssueSpentTimeFactory.create(
@@ -421,7 +421,7 @@ def test_time_spents_by_state(user):
         Issue.objects.filter(user=user),
         due_date=datetime.now().date(),
         user=user,
-        state=ISSUE_STATES.OPENED,
+        state=IssueState.OPENED,
     )
 
     _check_summary(summary, 2, 1, 1, 100, 0)
@@ -430,7 +430,7 @@ def test_time_spents_by_state(user):
         Issue.objects.filter(user=user),
         due_date=datetime.now().date(),
         user=user,
-        state=ISSUE_STATES.CLOSED,
+        state=IssueState.CLOSED,
     )
 
     _check_summary(summary, 2, 1, 1, 400, 0)
@@ -441,7 +441,7 @@ def test_time_spents_by_milestone(user):
     issue_1 = IssueFactory.create(
         user=user,
         due_date=datetime.now(),
-        state=ISSUE_STATES.OPENED,
+        state=IssueState.OPENED,
         milestone=milestone_1
     )
     IssueSpentTimeFactory.create(
@@ -455,7 +455,7 @@ def test_time_spents_by_milestone(user):
     issue_2 = IssueFactory.create(
         user=user,
         due_date=datetime.now(),
-        state=ISSUE_STATES.OPENED,
+        state=IssueState.OPENED,
         milestone=milestone_2
     )
     IssueSpentTimeFactory.create(
@@ -489,7 +489,7 @@ def test_time_spents_by_ticket(user):
     issue_1 = IssueFactory.create(
         user=user,
         due_date=datetime.now(),
-        state=ISSUE_STATES.OPENED,
+        state=IssueState.OPENED,
         ticket=ticket_1,
     )
     IssueSpentTimeFactory.create(
@@ -503,7 +503,7 @@ def test_time_spents_by_ticket(user):
     issue_2 = IssueFactory.create(
         user=user,
         due_date=datetime.now(),
-        state=ISSUE_STATES.OPENED,
+        state=IssueState.OPENED,
         ticket=ticket_2
     )
     IssueSpentTimeFactory.create(
@@ -516,7 +516,7 @@ def test_time_spents_by_ticket(user):
     IssueFactory.create_batch(
         size=3,
         due_date=datetime.now(),
-        state=ISSUE_STATES.OPENED,
+        state=IssueState.OPENED,
         ticket=TicketFactory.create()
     )
 
@@ -542,13 +542,13 @@ def test_time_spents_by_ticket(user):
 def test_resolve_issues_summary(user, client):
     IssueFactory.create_batch(
         5, user=user,
-        state=ISSUE_STATES.OPENED,
+        state=IssueState.OPENED,
         total_time_spent=0,
         due_date=datetime.now()
     )
     IssueFactory.create_batch(
         3, user=UserFactory.create(),
-        state=ISSUE_STATES.OPENED
+        state=IssueState.OPENED
     )
 
     client.user = user

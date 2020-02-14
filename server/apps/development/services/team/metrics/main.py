@@ -3,7 +3,7 @@
 from django.db.models import Sum
 
 from apps.development.models import Issue, MergeRequest, Team, TeamMember
-from apps.development.models.issue import ISSUE_STATES
+from apps.development.models.issue import IssueState
 from apps.development.services.issue.problems import (
     annotate_issue_problems,
     filter_issue_problems,
@@ -82,11 +82,11 @@ class TeamMetricsProvider:
         return merge_requests
 
     def _get_opened_count(self, workitems) -> int:
-        return workitems.filter(state=ISSUE_STATES.OPENED).count()
+        return workitems.filter(state=IssueState.OPENED).count()
 
     def _get_opened_estimated(self, workitems) -> int:
         return workitems.filter(
-            state=ISSUE_STATES.OPENED,
+            state=IssueState.OPENED,
         ).aggregate(
             total_time_estimate=Sum("time_estimate"),
         )["total_time_estimate"] or 0

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from apps.core.utils.time import seconds
-from apps.development.models.issue import ISSUE_STATES
+from apps.development.models.issue import IssueState
 from apps.development.models.merge_request import MERGE_REQUESTS_STATES
 from apps.users.services.user.problems import get_user_problems
 from apps.users.services.user.problems.checkers import PROBLEM_NOT_ENOUGH_TASKS
@@ -14,21 +14,21 @@ def test_issues(user):
         user=user,
         time_estimate=seconds(hours=3),
         total_time_spent=seconds(hours=1),
-        state=ISSUE_STATES.OPENED,
+        state=IssueState.OPENED,
     )
 
     IssueFactory.create(
         user=user,
         time_estimate=seconds(hours=2),
         total_time_spent=seconds(hours=1),
-        state=ISSUE_STATES.OPENED,
+        state=IssueState.OPENED,
     )
 
     IssueFactory.create(
         user=user,
         time_estimate=seconds(hours=8),
         total_time_spent=0,
-        state=ISSUE_STATES.CLOSED,
+        state=IssueState.CLOSED,
     )
 
     assert get_user_problems(user) == [
@@ -75,7 +75,7 @@ def test_complex(user):
         user=user,
         time_estimate=seconds(hours=3),
         total_time_spent=seconds(hours=1),
-        state=ISSUE_STATES.OPENED,
+        state=IssueState.OPENED,
     )
 
     MergeRequestFactory.create(

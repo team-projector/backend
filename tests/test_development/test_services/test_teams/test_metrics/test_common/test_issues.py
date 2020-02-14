@@ -3,7 +3,7 @@ from datetime import datetime, timedelta
 from apps.core.utils.time import seconds
 from apps.development.graphql.types.team import TeamType
 from apps.development.models import Team
-from apps.development.models.issue import ISSUE_STATES
+from apps.development.models.issue import IssueState
 from apps.development.services.team.metrics.main import get_team_metrics
 from tests.test_development.factories import IssueFactory
 from tests.test_development.test_services.test_teams.test_metrics.test_common.checker import (  # noqa: E501
@@ -17,14 +17,14 @@ def test_basic(team: Team):
         user=team.members.all()[0],
         due_date=datetime.now() + timedelta(days=1),
         time_estimate=seconds(hours=2),
-        state=ISSUE_STATES.OPENED
+        state=IssueState.OPENED
     )
     IssueFactory.create_batch(
         4,
         user=team.members.all()[1],
         due_date=datetime.now() + timedelta(days=2),
         time_estimate=seconds(hours=3),
-        state=ISSUE_STATES.CLOSED
+        state=IssueState.CLOSED
     )
 
     IssueFactory.create_batch(size=5)
@@ -41,7 +41,7 @@ def test_problems(team: Team):
     IssueFactory.create(
         user=team.members.all()[0],
         due_date=None,
-        state=ISSUE_STATES.OPENED,
+        state=IssueState.OPENED,
         time_estimate=seconds(hours=1),
         title="issue_problem_1"
     )
@@ -49,21 +49,21 @@ def test_problems(team: Team):
         user=team.members.all()[0],
         due_date=datetime.now() - timedelta(days=3),
         time_estimate=seconds(hours=3),
-        state=ISSUE_STATES.OPENED,
+        state=IssueState.OPENED,
         title="issue_problem_2"
     )
     IssueFactory.create(
         user=team.members.all()[0],
         time_estimate=None,
         title="issue_problem_3",
-        state=ISSUE_STATES.OPENED
+        state=IssueState.OPENED
     )
     IssueFactory.create_batch(
         size=4,
         user=team.members.all()[1],
         due_date=datetime.now() + timedelta(days=3),
         time_estimate=seconds(hours=3),
-        state=ISSUE_STATES.CLOSED
+        state=IssueState.CLOSED
     )
 
     IssueFactory.create_batch(size=5)
@@ -83,7 +83,7 @@ def test_resolver(team: Team):
         user=team.members.all()[0],
         due_date=datetime.now() + timedelta(days=1),
         time_estimate=seconds(hours=2),
-        state=ISSUE_STATES.OPENED
+        state=IssueState.OPENED
     )
 
     check_team_metrics(

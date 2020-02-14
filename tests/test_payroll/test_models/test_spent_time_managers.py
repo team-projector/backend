@@ -2,7 +2,7 @@ import pytest
 from django.db.models import Sum
 
 from apps.core.utils.time import seconds
-from apps.development.models.issue import ISSUE_STATES
+from apps.development.models.issue import IssueState
 from apps.payroll.models import SpentTime
 from tests.test_development.factories import IssueFactory
 from tests.test_payroll.factories import IssueSpentTimeFactory, SalaryFactory
@@ -15,7 +15,7 @@ def user(db):
 
 
 def test_paid(user):
-    issue = IssueFactory.create(user=user, state=ISSUE_STATES.OPENED)
+    issue = IssueFactory.create(user=user, state=IssueState.OPENED)
     salary = SalaryFactory.create(user=user)
 
     IssueSpentTimeFactory.create(
@@ -40,7 +40,7 @@ def test_paid(user):
 
 
 def test_payroll_metrics(user):
-    issue = IssueFactory.create(user=user, state=ISSUE_STATES.OPENED)
+    issue = IssueFactory.create(user=user, state=IssueState.OPENED)
 
     IssueSpentTimeFactory.create(
         user=user,

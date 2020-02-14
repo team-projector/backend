@@ -3,7 +3,7 @@ from pytest import raises
 from apps.core.graphql.errors import GraphQLPermissionDenied
 from apps.core.utils.time import seconds
 from apps.development.graphql.types import TicketType
-from apps.development.models.issue import ISSUE_STATES
+from apps.development.models.issue import IssueState
 from apps.development.services.ticket.metrics import get_ticket_metrics
 from tests.test_development.factories import IssueFactory, TicketFactory
 from tests.test_users.factories.user import UserFactory
@@ -23,19 +23,19 @@ def test_metrics(db):
 
     IssueFactory.create(
         ticket=ticket,
-        state=ISSUE_STATES.OPENED,
+        state=IssueState.OPENED,
         total_time_spent=0,
         time_estimate=seconds(hours=1)
     )
     IssueFactory.create(
         ticket=ticket,
-        state=ISSUE_STATES.CLOSED,
+        state=IssueState.CLOSED,
         total_time_spent=seconds(hours=1),
         time_estimate=seconds(hours=2)
     )
     IssueFactory.create(
         ticket=ticket,
-        state=ISSUE_STATES.CLOSED,
+        state=IssueState.CLOSED,
         total_time_spent=seconds(hours=2),
         time_estimate=seconds(hours=2)
     )
@@ -56,14 +56,14 @@ def test_budget_estimated(db):
     IssueFactory.create(
         ticket=ticket,
         user=user_1,
-        state=ISSUE_STATES.OPENED,
+        state=IssueState.OPENED,
         total_time_spent=0,
         time_estimate=seconds(hours=1)
     )
     IssueFactory.create(
         ticket=ticket,
         user=user_1,
-        state=ISSUE_STATES.CLOSED,
+        state=IssueState.CLOSED,
         total_time_spent=seconds(hours=1),
         time_estimate=seconds(hours=2)
     )
@@ -73,14 +73,14 @@ def test_budget_estimated(db):
     IssueFactory.create(
         ticket=ticket,
         user=user_2,
-        state=ISSUE_STATES.OPENED,
+        state=IssueState.OPENED,
         total_time_spent=0,
         time_estimate=seconds(hours=1)
     )
     IssueFactory.create(
         ticket=ticket,
         user=user_2,
-        state=ISSUE_STATES.CLOSED,
+        state=IssueState.CLOSED,
         total_time_spent=seconds(hours=2),
         time_estimate=seconds(hours=1)
     )
@@ -88,7 +88,7 @@ def test_budget_estimated(db):
     IssueFactory.create(
         ticket=TicketFactory.create(),
         user=user_2,
-        state=ISSUE_STATES.OPENED,
+        state=IssueState.OPENED,
         total_time_spent=seconds(hours=10),
         time_estimate=seconds(hours=10)
     )
@@ -108,7 +108,7 @@ def test_resolve_metrics(user, ghl_auth_mock_info):
 
     IssueFactory.create(
         ticket=ticket,
-        state=ISSUE_STATES.OPENED,
+        state=IssueState.OPENED,
         total_time_spent=0,
         time_estimate=seconds(hours=1)
     )
@@ -124,7 +124,7 @@ def test_resolve_metrics_not_pm(user, ghl_auth_mock_info):
 
     IssueFactory.create(
         ticket=ticket,
-        state=ISSUE_STATES.OPENED,
+        state=IssueState.OPENED,
         total_time_spent=0,
         time_estimate=seconds(hours=1)
     )
@@ -154,7 +154,7 @@ def test_opened_time_remains_with_closed_issues(user, ghl_auth_mock_info):
     IssueFactory.create_batch(
         size=3,
         ticket=ticket,
-        state=ISSUE_STATES.CLOSED,
+        state=IssueState.CLOSED,
     )
 
     metrics = TicketType.resolve_metrics(ticket, info=ghl_auth_mock_info)
@@ -173,21 +173,21 @@ def test_opened_time_remains(user, ghl_auth_mock_info):
 
     IssueFactory.create(
         ticket=ticket,
-        state=ISSUE_STATES.OPENED,
+        state=IssueState.OPENED,
         total_time_spent=seconds(hours=5),
         time_estimate=seconds(hours=3),
     )
 
     IssueFactory.create(
         ticket=ticket,
-        state=ISSUE_STATES.OPENED,
+        state=IssueState.OPENED,
         total_time_spent=seconds(hours=3),
         time_estimate=seconds(hours=4),
     )
 
     IssueFactory.create(
         ticket=ticket,
-        state=ISSUE_STATES.CLOSED,
+        state=IssueState.CLOSED,
         total_time_spent=seconds(hours=1),
         time_estimate=seconds(hours=4),
     )
@@ -207,12 +207,12 @@ def test_opened_time_remains_random(user, ghl_auth_mock_info):
     issues = IssueFactory.create_batch(
         size=3,
         ticket=ticket,
-        state=ISSUE_STATES.OPENED,
+        state=IssueState.OPENED,
     )
 
     IssueFactory.create(
         ticket=ticket,
-        state=ISSUE_STATES.CLOSED,
+        state=IssueState.CLOSED,
         total_time_spent=seconds(hours=1),
         time_estimate=seconds(hours=4)
     )

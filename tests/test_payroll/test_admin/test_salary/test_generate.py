@@ -7,7 +7,7 @@ import pytest
 from django.utils import timezone
 
 from apps.core.utils.time import seconds
-from apps.development.models.issue import ISSUE_STATES
+from apps.development.models.issue import IssueState
 from apps.payroll.models import Salary
 from tests.test_development.factories import IssueFactory
 from tests.test_payroll.factories import IssueSpentTimeFactory
@@ -15,7 +15,7 @@ from tests.test_payroll.factories import IssueSpentTimeFactory
 
 @pytest.fixture()
 def issue():
-    return IssueFactory.create(state=ISSUE_STATES.CLOSED)
+    return IssueFactory.create(state=IssueState.CLOSED)
 
 
 @pytest.fixture()

@@ -6,7 +6,7 @@ from typing import Dict, List
 from django.db import models
 
 from apps.development.models import Issue
-from apps.development.models.issue import ISSUE_STATES
+from apps.development.models.issue import IssueState
 from apps.users.services.user.metrics.progress import provider
 from apps.users.services.user.metrics.progress.day.metrics import (
     UserDaysMetricsGenerator,
@@ -87,6 +87,6 @@ class DayMetricsProvider(provider.ProgressMetricsProvider):
                 user=self.user,
                 remaining__gt=0,
             ).exclude(
-                state=ISSUE_STATES.CLOSED,
+                state=IssueState.CLOSED,
             ).values("id", "due_date", "remaining"),
         )

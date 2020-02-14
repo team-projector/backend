@@ -9,7 +9,7 @@ from freezegun import freeze_time
 from pytest import raises
 
 from apps.core.utils.time import seconds
-from apps.development.models.issue import ISSUE_STATES
+from apps.development.models.issue import IssueState
 from apps.users.services.user.metrics import get_progress_metrics
 from apps.users.services.user.metrics.progress.provider import (
     ProgressMetricsProvider,
@@ -59,7 +59,7 @@ def test_simple(user, _freeze_to_noon):
     issue.total_time_spent = issue.time_spents.aggregate(
         spent=Sum("time_spent"),
     )["spent"]
-    issue.state = ISSUE_STATES.OPENED
+    issue.state = IssueState.OPENED
     issue.due_date = datetime.now() + timedelta(days=1)
     issue.save()
 
@@ -102,7 +102,7 @@ def test_negative_remains(user, _freeze_to_noon):
     issue.total_time_spent = issue.time_spents.aggregate(
         spent=Sum("time_spent"),
     )["spent"]
-    issue.state = ISSUE_STATES.OPENED
+    issue.state = IssueState.OPENED
     issue.due_date = datetime.now() + timedelta(days=1)
     issue.save()
 
@@ -126,7 +126,7 @@ def test_loading_day_already_has_spends(user, _freeze_to_noon):
     issue = IssueFactory.create(user=user, due_date=datetime.now())
     issue_2 = IssueFactory.create(
         user=user,
-        state=ISSUE_STATES.OPENED,
+        state=IssueState.OPENED,
         total_time_spent=seconds(hours=3),
         time_estimate=seconds(hours=10),
     )
@@ -152,7 +152,7 @@ def test_loading_day_already_has_spends(user, _freeze_to_noon):
 
     issue.time_estimate = int(seconds(hours=4))
     issue.total_time_spent = int(seconds(hours=3))
-    issue.state = ISSUE_STATES.OPENED
+    issue.state = IssueState.OPENED
     issue.due_date = datetime.now()
     issue.save()
 
@@ -187,7 +187,7 @@ def test_not_in_range(user, _freeze_to_noon):
     issue = IssueFactory.create(user=user, due_date=datetime.now())
     issue.time_estimate = 0
     issue.total_time_spent = 0
-    issue.state = ISSUE_STATES.OPENED
+    issue.state = IssueState.OPENED
     issue.save()
 
     IssueSpentTimeFactory.create(
@@ -234,7 +234,7 @@ def test_another_user(user, _freeze_to_noon):
     issue = IssueFactory.create(user=user, due_date=datetime.now())
     issue.time_estimate = 0
     issue.total_time_spent = 0
-    issue.state = ISSUE_STATES.OPENED
+    issue.state = IssueState.OPENED
     issue.save()
 
     another_user = UserFactory.create()
@@ -288,7 +288,7 @@ def test_not_loading_over_daily_work_hours(user, _freeze_to_noon):
         due_date=datetime.now() + timedelta(days=7),
         time_estimate=seconds(hours=15),
         total_time_spent=5,
-        state=ISSUE_STATES.OPENED
+        state=IssueState.OPENED
     )
 
     IssueSpentTimeFactory.create(

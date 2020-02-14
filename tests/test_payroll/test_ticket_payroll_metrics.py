@@ -1,7 +1,7 @@
 from datetime import datetime
 
 from apps.core.utils.time import seconds
-from apps.development.models.issue import ISSUE_STATES
+from apps.development.models.issue import IssueState
 from apps.development.services.ticket.metrics import get_ticket_metrics
 from tests.test_development.factories import IssueFactory, TicketFactory
 from tests.test_payroll.factories import IssueSpentTimeFactory
@@ -16,7 +16,7 @@ def test_metrics(db):
     issue_1 = IssueFactory.create(
         ticket=ticket,
         user=user,
-        state=ISSUE_STATES.OPENED,
+        state=IssueState.OPENED,
         total_time_spent=seconds(hours=1),
         time_estimate=seconds(hours=2)
     )
@@ -30,7 +30,7 @@ def test_metrics(db):
     issue_2 = IssueFactory.create(
         ticket=ticket,
         user=user,
-        state=ISSUE_STATES.CLOSED,
+        state=IssueState.CLOSED,
         total_time_spent=seconds(hours=2),
         time_estimate=seconds(hours=2)
     )

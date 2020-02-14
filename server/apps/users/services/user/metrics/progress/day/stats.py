@@ -6,7 +6,7 @@ from typing import Dict
 from django.db import models
 from django.db.models.functions import Coalesce, TruncDay
 
-from apps.development.models.issue import ISSUE_STATES, Issue
+from apps.development.models.issue import Issue, IssueState
 from apps.payroll.models import SpentTime
 from apps.users.models import User
 
@@ -46,7 +46,7 @@ class UserDayStatsProvider:
                 models.When(
                     models.Q(
                         time_estimate__gt=models.F("total_time_spent"),
-                    ) & ~models.Q(state=ISSUE_STATES.CLOSED),
+                    ) & ~models.Q(state=IssueState.CLOSED),
                     then=(
                         models.F("time_estimate") - models.F("total_time_spent")
                     ),

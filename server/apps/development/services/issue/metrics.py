@@ -5,7 +5,7 @@ from django.db.models import Sum
 from django.db.models.functions import Coalesce
 
 from apps.development.models import Issue
-from apps.development.models.issue import ISSUE_STATES
+from apps.development.models.issue import IssueState
 from apps.payroll.models import SpentTime
 from apps.users.models import User
 
@@ -72,13 +72,13 @@ class IssuesContainerMetricsProvider:
             issues_closed_count=Coalesce(
                 models.Count(
                     "id",
-                    filter=models.Q(state=ISSUE_STATES.CLOSED),
+                    filter=models.Q(state=IssueState.CLOSED),
                 ), 0,
             ),
             issues_opened_count=Coalesce(
                 models.Count(
                     "id",
-                    filter=models.Q(state=ISSUE_STATES.OPENED),
+                    filter=models.Q(state=IssueState.OPENED),
                 ), 0,
             ),
             issues_count=models.Count("*"),

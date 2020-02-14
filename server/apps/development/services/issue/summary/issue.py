@@ -4,7 +4,7 @@ from typing import List
 
 from django.db.models import Count, QuerySet, Sum
 
-from apps.development.models.issue import ISSUE_STATES
+from apps.development.models.issue import IssueState
 from apps.development.services.issue.problems import (
     annotate_issue_problems,
     filter_issue_problems,
@@ -50,9 +50,9 @@ class IssuesSummaryProvider:
         for count_state in self._get_counts_by_state():
             summary.count += count_state["count"]
 
-            if count_state["state"] == ISSUE_STATES.OPENED:
+            if count_state["state"] == IssueState.OPENED:
                 summary.opened_count = count_state["count"]
-            elif count_state["state"] == ISSUE_STATES.CLOSED:
+            elif count_state["state"] == IssueState.CLOSED:
                 summary.closed_count = count_state["count"]
 
         summary.time_spent = self._get_time_spent()

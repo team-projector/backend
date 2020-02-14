@@ -4,7 +4,7 @@ from django.test import TestCase
 from django.utils import timezone
 
 from apps.core.utils.time import seconds
-from apps.development.models.issue import ISSUE_STATES
+from apps.development.models.issue import IssueState
 from apps.payroll.models import Salary
 from apps.payroll.services.salary.calculator import SalaryCalculator
 from apps.users.models import User
@@ -24,7 +24,7 @@ class BulkGenerateSalariesTests(TestCase):
         )
 
     def test_single(self):
-        issue = IssueFactory.create(state=ISSUE_STATES.CLOSED)
+        issue = IssueFactory.create(state=IssueState.CLOSED)
 
         IssueSpentTimeFactory.create(user=self.user, base=issue,
                                      time_spent=seconds(hours=1))
@@ -41,9 +41,9 @@ class BulkGenerateSalariesTests(TestCase):
         self.assertEqual(salary.total, self.user.hour_rate * 4)
 
     def test_many(self):
-        issue_1 = IssueFactory.create(state=ISSUE_STATES.CLOSED)
-        issue_2 = IssueFactory.create(state=ISSUE_STATES.CLOSED)
-        issue_3 = IssueFactory.create(state=ISSUE_STATES.CLOSED)
+        issue_1 = IssueFactory.create(state=IssueState.CLOSED)
+        issue_2 = IssueFactory.create(state=IssueState.CLOSED)
+        issue_3 = IssueFactory.create(state=IssueState.CLOSED)
 
         user_2 = UserFactory.create()
         user_3 = UserFactory.create()

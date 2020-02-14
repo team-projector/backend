@@ -5,7 +5,7 @@ from typing import ClassVar
 from django.db import models
 
 from apps.development.models import Ticket
-from apps.development.models.issue import ISSUE_STATES, Issue
+from apps.development.models.issue import Issue, IssueState
 
 PROBLEM_OVER_DUE_DATE = "OVER_DUE_DATE"
 
@@ -42,7 +42,7 @@ class OverDueDateChecker(BaseProblemChecker):
         over_due_date = Issue.objects.filter(
             ticket_id=models.OuterRef("id"),
             due_date__gt=models.OuterRef("due_date"),
-            state=ISSUE_STATES.OPENED,
+            state=IssueState.OPENED,
         )
 
         return models.Exists(over_due_date)
@@ -57,5 +57,5 @@ class OverDueDateChecker(BaseProblemChecker):
             return prefetched
 
         return ticket.issues.filter(
-            due_date__gt=ticket.due_date, state=ISSUE_STATES.OPENED,
+            due_date__gt=ticket.due_date, state=IssueState.OPENED,
         ).exists()

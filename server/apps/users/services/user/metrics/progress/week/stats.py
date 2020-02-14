@@ -8,7 +8,7 @@ from django.db.models.functions import Cast, Coalesce, TruncDate, TruncWeek
 from django.utils.timezone import make_aware
 
 from apps.core.utils.date import date2datetime
-from apps.development.models.issue import ISSUE_STATES, Issue
+from apps.development.models.issue import Issue, IssueState
 from apps.payroll.models import SpentTime
 from apps.users.models import User
 
@@ -77,7 +77,7 @@ class UserWeekStatsProvider:
                 make_aware(date2datetime(self._start)),
                 make_aware(date2datetime(self._end)),
             ),
-            state=ISSUE_STATES.CLOSED,
+            state=IssueState.CLOSED,
             total_time_spent__gt=0,
             time_estimate__gt=0,
             week__isnull=False,
