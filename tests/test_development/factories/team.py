@@ -8,3 +8,8 @@ class TeamFactory(factory.django.DjangoModelFactory):
 
     class Meta:
         model = Team
+
+    @factory.post_generation
+    def members(self, create, extracted, **kwargs):
+        if create and extracted:
+            self.members.set(extracted)

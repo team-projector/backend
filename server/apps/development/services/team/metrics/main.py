@@ -63,12 +63,8 @@ class TeamMetricsProvider:
         issues = IssueTeamMetrics()
 
         issues.count = self.issues.count()
-        issues.opened_count = self._get_opened_count(
-            self.issues,
-        )
-        issues.opened_estimated = self._get_opened_estimated(
-            self.issues,
-        )
+        issues.opened_count = self._get_opened_count(self.issues)
+        issues.opened_estimated = self._get_opened_estimated(self.issues)
 
         return issues
 
@@ -93,19 +89,16 @@ class TeamMetricsProvider:
             state=ISSUE_STATES.OPENED,
         ).aggregate(
             total_time_estimate=Sum("time_estimate"),
-        )["total_time_estimate"]
+        )["total_time_estimate"] or 0
 
 
 def get_team_metrics(team: Team) -> TeamMetrics:
     """Get metrics for team."""
     users = TeamMember.objects.get_no_watchers(team)
 
-    issues = Issue.objects.filter(user__in=users)
-    merge_requests = MergeRequest.objects.filter(user__in=users)
-
     provider = TeamMetricsProvider(
-        issues,
-        merge_requests,
+        Issue.objects.filter(user__in=users),
+        MergeRequest.objects.filter(user__in=users),
     )
 
     return provider.execute()
