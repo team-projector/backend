@@ -43,7 +43,7 @@ test:
   variables:
     DJANGO_ENV: test
   services:
-    - postgres
+    - postgres:12.1
   script:
     - cd /app
     - pytest -n auto --dist=loadscope --cov=server --cov-report=html:coverage_html
