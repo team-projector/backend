@@ -41,7 +41,7 @@ def test_query(user, ghl_client):
 
     response = ghl_client.execute(
         GHL_QUERY_APPROVE_WORK_BREAK,
-        variables={"id": work_break.pk},
+        variable_values={"id": work_break.pk},
     )
 
     work_break.refresh_from_db()

@@ -21,7 +21,7 @@ def test_no_remains(db):
         total_time_spent=seconds(hours=4),
     )
 
-    assert issue.time_remains == 0
+    assert issue.time_remains == -seconds(hours=2)
 
 
 def test_time_estimate_is_none(db):

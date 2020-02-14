@@ -23,7 +23,7 @@ def gql_client_authenticated(rf, admin_user):
     request = rf.post("/")
     request.user = admin_user
 
-    return GQLClient(schema, context=request)
+    return GQLClient(schema, context_value=request)
 
 
 @pytest.fixture()  # delete
@@ -31,7 +31,7 @@ def gql_client_anonymous(rf):
     request = rf.post("/")
     request.user = AnonymousUser()
 
-    return GQLClient(schema, context=request)
+    return GQLClient(schema, context_value=request)
 
 
 @pytest.fixture(scope="session")

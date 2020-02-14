@@ -128,6 +128,7 @@ def test_remains(user):
     issue_3 = IssueFactory.create(
         user=user,
         state=ISSUE_STATES.CLOSED,
+        time_estimate=seconds(hours=4),
         total_time_spent=seconds(hours=3),
     )
 
@@ -135,10 +136,10 @@ def test_remains(user):
     assert metrics.remains == seconds(hours=2)
 
     metrics = get_issue_metrics(issue_2)
-    assert metrics.remains == 0
+    assert metrics.remains == -seconds(hours=4)
 
     metrics = get_issue_metrics(issue_3)
-    assert metrics.remains == 0
+    assert metrics.remains == seconds(hours=1)
 
 
 def test_efficiency(user):
@@ -165,7 +166,7 @@ def test_efficiency(user):
     assert metrics.efficiency == 2.0
 
     metrics = get_issue_metrics(issue_2)
-    assert metrics.remains == 0
+    assert metrics.remains == -seconds(hours=4)
 
     metrics = get_issue_metrics(issue_3)
     assert metrics.efficiency is None

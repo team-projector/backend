@@ -59,7 +59,7 @@ def test_retreive(user, ghl_client):
 
     response = ghl_client.execute(
         GHL_QUERY_TICKET,
-        variables={
+        variable_values={
             "id": issue.ticket_id,
         },
     )

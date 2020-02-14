@@ -51,7 +51,7 @@ def test_query(project_manager, ghl_client):
 
     response = ghl_client.execute(
         GHL_QUERY_CREATE_TICKET,
-        variables={
+        variable_values={
             "title": "test ticket",
             "type": TYPE_FEATURE,
             "startDate": str(datetime.now().date()),

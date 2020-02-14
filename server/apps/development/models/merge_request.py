@@ -146,7 +146,7 @@ class MergeRequest(
     def time_remains(self) -> Optional[int]:
         """Return the difference between estimate and spent time."""
         if self.time_estimate is not None and self.total_time_spent is not None:
-            return max(self.time_estimate - self.total_time_spent, 0)
+            return self.time_estimate - self.total_time_spent
 
         return None
 

@@ -28,7 +28,7 @@ def test_query(issue, ticket, ghl_client, user):
 
     response = ghl_client.execute(
         GHL_QUERY_UPDATE_ISSUE,
-        variables={
+        variable_values={
             "id": issue.pk,
             "ticket": ticket.pk,
         }
