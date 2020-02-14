@@ -7,15 +7,17 @@ from django.core.serializers.json import DjangoJSONEncoder
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
-from apps.core.models.utils import Choices
 from apps.development.models.managers import NoteManager
 from apps.users.models import User
 
-NOTE_TYPES = Choices(
-    ("TIME_SPEND", "Time spend"),
-    ("RESET_SPEND", "Reset spend"),
-    ("MOVED_FROM", "Moved from"),
-)
+
+class NoteType(models.TextChoices):
+    """Note types choices."""
+
+    TIME_SPEND = "TIME_SPEND", _("CH_TIME_SPEND")  # noqa: WPS115
+    RESET_SPEND = "RESET_SPEND", _("CH_RESET_SPEND")  # noqa: WPS115
+    MOVED_FROM = "MOVED_FROM", _("CH_MOVED_FROM")  # noqa: WPS115
+
 
 NOTE_TYPE_MAX_LENGTH = 20
 
@@ -28,7 +30,6 @@ class Note(models.Model):
     """
 
     object_id = models.IntegerField()
-
     content_object = GenericForeignKey()
 
     content_type = models.ForeignKey(
@@ -63,7 +64,7 @@ class Note(models.Model):
     body = models.TextField()
 
     type = models.CharField(  # noqa: A003
-        choices=NOTE_TYPES,
+        choices=NoteType.choices,
         max_length=NOTE_TYPE_MAX_LENGTH,
         verbose_name=_("VN__TYPE"),
         help_text=_("HT__TYPE"),

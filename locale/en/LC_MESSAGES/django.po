@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-02-04 17:08+0300\n"
+"POT-Creation-Date: 2020-02-14 20:29+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -169,6 +169,15 @@ msgstr "Notes"
 
 msgid "HT__NOTES"
 msgstr "Notes"
+
+msgid "CH_TIME_SPEND"
+msgstr "Time spend"
+
+msgid "CH_RESET_SPEND"
+msgstr "Reset spend"
+
+msgid "CH_MOVED_FROM"
+msgstr "Moved from"
 
 msgid "VN__TYPE"
 msgstr "Type"

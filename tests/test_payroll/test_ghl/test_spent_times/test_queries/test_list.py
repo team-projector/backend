@@ -3,7 +3,7 @@
 from pytest import raises
 
 from apps.core.graphql.errors import GraphQLPermissionDenied
-from apps.development.models.note import NOTE_TYPES
+from apps.development.models.note import NoteType
 from tests.test_development.factories import IssueFactory, IssueNoteFactory
 from tests.test_payroll.factories import SalaryFactory
 
@@ -99,7 +99,7 @@ def _create_spents(issue, size=3):
     IssueNoteFactory.create_batch(
         size,
         content_object=issue,
-        type=NOTE_TYPES.TIME_SPEND,
+        type=NoteType.TIME_SPEND,
         data={
             "spent": 10,
             "date": issue.created_at.date(),

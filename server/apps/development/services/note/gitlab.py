@@ -8,7 +8,7 @@ from typing import DefaultDict, Match, Optional, Pattern
 
 from apps.core.gitlab.parsers import parse_gl_date, parse_gl_datetime
 from apps.core.utils.time import seconds
-from apps.development.models.note import NOTE_TYPES
+from apps.development.models.note import NoteType
 
 RE_SPEND_FULL: Pattern[str] = re.compile(
     r"^(?P<action>(added|subtracted)) (?P<spent>.+) "
@@ -104,7 +104,7 @@ class SpendAddedParser(BaseNoteParser):
             spent *= -1
 
         return NoteReadResult(
-            NOTE_TYPES.TIME_SPEND, {
+            NoteType.TIME_SPEND, {
                 "spent": spent,
                 "date": self._extract_date(gl_note, match),
             },
@@ -124,7 +124,7 @@ class SpendResetParser(BaseNoteParser):
     def parse(self, gl_note) -> Optional[NoteReadResult]:
         """Parse note."""
         if gl_note.body == SPEND_RESET_MESSAGE:
-            return NoteReadResult(NOTE_TYPES.RESET_SPEND, {})
+            return NoteReadResult(NoteType.RESET_SPEND, {})
 
         return None
 
@@ -136,7 +136,7 @@ class MovedFromParser(BaseNoteParser):
         """Parse note."""
         is_system = getattr(gl_note, "system", False)  # noqa: WPS425
         if is_system and RE_MOVED_FROM.match(gl_note.body):
-            return NoteReadResult(NOTE_TYPES.MOVED_FROM, {})
+            return NoteReadResult(NoteType.MOVED_FROM, {})
 
         return None
 

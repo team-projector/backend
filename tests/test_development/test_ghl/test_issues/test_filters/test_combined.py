@@ -3,7 +3,7 @@
 from datetime import datetime, timedelta
 
 from apps.development.graphql.filters import IssuesFilterSet
-from apps.development.models.issue import IssueState, Issue
+from apps.development.models.issue import Issue, IssueState
 from tests.test_development.factories import IssueFactory
 
 

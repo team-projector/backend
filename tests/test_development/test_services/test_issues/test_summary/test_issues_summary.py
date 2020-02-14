@@ -8,7 +8,7 @@ from apps.development.graphql.resolvers.issues_summary import (
     resolve_issues_team_summaries,
 )
 from apps.development.models import Project, Team, TeamMember
-from apps.development.models.issue import IssueState, Issue
+from apps.development.models.issue import Issue, IssueState
 from apps.development.models.milestone import MILESTONE_STATES
 from apps.development.services.issue.summary import (
     get_issues_summary,

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from apps.development.models.note import NOTE_TYPES
+from apps.development.models.note import NoteType
 from apps.development.services.merge_request.gl.manager import (
     MergeRequestGlManager,
 )
@@ -42,7 +42,7 @@ def test_notes(db, gl_mocker, gl_client):
     note = merge_request.notes.first()
 
     assert note.gl_id == gl_note["id"]
-    assert note.type == NOTE_TYPES.TIME_SPEND
+    assert note.type == NoteType.TIME_SPEND
     assert note.body == "added 1h of time spent at 2000-01-01"
     assert note.created_at is not None
     assert note.updated_at is not None

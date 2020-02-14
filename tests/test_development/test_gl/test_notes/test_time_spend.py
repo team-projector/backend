@@ -8,7 +8,7 @@ from apps.core.gitlab.parsers import GITLAB_DATE_FORMAT, GITLAB_DATETIME_FORMAT
 from apps.core.utils.objects import dict2obj
 from apps.core.utils.time import seconds
 from apps.development.models import Note
-from apps.development.models.note import NOTE_TYPES
+from apps.development.models.note import NoteType
 from apps.development.services.note.gitlab import SPEND_RESET_MESSAGE
 from tests.test_development.factories import IssueFactory
 
@@ -34,7 +34,7 @@ def test_added(user):
     note = Note.objects.first()
     assert note.gl_id == 2
     assert note.user == user
-    assert note.type == NOTE_TYPES.TIME_SPEND
+    assert note.type == NoteType.TIME_SPEND
     assert note.body == body
     assert note.data["spent"] == seconds(hours=1, minutes=1)
     assert note.data["date"] == date_str
@@ -61,7 +61,7 @@ def test_subtracted(user):
     assert note.gl_id == 2
     assert note.user == user
     assert note.body == body
-    assert note.type == NOTE_TYPES.TIME_SPEND
+    assert note.type == NoteType.TIME_SPEND
     assert note.data["spent"] == -seconds(hours=1, minutes=1)
     assert note.data["date"] == date_str
 
@@ -85,7 +85,7 @@ def test_removed(user):
     assert note.gl_id == 2
     assert note.user == user
     assert note.body == SPEND_RESET_MESSAGE
-    assert note.type == NOTE_TYPES.RESET_SPEND
+    assert note.type == NoteType.RESET_SPEND
     assert not note.data
 
 
@@ -223,7 +223,7 @@ def test_body_without_date(user):
     note = Note.objects.first()
     assert note.gl_id == 2
     assert note.user == user
-    assert note.type == NOTE_TYPES.TIME_SPEND
+    assert note.type == NoteType.TIME_SPEND
     assert note.body == body
     assert note.data["spent"] == seconds(hours=1, minutes=1)
     assert note.data["date"] == note_date.strftime(GITLAB_DATE_FORMAT)

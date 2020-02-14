@@ -5,7 +5,7 @@ from datetime import datetime
 from apps.core.gitlab import GITLAB_DATETIME_FORMAT
 from apps.core.utils.objects import dict2obj
 from apps.development.models import Note
-from apps.development.models.note import NOTE_TYPES
+from apps.development.models.note import NoteType
 from tests.test_development.factories import IssueFactory
 
 
@@ -31,7 +31,7 @@ def test_success(user):
     note = Note.objects.first()
     assert note.gl_id == 2
     assert note.user == user
-    assert note.type == NOTE_TYPES.MOVED_FROM
+    assert note.type == NoteType.MOVED_FROM
     assert note.body == body
 
 

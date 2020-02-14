@@ -8,7 +8,7 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 
 from apps.core.gitlab import parse_gl_date
-from apps.development.models.note import NOTE_TYPES, Note
+from apps.development.models.note import Note, NoteType
 
 
 class NotableMixin(models.Model):
@@ -33,10 +33,10 @@ class NotableMixin(models.Model):
             time_spent = 0
             note_date = note.created_at.date()
 
-            if note.type == NOTE_TYPES.RESET_SPEND:
+            if note.type == NoteType.RESET_SPEND:
                 time_spent = -users_spents[note.user_id]
                 users_spents[note.user_id] = 0
-            elif note.type == NOTE_TYPES.TIME_SPEND:
+            elif note.type == NoteType.TIME_SPEND:
                 time_spent = note.data["spent"]
                 note_date = parse_gl_date(note.data["date"])
 
@@ -62,7 +62,7 @@ class NotableMixin(models.Model):
         notes: List[Note] = []
 
         for note in self.notes.all().order_by("created_at"):
-            if note.type == NOTE_TYPES.MOVED_FROM:
+            if note.type == NoteType.MOVED_FROM:
                 notes = []
             else:
                 notes.append(note)
