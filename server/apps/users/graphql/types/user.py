@@ -20,7 +20,7 @@ class UserType(BaseDjangoObjectType):
 
     class Meta:
         model = User
-        exclude_fields = ("password",)
+        exclude = ("password",)
         interfaces = (DatasourceRelayNode,)
         connection_class = DataSourceConnection
         name = "User"

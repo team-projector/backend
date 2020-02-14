@@ -7,7 +7,7 @@ from rest_framework.fields import Field
 
 from apps.core.drf.fields.choices_field import ChoicesField
 from apps.development.models import Issue
-from apps.development.models.ticket import TICKET_TYPES, Ticket, TicketState
+from apps.development.models.ticket import Ticket, TicketState, TicketType
 
 
 class TicketBaseInput(serializers.ModelSerializer):
@@ -19,7 +19,7 @@ class TicketBaseInput(serializers.ModelSerializer):
     # type, type."
     type = ChoicesField(  # noqa: A003
         required=False,
-        choices=TICKET_TYPES.keys(),
+        choices=TicketType.values,
     )
 
     state = ChoicesField(

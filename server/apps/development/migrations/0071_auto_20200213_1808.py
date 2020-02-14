@@ -6,8 +6,6 @@ from apps.development.models.ticket import TicketState
 
 
 def set_ticket_default_state(apps, schema_editor):
-    # We can't import the Person model directly as it may be a newer
-    # version than this migration expects. We use the historical version.
     Ticket = apps.get_model('development', 'Ticket')
     Ticket.objects.filter(state='').update(state=TicketState.CREATED)
 

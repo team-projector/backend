@@ -10,7 +10,7 @@ from apps.core.graphql.errors import (
     GraphQLInputError,
     GraphQLPermissionDenied,
 )
-from apps.development.models.ticket import TYPE_FEATURE, TicketState
+from apps.development.models.ticket import TicketState, TicketType
 from tests.test_development.factories import (
     IssueFactory,
     ProjectMilestoneFactory,
@@ -53,7 +53,7 @@ def test_query(project_manager, ghl_client):
         GHL_QUERY_CREATE_TICKET,
         variable_values={
             "title": "test ticket",
-            "type": TYPE_FEATURE,
+            "type": TicketType.FEATURE,
             "startDate": str(datetime.now().date()),
             "dueDate": str(datetime.now().date()),
             "url": "http://test1.com",
@@ -113,7 +113,7 @@ def test_without_permissions(user, ghl_auth_mock_info, create_ticket_mutation):
             title="test ticket",
             startDate=datetime.now().date(),
             dueDate=datetime.now().date(),
-            type=TYPE_FEATURE,
+            type=TicketType.FEATURE,
             url="http://test1.com",
             milestone=milestone.pk
         )

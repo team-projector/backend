@@ -5,21 +5,18 @@ from django.utils.translation import gettext_lazy as _
 
 from apps.core.consts import DEFAULT_TITLE_LENGTH
 from apps.core.models.mixins import Timestamps
-from apps.core.models.utils import Choices
-
-TYPE_FEATURE = "FEATURE"
-TYPE_IMPROVEMENT = "IMPROVEMENT"
-TYPE_BUG_FIXING = "BUG_FIXING"
-
-TICKET_TYPES = Choices(
-    (TYPE_FEATURE, _("CH_FEATURE")),
-    (TYPE_IMPROVEMENT, _("CH_IMPROVEMENT")),
-    (TYPE_BUG_FIXING, _("CH_BUG_FIXING")),
-)
 
 TICKET_TYPE_MAX_LENGTH = 50
 TICKET_ROLE_MAX_LENGTH = 50
 TICKET_STATE_MAX_LENGTH = 50
+
+
+class TicketType(models.TextChoices):
+    """Ticket types choices."""
+
+    FEATURE = "FEATURE", _("CH_FEATURE")  # noqa: WPS115
+    IMPROVEMENT = "IMPROVEMENT", _("CH_IMPROVEMENT")  # noqa: WPS115
+    BUG_FIXING = "BUG_FIXING", _("CH_BUG_FIXING")  # noqa: WPS115
 
 
 class TicketState(models.TextChoices):
@@ -37,7 +34,8 @@ class Ticket(Timestamps):
     """The ticket model."""
 
     type = models.CharField(  # noqa: A003
-        choices=TICKET_TYPES,
+        choices=TicketType.choices,
+        default=TicketType.FEATURE,
         max_length=TICKET_TYPE_MAX_LENGTH,
         blank=True,
         verbose_name=_("VN__TYPE"),
