@@ -22,7 +22,7 @@ def test_query(user, ghl_client):
 
     response = ghl_client.execute(
         GHL_QUERY_MERGE_REQUEST_SUMMARY,
-        variables={
+        variable_values={
             "user": user.id,
         },
     )

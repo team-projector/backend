@@ -23,7 +23,7 @@ def test_query(user, ghl_client):
 
     response = ghl_client.execute(
         GHL_QUERY_ISSUE,
-        variables={
+        variable_values={
             "id": issue.pk,
         },
     )

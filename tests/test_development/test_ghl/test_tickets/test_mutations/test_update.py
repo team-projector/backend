@@ -34,7 +34,7 @@ def test_query(project_manager, ghl_client, ticket):
 
     response = ghl_client.execute(
         GHL_QUERY_UPDATE_TICKET,
-        variables={
+        variable_values={
             "id": ticket.pk,
             "title": new_title,
             "state": TicketState.DOING,

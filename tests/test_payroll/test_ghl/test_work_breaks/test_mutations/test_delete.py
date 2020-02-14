@@ -20,7 +20,7 @@ def test_query(user, ghl_client):
 
     response = ghl_client.execute(
         GHL_QUERY_DELETE_WORK_BREAK,
-        variables={"id": work_break.id},
+        variable_values={"id": work_break.id},
     )
 
     assert response["data"]["deleteWorkBreak"]["ok"]

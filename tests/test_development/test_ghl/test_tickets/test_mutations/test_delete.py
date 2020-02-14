@@ -19,7 +19,7 @@ def test_query(project_manager, ghl_client, ticket):
 
     response = ghl_client.execute(
         GHL_DELETE_TICKET,
-        variables={
+        variable_values={
             "id": ticket.pk,
         },
     )

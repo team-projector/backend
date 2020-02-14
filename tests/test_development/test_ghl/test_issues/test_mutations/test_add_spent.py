@@ -46,7 +46,7 @@ def test_query(project_manager, ghl_client, gl_mocker, user):
 
     response = ghl_client.execute(
         GHL_QUERY_ADD_SPENT_TO_ISSUE,
-        variables={
+        variable_values={
             "id": issue.pk,
             "seconds": 60,
         }

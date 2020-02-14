@@ -131,13 +131,14 @@ def test_remains(user):
         user=user,
         state=MERGE_REQUESTS_STATES.CLOSED,
         total_time_spent=seconds(hours=3),
+        time_estimate=seconds(hours=3),
     )
 
     metrics = get_merge_request_metrics(mergerequest_1)
     assert metrics.remains == seconds(hours=2)
 
     metrics = get_merge_request_metrics(mergerequest_2)
-    assert metrics.remains == 0
+    assert metrics.remains == -seconds(hours=4)
 
     metrics = get_merge_request_metrics(mergerequest_3)
     assert metrics.remains == 0
@@ -167,7 +168,7 @@ def test_efficiency(user):
     assert metrics.efficiency == 2.0
 
     metrics = get_merge_request_metrics(mergerequest_2)
-    assert metrics.remains == 0
+    assert metrics.remains == -seconds(hours=4)
 
     metrics = get_merge_request_metrics(mergerequest_3)
     assert metrics.efficiency is None
