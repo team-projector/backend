@@ -5,16 +5,18 @@ from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
-from apps.core.models.utils import Choices
 from apps.users.models.managers import UserManager
 
-USER_ROLES = Choices(
-    ("DEVELOPER", _("CH_DEVELOPER")),
-    ("TEAM_LEADER", _("CH_TEAM_LEADER")),
-    ("PROJECT_MANAGER", _("CH_PROJECT_MANAGER")),
-    ("CUSTOMER", _("CH_CUSTOMER")),
-    ("SHAREHOLDER", _("CH_SHAREHOLDER")),
-)
+
+class UserRole(models.TextChoices):
+    """User roles choices."""
+
+    DEVELOPER = "DEVELOPER", _("CH_DEVELOPER")  # noqa: WPS115
+    TEAM_LEADER = "TEAM_LEADER", _("CH_TEAM_LEADER")  # noqa: WPS115
+    PROJECT_MANAGER = "PROJECT_MANAGER", _("CH_PROJECT_MANAGER")  # noqa: WPS115
+    CUSTOMER = "CUSTOMER", _("CH_CUSTOMER")  # noqa: WPS115
+    SHAREHOLDER = "SHAREHOLDER", _("CH_SHAREHOLDER")  # noqa: WPS115
+
 
 USER_LOGIN_MAX_LENGTH = 150
 USER_EMAIL_MAX_LENGTH = 150
@@ -67,7 +69,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     )
 
     roles = BitField(
-        flags=USER_ROLES,
+        flags=UserRole.choices,
         default=0,
     )
 
