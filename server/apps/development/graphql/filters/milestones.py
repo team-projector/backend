@@ -5,7 +5,7 @@ from django.db.models import QuerySet
 
 from apps.core.graphql.filters import SearchFilter
 from apps.core.graphql.filters.ordering import OrderingFilter
-from apps.development.models.milestone import MilestoneState
+from apps.development.models.milestone import Milestone, MilestoneState
 
 
 class ActiveFilter(django_filters.BooleanFilter):
@@ -31,3 +31,7 @@ class MilestonesFilterSet(django_filters.FilterSet):
     )
 
     q = SearchFilter(fields=("title", "=gl_url"))  # noqa: WPS111
+
+    class Meta:
+        model = Milestone
+        fields = ("active", "state")
