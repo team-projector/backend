@@ -1,10 +1,16 @@
 # -*- coding: utf-8 -*-
 
-from apps.payroll.graphql.queries import salaries, spent_times, work_breaks
+from apps.payroll.graphql.queries import (
+    penalties,
+    salaries,
+    spent_times,
+    work_breaks,
+)
 
 
-class PayrollQueries(
+class PayrollQueries(  # noqa: WPS215
     salaries.SalariesQueries,
+    penalties.PenaltiesQueries,
     spent_times.TimeExpensesQueries,
     work_breaks.WorkBreaksQueries,
 ):
