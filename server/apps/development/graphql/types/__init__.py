@@ -22,3 +22,4 @@ from .team_member_progress_metrics import TeamMemberProgressMetricsType
 from .team_metrics import TeamMetricsType
 from .ticket import TicketType
 from .tickets_summary import TicketsSummaryType
+from .milestones_summary import MilestonesSummaryType

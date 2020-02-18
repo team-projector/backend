@@ -5,7 +5,8 @@ import graphene
 from apps.core.graphql.connection_fields import DataSourceConnectionField
 from apps.core.graphql.relay_nodes import DatasourceRelayNode
 from apps.development.graphql.filters import MilestonesFilterSet
-from apps.development.graphql.types import MilestoneType
+from apps.development.graphql.resolvers import resolve_milestones_summary
+from apps.development.graphql.types import MilestonesSummaryType, MilestoneType
 
 
 class MilestonesQueries(graphene.ObjectType):
@@ -16,4 +17,10 @@ class MilestonesQueries(graphene.ObjectType):
     all_milestones = DataSourceConnectionField(
         MilestoneType,
         filterset_class=MilestonesFilterSet,
+    )
+
+    milestones_summary = graphene.Field(
+        MilestonesSummaryType,
+        milestone=graphene.ID(),
+        resolver=resolve_milestones_summary,
     )
