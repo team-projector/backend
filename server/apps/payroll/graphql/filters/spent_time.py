@@ -59,21 +59,6 @@ class StateFilter(django_filters.CharFilter):
         )
 
 
-class SalaryFilter(django_filters.ModelChoiceFilter):
-    """Filter spent times by salary."""
-
-    def __init__(self) -> None:
-        """Initialize self."""
-        super().__init__(queryset=Salary.objects.all())
-
-    def filter(self, queryset, value) -> QuerySet:  # noqa: A003, WPS110
-        """Do filtering."""
-        if not value:
-            return queryset
-
-        return queryset.filter(salary=value)
-
-
 class SpentTimeFilterSet(django_filters.FilterSet):
     """Set of filters for Spent Time."""
 
@@ -81,7 +66,7 @@ class SpentTimeFilterSet(django_filters.FilterSet):
     project = ProjectFilter()
     team = TeamFilter()
     state = StateFilter()
-    salary = SalaryFilter()
+    salary = django_filters.ModelChoiceFilter(queryset=Salary.objects.all())
 
     order_by = OrderingFilter(
         fields=("date", "created_at"),
