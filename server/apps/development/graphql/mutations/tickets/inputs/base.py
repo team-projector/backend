@@ -38,7 +38,7 @@ class TicketBaseInput(serializers.ModelSerializer):
         model = Ticket
         fields = [
             "type", "title", "start_date", "due_date", "url", "issues", "role",
-            "state",
+            "state", "milestone",
         ]
 
     def get_fields(self) -> Dict[str, Field]:

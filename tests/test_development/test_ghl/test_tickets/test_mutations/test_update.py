@@ -4,7 +4,10 @@ from pytest import raises
 
 from apps.core.graphql.errors import GraphQLInputError, GraphQLPermissionDenied
 from apps.development.models.ticket import TicketState
-from tests.test_development.factories import IssueFactory
+from tests.test_development.factories import (
+    IssueFactory,
+    ProjectMilestoneFactory,
+)
 
 GHL_QUERY_UPDATE_TICKET = """
 mutation (
@@ -31,7 +34,6 @@ def test_query(project_manager, ghl_client, ticket):
     ghl_client.set_user(project_manager)
 
     new_title = "new_{0}".format(ticket.title)
-
     response = ghl_client.execute(
         GHL_QUERY_UPDATE_TICKET,
         variable_values={
@@ -152,3 +154,23 @@ def test_update_state(
     ticket.refresh_from_db()
 
     assert TicketState.PLANNING == ticket.state
+
+
+def test_update_milestone(
+    project_manager,
+    ghl_auth_mock_info,
+    update_ticket_mutation,
+    ticket,
+):
+    """Test update milestone."""
+    new_milestone = ProjectMilestoneFactory()
+    update_ticket_mutation(
+        root=None,
+        info=ghl_auth_mock_info,
+        id=ticket.id,
+        milestone=new_milestone.id,
+    )
+
+    ticket.refresh_from_db()
+
+    assert new_milestone == ticket.milestone

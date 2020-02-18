@@ -12,9 +12,6 @@ from apps.development.graphql.mutations.tickets.inputs.base import (
 class CreateTicketInput(TicketBaseInput):
     """Ticket create serializer."""
 
-    class Meta(TicketBaseInput.Meta):
-        fields = [*TicketBaseInput.Meta.fields, "milestone"]
-
     def get_fields(self) -> Dict[str, Field]:
         """Returns serializer fields."""
         fields = super().get_fields()
