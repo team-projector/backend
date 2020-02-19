@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from apps.payroll.graphql.queries import (
+    bonuses,
     penalties,
     salaries,
     spent_times,
@@ -13,5 +14,6 @@ class PayrollQueries(  # noqa: WPS215
     penalties.PenaltiesQueries,
     spent_times.TimeExpensesQueries,
     work_breaks.WorkBreaksQueries,
+    bonuses.BonusesQueries,
 ):
     """Class representing list of all queries."""
