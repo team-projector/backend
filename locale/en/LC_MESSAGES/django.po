@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-02-14 20:29+0300\n"
+"POT-Creation-Date: 2020-02-20 17:45+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -134,6 +134,9 @@ msgstr "Merge Request"
 msgid "VN__MERGE_REQUESTS"
 msgstr "Merge Requests"
 
+msgid "CH_ACTIVE"
+msgstr "Is active"
+
 msgid "VN__DESCRIPTION"
 msgstr "Description"
 
@@ -248,7 +251,7 @@ msgstr "Project groups"
 msgid "CH_DEVELOPER"
 msgstr "Developer"
 
-msgid "CH_PM"
+msgid "CH_PROJECT_MANAGER"
 msgstr "Project manager"
 
 msgid "CH_CUSTOMER"
@@ -467,11 +470,23 @@ msgstr "Customer sum"
 msgid "HT__CUSTOMER_SUM"
 msgstr "Customer sum"
 
+msgid "VN__TAX_SUM"
+msgstr "Tax sum"
+
+msgid "HT__TAX_SUM"
+msgstr " "
+
 msgid "VN__RATE"
 msgstr "Rate"
 
 msgid "HT__RATE"
 msgstr "Rate"
+
+msgid "VN__TAX_RATE"
+msgstr "Tax rate"
+
+msgid "HT__TAX_RATE"
+msgstr " "
 
 msgid "VN__CUSTOMER_RATE"
 msgstr "Customer rate"
@@ -524,6 +539,12 @@ msgstr "Comment"
 msgid "HT__COMMENT"
 msgstr "Comment"
 
+msgid "VN__PAID"
+msgstr "Paid"
+
+msgid "HT__PAID"
+msgstr "Paid"
+
 msgid "VN__WORKBREAK"
 msgstr "Workbreak"
 
@@ -544,9 +565,6 @@ msgstr "Tokens"
 
 msgid "CH_TEAM_LEADER"
 msgstr "Team leader"
-
-msgid "CH_PROJECT_MANAGER"
-msgstr "Project manager"
 
 msgid "CH_SHAREHOLDER"
 msgstr "Shareholder"
@@ -569,6 +587,12 @@ msgstr "Email"
 msgid "HT__EMAIL"
 msgstr "Email"
 
+msgid "VN__POSITION"
+msgstr "Position"
+
+msgid "HT__POSITION"
+msgstr " "
+
 msgid "VN__HOUR_RATE"
 msgstr "Hour rate, ₽"
 
@@ -580,6 +604,12 @@ msgstr "Customer hour rate, $"
 
 msgid "HT__CUSTOMER_HOUR_RATE"
 msgstr "Customer hour rate, $"
+
+msgid "VN__ANNUAL_PAID_WORK_BREAKS_DAYS"
+msgstr "Annual paid work breaks days"
+
+msgid "HT__ANNUAL_PAID_WORK_BREAKS_DAYS"
+msgstr " "
 
 msgid "VN__IS_STAFF"
 msgstr "Is Staff"

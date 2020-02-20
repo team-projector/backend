@@ -55,8 +55,8 @@ class SalaryCalculator:
         salary.bonus = self._get_bonus(salary)
         salary.total = salary.sum + salary.bonus - salary.penalty
 
-        if user.taxes:
-            salary.taxes = salary.total * Decimal.from_float(user.taxes)
+        if user.tax_rate:
+            salary.taxes = salary.total * Decimal.from_float(user.tax_rate)
 
         salary.save()
 

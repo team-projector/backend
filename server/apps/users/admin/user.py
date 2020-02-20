@@ -45,7 +45,7 @@ class UserAdmin(
         (None, {
             "fields": (
                 "login", "email", "name", "roles", "is_superuser", "is_staff",
-                "is_active", "last_login",
+                "is_active", "last_login", "position",
             ),
         }),
         ("GitLab", {
@@ -55,12 +55,14 @@ class UserAdmin(
         }),
         ("Costs", {
             "fields": (
-                "hour_rate", "customer_hour_rate", "taxes", "daily_work_hours",
+                "hour_rate", "customer_hour_rate", "tax_rate",
+                "daily_work_hours", "annual_paid_work_breaks_days",
             ),
         }),
     )
     readonly_fields = ("last_login",)
     change_password_form = AdminPasswordChangeForm
+    autocomplete_fields = ("position", "groups")
 
     @admin_field("Change password")
     def change_password_link(self, instance):

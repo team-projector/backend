@@ -54,6 +54,12 @@ class WorkBreak(ApprovedMixin, Timestamps):
         help_text=_("HT__COMMENT"),
     )
 
+    paid = models.BooleanField(
+        default=False,
+        verbose_name=_("VN__PAID"),
+        help_text=_("HT__PAID"),
+    )
+
     objects = WorkBreakManager()  # noqa: WPS110
 
     class Meta:

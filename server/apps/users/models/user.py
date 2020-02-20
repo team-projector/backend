@@ -5,6 +5,7 @@ from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
+from apps.users.models import Position
 from apps.users.models.managers import UserManager
 
 
@@ -50,6 +51,15 @@ class User(AbstractBaseUser, PermissionsMixin):
         help_text=_("HT__EMAIL"),
     )
 
+    position = models.ForeignKey(
+        Position,
+        models.SET_NULL,
+        null=True,
+        blank=True,
+        verbose_name=_("VN__POSITION"),
+        help_text=_("HT__POSITION"),
+    )
+
     hour_rate = models.FloatField(
         default=0,
         verbose_name=_("VN__HOUR_RATE"),
@@ -62,10 +72,16 @@ class User(AbstractBaseUser, PermissionsMixin):
         help_text=_("HT__CUSTOMER_HOUR_RATE"),
     )
 
-    taxes = models.FloatField(
+    tax_rate = models.FloatField(
         default=0,
-        verbose_name=_("VN__TAXES"),
-        help_text=_("HT__TAXES"),
+        verbose_name=_("VN__TAX_RATE"),
+        help_text=_("HT__TAX_RATE"),
+    )
+
+    annual_paid_work_breaks_days = models.IntegerField(
+        default=0,
+        verbose_name=_("VN__ANNUAL_PAID_WORK_BREAKS_DAYS"),
+        help_text=_("HT__ANNUAL_PAID_WORK_BREAKS_DAYS"),
     )
 
     roles = BitField(
