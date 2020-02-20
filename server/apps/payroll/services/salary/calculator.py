@@ -39,6 +39,9 @@ class SalaryCalculator:
         salary = Salary.objects.create(
             created_by=self.initiator,
             user=user,
+            hour_rate=user.hour_rate,
+            tax_rate=user.tax_rate,
+            position=user.position,
             period_from=self.period_from,
             period_to=self.period_to,
         )

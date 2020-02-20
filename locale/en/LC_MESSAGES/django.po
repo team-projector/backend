@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-02-20 17:45+0300\n"
+"POT-Creation-Date: 2020-02-20 20:05+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -413,6 +413,12 @@ msgstr "Penalty"
 msgid "VN__PENALTIES"
 msgstr "Penalties"
 
+msgid "VN__POSITION"
+msgstr "Position"
+
+msgid "HT__POSITION"
+msgstr " "
+
 msgid "VN__PERIOD_FROM"
 msgstr "Period from"
 
@@ -430,6 +436,18 @@ msgstr "Charged time"
 
 msgid "HT__CHARGED_TIME"
 msgstr "Charged time"
+
+msgid "VN__HOUR_RATE"
+msgstr "Hour rate, ₽"
+
+msgid "HT__HOUR_RATE"
+msgstr "Hour rate, ₽"
+
+msgid "VN__TAX_RATE"
+msgstr "Tax rate"
+
+msgid "HT__TAX_RATE"
+msgstr " "
 
 msgid "VN__TAXES"
 msgstr "Taxes"
@@ -481,12 +499,6 @@ msgstr "Rate"
 
 msgid "HT__RATE"
 msgstr "Rate"
-
-msgid "VN__TAX_RATE"
-msgstr "Tax rate"
-
-msgid "HT__TAX_RATE"
-msgstr " "
 
 msgid "VN__CUSTOMER_RATE"
 msgstr "Customer rate"
@@ -586,18 +598,6 @@ msgstr "Email"
 
 msgid "HT__EMAIL"
 msgstr "Email"
-
-msgid "VN__POSITION"
-msgstr "Position"
-
-msgid "HT__POSITION"
-msgstr " "
-
-msgid "VN__HOUR_RATE"
-msgstr "Hour rate, ₽"
-
-msgid "HT__HOUR_RATE"
-msgstr "Hour rate, ₽"
 
 msgid "VN__CUSTOMER_HOUR_RATE"
 msgstr "Customer hour rate, $"

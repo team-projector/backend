@@ -18,6 +18,7 @@ from tests.test_payroll.factories import (
     PenaltyFactory,
     SalaryFactory,
 )
+from tests.test_users.factories.position import PositionFactory
 from tests.test_users.factories.user import UserFactory
 
 
@@ -26,7 +27,9 @@ class GenerateSalariesTests(TestCase):
         self.initiator = User.objects.create_user(login="initiator")
         self.user = User.objects.create_user(
             login="user",
-            hour_rate=100
+            hour_rate=100,
+            tax_rate=15,
+            position=PositionFactory()
         )
         self.calculator = SalaryCalculator(
             self.initiator,
@@ -59,7 +62,10 @@ class GenerateSalariesTests(TestCase):
         self.assertEqual(self.user.hour_rate * 9, salary.sum)
         self.assertEqual(0, salary.penalty)
         self.assertEqual(0, salary.bonus)
-        self.assertEqual(0, salary.taxes)
+        self.assertEqual(salary.total * salary.tax_rate, salary.taxes)
+        self.assertEqual(100, salary.hour_rate)
+        self.assertEqual(15, salary.tax_rate)
+        self.assertEqual(self.user.position, salary.position)
 
         self.assertEqual(salary.total, salary.sum)
 
@@ -96,7 +102,7 @@ class GenerateSalariesTests(TestCase):
         self.assertEqual(salary.sum, self.user.hour_rate * 4)
         self.assertEqual(salary.penalty, penalty.sum)
         self.assertEqual(salary.bonus, 0)
-        self.assertEqual(salary.taxes, 0)
+        self.assertEqual(salary.total * salary.tax_rate, salary.taxes)
         self.assertEqual(salary.total, salary.sum - penalty.sum)
 
         self.assertEqual(Payroll.objects.filter(salary=salary).count(), 4)
@@ -123,7 +129,7 @@ class GenerateSalariesTests(TestCase):
         self.assertEqual(salary.sum, self.user.hour_rate * 4)
         self.assertEqual(salary.bonus, bonus.sum)
         self.assertEqual(salary.penalty, 0)
-        self.assertEqual(salary.taxes, 0)
+        self.assertEqual(salary.total * salary.tax_rate, salary.taxes)
         self.assertEqual(salary.total, salary.sum + bonus.sum)
 
         self.assertEqual(Payroll.objects.filter(salary=salary).count(), 4)
@@ -151,7 +157,7 @@ class GenerateSalariesTests(TestCase):
         self.assertEqual(salary.sum, self.user.hour_rate * 4)
         self.assertEqual(salary.bonus, bonus.sum)
         self.assertEqual(salary.penalty, penalty.sum)
-        self.assertEqual(salary.taxes, 0)
+        self.assertEqual(salary.total * salary.tax_rate, salary.taxes)
 
         self.assertEqual(salary.total, salary.sum + bonus.sum - penalty.sum)
         self.assertEqual(Payroll.objects.filter(salary=salary).count(), 5)
@@ -182,7 +188,7 @@ class GenerateSalariesTests(TestCase):
         self.assertEqual(salary.sum, self.user.hour_rate * 5)
         self.assertEqual(salary.bonus, bonus.sum)
         self.assertEqual(salary.penalty, 0)
-        self.assertEqual(salary.taxes, 0)
+        self.assertEqual(salary.total * salary.tax_rate, salary.taxes)
         self.assertEqual(salary.total, salary.sum + bonus.sum)
 
         self.assertEqual(Payroll.objects.filter(salary=salary).count(), 2)
@@ -211,7 +217,7 @@ class GenerateSalariesTests(TestCase):
                          seconds(hours=5))
         self.assertEqual(salary.sum, self.user.hour_rate * 5)
         self.assertEqual(salary.bonus, 0)
-        self.assertEqual(salary.taxes, 0)
+        self.assertEqual(salary.total * salary.tax_rate, salary.taxes)
         self.assertEqual(salary.penalty, penalty.sum)
         self.assertEqual(salary.total, salary.sum - penalty.sum)
 
@@ -243,7 +249,7 @@ class GenerateSalariesTests(TestCase):
         self.assertEqual(salary.sum, self.user.hour_rate * 3)
         self.assertEqual(salary.bonus, 0)
         self.assertEqual(salary.penalty, 0)
-        self.assertEqual(salary.taxes, 0)
+        self.assertEqual(salary.total * salary.tax_rate, salary.taxes)
         self.assertEqual(salary.total, salary.sum)
 
         self.assertEqual(Payroll.objects.filter(salary=salary).count(), 2)

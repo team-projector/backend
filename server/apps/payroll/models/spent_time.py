@@ -38,7 +38,7 @@ class SpentTime(Payroll):  # noqa:WPS230
     )
 
     tax_rate = models.FloatField(
-        null=True,
+        default=0,
         verbose_name=_("VN__TAX_RATE"),
         help_text=_("HT__TAX_RATE"),
     )
