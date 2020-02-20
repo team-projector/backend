@@ -13,7 +13,7 @@ class BaseSpentTimeFactory(factory.django.DjangoModelFactory):
         after_now=False,
         tzinfo=pytz.UTC,
     )
-    rate = factory.Faker("random_int")
+    hour_rate = factory.Faker("random_int")
     time_spent = factory.Faker("random_int")
 
     class Meta:

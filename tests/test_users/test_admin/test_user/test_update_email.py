@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+from http import HTTPStatus
+
 from tests.test_users.factories.user import UserFactory
 
 
@@ -11,14 +13,17 @@ def test_change_email(user_admin, admin_client):
         "email": "new_@mail.com",
         "hour_rate": user.hour_rate,
         "customer_hour_rate": user.customer_hour_rate,
-        "taxes": user.taxes,
+        "tax_rate": user.tax_rate,
         "daily_work_hours": user.daily_work_hours,
+        "annual_paid_work_breaks_days": user.annual_paid_work_breaks_days,
     }
 
-    user_admin.changeform_view(
+    response = user_admin.changeform_view(
         admin_client.post("/admin/users/user/", data),
         object_id=str(user.id),
     )
+
+    assert response.status_code == HTTPStatus.FOUND
 
     user.refresh_from_db()
     assert user.email == "new_@mail.com"
@@ -32,7 +37,7 @@ def test_not_changed_email(user_admin, admin_client):
         "email": "test@mail.com",
         "hour_rate": user.hour_rate,
         "customer_hour_rate": user.customer_hour_rate,
-        "taxes": user.taxes,
+        "tax_rate": user.tax_rate,
         "daily_work_hours": user.daily_work_hours,
     }
 
@@ -54,7 +59,7 @@ def test_dublicate_email(user_admin, admin_client):
         "email": user.email,
         "hour_rate": another_user.hour_rate,
         "customer_hour_rate": another_user.customer_hour_rate,
-        "taxes": another_user.taxes,
+        "tax_rate": another_user.tax_rate,
         "daily_work_hours": another_user.daily_work_hours,
     }
 

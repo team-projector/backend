@@ -3,6 +3,7 @@
 import graphene
 from django.db.models import QuerySet
 
+from apps.core.graphql import get_fields_from_info
 from apps.core.graphql.connections import DataSourceConnection
 from apps.core.graphql.relay_nodes import DatasourceRelayNode
 from apps.core.graphql.types import BaseDjangoObjectType
@@ -27,7 +28,7 @@ class UserType(BaseDjangoObjectType):
 
     def resolve_metrics(self, info, **kwargs):  # noqa: WPS110
         """Get user metrics."""
-        provider = UserMetricsProvider()
+        provider = UserMetricsProvider(get_fields_from_info(info))
         return provider.get_metrics(self)
 
     def resolve_problems(self, info, **kwargs):  # noqa: WPS110

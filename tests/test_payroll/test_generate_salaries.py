@@ -249,7 +249,7 @@ class GenerateSalariesTests(TestCase):
         self.assertEqual(Payroll.objects.filter(salary=salary).count(), 2)
 
     def test_taxes(self):
-        self.user.taxes = 0.3
+        self.user.tax_rate = 0.3
         self.user.save()
 
         issue = IssueFactory.create(state=IssueState.CLOSED)
@@ -276,6 +276,6 @@ class GenerateSalariesTests(TestCase):
         self.assertEqual(salary.penalty, penalty.sum)
         self.assertEqual(salary.total, salary.sum + bonus.sum - penalty.sum)
         self.assertEqual(salary.taxes,
-                         salary.total * Decimal.from_float(self.user.taxes))
+                         salary.total * Decimal.from_float(self.user.tax_rate))
 
         self.assertEqual(Payroll.objects.filter(salary=salary).count(), 5)

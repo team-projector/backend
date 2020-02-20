@@ -11,7 +11,7 @@ from tests.test_users.factories.user import UserFactory
 
 @pytest.fixture()
 def user(db):
-    yield UserFactory.create(hour_rate=100)
+    yield UserFactory.create(hour_rate=100, tax_rate=15)
 
 
 def test_payroll_metrics(user):
