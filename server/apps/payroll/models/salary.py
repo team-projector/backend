@@ -8,6 +8,7 @@ from model_utils import FieldTracker
 from apps.core.models.fields import MoneyField
 from apps.core.models.mixins import Timestamps
 from apps.payroll.models.managers import SalaryManager
+from apps.users.models import Position
 
 
 class Salary(Timestamps):
@@ -28,6 +29,15 @@ class Salary(Timestamps):
         help_text=_("HT__USER"),
     )
 
+    position = models.ForeignKey(
+        Position,
+        models.SET_NULL,
+        null=True,
+        blank=True,
+        verbose_name=_("VN__POSITION"),
+        help_text=_("HT__POSITION"),
+    )
+
     period_from = models.DateField(
         null=True,
         blank=True,
@@ -46,6 +56,18 @@ class Salary(Timestamps):
         default=0,
         verbose_name=_("VN__CHARGED_TIME"),
         help_text=_("HT__CHARGED_TIME"),
+    )
+
+    hour_rate = models.FloatField(
+        default=0,
+        verbose_name=_("VN__HOUR_RATE"),
+        help_text=_("HT__HOUR_RATE"),
+    )
+
+    tax_rate = models.FloatField(
+        default=0,
+        verbose_name=_("VN__TAX_RATE"),
+        help_text=_("HT__TAX_RATE"),
     )
 
     taxes = MoneyField(
