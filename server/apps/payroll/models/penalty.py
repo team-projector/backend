@@ -9,9 +9,9 @@ from apps.payroll.models import Payroll
 class Penalty(Payroll):
     """The penalty model."""
 
-    description = models.TextField(
-        verbose_name=_("VN__DESCRIPTION"),
-        help_text=_("HT__DESCRIPTION"),
+    comment = models.TextField(
+        verbose_name=_("VN__COMMENT"),
+        help_text=_("HT__COMMENT"),
     )
 
     class Meta:

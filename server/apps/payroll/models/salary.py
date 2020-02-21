@@ -106,10 +106,10 @@ class Salary(Timestamps):
         help_text=_("HT__PAYED"),
     )
 
-    comments = models.TextField(
+    comment = models.TextField(
         blank=True,
-        verbose_name=_("VN__COMMENTS"),
-        help_text=_("HT__COMMENTS"),
+        verbose_name=_("VN__COMMENT"),
+        help_text=_("HT__COMMENT"),
     )
 
     objects = SalaryManager()  # noqa: WPS110
