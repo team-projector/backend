@@ -10,7 +10,7 @@ GHL_QUERY_PENALTY = """
 query ($id: ID!) {
   penalty (id: $id) {
     id
-    description
+    comment
   }
 }
 """

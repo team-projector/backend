@@ -16,7 +16,7 @@ query {
       node {
         id
         sum
-        comments
+        comment
       }
     }
   }

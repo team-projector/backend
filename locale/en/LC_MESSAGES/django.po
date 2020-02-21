@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-02-20 20:05+0300\n"
+"POT-Creation-Date: 2020-02-21 11:43+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -338,6 +338,12 @@ msgstr "No"
 msgid "VN__PAYROLL"
 msgstr "Payroll"
 
+msgid "VN__COMMENT"
+msgstr "Comment"
+
+msgid "HT__COMMENT"
+msgstr "Comment"
+
 msgid "VN__BONUS"
 msgstr "Bonus"
 
@@ -473,12 +479,6 @@ msgstr "Payed"
 msgid "HT__PAYED"
 msgstr "Payed"
 
-msgid "VN__COMMENTS"
-msgstr "Comments"
-
-msgid "HT__COMMENTS"
-msgstr "Comments"
-
 msgid "VN__SALARIES"
 msgstr "Salaries"
 
@@ -544,12 +544,6 @@ msgstr "Reason"
 
 msgid "HT__REASON"
 msgstr "Reason"
-
-msgid "VN__COMMENT"
-msgstr "Comment"
-
-msgid "HT__COMMENT"
-msgstr "Comment"
 
 msgid "VN__PAID"
 msgstr "Paid"

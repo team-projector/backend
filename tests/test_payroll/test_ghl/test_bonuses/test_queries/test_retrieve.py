@@ -10,7 +10,7 @@ GHL_QUERY_BONUS = """
 query ($id: ID!) {
   bonus (id: $id) {
     id
-    description
+    comment
   }
 }
 """

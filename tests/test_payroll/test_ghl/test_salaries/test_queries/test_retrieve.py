@@ -10,7 +10,7 @@ GHL_QUERY_SALARY = """
 query ($id: ID!) {
   salary (id: $id) {
     id
-    comments
+    comment
   }
 }
 """

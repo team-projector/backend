@@ -9,9 +9,9 @@ from apps.payroll.models.payroll import Payroll
 class Bonus(Payroll):
     """The bonus model."""
 
-    description = models.TextField(
-        verbose_name=_("VN__DESCRIPTION"),
-        help_text=_("HT__DESCRIPTION"),
+    comment = models.TextField(
+        verbose_name=_("VN__COMMENT"),
+        help_text=_("HT__COMMENT"),
     )
 
     class Meta:
