@@ -26,5 +26,9 @@ class AdminMenu(Menu):
                     "Generate salaries",
                     reverse("admin:generate-salaries"),
                 ),
+                items.MenuItem(
+                    "GraphQL playground",
+                    "/graphql/",
+                ),
             ]),
         ]
