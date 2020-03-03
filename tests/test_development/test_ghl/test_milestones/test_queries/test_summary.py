@@ -39,8 +39,8 @@ def milestones(user):
     )
 
 
-def test_raw_query(ghl_client, milestones):
-    response = ghl_client.execute(
+def test_raw_query(gql_client_authenticated, milestones):
+    response = gql_client_authenticated.execute(
         GHL_QUERY_MILESTONES_SUMMARY,
     )
 
