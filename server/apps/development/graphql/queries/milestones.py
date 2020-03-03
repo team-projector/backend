@@ -21,6 +21,6 @@ class MilestonesQueries(graphene.ObjectType):
 
     milestones_summary = graphene.Field(
         MilestonesSummaryType,
-        milestone=graphene.ID(),
+        user=graphene.ID(),
         resolver=resolve_milestones_summary,
     )

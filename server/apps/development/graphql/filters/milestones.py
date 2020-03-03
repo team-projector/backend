@@ -1,11 +1,14 @@
 # -*- coding: utf-8 -*-
 
 import django_filters
+from django.contrib.auth import get_user_model
 from django.db.models import QuerySet
 
 from apps.core.graphql.filters import SearchFilter
 from apps.core.graphql.filters.ordering import OrderingFilter
 from apps.development.models.milestone import Milestone, MilestoneState
+
+User = get_user_model()
 
 
 class ActiveFilter(django_filters.BooleanFilter):
@@ -25,12 +28,9 @@ class MilestonesFilterSet(django_filters.FilterSet):
     """Set of filters for Milestone."""
 
     active = ActiveFilter()
-
-    order_by = OrderingFilter(
-        fields=("due_date",),
-    )
-
+    user = django_filters.ModelChoiceFilter(queryset=User.objects.all())
     q = SearchFilter(fields=("title", "=gl_url"))  # noqa: WPS111
+    order_by = OrderingFilter(fields=("due_date",))
 
     class Meta:
         model = Milestone
