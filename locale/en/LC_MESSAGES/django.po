@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-02-21 11:43+0300\n"
+"POT-Creation-Date: 2020-03-05 16:17+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -59,10 +59,10 @@ msgstr "Development"
 msgid "MSG_PLEASE_PROVIDE_PERSONAL_GL_TOKEN"
 msgstr "Please fill personal gitlab token in profile"
 
-msgid "CH_OPENED"
+msgid "CH__OPENED"
 msgstr "opened"
 
-msgid "CH_CLOSED"
+msgid "CH__CLOSED"
 msgstr "closed"
 
 msgid "VN__TITLE"
@@ -119,7 +119,7 @@ msgstr "Label"
 msgid "VN__LABELS"
 msgstr "Labels"
 
-msgid "CH_MERGED"
+msgid "CH__MERGED"
 msgstr "merged"
 
 msgid "VN__AUTHOR"
@@ -134,7 +134,7 @@ msgstr "Merge Request"
 msgid "VN__MERGE_REQUESTS"
 msgstr "Merge Requests"
 
-msgid "CH_ACTIVE"
+msgid "CH__ACTIVE"
 msgstr "Is active"
 
 msgid "VN__DESCRIPTION"
@@ -173,13 +173,13 @@ msgstr "Notes"
 msgid "HT__NOTES"
 msgstr "Notes"
 
-msgid "CH_TIME_SPEND"
+msgid "CH__TIME_SPEND"
 msgstr "Time spend"
 
-msgid "CH_RESET_SPEND"
+msgid "CH__RESET_SPEND"
 msgstr "Reset spend"
 
-msgid "CH_MOVED_FROM"
+msgid "CH__MOVED_FROM"
 msgstr "Moved from"
 
 msgid "VN__TYPE"
@@ -248,13 +248,13 @@ msgstr "Project group"
 msgid "VN__PROJECT_GROUPS"
 msgstr "Project groups"
 
-msgid "CH_DEVELOPER"
+msgid "CH__DEVELOPER"
 msgstr "Developer"
 
-msgid "CH_PROJECT_MANAGER"
+msgid "CH__PROJECT_MANAGER"
 msgstr "Project manager"
 
-msgid "CH_CUSTOMER"
+msgid "CH__CUSTOMER"
 msgstr "Customer"
 
 msgid "VN__ROLE"
@@ -275,10 +275,10 @@ msgstr "Team"
 msgid "VN__TEAMS"
 msgstr "Teams"
 
-msgid "CH_LEADER"
-msgstr "Team leader"
+msgid "CH__LEADER"
+msgstr "Leader"
 
-msgid "CH_WATCHER"
+msgid "CH__WATCHER"
 msgstr "Watcher"
 
 msgid "HT__TEAM"
@@ -290,31 +290,31 @@ msgstr "Team Member"
 msgid "VN__TEAM_MEMBERS"
 msgstr "Team Members"
 
-msgid "CH_FEATURE"
+msgid "CH__FEATURE"
 msgstr "Feature"
 
-msgid "CH_IMPROVEMENT"
+msgid "CH__IMPROVEMENT"
 msgstr "Improvement"
 
-msgid "CH_BUG_FIXING"
+msgid "CH__BUG_FIXING"
 msgstr "Bug Fixing"
 
-msgid "CH_CREATED"
+msgid "CH__CREATED"
 msgstr "Created"
 
-msgid "CH_PLANNING"
+msgid "CH__PLANNING"
 msgstr "Planning"
 
-msgid "CH_DOING"
+msgid "CH__DOING"
 msgstr "Doing"
 
-msgid "CH_TESTING"
+msgid "CH__TESTING"
 msgstr "Testing"
 
-msgid "CH_ACCEPTING"
+msgid "CH__ACCEPTING"
 msgstr "Accepting"
 
-msgid "CH_DONE"
+msgid "CH__DONE"
 msgstr "Done"
 
 msgid "VN__URL"
@@ -350,11 +350,11 @@ msgstr "Bonus"
 msgid "VN__BONUSES"
 msgstr "Bonuses"
 
-msgid "CH_APPROVED"
-msgstr "approved"
+msgid "CH__APPROVED"
+msgstr "Approved"
 
-msgid "CH_DECLINED"
-msgstr "declined"
+msgid "CH__DECLINED"
+msgstr "Declined"
 
 msgid "VN__APPROVE_STATE"
 msgstr "Approve state"
@@ -518,13 +518,13 @@ msgstr "Spent time"
 msgid "VN__SPENT_TIMES"
 msgstr "Spent times"
 
-msgid "CH_DAYOFF"
+msgid "CH__DAYOFF"
 msgstr "Dayoff"
 
-msgid "CH_VACATION"
+msgid "CH__VACATION"
 msgstr "Vacation"
 
-msgid "CH_DISEASE"
+msgid "CH__DISEASE"
 msgstr "Disease"
 
 msgid "VN__DATE_FROM"
@@ -569,10 +569,10 @@ msgstr "Token"
 msgid "VN__TOKENS"
 msgstr "Tokens"
 
-msgid "CH_TEAM_LEADER"
+msgid "CH__TEAM_LEADER"
 msgstr "Team leader"
 
-msgid "CH_SHAREHOLDER"
+msgid "CH__SHAREHOLDER"
 msgstr "Shareholder"
 
 msgid "VN__LOGIN"

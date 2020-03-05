@@ -11,9 +11,9 @@ from apps.development.models.managers import TeamMemberManager
 class TeamMemberRole(models.TextChoices):
     """Team member roles choices."""
 
-    LEADER = "LEADER", _("CH_LEADER")  # noqa: WPS115
-    DEVELOPER = "DEVELOPER", _("CH_DEVELOPER")  # noqa: WPS115
-    WATCHER = "WATCHER", _("CH_WATCHER")  # noqa: WPS115
+    LEADER = "LEADER", _("CH__LEADER")  # noqa: WPS115
+    DEVELOPER = "DEVELOPER", _("CH__DEVELOPER")  # noqa: WPS115
+    WATCHER = "WATCHER", _("CH__WATCHER")  # noqa: WPS115
 
 
 class TeamMember(models.Model):

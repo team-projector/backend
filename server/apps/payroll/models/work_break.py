@@ -12,9 +12,9 @@ from apps.payroll.models.mixins import ApprovedMixin
 class WorkBreakReason(models.TextChoices):
     """Work break reason choices."""
 
-    DAYOFF = "DAYOFF", _("CH_DAYOFF")  # noqa: WPS115
-    VACATION = "VACATION", _("CH_VACATION")  # noqa: WPS115
-    DISEASE = "DISEASE", _("CH_DISEASE")  # noqa: WPS115
+    DAYOFF = "DAYOFF", _("CH__DAYOFF")  # noqa: WPS115
+    VACATION = "VACATION", _("CH__VACATION")  # noqa: WPS115
+    DISEASE = "DISEASE", _("CH__DISEASE")  # noqa: WPS115
 
 
 WORK_BREAK_REASON_MAX_LENGTH = 15

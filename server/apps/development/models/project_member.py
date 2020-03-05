@@ -12,9 +12,9 @@ from apps.core.models.mixins import Timestamps
 class ProjectMemberRole(models.TextChoices):
     """Project member role choices."""
 
-    DEVELOPER = "DEVELOPER", _("CH_DEVELOPER")  # noqa: WPS115
-    PROJECT_MANAGER = "PROJECT_MANAGER", _("CH_PROJECT_MANAGER")  # noqa: WPS115
-    CUSTOMER = "CUSTOMER", _("CH_CUSTOMER")  # noqa: WPS115
+    DEVELOPER = "DEVELOPER", _("CH__DEVELOPER")  # noqa: WPS115
+    PROJECT_MANAGER = "PROJECT_MANAGER", _("CH__PROJECT_MANAGER")  # noqa: WPS115
+    CUSTOMER = "CUSTOMER", _("CH__CUSTOMER")  # noqa: WPS115
 
 
 PROJECT_MEMBER_ROLE_MAX_LENGTH = 20

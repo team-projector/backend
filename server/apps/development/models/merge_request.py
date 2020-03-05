@@ -17,9 +17,9 @@ from apps.development.models.mixins import TrackableMixin
 class MergeRequestState(models.TextChoices):
     """Merge request state choices."""
 
-    OPENED = "OPENED", _("CH_OPENED")  # noqa: WPS115
-    MERGED = "MERGED", _("CH_MERGED")  # noqa: WPS115
-    CLOSED = "CLOSED", _("CH_CLOSED")  # noqa: WPS115
+    OPENED = "OPENED", _("CH__OPENED")  # noqa: WPS115
+    MERGED = "MERGED", _("CH__MERGED")  # noqa: WPS115
+    CLOSED = "CLOSED", _("CH__CLOSED")  # noqa: WPS115
 
 
 MERGE_REQUESTS_STATE_MAX_LENGTH = 255

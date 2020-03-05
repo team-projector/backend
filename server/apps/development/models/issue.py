@@ -17,8 +17,8 @@ from apps.development.models.mixins import TrackableMixin
 class IssueState(models.TextChoices):
     """Issue state choices."""
 
-    OPENED = "OPENED", _("CH_OPENED")  # noqa: WPS115
-    CLOSED = "CLOSED", _("CH_CLOSED")  # noqa: WPS115
+    OPENED = "OPENED", _("CH__OPENED")  # noqa: WPS115
+    CLOSED = "CLOSED", _("CH__CLOSED")  # noqa: WPS115
 
 
 ISSUE_STATE_MAX_LENGTH = 255

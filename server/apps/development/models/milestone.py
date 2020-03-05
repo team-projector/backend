@@ -17,8 +17,8 @@ from apps.development.models.managers import MilestoneManager
 class MilestoneState(models.TextChoices):
     """Milestone state choices."""
 
-    ACTIVE = "ACTIVE", _("CH_ACTIVE")  # noqa: WPS115
-    CLOSED = "CLOSED", _("CH_CLOSED")  # noqa: WPS115
+    ACTIVE = "ACTIVE", _("CH__ACTIVE")  # noqa: WPS115
+    CLOSED = "CLOSED", _("CH__CLOSED")  # noqa: WPS115
 
 
 MILESTONE_STATE_MAX_LENGTH = 20

@@ -14,9 +14,9 @@ from apps.users.models import User
 class NoteType(models.TextChoices):
     """Note types choices."""
 
-    TIME_SPEND = "TIME_SPEND", _("CH_TIME_SPEND")  # noqa: WPS115
-    RESET_SPEND = "RESET_SPEND", _("CH_RESET_SPEND")  # noqa: WPS115
-    MOVED_FROM = "MOVED_FROM", _("CH_MOVED_FROM")  # noqa: WPS115
+    TIME_SPEND = "TIME_SPEND", _("CH__TIME_SPEND")  # noqa: WPS115
+    RESET_SPEND = "RESET_SPEND", _("CH__RESET_SPEND")  # noqa: WPS115
+    MOVED_FROM = "MOVED_FROM", _("CH__MOVED_FROM")  # noqa: WPS115
 
 
 NOTE_TYPE_MAX_LENGTH = 20

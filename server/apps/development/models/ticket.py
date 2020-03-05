@@ -14,20 +14,20 @@ TICKET_STATE_MAX_LENGTH = 50
 class TicketType(models.TextChoices):
     """Ticket types choices."""
 
-    FEATURE = "FEATURE", _("CH_FEATURE")  # noqa: WPS115
-    IMPROVEMENT = "IMPROVEMENT", _("CH_IMPROVEMENT")  # noqa: WPS115
-    BUG_FIXING = "BUG_FIXING", _("CH_BUG_FIXING")  # noqa: WPS115
+    FEATURE = "FEATURE", _("CH__FEATURE")  # noqa: WPS115
+    IMPROVEMENT = "IMPROVEMENT", _("CH__IMPROVEMENT")  # noqa: WPS115
+    BUG_FIXING = "BUG_FIXING", _("CH__BUG_FIXING")  # noqa: WPS115
 
 
 class TicketState(models.TextChoices):
     """Ticket states choices."""
 
-    CREATED = "CREATED", _("CH_CREATED")  # noqa: WPS115
-    PLANNING = "PLANNING", _("CH_PLANNING")  # noqa: WPS115
-    DOING = "DOING", _("CH_DOING")  # noqa: WPS115
-    TESTING = "TESTING", _("CH_TESTING")  # noqa: WPS115
-    ACCEPTING = "ACCEPTING", _("CH_ACCEPTING")  # noqa: WPS115
-    DONE = "DONE", _("CH_DONE")  # noqa: WPS115
+    CREATED = "CREATED", _("CH__CREATED")  # noqa: WPS115
+    PLANNING = "PLANNING", _("CH__PLANNING")  # noqa: WPS115
+    DOING = "DOING", _("CH__DOING")  # noqa: WPS115
+    TESTING = "TESTING", _("CH__TESTING")  # noqa: WPS115
+    ACCEPTING = "ACCEPTING", _("CH__ACCEPTING")  # noqa: WPS115
+    DONE = "DONE", _("CH__DONE")  # noqa: WPS115
 
 
 class Ticket(Timestamps):

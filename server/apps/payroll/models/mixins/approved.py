@@ -9,9 +9,9 @@ from apps.users.models import User
 class ApprovedState(models.TextChoices):
     """Approved state choices."""
 
-    CREATED = "CREATED", _("CH_CREATED")  # noqa: WPS115
-    APPROVED = "APPROVED", _("CH_APPROVED")  # noqa: WPS115
-    DECLINED = "DECLINED", _("CH_DECLINED")  # noqa: WPS115
+    CREATED = "CREATED", _("CH__CREATED")  # noqa: WPS115
+    APPROVED = "APPROVED", _("CH__APPROVED")  # noqa: WPS115
+    DECLINED = "DECLINED", _("CH__DECLINED")  # noqa: WPS115
 
 
 APPROVED_STATE_MAX_LENGTH = 15
