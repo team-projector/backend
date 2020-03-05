@@ -13,7 +13,7 @@ class ProjectMemberRole(models.TextChoices):
     """Project member role choices."""
 
     DEVELOPER = "DEVELOPER", _("CH__DEVELOPER")  # noqa: WPS115
-    PROJECT_MANAGER = "PROJECT_MANAGER", _("CH__PROJECT_MANAGER")  # noqa: WPS115
+    PROJECT_MANAGER = "PROJECT_MANAGER", _("CH__PROJECT_MANAGER")  # noqa: WPS115, E501
     CUSTOMER = "CUSTOMER", _("CH__CUSTOMER")  # noqa: WPS115
 
 
