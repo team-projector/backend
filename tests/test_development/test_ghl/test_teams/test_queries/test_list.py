@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from pytest import raises
+import pytest
 
 from apps.core.graphql.errors import GraphQLPermissionDenied
 from tests.test_development.factories import TeamFactory
@@ -46,7 +46,7 @@ def test_not_team_member(user, ghl_auth_mock_info, all_teams_query):
 
 def test_unauth(user, ghl_mock_info, all_teams_query):
     """Test not auth query."""
-    with raises(GraphQLPermissionDenied):
+    with pytest.raises(GraphQLPermissionDenied):
         all_teams_query(
             root=None,
             info=ghl_mock_info,

@@ -1,4 +1,4 @@
-from pytest import raises
+import pytest
 
 from apps.core.graphql.errors import GraphQLPermissionDenied
 from apps.development.models import TeamMember
@@ -57,7 +57,7 @@ def test_approve_by_other_team_teamlead(user, client):
     client.user = user
     info = AttrDict({"context": client})
 
-    with raises(GraphQLPermissionDenied):
+    with pytest.raises(GraphQLPermissionDenied):
         ApproveWorkBreakMutation.mutate(
             root=None,
             info=info,
@@ -71,7 +71,7 @@ def test_approve_by_current_user(user, client):
     client.user = user
     info = AttrDict({"context": client})
 
-    with raises(GraphQLPermissionDenied):
+    with pytest.raises(GraphQLPermissionDenied):
         ApproveWorkBreakMutation.mutate(
             root=None,
             info=info,
@@ -126,7 +126,7 @@ def test_decline_by_other_team_teamlead(user, client):
     client.user = user
     info = AttrDict({"context": client})
 
-    with raises(GraphQLPermissionDenied):
+    with pytest.raises(GraphQLPermissionDenied):
         DeclineWorkBreakMutation.mutate(
             root=None,
             info=info,
@@ -141,7 +141,7 @@ def test_decline_by_current_user(user, client):
     client.user = user
     info = AttrDict({"context": client})
 
-    with raises(GraphQLPermissionDenied):
+    with pytest.raises(GraphQLPermissionDenied):
         DeclineWorkBreakMutation.mutate(
             root=None,
             info=info,

@@ -2,7 +2,7 @@
 
 from datetime import datetime
 
-from pytest import raises
+import pytest
 
 from apps.core.graphql.errors import GraphQLPermissionDenied
 from apps.development.models import TeamMember
@@ -61,7 +61,7 @@ def test_not_leader(user, ghl_auth_mock_info, team_progress_metrics_query):
     team = TeamFactory.create(members=[user])
     date = datetime.now().date()
 
-    with raises(GraphQLPermissionDenied):
+    with pytest.raises(GraphQLPermissionDenied):
         team_progress_metrics_query(
             None,
             info=ghl_auth_mock_info,
@@ -82,7 +82,7 @@ def test_another_team(user, ghl_auth_mock_info, team_progress_metrics_query):
     )
     date = datetime.now().date()
 
-    with raises(GraphQLPermissionDenied):
+    with pytest.raises(GraphQLPermissionDenied):
         team_progress_metrics_query(
             None,
             info=ghl_auth_mock_info,
@@ -107,7 +107,7 @@ def test_metrics_developer(
     )
     date = datetime.now().date()
 
-    with raises(GraphQLPermissionDenied):
+    with pytest.raises(GraphQLPermissionDenied):
         team_progress_metrics_query(
             None,
             info=ghl_auth_mock_info,

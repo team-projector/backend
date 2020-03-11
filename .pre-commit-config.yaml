@@ -1,0 +1,6 @@
+- repo: local
+  hooks:
+    - id: quality
+      name: Check quality
+      entry: ./scripts/pre_commit.sh
+      language: script

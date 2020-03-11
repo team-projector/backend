@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from pytest import raises
+import pytest
 
 from apps.core.graphql.errors import GraphQLNotFound
 from apps.development.models import TeamMember
@@ -36,7 +36,7 @@ def test_query(user, ghl_client):
 def test_not_team_lead(ghl_auth_mock_info, work_break_query):
     work_break = WorkBreakFactory.create()
 
-    with raises(GraphQLNotFound):
+    with pytest.raises(GraphQLNotFound):
         work_break_query(
             root=None,
             info=ghl_auth_mock_info,

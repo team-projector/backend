@@ -1,4 +1,4 @@
-from pytest import raises
+import pytest
 
 from apps.core.graphql.errors import GraphQLPermissionDenied
 from apps.development.models import TeamMember
@@ -76,7 +76,7 @@ def test_filter_by_team_not_teamlead(user, client):
 
     client.user = user
 
-    with raises(GraphQLPermissionDenied):
+    with pytest.raises(GraphQLPermissionDenied):
         WorkBreakFilterSet(  # noqa: WPS428
             data={"team": team.id},
             queryset=WorkBreak.objects.all(),

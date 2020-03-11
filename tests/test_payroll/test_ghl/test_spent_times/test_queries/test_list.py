@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from pytest import raises
+import pytest
 
 from apps.core.graphql.errors import GraphQLPermissionDenied
 from apps.development.models.note import NoteType
@@ -47,7 +47,7 @@ def test_not_time_spents(ghl_auth_mock_info, all_spent_times_query):
 
 def test_unauth(ghl_mock_info, all_spent_times_query):
     """Test unauth issues list."""
-    with raises(GraphQLPermissionDenied):
+    with pytest.raises(GraphQLPermissionDenied):
         all_spent_times_query(
             root=None,
             info=ghl_mock_info,

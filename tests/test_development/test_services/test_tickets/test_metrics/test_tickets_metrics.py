@@ -1,4 +1,4 @@
-from pytest import raises
+import pytest
 
 from apps.core.graphql.errors import GraphQLPermissionDenied
 from apps.core.utils.time import seconds
@@ -129,7 +129,7 @@ def test_resolve_metrics_not_pm(user, ghl_auth_mock_info):
         time_estimate=seconds(hours=1)
     )
 
-    with raises(GraphQLPermissionDenied):
+    with pytest.raises(GraphQLPermissionDenied):
         TicketType.resolve_metrics(ticket, info=ghl_auth_mock_info)
 
 

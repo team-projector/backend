@@ -1,4 +1,4 @@
-from pytest import raises
+import pytest
 
 from apps.core.graphql.errors import GraphQLPermissionDenied
 from apps.development.models import Milestone
@@ -31,7 +31,7 @@ def test_not_pm(user):
 
     ProjectMilestoneFactory.create(owner=group)
 
-    with raises(GraphQLPermissionDenied):
+    with pytest.raises(GraphQLPermissionDenied):
         filter_allowed_for_user(Milestone.objects.all(), user)
 
 

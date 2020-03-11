@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from pytest import raises
+import pytest
 
 from apps.core.graphql.errors import GraphQLNotFound, GraphQLPermissionDenied
 from tests.test_payroll.factories import SalaryFactory
@@ -34,7 +34,7 @@ def test_query(user, ghl_client):
 def test_unauth(ghl_mock_info, salary_query, user):
     salary = SalaryFactory(user=user)
 
-    with raises(GraphQLPermissionDenied):
+    with pytest.raises(GraphQLPermissionDenied):
         salary_query(
             root=None,
             info=ghl_mock_info,
@@ -43,7 +43,7 @@ def test_unauth(ghl_mock_info, salary_query, user):
 
 
 def test_not_found(ghl_auth_mock_info, salary_query):
-    with raises(GraphQLNotFound):
+    with pytest.raises(GraphQLNotFound):
         salary_query(
             root=None,
             info=ghl_auth_mock_info,
@@ -53,7 +53,7 @@ def test_not_found(ghl_auth_mock_info, salary_query):
 
 def test_not_allowed_for_user(user, salary_query, ghl_auth_mock_info):
     salary = SalaryFactory(user=UserFactory())
-    with raises(GraphQLNotFound):
+    with pytest.raises(GraphQLNotFound):
         salary_query(
             root=None,
             info=ghl_auth_mock_info,

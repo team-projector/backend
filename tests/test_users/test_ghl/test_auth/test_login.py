@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from pytest import raises
+import pytest
 from rest_framework.exceptions import AuthenticationFailed
 
 from apps.users.models import Token
@@ -54,7 +54,7 @@ def test_wrong_username(user, ghl_mock_info, login_mutation):
     """Test wrong username case."""
     assert not Token.objects.filter(user=user).exists()
 
-    with raises(AuthenticationFailed):
+    with pytest.raises(AuthenticationFailed):
         login_mutation(
             None,
             ghl_mock_info,
@@ -69,7 +69,7 @@ def test_wrong_password(user, ghl_mock_info, login_mutation):
     """Test wrong password case."""
     assert not Token.objects.filter(user=user).exists()
 
-    with raises(AuthenticationFailed):
+    with pytest.raises(AuthenticationFailed):
         login_mutation(
             None,
             ghl_mock_info,

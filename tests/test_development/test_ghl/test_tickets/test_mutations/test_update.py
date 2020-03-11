@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from pytest import raises
+import pytest
 
 from apps.core.graphql.errors import GraphQLInputError, GraphQLPermissionDenied
 from apps.development.models.ticket import TicketState
@@ -60,7 +60,7 @@ def test_without_permissions(
     ticket,
 ):
     """Test non project manager."""
-    with raises(GraphQLPermissionDenied):
+    with pytest.raises(GraphQLPermissionDenied):
         update_ticket_mutation(
             root=None,
             info=ghl_auth_mock_info,
@@ -121,7 +121,7 @@ def test_both_params_attach_and_issues(
     """Test both attach and rewrite issues."""
     issue = IssueFactory(user=project_manager)
 
-    with raises(GraphQLInputError) as exc_info:
+    with pytest.raises(GraphQLInputError) as exc_info:
         update_ticket_mutation(
             root=None,
             info=ghl_auth_mock_info,

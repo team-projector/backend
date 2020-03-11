@@ -1,4 +1,4 @@
-from pytest import raises
+import pytest
 
 from apps.core.utils.time import seconds
 from apps.development.graphql.types import MergeRequestType
@@ -17,7 +17,7 @@ from tests.test_development.factories import (
 
 
 def test_base_checker():
-    with raises(NotImplementedError):
+    with pytest.raises(NotImplementedError):
         BaseProblemChecker().merge_request_has_problem(None)
 
 

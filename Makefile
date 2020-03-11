@@ -6,3 +6,6 @@ make_messages:
 
 compile_messages:
 	@./manage.py compilemessages
+
+pre_commit:
+	@./scripts/pre_commit.sh

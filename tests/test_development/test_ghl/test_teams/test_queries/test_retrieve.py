@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from pytest import raises
+import pytest
 
 from apps.core.graphql.errors import GraphQLNotFound, GraphQLPermissionDenied
 from tests.test_development.factories import TeamFactory
@@ -33,7 +33,7 @@ def test_query(user, ghl_client):
 
 def test_unauth(ghl_mock_info, team_query):
     """Test unauth team retrieving."""
-    with raises(GraphQLPermissionDenied):
+    with pytest.raises(GraphQLPermissionDenied):
         team_query(
             root=None,
             info=ghl_mock_info,
@@ -43,7 +43,7 @@ def test_unauth(ghl_mock_info, team_query):
 
 def test_not_found(ghl_auth_mock_info, team_query):
     """Test not found team retrieving."""
-    with raises(GraphQLNotFound):
+    with pytest.raises(GraphQLNotFound):
         team_query(
             root=None,
             info=ghl_auth_mock_info,
@@ -52,7 +52,7 @@ def test_not_found(ghl_auth_mock_info, team_query):
 
 
 def test_not_member(user, ghl_auth_mock_info, team_query):
-    with raises(GraphQLNotFound):
+    with pytest.raises(GraphQLNotFound):
         team_query(
             root=None,
             info=ghl_auth_mock_info,

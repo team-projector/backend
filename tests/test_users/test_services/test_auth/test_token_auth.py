@@ -6,7 +6,6 @@ import pytest
 from django.conf import settings
 from django.http import HttpRequest
 from django.utils import timezone
-from pytest import raises
 from rest_framework.exceptions import AuthenticationFailed
 
 from apps.core.graphql.security.authentication import TokenAuthentication
@@ -50,9 +49,8 @@ def test_expired_token(rf, auth, user_token):
     request = rf.get("/")
     set_http_auth_header(request, user_token)
 
-    with raises(AuthenticationFailed) as error:
+    with pytest.raises(AuthenticationFailed, match="Token has expired"):
         auth.authenticate(request)
-        assert str(error.value.detail) == "Token has expired"
 
 
 def test_invalid_token(rf, auth, user_token):
@@ -61,6 +59,5 @@ def test_invalid_token(rf, auth, user_token):
     request = rf.get("/")
     set_http_auth_header(request, user_token)
 
-    with raises(AuthenticationFailed) as error:
+    with pytest.raises(AuthenticationFailed, match="Invalid token."):
         auth.authenticate(request)
-        assert str(error.value.detail) == "Invalid token."

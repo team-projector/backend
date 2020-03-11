@@ -1,4 +1,5 @@
 import pytest
+from django.utils.translation import gettext as _
 
 from apps.users.models import User
 from tests.fixtures.users import DEFAULT_USER_PASSWORD, DEFAULT_USERNAME
@@ -26,5 +27,5 @@ def test_superuser(db):
 
 def test_with_login_none(db):
     """Test if login None."""
-    with pytest.raises(ValueError):
+    with pytest.raises(ValueError, match=_("VN__USER_MUST_HAVE_A_LOGIN")):
         User.objects.create_user(login=None)

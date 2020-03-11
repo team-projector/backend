@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from pytest import raises
+import pytest
 
 from apps.core.graphql.errors import GraphQLPermissionDenied
 from apps.development.models.project_member import ProjectMemberRole
@@ -47,7 +47,7 @@ def test_not_permissions(ghl_auth_mock_info, all_milestones_query):
     """Test permissions."""
     ProjectMilestoneFactory.create()
 
-    with raises(GraphQLPermissionDenied):
+    with pytest.raises(GraphQLPermissionDenied):
         all_milestones_query(
             root=None,
             info=ghl_auth_mock_info,
