@@ -12,13 +12,11 @@ from tests.test_payroll.factories import IssueSpentTimeFactory
 def test_detect(user):
     """Test if user has many opened tasks."""
     IssueSpentTimeFactory.create(
-        user=user,
-        time_spent=seconds(hours=5),
+        user=user, time_spent=seconds(hours=5),
     )
 
     IssueSpentTimeFactory.create(
-        user=user,
-        time_spent=seconds(hours=8),
+        user=user, time_spent=seconds(hours=8),
     )
 
     assert get_user_problems(user) == [

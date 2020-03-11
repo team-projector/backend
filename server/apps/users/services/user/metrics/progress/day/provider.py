@@ -22,31 +22,21 @@ class DayMetricsProvider(provider.ProgressMetricsProvider):
         """Calculate and return metrics."""
         now = datetime.now().date()
 
-        active_issues = (
-            self._get_active_issues()
-            if now <= self.end
-            else []
-        )
+        active_issues = self._get_active_issues() if now <= self.end else []
 
         generator = UserDaysMetricsGenerator(
-            self.user,
-            self.start,
-            self.end,
-            active_issues,
+            self.user, self.start, self.end, active_issues,
         )
 
         if self.start > now:
             self._replay_loading(
-                now,
-                active_issues,
-                generator,
+                now, active_issues, generator,
             )
 
         return self._get_metrics(generator)
 
     def _get_metrics(  # noqa: WPS211
-        self,
-        generator: UserDaysMetricsGenerator,
+        self, generator: UserDaysMetricsGenerator,
     ) -> provider.UserProgressMetricsList:
         current = self.start
 
@@ -83,10 +73,8 @@ class DayMetricsProvider(provider.ProgressMetricsProvider):
                 remaining=(
                     models.F("time_estimate") - models.F("total_time_spent")
                 ),
-            ).filter(
-                user=self.user,
-                remaining__gt=0,
-            ).exclude(
-                state=IssueState.CLOSED,
-            ).values("id", "due_date", "remaining"),
+            )
+            .filter(user=self.user, remaining__gt=0)
+            .exclude(state=IssueState.CLOSED)
+            .values("id", "due_date", "remaining"),
         )

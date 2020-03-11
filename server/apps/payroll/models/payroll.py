@@ -19,9 +19,7 @@ class Payroll(Timestamps):
     )
 
     sum = MoneyField(  # noqa: A003
-        default=0,
-        verbose_name=_("VN__SUM"),
-        help_text=_("HT__SUM"),
+        default=0, verbose_name=_("VN__SUM"), help_text=_("HT__SUM"),
     )
 
     salary = models.ForeignKey(

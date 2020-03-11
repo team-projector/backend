@@ -14,7 +14,10 @@ class UserRole(models.TextChoices):
 
     DEVELOPER = "DEVELOPER", _("CH__DEVELOPER")  # noqa: WPS115
     TEAM_LEADER = "TEAM_LEADER", _("CH__TEAM_LEADER")  # noqa: WPS115
-    PROJECT_MANAGER = "PROJECT_MANAGER", _("CH__PROJECT_MANAGER")  # noqa: WPS115, E501
+    PROJECT_MANAGER = (  # noqa: WPS115, E501
+        "PROJECT_MANAGER",
+        _("CH__PROJECT_MANAGER"),
+    )
     CUSTOMER = "CUSTOMER", _("CH__CUSTOMER")  # noqa: WPS115
     SHAREHOLDER = "SHAREHOLDER", _("CH__SHAREHOLDER")  # noqa: WPS115
 
@@ -73,9 +76,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     )
 
     tax_rate = models.FloatField(
-        default=0,
-        verbose_name=_("VN__TAX_RATE"),
-        help_text=_("HT__TAX_RATE"),
+        default=0, verbose_name=_("VN__TAX_RATE"), help_text=_("HT__TAX_RATE"),
     )
 
     annual_paid_work_breaks_days = models.IntegerField(
@@ -84,10 +85,7 @@ class User(AbstractBaseUser, PermissionsMixin):
         help_text=_("HT__ANNUAL_PAID_WORK_BREAKS_DAYS"),
     )
 
-    roles = BitField(
-        flags=UserRole.choices,
-        default=0,
-    )
+    roles = BitField(flags=UserRole.choices, default=0)
 
     is_staff = models.BooleanField(
         default=True,

@@ -8,8 +8,7 @@ from apps.core.graphql.security.permissions import AllowAuthenticated
 
 
 class BaseMutation(
-    AuthMutation,
-    graphene.Mutation,
+    AuthMutation, graphene.Mutation,
 ):
     """A base class mutation."""
 

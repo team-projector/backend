@@ -32,14 +32,10 @@ class Note(models.Model):
     object_id = models.IntegerField()
     content_object = GenericForeignKey()
 
-    content_type = models.ForeignKey(
-        ContentType,
-        models.CASCADE,
-    )
+    content_type = models.ForeignKey(ContentType, models.CASCADE)
 
     gl_id = models.PositiveIntegerField(
-        verbose_name=_("VN__GITLAB_ID"),
-        help_text=_("HT__GITLAB_ID"),
+        verbose_name=_("VN__GITLAB_ID"), help_text=_("HT__GITLAB_ID"),
     )
 
     user = models.ForeignKey(
@@ -51,16 +47,8 @@ class Note(models.Model):
         help_text=_("HT__USER"),
     )
 
-    created_at = models.DateTimeField(
-        null=True,
-        blank=True,
-    )
-
-    updated_at = models.DateTimeField(
-        null=True,
-        blank=True,
-    )
-
+    created_at = models.DateTimeField(null=True, blank=True)
+    updated_at = models.DateTimeField(null=True, blank=True)
     body = models.TextField()
 
     type = models.CharField(  # noqa: A003
@@ -70,9 +58,7 @@ class Note(models.Model):
         help_text=_("HT__TYPE"),
     )
 
-    data = JSONField(  # noqa: WPS110
-        encoder=DjangoJSONEncoder,
-    )
+    data = JSONField(encoder=DjangoJSONEncoder)  # noqa: WPS110
 
     objects = NoteManager()  # noqa: WPS110
 

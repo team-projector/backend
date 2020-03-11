@@ -17,14 +17,14 @@ def test_basic(team: Team):
         user=team.members.all()[0],
         due_date=datetime.now() + timedelta(days=1),
         time_estimate=seconds(hours=2),
-        state=IssueState.OPENED
+        state=IssueState.OPENED,
     )
     IssueFactory.create_batch(
         4,
         user=team.members.all()[1],
         due_date=datetime.now() + timedelta(days=2),
         time_estimate=seconds(hours=3),
-        state=IssueState.CLOSED
+        state=IssueState.CLOSED,
     )
 
     IssueFactory.create_batch(size=5)
@@ -33,7 +33,7 @@ def test_basic(team: Team):
         get_team_metrics(team),
         issues_count=6,
         issues_opened_count=2,
-        issues_opened_estimated=seconds(hours=4)
+        issues_opened_estimated=seconds(hours=4),
     )
 
 
@@ -43,27 +43,27 @@ def test_problems(team: Team):
         due_date=None,
         state=IssueState.OPENED,
         time_estimate=seconds(hours=1),
-        title="issue_problem_1"
+        title="issue_problem_1",
     )
     IssueFactory.create(
         user=team.members.all()[0],
         due_date=datetime.now() - timedelta(days=3),
         time_estimate=seconds(hours=3),
         state=IssueState.OPENED,
-        title="issue_problem_2"
+        title="issue_problem_2",
     )
     IssueFactory.create(
         user=team.members.all()[0],
         time_estimate=None,
         title="issue_problem_3",
-        state=IssueState.OPENED
+        state=IssueState.OPENED,
     )
     IssueFactory.create_batch(
         size=4,
         user=team.members.all()[1],
         due_date=datetime.now() + timedelta(days=3),
         time_estimate=seconds(hours=3),
-        state=IssueState.CLOSED
+        state=IssueState.CLOSED,
     )
 
     IssueFactory.create_batch(size=5)
@@ -83,7 +83,7 @@ def test_resolver(team: Team):
         user=team.members.all()[0],
         due_date=datetime.now() + timedelta(days=1),
         time_estimate=seconds(hours=2),
-        state=IssueState.OPENED
+        state=IssueState.OPENED,
     )
 
     check_team_metrics(

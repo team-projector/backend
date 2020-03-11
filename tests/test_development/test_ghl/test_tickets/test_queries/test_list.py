@@ -26,9 +26,7 @@ def test_query(user, ghl_client):
 
     ghl_client.set_user(user)
 
-    response = ghl_client.execute(
-        GHL_QUERY_ALL_TICKETS,
-    )
+    response = ghl_client.execute(GHL_QUERY_ALL_TICKETS)
 
     assert "errors" not in response
     assert response["data"]["allTickets"]["count"] == 5
@@ -38,10 +36,7 @@ def test_success(ghl_auth_mock_info, all_tickets_query):
     """Test success tickets list."""
     TicketFactory.create_batch(5)
 
-    response = all_tickets_query(
-        root=None,
-        info=ghl_auth_mock_info,
-    )
+    response = all_tickets_query(root=None, info=ghl_auth_mock_info)
 
     assert response.length == 5
 
@@ -50,6 +45,5 @@ def test_unauth(ghl_mock_info, all_tickets_query):
     """Test unauth tickets list."""
     with pytest.raises(GraphQLPermissionDenied):
         all_tickets_query(
-            root=None,
-            info=ghl_mock_info,
+            root=None, info=ghl_mock_info,
         )

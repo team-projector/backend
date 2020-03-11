@@ -20,11 +20,7 @@ class Manager:
         self.work_break.approved_at = timezone.now()
         self.work_break.save()
 
-    def decline(
-        self,
-        approved_by: User,
-        decline_reason: str,
-    ) -> None:
+    def decline(self, approved_by: User, decline_reason: str) -> None:
         """Decline work break."""
         self.work_break.approve_state = ApprovedState.DECLINED
         self.work_break.approved_by = approved_by

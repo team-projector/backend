@@ -17,10 +17,7 @@ class SalaryCalculator:
     """Salary calculator."""
 
     def __init__(
-        self,
-        initiator: User,
-        period_from: date,
-        period_to: date,
+        self, initiator: User, period_from: date, period_to: date,
     ):
         """Initialize self."""
         self.initiator = initiator
@@ -66,56 +63,47 @@ class SalaryCalculator:
         return salary
 
     def _get_spent_data(self, salary: Salary) -> models.QuerySet:
-        return SpentTime.objects.filter(
-            salary=salary,
-        ).aggregate(
+        return SpentTime.objects.filter(salary=salary).aggregate(
             total_sum=models.Sum("sum"),
             total_time_spent=models.Sum("time_spent"),
         )
 
     def _get_penalty(self, salary: Salary) -> models.QuerySet:
-        return Penalty.objects.filter(
-            salary=salary,
-        ).aggregate(
-            total_sum=models.Sum("sum"),
-        )["total_sum"] or 0
+        return (
+            Penalty.objects.filter(salary=salary).aggregate(
+                total_sum=models.Sum("sum"),
+            )["total_sum"]
+            or 0
+        )
 
     def _get_bonus(self, salary: Salary) -> models.QuerySet:
-        return Bonus.objects.filter(
-            salary=salary,
-        ).aggregate(
-            total_sum=models.Sum("sum"),
-        )["total_sum"] or 0
+        return (
+            Bonus.objects.filter(salary=salary).aggregate(
+                total_sum=models.Sum("sum"),
+            )["total_sum"]
+            or 0
+        )
 
-    def _lock_payrolls(
-        self,
-        user: User,
-        salary: Salary,
-    ) -> int:
+    def _lock_payrolls(self, user: User, salary: Salary) -> int:
         locked = Penalty.objects.filter(
-            salary__isnull=True,
-            user=user,
-        ).update(
-            salary=salary,
-        )
-        locked += Bonus.objects.filter(
-            salary__isnull=True,
-            user=user,
-        ).update(
+            salary__isnull=True, user=user,
+        ).update(salary=salary)
+        locked += Bonus.objects.filter(salary__isnull=True, user=user).update(
             salary=salary,
         )
 
-        locked += SpentTime.objects.filter(
-            salary__isnull=True,
-            user=user,
-        ).filter(
-            models.Q(issues__state=IssueState.CLOSED)
-            | models.Q(mergerequests__state__in=(
-                MergeRequestState.CLOSED,
-                MergeRequestState.MERGED,
-            )),
-        ).update(
-            salary=salary,
+        locked += (
+            SpentTime.objects.filter(salary__isnull=True, user=user)
+            .filter(
+                models.Q(issues__state=IssueState.CLOSED)
+                | models.Q(
+                    mergerequests__state__in=(
+                        MergeRequestState.CLOSED,
+                        MergeRequestState.MERGED,
+                    ),
+                ),
+            )
+            .update(salary=salary)
         )
 
         return locked

@@ -11,10 +11,7 @@ class SystemEmailDispatcher:
     """A class for sending emails."""
 
     def mail_users(
-        self,
-        subject: str,
-        text: str,
-        recipient_list: List[str],
+        self, subject: str, text: str, recipient_list: List[str],
     ) -> None:
         """
         Send email.
@@ -23,10 +20,9 @@ class SystemEmailDispatcher:
         """
         template = get_template("system_email_template.html")
 
-        renderer = template.render(context={
-            "title": subject,
-            "text": text.replace("\n", "<br/>"),
-        })
+        renderer = template.render(
+            context={"title": subject, "text": text.replace("\n", "<br/>")},
+        )
 
         send_mail(
             subject=subject,

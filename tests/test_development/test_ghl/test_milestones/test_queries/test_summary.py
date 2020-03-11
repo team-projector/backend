@@ -23,51 +23,35 @@ query {
 def milestones(user):
     project = ProjectFactory.create()
     ProjectMemberFactory.create(
-        user=user,
-        role=ProjectMemberRole.PROJECT_MANAGER,
-        owner=project
+        user=user, role=ProjectMemberRole.PROJECT_MANAGER, owner=project
     )
     return (
         ProjectMilestoneFactory.create(
-            state=MilestoneState.ACTIVE,
-            owner=project,
+            state=MilestoneState.ACTIVE, owner=project,
         ),
         ProjectMilestoneFactory.create(
-            state=MilestoneState.CLOSED,
-            owner=project,
+            state=MilestoneState.CLOSED, owner=project,
         ),
     )
 
 
 def test_raw_query(gql_client_authenticated, milestones):
-    response = gql_client_authenticated.execute(
-        GHL_QUERY_MILESTONES_SUMMARY,
-    )
+    response = gql_client_authenticated.execute(GHL_QUERY_MILESTONES_SUMMARY)
 
     assert "errors" not in response
 
     dto = response["data"]["milestonesSummary"]
-    assert dto == {
-        "count": 2,
-        "activeCount": 1,
-        "closedCount": 1
-    }
+    assert dto == {"count": 2, "activeCount": 1, "closedCount": 1}
 
 
 def test_filter_by_state(
-    milestones_summary_query,
-    ghl_auth_mock_info,
-    milestones,
+    milestones_summary_query, ghl_auth_mock_info, milestones,
 ):
     response = milestones_summary_query(
         parent=None,
         root=None,
         info=ghl_auth_mock_info,
-        state=MilestoneState.ACTIVE
+        state=MilestoneState.ACTIVE,
     )
 
-    assert response == {
-        "count": 1,
-        "active_count": 1,
-        "closed_count": 0
-    }
+    assert response == {"count": 1, "active_count": 1, "closed_count": 0}

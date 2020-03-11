@@ -14,16 +14,22 @@ def test_success(user):
 
     body = "moved from group/project#111"
 
-    Note.objects.update_from_gitlab(dict2obj({
-        "id": 2,
-        "body": body,
-        "created_at": datetime.strftime(datetime.now(), GITLAB_DATETIME_FORMAT),
-        "updated_at": datetime.strftime(datetime.now(), GITLAB_DATETIME_FORMAT),
-        "author": {
-            "id": user.gl_id,
-        },
-        "system": True,
-    }), issue,
+    Note.objects.update_from_gitlab(
+        dict2obj(
+            {
+                "id": 2,
+                "body": body,
+                "created_at": datetime.strftime(
+                    datetime.now(), GITLAB_DATETIME_FORMAT,
+                ),
+                "updated_at": datetime.strftime(
+                    datetime.now(), GITLAB_DATETIME_FORMAT,
+                ),
+                "author": {"id": user.gl_id},
+                "system": True,
+            }
+        ),
+        issue,
     )
 
     assert Note.objects.count() == 1
@@ -40,16 +46,22 @@ def test_no_system(user):
 
     body = "moved from group/project#111"
 
-    Note.objects.update_from_gitlab(dict2obj({
-        "id": 2,
-        "body": body,
-        "created_at": datetime.strftime(datetime.now(), GITLAB_DATETIME_FORMAT),
-        "updated_at": datetime.strftime(datetime.now(), GITLAB_DATETIME_FORMAT),
-        "author": {
-            "id": user.gl_id,
-        },
-        "system": False,
-    }), issue,
+    Note.objects.update_from_gitlab(
+        dict2obj(
+            {
+                "id": 2,
+                "body": body,
+                "created_at": datetime.strftime(
+                    datetime.now(), GITLAB_DATETIME_FORMAT,
+                ),
+                "updated_at": datetime.strftime(
+                    datetime.now(), GITLAB_DATETIME_FORMAT,
+                ),
+                "author": {"id": user.gl_id},
+                "system": False,
+            }
+        ),
+        issue,
     )
 
     assert not Note.objects.exists()
@@ -60,16 +72,22 @@ def test_bad_issue_number(user):
 
     body = "moved from group/project#111b"
 
-    Note.objects.update_from_gitlab(dict2obj({
-        "id": 2,
-        "body": body,
-        "created_at": datetime.strftime(datetime.now(), GITLAB_DATETIME_FORMAT),
-        "updated_at": datetime.strftime(datetime.now(), GITLAB_DATETIME_FORMAT),
-        "author": {
-            "id": user.gl_id,
-        },
-        "system": True,
-    }), issue,
+    Note.objects.update_from_gitlab(
+        dict2obj(
+            {
+                "id": 2,
+                "body": body,
+                "created_at": datetime.strftime(
+                    datetime.now(), GITLAB_DATETIME_FORMAT,
+                ),
+                "updated_at": datetime.strftime(
+                    datetime.now(), GITLAB_DATETIME_FORMAT,
+                ),
+                "author": {"id": user.gl_id},
+                "system": True,
+            }
+        ),
+        issue,
     )
 
     assert not Note.objects.exists()

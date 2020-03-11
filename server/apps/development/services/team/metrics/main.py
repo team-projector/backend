@@ -38,9 +38,7 @@ class TeamMetricsProvider:
     """Team metrics provider."""
 
     def __init__(
-        self,
-        issues: Issue,
-        merge_requests: MergeRequest,
+        self, issues: Issue, merge_requests: MergeRequest,
     ):
         """Initialize self."""
         self.issues = issues
@@ -85,11 +83,12 @@ class TeamMetricsProvider:
         return workitems.filter(state=IssueState.OPENED).count()
 
     def _get_opened_estimated(self, workitems) -> int:
-        return workitems.filter(
-            state=IssueState.OPENED,
-        ).aggregate(
-            total_time_estimate=Sum("time_estimate"),
-        )["total_time_estimate"] or 0
+        return (
+            workitems.filter(state=IssueState.OPENED).aggregate(
+                total_time_estimate=Sum("time_estimate"),
+            )["total_time_estimate"]
+            or 0
+        )
 
 
 def get_team_metrics(team: Team) -> TeamMetrics:

@@ -24,19 +24,13 @@ class LabelAdmin(BaseModelAdmin):
     list_display = ("title", "color_square")
     search_fields = ("title",)
 
-    fieldsets = (
-        (None, {
-            "fields": ("title", "color_square"),
-        }),
-    )
+    fieldsets = ((None, {"fields": ("title", "color_square")}),)
 
     readonly_fields = ("title", "color_square")
 
     @mark_safe
     def color_square(self, label):
         """Show current label with colored square near."""
-        return COLOR_TEMPLATE.format(
-            color=label.color,
-        )
+        return COLOR_TEMPLATE.format(color=label.color)
 
     color_square.short_description = "color"

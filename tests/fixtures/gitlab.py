@@ -22,19 +22,13 @@ class GitlabMock(HttprettyMock):
         super().__init__()
 
         self.register_url(
-            httpretty.GET,
-            RE_GITLAB_URL,
-            RequestCallbackFactory({}),
+            httpretty.GET, RE_GITLAB_URL, RequestCallbackFactory({}),
         )
         self.register_url(
-            httpretty.POST,
-            RE_GITLAB_URL,
-            RequestCallbackFactory({}),
+            httpretty.POST, RE_GITLAB_URL, RequestCallbackFactory({}),
         )
         self.register_url(
-            httpretty.DELETE,
-            RE_GITLAB_URL,
-            RequestCallbackFactory({}),
+            httpretty.DELETE, RE_GITLAB_URL, RequestCallbackFactory({}),
         )
 
 

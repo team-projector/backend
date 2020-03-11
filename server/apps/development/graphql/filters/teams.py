@@ -23,17 +23,14 @@ class TeamRolesFilter(django_filters.CharFilter):
 
         team_members = filter_by_roles(
             TeamMember.objects.filter(
-                team=OuterRef("pk"),
-                user=self.parent.request.user,
+                team=OuterRef("pk"), user=self.parent.request.user,
             ),
             parsed_roles,
         )
 
         queryset = queryset.annotate(
             member_exists=Exists(team_members),
-        ).filter(
-            member_exists=True,
-        )
+        ).filter(member_exists=True)
 
         return queryset
 
@@ -52,9 +49,7 @@ class TeamsFilterSet(django_filters.FilterSet):
     """Set of filters for Team."""
 
     roles = TeamRolesFilter()
-    order_by = OrderingFilter(
-        fields=("title",),
-    )
+    order_by = OrderingFilter(fields=("title",))
     q = SearchFilter(fields=("title",))  # noqa: WPS111
 
     class Meta:

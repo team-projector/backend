@@ -18,9 +18,7 @@ def issue(db):
 def test_without_user_spend(issue, user):
     """Test any user time spent for issue."""
     IssueSpentTimeFactory.create(
-        user=UserFactory.create(),
-        base=issue,
-        time_spent=int(seconds(hours=2))
+        user=UserFactory.create(), base=issue, time_spent=int(seconds(hours=2))
     )
 
     assert get_user_time_spent(issue, user) == 0
@@ -30,14 +28,10 @@ def test_some_spends(issue, user):
     """Test user time spent for issue."""
     spends = [
         IssueSpentTimeFactory.create(
-            user=user,
-            base=issue,
-            time_spent=int(seconds(hours=5))
+            user=user, base=issue, time_spent=int(seconds(hours=5))
         ),
         IssueSpentTimeFactory.create(
-            user=user,
-            base=issue,
-            time_spent=int(seconds(hours=2))
+            user=user, base=issue, time_spent=int(seconds(hours=2))
         ),
     ]
 
@@ -51,15 +45,11 @@ def test_different_user_spents(issue, user):
     user_2 = UserFactory.create()
     spends = [
         IssueSpentTimeFactory.create(
-            user=user,
-            base=issue,
-            time_spent=int(seconds(hours=5))
+            user=user, base=issue, time_spent=int(seconds(hours=5))
         ),
         IssueSpentTimeFactory.create(
-            user=user_2,
-            base=issue,
-            time_spent=int(seconds(hours=2))
-        )
+            user=user_2, base=issue, time_spent=int(seconds(hours=2))
+        ),
     ]
 
     assert get_user_time_spent(issue, user) == spends[0].time_spent

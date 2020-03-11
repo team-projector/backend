@@ -8,8 +8,7 @@ from graphql.utils.ast_to_dict import ast_to_dict
 
 
 def collect_fields(
-    node,
-    fragments: Dict[str, object],
+    node, fragments: Dict[str, object],
 ):
     """Collect fields."""
     field = {}
@@ -23,7 +22,9 @@ def collect_fields(
                 field[name] = collect_fields(leaf, fragments)
             elif leaf["kind"] == "FragmentSpread":
                 field.update(
-                    collect_fields(fragments[leaf["name"]["value"]], fragments),
+                    collect_fields(
+                        fragments[leaf["name"]["value"]], fragments,
+                    ),
                 )
 
     return field
@@ -40,10 +41,7 @@ def get_fields_from_info(info: ResolveInfo):  # noqa: WPS110
     return collect_fields(node, fragments)
 
 
-def is_field_selected(
-    info: ResolveInfo,  # noqa: WPS110
-    path: str,
-) -> bool:
+def is_field_selected(info: ResolveInfo, path: str) -> bool:  # noqa: WPS110
     """Is field selected."""
     fields = get_fields_from_info(info)
 

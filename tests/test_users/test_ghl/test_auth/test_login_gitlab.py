@@ -32,8 +32,7 @@ def test_query(user, ghl_client):
     }
 
     response = ghl_client.execute(
-        GHL_QUERY_LOGIN_GITLAB,
-        extra_context=context,
+        GHL_QUERY_LOGIN_GITLAB, extra_context=context,
     )
 
     redirect_url = response["data"]["loginGitlab"]["redirectUrl"]

@@ -8,12 +8,18 @@ def test_filter_by_state(db):
     ProjectMilestoneFactory.create(state=MilestoneState.ACTIVE)
     ProjectMilestoneFactory.create(state=MilestoneState.CLOSED)
 
-    assert MilestonesFilterSet(
-        data={"state": MilestoneState.ACTIVE},
-        queryset=Milestone.objects.all(),
-    ).qs.count() == 2
+    assert (
+        MilestonesFilterSet(
+            data={"state": MilestoneState.ACTIVE},
+            queryset=Milestone.objects.all(),
+        ).qs.count()
+        == 2
+    )
 
-    assert MilestonesFilterSet(
-        data={"state": MilestoneState.CLOSED},
-        queryset=Milestone.objects.all(),
-    ).qs.count() == 1
+    assert (
+        MilestonesFilterSet(
+            data={"state": MilestoneState.CLOSED},
+            queryset=Milestone.objects.all(),
+        ).qs.count()
+        == 1
+    )

@@ -6,18 +6,11 @@ from tests.test_users.factories.user import UserFactory
 
 
 def test_my_salaries(user):
-    salaries = SalaryFactory.create_batch(
-        size=3,
-        user=user)
+    salaries = SalaryFactory.create_batch(size=3, user=user)
 
-    SalaryFactory.create_batch(
-        size=5,
-        user=UserFactory.create())
+    SalaryFactory.create_batch(size=5, user=UserFactory.create())
 
-    _assert_salaries(
-        Salary.objects.allowed_for_user(user),
-        salaries
-    )
+    _assert_salaries(Salary.objects.allowed_for_user(user), salaries)
 
 
 def test_in_team_not_viewer(user):
@@ -27,9 +20,7 @@ def test_in_team_not_viewer(user):
 
     SalaryFactory.create(user=user_2)
 
-    _assert_salaries(
-        Salary.objects.allowed_for_user(user)
-    )
+    _assert_salaries(Salary.objects.allowed_for_user(user))
 
 
 def test_as_team_leader(user):
@@ -37,16 +28,11 @@ def test_as_team_leader(user):
     team = TeamFactory.create()
     team.members.set([user, user_2])
 
-    TeamMember.objects.filter(user=user).update(
-        roles=TeamMember.roles.LEADER
-    )
+    TeamMember.objects.filter(user=user).update(roles=TeamMember.roles.LEADER)
 
     salary = SalaryFactory.create(user=user_2)
 
-    _assert_salaries(
-        Salary.objects.allowed_for_user(user),
-        [salary]
-    )
+    _assert_salaries(Salary.objects.allowed_for_user(user), [salary])
 
 
 def test_as_team_watcher(user):
@@ -54,15 +40,11 @@ def test_as_team_watcher(user):
     team = TeamFactory.create()
     team.members.set([user, user_2])
 
-    TeamMember.objects.filter(user=user).update(
-        roles=TeamMember.roles.WATCHER
-    )
+    TeamMember.objects.filter(user=user).update(roles=TeamMember.roles.WATCHER)
 
     SalaryFactory.create(user=user_2)
 
-    _assert_salaries(
-        Salary.objects.allowed_for_user(user)
-    )
+    _assert_salaries(Salary.objects.allowed_for_user(user))
 
 
 def test_as_leader_another_team(user):
@@ -73,15 +55,11 @@ def test_as_leader_another_team(user):
     team_2 = TeamFactory.create()
     team_2.members.add(user_2)
 
-    TeamMember.objects.filter(user=user).update(
-        roles=TeamMember.roles.LEADER
-    )
+    TeamMember.objects.filter(user=user).update(roles=TeamMember.roles.LEADER)
 
     SalaryFactory.create(user=user_2)
 
-    _assert_salaries(
-        Salary.objects.allowed_for_user(user)
-    )
+    _assert_salaries(Salary.objects.allowed_for_user(user))
 
 
 def test_as_watcher_another_team(user):
@@ -92,15 +70,11 @@ def test_as_watcher_another_team(user):
     team_2 = TeamFactory.create()
     team_2.members.add(user_2)
 
-    TeamMember.objects.filter(user=user).update(
-        roles=TeamMember.roles.WATCHER
-    )
+    TeamMember.objects.filter(user=user).update(roles=TeamMember.roles.WATCHER)
 
     SalaryFactory.create(user=user_2)
 
-    _assert_salaries(
-        Salary.objects.allowed_for_user(user)
-    )
+    _assert_salaries(Salary.objects.allowed_for_user(user))
 
 
 def test_my_salaries_and_as_leader(user):
@@ -119,8 +93,7 @@ def test_my_salaries_and_as_leader(user):
     salaries = SalaryFactory.create_batch(size=3, user=user_2)
 
     _assert_salaries(
-        Salary.objects.allowed_for_user(user),
-        [*salaries_my, *salaries]
+        Salary.objects.allowed_for_user(user), [*salaries_my, *salaries]
     )
 
 

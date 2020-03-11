@@ -31,9 +31,7 @@ class Command(createsuperuser.Command):
 
         self._fill_user_data_required_fields(user_data, options)
 
-        self.UserModel.objects.create_superuser(
-            **user_data,
-        )
+        self.UserModel.objects.create_superuser(**user_data)
 
         if options["verbosity"] >= 1:
             self.stdout.write("Superuser created successfully.")

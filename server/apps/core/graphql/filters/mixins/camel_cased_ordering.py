@@ -20,11 +20,15 @@ class CamelCasedOrderingMixin(OrderingFilter):
         """Normalize fields."""
         ret = super().normalize_fields(fields)
 
-        return OrderedDict([
-            (key, "__".join(
-                str_converters.to_camel_case(choice)
-                for choice in choice_field.split("__")
-            ))
-            for key, choice_field in
-            ret.items()
-        ])
+        return OrderedDict(
+            [
+                (
+                    key,
+                    "__".join(
+                        str_converters.to_camel_case(choice)
+                        for choice in choice_field.split("__")
+                    ),
+                )
+                for key, choice_field in ret.items()
+            ],
+        )

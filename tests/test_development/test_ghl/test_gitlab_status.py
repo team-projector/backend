@@ -23,8 +23,7 @@ def test_status(user):
     project.save()
 
     add_action_task.delay(
-        sender_id=user.id,
-        verb=ACTION_GITLAB_WEBHOOK_TRIGGERED,
+        sender_id=user.id, verb=ACTION_GITLAB_WEBHOOK_TRIGGERED,
     )
     add_action_task.delay(sender_id=user.id, verb=ACTION_GITLAB_CALL_API)
 
@@ -44,25 +43,24 @@ def test_resolver(user, client):
     project.gl_last_sync = timezone.now() + timedelta(minutes=2)
     project.save()
 
-    add_action_task.delay(sender_id=user.id,
-                          verb=ACTION_GITLAB_WEBHOOK_TRIGGERED)
+    add_action_task.delay(
+        sender_id=user.id, verb=ACTION_GITLAB_WEBHOOK_TRIGGERED,
+    )
     add_action_task.delay(sender_id=user.id, verb=ACTION_GITLAB_CALL_API)
 
     client.user = user
     info = AttrDict({"context": client})
 
-    sync_status = resolve_gitlab_status(
-        parent=None,
-        info=info
-    )
+    sync_status = resolve_gitlab_status(parent=None, info=info)
 
     assert sync_status.last_sync == project.gl_last_sync
     assert set(
         Issue.objects.order_by("-updated_at")[:10].values_list("id", flat=True)
     ) == {issue.id for issue in sync_status.last_issues}
 
-    add_action_task.delay(sender_id=user.id,
-                          verb=ACTION_GITLAB_WEBHOOK_TRIGGERED)
+    add_action_task.delay(
+        sender_id=user.id, verb=ACTION_GITLAB_WEBHOOK_TRIGGERED,
+    )
     add_action_task.delay(sender_id=user.id, verb=ACTION_GITLAB_CALL_API)
 
     sync_status = get_gitlab_sync_status()

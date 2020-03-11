@@ -17,8 +17,7 @@ class TicketsQueries(graphene.ObjectType):
     ticket = DatasourceRelayNode.Field(TicketType)
 
     all_tickets = DataSourceConnectionField(
-        TicketType,
-        filterset_class=TicketsFilterSet,
+        TicketType, filterset_class=TicketsFilterSet,
     )
 
     tickets_summary = graphene.Field(

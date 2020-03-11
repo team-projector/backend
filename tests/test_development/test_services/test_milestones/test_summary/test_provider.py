@@ -11,23 +11,15 @@ from tests.test_development.factories import (
 
 def test_all_fields(db):
     summary = MilestonesSummaryProvider(Milestone.objects.all()).get_data()
-    assert summary == {
-        "count": 0,
-        "active_count": 0,
-        "closed_count": 0
-    }
+    assert summary == {"count": 0, "active_count": 0, "closed_count": 0}
 
 
 def test_selected_fields(db):
     summary = MilestonesSummaryProvider(
-        Milestone.objects.all(),
-        fields=("count", "active_count"),
+        Milestone.objects.all(), fields=("count", "active_count"),
     ).get_data()
 
-    assert summary == {
-        "count": 0,
-        "active_count": 0
-    }
+    assert summary == {"count": 0, "active_count": 0}
 
 
 def test_prefiltered_qs(db):
@@ -42,8 +34,4 @@ def test_prefiltered_qs(db):
         fields=("count", "active_count", "closed_count"),
     ).get_data()
 
-    assert summary == {
-        "count": 2,
-        "active_count": 1,
-        "closed_count": 1
-    }
+    assert summary == {"count": 2, "active_count": 1, "closed_count": 1}

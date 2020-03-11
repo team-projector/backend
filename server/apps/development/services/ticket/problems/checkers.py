@@ -18,9 +18,9 @@ class BaseProblemChecker:
 
     def setup_queryset(self, queryset: models.QuerySet) -> models.QuerySet:
         """Setup queryset."""
-        return queryset.annotate(**{
-            self.annotate_field: self.get_annotation(),
-        })
+        return queryset.annotate(
+            **{self.annotate_field: self.get_annotation()},
+        )
 
     def ticket_has_problem(self, ticket: Ticket) -> bool:
         """Method should be implemented in subclass."""

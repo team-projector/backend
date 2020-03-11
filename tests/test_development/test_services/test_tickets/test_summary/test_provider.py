@@ -16,20 +16,16 @@ def test_all_fields(db):
         "doing_count": 0,
         "done_count": 0,
         "planning_count": 0,
-        "testing_count": 0
+        "testing_count": 0,
     }
 
 
 def test_selected_fields(db):
     summary = TicketsSummaryProvider(
-        Ticket.objects.all(),
-        fields=("count", "doing_count"),
+        Ticket.objects.all(), fields=("count", "doing_count"),
     ).get_data()
 
-    assert summary == {
-        "count": 0,
-        "doing_count": 0
-    }
+    assert summary == {"count": 0, "doing_count": 0}
 
 
 def test_prefiltered_qs(db):
@@ -44,8 +40,4 @@ def test_prefiltered_qs(db):
         fields=("count", "planning_count", "created_count"),
     ).get_data()
 
-    assert summary == {
-        "count": 2,
-        "planning_count": 1,
-        "created_count": 1
-    }
+    assert summary == {"count": 2, "planning_count": 1, "created_count": 1}

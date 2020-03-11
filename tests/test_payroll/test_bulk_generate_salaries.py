@@ -26,12 +26,15 @@ class BulkGenerateSalariesTests(TestCase):
     def test_single(self):
         issue = IssueFactory.create(state=IssueState.CLOSED)
 
-        IssueSpentTimeFactory.create(user=self.user, base=issue,
-                                     time_spent=seconds(hours=1))
-        IssueSpentTimeFactory.create(user=self.user, base=issue,
-                                     time_spent=-seconds(hours=2))
-        IssueSpentTimeFactory.create(user=self.user, base=issue,
-                                     time_spent=seconds(hours=5))
+        IssueSpentTimeFactory.create(
+            user=self.user, base=issue, time_spent=seconds(hours=1)
+        )
+        IssueSpentTimeFactory.create(
+            user=self.user, base=issue, time_spent=-seconds(hours=2)
+        )
+        IssueSpentTimeFactory.create(
+            user=self.user, base=issue, time_spent=seconds(hours=5)
+        )
 
         self.calculator.generate_bulk()
 
@@ -48,12 +51,15 @@ class BulkGenerateSalariesTests(TestCase):
         user_2 = UserFactory.create()
         user_3 = UserFactory.create()
 
-        IssueSpentTimeFactory.create(user=self.user, base=issue_1,
-                                     time_spent=seconds(hours=1))
-        IssueSpentTimeFactory.create(user=user_2, base=issue_2,
-                                     time_spent=seconds(hours=2))
-        IssueSpentTimeFactory.create(user=user_3, base=issue_3,
-                                     time_spent=seconds(hours=5))
+        IssueSpentTimeFactory.create(
+            user=self.user, base=issue_1, time_spent=seconds(hours=1)
+        )
+        IssueSpentTimeFactory.create(
+            user=user_2, base=issue_2, time_spent=seconds(hours=2)
+        )
+        IssueSpentTimeFactory.create(
+            user=user_3, base=issue_3, time_spent=seconds(hours=5)
+        )
 
         self.calculator.generate_bulk()
 

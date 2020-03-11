@@ -37,9 +37,7 @@ def test_list(user, ghl_client):
 
     ghl_client.set_user(user)
 
-    response = ghl_client.execute(
-        GHL_QUERY_ALL_TICKETS,
-    )
+    response = ghl_client.execute(GHL_QUERY_ALL_TICKETS)
 
     assert "errors" not in response
     assert response["data"]["allTickets"]["count"] == 5
@@ -58,10 +56,7 @@ def test_retreive(user, ghl_client):
     ghl_client.set_user(user)
 
     response = ghl_client.execute(
-        GHL_QUERY_TICKET,
-        variable_values={
-            "id": issue.ticket_id,
-        },
+        GHL_QUERY_TICKET, variable_values={"id": issue.ticket_id},
     )
 
     assert "errors" not in response

@@ -9,10 +9,7 @@ from rest_framework.authtoken.models import Token as BaseToken
 class Token(BaseToken):
     """The authorization token model."""
 
-    user = models.ForeignKey(
-        settings.AUTH_USER_MODEL,
-        models.CASCADE,
-    )
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, models.CASCADE)
 
     class Meta:
         verbose_name = _("VN__TOKEN")

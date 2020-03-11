@@ -7,8 +7,7 @@ from rest_framework.utils import model_meta
 
 
 def update_from_validated_data(
-    instance: Model,
-    validated_data: Dict[str, object],
+    instance: Model, validated_data: Dict[str, object],
 ) -> Model:
     """Simply set each attribute on the instance, and then save it."""
     field_info = model_meta.get_field_info(instance)

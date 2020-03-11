@@ -36,11 +36,12 @@ def get_issue_metrics(issue: Issue) -> IssueMetrics:
 
 def get_user_time_spent(issue: Issue, user: User) -> int:
     """Get time spent for issue."""
-    return issue.time_spents.filter(
-        user=user,
-    ).aggregate(
-        total_user_time_spent=Sum("time_spent"),
-    )["total_user_time_spent"] or 0
+    return (
+        issue.time_spents.filter(user=user).aggregate(
+            total_user_time_spent=Sum("time_spent"),
+        )["total_user_time_spent"]
+        or 0
+    )
 
 
 class IssuesContainerMetrics:
@@ -70,16 +71,12 @@ class IssuesContainerMetricsProvider:
             time_estimate=Coalesce(models.Sum("time_estimate"), 0),
             time_spent=Coalesce(models.Sum("total_time_spent"), 0),
             issues_closed_count=Coalesce(
-                models.Count(
-                    "id",
-                    filter=models.Q(state=IssueState.CLOSED),
-                ), 0,
+                models.Count("id", filter=models.Q(state=IssueState.CLOSED)),
+                0,
             ),
             issues_opened_count=Coalesce(
-                models.Count(
-                    "id",
-                    filter=models.Q(state=IssueState.OPENED),
-                ), 0,
+                models.Count("id", filter=models.Q(state=IssueState.OPENED)),
+                0,
             ),
             issues_count=models.Count("*"),
         )

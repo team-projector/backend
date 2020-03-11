@@ -13,8 +13,7 @@ def test_by_due_date(user):
     IssueFactory.create(user=user, due_date=datetime.now() - timedelta(days=1))
 
     results = IssuesFilterSet(
-        data={"due_date": datetime.now().date()},
-        queryset=Issue.objects.all()
+        data={"due_date": datetime.now().date()}, queryset=Issue.objects.all()
     ).qs
 
     assert results.count() == 1

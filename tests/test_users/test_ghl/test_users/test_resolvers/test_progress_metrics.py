@@ -16,16 +16,12 @@ def test_success(user, ghl_auth_mock_info):
     team = TeamFactory.create()
 
     TeamMemberFactory.create(
-        user=user,
-        team=team,
-        roles=TeamMember.roles.LEADER
+        user=user, team=team, roles=TeamMember.roles.LEADER
     )
 
     checked_user = UserFactory.create()
     TeamMemberFactory.create(
-        user=checked_user,
-        team=team,
-        roles=TeamMember.roles.DEVELOPER
+        user=checked_user, team=team, roles=TeamMember.roles.DEVELOPER
     )
 
     metrics = resolve_user_progress_metrics(
@@ -34,7 +30,7 @@ def test_success(user, ghl_auth_mock_info):
         user=checked_user.pk,
         start=datetime.now().date(),
         end=datetime.now().date(),
-        group="day"
+        group="day",
     )
 
     assert len(metrics) == 1
@@ -45,16 +41,12 @@ def test_not_leader(user, ghl_auth_mock_info):
     team = TeamFactory.create()
 
     TeamMemberFactory.create(
-        user=user,
-        team=team,
-        roles=TeamMember.roles.DEVELOPER
+        user=user, team=team, roles=TeamMember.roles.DEVELOPER
     )
 
     checked_user = UserFactory.create()
     TeamMemberFactory.create(
-        user=checked_user,
-        team=team,
-        roles=TeamMember.roles.DEVELOPER
+        user=checked_user, team=team, roles=TeamMember.roles.DEVELOPER
     )
 
     with pytest.raises(GraphQLNotFound):
@@ -64,5 +56,5 @@ def test_not_leader(user, ghl_auth_mock_info):
             user=checked_user.pk,
             start=datetime.now().date(),
             end=datetime.now().date(),
-            group="day"
+            group="day",
         )

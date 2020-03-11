@@ -32,10 +32,7 @@ HOURS_PER_MONTH = WEEK_PER_MONTH * HOURS_PER_WEEK
 
 
 def spend_handler_helper(
-    bag: DefaultDict[str, int],
-    time_value: int,
-    key: str,
-    multiplier: int = 1,
+    bag: DefaultDict[str, int], time_value: int, key: str, multiplier: int = 1,
 ):
     """Helps to handle different units of time via multiplier."""
     bag[key] += time_value * multiplier
@@ -43,14 +40,16 @@ def spend_handler_helper(
 
 hours_helper = partial(spend_handler_helper, key="hours")
 
-GITLAB_SPEND_HANDLERS = types.MappingProxyType({
-    "mo": partial(hours_helper, multiplier=HOURS_PER_MONTH),
-    "w": partial(hours_helper, multiplier=HOURS_PER_WEEK),
-    "d": partial(hours_helper, multiplier=HOURS_PER_DAY),
-    "h": hours_helper,
-    "m": partial(spend_handler_helper, key="minutes"),
-    "s": partial(spend_handler_helper, key="seconds"),
-})
+GITLAB_SPEND_HANDLERS = types.MappingProxyType(
+    {
+        "mo": partial(hours_helper, multiplier=HOURS_PER_MONTH),
+        "w": partial(hours_helper, multiplier=HOURS_PER_WEEK),
+        "d": partial(hours_helper, multiplier=HOURS_PER_DAY),
+        "h": hours_helper,
+        "m": partial(spend_handler_helper, key="minutes"),
+        "s": partial(spend_handler_helper, key="seconds"),
+    },
+)
 
 NoteReadResult = namedtuple("NoteReadResult", ["type", "data"])
 
@@ -72,8 +71,7 @@ def parse_spend(spent: str) -> int:
             continue
 
         GITLAB_SPEND_HANDLERS[match.group("part")](
-            bag,
-            int(match.group("value")),
+            bag, int(match.group("value")),
         )
 
     return int(seconds(**bag))
@@ -92,9 +90,10 @@ class SpendAddedParser(BaseNoteParser):
 
     def parse(self, gl_note) -> Optional[NoteReadResult]:
         """Parse note."""
-        match = (
-            RE_SPEND_FULL.match(gl_note.body) or  # noqa: W504
-            RE_SPEND_SHORT.match(gl_note.body)
+        match = RE_SPEND_FULL.match(
+            gl_note.body,
+        ) or RE_SPEND_SHORT.match(  # noqa: W504
+            gl_note.body,
         )
         if not match:
             return None
@@ -104,10 +103,8 @@ class SpendAddedParser(BaseNoteParser):
             spent *= -1
 
         return NoteReadResult(
-            NoteType.TIME_SPEND, {
-                "spent": spent,
-                "date": self._extract_date(gl_note, match),
-            },
+            NoteType.TIME_SPEND,
+            {"spent": spent, "date": self._extract_date(gl_note, match)},
         )
 
     def _extract_date(self, gl_note, match: Match[str]):

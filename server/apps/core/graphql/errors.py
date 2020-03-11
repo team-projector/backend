@@ -70,10 +70,7 @@ class GraphQLInputError(BaseGraphQLError):
         field_errors = []
 
         for field, messages in camelize(errors).items():
-            field_errors.append({
-                "fieldName": field,
-                "messages": messages,
-            })
+            field_errors.append({"fieldName": field, "messages": messages})
         extensions["fieldErrors"] = field_errors
 
         kwargs["extensions"] = extensions

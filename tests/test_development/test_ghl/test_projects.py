@@ -23,30 +23,24 @@ def test_project_milestones(user, client):
     project = ProjectFactory.create()
 
     milestone_1 = ProjectMilestoneFactory.create(
-        owner=project,
-        state=MilestoneState.ACTIVE
+        owner=project, state=MilestoneState.ACTIVE
     )
     milestone_2 = ProjectMilestoneFactory.create(
-        owner=project,
-        state=MilestoneState.CLOSED
+        owner=project, state=MilestoneState.CLOSED
     )
 
     client.user = user
     info = AttrDict({"context": client})
 
     milestones = ProjectMilestonesResolver(
-        project=project,
-        info=info,
-        active=True
+        project=project, info=info, active=True
     ).execute()
 
     assert milestones.count() == 1
     assert milestones.first() == milestone_1
 
     milestones = ProjectMilestonesResolver(
-        project=project,
-        info=info,
-        active=False
+        project=project, info=info, active=False
     ).execute()
 
     assert milestones.count() == 1
@@ -57,37 +51,29 @@ def test_project_group_milestones(user, client):
     group = ProjectGroupFactory.create()
 
     milestone_1 = ProjectGroupMilestoneFactory.create(
-        owner=group,
-        state=MilestoneState.ACTIVE
+        owner=group, state=MilestoneState.ACTIVE
     )
     ProjectGroupMilestoneFactory.create_batch(
-        3,
-        owner=group,
-        state=MilestoneState.CLOSED
+        3, owner=group, state=MilestoneState.CLOSED
     )
 
     project = ProjectFactory.create(group=group)
     milestone_2 = ProjectGroupMilestoneFactory.create(
-        owner=project,
-        state=MilestoneState.CLOSED
+        owner=project, state=MilestoneState.CLOSED
     )
 
     client.user = user
     info = AttrDict({"context": client})
 
     milestones = ProjectMilestonesResolver(
-        project=project,
-        info=info,
-        active=True
+        project=project, info=info, active=True
     ).execute()
 
     assert milestones.count() == 1
     assert milestones.first() == milestone_1
 
     milestones = ProjectMilestonesResolver(
-        project=project,
-        info=info,
-        active=False
+        project=project, info=info, active=False
     ).execute()
 
     assert milestones.count() == 1
@@ -98,39 +84,31 @@ def test_project_group_parent_milestones(user, client):
     group_parent = ProjectGroupFactory.create()
 
     milestone_1 = ProjectGroupMilestoneFactory.create(
-        owner=group_parent,
-        state=MilestoneState.ACTIVE
+        owner=group_parent, state=MilestoneState.ACTIVE
     )
     ProjectGroupMilestoneFactory.create_batch(
-        3,
-        owner=group_parent,
-        state=MilestoneState.CLOSED
+        3, owner=group_parent, state=MilestoneState.CLOSED
     )
 
     group = ProjectGroupFactory.create(parent=group_parent)
 
     project = ProjectFactory.create(group=group)
     milestone_2 = ProjectGroupMilestoneFactory.create(
-        owner=group,
-        state=MilestoneState.CLOSED
+        owner=group, state=MilestoneState.CLOSED
     )
 
     client.user = user
     info = AttrDict({"context": client})
 
     milestones = ProjectMilestonesResolver(
-        project=project,
-        info=info,
-        active=True
+        project=project, info=info, active=True
     ).execute()
 
     assert milestones.count() == 1
     assert milestones.first() == milestone_1
 
     milestones = ProjectMilestonesResolver(
-        project=project,
-        info=info,
-        active=False
+        project=project, info=info, active=False
     ).execute()
 
     assert milestones.count() == 1
@@ -140,13 +118,9 @@ def test_project_group_parent_milestones(user, client):
 def test_resolve_milestones(user, client):
     project = ProjectFactory.create()
 
-    ProjectMilestoneFactory.create(
-        owner=project,
-        state=MilestoneState.ACTIVE
-    )
+    ProjectMilestoneFactory.create(owner=project, state=MilestoneState.ACTIVE)
     milestone_2 = ProjectMilestoneFactory.create(
-        owner=project,
-        state=MilestoneState.CLOSED
+        owner=project, state=MilestoneState.CLOSED
     )
 
     client.user = user

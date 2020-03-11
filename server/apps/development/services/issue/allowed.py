@@ -24,10 +24,7 @@ def check_allow_project_manager(user: User) -> None:
         )
 
 
-def filter_allowed_for_user(
-    queryset: QuerySet,
-    user: User,
-) -> QuerySet:
+def filter_allowed_for_user(queryset: QuerySet, user: User) -> QuerySet:
     """Get allowed issues for user."""
     team_member_issues = filter_by_team_member_role(queryset, user)
 
@@ -35,9 +32,7 @@ def filter_allowed_for_user(
         project__in=get_allowed_projects(user),
     )
 
-    return queryset.filter(
-        id__in=team_member_issues | project_member_issues,
-    )
+    return queryset.filter(id__in=team_member_issues | project_member_issues)
 
 
 def get_allowed_projects(user) -> Iterable[Project]:
@@ -48,15 +43,13 @@ def get_allowed_projects(user) -> Iterable[Project]:
         id=OuterRef("members__id"),
     )
 
-    projects = list(Project.objects.annotate(
-        is_allowed=Exists(members),
-    ).filter(
-        is_allowed=True,
-    ))
+    projects = list(
+        Project.objects.annotate(is_allowed=Exists(members)).filter(
+            is_allowed=True,
+        ),
+    )
 
-    groups = ProjectGroup.objects.annotate(
-        is_allowed=Exists(members),
-    ).filter(
+    groups = ProjectGroup.objects.annotate(is_allowed=Exists(members)).filter(
         is_allowed=True,
     )
 
@@ -66,9 +59,7 @@ def get_allowed_projects(user) -> Iterable[Project]:
     return set(projects)
 
 
-def get_projects_from_group(
-    group: ProjectGroup,
-) -> Iterable[Project]:
+def get_projects_from_group(group: ProjectGroup) -> Iterable[Project]:
     """Get projects from group."""
     projects = list(Project.objects.filter(group=group))
 
@@ -79,10 +70,7 @@ def get_projects_from_group(
     return set(projects)
 
 
-def filter_by_team_member_role(
-    queryset: QuerySet,
-    user: User,
-) -> QuerySet:
+def filter_by_team_member_role(queryset: QuerySet, user: User) -> QuerySet:
     """
     Get allowed issues for user from teams.
 
@@ -92,18 +80,10 @@ def filter_by_team_member_role(
 
     members = filter_by_roles(
         TeamMember.objects.filter(user=user),
-        [
-            TeamMember.roles.LEADER,
-            TeamMember.roles.WATCHER,
-        ],
-    ).values_list(
-        "team__members",
-        flat=True,
-    )
+        [TeamMember.roles.LEADER, TeamMember.roles.WATCHER],
+    ).values_list("team__members", flat=True)
 
     for member in members:
         allowed_users.add(member)
 
-    return queryset.filter(
-        user__in=allowed_users,
-    )
+    return queryset.filter(user__in=allowed_users)

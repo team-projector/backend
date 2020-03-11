@@ -23,16 +23,11 @@ class ProjectGroupGlManager:
     def sync_all_groups(self) -> None:
         """Sync all groups with gitlab."""
         gl_groups = self.provider.get_gl_groups(all=True)
-        gl_groups_map = {
-            gl_group.id: gl_group
-            for gl_group in gl_groups
-        }
+        gl_groups_map = {gl_group.id: gl_group for gl_group in gl_groups}
 
         while gl_groups:
             self.sync_group(
-                gl_groups[0],
-                gl_groups,
-                gl_groups_map,
+                gl_groups[0], gl_groups, gl_groups_map,
             )
 
     def sync_group(
@@ -61,9 +56,7 @@ class ProjectGroupGlManager:
         return self.update_group(gl_group, parent)
 
     def update_group(
-        self,
-        gl_group: gl.Group,
-        parent: Optional[ProjectGroup],
+        self, gl_group: gl.Group, parent: Optional[ProjectGroup],
     ) -> ProjectGroup:
         """Update project group data based on gitlab."""
         group, _ = ProjectGroup.objects.update_from_gitlab(

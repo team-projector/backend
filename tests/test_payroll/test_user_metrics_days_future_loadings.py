@@ -17,7 +17,7 @@ def test_replay(user):
         due_date=datetime.now() + timedelta(days=10),
         time_estimate=seconds(hours=15),
         total_time_spent=0,
-        state=IssueState.OPENED
+        state=IssueState.OPENED,
     )
 
     start = datetime.now().date() + timedelta(days=1)
@@ -25,9 +25,7 @@ def test_replay(user):
     metrics = get_progress_metrics(user, start, end, "day")
 
     assert len(metrics) == (end - start).days + 1
-    _check_metrics(metrics, {
-        start: timedelta(hours=7)
-    })
+    _check_metrics(metrics, {start: timedelta(hours=7)})
 
 
 @override_settings(TP_WEEKENDS_DAYS=[])
@@ -37,7 +35,7 @@ def test_has_spents(user):
         due_date=datetime.now() + timedelta(days=10),
         time_estimate=seconds(hours=15),
         total_time_spent=seconds(hours=2),
-        state=IssueState.OPENED
+        state=IssueState.OPENED,
     )
 
     start = datetime.now().date() + timedelta(days=1)
@@ -45,9 +43,7 @@ def test_has_spents(user):
     metrics = get_progress_metrics(user, start, end, "day")
 
     assert len(metrics) == (end - start).days + 1
-    _check_metrics(metrics, {
-        start: timedelta(hours=5)
-    })
+    _check_metrics(metrics, {start: timedelta(hours=5)})
 
 
 @override_settings(TP_WEEKENDS_DAYS=[])
@@ -57,7 +53,7 @@ def test_replay_without_active_issues(user):
         due_date=datetime.now() + timedelta(days=10),
         time_estimate=seconds(hours=3),
         total_time_spent=3,
-        state=IssueState.CLOSED
+        state=IssueState.CLOSED,
     )
 
     start = datetime.now().date() + timedelta(days=1)
@@ -65,9 +61,7 @@ def test_replay_without_active_issues(user):
     metrics = get_progress_metrics(user, start, end, "day")
 
     assert len(metrics) == (end - start).days + 1
-    _check_metrics(metrics, {
-        start: timedelta(seconds=0)
-    })
+    _check_metrics(metrics, {start: timedelta(seconds=0)})
 
 
 @override_settings(TP_WEEKENDS_DAYS=[0, 1, 2, 3, 4, 5, 6])
@@ -77,7 +71,7 @@ def test_not_apply_loading_weekends(user):
         due_date=datetime.now() + timedelta(days=10),
         time_estimate=seconds(hours=15),
         total_time_spent=0,
-        state=IssueState.OPENED
+        state=IssueState.OPENED,
     )
 
     start = datetime.now().date() + timedelta(days=1)
@@ -85,9 +79,7 @@ def test_not_apply_loading_weekends(user):
     metrics = get_progress_metrics(user, start, end, "day")
 
     assert len(metrics) == (end - start).days + 1
-    _check_metrics(metrics, {
-        start: timedelta(seconds=0)
-    })
+    _check_metrics(metrics, {start: timedelta(seconds=0)})
 
 
 def _check_metrics(metrics, loadings: Dict[date, timedelta]):
@@ -101,8 +93,7 @@ def _check_metrics(metrics, loadings: Dict[date, timedelta]):
 
 def _prepare_metrics(metrics):
     return {
-        format_date(metric_date): time
-        for metric_date, time in metrics.items()
+        format_date(metric_date): time for metric_date, time in metrics.items()
     }
 
 

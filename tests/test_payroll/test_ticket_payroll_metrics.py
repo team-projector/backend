@@ -10,21 +10,20 @@ from tests.test_users.factories.user import UserFactory
 
 def test_metrics(db):
     ticket = TicketFactory.create()
-    user = UserFactory.create(customer_hour_rate=3,
-                              hour_rate=2)
+    user = UserFactory.create(customer_hour_rate=3, hour_rate=2)
 
     issue_1 = IssueFactory.create(
         ticket=ticket,
         user=user,
         state=IssueState.OPENED,
         total_time_spent=seconds(hours=1),
-        time_estimate=seconds(hours=2)
+        time_estimate=seconds(hours=2),
     )
     IssueSpentTimeFactory.create(
         date=datetime.now(),
         user=user,
         base=issue_1,
-        time_spent=seconds(hours=1)
+        time_spent=seconds(hours=1),
     )
 
     issue_2 = IssueFactory.create(
@@ -32,13 +31,13 @@ def test_metrics(db):
         user=user,
         state=IssueState.CLOSED,
         total_time_spent=seconds(hours=2),
-        time_estimate=seconds(hours=2)
+        time_estimate=seconds(hours=2),
     )
     IssueSpentTimeFactory.create(
         date=datetime.now(),
         user=user,
         base=issue_2,
-        time_spent=seconds(hours=2)
+        time_spent=seconds(hours=2),
     )
 
     metrics = get_ticket_metrics(ticket)

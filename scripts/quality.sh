@@ -4,6 +4,8 @@ set -o errexit
 set -o nounset
 
 run_checkers() {
+  black --check .
+
   mypy .
 
   flake8 .

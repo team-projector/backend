@@ -18,24 +18,16 @@ def test_payroll_metrics(user):
     issue = IssueFactory.create(user=user, state=IssueState.OPENED)
 
     IssueSpentTimeFactory.create(
-        user=user,
-        base=issue,
-        time_spent=seconds(hours=3)
+        user=user, base=issue, time_spent=seconds(hours=3)
     )
     IssueSpentTimeFactory.create(
-        user=user,
-        base=issue,
-        time_spent=seconds(hours=2)
+        user=user, base=issue, time_spent=seconds(hours=2)
     )
     IssueSpentTimeFactory.create(
-        user=user,
-        base=issue,
-        time_spent=seconds(hours=4)
+        user=user, base=issue, time_spent=seconds(hours=4)
     )
     IssueSpentTimeFactory.create(
-        user=user,
-        base=issue,
-        time_spent=-seconds(hours=3)
+        user=user, base=issue, time_spent=-seconds(hours=3)
     )
 
     metrics = get_issue_metrics(issue)
@@ -49,28 +41,16 @@ def test_paid_metrics(user):
     salary = SalaryFactory.create(user=user)
 
     IssueSpentTimeFactory.create(
-        user=user,
-        base=issue,
-        salary=salary,
-        time_spent=seconds(hours=3)
+        user=user, base=issue, salary=salary, time_spent=seconds(hours=3)
     )
     IssueSpentTimeFactory.create(
-        user=user,
-        base=issue,
-        salary=salary,
-        time_spent=seconds(hours=2)
+        user=user, base=issue, salary=salary, time_spent=seconds(hours=2)
     )
     IssueSpentTimeFactory.create(
-        user=user,
-        base=issue,
-        salary=salary,
-        time_spent=seconds(hours=4)
+        user=user, base=issue, salary=salary, time_spent=seconds(hours=4)
     )
     IssueSpentTimeFactory.create(
-        user=user,
-        base=issue,
-        salary=salary,
-        time_spent=-seconds(hours=3)
+        user=user, base=issue, salary=salary, time_spent=-seconds(hours=3)
     )
 
     metrics = get_issue_metrics(issue)
@@ -84,26 +64,16 @@ def test_complex_metrics(user):
     salary = SalaryFactory.create(user=user)
 
     IssueSpentTimeFactory.create(
-        user=user,
-        base=issue,
-        salary=salary,
-        time_spent=seconds(hours=3)
+        user=user, base=issue, salary=salary, time_spent=seconds(hours=3)
     )
     IssueSpentTimeFactory.create(
-        user=user,
-        base=issue,
-        salary=salary,
-        time_spent=seconds(hours=2)
+        user=user, base=issue, salary=salary, time_spent=seconds(hours=2)
     )
     IssueSpentTimeFactory.create(
-        user=user,
-        base=issue,
-        time_spent=seconds(hours=4)
+        user=user, base=issue, time_spent=seconds(hours=4)
     )
     IssueSpentTimeFactory.create(
-        user=user,
-        base=issue,
-        time_spent=-seconds(hours=3)
+        user=user, base=issue, time_spent=-seconds(hours=3)
     )
 
     metrics = get_issue_metrics(issue)
@@ -176,9 +146,7 @@ def test_resolver(user):
     issue = IssueFactory.create(user=user, state=IssueState.OPENED)
 
     IssueSpentTimeFactory.create(
-        user=user,
-        base=issue,
-        time_spent=seconds(hours=6)
+        user=user, base=issue, time_spent=seconds(hours=6)
     )
 
     metrics = IssueType.resolve_metrics(issue, None)

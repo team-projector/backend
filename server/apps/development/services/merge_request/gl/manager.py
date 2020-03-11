@@ -18,18 +18,13 @@ logger = logging.getLogger(__name__)
 class MergeRequestGlManager(BaseWorkItemGlManager):
     """Merge requests gitlab manager."""
 
-    def sync_merge_requests(
-        self,
-        full_reload: bool = False,
-    ) -> None:
+    def sync_merge_requests(self, full_reload: bool = False) -> None:
         """Sync merge requests from all projects."""
         for project in models.Project.objects.all():
             self.sync_project_merge_requests(project, full_reload)
 
     def sync_project_merge_requests(
-        self,
-        project: models.Project,
-        full_reload: bool = False,
+        self, project: models.Project, full_reload: bool = False,
     ) -> None:
         """Load merge requests from project."""
         gl_project = self.project_provider.get_gl_project(project)
@@ -47,9 +42,7 @@ class MergeRequestGlManager(BaseWorkItemGlManager):
 
         for gl_merge_request in gl_project.mergerequests.list(**args):
             self.update_merge_request(
-                project,
-                gl_project,
-                gl_merge_request,
+                project, gl_project, gl_merge_request,
             )
 
         project.gl_last_merge_requests_sync = timezone.now()

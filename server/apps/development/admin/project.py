@@ -11,8 +11,7 @@ from apps.development.tasks import sync_project_task
 
 @admin.register(Project)
 class ProjectAdmin(
-    ForceSyncEntityMixin,
-    BaseModelAdmin,
+    ForceSyncEntityMixin, BaseModelAdmin,
 ):
     """A class representing Project model for admin dashboard."""
 
@@ -24,6 +23,5 @@ class ProjectAdmin(
     def sync_handler(self, project):
         """Syncing project."""
         sync_project_task.delay(
-            project.group.id,
-            project.id,
+            project.group.id, project.id,
         )

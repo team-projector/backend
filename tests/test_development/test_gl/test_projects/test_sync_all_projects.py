@@ -29,14 +29,10 @@ def test_from_many_groups(db, gl_mocker, gl_client):
     gl_projects = GlProjectFactory.create_batch(2)
 
     gl_mock.mock_group_endpoints(
-        gl_mocker,
-        gl_first_group,
-        projects=[gl_projects[0]],
+        gl_mocker, gl_first_group, projects=[gl_projects[0]],
     )
     gl_mock.mock_group_endpoints(
-        gl_mocker,
-        gl_second_group,
-        projects=[gl_projects[1]],
+        gl_mocker, gl_second_group, projects=[gl_projects[1]],
     )
 
     ProjectGlManager().sync_all_projects()

@@ -32,6 +32,7 @@ slackclient = "*"
 uwsgi = "*"
 uwsgitop = "*"
 tqdm = "*"
+black = "^19.10b0"
 
 [tool.poetry.dev-dependencies]
 pytest = "*"
@@ -52,6 +53,20 @@ dennis = "*"
 safety = "*"
 xenon = "*"
 
+[tool.black]
+line-length = 79
+target-version = ['py38']
+include = '\.pyi?$'
+exclude = '''
+(
+  /(
+    | \.git          # root of the project
+    | \.mypy_cache
+    | \.pytest_cache
+    | .*\/migrations
+  )/
+)
+'''
 
 [build-system]
 requires = ["poetry>=0.12"]

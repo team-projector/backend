@@ -25,8 +25,7 @@ class DeclineWorkBreakMutation(BaseMutation):
     def do_mutate(cls, root, info, **kwargs):  # noqa: WPS110
         """Decline work break after validation."""
         work_break = get_object_or_not_found(
-            WorkBreak.objects.all(),
-            pk=kwargs["id"],
+            WorkBreak.objects.all(), pk=kwargs["id"],
         )
 
         work_break_service.Manager(work_break).decline(
@@ -34,6 +33,4 @@ class DeclineWorkBreakMutation(BaseMutation):
             decline_reason=kwargs["decline_reason"],
         )
 
-        return DeclineWorkBreakMutation(
-            work_break=work_break,
-        )
+        return DeclineWorkBreakMutation(work_break=work_break)

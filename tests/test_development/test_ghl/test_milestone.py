@@ -12,9 +12,7 @@ from tests.test_development.factories import (
 def test_milestones(user, client):
     project = ProjectFactory.create()
     ProjectMemberFactory.create(
-        user=user,
-        role=ProjectMemberRole.PROJECT_MANAGER,
-        owner=project
+        user=user, role=ProjectMemberRole.PROJECT_MANAGER, owner=project,
     )
 
     milestone = ProjectMilestoneFactory.create(owner=project)
@@ -24,9 +22,7 @@ def test_milestones(user, client):
 
     ProjectMilestoneFactory.create_batch(5)
 
-    milestones = MilestoneType().get_queryset(
-        Milestone.objects.all(), info
-    )
+    milestones = MilestoneType().get_queryset(Milestone.objects.all(), info)
 
     assert milestones.count() == 1
     assert milestones.first() == milestone
@@ -35,9 +31,7 @@ def test_milestones(user, client):
 def test_milestone(user, client):
     project = ProjectFactory.create()
     ProjectMemberFactory.create(
-        user=user,
-        role=ProjectMemberRole.PROJECT_MANAGER,
-        owner=project
+        user=user, role=ProjectMemberRole.PROJECT_MANAGER, owner=project,
     )
 
     milestone = ProjectMilestoneFactory.create(owner=project)
@@ -47,8 +41,6 @@ def test_milestone(user, client):
 
     ProjectMilestoneFactory.create_batch(5)
 
-    results = MilestoneType().get_node(
-        info, milestone.id
-    )
+    results = MilestoneType().get_node(info, milestone.id)
 
     assert results == milestone

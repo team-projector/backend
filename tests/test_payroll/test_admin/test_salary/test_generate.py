@@ -21,9 +21,7 @@ def issue():
 @pytest.fixture()
 def issue_spent_time(user, issue):
     return IssueSpentTimeFactory.create(
-        user=user,
-        base=issue,
-        time_spent=seconds(hours=5)
+        user=user, base=issue, time_spent=seconds(hours=5)
     )
 
 
@@ -41,10 +39,13 @@ def test_get_form(admin_client, salary_admin):
 
 def test_generate_salaries(issue_spent_time, admin_client, salary_admin):
     response = salary_admin.generate_salaries(
-        admin_client.post("/admin/payroll/salary/", {
-            "period_from": str(timezone.now().date() - timedelta(days=15)),
-            "period_to": str(timezone.now().date())
-        })
+        admin_client.post(
+            "/admin/payroll/salary/",
+            {
+                "period_from": str(timezone.now().date() - timedelta(days=15)),
+                "period_to": str(timezone.now().date()),
+            },
+        )
     )
 
     assert response.status_code == HTTPStatus.FOUND

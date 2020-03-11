@@ -34,7 +34,5 @@ def sync_project_issue_task(project_id: int, iid: int) -> None:
 
     manager = IssueGlManager()
     manager.update_project_issue(
-        project,
-        gl_project,
-        gl_project.issues.get(iid),
+        project, gl_project, gl_project.issues.get(iid),
     )

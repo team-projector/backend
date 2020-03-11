@@ -46,10 +46,7 @@ class SerializerMutation(AuthMutation, graphene.Mutation):
         serializer = serializer_class()
 
         input_fields = fields_for_serializer(
-            serializer,
-            only_fields,
-            exclude_fields,
-            is_input=True,
+            serializer, only_fields, exclude_fields, is_input=True,
         )
 
         input_fields = yank_fields_from_attrs(input_fields)
@@ -110,11 +107,7 @@ class SerializerMutation(AuthMutation, graphene.Mutation):
         serializer = cls._meta.serializer_class(**kwargs)
 
         if serializer.is_valid():
-            return cls.perform_mutate(
-                root,
-                info,
-                serializer.validated_data,
-            )
+            return cls.perform_mutate(root, info, serializer.validated_data)
 
         raise GraphQLInputError(serializer.errors)
 
@@ -128,9 +121,7 @@ class SerializerMutation(AuthMutation, graphene.Mutation):
         """Get serializer options."""
         return {
             "data": input,
-            "context": {
-                "request": info.context,
-            },
+            "context": {"request": info.context},
         }
 
     @classmethod

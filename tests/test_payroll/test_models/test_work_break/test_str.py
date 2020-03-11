@@ -4,8 +4,7 @@ from tests.test_payroll.factories import WorkBreakFactory
 
 def test_str(user):
     work_break = WorkBreakFactory.create(
-        reason=WorkBreakReason.DAYOFF,
-        user=user,
+        reason=WorkBreakReason.DAYOFF, user=user,
     )
 
     assert str(work_break) == "{0}: {1} ({2} - {3})".format(

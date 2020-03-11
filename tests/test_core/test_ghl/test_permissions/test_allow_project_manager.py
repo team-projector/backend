@@ -29,5 +29,7 @@ def test_not_project_manager(ghl_auth_mock_info):
     perms = AllowProjectManager()
 
     assert not perms.has_node_permission(info=ghl_auth_mock_info, obj_id="1")
-    assert not perms.has_mutation_permission(info=ghl_auth_mock_info, root=None)
+    assert not perms.has_mutation_permission(
+        info=ghl_auth_mock_info, root=None
+    )
     assert not perms.has_filter_permission(info=ghl_auth_mock_info)

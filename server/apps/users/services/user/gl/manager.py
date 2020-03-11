@@ -23,10 +23,7 @@ class UserGlManager:
         for user in User.objects.filter(gl_id__isnull=False):
             self.sync_user(user.gl_id)
 
-    def sync_user(
-        self,
-        gl_user_id: int,
-    ) -> User:
+    def sync_user(self, gl_user_id: int) -> User:
         """Load user from Gitlab."""
         gl_user = self.user_provider.get_gl_user(gl_user_id)
 
@@ -38,7 +35,8 @@ class UserGlManager:
                 "gl_avatar": gl_user.avatar_url,
                 "gl_url": gl_user.web_url,
                 "gl_last_sync": timezone.now(),
-            })
+            },
+        )
 
         if created:
             user.is_active = False
@@ -53,10 +51,7 @@ class UserGlManager:
 
         return user
 
-    def extract_user_from_data(
-        self,
-        gl_user,
-    ) -> Optional[User]:
+    def extract_user_from_data(self, gl_user) -> Optional[User]:
         """Retrieve Gitlab user."""
         if not gl_user:
             return None

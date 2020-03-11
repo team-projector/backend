@@ -72,13 +72,9 @@ class Project(GitlabEntityMixin):
         help_text=_("HT__MERGE_REQUESTS_SYNC"),
     )
 
-    milestones = GenericRelation(
-        "Milestone",
-        related_query_name="project",
-    )
+    milestones = GenericRelation("Milestone", related_query_name="project")
     members = GenericRelation(
-        "development.ProjectMember",
-        related_query_name="project",
+        "development.ProjectMember", related_query_name="project",
     )
 
     objects = ProjectManager()  # noqa: WPS110

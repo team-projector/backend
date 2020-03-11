@@ -19,9 +19,7 @@ def test_filter_by_milestone(user, auth_rf):
     IssueFactory.create_batch(3, user=user, milestone=milestone)
 
     IssueFactory.create_batch(
-        2,
-        user=user,
-        milestone=ProjectMilestoneFactory.create(),
+        2, user=user, milestone=ProjectMilestoneFactory.create(),
     )
 
     results = IssuesFilterSet(
@@ -42,5 +40,5 @@ def test_not_project_manager(user, auth_rf):
         IssuesFilterSet(  # noqa: WPS428
             data={"milestone": milestone.pk},
             queryset=Issue.objects.all(),
-            request=auth_rf.get("/")
+            request=auth_rf.get("/"),
         ).qs

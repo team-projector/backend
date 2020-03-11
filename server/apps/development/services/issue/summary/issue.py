@@ -34,9 +34,7 @@ class IssuesSummaryProvider:
     """Issues summary provider."""
 
     def __init__(
-        self,
-        queryset: QuerySet,
-        **kwargs,
+        self, queryset: QuerySet, **kwargs,
     ):
         """Initialize self."""
         self._queryset = queryset
@@ -61,11 +59,11 @@ class IssuesSummaryProvider:
         return summary
 
     def _get_counts_by_state(self) -> QuerySet:
-        return self._queryset.values(
-            "state",
-        ).annotate(
-            count=Count("*"),
-        ).order_by()
+        return (
+            self._queryset.values("state")
+            .annotate(count=Count("*"))
+            .order_by()
+        )
 
     def _get_time_spent(self) -> int:
         queryset = SpentTime.objects.filter(issues__isnull=False)
@@ -85,9 +83,12 @@ class IssuesSummaryProvider:
             if option_value:
                 queryset = queryset.filter(**{lookup: option_value})
 
-        return queryset.aggregate(
-            total_time_spent=Sum("time_spent"),
-        )["total_time_spent"] or 0
+        return (
+            queryset.aggregate(total_time_spent=Sum("time_spent"))[
+                "total_time_spent"
+            ]
+            or 0
+        )
 
     def _get_problems_count(self) -> int:
         queryset = annotate_issue_problems(self._queryset)
@@ -96,9 +97,6 @@ class IssuesSummaryProvider:
         return queryset.count()
 
 
-def get_issues_summary(
-    queryset: QuerySet,
-    **kwargs,
-) -> IssuesSummary:
+def get_issues_summary(queryset: QuerySet, **kwargs) -> IssuesSummary:
     """Get summary for issues."""
     return IssuesSummaryProvider(queryset, **kwargs).execute()

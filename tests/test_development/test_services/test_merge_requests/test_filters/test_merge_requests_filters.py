@@ -15,31 +15,25 @@ def test_filter_by_user(user):
 
     team = TeamFactory.create()
     TeamMemberFactory.create(
-        user=user,
-        team=team,
-        roles=TeamMember.roles.LEADER
+        user=user, team=team, roles=TeamMember.roles.LEADER
     )
 
     TeamMemberFactory.create(
-        user=user_2,
-        team=team,
-        roles=TeamMember.roles.DEVELOPER
+        user=user_2, team=team, roles=TeamMember.roles.DEVELOPER
     )
 
     MergeRequestFactory.create(user=user_2)
     MergeRequestFactory.create_batch(3, user=user)
 
     results = MergeRequestFilterSet(
-        data={"user": user_2.id},
-        queryset=MergeRequest.objects.all(),
+        data={"user": user_2.id}, queryset=MergeRequest.objects.all(),
     ).qs
 
     assert results.count() == 1
     assert results.first().user == user_2
 
     results = MergeRequestFilterSet(
-        data={"user": user.id},
-        queryset=MergeRequest.objects.all(),
+        data={"user": user.id}, queryset=MergeRequest.objects.all(),
     ).qs
 
     assert results.count() == 3
@@ -82,16 +76,14 @@ def test_filter_by_projects(user):
     )
 
     results = MergeRequestFilterSet(
-        data={"project": project_1.id},
-        queryset=MergeRequest.objects.all(),
+        data={"project": project_1.id}, queryset=MergeRequest.objects.all(),
     ).qs
 
     assert results.count() == 1
     assert results.first().project == project_1
 
     results = MergeRequestFilterSet(
-        data={"project": project_2.id},
-        queryset=MergeRequest.objects.all(),
+        data={"project": project_2.id}, queryset=MergeRequest.objects.all(),
     ).qs
 
     assert results.count() == 1
@@ -104,15 +96,13 @@ def test_ordering(user):
     merge_request_3 = MergeRequestFactory.create(title="bar", user=user)
 
     results = MergeRequestFilterSet(
-        data={"order_by": "title"},
-        queryset=MergeRequest.objects.all(),
+        data={"order_by": "title"}, queryset=MergeRequest.objects.all(),
     ).qs
 
     assert list(results) == [merge_request_1, merge_request_3, merge_request_2]
 
     results = MergeRequestFilterSet(
-        data={"order_by": "-title"},
-        queryset=MergeRequest.objects.all(),
+        data={"order_by": "-title"}, queryset=MergeRequest.objects.all(),
     ).qs
 
     assert list(results) == [merge_request_2, merge_request_3, merge_request_1]

@@ -15,18 +15,14 @@ from tests.test_development.factories import (
 def test_not_pm(user):
     project = ProjectFactory.create()
     ProjectMemberFactory.create(
-        user=user,
-        role=ProjectMemberRole.DEVELOPER,
-        owner=project
+        user=user, role=ProjectMemberRole.DEVELOPER, owner=project
     )
 
     ProjectMilestoneFactory.create(owner=project)
 
     group = ProjectGroupFactory.create()
     ProjectMemberFactory.create(
-        user=user,
-        role=ProjectMemberRole.CUSTOMER,
-        owner=group
+        user=user, role=ProjectMemberRole.CUSTOMER, owner=group
     )
 
     ProjectMilestoneFactory.create(owner=group)
@@ -38,9 +34,7 @@ def test_not_pm(user):
 def test_projects(user):
     project_1 = ProjectFactory.create()
     ProjectMemberFactory.create(
-        user=user,
-        role=ProjectMemberRole.PROJECT_MANAGER,
-        owner=project_1
+        user=user, role=ProjectMemberRole.PROJECT_MANAGER, owner=project_1
     )
 
     milestone_1 = ProjectMilestoneFactory.create(owner=project_1)
@@ -48,18 +42,14 @@ def test_projects(user):
 
     project_2 = ProjectFactory.create()
     ProjectMemberFactory.create(
-        user=user,
-        role=ProjectMemberRole.PROJECT_MANAGER,
-        owner=project_2
+        user=user, role=ProjectMemberRole.PROJECT_MANAGER, owner=project_2
     )
 
     milestone_3 = ProjectMilestoneFactory.create(owner=project_2)
 
     ProjectMilestoneFactory.create_batch(10)
 
-    queryset = filter_allowed_for_user(
-        Milestone.objects.all(), user
-    )
+    queryset = filter_allowed_for_user(Milestone.objects.all(), user)
 
     assert queryset.count() == 3
     assert set(queryset) == {milestone_1, milestone_2, milestone_3}
@@ -68,9 +58,7 @@ def test_projects(user):
 def test_groups(user):
     group_1 = ProjectGroupFactory.create()
     ProjectMemberFactory.create(
-        user=user,
-        role=ProjectMemberRole.PROJECT_MANAGER,
-        owner=group_1
+        user=user, role=ProjectMemberRole.PROJECT_MANAGER, owner=group_1
     )
 
     milestone_1 = ProjectMilestoneFactory.create(owner=group_1)
@@ -78,18 +66,14 @@ def test_groups(user):
 
     group_2 = ProjectGroupFactory.create()
     ProjectMemberFactory.create(
-        user=user,
-        role=ProjectMemberRole.PROJECT_MANAGER,
-        owner=group_2
+        user=user, role=ProjectMemberRole.PROJECT_MANAGER, owner=group_2
     )
 
     milestone_3 = ProjectMilestoneFactory.create(owner=group_2)
 
     ProjectMilestoneFactory.create_batch(10)
 
-    queryset = filter_allowed_for_user(
-        Milestone.objects.all(), user
-    )
+    queryset = filter_allowed_for_user(Milestone.objects.all(), user)
 
     assert queryset.count() == 3
     assert set(queryset) == {milestone_1, milestone_2, milestone_3}
@@ -98,9 +82,7 @@ def test_groups(user):
 def test_group_and_projects(user):
     group = ProjectGroupFactory.create()
     ProjectMemberFactory.create(
-        user=user,
-        role=ProjectMemberRole.PROJECT_MANAGER,
-        owner=group
+        user=user, role=ProjectMemberRole.PROJECT_MANAGER, owner=group
     )
 
     milestone_1 = ProjectMilestoneFactory.create(owner=group)
@@ -108,18 +90,14 @@ def test_group_and_projects(user):
 
     project = ProjectFactory.create()
     ProjectMemberFactory.create(
-        user=user,
-        role=ProjectMemberRole.PROJECT_MANAGER,
-        owner=project
+        user=user, role=ProjectMemberRole.PROJECT_MANAGER, owner=project
     )
 
     milestone_3 = ProjectMilestoneFactory.create(owner=project)
 
     ProjectMilestoneFactory.create_batch(10)
 
-    queryset = filter_allowed_for_user(
-        Milestone.objects.all(), user
-    )
+    queryset = filter_allowed_for_user(Milestone.objects.all(), user)
 
     assert queryset.count() == 3
     assert set(queryset) == {milestone_1, milestone_2, milestone_3}
@@ -128,9 +106,7 @@ def test_group_and_projects(user):
 def test_group_with_projects(user):
     group = ProjectGroupFactory.create()
     ProjectMemberFactory.create(
-        user=user,
-        role=ProjectMemberRole.PROJECT_MANAGER,
-        owner=group
+        user=user, role=ProjectMemberRole.PROJECT_MANAGER, owner=group
     )
 
     milestone_1 = ProjectMilestoneFactory.create(owner=group)
@@ -144,21 +120,21 @@ def test_group_with_projects(user):
 
     ProjectMilestoneFactory.create_batch(10)
 
-    queryset = filter_allowed_for_user(
-        Milestone.objects.all(), user
-    )
+    queryset = filter_allowed_for_user(Milestone.objects.all(), user)
 
     assert queryset.count() == 4
-    assert set(queryset) == {milestone_1, milestone_2,
-                             milestone_3, milestone_4}
+    assert set(queryset) == {
+        milestone_1,
+        milestone_2,
+        milestone_3,
+        milestone_4,
+    }
 
 
 def test_parent_group_with_groups(user):
     parent_group = ProjectGroupFactory.create()
     ProjectMemberFactory.create(
-        user=user,
-        role=ProjectMemberRole.PROJECT_MANAGER,
-        owner=parent_group
+        user=user, role=ProjectMemberRole.PROJECT_MANAGER, owner=parent_group
     )
 
     group_1 = ProjectGroupFactory.create(parent=parent_group)
@@ -170,9 +146,7 @@ def test_parent_group_with_groups(user):
 
     ProjectMilestoneFactory.create_batch(10)
 
-    queryset = filter_allowed_for_user(
-        Milestone.objects.all(), user
-    )
+    queryset = filter_allowed_for_user(Milestone.objects.all(), user)
 
     assert queryset.count() == 3
     assert set(queryset) == {milestone_1, milestone_2, milestone_3}
@@ -181,9 +155,7 @@ def test_parent_group_with_groups(user):
 def test_parent_group_with_groups_and_projects(user):
     parent_group = ProjectGroupFactory.create()
     ProjectMemberFactory.create(
-        user=user,
-        role=ProjectMemberRole.PROJECT_MANAGER,
-        owner=parent_group
+        user=user, role=ProjectMemberRole.PROJECT_MANAGER, owner=parent_group
     )
 
     group_1 = ProjectGroupFactory.create(parent=parent_group)
@@ -205,5 +177,10 @@ def test_parent_group_with_groups_and_projects(user):
     queryset = filter_allowed_for_user(Milestone.objects.all(), user)
 
     assert queryset.count() == 5
-    assert set(queryset) == {milestone_1, milestone_2, milestone_3,
-                             milestone_4, milestone_5}
+    assert set(queryset) == {
+        milestone_1,
+        milestone_2,
+        milestone_3,
+        milestone_4,
+        milestone_5,
+    }

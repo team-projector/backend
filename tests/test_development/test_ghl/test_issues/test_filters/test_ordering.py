@@ -15,8 +15,7 @@ def test_by_title_asc(user):
     ]
 
     results = IssuesFilterSet(
-        data={"order_by": "title"},
-        queryset=Issue.objects.all()
+        data={"order_by": "title"}, queryset=Issue.objects.all()
     ).qs
 
     assert list(results) == issues
@@ -30,8 +29,7 @@ def test_by_title_desc(user):
     ]
 
     results = IssuesFilterSet(
-        data={"order_by": "-title"},
-        queryset=Issue.objects.all()
+        data={"order_by": "-title"}, queryset=Issue.objects.all()
     ).qs
 
     assert list(results) == issues[::-1]
@@ -40,19 +38,16 @@ def test_by_title_desc(user):
 def test_by_due_date_asc(user):
     issues = [
         IssueFactory.create(
-            due_date=datetime.now() - timedelta(days=3),
-            user=user,
+            due_date=datetime.now() - timedelta(days=3), user=user,
         ),
         IssueFactory.create(due_date=datetime.now(), user=user),
         IssueFactory.create(
-            due_date=datetime.now() + timedelta(days=1),
-            user=user,
-        )
+            due_date=datetime.now() + timedelta(days=1), user=user,
+        ),
     ]
 
     results = IssuesFilterSet(
-        data={"order_by": "dueDate"},
-        queryset=Issue.objects.all()
+        data={"order_by": "dueDate"}, queryset=Issue.objects.all()
     ).qs
 
     assert list(results) == issues
@@ -61,19 +56,16 @@ def test_by_due_date_asc(user):
 def test_by_due_date_desc(user):
     issues = [
         IssueFactory.create(
-            due_date=datetime.now() - timedelta(days=3),
-            user=user,
+            due_date=datetime.now() - timedelta(days=3), user=user,
         ),
         IssueFactory.create(due_date=datetime.now(), user=user),
         IssueFactory.create(
-            due_date=datetime.now() + timedelta(days=1),
-            user=user,
-        )
+            due_date=datetime.now() + timedelta(days=1), user=user,
+        ),
     ]
 
     results = IssuesFilterSet(
-        data={"order_by": "-dueDate"},
-        queryset=Issue.objects.all()
+        data={"order_by": "-dueDate"}, queryset=Issue.objects.all()
     ).qs
 
     assert list(results) == issues[::-1]

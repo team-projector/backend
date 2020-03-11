@@ -10,8 +10,7 @@ from apps.payroll.models import WorkBreak
 
 
 class CreateWorkBreakMutation(
-    ArgumentsValidationMixin,
-    BaseMutation,
+    ArgumentsValidationMixin, BaseMutation,
 ):
     """Create work break mutation."""
 

@@ -25,9 +25,18 @@ class PayrollAdmin(BaseModelAdmin):
     readonly_fields = ("inheritance",)
 
     fieldsets = (
-        (None, {
-            "fields": ("inheritance", "created_by", "sum", "salary", "user"),
-        }),
+        (
+            None,
+            {
+                "fields": (
+                    "inheritance",
+                    "created_by",
+                    "sum",
+                    "salary",
+                    "user",
+                ),
+            },
+        ),
     )
 
     def inheritance(self, payroll):
@@ -56,15 +65,10 @@ class PayrollAdmin(BaseModelAdmin):
 
     def _get_accessor_names(self, model) -> Iterable[str]:
         related_objects = [
-            item for item in model._meta.get_fields()  # noqa: WPS437, WPS110
-            if isinstance(
-                item, OneToOneRel,
-            ) and issubclass(
-                item.field.model, model,
-            )
+            item
+            for item in model._meta.get_fields()  # noqa: WPS437, WPS110
+            if isinstance(item, OneToOneRel)
+            and issubclass(item.field.model, model)
         ]
 
-        return [
-            rel.get_accessor_name()
-            for rel in related_objects
-        ]
+        return [rel.get_accessor_name() for rel in related_objects]

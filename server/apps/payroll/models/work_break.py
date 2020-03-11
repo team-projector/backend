@@ -32,13 +32,11 @@ class WorkBreak(ApprovedMixin, Timestamps):
     )
 
     from_date = models.DateTimeField(
-        verbose_name=_("VN__DATE_FROM"),
-        help_text=_("HT__DATE_FROM"),
+        verbose_name=_("VN__DATE_FROM"), help_text=_("HT__DATE_FROM"),
     )
 
     to_date = models.DateTimeField(
-        verbose_name=_("VN__DATE_TO"),
-        help_text=_("HT__DATE_TO"),
+        verbose_name=_("VN__DATE_TO"), help_text=_("HT__DATE_TO"),
     )
 
     reason = models.CharField(
@@ -50,14 +48,11 @@ class WorkBreak(ApprovedMixin, Timestamps):
     )
 
     comment = models.TextField(
-        verbose_name=_("VN__COMMENT"),
-        help_text=_("HT__COMMENT"),
+        verbose_name=_("VN__COMMENT"), help_text=_("HT__COMMENT"),
     )
 
     paid = models.BooleanField(
-        default=False,
-        verbose_name=_("VN__PAID"),
-        help_text=_("HT__PAID"),
+        default=False, verbose_name=_("VN__PAID"), help_text=_("HT__PAID"),
     )
 
     objects = WorkBreakManager()  # noqa: WPS110
@@ -70,8 +65,5 @@ class WorkBreak(ApprovedMixin, Timestamps):
     def __str__(self):
         """Returns object string representation."""
         return "{0}: {1} ({2} - {3})".format(
-            self.user,
-            self.reason,
-            self.from_date,
-            self.to_date,
+            self.user, self.reason, self.from_date, self.to_date,
         )

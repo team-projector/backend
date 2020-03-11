@@ -8,7 +8,5 @@ class AdminFieldsOverridesMixin:
     """A mixin with form fields overrides."""
 
     formfield_overrides = {
-        BitField: {
-            "widget": BitFieldCheckboxSelectMultiple,
-        },
+        BitField: {"widget": BitFieldCheckboxSelectMultiple},
     }

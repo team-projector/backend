@@ -9,9 +9,7 @@ class AllowProjectManager:
     """Allow performing action only for project manager."""
 
     def has_node_permission(
-        self,
-        info: ResolveInfo,  # noqa: WPS110
-        obj_id: str,
+        self, info: ResolveInfo, obj_id: str,  # noqa: WPS110
     ) -> bool:
         """Check has node permission."""
         return self._is_project_manager(info.context.user)  # type:ignore
@@ -26,8 +24,7 @@ class AllowProjectManager:
         return self._is_project_manager(info.context.user)  # type:ignore
 
     def has_filter_permission(
-        self,
-        info: ResolveInfo,  # noqa: WPS110
+        self, info: ResolveInfo,  # noqa: WPS110
     ) -> bool:
         """Check has filter permission."""
         return self._is_project_manager(info.context.user)  # type:ignore

@@ -33,22 +33,14 @@ def test_query(project_manager, ghl_client, gl_mocker, user):
     issue, gl_issue = initializers.init_issue(
         project,
         gl_project,
-        model_kwargs={
-            "user": user,
-            "state": IssueState.OPENED,
-        },
-        gl_kwargs={
-            "assignee": gl_assignee,
-            "state": "closed",
-        },
+        model_kwargs={"user": user, "state": IssueState.OPENED},
+        gl_kwargs={"assignee": gl_assignee, "state": "closed"},
     )
 
     gl_mock.register_user(gl_mocker, gl_assignee)
     gl_mock.mock_issue_endpoints(gl_mocker, gl_project, gl_issue)
     gl_mock.mock_project_endpoints(
-        gl_mocker,
-        gl_project,
-        issues=[gl_issue],
+        gl_mocker, gl_project, issues=[gl_issue],
     )
 
     assert issue.state == IssueState.OPENED
@@ -56,10 +48,7 @@ def test_query(project_manager, ghl_client, gl_mocker, user):
     ghl_client.set_user(user)
 
     response = ghl_client.execute(
-        GHL_QUERY_SYNC_ISSUE,
-        variable_values={
-            "id": issue.pk,
-        }
+        GHL_QUERY_SYNC_ISSUE, variable_values={"id": issue.pk}
     )
 
     assert "errors" not in response
@@ -72,17 +61,13 @@ def test_query(project_manager, ghl_client, gl_mocker, user):
 
 
 def test_without_access(
-    user,
-    ghl_auth_mock_info,
-    sync_issue_mutation,
+    user, ghl_auth_mock_info, sync_issue_mutation,
 ):
     issue = IssueFactory()
 
     with pytest.raises(GraphQLInputError) as exc_info:
         sync_issue_mutation(
-            root=None,
-            info=ghl_auth_mock_info,
-            id=issue.id,
+            root=None, info=ghl_auth_mock_info, id=issue.id,
         )
 
     extensions = exc_info.value.extensions  # noqa: WPS441

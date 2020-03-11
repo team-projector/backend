@@ -15,13 +15,11 @@ def test_normal_user(db):
 def test_superuser(db):
     """Test creation super user."""
     User.objects.create_superuser(
-        DEFAULT_USERNAME,
-        DEFAULT_USER_PASSWORD,
+        DEFAULT_USERNAME, DEFAULT_USER_PASSWORD,
     )
 
     assert User.objects.filter(
-        login=DEFAULT_USERNAME,
-        is_superuser=True,
+        login=DEFAULT_USERNAME, is_superuser=True,
     ).exists()
 
 

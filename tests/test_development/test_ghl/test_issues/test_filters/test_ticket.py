@@ -19,7 +19,7 @@ def test_by_ticket(user, auth_rf):
     results = IssuesFilterSet(
         data={"ticket": ticket.pk},
         queryset=Issue.objects.all(),
-        request=auth_rf.get("/")
+        request=auth_rf.get("/"),
     ).qs
 
     assert results.count() == 3
@@ -34,5 +34,5 @@ def test_not_project_manager(user, auth_rf):
         IssuesFilterSet(  # noqa: WPS428
             data={"ticket": ticket.pk},
             queryset=Issue.objects.all(),
-            request=auth_rf.get("/")
+            request=auth_rf.get("/"),
         ).qs

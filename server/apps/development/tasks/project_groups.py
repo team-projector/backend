@@ -26,6 +26,5 @@ def sync_project_group_task(gl_id: int) -> None:
 
     manager = ProjectGroupGlManager()
     manager.update_group(
-        gl_group,
-        parent,
+        gl_group, parent,
     )

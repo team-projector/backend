@@ -28,38 +28,39 @@ from tests.test_users.factories.user import UserFactory
 @override_settings(TP_WEEKENDS_DAYS=[])
 def test_simple(user):
     developer = UserFactory.create()
-    issue = IssueFactory.create(user=developer,
-                                due_date=datetime.now())
+    issue = IssueFactory.create(user=developer, due_date=datetime.now())
 
     team = TeamFactory.create()
-    TeamMemberFactory.create(team=team, user=developer,
-                             roles=TeamMember.roles.DEVELOPER)
-    TeamMemberFactory.create(team=team, user=user,
-                             roles=TeamMember.roles.LEADER)
+    TeamMemberFactory.create(
+        team=team, user=developer, roles=TeamMember.roles.DEVELOPER
+    )
+    TeamMemberFactory.create(
+        team=team, user=user, roles=TeamMember.roles.LEADER
+    )
 
     IssueSpentTimeFactory.create(
         date=timezone.now() - timedelta(days=4),
         user=developer,
         base=issue,
-        time_spent=seconds(hours=3)
+        time_spent=seconds(hours=3),
     )
     IssueSpentTimeFactory.create(
         date=timezone.now() - timedelta(days=2, hours=5),
         user=developer,
         base=issue,
-        time_spent=seconds(hours=2)
+        time_spent=seconds(hours=2),
     )
     IssueSpentTimeFactory.create(
         date=timezone.now() - timedelta(days=1),
         user=developer,
         base=issue,
-        time_spent=seconds(hours=4)
+        time_spent=seconds(hours=4),
     )
     IssueSpentTimeFactory.create(
         date=timezone.now() - timedelta(days=1, hours=5),
         user=developer,
         base=issue,
-        time_spent=-seconds(hours=3)
+        time_spent=-seconds(hours=3),
     )
 
     issue.time_estimate = seconds(hours=15)
@@ -77,31 +78,29 @@ def test_simple(user):
     assert len(metrics) == 2
 
     developer_metrics = next(
-        item.metrics for item in metrics if item.user == developer)
+        item.metrics for item in metrics if item.user == developer
+    )
 
     assert len(developer_metrics) == (end - start).days + 1
 
     _check_metrics(
         developer_metrics,
         {
-            timezone.now() - timedelta(days=4): timedelta(
-                hours=3),
-            timezone.now() - timedelta(days=2): timedelta(
-                hours=2),
-            timezone.now() - timedelta(days=1): timedelta(
-                hours=1),
-        }, {
+            timezone.now() - timedelta(days=4): timedelta(hours=3),
+            timezone.now() - timedelta(days=2): timedelta(hours=2),
+            timezone.now() - timedelta(days=1): timedelta(hours=1),
+        },
+        {
             timezone.now(): timedelta(hours=8),
-            timezone.now() + timedelta(days=1): timedelta(
-                hours=1),
-        }, {
-            timezone.now() + timedelta(days=1): 1
-        }, {
-            timezone.now() + timedelta(days=1): timedelta(
-                hours=15)
-        }, {
-            timezone.now() + timedelta(days=1):
-                timedelta(seconds=issue.time_estimate - issue.total_time_spent)
+            timezone.now() + timedelta(days=1): timedelta(hours=1),
+        },
+        {timezone.now() + timedelta(days=1): 1},
+        {timezone.now() + timedelta(days=1): timedelta(hours=15)},
+        {
+            timezone.now()
+            + timedelta(days=1): timedelta(
+                seconds=issue.time_estimate - issue.total_time_spent
+            )
         },
     )
 
@@ -109,20 +108,21 @@ def test_simple(user):
 @override_settings(TP_WEEKENDS_DAYS=[])
 def test_negative_remains(user):
     developer = UserFactory.create()
-    issue = IssueFactory.create(user=developer,
-                                due_date=datetime.now())
+    issue = IssueFactory.create(user=developer, due_date=datetime.now())
 
     team = TeamFactory.create()
-    TeamMemberFactory.create(team=team, user=developer,
-                             roles=TeamMember.roles.DEVELOPER)
-    TeamMemberFactory.create(team=team, user=user,
-                             roles=TeamMember.roles.LEADER)
+    TeamMemberFactory.create(
+        team=team, user=developer, roles=TeamMember.roles.DEVELOPER
+    )
+    TeamMemberFactory.create(
+        team=team, user=user, roles=TeamMember.roles.LEADER
+    )
 
     IssueSpentTimeFactory.create(
         date=timezone.now() - timedelta(days=4, hours=5),
         user=developer,
         base=issue,
-        time_spent=seconds(hours=3)
+        time_spent=seconds(hours=3),
     )
 
     issue.time_estimate = seconds(hours=2)
@@ -140,58 +140,58 @@ def test_negative_remains(user):
     assert len(metrics) == 2
 
     developer_metrics = next(
-        item.metrics for item in metrics if item.user == developer)
+        item.metrics for item in metrics if item.user == developer
+    )
 
     assert len(developer_metrics) == (end - start).days + 1
 
-    _check_metrics(developer_metrics,
-                   {
-                       timezone.now() - timedelta(days=4): timedelta(
-                           hours=3),
-                   }, {}, {
-                       timezone.now() + timedelta(days=1): 1
-                   }, {
-                       timezone.now() + timedelta(days=1): timedelta(
-                           hours=2)
-                   }, {})
+    _check_metrics(
+        developer_metrics,
+        {timezone.now() - timedelta(days=4): timedelta(hours=3)},
+        {},
+        {timezone.now() + timedelta(days=1): 1},
+        {timezone.now() + timedelta(days=1): timedelta(hours=2)},
+        {},
+    )
 
 
 @override_settings(TP_WEEKENDS_DAYS=[])
 def test_loading_day_already_has_spends(user):
     developer = UserFactory.create()
-    issue = IssueFactory.create(user=developer,
-                                due_date=datetime.now())
+    issue = IssueFactory.create(user=developer, due_date=datetime.now())
 
     team = TeamFactory.create()
-    TeamMemberFactory.create(team=team, user=developer,
-                             roles=TeamMember.roles.DEVELOPER)
-    TeamMemberFactory.create(team=team, user=user,
-                             roles=TeamMember.roles.LEADER)
+    TeamMemberFactory.create(
+        team=team, user=developer, roles=TeamMember.roles.DEVELOPER
+    )
+    TeamMemberFactory.create(
+        team=team, user=user, roles=TeamMember.roles.LEADER
+    )
 
-    issue_2 = IssueFactory.create(user=developer,
-                                  state=IssueState.OPENED,
-                                  total_time_spent=timedelta(
-                                      hours=3).total_seconds(),
-                                  time_estimate=timedelta(
-                                      hours=10).total_seconds())
+    issue_2 = IssueFactory.create(
+        user=developer,
+        state=IssueState.OPENED,
+        total_time_spent=timedelta(hours=3).total_seconds(),
+        time_estimate=timedelta(hours=10).total_seconds(),
+    )
 
     IssueSpentTimeFactory.create(
         date=timezone.now(),
         user=developer,
         base=issue_2,
-        time_spent=seconds(hours=1)
+        time_spent=seconds(hours=1),
     )
     IssueSpentTimeFactory.create(
         date=timezone.now(),
         user=developer,
         base=issue_2,
-        time_spent=seconds(hours=2)
+        time_spent=seconds(hours=2),
     )
     IssueSpentTimeFactory.create(
         date=timezone.now(),
         user=developer,
         base=issue,
-        time_spent=seconds(hours=3)
+        time_spent=seconds(hours=3),
     )
 
     issue.time_estimate = int(seconds(hours=4))
@@ -212,38 +212,40 @@ def test_loading_day_already_has_spends(user):
     assert len(metrics) == 2
 
     developer_metrics = next(
-        item.metrics for item in metrics if item.user == developer)
+        item.metrics for item in metrics if item.user == developer
+    )
 
     assert len(developer_metrics) == (end - start).days + 1
 
-    _check_metrics(developer_metrics,
-                   {
-                       timezone.now(): timedelta(hours=6)
-                   }, {
-                       timezone.now(): timedelta(hours=8),
-                       timezone.now() + timedelta(days=1): timedelta(
-                           hours=6),
-                   }, {
-                       timezone.now(): 1,
-                   }, {
-                       timezone.now(): timedelta(hours=4),
-                   }, {
-                       timezone.now(): timedelta(
-                           seconds=issue.time_estimate - issue.total_time_spent)
-                   })
+    _check_metrics(
+        developer_metrics,
+        {timezone.now(): timedelta(hours=6)},
+        {
+            timezone.now(): timedelta(hours=8),
+            timezone.now() + timedelta(days=1): timedelta(hours=6),
+        },
+        {timezone.now(): 1},
+        {timezone.now(): timedelta(hours=4)},
+        {
+            timezone.now(): timedelta(
+                seconds=issue.time_estimate - issue.total_time_spent
+            )
+        },
+    )
 
 
 @override_settings(TP_WEEKENDS_DAYS=[])
 def test_not_in_range(user):
     developer = UserFactory.create()
-    issue = IssueFactory.create(user=developer,
-                                due_date=datetime.now())
+    issue = IssueFactory.create(user=developer, due_date=datetime.now())
 
     team = TeamFactory.create()
-    TeamMemberFactory.create(team=team, user=developer,
-                             roles=TeamMember.roles.DEVELOPER)
-    TeamMemberFactory.create(team=team, user=user,
-                             roles=TeamMember.roles.LEADER)
+    TeamMemberFactory.create(
+        team=team, user=developer, roles=TeamMember.roles.DEVELOPER
+    )
+    TeamMemberFactory.create(
+        team=team, user=user, roles=TeamMember.roles.LEADER
+    )
 
     issue.time_estimate = 0
     issue.total_time_spent = 0
@@ -254,25 +256,25 @@ def test_not_in_range(user):
         date=timezone.now() - timedelta(days=5, hours=5),
         user=developer,
         base=issue,
-        time_spent=seconds(hours=2)
+        time_spent=seconds(hours=2),
     )
     IssueSpentTimeFactory.create(
         date=timezone.now() - timedelta(days=1),
         user=developer,
         base=issue,
-        time_spent=seconds(hours=4)
+        time_spent=seconds(hours=4),
     )
     IssueSpentTimeFactory.create(
         date=timezone.now() - timedelta(days=1, hours=5),
         user=developer,
         base=issue,
-        time_spent=-seconds(hours=3)
+        time_spent=-seconds(hours=3),
     )
     IssueSpentTimeFactory.create(
         date=timezone.now() + timedelta(days=1),
         user=developer,
         base=issue,
-        time_spent=seconds(hours=3)
+        time_spent=seconds(hours=3),
     )
 
     start = timezone.now().date() - timedelta(days=3)
@@ -280,35 +282,36 @@ def test_not_in_range(user):
     metrics = get_progress_metrics(team, start, end, "day")
 
     developer_metrics = next(
-        item.metrics
-        for item in metrics
-        if item.user == developer
+        item.metrics for item in metrics if item.user == developer
     )
 
     assert len(developer_metrics) == (end - start).days + 1
 
-    _check_metrics(developer_metrics,
-                   {
-                       timezone.now() - timedelta(days=1): timedelta(
-                           hours=1),
-                       timezone.now() + timedelta(days=1): timedelta(
-                           hours=3)
-                   }, {}, {
-                       timezone.now(): 1
-                   }, {}, {})
+    _check_metrics(
+        developer_metrics,
+        {
+            timezone.now() - timedelta(days=1): timedelta(hours=1),
+            timezone.now() + timedelta(days=1): timedelta(hours=3),
+        },
+        {},
+        {timezone.now(): 1},
+        {},
+        {},
+    )
 
 
 @override_settings(TP_WEEKENDS_DAYS=[])
 def test_another_user_not_in_team(user):
     developer = UserFactory.create()
-    issue = IssueFactory.create(user=developer,
-                                due_date=datetime.now())
+    issue = IssueFactory.create(user=developer, due_date=datetime.now())
 
     team = TeamFactory.create()
-    TeamMemberFactory.create(team=team, user=developer,
-                             roles=TeamMember.roles.DEVELOPER)
-    TeamMemberFactory.create(team=team, user=user,
-                             roles=TeamMember.roles.LEADER)
+    TeamMemberFactory.create(
+        team=team, user=developer, roles=TeamMember.roles.DEVELOPER
+    )
+    TeamMemberFactory.create(
+        team=team, user=user, roles=TeamMember.roles.LEADER
+    )
 
     issue.time_estimate = 0
     issue.total_time_spent = 0
@@ -321,25 +324,25 @@ def test_another_user_not_in_team(user):
         date=timezone.now() - timedelta(days=2, hours=5),
         user=developer,
         base=issue,
-        time_spent=seconds(hours=2)
+        time_spent=seconds(hours=2),
     )
     IssueSpentTimeFactory.create(
         date=timezone.now() - timedelta(days=1),
         user=another_user,
         base=issue,
-        time_spent=seconds(hours=4)
+        time_spent=seconds(hours=4),
     )
     IssueSpentTimeFactory.create(
         date=timezone.now() - timedelta(days=1, hours=5),
         user=developer,
         base=issue,
-        time_spent=-seconds(hours=3)
+        time_spent=-seconds(hours=3),
     )
     IssueSpentTimeFactory.create(
         date=timezone.now() + timedelta(days=1),
         user=another_user,
         base=issue,
-        time_spent=seconds(hours=3)
+        time_spent=seconds(hours=3),
     )
 
     start = timezone.now().date() - timedelta(days=5)
@@ -353,42 +356,44 @@ def test_another_user_not_in_team(user):
 @override_settings(TP_WEEKENDS_DAYS=[])
 def test_another_user_in_team(user):
     developer = UserFactory.create()
-    issue = IssueFactory.create(user=developer,
-                                due_date=datetime.now())
+    issue = IssueFactory.create(user=developer, due_date=datetime.now())
 
     team = TeamFactory.create()
-    TeamMemberFactory.create(team=team, user=developer,
-                             roles=TeamMember.roles.DEVELOPER)
-    TeamMemberFactory.create(team=team, user=user,
-                             roles=TeamMember.roles.LEADER)
+    TeamMemberFactory.create(
+        team=team, user=developer, roles=TeamMember.roles.DEVELOPER
+    )
+    TeamMemberFactory.create(
+        team=team, user=user, roles=TeamMember.roles.LEADER
+    )
 
     another_user = UserFactory.create()
-    TeamMemberFactory.create(team=team, user=another_user,
-                             roles=TeamMember.roles.DEVELOPER)
+    TeamMemberFactory.create(
+        team=team, user=another_user, roles=TeamMember.roles.DEVELOPER
+    )
 
     IssueSpentTimeFactory.create(
         date=timezone.now() - timedelta(days=2, hours=3),
         user=developer,
         base=issue,
-        time_spent=seconds(hours=2)
+        time_spent=seconds(hours=2),
     )
     IssueSpentTimeFactory.create(
         date=timezone.now() - timedelta(days=1),
         user=another_user,
         base=issue,
-        time_spent=seconds(hours=4)
+        time_spent=seconds(hours=4),
     )
     IssueSpentTimeFactory.create(
         date=timezone.now() - timedelta(days=1, hours=5),
         user=developer,
         base=issue,
-        time_spent=-seconds(hours=3)
+        time_spent=-seconds(hours=3),
     )
     IssueSpentTimeFactory.create(
         date=timezone.now() + timedelta(days=1),
         user=another_user,
         base=issue,
-        time_spent=seconds(hours=3)
+        time_spent=seconds(hours=3),
     )
 
     issue.time_estimate = seconds(hours=4)
@@ -404,44 +409,40 @@ def test_another_user_in_team(user):
     assert len(metrics) == 3
 
     developer_metrics = next(
-        item.metrics for item in metrics if item.user == developer)
+        item.metrics for item in metrics if item.user == developer
+    )
 
     assert len(developer_metrics) == (end - start).days + 1
 
-    _check_metrics(developer_metrics,
-                   {
-                       timezone.now() - timedelta(days=2,
-                                                  hours=3): timedelta(
-                           hours=2),
-                       timezone.now() - timedelta(days=1,
-                                                  hours=3): -timedelta(
-                           hours=3),
-                   }, {
-                       timezone.now(): timedelta(hours=4),
-                   }, {
-                       timezone.now(): 1,
-                   }, {
-                       timezone.now(): timedelta(hours=4),
-                   }, {
-                       timezone.now(): timedelta(hours=4),
-                   })
+    _check_metrics(
+        developer_metrics,
+        {
+            timezone.now() - timedelta(days=2, hours=3): timedelta(hours=2),
+            timezone.now() - timedelta(days=1, hours=3): -timedelta(hours=3),
+        },
+        {timezone.now(): timedelta(hours=4)},
+        {timezone.now(): 1},
+        {timezone.now(): timedelta(hours=4)},
+        {timezone.now(): timedelta(hours=4)},
+    )
 
     another_user_metrics = next(
-        item.metrics
-        for item in metrics
-        if item.user == another_user
+        item.metrics for item in metrics if item.user == another_user
     )
 
     assert len(another_user_metrics) == (end - start).days + 1
 
-    _check_metrics(another_user_metrics,
-                   {
-                       timezone.now() - timedelta(days=1,
-                                                  hours=3): timedelta(
-                           hours=4),
-                       timezone.now() + timedelta(days=1): timedelta(
-                           hours=3),
-                   }, {}, {}, {}, {})
+    _check_metrics(
+        another_user_metrics,
+        {
+            timezone.now() - timedelta(days=1, hours=3): timedelta(hours=4),
+            timezone.now() + timedelta(days=1): timedelta(hours=3),
+        },
+        {},
+        {},
+        {},
+        {},
+    )
 
 
 def test_bad_group(db):
@@ -496,8 +497,7 @@ def _check_metrics(
 
 def _prepare_metrics(metrics):
     return {
-        format_date(metric_date): time
-        for metric_date, time in metrics.items()
+        format_date(metric_date): time for metric_date, time in metrics.items()
     }
 
 

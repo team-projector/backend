@@ -11,8 +11,7 @@ from apps.users.models import User
 
 
 def filter_allowed_for_user(
-    queryset: models.QuerySet,
-    user: User,
+    queryset: models.QuerySet, user: User,
 ) -> models.QuerySet:
     """Get milestones for user."""
     members = get_members(user)
@@ -33,8 +32,7 @@ def filter_allowed_for_user(
 def get_members(user: User) -> List[ProjectMember]:
     """Get project managers."""
     members = ProjectMember.objects.filter(
-        user=user,
-        role=ProjectMemberRole.PROJECT_MANAGER,
+        user=user, role=ProjectMemberRole.PROJECT_MANAGER,
     )
 
     if not members:
@@ -46,8 +44,7 @@ def get_members(user: User) -> List[ProjectMember]:
 
 
 def get_group_milestones(
-    groups: models.QuerySet,
-    milestones_ids: List[int],
+    groups: models.QuerySet, milestones_ids: List[int],
 ) -> List[int]:
     """Get milestones of groups."""
     milestones_on_level = Milestone.objects.filter(
@@ -58,9 +55,7 @@ def get_group_milestones(
     for milestone in milestones_on_level:
         milestones_ids.append(milestone.get("id"))
 
-    children_groups = ProjectGroup.objects.filter(
-        parent__in=groups,
-    )
+    children_groups = ProjectGroup.objects.filter(parent__in=groups)
 
     if children_groups:
         get_group_milestones(children_groups, milestones_ids)

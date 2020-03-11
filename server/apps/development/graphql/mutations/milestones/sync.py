@@ -24,21 +24,16 @@ class SyncMilestoneMutation(BaseMutation):
     def do_mutate(cls, root, info, **kwargs):  # noqa: WPS110
         """Syncing milestone."""
         milestone = get_object_or_not_found(
-            Milestone.objects.all(),
-            pk=kwargs.get("id"),
+            Milestone.objects.all(), pk=kwargs.get("id"),
         )
 
         if milestone.content_type.model_class() == Project:
             sync_project_milestone_task.delay(
-                milestone.owner.gl_id,
-                milestone.gl_id,
+                milestone.owner.gl_id, milestone.gl_id,
             )
         elif milestone.content_type.model_class() == ProjectGroup:
             sync_project_group_milestone_task.delay(
-                milestone.owner.gl_id,
-                milestone.gl_id,
+                milestone.owner.gl_id, milestone.gl_id,
             )
 
-        return SyncMilestoneMutation(
-            milestone=milestone,
-        )
+        return SyncMilestoneMutation(milestone=milestone)

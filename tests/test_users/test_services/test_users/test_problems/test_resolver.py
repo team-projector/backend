@@ -11,10 +11,7 @@ from tests.test_payroll.factories import IssueSpentTimeFactory
 
 def test_resolver(user):
     """Test user problems resolver."""
-    IssueSpentTimeFactory.create(
-        user=user,
-        time_spent=seconds(hours=16)
-    )
+    IssueSpentTimeFactory.create(user=user, time_spent=seconds(hours=16))
 
     problems = UserType.resolve_problems(user, None)
     assert problems == [

@@ -25,9 +25,7 @@ def test_query(user, ghl_client):
     """Test team progress metrics raw query."""
     team = TeamFactory.create()
     TeamMemberFactory.create(
-        team=team,
-        user=user,
-        roles=TeamMember.roles.LEADER,
+        team=team, user=user, roles=TeamMember.roles.LEADER,
     )
 
     ghl_client.set_user(user)
@@ -76,9 +74,7 @@ def test_another_team(user, ghl_auth_mock_info, team_progress_metrics_query):
     """Test retrieve metrics for another team."""
     team = TeamFactory.create()
     TeamMemberFactory.create(
-        user=user,
-        team=team,
-        roles=TeamMember.roles.LEADER
+        user=user, team=team, roles=TeamMember.roles.LEADER
     )
     date = datetime.now().date()
 
@@ -94,16 +90,12 @@ def test_another_team(user, ghl_auth_mock_info, team_progress_metrics_query):
 
 
 def test_metrics_developer(
-    user,
-    ghl_auth_mock_info,
-    team_progress_metrics_query,
+    user, ghl_auth_mock_info, team_progress_metrics_query,
 ):
     """Test retrieve metrics for developer."""
     team = TeamFactory.create()
     TeamMemberFactory.create(
-        user=user,
-        team=team,
-        roles=TeamMember.roles.DEVELOPER
+        user=user, team=team, roles=TeamMember.roles.DEVELOPER
     )
     date = datetime.now().date()
 

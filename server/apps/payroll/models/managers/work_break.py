@@ -11,11 +11,7 @@ class WorkBreakManager(models.Manager):
         from apps.development.models import TeamMember  # noqa: WPS433
 
         users = TeamMember.objects.filter(
-            user=user,
-            roles=TeamMember.roles.LEADER,
-        ).values_list(
-            "team__members",
-            flat=True,
-        )
+            user=user, roles=TeamMember.roles.LEADER,
+        ).values_list("team__members", flat=True)
 
         return self.filter(user__in=(*users, user.id))

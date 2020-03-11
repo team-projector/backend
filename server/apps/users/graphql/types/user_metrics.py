@@ -32,4 +32,6 @@ class UserMetricsType(graphene.ObjectType):
     issues = graphene.Field(IssueUserMetricsType)
     merge_requests = graphene.Field(MergeRequestUserMetricsType)
 
-    last_salary_date = graphene.Date(resolver=metrics.last_salary_date_resolver)
+    last_salary_date = graphene.Date(
+        resolver=metrics.last_salary_date_resolver,
+    )

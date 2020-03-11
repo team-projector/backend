@@ -14,8 +14,7 @@ from tests.test_users.factories.gitlab import GlUserFactory
 def test_participants(db, gl_mocker, gl_client):
     project, gl_project = initializers.init_project()
     merge_request, gl_merge_request = initializers.init_merge_request(
-        project,
-        gl_project,
+        project, gl_project,
     )
     gl_participants = GlUserFactory.create_batch(2)
 
@@ -23,15 +22,10 @@ def test_participants(db, gl_mocker, gl_client):
         gl_mock.register_user(gl_mocker, to_register)
 
     gl_mock.mock_project_endpoints(
-        gl_mocker,
-        gl_project,
-        merge_requests=[gl_merge_request],
+        gl_mocker, gl_project, merge_requests=[gl_merge_request],
     )
     gl_mock.mock_merge_request_endpoints(
-        gl_mocker,
-        gl_project,
-        gl_merge_request,
-        participants=gl_participants,
+        gl_mocker, gl_project, gl_merge_request, participants=gl_participants,
     )
 
     gl_project = gl_client.projects.get(id=project.gl_id)

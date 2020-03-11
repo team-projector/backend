@@ -29,10 +29,7 @@ class ProjectGlManager:
         for group in ProjectGroup.objects.for_sync():
             self.sync_group_projects(group)
 
-    def sync_group_projects(
-        self,
-        group: ProjectGroup,
-    ) -> None:
+    def sync_group_projects(self, group: ProjectGroup) -> None:
         """Sync projects of the group."""
         gl_group = self.group_provider.get_gl_group(group)
         if not gl_group:
@@ -42,9 +39,7 @@ class ProjectGlManager:
             self.update_project(group, gl_project)
 
     def update_project(
-        self,
-        group: ProjectGroup,
-        gl_project: gl.Project,
+        self, group: ProjectGroup, gl_project: gl.Project,
     ) -> None:
         """Update project based on gitlab data."""
         msg = "Updating project '{0}'...".format(gl_project.name)

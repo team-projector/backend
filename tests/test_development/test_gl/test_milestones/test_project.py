@@ -15,9 +15,7 @@ def test_all(db, gl_mocker):
     gl_milestone = GlProjectMilestoneFactory.create()
 
     gl_mock.mock_project_endpoints(
-        gl_mocker,
-        gl_project,
-        milestones=[gl_milestone],
+        gl_mocker, gl_project, milestones=[gl_milestone],
     )
 
     MilestoneGlManager().sync_project_milestones(project)
@@ -31,15 +29,11 @@ def test_single(db, gl_mocker):
     gl_milestone = GlProjectMilestoneFactory.create()
 
     gl_mock.mock_project_endpoints(
-        gl_mocker,
-        gl_project,
-        milestones=[gl_milestone],
+        gl_mocker, gl_project, milestones=[gl_milestone],
     )
 
     gl_mock.mock_project_milestone_endpoints(
-        gl_mocker,
-        gl_project,
-        gl_milestone,
+        gl_mocker, gl_project, gl_milestone,
     )
 
     MilestoneGlManager().sync_project_milestone(project, gl_milestone["id"])

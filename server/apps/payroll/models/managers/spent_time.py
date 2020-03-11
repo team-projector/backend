@@ -26,10 +26,7 @@ class SpentTimeQuerySet(models.QuerySet):
             total_issues=self._sum(issues__isnull=False),
             opened_issues=self._sum(issues__state=issue.IssueState.OPENED),
             closed_issues=self._sum(issues__state=issue.IssueState.CLOSED),
-
-            total_merges=self._sum(
-                mergerequests__isnull=False,
-            ),
+            total_merges=self._sum(mergerequests__isnull=False),
             opened_merges=self._sum(
                 mergerequests__state=MergeRequestState.OPENED,
             ),
@@ -42,9 +39,7 @@ class SpentTimeQuerySet(models.QuerySet):
         )
 
     def annotate_payrolls(
-        self,
-        paid: bool = True,
-        payroll: bool = True,
+        self, paid: bool = True, payroll: bool = True,
     ) -> models.QuerySet:
         """Get total sum payroll or paid."""
         queryset = self
@@ -52,9 +47,7 @@ class SpentTimeQuerySet(models.QuerySet):
         if paid:
             queryset = queryset.annotate(
                 paid=models.Case(
-                    models.When(
-                        salary__isnull=False, then=models.F("sum"),
-                    ),
+                    models.When(salary__isnull=False, then=models.F("sum")),
                     default=0,
                     output_field=models.FloatField(),
                 ),
@@ -63,9 +56,7 @@ class SpentTimeQuerySet(models.QuerySet):
         if payroll:
             queryset = queryset.annotate(
                 payroll=models.Case(
-                    models.When(
-                        salary__isnull=True, then=models.F("sum"),
-                    ),
+                    models.When(salary__isnull=True, then=models.F("sum")),
                     default=0,
                     output_field=models.FloatField(),
                 ),
@@ -90,4 +81,5 @@ class SpentTimeManager(BaseSpentTimeManager):  # type: ignore
         from apps.payroll.services.spent_time.allowed import (  # noqa: WPS433
             filter_allowed_for_user,
         )
+
         return filter_allowed_for_user(self, user)

@@ -11,20 +11,16 @@ from apps.development.models import TeamMember
 
 
 def filter_by_roles(
-    queryset: models.QuerySet,
-    roles: Iterable[Union[str, Bit]],
+    queryset: models.QuerySet, roles: Iterable[Union[str, Bit]],
 ) -> models.QuerySet:
     """Get team members by role."""
     roles = [
         role
-        if isinstance(role, Bit) else
-        Bit(TeamMember.roles.keys().index(role))
+        if isinstance(role, Bit)
+        else Bit(TeamMember.roles.keys().index(role))
         for role in roles
     ]
 
     return queryset.filter(
-        reduce(
-            or_,
-            [models.Q(roles=role) for role in roles],
-        ),
+        reduce(or_, [models.Q(roles=role) for role in roles]),
     )

@@ -20,15 +20,15 @@ class AuthNode:
 
     @classmethod
     def get_node(
-        cls,
-        info: ResolveInfo,  # noqa: WPS110
-        obj_id: str,
+        cls, info: ResolveInfo, obj_id: str,  # noqa: WPS110
     ) -> Optional[Model]:
         """Get node."""
-        has_node_permission = all((
-            perm().has_node_permission(info, obj_id)
-            for perm in cls.permission_classes
-        ))
+        has_node_permission = all(
+            (
+                perm().has_node_permission(info, obj_id)
+                for perm in cls.permission_classes
+            ),
+        )
 
         if has_node_permission:
             return get_object_or_not_found(

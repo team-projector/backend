@@ -12,9 +12,7 @@ class RequestCallbackFactory:
     """Create request callback."""
 
     def __init__(
-        self,
-        body: Optional[object] = None,
-        status_code: int = HTTPStatus.OK,
+        self, body: Optional[object] = None, status_code: int = HTTPStatus.OK,
     ) -> None:
         self._body = {} if body is None else body
         self._status_code = status_code
@@ -27,11 +25,7 @@ class RequestCallbackFactory:
     ) -> List[object]:
         response_headers["Content-Type"] = "application/json"
 
-        return [
-            self._status_code,
-            response_headers,
-            json.dumps(self._body)
-        ]
+        return [self._status_code, response_headers, json.dumps(self._body)]
 
 
 class HttprettyMock:
@@ -87,10 +81,7 @@ class HttprettyMock:
         priority: int = 0,
     ) -> None:
         httpretty.register_uri(
-            method=method,
-            uri=uri,
-            body=request_callback,
-            priority=priority,
+            method=method, uri=uri, body=request_callback, priority=priority,
         )
 
     def _prepare_uri(self, path: str) -> str:

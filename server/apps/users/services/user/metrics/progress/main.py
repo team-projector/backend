@@ -16,10 +16,7 @@ from apps.users.services.user.metrics.progress.week.provider import (
 
 
 def _create_provider(
-    user: User,
-    start: date,
-    end: date,
-    group: str,
+    user: User, start: date, end: date, group: str,
 ) -> ProgressMetricsProvider:
     if group == "day":
         return DayMetricsProvider(user, start, end)
@@ -30,10 +27,7 @@ def _create_provider(
 
 
 def get_progress_metrics(
-    user: User,
-    start: date,
-    end: date,
-    grp: str,
+    user: User, start: date, end: date, grp: str,
 ) -> UserProgressMetricsList:
     """Get user progress."""
     provider = _create_provider(user, start, end, grp)

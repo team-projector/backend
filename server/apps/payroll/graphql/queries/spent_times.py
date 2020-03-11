@@ -12,8 +12,7 @@ class TimeExpensesQueries(graphene.ObjectType):
     """Class representing list of available fields for spent times queries."""
 
     all_spent_times = DataSourceConnectionField(
-        SpentTimeType,
-        filterset_class=SpentTimeFilterSet,
+        SpentTimeType, filterset_class=SpentTimeFilterSet,
     )
 
     spent_times_summary = graphene.Field(

@@ -8,6 +8,7 @@ from apps.core.tasks import add_action_task
 
 def gitlab_api_call(func):
     """Decorator for log gitlab api calls."""
+
     @functools.wraps(func)
     def wrapper(*args, **kwargs):  # noqa: WPS430
         func_result = func(*args, **kwargs)

@@ -60,7 +60,7 @@ def test_query(project_manager, ghl_client):
             "issues": [str(issue.pk) for issue in issues],
             "role": "Manager",
             "state": TicketState.DOING,
-        }
+        },
     )
 
     assert "errors" not in response
@@ -74,9 +74,7 @@ def test_query(project_manager, ghl_client):
 
 
 def test_invalid_parameters(
-    project_manager,
-    ghl_auth_mock_info,
-    create_ticket_mutation,
+    project_manager, ghl_auth_mock_info, create_ticket_mutation,
 ):
     """Test creation with invalid parameters."""
     with pytest.raises(GraphQLInputError) as exc_info:
@@ -94,8 +92,7 @@ def test_invalid_parameters(
     assert extensions["code"] == INPUT_ERROR
 
     fields_with_errors = {
-        err["fieldName"]
-        for err in extensions["fieldErrors"]
+        err["fieldName"] for err in extensions["fieldErrors"]
     }
 
     assert fields_with_errors == {"url", "type", "milestone", "state"}
@@ -114,5 +111,5 @@ def test_without_permissions(user, ghl_auth_mock_info, create_ticket_mutation):
             dueDate=datetime.now().date(),
             type=TicketType.FEATURE,
             url="http://test1.com",
-            milestone=milestone.pk
+            milestone=milestone.pk,
         )

@@ -24,9 +24,7 @@ def gl_webhook(request):
     if settings.GITLAB_NO_SYNC:
         return HttpResponse()
 
-    _check_webhook_secret_token(
-        request.META.get("HTTP_X_GITLAB_TOKEN"),
-    )
+    _check_webhook_secret_token(request.META.get("HTTP_X_GITLAB_TOKEN"))
 
     body = json.loads(request.body.decode("utf-8"))
     kind = body["object_kind"]

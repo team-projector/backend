@@ -24,7 +24,4 @@ class UsersQueries(graphene.ObjectType):
         resolver=resolve_user_progress_metrics,
     )
 
-    me = graphene.Field(
-        UserType,
-        resolver=resolve_me_user,
-    )
+    me = graphene.Field(UserType, resolver=resolve_me_user)

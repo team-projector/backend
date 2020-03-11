@@ -24,10 +24,7 @@ def test_asc_ordering(db):
 
     test_filter = DemoFilter(fields=(("due_date",)))
 
-    queryset = test_filter.filter(
-        Issue.objects.all(),
-        value=["due_date"],
-    )
+    queryset = test_filter.filter(Issue.objects.all(), value=["due_date"])
 
     assert list(queryset) == issues
 
@@ -44,10 +41,7 @@ def test_desc_ordering(db):
 
     test_filter = DemoFilter(fields=(("due_date",)))
 
-    queryset = test_filter.filter(
-        Issue.objects.all(),
-        value=["-due_date"],
-    )
+    queryset = test_filter.filter(Issue.objects.all(), value=["-due_date"])
 
     issues.reverse()
 

@@ -13,17 +13,11 @@ from apps.users.graphql.queries import UsersQueries
 
 
 class Query(  # noqa: WPS215
-    DevelopmentQueries,
-    PayrollQueries,
-    UsersQueries,
-    graphene.ObjectType,
+    DevelopmentQueries, PayrollQueries, UsersQueries, graphene.ObjectType,
 ):
     """Class representing all available queries."""
 
-    debug = graphene.Field(
-        DjangoDebug,
-        name="_debug",
-    )
+    debug = graphene.Field(DjangoDebug, name="_debug")
 
 
 class Mutation(  # noqa: WPS215
@@ -35,22 +29,14 @@ class Mutation(  # noqa: WPS215
     """Class representing all available mutations."""
 
 
-schema = graphene.Schema(
-    query=Query,
-    mutation=Mutation,
-)
+schema = graphene.Schema(query=Query, mutation=Mutation)
 
 
 def get_api_graphql_view():
     """Get API graphql view."""
-    return ApiGraphQLView.as_view(
-        schema=schema,
-    )
+    return ApiGraphQLView.as_view(schema=schema)
 
 
 def get_graphql_view():
     """Get graphql view."""
-    return PlaygroundGraphQLView.as_view(
-        graphiql=True,
-        schema=schema,
-    )
+    return PlaygroundGraphQLView.as_view(graphiql=True, schema=schema)

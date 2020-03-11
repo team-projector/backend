@@ -32,9 +32,7 @@ class IssueGlManager(BaseWorkItemGlManager):
             self.sync_project_issues(project, full_reload)
 
     def sync_project_issues(
-        self,
-        project: Project,
-        full_reload: bool = False,
+        self, project: Project, full_reload: bool = False,
     ) -> None:
         """Load project issues."""
         logger.info("Syncing project '%s' issues", project)
@@ -80,7 +78,9 @@ class IssueGlManager(BaseWorkItemGlManager):
             "created_at": gitlab.parse_gl_datetime(gl_issue.created_at),
             "updated_at": gitlab.parse_gl_datetime(gl_issue.updated_at),
             "closed_at": gitlab.parse_gl_datetime(gl_issue.closed_at),
-            "user": self.user_manager.extract_user_from_data(gl_issue.assignee),
+            "user": self.user_manager.extract_user_from_data(
+                gl_issue.assignee,
+            ),
             "is_merged": gitlab.parse_state_merged(gl_issue.closed_by()),
         }
 
@@ -102,9 +102,7 @@ class IssueGlManager(BaseWorkItemGlManager):
         logger.info("Issue '%s' is synced", issue)
 
     def check_project_deleted_issues(
-        self,
-        project: Project,
-        gl_project: gl.Project,
+        self, project: Project, gl_project: gl.Project,
     ) -> None:
         """Whether issues were deleted from project."""
         gl_issues = set()
@@ -118,10 +116,8 @@ class IssueGlManager(BaseWorkItemGlManager):
         project.issues.filter(gl_id__in=diff).delete()
 
         logger.info(
-            "Project '{project}' deleted issues ckecked: removed {removed}", {
-                "project": project,
-                "removed": len(diff),
-            },
+            "Project '{project}' deleted issues ckecked: removed {removed}",
+            {"project": project, "removed": len(diff)},
         )
 
     def sync_merge_requests(
@@ -132,15 +128,14 @@ class IssueGlManager(BaseWorkItemGlManager):
         gl_project: gl.Project,
     ) -> None:
         """Load merge requests for issue."""
-        issue.merge_requests.set((
-            self._sync_merge_request(
-                mr["id"],
-                mr["iid"],
-                project,
-                gl_project,
-            )
-            for mr in gl_issue.closed_by()
-        ))
+        issue.merge_requests.set(
+            (
+                self._sync_merge_request(
+                    mr["id"], mr["iid"], project, gl_project,
+                )
+                for mr in gl_issue.closed_by()
+            ),
+        )
 
     def _sync_merge_request(
         self,
@@ -155,9 +150,7 @@ class IssueGlManager(BaseWorkItemGlManager):
             gl_merge_request = gl_project.mergerequests.get(gl_iid)
 
             merge_request = self.merge_requests_manager.update_merge_request(
-                project,
-                gl_project,
-                gl_merge_request,
+                project, gl_project, gl_merge_request,
             )
 
         return merge_request

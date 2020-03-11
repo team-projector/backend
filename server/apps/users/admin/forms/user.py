@@ -12,9 +12,7 @@ class UserAdminForm(UserChangeForm):
         email = self.cleaned_data.get("email")
 
         if email:
-            qs = self._meta.model.objects.filter(
-                email=email,
-            ).exclude(
+            qs = self._meta.model.objects.filter(email=email).exclude(
                 pk=self.instance.pk,
             )
 

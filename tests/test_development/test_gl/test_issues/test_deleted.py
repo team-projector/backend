@@ -17,11 +17,7 @@ def test_check_deleted(db, gl_mocker, gl_client):
     project, gl_project = initializers.init_project()
     gl_assignee = GlUserFactory.create()
     issue, gl_issue = initializers.init_issue(
-        project,
-        gl_project,
-        gl_kwargs={
-            "assignee": gl_assignee,
-        },
+        project, gl_project, gl_kwargs={"assignee": gl_assignee},
     )
     IssueFactory.create_batch(5, project=project)
 
@@ -29,8 +25,7 @@ def test_check_deleted(db, gl_mocker, gl_client):
     gl_mock.mock_project_endpoints(gl_mocker, gl_project, issues=[gl_issue])
 
     IssueGlManager().check_project_deleted_issues(
-        project,
-        gl_client.projects.get(id=project.gl_id),
+        project, gl_client.projects.get(id=project.gl_id),
     )
 
     assert Issue.objects.count() == 1
@@ -42,13 +37,10 @@ def test_server_error(db, gl_mocker, gl_client):
     project = ProjectFactory.create(gl_id=gl_project["id"])
 
     gl_mock.register_project(
-        gl_mocker,
-        gl_project,
-        status_code=HTTPStatus.INTERNAL_SERVER_ERROR,
+        gl_mocker, gl_project, status_code=HTTPStatus.INTERNAL_SERVER_ERROR,
     )
 
     with pytest.raises(GitlabGetError):
         IssueGlManager().check_project_deleted_issues(
-            project,
-            gl_client.projects.get(id=project.gl_id),
+            project, gl_client.projects.get(id=project.gl_id),
         )

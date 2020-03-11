@@ -17,16 +17,9 @@ class WeekMetricsProvider(provider.ProgressMetricsProvider):
 
     def get_metrics(self) -> provider.UserProgressMetricsList:
         """Calculate and return metrics."""
-        generator = UserWeekMetricsGenerator(
-            self.user,
-            self.start,
-            self.end,
-        )
+        generator = UserWeekMetricsGenerator(self.user, self.start, self.end)
 
-        return [
-            generator.generate_metric(week)
-            for week in self._get_weeks()
-        ]
+        return [generator.generate_metric(week) for week in self._get_weeks()]
 
     def _get_weeks(self) -> List[date]:
         ret: List[date] = []

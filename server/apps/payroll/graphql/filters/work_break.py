@@ -22,23 +22,17 @@ class ApprovingFilter(django_filters.BooleanFilter):
             return queryset
 
         teams = TeamMember.objects.filter(
-            user=self.parent.request.user,
-            roles=TeamMember.roles.LEADER,
-        ).values_list(
-            "team",
-            flat=True,
-        )
+            user=self.parent.request.user, roles=TeamMember.roles.LEADER,
+        ).values_list("team", flat=True)
 
         subquery = User.objects.filter(
-            teams__in=teams,
-            id=OuterRef("user_id"),
+            teams__in=teams, id=OuterRef("user_id"),
         )
 
         queryset = queryset.annotate(
             user_is_team_member=Exists(subquery),
         ).filter(
-            user_is_team_member=True,
-            approve_state=ApprovedState.CREATED,
+            user_is_team_member=True, approve_state=ApprovedState.CREATED,
         )
 
         return queryset
@@ -68,9 +62,7 @@ class WorkBreakFilterSet(django_filters.FilterSet):
     team = TeamFilter()
     user = django_filters.ModelChoiceFilter(queryset=User.objects.all())
 
-    order_by = OrderingFilter(
-        fields=("from_date",),
-    )
+    order_by = OrderingFilter(fields=("from_date",))
 
     class Meta:
         model = WorkBreak

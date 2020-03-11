@@ -18,8 +18,7 @@ class TeamsQueries(graphene.ObjectType):
     team = DatasourceRelayNode.Field(TeamType)
 
     all_teams = DataSourceConnectionField(
-        TeamType,
-        filterset_class=TeamsFilterSet,
+        TeamType, filterset_class=TeamsFilterSet,
     )
 
     team_progress_metrics = graphene.Field(

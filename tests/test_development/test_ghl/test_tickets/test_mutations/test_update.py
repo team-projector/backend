@@ -40,7 +40,7 @@ def test_query(project_manager, ghl_client, ticket):
             "id": ticket.pk,
             "title": new_title,
             "state": TicketState.DOING,
-        }
+        },
     )
 
     assert "errors" not in response
@@ -54,10 +54,7 @@ def test_query(project_manager, ghl_client, ticket):
 
 
 def test_without_permissions(
-    user,
-    ghl_auth_mock_info,
-    update_ticket_mutation,
-    ticket,
+    user, ghl_auth_mock_info, update_ticket_mutation, ticket,
 ):
     """Test non project manager."""
     with pytest.raises(GraphQLPermissionDenied):
@@ -70,10 +67,7 @@ def test_without_permissions(
 
 
 def test_attach_issues(
-    project_manager,
-    ghl_auth_mock_info,
-    update_ticket_mutation,
-    ticket,
+    project_manager, ghl_auth_mock_info, update_ticket_mutation, ticket,
 ):
     """Test attach issues."""
     attached_issue = IssueFactory(ticket=ticket, user=project_manager)
@@ -93,19 +87,13 @@ def test_attach_issues(
 
 
 def test_clear_issues(
-    project_manager,
-    ghl_auth_mock_info,
-    update_ticket_mutation,
-    ticket,
+    project_manager, ghl_auth_mock_info, update_ticket_mutation, ticket,
 ):
     """Test clear issues."""
     issue = IssueFactory(ticket=ticket, user=project_manager)
 
     update_ticket_mutation(
-        root=None,
-        info=ghl_auth_mock_info,
-        id=ticket.id,
-        issues=[],
+        root=None, info=ghl_auth_mock_info, id=ticket.id, issues=[],
     )
 
     issue.refresh_from_db()
@@ -113,10 +101,7 @@ def test_clear_issues(
 
 
 def test_both_params_attach_and_issues(
-    project_manager,
-    ghl_auth_mock_info,
-    update_ticket_mutation,
-    ticket,
+    project_manager, ghl_auth_mock_info, update_ticket_mutation, ticket,
 ):
     """Test both attach and rewrite issues."""
     issue = IssueFactory(user=project_manager)
@@ -136,10 +121,7 @@ def test_both_params_attach_and_issues(
 
 
 def test_update_state(
-    project_manager,
-    ghl_auth_mock_info,
-    update_ticket_mutation,
-    ticket,
+    project_manager, ghl_auth_mock_info, update_ticket_mutation, ticket,
 ):
     """Test update state."""
     assert TicketState.CREATED == ticket.state
@@ -157,10 +139,7 @@ def test_update_state(
 
 
 def test_update_milestone(
-    project_manager,
-    ghl_auth_mock_info,
-    update_ticket_mutation,
-    ticket,
+    project_manager, ghl_auth_mock_info, update_ticket_mutation, ticket,
 ):
     """Test update milestone."""
     new_milestone = ProjectMilestoneFactory()

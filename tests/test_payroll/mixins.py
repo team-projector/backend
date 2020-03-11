@@ -33,7 +33,10 @@ class CheckUserProgressMetricsMixin(testcases.TestCase):
             self._check_metric(metric, "time_remains", time_remains)
 
             if metric["start"] in issues_counts:
-                assert metric["issues_count"] == issues_counts[metric.get("start")]  # noqa: E501
+                assert (
+                    metric["issues_count"]
+                    == issues_counts[metric.get("start")]
+                )  # noqa: E501
             else:
                 assert metric["issues_count"] == 0
 

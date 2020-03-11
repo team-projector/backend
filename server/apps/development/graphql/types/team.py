@@ -20,8 +20,7 @@ class TeamType(BaseDjangoObjectType):
 
     metrics = graphene.Field(TeamMetricsType)
     members = DataSourceConnectionField(
-        TeamMemberType,
-        filterset_class=TeamMembersFilterSet,
+        TeamMemberType, filterset_class=TeamMembersFilterSet,
     )
 
     class Meta:
@@ -31,16 +30,9 @@ class TeamType(BaseDjangoObjectType):
         name = "Team"
 
     @classmethod
-    def get_queryset(
-        cls,
-        queryset,
-        info,  # noqa: WPS110
-    ) -> QuerySet:
+    def get_queryset(cls, queryset, info) -> QuerySet:  # noqa: WPS110
         """Get teams."""
-        return filter_allowed_for_user(
-            queryset,
-            info.context.user,
-        )
+        return filter_allowed_for_user(queryset, info.context.user)
 
     def resolve_metrics(self, info, **kwargs):  # noqa: WPS110
         """Get team metrics."""

@@ -44,18 +44,15 @@ class NotAssignedChecker(BaseProblemChecker):
 
     def merge_request_has_problem(self, merge_request: MergeRequest) -> bool:
         """Current merge request has problem."""
-        return (
-            not merge_request.user
-            and self._is_done_opened_issues_exists(merge_request)
+        return not merge_request.user and self._is_done_opened_issues_exists(
+            merge_request,
         )
 
     def _is_done_opened_issues_exists(
-        self,
-        merge_request: MergeRequest,
+        self, merge_request: MergeRequest,
     ) -> bool:
         return merge_request.issues.filter(
-            labels__title__iexact="done",
-            state=MergeRequestState.OPENED,
+            labels__title__iexact="done", state=MergeRequestState.OPENED,
         ).exists()
 
 
