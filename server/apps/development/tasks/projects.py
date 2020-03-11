@@ -8,10 +8,7 @@ from celery_app import app
 
 
 @app.task
-def sync_project_task(
-    group_id: int,
-    project_id: int,
-) -> None:
+def sync_project_task(group_id: int, project_id: int) -> None:
     """Syncing project from Gitlab."""
     project = Project.objects.get(id=project_id)
 

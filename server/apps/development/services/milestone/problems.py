@@ -34,10 +34,7 @@ class OverdueDueDateChecker(BaseProblemChecker):
         )
 
 
-checkers = [
-    checker_class()
-    for checker_class in (OverdueDueDateChecker,)
-]
+checkers = [checker_class() for checker_class in (OverdueDueDateChecker,)]
 
 
 def get_milestone_problems(milestone: Milestone) -> List[str]:

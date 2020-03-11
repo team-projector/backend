@@ -20,8 +20,7 @@ MAX_SIZE = graphene_settings.RELAY_CONNECTION_MAX_LIMIT
 
 
 class DataSourceConnectionField(
-    AuthFilter,
-    DjangoFilterConnectionField,
+    AuthFilter, DjangoFilterConnectionField,
 ):
     """Data source connection field."""
 
@@ -34,10 +33,7 @@ class DataSourceConnectionField(
 
     @classmethod
     def resolve_connection(
-        cls,
-        connection,
-        args,
-        iterable,
+        cls, connection, args, iterable,
     ):
         """Resolve connection."""
         iterable = maybe_queryset(iterable)
@@ -78,29 +74,21 @@ class DataSourceConnectionField(
         # implemented support for offsets
 
         args = args or {}
-        before_offset = get_offset_with_default(args.get("before"), list_length)
+        before_offset = get_offset_with_default(
+            args.get("before"), list_length,
+        )
         after_offset = get_offset_with_default(args.get("after"), -1)
 
-        start_offset = max(
-            slice_start - 1,
-            after_offset,
-            -1,
-        ) + 1
+        start_offset = max(slice_start - 1, after_offset, -1) + 1
         end_offset = min(
             slice_start + (list_slice_length or len(list_slice)),
             before_offset,
             list_length,
         )
         if isinstance(args.get("first"), int):
-            end_offset = min(
-                end_offset,
-                start_offset + args.get("first"),
-            )
+            end_offset = min(end_offset, start_offset + args.get("first"))
         if isinstance(args.get("last"), int):
-            start_offset = max(
-                start_offset,
-                end_offset - args.get("last"),
-            )
+            start_offset = max(start_offset, end_offset - args.get("last"))
 
         return cls._build_connection_type(
             connection_type,
@@ -120,29 +108,20 @@ class DataSourceConnectionField(
 
     @classmethod
     def _get_edges(
-        cls,
-        edge_type,
-        list_slice,
-        start_offset,
-        end_offset,
+        cls, edge_type, list_slice, start_offset, end_offset,
     ) -> List[ObjectType]:
         slice_fragment = list_slice[start_offset:end_offset]
 
         return [
             edge_type(
-                node=node,
-                cursor=offset_to_cursor(start_offset + index),
+                node=node, cursor=offset_to_cursor(start_offset + index),
             )
             for index, node in enumerate(slice_fragment)
         ]
 
     @classmethod
     def _has_previous_page(
-        cls,
-        after_offset,
-        after,
-        last,
-        start_offset,
+        cls, after_offset, after, last, start_offset,
     ) -> bool:
         lower_bound = after_offset + 1 if after else 0
 
@@ -150,12 +129,7 @@ class DataSourceConnectionField(
 
     @classmethod
     def _has_next_page(  # noqa: WPS211
-        cls,
-        before_offset,
-        before,
-        first,
-        end_offset,
-        list_length,
+        cls, before_offset, before, first, end_offset, list_length,
     ) -> bool:
         upper_bound = before_offset if before else list_length
 
@@ -190,17 +164,10 @@ class DataSourceConnectionField(
                 start_cursor=edges[0].cursor if edges else None,
                 end_cursor=edges[-1].cursor if edges else None,
                 has_previous_page=cls._has_previous_page(
-                    after_offset,
-                    after,
-                    last,
-                    start_offset,
+                    after_offset, after, last, start_offset,
                 ),
                 has_next_page=cls._has_next_page(
-                    before_offset,
-                    before,
-                    first,
-                    end_offset,
-                    list_length,
+                    before_offset, before, first, end_offset, list_length,
                 ),
             ),
         )

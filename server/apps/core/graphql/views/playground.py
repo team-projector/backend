@@ -5,7 +5,6 @@ from graphene_django.views import GraphQLView
 
 
 class PlaygroundGraphQLView(
-    LoginRequiredMixin,
-    GraphQLView,
+    LoginRequiredMixin, GraphQLView,
 ):
     """Playground GraphQL View."""

@@ -40,15 +40,25 @@ def annotate_issue_problems(queryset: models.QuerySet) -> models.QuerySet:
 
 def filter_issue_problems(queryset: models.QuerySet) -> models.QuerySet:
     """Get problems from issues."""
-    return queryset.filter(reduce(or_, [
-        models.Q(**{checker.annotate_field: True})
-        for checker in issue_problem_checkers
-    ]))
+    return queryset.filter(
+        reduce(
+            or_,
+            [
+                models.Q(**{checker.annotate_field: True})
+                for checker in issue_problem_checkers
+            ],
+        ),
+    )
 
 
 def exclude_issue_problems(queryset: models.QuerySet) -> models.QuerySet:
     """Exclude problems from issues."""
-    return queryset.filter(reduce(and_, [
-        models.Q(**{checker.annotate_field: None})
-        for checker in issue_problem_checkers
-    ]))
+    return queryset.filter(
+        reduce(
+            and_,
+            [
+                models.Q(**{checker.annotate_field: None})
+                for checker in issue_problem_checkers
+            ],
+        ),
+    )

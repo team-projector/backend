@@ -36,7 +36,5 @@ def sync_project_merge_request_task(project_id: int, iid: int) -> None:
 
     manager = MergeRequestGlManager()
     manager.update_merge_request(
-        project,
-        gl_project,
-        gl_project.mergerequests.get(iid),
+        project, gl_project, gl_project.mergerequests.get(iid),
     )

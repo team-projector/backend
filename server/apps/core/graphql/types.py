@@ -7,8 +7,7 @@ from apps.core.graphql.security.permissions import AllowAuthenticated
 
 
 class BaseDjangoObjectType(
-    AuthNode,
-    DjangoObjectType,
+    AuthNode, DjangoObjectType,
 ):
     """A base class Django object type."""
 

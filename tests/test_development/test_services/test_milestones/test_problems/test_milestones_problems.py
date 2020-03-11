@@ -12,7 +12,7 @@ from tests.test_development.factories import ProjectMilestoneFactory
 def test_overdue_due_day(db):
     problem_milestone = ProjectMilestoneFactory.create(
         state=MilestoneState.ACTIVE,
-        due_date=datetime.now().date() - timedelta(days=1)
+        due_date=datetime.now().date() - timedelta(days=1),
     )
 
     assert get_milestone_problems(problem_milestone) == [PROBLEM_OVER_DUE_DAY]
@@ -21,7 +21,7 @@ def test_overdue_due_day(db):
 def test_overdue_due_day_but_closed(db):
     milestone = ProjectMilestoneFactory.create(
         state=MilestoneState.CLOSED,
-        due_date=datetime.now().date() - timedelta(days=1)
+        due_date=datetime.now().date() - timedelta(days=1),
     )
 
     assert not get_milestone_problems(milestone)
@@ -30,7 +30,7 @@ def test_overdue_due_day_but_closed(db):
 def test_resolver(db):
     problem_milestone = ProjectMilestoneFactory.create(
         state=MilestoneState.ACTIVE,
-        due_date=datetime.now().date() - timedelta(days=1)
+        due_date=datetime.now().date() - timedelta(days=1),
     )
 
     problems = MilestoneType.resolve_problems(problem_milestone, None)

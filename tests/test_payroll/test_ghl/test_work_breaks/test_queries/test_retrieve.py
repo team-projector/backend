@@ -24,10 +24,7 @@ def test_query(user, ghl_client):
     work_break = WorkBreakFactory.create(user=user)
 
     response = ghl_client.execute(
-        GHL_QUERY_WORK_BREAK,
-        variable_values={
-            "id": work_break.pk,
-        },
+        GHL_QUERY_WORK_BREAK, variable_values={"id": work_break.pk},
     )
 
     assert response["data"]["workBreak"]["id"] == str(work_break.id)
@@ -38,9 +35,7 @@ def test_not_team_lead(ghl_auth_mock_info, work_break_query):
 
     with pytest.raises(GraphQLNotFound):
         work_break_query(
-            root=None,
-            info=ghl_auth_mock_info,
-            id=work_break.pk,
+            root=None, info=ghl_auth_mock_info, id=work_break.pk,
         )
 
 
@@ -51,19 +46,15 @@ def test_as_team_lead(ghl_auth_mock_info, work_break_query):
     TeamMemberFactory.create(
         team=team,
         user=ghl_auth_mock_info.context.user,
-        roles=TeamMember.roles.LEADER
+        roles=TeamMember.roles.LEADER,
     )
     TeamMemberFactory.create(
-        team=team,
-        user=user,
-        roles=TeamMember.roles.DEVELOPER
+        team=team, user=user, roles=TeamMember.roles.DEVELOPER
     )
     work_break = WorkBreakFactory.create(user=user)
 
     work_break_node = work_break_query(
-        root=None,
-        info=ghl_auth_mock_info,
-        id=work_break.pk,
+        root=None, info=ghl_auth_mock_info, id=work_break.pk,
     )
 
     assert work_break_node.id == work_break.id

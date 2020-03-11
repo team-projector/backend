@@ -18,25 +18,25 @@ def test_list(user, client):
         date=timezone.now() - timedelta(hours=4),
         user=user,
         base=issue,
-        time_spent=int(seconds(hours=5))
+        time_spent=int(seconds(hours=5)),
     )
     spend_2 = IssueSpentTimeFactory.create(
         date=timezone.now() - timedelta(hours=2),
         user=user,
         base=issue,
-        time_spent=int(seconds(hours=2))
+        time_spent=int(seconds(hours=2)),
     )
     spend_3 = IssueSpentTimeFactory.create(
         date=timezone.now() - timedelta(hours=3),
         user=user,
         base=issue,
-        time_spent=int(seconds(hours=4))
+        time_spent=int(seconds(hours=4)),
     )
     spend_4 = IssueSpentTimeFactory.create(
         date=timezone.now() - timedelta(hours=1),
         user=user,
         base=issue,
-        time_spent=int(seconds(minutes=10))
+        time_spent=int(seconds(minutes=10)),
     )
 
     client.user = user
@@ -45,9 +45,7 @@ def test_list(user, client):
     spends = SpentTimeType().get_queryset(SpentTime.objects.all(), info)
 
     results = SpentTimeFilterSet(
-        data={"user": user.id},
-        queryset=spends,
-        request=client,
+        data={"user": user.id}, queryset=spends, request=client,
     ).qs
 
     assert results.count() == 4
@@ -57,10 +55,7 @@ def test_list(user, client):
 def test_owner(user):
     issue = IssueFactory.create()
     spend_1 = IssueSpentTimeFactory.create(
-        date=timezone.now(),
-        user=user,
-        base=issue,
-        time_spent=0
+        date=timezone.now(), user=user, base=issue, time_spent=0
     )
 
     merge_request = MergeRequestFactory.create()
@@ -68,7 +63,7 @@ def test_owner(user):
         date=timezone.now() - timedelta(hours=4),
         user=user,
         base=merge_request,
-        time_spent=0
+        time_spent=0,
     )
 
     assert SpentTimeType.resolve_owner(spend_1, None) == issue

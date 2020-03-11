@@ -33,25 +33,25 @@ def test_simple(user, _freeze_to_noon):
         date=datetime.now() - timedelta(days=4),
         user=user,
         base=issue,
-        time_spent=seconds(hours=3)
+        time_spent=seconds(hours=3),
     )
     IssueSpentTimeFactory.create(
         date=datetime.now() - timedelta(days=2, hours=5),
         user=user,
         base=issue,
-        time_spent=seconds(hours=2)
+        time_spent=seconds(hours=2),
     )
     IssueSpentTimeFactory.create(
         date=datetime.now() - timedelta(days=1),
         user=user,
         base=issue,
-        time_spent=seconds(hours=4)
+        time_spent=seconds(hours=4),
     )
     IssueSpentTimeFactory.create(
         date=datetime.now() - timedelta(days=1, hours=5),
         user=user,
         base=issue,
-        time_spent=-seconds(hours=3)
+        time_spent=-seconds(hours=3),
     )
 
     issue.time_estimate = seconds(hours=15)
@@ -73,17 +73,19 @@ def test_simple(user, _freeze_to_noon):
             datetime.now() - timedelta(days=4): timedelta(hours=3),
             datetime.now() - timedelta(days=2): timedelta(hours=2),
             datetime.now() - timedelta(days=1): timedelta(hours=1),
-        }, {
+        },
+        {
             datetime.now(): timedelta(hours=8),
             datetime.now() + timedelta(days=1): timedelta(hours=1),
-        }, {
-            datetime.now() + timedelta(days=1): 1
-        }, {
-            datetime.now() + timedelta(days=1): timedelta(hours=15)
-        }, {
-            datetime.now() + timedelta(days=1):
-                timedelta(seconds=issue.time_estimate - issue.total_time_spent)
-        }
+        },
+        {datetime.now() + timedelta(days=1): 1},
+        {datetime.now() + timedelta(days=1): timedelta(hours=15)},
+        {
+            datetime.now()
+            + timedelta(days=1): timedelta(
+                seconds=issue.time_estimate - issue.total_time_spent
+            )
+        },
     )
 
 
@@ -94,7 +96,7 @@ def test_negative_remains(user, _freeze_to_noon):
         date=datetime.now() - timedelta(days=4),
         user=user,
         base=issue,
-        time_spent=seconds(hours=3)
+        time_spent=seconds(hours=3),
     )
 
     issue.time_estimate = seconds(hours=2)
@@ -110,14 +112,14 @@ def test_negative_remains(user, _freeze_to_noon):
     metrics = get_progress_metrics(user, start, end, "day")
 
     assert len(metrics) == (end - start).days + 1
-    _check_metrics(metrics,
-                   {
-                       timezone.now() - timedelta(days=4): timedelta(hours=3),
-                   }, {}, {
-                       timezone.now() + timedelta(days=1): 1
-                   }, {
-                       timezone.now() + timedelta(days=1): timedelta(hours=2)
-                   }, {})
+    _check_metrics(
+        metrics,
+        {timezone.now() - timedelta(days=4): timedelta(hours=3)},
+        {},
+        {timezone.now() + timedelta(days=1): 1},
+        {timezone.now() + timedelta(days=1): timedelta(hours=2)},
+        {},
+    )
 
 
 @override_settings(TP_WEEKENDS_DAYS=[])
@@ -134,19 +136,16 @@ def test_loading_day_already_has_spends(user, _freeze_to_noon):
         date=datetime.now(),
         user=user,
         base=issue_2,
-        time_spent=seconds(hours=1)
+        time_spent=seconds(hours=1),
     )
     IssueSpentTimeFactory.create(
         date=datetime.now(),
         user=user,
         base=issue_2,
-        time_spent=seconds(hours=2)
+        time_spent=seconds(hours=2),
     )
     IssueSpentTimeFactory.create(
-        date=datetime.now(),
-        user=user,
-        base=issue,
-        time_spent=seconds(hours=3)
+        date=datetime.now(), user=user, base=issue, time_spent=seconds(hours=3)
     )
 
     issue.time_estimate = int(seconds(hours=4))
@@ -165,20 +164,21 @@ def test_loading_day_already_has_spends(user, _freeze_to_noon):
     metrics = get_progress_metrics(user, start, end, "day")
 
     assert len(metrics) == (end - start).days + 1
-    _check_metrics(metrics,
-                   {
-                       timezone.now(): timedelta(hours=6)
-                   }, {
-                       timezone.now(): timedelta(hours=8),
-                       timezone.now() + timedelta(days=1): timedelta(hours=6),
-                   }, {
-                       timezone.now(): 1,
-                   }, {
-                       timezone.now(): timedelta(hours=4),
-                   }, {
-                       timezone.now(): timedelta(
-                           seconds=issue.time_estimate - issue.total_time_spent)
-                   })
+    _check_metrics(
+        metrics,
+        {timezone.now(): timedelta(hours=6)},
+        {
+            timezone.now(): timedelta(hours=8),
+            timezone.now() + timedelta(days=1): timedelta(hours=6),
+        },
+        {timezone.now(): 1},
+        {timezone.now(): timedelta(hours=4)},
+        {
+            timezone.now(): timedelta(
+                seconds=issue.time_estimate - issue.total_time_spent
+            )
+        },
+    )
 
 
 @override_settings(TP_WEEKENDS_DAYS=[])
@@ -193,25 +193,25 @@ def test_not_in_range(user, _freeze_to_noon):
         date=datetime.now() - timedelta(days=5, hours=5),
         user=user,
         base=issue,
-        time_spent=seconds(hours=2)
+        time_spent=seconds(hours=2),
     )
     IssueSpentTimeFactory.create(
         date=datetime.now() - timedelta(days=1),
         user=user,
         base=issue,
-        time_spent=seconds(hours=4)
+        time_spent=seconds(hours=4),
     )
     IssueSpentTimeFactory.create(
         date=datetime.now() - timedelta(days=1, hours=5),
         user=user,
         base=issue,
-        time_spent=-seconds(hours=3)
+        time_spent=-seconds(hours=3),
     )
     IssueSpentTimeFactory.create(
         date=datetime.now() + timedelta(days=1),
         user=user,
         base=issue,
-        time_spent=seconds(hours=3)
+        time_spent=seconds(hours=3),
     )
 
     start = datetime.now().date() - timedelta(days=3)
@@ -219,13 +219,17 @@ def test_not_in_range(user, _freeze_to_noon):
     metrics = get_progress_metrics(user, start, end, "day")
 
     assert len(metrics) == (end - start).days + 1
-    _check_metrics(metrics,
-                   {
-                       timezone.now() - timedelta(days=1): timedelta(hours=1),
-                       timezone.now() + timedelta(days=1): timedelta(hours=3)
-                   }, {}, {
-                       timezone.now(): 1
-                   }, {}, {})
+    _check_metrics(
+        metrics,
+        {
+            timezone.now() - timedelta(days=1): timedelta(hours=1),
+            timezone.now() + timedelta(days=1): timedelta(hours=3),
+        },
+        {},
+        {timezone.now(): 1},
+        {},
+        {},
+    )
 
 
 @override_settings(TP_WEEKENDS_DAYS=[])
@@ -242,25 +246,25 @@ def test_another_user(user, _freeze_to_noon):
         date=datetime.now() - timedelta(days=2, hours=5),
         user=user,
         base=issue,
-        time_spent=seconds(hours=2)
+        time_spent=seconds(hours=2),
     )
     IssueSpentTimeFactory.create(
         date=datetime.now() - timedelta(days=1),
         user=another_user,
         base=issue,
-        time_spent=seconds(hours=4)
+        time_spent=seconds(hours=4),
     )
     IssueSpentTimeFactory.create(
         date=datetime.now() - timedelta(days=1, hours=5),
         user=user,
         base=issue,
-        time_spent=-seconds(hours=3)
+        time_spent=-seconds(hours=3),
     )
     IssueSpentTimeFactory.create(
         date=datetime.now() + timedelta(days=1),
         user=another_user,
         base=issue,
-        time_spent=seconds(hours=3)
+        time_spent=seconds(hours=3),
     )
 
     start = datetime.now().date() - timedelta(days=5)
@@ -268,13 +272,17 @@ def test_another_user(user, _freeze_to_noon):
     metrics = get_progress_metrics(user, start, end, "day")
 
     assert len(metrics) == (end - start).days + 1
-    _check_metrics(metrics,
-                   {
-                       timezone.now() - timedelta(days=2): timedelta(hours=2),
-                       timezone.now() - timedelta(days=1): -timedelta(hours=3)
-                   }, {}, {
-                       timezone.now(): 1
-                   }, {}, {})
+    _check_metrics(
+        metrics,
+        {
+            timezone.now() - timedelta(days=2): timedelta(hours=2),
+            timezone.now() - timedelta(days=1): -timedelta(hours=3),
+        },
+        {},
+        {timezone.now(): 1},
+        {},
+        {},
+    )
 
 
 @override_settings(TP_WEEKENDS_DAYS=[])
@@ -287,14 +295,11 @@ def test_not_loading_over_daily_work_hours(user, _freeze_to_noon):
         due_date=datetime.now() + timedelta(days=7),
         time_estimate=seconds(hours=15),
         total_time_spent=5,
-        state=IssueState.OPENED
+        state=IssueState.OPENED,
     )
 
     IssueSpentTimeFactory.create(
-        date=datetime.now(),
-        user=user,
-        base=issue,
-        time_spent=seconds(hours=5)
+        date=datetime.now(), user=user, base=issue, time_spent=seconds(hours=5)
     )
 
     start = datetime.now().date() - timedelta(days=1)
@@ -302,18 +307,21 @@ def test_not_loading_over_daily_work_hours(user, _freeze_to_noon):
     metrics = get_progress_metrics(user, start, end, "day")
 
     assert len(metrics) == (end - start).days + 1
-    _check_metrics(metrics,
-                   {
-                       timezone.now() - timedelta(days=1): timedelta(hours=0),
-                       timezone.now(): timedelta(hours=5),
-                   }, {
-                       timezone.now(): timedelta(hours=5),
-                       timezone.now() + timedelta(days=1): timedelta(hours=4),
-                   }, {
-                       timezone.now() + timedelta(days=7): 1
-                   }, {
-                       timezone.now() + timedelta(days=7): timedelta(hours=15)
-                   }, {}, 4)
+    _check_metrics(
+        metrics,
+        {
+            timezone.now() - timedelta(days=1): timedelta(hours=0),
+            timezone.now(): timedelta(hours=5),
+        },
+        {
+            timezone.now(): timedelta(hours=5),
+            timezone.now() + timedelta(days=1): timedelta(hours=4),
+        },
+        {timezone.now() + timedelta(days=7): 1},
+        {timezone.now() + timedelta(days=7): timedelta(hours=15)},
+        {},
+        4,
+    )
 
 
 def test_bad_group(user, _freeze_to_noon):
@@ -336,13 +344,15 @@ def test_provider_not_implemented(user, _freeze_to_noon):
         ).get_metrics()
 
 
-def _check_metrics(metrics,
-                   spents: Dict[datetime, timedelta],
-                   loadings: Dict[datetime, timedelta],
-                   issues_counts: Dict[datetime, int],
-                   time_estimates: Dict[datetime, timedelta],
-                   time_remains: Dict[datetime, timedelta],
-                   planned_work_hours: int = 8):
+def _check_metrics(
+    metrics,
+    spents: Dict[datetime, timedelta],
+    loadings: Dict[datetime, timedelta],
+    issues_counts: Dict[datetime, int],
+    time_estimates: Dict[datetime, timedelta],
+    time_remains: Dict[datetime, timedelta],
+    planned_work_hours: int = 8,
+):
     spents = _prepare_metrics(spents)
     loadings = _prepare_metrics(loadings)
     time_estimates = _prepare_metrics(time_estimates)
@@ -366,8 +376,7 @@ def _check_metrics(metrics,
 
 def _prepare_metrics(metrics):
     return {
-        format_date(metric_date): time
-        for metric_date, time in metrics.items()
+        format_date(metric_date): time for metric_date, time in metrics.items()
     }
 
 

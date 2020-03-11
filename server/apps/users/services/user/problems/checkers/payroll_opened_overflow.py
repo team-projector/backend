@@ -21,12 +21,10 @@ class PayrollOpenedOverflowChecker(BaseProblemChecker):
     def has_problem(self, user: User) -> bool:
         """Has problem if time spent more than daily work hours of user."""
         total_spend = SpentTime.objects.filter(
-            salary__isnull=True,
-            user=user,
-            issues__state=IssueState.OPENED,
-        ).aggregate(
-            total_time_spent=Coalesce(Sum("time_spent"), 0),
-        )["total_time_spent"]
+            salary__isnull=True, user=user, issues__state=IssueState.OPENED,
+        ).aggregate(total_time_spent=Coalesce(Sum("time_spent"), 0))[
+            "total_time_spent"
+        ]
 
         return total_spend > user.daily_work_hours * (
             SECONDS_PER_HOUR * PROBLEM_PAYROLL_OVERFLOW_RATIO

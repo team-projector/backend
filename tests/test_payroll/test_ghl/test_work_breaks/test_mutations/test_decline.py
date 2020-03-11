@@ -28,23 +28,16 @@ def test_query(user, ghl_client):
     user_1 = UserFactory.create()
 
     TeamMemberFactory.create(
-        team=team,
-        user=user,
-        roles=TeamMember.roles.LEADER
+        team=team, user=user, roles=TeamMember.roles.LEADER
     )
     TeamMemberFactory.create(
-        team=team,
-        user=user_1,
-        roles=TeamMember.roles.DEVELOPER
+        team=team, user=user_1, roles=TeamMember.roles.DEVELOPER
     )
     work_break = WorkBreakFactory.create(user=user_1)
 
     response = ghl_client.execute(
         GHL_QUERY_DECLINE_WORK_BREAK,
-        variable_values={
-            "id": work_break.pk,
-            "declineReason": "reason",
-        },
+        variable_values={"id": work_break.pk, "declineReason": "reason"},
     )
 
     work_break.refresh_from_db()
@@ -62,9 +55,7 @@ def test_not_team_lead(ghl_auth_mock_info, decline_work_break_mutation):
 
     with pytest.raises(GraphQLPermissionDenied):
         decline_work_break_mutation(
-            root=None,
-            info=ghl_auth_mock_info,
-            id=work_break.pk,
+            root=None, info=ghl_auth_mock_info, id=work_break.pk,
         )
 
     work_break.refresh_from_db()
@@ -78,9 +69,7 @@ def test_owner(ghl_auth_mock_info, decline_work_break_mutation):
 
     with pytest.raises(GraphQLPermissionDenied):
         decline_work_break_mutation(
-            root=None,
-            info=ghl_auth_mock_info,
-            id=work_break.pk,
+            root=None, info=ghl_auth_mock_info, id=work_break.pk,
         )
 
     work_break.refresh_from_db()

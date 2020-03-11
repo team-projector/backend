@@ -13,7 +13,10 @@ class ProjectMemberRole(models.TextChoices):
     """Project member role choices."""
 
     DEVELOPER = "DEVELOPER", _("CH__DEVELOPER")  # noqa: WPS115
-    PROJECT_MANAGER = "PROJECT_MANAGER", _("CH__PROJECT_MANAGER")  # noqa: WPS115, E501
+    PROJECT_MANAGER = (  # noqa: WPS115, E501
+        "PROJECT_MANAGER",
+        _("CH__PROJECT_MANAGER"),
+    )
     CUSTOMER = "CUSTOMER", _("CH__CUSTOMER")  # noqa: WPS115
 
 
@@ -23,10 +26,7 @@ PROJECT_MEMBER_ROLE_MAX_LENGTH = 20
 class ProjectMember(Timestamps):
     """The project member model."""
 
-    user = models.ForeignKey(
-        settings.AUTH_USER_MODEL,
-        models.CASCADE,
-    )
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, models.CASCADE)
 
     role = models.CharField(
         choices=ProjectMemberRole.choices,
@@ -36,13 +36,7 @@ class ProjectMember(Timestamps):
     )
 
     owner = GenericForeignKey()
-
-    content_type = models.ForeignKey(
-        ContentType,
-        models.CASCADE,
-        null=True,
-    )
-
+    content_type = models.ForeignKey(ContentType, models.CASCADE, null=True)
     object_id = models.PositiveIntegerField(null=True)
 
     class Meta:

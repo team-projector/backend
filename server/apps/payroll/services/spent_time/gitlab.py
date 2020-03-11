@@ -8,11 +8,7 @@ from apps.development.models import Issue
 from apps.users.models import User
 
 
-def add_spent_time(
-    user: User,
-    issue: Issue,
-    seconds: int,
-) -> None:
+def add_spent_time(user: User, issue: Issue, seconds: int) -> None:
     """Add spent time for issue."""
     gl = get_gitlab_client(user.gl_token)
 

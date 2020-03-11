@@ -10,8 +10,7 @@ class Bonus(Payroll):
     """The bonus model."""
 
     comment = models.TextField(
-        verbose_name=_("VN__COMMENT"),
-        help_text=_("HT__COMMENT"),
+        verbose_name=_("VN__COMMENT"), help_text=_("HT__COMMENT"),
     )
 
     class Meta:

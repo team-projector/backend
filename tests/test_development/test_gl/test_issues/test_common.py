@@ -13,13 +13,9 @@ from tests.test_development.test_gl.helpers import (
 )
 from tests.test_users.factories.gitlab import GlUserFactory
 
-Context = namedtuple("Context", [
-    "project",
-    "gl_project",
-    "gl_assignee",
-    "issue",
-    "gl_issue"
-])
+Context = namedtuple(
+    "Context", ["project", "gl_project", "gl_assignee", "issue", "gl_issue"]
+)
 
 
 @pytest.fixture()
@@ -27,19 +23,13 @@ def context(gl_mocker) -> Context:
     project, gl_project = initializers.init_project()
     gl_assignee = GlUserFactory.create()
     issue, gl_issue = initializers.init_issue(
-        project,
-        gl_project,
-        gl_kwargs={
-            "assignee": gl_assignee,
-        },
+        project, gl_project, gl_kwargs={"assignee": gl_assignee},
     )
 
     gl_mock.register_user(gl_mocker, gl_assignee)
     gl_mock.mock_issue_endpoints(gl_mocker, gl_project, gl_issue)
     gl_mock.mock_project_endpoints(
-        gl_mocker,
-        gl_project,
-        issues=[gl_issue],
+        gl_mocker, gl_project, issues=[gl_issue],
     )
 
     return Context(
@@ -68,9 +58,10 @@ def test_update_last_sync(db, context):
     gl_checkers.check_issue(issue, context.gl_issue)
 
     context.project.refresh_from_db()
-    assert timezone.datetime.date(
-        context.project.gl_last_issues_sync
-    ) == timezone.now().date()
+    assert (
+        timezone.datetime.date(context.project.gl_last_issues_sync)
+        == timezone.now().date()
+    )
 
 
 def test_no_milestone_in_db(db, context, gl_client):
@@ -78,9 +69,7 @@ def test_no_milestone_in_db(db, context, gl_client):
     gl_issue_manager = gl_project_loaded.issues.get(id=context.gl_issue["iid"])
 
     IssueGlManager().update_project_issue(
-        context.project,
-        gl_project_loaded,
-        gl_issue_manager,
+        context.project, gl_project_loaded, gl_issue_manager,
     )
 
     issue = Issue.objects.first()
@@ -101,9 +90,7 @@ def test_milestone_in_db(db, context, gl_client):
     gl_issue_manager = gl_project_loaded.issues.get(id=context.gl_issue["iid"])
 
     IssueGlManager().update_project_issue(
-        context.project,
-        gl_project_loaded,
-        gl_issue_manager,
+        context.project, gl_project_loaded, gl_issue_manager,
     )
 
     issue = Issue.objects.first()

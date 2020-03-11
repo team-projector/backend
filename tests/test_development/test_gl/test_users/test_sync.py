@@ -20,14 +20,9 @@ def test_success(db, gl_mocker):
 
 
 def test_already_exists_email_filled(db, gl_mocker):
-    gl_user = GlUserFactory.create(
-        public_email="gitlab_email"
-    )
+    gl_user = GlUserFactory.create(public_email="gitlab_email")
 
-    user = UserFactory.create(
-        gl_id=gl_user["id"],
-        email="db_email",
-    )
+    user = UserFactory.create(gl_id=gl_user["id"], email="db_email")
 
     gl_mock.register_user(gl_mocker, gl_user)
 
@@ -40,14 +35,9 @@ def test_already_exists_email_filled(db, gl_mocker):
 
 
 def test_already_exists_email_empty(db, gl_mocker):
-    gl_user = GlUserFactory.create(
-        public_email="gitlab_email"
-    )
+    gl_user = GlUserFactory.create(public_email="gitlab_email")
 
-    user = UserFactory.create(
-        gl_id=gl_user["id"],
-        email=""
-    )
+    user = UserFactory.create(gl_id=gl_user["id"], email="")
 
     gl_mock.register_user(gl_mocker, gl_user)
 

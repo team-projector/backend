@@ -12,8 +12,7 @@ from apps.payroll.models import WorkBreak
 
 
 class UpdateWorkBreakMutation(
-    ArgumentsValidationMixin,
-    BaseMutation,
+    ArgumentsValidationMixin, BaseMutation,
 ):
     """Update work break after validation."""
 
@@ -34,8 +33,7 @@ class UpdateWorkBreakMutation(
     def perform_mutate(cls, info, cleaned_data):  # noqa: WPS110
         """Update work break."""
         work_break = get_object_or_not_found(
-            WorkBreak.objects.all(),
-            pk=cleaned_data["id"],
+            WorkBreak.objects.all(), pk=cleaned_data["id"],
         )
 
         work_break.comment = cleaned_data["comment"]
@@ -45,6 +43,4 @@ class UpdateWorkBreakMutation(
         work_break.user = cleaned_data["user"]
         work_break.save()
 
-        return UpdateWorkBreakMutation(
-            work_break=work_break,
-        )
+        return UpdateWorkBreakMutation(work_break=work_break)

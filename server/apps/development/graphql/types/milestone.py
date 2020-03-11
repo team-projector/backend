@@ -38,10 +38,6 @@ class MilestoneType(BaseDjangoObjectType):
         return get_milestone_problems(self)
 
     @classmethod
-    def get_queryset(
-        cls,
-        queryset,
-        info,  # noqa: WPS110
-    ) -> QuerySet:
+    def get_queryset(cls, queryset, info) -> QuerySet:  # noqa: WPS110
         """Get milestones."""
         return filter_allowed_for_user(queryset, info.context.user)

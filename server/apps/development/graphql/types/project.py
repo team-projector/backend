@@ -18,13 +18,16 @@ class ProjectType(BaseDjangoObjectType):
     """Project type."""
 
     milestones = DataSourceConnectionField(
-        MilestoneType,
-        filterset_class=MilestonesFilterSet,
+        MilestoneType, filterset_class=MilestonesFilterSet,
     )
 
     def resolve_milestones(self: Project, info, **kwargs):  # noqa: WPS110
         """Get project milestones."""
-        if isinstance(getattr(self, "parent_type", None), IssuesProjectSummary):
+        is_summary = isinstance(
+            getattr(self, "parent_type", None), IssuesProjectSummary,
+        )
+
+        if is_summary:
             return ProjectType.handle_within_summary(self, **kwargs)
 
         resolver = ProjectMilestonesResolver(self, info, **kwargs)

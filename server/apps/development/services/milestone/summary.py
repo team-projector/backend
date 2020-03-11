@@ -34,8 +34,8 @@ class MilestonesSummaryProvider:
             fields_set = set(self._fields)
             aggregations = {
                 name: aggr
-                for name, aggr
-                in aggregations.items() if name in fields_set
+                for name, aggr in aggregations.items()
+                if name in fields_set
             }
 
         return self._queryset.aggregate(**aggregations)

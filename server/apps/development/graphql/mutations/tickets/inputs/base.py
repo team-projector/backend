@@ -18,27 +18,27 @@ class TicketBaseInput(serializers.ModelSerializer):
     # "AssertionError: Found different types with the same name in the schema:
     # type, type."
     type = ChoicesField(  # noqa: A003
-        required=False,
-        choices=TicketType.values,
+        required=False, choices=TicketType.values,
     )
 
-    state = ChoicesField(
-        choices=TicketState.values,
-        required=False,
-    )
+    state = ChoicesField(choices=TicketState.values, required=False)
 
     issues = serializers.PrimaryKeyRelatedField(
-        many=True,
-        required=False,
-        write_only=True,
-        queryset=Issue.objects,
+        many=True, required=False, write_only=True, queryset=Issue.objects,
     )
 
     class Meta:
         model = Ticket
         fields = [
-            "type", "title", "start_date", "due_date", "url", "issues", "role",
-            "state", "milestone",
+            "type",
+            "title",
+            "start_date",
+            "due_date",
+            "url",
+            "issues",
+            "role",
+            "state",
+            "milestone",
         ]
 
     def get_fields(self) -> Dict[str, Field]:

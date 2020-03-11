@@ -18,47 +18,77 @@ from apps.users.models import User
 
 @admin.register(User)
 class UserAdmin(
-    mixins.ForceSyncEntityMixin,
-    DjUserAdmin,
-    base.BaseModelAdmin,
+    mixins.ForceSyncEntityMixin, DjUserAdmin, base.BaseModelAdmin,
 ):
     """A class representing User model for admin dashboard."""
 
     list_display = (
-        "login", "name", "email", "hour_rate", "last_login", "is_active",
-        "is_staff", "change_password_link",
+        "login",
+        "name",
+        "email",
+        "hour_rate",
+        "last_login",
+        "is_active",
+        "is_staff",
+        "change_password_link",
     )
     list_filter = ("is_active", "is_staff")
     ordering = ("login",)
     sortable_by = ()
     search_fields = ("login",)
     add_fieldsets = (
-        (None, {
-            "classes": ("wide",),
-            "fields": ("login", "password1", "password2"),
-        }),
+        (
+            None,
+            {
+                "classes": ("wide",),
+                "fields": ("login", "password1", "password2"),
+            },
+        ),
     )
 
     exclude = ("user_permissions",)
     form = UserAdminForm
     fieldsets = (
-        (None, {
-            "fields": (
-                "login", "email", "name", "roles", "is_superuser", "is_staff",
-                "is_active", "last_login", "position",
-            ),
-        }),
-        ("GitLab", {
-            "fields": (
-                "gl_avatar", "gl_id", "gl_url", "gl_last_sync", "gl_token",
-            ),
-        }),
-        ("Costs", {
-            "fields": (
-                "hour_rate", "customer_hour_rate", "tax_rate",
-                "daily_work_hours", "annual_paid_work_breaks_days",
-            ),
-        }),
+        (
+            None,
+            {
+                "fields": (
+                    "login",
+                    "email",
+                    "name",
+                    "roles",
+                    "is_superuser",
+                    "is_staff",
+                    "is_active",
+                    "last_login",
+                    "position",
+                ),
+            },
+        ),
+        (
+            "GitLab",
+            {
+                "fields": (
+                    "gl_avatar",
+                    "gl_id",
+                    "gl_url",
+                    "gl_last_sync",
+                    "gl_token",
+                ),
+            },
+        ),
+        (
+            "Costs",
+            {
+                "fields": (
+                    "hour_rate",
+                    "customer_hour_rate",
+                    "tax_rate",
+                    "daily_work_hours",
+                    "annual_paid_work_breaks_days",
+                ),
+            },
+        ),
     )
     readonly_fields = ("last_login",)
     change_password_form = AdminPasswordChangeForm
@@ -70,8 +100,7 @@ class UserAdmin(
         return format_html(
             '<a href="{}">change password</a>',  # noqa: P103
             reverse(
-                "admin:auth_user_password_change",
-                kwargs={"id": instance.pk},
+                "admin:auth_user_password_change", kwargs={"id": instance.pk},
             ),
         )
 

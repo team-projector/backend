@@ -33,10 +33,7 @@ class TeamMember(models.Model):
         help_text=_("HT__USER"),
     )
 
-    roles = BitField(
-        flags=TeamMemberRole.choices,
-        default=0,
-    )
+    roles = BitField(flags=TeamMemberRole.choices, default=0)
 
     objects = TeamMemberManager()  # noqa: WPS110
 

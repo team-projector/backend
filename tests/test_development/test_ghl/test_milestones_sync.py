@@ -24,7 +24,8 @@ def test_sync_milestone_group(user, client, gl_mocker):
     group = ProjectGroupFactory.create(gl_id=gl_group.id)
 
     gl_milestone = AttrDict(
-        GlGroupMilestoneFactory(state=MilestoneState.CLOSED))
+        GlGroupMilestoneFactory(state=MilestoneState.CLOSED)
+    )
     milestone = ProjectGroupMilestoneFactory.create(
         gl_id=gl_milestone.id, owner=group, state=MilestoneState.ACTIVE
     )
@@ -38,13 +39,13 @@ def test_sync_milestone_group(user, client, gl_mocker):
     assert milestone.state == MilestoneState.ACTIVE
 
     client.user = user
-    info = AttrDict({
-        "context": client
-    })
+    info = AttrDict({"context": client})
 
-    milestone_mutated = SyncMilestoneMutation().do_mutate(
-        None, info, id=milestone.id
-    ).milestone
+    milestone_mutated = (
+        SyncMilestoneMutation()
+        .do_mutate(None, info, id=milestone.id)
+        .milestone
+    )
 
     assert milestone_mutated.id == milestone_mutated.id
     assert milestone_mutated.gl_id == milestone_mutated.gl_id
@@ -59,7 +60,8 @@ def test_sync_milestone_project(user, client, gl_mocker):
     project = ProjectFactory.create(gl_id=gl_project.id)
 
     gl_milestone = AttrDict(
-        GlProjectMilestoneFactory(state=MilestoneState.CLOSED))
+        GlProjectMilestoneFactory(state=MilestoneState.CLOSED)
+    )
     milestone = ProjectMilestoneFactory.create(
         gl_id=gl_milestone.id, owner=project, state=MilestoneState.ACTIVE
     )
@@ -73,13 +75,13 @@ def test_sync_milestone_project(user, client, gl_mocker):
     assert milestone.state == MilestoneState.ACTIVE
 
     client.user = user
-    info = AttrDict({
-        "context": client
-    })
+    info = AttrDict({"context": client})
 
-    milestone_mutated = SyncMilestoneMutation().do_mutate(
-        None, info, id=milestone.id
-    ).milestone
+    milestone_mutated = (
+        SyncMilestoneMutation()
+        .do_mutate(None, info, id=milestone.id)
+        .milestone
+    )
 
     assert milestone_mutated.id == milestone_mutated.id
     assert milestone_mutated.gl_id == milestone_mutated.gl_id
@@ -94,13 +96,9 @@ def test_sync_milestone_inccorect_owner(user, client):
     )
 
     client.user = user
-    info = AttrDict({
-        "context": client
-    })
+    info = AttrDict({"context": client})
 
-    SyncMilestoneMutation().do_mutate(
-        None, info, id=milestone.id
-    )
+    SyncMilestoneMutation().do_mutate(None, info, id=milestone.id)
 
     milestone.refresh_from_db()
     assert milestone.state == MilestoneState.ACTIVE

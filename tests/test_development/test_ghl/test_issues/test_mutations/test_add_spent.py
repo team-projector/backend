@@ -36,9 +36,7 @@ def test_query(project_manager, ghl_client, gl_mocker, user):
 
     gl_project_issue = GlIssueFactory.create(id=gl_project["id"])
     issue = IssueFactory.create(
-        gl_iid=gl_project_issue["iid"],
-        user=user,
-        project=project,
+        gl_iid=gl_project_issue["iid"], user=user, project=project,
     )
 
     IssueFactory.create_batch(5, project=project)
@@ -46,10 +44,7 @@ def test_query(project_manager, ghl_client, gl_mocker, user):
 
     response = ghl_client.execute(
         GHL_QUERY_ADD_SPENT_TO_ISSUE,
-        variable_values={
-            "id": issue.pk,
-            "seconds": 60,
-        }
+        variable_values={"id": issue.pk, "seconds": 60},
     )
 
     assert "errors" not in response
@@ -59,16 +54,11 @@ def test_query(project_manager, ghl_client, gl_mocker, user):
 
 
 def test_user_without_gl_token(
-    issue,
-    ghl_auth_mock_info,
-    add_spent_issue_mutation
+    issue, ghl_auth_mock_info, add_spent_issue_mutation
 ):
     with pytest.raises(GraphQLInputError) as exc_info:
         add_spent_issue_mutation(
-            root=None,
-            info=ghl_auth_mock_info,
-            id=issue.id,
-            seconds=60
+            root=None, info=ghl_auth_mock_info, id=issue.id, seconds=60,
         )
 
     extensions = exc_info.value.extensions  # noqa: WPS441
@@ -77,21 +67,13 @@ def test_user_without_gl_token(
     assert extensions["fieldErrors"][0]["messages"][0] == ERROR_MSG_NO_GL_TOKEN
 
 
-def test_bad_time(
-    issue,
-    user,
-    ghl_auth_mock_info,
-    add_spent_issue_mutation
-):
+def test_bad_time(issue, user, ghl_auth_mock_info, add_spent_issue_mutation):
     user.gl_token = "token"
     user.save()
 
     with pytest.raises(GraphQLInputError) as exc_info:
         add_spent_issue_mutation(
-            root=None,
-            info=ghl_auth_mock_info,
-            id=issue.id,
-            seconds=-30
+            root=None, info=ghl_auth_mock_info, id=issue.id, seconds=-30,
         )
 
     extensions = exc_info.value.extensions  # noqa: WPS441

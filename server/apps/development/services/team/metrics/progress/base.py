@@ -19,10 +19,7 @@ class ProgressMetricsProvider:
     """Progress metrics provider."""
 
     def __init__(
-        self,
-        team: Team,
-        start: date,
-        end: date,
+        self, team: Team, start: date, end: date,
     ):
         """Initialize self."""
         self.team = team

@@ -19,8 +19,7 @@ def test_query(user, ghl_client):
     work_break = WorkBreakFactory.create(user=user)
 
     response = ghl_client.execute(
-        GHL_QUERY_DELETE_WORK_BREAK,
-        variable_values={"id": work_break.id},
+        GHL_QUERY_DELETE_WORK_BREAK, variable_values={"id": work_break.id},
     )
 
     assert response["data"]["deleteWorkBreak"]["ok"]

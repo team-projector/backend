@@ -13,6 +13,5 @@ class SalariesQueries(graphene.ObjectType):
 
     salary = DatasourceRelayNode.Field(SalaryType)
     all_salaries = DataSourceConnectionField(
-        SalaryType,
-        filterset_class=SalaryFilterSet,
+        SalaryType, filterset_class=SalaryFilterSet,
     )

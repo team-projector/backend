@@ -10,15 +10,10 @@ from tests.test_development.factories import IssueFactory
 def test_no_filter(user):
     IssueFactory.create_batch(2, user=user)
     IssueFactory.create_batch(
-        5,
-        user=user,
-        due_date=datetime.now().date(),
-        time_estimate=1000
+        5, user=user, due_date=datetime.now().date(), time_estimate=1000
     )
 
-    results = IssuesFilterSet(
-        queryset=Issue.objects.all()
-    ).qs
+    results = IssuesFilterSet(queryset=Issue.objects.all()).qs
 
     assert results.count() == 7
 
@@ -26,15 +21,11 @@ def test_no_filter(user):
 def test_has_problems(user):
     issues = IssueFactory.create_batch(2, user=user)
     IssueFactory.create_batch(
-        5,
-        user=user,
-        due_date=datetime.now().date(),
-        time_estimate=1000
+        5, user=user, due_date=datetime.now().date(), time_estimate=1000
     )
 
     results = IssuesFilterSet(
-        data={"problems": True},
-        queryset=Issue.objects.all()
+        data={"problems": True}, queryset=Issue.objects.all()
     ).qs
 
     assert results.count() == 2
@@ -44,15 +35,11 @@ def test_has_problems(user):
 def test_no_problems(user):
     issues = IssueFactory.create_batch(2, user=user)
     IssueFactory.create_batch(
-        5,
-        user=user,
-        due_date=datetime.now().date(),
-        time_estimate=1000
+        5, user=user, due_date=datetime.now().date(), time_estimate=1000
     )
 
     results = IssuesFilterSet(
-        data={"problems": False},
-        queryset=Issue.objects.all()
+        data={"problems": False}, queryset=Issue.objects.all()
     ).qs
 
     assert results.count() == 5

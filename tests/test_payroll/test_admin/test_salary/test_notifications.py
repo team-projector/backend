@@ -22,7 +22,7 @@ def test_send_notification(admin_client, salary_admin):
             "/admin/payroll/salary/{0}/change/".format(salary.pk),
             model_to_dict_form(salary),
         ),
-        object_id=str(salary.id)
+        object_id=str(salary.id),
     )
 
     trigger_on_commit()
@@ -46,7 +46,7 @@ def test_payed_changed_to_false(admin_client, salary_admin):
             "/admin/payroll/salary/{0}/change/".format(salary.pk),
             model_to_dict_form(salary),
         ),
-        object_id=str(salary.id)
+        object_id=str(salary.id),
     )
 
     trigger_on_commit()
@@ -66,7 +66,7 @@ def test_user_without_email_but_payed(admin_client, salary_admin):
             "/admin/payroll/salary/{0}/change/".format(salary.pk),
             model_to_dict_form(salary),
         ),
-        object_id=str(salary.id)
+        object_id=str(salary.id),
     )
 
     trigger_on_commit()
@@ -86,7 +86,7 @@ def test_another_field_changed(admin_client, salary_admin):
             "/admin/payroll/salary/{0}/change/".format(salary.pk),
             model_to_dict_form(salary),
         ),
-        object_id=str(salary.id)
+        object_id=str(salary.id),
     )
 
     trigger_on_commit()
@@ -107,7 +107,7 @@ def test_another_field_changed_and_payed(admin_client, salary_admin):
             "/admin/payroll/salary/{0}/change/".format(salary.pk),
             model_to_dict_form(salary),
         ),
-        object_id=str(salary.id)
+        object_id=str(salary.id),
     )
 
     trigger_on_commit()

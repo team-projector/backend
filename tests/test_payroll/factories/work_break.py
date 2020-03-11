@@ -13,11 +13,13 @@ from tests.test_users.factories.user import UserFactory
 class WorkBreakFactory(factory.django.DjangoModelFactory):
     user = factory.SubFactory(UserFactory)
     comment = factory.Faker("text", max_nb_chars=200)
-    reason = random.choice((
-        WorkBreakReason.DAYOFF,
-        WorkBreakReason.VACATION,
-        WorkBreakReason.DISEASE
-    ))
+    reason = random.choice(
+        (
+            WorkBreakReason.DAYOFF,
+            WorkBreakReason.VACATION,
+            WorkBreakReason.DISEASE,
+        )
+    )
 
     from_date = factory.Faker(
         "date_time_this_year",

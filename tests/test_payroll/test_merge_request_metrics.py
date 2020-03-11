@@ -16,24 +16,16 @@ def test_payroll_metrics(user):
     )
 
     MergeRequestSpentTimeFactory.create(
-        user=user,
-        base=mergerequest,
-        time_spent=seconds(hours=3)
+        user=user, base=mergerequest, time_spent=seconds(hours=3)
     )
     MergeRequestSpentTimeFactory.create(
-        user=user,
-        base=mergerequest,
-        time_spent=seconds(hours=2)
+        user=user, base=mergerequest, time_spent=seconds(hours=2)
     )
     MergeRequestSpentTimeFactory.create(
-        user=user,
-        base=mergerequest,
-        time_spent=seconds(hours=4)
+        user=user, base=mergerequest, time_spent=seconds(hours=4)
     )
     MergeRequestSpentTimeFactory.create(
-        user=user,
-        base=mergerequest,
-        time_spent=-seconds(hours=3)
+        user=user, base=mergerequest, time_spent=-seconds(hours=3)
     )
 
     metrics = get_merge_request_metrics(mergerequest)
@@ -52,25 +44,25 @@ def test_paid_metrics(user):
         user=user,
         base=mergerequest,
         salary=salary,
-        time_spent=seconds(hours=3)
+        time_spent=seconds(hours=3),
     )
     MergeRequestSpentTimeFactory.create(
         user=user,
         base=mergerequest,
         salary=salary,
-        time_spent=seconds(hours=2)
+        time_spent=seconds(hours=2),
     )
     MergeRequestSpentTimeFactory.create(
         user=user,
         base=mergerequest,
         salary=salary,
-        time_spent=seconds(hours=4)
+        time_spent=seconds(hours=4),
     )
     MergeRequestSpentTimeFactory.create(
         user=user,
         base=mergerequest,
         salary=salary,
-        time_spent=-seconds(hours=3)
+        time_spent=-seconds(hours=3),
     )
 
     metrics = get_merge_request_metrics(mergerequest)
@@ -89,23 +81,19 @@ def test_complex_metrics(user):
         user=user,
         base=mergerequest,
         salary=salary,
-        time_spent=seconds(hours=3)
+        time_spent=seconds(hours=3),
     )
     MergeRequestSpentTimeFactory.create(
         user=user,
         base=mergerequest,
         salary=salary,
-        time_spent=seconds(hours=2)
+        time_spent=seconds(hours=2),
     )
     MergeRequestSpentTimeFactory.create(
-        user=user,
-        base=mergerequest,
-        time_spent=seconds(hours=4)
+        user=user, base=mergerequest, time_spent=seconds(hours=4)
     )
     MergeRequestSpentTimeFactory.create(
-        user=user,
-        base=mergerequest,
-        time_spent=-seconds(hours=3)
+        user=user, base=mergerequest, time_spent=-seconds(hours=3)
     )
 
     metrics = get_merge_request_metrics(mergerequest)

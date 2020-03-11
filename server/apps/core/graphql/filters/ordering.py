@@ -9,8 +9,6 @@ from apps.core.graphql.filters.mixins import (
 
 
 class OrderingFilter(
-    CamelCasedOrderingMixin,
-    NullsAlwaysLastOrderingMixin,
-    BaseOrderingFilter,
+    CamelCasedOrderingMixin, NullsAlwaysLastOrderingMixin, BaseOrderingFilter,
 ):
     """Ordering filter."""

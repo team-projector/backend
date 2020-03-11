@@ -45,9 +45,7 @@ class GitLabOAuth2Backend(SocialGitLabOAuth2):
         response = kwargs.get("response")
 
         if response:
-            return User.objects.filter(
-                login=response["username"],
-            ).first()
+            return User.objects.filter(login=response["username"]).first()
 
     def set_data(self, **kwargs):
         """

@@ -16,8 +16,7 @@ def test_salaries_filter_by_user(user):
     salaries_user_2 = SalaryFactory.create_batch(size=5, user=user_2)
 
     results = SalaryFilterSet(
-        data={"user": user_2.id},
-        queryset=Salary.objects.all(),
+        data={"user": user_2.id}, queryset=Salary.objects.all(),
     ).qs
 
     assert results.count() == 5
@@ -41,9 +40,7 @@ def test_salaries_filter_by_team(user, client):
     client.user = user
 
     results = SalaryFilterSet(
-        data={"team": team.id},
-        queryset=Salary.objects.all(),
-        request=client,
+        data={"team": team.id}, queryset=Salary.objects.all(), request=client,
     ).qs
 
     assert results.count() == 2

@@ -22,24 +22,17 @@ class SlackClient:
         """
         with suppress(TypeError, SlackApiError):
             return self._client.im_open(
-                user=self._client.users_lookupByEmail(
-                    email=email,
-                ).get("user").get("id"),
+                user=self._client.users_lookupByEmail(email=email)
+                .get("user")
+                .get("id"),
             ).get("channel")
 
-    def send_message_to_channel(
-        self,
-        channel,
-        msg: str,
-        **kwargs,
-    ) -> None:
+    def send_message_to_channel(self, channel, msg: str, **kwargs) -> None:
         """
         Send message to channel.
 
         https://api.slack.com/methods/chat.postMessage
         """
         self._client.chat_postMessage(
-            channel=channel,
-            text=msg,
-            **kwargs,
+            channel=channel, text=msg, **kwargs,
         )

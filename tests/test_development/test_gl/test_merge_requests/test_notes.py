@@ -16,22 +16,17 @@ from tests.test_users.factories.gitlab import GlUserFactory
 def test_notes(db, gl_mocker, gl_client):
     project, gl_project = initializers.init_project()
     merge_request, gl_merge_request = initializers.init_merge_request(
-        project,
-        gl_project,
+        project, gl_project,
     )
     gl_author = GlUserFactory.create()
     gl_note = GlNoteFactory.create(
-        author=gl_author,
-        body="added 1h of time spent at 2000-01-01",
+        author=gl_author, body="added 1h of time spent at 2000-01-01",
     )
 
     gl_mock.register_user(gl_mocker, gl_author)
     gl_mock.mock_project_endpoints(gl_mocker, gl_project)
     gl_mock.mock_merge_request_endpoints(
-        gl_mocker,
-        gl_project,
-        gl_merge_request,
-        notes=[gl_note],
+        gl_mocker, gl_project, gl_merge_request, notes=[gl_note],
     )
 
     gl_project = gl_client.projects.get(id=project.gl_id)

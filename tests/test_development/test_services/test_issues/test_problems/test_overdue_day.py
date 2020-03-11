@@ -12,8 +12,7 @@ from tests.test_development.factories import IssueFactory
 
 def test_overdue_due_day(user):
     problem_issue = IssueFactory.create(
-        user=user,
-        due_date=datetime.now().date() - timedelta(days=1),
+        user=user, due_date=datetime.now().date() - timedelta(days=1),
     )
 
     assert get_issue_problems(problem_issue) == [PROBLEM_OVER_DUE_DAY]

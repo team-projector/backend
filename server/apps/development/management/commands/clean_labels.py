@@ -15,9 +15,7 @@ class Command(BaseCommand):
     def add_arguments(self, parser):
         """Add call arguments."""
         parser.add_argument(
-            "--group",
-            type=str,
-            help="Gitlab group_id for sync labels",
+            "--group", type=str, help="Gitlab group_id for sync labels",
         )
         parser.add_argument(
             "-l",
@@ -49,9 +47,11 @@ class Command(BaseCommand):
                         "Failed on {0} operation: {1}".format(num, operation),
                     )
 
-                    self.stdout("Left operations:\n {0}".format(
-                        "\n".join(operations[num:]),
-                    ))
+                    self.stdout(
+                        "Left operations:\n {0}".format(
+                            "\n".join(operations[num:]),
+                        ),
+                    )
                 pbar.update()
 
     def _generate_operations(self, client) -> Tuple[Any, ...]:  # type: ignore
@@ -67,10 +67,7 @@ class Command(BaseCommand):
 
             Project._adjust_labels_for_single_item = _wrapped  # noqa: WPS437
 
-            return cleaner.clean_group(
-                self.group_for_sync,
-                dry_run=True,
-            )
+            return cleaner.clean_group(self.group_for_sync, dry_run=True)
 
     def _get_total(self, client) -> int:
         gr = client.groups.get(self.group_for_sync)

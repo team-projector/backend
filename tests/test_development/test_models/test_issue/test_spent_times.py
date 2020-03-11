@@ -12,8 +12,7 @@ from tests.test_payroll.factories import IssueSpentTimeFactory
 
 def test_reset_spend(user):
     IssueNoteFactory.create(
-        type=NoteType.RESET_SPEND,
-        user=user,
+        type=NoteType.RESET_SPEND, user=user,
     )
 
     assert SpentTime.objects.count() == 0
@@ -29,10 +28,7 @@ def test_time_spend(user):
     IssueNoteFactory.create(
         type=NoteType.TIME_SPEND,
         user=user,
-        data={
-            "date": str(datetime.now().date()),
-            "spent": seconds(hours=2)
-        },
+        data={"date": str(datetime.now().date()), "spent": seconds(hours=2)},
     )
 
     assert SpentTime.objects.count() == 0
@@ -46,8 +42,7 @@ def test_time_spend(user):
 
 def test_moved_from(user):
     IssueNoteFactory.create(
-        type=NoteType.MOVED_FROM,
-        user=user,
+        type=NoteType.MOVED_FROM, user=user,
     )
 
     assert SpentTime.objects.count() == 0
@@ -60,8 +55,7 @@ def test_moved_from(user):
 
 def test_type_not_exist(user):
     IssueNoteFactory.create(
-        type="not_exist",
-        user=user,
+        type="not_exist", user=user,
     )
 
     issue = Issue.objects.first()
@@ -71,18 +65,12 @@ def test_type_not_exist(user):
 
 
 def test_spent_time_exists(user):
-    note = IssueNoteFactory.create(
-        type=NoteType.RESET_SPEND,
-        user=user,
-    )
+    note = IssueNoteFactory.create(type=NoteType.RESET_SPEND, user=user)
 
     issue = Issue.objects.first()
 
     IssueSpentTimeFactory(
-        user=user,
-        base=issue,
-        note=note,
-        time_spent=0,
+        user=user, base=issue, note=note, time_spent=0,
     )
 
     assert SpentTime.objects.count() == 1

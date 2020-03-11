@@ -17,13 +17,17 @@ from apps.development.tasks import sync_project_issue_task
 
 @admin.register(Issue)
 class IssueAdmin(
-    ForceSyncEntityMixin,
-    BaseModelAdmin,
+    ForceSyncEntityMixin, BaseModelAdmin,
 ):
     """A class representing Issue model for admin dashboard."""
 
     list_display = (
-        "title", "user", "milestone", "state", "created_at", "gl_last_sync",
+        "title",
+        "user",
+        "milestone",
+        "state",
+        "created_at",
+        "gl_last_sync",
     )
     list_filter = (
         ProjectFilter,
@@ -40,6 +44,5 @@ class IssueAdmin(
     def sync_handler(self, issue):
         """Syncing issue."""
         sync_project_issue_task.delay(
-            issue.project.gl_id,
-            issue.gl_iid,
+            issue.project.gl_id, issue.gl_iid,
         )

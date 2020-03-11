@@ -19,22 +19,14 @@ def test_paid(user):
     salary = SalaryFactory.create(user=user)
 
     IssueSpentTimeFactory.create(
-        user=user,
-        base=issue,
-        salary=salary,
-        time_spent=seconds(hours=3),
+        user=user, base=issue, salary=salary, time_spent=seconds(hours=3),
     )
     IssueSpentTimeFactory.create(
-        user=user,
-        base=issue,
-        salary=salary,
-        time_spent=-seconds(hours=1),
+        user=user, base=issue, salary=salary, time_spent=-seconds(hours=1),
     )
 
     queryset = SpentTime.objects.annotate_payrolls(payroll=False)
-    total_paid = queryset.aggregate(
-        total_paid=Sum("paid")
-    )["total_paid"]
+    total_paid = queryset.aggregate(total_paid=Sum("paid"))["total_paid"]
 
     assert total_paid == 2 * user.hour_rate
 
@@ -43,19 +35,15 @@ def test_payroll_metrics(user):
     issue = IssueFactory.create(user=user, state=IssueState.OPENED)
 
     IssueSpentTimeFactory.create(
-        user=user,
-        base=issue,
-        time_spent=seconds(hours=3),
+        user=user, base=issue, time_spent=seconds(hours=3),
     )
     IssueSpentTimeFactory.create(
-        user=user,
-        base=issue,
-        time_spent=-seconds(hours=1),
+        user=user, base=issue, time_spent=-seconds(hours=1),
     )
 
     queryset = SpentTime.objects.annotate_payrolls(paid=False)
-    total_payroll = queryset.aggregate(
-        total_payroll=Sum("payroll")
-    )["total_payroll"]
+    total_payroll = queryset.aggregate(total_payroll=Sum("payroll"))[
+        "total_payroll"
+    ]
 
     assert total_payroll == 2 * user.hour_rate

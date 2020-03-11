@@ -20,9 +20,7 @@ class NoInputMutation(AuthMutation, graphene.Mutation):
 
     @classmethod
     def mutate(
-        cls,
-        root: Optional[object],
-        info: ResolveInfo,  # noqa: WPS110
+        cls, root: Optional[object], info: ResolveInfo,  # noqa: WPS110
     ):
         """Mutation handler."""
         cls.check_premissions(root, info)
@@ -31,9 +29,7 @@ class NoInputMutation(AuthMutation, graphene.Mutation):
 
     @classmethod
     def check_premissions(
-        cls,
-        root: Optional[object],
-        info: ResolveInfo,  # noqa: WPS110
+        cls, root: Optional[object], info: ResolveInfo,  # noqa: WPS110
     ) -> None:
         """Check permissions handler."""
         if not cls.has_permission(root, info):
@@ -41,9 +37,7 @@ class NoInputMutation(AuthMutation, graphene.Mutation):
 
     @classmethod
     def perform_mutate(
-        cls,
-        root: Optional[object],
-        info: ResolveInfo,  # noqa: WPS110
+        cls, root: Optional[object], info: ResolveInfo,  # noqa: WPS110
     ) -> "NoInputMutation":
         """Overrideable mutation handler."""
         raise NotImplementedError

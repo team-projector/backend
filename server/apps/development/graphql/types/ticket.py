@@ -39,11 +39,7 @@ class TicketType(BaseDjangoObjectType):
         name = "Ticket"
 
     @classmethod
-    def get_queryset(
-        cls,
-        queryset,
-        info,  # noqa: WPS110
-    ) -> QuerySet:
+    def get_queryset(cls, queryset, info) -> QuerySet:  # noqa: WPS110
         """Get tickets."""
         if graphql.is_field_selected(info, "edges.node.problems"):
             queryset = annotate_ticket_problems(queryset)

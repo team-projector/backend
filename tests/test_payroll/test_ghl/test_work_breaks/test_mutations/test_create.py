@@ -39,8 +39,7 @@ def test_query(user, ghl_client):
     }
 
     response = ghl_client.execute(
-        GHL_QUERY_CREATE_WORK_BREAK,
-        variable_values=create_variables,
+        GHL_QUERY_CREATE_WORK_BREAK, variable_values=create_variables,
     )
 
     dto = response["data"]["createWorkBreak"]["workBreak"]

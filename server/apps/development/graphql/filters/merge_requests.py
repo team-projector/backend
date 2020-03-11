@@ -35,9 +35,7 @@ class MergeRequestFilterSet(django_filters.FilterSet):
     project = django_filters.ModelChoiceFilter(queryset=Project.objects.all())
     team = TeamFilter()
 
-    order_by = OrderingFilter(
-        fields=("title", "created_at", "closed_at"),
-    )
+    order_by = OrderingFilter(fields=("title", "created_at", "closed_at"))
 
     class Meta:
         model = MergeRequest

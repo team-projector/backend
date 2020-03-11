@@ -9,18 +9,10 @@ from apps.users.models import Token
 from apps.users.services.token.create import create_user_token
 
 
-def login_user(
-    login: str,
-    password: str,
-    request,
-) -> Token:
+def login_user(login: str, password: str, request) -> Token:
     """Login user."""
     if login and password:
-        user = authenticate(
-            request=request,
-            login=login,
-            password=password,
-        )
+        user = authenticate(request=request, login=login, password=password)
 
         if not user:
             raise AuthenticationFailed(

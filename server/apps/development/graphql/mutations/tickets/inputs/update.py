@@ -19,10 +19,7 @@ class UpdateTicketInput(TicketBaseInput):
     """Ticket update serializer."""
 
     attach_issues = serializers.PrimaryKeyRelatedField(
-        many=True,
-        required=False,
-        write_only=True,
-        queryset=Issue.objects,
+        many=True, required=False, write_only=True, queryset=Issue.objects,
     )
 
     id = serializers.PrimaryKeyRelatedField(  # noqa:A003

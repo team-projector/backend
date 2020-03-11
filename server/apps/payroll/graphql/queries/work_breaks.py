@@ -13,6 +13,5 @@ class WorkBreaksQueries(graphene.ObjectType):
 
     work_break = DatasourceRelayNode.Field(WorkBreakType)
     all_work_breaks = DataSourceConnectionField(
-        WorkBreakType,
-        filterset_class=WorkBreakFilterSet,
+        WorkBreakType, filterset_class=WorkBreakFilterSet,
     )

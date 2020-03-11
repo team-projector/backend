@@ -27,9 +27,7 @@ def test_query(user, ghl_client):
 
     work_break = WorkBreakFactory.create(user=user)
 
-    response = ghl_client.execute(
-        GHL_QUERY_ALL_WORK_BREAKS,
-    )
+    response = ghl_client.execute(GHL_QUERY_ALL_WORK_BREAKS)
 
     assert response["data"]["breaks"]["count"] == 1
 
@@ -42,10 +40,7 @@ def test_query(user, ghl_client):
 def test_not_team_lead(ghl_auth_mock_info, all_work_breaks_query):
     WorkBreakFactory.create_batch(3)
 
-    response = all_work_breaks_query(
-        root=None,
-        info=ghl_auth_mock_info,
-    )
+    response = all_work_breaks_query(root=None, info=ghl_auth_mock_info)
 
     assert WorkBreak.objects.count() == 3
     assert not response.length

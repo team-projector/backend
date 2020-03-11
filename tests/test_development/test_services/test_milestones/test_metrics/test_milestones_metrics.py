@@ -21,8 +21,7 @@ from tests.test_users.factories import UserFactory
 @pytest.fixture()
 def user(db):
     yield UserFactory.create(
-        customer_hour_rate=100,
-        hour_rate=1000,
+        customer_hour_rate=100, hour_rate=1000,
     )
 
 
@@ -53,10 +52,7 @@ def test_metrics_issues(user):
     milestone = ProjectMilestoneFactory.create(budget=10000)
 
     IssueFactory.create_batch(
-        3,
-        user=user,
-        milestone=milestone,
-        total_time_spent=0,
+        3, user=user, milestone=milestone, total_time_spent=0,
     )
 
     metrics = get_milestone_metrics(milestone)

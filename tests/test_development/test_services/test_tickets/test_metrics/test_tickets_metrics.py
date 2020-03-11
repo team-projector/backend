@@ -25,19 +25,19 @@ def test_metrics(db):
         ticket=ticket,
         state=IssueState.OPENED,
         total_time_spent=0,
-        time_estimate=seconds(hours=1)
+        time_estimate=seconds(hours=1),
     )
     IssueFactory.create(
         ticket=ticket,
         state=IssueState.CLOSED,
         total_time_spent=seconds(hours=1),
-        time_estimate=seconds(hours=2)
+        time_estimate=seconds(hours=2),
     )
     IssueFactory.create(
         ticket=ticket,
         state=IssueState.CLOSED,
         total_time_spent=seconds(hours=2),
-        time_estimate=seconds(hours=2)
+        time_estimate=seconds(hours=2),
     )
 
     metrics = get_ticket_metrics(ticket)
@@ -58,14 +58,14 @@ def test_budget_estimated(db):
         user=user_1,
         state=IssueState.OPENED,
         total_time_spent=0,
-        time_estimate=seconds(hours=1)
+        time_estimate=seconds(hours=1),
     )
     IssueFactory.create(
         ticket=ticket,
         user=user_1,
         state=IssueState.CLOSED,
         total_time_spent=seconds(hours=1),
-        time_estimate=seconds(hours=2)
+        time_estimate=seconds(hours=2),
     )
 
     user_2 = UserFactory.create(customer_hour_rate=5)
@@ -75,14 +75,14 @@ def test_budget_estimated(db):
         user=user_2,
         state=IssueState.OPENED,
         total_time_spent=0,
-        time_estimate=seconds(hours=1)
+        time_estimate=seconds(hours=1),
     )
     IssueFactory.create(
         ticket=ticket,
         user=user_2,
         state=IssueState.CLOSED,
         total_time_spent=seconds(hours=2),
-        time_estimate=seconds(hours=1)
+        time_estimate=seconds(hours=1),
     )
 
     IssueFactory.create(
@@ -90,7 +90,7 @@ def test_budget_estimated(db):
         user=user_2,
         state=IssueState.OPENED,
         total_time_spent=seconds(hours=10),
-        time_estimate=seconds(hours=10)
+        time_estimate=seconds(hours=10),
     )
 
     metrics = get_ticket_metrics(ticket)
@@ -110,7 +110,7 @@ def test_resolve_metrics(user, ghl_auth_mock_info):
         ticket=ticket,
         state=IssueState.OPENED,
         total_time_spent=0,
-        time_estimate=seconds(hours=1)
+        time_estimate=seconds(hours=1),
     )
 
     metrics = TicketType.resolve_metrics(ticket, info=ghl_auth_mock_info)
@@ -126,7 +126,7 @@ def test_resolve_metrics_not_pm(user, ghl_auth_mock_info):
         ticket=ticket,
         state=IssueState.OPENED,
         total_time_spent=0,
-        time_estimate=seconds(hours=1)
+        time_estimate=seconds(hours=1),
     )
 
     with pytest.raises(GraphQLPermissionDenied):
@@ -152,9 +152,7 @@ def test_opened_time_remains_with_closed_issues(user, ghl_auth_mock_info):
     ticket = TicketFactory.create()
 
     IssueFactory.create_batch(
-        size=3,
-        ticket=ticket,
-        state=IssueState.CLOSED,
+        size=3, ticket=ticket, state=IssueState.CLOSED,
     )
 
     metrics = TicketType.resolve_metrics(ticket, info=ghl_auth_mock_info)
@@ -205,16 +203,14 @@ def test_opened_time_remains_random(user, ghl_auth_mock_info):
     ticket = TicketFactory.create()
 
     issues = IssueFactory.create_batch(
-        size=3,
-        ticket=ticket,
-        state=IssueState.OPENED,
+        size=3, ticket=ticket, state=IssueState.OPENED,
     )
 
     IssueFactory.create(
         ticket=ticket,
         state=IssueState.CLOSED,
         total_time_spent=seconds(hours=1),
-        time_estimate=seconds(hours=4)
+        time_estimate=seconds(hours=4),
     )
 
     opened_time_remains = 0

@@ -26,13 +26,9 @@ class NotEnoughTasksChecker(BaseProblemChecker):
         If user"s daily work hours more than difference between
         estimate and total user"s time spent.
         """
-        issues = Issue.objects.filter(
-            user=user,
-            state=IssueState.OPENED,
-        )
+        issues = Issue.objects.filter(user=user, state=IssueState.OPENED)
         merge_requests = MergeRequest.objects.filter(
-            user=user,
-            state=MergeRequestState.OPENED,
+            user=user, state=MergeRequestState.OPENED,
         )
 
         issues_time_remains = self._aggregate_time_remains(issues)
@@ -43,10 +39,13 @@ class NotEnoughTasksChecker(BaseProblemChecker):
         return issues_time_remains + mrs_time_remains < daily_work_hours
 
     def _aggregate_time_remains(self, queryset) -> int:
-        return queryset.annotate(
-            time_remains=(
-                models.F("time_estimate") - models.F("total_time_spent")
-            ),
-        ).aggregate(
-            total_time_remains=models.Sum("time_remains"),
-        )["total_time_remains"] or 0
+        return (
+            queryset.annotate(
+                time_remains=(
+                    models.F("time_estimate") - models.F("total_time_spent")
+                ),
+            ).aggregate(total_time_remains=models.Sum("time_remains"))[
+                "total_time_remains"
+            ]
+            or 0
+        )

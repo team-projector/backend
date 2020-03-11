@@ -22,12 +22,6 @@ class LoginMutation(BaseMutation):
     @classmethod
     def do_mutate(cls, root, info, login, password):  # noqa: WPS110
         """After successful login return token."""
-        token = login_user(
-            login,
-            password,
-            info.context,
-        )
+        token = login_user(login, password, info.context)
 
-        return LoginMutation(
-            token=token,
-        )
+        return LoginMutation(token=token)

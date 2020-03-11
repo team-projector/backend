@@ -39,10 +39,7 @@ class TicketMetricsProvider:
 
         return metrics
 
-    def _fill_issues_metrics(
-        self,
-        metrics: TicketMetrics,
-    ) -> None:
+    def _fill_issues_metrics(self, metrics: TicketMetrics) -> None:
         issues = Issue.objects.filter(ticket=self.ticket)
 
         if not issues:
@@ -61,8 +58,7 @@ class TicketMetricsProvider:
             ),
             opened_time_estimate=Coalesce(
                 models.Sum(
-                    "time_estimate",
-                    filter=models.Q(state=IssueState.OPENED),
+                    "time_estimate", filter=models.Q(state=IssueState.OPENED),
                 ),
                 0,
             ),
@@ -80,7 +76,8 @@ class TicketMetricsProvider:
                     / SECS_IN_HOUR
                     * models.F("user__customer_hour_rate"),
                     output_field=models.DecimalField(),
-                ), 0,
+                ),
+                0,
             ),
         )
 
@@ -101,10 +98,7 @@ class TicketMetricsProvider:
 
         metrics.budget_estimate = stats["budget_estimate"]
 
-    def _fill_payroll_metrics(
-        self,
-        metrics: TicketMetrics,
-    ) -> None:
+    def _fill_payroll_metrics(self, metrics: TicketMetrics) -> None:
         payroll = SpentTime.objects.filter(
             issues__ticket=self.ticket,
         ).aggregate(

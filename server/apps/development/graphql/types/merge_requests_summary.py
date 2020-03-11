@@ -7,8 +7,7 @@ from apps.core.graphql.security.permissions import AllowAuthenticated
 
 
 class MergeRequestsSummaryType(
-    AuthNode,
-    graphene.ObjectType,
+    AuthNode, graphene.ObjectType,
 ):
     """Merge requests summary type."""
 

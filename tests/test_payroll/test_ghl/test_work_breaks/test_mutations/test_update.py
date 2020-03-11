@@ -39,9 +39,7 @@ def test_query(user, ghl_client):
 
     team = TeamFactory.create()
     TeamMemberFactory.create(
-        team=team,
-        user=user,
-        roles=TeamMember.roles.LEADER,
+        team=team, user=user, roles=TeamMember.roles.LEADER,
     )
 
     user.roles = User.roles.TEAM_LEADER
@@ -59,8 +57,7 @@ def test_query(user, ghl_client):
     }
 
     response = ghl_client.execute(
-        GHL_QUERY_UPDATE_WORK_BREAK,
-        variable_values=update_variables,
+        GHL_QUERY_UPDATE_WORK_BREAK, variable_values=update_variables,
     )
 
     dto = response["data"]["updateWorkBreak"]["workBreak"]
@@ -70,8 +67,7 @@ def test_query(user, ghl_client):
 
 
 def test_work_break_not_team_lead(
-    ghl_auth_mock_info,
-    update_work_break_mutation,
+    ghl_auth_mock_info, update_work_break_mutation,
 ):
     work_break = WorkBreakFactory.create(comment="django")
 
@@ -86,9 +82,7 @@ def test_work_break_not_team_lead(
 
     with pytest.raises(GraphQLPermissionDenied):
         update_work_break_mutation(
-            root=None,
-            info=ghl_auth_mock_info,
-            **update_variables,
+            root=None, info=ghl_auth_mock_info, **update_variables,
         )
     work_break.refresh_from_db()
 
@@ -96,8 +90,7 @@ def test_work_break_not_team_lead(
 
 
 def test_update_work_break_another_user(
-    ghl_auth_mock_info,
-    update_work_break_mutation,
+    ghl_auth_mock_info, update_work_break_mutation,
 ):
     team = TeamFactory.create()
 
@@ -109,9 +102,7 @@ def test_update_work_break_another_user(
 
     user_2 = UserFactory.create()
     TeamMemberFactory.create(
-        team=team,
-        user=user_2,
-        roles=TeamMember.roles.DEVELOPER,
+        team=team, user=user_2, roles=TeamMember.roles.DEVELOPER,
     )
 
     work_break = WorkBreakFactory.create(user=user_2, comment="created")
@@ -127,15 +118,12 @@ def test_update_work_break_another_user(
 
     with pytest.raises(GraphQLPermissionDenied):
         update_work_break_mutation(
-            root=None,
-            info=ghl_auth_mock_info,
-            **update_variables,
+            root=None, info=ghl_auth_mock_info, **update_variables,
         )
 
 
 def test_update_work_break_another_user_but_team_lead(
-    ghl_auth_mock_info,
-    update_work_break_mutation,
+    ghl_auth_mock_info, update_work_break_mutation,
 ):
     team = TeamFactory.create()
 
@@ -147,9 +135,7 @@ def test_update_work_break_another_user_but_team_lead(
 
     user_2 = UserFactory.create()
     TeamMemberFactory.create(
-        team=team,
-        user=user_2,
-        roles=TeamMember.roles.DEVELOPER,
+        team=team, user=user_2, roles=TeamMember.roles.DEVELOPER,
     )
 
     work_break = WorkBreakFactory.create(user=user_2, comment="created")
@@ -164,9 +150,7 @@ def test_update_work_break_another_user_but_team_lead(
     }
 
     update_work_break_mutation(
-        root=None,
-        info=ghl_auth_mock_info,
-        **update_variables,
+        root=None, info=ghl_auth_mock_info, **update_variables,
     )
 
     work_break.refresh_from_db()
@@ -176,7 +160,9 @@ def test_update_work_break_another_user_but_team_lead(
     assert work_break.user == user_2
 
 
-def test_change_work_break_user(ghl_auth_mock_info, update_work_break_mutation):
+def test_change_work_break_user(
+    ghl_auth_mock_info, update_work_break_mutation
+):
     team = TeamFactory.create()
     user_2 = UserFactory.create()
     user_3 = UserFactory.create()
@@ -187,9 +173,7 @@ def test_change_work_break_user(ghl_auth_mock_info, update_work_break_mutation):
         roles=TeamMember.roles.LEADER,
     )
     TeamMemberFactory.create(
-        team=team,
-        user=user_2,
-        roles=TeamMember.roles.DEVELOPER,
+        team=team, user=user_2, roles=TeamMember.roles.DEVELOPER,
     )
 
     work_break = WorkBreakFactory.create(user=user_2, comment="created")
@@ -204,9 +188,7 @@ def test_change_work_break_user(ghl_auth_mock_info, update_work_break_mutation):
     }
 
     update_work_break_mutation(
-        root=None,
-        info=ghl_auth_mock_info,
-        **update_variables,
+        root=None, info=ghl_auth_mock_info, **update_variables,
     )
 
     work_break.refresh_from_db()

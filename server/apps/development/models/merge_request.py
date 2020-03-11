@@ -26,9 +26,7 @@ MERGE_REQUESTS_STATE_MAX_LENGTH = 255
 
 
 class MergeRequest(
-    TrackableMixin,
-    GitlabEntityMixin,
-    GitlabInternalIdMixin,
+    TrackableMixin, GitlabEntityMixin, GitlabInternalIdMixin,
 ):
     """
     The merge request model.
@@ -62,25 +60,12 @@ class MergeRequest(
         help_text=_("HT__STATE"),
     )
 
-    created_at = models.DateTimeField(
-        null=True,
-        blank=True,
-    )
-
-    updated_at = models.DateTimeField(
-        null=True,
-        blank=True,
-    )
-
-    closed_at = models.DateTimeField(
-        null=True,
-        blank=True,
-    )
+    created_at = models.DateTimeField(null=True, blank=True)
+    updated_at = models.DateTimeField(null=True, blank=True)
+    closed_at = models.DateTimeField(null=True, blank=True)
 
     labels = models.ManyToManyField(
-        "development.Label",
-        related_name="merge_requests",
-        blank=True,
+        "development.Label", related_name="merge_requests", blank=True,
     )
 
     project = models.ForeignKey(
@@ -114,10 +99,7 @@ class MergeRequest(
     )
 
     milestone = models.ForeignKey(
-        "development.Milestone",
-        models.CASCADE,
-        null=True,
-        blank=True,
+        "development.Milestone", models.CASCADE, null=True, blank=True,
     )
 
     participants = models.ManyToManyField(
@@ -140,14 +122,19 @@ class MergeRequest(
     @cached_property
     def last_note_date(self) -> datetime:
         """Returns last note date."""
-        return self.notes.aggregate(
-            last_created=models.Max("created_at"),
-        )["last_created"]
+        return self.notes.aggregate(last_created=models.Max("created_at"))[
+            "last_created"
+        ]
 
     @property
     def time_remains(self) -> Optional[int]:
         """Return the difference between estimate and spent time."""
-        if self.time_estimate is not None and self.total_time_spent is not None:
+        is_remains_available = (
+            self.time_estimate is not None
+            and self.total_time_spent is not None
+        )
+
+        if is_remains_available:
             return self.time_estimate - self.total_time_spent
 
         return None

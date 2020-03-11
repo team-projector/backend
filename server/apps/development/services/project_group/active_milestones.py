@@ -17,8 +17,7 @@ def load_for_group(group) -> QuerySet:
 
 def _get_group_milestones(group) -> QuerySet:
     milestones = Milestone.objects.filter(
-        project_group__pk=group.id,
-        state=MilestoneState.ACTIVE,
+        project_group__pk=group.id, state=MilestoneState.ACTIVE,
     )
 
     if milestones or not group.parent:

@@ -61,19 +61,19 @@ class BaseWorkItemGlManager:
         gl_target: Union[gl.ProjectIssue, gl.MergeRequest],
     ) -> None:
         """Load participants for work item."""
-        target.participants.set((
-            self.user_manager.sync_user(user["id"])
-            for user in gl_target.participants()
-        ))
+        target.participants.set(
+            (
+                self.user_manager.sync_user(user["id"])
+                for user in gl_target.participants()
+            ),
+        )
 
     def _get_or_create_label(
         self,
         label_title: gl.ProjectLabel,
         project_labels: List[gl.ProjectLabel],
     ) -> Optional[Label]:
-        label = Label.objects.filter(
-            title=label_title,
-        ).first()
+        label = Label.objects.filter(title=label_title).first()
 
         return label or self._create_label(label_title, project_labels)
 
@@ -92,6 +92,8 @@ class BaseWorkItemGlManager:
         )
 
         if gl_label:
-            return Label.objects.create(title=label_title, color=gl_label.color)
+            return Label.objects.create(
+                title=label_title, color=gl_label.color,
+            )
 
         return None

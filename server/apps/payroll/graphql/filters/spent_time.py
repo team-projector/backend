@@ -37,9 +37,7 @@ class ProjectFilter(django_filters.ModelChoiceFilter):
         if not value:
             return queryset
 
-        return queryset.filter(
-            issues__project=value,
-        ) | queryset.filter(
+        return queryset.filter(issues__project=value) | queryset.filter(
             mergerequests__project=value,
         )
 
@@ -52,9 +50,7 @@ class StateFilter(django_filters.CharFilter):
         if not value or value == "all":
             return queryset
 
-        return queryset.filter(
-            issues__state=value,
-        ) | queryset.filter(
+        return queryset.filter(issues__state=value) | queryset.filter(
             mergerequests__state=value,
         )
 
@@ -68,9 +64,7 @@ class SpentTimeFilterSet(django_filters.FilterSet):
     state = StateFilter()
     salary = django_filters.ModelChoiceFilter(queryset=Salary.objects.all())
 
-    order_by = OrderingFilter(
-        fields=("date", "created_at"),
-    )
+    order_by = OrderingFilter(fields=("date", "created_at"))
 
     class Meta:
         model = SpentTime

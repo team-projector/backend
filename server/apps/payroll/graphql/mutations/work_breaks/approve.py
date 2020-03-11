@@ -24,8 +24,7 @@ class ApproveWorkBreakMutation(BaseMutation):
     def do_mutate(cls, root, info, **kwargs):  # noqa: WPS110
         """Approve work break after validation."""
         work_break = get_object_or_not_found(
-            WorkBreak.objects.all(),
-            pk=kwargs["id"],
+            WorkBreak.objects.all(), pk=kwargs["id"],
         )
 
         work_break_service.Manager(work_break).approve(

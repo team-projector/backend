@@ -6,19 +6,13 @@ from apps.payroll.services import spent_time as spent_time_service
 
 
 def resolve_spent_times_summary(
-    parent,
-    info,  # noqa: WPS110
-    **kwargs,
+    parent, info, **kwargs,  # noqa: WPS110
 ):
     """Resolve spent times summary."""
     filterset = SpentTimeFilterSet(
         data=kwargs,
-        queryset=SpentTime.objects.allowed_for_user(
-            info.context.user,
-        ),
+        queryset=SpentTime.objects.allowed_for_user(info.context.user),
         request=info.context,
     )
 
-    return spent_time_service.get_summary(
-        filterset.qs,
-    )
+    return spent_time_service.get_summary(filterset.qs)

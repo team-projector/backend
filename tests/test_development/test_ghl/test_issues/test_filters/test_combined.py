@@ -9,32 +9,25 @@ from tests.test_development.factories import IssueFactory
 
 def test_filter_by_due_date_and_state(user):
     issue = IssueFactory.create(
-        user=user,
-        state=IssueState.OPENED,
-        due_date=datetime.now()
+        user=user, state=IssueState.OPENED, due_date=datetime.now()
+    )
+    IssueFactory.create(
+        user=user, state=IssueState.CLOSED, due_date=datetime.now()
     )
     IssueFactory.create(
         user=user,
         state=IssueState.CLOSED,
-        due_date=datetime.now()
-    )
-    IssueFactory.create(
-        user=user,
-        state=IssueState.CLOSED,
-        due_date=datetime.now() - timedelta(days=1)
+        due_date=datetime.now() - timedelta(days=1),
     )
     IssueFactory.create(
         user=user,
         state=IssueState.OPENED,
-        due_date=datetime.now() - timedelta(days=1)
+        due_date=datetime.now() - timedelta(days=1),
     )
 
     results = IssuesFilterSet(
-        data={
-            "due_date": datetime.now().date(),
-            "state": IssueState.OPENED
-        },
-        queryset=Issue.objects.all()
+        data={"due_date": datetime.now().date(), "state": IssueState.OPENED},
+        queryset=Issue.objects.all(),
     ).qs
 
     assert results.count() == 1

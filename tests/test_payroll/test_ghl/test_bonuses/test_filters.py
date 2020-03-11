@@ -11,8 +11,7 @@ def test_bonuses_filter_by_user(user):
     bonuses_user_2 = BonusFactory.create_batch(size=5, user=user_2)
 
     results = BonusFilterSet(
-        data={"user": user_2.id},
-        queryset=Bonus.objects.all(),
+        data={"user": user_2.id}, queryset=Bonus.objects.all(),
     ).qs
 
     assert results.count() == 5
@@ -23,14 +22,11 @@ def test_bonuses_filter_by_salary(user):
     salary = SalaryFactory(user=user)
     BonusFactory.create_batch(size=3, user=user)
     bonuses_salary_2 = BonusFactory.create_batch(
-        size=5,
-        user=user,
-        salary=salary,
+        size=5, user=user, salary=salary,
     )
 
     results = BonusFilterSet(
-        data={"salary": salary.id},
-        queryset=Bonus.objects.all(),
+        data={"salary": salary.id}, queryset=Bonus.objects.all(),
     ).qs
 
     assert results.count() == 5

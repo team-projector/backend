@@ -19,9 +19,7 @@ class Team(models.Model):
     )
 
     members = models.ManyToManyField(
-        settings.AUTH_USER_MODEL,
-        through=TeamMember,
-        related_name="teams",
+        settings.AUTH_USER_MODEL, through=TeamMember, related_name="teams",
     )
 
     class Meta:

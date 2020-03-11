@@ -29,10 +29,7 @@ class ProgressMetricsProvider:
     """User progress metrics provider."""
 
     def __init__(
-        self,
-        user: User,
-        start: date,
-        end: date,
+        self, user: User, start: date, end: date,
     ):
         """Initialize self."""
         self.user = user

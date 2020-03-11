@@ -20,12 +20,14 @@ class BaseProblemChecker:
 
     def setup_queryset(self, queryset: models.QuerySet) -> models.QuerySet:
         """Setup queryset."""
-        return queryset.annotate(**{
-            self.annotate_field: models.Case(
-                self.get_condition(),
-                output_field=models.NullBooleanField(),
-            ),
-        })
+        return queryset.annotate(
+            **{
+                self.annotate_field: models.Case(
+                    self.get_condition(),
+                    output_field=models.NullBooleanField(),
+                ),
+            },
+        )
 
     def issue_has_problem(self, issue: Issue) -> bool:
         """Method should be implemented in subclass."""
@@ -51,10 +53,7 @@ class EmptyDueDateChecker(BaseProblemChecker):
 
     def issue_has_problem(self, issue: Issue) -> bool:
         """Current issue has problem."""
-        return (
-            not issue.due_date
-            and issue.state == IssueState.OPENED
-        )
+        return not issue.due_date and issue.state == IssueState.OPENED
 
 
 class OverdueDueDateChecker(BaseProblemChecker):
@@ -98,7 +97,4 @@ class EmptyEstimateChecker(BaseProblemChecker):
 
     def issue_has_problem(self, issue: Issue) -> bool:
         """Current issue has problem."""
-        return (
-            not issue.time_estimate
-            and issue.state == IssueState.OPENED
-        )
+        return not issue.time_estimate and issue.state == IssueState.OPENED

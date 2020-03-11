@@ -12,9 +12,7 @@ from apps.core.admin.mixins import AdminFieldsOverridesMixin
 
 
 class BaseModelAdmin(
-    AdminAutocompleteFieldsMixin,
-    AdminFieldsOverridesMixin,
-    admin.ModelAdmin,
+    AdminAutocompleteFieldsMixin, AdminFieldsOverridesMixin, admin.ModelAdmin,
 ):
     """A base class for admin dashboard."""
 
@@ -32,8 +30,7 @@ class BaseModelAdmin(
 
         if request.GET or (ref and ref.endswith(path)) or not default_filters:
             return super().changelist_view(
-                request,
-                extra_context=extra_context,
+                request, extra_context=extra_context,
             )
 
         query = urlencode(default_filters)

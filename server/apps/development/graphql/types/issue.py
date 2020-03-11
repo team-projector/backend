@@ -46,19 +46,12 @@ class IssueType(graphql.BaseDjangoObjectType):
         return 0
 
     @classmethod
-    def get_queryset(
-        cls,
-        queryset,
-        info,  # noqa: WPS110
-    ) -> QuerySet:
+    def get_queryset(cls, queryset, info) -> QuerySet:  # noqa: WPS110
         """Get issues."""
         if isinstance(queryset, list):
             return queryset
 
-        queryset = filter_allowed_for_user(
-            queryset,
-            info.context.user,
-        )
+        queryset = filter_allowed_for_user(queryset, info.context.user)
 
         if graphql.is_field_selected(info, "edges.node.user"):
             queryset = queryset.select_related("user")

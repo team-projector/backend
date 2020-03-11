@@ -15,10 +15,7 @@ SECS_IN_HOUR = 60 * 60
 class SpentTime(Payroll):  # noqa:WPS230
     """The spent time model."""
 
-    date = models.DateField(
-        null=True,
-    )
-
+    date = models.DateField(null=True)
     customer_sum = MoneyField(
         default=0,
         verbose_name=_("VN__CUSTOMER_SUM"),
@@ -26,21 +23,15 @@ class SpentTime(Payroll):  # noqa:WPS230
     )
 
     tax_sum = MoneyField(
-        default=0,
-        verbose_name=_("VN__TAX_SUM"),
-        help_text=_("HT__TAX_SUM"),
+        default=0, verbose_name=_("VN__TAX_SUM"), help_text=_("HT__TAX_SUM"),
     )
 
     hour_rate = models.FloatField(
-        null=True,
-        verbose_name=_("VN__RATE"),
-        help_text=_("HT__RATE"),
+        null=True, verbose_name=_("VN__RATE"), help_text=_("HT__RATE"),
     )
 
     tax_rate = models.FloatField(
-        default=0,
-        verbose_name=_("VN__TAX_RATE"),
-        help_text=_("HT__TAX_RATE"),
+        default=0, verbose_name=_("VN__TAX_RATE"), help_text=_("HT__TAX_RATE"),
     )
 
     customer_rate = models.FloatField(
@@ -50,14 +41,10 @@ class SpentTime(Payroll):  # noqa:WPS230
     )
 
     time_spent = models.IntegerField(
-        verbose_name=_("VN__TIME_SPENT"),
-        help_text=_("HT__TIME_SPENT"),
+        verbose_name=_("VN__TIME_SPENT"), help_text=_("HT__TIME_SPENT"),
     )
 
-    content_type = models.ForeignKey(
-        ContentType,
-        models.CASCADE,
-    )
+    content_type = models.ForeignKey(ContentType, models.CASCADE)
 
     object_id = models.PositiveIntegerField()
 

@@ -28,10 +28,7 @@ def test_query(issue, ticket, ghl_client, user):
 
     response = ghl_client.execute(
         GHL_QUERY_UPDATE_ISSUE,
-        variable_values={
-            "id": issue.pk,
-            "ticket": ticket.pk,
-        }
+        variable_values={"id": issue.pk, "ticket": ticket.pk},
     )
 
     assert "errors" not in response
@@ -45,19 +42,13 @@ def test_query(issue, ticket, ghl_client, user):
 
 
 def test_without_access(
-    user,
-    ghl_auth_mock_info,
-    update_issue_mutation,
-    ticket,
+    user, ghl_auth_mock_info, update_issue_mutation, ticket,
 ):
     issue = IssueFactory()
 
     with pytest.raises(GraphQLInputError) as exc_info:
         update_issue_mutation(
-            root=None,
-            info=ghl_auth_mock_info,
-            id=issue.id,
-            ticket=ticket.id,
+            root=None, info=ghl_auth_mock_info, id=issue.id, ticket=ticket.id,
         )
 
     extensions = exc_info.value.extensions  # noqa: WPS441

@@ -15,6 +15,4 @@ def resolve_merge_requests_summary(parent, info, **kwargs):  # noqa: WPS110
         request=info.context,
     )
 
-    return get_merge_requests_summary(
-        filterset.qs,
-    )
+    return get_merge_requests_summary(filterset.qs)

@@ -13,10 +13,7 @@ class ProjectManager(models.Manager):
         """Save project by Gitlab id."""
         kwargs["gl_last_sync"] = timezone.now()
 
-        return self.update_or_create(
-            gl_id=gl_id,
-            defaults=kwargs,
-        )
+        return self.update_or_create(gl_id=gl_id, defaults=kwargs)
 
     def for_sync(self) -> models.QuerySet:
         """Get projects for full sync with gitlab."""

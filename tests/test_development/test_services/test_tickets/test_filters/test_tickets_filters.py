@@ -16,16 +16,14 @@ def test_filter_by_milestone(db):
     TicketFactory.create(milestone=milestone_2)
 
     results = TicketsFilterSet(
-        data={"milestone": milestone_1.id},
-        queryset=Ticket.objects.all(),
+        data={"milestone": milestone_1.id}, queryset=Ticket.objects.all(),
     ).qs
 
     assert results.count() == 1
     assert results.first().milestone == milestone_1
 
     results = TicketsFilterSet(
-        data={"milestone": milestone_2.id},
-        queryset=Ticket.objects.all(),
+        data={"milestone": milestone_2.id}, queryset=Ticket.objects.all(),
     ).qs
 
     assert results.count() == 1
@@ -39,21 +37,17 @@ def test_order_by_due_date(db):
     ticket_2 = TicketFactory.create(
         due_date=datetime.now() + timedelta(days=1)
     )
-    ticket_3 = TicketFactory.create(
-        due_date=datetime.now()
-    )
+    ticket_3 = TicketFactory.create(due_date=datetime.now())
 
     results = TicketsFilterSet(
-        data={"order_by": "dueDate"},
-        queryset=Ticket.objects.all(),
+        data={"order_by": "dueDate"}, queryset=Ticket.objects.all(),
     ).qs
 
     assert results.count() == 3
     assert list(results) == [ticket_1, ticket_3, ticket_2]
 
     results = TicketsFilterSet(
-        data={"order_by": "-dueDate"},
-        queryset=Ticket.objects.all(),
+        data={"order_by": "-dueDate"}, queryset=Ticket.objects.all(),
     ).qs
 
     assert list(results) == [ticket_2, ticket_3, ticket_1]
@@ -65,16 +59,14 @@ def test_order_by_title(db):
     ticket_3 = TicketFactory.create(title="CC")
 
     results = TicketsFilterSet(
-        data={"order_by": "title"},
-        queryset=Ticket.objects.all(),
+        data={"order_by": "title"}, queryset=Ticket.objects.all(),
     ).qs
 
     assert results.count() == 3
     assert list(results) == [ticket_2, ticket_1, ticket_3]
 
     results = TicketsFilterSet(
-        data={"order_by": "-title"},
-        queryset=Ticket.objects.all(),
+        data={"order_by": "-title"}, queryset=Ticket.objects.all(),
     ).qs
 
     assert list(results) == [ticket_3, ticket_1, ticket_2]
@@ -92,8 +84,7 @@ def test_order_by_due_date_and_title(db):
     )
 
     results = TicketsFilterSet(
-        data={"order_by": "dueDate,title"},
-        queryset=Ticket.objects.all(),
+        data={"order_by": "dueDate,title"}, queryset=Ticket.objects.all(),
     ).qs
 
     assert results.count() == 3

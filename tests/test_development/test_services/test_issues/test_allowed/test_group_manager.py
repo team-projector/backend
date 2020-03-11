@@ -27,10 +27,11 @@ def test_manager(project, group_manager, make_group_manager):
     IssueFactory.create_batch(5, project=project3)
 
     helpers.check_allowed_for_user(
-        group_manager, [
+        group_manager,
+        [
             *IssueFactory.create_batch(2, project=project),
             IssueFactory.create(project=project2),
-        ]
+        ],
     )
 
 
@@ -53,8 +54,9 @@ def test_hierarchy(project, group, group_manager):
     IssueFactory.create_batch(5, project=project3)
 
     helpers.check_allowed_for_user(
-        group_manager, [
+        group_manager,
+        [
             *IssueFactory.create_batch(2, project=project),
             IssueFactory.create(project=project2),
-        ]
+        ],
     )

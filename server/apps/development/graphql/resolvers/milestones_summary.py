@@ -10,21 +10,17 @@ from apps.development.services.milestone.summary import (
 
 
 def resolve_milestones_summary(
-    parent,
-    info,  # noqa: WPS110
-    **kwargs,
+    parent, info, **kwargs,  # noqa: WPS110
 ):
     """Resolve issues summary."""
     filterset = MilestonesFilterSet(
         data=kwargs,
         queryset=filter_allowed_for_user(
-            Milestone.objects.all(),
-            info.context.user,
+            Milestone.objects.all(), info.context.user,
         ),
         request=info.context,
     )
 
     return MilestonesSummaryProvider(
-        filterset.qs,
-        fields=get_fields_from_info(info),
+        filterset.qs, fields=get_fields_from_info(info),
     ).get_data()

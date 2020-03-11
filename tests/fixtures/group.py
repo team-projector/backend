@@ -55,27 +55,21 @@ def group_customer(group, make_group_customer):
 def _make_group_manager(group, user=None):
     """Create or bind group manager."""
     return _add_or_update_user_in_group(
-        group,
-        ProjectMemberRole.PROJECT_MANAGER,
-        user,
+        group, ProjectMemberRole.PROJECT_MANAGER, user,
     )
 
 
 def _make_group_developer(group, user=None):
     """Create or bind group developer."""
     return _add_or_update_user_in_group(
-        group,
-        ProjectMemberRole.DEVELOPER,
-        user,
+        group, ProjectMemberRole.DEVELOPER, user,
     )
 
 
 def _make_group_customer(group, user=None):
     """Create or bind group customer."""
     return _add_or_update_user_in_group(
-        group,
-        ProjectMemberRole.CUSTOMER,
-        user,
+        group, ProjectMemberRole.CUSTOMER, user,
     )
 
 

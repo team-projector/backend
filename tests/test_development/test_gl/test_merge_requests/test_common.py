@@ -13,14 +13,17 @@ from tests.test_development.test_gl.helpers import (
 )
 from tests.test_users.factories.gitlab import GlUserFactory
 
-Context = namedtuple("Context", [
-    "project",
-    "gl_project",
-    "gl_assignee",
-    "gl_author",
-    "merge_request",
-    "gl_merge_request"
-])
+Context = namedtuple(
+    "Context",
+    [
+        "project",
+        "gl_project",
+        "gl_assignee",
+        "gl_author",
+        "merge_request",
+        "gl_merge_request",
+    ],
+)
 
 
 @pytest.fixture()
@@ -30,21 +33,15 @@ def context(gl_mocker) -> Context:
     merge_request, gl_merge_request = initializers.init_merge_request(
         project,
         gl_project,
-        gl_kwargs={
-            "assignee": gl_user,
-            "author": gl_user,
-        },
+        gl_kwargs={"assignee": gl_user, "author": gl_user},
     )
 
     gl_mock.register_user(gl_mocker, gl_user)
     gl_mock.mock_merge_request_endpoints(
-        gl_mocker, gl_project,
-        gl_merge_request,
+        gl_mocker, gl_project, gl_merge_request,
     )
     gl_mock.mock_project_endpoints(
-        gl_mocker,
-        gl_project,
-        merge_requests=[gl_merge_request],
+        gl_mocker, gl_project, merge_requests=[gl_merge_request],
     )
 
     return Context(
@@ -63,8 +60,7 @@ def test_load(db, context):
     context.merge_request.refresh_from_db()
 
     gl_checkers.check_merge_request(
-        context.merge_request,
-        context.gl_merge_request,
+        context.merge_request, context.gl_merge_request,
     )
     gl_checkers.check_user(context.merge_request.user, context.gl_assignee)
     gl_checkers.check_user(context.merge_request.author, context.gl_author)
@@ -74,8 +70,7 @@ def test_no_milestone_in_db(db, context, gl_client):
     gl_project_loaded = gl_client.projects.get(id=context.project.gl_id)
 
     MergeRequestGlManager().sync_project_merge_requests(
-        context.project,
-        gl_project_loaded,
+        context.project, gl_project_loaded,
     )
 
     merge_request = context.merge_request
@@ -94,8 +89,7 @@ def test_milestone_in_db(db, context, gl_client):
     gl_project_loaded = gl_client.projects.get(id=context.project.gl_id)
 
     MergeRequestGlManager().sync_project_merge_requests(
-        context.project,
-        gl_project_loaded,
+        context.project, gl_project_loaded,
     )
 
     merge_request = context.merge_request

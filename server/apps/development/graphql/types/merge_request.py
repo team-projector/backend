@@ -43,10 +43,7 @@ class MergeRequestType(graphql.BaseDjangoObjectType):
     @classmethod
     def get_queryset(cls, queryset, info) -> models.QuerySet:  # noqa: WPS110
         """Get queryset."""
-        queryset = filter_allowed_for_user(
-            queryset,
-            info.context.user,
-        )
+        queryset = filter_allowed_for_user(queryset, info.context.user)
 
         if graphql.is_field_selected(info, "edges.node.user"):
             queryset = queryset.select_related("user")

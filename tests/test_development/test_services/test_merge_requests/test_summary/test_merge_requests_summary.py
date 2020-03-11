@@ -15,30 +15,23 @@ from tests.test_users.factories.user import UserFactory
 
 def test_counts_by_state(user):
     MergeRequestFactory.create_batch(
-        7, user=user,
-        state=MergeRequestState.OPENED,
-        total_time_spent=0
+        7, user=user, state=MergeRequestState.OPENED, total_time_spent=0
     )
     MergeRequestFactory.create_batch(
-        5, user=user,
-        state=MergeRequestState.CLOSED,
-        total_time_spent=0
+        5, user=user, state=MergeRequestState.CLOSED, total_time_spent=0
     )
     MergeRequestFactory.create_batch(
-        3, user=user,
-        state=MergeRequestState.MERGED,
-        total_time_spent=0
+        3, user=user, state=MergeRequestState.MERGED, total_time_spent=0
     )
 
     MergeRequestFactory.create_batch(
-        2, user=user,
-        state="",
-        total_time_spent=0
+        2, user=user, state="", total_time_spent=0
     )
     MergeRequestFactory.create_batch(
-        2, user=UserFactory.create(),
+        2,
+        user=UserFactory.create(),
         state=MergeRequestState.OPENED,
-        total_time_spent=0
+        total_time_spent=0,
     )
 
     summary = get_merge_requests_summary(
@@ -53,29 +46,25 @@ def test_counts_by_state(user):
 
 def test_resolver_summary(user, client):
     team = TeamFactory.create()
-    TeamMemberFactory.create(user=user, team=team,
-                             roles=TeamMember.roles.LEADER)
-
-    MergeRequestFactory.create_batch(
-        7, user=user,
-        state=MergeRequestState.OPENED,
-        total_time_spent=0
+    TeamMemberFactory.create(
+        user=user, team=team, roles=TeamMember.roles.LEADER
     )
 
     MergeRequestFactory.create_batch(
-        3, user=UserFactory(),
+        7, user=user, state=MergeRequestState.OPENED, total_time_spent=0
+    )
+
+    MergeRequestFactory.create_batch(
+        3,
+        user=UserFactory(),
         state=MergeRequestState.CLOSED,
-        total_time_spent=0
+        total_time_spent=0,
     )
 
     client.user = user
     info = AttrDict({"context": client})
 
-    summary = resolve_merge_requests_summary(
-        parent=None,
-        info=info,
-        user=user
-    )
+    summary = resolve_merge_requests_summary(parent=None, info=info, user=user)
 
     assert summary.count == 7
     assert summary.opened_count == 7

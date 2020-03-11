@@ -17,23 +17,16 @@ def test_active_milestones_sort(user, client):
     info = AttrDict({"context": client})
 
     m1 = ProjectMilestoneFactory(state=MilestoneState.ACTIVE)
-    ProjectMilestoneFactory(
-        state=MilestoneState.ACTIVE,
-        owner=m1.owner
-    )
+    ProjectMilestoneFactory(state=MilestoneState.ACTIVE, owner=m1.owner)
     m3 = ProjectMilestoneFactory(
-        state=MilestoneState.ACTIVE,
-        owner=m1.owner,
-        due_date=timezone.now()
+        state=MilestoneState.ACTIVE, owner=m1.owner, due_date=timezone.now(),
     )
 
     parent = ProjectType.get_node(info, obj_id=m1.owner.id)
     parent.parent_type = IssuesProjectSummary()
 
     milestones = ProjectType.resolve_milestones(
-        parent,
-        info,
-        order_by="due_date"
+        parent, info, order_by="due_date",
     )
 
     assert len(milestones) == 3

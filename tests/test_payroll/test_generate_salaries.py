@@ -30,31 +30,39 @@ class GenerateSalariesTests(TestCase):
             login="user",
             hour_rate=100,
             tax_rate=15,
-            position=PositionFactory()
+            position=PositionFactory(),
         )
         self.calculator = SalaryCalculator(
             self.initiator,
             period_from=timezone.now() - timedelta(days=30),
-            period_to=timezone.now()
+            period_to=timezone.now(),
         )
 
     def test_common(self):
         issue = IssueFactory.create(state=IssueState.CLOSED)
         mr = MergeRequestFactory.create(state=IssueState.CLOSED)
 
-        IssueSpentTimeFactory.create(user=self.user, base=issue,
-                                     time_spent=timedelta(
-                                         hours=1).total_seconds())
-        IssueSpentTimeFactory.create(user=self.user, base=issue,
-                                     time_spent=-timedelta(
-                                         hours=2).total_seconds())
-        IssueSpentTimeFactory.create(user=self.user, base=issue,
-                                     time_spent=timedelta(
-                                         hours=5).total_seconds())
+        IssueSpentTimeFactory.create(
+            user=self.user,
+            base=issue,
+            time_spent=timedelta(hours=1).total_seconds(),
+        )
+        IssueSpentTimeFactory.create(
+            user=self.user,
+            base=issue,
+            time_spent=-timedelta(hours=2).total_seconds(),
+        )
+        IssueSpentTimeFactory.create(
+            user=self.user,
+            base=issue,
+            time_spent=timedelta(hours=5).total_seconds(),
+        )
 
-        MergeRequestSpentTimeFactory.create(user=self.user, base=mr,
-                                            time_spent=timedelta(
-                                                hours=5).total_seconds())
+        MergeRequestSpentTimeFactory.create(
+            user=self.user,
+            base=mr,
+            time_spent=timedelta(hours=5).total_seconds(),
+        )
 
         salary = self.calculator.generate(self.user)
 
@@ -81,15 +89,21 @@ class GenerateSalariesTests(TestCase):
     def test_with_penalty(self):
         issue = IssueFactory.create(state=IssueState.CLOSED)
 
-        IssueSpentTimeFactory.create(user=self.user, base=issue,
-                                     time_spent=timedelta(
-                                         hours=1).total_seconds())
-        IssueSpentTimeFactory.create(user=self.user, base=issue,
-                                     time_spent=-timedelta(
-                                         hours=2).total_seconds())
-        IssueSpentTimeFactory.create(user=self.user, base=issue,
-                                     time_spent=timedelta(
-                                         hours=5).total_seconds())
+        IssueSpentTimeFactory.create(
+            user=self.user,
+            base=issue,
+            time_spent=timedelta(hours=1).total_seconds(),
+        )
+        IssueSpentTimeFactory.create(
+            user=self.user,
+            base=issue,
+            time_spent=-timedelta(hours=2).total_seconds(),
+        )
+        IssueSpentTimeFactory.create(
+            user=self.user,
+            base=issue,
+            time_spent=timedelta(hours=5).total_seconds(),
+        )
 
         penalty = PenaltyFactory.create(user=self.user, sum=100)
 
@@ -106,15 +120,21 @@ class GenerateSalariesTests(TestCase):
     def test_with_bonus(self):
         issue = IssueFactory.create(state=IssueState.CLOSED)
 
-        IssueSpentTimeFactory.create(user=self.user, base=issue,
-                                     time_spent=timedelta(
-                                         hours=1).total_seconds())
-        IssueSpentTimeFactory.create(user=self.user, base=issue,
-                                     time_spent=-timedelta(
-                                         hours=2).total_seconds())
-        IssueSpentTimeFactory.create(user=self.user, base=issue,
-                                     time_spent=timedelta(
-                                         hours=5).total_seconds())
+        IssueSpentTimeFactory.create(
+            user=self.user,
+            base=issue,
+            time_spent=timedelta(hours=1).total_seconds(),
+        )
+        IssueSpentTimeFactory.create(
+            user=self.user,
+            base=issue,
+            time_spent=-timedelta(hours=2).total_seconds(),
+        )
+        IssueSpentTimeFactory.create(
+            user=self.user,
+            base=issue,
+            time_spent=timedelta(hours=5).total_seconds(),
+        )
 
         bonus = BonusFactory.create(user=self.user)
 
@@ -131,15 +151,21 @@ class GenerateSalariesTests(TestCase):
     def test_complex(self):
         issue = IssueFactory.create(state=IssueState.CLOSED)
 
-        IssueSpentTimeFactory.create(user=self.user, base=issue,
-                                     time_spent=timedelta(
-                                         hours=1).total_seconds())
-        IssueSpentTimeFactory.create(user=self.user, base=issue,
-                                     time_spent=-timedelta(
-                                         hours=2).total_seconds())
-        IssueSpentTimeFactory.create(user=self.user, base=issue,
-                                     time_spent=timedelta(
-                                         hours=5).total_seconds())
+        IssueSpentTimeFactory.create(
+            user=self.user,
+            base=issue,
+            time_spent=timedelta(hours=1).total_seconds(),
+        )
+        IssueSpentTimeFactory.create(
+            user=self.user,
+            base=issue,
+            time_spent=-timedelta(hours=2).total_seconds(),
+        )
+        IssueSpentTimeFactory.create(
+            user=self.user,
+            base=issue,
+            time_spent=timedelta(hours=5).total_seconds(),
+        )
 
         bonus = BonusFactory.create(user=self.user)
         penalty = PenaltyFactory.create(user=self.user, sum=100)
@@ -158,17 +184,23 @@ class GenerateSalariesTests(TestCase):
         prev_salary = SalaryFactory.create(user=self.user)
         issue = IssueFactory.create(state=IssueState.CLOSED)
 
-        IssueSpentTimeFactory.create(salary=prev_salary, base=issue,
-                                     user=self.user,
-                                     time_spent=timedelta(
-                                         hours=1).total_seconds())
-        IssueSpentTimeFactory.create(salary=prev_salary, base=issue,
-                                     user=self.user,
-                                     time_spent=-timedelta(
-                                         hours=2).total_seconds())
-        IssueSpentTimeFactory.create(user=self.user, base=issue,
-                                     time_spent=timedelta(
-                                         hours=5).total_seconds())
+        IssueSpentTimeFactory.create(
+            salary=prev_salary,
+            base=issue,
+            user=self.user,
+            time_spent=timedelta(hours=1).total_seconds(),
+        )
+        IssueSpentTimeFactory.create(
+            salary=prev_salary,
+            base=issue,
+            user=self.user,
+            time_spent=-timedelta(hours=2).total_seconds(),
+        )
+        IssueSpentTimeFactory.create(
+            user=self.user,
+            base=issue,
+            time_spent=timedelta(hours=5).total_seconds(),
+        )
 
         bonus = BonusFactory.create(user=self.user)
         PenaltyFactory.create(user=self.user, salary=prev_salary, sum=100)
@@ -188,15 +220,21 @@ class GenerateSalariesTests(TestCase):
         user_2 = UserFactory.create()
         issue = IssueFactory.create(state=IssueState.CLOSED)
 
-        IssueSpentTimeFactory.create(user=user_2, base=issue,
-                                     time_spent=timedelta(
-                                         hours=1).total_seconds())
-        IssueSpentTimeFactory.create(user=user_2, base=issue,
-                                     time_spent=-timedelta(
-                                         hours=2).total_seconds())
-        IssueSpentTimeFactory.create(user=self.user, base=issue,
-                                     time_spent=timedelta(
-                                         hours=5).total_seconds())
+        IssueSpentTimeFactory.create(
+            user=user_2,
+            base=issue,
+            time_spent=timedelta(hours=1).total_seconds(),
+        )
+        IssueSpentTimeFactory.create(
+            user=user_2,
+            base=issue,
+            time_spent=-timedelta(hours=2).total_seconds(),
+        )
+        IssueSpentTimeFactory.create(
+            user=self.user,
+            base=issue,
+            time_spent=timedelta(hours=5).total_seconds(),
+        )
 
         BonusFactory.create(user=user_2)
         penalty = PenaltyFactory.create(user=self.user, sum=100)
@@ -216,19 +254,27 @@ class GenerateSalariesTests(TestCase):
         opened_issue = IssueFactory.create(state=IssueState.OPENED)
         opened_mr = MergeRequestFactory.create(state=IssueState.OPENED)
 
-        IssueSpentTimeFactory.create(user=self.user, base=opened_issue,
-                                     time_spent=timedelta(
-                                         hours=1).total_seconds())
-        IssueSpentTimeFactory.create(user=self.user, base=closed_issue,
-                                     time_spent=-timedelta(
-                                         hours=2).total_seconds())
-        IssueSpentTimeFactory.create(user=self.user, base=closed_issue,
-                                     time_spent=timedelta(
-                                         hours=5).total_seconds())
+        IssueSpentTimeFactory.create(
+            user=self.user,
+            base=opened_issue,
+            time_spent=timedelta(hours=1).total_seconds(),
+        )
+        IssueSpentTimeFactory.create(
+            user=self.user,
+            base=closed_issue,
+            time_spent=-timedelta(hours=2).total_seconds(),
+        )
+        IssueSpentTimeFactory.create(
+            user=self.user,
+            base=closed_issue,
+            time_spent=timedelta(hours=5).total_seconds(),
+        )
 
-        MergeRequestSpentTimeFactory.create(user=self.user, base=opened_mr,
-                                            time_spent=timedelta(
-                                                hours=5).total_seconds())
+        MergeRequestSpentTimeFactory.create(
+            user=self.user,
+            base=opened_mr,
+            time_spent=timedelta(hours=5).total_seconds(),
+        )
 
         salary = self.calculator.generate(self.user)
 
@@ -246,15 +292,21 @@ class GenerateSalariesTests(TestCase):
 
         issue = IssueFactory.create(state=IssueState.CLOSED)
 
-        IssueSpentTimeFactory.create(user=self.user, base=issue,
-                                     time_spent=timedelta(
-                                         hours=1).total_seconds())
-        IssueSpentTimeFactory.create(user=self.user, base=issue,
-                                     time_spent=-timedelta(
-                                         hours=2).total_seconds())
-        IssueSpentTimeFactory.create(user=self.user, base=issue,
-                                     time_spent=timedelta(
-                                         hours=5).total_seconds())
+        IssueSpentTimeFactory.create(
+            user=self.user,
+            base=issue,
+            time_spent=timedelta(hours=1).total_seconds(),
+        )
+        IssueSpentTimeFactory.create(
+            user=self.user,
+            base=issue,
+            time_spent=-timedelta(hours=2).total_seconds(),
+        )
+        IssueSpentTimeFactory.create(
+            user=self.user,
+            base=issue,
+            time_spent=timedelta(hours=5).total_seconds(),
+        )
 
         bonus = BonusFactory.create(user=self.user)
         penalty = PenaltyFactory.create(user=self.user, sum=100)

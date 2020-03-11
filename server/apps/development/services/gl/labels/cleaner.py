@@ -19,10 +19,7 @@ class Label:
     """Label object with label id, name and gl api parent refer."""
 
     def __init__(
-        self,
-        id_,
-        name,
-        parent: Union[GLGroupProject, GLGroup],
+        self, id_, name, parent: Union[GLGroupProject, GLGroup],
     ):
         """Inits a label."""
         self.id = id_
@@ -94,8 +91,7 @@ class LabelsContainer:
                 name=gl_label.attributes.get("name"),
                 parent=self.gl_api_object,
             )
-            for gl_label
-            in labels
+            for gl_label in labels
         }
 
 
@@ -124,11 +120,12 @@ class Project(LabelsContainer):
 
     def _adjust_labels_for_single_item(self, gl_api_obj) -> None:
         initial = sorted(gl_api_obj.labels)
-        gl_api_obj.labels = list({
-            self._replace_label_by_id(l_name)
-            for l_name
-            in gl_api_obj.labels
-        })
+        gl_api_obj.labels = list(
+            {
+                self._replace_label_by_id(l_name)
+                for l_name in gl_api_obj.labels
+            },
+        )
 
         if initial != sorted(gl_api_obj.labels):
             gl_api_obj.save()
@@ -164,16 +161,14 @@ class Group(LabelsContainer):
         """Returns subgroups."""
         return [
             Group(key=subgroup.get_id(), client=self._client)
-            for subgroup
-            in self.gl_api_object.subgroups.list(all=True)
+            for subgroup in self.gl_api_object.subgroups.list(all=True)
         ]
 
     def get_projects(self) -> List[Project]:
         """Returns projects."""
         return [
             Project(key=project.get_id(), client=self._client)
-            for project
-            in self.gl_api_object.projects.list(all=True)
+            for project in self.gl_api_object.projects.list(all=True)
         ]
 
 
@@ -193,7 +188,9 @@ class LabelsContainerTree:
         self.root = self.get_labels_containers_tree(root_element)
 
     @classmethod
-    def get_labels_containers_tree(cls, root: Union[Project, Group], tree=None):
+    def get_labels_containers_tree(
+        cls, root: Union[Project, Group], tree=None,
+    ):
         """Builds tree from the element."""
         if not tree:
             tree = {}
@@ -210,8 +207,7 @@ class LabelsContainerTree:
         return TreeElement(root, children)
 
     def get_containers(
-        self,
-        element: Optional[TreeElement] = None,
+        self, element: Optional[TreeElement] = None,
     ) -> Generator[Union[Project, Group], None, None]:
         """Returns all containers in the tree."""
         if not element:
@@ -224,8 +220,7 @@ class LabelsContainerTree:
             yield from self.get_containers(child)
 
     def get_marked_labels(
-        self,
-        element: Optional[TreeElement] = None,
+        self, element: Optional[TreeElement] = None,
     ) -> Dict[int, Label]:
         """Returns all labels in the tree which have a form of __<id>__<n>."""
         if element is None:
@@ -233,8 +228,7 @@ class LabelsContainerTree:
 
         ret = {
             label_id: label
-            for label_id, label
-            in element.container.labels.items()
+            for label_id, label in element.container.labels.items()
             if len(label.name.split("__")) == 3
         }
 
@@ -254,9 +248,7 @@ class LabelsCleaner:
         self._client = client
 
     def clean_group(  # noqa:WPS210
-        self,
-        group_key: Union[str, int],
-        dry_run=False,
+        self, group_key: Union[str, int], dry_run=False,
     ):
         """Cleans the group with a given key from duplicate labels."""
         group = Group(group_key, client=self._client)
@@ -281,19 +273,16 @@ class LabelsCleaner:
         tree = LabelsContainerTree(group)
 
         with capture_gitlab_requests(
-            gl_client=self._client,
-            put=HTTPStatus.OK,
-            delete=HTTPStatus.OK,
+            gl_client=self._client, put=HTTPStatus.OK, delete=HTTPStatus.OK,
         ) as captured:
             self._process_element_renaming(
-                tree.root,
-                tree.root.container.labels,
+                tree.root, tree.root.container.labels,
             )
 
             projects = [
                 container
-                for container
-                in tree.get_containers() if isinstance(container, Project)
+                for container in tree.get_containers()
+                if isinstance(container, Project)
             ]
 
             for project in projects:
@@ -305,9 +294,7 @@ class LabelsCleaner:
             return captured
 
     def _process_element_renaming(
-        self,
-        element: TreeElement,
-        parent_labels: Dict[int, Label],
+        self, element: TreeElement, parent_labels: Dict[int, Label],
     ) -> None:
         parent_labels = parent_labels.copy()
         for label in element.container.labels.values():

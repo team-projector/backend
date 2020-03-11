@@ -35,20 +35,20 @@ class UserMetricsProvider:
             ret["issues"]["opened_count"] = self._get_issues_opened_count(user)
 
         if self._is_metric_requested("merge_requests__opened_count"):
-            ret["merge_requests"]["opened_count"] = self._get_mr_opened_count(user)  # noqa:E501
+            ret["merge_requests"]["opened_count"] = self._get_mr_opened_count(
+                user,
+            )
 
         return ret
 
     def _get_issues_opened_count(self, user: User):
         return Issue.objects.filter(
-            user=user,
-            state=IssueState.OPENED,
+            user=user, state=IssueState.OPENED,
         ).count()
 
     def _get_mr_opened_count(self, user: User):
         return MergeRequest.objects.filter(
-            user=user,
-            state=MergeRequestState.OPENED,
+            user=user, state=MergeRequestState.OPENED,
         ).count()
 
     def _get_time_spent_aggregations(self, user: User):
@@ -57,95 +57,100 @@ class UserMetricsProvider:
 
         aggregations = {
             "payroll": Coalesce(models.Sum("sum"), 0),
-
             "payroll_opened": Coalesce(
-                models.Sum("sum", filter=models.Q(
-                    issue_opened
-                    | mr_opend,
-                )), 0,
+                models.Sum("sum", filter=models.Q(issue_opened | mr_opend)), 0,
             ),
-
             "payroll_closed": Coalesce(
-                models.Sum("sum", filter=models.Q(
-                    models.Q(issues__state=IssueState.CLOSED)
-                    | models.Q(mergerequests__state__in=(
-                        MergeRequestState.CLOSED,
-                        MergeRequestState.MERGED,
-                    )),
-                )), 0,
+                models.Sum(
+                    "sum",
+                    filter=models.Q(
+                        models.Q(issues__state=IssueState.CLOSED)
+                        | models.Q(
+                            mergerequests__state__in=(
+                                MergeRequestState.CLOSED,
+                                MergeRequestState.MERGED,
+                            ),
+                        ),
+                    ),
+                ),
+                0,
             ),
-
             "taxes": Coalesce(models.Sum("tax_sum"), 0),
-
             "taxes_opened": Coalesce(
-                models.Sum("tax_sum", filter=models.Q(issue_opened | mr_opend)),
+                models.Sum(
+                    "tax_sum", filter=models.Q(issue_opened | mr_opend),
+                ),
                 0,
             ),
-
             "taxes_closed": Coalesce(
-                models.Sum("tax_sum", filter=models.Q(
-                    models.Q(issues__state=IssueState.CLOSED)
-                    | models.Q(mergerequests__state__in=(
-                        MergeRequestState.CLOSED,
-                        MergeRequestState.MERGED,
-                    )),
-                )), 0,
-            ),
-
-            "issues__opened_spent": Coalesce(
-                models.Sum("time_spent", filter=issue_opened),
+                models.Sum(
+                    "tax_sum",
+                    filter=models.Q(
+                        models.Q(issues__state=IssueState.CLOSED)
+                        | models.Q(
+                            mergerequests__state__in=(
+                                MergeRequestState.CLOSED,
+                                MergeRequestState.MERGED,
+                            ),
+                        ),
+                    ),
+                ),
                 0,
             ),
-
+            "issues__opened_spent": Coalesce(
+                models.Sum("time_spent", filter=issue_opened), 0,
+            ),
             "issues__closed_spent": Coalesce(
                 models.Sum(
                     "time_spent",
                     filter=models.Q(issues__state=IssueState.CLOSED),
-                ), 0,
+                ),
+                0,
             ),
-
             "merge_requests__closed_spent": Coalesce(
                 models.Sum(
                     "time_spent",
-                    filter=models.Q(mergerequests__state__in=(
-                        MergeRequestState.CLOSED,
-                        MergeRequestState.MERGED,
-                    )),
-                ), 0,
+                    filter=models.Q(
+                        mergerequests__state__in=(
+                            MergeRequestState.CLOSED,
+                            MergeRequestState.MERGED,
+                        ),
+                    ),
+                ),
+                0,
             ),
-
             "merge_requests__opened_spent": Coalesce(
-                models.Sum("time_spent", filter=mr_opend),
-                0,
+                models.Sum("time_spent", filter=mr_opend), 0,
             ),
-
             "opened_spent": Coalesce(
-                models.Sum("time_spent", filter=issue_opened | mr_opend),
-                0,
+                models.Sum("time_spent", filter=issue_opened | mr_opend), 0,
             ),
-
             "closed_spent": Coalesce(
                 models.Sum(
                     "time_spent",
                     filter=models.Q(
                         models.Q(issues__state=IssueState.CLOSED)
-                        | models.Q(mergerequests__state__in=(
-                            MergeRequestState.CLOSED,
-                            MergeRequestState.MERGED,
-                        )),
+                        | models.Q(
+                            mergerequests__state__in=(
+                                MergeRequestState.CLOSED,
+                                MergeRequestState.MERGED,
+                            ),
+                        ),
                     ),
-                ), 0,
+                ),
+                0,
             ),
         }
 
         return SpentTime.objects.filter(
-            salary__isnull=True,
-            user=user,
-        ).aggregate(**{
-            key: aggr
-            for key, aggr
-            in aggregations.items() if self._is_metric_requested(key)
-        })
+            salary__isnull=True, user=user,
+        ).aggregate(
+            **{
+                key: aggr
+                for key, aggr in aggregations.items()
+                if self._is_metric_requested(key)
+            },
+        )
 
     def _is_metric_requested(self, metric: str):
         if not self._fields:

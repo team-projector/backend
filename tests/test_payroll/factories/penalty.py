@@ -11,7 +11,8 @@ class PenaltyFactory(factory.django.DjangoModelFactory):
     created_at = factory.Faker(
         "date_time_this_year",
         before_now=True,
-        after_now=False, tzinfo=pytz.UTC,
+        after_now=False,
+        tzinfo=pytz.UTC,
     )
     sum = factory.Faker("random_int")
     created_by = factory.SubFactory(UserFactory)

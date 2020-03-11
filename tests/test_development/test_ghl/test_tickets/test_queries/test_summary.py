@@ -28,9 +28,7 @@ def tickets(db):
 
 
 def test_raw_query(ghl_client, tickets):
-    response = ghl_client.execute(
-        GHL_QUERY_TICKETS_SUMMARY,
-    )
+    response = ghl_client.execute(GHL_QUERY_TICKETS_SUMMARY)
 
     assert "errors" not in response
 
@@ -42,20 +40,18 @@ def test_raw_query(ghl_client, tickets):
         "doingCount": 0,
         "testingCount": 1,
         "acceptingCount": 1,
-        "doneCount": 1
+        "doneCount": 1,
     }
 
 
 def test_filter_by_milestone(
-    tickets_summary_query,
-    ghl_auth_mock_info,
-    tickets,
+    tickets_summary_query, ghl_auth_mock_info, tickets,
 ):
     response = tickets_summary_query(
         parent=None,
         root=None,
         info=ghl_auth_mock_info,
-        milestone=tickets[0].milestone.id
+        milestone=tickets[0].milestone.id,
     )
 
     assert response == {
@@ -65,5 +61,5 @@ def test_filter_by_milestone(
         "doing_count": 0,
         "testing_count": 1,
         "accepting_count": 0,
-        "done_count": 0
+        "done_count": 0,
     }

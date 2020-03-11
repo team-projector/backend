@@ -18,21 +18,33 @@ def test_parse_date():
 def test_simple(user):
     issue = IssueFactory.create()
 
-    _create_note(user, issue,
-                 NoteType.TIME_SPEND,
-                 timezone.now() - timedelta(hours=2),
-                 timedelta(hours=1))
-    _create_note(user, issue,
-                 NoteType.TIME_SPEND,
-                 timezone.now() - timedelta(hours=1),
-                 timedelta(hours=5))
-    _create_note(user, issue,
-                 NoteType.TIME_SPEND,
-                 timezone.now() - timedelta(hours=1),
-                 -timedelta(hours=3))
-    _create_note(user, issue,
-                 NoteType.RESET_SPEND,
-                 timezone.now() - timedelta(minutes=30))
+    _create_note(
+        user,
+        issue,
+        NoteType.TIME_SPEND,
+        timezone.now() - timedelta(hours=2),
+        timedelta(hours=1),
+    )
+    _create_note(
+        user,
+        issue,
+        NoteType.TIME_SPEND,
+        timezone.now() - timedelta(hours=1),
+        timedelta(hours=5),
+    )
+    _create_note(
+        user,
+        issue,
+        NoteType.TIME_SPEND,
+        timezone.now() - timedelta(hours=1),
+        -timedelta(hours=3),
+    )
+    _create_note(
+        user,
+        issue,
+        NoteType.RESET_SPEND,
+        timezone.now() - timedelta(minutes=30),
+    )
 
     issue.adjust_spent_times()
 
@@ -42,25 +54,37 @@ def test_simple(user):
 def test_different_created_at_and_date(user):
     issue = IssueFactory.create()
 
-    _create_note(user, issue,
-                 NoteType.TIME_SPEND,
-                 timezone.now() - timedelta(hours=2),
-                 timedelta(hours=1),
-                 date=(timezone.now() - timedelta(days=1)).date())
-    _create_note(user, issue,
-                 NoteType.TIME_SPEND,
-                 timezone.now() - timedelta(hours=1),
-                 timedelta(hours=5),
-                 date=(timezone.now() - timedelta(days=2)).date())
-    _create_note(user, issue,
-                 NoteType.TIME_SPEND,
-                 timezone.now() - timedelta(hours=1),
-                 -timedelta(hours=3),
-                 date=(timezone.now() - timedelta(days=3)).date())
-    _create_note(user, issue,
-                 NoteType.RESET_SPEND,
-                 timezone.now() - timedelta(minutes=30),
-                 date=(timezone.now() - timedelta(days=5)).date())
+    _create_note(
+        user,
+        issue,
+        NoteType.TIME_SPEND,
+        timezone.now() - timedelta(hours=2),
+        timedelta(hours=1),
+        date=(timezone.now() - timedelta(days=1)).date(),
+    )
+    _create_note(
+        user,
+        issue,
+        NoteType.TIME_SPEND,
+        timezone.now() - timedelta(hours=1),
+        timedelta(hours=5),
+        date=(timezone.now() - timedelta(days=2)).date(),
+    )
+    _create_note(
+        user,
+        issue,
+        NoteType.TIME_SPEND,
+        timezone.now() - timedelta(hours=1),
+        -timedelta(hours=3),
+        date=(timezone.now() - timedelta(days=3)).date(),
+    )
+    _create_note(
+        user,
+        issue,
+        NoteType.RESET_SPEND,
+        timezone.now() - timedelta(minutes=30),
+        date=(timezone.now() - timedelta(days=5)).date(),
+    )
 
     issue.adjust_spent_times()
 
@@ -70,30 +94,48 @@ def test_different_created_at_and_date(user):
 def test_many_resets(user):
     issue = IssueFactory.create()
 
-    _create_note(user, issue,
-                 NoteType.TIME_SPEND,
-                 timezone.now() - timedelta(hours=2),
-                 timedelta(hours=1))
-    _create_note(user, issue,
-                 NoteType.TIME_SPEND,
-                 timezone.now() - timedelta(hours=1),
-                 timedelta(hours=5))
-    _create_note(user, issue,
-                 NoteType.TIME_SPEND,
-                 timezone.now() - timedelta(hours=1),
-                 -timedelta(hours=3))
-    _create_note(user, issue,
-                 NoteType.RESET_SPEND,
-                 timezone.now() - timedelta(minutes=30))
+    _create_note(
+        user,
+        issue,
+        NoteType.TIME_SPEND,
+        timezone.now() - timedelta(hours=2),
+        timedelta(hours=1),
+    )
+    _create_note(
+        user,
+        issue,
+        NoteType.TIME_SPEND,
+        timezone.now() - timedelta(hours=1),
+        timedelta(hours=5),
+    )
+    _create_note(
+        user,
+        issue,
+        NoteType.TIME_SPEND,
+        timezone.now() - timedelta(hours=1),
+        -timedelta(hours=3),
+    )
+    _create_note(
+        user,
+        issue,
+        NoteType.RESET_SPEND,
+        timezone.now() - timedelta(minutes=30),
+    )
 
-    _create_note(user, issue,
-                 NoteType.TIME_SPEND,
-                 timezone.now() - timedelta(hours=5),
-                 -timedelta(hours=3))
-    _create_note(user, issue,
-                 NoteType.TIME_SPEND,
-                 timezone.now() - timedelta(hours=6),
-                 timedelta(hours=4))
+    _create_note(
+        user,
+        issue,
+        NoteType.TIME_SPEND,
+        timezone.now() - timedelta(hours=5),
+        -timedelta(hours=3),
+    )
+    _create_note(
+        user,
+        issue,
+        NoteType.TIME_SPEND,
+        timezone.now() - timedelta(hours=6),
+        timedelta(hours=4),
+    )
 
     issue.adjust_spent_times()
     _check_generated_time_spents(issue)
@@ -102,9 +144,12 @@ def test_many_resets(user):
 def test_only_reset(user):
     issue = IssueFactory.create()
 
-    _create_note(user, issue,
-                 NoteType.RESET_SPEND,
-                 timezone.now() - timedelta(minutes=30))
+    _create_note(
+        user,
+        issue,
+        NoteType.RESET_SPEND,
+        timezone.now() - timedelta(minutes=30),
+    )
 
     issue.adjust_spent_times()
 
@@ -116,45 +161,75 @@ def test_multi_user_reset(user):
 
     user_2 = UserFactory.create()
 
-    _create_note(user_2, issue,
-                 NoteType.TIME_SPEND,
-                 timezone.now() - timedelta(hours=6),
-                 timedelta(hours=4))
-    _create_note(user_2, issue,
-                 NoteType.TIME_SPEND,
-                 timezone.now() - timedelta(hours=5),
-                 -timedelta(hours=3))
-    _create_note(user_2, issue,
-                 NoteType.RESET_SPEND,
-                 timezone.now() - timedelta(hours=4))
+    _create_note(
+        user_2,
+        issue,
+        NoteType.TIME_SPEND,
+        timezone.now() - timedelta(hours=6),
+        timedelta(hours=4),
+    )
+    _create_note(
+        user_2,
+        issue,
+        NoteType.TIME_SPEND,
+        timezone.now() - timedelta(hours=5),
+        -timedelta(hours=3),
+    )
+    _create_note(
+        user_2,
+        issue,
+        NoteType.RESET_SPEND,
+        timezone.now() - timedelta(hours=4),
+    )
 
-    _create_note(user, issue,
-                 NoteType.TIME_SPEND,
-                 timezone.now() - timedelta(hours=4),
-                 timedelta(hours=5))
-    _create_note(user, issue,
-                 NoteType.TIME_SPEND,
-                 timezone.now() - timedelta(hours=2),
-                 timedelta(hours=1))
-    _create_note(user, issue,
-                 NoteType.TIME_SPEND,
-                 timezone.now() - timedelta(hours=1),
-                 timedelta(hours=5))
-    _create_note(user, issue,
-                 NoteType.TIME_SPEND,
-                 timezone.now() - timedelta(hours=1),
-                 -timedelta(hours=3))
-    _create_note(user, issue,
-                 NoteType.RESET_SPEND,
-                 timezone.now() - timedelta(minutes=30))
+    _create_note(
+        user,
+        issue,
+        NoteType.TIME_SPEND,
+        timezone.now() - timedelta(hours=4),
+        timedelta(hours=5),
+    )
+    _create_note(
+        user,
+        issue,
+        NoteType.TIME_SPEND,
+        timezone.now() - timedelta(hours=2),
+        timedelta(hours=1),
+    )
+    _create_note(
+        user,
+        issue,
+        NoteType.TIME_SPEND,
+        timezone.now() - timedelta(hours=1),
+        timedelta(hours=5),
+    )
+    _create_note(
+        user,
+        issue,
+        NoteType.TIME_SPEND,
+        timezone.now() - timedelta(hours=1),
+        -timedelta(hours=3),
+    )
+    _create_note(
+        user,
+        issue,
+        NoteType.RESET_SPEND,
+        timezone.now() - timedelta(minutes=30),
+    )
 
-    _create_note(user_2, issue,
-                 NoteType.TIME_SPEND,
-                 timezone.now() - timedelta(hours=1),
-                 timedelta(hours=5))
-    _create_note(user_2, issue,
-                 NoteType.RESET_SPEND,
-                 timezone.now() - timedelta(minutes=30))
+    _create_note(
+        user_2,
+        issue,
+        NoteType.TIME_SPEND,
+        timezone.now() - timedelta(hours=1),
+        timedelta(hours=5),
+    )
+    _create_note(
+        user_2,
+        issue,
+        NoteType.RESET_SPEND,
+        timezone.now() - timedelta(minutes=30),
+    )
 
     issue.adjust_spent_times()
 
@@ -164,19 +239,25 @@ def test_multi_user_reset(user):
 def test_spents_but_moved_from(user):
     issue = IssueFactory.create()
 
-    spent_before = _create_note(user, issue,
-                                NoteType.TIME_SPEND,
-                                timezone.now() - timedelta(hours=2),
-                                timedelta(hours=1))
+    spent_before = _create_note(
+        user,
+        issue,
+        NoteType.TIME_SPEND,
+        timezone.now() - timedelta(hours=2),
+        timedelta(hours=1),
+    )
 
-    moved_from = _create_note(user, issue,
-                              NoteType.MOVED_FROM,
-                              timezone.now() - timedelta(hours=1))
+    moved_from = _create_note(
+        user, issue, NoteType.MOVED_FROM, timezone.now() - timedelta(hours=1)
+    )
 
-    spent_after = _create_note(user, issue,
-                               NoteType.TIME_SPEND,
-                               timezone.now() - timedelta(minutes=30),
-                               timedelta(hours=5))
+    spent_after = _create_note(
+        user,
+        issue,
+        NoteType.TIME_SPEND,
+        timezone.now() - timedelta(minutes=30),
+        timedelta(hours=5),
+    )
 
     issue.adjust_spent_times()
 
@@ -188,23 +269,32 @@ def test_spents_but_moved_from(user):
 def test_spents_with_resets_but_moved_from(user):
     issue = IssueFactory.create()
 
-    spent_before = _create_note(user, issue,
-                                NoteType.TIME_SPEND,
-                                timezone.now() - timedelta(hours=2),
-                                timedelta(hours=1))
+    spent_before = _create_note(
+        user,
+        issue,
+        NoteType.TIME_SPEND,
+        timezone.now() - timedelta(hours=2),
+        timedelta(hours=1),
+    )
 
-    moved_from = _create_note(user, issue,
-                              NoteType.MOVED_FROM,
-                              timezone.now() - timedelta(hours=1))
+    moved_from = _create_note(
+        user, issue, NoteType.MOVED_FROM, timezone.now() - timedelta(hours=1)
+    )
 
-    spent_after = _create_note(user, issue,
-                               NoteType.TIME_SPEND,
-                               timezone.now() - timedelta(minutes=30),
-                               timedelta(hours=5))
+    spent_after = _create_note(
+        user,
+        issue,
+        NoteType.TIME_SPEND,
+        timezone.now() - timedelta(minutes=30),
+        timedelta(hours=5),
+    )
 
-    reset_spend = _create_note(user, issue,
-                               NoteType.RESET_SPEND,
-                               timezone.now() - timedelta(minutes=15))
+    reset_spend = _create_note(
+        user,
+        issue,
+        NoteType.RESET_SPEND,
+        timezone.now() - timedelta(minutes=15),
+    )
 
     issue.adjust_spent_times()
 
@@ -218,12 +308,7 @@ def test_spents_with_resets_but_moved_from(user):
 
 
 def _create_note(
-    user,
-    issue,
-    note_type,
-    created_at,
-    spent: timedelta = None,
-    date=None,
+    user, issue, note_type, created_at, spent: timedelta = None, date=None,
 ):
     return IssueNoteFactory.create(
         type=note_type,
@@ -233,8 +318,10 @@ def _create_note(
         content_object=issue,
         data={
             "spent": spent.total_seconds(),
-            "date": date or created_at.date()
-        } if spent else {}
+            "date": date or created_at.date(),
+        }
+        if spent
+        else {},
     )
 
 

@@ -18,9 +18,7 @@ from tests.test_users.factories.user import UserFactory
 @override_settings(TP_WEEKENDS_DAYS=[])
 def test_simple(user):
     issue = IssueFactory.create(
-        user=user,
-        due_date=datetime.now(),
-        closed_at=timezone.now()
+        user=user, due_date=datetime.now(), closed_at=timezone.now()
     )
 
     monday = begin_of_week(timezone.now().date())
@@ -29,25 +27,25 @@ def test_simple(user):
         date=monday + timedelta(days=4),
         user=user,
         base=issue,
-        time_spent=seconds(hours=3)
+        time_spent=seconds(hours=3),
     )
     IssueSpentTimeFactory.create(
         date=monday + timedelta(days=2, hours=5),
         user=user,
         base=issue,
-        time_spent=seconds(hours=2)
+        time_spent=seconds(hours=2),
     )
     IssueSpentTimeFactory.create(
         date=monday + timedelta(days=1),
         user=user,
         base=issue,
-        time_spent=seconds(hours=4)
+        time_spent=seconds(hours=4),
     )
     IssueSpentTimeFactory.create(
         date=monday + timedelta(days=1, hours=5),
         user=user,
         base=issue,
-        time_spent=-seconds(hours=3)
+        time_spent=-seconds(hours=3),
     )
 
     issue.time_estimate = seconds(hours=15)
@@ -63,22 +61,19 @@ def test_simple(user):
     metrics = get_progress_metrics(user, start, end, "week")
 
     assert len(metrics) == 2
-    _check_metrics(metrics,
-                   {
-                       monday: timedelta(hours=6)
-                   }, {
-                       monday: 1
-                   }, {
-                       monday: timedelta(hours=15)
-                   }, {})
+    _check_metrics(
+        metrics,
+        {monday: timedelta(hours=6)},
+        {monday: 1},
+        {monday: timedelta(hours=15)},
+        {},
+    )
 
 
 @override_settings(TP_WEEKENDS_DAYS=[])
 def test_efficiency_more_1(user):
     issue = IssueFactory.create(
-        user=user,
-        due_date=datetime.now(),
-        closed_at=timezone.now()
+        user=user, due_date=datetime.now(), closed_at=timezone.now()
     )
 
     monday = begin_of_week(timezone.now().date())
@@ -87,25 +82,25 @@ def test_efficiency_more_1(user):
         date=monday + timedelta(days=4),
         user=user,
         base=issue,
-        time_spent=seconds(hours=3)
+        time_spent=seconds(hours=3),
     )
     IssueSpentTimeFactory.create(
         date=monday + timedelta(days=2, hours=5),
         user=user,
         base=issue,
-        time_spent=seconds(hours=2)
+        time_spent=seconds(hours=2),
     )
     IssueSpentTimeFactory.create(
         date=monday + timedelta(days=1),
         user=user,
         base=issue,
-        time_spent=seconds(hours=4)
+        time_spent=seconds(hours=4),
     )
     IssueSpentTimeFactory.create(
         date=monday + timedelta(days=1, hours=5),
         user=user,
         base=issue,
-        time_spent=-seconds(hours=3)
+        time_spent=-seconds(hours=3),
     )
 
     issue.time_estimate = seconds(hours=15)
@@ -122,24 +117,19 @@ def test_efficiency_more_1(user):
     metrics = get_progress_metrics(user, start, end, "week")
 
     assert len(metrics) == 2
-    _check_metrics(metrics,
-                   {
-                       monday: timedelta(hours=6)
-                   }, {
-                       monday: 1
-                   }, {
-                       monday: timedelta(hours=15)
-                   }, {
-                       monday: issue.time_estimate / issue.total_time_spent
-                   })
+    _check_metrics(
+        metrics,
+        {monday: timedelta(hours=6)},
+        {monday: 1},
+        {monday: timedelta(hours=15)},
+        {monday: issue.time_estimate / issue.total_time_spent},
+    )
 
 
 @override_settings(TP_WEEKENDS_DAYS=[])
 def test_efficiency_less_1(user):
     issue = IssueFactory.create(
-        user=user,
-        due_date=datetime.now(),
-        closed_at=timezone.now()
+        user=user, due_date=datetime.now(), closed_at=timezone.now()
     )
 
     monday = begin_of_week(timezone.now().date())
@@ -148,25 +138,25 @@ def test_efficiency_less_1(user):
         date=monday + timedelta(days=4),
         user=user,
         base=issue,
-        time_spent=seconds(hours=3)
+        time_spent=seconds(hours=3),
     )
     IssueSpentTimeFactory.create(
         date=monday + timedelta(days=2, hours=5),
         user=user,
         base=issue,
-        time_spent=seconds(hours=2)
+        time_spent=seconds(hours=2),
     )
     IssueSpentTimeFactory.create(
         date=monday + timedelta(days=1),
         user=user,
         base=issue,
-        time_spent=seconds(hours=4)
+        time_spent=seconds(hours=4),
     )
     IssueSpentTimeFactory.create(
         date=monday + timedelta(days=1, hours=5),
         user=user,
         base=issue,
-        time_spent=-seconds(hours=3)
+        time_spent=-seconds(hours=3),
     )
 
     issue.time_estimate = seconds(hours=3)
@@ -184,24 +174,19 @@ def test_efficiency_less_1(user):
 
     assert len(metrics) == 2
 
-    _check_metrics(metrics,
-                   {
-                       monday: timedelta(hours=6)
-                   }, {
-                       monday: 1
-                   }, {
-                       monday: timedelta(hours=3)
-                   }, {
-                       monday: issue.time_estimate / issue.total_time_spent
-                   })
+    _check_metrics(
+        metrics,
+        {monday: timedelta(hours=6)},
+        {monday: 1},
+        {monday: timedelta(hours=3)},
+        {monday: issue.time_estimate / issue.total_time_spent},
+    )
 
 
 @override_settings(TP_WEEKENDS_DAYS=[])
 def test_efficiency_zero_estimate(user):
     issue = IssueFactory.create(
-        user=user,
-        due_date=datetime.now(),
-        closed_at=timezone.now()
+        user=user, due_date=datetime.now(), closed_at=timezone.now()
     )
 
     monday = begin_of_week(timezone.now().date())
@@ -210,25 +195,25 @@ def test_efficiency_zero_estimate(user):
         date=monday + timedelta(days=4),
         user=user,
         base=issue,
-        time_spent=seconds(hours=3)
+        time_spent=seconds(hours=3),
     )
     IssueSpentTimeFactory.create(
         date=monday + timedelta(days=2, hours=5),
         user=user,
         base=issue,
-        time_spent=seconds(hours=2)
+        time_spent=seconds(hours=2),
     )
     IssueSpentTimeFactory.create(
         date=monday + timedelta(days=1),
         user=user,
         base=issue,
-        time_spent=seconds(hours=4)
+        time_spent=seconds(hours=4),
     )
     IssueSpentTimeFactory.create(
         date=monday + timedelta(days=1, hours=5),
         user=user,
         base=issue,
-        time_spent=-seconds(hours=3)
+        time_spent=-seconds(hours=3),
     )
 
     issue.time_estimate = 0
@@ -246,20 +231,13 @@ def test_efficiency_zero_estimate(user):
 
     assert len(metrics) == 2
 
-    _check_metrics(metrics,
-                   {
-                       monday: timedelta(hours=6)
-                   }, {
-                       monday: 1
-                   }, {}, {})
+    _check_metrics(metrics, {monday: timedelta(hours=6)}, {monday: 1}, {}, {})
 
 
 @override_settings(TP_WEEKENDS_DAYS=[])
 def test_efficiency_zero_spend(user):
     issue = IssueFactory.create(
-        user=user,
-        due_date=datetime.now(),
-        closed_at=timezone.now()
+        user=user, due_date=datetime.now(), closed_at=timezone.now()
     )
 
     monday = begin_of_week(timezone.now().date())
@@ -277,21 +255,13 @@ def test_efficiency_zero_spend(user):
 
     assert len(metrics) == 2
 
-    _check_metrics(metrics,
-                   {},
-                   {
-                       monday: 1
-                   }, {
-                       monday: timedelta(hours=2)
-                   }, {})
+    _check_metrics(metrics, {}, {monday: 1}, {monday: timedelta(hours=2)}, {})
 
 
 @override_settings(TP_WEEKENDS_DAYS=[])
 def test_many_weeks(user):
     issue = IssueFactory.create(
-        user=user,
-        due_date=datetime.now(),
-        closed_at=timezone.now()
+        user=user, due_date=datetime.now(), closed_at=timezone.now()
     )
 
     monday = begin_of_week(timezone.now().date())
@@ -300,25 +270,25 @@ def test_many_weeks(user):
         date=monday - timedelta(days=4),
         user=user,
         base=issue,
-        time_spent=seconds(hours=3)
+        time_spent=seconds(hours=3),
     )
     IssueSpentTimeFactory.create(
         date=monday - timedelta(days=2, hours=5),
         user=user,
         base=issue,
-        time_spent=seconds(hours=2)
+        time_spent=seconds(hours=2),
     )
     IssueSpentTimeFactory.create(
         date=monday + timedelta(days=1),
         user=user,
         base=issue,
-        time_spent=seconds(hours=4)
+        time_spent=seconds(hours=4),
     )
     IssueSpentTimeFactory.create(
         date=monday + timedelta(days=1, hours=5),
         user=user,
         base=issue,
-        time_spent=-seconds(hours=3)
+        time_spent=-seconds(hours=3),
     )
 
     issue.time_estimate = seconds(hours=15)
@@ -335,23 +305,22 @@ def test_many_weeks(user):
 
     assert len(metrics) == 2
 
-    _check_metrics(metrics,
-                   {
-                       monday - timedelta(weeks=1): timedelta(hours=5),
-                       monday: timedelta(hours=1)
-                   }, {
-                       monday: 1
-                   }, {
-                       monday: timedelta(hours=15)
-                   }, {})
+    _check_metrics(
+        metrics,
+        {
+            monday - timedelta(weeks=1): timedelta(hours=5),
+            monday: timedelta(hours=1),
+        },
+        {monday: 1},
+        {monday: timedelta(hours=15)},
+        {},
+    )
 
 
 @override_settings(TP_WEEKENDS_DAYS=[])
 def test_not_in_range(user):
     issue = IssueFactory.create(
-        user=user,
-        due_date=datetime.now(),
-        closed_at=timezone.now()
+        user=user, due_date=datetime.now(), closed_at=timezone.now()
     )
 
     monday = begin_of_week(timezone.now().date())
@@ -360,25 +329,25 @@ def test_not_in_range(user):
         date=monday - timedelta(days=4),
         user=user,
         base=issue,
-        time_spent=seconds(hours=3)
+        time_spent=seconds(hours=3),
     )
     IssueSpentTimeFactory.create(
         date=monday - timedelta(days=2, hours=5),
         user=user,
         base=issue,
-        time_spent=seconds(hours=2)
+        time_spent=seconds(hours=2),
     )
     IssueSpentTimeFactory.create(
         date=monday + timedelta(days=1),
         user=user,
         base=issue,
-        time_spent=seconds(hours=4)
+        time_spent=seconds(hours=4),
     )
     IssueSpentTimeFactory.create(
         date=monday + timedelta(days=1, hours=5),
         user=user,
         base=issue,
-        time_spent=-seconds(hours=3)
+        time_spent=-seconds(hours=3),
     )
 
     issue.time_estimate = seconds(hours=15)
@@ -395,22 +364,19 @@ def test_not_in_range(user):
 
     assert len(metrics) == 2
 
-    _check_metrics(metrics,
-                   {
-                       monday: timedelta(hours=1)
-                   }, {
-                       monday: 1
-                   }, {
-                       monday: timedelta(hours=15)
-                   }, {})
+    _check_metrics(
+        metrics,
+        {monday: timedelta(hours=1)},
+        {monday: 1},
+        {monday: timedelta(hours=15)},
+        {},
+    )
 
 
 @override_settings(TP_WEEKENDS_DAYS=[])
 def test_another_user(user):
     issue = IssueFactory.create(
-        user=user,
-        due_date=datetime.now(),
-        closed_at=timezone.now()
+        user=user, due_date=datetime.now(), closed_at=timezone.now()
     )
 
     another_user = UserFactory.create()
@@ -421,25 +387,25 @@ def test_another_user(user):
         date=monday + timedelta(days=4),
         user=user,
         base=issue,
-        time_spent=seconds(hours=3)
+        time_spent=seconds(hours=3),
     )
     IssueSpentTimeFactory.create(
         date=monday + timedelta(days=2, hours=5),
         user=user,
         base=issue,
-        time_spent=seconds(hours=2)
+        time_spent=seconds(hours=2),
     )
     IssueSpentTimeFactory.create(
         date=monday + timedelta(days=1),
         user=another_user,
         base=issue,
-        time_spent=seconds(hours=4)
+        time_spent=seconds(hours=4),
     )
     IssueSpentTimeFactory.create(
         date=monday + timedelta(days=1, hours=5),
         user=another_user,
         base=issue,
-        time_spent=-seconds(hours=3)
+        time_spent=-seconds(hours=3),
     )
 
     issue.time_estimate = seconds(hours=15)
@@ -456,22 +422,19 @@ def test_another_user(user):
 
     assert len(metrics) == 2
 
-    _check_metrics(metrics,
-                   {
-                       monday: timedelta(hours=5)
-                   }, {
-                       monday: 1
-                   }, {
-                       monday: timedelta(hours=15)
-                   }, {})
+    _check_metrics(
+        metrics,
+        {monday: timedelta(hours=5)},
+        {monday: 1},
+        {monday: timedelta(hours=15)},
+        {},
+    )
 
 
 @override_settings(TP_WEEKENDS_DAYS=[])
 def test_many_issues(user):
     issue = IssueFactory.create(
-        user=user,
-        due_date=datetime.now(),
-        closed_at=timezone.now()
+        user=user, due_date=datetime.now(), closed_at=timezone.now()
     )
 
     monday = begin_of_week(datetime.now().date())
@@ -479,37 +442,33 @@ def test_many_issues(user):
         user=user,
         state=IssueState.OPENED,
         due_date=monday + timedelta(days=4),
-        total_time_spent=timedelta(
-            hours=3,
-        ).total_seconds(),
-        time_estimate=timedelta(
-            hours=10,
-        ).total_seconds(),
+        total_time_spent=timedelta(hours=3).total_seconds(),
+        time_estimate=timedelta(hours=10).total_seconds(),
     )
 
     IssueSpentTimeFactory.create(
         date=monday + timedelta(days=4),
         user=user,
         base=another_issue,
-        time_spent=seconds(hours=3)
+        time_spent=seconds(hours=3),
     )
     IssueSpentTimeFactory.create(
         date=monday + timedelta(days=2, hours=5),
         user=user,
         base=another_issue,
-        time_spent=seconds(hours=2)
+        time_spent=seconds(hours=2),
     )
     IssueSpentTimeFactory.create(
         date=monday + timedelta(days=1),
         user=user,
         base=issue,
-        time_spent=seconds(hours=4)
+        time_spent=seconds(hours=4),
     )
     IssueSpentTimeFactory.create(
         date=monday + timedelta(days=1, hours=5),
         user=user,
         base=issue,
-        time_spent=-seconds(hours=3)
+        time_spent=-seconds(hours=3),
     )
 
     issue.time_estimate = seconds(hours=15)
@@ -531,21 +490,22 @@ def test_many_issues(user):
 
     assert len(metrics) == 2
 
-    _check_metrics(metrics,
-                   {
-                       monday: timedelta(hours=6)
-                   }, {
-                       monday: 2
-                   }, {
-                       monday: timedelta(days=1, hours=1)
-                   }, {})
+    _check_metrics(
+        metrics,
+        {monday: timedelta(hours=6)},
+        {monday: 2},
+        {monday: timedelta(days=1, hours=1)},
+        {},
+    )
 
 
-def _check_metrics(metrics,
-                   spents: Dict[date, timedelta],
-                   issues_counts: Dict[date, int],
-                   time_estimates: Dict[date, timedelta],
-                   efficiencies: Dict[date, float]):
+def _check_metrics(
+    metrics,
+    spents: Dict[date, timedelta],
+    issues_counts: Dict[date, int],
+    time_estimates: Dict[date, timedelta],
+    efficiencies: Dict[date, float],
+):
     spents = _prepare_metrics(spents)
     time_estimates = _prepare_metrics(time_estimates)
     issues_counts = _prepare_metrics(issues_counts)
@@ -571,8 +531,7 @@ def _check_metrics(metrics,
 
 def _prepare_metrics(metrics):
     return {
-        format_date(metric_date): time
-        for metric_date, time in metrics.items()
+        format_date(metric_date): time for metric_date, time in metrics.items()
     }
 
 

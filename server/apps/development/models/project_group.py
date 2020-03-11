@@ -51,13 +51,11 @@ class ProjectGroup(GitlabEntityMixin):
     )
 
     milestones = GenericRelation(
-        "development.Milestone",
-        related_query_name="project_group",
+        "development.Milestone", related_query_name="project_group",
     )
 
     members = GenericRelation(
-        "development.ProjectMember",
-        related_query_name="project_group",
+        "development.ProjectMember", related_query_name="project_group",
     )
 
     objects = ProjectGroupManager()  # noqa: WPS110

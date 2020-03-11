@@ -23,9 +23,7 @@ calculator = UserMetricsProvider()
 @pytest.fixture()
 def user(db):
     yield UserFactory.create(
-        login="user",
-        hour_rate=100,
-        tax_rate=15,
+        login="user", hour_rate=100, tax_rate=15,
     )
 
 
@@ -81,8 +79,9 @@ def test_bonus(user):
 
 def test_bonus_have_salaries(user):
     bonuses = BonusFactory.create_batch(10, user=user)
-    BonusFactory.create_batch(5, user=user,
-                              salary=SalaryFactory.create(user=user))
+    BonusFactory.create_batch(
+        5, user=user, salary=SalaryFactory.create(user=user)
+    )
 
     bonus_sum = metrics.bonus_resolver({"user": user}, None)
     assert bonus_sum == sum(bonus.sum for bonus in bonuses)
@@ -107,8 +106,9 @@ def test_penalty(user):
 
 def test_penalty_have_salaries(user):
     penalties = PenaltyFactory.create_batch(10, user=user)
-    PenaltyFactory.create_batch(5, user=user,
-                                salary=SalaryFactory.create(user=user))
+    PenaltyFactory.create_batch(
+        5, user=user, salary=SalaryFactory.create(user=user),
+    )
 
     penalty_sum = metrics.penalty_resolver({"user": user}, None)
     assert penalty_sum == sum(penalty.sum for penalty in penalties)
@@ -126,20 +126,20 @@ def test_penalty_another_user(user):
 
 def test_payroll_opened(user):
     issue = IssueFactory.create(state=IssueState.OPENED)
-    mr = MergeRequestFactory.create(
-        state=MergeRequestState.OPENED)
+    mr = MergeRequestFactory.create(state=MergeRequestState.OPENED)
 
-    IssueSpentTimeFactory.create(user=user, base=issue,
-                                 time_spent=seconds(hours=1))
-    IssueSpentTimeFactory.create(user=user, base=issue,
-                                 time_spent=-seconds(hours=2))
-    IssueSpentTimeFactory.create(user=user, base=issue,
-                                 time_spent=seconds(hours=5))
+    IssueSpentTimeFactory.create(
+        user=user, base=issue, time_spent=seconds(hours=1)
+    )
+    IssueSpentTimeFactory.create(
+        user=user, base=issue, time_spent=-seconds(hours=2)
+    )
+    IssueSpentTimeFactory.create(
+        user=user, base=issue, time_spent=seconds(hours=5)
+    )
 
     MergeRequestSpentTimeFactory.create(
-        user=user,
-        base=mr,
-        time_spent=seconds(hours=5)
+        user=user, base=mr, time_spent=seconds(hours=5)
     )
 
     _check_metrics(
@@ -153,34 +153,27 @@ def test_payroll_opened(user):
 
 def test_payroll_opened_has_salary(user):
     issue = IssueFactory.create(state=IssueState.OPENED)
-    mr = MergeRequestFactory.create(
-        state=MergeRequestState.OPENED)
+    mr = MergeRequestFactory.create(state=MergeRequestState.OPENED)
 
     salary = SalaryFactory.create(user=user)
 
     IssueSpentTimeFactory.create(
-        user=user,
-        base=issue,
-        time_spent=seconds(hours=4),
-        salary=salary,
+        user=user, base=issue, time_spent=seconds(hours=4), salary=salary,
     )
 
-    IssueSpentTimeFactory.create(user=user, base=issue,
-                                 time_spent=seconds(hours=2))
-    IssueSpentTimeFactory.create(user=user, base=issue,
-                                 time_spent=seconds(hours=5))
-
-    MergeRequestSpentTimeFactory.create(
-        user=user,
-        base=mr,
-        time_spent=seconds(hours=5)
+    IssueSpentTimeFactory.create(
+        user=user, base=issue, time_spent=seconds(hours=2)
+    )
+    IssueSpentTimeFactory.create(
+        user=user, base=issue, time_spent=seconds(hours=5)
     )
 
     MergeRequestSpentTimeFactory.create(
-        user=user,
-        base=mr,
-        time_spent=seconds(hours=2),
-        salary=salary
+        user=user, base=mr, time_spent=seconds(hours=5)
+    )
+
+    MergeRequestSpentTimeFactory.create(
+        user=user, base=mr, time_spent=seconds(hours=2), salary=salary
     )
 
     _check_metrics(
@@ -195,10 +188,12 @@ def test_payroll_opened_has_salary(user):
 def test_payroll_opened_has_closed(user):
     issue = IssueFactory.create(state=IssueState.CLOSED)
 
-    IssueSpentTimeFactory.create(user=user, base=issue,
-                                 time_spent=seconds(hours=4))
-    IssueSpentTimeFactory.create(user=user, base=issue,
-                                 time_spent=seconds(hours=2))
+    IssueSpentTimeFactory.create(
+        user=user, base=issue, time_spent=seconds(hours=4)
+    )
+    IssueSpentTimeFactory.create(
+        user=user, base=issue, time_spent=seconds(hours=2)
+    )
     IssueSpentTimeFactory.create(user=user, time_spent=seconds(hours=5))
 
     _check_metrics(
@@ -217,12 +212,15 @@ def test_payroll_opened_another_user(user):
 
     user_2 = UserFactory.create()
 
-    IssueSpentTimeFactory.create(user=user_2, base=issue,
-                                 time_spent=seconds(hours=1))
-    IssueSpentTimeFactory.create(user=user_2, base=issue,
-                                 time_spent=seconds(hours=2))
-    IssueSpentTimeFactory.create(user=user, base=issue,
-                                 time_spent=seconds(hours=5))
+    IssueSpentTimeFactory.create(
+        user=user_2, base=issue, time_spent=seconds(hours=1)
+    )
+    IssueSpentTimeFactory.create(
+        user=user_2, base=issue, time_spent=seconds(hours=2)
+    )
+    IssueSpentTimeFactory.create(
+        user=user, base=issue, time_spent=seconds(hours=5)
+    )
 
     _check_metrics(
         calculator.get_metrics(user),
@@ -235,12 +233,15 @@ def test_payroll_opened_another_user(user):
 def test_payroll_closed(user):
     issue = IssueFactory.create(state=IssueState.CLOSED)
 
-    IssueSpentTimeFactory.create(user=user, base=issue,
-                                 time_spent=seconds(hours=1))
-    IssueSpentTimeFactory.create(user=user, base=issue,
-                                 time_spent=-seconds(hours=2))
-    IssueSpentTimeFactory.create(user=user, base=issue,
-                                 time_spent=seconds(hours=5))
+    IssueSpentTimeFactory.create(
+        user=user, base=issue, time_spent=seconds(hours=1)
+    )
+    IssueSpentTimeFactory.create(
+        user=user, base=issue, time_spent=-seconds(hours=2)
+    )
+    IssueSpentTimeFactory.create(
+        user=user, base=issue, time_spent=seconds(hours=5)
+    )
 
     _check_metrics(
         calculator.get_metrics(user),
@@ -253,13 +254,18 @@ def test_payroll_closed(user):
 def test_payroll_closed_has_salary(user):
     issue = IssueFactory.create(state=IssueState.CLOSED)
 
-    IssueSpentTimeFactory.create(user=user, base=issue,
-                                 time_spent=seconds(hours=4),
-                                 salary=SalaryFactory.create(user=user))
-    IssueSpentTimeFactory.create(user=user, base=issue,
-                                 time_spent=seconds(hours=2))
-    IssueSpentTimeFactory.create(user=user, base=issue,
-                                 time_spent=seconds(hours=5))
+    IssueSpentTimeFactory.create(
+        user=user,
+        base=issue,
+        time_spent=seconds(hours=4),
+        salary=SalaryFactory.create(user=user),
+    )
+    IssueSpentTimeFactory.create(
+        user=user, base=issue, time_spent=seconds(hours=2)
+    )
+    IssueSpentTimeFactory.create(
+        user=user, base=issue, time_spent=seconds(hours=5)
+    )
 
     _check_metrics(
         calculator.get_metrics(user),
@@ -272,14 +278,17 @@ def test_payroll_closed_has_salary(user):
 def test_payroll_opened_has_opened(user):
     issue = IssueFactory.create(state=IssueState.OPENED)
 
-    IssueSpentTimeFactory.create(user=user, base=issue,
-                                 time_spent=seconds(hours=4))
-    IssueSpentTimeFactory.create(user=user, base=issue,
-                                 time_spent=seconds(hours=2))
-    IssueSpentTimeFactory.create(user=user,
-                                 base=IssueFactory.create(
-                                     state=IssueState.CLOSED),
-                                 time_spent=seconds(hours=5))
+    IssueSpentTimeFactory.create(
+        user=user, base=issue, time_spent=seconds(hours=4)
+    )
+    IssueSpentTimeFactory.create(
+        user=user, base=issue, time_spent=seconds(hours=2)
+    )
+    IssueSpentTimeFactory.create(
+        user=user,
+        base=IssueFactory.create(state=IssueState.CLOSED),
+        time_spent=seconds(hours=5),
+    )
 
     _check_metrics(
         calculator.get_metrics(user),
@@ -298,17 +307,18 @@ def test_payroll_closed_another_user(user):
 
     user_2 = UserFactory.create()
 
-    IssueSpentTimeFactory.create(user=user_2, base=issue,
-                                 time_spent=seconds(hours=1))
-    IssueSpentTimeFactory.create(user=user_2, base=issue,
-                                 time_spent=seconds(hours=2))
-    IssueSpentTimeFactory.create(user=user, base=issue,
-                                 time_spent=seconds(hours=5))
+    IssueSpentTimeFactory.create(
+        user=user_2, base=issue, time_spent=seconds(hours=1)
+    )
+    IssueSpentTimeFactory.create(
+        user=user_2, base=issue, time_spent=seconds(hours=2)
+    )
+    IssueSpentTimeFactory.create(
+        user=user, base=issue, time_spent=seconds(hours=5)
+    )
 
     MergeRequestSpentTimeFactory.create(
-        user=user,
-        base=mr,
-        time_spent=seconds(hours=2),
+        user=user, base=mr, time_spent=seconds(hours=2),
     )
 
     _check_metrics(
@@ -326,11 +336,7 @@ def test_last_salary_date(user):
         period_to=timezone.now() - timezone.timedelta(days=30),
         payed=True,
     )
-    salary = SalaryFactory(
-        user=user,
-        period_to=timezone.now(),
-        payed=True,
-    )
+    salary = SalaryFactory(user=user, period_to=timezone.now(), payed=True)
 
     last_salary_date = metrics.last_salary_date_resolver({"user": user}, None)
     assert last_salary_date == salary.created_at
@@ -351,8 +357,7 @@ def test_paid_work_breaks_days(user):
         from_date=now - timezone.timedelta(days=5),
     )
     paid_work_breaks_days = metrics.paid_work_breaks_days_resolver(
-        {"user": user},
-        None,
+        {"user": user}, None,
     )
     assert paid_work_breaks_days == 5
 
@@ -366,8 +371,7 @@ def test_paid_work_breaks_days_not_paid_not_count(user):
         from_date=now - timezone.timedelta(days=5),
     )
     paid_work_breaks_days = metrics.paid_work_breaks_days_resolver(
-        {"user": user},
-        None,
+        {"user": user}, None,
     )
     assert paid_work_breaks_days == 0
 
@@ -381,8 +385,7 @@ def test_paid_work_breaks_days_not_this_year_not_count(user):
         from_date=now - timezone.timedelta(days=375),
     )
     paid_work_breaks_days = metrics.paid_work_breaks_days_resolver(
-        {"user": user},
-        None,
+        {"user": user}, None,
     )
     assert paid_work_breaks_days == 0
 
@@ -396,8 +399,7 @@ def test_paid_work_breaks_lower_boundary_of_year(user):
         from_date=timezone.make_aware(timezone.datetime(now.year - 1, 12, 25)),
     )
     paid_work_breaks_days = metrics.paid_work_breaks_days_resolver(
-        {"user": user},
-        None,
+        {"user": user}, None,
     )
     assert paid_work_breaks_days == 3
 
@@ -411,8 +413,7 @@ def test_paid_work_breaks_upper_boundary_of_year(user):
         from_date=timezone.make_aware(timezone.datetime(now.year, 12, 25)),
     )
     paid_work_breaks_days = metrics.paid_work_breaks_days_resolver(
-        {"user": user},
-        None,
+        {"user": user}, None,
     )
     assert paid_work_breaks_days == 7
 
@@ -422,16 +423,15 @@ def test_complex(user):
     PenaltyFactory.create_batch(10, user=user)
 
     issue = IssueFactory.create(user=user, state=IssueState.OPENED)
-    IssueSpentTimeFactory.create(user=user, base=issue,
-                                 time_spent=seconds(hours=4))
-    IssueSpentTimeFactory.create(user=user, base=issue,
-                                 time_spent=seconds(hours=2))
+    IssueSpentTimeFactory.create(
+        user=user, base=issue, time_spent=seconds(hours=4)
+    )
+    IssueSpentTimeFactory.create(
+        user=user, base=issue, time_spent=seconds(hours=2)
+    )
     IssueSpentTimeFactory.create(
         user=user,
-        base=IssueFactory.create(
-            user=user,
-            state=IssueState.CLOSED,
-        ),
+        base=IssueFactory.create(user=user, state=IssueState.CLOSED),
         time_spent=seconds(hours=5),
     )
 

@@ -88,10 +88,7 @@ def model_to_dict_form(data: dict) -> dict:
         return "" if value is None else value
 
     original = model_to_dict(data)
-    return {
-        key: replace(value)
-        for key, value in original.items()
-    }
+    return {key: replace(value) for key, value in original.items()}
 
 
 def format_date(date: datetime) -> str:

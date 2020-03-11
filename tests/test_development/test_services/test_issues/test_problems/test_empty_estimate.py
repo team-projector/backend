@@ -11,9 +11,7 @@ from tests.test_development.factories import IssueFactory
 
 def test_empty_estimate(user):
     issue = IssueFactory.create(
-        user=user,
-        due_date=datetime.now().date(),
-        time_estimate=None,
+        user=user, due_date=datetime.now().date(), time_estimate=None,
     )
 
     assert get_issue_problems(issue) == [PROBLEM_EMPTY_ESTIMATE]
@@ -21,9 +19,7 @@ def test_empty_estimate(user):
 
 def test_zero_estimate(user):
     issue = IssueFactory.create(
-        user=user,
-        due_date=datetime.now().date(),
-        time_estimate=0,
+        user=user, due_date=datetime.now().date(), time_estimate=0,
     )
 
     assert get_issue_problems(issue) == [PROBLEM_EMPTY_ESTIMATE]

@@ -15,10 +15,7 @@ class MergeRequestManager(models.Manager):
         """Save merge request by Gitlab id."""
         kwargs["gl_last_sync"] = timezone.now()
 
-        return self.update_or_create(
-            gl_id=gl_id,
-            defaults=kwargs,
-        )
+        return self.update_or_create(gl_id=gl_id, defaults=kwargs)
 
     def allowed_for_user(self, user: User) -> models.QuerySet:
         """Issues allowed for team leader and watchers."""

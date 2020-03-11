@@ -13,10 +13,7 @@ class UserWeekMetricsGenerator:
     """User week metrics generator."""
 
     def __init__(
-        self,
-        user: User,
-        start: date,
-        end: date,
+        self, user: User, start: date, end: date,
     ):
         """Initializing."""
         self._user = user
@@ -42,9 +39,7 @@ class UserWeekMetricsGenerator:
         return metric
 
     def _apply_stats(  # noqa: WPS211
-        self,
-        week: date,
-        metric: provider.UserProgressMetrics,
+        self, week: date, metric: provider.UserProgressMetrics,
     ) -> None:
         deadline = self._deadline_stats.get(week)
         if deadline:

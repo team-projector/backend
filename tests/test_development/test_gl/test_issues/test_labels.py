@@ -10,27 +10,19 @@ def test_labels(db, gl_mocker, gl_client):
     project, gl_project = initializers.init_project()
     gl_label = GlLabelFactory.create()
     issue, gl_issue = initializers.init_issue(
-        project,
-        gl_project,
-        gl_kwargs={
-            "labels": [gl_label["name"]],
-        },
+        project, gl_project, gl_kwargs={"labels": [gl_label["name"]]},
     )
 
     gl_mock.mock_project_endpoints(gl_mocker, gl_project, labels=[gl_label])
     gl_mock.mock_issue_endpoints(
-        gl_mocker,
-        gl_project,
-        gl_issue,
-        labels=[gl_label],
+        gl_mocker, gl_project, gl_issue, labels=[gl_label],
     )
 
     gl_project_loaded_manager = gl_client.projects.get(id=project.gl_id)
     gl_issue_manager = gl_project_loaded_manager.issues.get(id=issue.gl_iid)
 
     IssueGlManager().sync_labels(
-        issue, gl_issue_manager,
-        gl_project_loaded_manager,
+        issue, gl_issue_manager, gl_project_loaded_manager,
     )
 
     issue.refresh_from_db()
@@ -44,19 +36,12 @@ def test_cached_labels(db, gl_mocker, gl_client):
     project, gl_project = initializers.init_project()
     gl_label = GlLabelFactory.create()
     first_issue, gl_first_issue = initializers.init_issue(
-        project,
-        gl_project,
-        gl_kwargs={
-            "labels": [gl_label["name"]],
-        },
+        project, gl_project, gl_kwargs={"labels": [gl_label["name"]]},
     )
 
     gl_mock.mock_project_endpoints(gl_mocker, gl_project, labels=[gl_label])
     gl_mock.mock_issue_endpoints(
-        gl_mocker,
-        gl_project,
-        gl_first_issue,
-        labels=[gl_label],
+        gl_mocker, gl_project, gl_first_issue, labels=[gl_label],
     )
 
     gl_project_loaded_manager = gl_client.projects.get(id=project.gl_id)
@@ -67,9 +52,7 @@ def test_cached_labels(db, gl_mocker, gl_client):
     assert getattr(gl_project_loaded_manager, "cached_labels", None) is None
 
     IssueGlManager().sync_labels(
-        first_issue,
-        gl_first_issue_manager,
-        gl_project_loaded_manager,
+        first_issue, gl_first_issue_manager, gl_project_loaded_manager,
     )
 
     assert gl_project_loaded_manager.cached_labels is not None
@@ -78,18 +61,11 @@ def test_cached_labels(db, gl_mocker, gl_client):
     assert first_issue.labels.first().title == gl_label["name"]
 
     second_issue, gl_second_issue = initializers.init_issue(
-        project,
-        gl_project,
-        gl_kwargs={
-            "labels": [gl_label["name"]],
-        },
+        project, gl_project, gl_kwargs={"labels": [gl_label["name"]]},
     )
 
     gl_mock.mock_issue_endpoints(
-        gl_mocker,
-        gl_project,
-        gl_second_issue,
-        labels=[gl_label],
+        gl_mocker, gl_project, gl_second_issue, labels=[gl_label],
     )
 
     gl_second_issue_manager = gl_project_loaded_manager.issues.get(
@@ -97,9 +73,7 @@ def test_cached_labels(db, gl_mocker, gl_client):
     )
 
     IssueGlManager().sync_labels(
-        second_issue,
-        gl_second_issue_manager,
-        gl_project_loaded_manager,
+        second_issue, gl_second_issue_manager, gl_project_loaded_manager,
     )
 
     second_issue.refresh_from_db()
@@ -110,11 +84,7 @@ def test_labels_is_empty(db, gl_mocker, gl_client):
     project, gl_project = initializers.init_project()
     gl_label = GlLabelFactory.create()
     issue, gl_issue = initializers.init_issue(
-        project,
-        gl_project,
-        gl_kwargs={
-            "labels": [gl_label["name"]],
-        },
+        project, gl_project, gl_kwargs={"labels": [gl_label["name"]]},
     )
 
     gl_mock.mock_project_endpoints(gl_mocker, gl_project)
@@ -124,9 +94,7 @@ def test_labels_is_empty(db, gl_mocker, gl_client):
     gl_issue_manager = gl_project_loaded_manager.issues.get(id=issue.gl_iid)
 
     IssueGlManager().sync_labels(
-        issue,
-        gl_issue_manager,
-        gl_project_loaded_manager,
+        issue, gl_issue_manager, gl_project_loaded_manager,
     )
 
     issue = Issue.objects.first()

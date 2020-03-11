@@ -9,23 +9,19 @@ def register_groups(mocker, groups):
 
 def register_group(mocker, group, status_code: int = HTTPStatus.OK):
     mocker.register_get(
-        "/groups/{0}".format(group["id"]),
-        group,
-        status_code=status_code,
+        "/groups/{0}".format(group["id"]), group, status_code=status_code,
     )
 
 
 def register_group_milestones(mocker, group, milestones):
     mocker.register_get(
-        "/groups/{0}/milestones".format(group["id"]),
-        milestones,
+        "/groups/{0}/milestones".format(group["id"]), milestones,
     )
 
 
 def register_group_projects(mocker, group, projects):
     mocker.register_get(
-        "/groups/{0}/projects".format(group["id"]),
-        projects,
+        "/groups/{0}/projects".format(group["id"]), projects,
     )
 
 

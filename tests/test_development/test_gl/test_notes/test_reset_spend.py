@@ -13,15 +13,22 @@ from tests.test_development.factories import IssueFactory
 def test_reset(user):
     issue = IssueFactory.create()
 
-    Note.objects.update_from_gitlab(dict2obj({
-        "id": 2,
-        "body": SPEND_RESET_MESSAGE,
-        "created_at": datetime.strftime(datetime.now(), GITLAB_DATETIME_FORMAT),
-        "updated_at": datetime.strftime(datetime.now(), GITLAB_DATETIME_FORMAT),
-        "author": {
-            "id": user.gl_id
-        }
-    }), issue)
+    Note.objects.update_from_gitlab(
+        dict2obj(
+            {
+                "id": 2,
+                "body": SPEND_RESET_MESSAGE,
+                "created_at": datetime.strftime(
+                    datetime.now(), GITLAB_DATETIME_FORMAT
+                ),
+                "updated_at": datetime.strftime(
+                    datetime.now(), GITLAB_DATETIME_FORMAT
+                ),
+                "author": {"id": user.gl_id},
+            }
+        ),
+        issue,
+    )
 
     assert Note.objects.count() == 1
 

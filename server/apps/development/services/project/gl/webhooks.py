@@ -25,14 +25,10 @@ class ProjectWebhookManager:
     def webhook_url(self) -> str:
         """Get webhook url."""
         return "https://{domain}{path}".format(
-            domain=settings.DOMAIN_NAME,
-            path=reverse("api:gl-webhook"),
+            domain=settings.DOMAIN_NAME, path=reverse("api:gl-webhook"),
         )
 
-    def check_project_webhooks(
-        self,
-        project: Project,
-    ) -> None:
+    def check_project_webhooks(self, project: Project) -> None:
         """Check whether webhooks for project are needed."""
         if not settings.GITLAB_CHECK_WEBHOOKS:
             return
@@ -50,21 +46,19 @@ class ProjectWebhookManager:
         """Validate webhooks for project."""
         hooks = gl_project.hooks.list()
 
-        tp_webhooks = [
-            hook
-            for hook in hooks
-            if hook.url == self.webhook_url
-        ]
+        tp_webhooks = [hook for hook in hooks if hook.url == self.webhook_url]
 
         has_valid = self._check_webhooks(tp_webhooks)
 
         if not has_valid:
-            gl_project.hooks.create({
-                "url": self.webhook_url,
-                "token": settings.GITLAB_WEBHOOK_SECRET_TOKEN,
-                "issues_events": True,
-                "merge_requests_events": True,
-            })
+            gl_project.hooks.create(
+                {
+                    "url": self.webhook_url,
+                    "token": settings.GITLAB_WEBHOOK_SECRET_TOKEN,
+                    "issues_events": True,
+                    "merge_requests_events": True,
+                },
+            )
 
     def _check_webhooks(self, tp_webhooks) -> bool:
         has_valid = False

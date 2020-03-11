@@ -25,9 +25,7 @@ MILESTONE_STATE_MAX_LENGTH = 20
 
 
 class Milestone(
-    GitlabEntityMixin,
-    GitlabInternalIdMixin,
-    Timestamps,
+    GitlabEntityMixin, GitlabInternalIdMixin, Timestamps,
 ):
     """The milestone model."""
 
@@ -75,10 +73,7 @@ class Milestone(
 
     owner = GenericForeignKey()
 
-    content_type = models.ForeignKey(
-        ContentType,
-        models.CASCADE,
-    )
+    content_type = models.ForeignKey(ContentType, models.CASCADE)
 
     object_id = models.PositiveIntegerField()
 
