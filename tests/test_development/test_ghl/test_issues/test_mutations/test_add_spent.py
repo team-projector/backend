@@ -1,4 +1,4 @@
-from pytest import raises
+import pytest
 
 from apps.core.graphql.errors import GraphQLInputError
 from apps.development.graphql.mutations.issues.inputs.add_spent import (
@@ -63,7 +63,7 @@ def test_user_without_gl_token(
     ghl_auth_mock_info,
     add_spent_issue_mutation
 ):
-    with raises(GraphQLInputError) as exc_info:
+    with pytest.raises(GraphQLInputError) as exc_info:
         add_spent_issue_mutation(
             root=None,
             info=ghl_auth_mock_info,
@@ -86,7 +86,7 @@ def test_bad_time(
     user.gl_token = "token"
     user.save()
 
-    with raises(GraphQLInputError) as exc_info:
+    with pytest.raises(GraphQLInputError) as exc_info:
         add_spent_issue_mutation(
             root=None,
             info=ghl_auth_mock_info,

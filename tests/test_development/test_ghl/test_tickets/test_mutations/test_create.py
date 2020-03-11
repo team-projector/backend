@@ -3,7 +3,6 @@
 from datetime import datetime
 
 import pytest
-from pytest import raises
 
 from apps.core.graphql.errors import (
     INPUT_ERROR,
@@ -80,7 +79,7 @@ def test_invalid_parameters(
     create_ticket_mutation,
 ):
     """Test creation with invalid parameters."""
-    with raises(GraphQLInputError) as exc_info:
+    with pytest.raises(GraphQLInputError) as exc_info:
         create_ticket_mutation(
             root=None,
             info=ghl_auth_mock_info,
@@ -106,7 +105,7 @@ def test_without_permissions(user, ghl_auth_mock_info, create_ticket_mutation):
     """Test deletion without permissions."""
     milestone = ProjectMilestoneFactory()
 
-    with raises(GraphQLPermissionDenied):
+    with pytest.raises(GraphQLPermissionDenied):
         create_ticket_mutation(
             root=None,
             info=ghl_auth_mock_info,

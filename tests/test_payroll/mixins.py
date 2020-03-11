@@ -24,8 +24,8 @@ class CheckUserProgressMetricsMixin(testcases.TestCase):
         time_remains = self._prepare_metrics(time_remains)
 
         for metric in metrics:
-            self.assertEqual(metric.get("start"), metric.get("end"))
-            self.assertEqual(metric["planned_work_hours"], planned_work_hours)
+            assert metric.get("start") == metric.get("end")
+            assert metric["planned_work_hours"] == planned_work_hours
 
             self._check_metric(metric, "time_spent", spents)
             self._check_metric(metric, "time_estimate", time_estimates)
@@ -33,12 +33,9 @@ class CheckUserProgressMetricsMixin(testcases.TestCase):
             self._check_metric(metric, "time_remains", time_remains)
 
             if metric["start"] in issues_counts:
-                self.assertEqual(
-                    metric["issues_count"],
-                    issues_counts[metric.get("start")],
-                )
+                assert metric["issues_count"] == issues_counts[metric.get("start")]  # noqa: E501
             else:
-                self.assertEqual(metric["issues_count"], 0)
+                assert metric["issues_count"] == 0
 
     def _prepare_metrics(self, metrics):
         return {
@@ -47,19 +44,22 @@ class CheckUserProgressMetricsMixin(testcases.TestCase):
         }
 
     def _check_metric(self, metric, metric_name, values):
+        message_tpl = "bad {0} for {1}: expected - {2}, actual - {3}"
         if metric["start"] in values:
-            self.assertEqual(
-                metric[metric_name],
-                values[metric.get("start")].total_seconds(),
-                f"bad {metric_name} for {metric['start']}: "
-                + f"expected - {values[metric.get('start')]}, "
-                + f"actual - {timedelta(seconds=metric[metric_name])}",
+            message = message_tpl.format(
+                metric_name,
+                metric["start"],
+                values[metric.get("start")],
+                timedelta(seconds=metric[metric_name]),
             )
+
+            start_value = values[metric.get("start")].total_seconds()
+            assert metric[metric_name] == start_value, message
         else:
-            self.assertEqual(
-                metric[metric_name],
+            message = message_tpl.format(
+                metric_name,
+                metric["start"],
                 0,
-                f"bad {metric_name} for {metric.get('start')}: "
-                + "expected - 0, "
-                + f"actual - {timedelta(seconds=metric[metric_name])}",
+                timedelta(seconds=metric[metric_name]),
             )
+            assert metric[metric_name] == 0, message

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from pytest import raises
+import pytest
 
 from apps.core.graphql.errors import GraphQLPermissionDenied
 from tests.test_development.factories import TicketFactory
@@ -48,7 +48,7 @@ def test_success(ghl_auth_mock_info, all_tickets_query):
 
 def test_unauth(ghl_mock_info, all_tickets_query):
     """Test unauth tickets list."""
-    with raises(GraphQLPermissionDenied):
+    with pytest.raises(GraphQLPermissionDenied):
         all_tickets_query(
             root=None,
             info=ghl_mock_info,

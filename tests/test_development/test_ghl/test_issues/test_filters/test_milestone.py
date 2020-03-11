@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from pytest import raises
+import pytest
 
 from apps.core.graphql.errors import GraphQLPermissionDenied
 from apps.development.graphql.filters import IssuesFilterSet
@@ -38,7 +38,7 @@ def test_not_project_manager(user, auth_rf):
     milestone = ProjectMilestoneFactory.create()
     IssueFactory.create_batch(3, user=user, milestone=milestone)
 
-    with raises(GraphQLPermissionDenied):
+    with pytest.raises(GraphQLPermissionDenied):
         IssuesFilterSet(  # noqa: WPS428
             data={"milestone": milestone.pk},
             queryset=Issue.objects.all(),

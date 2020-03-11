@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from pytest import raises
+import pytest
 
 from apps.core.graphql.errors import GraphQLNotFound
 
@@ -45,7 +45,7 @@ def test_inactive(user, ghl_auth_mock_info, user_query):
     user.is_active = False
     user.save(update_fields=["is_active"])
 
-    with raises(GraphQLNotFound):
+    with pytest.raises(GraphQLNotFound):
         user_query(
             root=None,
             info=ghl_auth_mock_info,

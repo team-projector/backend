@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from pytest import raises
+import pytest
 
 from apps.core.graphql.errors import GraphQLPermissionDenied
 from apps.development.models import TeamMember
@@ -60,7 +60,7 @@ def test_query(user, ghl_client):
 def test_not_team_lead(ghl_auth_mock_info, decline_work_break_mutation):
     work_break = WorkBreakFactory.create()
 
-    with raises(GraphQLPermissionDenied):
+    with pytest.raises(GraphQLPermissionDenied):
         decline_work_break_mutation(
             root=None,
             info=ghl_auth_mock_info,
@@ -76,7 +76,7 @@ def test_not_team_lead(ghl_auth_mock_info, decline_work_break_mutation):
 def test_owner(ghl_auth_mock_info, decline_work_break_mutation):
     work_break = WorkBreakFactory.create(user=ghl_auth_mock_info.context.user)
 
-    with raises(GraphQLPermissionDenied):
+    with pytest.raises(GraphQLPermissionDenied):
         decline_work_break_mutation(
             root=None,
             info=ghl_auth_mock_info,

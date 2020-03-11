@@ -1,4 +1,4 @@
-from pytest import raises
+import pytest
 
 from apps.core.graphql.errors import GraphQLPermissionDenied
 from apps.development.models import TeamMember
@@ -63,7 +63,7 @@ def test_salaries_filter_by_team_not_leader(user, client):
 
     client.user = user
 
-    with raises(GraphQLPermissionDenied):
+    with pytest.raises(GraphQLPermissionDenied):
         SalaryFilterSet(  # noqa: WPS428
             data={"team": team.id},
             queryset=Salary.objects.all(),

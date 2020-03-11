@@ -2,7 +2,7 @@
 
 from datetime import datetime
 
-from pytest import raises
+import pytest
 
 from apps.core.graphql.errors import GraphQLNotFound
 from apps.development.models import TeamMember
@@ -57,7 +57,7 @@ def test_not_leader(user, ghl_auth_mock_info):
         roles=TeamMember.roles.DEVELOPER
     )
 
-    with raises(GraphQLNotFound):
+    with pytest.raises(GraphQLNotFound):
         resolve_user_progress_metrics(
             parent=None,
             info=ghl_auth_mock_info,

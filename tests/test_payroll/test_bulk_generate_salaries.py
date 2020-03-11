@@ -35,10 +35,10 @@ class BulkGenerateSalariesTests(TestCase):
 
         self.calculator.generate_bulk()
 
-        self.assertEqual(Salary.objects.count(), 1)
+        assert Salary.objects.count() == 1
 
         salary = Salary.objects.filter(user=self.user).first()
-        self.assertEqual(salary.total, self.user.hour_rate * 4)
+        assert salary.total == self.user.hour_rate * 4
 
     def test_many(self):
         issue_1 = IssueFactory.create(state=IssueState.CLOSED)
@@ -57,13 +57,13 @@ class BulkGenerateSalariesTests(TestCase):
 
         self.calculator.generate_bulk()
 
-        self.assertEqual(Salary.objects.count(), 3)
+        assert Salary.objects.count() == 3
 
         salary = Salary.objects.filter(user=self.user).first()
-        self.assertEqual(salary.total, self.user.hour_rate)
+        assert salary.total == self.user.hour_rate
 
         salary = Salary.objects.filter(user=user_2).first()
-        self.assertEqual(salary.total, user_2.hour_rate * 2)
+        assert salary.total == user_2.hour_rate * 2
 
         salary = Salary.objects.filter(user=user_3).first()
-        self.assertEqual(salary.total, user_3.hour_rate * 5)
+        assert salary.total == user_3.hour_rate * 5

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from pytest import raises
+import pytest
 
 from apps.core.graphql.errors import GraphQLPermissionDenied
 from apps.development.models import TeamMember
@@ -36,7 +36,7 @@ def test_query(user, gql_client_authenticated):
 
 
 def test_unauth(ghl_mock_info, all_salaries_query):
-    with raises(GraphQLPermissionDenied):
+    with pytest.raises(GraphQLPermissionDenied):
         all_salaries_query(
             root=None,
             info=ghl_mock_info,

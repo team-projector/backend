@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from pytest import raises
+import pytest
 
 from apps.core.graphql.errors import GraphQLNotFound, GraphQLPermissionDenied
 from tests.test_development.factories import IssueFactory
@@ -36,7 +36,7 @@ def test_unauth(db, ghl_mock_info, issue_query):
     """Test unauth issue retrieving."""
     issue = IssueFactory()
 
-    with raises(GraphQLPermissionDenied):
+    with pytest.raises(GraphQLPermissionDenied):
         issue_query(
             root=None,
             info=ghl_mock_info,
@@ -46,7 +46,7 @@ def test_unauth(db, ghl_mock_info, issue_query):
 
 def test_not_found(ghl_auth_mock_info, issue_query):
     """Test not found issue retrieving."""
-    with raises(GraphQLNotFound):
+    with pytest.raises(GraphQLNotFound):
         issue_query(
             root=None,
             info=ghl_auth_mock_info,

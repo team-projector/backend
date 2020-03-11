@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 import pytest
-from pytest import raises
 from rest_framework.exceptions import AuthenticationFailed
 
 from apps.development.api.views.gl_webhook import gl_webhook
@@ -27,14 +26,14 @@ def _gitlab_webhook_secret_token(settings) -> None:
 def test_no_token(client):
     webhook = GlIssueWebhookFactory.create()
 
-    with raises(AuthenticationFailed):
+    with pytest.raises(AuthenticationFailed):
         gl_webhook(client.post("/", data=webhook, format="json"))
 
 
 def test_bad_token(client):
     webhook = GlIssueWebhookFactory.create()
 
-    with raises(AuthenticationFailed):
+    with pytest.raises(AuthenticationFailed):
         gl_webhook(client.post(
             "/",
             data=webhook,

@@ -1,4 +1,4 @@
-from pytest import raises
+import pytest
 
 from apps.core.graphql.errors import GraphQLInputError
 from apps.development.models.issue import IssueState
@@ -78,7 +78,7 @@ def test_without_access(
 ):
     issue = IssueFactory()
 
-    with raises(GraphQLInputError) as exc_info:
+    with pytest.raises(GraphQLInputError) as exc_info:
         sync_issue_mutation(
             root=None,
             info=ghl_auth_mock_info,

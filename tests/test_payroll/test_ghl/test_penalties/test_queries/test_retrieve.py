@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from pytest import raises
+import pytest
 
 from apps.core.graphql.errors import GraphQLNotFound, GraphQLPermissionDenied
 from tests.test_payroll.factories import PenaltyFactory
@@ -34,7 +34,7 @@ def test_query(user, ghl_client):
 def test_unauth(db, ghl_mock_info, penalty_query, user):
     penalty = PenaltyFactory(user=user)
 
-    with raises(GraphQLPermissionDenied):
+    with pytest.raises(GraphQLPermissionDenied):
         penalty_query(
             root=None,
             info=ghl_mock_info,
@@ -43,7 +43,7 @@ def test_unauth(db, ghl_mock_info, penalty_query, user):
 
 
 def test_not_found(ghl_auth_mock_info, penalty_query):
-    with raises(GraphQLNotFound):
+    with pytest.raises(GraphQLNotFound):
         penalty_query(
             root=None,
             info=ghl_auth_mock_info,
@@ -53,7 +53,7 @@ def test_not_found(ghl_auth_mock_info, penalty_query):
 
 def test_not_allowed_for_user(user, penalty_query, ghl_auth_mock_info):
     penalty = PenaltyFactory(user=UserFactory())
-    with raises(GraphQLNotFound):
+    with pytest.raises(GraphQLNotFound):
         penalty_query(
             root=None,
             info=ghl_auth_mock_info,

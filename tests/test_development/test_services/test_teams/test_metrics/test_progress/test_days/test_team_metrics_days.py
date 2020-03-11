@@ -1,10 +1,10 @@
 from datetime import datetime, timedelta
 from typing import Dict
 
+import pytest
 from django.db.models import Sum
 from django.test import override_settings
 from django.utils import timezone
-from pytest import raises
 
 from apps.core.utils.time import seconds
 from apps.development.models import TeamMember
@@ -445,17 +445,18 @@ def test_another_user_in_team(user):
 
 
 def test_bad_group(db):
-    with raises(ValueError):
+    group = "test_bad_group"
+    with pytest.raises(ValueError, match="Bad group '{0}'".format(group)):
         get_progress_metrics(
             TeamFactory.create(),
             timezone.now().date() - timedelta(days=5),
             timezone.now().date() + timedelta(days=5),
-            "test_bad_group"
+            group,
         )
 
 
 def test_provider_not_implemented(user):
-    with raises(NotImplementedError):
+    with pytest.raises(NotImplementedError):
         ProgressMetricsProvider(
             TeamFactory.create(),
             datetime.now().date() - timedelta(days=5),

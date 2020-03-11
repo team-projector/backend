@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from pytest import raises
+import pytest
 
 from apps.core.graphql.errors import GraphQLNotFound, GraphQLPermissionDenied
 from tests.test_payroll.factories import BonusFactory
@@ -34,7 +34,7 @@ def test_query(user, ghl_client):
 def test_unauth(db, ghl_mock_info, bonus_query, user):
     bonus = BonusFactory(user=user)
 
-    with raises(GraphQLPermissionDenied):
+    with pytest.raises(GraphQLPermissionDenied):
         bonus_query(
             root=None,
             info=ghl_mock_info,
@@ -43,7 +43,7 @@ def test_unauth(db, ghl_mock_info, bonus_query, user):
 
 
 def test_not_found(ghl_auth_mock_info, bonus_query):
-    with raises(GraphQLNotFound):
+    with pytest.raises(GraphQLNotFound):
         bonus_query(
             root=None,
             info=ghl_auth_mock_info,
@@ -53,7 +53,7 @@ def test_not_found(ghl_auth_mock_info, bonus_query):
 
 def test_not_allowed_for_user(user, bonus_query, ghl_auth_mock_info):
     bonus = BonusFactory(user=UserFactory())
-    with raises(GraphQLNotFound):
+    with pytest.raises(GraphQLNotFound):
         bonus_query(
             root=None,
             info=ghl_auth_mock_info,

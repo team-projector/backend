@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from pytest import raises
+import pytest
 
 from apps.core.graphql.errors import GraphQLPermissionDenied
 from tests.test_development.factories import IssueFactory
@@ -44,7 +44,7 @@ def test_not_owned_issue(ghl_auth_mock_info, all_issues_query):
 
 def test_unauth(ghl_mock_info, all_issues_query):
     """Test unauth issues list."""
-    with raises(GraphQLPermissionDenied):
+    with pytest.raises(GraphQLPermissionDenied):
         all_issues_query(
             root=None,
             info=ghl_mock_info,

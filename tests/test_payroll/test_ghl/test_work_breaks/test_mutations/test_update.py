@@ -2,8 +2,8 @@
 
 from datetime import timedelta
 
+import pytest
 from django.utils import timezone
-from pytest import raises
 
 from apps.core.graphql.errors import GraphQLPermissionDenied
 from apps.development.models import TeamMember
@@ -84,7 +84,7 @@ def test_work_break_not_team_lead(
         "comment": "test comment",
     }
 
-    with raises(GraphQLPermissionDenied):
+    with pytest.raises(GraphQLPermissionDenied):
         update_work_break_mutation(
             root=None,
             info=ghl_auth_mock_info,
@@ -125,7 +125,7 @@ def test_update_work_break_another_user(
         "comment": "test comment",
     }
 
-    with raises(GraphQLPermissionDenied):
+    with pytest.raises(GraphQLPermissionDenied):
         update_work_break_mutation(
             root=None,
             info=ghl_auth_mock_info,

@@ -1,6 +1,7 @@
 from datetime import timedelta
 from decimal import Decimal
 
+import pytest
 from django.test import TestCase
 from django.utils import timezone
 
@@ -57,28 +58,25 @@ class GenerateSalariesTests(TestCase):
 
         salary = self.calculator.generate(self.user)
 
-        self.assertEqual(salary.charged_time,
-                         seconds(hours=9))
-        self.assertEqual(self.user.hour_rate * 9, salary.sum)
-        self.assertEqual(0, salary.penalty)
-        self.assertEqual(0, salary.bonus)
-        self.assertEqual(salary.total * salary.tax_rate, salary.taxes)
-        self.assertEqual(100, salary.hour_rate)
-        self.assertEqual(15, salary.tax_rate)
-        self.assertEqual(self.user.position, salary.position)
-
-        self.assertEqual(salary.total, salary.sum)
-
-        self.assertEqual(4, Payroll.objects.filter(salary=salary).count())
+        assert salary.charged_time == seconds(hours=9)
+        assert self.user.hour_rate * 9 == salary.sum
+        assert salary.penalty == 0
+        assert salary.bonus == 0
+        assert salary.total * salary.tax_rate == salary.taxes
+        assert salary.hour_rate == 100
+        assert salary.tax_rate == 15
+        assert self.user.position == salary.position
+        assert salary.total == salary.sum
+        assert Payroll.objects.filter(salary=salary).count() == 4
 
     def test_no_payrolls(self):
         salary = None
 
-        with self.assertRaises(EmptySalaryException):
+        with pytest.raises(EmptySalaryException):
             salary = self.calculator.generate(self.user)
 
-        self.assertIsNone(salary)
-        self.assertEqual(Salary.objects.count(), 0)
+        assert salary is None
+        assert Salary.objects.count() == 0
 
     def test_with_penalty(self):
         issue = IssueFactory.create(state=IssueState.CLOSED)
@@ -97,15 +95,13 @@ class GenerateSalariesTests(TestCase):
 
         salary = self.calculator.generate(self.user)
 
-        self.assertEqual(salary.charged_time,
-                         seconds(hours=4))
-        self.assertEqual(salary.sum, self.user.hour_rate * 4)
-        self.assertEqual(salary.penalty, penalty.sum)
-        self.assertEqual(salary.bonus, 0)
-        self.assertEqual(salary.total * salary.tax_rate, salary.taxes)
-        self.assertEqual(salary.total, salary.sum - penalty.sum)
-
-        self.assertEqual(Payroll.objects.filter(salary=salary).count(), 4)
+        assert salary.charged_time == seconds(hours=4)
+        assert salary.sum == self.user.hour_rate * 4
+        assert salary.penalty == penalty.sum
+        assert salary.bonus == 0
+        assert salary.total * salary.tax_rate == salary.taxes
+        assert salary.total == salary.sum - penalty.sum
+        assert Payroll.objects.filter(salary=salary).count() == 4
 
     def test_with_bonus(self):
         issue = IssueFactory.create(state=IssueState.CLOSED)
@@ -124,15 +120,13 @@ class GenerateSalariesTests(TestCase):
 
         salary = self.calculator.generate(self.user)
 
-        self.assertEqual(salary.charged_time,
-                         seconds(hours=4))
-        self.assertEqual(salary.sum, self.user.hour_rate * 4)
-        self.assertEqual(salary.bonus, bonus.sum)
-        self.assertEqual(salary.penalty, 0)
-        self.assertEqual(salary.total * salary.tax_rate, salary.taxes)
-        self.assertEqual(salary.total, salary.sum + bonus.sum)
-
-        self.assertEqual(Payroll.objects.filter(salary=salary).count(), 4)
+        assert salary.charged_time == seconds(hours=4)
+        assert salary.sum == self.user.hour_rate * 4
+        assert salary.bonus == bonus.sum
+        assert salary.penalty == 0
+        assert salary.total * salary.tax_rate == salary.taxes
+        assert salary.total == salary.sum + bonus.sum
+        assert Payroll.objects.filter(salary=salary).count() == 4
 
     def test_complex(self):
         issue = IssueFactory.create(state=IssueState.CLOSED)
@@ -152,15 +146,13 @@ class GenerateSalariesTests(TestCase):
 
         salary = self.calculator.generate(self.user)
 
-        self.assertEqual(salary.charged_time,
-                         seconds(hours=4))
-        self.assertEqual(salary.sum, self.user.hour_rate * 4)
-        self.assertEqual(salary.bonus, bonus.sum)
-        self.assertEqual(salary.penalty, penalty.sum)
-        self.assertEqual(salary.total * salary.tax_rate, salary.taxes)
-
-        self.assertEqual(salary.total, salary.sum + bonus.sum - penalty.sum)
-        self.assertEqual(Payroll.objects.filter(salary=salary).count(), 5)
+        assert salary.charged_time == seconds(hours=4)
+        assert salary.sum == self.user.hour_rate * 4
+        assert salary.bonus == bonus.sum
+        assert salary.penalty == penalty.sum
+        assert salary.total * salary.tax_rate == salary.taxes
+        assert salary.total == salary.sum + bonus.sum - penalty.sum
+        assert Payroll.objects.filter(salary=salary).count() == 5
 
     def test_some_already_with_salary(self):
         prev_salary = SalaryFactory.create(user=self.user)
@@ -183,16 +175,14 @@ class GenerateSalariesTests(TestCase):
 
         salary = self.calculator.generate(self.user)
 
-        self.assertEqual(salary.charged_time,
-                         seconds(hours=5))
-        self.assertEqual(salary.sum, self.user.hour_rate * 5)
-        self.assertEqual(salary.bonus, bonus.sum)
-        self.assertEqual(salary.penalty, 0)
-        self.assertEqual(salary.total * salary.tax_rate, salary.taxes)
-        self.assertEqual(salary.total, salary.sum + bonus.sum)
-
-        self.assertEqual(Payroll.objects.filter(salary=salary).count(), 2)
-        self.assertEqual(Payroll.objects.filter(salary=prev_salary).count(), 3)
+        assert salary.charged_time == seconds(hours=5)
+        assert salary.sum == self.user.hour_rate * 5
+        assert salary.bonus == bonus.sum
+        assert salary.penalty == 0
+        assert salary.total * salary.tax_rate == salary.taxes
+        assert salary.total == salary.sum + bonus.sum
+        assert Payroll.objects.filter(salary=salary).count() == 2
+        assert Payroll.objects.filter(salary=prev_salary).count() == 3
 
     def test_with_another_user(self):
         user_2 = UserFactory.create()
@@ -213,15 +203,13 @@ class GenerateSalariesTests(TestCase):
 
         salary = self.calculator.generate(self.user)
 
-        self.assertEqual(salary.charged_time,
-                         seconds(hours=5))
-        self.assertEqual(salary.sum, self.user.hour_rate * 5)
-        self.assertEqual(salary.bonus, 0)
-        self.assertEqual(salary.total * salary.tax_rate, salary.taxes)
-        self.assertEqual(salary.penalty, penalty.sum)
-        self.assertEqual(salary.total, salary.sum - penalty.sum)
-
-        self.assertEqual(Payroll.objects.filter(salary=salary).count(), 2)
+        assert salary.charged_time == seconds(hours=5)
+        assert salary.sum == self.user.hour_rate * 5
+        assert salary.bonus == 0
+        assert salary.total * salary.tax_rate == salary.taxes
+        assert salary.penalty == penalty.sum
+        assert salary.total == salary.sum - penalty.sum
+        assert Payroll.objects.filter(salary=salary).count() == 2
 
     def test_with_opened_issues_mr(self):
         closed_issue = IssueFactory.create(state=IssueState.CLOSED)
@@ -244,15 +232,13 @@ class GenerateSalariesTests(TestCase):
 
         salary = self.calculator.generate(self.user)
 
-        self.assertEqual(salary.charged_time,
-                         seconds(hours=3))
-        self.assertEqual(salary.sum, self.user.hour_rate * 3)
-        self.assertEqual(salary.bonus, 0)
-        self.assertEqual(salary.penalty, 0)
-        self.assertEqual(salary.total * salary.tax_rate, salary.taxes)
-        self.assertEqual(salary.total, salary.sum)
-
-        self.assertEqual(Payroll.objects.filter(salary=salary).count(), 2)
+        assert salary.charged_time == seconds(hours=3)
+        assert salary.sum == self.user.hour_rate * 3
+        assert salary.bonus == 0
+        assert salary.penalty == 0
+        assert salary.total * salary.tax_rate == salary.taxes
+        assert salary.total == salary.sum
+        assert Payroll.objects.filter(salary=salary).count() == 2
 
     def test_taxes(self):
         self.user.tax_rate = 0.3
@@ -275,13 +261,12 @@ class GenerateSalariesTests(TestCase):
 
         salary = self.calculator.generate(self.user)
 
-        self.assertEqual(salary.charged_time,
-                         seconds(hours=4))
-        self.assertEqual(salary.sum, self.user.hour_rate * 4)
-        self.assertEqual(salary.bonus, bonus.sum)
-        self.assertEqual(salary.penalty, penalty.sum)
-        self.assertEqual(salary.total, salary.sum + bonus.sum - penalty.sum)
-        self.assertEqual(salary.taxes,
-                         salary.total * Decimal.from_float(self.user.tax_rate))
-
-        self.assertEqual(Payroll.objects.filter(salary=salary).count(), 5)
+        assert salary.charged_time == seconds(hours=4)
+        assert salary.sum == self.user.hour_rate * 4
+        assert salary.bonus == bonus.sum
+        assert salary.penalty == penalty.sum
+        assert salary.total == salary.sum + bonus.sum - penalty.sum
+        assert salary.taxes == salary.total * Decimal.from_float(
+            self.user.tax_rate,
+        )
+        assert Payroll.objects.filter(salary=salary).count() == 5

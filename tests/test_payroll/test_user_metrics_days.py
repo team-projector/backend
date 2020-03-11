@@ -6,7 +6,6 @@ from django.db.models import Sum
 from django.test import override_settings
 from django.utils import timezone
 from freezegun import freeze_time
-from pytest import raises
 
 from apps.core.utils.time import seconds
 from apps.development.models.issue import IssueState
@@ -318,17 +317,18 @@ def test_not_loading_over_daily_work_hours(user, _freeze_to_noon):
 
 
 def test_bad_group(user, _freeze_to_noon):
-    with raises(ValueError):
+    group = "test_bad_group"
+    with pytest.raises(ValueError, match="Bad group '{0}'".format(group)):
         get_progress_metrics(
             user,
             datetime.now().date() - timedelta(days=5),
             datetime.now().date() + timedelta(days=5),
-            "test_bad_group"
+            group,
         )
 
 
 def test_provider_not_implemented(user, _freeze_to_noon):
-    with raises(NotImplementedError):
+    with pytest.raises(NotImplementedError):
         ProgressMetricsProvider(
             user,
             datetime.now().date() - timedelta(days=5),
