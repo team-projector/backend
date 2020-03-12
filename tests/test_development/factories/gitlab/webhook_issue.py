@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 import factory
 
 from tests.test_development.factories.gitlab.issue import GlIssueFactory

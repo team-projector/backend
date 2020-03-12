@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 import pytest
 from django.utils.translation import gettext as _
 

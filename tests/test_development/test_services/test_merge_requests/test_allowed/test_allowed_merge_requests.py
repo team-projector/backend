@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from apps.development.models import MergeRequest, TeamMember
 from tests.test_development.factories import (
     MergeRequestFactory,

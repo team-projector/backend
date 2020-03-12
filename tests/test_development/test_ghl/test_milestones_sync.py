@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from django.test import override_settings
 
 from apps.development.graphql.mutations.milestones import SyncMilestoneMutation

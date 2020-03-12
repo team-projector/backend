@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from apps.payroll.models import Payroll
 from tests.test_payroll.factories import (
     BonusFactory,

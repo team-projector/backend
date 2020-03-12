@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from apps.payroll.admin.filters import HasSalaryFilter
 from apps.payroll.models import Payroll, Salary
 from tests.test_payroll.factories import SalaryFactory

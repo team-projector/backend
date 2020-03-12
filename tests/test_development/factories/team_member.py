@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 import factory
 
 from apps.development.models import TeamMember

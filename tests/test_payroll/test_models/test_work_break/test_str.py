@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from apps.payroll.models.work_break import WorkBreakReason
 from tests.test_payroll.factories import WorkBreakFactory
 

@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from apps.development.models import TeamMember
 from apps.payroll.models.mixins.approved import ApprovedState
 from apps.payroll.services import work_break as work_break_service

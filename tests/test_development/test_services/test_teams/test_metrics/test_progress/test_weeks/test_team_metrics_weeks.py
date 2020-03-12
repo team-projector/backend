@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from datetime import date, datetime, timedelta
 from typing import Dict
 

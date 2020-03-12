@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from apps.development.models import TeamMember
 from apps.payroll.models import SpentTime
 from tests.test_development.factories import TeamFactory

@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from apps.development.graphql.resolvers import resolve_merge_requests_summary
 from apps.development.models import MergeRequest, TeamMember
 from apps.development.models.merge_request import MergeRequestState

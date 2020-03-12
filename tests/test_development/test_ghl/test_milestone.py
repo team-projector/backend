@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from apps.development.graphql.types.milestone import MilestoneType
 from apps.development.models import Milestone
 from apps.development.models.project_member import ProjectMemberRole

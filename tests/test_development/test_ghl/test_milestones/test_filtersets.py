@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from apps.development.graphql.filters import MilestonesFilterSet
 from apps.development.models.milestone import Milestone, MilestoneState
 from tests.test_development.factories import ProjectMilestoneFactory

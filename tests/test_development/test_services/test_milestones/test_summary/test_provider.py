@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from apps.development.models import Milestone
 from apps.development.models.milestone import MilestoneState
 from apps.development.services.milestone.summary import (

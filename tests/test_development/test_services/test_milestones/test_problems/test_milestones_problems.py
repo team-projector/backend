@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from datetime import datetime, timedelta
 
 from apps.development.graphql.types.milestone import MilestoneType

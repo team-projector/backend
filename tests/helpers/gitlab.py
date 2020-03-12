@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from apps.core.gitlab.parsers import GITLAB_DATE_FORMAT, GITLAB_DATETIME_FORMAT
 
 

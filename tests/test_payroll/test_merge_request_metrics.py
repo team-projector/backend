@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from apps.core.utils.time import seconds
 from apps.development.models.merge_request import MergeRequestState
 from apps.development.services.merge_request.metrics import (

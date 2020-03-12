@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from apps.development.services.team.metrics.main import TeamMetrics
 
 
