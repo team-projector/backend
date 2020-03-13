@@ -34,7 +34,7 @@ def ticket():
 @pytest.fixture()
 def project_manager(user):
     """Provide project manager."""
-    user.roles.PROJECT_MANAGER = True
+    user.roles.MANAGER = True
     user.save()
 
     return user

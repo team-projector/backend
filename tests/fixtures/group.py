@@ -55,7 +55,7 @@ def group_customer(group, make_group_customer):
 def _make_group_manager(group, user=None):
     """Create or bind group manager."""
     return _add_or_update_user_in_group(
-        group, ProjectMemberRole.PROJECT_MANAGER, user,
+        group, ProjectMemberRole.MANAGER, user,
     )
 
 

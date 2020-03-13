@@ -32,7 +32,7 @@ def filter_allowed_for_user(
 def get_members(user: User) -> List[ProjectMember]:
     """Get project managers."""
     members = ProjectMember.objects.filter(
-        user=user, role=ProjectMemberRole.PROJECT_MANAGER,
+        user=user, role=ProjectMemberRole.MANAGER,
     )
 
     if not members:

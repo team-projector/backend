@@ -12,7 +12,7 @@ from tests.test_development.factories import (
 
 
 def test_filter_by_milestone(user, auth_rf):
-    user.roles.PROJECT_MANAGER = True
+    user.roles.MANAGER = True
     user.save()
 
     milestone = ProjectMilestoneFactory.create()

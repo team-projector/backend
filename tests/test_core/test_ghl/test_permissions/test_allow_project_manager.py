@@ -7,7 +7,7 @@ def test_success(user, ghl_auth_mock_info):
     """Check if project manager user has permissions."""
     perms = AllowProjectManager()
 
-    user.roles.PROJECT_MANAGER = True
+    user.roles.MANAGER = True
     user.save()
 
     assert perms.has_node_permission(info=ghl_auth_mock_info, obj_id="1")

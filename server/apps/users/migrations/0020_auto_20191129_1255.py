@@ -14,6 +14,6 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name="user",
             name="roles",
-            field=bitfield.models.BitField((("DEVELOPER", "CH_DEVELOPER"), ("TEAM_LEADER", "CH_TEAM_LEADER"), ("PROJECT_MANAGER", "CH_PROJECT_MANAGER"), ("CUSTOMER", "CH_CUSTOMER"), ("SHAREHOLDER", "CH_SHAREHOLDER")), default=0),
+            field=bitfield.models.BitField((("DEVELOPER", "CH_DEVELOPER"), ("TEAM_LEADER", "CH_TEAM_LEADER"), ("MANAGER", "CH_MANAGER"), ("CUSTOMER", "CH_CUSTOMER"), ("SHAREHOLDER", "CH_SHAREHOLDER")), default=0),
         ),
     ]

@@ -25,7 +25,7 @@ query {
 def milestones(user):
     project = ProjectFactory.create()
     ProjectMemberFactory.create(
-        user=user, role=ProjectMemberRole.PROJECT_MANAGER, owner=project
+        user=user, role=ProjectMemberRole.MANAGER, owner=project
     )
     return (
         ProjectMilestoneFactory.create(

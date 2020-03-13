@@ -34,7 +34,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='projectmember',
             name='role',
-            field=models.CharField(choices=[('DEVELOPER', 'CH__DEVELOPER'), ('PROJECT_MANAGER', 'CH__PROJECT_MANAGER'), ('CUSTOMER', 'CH__CUSTOMER')], help_text='HT__ROLE', max_length=20, verbose_name='VN__ROLE'),
+            field=models.CharField(choices=[('DEVELOPER', 'CH__DEVELOPER'), ('MANAGER', 'CH__MANAGER'), ('CUSTOMER', 'CH__CUSTOMER')], help_text='HT__ROLE', max_length=20, verbose_name='VN__ROLE'),
         ),
         migrations.AlterField(
             model_name='teammember',

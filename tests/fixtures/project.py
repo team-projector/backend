@@ -55,7 +55,7 @@ def project_customer(project, make_project_customer):
 def _make_project_manager(project, user=None):
     """Create or bind project manager."""
     return _add_or_update_user_in_project(
-        project, ProjectMemberRole.PROJECT_MANAGER, user,
+        project, ProjectMemberRole.MANAGER, user,
     )
 
 

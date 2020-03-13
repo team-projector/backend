@@ -12,7 +12,7 @@ from tests.test_development.factories import (
 
 
 def test_active_milestones_sort(user, client):
-    user.roles.PROJECT_MANAGER = True
+    user.roles.MANAGER = True
     user.save()
 
     client.user = user

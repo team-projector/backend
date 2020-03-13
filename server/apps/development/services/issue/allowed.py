@@ -18,7 +18,7 @@ from apps.users.models import User
 
 def check_allow_project_manager(user: User) -> None:
     """Check whether user is a project manager."""
-    if not user.roles.PROJECT_MANAGER:
+    if not user.roles.MANAGER:
         raise GraphQLPermissionDenied(
             "Only project managers can view project resources",
         )
@@ -38,9 +38,7 @@ def filter_allowed_for_user(queryset: QuerySet, user: User) -> QuerySet:
 def get_allowed_projects(user) -> Iterable[Project]:
     """Get allowed projects for user."""
     members = ProjectMember.objects.filter(
-        user=user,
-        role=ProjectMemberRole.PROJECT_MANAGER,
-        id=OuterRef("members__id"),
+        user=user, role=ProjectMemberRole.MANAGER, id=OuterRef("members__id"),
     )
 
     projects = list(

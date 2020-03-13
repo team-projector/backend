@@ -9,7 +9,7 @@ from tests.test_development.factories import IssueFactory, TicketFactory
 
 
 def test_by_ticket(user, auth_rf):
-    user.roles.PROJECT_MANAGER = True
+    user.roles.MANAGER = True
     user.save()
 
     ticket = TicketFactory.create()

@@ -14,7 +14,7 @@ from tests.test_development.factories import (
 def test_milestones(user, client):
     project = ProjectFactory.create()
     ProjectMemberFactory.create(
-        user=user, role=ProjectMemberRole.PROJECT_MANAGER, owner=project,
+        user=user, role=ProjectMemberRole.MANAGER, owner=project,
     )
 
     milestone = ProjectMilestoneFactory.create(owner=project)
@@ -33,7 +33,7 @@ def test_milestones(user, client):
 def test_milestone(user, client):
     project = ProjectFactory.create()
     ProjectMemberFactory.create(
-        user=user, role=ProjectMemberRole.PROJECT_MANAGER, owner=project,
+        user=user, role=ProjectMemberRole.MANAGER, owner=project,
     )
 
     milestone = ProjectMilestoneFactory.create(owner=project)

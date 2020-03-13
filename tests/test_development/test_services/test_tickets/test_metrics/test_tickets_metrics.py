@@ -103,7 +103,7 @@ def test_budget_estimated(db):
 
 
 def test_resolve_metrics(user, ghl_auth_mock_info):
-    user.roles.PROJECT_MANAGER = True
+    user.roles.MANAGER = True
     user.save()
 
     ticket = TicketFactory.create()
@@ -136,7 +136,7 @@ def test_resolve_metrics_not_pm(user, ghl_auth_mock_info):
 
 
 def test_opened_time_remains_without_issues(user, ghl_auth_mock_info):
-    user.roles.PROJECT_MANAGER = True
+    user.roles.MANAGER = True
     user.save()
 
     ticket = TicketFactory.create()
@@ -148,7 +148,7 @@ def test_opened_time_remains_without_issues(user, ghl_auth_mock_info):
 
 
 def test_opened_time_remains_with_closed_issues(user, ghl_auth_mock_info):
-    user.roles.PROJECT_MANAGER = True
+    user.roles.MANAGER = True
     user.save()
 
     ticket = TicketFactory.create()
@@ -166,7 +166,7 @@ def test_opened_time_remains_with_closed_issues(user, ghl_auth_mock_info):
 
 
 def test_opened_time_remains(user, ghl_auth_mock_info):
-    user.roles.PROJECT_MANAGER = True
+    user.roles.MANAGER = True
     user.save()
 
     ticket = TicketFactory.create()
@@ -199,7 +199,7 @@ def test_opened_time_remains(user, ghl_auth_mock_info):
 
 
 def test_opened_time_remains_random(user, ghl_auth_mock_info):
-    user.roles.PROJECT_MANAGER = True
+    user.roles.MANAGER = True
     user.save()
 
     ticket = TicketFactory.create()

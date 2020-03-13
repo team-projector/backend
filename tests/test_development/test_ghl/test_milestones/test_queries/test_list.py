@@ -30,7 +30,7 @@ def test_query(user, gql_client_authenticated):
     """Test getting all milestones raw query."""
     project = ProjectFactory.create()
     ProjectMemberFactory.create(
-        user=user, role=ProjectMemberRole.PROJECT_MANAGER, owner=project
+        user=user, role=ProjectMemberRole.MANAGER, owner=project
     )
     ProjectMilestoneFactory.create_batch(5, owner=project)
 
@@ -54,7 +54,7 @@ def test_search_by_title(ghl_auth_mock_info, all_milestones_query):
     project = ProjectFactory.create()
     ProjectMemberFactory.create(
         user=ghl_auth_mock_info.context.user,
-        role=ProjectMemberRole.PROJECT_MANAGER,
+        role=ProjectMemberRole.MANAGER,
         owner=project,
     )
     milestones = ProjectMilestoneFactory.create_batch(5, owner=project)
@@ -77,7 +77,7 @@ def test_search_by_gl_url(ghl_auth_mock_info, all_milestones_query):
     project = ProjectFactory.create()
     ProjectMemberFactory.create(
         user=ghl_auth_mock_info.context.user,
-        role=ProjectMemberRole.PROJECT_MANAGER,
+        role=ProjectMemberRole.MANAGER,
         owner=project,
     )
     milestones = ProjectMilestoneFactory.create_batch(5, owner=project)
@@ -102,7 +102,7 @@ def test_search_by_gl_url_not_full(ghl_auth_mock_info, all_milestones_query):
     project = ProjectFactory.create()
     ProjectMemberFactory.create(
         user=ghl_auth_mock_info.context.user,
-        role=ProjectMemberRole.PROJECT_MANAGER,
+        role=ProjectMemberRole.MANAGER,
         owner=project,
     )
     milestones = ProjectMilestoneFactory.create_batch(5, owner=project)
@@ -124,7 +124,7 @@ def test_search_no_results(ghl_auth_mock_info, all_milestones_query):
     project = ProjectFactory.create()
     ProjectMemberFactory.create(
         user=ghl_auth_mock_info.context.user,
-        role=ProjectMemberRole.PROJECT_MANAGER,
+        role=ProjectMemberRole.MANAGER,
         owner=project,
     )
     ProjectMilestoneFactory.create_batch(5, owner=project)

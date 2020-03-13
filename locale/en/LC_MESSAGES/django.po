@@ -251,8 +251,8 @@ msgstr "Project groups"
 msgid "CH__DEVELOPER"
 msgstr "Developer"
 
-msgid "CH__PROJECT_MANAGER"
-msgstr "Project manager"
+msgid "CH__MANAGER"
+msgstr "Manager"
 
 msgid "CH__CUSTOMER"
 msgstr "Customer"

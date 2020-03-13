@@ -14,9 +14,9 @@ class UserRole(models.TextChoices):
 
     DEVELOPER = "DEVELOPER", _("CH__DEVELOPER")  # noqa: WPS115
     TEAM_LEADER = "TEAM_LEADER", _("CH__TEAM_LEADER")  # noqa: WPS115
-    PROJECT_MANAGER = (  # noqa: WPS115, E501
-        "PROJECT_MANAGER",
-        _("CH__PROJECT_MANAGER"),
+    MANAGER = (  # noqa: WPS115, E501
+        "MANAGER",
+        _("CH__MANAGER"),
     )
     CUSTOMER = "CUSTOMER", _("CH__CUSTOMER")  # noqa: WPS115
     SHAREHOLDER = "SHAREHOLDER", _("CH__SHAREHOLDER")  # noqa: WPS115
