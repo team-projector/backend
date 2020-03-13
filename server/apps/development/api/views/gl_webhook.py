@@ -1,75 +1,61 @@
 # -*- coding: utf-8 -*-
 
 import json
-import logging
+from typing import Optional
 
 from django.conf import settings
 from django.http import HttpResponse
+from django.views import View
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework.exceptions import AuthenticationFailed
 
-from apps.core.activity.verbs import ACTION_GITLAB_WEBHOOK_TRIGGERED
-from apps.core.tasks import add_action_task
-from apps.development.tasks import (
-    sync_project_issue_task,
-    sync_project_merge_request_task,
+from apps.development.services.gl.webhook import GLWebhook
+from apps.development.services.issue.gl.webhook import IssuesGLWebhook
+from apps.development.services.merge_request.gl.webhook import (
+    MergeRequestsGLWebhook,
 )
 
-logger = logging.getLogger(__name__)
+WEBHOOKS_CLASSES = (IssuesGLWebhook, MergeRequestsGLWebhook)
 
 
-@csrf_exempt
-def gl_webhook(request):
-    """Gitlab webhook."""
-    if settings.GITLAB_NO_SYNC:
+class GlWebhookView(View):
+    """GitLab webhook view."""
+
+    @csrf_exempt
+    def post(self, request) -> HttpResponse:
+        """Request handler."""
+        if settings.GITLAB_NO_SYNC:
+            return HttpResponse()
+
+        self._check_webhook_secret_token(
+            request.META.get("HTTP_X_GITLAB_TOKEN"),
+        )
+
+        body = json.loads(request.body.decode("utf-8"))
+        webhook = self._get_webhook(body["object_kind"])
+        if webhook:
+            webhook.handle_hook(body)
+
         return HttpResponse()
 
-    _check_webhook_secret_token(request.META.get("HTTP_X_GITLAB_TOKEN"))
+    def _check_webhook_secret_token(self, secret_token: str) -> None:
+        if not settings.GITLAB_WEBHOOK_SECRET_TOKEN:
+            return
 
-    body = json.loads(request.body.decode("utf-8"))
-    kind = body["object_kind"]
+        if settings.GITLAB_WEBHOOK_SECRET_TOKEN != secret_token:
+            raise AuthenticationFailed("Invalid token")
 
-    if kind == "issue":
-        _sync_issue(body)
-    elif kind == "merge_request":
-        _sync_merge_request(body)
+    def _get_webhook(self, object_kind: str) -> Optional[GLWebhook]:
+        webhook_class = next(
+            (
+                hook
+                for hook in WEBHOOKS_CLASSES
+                if hook.object_kind == object_kind
+            ),
+            None,
+        )
 
-    return HttpResponse()
+        if webhook_class:
+            return webhook_class()
 
-
-def _sync_issue(body) -> None:
-    project_id = body["project"]["id"]
-    issue_id = body["object_attributes"]["iid"]
-
-    sync_project_issue_task.delay(project_id, issue_id)
-
-    logger.info(
-        "gitlab webhook was triggered: project = %s, issue = %s",
-        project_id,
-        issue_id,
-    )
-
-    add_action_task.delay(verb=ACTION_GITLAB_WEBHOOK_TRIGGERED)
-
-
-def _sync_merge_request(body) -> None:
-    project_id = body["project"]["id"]
-    merge_request_id = body["object_attributes"]["iid"]
-
-    sync_project_merge_request_task.delay(project_id, merge_request_id)
-
-    logger.info(
-        "gitlab webhook was triggered: project = %s, merge_request = %s",
-        project_id,
-        merge_request_id,
-    )
-
-    add_action_task.delay(verb=ACTION_GITLAB_WEBHOOK_TRIGGERED)
-
-
-def _check_webhook_secret_token(secret_token: str) -> None:
-    if not settings.GITLAB_WEBHOOK_SECRET_TOKEN:
-        return
-
-    if settings.GITLAB_WEBHOOK_SECRET_TOKEN != secret_token:
-        raise AuthenticationFailed("Invalid token")
+        return None

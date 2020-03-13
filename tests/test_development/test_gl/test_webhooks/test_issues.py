@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 
-from apps.development.api.views.gl_webhook import gl_webhook
 from apps.development.models import Issue
 from tests.test_development.factories.gitlab import (
     GlIssueFactory,
@@ -14,7 +13,7 @@ from tests.test_development.test_gl.helpers import (
 from tests.test_users.factories.gitlab import GlUserFactory
 
 
-def test_success(db, gl_mocker, client):
+def test_success(db, gl_mocker, gl_webhook_view, client):
     project, gl_project = initializers.init_project()
     gl_assignee = GlUserFactory.create()
     gl_issue = GlIssueFactory.create(
@@ -30,7 +29,7 @@ def test_success(db, gl_mocker, client):
     )
     gl_mock.mock_issue_endpoints(gl_mocker, gl_project, gl_issue)
 
-    gl_webhook(client.post("/", data=webhook_data, format="json"))
+    gl_webhook_view(client.post("/", data=webhook_data, format="json"))
 
     assert Issue.objects.count() == 1
 

@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 
-from apps.development.api.views.gl_webhook import gl_webhook
 from apps.development.models import Project
 from tests.test_development.factories.gitlab import (
     GlIssueWebhookFactory,
@@ -9,7 +8,7 @@ from tests.test_development.factories.gitlab import (
 from tests.test_development.test_gl.helpers import gl_mock
 
 
-def test_another_kind_object(db, gl_mocker, client):
+def test_another_kind_object(db, gl_mocker, gl_webhook_view, client):
     gl_project = GlProjectFactory.create()
     gl_mock.mock_project_endpoints(gl_mocker, gl_project)
 
@@ -19,6 +18,6 @@ def test_another_kind_object(db, gl_mocker, client):
         object_attributes=gl_project,
     )
 
-    gl_webhook(client.post("/", data=webhook_data, format="json"))
+    gl_webhook_view(client.post("/", data=webhook_data, format="json"))
 
     assert not Project.objects.exists()
