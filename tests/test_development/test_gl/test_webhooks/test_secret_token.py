@@ -3,7 +3,6 @@
 import pytest
 from rest_framework.exceptions import AuthenticationFailed
 
-from apps.development.api.views.gl_webhook import gl_webhook
 from apps.development.models import Issue
 from tests.test_development.factories.gitlab import (
     GlIssueFactory,
@@ -23,18 +22,18 @@ def _gitlab_webhook_secret_token(settings) -> None:
     settings.GITLAB_WEBHOOK_SECRET_TOKEN = "SECRET_TOKEN"
 
 
-def test_no_token(client):
+def test_no_token(client, gl_webhook_view):
     webhook = GlIssueWebhookFactory.create()
 
     with pytest.raises(AuthenticationFailed):
-        gl_webhook(client.post("/", data=webhook, format="json"))
+        gl_webhook_view(client.post("/", data=webhook, format="json"))
 
 
-def test_bad_token(client):
+def test_bad_token(client, gl_webhook_view):
     webhook = GlIssueWebhookFactory.create()
 
     with pytest.raises(AuthenticationFailed):
-        gl_webhook(
+        gl_webhook_view(
             client.post(
                 "/",
                 data=webhook,
@@ -44,7 +43,7 @@ def test_bad_token(client):
         )
 
 
-def test_sync_with_secret_token(db, gl_mocker, client):
+def test_sync_with_secret_token(db, gl_mocker, gl_webhook_view, client):
     project, gl_project = initializers.init_project()
     gl_assignee = GlUserFactory.create()
     gl_issue = GlIssueFactory.create(
@@ -60,7 +59,7 @@ def test_sync_with_secret_token(db, gl_mocker, client):
     )
     gl_mock.mock_issue_endpoints(gl_mocker, gl_project, gl_issue)
 
-    gl_webhook(
+    gl_webhook_view(
         client.post(
             "/",
             data=webhook_data,

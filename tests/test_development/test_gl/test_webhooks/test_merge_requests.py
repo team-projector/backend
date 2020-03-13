@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 
-from apps.development.api.views.gl_webhook import gl_webhook
 from apps.development.models import MergeRequest
 from tests.test_development.factories.gitlab import (
     GlMergeRequestFactory,
@@ -14,7 +13,7 @@ from tests.test_development.test_gl.helpers import (
 from tests.test_users.factories.gitlab import GlUserFactory
 
 
-def test_success(db, gl_mocker, client):
+def test_success(db, gl_mocker, gl_webhook_view, client):
     project, gl_project = initializers.init_project()
     gl_user = GlUserFactory.create()
     gl_merge_request = GlMergeRequestFactory.create(
@@ -32,7 +31,7 @@ def test_success(db, gl_mocker, client):
         gl_mocker, gl_project, gl_merge_request,
     )
 
-    gl_webhook(client.post("/", data=webhook_data, format="json"))
+    gl_webhook_view(client.post("/", data=webhook_data, format="json"))
 
     merge_request = MergeRequest.objects.first()
 
