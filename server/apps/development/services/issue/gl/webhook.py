@@ -14,6 +14,7 @@ class IssuesGLWebhook(GLWebhook):
     """Issue GitLab webhook handler."""
 
     object_kind = "issue"
+    settings_field = "issues_events"
 
     def handle_hook(self, body) -> None:
         """Webhook handler."""

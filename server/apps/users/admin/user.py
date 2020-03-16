@@ -89,6 +89,7 @@ class UserAdmin(
                 ),
             },
         ),
+        ("Notifications", {"fields": ("notify_pipeline_status",)}),
     )
     readonly_fields = ("last_login",)
     change_password_form = AdminPasswordChangeForm

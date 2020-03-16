@@ -1,0 +1,28 @@
+[
+  {
+    "type": "section",
+    "text": {
+      "type": "mrkdwn",
+      "text": "*<{{ project.web_url }}/pipelines/{{pipeline.id}}|:{% if pipeline.status == 'success' %}green_circle{% else %}red_circle{% endif %}: Pipeline #{{ pipeline.id }} has {{ pipeline.status }} in {{ pipeline.duration }} secs>*"
+    }
+  },
+  {
+    "type": "section",
+    "fields": [
+      {
+        "type": "mrkdwn",
+        "text": "*Project:*\n*<{{ project.web_url }}|{{ project.name }}>*"
+      },
+      {% if merge_request %}
+      {
+        "type": "mrkdwn",
+        "text": "*Merge request:*\n*<{{ merge_request.url }}|{{ merge_request.title }}>*"
+      },
+      {% endif %}
+      {
+        "type": "mrkdwn",
+        "text": "*Commit:*\n*<{{ commit.url }}|{{ commit.title }}>*"
+      }
+    ]
+  }
+]

@@ -6,7 +6,7 @@ from django.conf import settings
 
 def get_gitlab_client(token: str) -> gitlab.Gitlab:
     """Create Gitlab client."""
-    return gitlab.Gitlab(settings.GITLAB_HOST, token)
+    return gitlab.Gitlab(settings.GITLAB_ADDRESS, token)
 
 
 def get_default_gitlab_client() -> gitlab.Gitlab:

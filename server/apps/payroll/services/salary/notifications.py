@@ -31,9 +31,6 @@ def send_slack_report(salary: Salary) -> None:
     msg = "Salary has been paid."
 
     slack = SlackClient()
-    channel = slack.get_channel_user_by_email(salary.user.email)
-
-    if channel:
-        slack.send_message_to_channel(
-            channel["id"], msg, icon_emoji=":moneybag:",
-        )
+    slack.send_text(
+        salary.user, msg, icon_emoji=":moneybag:",
+    )
