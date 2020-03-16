@@ -14,6 +14,7 @@ class MergeRequestsGLWebhook(GLWebhook):
     """Merge request GitLab webhook handler."""
 
     object_kind = "merge_request"
+    settings_field = "merge_requests_events"
 
     def handle_hook(self, body) -> None:
         """Webhook handler."""

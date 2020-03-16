@@ -11,12 +11,9 @@ from django.views.decorators.csrf import csrf_exempt
 from rest_framework.exceptions import AuthenticationFailed
 
 from apps.development.services.gl.webhook import GLWebhook
-from apps.development.services.issue.gl.webhook import IssuesGLWebhook
-from apps.development.services.merge_request.gl.webhook import (
-    MergeRequestsGLWebhook,
+from apps.development.services.project.gl.webhooks import (
+    GITLAB_WEBHOOKS_CLASSES,
 )
-
-WEBHOOKS_CLASSES = (IssuesGLWebhook, MergeRequestsGLWebhook)
 
 
 class GlWebhookView(View):
@@ -54,7 +51,7 @@ class GlWebhookView(View):
         webhook_class = next(
             (
                 hook
-                for hook in WEBHOOKS_CLASSES
+                for hook in GITLAB_WEBHOOKS_CLASSES
                 if hook.object_kind == object_kind
             ),
             None,

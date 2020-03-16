@@ -9,9 +9,20 @@ from gitlab import GitlabError
 from gitlab.v4 import objects as gl
 
 from apps.development.models import Project
+from apps.development.services.issue.gl.webhook import IssuesGLWebhook
+from apps.development.services.merge_request.gl.webhook import (
+    MergeRequestsGLWebhook,
+)
+from apps.development.services.pipelines.gl.webhook import PipelineGLWebhook
 from apps.development.services.project.gl.provider import ProjectGlProvider
 
 logger = logging.getLogger(__name__)
+
+GITLAB_WEBHOOKS_CLASSES = (
+    IssuesGLWebhook,
+    MergeRequestsGLWebhook,
+    PipelineGLWebhook,
+)
 
 
 class ProjectWebhookManager:
@@ -51,14 +62,15 @@ class ProjectWebhookManager:
         has_valid = self._check_webhooks(tp_webhooks)
 
         if not has_valid:
-            gl_project.hooks.create(
-                {
-                    "url": self.webhook_url,
-                    "token": settings.GITLAB_WEBHOOK_SECRET_TOKEN,
-                    "issues_events": True,
-                    "merge_requests_events": True,
-                },
-            )
+            payload = {
+                "url": self.webhook_url,
+                "token": settings.GITLAB_WEBHOOK_SECRET_TOKEN,
+            }
+
+            for webhook_class in GITLAB_WEBHOOKS_CLASSES:
+                payload[webhook_class.settings_field] = True
+
+            gl_project.hooks.create(payload)
 
     def _check_webhooks(self, tp_webhooks) -> bool:
         has_valid = False
@@ -74,10 +86,11 @@ class ProjectWebhookManager:
 
         return has_valid
 
-    def _validate_webhook(self, webhook, webhook_url: str) -> bool:
+    def _validate_webhook(
+        self, webhook: gl.ProjectHook, webhook_url: str,
+    ) -> bool:
         """Validate webhook."""
-        return (
-            webhook.url == webhook_url
-            and webhook.issues_events
-            and webhook.merge_requests_events
+        return webhook.url == webhook_url and all(
+            getattr(webhook, webhook_class.settings_field)
+            for webhook_class in GITLAB_WEBHOOKS_CLASSES
         )

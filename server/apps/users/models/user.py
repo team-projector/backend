@@ -132,6 +132,12 @@ class User(AbstractBaseUser, PermissionsMixin):
         help_text=_("HT__PERSONAL_GITLAB_TOKEN"),
     )
 
+    notify_pipeline_status = models.BooleanField(
+        default=False,
+        verbose_name=_("VN__NOTIFY_PIPELINE_STATUS"),
+        help_text=_("HT__NOTIFY_PIPELINE_STATUS"),
+    )
+
     daily_work_hours = models.PositiveIntegerField(default=8)
 
     objects = UserManager()  # noqa: WPS110
