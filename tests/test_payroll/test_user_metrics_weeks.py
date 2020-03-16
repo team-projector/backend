@@ -6,8 +6,9 @@ from typing import Dict
 from django.db.models import Sum
 from django.test import override_settings
 from django.utils import timezone
+from django.utils.timezone import make_aware
 
-from apps.core.utils.date import begin_of_week
+from apps.core.utils.date import begin_of_week, date2datetime
 from apps.core.utils.time import seconds
 from apps.development.models.issue import IssueState
 from apps.users.services.user.metrics import get_progress_metrics
@@ -111,7 +112,7 @@ def test_efficiency_more_1(user):
     )["spent"]
     issue.state = IssueState.CLOSED
     issue.due_date = monday + timedelta(days=1)
-    issue.closed_at = monday + timedelta(days=1)
+    issue.closed_at = make_aware(date2datetime(monday + timedelta(days=1)))
     issue.save()
 
     start = monday - timedelta(days=5)
@@ -167,7 +168,7 @@ def test_efficiency_less_1(user):
     )["spent"]
     issue.state = IssueState.CLOSED
     issue.due_date = monday + timedelta(days=1)
-    issue.closed_at = monday + timedelta(days=1)
+    issue.closed_at = make_aware(date2datetime(monday + timedelta(days=1)))
     issue.save()
 
     start = monday - timedelta(days=5)
@@ -224,7 +225,7 @@ def test_efficiency_zero_estimate(user):
     )["spent"]
     issue.state = IssueState.CLOSED
     issue.due_date = monday + timedelta(days=1)
-    issue.closed_at = monday + timedelta(days=1)
+    issue.closed_at = make_aware(date2datetime(monday + timedelta(days=1)))
     issue.save()
 
     start = monday - timedelta(days=5)
@@ -248,7 +249,7 @@ def test_efficiency_zero_spend(user):
     issue.total_time_spent = 0
     issue.state = IssueState.CLOSED
     issue.due_date = monday + timedelta(days=1)
-    issue.closed_at = monday + timedelta(days=1)
+    issue.closed_at = make_aware(date2datetime(monday + timedelta(days=1)))
     issue.save()
 
     start = monday - timedelta(days=5)
