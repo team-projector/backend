@@ -3,9 +3,11 @@
 from contextlib import suppress
 from typing import List
 
+import slack
+from django.conf import settings
+from django.core.exceptions import ImproperlyConfigured
 from slack.errors import SlackApiError
 
-from apps.core.notifications.slack import get_slack_client
 from apps.users.models import User
 
 
@@ -14,7 +16,7 @@ class SlackClient:
 
     def __init__(self):
         """Initialize self."""
-        self._client = get_slack_client()
+        self._client = self._get_slack_client()
 
     def send_text(self, user: User, msg: str, **kwargs) -> None:
         """
@@ -39,6 +41,13 @@ class SlackClient:
             self._client.chat_postMessage(
                 channel=channel["id"], blocks=blocks, **kwargs,
             )
+
+    def _get_slack_client(self) -> slack.WebClient:
+        token = settings.SLACK_TOKEN
+        if not token:
+            raise ImproperlyConfigured("'settings.SLACK_TOKEN' must be filled")
+
+        return slack.WebClient(token)
 
     def _get_channel_user_by_email(self, email: str):
         """
