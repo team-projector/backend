@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-03-05 16:17+0300\n"
+"POT-Creation-Date: 2020-03-16 21:21+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -616,6 +616,12 @@ msgstr "Personal gitlab token"
 
 msgid "HT__PERSONAL_GITLAB_TOKEN"
 msgstr "Personal gitlab token"
+
+msgid "VN__NOTIFY_PIPELINE_STATUS"
+msgstr "Notify pipeline status"
+
+msgid "HT__NOTIFY_PIPELINE_STATUS"
+msgstr "Notify pipeline status"
 
 msgid "MSG_UNABLE_TO_LOGIN_WITH_PROVIDED_CREDENTIALS"
 msgstr "Unable login with provided credentials"
