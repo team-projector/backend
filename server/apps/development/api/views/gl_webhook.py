@@ -5,6 +5,7 @@ from typing import Optional
 
 from django.conf import settings
 from django.http import HttpResponse
+from django.utils.decorators import method_decorator
 from django.views import View
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework.exceptions import AuthenticationFailed
@@ -21,7 +22,11 @@ WEBHOOKS_CLASSES = (IssuesGLWebhook, MergeRequestsGLWebhook)
 class GlWebhookView(View):
     """GitLab webhook view."""
 
-    @csrf_exempt
+    @method_decorator(csrf_exempt)
+    def dispatch(self, *args, **kwargs):
+        """Dispatch."""
+        return super().dispatch(*args, **kwargs)
+
     def post(self, request) -> HttpResponse:
         """Request handler."""
         if settings.GITLAB_NO_SYNC:
