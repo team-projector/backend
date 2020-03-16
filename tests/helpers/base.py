@@ -17,6 +17,7 @@ class MockStorageMessages:
 
 class Client:
     def __init__(self, user=None):
+        """Initializing."""
         self.user = user
         self._factory = APIRequestFactory()
         self._credentials = {}

@@ -13,6 +13,7 @@ from gql import schema
 
 class GraphQLClient(Client):
     def __init__(self, *args, **kwargs) -> None:
+        """Initializing."""
         super().__init__(schema, *args, **kwargs)
 
         self._user: Optional[User] = None

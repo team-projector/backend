@@ -12,6 +12,7 @@ from apps.users.services.token.create import create_user_token
 
 class RequestFactory(DjangoRequestFactory):
     def __init__(self, *args, **kwargs) -> None:
+        """Initializing."""
         super().__init__(*args, **kwargs)
 
         self._user: Optional[User] = None

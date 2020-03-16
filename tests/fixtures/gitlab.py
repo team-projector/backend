@@ -19,6 +19,7 @@ class GitlabMock(HttprettyMock):
     base_api_url = "{0}/api/v4".format(settings.GITLAB_HOST)
 
     def __init__(self) -> None:
+        """Initializing."""
         super().__init__()
 
         self.register_url(

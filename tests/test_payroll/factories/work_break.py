@@ -13,7 +13,7 @@ from tests.test_users.factories.user import UserFactory
 class WorkBreakFactory(factory.django.DjangoModelFactory):
     user = factory.SubFactory(UserFactory)
     comment = factory.Faker("text", max_nb_chars=200)
-    reason = random.choice(
+    reason = random.choice(  # noqa: S311
         (
             WorkBreakReason.DAYOFF,
             WorkBreakReason.VACATION,
