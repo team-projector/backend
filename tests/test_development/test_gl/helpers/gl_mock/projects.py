@@ -19,8 +19,10 @@ def register_create_project_hook(mocker, project, response):
     mocker.register_post("/projects/{0}/hooks".format(project["id"]), response)
 
 
-def register_delete_project_hook(mocker, project):
-    mocker.register_delete("/projects/{0}/hooks".format(project["id"]))
+def register_delete_project_hook(mocker, project, response=None):
+    mocker.register_delete(
+        "/projects/{0}/hooks".format(project["id"]), response,
+    )
 
 
 def register_project_labels(mocker, project, labels):

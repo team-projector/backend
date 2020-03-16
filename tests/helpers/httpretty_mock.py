@@ -2,10 +2,14 @@
 
 import json
 from http import HTTPStatus
-from typing import Dict, List, Optional, Pattern, Union
+from typing import Callable, Dict, List, Optional, Pattern, Union
 
 import httpretty
 from httpretty.core import HTTPrettyRequest
+
+RequestCallback = Callable[
+    [HTTPrettyRequest, str, Dict[str, str]], List[object]  # noqa: WPS221
+]
 
 
 class RequestCallbackFactory:
@@ -45,10 +49,14 @@ class HttprettyMock:
         status_code: int = HTTPStatus.OK,
     ) -> None:
         """Registry url for mock get-query."""
+        request_callback = body
+        if not callable(body):
+            request_callback = RequestCallbackFactory(body, status_code)
+
         self.register_url(
             method=httpretty.GET,
             uri=self._prepare_uri(path),
-            request_callback=RequestCallbackFactory(body, status_code),
+            request_callback=request_callback,
             priority=1,
         )
 
@@ -59,19 +67,32 @@ class HttprettyMock:
         status_code: int = HTTPStatus.OK,
     ) -> None:
         """Registry url for mock post-query."""
+        request_callback = body
+        if not callable(body):
+            request_callback = RequestCallbackFactory(body, status_code)
+
         self.register_url(
             method=httpretty.POST,
             uri=self._prepare_uri(path),
-            request_callback=RequestCallbackFactory(body, status_code),
+            request_callback=request_callback,
             priority=1,
         )
 
-    def register_delete(self, path: str, status: int = HTTPStatus.OK) -> None:
+    def register_delete(
+        self,
+        path: str,
+        body: Optional[object] = None,
+        status_code: int = HTTPStatus.OK,
+    ) -> None:
         """Registry url for mock delete-query."""
+        request_callback = body
+        if not callable(body):
+            request_callback = RequestCallbackFactory(body, status_code)
+
         self.register_url(
             method=httpretty.DELETE,
             uri=self._prepare_uri(path),
-            request_callback=RequestCallbackFactory(None, status),
+            request_callback=request_callback,
             priority=1,
         )
 
@@ -79,7 +100,7 @@ class HttprettyMock:
         self,
         method: str,
         uri: Union[Pattern[str], str],
-        request_callback: RequestCallbackFactory,
+        request_callback: RequestCallback,
         priority: int = 0,
     ) -> None:
         httpretty.register_uri(

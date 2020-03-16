@@ -13,6 +13,7 @@ from .projects import (
     register_project_labels,
     register_project_merge_requests,
     register_create_project_hook,
+    register_delete_project_hook,
     mock_project_endpoints,
 )
 from .issues import (
