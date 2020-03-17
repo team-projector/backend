@@ -17,7 +17,16 @@ class WorkBreakAdmin(BaseModelAdmin):
     fieldsets = (
         (
             None,
-            {"fields": ("user", "reason", "from_date", "to_date", "comment")},
+            {
+                "fields": (
+                    "user",
+                    "reason",
+                    "from_date",
+                    "to_date",
+                    "comment",
+                    "paid",
+                ),
+            },
         ),
         (
             "Approve status",

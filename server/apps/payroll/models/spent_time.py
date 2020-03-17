@@ -22,10 +22,6 @@ class SpentTime(Payroll):  # noqa:WPS230
         help_text=_("HT__CUSTOMER_SUM"),
     )
 
-    tax_sum = MoneyField(
-        default=0, verbose_name=_("VN__TAX_SUM"), help_text=_("HT__TAX_SUM"),
-    )
-
     hour_rate = models.FloatField(
         null=True, verbose_name=_("VN__RATE"), help_text=_("HT__RATE"),
     )
@@ -84,5 +80,4 @@ class SpentTime(Payroll):  # noqa:WPS230
         work_hours = self.time_spent / SECS_IN_HOUR
 
         self.sum = work_hours * self.hour_rate  # noqa: WPS601
-        self.tax_sum = work_hours * self.tax_rate  # noqa: WPS601
         self.customer_sum = work_hours * self.customer_rate  # noqa: WPS601
