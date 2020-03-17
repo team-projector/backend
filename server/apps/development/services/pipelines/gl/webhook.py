@@ -35,7 +35,7 @@ class PipelineGLWebhook(GLWebhook):
             return
 
         rendered = render_to_string(
-            "development/slack/pipeline.json",
+            "slack/pipeline.json",
             {
                 "gitlab_address": settings.GITLAB_ADDRESS,
                 "pipeline": pipeline,

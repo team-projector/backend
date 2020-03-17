@@ -3,7 +3,7 @@
     "type": "section",
     "text": {
       "type": "mrkdwn",
-      "text": "*<{{ project.web_url }}/pipelines/{{pipeline.id}}|:{% if pipeline.status == 'success' %}white_check_mark{% else %}x{% endif %}: Pipeline #{{ pipeline.id }} has {{ pipeline.status }} in {{ pipeline.duration }} secs>*"
+      "text": "*<{{ project.web_url }}/pipelines/{{pipeline.id}}|:{% if pipeline.status == 'success' %}white_check_mark{% else %}x{% endif %}: Pipeline #{{ pipeline.id }} has {{ pipeline.detailed_status }} in {{ pipeline.duration }} secs>*"
     }
   },
   {
