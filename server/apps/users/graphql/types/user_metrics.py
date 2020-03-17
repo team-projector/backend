@@ -19,8 +19,8 @@ class UserMetricsType(graphene.ObjectType):
         resolver=metrics.paid_work_breaks_days_resolver,
     )
 
-    bonus = graphene.Float(resolver=metrics.bonus_resolver)
-    penalty = graphene.Float(resolver=metrics.penalty_resolver)
+    bonus = graphene.Float()
+    penalty = graphene.Float()
 
     opened_spent = graphene.Float()
     closed_spent = graphene.Float()
