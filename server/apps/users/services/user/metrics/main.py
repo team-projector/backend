@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from decimal import Decimal
-from typing import Dict, Optional, Tuple
+from typing import Dict, List, NamedTuple, Optional, Tuple
 
 from django.db import models
 from django.db.models.functions import Coalesce
@@ -99,58 +99,17 @@ class UserMetricsProvider:
 
 class _Aggregations:
     issue_opened = models.Q(issues__state=IssueState.OPENED)
-    mr_opend = models.Q(mergerequests__state=MergeRequestState.OPENED)
-    tax_rate = models.ExpressionWrapper(
-        models.F("tax_rate"), output_field=MoneyField(max_length=MoneyField),
+    issue_closed = models.Q(issues__state=IssueState.CLOSED)
+    mreq_opened = models.Q(mergerequests__state=MergeRequestState.OPENED)
+    mreq_closed = models.Q(
+        mergerequests__state__in=(
+            MergeRequestState.CLOSED,
+            MergeRequestState.MERGED,
+        ),
     )
 
     def __call__(self) -> Dict[str, models.Expression]:
-        return {
-            "payroll": Coalesce(models.Sum("sum"), 0),
-            "payroll_opened": Coalesce(
-                models.Sum(
-                    "sum", filter=models.Q(self.issue_opened | self.mr_opend),
-                ),
-                0,
-            ),
-            "payroll_closed": Coalesce(
-                models.Sum(
-                    "sum",
-                    filter=models.Q(
-                        models.Q(issues__state=IssueState.CLOSED)
-                        | models.Q(
-                            mergerequests__state__in=(
-                                MergeRequestState.CLOSED,
-                                MergeRequestState.MERGED,
-                            ),
-                        ),
-                    ),
-                ),
-                0,
-            ),
-            "taxes": Coalesce(models.Sum(models.F("sum") * self.tax_rate), 0),
-            "taxes_opened": Coalesce(
-                models.Sum(
-                    models.F("sum") * self.tax_rate,
-                    filter=models.Q(self.issue_opened | self.mr_opend),
-                ),
-                0,
-            ),
-            "taxes_closed": Coalesce(
-                models.Sum(
-                    models.F("sum") * self.tax_rate,
-                    filter=models.Q(
-                        models.Q(issues__state=IssueState.CLOSED)
-                        | models.Q(
-                            mergerequests__state__in=(
-                                MergeRequestState.CLOSED,
-                                MergeRequestState.MERGED,
-                            ),
-                        ),
-                    ),
-                ),
-                0,
-            ),
+        ret = {
             "issues.opened_spent": Coalesce(
                 models.Sum("time_spent", filter=self.issue_opened), 0,
             ),
@@ -174,11 +133,11 @@ class _Aggregations:
                 0,
             ),
             "merge_requests.opened_spent": Coalesce(
-                models.Sum("time_spent", filter=self.mr_opend), 0,
+                models.Sum("time_spent", filter=self.mreq_opened), 0,
             ),
             "opened_spent": Coalesce(
                 models.Sum(
-                    "time_spent", filter=self.issue_opened | self.mr_opend,
+                    "time_spent", filter=self.issue_opened | self.mreq_opened,
                 ),
                 0,
             ),
@@ -199,5 +158,82 @@ class _Aggregations:
             ),
         }
 
+        aggr_params_list: List[Tuple[str, _WorkItemFilters]] = [
+            (
+                "issues.",
+                _WorkItemFilters(
+                    self.issue_opened,
+                    self.issue_closed,
+                    self.issue_opened | self.issue_closed,
+                ),
+            ),
+            (
+                "merge_requests.",
+                _WorkItemFilters(
+                    self.mreq_opened,
+                    self.mreq_closed,
+                    self.mreq_opened | self.mreq_closed,
+                ),
+            ),
+            (
+                "",
+                _WorkItemFilters(
+                    self.issue_opened | self.mreq_opened,
+                    self.issue_closed | self.mreq_closed,
+                    None,
+                ),
+            ),
+        ]
+
+        for aggr_params in aggr_params_list:
+            for metric, expr in _work_item_aggrs(aggr_params[1]).items():
+                ret["{0}{1}".format(aggr_params[0], metric)] = expr
+
+        return ret
+
+
+class _WorkItemFilters(NamedTuple):
+    opened: models.Q
+    closed: models.Q
+    all: Optional[models.Q]
+
+
+class _WorkItemAggregations:
+    tax_rate = models.ExpressionWrapper(
+        models.F("tax_rate"), output_field=MoneyField(max_length=MoneyField),
+    )
+
+    def __call__(
+        self, filters: _WorkItemFilters,
+    ) -> Dict[str, models.Expression]:
+        return {
+            "payroll": Coalesce(models.Sum("sum", filter=filters.all), 0),
+            "payroll_opened": Coalesce(
+                models.Sum("sum", filter=filters.opened), 0,
+            ),
+            "payroll_closed": Coalesce(
+                models.Sum("sum", filter=filters.closed), 0,
+            ),
+            "taxes": Coalesce(
+                models.Sum(
+                    models.F("sum") * self.tax_rate, filter=filters.all,
+                ),
+                0,
+            ),
+            "taxes_opened": Coalesce(
+                models.Sum(
+                    models.F("sum") * self.tax_rate, filter=filters.opened,
+                ),
+                0,
+            ),
+            "taxes_closed": Coalesce(
+                models.Sum(
+                    models.F("sum") * self.tax_rate, filter=filters.closed,
+                ),
+                0,
+            ),
+        }
+
 
 _aggregations = _Aggregations()
+_work_item_aggrs = _WorkItemAggregations()
