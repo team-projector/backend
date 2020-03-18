@@ -11,6 +11,14 @@ class WorkItemUserMetricsType(graphene.ObjectType):
     closed_spent = graphene.Float()
     opened_spent = graphene.Float()
 
+    payroll_closed = graphene.Float()
+    payroll_opened = graphene.Float()
+    payroll = graphene.Float()
+
+    taxes_closed = graphene.Float()
+    taxes_opened = graphene.Float()
+    taxes = graphene.Float()
+
 
 class IssueUserMetricsType(WorkItemUserMetricsType):
     """Issue user metrics type."""

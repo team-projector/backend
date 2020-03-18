@@ -84,26 +84,54 @@ def test_payroll_opened(user):
     mr = MergeRequestFactory.create(state=MergeRequestState.OPENED)
 
     IssueSpentTimeFactory.create(
-        user=user, base=issue, time_spent=seconds(hours=1)
+        user=user, base=issue, time_spent=seconds(hours=1),
     )
     IssueSpentTimeFactory.create(
-        user=user, base=issue, time_spent=-seconds(hours=2)
+        user=user, base=issue, time_spent=-seconds(hours=2),
     )
     IssueSpentTimeFactory.create(
-        user=user, base=issue, time_spent=seconds(hours=5)
+        user=user, base=issue, time_spent=seconds(hours=5),
     )
 
     MergeRequestSpentTimeFactory.create(
-        user=user, base=mr, time_spent=seconds(hours=5)
+        user=user, base=mr, time_spent=seconds(hours=5),
     )
 
-    _check_metrics(
-        calculator().get_metrics(user),
-        payroll_opened=user.hour_rate * 9,
-        taxes_opened=user.hour_rate * 9 * user.tax_rate,
-        taxes=user.hour_rate * 9 * user.tax_rate,
+    metrics = calculator().get_metrics(user)
+
+    # check common
+    _check_spent(
+        metrics,
         issues_opened_spent=seconds(hours=4),
         mr_opened_spent=seconds(hours=5),
+    )
+    _check_taxes(
+        metrics,
+        taxes_opened=user.hour_rate * 9 * user.tax_rate,
+        taxes=user.hour_rate * 9 * user.tax_rate,
+    )
+    _check_payroll(
+        metrics, payroll_opened=user.hour_rate * 9,
+    )
+
+    # check issues
+    _check_taxes(
+        metrics["issues"],
+        taxes_opened=user.hour_rate * 4 * user.tax_rate,
+        taxes=user.hour_rate * 4 * user.tax_rate,
+    )
+    _check_payroll(
+        metrics["issues"], payroll_opened=user.hour_rate * 4,
+    )
+
+    # check merge_request
+    _check_taxes(
+        metrics["merge_requests"],
+        taxes_opened=user.hour_rate * 5 * user.tax_rate,
+        taxes=user.hour_rate * 5 * user.tax_rate,
+    )
+    _check_payroll(
+        metrics["merge_requests"], payroll_opened=user.hour_rate * 5,
     )
 
 
@@ -118,27 +146,55 @@ def test_payroll_opened_has_salary(user):
     )
 
     IssueSpentTimeFactory.create(
-        user=user, base=issue, time_spent=seconds(hours=2)
+        user=user, base=issue, time_spent=seconds(hours=2),
     )
     IssueSpentTimeFactory.create(
-        user=user, base=issue, time_spent=seconds(hours=5)
+        user=user, base=issue, time_spent=seconds(hours=5),
     )
 
     MergeRequestSpentTimeFactory.create(
-        user=user, base=mr, time_spent=seconds(hours=5)
+        user=user, base=mr, time_spent=seconds(hours=5),
     )
 
     MergeRequestSpentTimeFactory.create(
-        user=user, base=mr, time_spent=seconds(hours=2), salary=salary
+        user=user, base=mr, time_spent=seconds(hours=2), salary=salary,
     )
 
-    _check_metrics(
-        calculator().get_metrics(user),
-        payroll_opened=user.hour_rate * 12,
+    metrics = calculator().get_metrics(user)
+
+    # check common
+    _check_spent(
+        metrics,
+        mr_opened_spent=seconds(hours=5),
+        issues_opened_spent=seconds(hours=7),
+    )
+    _check_taxes(
+        metrics,
         taxes_opened=user.tax_rate * user.hour_rate * 12,
         taxes=user.hour_rate * 12 * user.tax_rate,
-        issues_opened_spent=seconds(hours=7),
-        mr_opened_spent=seconds(hours=5),
+    )
+    _check_payroll(
+        metrics, payroll_opened=user.hour_rate * 12,
+    )
+
+    # check issues
+    _check_taxes(
+        metrics["issues"],
+        taxes_opened=user.hour_rate * 7 * user.tax_rate,
+        taxes=user.hour_rate * 7 * user.tax_rate,
+    )
+    _check_payroll(
+        metrics["issues"], payroll_opened=user.hour_rate * 7,
+    )
+
+    # check merge_request
+    _check_taxes(
+        metrics["merge_requests"],
+        taxes_opened=user.hour_rate * 5 * user.tax_rate,
+        taxes=user.hour_rate * 5 * user.tax_rate,
+    )
+    _check_payroll(
+        metrics["merge_requests"], payroll_opened=user.hour_rate * 5,
     )
 
 
@@ -146,23 +202,49 @@ def test_payroll_opened_has_closed(user):
     issue = IssueFactory.create(state=IssueState.CLOSED)
 
     IssueSpentTimeFactory.create(
-        user=user, base=issue, time_spent=seconds(hours=4)
+        user=user, base=issue, time_spent=seconds(hours=4),
     )
     IssueSpentTimeFactory.create(
-        user=user, base=issue, time_spent=seconds(hours=2)
+        user=user, base=issue, time_spent=seconds(hours=2),
     )
     IssueSpentTimeFactory.create(user=user, time_spent=seconds(hours=5))
 
-    _check_metrics(
-        calculator().get_metrics(user),
-        payroll_opened=user.hour_rate * 5,
-        taxes_opened=user.tax_rate * user.hour_rate * 5,
-        issues_opened_spent=seconds(hours=5),
-        payroll_closed=user.hour_rate * 6,
-        taxes_closed=user.tax_rate * user.hour_rate * 6,
-        taxes=user.hour_rate * 11 * user.tax_rate,
+    metrics = calculator().get_metrics(user)
+
+    # check common
+    _check_spent(
+        metrics,
         issues_closed_spent=seconds(hours=6),
+        issues_opened_spent=seconds(hours=5),
     )
+    _check_taxes(
+        metrics,
+        taxes_closed=user.tax_rate * user.hour_rate * 6,
+        taxes_opened=user.tax_rate * user.hour_rate * 5,
+        taxes=user.hour_rate * 11 * user.tax_rate,
+    )
+    _check_payroll(
+        metrics,
+        payroll_opened=user.hour_rate * 5,
+        payroll_closed=user.hour_rate * 6,
+    )
+
+    # check issues
+    _check_taxes(
+        metrics["issues"],
+        taxes_closed=user.tax_rate * user.hour_rate * 6,
+        taxes_opened=user.tax_rate * user.hour_rate * 5,
+        taxes=user.hour_rate * 11 * user.tax_rate,
+    )
+    _check_payroll(
+        metrics["issues"],
+        payroll_opened=user.hour_rate * 5,
+        payroll_closed=user.hour_rate * 6,
+    )
+
+    # check merge_request
+    _check_taxes(metrics["merge_requests"])
+    _check_payroll(metrics["merge_requests"])
 
 
 def test_payroll_opened_another_user(user):
@@ -171,44 +253,86 @@ def test_payroll_opened_another_user(user):
     user_2 = UserFactory.create()
 
     IssueSpentTimeFactory.create(
-        user=user_2, base=issue, time_spent=seconds(hours=1)
+        user=user_2, base=issue, time_spent=seconds(hours=1),
     )
     IssueSpentTimeFactory.create(
-        user=user_2, base=issue, time_spent=seconds(hours=2)
+        user=user_2, base=issue, time_spent=seconds(hours=2),
     )
     IssueSpentTimeFactory.create(
-        user=user, base=issue, time_spent=seconds(hours=5)
+        user=user, base=issue, time_spent=seconds(hours=5),
     )
 
-    _check_metrics(
-        calculator().get_metrics(user),
-        payroll_opened=user.hour_rate * 5,
+    metrics = calculator().get_metrics(user)
+
+    # check common
+    _check_spent(
+        metrics, issues_opened_spent=seconds(hours=5),
+    )
+    _check_taxes(
+        metrics,
         taxes_opened=user.tax_rate * user.hour_rate * 5,
         taxes=user.hour_rate * 5 * user.tax_rate,
-        issues_opened_spent=seconds(hours=5),
     )
+    _check_payroll(
+        metrics, payroll_opened=user.hour_rate * 5,
+    )
+
+    # check issues
+    _check_taxes(
+        metrics["issues"],
+        taxes_opened=user.tax_rate * user.hour_rate * 5,
+        taxes=user.hour_rate * 5 * user.tax_rate,
+    )
+    _check_payroll(
+        metrics["issues"], payroll_opened=user.hour_rate * 5,
+    )
+
+    # check merge_request
+    _check_taxes(metrics["merge_requests"])
+    _check_payroll(metrics["merge_requests"])
 
 
 def test_payroll_closed(user):
     issue = IssueFactory.create(state=IssueState.CLOSED)
 
     IssueSpentTimeFactory.create(
-        user=user, base=issue, time_spent=seconds(hours=1)
+        user=user, base=issue, time_spent=seconds(hours=1),
     )
     IssueSpentTimeFactory.create(
-        user=user, base=issue, time_spent=-seconds(hours=2)
+        user=user, base=issue, time_spent=-seconds(hours=2),
     )
     IssueSpentTimeFactory.create(
-        user=user, base=issue, time_spent=seconds(hours=5)
+        user=user, base=issue, time_spent=seconds(hours=5),
     )
 
-    _check_metrics(
-        calculator().get_metrics(user),
-        payroll_closed=user.hour_rate * 4,
+    metrics = calculator().get_metrics(user)
+
+    # check common
+    _check_spent(
+        metrics, issues_closed_spent=seconds(hours=4),
+    )
+    _check_taxes(
+        metrics,
         taxes_closed=user.tax_rate * user.hour_rate * 4,
         taxes=user.hour_rate * 4 * user.tax_rate,
-        issues_closed_spent=seconds(hours=4),
     )
+    _check_payroll(
+        metrics, payroll_closed=user.hour_rate * 4,
+    )
+
+    # check issues
+    _check_taxes(
+        metrics["issues"],
+        taxes_closed=user.tax_rate * user.hour_rate * 4,
+        taxes=user.hour_rate * 4 * user.tax_rate,
+    )
+    _check_payroll(
+        metrics["issues"], payroll_closed=user.hour_rate * 4,
+    )
+
+    # check merge_request
+    _check_taxes(metrics["merge_requests"])
+    _check_payroll(metrics["merge_requests"])
 
 
 def test_payroll_closed_has_salary(user):
@@ -221,29 +345,50 @@ def test_payroll_closed_has_salary(user):
         salary=SalaryFactory.create(user=user),
     )
     IssueSpentTimeFactory.create(
-        user=user, base=issue, time_spent=seconds(hours=2)
+        user=user, base=issue, time_spent=seconds(hours=2),
     )
     IssueSpentTimeFactory.create(
-        user=user, base=issue, time_spent=seconds(hours=5)
+        user=user, base=issue, time_spent=seconds(hours=5),
     )
 
-    _check_metrics(
-        calculator().get_metrics(user),
-        payroll_closed=user.hour_rate * 7,
+    metrics = calculator().get_metrics(user)
+
+    # check common
+    _check_spent(
+        metrics, issues_closed_spent=seconds(hours=7),
+    )
+    _check_taxes(
+        metrics,
         taxes_closed=user.tax_rate * user.hour_rate * 7,
         taxes=user.hour_rate * 7 * user.tax_rate,
-        issues_closed_spent=seconds(hours=7),
     )
+    _check_payroll(
+        metrics, payroll_closed=user.hour_rate * 7,
+    )
+
+    # check issues
+    _check_taxes(
+        metrics["issues"],
+        taxes_closed=user.tax_rate * user.hour_rate * 7,
+        taxes=user.hour_rate * 7 * user.tax_rate,
+    )
+    _check_payroll(
+        metrics["issues"], payroll_closed=user.hour_rate * 7,
+    )
+
+    # check merge_request
+    _check_taxes(metrics["merge_requests"])
+    _check_payroll(metrics["merge_requests"])
 
 
 def test_payroll_opened_has_opened(user):
     issue = IssueFactory.create(state=IssueState.OPENED)
 
     IssueSpentTimeFactory.create(
-        user=user, base=issue, time_spent=seconds(hours=4)
+        user=user, base=issue, time_spent=seconds(hours=4),
     )
     IssueSpentTimeFactory.create(
-        user=user, base=issue, time_spent=seconds(hours=2)
+        user=user, base=issue, time_spent=seconds(hours=2),
     )
     IssueSpentTimeFactory.create(
         user=user,
@@ -251,16 +396,42 @@ def test_payroll_opened_has_opened(user):
         time_spent=seconds(hours=5),
     )
 
-    _check_metrics(
-        calculator().get_metrics(user),
-        payroll_closed=user.hour_rate * 5,
-        taxes_closed=user.tax_rate * user.hour_rate * 5,
+    metrics = calculator().get_metrics(user)
+
+    # check common
+    _check_spent(
+        metrics,
         issues_closed_spent=seconds(hours=5),
-        payroll_opened=user.hour_rate * 6,
-        taxes_opened=user.tax_rate * user.hour_rate * 6,
-        taxes=user.hour_rate * 11 * user.tax_rate,
         issues_opened_spent=seconds(hours=6),
     )
+    _check_taxes(
+        metrics,
+        taxes_closed=user.tax_rate * user.hour_rate * 5,
+        taxes_opened=user.tax_rate * user.hour_rate * 6,
+        taxes=user.hour_rate * 11 * user.tax_rate,
+    )
+    _check_payroll(
+        metrics,
+        payroll_closed=user.hour_rate * 5,
+        payroll_opened=user.hour_rate * 6,
+    )
+
+    # check issues
+    _check_taxes(
+        metrics["issues"],
+        taxes_closed=user.tax_rate * user.hour_rate * 5,
+        taxes_opened=user.tax_rate * user.hour_rate * 6,
+        taxes=user.hour_rate * 11 * user.tax_rate,
+    )
+    _check_payroll(
+        metrics["issues"],
+        payroll_closed=user.hour_rate * 5,
+        payroll_opened=user.hour_rate * 6,
+    )
+
+    # check merge_request
+    _check_taxes(metrics["merge_requests"])
+    _check_payroll(metrics["merge_requests"])
 
 
 def test_payroll_closed_another_user(user):
@@ -270,26 +441,50 @@ def test_payroll_closed_another_user(user):
     user_2 = UserFactory.create()
 
     IssueSpentTimeFactory.create(
-        user=user_2, base=issue, time_spent=seconds(hours=1)
+        user=user_2, base=issue, time_spent=seconds(hours=1),
     )
     IssueSpentTimeFactory.create(
-        user=user_2, base=issue, time_spent=seconds(hours=2)
+        user=user_2, base=issue, time_spent=seconds(hours=2),
     )
     IssueSpentTimeFactory.create(
-        user=user, base=issue, time_spent=seconds(hours=5)
+        user=user, base=issue, time_spent=seconds(hours=5),
     )
 
     MergeRequestSpentTimeFactory.create(
         user=user, base=mr, time_spent=seconds(hours=2),
     )
 
-    _check_metrics(
-        calculator().get_metrics(user),
-        payroll_closed=user.hour_rate * 7,
-        taxes_closed=user.tax_rate * user.hour_rate * 7,
-        taxes=user.hour_rate * 7 * user.tax_rate,
+    metrics = calculator().get_metrics(user)
+
+    # check common
+    _check_spent(
+        metrics,
         issues_closed_spent=seconds(hours=5),
         mr_closed_spent=seconds(hours=2),
+    )
+    _check_taxes(
+        metrics,
+        taxes_closed=user.tax_rate * user.hour_rate * 7,
+        taxes=user.hour_rate * 7 * user.tax_rate,
+    )
+    _check_payroll(metrics, payroll_closed=user.hour_rate * 7)
+
+    # check issues
+    _check_taxes(
+        metrics["issues"],
+        taxes_closed=user.tax_rate * user.hour_rate * 5,
+        taxes=user.hour_rate * 5 * user.tax_rate,
+    )
+    _check_payroll(metrics["issues"], payroll_closed=user.hour_rate * 5)
+
+    # check merge_request
+    _check_taxes(
+        metrics["merge_requests"],
+        taxes_closed=user.tax_rate * user.hour_rate * 2,
+        taxes=user.hour_rate * 2 * user.tax_rate,
+    )
+    _check_payroll(
+        metrics["merge_requests"], payroll_closed=user.hour_rate * 2,
     )
 
 
@@ -302,7 +497,7 @@ def test_last_salary_date(user, ghl_auth_mock_info):
     salary = SalaryFactory(user=user, period_to=timezone.now())
 
     last_salary_date = metrics.last_salary_date_resolver(
-        None, ghl_auth_mock_info
+        None, ghl_auth_mock_info,
     )
     assert last_salary_date == salary.period_to.date()
 
@@ -313,23 +508,21 @@ def test_bonus(user):
     metrics = calculator().get_metrics(user)
 
     bonus = sum(bonus.sum for bonus in bonuses)
-    _check_metrics(
-        metrics, bonus=bonus, taxes=bonus * user.tax_rate,
-    )
+    assert metrics["bonus"] == bonus
+    _check_taxes(metrics, taxes=bonus * user.tax_rate)
 
 
 def test_bonus_have_salaries(user):
     bonuses = BonusFactory.create_batch(10, user=user)
     BonusFactory.create_batch(
-        5, user=user, salary=SalaryFactory.create(user=user)
+        5, user=user, salary=SalaryFactory.create(user=user),
     )
 
     metrics = calculator().get_metrics(user)
 
     bonus = sum(bonus.sum for bonus in bonuses)
-    _check_metrics(
-        metrics, bonus=bonus, taxes=bonus * user.tax_rate,
-    )
+    assert metrics["bonus"] == bonus
+    _check_taxes(metrics, taxes=bonus * user.tax_rate)
 
 
 def test_bonus_another_user(user):
@@ -341,9 +534,8 @@ def test_bonus_another_user(user):
     metrics = calculator().get_metrics(user)
 
     bonus = sum(bonus.sum for bonus in bonuses)
-    _check_metrics(
-        metrics, bonus=bonus, taxes=bonus * user.tax_rate,
-    )
+    assert metrics["bonus"] == bonus
+    _check_taxes(metrics, taxes=bonus * user.tax_rate)
 
 
 def test_penalty(user):
@@ -352,23 +544,19 @@ def test_penalty(user):
     metrics = calculator().get_metrics(user)
 
     penalty = sum(penalty.sum for penalty in penalties)
-    _check_metrics(
-        metrics, penalty=penalty,
-    )
+    assert metrics["penalty"] == penalty
 
 
 def test_penalty_have_salaries(user):
     penalties = PenaltyFactory.create_batch(10, user=user)
     PenaltyFactory.create_batch(
-        5, user=user, salary=SalaryFactory.create(user=user)
+        5, user=user, salary=SalaryFactory.create(user=user),
     )
 
     metrics = calculator().get_metrics(user)
 
     penalty = sum(penalty.sum for penalty in penalties)
-    _check_metrics(
-        metrics, penalty=penalty,
-    )
+    assert metrics["penalty"] == penalty
 
 
 def test_penalty_another_user(user):
@@ -378,11 +566,9 @@ def test_penalty_another_user(user):
     PenaltyFactory.create_batch(5, user=user_2)
 
     metrics = calculator().get_metrics(user)
-
     penalty = sum(penalty.sum for penalty in penalties)
-    _check_metrics(
-        metrics, penalty=penalty,
-    )
+
+    assert metrics["penalty"] == penalty
 
 
 def test_paid_work_breaks_days(user, ghl_auth_mock_info):
@@ -414,7 +600,7 @@ def test_paid_work_breaks_days_not_paid_not_count(user, ghl_auth_mock_info):
 
 
 def test_paid_work_breaks_days_not_this_year_not_count(
-    user, ghl_auth_mock_info
+    user, ghl_auth_mock_info,
 ):
     now = timezone.now()
     WorkBreakFactory(
@@ -463,10 +649,10 @@ def test_complex(user):
 
     issue = IssueFactory.create(user=user, state=IssueState.OPENED)
     IssueSpentTimeFactory.create(
-        user=user, base=issue, time_spent=seconds(hours=4)
+        user=user, base=issue, time_spent=seconds(hours=4),
     )
     IssueSpentTimeFactory.create(
-        user=user, base=issue, time_spent=seconds(hours=2)
+        user=user, base=issue, time_spent=seconds(hours=2),
     )
     IssueSpentTimeFactory.create(
         user=user,
@@ -474,46 +660,71 @@ def test_complex(user):
         time_spent=seconds(hours=5),
     )
 
+    metrics = calculator().get_metrics(user)
+
+    # check common
     bonus, penalty = 100 * 10, 50 * 10
-    _check_metrics(
-        calculator().get_metrics(user),
-        bonus=100 * 10,
-        penalty=50 * 10,
-        payroll_closed=user.hour_rate * 5,
-        taxes_closed=user.tax_rate * user.hour_rate * 5,
+    assert metrics["bonus"] == bonus
+    assert metrics["penalty"] == penalty
+
+    _check_spent(
+        metrics,
         issues_closed_spent=seconds(hours=5),
-        payroll_opened=user.hour_rate * 6,
-        taxes_opened=user.tax_rate * user.hour_rate * 6,
         issues_opened_spent=seconds(hours=6),
+    )
+    _check_payroll(
+        metrics,
+        payroll_closed=user.hour_rate * 5,
+        payroll_opened=user.hour_rate * 6,
+    )
+    _check_taxes(
+        metrics,
+        taxes_closed=user.tax_rate * user.hour_rate * 5,
+        taxes_opened=user.tax_rate * user.hour_rate * 6,
         taxes=(user.hour_rate * 11 + bonus - penalty) * user.tax_rate,
     )
 
+    # check issues
+    _check_payroll(
+        metrics["issues"],
+        payroll_closed=user.hour_rate * 5,
+        payroll_opened=user.hour_rate * 6,
+    )
+    _check_taxes(
+        metrics["issues"],
+        taxes_closed=user.tax_rate * user.hour_rate * 5,
+        taxes_opened=user.tax_rate * user.hour_rate * 6,
+        taxes=user.hour_rate * 11 * user.tax_rate,
+    )
 
-def _check_metrics(
+    # check merge_request
+    _check_taxes(metrics["merge_requests"])
+    _check_payroll(metrics["merge_requests"])
+
+
+def _check_payroll(
+    metrics, payroll_opened=0, payroll_closed=0,
+):
+    assert payroll_opened == metrics["payroll_opened"]
+    assert payroll_closed == metrics["payroll_closed"]
+    assert payroll_opened + payroll_closed == metrics["payroll"]
+
+
+def _check_taxes(
+    metrics, taxes_opened=0, taxes_closed=0, taxes=0,
+):
+    assert taxes_opened == metrics["taxes_opened"]
+    assert taxes_closed == metrics["taxes_closed"]
+    assert taxes == metrics["taxes"]
+
+
+def _check_spent(
     metrics,
-    bonus=0,
-    penalty=0,
-    payroll_opened=0,
-    payroll_closed=0,
-    taxes_opened=0,
-    taxes_closed=0,
-    taxes=0,
     issues_closed_spent=0.0,
     issues_opened_spent=0.0,
     mr_closed_spent=0.0,
     mr_opened_spent=0.0,
 ):
-    assert bonus == metrics["bonus"]
-    assert penalty == metrics["penalty"]
-
-    assert payroll_opened == metrics["payroll_opened"]
-    assert payroll_closed == metrics["payroll_closed"]
-    assert payroll_opened + payroll_closed == metrics["payroll"]
-
-    assert taxes_opened == metrics["taxes_opened"]
-    assert taxes_closed == metrics["taxes_closed"]
-    assert taxes == metrics["taxes"]
-
     assert issues_closed_spent == metrics["issues"]["closed_spent"]
     assert issues_opened_spent == metrics["issues"]["opened_spent"]
 
