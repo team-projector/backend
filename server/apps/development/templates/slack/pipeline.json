@@ -11,7 +11,7 @@
     "fields": [
       {
         "type": "mrkdwn",
-        "text": "*Project:*\n*<{{ project.web_url }}|{{ project.name }}>*"
+        "text": "*Project:*\n*<{{ project.web_url }}|{{ project.path_with_namespace }}>*"
       },
       {% if merge_request %}
       {
