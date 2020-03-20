@@ -1,10 +1,11 @@
 # -*- coding: utf-8 -*-
 
-from collections import Iterable, Sequence
-from typing import List, TypeVar
+import typing
 
-T = TypeVar("T")  # noqa: WPS111
+T = typing.TypeVar("T")  # noqa WPS111
 
 
-def sub_list(source: Sequence[T], indexes: Iterable[int]) -> List[T]:
+def sub_list(
+    source: typing.Sequence, indexes: typing.Iterable[int]
+) -> typing.List[T]:
     return [source[index] for index in indexes]

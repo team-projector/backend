@@ -4,7 +4,7 @@ from datetime import datetime, timedelta
 
 from apps.development.graphql.filters import TicketsFilterSet
 from apps.development.models import Ticket
-from tests import helpers
+from tests.helpers import lists
 from tests.test_development.factories import TicketFactory
 
 
@@ -21,7 +21,7 @@ def test_by_due_date_asc(db):
     ).qs
 
     assert results.count() == 3
-    assert list(results) == helpers.sub_list(tickets, (0, 2, 1))
+    assert list(results) == lists.sub_list(tickets, (0, 2, 1))
 
 
 def test_by_due_date_desc(db):
@@ -37,7 +37,7 @@ def test_by_due_date_desc(db):
     ).qs
 
     assert results.count() == 3
-    assert list(results) == helpers.sub_list(tickets, (1, 2, 0))
+    assert list(results) == lists.sub_list(tickets, (1, 2, 0))
 
 
 def test_by_title_asc(db):
@@ -53,7 +53,7 @@ def test_by_title_asc(db):
     ).qs
 
     assert results.count() == 3
-    assert list(results) == helpers.sub_list(tickets, (1, 0, 2))
+    assert list(results) == lists.sub_list(tickets, (1, 0, 2))
 
 
 def test_by_title_desc(db):
@@ -69,7 +69,7 @@ def test_by_title_desc(db):
     ).qs
 
     assert results.count() == 3
-    assert list(results) == helpers.sub_list(tickets, (2, 0, 1))
+    assert list(results) == lists.sub_list(tickets, (2, 0, 1))
 
 
 def test_by_due_date_and_title(db):
@@ -91,4 +91,4 @@ def test_by_due_date_and_title(db):
     ).qs
 
     assert results.count() == 3
-    assert list(results) == helpers.sub_list(tickets, (1, 0, 2))
+    assert list(results) == lists.sub_list(tickets, (1, 0, 2))
