@@ -33,3 +33,25 @@ def test_penalties_filter_by_salary(user):
 
     assert results.count() == 5
     assert set(results) == set(penalties_salary_2)
+
+
+def test_salary_is_null(user):
+    PenaltyFactory.create_batch(size=2, user=user, salary=None)
+
+    results = PenaltyFilterSet(
+        data={"salary": None}, queryset=Penalty.objects.all(),
+    ).qs
+
+    assert results.count() == 2
+
+
+def test_salary_is_null_empty(user):
+    PenaltyFactory.create_batch(
+        size=2, user=user, salary=SalaryFactory.create(user=user),
+    )
+
+    results = PenaltyFilterSet(
+        data={"salary": None}, queryset=Penalty.objects.all(),
+    ).qs
+
+    assert not results.exists()
