@@ -2,7 +2,7 @@
 
 import typing
 
-T = typing.TypeVar("T")  # noqa WPS111
+T = typing.TypeVar("T")  # noqa: WPS111
 
 
 def sub_list(
