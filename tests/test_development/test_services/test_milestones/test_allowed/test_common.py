@@ -106,7 +106,7 @@ def test_parent_group_with_groups(
     groups = ProjectGroupFactory.create_batch(2, parent=parent_group)
 
     milestones = {
-        ProjectMilestoneFactory.create_batch(2, owner=groups[0]),
+        *ProjectMilestoneFactory.create_batch(2, owner=groups[0]),
         ProjectMilestoneFactory.create(owner=groups[1]),
     }
 
