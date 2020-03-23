@@ -10,7 +10,7 @@ from tests.test_users.factories.user import UserFactory
 
 
 @pytest.fixture()
-def ticket():
+def ticket(db):
     return TicketFactory.create()
 
 
