@@ -46,17 +46,22 @@ def test_customer(project, group_customer):
 
 
 def test_hierarchy(project, group, group_manager):
-    sub_group = ProjectGroupFactory.create(parent=group)
-    project2 = ProjectFactory.create(group=sub_group)
+    groups = [
+        ProjectGroupFactory.create(parent=group),
+        ProjectGroupFactory.create(),
+    ]
 
-    group_another = ProjectGroupFactory.create()
-    project3 = ProjectFactory.create(group=group_another)
-    IssueFactory.create_batch(5, project=project3)
+    projects = [
+        ProjectFactory.create(group=groups[0]),
+        ProjectFactory.create(group=groups[1]),
+    ]
+
+    IssueFactory.create_batch(5, project=projects[1])
 
     helpers.check_allowed_for_user(
         group_manager,
         [
             *IssueFactory.create_batch(2, project=project),
-            IssueFactory.create(project=project2),
+            IssueFactory.create(project=projects[0]),
         ],
     )
