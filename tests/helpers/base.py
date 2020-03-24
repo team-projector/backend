@@ -2,7 +2,6 @@
 
 import datetime
 
-from django.contrib.admin import site
 from django.db import transaction
 from django.forms.models import model_to_dict
 from rest_framework.test import APIRequestFactory
@@ -80,10 +79,6 @@ def trigger_on_commit():
         func()
 
 
-def model_admin(model):
-    return site._registry[model]
-
-
 def model_to_dict_form(data: dict) -> dict:
     def replace(value):
         return "" if value is None else value
@@ -94,7 +89,3 @@ def model_to_dict_form(data: dict) -> dict:
 
 def format_date(date: datetime) -> str:
     return date.strftime("%Y-%m-%d")
-
-
-def parse_gl_date(date_str: str) -> datetime:
-    return datetime.datetime.strptime(date_str, "%Y-%m-%d")
