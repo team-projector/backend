@@ -42,5 +42,5 @@ def test_complex(
     team_leader_issues = [issues[index] for index in (0, 1, 2, 4, 5)]
     helpers.check_allowed_for_user(team_leader, team_leader_issues)
     helpers.check_allowed_for_user(
-        team_developer, [issues[2], issues[4], issues[5]]
+        team_developer, [issues[2], issues[4], issues[5]],
     )

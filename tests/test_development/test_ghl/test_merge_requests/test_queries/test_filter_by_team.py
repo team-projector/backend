@@ -9,7 +9,7 @@ from tests.test_development.factories import (
 from tests.test_users.factories.user import UserFactory
 
 
-def test_merge_requests_filter_by_team_empty(
+def test_filter_by_team_empty(
     user, ghl_auth_mock_info, all_merge_requests_query,
 ):
     """Test team doesn"t have merge requests."""
@@ -31,7 +31,7 @@ def test_merge_requests_filter_by_team_empty(
     assert response.length == 0
 
 
-def test_merge_requests_filter_by_team_watcher_empty(
+def test_filter_by_team_watcher_empty(
     user, ghl_auth_mock_info, all_merge_requests_query,
 ):
     """Test watcher no results."""
@@ -56,7 +56,7 @@ def test_merge_requests_filter_by_team_watcher_empty(
     assert response.length == 0
 
 
-def test_merge_requests_filter_by_team_leader(
+def test_filter_by_team_leader(
     user, ghl_auth_mock_info, all_merge_requests_query,
 ):
     """Test team leader see merge requests of his team."""

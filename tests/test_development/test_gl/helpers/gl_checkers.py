@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 
-def check_group(group, gl_group, parent=None):
+def check_group(group, gl_group, parent=None):  # noqa: WPS218
     assert group.gl_id == gl_group["id"]
     assert group.gl_url == gl_group["web_url"]
     assert group.gl_avatar == gl_group["avatar_url"]
@@ -10,7 +10,7 @@ def check_group(group, gl_group, parent=None):
     assert group.parent == parent
 
 
-def check_issue(issue, gl_issue):
+def check_issue(issue, gl_issue):  # noqa: WPS218
     assert issue.gl_id == gl_issue["id"]
     assert issue.gl_iid == gl_issue["iid"]
     assert issue.gl_url == gl_issue["web_url"]
@@ -20,7 +20,7 @@ def check_issue(issue, gl_issue):
     assert issue.updated_at is not None
 
 
-def check_milestone(milestone, gl_milestone, owner):
+def check_milestone(milestone, gl_milestone, owner):  # noqa: WPS218
     assert milestone.gl_id == gl_milestone["id"]
     assert milestone.gl_iid == gl_milestone["iid"]
     assert milestone.gl_url == gl_milestone["web_url"]
@@ -34,7 +34,7 @@ def check_milestone(milestone, gl_milestone, owner):
     assert milestone.owner == owner
 
 
-def check_merge_request(merge_request, gl_merge_request):
+def check_merge_request(merge_request, gl_merge_request):  # noqa: WPS218
     assert merge_request.gl_id == gl_merge_request["id"]
     assert merge_request.gl_iid == gl_merge_request["iid"]
     assert merge_request.gl_url == gl_merge_request["web_url"]
@@ -44,7 +44,7 @@ def check_merge_request(merge_request, gl_merge_request):
     assert merge_request.updated_at is not None
 
 
-def check_project(project, gl_project, group=None):
+def check_project(project, gl_project, group=None):  # noqa: WPS218
     assert project.gl_id == gl_project["id"]
     assert project.gl_url == gl_project["web_url"]
     assert project.gl_avatar == gl_project["avatar_url"]

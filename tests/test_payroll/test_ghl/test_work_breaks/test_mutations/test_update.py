@@ -122,27 +122,22 @@ def test_update_work_break_another_user(
         )
 
 
-def test_update_work_break_another_user_but_team_lead(
-    ghl_auth_mock_info, update_work_break_mutation,
+def test_update_another_user_but_team_lead(
+    ghl_auth_mock_info,
+    update_work_break_mutation,
+    team,
+    make_team_developer,
+    make_team_leader,
 ):
-    team = TeamFactory.create()
+    another_user = UserFactory.create()
+    make_team_leader(team, ghl_auth_mock_info.context.user)
+    make_team_developer(team, another_user)
 
-    TeamMemberFactory.create(
-        team=team,
-        user=ghl_auth_mock_info.context.user,
-        roles=TeamMember.roles.LEADER,
-    )
-
-    user_2 = UserFactory.create()
-    TeamMemberFactory.create(
-        team=team, user=user_2, roles=TeamMember.roles.DEVELOPER,
-    )
-
-    work_break = WorkBreakFactory.create(user=user_2, comment="created")
+    work_break = WorkBreakFactory.create(user=another_user, comment="created")
 
     update_variables = {
         "id": work_break.pk,
-        "user": user_2.id,
+        "user": another_user.pk,
         "from_date": timezone.now(),
         "to_date": timezone.now(),
         "reason": WorkBreakReason.DAYOFF,
@@ -157,7 +152,7 @@ def test_update_work_break_another_user_but_team_lead(
 
     assert WorkBreak.objects.count() == 1
     assert work_break.comment == "updated"
-    assert work_break.user == user_2
+    assert work_break.user == another_user
 
 
 def test_change_work_break_user(

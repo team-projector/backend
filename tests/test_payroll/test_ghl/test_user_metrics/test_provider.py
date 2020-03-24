@@ -60,20 +60,16 @@ def test_mr_opened_count_exists_closed(user, ghl_auth_mock_info):
 
 
 def test_issues_opened_count_another_user(user, ghl_auth_mock_info):
-    user_2 = UserFactory.create()
-
     IssueFactory.create_batch(2, user=user)
-    IssueFactory.create_batch(5, user=user_2)
+    IssueFactory.create_batch(5, user=UserFactory.create())
 
     expected = metrics.issues_opened_count_resolver(None, ghl_auth_mock_info)
     assert expected == 2
 
 
 def test_mr_opened_count_another_user(user, ghl_auth_mock_info):
-    user_2 = UserFactory.create()
-
     MergeRequestFactory.create_batch(2, user=user)
-    MergeRequestFactory.create_batch(5, user=user_2)
+    MergeRequestFactory.create_batch(5, user=UserFactory.create())
 
     expected = metrics.mr_opened_count_resolver(None, ghl_auth_mock_info)
     assert expected == 2
@@ -250,13 +246,13 @@ def test_payroll_opened_has_closed(user):
 def test_payroll_opened_another_user(user):
     issue = IssueFactory.create(state=IssueState.OPENED)
 
-    user_2 = UserFactory.create()
+    another_user = UserFactory.create()
 
     IssueSpentTimeFactory.create(
-        user=user_2, base=issue, time_spent=seconds(hours=1),
+        user=another_user, base=issue, time_spent=seconds(hours=1),
     )
     IssueSpentTimeFactory.create(
-        user=user_2, base=issue, time_spent=seconds(hours=2),
+        user=another_user, base=issue, time_spent=seconds(hours=2),
     )
     IssueSpentTimeFactory.create(
         user=user, base=issue, time_spent=seconds(hours=5),
@@ -438,13 +434,13 @@ def test_payroll_closed_another_user(user):
     issue = IssueFactory.create(state=IssueState.CLOSED)
     mr = MergeRequestFactory.create(state=IssueState.CLOSED)
 
-    user_2 = UserFactory.create()
+    another_user = UserFactory.create()
 
     IssueSpentTimeFactory.create(
-        user=user_2, base=issue, time_spent=seconds(hours=1),
+        user=another_user, base=issue, time_spent=seconds(hours=1),
     )
     IssueSpentTimeFactory.create(
-        user=user_2, base=issue, time_spent=seconds(hours=2),
+        user=another_user, base=issue, time_spent=seconds(hours=2),
     )
     IssueSpentTimeFactory.create(
         user=user, base=issue, time_spent=seconds(hours=5),
@@ -528,8 +524,7 @@ def test_bonus_have_salaries(user):
 def test_bonus_another_user(user):
     bonuses = BonusFactory.create_batch(10, user=user)
 
-    user_2 = UserFactory.create()
-    BonusFactory.create_batch(5, user=user_2)
+    BonusFactory.create_batch(5, user=UserFactory.create())
 
     metrics = calculator().get_metrics(user)
 
@@ -562,8 +557,7 @@ def test_penalty_have_salaries(user):
 def test_penalty_another_user(user):
     penalties = PenaltyFactory.create_batch(10, user=user)
 
-    user_2 = UserFactory.create()
-    PenaltyFactory.create_batch(5, user=user_2)
+    PenaltyFactory.create_batch(5, user=UserFactory.create())
 
     metrics = calculator().get_metrics(user)
     penalty = sum(penalty.sum for penalty in penalties)
@@ -599,7 +593,7 @@ def test_paid_work_breaks_days_not_paid_not_count(user, ghl_auth_mock_info):
     assert paid_work_breaks_days == 0
 
 
-def test_paid_work_breaks_days_not_this_year_not_count(
+def test_paid_work_breaks_days_not_this_year(
     user, ghl_auth_mock_info,
 ):
     now = timezone.now()
