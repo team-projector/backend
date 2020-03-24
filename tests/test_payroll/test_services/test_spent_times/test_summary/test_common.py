@@ -3,14 +3,15 @@
 from apps.core.utils.time import seconds
 from apps.development.models.issue import IssueState
 from apps.development.models.merge_request import MergeRequestState
-from apps.payroll.graphql.resolvers import resolve_spent_times_summary
 from apps.payroll.models import SpentTime
 from apps.payroll.services import spent_time as spent_time_service
-from tests.helpers.objects import AttrDict
 from tests.test_development.factories import IssueFactory, MergeRequestFactory
 from tests.test_payroll.factories import (
     IssueSpentTimeFactory,
     MergeRequestSpentTimeFactory,
+)
+from tests.test_payroll.test_services.test_spent_times.test_summary import (
+    checkers,
 )
 
 
@@ -24,14 +25,13 @@ def test_without_spents(user):
 
     summary = spent_time_service.get_summary(SpentTime.objects.all())
 
-    assert summary.spent == 0
-    assert summary.opened_spent == 0
-    assert summary.issues.spent == 0
-    assert summary.merge_requests.spent == 0
+    checkers.check_time_spent_summary(summary)
+    checkers.check_time_spent_issues_summary(summary.issues)
+    checkers.check_time_spent_merge_requests_summary(summary.merge_requests)
 
 
 def test_issues_spents(user):
-    issue_opened = IssueFactory.create(user=user, state=IssueState.OPENED)
+    issue_opened = IssueFactory.create(user=user)
 
     IssueSpentTimeFactory.create(
         user=user, base=issue_opened, time_spent=seconds(hours=2),
@@ -53,21 +53,23 @@ def test_issues_spents(user):
 
     summary = spent_time_service.get_summary(SpentTime.objects.all())
 
-    assert summary.merge_requests.spent == 0
-
-    assert summary.issues.opened_spent == seconds(hours=5)
-    assert summary.issues.closed_spent == seconds(hours=3)
-    assert summary.issues.spent == seconds(hours=8)
-
-    assert summary.spent == seconds(hours=8)
-    assert summary.opened_spent == seconds(hours=5)
-    assert summary.closed_spent == seconds(hours=3)
+    checkers.check_time_spent_summary(
+        summary,
+        spent=seconds(hours=8),
+        opened_spent=seconds(hours=5),
+        closed_spent=seconds(hours=3),
+    )
+    checkers.check_time_spent_issues_summary(
+        summary.issues,
+        opened_spent=seconds(hours=5),
+        closed_spent=seconds(hours=3),
+        spent=seconds(hours=8),
+    )
+    checkers.check_time_spent_merge_requests_summary(summary.merge_requests)
 
 
 def test_merge_requests_spents(user):
-    mr_opened = MergeRequestFactory.create(
-        user=user, state=MergeRequestState.OPENED
-    )
+    mr_opened = MergeRequestFactory.create(user=user)
 
     MergeRequestSpentTimeFactory.create(
         user=user, base=mr_opened, time_spent=seconds(hours=2),
@@ -103,22 +105,26 @@ def test_merge_requests_spents(user):
 
     summary = spent_time_service.get_summary(SpentTime.objects.all())
 
-    assert summary.issues.spent == 0
-
-    assert summary.merge_requests.opened_spent == seconds(hours=5)
-    assert summary.merge_requests.closed_spent == seconds(hours=3)
-    assert summary.merge_requests.merged_spent == seconds(hours=6)
-    assert summary.merge_requests.spent == seconds(hours=14)
-
-    assert summary.spent == seconds(hours=14)
-    assert summary.opened_spent == seconds(hours=5)
-    assert summary.closed_spent == seconds(hours=9)
+    checkers.check_time_spent_summary(
+        summary,
+        spent=seconds(hours=14),
+        opened_spent=seconds(hours=5),
+        closed_spent=seconds(hours=9),
+    )
+    checkers.check_time_spent_issues_summary(summary.issues)
+    checkers.check_time_spent_merge_requests_summary(
+        summary.merge_requests,
+        opened_spent=seconds(hours=5),
+        closed_spent=seconds(hours=3),
+        merged_spent=seconds(hours=6),
+        spent=seconds(hours=14),
+    )
 
 
 def test_complex_spents(user):
     IssueSpentTimeFactory.create(
         user=user,
-        base=IssueFactory.create(user=user, state=IssueState.OPENED),
+        base=IssueFactory.create(user=user),
         time_spent=seconds(hours=5),
     )
 
@@ -130,9 +136,7 @@ def test_complex_spents(user):
 
     MergeRequestSpentTimeFactory.create(
         user=user,
-        base=MergeRequestFactory.create(
-            user=user, state=MergeRequestState.OPENED,
-        ),
+        base=MergeRequestFactory.create(user=user),
         time_spent=seconds(hours=5),
     )
 
@@ -154,44 +158,22 @@ def test_complex_spents(user):
 
     summary = spent_time_service.get_summary(SpentTime.objects.all())
 
-    assert summary.issues.opened_spent == seconds(hours=5)
-    assert summary.issues.closed_spent == seconds(hours=3)
-    assert summary.issues.spent == seconds(hours=8)
-
-    assert summary.merge_requests.opened_spent == seconds(hours=5)
-    assert summary.merge_requests.closed_spent == seconds(hours=3)
-    assert summary.merge_requests.merged_spent == seconds(hours=6)
-    assert summary.merge_requests.spent == seconds(hours=14)
-
-    assert summary.spent == seconds(hours=22)
-    assert summary.opened_spent == seconds(hours=10)
-    assert summary.closed_spent == seconds(hours=12)
-
-
-def test_resolver(user, client):
-    IssueSpentTimeFactory.create(
-        user=user,
-        base=IssueFactory.create(user=user, state=IssueState.OPENED),
-        time_spent=seconds(hours=2),
+    checkers.check_time_spent_summary(
+        summary,
+        spent=seconds(hours=22),
+        opened_spent=seconds(hours=10),
+        closed_spent=seconds(hours=12),
     )
-    IssueSpentTimeFactory.create(
-        user=user,
-        base=IssueFactory.create(user=user, state=IssueState.CLOSED),
-        time_spent=seconds(hours=1),
+    checkers.check_time_spent_issues_summary(
+        summary.issues,
+        opened_spent=seconds(hours=5),
+        closed_spent=seconds(hours=3),
+        spent=seconds(hours=8),
     )
-
-    client.user = user
-    info = AttrDict({"context": client})
-
-    summary = resolve_spent_times_summary(
-        parent=None, info=info, state=IssueState.OPENED
+    checkers.check_time_spent_merge_requests_summary(
+        summary.merge_requests,
+        opened_spent=seconds(hours=5),
+        closed_spent=seconds(hours=3),
+        merged_spent=seconds(hours=6),
+        spent=seconds(hours=14),
     )
-
-    assert summary.merge_requests.spent == 0
-
-    assert summary.issues.opened_spent == seconds(hours=2)
-    assert summary.issues.closed_spent == seconds(hours=0)
-    assert summary.issues.spent == seconds(hours=2)
-
-    assert summary.spent == seconds(hours=2)
-    assert summary.opened_spent == seconds(hours=2)

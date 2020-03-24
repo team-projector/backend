@@ -263,9 +263,9 @@ def test_spents_but_moved_from(user):
 
     issue.adjust_spent_times()
 
-    assert SpentTime.objects.filter(note=spent_before).exists() is False
-    assert SpentTime.objects.filter(note=moved_from).exists() is False
-    assert SpentTime.objects.filter(note=spent_after).exists() is True
+    assert not SpentTime.objects.filter(note=spent_before).exists()
+    assert not SpentTime.objects.filter(note=moved_from).exists()
+    assert SpentTime.objects.filter(note=spent_after).exists()
 
 
 def test_spents_with_resets_but_moved_from(user):
@@ -300,9 +300,9 @@ def test_spents_with_resets_but_moved_from(user):
 
     issue.adjust_spent_times()
 
-    assert SpentTime.objects.filter(note=spent_before).exists() is False
-    assert SpentTime.objects.filter(note=moved_from).exists() is False
-    assert SpentTime.objects.filter(note=spent_after).exists() is True
+    assert not SpentTime.objects.filter(note=spent_before).exists()
+    assert not SpentTime.objects.filter(note=moved_from).exists()
+    assert SpentTime.objects.filter(note=spent_after).exists()
 
     reset_spent_time = SpentTime.objects.filter(note=reset_spend).first()
     assert reset_spent_time is not None
