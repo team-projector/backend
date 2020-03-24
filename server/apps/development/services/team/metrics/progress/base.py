@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from datetime import date
-from typing import Iterable, List
+from typing import List
 
 from apps.development.models import Team
 from apps.users.models import User
@@ -26,7 +26,7 @@ class ProgressMetricsProvider:
         self.start = start
         self.end = end
 
-    def get_metrics(self) -> Iterable[TeamMemberProgressMetrics]:
+    def get_metrics(self) -> List[TeamMemberProgressMetrics]:
         """Calculate and return metrics."""
         metrics: List[TeamMemberProgressMetrics] = []
         for member in self.team.members.all():

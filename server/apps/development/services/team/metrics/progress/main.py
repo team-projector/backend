@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from datetime import date
-from typing import Iterable
+from typing import List
 
 from apps.development.models import Team
 from apps.development.services.team.metrics.progress.base import (
@@ -28,7 +28,7 @@ def create_provider(
     raise ValueError("Bad group '{0}'".format(group))
 
 
-TeamMemberProgressMetricsList = Iterable[TeamMemberProgressMetrics]
+TeamMemberProgressMetricsList = List[TeamMemberProgressMetrics]
 
 
 def get_progress_metrics(

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from datetime import date
-from typing import Iterable, Optional
+from typing import List, Optional
 
 from apps.users.models import User
 
@@ -22,7 +22,7 @@ class UserProgressMetrics:
     planned_work_hours: int = 0
 
 
-UserProgressMetricsList = Iterable[UserProgressMetrics]
+UserProgressMetricsList = List[UserProgressMetrics]
 
 
 class ProgressMetricsProvider:
@@ -36,6 +36,6 @@ class ProgressMetricsProvider:
         self.start = start
         self.end = end
 
-    def get_metrics(self) -> Iterable[UserProgressMetrics]:
+    def get_metrics(self) -> List[UserProgressMetrics]:
         """Method should be implemented in subclass."""
         raise NotImplementedError
