@@ -172,4 +172,4 @@ def test_efficiency(user):
     assert metrics.remains == -seconds(hours=4)
 
     metrics = get_merge_request_metrics(merge_requests[2])
-    assert metrics.efficiency is None
+    assert metrics.efficiency == 0

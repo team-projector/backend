@@ -157,4 +157,4 @@ def test_efficiency(user):
     assert metrics.remains == -seconds(hours=4)
 
     metrics = get_issue_metrics(issues[2])
-    assert metrics.efficiency is None
+    assert metrics.efficiency == 0
