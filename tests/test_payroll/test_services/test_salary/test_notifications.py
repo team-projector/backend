@@ -29,7 +29,6 @@ def test_without_email(db):
     user = UserFactory.create(email="")
 
     salary = SalaryFactory.create(user=user, payed=True)
-
     SalaryFactory.create_batch(3, user=user, payed=False)
 
     assert not mail.outbox

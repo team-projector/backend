@@ -62,6 +62,28 @@ def test_not_team_lead(ghl_auth_mock_info, approve_work_break_mutation):
     assert work_break.approve_state == ApprovedState.CREATED
 
 
+def test_other_team_teamlead(
+    user,
+    ghl_auth_mock_info,
+    team,
+    make_team_developer,
+    make_team_leader,
+    approve_work_break_mutation,
+):
+    make_team_leader(team, user)
+
+    another_team = TeamFactory.create()
+    another_user = UserFactory.create()
+    make_team_developer(another_team, another_user)
+
+    work_break = WorkBreakFactory.create(user=another_user)
+
+    with pytest.raises(GraphQLPermissionDenied):
+        approve_work_break_mutation(
+            root=None, info=ghl_auth_mock_info, id=work_break.id,
+        )
+
+
 def test_owner(ghl_auth_mock_info, approve_work_break_mutation):
     work_break = WorkBreakFactory.create(user=ghl_auth_mock_info.context.user)
 
