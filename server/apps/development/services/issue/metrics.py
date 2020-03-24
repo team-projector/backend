@@ -27,7 +27,7 @@ def get_issue_metrics(issue: Issue) -> IssueMetrics:
 
     metrics = IssueMetrics()
     metrics.remains = issue.time_remains
-    metrics.efficiency = issue.efficiency
+    metrics.efficiency = issue.efficiency or 0
     metrics.payroll = payroll["total_payroll"]
     metrics.paid = payroll["total_paid"]
 

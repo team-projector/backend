@@ -6,6 +6,9 @@ from apps.core.utils.time import seconds
 from apps.development.models.issue import IssueState
 from apps.development.services.ticket.metrics import get_ticket_metrics
 from tests.test_development.factories import IssueFactory, TicketFactory
+from tests.test_development.test_services.test_tickets.test_metrics import (
+    checkers,
+)
 from tests.test_payroll.factories import IssueSpentTimeFactory
 from tests.test_users.factories.user import UserFactory
 
@@ -14,41 +17,37 @@ def test_metrics(db):
     ticket = TicketFactory.create()
     user = UserFactory.create(customer_hour_rate=3, hour_rate=2)
 
-    issue_1 = IssueFactory.create(
-        ticket=ticket,
-        user=user,
-        state=IssueState.OPENED,
-        total_time_spent=seconds(hours=1),
-        time_estimate=seconds(hours=2),
-    )
     IssueSpentTimeFactory.create(
         date=datetime.now(),
         user=user,
-        base=issue_1,
+        base=IssueFactory.create(
+            ticket=ticket,
+            user=user,
+            total_time_spent=seconds(hours=1),
+            time_estimate=seconds(hours=2),
+        ),
         time_spent=seconds(hours=1),
     )
 
-    issue_2 = IssueFactory.create(
-        ticket=ticket,
-        user=user,
-        state=IssueState.CLOSED,
-        total_time_spent=seconds(hours=2),
-        time_estimate=seconds(hours=2),
-    )
     IssueSpentTimeFactory.create(
         date=datetime.now(),
         user=user,
-        base=issue_2,
+        base=IssueFactory.create(
+            ticket=ticket,
+            user=user,
+            state=IssueState.CLOSED,
+            total_time_spent=seconds(hours=2),
+            time_estimate=seconds(hours=2),
+        ),
         time_spent=seconds(hours=2),
     )
 
-    metrics = get_ticket_metrics(ticket)
-
-    assert metrics.issues_count == 2
-
-    assert metrics.budget_estimate == 12
-    assert metrics.budget_spent == 9
-    assert metrics.budget_remains == 3
-
-    assert metrics.payroll == 6
-    assert metrics.profit == 6
+    checkers.check_ticket_metrics(
+        get_ticket_metrics(ticket),
+        issues_count=2,
+        budget_estimate=12,
+        budget_spent=9,
+        budget_remains=3,
+        payroll=6,
+        profit=6,
+    )
