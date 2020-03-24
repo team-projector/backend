@@ -1,31 +1,39 @@
 # -*- coding: utf-8 -*-
 
-import graphene
+from typing import Any, Dict, Optional
 
-from apps.core.graphql.helpers.generics import get_object_or_not_found
-from apps.core.graphql.mutations import BaseMutation
+import graphene
+from graphql import ResolveInfo
+
+from apps.core.graphql.mutations import SerializerMutation
+from apps.development.graphql.mutations.milestones.inputs import (
+    SyncMilestoneInput,
+)
 from apps.development.graphql.types import MilestoneType
-from apps.development.models import Milestone, Project, ProjectGroup
+from apps.development.models import Project, ProjectGroup
 from apps.development.tasks import (
     sync_project_group_milestone_task,
     sync_project_milestone_task,
 )
 
 
-class SyncMilestoneMutation(BaseMutation):
+class SyncMilestoneMutation(SerializerMutation):
     """Syncing milestone mutation."""
 
-    class Arguments:
-        id = graphene.ID()  # noqa: A003
+    class Meta:
+        serializer_class = SyncMilestoneInput
 
     milestone = graphene.Field(MilestoneType)
 
     @classmethod
-    def do_mutate(cls, root, info, **kwargs):  # noqa: WPS110
+    def perform_mutate(  # type: ignore
+        cls,
+        root: Optional[object],
+        info: ResolveInfo,  # noqa: WPS110ø
+        validated_data: Dict[str, Any],
+    ) -> "SyncMilestoneMutation":
         """Syncing milestone."""
-        milestone = get_object_or_not_found(
-            Milestone.objects.all(), pk=kwargs.get("id"),
-        )
+        milestone = validated_data.pop("milestone")
 
         if milestone.content_type.model_class() == Project:
             sync_project_milestone_task.delay(
@@ -36,4 +44,4 @@ class SyncMilestoneMutation(BaseMutation):
                 milestone.owner.gl_id, milestone.gl_id,
             )
 
-        return SyncMilestoneMutation(milestone=milestone)
+        return cls(milestone=milestone)
