@@ -13,11 +13,11 @@ from apps.development.services.team.metrics.progress import (
     get_progress_metrics,
 )
 from tests.test_development.factories import IssueFactory
-from tests.test_development.test_services.test_teams.test_metrics.test_progress.test_weeks import (  # noqa: E501
-    checkers,
-)
 from tests.test_payroll.factories import IssueSpentTimeFactory
 from tests.test_users.factories.user import UserFactory
+from tests.test_users.test_services.test_users.test_metrics.test_progress.test_weeks import (  # noqa: E501
+    checkers,
+)
 
 
 def test_simple(team, team_developer, team_leader):

@@ -1,10 +1,8 @@
 # -*- coding: utf-8 -*-
 
-from datetime import date, datetime, timedelta
-from typing import Dict
+from datetime import datetime, timedelta
 
 from django.db.models import Sum
-from django.test import override_settings
 from django.utils import timezone
 from django.utils.timezone import make_aware
 
@@ -12,19 +10,23 @@ from apps.core.utils.date import begin_of_week, date2datetime
 from apps.core.utils.time import seconds
 from apps.development.models.issue import IssueState
 from apps.users.services.user.metrics import get_progress_metrics
-from tests.helpers.base import format_date
 from tests.test_development.factories import IssueFactory
 from tests.test_payroll.factories import IssueSpentTimeFactory
 from tests.test_users.factories.user import UserFactory
+from tests.test_users.test_services.test_users.test_metrics.test_progress.test_weeks import (  # noqa: E501
+    checkers,
+)
 
 
-@override_settings(TP_WEEKENDS_DAYS=[])
 def test_simple(user):
-    issue = IssueFactory.create(
-        user=user, due_date=datetime.now(), closed_at=timezone.now()
-    )
-
     monday = begin_of_week(timezone.now().date())
+
+    issue = IssueFactory.create(
+        user=user,
+        due_date=monday + timedelta(days=1),
+        closed_at=timezone.now(),
+        time_estimate=seconds(hours=15),
+    )
 
     IssueSpentTimeFactory.create(
         date=monday + timedelta(days=4),
@@ -51,35 +53,33 @@ def test_simple(user):
         time_spent=-seconds(hours=3),
     )
 
-    issue.time_estimate = seconds(hours=15)
     issue.total_time_spent = issue.time_spents.aggregate(
         spent=Sum("time_spent"),
     )["spent"]
-    issue.state = IssueState.OPENED
-    issue.due_date = monday + timedelta(days=1)
     issue.save()
 
-    start = monday - timedelta(days=5)
-    end = monday + timedelta(days=5)
-    metrics = get_progress_metrics(user, start, end, "week")
+    metrics = get_progress_metrics(
+        user, monday - timedelta(days=5), monday + timedelta(days=5), "week",
+    )
 
     assert len(metrics) == 2
-    _check_metrics(
+    checkers.check_user_progress_metrics(
         metrics,
-        {monday: timedelta(hours=6)},
-        {monday: 1},
-        {monday: timedelta(hours=15)},
-        {},
+        spents={monday: timedelta(hours=6)},
+        issues_counts={monday: 1},
+        time_estimates={monday: timedelta(hours=15)},
     )
 
 
-@override_settings(TP_WEEKENDS_DAYS=[])
 def test_efficiency_more_1(user):
-    issue = IssueFactory.create(
-        user=user, due_date=datetime.now(), closed_at=timezone.now()
-    )
-
     monday = begin_of_week(timezone.now().date())
+    issue = IssueFactory.create(
+        user=user,
+        due_date=monday + timedelta(days=1),
+        time_estimate=seconds(hours=15),
+        state=IssueState.CLOSED,
+        closed_at=make_aware(date2datetime(monday + timedelta(days=1))),
+    )
 
     IssueSpentTimeFactory.create(
         date=monday + timedelta(days=4),
@@ -106,36 +106,34 @@ def test_efficiency_more_1(user):
         time_spent=-seconds(hours=3),
     )
 
-    issue.time_estimate = seconds(hours=15)
     issue.total_time_spent = issue.time_spents.aggregate(
         spent=Sum("time_spent")
     )["spent"]
-    issue.state = IssueState.CLOSED
-    issue.due_date = monday + timedelta(days=1)
-    issue.closed_at = make_aware(date2datetime(monday + timedelta(days=1)))
     issue.save()
 
-    start = monday - timedelta(days=5)
-    end = monday + timedelta(days=5)
-    metrics = get_progress_metrics(user, start, end, "week")
+    metrics = get_progress_metrics(
+        user, monday - timedelta(days=5), monday + timedelta(days=5), "week",
+    )
 
     assert len(metrics) == 2
-    _check_metrics(
+    checkers.check_user_progress_metrics(
         metrics,
-        {monday: timedelta(hours=6)},
-        {monday: 1},
-        {monday: timedelta(hours=15)},
-        {monday: issue.time_estimate / issue.total_time_spent},
+        spents={monday: timedelta(hours=6)},
+        issues_counts={monday: 1},
+        time_estimates={monday: timedelta(hours=15)},
+        efficiencies={monday: issue.time_estimate / issue.total_time_spent},
     )
 
 
-@override_settings(TP_WEEKENDS_DAYS=[])
 def test_efficiency_less_1(user):
-    issue = IssueFactory.create(
-        user=user, due_date=datetime.now(), closed_at=timezone.now()
-    )
-
     monday = begin_of_week(timezone.now().date())
+    issue = IssueFactory.create(
+        user=user,
+        time_estimate=seconds(hours=3),
+        state=IssueState.CLOSED,
+        due_date=monday + timedelta(days=1),
+        closed_at=make_aware(date2datetime(monday + timedelta(days=1))),
+    )
 
     IssueSpentTimeFactory.create(
         date=monday + timedelta(days=4),
@@ -162,37 +160,34 @@ def test_efficiency_less_1(user):
         time_spent=-seconds(hours=3),
     )
 
-    issue.time_estimate = seconds(hours=3)
     issue.total_time_spent = issue.time_spents.aggregate(
         spent=Sum("time_spent")
     )["spent"]
-    issue.state = IssueState.CLOSED
-    issue.due_date = monday + timedelta(days=1)
-    issue.closed_at = make_aware(date2datetime(monday + timedelta(days=1)))
     issue.save()
 
-    start = monday - timedelta(days=5)
-    end = monday + timedelta(days=5)
-    metrics = get_progress_metrics(user, start, end, "week")
+    metrics = get_progress_metrics(
+        user, monday - timedelta(days=5), monday + timedelta(days=5), "week",
+    )
 
     assert len(metrics) == 2
-
-    _check_metrics(
+    checkers.check_user_progress_metrics(
         metrics,
-        {monday: timedelta(hours=6)},
-        {monday: 1},
-        {monday: timedelta(hours=3)},
-        {monday: issue.time_estimate / issue.total_time_spent},
+        spents={monday: timedelta(hours=6)},
+        issues_counts={monday: 1},
+        time_estimates={monday: timedelta(hours=3)},
+        efficiencies={monday: issue.time_estimate / issue.total_time_spent},
     )
 
 
-@override_settings(TP_WEEKENDS_DAYS=[])
 def test_efficiency_zero_estimate(user):
-    issue = IssueFactory.create(
-        user=user, due_date=datetime.now(), closed_at=timezone.now()
-    )
-
     monday = begin_of_week(timezone.now().date())
+    issue = IssueFactory.create(
+        user=user,
+        state=IssueState.CLOSED,
+        time_estimate=0,
+        due_date=monday + timedelta(days=1),
+        closed_at=make_aware(date2datetime(monday + timedelta(days=1))),
+    )
 
     IssueSpentTimeFactory.create(
         date=monday + timedelta(days=4),
@@ -219,55 +214,54 @@ def test_efficiency_zero_estimate(user):
         time_spent=-seconds(hours=3),
     )
 
-    issue.time_estimate = 0
     issue.total_time_spent = issue.time_spents.aggregate(
         spent=Sum("time_spent"),
     )["spent"]
-    issue.state = IssueState.CLOSED
-    issue.due_date = monday + timedelta(days=1)
-    issue.closed_at = make_aware(date2datetime(monday + timedelta(days=1)))
     issue.save()
 
-    start = monday - timedelta(days=5)
-    end = monday + timedelta(days=5)
-    metrics = get_progress_metrics(user, start, end, "week")
+    metrics = get_progress_metrics(
+        user, monday - timedelta(days=5), monday + timedelta(days=5), "week"
+    )
 
     assert len(metrics) == 2
+    checkers.check_user_progress_metrics(
+        metrics,
+        spents={monday: timedelta(hours=6)},
+        issues_counts={monday: 1},
+    )
 
-    _check_metrics(metrics, {monday: timedelta(hours=6)}, {monday: 1}, {}, {})
 
-
-@override_settings(TP_WEEKENDS_DAYS=[])
 def test_efficiency_zero_spend(user):
-    issue = IssueFactory.create(
-        user=user, due_date=datetime.now(), closed_at=timezone.now()
+    monday = begin_of_week(timezone.now().date())
+    IssueFactory.create(
+        user=user,
+        time_estimate=seconds(hours=2),
+        total_time_spent=0,
+        state=IssueState.CLOSED,
+        due_date=monday + timedelta(days=1),
+        closed_at=make_aware(date2datetime(monday + timedelta(days=1))),
     )
 
-    monday = begin_of_week(timezone.now().date())
-
-    issue.time_estimate = seconds(hours=2)
-    issue.total_time_spent = 0
-    issue.state = IssueState.CLOSED
-    issue.due_date = monday + timedelta(days=1)
-    issue.closed_at = make_aware(date2datetime(monday + timedelta(days=1)))
-    issue.save()
-
-    start = monday - timedelta(days=5)
-    end = monday + timedelta(days=5)
-    metrics = get_progress_metrics(user, start, end, "week")
+    metrics = get_progress_metrics(
+        user, monday - timedelta(days=5), monday + timedelta(days=5), "week"
+    )
 
     assert len(metrics) == 2
-
-    _check_metrics(metrics, {}, {monday: 1}, {monday: timedelta(hours=2)}, {})
-
-
-@override_settings(TP_WEEKENDS_DAYS=[])
-def test_many_weeks(user):
-    issue = IssueFactory.create(
-        user=user, due_date=datetime.now(), closed_at=timezone.now()
+    checkers.check_user_progress_metrics(
+        metrics,
+        issues_counts={monday: 1},
+        time_estimates={monday: timedelta(hours=2)},
     )
 
+
+def test_many_weeks(user):
     monday = begin_of_week(timezone.now().date())
+    issue = IssueFactory.create(
+        user=user,
+        closed_at=timezone.now(),
+        time_estimate=seconds(hours=15),
+        due_date=monday + timedelta(days=2),
+    )
 
     IssueSpentTimeFactory.create(
         date=monday - timedelta(days=4),
@@ -294,39 +288,35 @@ def test_many_weeks(user):
         time_spent=-seconds(hours=3),
     )
 
-    issue.time_estimate = seconds(hours=15)
     issue.total_time_spent = issue.time_spents.aggregate(
         spent=Sum("time_spent"),
     )["spent"]
-    issue.state = IssueState.OPENED
-    issue.due_date = monday + timedelta(days=2)
     issue.save()
 
-    start = monday - timedelta(days=5)
-    end = monday + timedelta(days=5)
-    metrics = get_progress_metrics(user, start, end, "week")
+    metrics = get_progress_metrics(
+        user, monday - timedelta(days=5), monday + timedelta(days=5), "week",
+    )
 
     assert len(metrics) == 2
-
-    _check_metrics(
+    checkers.check_user_progress_metrics(
         metrics,
-        {
+        spents={
             monday - timedelta(weeks=1): timedelta(hours=5),
             monday: timedelta(hours=1),
         },
-        {monday: 1},
-        {monday: timedelta(hours=15)},
-        {},
+        issues_counts={monday: 1},
+        time_estimates={monday: timedelta(hours=15)},
     )
 
 
-@override_settings(TP_WEEKENDS_DAYS=[])
 def test_not_in_range(user):
-    issue = IssueFactory.create(
-        user=user, due_date=datetime.now(), closed_at=timezone.now()
-    )
-
     monday = begin_of_week(timezone.now().date())
+    issue = IssueFactory.create(
+        user=user,
+        closed_at=timezone.now(),
+        time_estimate=seconds(hours=15),
+        due_date=monday + timedelta(days=1),
+    )
 
     IssueSpentTimeFactory.create(
         date=monday - timedelta(days=4),
@@ -353,39 +343,35 @@ def test_not_in_range(user):
         time_spent=-seconds(hours=3),
     )
 
-    issue.time_estimate = seconds(hours=15)
     issue.total_time_spent = issue.time_spents.aggregate(
         spent=Sum("time_spent"),
     )["spent"]
-    issue.state = IssueState.OPENED
-    issue.due_date = monday + timedelta(days=1)
     issue.save()
 
-    start = monday
-    end = monday + timedelta(weeks=1, days=5)
-    metrics = get_progress_metrics(user, start, end, "week")
+    metrics = get_progress_metrics(
+        user, monday, monday + timedelta(weeks=1, days=5), "week"
+    )
 
     assert len(metrics) == 2
-
-    _check_metrics(
+    checkers.check_user_progress_metrics(
         metrics,
-        {monday: timedelta(hours=1)},
-        {monday: 1},
-        {monday: timedelta(hours=15)},
-        {},
+        spents={monday: timedelta(hours=1)},
+        issues_counts={monday: 1},
+        time_estimates={monday: timedelta(hours=15)},
     )
 
 
-@override_settings(TP_WEEKENDS_DAYS=[])
 def test_another_user(user):
+    monday = begin_of_week(timezone.now().date())
     issue = IssueFactory.create(
-        user=user, due_date=datetime.now(), closed_at=timezone.now()
+        user=user,
+        closed_at=timezone.now(),
+        time_estimate=seconds(hours=15),
+        due_date=monday + timedelta(days=1),
     )
 
     another_user = UserFactory.create()
 
-    monday = begin_of_week(timezone.now().date())
-
     IssueSpentTimeFactory.create(
         date=monday + timedelta(days=4),
         user=user,
@@ -411,39 +397,35 @@ def test_another_user(user):
         time_spent=-seconds(hours=3),
     )
 
-    issue.time_estimate = seconds(hours=15)
     issue.total_time_spent = issue.time_spents.aggregate(
         spent=Sum("time_spent"),
     )["spent"]
-    issue.state = IssueState.OPENED
-    issue.due_date = monday + timedelta(days=1)
     issue.save()
 
-    start = monday - timedelta(days=5)
-    end = monday + timedelta(days=5)
-    metrics = get_progress_metrics(user, start, end, "week")
+    metrics = get_progress_metrics(
+        user, monday - timedelta(days=5), monday + timedelta(days=5), "week"
+    )
 
     assert len(metrics) == 2
-
-    _check_metrics(
+    checkers.check_user_progress_metrics(
         metrics,
-        {monday: timedelta(hours=5)},
-        {monday: 1},
-        {monday: timedelta(hours=15)},
-        {},
+        spents={monday: timedelta(hours=5)},
+        issues_counts={monday: 1},
+        time_estimates={monday: timedelta(hours=15)},
     )
 
 
-@override_settings(TP_WEEKENDS_DAYS=[])
 def test_many_issues(user):
+    monday = begin_of_week(datetime.now().date())
     issue = IssueFactory.create(
-        user=user, due_date=datetime.now(), closed_at=timezone.now()
+        user=user,
+        closed_at=timezone.now(),
+        time_estimate=seconds(hours=15),
+        due_date=monday + timedelta(days=1),
     )
 
-    monday = begin_of_week(datetime.now().date())
     another_issue = IssueFactory.create(
         user=user,
-        state=IssueState.OPENED,
         due_date=monday + timedelta(days=4),
         total_time_spent=timedelta(hours=3).total_seconds(),
         time_estimate=timedelta(hours=10).total_seconds(),
@@ -474,12 +456,9 @@ def test_many_issues(user):
         time_spent=-seconds(hours=3),
     )
 
-    issue.time_estimate = seconds(hours=15)
     issue.total_time_spent = issue.time_spents.aggregate(
         spent=Sum("time_spent"),
     )["spent"]
-    issue.state = IssueState.OPENED
-    issue.due_date = monday + timedelta(days=1)
     issue.save()
 
     another_issue.total_time_spent = another_issue.time_spents.aggregate(
@@ -492,56 +471,9 @@ def test_many_issues(user):
     metrics = get_progress_metrics(user, start, end, "week")
 
     assert len(metrics) == 2
-
-    _check_metrics(
+    checkers.check_user_progress_metrics(
         metrics,
-        {monday: timedelta(hours=6)},
-        {monday: 2},
-        {monday: timedelta(days=1, hours=1)},
-        {},
+        spents={monday: timedelta(hours=6)},
+        issues_counts={monday: 2},
+        time_estimates={monday: timedelta(days=1, hours=1)},
     )
-
-
-def _check_metrics(
-    metrics,
-    spents: Dict[date, timedelta],
-    issues_counts: Dict[date, int],
-    time_estimates: Dict[date, timedelta],
-    efficiencies: Dict[date, float],
-):
-    spents = _prepare_metrics(spents)
-    time_estimates = _prepare_metrics(time_estimates)
-    issues_counts = _prepare_metrics(issues_counts)
-    efficiencies = _prepare_metrics(efficiencies)
-
-    for metric in metrics:
-        assert metric.end == metric.start + timedelta(weeks=1)
-
-        _check_metric(metric, "time_spent", spents)
-        _check_metric(metric, "time_estimate", time_estimates)
-
-        start_dt = str(metric.start)
-        if start_dt in efficiencies:
-            assert efficiencies.get(start_dt) == metric.efficiency
-        else:
-            assert metric.efficiency == 0
-
-        if start_dt in issues_counts:
-            assert issues_counts.get(start_dt) == metric.issues_count
-        else:
-            assert metric.issues_count == 0
-
-
-def _prepare_metrics(metrics):
-    return {
-        format_date(metric_date): time for metric_date, time in metrics.items()
-    }
-
-
-def _check_metric(metric, metric_name, values):
-    start_dt = values.get(str(metric.start))
-
-    if start_dt:
-        assert getattr(metric, metric_name) == start_dt.total_seconds()
-    else:
-        assert getattr(metric, metric_name) == 0

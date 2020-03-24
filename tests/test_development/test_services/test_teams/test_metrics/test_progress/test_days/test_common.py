@@ -14,15 +14,19 @@ from apps.development.services.team.metrics.progress.base import (
     ProgressMetricsProvider,
 )
 from tests.test_development.factories import IssueFactory, TeamFactory
-from tests.test_development.test_services.test_teams.test_metrics.test_progress.test_days import (  # noqa: E501
-    checkers,
-)
 from tests.test_payroll.factories import IssueSpentTimeFactory
 from tests.test_users.factories.user import UserFactory
+from tests.test_users.test_services.test_users.test_metrics.test_progress.test_days import (  # noqa: E501
+    checkers,
+)
 
 
 def test_simple(team, team_developer, team_leader):
-    issue = IssueFactory.create(user=team_developer, due_date=datetime.now())
+    issue = IssueFactory.create(
+        user=team_developer,
+        time_estimate=seconds(hours=15),
+        due_date=timezone.now() + timedelta(days=1),
+    )
 
     IssueSpentTimeFactory.create(
         date=timezone.now() - timedelta(days=4),
@@ -49,11 +53,9 @@ def test_simple(team, team_developer, team_leader):
         time_spent=-seconds(hours=3),
     )
 
-    issue.time_estimate = seconds(hours=15)
     issue.total_time_spent = issue.time_spents.aggregate(
         spent=Sum("time_spent"),
     )["spent"]
-    issue.due_date = timezone.now() + timedelta(days=1)
     issue.save()
 
     start = timezone.now().date() - timedelta(days=5)

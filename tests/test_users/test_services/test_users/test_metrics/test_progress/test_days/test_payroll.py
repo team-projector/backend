@@ -1,21 +1,20 @@
 # -*- coding: utf-8 -*-
 
-from datetime import date, datetime, timedelta
-from typing import Dict
+from datetime import datetime, timedelta
 
-from django.test import override_settings
 from django.utils import timezone
 
 from apps.core.utils.date import begin_of_week
 from apps.core.utils.time import seconds
 from apps.development.models.issue import IssueState
 from apps.users.services.user.metrics import get_progress_metrics
-from tests.helpers.base import format_date
 from tests.test_development.factories import IssueFactory
 from tests.test_payroll.factories import IssueSpentTimeFactory, SalaryFactory
+from tests.test_users.test_services.test_users.test_metrics.test_progress.test_days import (  # noqa: E501
+    checkers,
+)
 
 
-@override_settings(TP_WEEKENDS_DAYS=[])
 def test_opened(user):
     user.hour_rate = 100
     user.save()
@@ -52,25 +51,21 @@ def test_opened(user):
         time_spent=-seconds(hours=3),
     )
 
-    issue.state = IssueState.OPENED
-    issue.save()
-
     start = monday - timedelta(days=5)
     end = monday + timedelta(days=5)
     metrics = get_progress_metrics(user, start, end, "day")
 
-    _check_metrics(
+    checkers.check_user_progress_payroll_metrics(
         metrics,
-        {
+        payroll={
             monday: 3 * user.hour_rate,
             monday + timedelta(days=1): user.hour_rate,
             monday + timedelta(days=2): 2 * user.hour_rate,
         },
-        {monday: 0},
+        paid={monday: 0},
     )
 
 
-@override_settings(TP_WEEKENDS_DAYS=[])
 def test_paid(user):
     user.hour_rate = 100
     user.save()
@@ -120,14 +115,14 @@ def test_paid(user):
     issue.state = IssueState.CLOSED
     issue.save()
 
-    start = monday - timedelta(days=5)
-    end = monday + timedelta(days=5)
-    metrics = get_progress_metrics(user, start, end, "day")
+    metrics = get_progress_metrics(
+        user, monday - timedelta(days=5), monday + timedelta(days=5), "day",
+    )
 
-    _check_metrics(
+    checkers.check_user_progress_payroll_metrics(
         metrics,
-        {monday: 0},
-        {
+        payroll={monday: 0},
+        paid={
             monday: 3 * user.hour_rate,
             monday + timedelta(days=1): user.hour_rate,
             monday + timedelta(days=2): 2 * user.hour_rate,
@@ -135,7 +130,6 @@ def test_paid(user):
     )
 
 
-@override_settings(TP_WEEKENDS_DAYS=[])
 def test_closed(user):
     user.hour_rate = 100
     user.save()
@@ -144,7 +138,7 @@ def test_closed(user):
     monday = begin_of_week(timezone.now().date())
 
     IssueSpentTimeFactory.create(
-        date=monday, user=user, base=issue, time_spent=seconds(hours=3)
+        date=monday, user=user, base=issue, time_spent=seconds(hours=3),
     )
     IssueSpentTimeFactory.create(
         date=monday + timedelta(days=2, hours=5),
@@ -174,22 +168,21 @@ def test_closed(user):
     issue.state = IssueState.CLOSED
     issue.save()
 
-    start = monday - timedelta(days=5)
-    end = monday + timedelta(days=5)
-    metrics = get_progress_metrics(user, start, end, "day")
+    metrics = get_progress_metrics(
+        user, monday - timedelta(days=5), monday + timedelta(days=5), "day",
+    )
 
-    _check_metrics(
+    checkers.check_user_progress_payroll_metrics(
         metrics,
-        {
+        payroll={
             monday: 3 * user.hour_rate,
             monday + timedelta(days=1): user.hour_rate,
             monday + timedelta(days=2): 2 * user.hour_rate,
         },
-        {monday: 0},
+        paid={monday: 0},
     )
 
 
-@override_settings(TP_WEEKENDS_DAYS=[])
 def test_complex(user):
     user.hour_rate = 100
     user.save()
@@ -237,39 +230,16 @@ def test_complex(user):
         time_spent=-seconds(hours=3),
     )
 
-    start = monday - timedelta(days=5)
-    end = monday + timedelta(days=5)
-    metrics = get_progress_metrics(user, start, end, "day")
+    metrics = get_progress_metrics(
+        user, monday - timedelta(days=5), monday + timedelta(days=5), "day",
+    )
 
-    _check_metrics(
+    checkers.check_user_progress_payroll_metrics(
         metrics,
-        {
+        payroll={
             monday: 6 * user.hour_rate,
             monday + timedelta(days=1): 4 * user.hour_rate,
             monday + timedelta(days=2): 2 * user.hour_rate,
         },
-        {monday + timedelta(days=1): 3 * user.hour_rate},
+        paid={monday + timedelta(days=1): 3 * user.hour_rate},
     )
-
-
-def _check_metrics(
-    metrics, payroll: Dict[date, float], paid: Dict[date, float]
-):
-    payroll = _prepare_metrics(payroll)
-    paid = _prepare_metrics(paid)
-
-    for metric in metrics:
-        assert metric.start == metric.end
-
-        _check_metric(metric, "payroll", payroll)
-        _check_metric(metric, "paid", paid)
-
-
-def _prepare_metrics(metrics):
-    return {
-        format_date(metric_date): time for metric_date, time in metrics.items()
-    }
-
-
-def _check_metric(metric, metric_name, values):
-    assert getattr(metric, metric_name) == values.get(str(metric.start), 0)
