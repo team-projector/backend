@@ -17,6 +17,11 @@ def register_group_milestones(mocker, group, milestones):
     mocker.register_get(
         "/groups/{0}/milestones".format(group["id"]), milestones,
     )
+    for milestone in milestones:
+        mocker.register_get(
+            "/groups/{0}/milestones/{1}".format(group["id"], milestone["id"]),
+            milestone,
+        )
 
 
 def register_group_projects(mocker, group, projects):
