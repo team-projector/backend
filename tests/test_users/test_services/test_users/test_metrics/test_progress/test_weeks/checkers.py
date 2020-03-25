@@ -57,7 +57,8 @@ def _prepare_metrics(metrics):
         return {}
 
     return {
-        format_date(metric_date): time for metric_date, time in metrics.items()
+        metric_date.strftime("%Y-%m-%d"): time
+        for metric_date, time in metrics.items()
     }
 
 

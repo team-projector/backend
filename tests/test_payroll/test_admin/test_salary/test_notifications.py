@@ -3,8 +3,7 @@
 from django.conf import settings
 from django.core import mail
 
-from tests.helpers import db
-from tests.helpers.base import model_to_dict_form
+from tests.helpers import db, objects
 from tests.test_payroll.factories import SalaryFactory
 from tests.test_users.factories.user import UserFactory
 
@@ -21,7 +20,7 @@ def test_send_notification(admin_rf, salary_admin):
     salary_admin.changeform_view(
         admin_rf.post(
             "/admin/payroll/salary/{0}/change/".format(salary.pk),
-            model_to_dict_form(salary),
+            objects.model_to_dict_form(salary),
         ),
         object_id=str(salary.id),
     )
@@ -45,7 +44,7 @@ def test_payed_changed_to_false(admin_rf, salary_admin):
     salary_admin.changeform_view(
         admin_rf.post(
             "/admin/payroll/salary/{0}/change/".format(salary.pk),
-            model_to_dict_form(salary),
+            objects.model_to_dict_form(salary),
         ),
         object_id=str(salary.id),
     )
@@ -65,7 +64,7 @@ def test_user_without_email_but_payed(admin_rf, salary_admin):
     salary_admin.changeform_view(
         admin_rf.post(
             "/admin/payroll/salary/{0}/change/".format(salary.pk),
-            model_to_dict_form(salary),
+            objects.model_to_dict_form(salary),
         ),
         object_id=str(salary.id),
     )
@@ -85,7 +84,7 @@ def test_another_field_changed(admin_rf, salary_admin):
     salary_admin.changeform_view(
         admin_rf.post(
             "/admin/payroll/salary/{0}/change/".format(salary.pk),
-            model_to_dict_form(salary),
+            objects.model_to_dict_form(salary),
         ),
         object_id=str(salary.id),
     )
@@ -106,7 +105,7 @@ def test_another_field_changed_and_payed(admin_rf, salary_admin):
     salary_admin.changeform_view(
         admin_rf.post(
             "/admin/payroll/salary/{0}/change/".format(salary.pk),
-            model_to_dict_form(salary),
+            objects.model_to_dict_form(salary),
         ),
         object_id=str(salary.id),
     )

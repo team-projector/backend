@@ -21,14 +21,14 @@ def auth_rf(rf, user) -> RequestFactory:
 
 
 @pytest.fixture()  # type: ignore
-def api_rf() -> ApiRequestFactory:
-    """Api request factory."""
-    return ApiRequestFactory()
-
-
-@pytest.fixture()  # type: ignore
 def admin_rf(rf, admin_user) -> RequestFactory:
-    """Request factory with setted user."""
+    """Admin request factory with setted admin user."""
     rf.set_user(admin_user)
 
     return rf
+
+
+@pytest.fixture()  # type: ignore
+def api_rf() -> ApiRequestFactory:
+    """Api request factory."""
+    return ApiRequestFactory()
