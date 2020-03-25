@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-03-16 21:21+0300\n"
+"POT-Creation-Date: 2020-03-25 12:53+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -52,6 +52,9 @@ msgstr "GitLab Internal ID"
 
 msgid "HT__GITLAB_INTERNAL_ID"
 msgstr "GitLab Internal ID"
+
+msgid "MSG__VALUE_MUST_BE_FROM_0_TO_1"
+msgstr "Value must be from 0 to 1"
 
 msgid "VN__DEVELOPMENT"
 msgstr "Development"
@@ -487,12 +490,6 @@ msgstr "Customer sum"
 
 msgid "HT__CUSTOMER_SUM"
 msgstr "Customer sum"
-
-msgid "VN__TAX_SUM"
-msgstr "Tax sum"
-
-msgid "HT__TAX_SUM"
-msgstr " "
 
 msgid "VN__RATE"
 msgstr "Rate"

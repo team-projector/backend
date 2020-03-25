@@ -5,6 +5,7 @@ from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
+from apps.core.models.validators import tax_rate_validator
 from apps.users.models import Position
 from apps.users.models.managers import UserManager
 
@@ -76,7 +77,10 @@ class User(AbstractBaseUser, PermissionsMixin):
     )
 
     tax_rate = models.FloatField(
-        default=0, verbose_name=_("VN__TAX_RATE"), help_text=_("HT__TAX_RATE"),
+        default=0,
+        verbose_name=_("VN__TAX_RATE"),
+        help_text=_("HT__TAX_RATE"),
+        validators=(tax_rate_validator,),
     )
 
     annual_paid_work_breaks_days = models.IntegerField(
