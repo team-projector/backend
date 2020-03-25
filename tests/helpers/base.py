@@ -34,7 +34,7 @@ class Client:
         request.META.update(**self._credentials)
 
         if self.user and self.user.is_superuser:
-            request._messages = MockStorageMessages()
+            request._messages = MockStorageMessages()  # noqa: WPS437
 
         return request
 
