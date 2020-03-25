@@ -17,7 +17,7 @@ def test_filter_by_team(
     WorkBreakFactory.create_batch(size=5, user=UserFactory.create())
 
     TeamMember.objects.filter(user=user, team=team).update(
-        roles=TeamMember.roles.LEADER
+        roles=TeamMember.roles.LEADER,
     )
 
     ghl_auth_mock_info.context.user = team_leader

@@ -28,10 +28,10 @@ def test_query(user, ghl_client):
     user_1 = UserFactory.create()
 
     TeamMemberFactory.create(
-        team=team, user=user, roles=TeamMember.roles.LEADER
+        team=team, user=user, roles=TeamMember.roles.LEADER,
     )
     TeamMemberFactory.create(
-        team=team, user=user_1, roles=TeamMember.roles.DEVELOPER
+        team=team, user=user_1, roles=TeamMember.roles.DEVELOPER,
     )
     work_break = WorkBreakFactory.create(user=user_1)
 

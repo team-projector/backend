@@ -56,7 +56,7 @@ def test_query(project_manager, ghl_client, gl_mocker, user):
 
 
 def test_user_without_gl_token(
-    issue, ghl_auth_mock_info, add_spent_issue_mutation
+    issue, ghl_auth_mock_info, add_spent_issue_mutation,
 ):
     with pytest.raises(GraphQLInputError) as exc_info:
         add_spent_issue_mutation(

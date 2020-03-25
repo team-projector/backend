@@ -40,7 +40,7 @@ def register_project_milestones(mocker, project, milestones):
     for milestone in milestones:
         mocker.register_get(
             "/projects/{0}/milestones/{1}".format(
-                project["id"], milestone["id"]
+                project["id"], milestone["id"],
             ),
             milestone,
         )

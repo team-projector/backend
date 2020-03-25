@@ -49,7 +49,7 @@ def test_unauth(ghl_mock_info, all_spent_times_query):
 
 
 def test_empty_filter_by_salary(
-    user, ghl_auth_mock_info, all_spent_times_query
+    user, ghl_auth_mock_info, all_spent_times_query,
 ):
     """Test filtering time spents by salary not exists."""
     issue = IssueFactory.create(user=user)

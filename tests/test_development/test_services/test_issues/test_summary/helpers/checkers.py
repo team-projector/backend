@@ -27,7 +27,7 @@ def check_project_stats(
     remains: int = 0,
 ):
     stats = next(
-        (item for item in summary.projects if item.project == project), None
+        (item for item in summary.projects if item.project == project), None,
     )
 
     assert stats is not None

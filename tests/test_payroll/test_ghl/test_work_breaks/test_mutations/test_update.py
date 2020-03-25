@@ -156,7 +156,7 @@ def test_update_another_user_but_team_lead(
 
 
 def test_change_work_break_user(
-    ghl_auth_mock_info, update_work_break_mutation
+    ghl_auth_mock_info, update_work_break_mutation,
 ):
     team = TeamFactory.create()
     user_2 = UserFactory.create()

@@ -36,7 +36,7 @@ def test_false(user, admin_client, payroll_admin):
     )
 
     payroll_without_salaries = has_salary_filter.queryset(
-        None, Payroll.objects
+        None, Payroll.objects,
     )
 
     assert payroll_without_salaries.count() == 1

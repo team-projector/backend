@@ -18,7 +18,7 @@ CREATE_WEBHOOK_BODY = types.MappingProxyType(
         "merge_requests_events": True,
         "pipeline_events": True,
         "token": None,
-    }
+    },
 )
 
 
@@ -71,7 +71,7 @@ def test_already_exists(db, gl_mocker, client):
                 "merge_requests_events": True,
                 "pipeline_events": True,
                 "token": None,
-            }
+            },
         ],
     )
 
@@ -91,7 +91,7 @@ def test_exists_another(db, gl_mocker, client):
                 "issues_events": True,
                 "merge_requests_events": True,
                 "token": None,
-            }
+            },
         ],
     )
     gl_mock.register_create_project_hook(gl_mocker, gl_project, callback)
@@ -115,7 +115,7 @@ def test_fix_wrong(db, gl_mocker, client):
                 "issues_events": True,
                 "merge_requests_events": False,
                 "token": None,
-            }
+            },
         ],
     )
     gl_mock.register_create_project_hook(

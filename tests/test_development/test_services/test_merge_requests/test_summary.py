@@ -30,7 +30,7 @@ def test_counts_by_state(user):
     )
 
     summary = get_merge_requests_summary(
-        MergeRequest.objects.filter(user=user)
+        MergeRequest.objects.filter(user=user),
     )
 
     assert summary.count == 17

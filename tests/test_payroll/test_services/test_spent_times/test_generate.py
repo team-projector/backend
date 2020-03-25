@@ -250,7 +250,7 @@ def test_spents_but_moved_from(user):
     )
 
     moved_from = _create_note(
-        user, issue, NoteType.MOVED_FROM, timezone.now() - timedelta(hours=1)
+        user, issue, NoteType.MOVED_FROM, timezone.now() - timedelta(hours=1),
     )
 
     spent_after = _create_note(
@@ -280,7 +280,7 @@ def test_spents_with_resets_but_moved_from(user):
     )
 
     moved_from = _create_note(
-        user, issue, NoteType.MOVED_FROM, timezone.now() - timedelta(hours=1)
+        user, issue, NoteType.MOVED_FROM, timezone.now() - timedelta(hours=1),
     )
 
     spent_after = _create_note(

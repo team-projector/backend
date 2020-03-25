@@ -52,16 +52,16 @@ def test_paid_metrics(user):
     salary = SalaryFactory.create(user=user)
 
     IssueSpentTimeFactory.create(
-        user=user, base=issue, salary=salary, time_spent=seconds(hours=3)
+        user=user, base=issue, salary=salary, time_spent=seconds(hours=3),
     )
     IssueSpentTimeFactory.create(
-        user=user, base=issue, salary=salary, time_spent=seconds(hours=2)
+        user=user, base=issue, salary=salary, time_spent=seconds(hours=2),
     )
     IssueSpentTimeFactory.create(
-        user=user, base=issue, salary=salary, time_spent=seconds(hours=4)
+        user=user, base=issue, salary=salary, time_spent=seconds(hours=4),
     )
     IssueSpentTimeFactory.create(
-        user=user, base=issue, salary=salary, time_spent=-seconds(hours=3)
+        user=user, base=issue, salary=salary, time_spent=-seconds(hours=3),
     )
 
     checkers.check_issues_metrics(
@@ -78,16 +78,16 @@ def test_complex_metrics(user):
     salary = SalaryFactory.create(user=user)
 
     IssueSpentTimeFactory.create(
-        user=user, base=issue, salary=salary, time_spent=seconds(hours=3)
+        user=user, base=issue, salary=salary, time_spent=seconds(hours=3),
     )
     IssueSpentTimeFactory.create(
-        user=user, base=issue, salary=salary, time_spent=seconds(hours=2)
+        user=user, base=issue, salary=salary, time_spent=seconds(hours=2),
     )
     IssueSpentTimeFactory.create(
-        user=user, base=issue, time_spent=seconds(hours=4)
+        user=user, base=issue, time_spent=seconds(hours=4),
     )
     IssueSpentTimeFactory.create(
-        user=user, base=issue, time_spent=-seconds(hours=3)
+        user=user, base=issue, time_spent=-seconds(hours=3),
     )
 
     checkers.check_issues_metrics(

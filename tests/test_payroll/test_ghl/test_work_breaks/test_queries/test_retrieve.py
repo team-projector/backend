@@ -49,7 +49,7 @@ def test_as_team_lead(ghl_auth_mock_info, work_break_query):
         roles=TeamMember.roles.LEADER,
     )
     TeamMemberFactory.create(
-        team=team, user=user, roles=TeamMember.roles.DEVELOPER
+        team=team, user=user, roles=TeamMember.roles.DEVELOPER,
     )
     work_break = WorkBreakFactory.create(user=user)
 

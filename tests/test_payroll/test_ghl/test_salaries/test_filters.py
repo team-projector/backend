@@ -36,7 +36,7 @@ def test_salaries_filter_by_team(user, client):
     team.members.set([user, user_2])
 
     TeamMember.objects.filter(user=user, team=team).update(
-        roles=TeamMember.roles.LEADER
+        roles=TeamMember.roles.LEADER,
     )
 
     client.user = user
@@ -57,7 +57,7 @@ def test_salaries_filter_by_team_not_leader(user, client):
     team.members.set([user, user_2])
 
     TeamMember.objects.filter(user=user, team=team).update(
-        roles=TeamMember.roles.DEVELOPER
+        roles=TeamMember.roles.DEVELOPER,
     )
 
     client.user = user

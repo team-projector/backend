@@ -18,7 +18,7 @@ class WorkBreakFactory(factory.django.DjangoModelFactory):
             WorkBreakReason.DAYOFF,
             WorkBreakReason.VACATION,
             WorkBreakReason.DISEASE,
-        )
+        ),
     )
 
     from_date = factory.Faker(

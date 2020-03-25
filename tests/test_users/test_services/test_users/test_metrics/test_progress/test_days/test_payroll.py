@@ -24,7 +24,7 @@ def test_opened(user):
     monday = begin_of_week(timezone.now().date())
 
     IssueSpentTimeFactory.create(
-        date=monday, user=user, base=issue, time_spent=seconds(hours=3)
+        date=monday, user=user, base=issue, time_spent=seconds(hours=3),
     )
     IssueSpentTimeFactory.create(
         date=monday + timedelta(days=2, hours=5),
@@ -192,17 +192,17 @@ def test_complex(user):
     salary = SalaryFactory.create(user=user)
 
     closed_issue = IssueFactory.create(
-        user=user, due_date=datetime.now(), state=IssueState.CLOSED
+        user=user, due_date=datetime.now(), state=IssueState.CLOSED,
     )
     opened_issue = IssueFactory.create(
-        user=user, due_date=datetime.now(), state=IssueState.OPENED
+        user=user, due_date=datetime.now(), state=IssueState.OPENED,
     )
 
     IssueSpentTimeFactory.create(
-        date=monday, user=user, base=closed_issue, time_spent=seconds(hours=4)
+        date=monday, user=user, base=closed_issue, time_spent=seconds(hours=4),
     )
     IssueSpentTimeFactory.create(
-        date=monday, user=user, base=opened_issue, time_spent=seconds(hours=2)
+        date=monday, user=user, base=opened_issue, time_spent=seconds(hours=2),
     )
     IssueSpentTimeFactory.create(
         date=monday + timedelta(days=2, hours=5),

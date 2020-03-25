@@ -15,7 +15,7 @@ def test_by_title_asc(user):
     ]
 
     results = IssuesFilterSet(
-        data={"order_by": "title"}, queryset=Issue.objects.all()
+        data={"order_by": "title"}, queryset=Issue.objects.all(),
     ).qs
 
     assert list(results) == issues
@@ -29,7 +29,7 @@ def test_by_title_desc(user):
     ]
 
     results = IssuesFilterSet(
-        data={"order_by": "-title"}, queryset=Issue.objects.all()
+        data={"order_by": "-title"}, queryset=Issue.objects.all(),
     ).qs
 
     assert list(results) == issues[::-1]
@@ -47,7 +47,7 @@ def test_by_due_date_asc(user):
     ]
 
     results = IssuesFilterSet(
-        data={"order_by": "dueDate"}, queryset=Issue.objects.all()
+        data={"order_by": "dueDate"}, queryset=Issue.objects.all(),
     ).qs
 
     assert list(results) == issues
@@ -65,7 +65,7 @@ def test_by_due_date_desc(user):
     ]
 
     results = IssuesFilterSet(
-        data={"order_by": "-dueDate"}, queryset=Issue.objects.all()
+        data={"order_by": "-dueDate"}, queryset=Issue.objects.all(),
     ).qs
 
     assert list(results) == issues[::-1]

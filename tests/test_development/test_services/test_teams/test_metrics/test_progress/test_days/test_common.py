@@ -83,13 +83,13 @@ def test_simple(team, team_developer, team_leader):
         },
         issues_counts={timezone.now() + timedelta(days=1): 1},
         time_estimates={
-            timezone.now() + timedelta(days=1): timedelta(hours=15)
+            timezone.now() + timedelta(days=1): timedelta(hours=15),
         },
         time_remains={
             timezone.now()
             + timedelta(days=1): timedelta(
-                seconds=issue.time_estimate - issue.total_time_spent
-            )
+                seconds=issue.time_estimate - issue.total_time_spent,
+            ),
         },
     )
 
@@ -196,7 +196,7 @@ def test_loading_day_already_has_spends(team, team_developer, team_leader):
         time_remains={
             timezone.now(): timedelta(
                 seconds=issues[0].time_estimate - issues[0].total_time_spent,
-            )
+            ),
         },
     )
 

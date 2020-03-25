@@ -76,7 +76,7 @@ def test_issues_team_summaries(user):
     )
 
     issues = resolve_issues_team_summaries(
-        dict2obj({"queryset": Issue.objects.all()}), None
+        dict2obj({"queryset": Issue.objects.all()}), None,
     )[0].issues
 
     assert issues.opened_count == 5

@@ -28,7 +28,7 @@ def test_as_team_leader(team_leader, team_developer):
     work_break = WorkBreakFactory.create(user=team_developer)
 
     assert list(WorkBreak.objects.allowed_for_user(team_leader)) == [
-        work_break
+        work_break,
     ]
 
 

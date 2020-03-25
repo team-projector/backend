@@ -9,10 +9,10 @@ from tests.test_development.factories import IssueFactory
 
 def test_filter_by_due_date_and_state(user):
     issue = IssueFactory.create(
-        user=user, state=IssueState.OPENED, due_date=datetime.now()
+        user=user, state=IssueState.OPENED, due_date=datetime.now(),
     )
     IssueFactory.create(
-        user=user, state=IssueState.CLOSED, due_date=datetime.now()
+        user=user, state=IssueState.CLOSED, due_date=datetime.now(),
     )
     IssueFactory.create(
         user=user,

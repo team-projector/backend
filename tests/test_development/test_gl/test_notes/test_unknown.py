@@ -16,13 +16,13 @@ def test_unsupported(user):
                 "id": 2,
                 "body": "bla",
                 "created_at": datetime.strftime(
-                    datetime.now(), GITLAB_DATETIME_FORMAT
+                    datetime.now(), GITLAB_DATETIME_FORMAT,
                 ),
                 "updated_at": datetime.strftime(
-                    datetime.now(), GITLAB_DATETIME_FORMAT
+                    datetime.now(), GITLAB_DATETIME_FORMAT,
                 ),
                 "author": {"id": user.gl_id},
-            }
+            },
         ),
         issue,
     )

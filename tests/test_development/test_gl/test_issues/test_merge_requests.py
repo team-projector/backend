@@ -23,7 +23,7 @@ def test_load_merge_requests(db, gl_mocker, gl_client):
         merge_requests=[gl_merge_request],
     )
     gl_mock.mock_issue_endpoints(
-        gl_mocker, gl_project, gl_issue, closed_by=[gl_merge_request]
+        gl_mocker, gl_project, gl_issue, closed_by=[gl_merge_request],
     )
     gl_mock.mock_merge_request_endpoints(
         gl_mocker, gl_project, gl_merge_request,

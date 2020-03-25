@@ -39,7 +39,7 @@ def test_bad_token(client, gl_webhook_view):
                 data=webhook,
                 format="json",
                 HTTP_X_GITLAB_TOKEN="BAD_TOKEN",
-            )
+            ),
         )
 
 
@@ -65,7 +65,7 @@ def test_sync_with_secret_token(db, gl_mocker, gl_webhook_view, client):
             data=webhook_data,
             format="json",
             HTTP_X_GITLAB_TOKEN="SECRET_TOKEN",
-        )
+        ),
     )
 
     assert Issue.objects.count() == 1

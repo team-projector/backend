@@ -76,13 +76,13 @@ def test_by_due_date_and_title(db):
     """Test complex ordering by date and title."""
     tickets = [
         TicketFactory.create(
-            due_date=datetime.now() + timedelta(days=1), title="BB"
+            due_date=datetime.now() + timedelta(days=1), title="BB",
         ),
         TicketFactory.create(
-            due_date=datetime.now() + timedelta(days=1), title="AA"
+            due_date=datetime.now() + timedelta(days=1), title="AA",
         ),
         TicketFactory.create(
-            due_date=datetime.now() + timedelta(days=2), title="CC"
+            due_date=datetime.now() + timedelta(days=2), title="CC",
         ),
     ]
 

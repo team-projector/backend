@@ -41,7 +41,7 @@ def test_not_changed_email(user_admin, admin_client):
     }
 
     user_admin.changeform_view(
-        admin_client.post("/admin/users/user/", data), object_id=str(user.id)
+        admin_client.post("/admin/users/user/", data), object_id=str(user.id),
     )
 
     user.refresh_from_db()

@@ -157,7 +157,7 @@ def test_filter_by_project(user):
             user=user, base=merge_request, time_spent=int(seconds(hours=4)),
         ),
         MergeRequestSpentTimeFactory.create(
-            user=user, base=merge_request, time_spent=int(seconds(hours=1))
+            user=user, base=merge_request, time_spent=int(seconds(hours=1)),
         ),
     ]
 
@@ -304,7 +304,7 @@ def test_filter_by_state_all(user):
 
     spends = [
         IssueSpentTimeFactory.create(
-            user=user, base=issue, time_spent=int(seconds(hours=5))
+            user=user, base=issue, time_spent=int(seconds(hours=5)),
         ),
         MergeRequestSpentTimeFactory.create(
             user=user, base=merge_request, time_spent=int(seconds(hours=4)),

@@ -36,18 +36,18 @@ def test_query(make_group_manager, ghl_client, gl_mocker, user):
 
     gl_mock.register_user(gl_mocker, gl_assignee)
     gl_mock.mock_group_endpoints(
-        gl_mocker, gl_group, milestones=[gl_milestone]
+        gl_mocker, gl_group, milestones=[gl_milestone],
     )
 
     milestone = ProjectGroupMilestoneFactory.create(
-        gl_id=gl_milestone["id"], owner=group, state=MilestoneState.ACTIVE
+        gl_id=gl_milestone["id"], owner=group, state=MilestoneState.ACTIVE,
     )
     make_group_manager(group, user)
     assert milestone.state == MilestoneState.ACTIVE
 
     ghl_client.set_user(user)
     response = ghl_client.execute(
-        GHL_QUERY_SYNC_MIELSTONE, variable_values={"id": milestone.pk}
+        GHL_QUERY_SYNC_MIELSTONE, variable_values={"id": milestone.pk},
     )
 
     assert "errors" not in response
@@ -74,11 +74,11 @@ def test_project_milestone(
 
     gl_mock.register_user(gl_mocker, gl_assignee)
     gl_mock.mock_project_endpoints(
-        gl_mocker, gl_project, milestones=[gl_milestone]
+        gl_mocker, gl_project, milestones=[gl_milestone],
     )
 
     milestone = ProjectGroupMilestoneFactory.create(
-        gl_id=gl_milestone["id"], owner=group, state=MilestoneState.ACTIVE
+        gl_id=gl_milestone["id"], owner=group, state=MilestoneState.ACTIVE,
     )
     make_group_manager(group, user)
 

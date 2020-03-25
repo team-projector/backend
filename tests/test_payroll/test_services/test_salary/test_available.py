@@ -73,7 +73,7 @@ def test_my_salaries_and_as_leader_with_queryset(team_leader, team_developer):
 
     assert (
         queryset.filter(
-            id__in=Salary.objects.allowed_for_user(team_leader)
+            id__in=Salary.objects.allowed_for_user(team_leader),
         ).count()
         == 0
     )

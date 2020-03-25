@@ -10,7 +10,7 @@ def test_complete_login(
 ):
     """Test complete login."""
     gl_mocker.register_get(
-        "/user", {"id": user.pk, "username": user.login, "email": user.email}
+        "/user", {"id": user.pk, "username": user.login, "email": user.email},
     )
 
     gl_mocker.base_api_url = GitLabOAuth2.ACCESS_TOKEN_URL
@@ -39,7 +39,7 @@ def test_not_login(
 ):
     """Test not login user."""
     gl_mocker.register_get(
-        "/user", {"id": user.pk, "username": "test_user", "email": user.email}
+        "/user", {"id": user.pk, "username": "test_user", "email": user.email},
     )
 
     gl_mocker.base_api_url = GitLabOAuth2.ACCESS_TOKEN_URL

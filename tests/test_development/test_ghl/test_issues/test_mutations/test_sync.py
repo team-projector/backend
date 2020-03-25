@@ -50,7 +50,7 @@ def test_query(project_manager, ghl_client, gl_mocker, user):
     ghl_client.set_user(user)
 
     response = ghl_client.execute(
-        GHL_QUERY_SYNC_ISSUE, variable_values={"id": issue.pk}
+        GHL_QUERY_SYNC_ISSUE, variable_values={"id": issue.pk},
     )
 
     assert "errors" not in response

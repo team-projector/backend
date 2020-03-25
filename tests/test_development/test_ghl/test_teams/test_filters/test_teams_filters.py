@@ -110,7 +110,7 @@ def test_search(user, make_team_leader):
     assert set(results) == {teams[0], teams[1]}
 
     results = TeamsFilterSet(
-        data={"q": "012345"}, queryset=Team.objects.all()
+        data={"q": "012345"}, queryset=Team.objects.all(),
     ).qs
 
     assert results.count() == 0
@@ -128,13 +128,13 @@ def test_order_by_title(user, make_team_leader):
     make_team_leader(teams[2], user)
 
     results = TeamsFilterSet(
-        data={"order_by": "title"}, queryset=Team.objects.all()
+        data={"order_by": "title"}, queryset=Team.objects.all(),
     ).qs
 
     assert list(results) == lists.sub_list(teams, (0, 2, 1))
 
     results = TeamsFilterSet(
-        data={"order_by": "-title"}, queryset=Team.objects.all()
+        data={"order_by": "-title"}, queryset=Team.objects.all(),
     ).qs
 
     assert list(results) == lists.sub_list(teams, (1, 2, 0))

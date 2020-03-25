@@ -27,7 +27,7 @@ def test_success(user):
                 ),
                 "author": {"id": user.gl_id},
                 "system": True,
-            }
+            },
         ),
         issue,
     )
@@ -59,7 +59,7 @@ def test_no_system(user):
                 ),
                 "author": {"id": user.gl_id},
                 "system": False,
-            }
+            },
         ),
         issue,
     )
@@ -85,7 +85,7 @@ def test_bad_issue_number(user):
                 ),
                 "author": {"id": user.gl_id},
                 "system": True,
-            }
+            },
         ),
         issue,
     )

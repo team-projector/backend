@@ -16,7 +16,7 @@ from tests.test_development.test_gl.helpers import (
 from tests.test_users.factories.gitlab import GlUserFactory
 
 Context = namedtuple(
-    "Context", ["project", "gl_project", "gl_assignee", "issue", "gl_issue"]
+    "Context", ["project", "gl_project", "gl_assignee", "issue", "gl_issue"],
 )
 
 

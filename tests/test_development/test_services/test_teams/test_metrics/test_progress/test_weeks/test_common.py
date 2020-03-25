@@ -110,7 +110,7 @@ def test_efficiency_more_1(team, team_developer, team_leader):
 
     issue.time_estimate = seconds(hours=15)
     issue.total_time_spent = issue.time_spents.aggregate(
-        spent=Sum("time_spent")
+        spent=Sum("time_spent"),
     )["spent"]
     issue.state = IssueState.CLOSED
     issue.due_date = monday + timedelta(days=1)
@@ -169,7 +169,7 @@ def test_efficiency_less_1(team, team_developer):
 
     issue.time_estimate = seconds(hours=3)
     issue.total_time_spent = issue.time_spents.aggregate(
-        spent=Sum("time_spent")
+        spent=Sum("time_spent"),
     )["spent"]
     issue.state = IssueState.CLOSED
     issue.due_date = monday + timedelta(days=1)

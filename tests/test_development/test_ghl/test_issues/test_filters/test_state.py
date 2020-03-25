@@ -11,7 +11,7 @@ def test_opened(user):
     IssueFactory.create_batch(5, user=user, state="")
 
     results = IssuesFilterSet(
-        data={"state": IssueState.OPENED}, queryset=Issue.objects.all()
+        data={"state": IssueState.OPENED}, queryset=Issue.objects.all(),
     ).qs
 
     assert results.count() == 1
@@ -24,7 +24,7 @@ def test_closed(user):
     issue = IssueFactory.create(user=user, state=IssueState.CLOSED)
 
     results = IssuesFilterSet(
-        data={"state": IssueState.CLOSED}, queryset=Issue.objects.all()
+        data={"state": IssueState.CLOSED}, queryset=Issue.objects.all(),
     ).qs
 
     assert results.count() == 1

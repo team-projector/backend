@@ -46,7 +46,7 @@ def test_check_webhooks(db, gl_mocker, gl_client):
 
     gl_mock.mock_project_endpoints(gl_mocker, gl_project, hooks=[webhook])
     gl_mock.register_create_project_hook(
-        gl_mocker, gl_project, {"id": gl_project["id"]}
+        gl_mocker, gl_project, {"id": gl_project["id"]},
     )
 
     gl_project_loaded = gl_client.projects.get(id=gl_project["id"])

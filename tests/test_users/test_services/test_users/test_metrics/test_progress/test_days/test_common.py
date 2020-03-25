@@ -75,13 +75,13 @@ def test_simple(user, _freeze_to_noon):
         },
         issues_counts={datetime.now() + timedelta(days=1): 1},
         time_estimates={
-            datetime.now() + timedelta(days=1): timedelta(hours=15)
+            datetime.now() + timedelta(days=1): timedelta(hours=15),
         },
         time_remains={
             datetime.now()
             + timedelta(days=1): timedelta(
                 seconds=issue.time_estimate - issue.total_time_spent,
-            )
+            ),
         },
     )
 
@@ -114,7 +114,7 @@ def test_negative_remains(user, _freeze_to_noon):
         spents={timezone.now() - timedelta(days=4): timedelta(hours=3)},
         issues_counts={timezone.now() + timedelta(days=1): 1},
         time_estimates={
-            timezone.now() + timedelta(days=1): timedelta(hours=2)
+            timezone.now() + timedelta(days=1): timedelta(hours=2),
         },
     )
 
@@ -146,7 +146,10 @@ def test_loading_day_already_has_spends(user, _freeze_to_noon):
         time_spent=seconds(hours=2),
     )
     IssueSpentTimeFactory.create(
-        date=datetime.now(), user=user, base=issue, time_spent=seconds(hours=3)
+        date=datetime.now(),
+        user=user,
+        base=issue,
+        time_spent=seconds(hours=3),
     )
 
     issue_2.total_time_spent = issue_2.time_spents.aggregate(
@@ -170,8 +173,8 @@ def test_loading_day_already_has_spends(user, _freeze_to_noon):
         time_estimates={timezone.now(): timedelta(hours=4)},
         time_remains={
             timezone.now(): timedelta(
-                seconds=issue.time_estimate - issue.total_time_spent
-            )
+                seconds=issue.time_estimate - issue.total_time_spent,
+            ),
         },
     )
 
@@ -287,7 +290,10 @@ def test_not_loading_over_daily_work_hours(user, _freeze_to_noon):
     )
 
     IssueSpentTimeFactory.create(
-        date=datetime.now(), user=user, base=issue, time_spent=seconds(hours=5)
+        date=datetime.now(),
+        user=user,
+        base=issue,
+        time_spent=seconds(hours=5),
     )
 
     start = datetime.now().date() - timedelta(days=1)
@@ -307,7 +313,7 @@ def test_not_loading_over_daily_work_hours(user, _freeze_to_noon):
         },
         issues_counts={timezone.now() + timedelta(days=7): 1},
         time_estimates={
-            timezone.now() + timedelta(days=7): timedelta(hours=15)
+            timezone.now() + timedelta(days=7): timedelta(hours=15),
         },
         planned_work_hours=4,
     )

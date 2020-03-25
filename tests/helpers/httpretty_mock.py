@@ -8,7 +8,7 @@ import httpretty
 from httpretty.core import HTTPrettyRequest
 
 RequestCallback = Callable[
-    [HTTPrettyRequest, str, Dict[str, str]], List[object]  # noqa: WPS221
+    [HTTPrettyRequest, str, Dict[str, str]], List[object],  # noqa: WPS221
 ]
 
 

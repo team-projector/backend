@@ -107,7 +107,7 @@ def test_efficiency_more_1(user):
     )
 
     issue.total_time_spent = issue.time_spents.aggregate(
-        spent=Sum("time_spent")
+        spent=Sum("time_spent"),
     )["spent"]
     issue.save()
 
@@ -161,7 +161,7 @@ def test_efficiency_less_1(user):
     )
 
     issue.total_time_spent = issue.time_spents.aggregate(
-        spent=Sum("time_spent")
+        spent=Sum("time_spent"),
     )["spent"]
     issue.save()
 
@@ -220,7 +220,7 @@ def test_efficiency_zero_estimate(user):
     issue.save()
 
     metrics = get_progress_metrics(
-        user, monday - timedelta(days=5), monday + timedelta(days=5), "week"
+        user, monday - timedelta(days=5), monday + timedelta(days=5), "week",
     )
 
     assert len(metrics) == 2
@@ -243,7 +243,7 @@ def test_efficiency_zero_spend(user):
     )
 
     metrics = get_progress_metrics(
-        user, monday - timedelta(days=5), monday + timedelta(days=5), "week"
+        user, monday - timedelta(days=5), monday + timedelta(days=5), "week",
     )
 
     assert len(metrics) == 2
@@ -349,7 +349,7 @@ def test_not_in_range(user):
     issue.save()
 
     metrics = get_progress_metrics(
-        user, monday, monday + timedelta(weeks=1, days=5), "week"
+        user, monday, monday + timedelta(weeks=1, days=5), "week",
     )
 
     assert len(metrics) == 2
@@ -403,7 +403,7 @@ def test_another_user(user):
     issue.save()
 
     metrics = get_progress_metrics(
-        user, monday - timedelta(days=5), monday + timedelta(days=5), "week"
+        user, monday - timedelta(days=5), monday + timedelta(days=5), "week",
     )
 
     assert len(metrics) == 2

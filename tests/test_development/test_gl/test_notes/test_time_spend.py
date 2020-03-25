@@ -25,13 +25,13 @@ def test_added(user):
                 "id": 2,
                 "body": body,
                 "created_at": datetime.strftime(
-                    datetime.now(), GITLAB_DATETIME_FORMAT
+                    datetime.now(), GITLAB_DATETIME_FORMAT,
                 ),
                 "updated_at": datetime.strftime(
-                    datetime.now(), GITLAB_DATETIME_FORMAT
+                    datetime.now(), GITLAB_DATETIME_FORMAT,
                 ),
                 "author": {"id": user.gl_id},
-            }
+            },
         ),
         issue,
     )
@@ -58,13 +58,13 @@ def test_subtracted(user):
                 "id": 2,
                 "body": body,
                 "created_at": datetime.strftime(
-                    datetime.now(), GITLAB_DATETIME_FORMAT
+                    datetime.now(), GITLAB_DATETIME_FORMAT,
                 ),
                 "updated_at": datetime.strftime(
-                    datetime.now(), GITLAB_DATETIME_FORMAT
+                    datetime.now(), GITLAB_DATETIME_FORMAT,
                 ),
                 "author": {"id": user.gl_id},
-            }
+            },
         ),
         issue,
     )
@@ -89,13 +89,13 @@ def test_removed(user):
                 "id": 2,
                 "body": SPEND_RESET_MESSAGE,
                 "created_at": datetime.strftime(
-                    datetime.now(), GITLAB_DATETIME_FORMAT
+                    datetime.now(), GITLAB_DATETIME_FORMAT,
                 ),
                 "updated_at": datetime.strftime(
-                    datetime.now(), GITLAB_DATETIME_FORMAT
+                    datetime.now(), GITLAB_DATETIME_FORMAT,
                 ),
                 "author": {"id": user.gl_id},
-            }
+            },
         ),
         issue,
     )
@@ -123,13 +123,13 @@ def test_already_exists(user):
                     date.today().strftime(GITLAB_DATE_FORMAT),
                 ),
                 "created_at": datetime.strftime(
-                    datetime.now(), GITLAB_DATETIME_FORMAT
+                    datetime.now(), GITLAB_DATETIME_FORMAT,
                 ),
                 "updated_at": datetime.strftime(
-                    datetime.now(), GITLAB_DATETIME_FORMAT
+                    datetime.now(), GITLAB_DATETIME_FORMAT,
                 ),
                 "author": {"id": user.gl_id},
-            }
+            },
         ),
         issue,
     )
@@ -154,13 +154,13 @@ def test_already_has_another(user):
                     date.today().strftime(GITLAB_DATE_FORMAT),
                 ),
                 "created_at": datetime.strftime(
-                    datetime.now(), GITLAB_DATETIME_FORMAT
+                    datetime.now(), GITLAB_DATETIME_FORMAT,
                 ),
                 "updated_at": datetime.strftime(
-                    datetime.now(), GITLAB_DATETIME_FORMAT
+                    datetime.now(), GITLAB_DATETIME_FORMAT,
                 ),
                 "author": {"id": user.gl_id},
-            }
+            },
         ),
         issue,
     )
@@ -187,13 +187,13 @@ def test_has_prior(user):
                     date.today().strftime(GITLAB_DATE_FORMAT),
                 ),
                 "created_at": datetime.strftime(
-                    datetime.now(), GITLAB_DATETIME_FORMAT
+                    datetime.now(), GITLAB_DATETIME_FORMAT,
                 ),
                 "updated_at": datetime.strftime(
-                    datetime.now(), GITLAB_DATETIME_FORMAT
+                    datetime.now(), GITLAB_DATETIME_FORMAT,
                 ),
                 "author": {"id": user.gl_id},
-            }
+            },
         ),
         issue,
     )
@@ -227,7 +227,7 @@ def test_has_after(user):
                     datetime.now(), GITLAB_DATETIME_FORMAT,
                 ),
                 "author": {"id": user.gl_id},
-            }
+            },
         ),
         issue,
     )
@@ -248,13 +248,13 @@ def test_body_without_date(user):
                 "id": 2,
                 "body": body,
                 "created_at": datetime.strftime(
-                    datetime.now(), GITLAB_DATETIME_FORMAT
+                    datetime.now(), GITLAB_DATETIME_FORMAT,
                 ),
                 "updated_at": datetime.strftime(
-                    datetime.now(), GITLAB_DATETIME_FORMAT
+                    datetime.now(), GITLAB_DATETIME_FORMAT,
                 ),
                 "author": {"id": user.gl_id},
-            }
+            },
         ),
         issue,
     )

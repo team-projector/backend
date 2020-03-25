@@ -25,7 +25,7 @@ def test_filter_by_team_empty(
     MergeRequestFactory.create(user=user)
 
     response = all_merge_requests_query(
-        root=None, info=ghl_auth_mock_info, team=team_1.id
+        root=None, info=ghl_auth_mock_info, team=team_1.id,
     )
 
     assert response.length == 0
@@ -44,13 +44,13 @@ def test_filter_by_team_watcher_empty(
     team_2.members.add(user)
 
     TeamMember.objects.filter(team=team_1).update(
-        roles=TeamMember.roles.WATCHER
+        roles=TeamMember.roles.WATCHER,
     )
 
     MergeRequestFactory.create(user=user)
 
     response = all_merge_requests_query(
-        root=None, info=ghl_auth_mock_info, team=team_1.id
+        root=None, info=ghl_auth_mock_info, team=team_1.id,
     )
 
     assert response.length == 0
@@ -65,17 +65,17 @@ def test_filter_by_team_leader(
     team_1.members.set([user_1, user])
 
     TeamMember.objects.filter(user=user_1, team=team_1).update(
-        roles=TeamMember.roles.LEADER
+        roles=TeamMember.roles.LEADER,
     )
     TeamMember.objects.filter(user=user, team=team_1).update(
-        roles=TeamMember.roles.WATCHER
+        roles=TeamMember.roles.WATCHER,
     )
 
     merge_request_1 = MergeRequestFactory.create(user=user_1)
     MergeRequestFactory.create(user=user)
 
     response = all_merge_requests_query(
-        root=None, info=ghl_auth_mock_info, team=team_1.id
+        root=None, info=ghl_auth_mock_info, team=team_1.id,
     )
 
     response_ids = [edge.node.id for edge in response.edges]
@@ -89,7 +89,7 @@ def test_many_members(
     team = TeamFactory()
 
     TeamMemberFactory.create(
-        user=user, team=team, roles=TeamMember.roles.LEADER
+        user=user, team=team, roles=TeamMember.roles.LEADER,
     )
 
     MergeRequestFactory.create_batch(2, user=user)
@@ -98,10 +98,10 @@ def test_many_members(
     MergeRequestFactory.create_batch(3, user=another_user)
 
     TeamMemberFactory.create(
-        user=another_user, team=team, roles=TeamMember.roles.DEVELOPER
+        user=another_user, team=team, roles=TeamMember.roles.DEVELOPER,
     )
     response = all_merge_requests_query(
-        root=None, info=ghl_auth_mock_info, team=team.id
+        root=None, info=ghl_auth_mock_info, team=team.id,
     )
 
     assert response.length == 5
@@ -113,7 +113,7 @@ def test_many_teams(
     team = TeamFactory()
 
     TeamMemberFactory.create(
-        user=user, team=team, roles=TeamMember.roles.LEADER
+        user=user, team=team, roles=TeamMember.roles.LEADER,
     )
 
     another_user = UserFactory()
@@ -123,15 +123,15 @@ def test_many_teams(
 
     another_team = TeamFactory()
     TeamMemberFactory.create(
-        user=user, team=another_team, roles=TeamMember.roles.WATCHER
+        user=user, team=another_team, roles=TeamMember.roles.WATCHER,
     )
 
     TeamMemberFactory.create(
-        user=another_user, team=another_team, roles=TeamMember.roles.DEVELOPER
+        user=another_user, team=another_team, roles=TeamMember.roles.DEVELOPER,
     )
 
     response = all_merge_requests_query(
-        root=None, info=ghl_auth_mock_info, team=team.id
+        root=None, info=ghl_auth_mock_info, team=team.id,
     )
 
     assert response.length == 2
