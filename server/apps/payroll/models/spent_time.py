@@ -6,6 +6,7 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 
 from apps.core.models.fields import MoneyField
+from apps.core.models.validators import tax_rate_validator
 from apps.payroll.models import Payroll
 from apps.payroll.models.managers import SpentTimeManager
 
@@ -27,7 +28,10 @@ class SpentTime(Payroll):  # noqa:WPS230
     )
 
     tax_rate = models.FloatField(
-        default=0, verbose_name=_("VN__TAX_RATE"), help_text=_("HT__TAX_RATE"),
+        default=0,
+        verbose_name=_("VN__TAX_RATE"),
+        help_text=_("HT__TAX_RATE"),
+        validators=(tax_rate_validator,),
     )
 
     customer_rate = models.FloatField(

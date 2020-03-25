@@ -7,6 +7,7 @@ from model_utils import FieldTracker
 
 from apps.core.models.fields import MoneyField
 from apps.core.models.mixins import Timestamps
+from apps.core.models.validators import tax_rate_validator
 from apps.payroll.models.managers import SalaryManager
 from apps.users.models import Position
 
@@ -65,7 +66,10 @@ class Salary(Timestamps):
     )
 
     tax_rate = models.FloatField(
-        default=0, verbose_name=_("VN__TAX_RATE"), help_text=_("HT__TAX_RATE"),
+        default=0,
+        verbose_name=_("VN__TAX_RATE"),
+        help_text=_("HT__TAX_RATE"),
+        validators=(tax_rate_validator,),
     )
 
     taxes = MoneyField(
