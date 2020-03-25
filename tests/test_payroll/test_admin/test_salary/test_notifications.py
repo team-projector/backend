@@ -3,12 +3,13 @@
 from django.conf import settings
 from django.core import mail
 
-from tests.helpers.base import model_to_dict_form, trigger_on_commit
+from tests.helpers import db
+from tests.helpers.base import model_to_dict_form
 from tests.test_payroll.factories import SalaryFactory
 from tests.test_users.factories.user import UserFactory
 
 
-def test_send_notification(admin_client, salary_admin):
+def test_send_notification(admin_rf, salary_admin):
     user = UserFactory.create(email="test1@mail.com")
 
     salary = SalaryFactory.create(user=user, payed=False)
@@ -18,14 +19,14 @@ def test_send_notification(admin_client, salary_admin):
     SalaryFactory.create_batch(2, user=user, payed=True)
 
     salary_admin.changeform_view(
-        admin_client.post(
+        admin_rf.post(
             "/admin/payroll/salary/{0}/change/".format(salary.pk),
             model_to_dict_form(salary),
         ),
         object_id=str(salary.id),
     )
 
-    trigger_on_commit()
+    db.trigger_on_commit()
     salary.refresh_from_db()
 
     assert salary.payed
@@ -35,82 +36,82 @@ def test_send_notification(admin_client, salary_admin):
     assert mail.outbox[0].to == [user.email]
 
 
-def test_payed_changed_to_false(admin_client, salary_admin):
+def test_payed_changed_to_false(admin_rf, salary_admin):
     user = UserFactory.create(email="test@mail.com")
 
     salary = SalaryFactory.create(user=user, payed=True)
     salary.payed = False
 
     salary_admin.changeform_view(
-        admin_client.post(
+        admin_rf.post(
             "/admin/payroll/salary/{0}/change/".format(salary.pk),
             model_to_dict_form(salary),
         ),
         object_id=str(salary.id),
     )
 
-    trigger_on_commit()
+    db.trigger_on_commit()
     salary.refresh_from_db()
 
     assert not salary.payed
     assert not mail.outbox
 
 
-def test_user_without_email_but_payed(admin_client, salary_admin):
+def test_user_without_email_but_payed(admin_rf, salary_admin):
     user = UserFactory.create()
     salary = SalaryFactory.create(user=user, payed=False)
     salary.payed = True
 
     salary_admin.changeform_view(
-        admin_client.post(
+        admin_rf.post(
             "/admin/payroll/salary/{0}/change/".format(salary.pk),
             model_to_dict_form(salary),
         ),
         object_id=str(salary.id),
     )
 
-    trigger_on_commit()
+    db.trigger_on_commit()
     salary.refresh_from_db()
 
     assert salary.payed
     assert not mail.outbox
 
 
-def test_another_field_changed(admin_client, salary_admin):
+def test_another_field_changed(admin_rf, salary_admin):
     user = UserFactory.create(email="test@mail.com")
     salary = SalaryFactory.create(user=user, payed=False)
     salary.sum = 10.0
 
     salary_admin.changeform_view(
-        admin_client.post(
+        admin_rf.post(
             "/admin/payroll/salary/{0}/change/".format(salary.pk),
             model_to_dict_form(salary),
         ),
         object_id=str(salary.id),
     )
 
-    trigger_on_commit()
+    db.trigger_on_commit()
     salary.refresh_from_db()
 
     assert salary.sum == 10.0
     assert not mail.outbox
 
 
-def test_another_field_changed_and_payed(admin_client, salary_admin):
+def test_another_field_changed_and_payed(admin_rf, salary_admin):
     user = UserFactory.create(email="test@mail.com")
     salary = SalaryFactory.create(user=user, payed=False)
     salary.sum = 10.0
     salary.payed = True
 
     salary_admin.changeform_view(
-        admin_client.post(
+        admin_rf.post(
             "/admin/payroll/salary/{0}/change/".format(salary.pk),
             model_to_dict_form(salary),
         ),
         object_id=str(salary.id),
     )
 
-    trigger_on_commit()
+    db.trigger_on_commit()
     salary.refresh_from_db()
 
     assert salary.sum == 10.0

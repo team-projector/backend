@@ -25,9 +25,9 @@ def issue_spent_time(user, issue):
     )
 
 
-def test_get_form(admin_client, salary_admin):
+def test_get_form(admin_rf, salary_admin):
     response = salary_admin.generate_salaries(
-        admin_client.get("/admin/payroll/salary/"),
+        admin_rf.get("/admin/payroll/salary/"),
     )
 
     assert response.status_code == HTTPStatus.OK
@@ -37,9 +37,9 @@ def test_get_form(admin_client, salary_admin):
     assert b"period_to" in response.content
 
 
-def test_generate_salaries(issue_spent_time, admin_client, salary_admin):
+def test_generate_salaries(issue_spent_time, admin_rf, salary_admin):
     response = salary_admin.generate_salaries(
-        admin_client.post(
+        admin_rf.post(
             "/admin/payroll/salary/",
             {
                 "period_from": str(timezone.now().date() - timedelta(days=15)),

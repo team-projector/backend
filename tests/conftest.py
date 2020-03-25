@@ -5,7 +5,6 @@ pytest_plugins = (
     "tests.fixtures.settings",
     "tests.fixtures.gitlab",
     "tests.fixtures.users",
-    "tests.fixtures.clients",
     "tests.fixtures.requests",
     "tests.fixtures.admin",
     "tests.fixtures.team",

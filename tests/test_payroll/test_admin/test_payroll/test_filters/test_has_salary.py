@@ -5,13 +5,13 @@ from apps.payroll.models import Payroll, Salary
 from tests.test_payroll.factories import SalaryFactory
 
 
-def test_true(user, admin_client, payroll_admin):
+def test_true(user, admin_rf, payroll_admin):
     payroll = Payroll.objects.create(
         created_by=user, user=user, salary=SalaryFactory.create(user=user),
     )
 
     has_salary_filter = HasSalaryFilter(
-        request=admin_client.get("/admin/payroll/salary/"),
+        request=admin_rf.get("/admin/payroll/salary/"),
         params={"has_salary": True},
         model=Salary,
         model_admin=payroll_admin,
@@ -25,11 +25,11 @@ def test_true(user, admin_client, payroll_admin):
     assert payroll_with_salaries.first() == payroll
 
 
-def test_false(user, admin_client, payroll_admin):
+def test_false(user, admin_rf, payroll_admin):
     payroll = Payroll.objects.create(created_by=user, user=user)
 
     has_salary_filter = HasSalaryFilter(
-        request=admin_client.get("/admin/payroll/salary/"),
+        request=admin_rf.get("/admin/payroll/salary/"),
         params={"has_salary": False},
         model=Salary,
         model_admin=payroll_admin,

@@ -5,7 +5,7 @@ from http import HTTPStatus
 from tests.test_users.factories.user import UserFactory
 
 
-def test_change_email(user_admin, admin_client):
+def test_change_email(user_admin, admin_rf):
     """Test normal email update."""
     user = UserFactory.create(email="old_@mail.com")
 
@@ -19,7 +19,7 @@ def test_change_email(user_admin, admin_client):
     }
 
     response = user_admin.changeform_view(
-        admin_client.post("/admin/users/user/", data), object_id=str(user.id),
+        admin_rf.post("/admin/users/user/", data), object_id=str(user.id),
     )
 
     assert response.status_code == HTTPStatus.FOUND
@@ -28,7 +28,7 @@ def test_change_email(user_admin, admin_client):
     assert user.email == "new_@mail.com"
 
 
-def test_not_changed_email(user_admin, admin_client):
+def test_not_changed_email(user_admin, admin_rf):
     """Test same email update."""
     user = UserFactory.create(email="test@mail.com")
 
@@ -41,14 +41,14 @@ def test_not_changed_email(user_admin, admin_client):
     }
 
     user_admin.changeform_view(
-        admin_client.post("/admin/users/user/", data), object_id=str(user.id),
+        admin_rf.post("/admin/users/user/", data), object_id=str(user.id),
     )
 
     user.refresh_from_db()
     assert user.email == "test@mail.com"
 
 
-def test_dublicate_email(user_admin, admin_client):
+def test_dublicate_email(user_admin, admin_rf):
     """Test dublicate email validation."""
     user = UserFactory.create(email="user@mail.com")
     another_user = UserFactory.create(email="another_user@mail.com")
@@ -62,7 +62,7 @@ def test_dublicate_email(user_admin, admin_client):
     }
 
     response = user_admin.changeform_view(
-        admin_client.post("/admin/users/user/", data),
+        admin_rf.post("/admin/users/user/", data),
         object_id=str(another_user.id),
     )
 

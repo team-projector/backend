@@ -10,6 +10,11 @@ from apps.users.models import Token, User
 from apps.users.services.token.create import create_user_token
 
 
+class _MockStorageMessages:
+    def add(self, level, message, extra_tags):
+        """Mocked add."""
+
+
 class RequestFactory(DjangoRequestFactory):
     def __init__(self, *args, **kwargs) -> None:
         """Initializing."""
@@ -37,6 +42,8 @@ class RequestFactory(DjangoRequestFactory):
     def post(self, *args, **kwargs):
         """Construct a POST request."""
         request = super().post(*args, **kwargs)
+        request._dont_enforce_csrf_checks = True  # noqa: WPS437
+        request._messages = _MockStorageMessages()  # noqa: WPS437
         self._auth_if_need(request)
 
         return request
