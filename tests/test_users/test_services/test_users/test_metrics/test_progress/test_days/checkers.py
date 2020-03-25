@@ -4,7 +4,6 @@ from datetime import date, datetime, timedelta
 from typing import Dict
 
 from apps.users.services.user.metrics import UserProgressMetricsList
-from tests.helpers.base import format_date
 
 
 def check_user_progress_metrics(
