@@ -66,7 +66,9 @@ class Client:
         if token is None:
             token = create_user_token(user)
 
-        self._credentials = {"HTTP_AUTHORIZATION": f"Bearer {token.key}"}
+        self._credentials = {
+            "HTTP_AUTHORIZATION": "Bearer {0}".format(token.key),
+        }
 
 
 def trigger_on_commit():
