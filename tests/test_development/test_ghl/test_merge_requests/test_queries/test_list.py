@@ -60,12 +60,12 @@ def test_team_members_combined(
     """Test access by the leader role."""
     MergeRequestFactory.create_batch(2, user=user)
 
-    user_2 = UserFactory()
-    MergeRequestFactory.create_batch(3, user=user_2)
+    user2 = UserFactory()
+    MergeRequestFactory.create_batch(3, user=user2)
 
     team = TeamFactory()
     TeamMemberFactory(user=user, team=team, roles=TeamMember.roles.LEADER)
-    TeamMemberFactory(user=user_2, team=team, roles=TeamMember.roles.DEVELOPER)
+    TeamMemberFactory(user=user2, team=team, roles=TeamMember.roles.DEVELOPER)
 
     response = all_merge_requests_query(root=None, info=ghl_auth_mock_info)
 

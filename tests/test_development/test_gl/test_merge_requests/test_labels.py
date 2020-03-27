@@ -42,50 +42,50 @@ def test_with_cached_labels(db, gl_mocker, gl_client):
 
     gl_label = GlLabelFactory.create()
 
-    merge_request_1, gl_merge_request_1 = initializers.init_merge_request(
+    merge_request1, gl_merge_request1 = initializers.init_merge_request(
         project, gl_project, gl_kwargs={"labels": [gl_label["name"]]},
     )
 
-    merge_request_2, gl_merge_request_2 = initializers.init_merge_request(
+    merge_request2, gl_merge_request2 = initializers.init_merge_request(
         project, gl_project, gl_kwargs={"labels": [gl_label["name"]]},
     )
 
     gl_mock.mock_project_endpoints(gl_mocker, gl_project, labels=[gl_label])
     gl_mock.mock_merge_request_endpoints(
-        gl_mocker, gl_project, gl_merge_request_1, labels=[gl_label],
+        gl_mocker, gl_project, gl_merge_request1, labels=[gl_label],
     )
     gl_mock.mock_merge_request_endpoints(
-        gl_mocker, gl_project, gl_merge_request_2, labels=[gl_label],
+        gl_mocker, gl_project, gl_merge_request2, labels=[gl_label],
     )
 
     gl_project_manager = gl_client.projects.get(id=project.gl_id)
     gl_merge_request_manager = gl_project_manager.mergerequests.get(
-        id=merge_request_1.gl_iid,
+        id=merge_request1.gl_iid,
     )
 
     assert getattr(gl_project_manager, "cached_labels", None) is None
 
     MergeRequestGlManager().sync_labels(
-        merge_request_1, gl_merge_request_manager, gl_project_manager,
+        merge_request1, gl_merge_request_manager, gl_project_manager,
     )
 
     assert gl_project_manager.cached_labels is not None
 
-    merge_request_1.refresh_from_db()
+    merge_request1.refresh_from_db()
 
-    assert merge_request_1.labels.first().title == gl_label["name"]
+    assert merge_request1.labels.first().title == gl_label["name"]
 
     gl_merge_request_manager = gl_project_manager.mergerequests.get(
-        id=merge_request_2.gl_iid,
+        id=merge_request2.gl_iid,
     )
 
     MergeRequestGlManager().sync_labels(
-        merge_request_2, gl_merge_request_manager, gl_project_manager,
+        merge_request2, gl_merge_request_manager, gl_project_manager,
     )
 
-    merge_request_2.refresh_from_db()
+    merge_request2.refresh_from_db()
 
-    assert merge_request_2.labels.first().title == gl_label["name"]
+    assert merge_request2.labels.first().title == gl_label["name"]
 
 
 def test_empty(db, gl_mocker, gl_client):

@@ -13,19 +13,19 @@ def test_filter_by_team_empty(
     user, ghl_auth_mock_info, all_merge_requests_query,
 ):
     """Test team doesn"t have merge requests."""
-    user_1 = UserFactory()
-    user_2 = UserFactory()
+    user1 = UserFactory()
+    user2 = UserFactory()
 
-    team_1 = TeamFactory()
-    team_2 = TeamFactory()
+    team1 = TeamFactory()
+    team2 = TeamFactory()
 
-    team_1.members.set([user_1, user_2])
-    team_2.members.add(user_2)
+    team1.members.set([user1, user2])
+    team2.members.add(user2)
 
     MergeRequestFactory.create(user=user)
 
     response = all_merge_requests_query(
-        root=None, info=ghl_auth_mock_info, team=team_1.id,
+        root=None, info=ghl_auth_mock_info, team=team1.id,
     )
 
     assert response.length == 0
@@ -35,22 +35,22 @@ def test_filter_by_team_watcher_empty(
     user, ghl_auth_mock_info, all_merge_requests_query,
 ):
     """Test watcher no results."""
-    user_1 = UserFactory()
+    user1 = UserFactory()
 
-    team_1 = TeamFactory()
-    team_2 = TeamFactory()
+    team1 = TeamFactory()
+    team2 = TeamFactory()
 
-    team_1.members.set([user_1, user])
-    team_2.members.add(user)
+    team1.members.set([user1, user])
+    team2.members.add(user)
 
-    TeamMember.objects.filter(team=team_1).update(
+    TeamMember.objects.filter(team=team1).update(
         roles=TeamMember.roles.WATCHER,
     )
 
     MergeRequestFactory.create(user=user)
 
     response = all_merge_requests_query(
-        root=None, info=ghl_auth_mock_info, team=team_1.id,
+        root=None, info=ghl_auth_mock_info, team=team1.id,
     )
 
     assert response.length == 0
@@ -60,26 +60,26 @@ def test_filter_by_team_leader(
     user, ghl_auth_mock_info, all_merge_requests_query,
 ):
     """Test team leader see merge requests of his team."""
-    user_1 = UserFactory()
-    team_1 = TeamFactory()
-    team_1.members.set([user_1, user])
+    user1 = UserFactory()
+    team1 = TeamFactory()
+    team1.members.set([user1, user])
 
-    TeamMember.objects.filter(user=user_1, team=team_1).update(
+    TeamMember.objects.filter(user=user1, team=team1).update(
         roles=TeamMember.roles.LEADER,
     )
-    TeamMember.objects.filter(user=user, team=team_1).update(
+    TeamMember.objects.filter(user=user, team=team1).update(
         roles=TeamMember.roles.WATCHER,
     )
 
-    merge_request_1 = MergeRequestFactory.create(user=user_1)
+    merge_request1 = MergeRequestFactory.create(user=user1)
     MergeRequestFactory.create(user=user)
 
     response = all_merge_requests_query(
-        root=None, info=ghl_auth_mock_info, team=team_1.id,
+        root=None, info=ghl_auth_mock_info, team=team1.id,
     )
 
     response_ids = [edge.node.id for edge in response.edges]
-    assert response_ids == [merge_request_1.id]
+    assert response_ids == [merge_request1.id]
 
 
 def test_many_members(

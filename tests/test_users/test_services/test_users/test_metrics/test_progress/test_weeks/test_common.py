@@ -71,7 +71,7 @@ def test_simple(user):
     )
 
 
-def test_efficiency_more_1(user):
+def test_efficiency_more100(user):
     monday = begin_of_week(timezone.now().date())
     issue = IssueFactory.create(
         user=user,
@@ -125,7 +125,7 @@ def test_efficiency_more_1(user):
     )
 
 
-def test_efficiency_less_1(user):
+def test_efficiency_less100(user):
     monday = begin_of_week(timezone.now().date())
     issue = IssueFactory.create(
         user=user,

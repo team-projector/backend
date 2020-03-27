@@ -15,11 +15,11 @@ def test_my_work_breaks(user):
 
 
 def test_in_team_not_viewer(user, team, make_team_developer):
-    user_2 = UserFactory.create()
-    make_team_developer(team, user_2)
+    user2 = UserFactory.create()
+    make_team_developer(team, user2)
     make_team_developer(team, user)
 
-    WorkBreakFactory.create(user=user_2)
+    WorkBreakFactory.create(user=user2)
 
     assert not WorkBreak.objects.allowed_for_user(user).exists()
 

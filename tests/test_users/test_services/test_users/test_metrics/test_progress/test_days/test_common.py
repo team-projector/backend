@@ -126,7 +126,7 @@ def test_loading_day_already_has_spends(user, _freeze_to_noon):
         total_time_spent=int(seconds(hours=3)),
         due_date=datetime.now(),
     )
-    issue_2 = IssueFactory.create(
+    issue2 = IssueFactory.create(
         user=user,
         state=IssueState.OPENED,
         total_time_spent=seconds(hours=3),
@@ -136,13 +136,13 @@ def test_loading_day_already_has_spends(user, _freeze_to_noon):
     IssueSpentTimeFactory.create(
         date=datetime.now(),
         user=user,
-        base=issue_2,
+        base=issue2,
         time_spent=seconds(hours=1),
     )
     IssueSpentTimeFactory.create(
         date=datetime.now(),
         user=user,
-        base=issue_2,
+        base=issue2,
         time_spent=seconds(hours=2),
     )
     IssueSpentTimeFactory.create(
@@ -152,10 +152,10 @@ def test_loading_day_already_has_spends(user, _freeze_to_noon):
         time_spent=seconds(hours=3),
     )
 
-    issue_2.total_time_spent = issue_2.time_spents.aggregate(
+    issue2.total_time_spent = issue2.time_spents.aggregate(
         spent=Sum("time_spent"),
     )["spent"]
-    issue_2.save()
+    issue2.save()
 
     start = datetime.now().date() - timedelta(days=5)
     end = datetime.now().date() + timedelta(days=5)

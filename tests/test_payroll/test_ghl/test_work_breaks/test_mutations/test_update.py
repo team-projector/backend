@@ -100,12 +100,12 @@ def test_update_work_break_another_user(
         roles=TeamMember.roles.DEVELOPER,
     )
 
-    user_2 = UserFactory.create()
+    user2 = UserFactory.create()
     TeamMemberFactory.create(
-        team=team, user=user_2, roles=TeamMember.roles.DEVELOPER,
+        team=team, user=user2, roles=TeamMember.roles.DEVELOPER,
     )
 
-    work_break = WorkBreakFactory.create(user=user_2, comment="created")
+    work_break = WorkBreakFactory.create(user=user2, comment="created")
 
     update_variables = {
         "id": work_break.pk,
@@ -159,8 +159,8 @@ def test_change_work_break_user(
     ghl_auth_mock_info, update_work_break_mutation,
 ):
     team = TeamFactory.create()
-    user_2 = UserFactory.create()
-    user_3 = UserFactory.create()
+    user2 = UserFactory.create()
+    user3 = UserFactory.create()
 
     TeamMemberFactory.create(
         team=team,
@@ -168,14 +168,14 @@ def test_change_work_break_user(
         roles=TeamMember.roles.LEADER,
     )
     TeamMemberFactory.create(
-        team=team, user=user_2, roles=TeamMember.roles.DEVELOPER,
+        team=team, user=user2, roles=TeamMember.roles.DEVELOPER,
     )
 
-    work_break = WorkBreakFactory.create(user=user_2, comment="created")
+    work_break = WorkBreakFactory.create(user=user2, comment="created")
 
     update_variables = {
         "id": work_break.pk,
-        "user": user_3.id,
+        "user": user3.id,
         "from_date": timezone.now(),
         "to_date": timezone.now(),
         "reason": WorkBreakReason.DAYOFF,
@@ -190,7 +190,7 @@ def test_change_work_break_user(
 
     assert WorkBreak.objects.count() == 1
     assert work_break.comment == "updated"
-    assert work_break.user == user_3
+    assert work_break.user == user3
 
 
 def _date_strftime(date):

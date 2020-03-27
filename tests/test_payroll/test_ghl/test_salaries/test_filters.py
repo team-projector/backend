@@ -14,26 +14,26 @@ from tests.test_users.factories.user import UserFactory
 def test_salaries_filter_by_user(user):
     SalaryFactory.create_batch(size=3, user=user)
 
-    user_2 = UserFactory.create()
-    salaries_user_2 = SalaryFactory.create_batch(size=5, user=user_2)
+    user2 = UserFactory.create()
+    salaries_user2 = SalaryFactory.create_batch(size=5, user=user2)
 
     results = SalaryFilterSet(
-        data={"user": user_2.id}, queryset=Salary.objects.all(),
+        data={"user": user2.id}, queryset=Salary.objects.all(),
     ).qs
 
     assert results.count() == 5
-    assert set(results) == set(salaries_user_2)
+    assert set(results) == set(salaries_user2)
 
 
 def test_salaries_filter_by_team(user, client):
-    user_2 = UserFactory.create()
-    salaries_user_2 = SalaryFactory.create_batch(size=2, user=user_2)
+    user2 = UserFactory.create()
+    salaries_user2 = SalaryFactory.create_batch(size=2, user=user2)
 
-    user_3 = UserFactory.create()
-    SalaryFactory.create_batch(size=3, user=user_3)
+    user3 = UserFactory.create()
+    SalaryFactory.create_batch(size=3, user=user3)
 
     team = TeamFactory.create()
-    team.members.set([user, user_2])
+    team.members.set([user, user2])
 
     TeamMember.objects.filter(user=user, team=team).update(
         roles=TeamMember.roles.LEADER,
@@ -46,15 +46,15 @@ def test_salaries_filter_by_team(user, client):
     ).qs
 
     assert results.count() == 2
-    assert set(results) == set(salaries_user_2)
+    assert set(results) == set(salaries_user2)
 
 
 def test_salaries_filter_by_team_not_leader(user, client):
-    user_2 = UserFactory.create()
-    SalaryFactory.create_batch(size=2, user=user_2)
+    user2 = UserFactory.create()
+    SalaryFactory.create_batch(size=2, user=user2)
 
     team = TeamFactory.create()
-    team.members.set([user, user_2])
+    team.members.set([user, user2])
 
     TeamMember.objects.filter(user=user, team=team).update(
         roles=TeamMember.roles.DEVELOPER,

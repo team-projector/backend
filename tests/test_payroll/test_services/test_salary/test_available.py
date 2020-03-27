@@ -14,9 +14,9 @@ def test_my_salaries(user):
 
 
 def test_in_team_not_viewer(user):
-    user_2 = UserFactory.create()
-    TeamFactory.create(members=[user, user_2])
-    SalaryFactory.create(user=user_2)
+    user2 = UserFactory.create()
+    TeamFactory.create(members=[user, user2])
+    SalaryFactory.create(user=user2)
 
     assert not Salary.objects.allowed_for_user(user).exists()
 
@@ -34,17 +34,17 @@ def test_as_team_watcher(team_developer, team_watcher):
 
 
 def test_as_leader_another_team(user, team_leader):
-    user_2 = UserFactory.create()
-    TeamFactory.create(members=[user_2])
-    SalaryFactory.create(user=user_2)
+    user2 = UserFactory.create()
+    TeamFactory.create(members=[user2])
+    SalaryFactory.create(user=user2)
 
     assert not Salary.objects.allowed_for_user(team_leader).exists()
 
 
 def test_as_watcher_another_team(user, team_watcher):
-    user_2 = UserFactory.create()
-    TeamFactory.create(members=[user_2])
-    SalaryFactory.create(user=user_2)
+    user2 = UserFactory.create()
+    TeamFactory.create(members=[user2])
+    SalaryFactory.create(user=user2)
 
     assert not Salary.objects.allowed_for_user(team_watcher).exists()
 

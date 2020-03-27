@@ -8,7 +8,7 @@ from tests.test_users.factories.user import UserFactory
 
 
 @pytest.fixture()
-def user_2(db):
+def user2(db):
     return UserFactory.create()
 
 

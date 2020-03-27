@@ -51,35 +51,35 @@ def test_metrics(ticket):
 
 
 def test_budget_estimated(ticket):
-    user_1 = UserFactory.create(customer_hour_rate=3)
+    user1 = UserFactory.create(customer_hour_rate=3)
 
     IssueFactory.create(
         ticket=ticket,
-        user=user_1,
+        user=user1,
         state=IssueState.OPENED,
         total_time_spent=0,
         time_estimate=seconds(hours=1),
     )
     IssueFactory.create(
         ticket=ticket,
-        user=user_1,
+        user=user1,
         state=IssueState.CLOSED,
         total_time_spent=seconds(hours=1),
         time_estimate=seconds(hours=2),
     )
 
-    user_2 = UserFactory.create(customer_hour_rate=5)
+    user2 = UserFactory.create(customer_hour_rate=5)
 
     IssueFactory.create(
         ticket=ticket,
-        user=user_2,
+        user=user2,
         state=IssueState.OPENED,
         total_time_spent=0,
         time_estimate=seconds(hours=1),
     )
     IssueFactory.create(
         ticket=ticket,
-        user=user_2,
+        user=user2,
         state=IssueState.CLOSED,
         total_time_spent=seconds(hours=2),
         time_estimate=seconds(hours=1),
@@ -87,7 +87,7 @@ def test_budget_estimated(ticket):
 
     IssueFactory.create(
         ticket=TicketFactory.create(),
-        user=user_2,
+        user=user2,
         state=IssueState.OPENED,
         total_time_spent=seconds(hours=10),
         time_estimate=seconds(hours=10),

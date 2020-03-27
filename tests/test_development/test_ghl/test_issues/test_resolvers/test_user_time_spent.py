@@ -44,15 +44,15 @@ def test_some_spends(issue, user):
 
 def test_different_user_spents(issue, user):
     """Test user time spent with different spents for issue."""
-    user_2 = UserFactory.create()
+    user2 = UserFactory.create()
     spends = [
         IssueSpentTimeFactory.create(
             user=user, base=issue, time_spent=int(seconds(hours=5)),
         ),
         IssueSpentTimeFactory.create(
-            user=user_2, base=issue, time_spent=int(seconds(hours=2)),
+            user=user2, base=issue, time_spent=int(seconds(hours=2)),
         ),
     ]
 
     assert get_user_time_spent(issue, user) == spends[0].time_spent
-    assert get_user_time_spent(issue, user_2) == spends[1].time_spent
+    assert get_user_time_spent(issue, user2) == spends[1].time_spent

@@ -9,21 +9,21 @@ from tests.test_users.factories.user import UserFactory
 def test_penalties_filter_by_user(user):
     PenaltyFactory.create_batch(size=3, user=user)
 
-    user_2 = UserFactory.create()
-    penalties_user_2 = PenaltyFactory.create_batch(size=5, user=user_2)
+    user2 = UserFactory.create()
+    penalties_user2 = PenaltyFactory.create_batch(size=5, user=user2)
 
     results = PenaltyFilterSet(
-        data={"user": user_2.id}, queryset=Penalty.objects.all(),
+        data={"user": user2.id}, queryset=Penalty.objects.all(),
     ).qs
 
     assert results.count() == 5
-    assert set(results) == set(penalties_user_2)
+    assert set(results) == set(penalties_user2)
 
 
 def test_penalties_filter_by_salary(user):
     salary = SalaryFactory(user=user)
     PenaltyFactory.create_batch(size=3, user=user)
-    penalties_salary_2 = PenaltyFactory.create_batch(
+    penalties_salary2 = PenaltyFactory.create_batch(
         size=5, user=user, salary=salary,
     )
 
@@ -32,7 +32,7 @@ def test_penalties_filter_by_salary(user):
     ).qs
 
     assert results.count() == 5
-    assert set(results) == set(penalties_salary_2)
+    assert set(results) == set(penalties_salary2)
 
 
 def test_salary_is_null(user):

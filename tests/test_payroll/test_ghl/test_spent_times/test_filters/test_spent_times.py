@@ -23,17 +23,17 @@ from tests.test_payroll.factories import (
 )
 
 
-def test_filter_by_salary(user, user_2, issue, salary):
+def test_filter_by_salary(user, user2, issue, salary):
     IssueSpentTimeFactory.create(
         date=timezone.now() - timedelta(hours=2),
-        user=user_2,
+        user=user2,
         base=issue,
         time_spent=int(seconds(hours=2)),
     )
 
     IssueSpentTimeFactory.create(
         date=timezone.now() - timedelta(hours=1),
-        user=user_2,
+        user=user2,
         base=issue,
         time_spent=int(seconds(minutes=10)),
     )
@@ -65,11 +65,11 @@ def test_filter_by_salary(user, user_2, issue, salary):
     assert set(results) == spends
 
 
-def test_filter_by_date(user, user_2, issue):
+def test_filter_by_date(user, user2, issue):
     spend_date = date(2020, 3, 3)
 
     IssueSpentTimeFactory.create(
-        user=user_2,
+        user=user2,
         base=issue,
         time_spent=int(seconds(minutes=10)),
         date=timezone.now() - timedelta(hours=1),
@@ -83,7 +83,7 @@ def test_filter_by_date(user, user_2, issue):
             date=spend_date,
         ),
         IssueSpentTimeFactory.create(
-            user=user_2,
+            user=user2,
             base=issue,
             time_spent=int(seconds(hours=2)),
             date=spend_date,
@@ -100,11 +100,11 @@ def test_filter_by_date(user, user_2, issue):
     assert set(results) == spends
 
 
-def test_by_date_and_user(user, user_2, issue):
+def test_by_date_and_user(user, user2, issue):
     spend_date = date(2019, 3, 3)
 
     IssueSpentTimeFactory.create(
-        user=user_2,
+        user=user2,
         base=issue,
         time_spent=int(seconds(hours=2)),
         date=spend_date,
@@ -119,7 +119,7 @@ def test_by_date_and_user(user, user_2, issue):
 
     IssueSpentTimeFactory.create(
         date=timezone.now() - timedelta(hours=1),
-        user=user_2,
+        user=user2,
         base=issue,
         time_spent=int(seconds(minutes=10)),
     )
@@ -178,13 +178,13 @@ def test_filter_by_project(user):
     assert set(results) == {*spends[2:]}
 
 
-def test_filter_by_team(user, user_2, make_team_leader):
+def test_filter_by_team(user, user2, make_team_leader):
     teams = TeamFactory.create_batch(2)
 
     make_team_leader(teams[0], user)
-    make_team_leader(teams[1], user_2)
+    make_team_leader(teams[1], user2)
 
-    issue = IssueFactory.create(user=user_2)
+    issue = IssueFactory.create(user=user2)
     merge_request = MergeRequestFactory.create(user=user)
 
     spends = [
@@ -195,10 +195,10 @@ def test_filter_by_team(user, user_2, make_team_leader):
             user=user, base=issue, time_spent=int(seconds(hours=2)),
         ),
         MergeRequestSpentTimeFactory.create(
-            user=user_2, base=merge_request, time_spent=int(seconds(hours=4)),
+            user=user2, base=merge_request, time_spent=int(seconds(hours=4)),
         ),
         MergeRequestSpentTimeFactory.create(
-            user=user_2, base=merge_request, time_spent=int(seconds(hours=1)),
+            user=user2, base=merge_request, time_spent=int(seconds(hours=1)),
         ),
     ]
 

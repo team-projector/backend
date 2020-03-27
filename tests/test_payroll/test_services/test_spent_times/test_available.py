@@ -15,11 +15,11 @@ def test_my_spents(user):
 
 
 def test_in_team_not_viewer(user, team, make_team_developer):
-    user_2 = UserFactory.create()
+    user2 = UserFactory.create()
     make_team_developer(team, user)
-    make_team_developer(team, user_2)
+    make_team_developer(team, user2)
 
-    IssueSpentTimeFactory.create(user=user_2)
+    IssueSpentTimeFactory.create(user=user2)
 
     assert not SpentTime.objects.allowed_for_user(user).exists()
 

@@ -161,24 +161,24 @@ def test_only_reset(user):
 def test_multi_user_reset(user):
     issue = IssueFactory.create()
 
-    user_2 = UserFactory.create()
+    user2 = UserFactory.create()
 
     _create_note(
-        user_2,
+        user2,
         issue,
         NoteType.TIME_SPEND,
         timezone.now() - timedelta(hours=6),
         timedelta(hours=4),
     )
     _create_note(
-        user_2,
+        user2,
         issue,
         NoteType.TIME_SPEND,
         timezone.now() - timedelta(hours=5),
         -timedelta(hours=3),
     )
     _create_note(
-        user_2,
+        user2,
         issue,
         NoteType.RESET_SPEND,
         timezone.now() - timedelta(hours=4),
@@ -220,14 +220,14 @@ def test_multi_user_reset(user):
     )
 
     _create_note(
-        user_2,
+        user2,
         issue,
         NoteType.TIME_SPEND,
         timezone.now() - timedelta(hours=1),
         timedelta(hours=5),
     )
     _create_note(
-        user_2,
+        user2,
         issue,
         NoteType.RESET_SPEND,
         timezone.now() - timedelta(minutes=30),

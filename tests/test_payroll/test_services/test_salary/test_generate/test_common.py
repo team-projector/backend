@@ -203,22 +203,20 @@ def test_some_already_with_salary(user, calculator):
 
 
 def test_with_another_user(user, calculator):
-    user_2 = UserFactory.create()
+    user2 = UserFactory.create()
     issue = IssueFactory.create(state=IssueState.CLOSED)
 
     IssueSpentTimeFactory.create(
-        user=user_2, base=issue, time_spent=timedelta(hours=1).total_seconds(),
+        user=user2, base=issue, time_spent=timedelta(hours=1).total_seconds(),
     )
     IssueSpentTimeFactory.create(
-        user=user_2,
-        base=issue,
-        time_spent=-timedelta(hours=2).total_seconds(),
+        user=user2, base=issue, time_spent=-timedelta(hours=2).total_seconds(),
     )
     IssueSpentTimeFactory.create(
         user=user, base=issue, time_spent=timedelta(hours=5).total_seconds(),
     )
 
-    BonusFactory.create(user=user_2)
+    BonusFactory.create(user=user2)
     penalty = PenaltyFactory.create(user=user, sum=100)
 
     salary = calculator.generate(user)

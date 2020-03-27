@@ -25,15 +25,15 @@ def test_query(user, ghl_client):
     ghl_client.set_user(user)
 
     team = TeamFactory.create()
-    user_1 = UserFactory.create()
+    user1 = UserFactory.create()
 
     TeamMemberFactory.create(
         team=team, user=user, roles=TeamMember.roles.LEADER,
     )
     TeamMemberFactory.create(
-        team=team, user=user_1, roles=TeamMember.roles.DEVELOPER,
+        team=team, user=user1, roles=TeamMember.roles.DEVELOPER,
     )
-    work_break = WorkBreakFactory.create(user=user_1)
+    work_break = WorkBreakFactory.create(user=user1)
 
     response = ghl_client.execute(
         GHL_QUERY_APPROVE_WORK_BREAK, variable_values={"id": work_break.pk},
