@@ -28,7 +28,7 @@ class AssetsProvider:
         self._opened_files.append(file_handler)
         return file_handler
 
-    def open_json(self, filename: str) -> Dict:
+    def read_json(self, filename: str) -> Dict:
         """Read json file to dict."""
         return json.loads(self.open(filename, mode="r").read())
 
