@@ -10,4 +10,5 @@ pytest_plugins = (
     "tests.fixtures.team",
     "tests.fixtures.project",
     "tests.fixtures.group",
+    "tests.fixtures.assets",
 )
