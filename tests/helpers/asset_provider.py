@@ -3,7 +3,7 @@
 import json
 import pathlib
 from io import TextIOWrapper
-from typing import Dict
+from typing import Dict, Optional
 
 ASSETS_FOLDER = "assets"
 
@@ -39,7 +39,7 @@ class AssetsProvider:
                 file_handler.close()
         self._opened_files.clear()
 
-    def _find_path(self, filename):
+    def _find_path(self, filename: str) -> Optional[str]:
         path = self._cwd
 
         while path.parents:
