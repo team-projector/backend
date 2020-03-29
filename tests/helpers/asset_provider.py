@@ -5,11 +5,11 @@ import pathlib
 from io import TextIOWrapper
 from typing import Dict
 
+ASSETS_FOLDER = "assets"
+
 
 class AssetsProvider:
     """Assets provider."""
-
-    assets_folder = "assets"
 
     def __init__(self, fspath) -> None:
         """Init provider."""
@@ -43,7 +43,7 @@ class AssetsProvider:
         path = self._cwd
 
         while path.parents:
-            pathfile = pathlib.Path(path, self.assets_folder, filename)
+            pathfile = pathlib.Path(path, ASSETS_FOLDER, filename)
             if pathfile.is_file():
                 return pathfile
 
