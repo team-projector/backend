@@ -16,7 +16,7 @@ class AssetsProvider:
         self._cwd = pathlib.Path(fspath)
         self._opened_files = []
 
-    def open(
+    def open_file(
         self, filename: str, mode: str = "rb", encoding: str = None,
     ) -> TextIOWrapper:
         """Open file and return a stream."""
@@ -30,7 +30,7 @@ class AssetsProvider:
 
     def read_json(self, filename: str) -> Dict:
         """Read json file to dict."""
-        return json.loads(self.open(filename, mode="r").read())
+        return json.loads(self.open_file(filename, mode="r").read())
 
     def close(self) -> None:
         """Close opened files."""

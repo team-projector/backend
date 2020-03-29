@@ -14,7 +14,7 @@ class PaymentFactory(factory.django.DjangoModelFactory):
         after_now=False,
         tzinfo=pytz.UTC,
     )
-    sum = factory.Faker("random_int")
+    sum = factory.Faker("random_int")  # noqa: A003
     created_by = factory.SubFactory(UserFactory)
 
     class Meta:
