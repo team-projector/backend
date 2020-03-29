@@ -309,7 +309,7 @@ def test_spents_with_resets_but_moved_from(user):
     assert reset_spent_time.time_spent == -timedelta(hours=5).total_seconds()
 
 
-def _create_note(
+def _create_note(  # noqa: WPS211
     user, issue, note_type, created_at, spent: timedelta = None, date=None,
 ):
     return IssueNoteFactory.create(

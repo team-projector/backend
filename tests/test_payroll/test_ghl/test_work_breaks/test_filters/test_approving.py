@@ -18,21 +18,21 @@ def test_approving_list(
     )
     WorkBreakFactory.create_batch(3, user=UserFactory.create())
 
-    results = WorkBreakFilterSet(
+    queryset = WorkBreakFilterSet(
         data={"approving": True},
         queryset=WorkBreak.objects.all(),
         request=ghl_auth_mock_info.context,
     ).qs
 
-    assert results.count() == 5
+    assert queryset.count() == 5
 
-    results = WorkBreakFilterSet(
+    queryset = WorkBreakFilterSet(
         data={"approving": False},
         queryset=WorkBreak.objects.all(),
         request=ghl_auth_mock_info.context,
     ).qs
 
-    assert results.count() == 12
+    assert queryset.count() == 12
 
 
 def test_approving_list_not_teamlead(
@@ -47,10 +47,10 @@ def test_approving_list_not_teamlead(
     )
     WorkBreakFactory.create_batch(3, user=UserFactory.create())
 
-    results = WorkBreakFilterSet(
+    queryset = WorkBreakFilterSet(
         data={"approving": True},
         queryset=WorkBreak.objects.all(),
         request=ghl_auth_mock_info.context,
     ).qs
 
-    assert results.count() == 0
+    assert queryset.count() == 0

@@ -16,12 +16,12 @@ def test_by_due_date_asc(db):
         TicketFactory.create(due_date=datetime.now()),
     ]
 
-    results = TicketsFilterSet(
+    queryset = TicketsFilterSet(
         data={"order_by": "dueDate"}, queryset=Ticket.objects.all(),
     ).qs
 
-    assert results.count() == 3
-    assert list(results) == lists.sub_list(tickets, (0, 2, 1))
+    assert queryset.count() == 3
+    assert list(queryset) == lists.sub_list(tickets, (0, 2, 1))
 
 
 def test_by_due_date_desc(db):
@@ -32,12 +32,12 @@ def test_by_due_date_desc(db):
         TicketFactory.create(due_date=datetime.now()),
     ]
 
-    results = TicketsFilterSet(
+    queryset = TicketsFilterSet(
         data={"order_by": "-dueDate"}, queryset=Ticket.objects.all(),
     ).qs
 
-    assert results.count() == 3
-    assert list(results) == lists.sub_list(tickets, (1, 2, 0))
+    assert queryset.count() == 3
+    assert list(queryset) == lists.sub_list(tickets, (1, 2, 0))
 
 
 def test_by_title_asc(db):
@@ -48,12 +48,12 @@ def test_by_title_asc(db):
         TicketFactory.create(title="CC"),
     ]
 
-    results = TicketsFilterSet(
+    queryset = TicketsFilterSet(
         data={"order_by": "title"}, queryset=Ticket.objects.all(),
     ).qs
 
-    assert results.count() == 3
-    assert list(results) == lists.sub_list(tickets, (1, 0, 2))
+    assert queryset.count() == 3
+    assert list(queryset) == lists.sub_list(tickets, (1, 0, 2))
 
 
 def test_by_title_desc(db):
@@ -64,12 +64,12 @@ def test_by_title_desc(db):
         TicketFactory.create(title="CC"),
     ]
 
-    results = TicketsFilterSet(
+    queryset = TicketsFilterSet(
         data={"order_by": "-title"}, queryset=Ticket.objects.all(),
     ).qs
 
-    assert results.count() == 3
-    assert list(results) == lists.sub_list(tickets, (2, 0, 1))
+    assert queryset.count() == 3
+    assert list(queryset) == lists.sub_list(tickets, (2, 0, 1))
 
 
 def test_by_due_date_and_title(db):
@@ -86,9 +86,9 @@ def test_by_due_date_and_title(db):
         ),
     ]
 
-    results = TicketsFilterSet(
+    queryset = TicketsFilterSet(
         data={"order_by": "dueDate,title"}, queryset=Ticket.objects.all(),
     ).qs
 
-    assert results.count() == 3
-    assert list(results) == lists.sub_list(tickets, (1, 0, 2))
+    assert queryset.count() == 3
+    assert list(queryset) == lists.sub_list(tickets, (1, 0, 2))

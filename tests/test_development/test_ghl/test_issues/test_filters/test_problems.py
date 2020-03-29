@@ -13,9 +13,9 @@ def test_no_filter(user):
         5, user=user, due_date=datetime.now().date(), time_estimate=1000,
     )
 
-    results = IssuesFilterSet(queryset=Issue.objects.all()).qs
+    issues = IssuesFilterSet(queryset=Issue.objects.all()).qs
 
-    assert results.count() == 7
+    assert issues.count() == 7
 
 
 def test_has_problems(user):
@@ -24,12 +24,12 @@ def test_has_problems(user):
         5, user=user, due_date=datetime.now().date(), time_estimate=1000,
     )
 
-    results = IssuesFilterSet(
+    queryset = IssuesFilterSet(
         data={"problems": True}, queryset=Issue.objects.all(),
     ).qs
 
-    assert results.count() == 2
-    assert set(results) == set(issues)
+    assert queryset.count() == 2
+    assert set(queryset) == set(issues)
 
 
 def test_no_problems(user):
@@ -38,9 +38,9 @@ def test_no_problems(user):
         5, user=user, due_date=datetime.now().date(), time_estimate=1000,
     )
 
-    results = IssuesFilterSet(
+    queryset = IssuesFilterSet(
         data={"problems": False}, queryset=Issue.objects.all(),
     ).qs
 
-    assert results.count() == 5
-    assert not any(issue in issues for issue in results)
+    assert queryset.count() == 5
+    assert not any(issue in issues for issue in queryset)

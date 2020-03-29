@@ -12,12 +12,12 @@ def test_penalties_filter_by_user(user):
     user2 = UserFactory.create()
     penalties_user2 = PenaltyFactory.create_batch(size=5, user=user2)
 
-    results = PenaltyFilterSet(
+    queryset = PenaltyFilterSet(
         data={"user": user2.id}, queryset=Penalty.objects.all(),
     ).qs
 
-    assert results.count() == 5
-    assert set(results) == set(penalties_user2)
+    assert queryset.count() == 5
+    assert set(queryset) == set(penalties_user2)
 
 
 def test_penalties_filter_by_salary(user):
@@ -27,22 +27,22 @@ def test_penalties_filter_by_salary(user):
         size=5, user=user, salary=salary,
     )
 
-    results = PenaltyFilterSet(
+    queryset = PenaltyFilterSet(
         data={"salary": salary.id}, queryset=Penalty.objects.all(),
     ).qs
 
-    assert results.count() == 5
-    assert set(results) == set(penalties_salary2)
+    assert queryset.count() == 5
+    assert set(queryset) == set(penalties_salary2)
 
 
 def test_salary_is_null(user):
     PenaltyFactory.create_batch(size=2, user=user, salary=None)
 
-    results = PenaltyFilterSet(
+    queryset = PenaltyFilterSet(
         data={"salary": None}, queryset=Penalty.objects.all(),
     ).qs
 
-    assert results.count() == 2
+    assert queryset.count() == 2
 
 
 def test_salary_is_null_empty(user):
@@ -50,8 +50,8 @@ def test_salary_is_null_empty(user):
         size=2, user=user, salary=SalaryFactory.create(user=user),
     )
 
-    results = PenaltyFilterSet(
+    queryset = PenaltyFilterSet(
         data={"salary": None}, queryset=Penalty.objects.all(),
     ).qs
 
-    assert not results.exists()
+    assert not queryset.exists()

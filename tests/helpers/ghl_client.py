@@ -12,6 +12,8 @@ from gql import schema
 
 
 class GraphQLClient(Client):
+    """Test graphql client."""
+
     def __init__(self, *args, **kwargs) -> None:
         """Initializing."""
         super().__init__(schema, *args, **kwargs)

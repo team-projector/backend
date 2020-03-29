@@ -6,7 +6,7 @@ from typing import Dict
 from apps.users.services.user.metrics import UserProgressMetricsList
 
 
-def check_user_progress_metrics(
+def check_user_progress_metrics(  # noqa: WPS211
     metrics: UserProgressMetricsList,
     spents: Dict[date, timedelta] = None,
     loadings: Dict[date, timedelta] = None,
@@ -61,19 +61,22 @@ def _prepare_metrics(metrics):
     }
 
 
-def _check_timedelta_metric(metric, metric_name, values):
+def _check_timedelta_metric(metric, metric_name, metric_values):
     dt = str(metric.start)
 
-    if dt in values:
-        assert getattr(metric, metric_name) == values.get(dt).total_seconds()
+    if dt in metric_values:
+        assert (
+            getattr(metric, metric_name)
+            == metric_values.get(dt).total_seconds()
+        )
     else:
         assert getattr(metric, metric_name) == 0
 
 
-def _check_number_metric(metric, metric_name, values):
+def _check_number_metric(metric, metric_name, metric_values):
     dt = str(metric.start)
 
-    if dt in values:
-        assert getattr(metric, metric_name) == values.get(dt)
+    if dt in metric_values:
+        assert getattr(metric, metric_name) == metric_values.get(dt)
     else:
         assert getattr(metric, metric_name) == 0

@@ -22,14 +22,14 @@ def test_filter_by_team(
 
     ghl_auth_mock_info.context.user = team_leader
 
-    results = WorkBreakFilterSet(
+    queryset = WorkBreakFilterSet(
         data={"team": team.pk},
         queryset=WorkBreak.objects.all(),
         request=ghl_auth_mock_info.context,
     ).qs
 
-    assert results.count() == 5
-    assert set(results) == set(work_breaks)
+    assert queryset.count() == 5
+    assert set(queryset) == set(work_breaks)
 
 
 def test_filter_by_team_not_allowed(

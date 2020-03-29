@@ -12,22 +12,22 @@ def test_filter_by_role(user, ghl_auth_mock_info, make_team_leader):
 
     make_team_leader(team, user)
 
-    results = TeamsFilterSet(
+    queryset = TeamsFilterSet(
         data={"roles": "DEVELOPER"},
         queryset=Team.objects.all(),
         request=ghl_auth_mock_info.context,
     ).qs
 
-    assert results.count() == 0
+    assert queryset.count() == 0
 
-    results = TeamsFilterSet(
+    queryset = TeamsFilterSet(
         data={"roles": "LEADER"},
         queryset=Team.objects.all(),
         request=ghl_auth_mock_info.context,
     ).qs
 
-    assert results.count() == 1
-    assert results.first() == team
+    assert queryset.count() == 1
+    assert queryset.first() == team
 
 
 def test_filter_many_roles(user, ghl_auth_mock_info):
@@ -40,30 +40,30 @@ def test_filter_many_roles(user, ghl_auth_mock_info):
         roles=TeamMember.roles.LEADER | TeamMember.roles.DEVELOPER,
     )
 
-    results = TeamsFilterSet(
+    queryset = TeamsFilterSet(
         data={"roles": "LEADER"},
         queryset=Team.objects.all(),
         request=ghl_auth_mock_info.context,
     ).qs
 
-    assert results.count() == 1
-    assert results.first() == team
+    assert queryset.count() == 1
+    assert queryset.first() == team
 
-    results = TeamsFilterSet(
+    queryset = TeamsFilterSet(
         data={"roles": "DEVELOPER"},
         queryset=Team.objects.all(),
         request=ghl_auth_mock_info.context,
     ).qs
 
-    assert results.first() == team
+    assert queryset.first() == team
 
-    results = TeamsFilterSet(
+    queryset = TeamsFilterSet(
         data={"roles": "WATCHER"},
         queryset=Team.objects.all(),
         request=ghl_auth_mock_info.context,
     ).qs
 
-    assert results.count() == 0
+    assert queryset.count() == 0
 
 
 def test_filter_by_user_and_many_roles(user, ghl_auth_mock_info):
@@ -76,14 +76,14 @@ def test_filter_by_user_and_many_roles(user, ghl_auth_mock_info):
         roles=TeamMember.roles.LEADER | TeamMember.roles.DEVELOPER,
     )
 
-    results = TeamsFilterSet(
+    queryset = TeamsFilterSet(
         data={"roles": "LEADER,WATCHER"},
         queryset=Team.objects.all(),
         request=ghl_auth_mock_info.context,
     ).qs
 
-    assert results.count() == 1
-    assert results.first() == team
+    assert queryset.count() == 1
+    assert queryset.first() == team
 
 
 def test_search(user, make_team_leader):
@@ -97,23 +97,25 @@ def test_search(user, make_team_leader):
     make_team_leader(teams[1], user)
     make_team_leader(teams[2], user)
 
-    results = TeamsFilterSet(data={"q": "ate"}, queryset=Team.objects.all()).qs
+    queryset = TeamsFilterSet(
+        data={"q": "ate"}, queryset=Team.objects.all(),
+    ).qs
 
-    assert results.count() == 1
-    assert results.first() == teams[0]
+    assert queryset.count() == 1
+    assert queryset.first() == teams[0]
 
-    results = TeamsFilterSet(
+    queryset = TeamsFilterSet(
         data={"q": "rea"}, queryset=Team.objects.all(),
     ).qs
 
-    assert results.count() == 2
-    assert set(results) == {teams[0], teams[1]}
+    assert queryset.count() == 2
+    assert set(queryset) == {teams[0], teams[1]}
 
-    results = TeamsFilterSet(
+    queryset = TeamsFilterSet(
         data={"q": "012345"}, queryset=Team.objects.all(),
     ).qs
 
-    assert results.count() == 0
+    assert queryset.count() == 0
 
 
 def test_order_by_title(user, make_team_leader):
@@ -127,14 +129,14 @@ def test_order_by_title(user, make_team_leader):
     make_team_leader(teams[1], user)
     make_team_leader(teams[2], user)
 
-    results = TeamsFilterSet(
+    queryset = TeamsFilterSet(
         data={"order_by": "title"}, queryset=Team.objects.all(),
     ).qs
 
-    assert list(results) == lists.sub_list(teams, (0, 2, 1))
+    assert list(queryset) == lists.sub_list(teams, (0, 2, 1))
 
-    results = TeamsFilterSet(
+    queryset = TeamsFilterSet(
         data={"order_by": "-title"}, queryset=Team.objects.all(),
     ).qs
 
-    assert list(results) == lists.sub_list(teams, (1, 2, 0))
+    assert list(queryset) == lists.sub_list(teams, (1, 2, 0))

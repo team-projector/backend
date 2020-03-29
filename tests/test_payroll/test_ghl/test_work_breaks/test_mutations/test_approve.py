@@ -62,7 +62,7 @@ def test_not_team_lead(ghl_auth_mock_info, approve_work_break_mutation):
     assert work_break.approve_state == ApprovedState.CREATED
 
 
-def test_other_team_teamlead(
+def test_other_team_teamlead(  # noqa: WPS211
     user,
     ghl_auth_mock_info,
     team,

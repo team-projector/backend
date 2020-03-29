@@ -17,9 +17,8 @@ def test_connection_anonymous(user, gql_client_anonymous):
       }
     }"""
 
-    data = gql_client_anonymous.execute(query)["data"]
-
-    assert data["allIssues"] is None
+    response = gql_client_anonymous.execute(query)["data"]
+    assert response["allIssues"] is None
 
 
 def test_connection_authenticated(admin_user, gql_client_authenticated):
@@ -43,9 +42,8 @@ def test_connection_authenticated(admin_user, gql_client_authenticated):
       }
     }"""
 
-    data = gql_client_authenticated.execute(query)["data"]
-
-    assert data["allIssues"]["count"] == 5
+    response = gql_client_authenticated.execute(query)["data"]
+    assert response["allIssues"]["count"] == 5
 
 
 def test_relay_node(admin_user, gql_client_authenticated):
@@ -59,6 +57,5 @@ def test_relay_node(admin_user, gql_client_authenticated):
       }
     }"""
 
-    data = gql_client_authenticated.execute(query)["data"]
-
-    assert int(data["issue"]["id"]) == 1
+    response = gql_client_authenticated.execute(query)["data"]
+    assert int(response["issue"]["id"]) == 1

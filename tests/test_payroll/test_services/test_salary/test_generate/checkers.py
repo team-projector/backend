@@ -4,7 +4,7 @@ from apps.payroll.models import Salary
 from apps.users.models import Position
 
 
-def check_salary(
+def check_salary(  # noqa: WPS211
     salary: Salary,
     charged_time: int = 0,
     sum: float = 0,  # noqa: A002

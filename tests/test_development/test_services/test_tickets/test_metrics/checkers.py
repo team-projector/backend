@@ -3,7 +3,7 @@
 from apps.development.services.ticket.metrics import TicketMetrics
 
 
-def check_ticket_metrics(
+def check_ticket_metrics(  # noqa: WPS211
     metrics: TicketMetrics,
     issues_count: int = 0,
     budget_estimate: float = 0.0,

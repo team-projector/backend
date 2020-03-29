@@ -65,7 +65,7 @@ def test_simple(team, team_developer, team_leader):
     assert len(metrics) == 2
 
     developer_metrics = next(
-        item.metrics for item in metrics if item.user == team_developer
+        metric.metrics for metric in metrics if metric.user == team_developer
     )
 
     assert len(developer_metrics) == 2
@@ -124,7 +124,7 @@ def test_efficiency_more100(team, team_developer, team_leader):
     assert len(metrics) == 2
 
     developer_metrics = next(
-        item.metrics for item in metrics if item.user == team_developer
+        metric.metrics for metric in metrics if metric.user == team_developer
     )
 
     assert len(developer_metrics) == 2
@@ -181,7 +181,7 @@ def test_efficiency_less100(team, team_developer):
     )
 
     developer_metrics = next(
-        item.metrics for item in metrics if item.user == team_developer
+        metric.metrics for metric in metrics if metric.user == team_developer
     )
 
     assert len(developer_metrics) == 2
@@ -238,7 +238,7 @@ def test_efficiency_zero_estimate(team, team_developer):
     )
 
     developer_metrics = next(
-        item.metrics for item in metrics if item.user == team_developer
+        metric.metrics for metric in metrics if metric.user == team_developer
     )
 
     assert len(developer_metrics) == 2
@@ -266,7 +266,7 @@ def test_efficiency_zero_spend(team, team_developer):
     )
 
     developer_metrics = next(
-        item.metrics for item in metrics if item.user == team_developer
+        metric.metrics for metric in metrics if metric.user == team_developer
     )
 
     assert len(developer_metrics) == 2
@@ -320,7 +320,7 @@ def test_many_weeks(team, team_developer):
     )
 
     developer_metrics = next(
-        item.metrics for item in metrics if item.user == team_developer
+        metric.metrics for metric in metrics if metric.user == team_developer
     )
 
     assert len(developer_metrics) == 2
@@ -378,7 +378,7 @@ def test_not_in_range(team, team_developer):
     )
 
     developer_metrics = next(
-        item.metrics for item in metrics if item.user == team_developer
+        metric.metrics for metric in metrics if metric.user == team_developer
     )
 
     assert len(developer_metrics) == 2
@@ -435,7 +435,7 @@ def test_another_user(team, team_developer):
     metrics = get_progress_metrics(team, start, end, "week")
 
     developer_metrics = next(
-        item.metrics for item in metrics if item.user == team_developer
+        metric.metrics for metric in metrics if metric.user == team_developer
     )
 
     assert len(developer_metrics) == 2
@@ -502,7 +502,7 @@ def test_many_issues(team, team_developer):
     )
 
     developer_metrics = next(
-        item.metrics for item in metrics if item.user == team_developer
+        metric.metrics for metric in metrics if metric.user == team_developer
     )
 
     assert len(developer_metrics) == 2

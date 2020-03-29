@@ -10,14 +10,13 @@ def template():
 
 
 def test_render(template):
-    data = {"duration": 125}
-    rendered = template.render(Context(data))
+    rendered = template.render(Context({"duration": 125}))
 
     assert rendered == "02:05"
 
 
 def test_render_not_valid(template):
-    data = {"duration": "bad value"}
-    rendered = template.render(Context(data))
+    context_data = {"duration": "bad value"}
+    rendered = template.render(Context(context_data))
 
-    assert rendered == data.get("duration")
+    assert rendered == context_data.get("duration")

@@ -4,7 +4,7 @@ from apps.development.models import Project, Team
 from apps.development.services.issue.summary.issue import IssuesSummary
 
 
-def check_summary(
+def check_summary(  # noqa: WPS211
     summary: IssuesSummary,
     count: int = 0,
     opened_count: int = 0,
@@ -12,6 +12,7 @@ def check_summary(
     time_spent: int = 0,
     problems_count: int = 0,
 ):
+    """Check issue summary."""
     assert summary.count == count
     assert summary.opened_count == opened_count
     assert summary.closed_count == closed_count
@@ -26,8 +27,14 @@ def check_project_stats(
     percentage: float = 0,
     remains: int = 0,
 ):
+    """Check projects stats."""
     stats = next(
-        (item for item in summary.projects if item.project == project), None,
+        (
+            project_stats
+            for project_stats in summary.projects
+            if project_stats.project == project
+        ),
+        None,
     )
 
     assert stats is not None
@@ -43,7 +50,15 @@ def check_team_stats(
     percentage: float = 0,
     remains: int = 0,
 ):
-    stats = next((item for item in summary.teams if item.team == team), None)
+    """Check teams stats."""
+    stats = next(
+        (
+            team_stats
+            for team_stats in summary.teams
+            if team_stats.team == team
+        ),
+        None,
+    )
 
     assert stats is not None
     assert stats.issues.opened_count == issues_opened_count

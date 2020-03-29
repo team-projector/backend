@@ -9,7 +9,7 @@ def test_change_email(user_admin, admin_rf):
     """Test normal email update."""
     user = UserFactory.create(email="old_@mail.com")
 
-    data = {
+    request_data = {
         "email": "new_@mail.com",
         "hour_rate": user.hour_rate,
         "customer_hour_rate": user.customer_hour_rate,
@@ -19,7 +19,8 @@ def test_change_email(user_admin, admin_rf):
     }
 
     response = user_admin.changeform_view(
-        admin_rf.post("/admin/users/user/", data), object_id=str(user.id),
+        admin_rf.post("/admin/users/user/", request_data),
+        object_id=str(user.id),
     )
 
     assert response.status_code == HTTPStatus.FOUND
@@ -32,7 +33,7 @@ def test_not_changed_email(user_admin, admin_rf):
     """Test same email update."""
     user = UserFactory.create(email="test@mail.com")
 
-    data = {
+    request_data = {
         "email": "test@mail.com",
         "hour_rate": user.hour_rate,
         "customer_hour_rate": user.customer_hour_rate,
@@ -41,7 +42,8 @@ def test_not_changed_email(user_admin, admin_rf):
     }
 
     user_admin.changeform_view(
-        admin_rf.post("/admin/users/user/", data), object_id=str(user.id),
+        admin_rf.post("/admin/users/user/", request_data),
+        object_id=str(user.id),
     )
 
     user.refresh_from_db()
@@ -53,7 +55,7 @@ def test_dublicate_email(user_admin, admin_rf):
     user = UserFactory.create(email="user@mail.com")
     another_user = UserFactory.create(email="another_user@mail.com")
 
-    data = {
+    request_data = {
         "email": user.email,
         "hour_rate": another_user.hour_rate,
         "customer_hour_rate": another_user.customer_hour_rate,
@@ -62,7 +64,7 @@ def test_dublicate_email(user_admin, admin_rf):
     }
 
     response = user_admin.changeform_view(
-        admin_rf.post("/admin/users/user/", data),
+        admin_rf.post("/admin/users/user/", request_data),
         object_id=str(another_user.id),
     )
 

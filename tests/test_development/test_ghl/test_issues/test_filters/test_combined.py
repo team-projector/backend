@@ -25,10 +25,10 @@ def test_filter_by_due_date_and_state(user):
         due_date=datetime.now() - timedelta(days=1),
     )
 
-    results = IssuesFilterSet(
+    issues = IssuesFilterSet(
         data={"due_date": datetime.now().date(), "state": IssueState.OPENED},
         queryset=Issue.objects.all(),
     ).qs
 
-    assert results.count() == 1
-    assert results.first() == issue
+    assert issues.count() == 1
+    assert issues.first() == issue

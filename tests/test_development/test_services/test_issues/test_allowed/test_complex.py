@@ -1,12 +1,13 @@
 # -*- coding: utf-8 -*-
 
+from tests.helpers import lists
 from tests.test_development.factories import IssueFactory, ProjectFactory
 from tests.test_development.test_services.test_issues.test_allowed import (
     helpers,
 )
 
 
-def test_complex(
+def test_complex(  # noqa: WPS211
     project,
     team_watcher,
     team_leader,
@@ -39,8 +40,9 @@ def test_complex(
     IssueFactory.create_batch(10, project=project3)
 
     helpers.check_allowed_for_user(team_watcher, issues)
-    team_leader_issues = [issues[index] for index in (0, 1, 2, 4, 5)]
-    helpers.check_allowed_for_user(team_leader, team_leader_issues)
     helpers.check_allowed_for_user(
-        team_developer, [issues[2], issues[4], issues[5]],
+        team_leader, lists.sub_list(issues, (0, 1, 2, 4, 5)),
+    )
+    helpers.check_allowed_for_user(
+        team_developer, lists.sub_list(issues, (2, 4, 5)),
     )

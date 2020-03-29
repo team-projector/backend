@@ -55,14 +55,14 @@ def test_filter_by_salary(user, user2, issue, salary):
         ),
     }
 
-    results = SpentTimeFilterSet(
+    queryset = SpentTimeFilterSet(
         data={"salary": salary.pk},
         queryset=SpentTime.objects.all(),
         request=None,
     ).qs
 
-    assert results.count() == 2
-    assert set(results) == spends
+    assert queryset.count() == 2
+    assert set(queryset) == spends
 
 
 def test_filter_by_date(user, user2, issue):
@@ -90,14 +90,14 @@ def test_filter_by_date(user, user2, issue):
         ),
     }
 
-    results = SpentTimeFilterSet(
+    queryset = SpentTimeFilterSet(
         data={"date": "2020-03-03"},
         queryset=SpentTime.objects.all(),
         request=None,
     ).qs
 
-    assert results.count() == 2
-    assert set(results) == spends
+    assert queryset.count() == 2
+    assert set(queryset) == spends
 
 
 def test_by_date_and_user(user, user2, issue):
@@ -131,14 +131,14 @@ def test_by_date_and_user(user, user2, issue):
         time_spent=int(seconds(hours=5)),
     )
 
-    results = SpentTimeFilterSet(
+    queryset = SpentTimeFilterSet(
         data={"date": "2019-03-03", "user": user.pk},
         queryset=SpentTime.objects.all(),
         request=None,
     ).qs
 
-    assert results.count() == 1
-    assert results[0] == spend
+    assert queryset.count() == 1
+    assert queryset[0] == spend
 
 
 def test_filter_by_project(user):
@@ -161,21 +161,21 @@ def test_filter_by_project(user):
         ),
     ]
 
-    results = SpentTimeFilterSet(
+    queryset = SpentTimeFilterSet(
         data={"project": projects[0].pk},
         queryset=SpentTime.objects.all(),
         request=None,
     ).qs
 
-    assert set(results) == {*spends[:2]}
+    assert set(queryset) == {*spends[:2]}
 
-    results = SpentTimeFilterSet(
+    queryset = SpentTimeFilterSet(
         data={"project": projects[1].pk},
         queryset=SpentTime.objects.all(),
         request=None,
     ).qs
 
-    assert set(results) == {*spends[2:]}
+    assert set(queryset) == {*spends[2:]}
 
 
 def test_filter_by_team(user, user2, make_team_leader):
@@ -202,21 +202,21 @@ def test_filter_by_team(user, user2, make_team_leader):
         ),
     ]
 
-    results = SpentTimeFilterSet(
+    queryset = SpentTimeFilterSet(
         data={"team": teams[0].id},
         queryset=SpentTime.objects.all(),
         request=None,
     ).qs
 
-    assert set(results) == {*spends[:2]}
+    assert set(queryset) == {*spends[:2]}
 
-    results = SpentTimeFilterSet(
+    queryset = SpentTimeFilterSet(
         data={"team": teams[1].id},
         queryset=SpentTime.objects.all(),
         request=None,
     ).qs
 
-    assert set(results) == {*spends[2:]}
+    assert set(queryset) == {*spends[2:]}
 
 
 def test_order_by_date(user, issue):
@@ -249,21 +249,21 @@ def test_order_by_date(user, issue):
         ),
     ]
 
-    results = SpentTimeFilterSet(
+    queryset = SpentTimeFilterSet(
         data={"order_by": "date"},
         queryset=SpentTime.objects.all(),
         request=None,
     ).qs
 
-    assert list(results) == lists.sub_list(spends, (0, 2, 1, 3))
+    assert list(queryset) == lists.sub_list(spends, (0, 2, 1, 3))
 
-    results = SpentTimeFilterSet(
+    queryset = SpentTimeFilterSet(
         data={"order_by": "-date"},
         queryset=SpentTime.objects.all(),
         request=None,
     ).qs
 
-    assert list(results) == lists.sub_list(spends, (3, 1, 2, 0))
+    assert list(queryset) == lists.sub_list(spends, (3, 1, 2, 0))
 
 
 def test_filter_by_state(user):
@@ -289,13 +289,13 @@ def test_filter_by_state(user):
         )
     ]
 
-    results = SpentTimeFilterSet(
+    queryset = SpentTimeFilterSet(
         data={"state": "OPENED"},
         queryset=SpentTime.objects.all(),
         request=None,
     ).qs
 
-    assert Counter(results) == Counter([i_opened, m_opened])
+    assert Counter(queryset) == Counter([i_opened, m_opened])
 
 
 def test_filter_by_state_all(user):
@@ -311,9 +311,9 @@ def test_filter_by_state_all(user):
         ),
     ]
 
-    results = SpentTimeFilterSet(
+    queryset = SpentTimeFilterSet(
         data={"state": "all"}, queryset=SpentTime.objects.all(), request=None,
     ).qs
 
-    assert len(results) == 2
-    assert Counter(results) == Counter(spends)
+    assert len(queryset) == 2
+    assert Counter(queryset) == Counter(spends)

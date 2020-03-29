@@ -22,14 +22,14 @@ def test_filter_by_milestone(user, auth_rf):
         2, user=user, milestone=ProjectMilestoneFactory.create(),
     )
 
-    results = IssuesFilterSet(
+    queryset = IssuesFilterSet(
         data={"milestone": milestone.pk},
         queryset=Issue.objects.all(),
         request=auth_rf.get("/"),
     ).qs
 
-    assert results.count() == 3
-    assert all(item.milestone == milestone for item in results)
+    assert queryset.count() == 3
+    assert all(issue.milestone == milestone for issue in queryset)
 
 
 def test_not_project_manager(user, auth_rf):

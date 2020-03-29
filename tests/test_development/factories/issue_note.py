@@ -16,7 +16,7 @@ class IssueNoteFactory(factory.django.DjangoModelFactory):
         tzinfo=pytz.UTC,
     )
     content_object = factory.SubFactory(IssueFactory)
-    data = {}
+    data = {}  # noqa: WPS110
 
     class Meta:
         model = Note

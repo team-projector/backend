@@ -9,12 +9,12 @@ def test_by_title_single(user):
     issue = IssueFactory.create(title="create", user=user, gl_url="foobar")
     IssueFactory.create(title="react", user=user)
 
-    results = IssuesFilterSet(
+    queryset = IssuesFilterSet(
         data={"q": "ate"}, queryset=Issue.objects.all(),
     ).qs
 
-    assert results.count() == 1
-    assert results.first() == issue
+    assert queryset.count() == 1
+    assert queryset.first() == issue
 
 
 def test_by_title_many(user):
@@ -23,30 +23,30 @@ def test_by_title_many(user):
         IssueFactory.create(title="react", user=user),
     ]
 
-    results = IssuesFilterSet(
+    queryset = IssuesFilterSet(
         data={"q": "rea"}, queryset=Issue.objects.all(),
     ).qs
 
-    assert results.count() == 2
-    assert set(results) == set(issues)
+    assert queryset.count() == 2
+    assert set(queryset) == set(issues)
 
 
-def test_empty_results(user):
+def test_empty_queryset(user):
     IssueFactory.create(title="issue", user=user)
 
-    results = IssuesFilterSet(
+    queryset = IssuesFilterSet(
         data={"q": "012345"}, queryset=Issue.objects.all(),
     ).qs
 
-    assert not results.exists()
+    assert not queryset.exists()
 
 
 def test_by_gl_url(user):
     issue = IssueFactory.create(title="create", user=user, gl_url="foobar")
 
-    results = IssuesFilterSet(
+    queryset = IssuesFilterSet(
         data={"q": "foobar"}, queryset=Issue.objects.all(),
     ).qs
 
-    assert results.count() == 1
-    assert results.first() == issue
+    assert queryset.count() == 1
+    assert queryset.first() == issue

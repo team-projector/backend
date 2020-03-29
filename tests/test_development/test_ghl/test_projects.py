@@ -14,11 +14,12 @@ from tests.test_development.factories import (
 
 def test_project(user, client):
     client.user = user
-    info = AttrDict({"context": client})
-
     project = ProjectFactory.create()
 
-    assert ProjectType().get_node(info, project.id) == project
+    assert (
+        ProjectType().get_node(AttrDict({"context": client}), project.id)
+        == project
+    )
 
 
 def test_project_milestones(user, client):
@@ -32,17 +33,15 @@ def test_project_milestones(user, client):
     )
 
     client.user = user
-    info = AttrDict({"context": client})
-
     milestones = ProjectMilestonesResolver(
-        project=project, info=info, active=True,
+        project=project, info=AttrDict({"context": client}), active=True,
     ).execute()
 
     assert milestones.count() == 1
     assert milestones.first() == milestone1
 
     milestones = ProjectMilestonesResolver(
-        project=project, info=info, active=False,
+        project=project, info=AttrDict({"context": client}), active=False,
     ).execute()
 
     assert milestones.count() == 1
@@ -65,17 +64,16 @@ def test_project_group_milestones(user, client):
     )
 
     client.user = user
-    info = AttrDict({"context": client})
 
     milestones = ProjectMilestonesResolver(
-        project=project, info=info, active=True,
+        project=project, info=AttrDict({"context": client}), active=True,
     ).execute()
 
     assert milestones.count() == 1
     assert milestones.first() == milestone1
 
     milestones = ProjectMilestonesResolver(
-        project=project, info=info, active=False,
+        project=project, info=AttrDict({"context": client}), active=False,
     ).execute()
 
     assert milestones.count() == 1
@@ -100,17 +98,16 @@ def test_project_group_parent_milestones(user, client):
     )
 
     client.user = user
-    info = AttrDict({"context": client})
 
     milestones = ProjectMilestonesResolver(
-        project=project, info=info, active=True,
+        project=project, info=AttrDict({"context": client}), active=True,
     ).execute()
 
     assert milestones.count() == 1
     assert milestones.first() == milestone1
 
     milestones = ProjectMilestonesResolver(
-        project=project, info=info, active=False,
+        project=project, info=AttrDict({"context": client}), active=False,
     ).execute()
 
     assert milestones.count() == 1
@@ -126,12 +123,15 @@ def test_resolve_milestones(user, client):
     )
 
     client.user = user
-    info = AttrDict({"context": client})
 
-    parent = ProjectType.get_node(info, obj_id=project.id)
+    parent = ProjectType.get_node(
+        AttrDict({"context": client}), obj_id=project.id,
+    )
     parent.parent_type = None
 
-    milestones = ProjectType.resolve_milestones(parent, info, active=False)
+    milestones = ProjectType.resolve_milestones(
+        parent, AttrDict({"context": client}), active=False,
+    )
 
     assert milestones.count() == 1
     assert milestones.first() == milestone2

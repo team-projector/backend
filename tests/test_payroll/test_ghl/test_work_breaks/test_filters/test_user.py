@@ -11,16 +11,16 @@ def test_filter_by_user(team_leader, team_developer):
         WorkBreakFactory.create(user=team_developer),
     ]
 
-    results = WorkBreakFilterSet(
+    queryset = WorkBreakFilterSet(
         data={"user": team_leader.pk}, queryset=WorkBreak.objects.all(),
     ).qs
 
-    assert results.count() == 1
-    assert results.first() == work_breaks[0]
+    assert queryset.count() == 1
+    assert queryset.first() == work_breaks[0]
 
-    results = WorkBreakFilterSet(
+    queryset = WorkBreakFilterSet(
         data={"user": team_developer.pk}, queryset=WorkBreak.objects.all(),
     ).qs
 
-    assert results.count() == 1
-    assert results.first() == work_breaks[1]
+    assert queryset.count() == 1
+    assert queryset.first() == work_breaks[1]

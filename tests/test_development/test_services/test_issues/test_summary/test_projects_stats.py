@@ -85,10 +85,8 @@ def test_sort_projects_by_milestone_flat(db):
 
         projects.append(milestone.owner)
 
-    results = sorted(projects, key=get_min_due_date)
-
     expected = [project.id for project in projects]
-    actual = [project.id for project in results]
+    actual = [project.id for project in sorted(projects, key=get_min_due_date)]
 
     assert expected == actual
 
@@ -113,9 +111,7 @@ def test_sort_projects_by_milestone_neested(db):
 
         projects.append(project)
 
-    results = sorted(projects, key=get_min_due_date)
-
     expected = [project.id for project in projects][::-1]
-    actual = [project.id for project in results]
+    actual = [project.id for project in sorted(projects, key=get_min_due_date)]
 
     assert expected == actual

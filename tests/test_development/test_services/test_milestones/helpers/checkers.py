@@ -3,7 +3,7 @@
 from apps.development.services.milestone.metrics import MilestoneMetrics
 
 
-def check_milestone_metrics(
+def check_milestone_metrics(  # noqa: WPS211
     metrics: MilestoneMetrics,
     budget: float = 0.0,
     payroll: float = 0.0,

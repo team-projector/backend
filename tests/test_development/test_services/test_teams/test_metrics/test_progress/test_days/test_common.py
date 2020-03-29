@@ -65,7 +65,7 @@ def test_simple(team, team_developer, team_leader):
     assert len(metrics) == 2
 
     developer_metrics = next(
-        item.metrics for item in metrics if item.user == team_developer
+        metric.metrics for metric in metrics if metric.user == team_developer
     )
 
     assert len(developer_metrics) == (end - start).days + 1
@@ -118,7 +118,7 @@ def test_negative_remains(team, team_developer, team_leader):
     assert len(metrics) == 2
 
     developer_metrics = next(
-        item.metrics for item in metrics if item.user == team_developer
+        metric.metrics for metric in metrics if metric.user == team_developer
     )
 
     assert len(developer_metrics) == (end - start).days + 1
@@ -179,7 +179,7 @@ def test_loading_day_already_has_spends(team, team_developer, team_leader):
     assert len(metrics) == 2
 
     developer_metrics = next(
-        item.metrics for item in metrics if item.user == team_developer
+        metric.metrics for metric in metrics if metric.user == team_developer
     )
 
     assert len(developer_metrics) == (end - start).days + 1
@@ -239,7 +239,7 @@ def test_not_in_range(team, team_developer, team_leader):
     metrics = get_progress_metrics(team, start, end, "day")
 
     developer_metrics = next(
-        item.metrics for item in metrics if item.user == team_developer
+        metric.metrics for metric in metrics if metric.user == team_developer
     )
 
     assert len(developer_metrics) == (end - start).days + 1
@@ -297,7 +297,7 @@ def test_another_user_not_in_team(team, team_developer, team_leader):
     )
 
     assert len(metrics) == 2
-    assert any(item.user == another_user for item in metrics) is False
+    assert not any(metric.user == another_user for metric in metrics)
 
 
 def test_another_user_in_team(
@@ -344,7 +344,7 @@ def test_another_user_in_team(
     assert len(metrics) == 3
 
     developer_metrics = next(
-        item.metrics for item in metrics if item.user == team_developer
+        metric.metrics for metric in metrics if metric.user == team_developer
     )
 
     assert len(developer_metrics) == (end - start).days + 1
@@ -362,7 +362,7 @@ def test_another_user_in_team(
     )
 
     another_user_metrics = next(
-        item.metrics for item in metrics if item.user == another_user
+        metric.metrics for metric in metrics if metric.user == another_user
     )
 
     assert len(another_user_metrics) == (end - start).days + 1

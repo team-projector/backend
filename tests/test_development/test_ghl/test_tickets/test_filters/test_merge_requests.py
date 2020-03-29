@@ -25,18 +25,18 @@ def test_filter_by_user(team_leader, team_developer):
     MergeRequestFactory.create(user=team_developer)
     MergeRequestFactory.create_batch(3, user=team_leader)
 
-    results = MergeRequestFilterSet(
+    queryset = MergeRequestFilterSet(
         data={"user": team_developer.pk}, queryset=MergeRequest.objects.all(),
     ).qs
 
-    assert results.count() == 1
-    assert results.first().user == team_developer
+    assert queryset.count() == 1
+    assert queryset.first().user == team_developer
 
-    results = MergeRequestFilterSet(
+    queryset = MergeRequestFilterSet(
         data={"user": team_leader.pk}, queryset=MergeRequest.objects.all(),
     ).qs
 
-    assert results.count() == 3
+    assert queryset.count() == 3
 
 
 def test_filter_by_state(user):
@@ -47,21 +47,21 @@ def test_filter_by_state(user):
         user=user, state=MergeRequestState.CLOSED,
     )
 
-    results = MergeRequestFilterSet(
+    queryset = MergeRequestFilterSet(
         data={"state": MergeRequestState.CLOSED},
         queryset=MergeRequest.objects.all(),
     ).qs
 
-    assert results.count() == 1
-    assert results.first() == merge_request_closed
+    assert queryset.count() == 1
+    assert queryset.first() == merge_request_closed
 
-    results = MergeRequestFilterSet(
+    queryset = MergeRequestFilterSet(
         data={"state": MergeRequestState.OPENED},
         queryset=MergeRequest.objects.all(),
     ).qs
 
-    assert results.count() == 1
-    assert results.first() == merge_request_opened
+    assert queryset.count() == 1
+    assert queryset.first() == merge_request_opened
 
 
 def test_filter_by_projects(user):
@@ -73,19 +73,19 @@ def test_filter_by_projects(user):
         3, user=user, project=ProjectFactory.create(),
     )
 
-    results = MergeRequestFilterSet(
+    queryset = MergeRequestFilterSet(
         data={"project": projects[0].id}, queryset=MergeRequest.objects.all(),
     ).qs
 
-    assert results.count() == 1
-    assert results.first().project == projects[0]
+    assert queryset.count() == 1
+    assert queryset.first().project == projects[0]
 
-    results = MergeRequestFilterSet(
+    queryset = MergeRequestFilterSet(
         data={"project": projects[1].id}, queryset=MergeRequest.objects.all(),
     ).qs
 
-    assert results.count() == 1
-    assert results.first().project == projects[1]
+    assert queryset.count() == 1
+    assert queryset.first().project == projects[1]
 
 
 def test_ordering(user):
@@ -94,10 +94,10 @@ def test_ordering(user):
         for title in ("agent", "cloud", "bar")
     ]
 
-    results = MergeRequestFilterSet(
+    queryset = MergeRequestFilterSet(
         data={"order_by": "title"}, queryset=MergeRequest.objects.all(),
     ).qs
-    assert list(results) == lists.sub_list(merge_requests, (0, 2, 1))
+    assert list(queryset) == lists.sub_list(merge_requests, (0, 2, 1))
 
 
 def test_ordering_desc(user):
@@ -106,7 +106,7 @@ def test_ordering_desc(user):
         for title in ("agent", "cloud", "bar")
     ]
 
-    results = MergeRequestFilterSet(
+    queryset = MergeRequestFilterSet(
         data={"order_by": "-title"}, queryset=MergeRequest.objects.all(),
     ).qs
-    assert list(results) == lists.sub_list(merge_requests, (1, 2, 0))
+    assert list(queryset) == lists.sub_list(merge_requests, (1, 2, 0))

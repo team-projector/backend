@@ -16,14 +16,14 @@ def test_by_ticket(user, auth_rf):
     IssueFactory.create_batch(3, user=user, ticket=ticket)
     IssueFactory.create_batch(2, user=user, ticket=TicketFactory.create())
 
-    results = IssuesFilterSet(
+    issues = IssuesFilterSet(
         data={"ticket": ticket.pk},
         queryset=Issue.objects.all(),
         request=auth_rf.get("/"),
     ).qs
 
-    assert results.count() == 3
-    assert all(item.ticket == ticket for item in results)
+    assert issues.count() == 3
+    assert all(issue.ticket == ticket for issue in issues)
 
 
 def test_not_project_manager(user, auth_rf):

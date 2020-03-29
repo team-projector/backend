@@ -12,12 +12,12 @@ def test_bonuses_filter_by_user(user):
     user2 = UserFactory.create()
     bonuses_user2 = BonusFactory.create_batch(size=5, user=user2)
 
-    results = BonusFilterSet(
+    queryset = BonusFilterSet(
         data={"user": user2.id}, queryset=Bonus.objects.all(),
     ).qs
 
-    assert results.count() == 5
-    assert set(results) == set(bonuses_user2)
+    assert queryset.count() == 5
+    assert set(queryset) == set(bonuses_user2)
 
 
 def test_bonuses_filter_by_salary(user):
@@ -27,9 +27,9 @@ def test_bonuses_filter_by_salary(user):
         size=5, user=user, salary=salary,
     )
 
-    results = BonusFilterSet(
+    queryset = BonusFilterSet(
         data={"salary": salary.id}, queryset=Bonus.objects.all(),
     ).qs
 
-    assert results.count() == 5
-    assert set(results) == set(bonuses_salary2)
+    assert queryset.count() == 5
+    assert set(queryset) == set(bonuses_salary2)

@@ -53,9 +53,10 @@ def test_resolver(user, client):
     add_action_task.delay(sender_id=user.id, verb=ACTION_GITLAB_CALL_API)
 
     client.user = user
-    info = AttrDict({"context": client})
 
-    sync_status = resolve_gitlab_status(parent=None, info=info)
+    sync_status = resolve_gitlab_status(
+        parent=None, info=AttrDict({"context": client}),
+    )
 
     assert sync_status.last_sync == project.gl_last_sync
     assert set(

@@ -14,11 +14,11 @@ def test_by_title_asc(user):
         IssueFactory.create(title="cloud", user=user),
     ]
 
-    results = IssuesFilterSet(
+    queryset = IssuesFilterSet(
         data={"order_by": "title"}, queryset=Issue.objects.all(),
     ).qs
 
-    assert list(results) == issues
+    assert list(queryset) == issues
 
 
 def test_by_title_desc(user):
@@ -28,11 +28,11 @@ def test_by_title_desc(user):
         IssueFactory.create(title="cloud", user=user),
     ]
 
-    results = IssuesFilterSet(
+    queryset = IssuesFilterSet(
         data={"order_by": "-title"}, queryset=Issue.objects.all(),
     ).qs
 
-    assert list(results) == issues[::-1]
+    assert list(queryset) == issues[::-1]
 
 
 def test_by_due_date_asc(user):
@@ -46,11 +46,11 @@ def test_by_due_date_asc(user):
         ),
     ]
 
-    results = IssuesFilterSet(
+    queryset = IssuesFilterSet(
         data={"order_by": "dueDate"}, queryset=Issue.objects.all(),
     ).qs
 
-    assert list(results) == issues
+    assert list(queryset) == issues
 
 
 def test_by_due_date_desc(user):
@@ -64,8 +64,8 @@ def test_by_due_date_desc(user):
         ),
     ]
 
-    results = IssuesFilterSet(
+    queryset = IssuesFilterSet(
         data={"order_by": "-dueDate"}, queryset=Issue.objects.all(),
     ).qs
 
-    assert list(results) == issues[::-1]
+    assert list(queryset) == issues[::-1]

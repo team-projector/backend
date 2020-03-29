@@ -21,12 +21,12 @@ def test_by_team_with_one_member(user):
     IssueFactory.create_batch(2, user=user)
     IssueFactory.create_batch(5, user=UserFactory.create())
 
-    results = IssuesFilterSet(
+    queryset = IssuesFilterSet(
         data={"team": team.id}, queryset=Issue.objects.all(),
     ).qs
 
-    assert results.count() == 2
-    assert all(issue.user == user for issue in results) is True
+    assert queryset.count() == 2
+    assert all(issue.user == user for issue in queryset)
 
 
 def test_by_team_with_many_members(user):
@@ -46,12 +46,12 @@ def test_by_team_with_many_members(user):
 
     IssueFactory.create_batch(4, user=UserFactory.create())
 
-    results = IssuesFilterSet(
+    queryset = IssuesFilterSet(
         data={"team": team.id}, queryset=Issue.objects.all(),
     ).qs
 
-    assert results.count() == 5
-    assert all(issue.user in {user, another_user} for issue in results)
+    assert queryset.count() == 5
+    assert all(issue.user in {user, another_user} for issue in queryset)
 
 
 def test_by_team_with_watcher(user):
@@ -74,16 +74,16 @@ def test_by_team_with_watcher(user):
         user=another_user, team=another_team, roles=TeamMember.roles.DEVELOPER,
     )
 
-    results = IssuesFilterSet(
+    queryset = IssuesFilterSet(
         data={"team": team.id}, queryset=Issue.objects.all(),
     ).qs
 
-    assert results.count() == 2
-    assert all(issue.user == user for issue in results) is True
+    assert queryset.count() == 2
+    assert all(issue.user == user for issue in queryset)
 
-    results = IssuesFilterSet(
+    queryset = IssuesFilterSet(
         data={"team": another_team.id}, queryset=Issue.objects.all(),
     ).qs
 
-    assert results.count() == 3
-    assert all(issue.user == another_user for issue in results) is True
+    assert queryset.count() == 3
+    assert all(issue.user == another_user for issue in queryset)

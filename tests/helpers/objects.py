@@ -10,9 +10,9 @@ class AttrDict(dict):  # delete
         self.__dict__ = self
 
 
-def model_to_dict_form(data: dict) -> dict:
-    def replace(value):
-        return "" if value is None else value
-
-    original = model_to_dict(data)
-    return {key: replace(value) for key, value in original.items()}
+def model_to_dict_form(object_data: dict) -> dict:
+    original = model_to_dict(object_data)
+    return {
+        field_key: "" if field_value is None else field_value
+        for field_key, field_value in original.items()
+    }

@@ -3,7 +3,7 @@
 from apps.development.services.team.metrics.main import TeamMetrics
 
 
-def check_team_metrics(
+def check_team_metrics(  # noqa: WPS211
     metrics: TeamMetrics,
     problems_count=0,
     issues_count=0,
