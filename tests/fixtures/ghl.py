@@ -44,19 +44,19 @@ def ghl_mutations():
     return schema.get_mutation_type()
 
 
-@pytest.fixture()  # type: ignore
+@pytest.fixture()
 def ghl_client() -> GraphQLClient:
     return GraphQLClient()
 
 
-@pytest.fixture()  # type: ignore
+@pytest.fixture()
 def ghl_auth_mock_info(user, auth_rf) -> ResolveInfo:
     request = auth_rf.get("/graphql/")
 
     return _get_mock_info(request)
 
 
-@pytest.fixture()  # type: ignore
+@pytest.fixture()
 def ghl_mock_info(rf) -> ResolveInfo:
     request = rf.get("/graphql/")
 

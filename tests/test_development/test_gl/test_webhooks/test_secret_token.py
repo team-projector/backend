@@ -16,7 +16,7 @@ from tests.test_development.test_gl.helpers import (
 from tests.test_users.factories.gitlab import GlUserFactory
 
 
-@pytest.fixture(autouse=True)  # type: ignore
+@pytest.fixture(autouse=True)
 def _gitlab_webhook_secret_token(settings) -> None:
     """Set test gitlab token."""
     settings.GITLAB_WEBHOOK_SECRET_TOKEN = "SECRET_TOKEN"

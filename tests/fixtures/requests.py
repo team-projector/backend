@@ -6,13 +6,13 @@ from tests.helpers.api_request_factory import ApiRequestFactory
 from tests.helpers.request_factory import RequestFactory
 
 
-@pytest.fixture()  # type: ignore
+@pytest.fixture()
 def rf() -> RequestFactory:
     """Request factory."""
     return RequestFactory()
 
 
-@pytest.fixture()  # type: ignore
+@pytest.fixture()
 def auth_rf(rf, user) -> RequestFactory:
     """Request factory with setted user."""
     rf.set_user(user)
@@ -20,7 +20,7 @@ def auth_rf(rf, user) -> RequestFactory:
     return rf
 
 
-@pytest.fixture()  # type: ignore
+@pytest.fixture()
 def admin_rf(rf, admin_user) -> RequestFactory:
     """Admin request factory with setted admin user."""
     rf.set_user(admin_user)
@@ -28,7 +28,7 @@ def admin_rf(rf, admin_user) -> RequestFactory:
     return rf
 
 
-@pytest.fixture()  # type: ignore
+@pytest.fixture()
 def api_rf() -> ApiRequestFactory:
     """Api request factory."""
     return ApiRequestFactory()

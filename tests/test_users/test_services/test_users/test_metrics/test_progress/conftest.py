@@ -6,7 +6,7 @@ import pytest
 from freezegun import freeze_time
 
 
-@pytest.fixture(autouse=True)  # type: ignore
+@pytest.fixture(autouse=True)
 def _weekends_days(settings) -> None:
     """Set test gitlab token."""
     settings.TP_WEEKENDS_DAYS = []

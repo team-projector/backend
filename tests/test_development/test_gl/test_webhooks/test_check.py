@@ -22,7 +22,7 @@ CREATE_WEBHOOK_BODY = types.MappingProxyType(
 )
 
 
-@pytest.fixture(autouse=True)  # type: ignore
+@pytest.fixture(autouse=True)
 def _gitlab_check_webhooks(settings) -> None:
     """Set check webhooks."""
     settings.GITLAB_CHECK_WEBHOOKS = True

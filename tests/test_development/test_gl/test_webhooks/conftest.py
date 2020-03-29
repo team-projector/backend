@@ -5,7 +5,7 @@ import pytest
 from apps.development.api.views import GlWebhookView
 
 
-@pytest.fixture(autouse=True)  # type: ignore
+@pytest.fixture(autouse=True)
 def _gitlab_webhook_secret_token(settings) -> None:
     """Set test gitlab token."""
     settings.GITLAB_WEBHOOK_SECRET_TOKEN = None

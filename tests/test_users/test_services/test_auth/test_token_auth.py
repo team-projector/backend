@@ -13,12 +13,12 @@ from apps.users.models import Token, User
 from apps.users.services.token.create import create_user_token
 
 
-@pytest.fixture()  # type: ignore
+@pytest.fixture()
 def auth() -> TokenAuthentication:
     return TokenAuthentication()
 
 
-@pytest.fixture()  # type: ignore
+@pytest.fixture()
 def user_token(user: User) -> Token:
     return create_user_token(user)
 
