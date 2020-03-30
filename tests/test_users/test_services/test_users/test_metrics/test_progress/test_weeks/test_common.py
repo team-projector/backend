@@ -466,9 +466,9 @@ def test_many_issues(user):
     )["spent"]
     another_issue.save()
 
-    start = monday - timedelta(days=5)
-    end = monday + timedelta(days=5)
-    metrics = get_progress_metrics(user, start, end, "week")
+    metrics = get_progress_metrics(
+        user, monday - timedelta(days=5), monday + timedelta(days=5), "week",
+    )
 
     assert len(metrics) == 2
     checkers.check_user_progress_metrics(

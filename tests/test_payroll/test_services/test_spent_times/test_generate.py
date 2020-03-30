@@ -271,40 +271,40 @@ def test_spents_but_moved_from(user):
 def test_spents_with_resets_but_moved_from(user):
     issue = IssueFactory.create()
 
-    spent_before = _create_note(
-        user,
-        issue,
-        NoteType.TIME_SPEND,
-        timezone.now() - timedelta(hours=2),
-        timedelta(hours=1),
-    )
-
-    moved_from = _create_note(
-        user, issue, NoteType.MOVED_FROM, timezone.now() - timedelta(hours=1),
-    )
-
-    spent_after = _create_note(
-        user,
-        issue,
-        NoteType.TIME_SPEND,
-        timezone.now() - timedelta(minutes=30),
-        timedelta(hours=5),
-    )
-
-    reset_spend = _create_note(
-        user,
-        issue,
-        NoteType.RESET_SPEND,
-        timezone.now() - timedelta(minutes=15),
-    )
+    notes = [
+        _create_note(
+            user,
+            issue,
+            NoteType.TIME_SPEND,
+            timezone.now() - timedelta(hours=2),
+            timedelta(hours=1),
+        ),
+        _create_note(
+            user, issue, NoteType.MOVED_FROM,
+            timezone.now() - timedelta(hours=1),
+        ),
+        _create_note(
+            user,
+            issue,
+            NoteType.TIME_SPEND,
+            timezone.now() - timedelta(minutes=30),
+            timedelta(hours=5),
+        ),
+        _create_note(
+            user,
+            issue,
+            NoteType.RESET_SPEND,
+            timezone.now() - timedelta(minutes=15),
+        ),
+    ]
 
     issue.adjust_spent_times()
 
-    assert not SpentTime.objects.filter(note=spent_before).exists()
-    assert not SpentTime.objects.filter(note=moved_from).exists()
-    assert SpentTime.objects.filter(note=spent_after).exists()
+    assert not SpentTime.objects.filter(note=notes[0]).exists()
+    assert not SpentTime.objects.filter(note=notes[1]).exists()
+    assert SpentTime.objects.filter(note=notes[2]).exists()
 
-    reset_spent_time = SpentTime.objects.filter(note=reset_spend).first()
+    reset_spent_time = SpentTime.objects.filter(note=notes[3]).first()
     assert reset_spent_time is not None
     assert reset_spent_time.time_spent == -timedelta(hours=5).total_seconds()
 
