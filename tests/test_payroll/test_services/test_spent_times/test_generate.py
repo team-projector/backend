@@ -280,7 +280,9 @@ def test_spents_with_resets_but_moved_from(user):
             timedelta(hours=1),
         ),
         _create_note(
-            user, issue, NoteType.MOVED_FROM,
+            user,
+            issue,
+            NoteType.MOVED_FROM,
             timezone.now() - timedelta(hours=1),
         ),
         _create_note(
