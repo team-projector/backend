@@ -21,9 +21,6 @@ DATABASES = {
     },
 }
 
-STATIC_ROOT = "/var/www/static"
-MEDIA_ROOT = "/var/www/media"
-
 GITLAB_TOKEN = config("DJANGO_GITLAB_TOKEN")
 
 SOCIAL_AUTH_GITLAB_REDIRECT_URI = "https://{0}/en/signup/login".format(

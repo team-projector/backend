@@ -13,5 +13,3 @@ DATABASES = {
 }
 
 CELERY_TASK_ALWAYS_EAGER = True
-
-BASE_URL = "http://localhost:8000"
