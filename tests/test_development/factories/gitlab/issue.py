@@ -25,3 +25,4 @@ class GlIssueFactory(factory.DictFactory):
     assignee = factory.SubFactory(GlUserFactory)
     labels = []
     milestone = factory.SubFactory(GlProjectMilestoneFactory)
+    description = factory.Faker("text", max_nb_chars=50)

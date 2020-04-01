@@ -17,6 +17,7 @@ class NoteType(models.TextChoices):
     TIME_SPEND = "TIME_SPEND", _("CH__TIME_SPEND")  # noqa: WPS115
     RESET_SPEND = "RESET_SPEND", _("CH__RESET_SPEND")  # noqa: WPS115
     MOVED_FROM = "MOVED_FROM", _("CH__MOVED_FROM")  # noqa: WPS115
+    COMMENT = "COMMENT", _("CH__COMMENT")  # noqa: WPS115
 
 
 NOTE_TYPE_MAX_LENGTH = 20

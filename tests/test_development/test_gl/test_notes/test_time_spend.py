@@ -9,7 +9,9 @@ from apps.core.utils.objects import dict2obj
 from apps.core.utils.time import seconds
 from apps.development.models import Note
 from apps.development.models.note import NoteType
-from apps.development.services.note.gitlab import SPEND_RESET_MESSAGE
+from apps.development.services.note.notes_parsers.base import (
+    SPEND_RESET_MESSAGE,
+)
 from tests.test_development.factories import IssueFactory
 
 

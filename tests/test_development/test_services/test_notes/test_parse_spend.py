@@ -4,7 +4,7 @@ from datetime import timedelta
 
 import pytest
 
-from apps.development.services.note.gitlab import parse_spend
+from apps.development.services.note.notes_parsers.base import parse_spend
 
 
 @pytest.mark.parametrize(
