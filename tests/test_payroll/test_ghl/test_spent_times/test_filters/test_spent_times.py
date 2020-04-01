@@ -65,6 +65,37 @@ def test_filter_by_salary(user, user2, issue, salary):
     assert set(queryset) == spends
 
 
+def test_filter_by_salary_not_exists(user, user2, issue, salary):
+    """Will getting all TimeSpents, salary not exists will ignored."""
+    IssueSpentTimeFactory.create(
+        date=timezone.now() - timedelta(hours=2), user=user2, base=issue,
+    )
+    IssueSpentTimeFactory.create(
+        date=timezone.now() - timedelta(hours=1), user=user2, base=issue,
+    )
+    IssueSpentTimeFactory.create(
+        date=timezone.now() - timedelta(hours=4),
+        user=user,
+        base=issue,
+        salary=salary,
+    )
+    IssueSpentTimeFactory.create(
+        date=timezone.now() - timedelta(hours=3),
+        user=user,
+        base=issue,
+        salary=salary,
+    )
+
+    queryset = SpentTimeFilterSet(
+        data={"salary": salary.pk + 1},
+        queryset=SpentTime.objects.all(),
+        request=None,
+    ).qs
+
+    assert queryset.count() == 4
+    assert set(queryset) == set(SpentTime.objects.all())
+
+
 def test_filter_by_date(user, user2, issue):
     spend_date = date(2020, 3, 3)
 
