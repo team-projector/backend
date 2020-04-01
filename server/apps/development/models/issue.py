@@ -39,6 +39,8 @@ class Issue(
         help_text=_("HT__TITLE"),
     )
 
+    description = models.TextField(blank=True, default="")
+
     time_estimate = models.PositiveIntegerField(
         null=True,
         verbose_name=_("VN__TIME_ESTIMATE"),
@@ -110,8 +112,6 @@ class Issue(
     merge_requests = models.ManyToManyField(
         "development.MergeRequest", blank=True, related_name="issues",
     )
-
-    description = models.TextField(blank=True, default="")
 
     objects = IssueManager()  # noqa: WPS110
 
