@@ -22,5 +22,6 @@ class TimeExpensesQueries(graphene.ObjectType):
         user=graphene.ID(),
         state=graphene.String(),
         date=graphene.Date(),
+        salary=graphene.ID(),
         resolver=resolve_spent_times_summary,
     )
