@@ -111,6 +111,8 @@ class Issue(
         "development.MergeRequest", blank=True, related_name="issues",
     )
 
+    description = models.TextField(blank=True, default="")
+
     objects = IssueManager()  # noqa: WPS110
 
     class Meta:
@@ -158,3 +160,12 @@ class Issue(
             and self.total_time_spent
             and self.time_estimate
         )
+
+    def save(self, *args, **kwargs):
+        """Saving model."""
+        from apps.development.services.issue.tickets_checker import (  # noqa: WPS433 E501
+            assign_issues_to_ticket,
+        )
+
+        super().save(*args, **kwargs)
+        assign_issues_to_ticket(self)

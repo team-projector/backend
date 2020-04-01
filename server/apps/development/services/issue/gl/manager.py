@@ -82,6 +82,7 @@ class IssueGlManager(BaseWorkItemGlManager):
                 gl_issue.assignee,
             ),
             "is_merged": gitlab.parse_state_merged(gl_issue.closed_by()),
+            "description": gl_issue.description,
         }
 
         if gl_issue.milestone:

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-03-25 12:53+0300\n"
+"POT-Creation-Date: 2020-03-31 12:35+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -55,6 +55,9 @@ msgstr "GitLab Internal ID"
 
 msgid "MSG__VALUE_MUST_BE_FROM_0_TO_1"
 msgstr "Value must be from 0 to 1"
+
+msgid "MSG__VALUE_MUST_BE_IS_NUMBER"
+msgstr "Value must be is number"
 
 msgid "VN__DEVELOPMENT"
 msgstr "Development"
@@ -184,6 +187,9 @@ msgstr "Reset spend"
 
 msgid "CH__MOVED_FROM"
 msgstr "Moved from"
+
+msgid "CH__COMMENT"
+msgstr "Comment"
 
 msgid "VN__TYPE"
 msgstr "Type"
