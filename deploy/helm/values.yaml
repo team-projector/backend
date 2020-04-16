@@ -4,7 +4,7 @@ image:
   tag: dev
 gitlab_check_webhooks: "true"
 email:
-  host: smtp.mailgun.org
+  host: smtp.eu.mailgun.org
   port: "587"
   from_email: system@teamprojector.com
 secrets:
