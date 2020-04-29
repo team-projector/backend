@@ -33,6 +33,7 @@ uwsgi = "*"
 uwsgitop = "*"
 tqdm = "*"
 black = "^19.10b0"
+sentry-sdk = "^0.14.3"
 
 [tool.poetry.dev-dependencies]
 pytest = "*"

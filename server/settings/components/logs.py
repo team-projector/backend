@@ -1,5 +1,9 @@
 # -*- coding: utf-8 -*-
 
+import sentry_sdk
+from decouple import config
+from sentry_sdk.integrations.django import DjangoIntegration
+
 LOGGING = {
     "version": 1,
     "disable_existing_loggers": False,
@@ -29,3 +33,9 @@ LOGGING = {
         },
     },
 }
+
+sentry_dsn = config("DJANGO_SENTRY_DSN", default=None)
+if sentry_dsn:
+    sentry_sdk.init(
+        dsn=sentry_dsn, integrations=[DjangoIntegration()],
+    )
