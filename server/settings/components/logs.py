@@ -37,5 +37,7 @@ LOGGING = {
 sentry_dsn = config("DJANGO_SENTRY_DSN", default=None)
 if sentry_dsn:
     sentry_sdk.init(  # type:ignore
-        dsn=sentry_dsn, integrations=[DjangoIntegration()],
+        dsn=sentry_dsn,
+        integrations=[DjangoIntegration()],
+        send_default_pii=True,
     )
