@@ -33,6 +33,10 @@ RUN apt update \
 
 FROM base as production
 
+ARG APP_VERSION
+
+ENV APP_VERSION=$APP_VERSION
+
 COPY . .
 
 RUN export DJANGO_ENV=build \
