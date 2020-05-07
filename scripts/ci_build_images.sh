@@ -10,7 +10,6 @@ docker build --cache-from $DOCKER_CACHE_IMAGE -t $DOCKER_TEST_IMAGE -t $DOCKER_C
 
 cat deploy/.dockerignore.production >> .dockerignore
 APP_VERSION=$(cat VERSION)
-echo $APP_VERSION
 docker build --cache-from $DOCKER_CACHE_IMAGE -t $DOCKER_IMAGE --target production -f deploy/Dockerfile --build-arg APP_VERSION=${APP_VERSION} .
 
 docker push $DOCKER_TEST_IMAGE
