@@ -20,6 +20,9 @@ def issue():
 
 @pytest.fixture()
 def issue_spent_time(user, issue):
+    user.hour_rate = 15
+    user.save(update_fields=("hour_rate",))
+
     return IssueSpentTimeFactory.create(
         user=user, base=issue, time_spent=seconds(hours=5),
     )
