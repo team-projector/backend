@@ -63,6 +63,24 @@ def test_no_payrolls(user, calculator):
     assert Salary.objects.count() == 0
 
 
+def test_empty_total(user, calculator):
+    salary = None
+
+    issue = IssueFactory.create(state=IssueState.CLOSED)
+    IssueSpentTimeFactory.create(
+        user=user, base=issue, time_spent=timedelta(hours=1).total_seconds(),
+    )
+    IssueSpentTimeFactory.create(
+        user=user, base=issue, time_spent=-timedelta(hours=1).total_seconds(),
+    )
+
+    with pytest.raises(EmptySalaryException):
+        salary = calculator.generate(user)
+
+    assert salary is None
+    assert not Salary.objects.exists()
+
+
 def test_with_penalty(user, calculator):
     issue = IssueFactory.create(state=IssueState.CLOSED)
 

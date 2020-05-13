@@ -3,6 +3,7 @@
 from contextlib import suppress
 from datetime import date
 from decimal import Decimal
+from typing import Optional
 
 from django.db import models, transaction
 
@@ -31,7 +32,7 @@ class SalaryCalculator:
                 self.generate(user)
 
     @transaction.atomic
-    def generate(self, user: User) -> Salary:
+    def generate(self, user: User) -> Optional[Salary]:
         """Generate salary for user."""
         salary = Salary.objects.create(
             created_by=self.initiator,
@@ -43,9 +44,7 @@ class SalaryCalculator:
             period_to=self.period_to,
         )
 
-        locked = self._lock_payrolls(user, salary)
-        if locked == 0:
-            raise EmptySalaryException
+        self._lock_payrolls(user, salary)
 
         spent_data = self._get_spent_data(salary)
 
@@ -55,11 +54,13 @@ class SalaryCalculator:
         salary.bonus = self._get_bonus(salary)
         salary.total = salary.sum + salary.bonus - salary.penalty
 
+        if not salary.total:
+            raise EmptySalaryException
+
         if user.tax_rate:
             salary.taxes = salary.total * Decimal.from_float(user.tax_rate)
 
         salary.save()
-
         return salary
 
     def _get_spent_data(self, salary: Salary) -> models.QuerySet:
@@ -105,5 +106,8 @@ class SalaryCalculator:
             )
             .update(salary=salary)
         )
+
+        if locked == 0:
+            raise EmptySalaryException
 
         return locked
