@@ -45,5 +45,5 @@ spec:
             failureThreshold: 5
           env:
             - name: UWSGI_PROCESSES_AUTO
-              value:  1
+              value:  "1"
           {{- include "env" . | nindent 12 }}
