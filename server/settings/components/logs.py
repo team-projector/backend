@@ -4,6 +4,8 @@ import sentry_sdk
 from decouple import config
 from sentry_sdk.integrations.django import DjangoIntegration
 
+from settings.components.tp import TP_APP_VERSION
+
 LOGGING = {
     "version": 1,
     "disable_existing_loggers": False,
@@ -39,5 +41,6 @@ if sentry_dsn:
     sentry_sdk.init(  # type:ignore
         dsn=sentry_dsn,
         integrations=[DjangoIntegration()],
+        release=TP_APP_VERSION,
         send_default_pii=True,
     )
