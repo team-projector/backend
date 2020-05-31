@@ -23,13 +23,10 @@ WORK_BREAK_REASON_MAX_LENGTH = 15
 class WorkBreak(ApprovedMixin, Timestamps):
     """The work break model."""
 
-    user = models.ForeignKey(
-        settings.AUTH_USER_MODEL,
-        models.CASCADE,
-        related_name="work_break",
-        verbose_name=_("VN__USER"),
-        help_text=_("HT__USER"),
-    )
+    class Meta:
+        verbose_name = _("VN__WORKBREAK")
+        verbose_name_plural = _("VN__WORKBREAKS")
+        ordering = ("-from_date",)
 
     from_date = models.DateTimeField(
         verbose_name=_("VN__DATE_FROM"), help_text=_("HT__DATE_FROM"),
@@ -55,12 +52,15 @@ class WorkBreak(ApprovedMixin, Timestamps):
         default=False, verbose_name=_("VN__PAID"), help_text=_("HT__PAID"),
     )
 
-    objects = WorkBreakManager()  # noqa: WPS110
+    user = models.ForeignKey(  # noqa: CCE001
+        settings.AUTH_USER_MODEL,
+        models.CASCADE,
+        related_name="work_break",
+        verbose_name=_("VN__USER"),
+        help_text=_("HT__USER"),
+    )
 
-    class Meta:
-        verbose_name = _("VN__WORKBREAK")
-        verbose_name_plural = _("VN__WORKBREAKS")
-        ordering = ("-from_date",)
+    objects = WorkBreakManager()  # noqa: WPS110
 
     def __str__(self):
         """Returns object string representation."""

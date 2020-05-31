@@ -24,10 +24,10 @@ class SerializerMutationOptions(MutationOptions):
 class SerializerMutation(AuthMutation, graphene.Mutation):
     """Serializer mutation."""
 
-    permission_classes = (AllowAuthenticated,)
-
     class Meta:
         abstract = True
+
+    permission_classes = (AllowAuthenticated,)
 
     @classmethod
     def __init_subclass_with_meta__(

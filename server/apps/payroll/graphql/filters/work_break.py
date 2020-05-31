@@ -58,12 +58,12 @@ class TeamFilter(django_filters.ModelChoiceFilter):
 class WorkBreakFilterSet(django_filters.FilterSet):
     """Set of filters for Work Break."""
 
+    class Meta:
+        model = WorkBreak
+        fields = ("approving", "team", "user")
+
     approving = ApprovingFilter()
     team = TeamFilter()
     user = django_filters.ModelChoiceFilter(queryset=User.objects.all())
 
     order_by = OrderingFilter(fields=("from_date",))
-
-    class Meta:
-        model = WorkBreak
-        fields = ("approving", "team", "user")

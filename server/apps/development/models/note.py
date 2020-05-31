@@ -30,22 +30,15 @@ class Note(models.Model):
     Fill from Gitlab when loading issues or merge requests.
     """
 
-    object_id = models.IntegerField()
-    content_object = GenericForeignKey()
+    class Meta:
+        verbose_name = _("VN__NOTE")
+        verbose_name_plural = _("VN__NOTES")
+        ordering = ("-created_at",)
 
-    content_type = models.ForeignKey(ContentType, models.CASCADE)
+    object_id = models.IntegerField()
 
     gl_id = models.PositiveIntegerField(
         verbose_name=_("VN__GITLAB_ID"), help_text=_("HT__GITLAB_ID"),
-    )
-
-    user = models.ForeignKey(
-        User,
-        models.SET_NULL,
-        null=True,
-        blank=True,
-        verbose_name=_("VN__USER"),
-        help_text=_("HT__USER"),
     )
 
     created_at = models.DateTimeField(null=True, blank=True)
@@ -61,12 +54,20 @@ class Note(models.Model):
 
     data = JSONField(encoder=DjangoJSONEncoder)  # noqa: WPS110
 
-    objects = NoteManager()  # noqa: WPS110
+    content_object = GenericForeignKey()
 
-    class Meta:
-        verbose_name = _("VN__NOTE")
-        verbose_name_plural = _("VN__NOTES")
-        ordering = ("-created_at",)
+    content_type = models.ForeignKey(ContentType, models.CASCADE)
+
+    user = models.ForeignKey(  # noqa: CCE001
+        User,
+        models.SET_NULL,
+        null=True,
+        blank=True,
+        verbose_name=_("VN__USER"),
+        help_text=_("HT__USER"),
+    )
+
+    objects = NoteManager()  # noqa: WPS110
 
     def __str__(self):
         """Returns object string representation."""

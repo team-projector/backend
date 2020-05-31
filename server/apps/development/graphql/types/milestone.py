@@ -19,15 +19,20 @@ from apps.development.services.milestone.problems import get_milestone_problems
 class MilestoneType(BaseDjangoObjectType):
     """Milestone type."""
 
-    metrics = graphene.Field(MilestoneMetricsType)
-    owner = graphene.Field(MilestoneOwner)
-    problems = graphene.List(graphene.String)
-
     class Meta:
         model = Milestone
         interfaces = (DatasourceRelayNode,)
         connection_class = DataSourceConnection
         name = "Milestone"
+
+    metrics = graphene.Field(MilestoneMetricsType)
+    owner = graphene.Field(MilestoneOwner)
+    problems = graphene.List(graphene.String)
+
+    @classmethod
+    def get_queryset(cls, queryset, info) -> QuerySet:  # noqa: WPS110
+        """Get milestones."""
+        return filter_allowed_for_user(queryset, info.context.user)
 
     def resolve_metrics(self, info, **kwargs):  # noqa: WPS110
         """Get milestone metrics."""
@@ -36,8 +41,3 @@ class MilestoneType(BaseDjangoObjectType):
     def resolve_problems(self, info, **kwargs):  # noqa: WPS110
         """Get milestone problems."""
         return get_milestone_problems(self)
-
-    @classmethod
-    def get_queryset(cls, queryset, info) -> QuerySet:  # noqa: WPS110
-        """Get milestones."""
-        return filter_allowed_for_user(queryset, info.context.user)

@@ -14,13 +14,13 @@ from apps.payroll.services.salary.allowed import filter_allowed_for_user
 class BonusType(BaseDjangoObjectType):
     """Bonus type."""
 
-    owner = graphene.Field(WorkItem)
-
     class Meta:
         model = Bonus
         interfaces = (DatasourceRelayNode,)
         connection_class = DataSourceConnection
         name = "Bonus"
+
+    owner = graphene.Field(WorkItem)
 
     @classmethod
     def get_queryset(cls, queryset, info) -> QuerySet:  # noqa: WPS110

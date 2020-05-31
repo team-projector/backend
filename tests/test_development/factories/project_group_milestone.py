@@ -8,7 +8,7 @@ from tests.test_development.factories.project_group import ProjectGroupFactory
 
 
 class ProjectGroupMilestoneFactory(MilestoneFactory):
-    owner = factory.SubFactory(ProjectGroupFactory)
-
     class Meta:
         model = Milestone
+
+    owner = factory.SubFactory(ProjectGroupFactory)

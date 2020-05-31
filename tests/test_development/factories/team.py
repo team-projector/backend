@@ -6,10 +6,10 @@ from apps.development.models import Team
 
 
 class TeamFactory(factory.django.DjangoModelFactory):
-    title = factory.Faker("text", max_nb_chars=200)
-
     class Meta:
         model = Team
+
+    title = factory.Faker("text", max_nb_chars=200)
 
     @factory.post_generation
     def members(self, create, extracted, **kwargs):

@@ -31,6 +31,11 @@ USER_GITLAB_TOKEN_MAX_LENGTH = 128
 class User(AbstractBaseUser, PermissionsMixin):
     """The User model."""
 
+    class Meta:
+        verbose_name = _("VN__USER")
+        verbose_name_plural = _("VN__USERS")
+        ordering = ("login",)
+
     USERNAME_FIELD = "login"  # noqa: WPS115
 
     login = models.CharField(
@@ -53,15 +58,6 @@ class User(AbstractBaseUser, PermissionsMixin):
         blank=True,
         verbose_name=_("VN__EMAIL"),
         help_text=_("HT__EMAIL"),
-    )
-
-    position = models.ForeignKey(
-        Position,
-        models.SET_NULL,
-        null=True,
-        blank=True,
-        verbose_name=_("VN__POSITION"),
-        help_text=_("HT__POSITION"),
     )
 
     hour_rate = models.FloatField(
@@ -144,12 +140,16 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     daily_work_hours = models.PositiveIntegerField(default=8)
 
-    objects = UserManager()  # noqa: WPS110
+    position = models.ForeignKey(  # noqa: CCE001
+        Position,
+        models.SET_NULL,
+        null=True,
+        blank=True,
+        verbose_name=_("VN__POSITION"),
+        help_text=_("HT__POSITION"),
+    )
 
-    class Meta:
-        verbose_name = _("VN__USER")
-        verbose_name_plural = _("VN__USERS")
-        ordering = ("login",)
+    objects = UserManager()  # noqa: WPS110
 
     def __str__(self):
         """Returns object string representation."""

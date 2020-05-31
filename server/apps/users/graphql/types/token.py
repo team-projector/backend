@@ -8,8 +8,8 @@ from apps.users.models import Token
 class TokenType(BaseDjangoObjectType):
     """Token type."""
 
-    permission_classes = (AllowAny,)
-
     class Meta:
         model = Token
         name = "Token"
+
+    permission_classes = (AllowAny,)

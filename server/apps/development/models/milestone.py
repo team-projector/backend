@@ -29,6 +29,11 @@ class Milestone(
 ):
     """The milestone model."""
 
+    class Meta:
+        verbose_name = _("VN__MILESTONE")
+        verbose_name_plural = _("VN__MILESTONES")
+        ordering = ("-created_at",)
+
     title = models.CharField(
         max_length=DEFAULT_TITLE_LENGTH,
         verbose_name=_("VN__TITLE"),
@@ -71,18 +76,14 @@ class Milestone(
         help_text=_("HT__BUDGET"),
     )
 
-    owner = GenericForeignKey()
-
-    content_type = models.ForeignKey(ContentType, models.CASCADE)
-
     object_id = models.PositiveIntegerField()
 
-    objects = MilestoneManager()  # noqa: WPS110
+    owner = GenericForeignKey()
+    content_type = models.ForeignKey(  # noqa: CCE001
+        ContentType, models.CASCADE,
+    )
 
-    class Meta:
-        verbose_name = _("VN__MILESTONE")
-        verbose_name_plural = _("VN__MILESTONES")
-        ordering = ("-created_at",)
+    objects = MilestoneManager()  # noqa: WPS110
 
     def __str__(self):
         """Returns object string representation."""

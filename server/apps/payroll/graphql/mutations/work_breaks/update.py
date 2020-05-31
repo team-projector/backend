@@ -16,9 +16,6 @@ class UpdateWorkBreakMutation(
 ):
     """Update work break after validation."""
 
-    permission_classes = (CanManageWorkBreak,)
-    form_class = WorkBreakForm
-
     class Arguments:
         id = graphene.ID(required=True)  # noqa: A003
         comment = graphene.String(required=True)
@@ -26,6 +23,9 @@ class UpdateWorkBreakMutation(
         reason = graphene.String(required=True)
         to_date = graphene.DateTime(required=True)
         user = graphene.Int(required=True)
+
+    permission_classes = (CanManageWorkBreak,)
+    form_class = WorkBreakForm
 
     work_break = graphene.Field(WorkBreakType)
 

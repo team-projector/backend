@@ -23,22 +23,14 @@ from apps.development.services.merge_request.problems import (
 class MergeRequestType(graphql.BaseDjangoObjectType):
     """Merge request type."""
 
-    metrics = graphene.Field(MergeRequestMetricsType)
-    problems = graphene.List(graphene.String)
-
     class Meta:
         model = development_models.MergeRequest
         interfaces = (graphql.DatasourceRelayNode, WorkItem)
         connection_class = graphql.DataSourceConnection
         name = "MergeRequest"
 
-    def resolve_metrics(self, info, **kwargs):  # noqa: WPS110
-        """Get merge request metrics."""
-        return get_merge_request_metrics(self)
-
-    def resolve_problems(self, info, **kwargs):  # noqa: WPS110
-        """Get merge request problems."""
-        return get_merge_request_problems(self)
+    metrics = graphene.Field(MergeRequestMetricsType)
+    problems = graphene.List(graphene.String)
 
     @classmethod
     def get_queryset(cls, queryset, info) -> models.QuerySet:  # noqa: WPS110
@@ -49,3 +41,11 @@ class MergeRequestType(graphql.BaseDjangoObjectType):
             queryset = queryset.select_related("user")
 
         return queryset
+
+    def resolve_metrics(self, info, **kwargs):  # noqa: WPS110
+        """Get merge request metrics."""
+        return get_merge_request_metrics(self)
+
+    def resolve_problems(self, info, **kwargs):  # noqa: WPS110
+        """Get merge request problems."""
+        return get_merge_request_problems(self)

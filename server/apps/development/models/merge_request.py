@@ -34,6 +34,11 @@ class MergeRequest(
     Fill from Gitlab.
     """
 
+    class Meta:
+        verbose_name = _("VN__MERGE_REQUEST")
+        verbose_name_plural = _("VN__MERGE_REQUESTS")
+        ordering = ("-created_at",)
+
     title = models.CharField(
         max_length=DEFAULT_TITLE_LENGTH,
         verbose_name=_("VN__TITLE"),
@@ -102,18 +107,13 @@ class MergeRequest(
         "development.Milestone", models.CASCADE, null=True, blank=True,
     )
 
-    participants = models.ManyToManyField(
+    participants = models.ManyToManyField(  # noqa: CCE001
         settings.AUTH_USER_MODEL,
         blank=True,
         related_name="participant_merge_requests",
     )
 
     objects = MergeRequestManager()  # noqa: WPS110
-
-    class Meta:
-        verbose_name = _("VN__MERGE_REQUEST")
-        verbose_name_plural = _("VN__MERGE_REQUESTS")
-        ordering = ("-created_at",)
 
     def __str__(self):
         """Returns object string representation."""

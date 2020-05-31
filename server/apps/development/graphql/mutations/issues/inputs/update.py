@@ -9,7 +9,7 @@ from apps.development.models import Ticket
 class UpdateIssueInput(BaseIssueInput):
     """Ticket update serializer."""
 
-    ticket = serializers.PrimaryKeyRelatedField(queryset=Ticket.objects.all())
-
     class Meta(BaseIssueInput.Meta):
         fields = ("id", "ticket")
+
+    ticket = serializers.PrimaryKeyRelatedField(queryset=Ticket.objects.all())

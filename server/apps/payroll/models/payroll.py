@@ -11,15 +11,20 @@ from apps.core.models.mixins import Timestamps
 class Payroll(Timestamps):
     """The payroll model."""
 
+    class Meta:
+        verbose_name = _("VN__PAYROLL")
+        verbose_name_plural = _("VN__PAYROLLS")
+        ordering = ("-created_at",)
+
+    sum = MoneyField(  # noqa: A003
+        default=0, verbose_name=_("VN__SUM"), help_text=_("HT__SUM"),
+    )
+
     created_by = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         models.CASCADE,
         verbose_name=_("VN__CREATED_BY"),
         help_text=_("HT__CREATED_BY"),
-    )
-
-    sum = MoneyField(  # noqa: A003
-        default=0, verbose_name=_("VN__SUM"), help_text=_("HT__SUM"),
     )
 
     salary = models.ForeignKey(
@@ -43,8 +48,3 @@ class Payroll(Timestamps):
     def __str__(self):
         """Returns object string representation."""
         return "{0} [{1}]: {2}".format(self.user, self.created_at, self.sum)
-
-    class Meta:
-        verbose_name = _("VN__PAYROLL")
-        verbose_name_plural = _("VN__PAYROLLS")
-        ordering = ("-created_at",)

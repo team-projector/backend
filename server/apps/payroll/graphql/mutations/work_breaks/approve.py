@@ -13,10 +13,10 @@ from apps.payroll.services import work_break as work_break_service
 class ApproveWorkBreakMutation(BaseMutation):
     """Approve work break mutation."""
 
-    permission_classes = (CanApproveDeclineWorkBreak,)
-
     class Arguments:
         id = graphene.ID(required=True)  # noqa: A003
+
+    permission_classes = (CanApproveDeclineWorkBreak,)
 
     work_break = graphene.Field(WorkBreakType)
 

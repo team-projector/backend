@@ -16,10 +16,10 @@ class BaseModelAdmin(
 ):
     """A base class for admin dashboard."""
 
-    list_per_page = 20
-
     class Media:
         """Media."""
+
+    list_per_page = 20
 
     def changelist_view(self, request: HttpRequest, extra_context=None):
         """The "change list" admin view for this model."""

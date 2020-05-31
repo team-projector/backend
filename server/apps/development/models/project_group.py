@@ -16,6 +16,11 @@ class ProjectGroup(GitlabEntityMixin):
     Fill from Gitlab.
     """
 
+    class Meta:
+        verbose_name = _("VN__PROJECT_GROUP")
+        verbose_name_plural = _("VN__PROJECT_GROUPS")
+        ordering = ("title",)
+
     title = models.CharField(
         max_length=DEFAULT_TITLE_LENGTH,
         verbose_name=_("VN__TITLE"),
@@ -54,16 +59,11 @@ class ProjectGroup(GitlabEntityMixin):
         "development.Milestone", related_query_name="project_group",
     )
 
-    members = GenericRelation(
+    members = GenericRelation(  # noqa: CCE001
         "development.ProjectMember", related_query_name="project_group",
     )
 
     objects = ProjectGroupManager()  # noqa: WPS110
-
-    class Meta:
-        verbose_name = _("VN__PROJECT_GROUP")
-        verbose_name_plural = _("VN__PROJECT_GROUPS")
-        ordering = ("title",)
 
     def __str__(self):
         """Returns object string representation."""

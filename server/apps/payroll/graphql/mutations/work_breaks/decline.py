@@ -13,11 +13,11 @@ from apps.payroll.services import work_break as work_break_service
 class DeclineWorkBreakMutation(BaseMutation):
     """Decline work break mutation."""
 
-    permission_classes = (CanApproveDeclineWorkBreak,)
-
     class Arguments:
         id = graphene.ID(required=True)  # noqa: A003
         decline_reason = graphene.String(required=True)
+
+    permission_classes = (CanApproveDeclineWorkBreak,)
 
     work_break = graphene.Field(WorkBreakType)
 

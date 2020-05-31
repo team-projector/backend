@@ -13,6 +13,9 @@ from tests.test_users.factories import UserFactory
 
 
 class MergeRequestFactory(GitlabFieldMixin):
+    class Meta:
+        model = MergeRequest
+
     state = MergeRequestState.OPENED
     title = factory.Faker("text", max_nb_chars=200)
     time_estimate = factory.Faker("random_int")
@@ -25,6 +28,3 @@ class MergeRequestFactory(GitlabFieldMixin):
         after_now=False,
         tzinfo=pytz.UTC,
     )
-
-    class Meta:
-        model = MergeRequest

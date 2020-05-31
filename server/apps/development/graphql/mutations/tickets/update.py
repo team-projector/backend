@@ -18,11 +18,11 @@ from apps.development.models import Issue
 class UpdateTicketMutation(SerializerMutation):
     """Update ticket mutation."""
 
-    ticket = graphene.Field(TicketType)
-    permission_classes = (AllowProjectManager,)
-
     class Meta:
         serializer_class = UpdateTicketInput
+
+    ticket = graphene.Field(TicketType)
+    permission_classes = (AllowProjectManager,)
 
     @classmethod
     def perform_mutate(  # type: ignore

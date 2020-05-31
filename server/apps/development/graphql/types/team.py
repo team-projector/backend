@@ -18,16 +18,16 @@ from apps.development.services.team.metrics.main import get_team_metrics
 class TeamType(BaseDjangoObjectType):
     """Team type."""
 
-    metrics = graphene.Field(TeamMetricsType)
-    members = DataSourceConnectionField(
-        TeamMemberType, filterset_class=TeamMembersFilterSet,
-    )
-
     class Meta:
         model = Team
         interfaces = (DatasourceRelayNode,)
         connection_class = DataSourceConnection
         name = "Team"
+
+    metrics = graphene.Field(TeamMetricsType)
+    members = DataSourceConnectionField(
+        TeamMemberType, filterset_class=TeamMembersFilterSet,
+    )
 
     @classmethod
     def get_queryset(cls, queryset, info) -> QuerySet:  # noqa: WPS110

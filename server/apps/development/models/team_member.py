@@ -19,6 +19,13 @@ class TeamMemberRole(models.TextChoices):
 class TeamMember(models.Model):
     """The team member model."""
 
+    class Meta:
+        verbose_name = _("VN__TEAM_MEMBER")
+        verbose_name_plural = _("VN__TEAM_MEMBERS")
+        unique_together = ("team", "user")
+
+    roles = BitField(flags=TeamMemberRole.choices, default=0)
+
     team = models.ForeignKey(
         "Team",
         models.CASCADE,
@@ -26,21 +33,14 @@ class TeamMember(models.Model):
         help_text=_("HT__TEAM"),
     )
 
-    user = models.ForeignKey(
+    user = models.ForeignKey(  # noqa: CCE001
         settings.AUTH_USER_MODEL,
         models.CASCADE,
         verbose_name=_("VN__USER"),
         help_text=_("HT__USER"),
     )
 
-    roles = BitField(flags=TeamMemberRole.choices, default=0)
-
     objects = TeamMemberManager()  # noqa: WPS110
-
-    class Meta:
-        verbose_name = _("VN__TEAM_MEMBER")
-        verbose_name_plural = _("VN__TEAM_MEMBERS")
-        unique_together = ("team", "user")
 
     def __str__(self):
         """Returns object string representation."""

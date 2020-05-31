@@ -58,6 +58,10 @@ class StateFilter(django_filters.CharFilter):
 class SpentTimeFilterSet(django_filters.FilterSet):
     """Set of filters for Spent Time."""
 
+    class Meta:
+        model = SpentTime
+        fields = ("date", "user", "salary", "team", "state")
+
     user = django_filters.ModelChoiceFilter(queryset=User.objects.all())
     project = ProjectFilter()
     team = TeamFilter()
@@ -65,7 +69,3 @@ class SpentTimeFilterSet(django_filters.FilterSet):
     salary = django_filters.ModelChoiceFilter(queryset=Salary.objects.all())
 
     order_by = OrderingFilter(fields=("date", "created_at"))
-
-    class Meta:
-        model = SpentTime
-        fields = ("date", "user", "salary", "team", "state")

@@ -11,6 +11,9 @@ from tests.test_users.factories.user import UserFactory
 
 
 class WorkBreakFactory(factory.django.DjangoModelFactory):
+    class Meta:
+        model = WorkBreak
+
     user = factory.SubFactory(UserFactory)
     comment = factory.Faker("text", max_nb_chars=200)
     reason = random.choice(  # noqa: S311
@@ -39,6 +42,3 @@ class WorkBreakFactory(factory.django.DjangoModelFactory):
         after_now=False,
         tzinfo=pytz.UTC,
     )
-
-    class Meta:
-        model = WorkBreak

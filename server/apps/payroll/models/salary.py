@@ -15,29 +15,10 @@ from apps.users.models import Position
 class Salary(Timestamps):
     """The salary model."""
 
-    created_by = models.ForeignKey(
-        settings.AUTH_USER_MODEL,
-        models.CASCADE,
-        verbose_name=_("VN__CREATED_BY"),
-        help_text=_("HT__CREATED_BY"),
-    )
-
-    user = models.ForeignKey(
-        settings.AUTH_USER_MODEL,
-        models.CASCADE,
-        related_name="salaries",
-        verbose_name=_("VN__USER"),
-        help_text=_("HT__USER"),
-    )
-
-    position = models.ForeignKey(
-        Position,
-        models.SET_NULL,
-        null=True,
-        blank=True,
-        verbose_name=_("VN__POSITION"),
-        help_text=_("HT__POSITION"),
-    )
+    class Meta:
+        verbose_name = _("VN__SALARY")
+        verbose_name_plural = _("VN__SALARIES")
+        ordering = ("-created_at",)
 
     period_from = models.DateField(
         null=True,
@@ -100,6 +81,30 @@ class Salary(Timestamps):
         blank=True, verbose_name=_("VN__COMMENT"), help_text=_("HT__COMMENT"),
     )
 
+    created_by = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        models.CASCADE,
+        verbose_name=_("VN__CREATED_BY"),
+        help_text=_("HT__CREATED_BY"),
+    )
+
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        models.CASCADE,
+        related_name="salaries",
+        verbose_name=_("VN__USER"),
+        help_text=_("HT__USER"),
+    )
+
+    position = models.ForeignKey(  # noqa: CCE001
+        Position,
+        models.SET_NULL,
+        null=True,
+        blank=True,
+        verbose_name=_("VN__POSITION"),
+        help_text=_("HT__POSITION"),
+    )
+
     objects = SalaryManager()  # noqa: WPS110
 
     field_tracker = FieldTracker()
@@ -107,8 +112,3 @@ class Salary(Timestamps):
     def __str__(self):
         """Returns object string representation."""
         return "{0} [{1}]: {2}".format(self.user, self.created_at, self.sum)
-
-    class Meta:
-        verbose_name = _("VN__SALARY")
-        verbose_name_plural = _("VN__SALARIES")
-        ordering = ("-created_at",)

@@ -33,6 +33,11 @@ class Issue(
     Fill from Gitlab.
     """
 
+    class Meta:
+        verbose_name = _("VN__ISSUE")
+        verbose_name_plural = _("VN__ISSUES")
+        ordering = ("-created_at",)
+
     title = models.CharField(
         max_length=DEFAULT_TITLE_LENGTH,
         verbose_name=_("VN__TITLE"),
@@ -65,6 +70,8 @@ class Issue(
     updated_at = models.DateTimeField(null=True, blank=True)
     closed_at = models.DateTimeField(null=True, blank=True)
     due_date = models.DateField(null=True, blank=True)
+
+    is_merged = models.BooleanField(default=False)
 
     labels = models.ManyToManyField(
         "development.Label", related_name="issues", blank=True,
@@ -107,22 +114,24 @@ class Issue(
         related_name="participant_issues",
     )
 
-    is_merged = models.BooleanField(default=False)
-
-    merge_requests = models.ManyToManyField(
+    merge_requests = models.ManyToManyField(  # noqa: CCE001
         "development.MergeRequest", blank=True, related_name="issues",
     )
 
     objects = IssueManager()  # noqa: WPS110
 
-    class Meta:
-        verbose_name = _("VN__ISSUE")
-        verbose_name_plural = _("VN__ISSUES")
-        ordering = ("-created_at",)
-
     def __str__(self):
         """Returns object string representation."""
         return self.title
+
+    def save(self, *args, **kwargs):
+        """Saving model."""
+        from apps.development.services.issue.tickets_checker import (  # noqa: WPS433 E501
+            assign_issues_to_ticket,
+        )
+
+        super().save(*args, **kwargs)
+        assign_issues_to_ticket(self)
 
     @cached_property
     def last_note_date(self) -> datetime:
@@ -160,12 +169,3 @@ class Issue(
             and self.total_time_spent
             and self.time_estimate
         )
-
-    def save(self, *args, **kwargs):
-        """Saving model."""
-        from apps.development.services.issue.tickets_checker import (  # noqa: WPS433 E501
-            assign_issues_to_ticket,
-        )
-
-        super().save(*args, **kwargs)
-        assign_issues_to_ticket(self)

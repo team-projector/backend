@@ -8,6 +8,9 @@ from tests.test_users.factories.user import UserFactory
 
 
 class BonusFactory(factory.django.DjangoModelFactory):
+    class Meta:
+        model = Bonus
+
     created_at = factory.Faker(
         "date_time_this_year",
         before_now=True,
@@ -16,6 +19,3 @@ class BonusFactory(factory.django.DjangoModelFactory):
     )
     sum = factory.Faker("random_int")  # noqa: A003
     created_by = factory.SubFactory(UserFactory)
-
-    class Meta:
-        model = Bonus

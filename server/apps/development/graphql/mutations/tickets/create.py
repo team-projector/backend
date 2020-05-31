@@ -15,11 +15,11 @@ from apps.development.models import Ticket
 class CreateTicketMutation(SerializerMutation):
     """Create ticket mutation."""
 
-    ticket = graphene.Field(TicketType)
-    permission_classes = (AllowProjectManager,)
-
     class Meta:
         serializer_class = CreateTicketInput
+
+    ticket = graphene.Field(TicketType)
+    permission_classes = (AllowProjectManager,)
 
     @classmethod
     def perform_mutate(

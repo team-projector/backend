@@ -16,6 +16,11 @@ SECS_IN_HOUR = 60 * 60
 class SpentTime(Payroll):  # noqa:WPS230
     """The spent time model."""
 
+    class Meta:
+        verbose_name = _("VN__SPENT_TIME")
+        verbose_name_plural = _("VN__SPENT_TIMES")
+        ordering = ("-date",)
+
     date = models.DateField(null=True)
     customer_sum = MoneyField(
         default=0,
@@ -44,13 +49,13 @@ class SpentTime(Payroll):  # noqa:WPS230
         verbose_name=_("VN__TIME_SPENT"), help_text=_("HT__TIME_SPENT"),
     )
 
-    content_type = models.ForeignKey(ContentType, models.CASCADE)
-
     object_id = models.PositiveIntegerField()
+
+    content_type = models.ForeignKey(ContentType, models.CASCADE)
 
     base = GenericForeignKey()
 
-    note = models.OneToOneField(
+    note = models.OneToOneField(  # noqa: CCE001
         "development.Note",
         models.SET_NULL,
         null=True,
@@ -58,12 +63,7 @@ class SpentTime(Payroll):  # noqa:WPS230
         related_name="time_spend",
     )
 
-    objects = SpentTimeManager()  # noqa: WPS110
-
-    class Meta:
-        verbose_name = _("VN__SPENT_TIME")
-        verbose_name_plural = _("VN__SPENT_TIMES")
-        ordering = ("-date",)
+    objects = SpentTimeManager()  # noqa: WPS110, CCE001
 
     def __str__(self):
         """Returns object string representation."""

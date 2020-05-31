@@ -11,13 +11,20 @@ from apps.development.services.milestone.allowed import filter_allowed_for_user
 class SyncMilestoneInput(serializers.ModelSerializer):
     """Milestone sync serializer."""
 
+    class Meta:
+        model = Milestone
+        fields = ("id",)
+
     id = serializers.PrimaryKeyRelatedField(  # noqa:A003
         queryset=Milestone.objects.all(),
     )
 
-    class Meta:
-        model = Milestone
-        fields = ("id",)
+    @property
+    def validated_data(self):
+        """Validated data changing."""
+        ret = super().validated_data
+        ret["milestone"] = ret.pop("id", None)
+        return ret
 
     def validate_id(self, milestone):
         """Validates that user have permissions to mutate milestone."""
@@ -37,10 +44,3 @@ class SyncMilestoneInput(serializers.ModelSerializer):
                     raise exc
 
         return milestone
-
-    @property
-    def validated_data(self):
-        """Validated data changing."""
-        ret = super().validated_data
-        ret["milestone"] = ret.pop("id", None)
-        return ret

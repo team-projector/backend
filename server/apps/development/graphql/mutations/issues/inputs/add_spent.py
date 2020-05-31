@@ -12,10 +12,10 @@ ERROR_MSG_NO_GL_TOKEN = _("MSG_PLEASE_PROVIDE_PERSONAL_GL_TOKEN")
 class AddSpentToIssueInput(BaseIssueInput):
     """Ticket sync serializer."""
 
-    seconds = serializers.IntegerField(min_value=1)
-
     class Meta(BaseIssueInput.Meta):
         fields = ("id", "seconds")
+
+    seconds = serializers.IntegerField(min_value=1)
 
     def validate(self, attrs):
         """Validates input parameters."""

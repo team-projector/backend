@@ -18,6 +18,9 @@ ISSUES_PARAM_ERROR = 'Please, choose one parameter: "attachIssues" or "issues"'
 class UpdateTicketInput(TicketBaseInput):
     """Ticket update serializer."""
 
+    class Meta(TicketBaseInput.Meta):
+        fields = ["id", *TicketBaseInput.Meta.fields, "attach_issues"]
+
     attach_issues = serializers.PrimaryKeyRelatedField(
         many=True, required=False, write_only=True, queryset=Issue.objects,
     )
@@ -26,8 +29,12 @@ class UpdateTicketInput(TicketBaseInput):
         queryset=Ticket.objects.all(),
     )
 
-    class Meta(TicketBaseInput.Meta):
-        fields = ["id", *TicketBaseInput.Meta.fields, "attach_issues"]
+    @property
+    def validated_data(self):
+        """Validated data changing."""
+        ret = super().validated_data
+        ret["ticket"] = ret.pop("id", None)
+        return ret
 
     def get_fields(self) -> Dict[str, Field]:
         """Returns serializer fields."""
@@ -50,10 +57,3 @@ class UpdateTicketInput(TicketBaseInput):
             raise ValidationError(ISSUES_PARAM_ERROR)
 
         return attrs
-
-    @property
-    def validated_data(self):
-        """Validated data changing."""
-        ret = super().validated_data
-        ret["ticket"] = ret.pop("id", None)
-        return ret

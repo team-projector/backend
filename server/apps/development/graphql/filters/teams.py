@@ -48,10 +48,10 @@ class TeamRolesFilter(django_filters.CharFilter):
 class TeamsFilterSet(django_filters.FilterSet):
     """Set of filters for Team."""
 
-    roles = TeamRolesFilter()
-    order_by = OrderingFilter(fields=("title",))
-    q = SearchFilter(fields=("title",))  # noqa: WPS111
-
     class Meta:
         model = Team
         fields = ("title", "roles")
+
+    roles = TeamRolesFilter()
+    order_by = OrderingFilter(fields=("title",))
+    q = SearchFilter(fields=("title",))  # noqa: WPS111

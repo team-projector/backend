@@ -13,10 +13,10 @@ from apps.core.graphql.security.permissions import AllowAuthenticated
 class NoInputMutation(AuthMutation, graphene.Mutation):
     """Base for non parametrized mutations."""
 
-    permission_classes = (AllowAuthenticated,)
-
     class Meta:
         abstract = True
+
+    permission_classes = (AllowAuthenticated,)
 
     @classmethod
     def mutate(

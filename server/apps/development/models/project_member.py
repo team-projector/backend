@@ -23,7 +23,10 @@ PROJECT_MEMBER_ROLE_MAX_LENGTH = 20
 class ProjectMember(Timestamps):
     """The project member model."""
 
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, models.CASCADE)
+    class Meta:
+        verbose_name = _("VN__PROJECT_MEMBER")
+        verbose_name_plural = _("VN__PROJECT_MEMBERS")
+        unique_together = ("user", "role", "object_id")
 
     role = models.CharField(
         choices=ProjectMemberRole.choices,
@@ -32,11 +35,9 @@ class ProjectMember(Timestamps):
         help_text=_("HT__ROLE"),
     )
 
-    owner = GenericForeignKey()
-    content_type = models.ForeignKey(ContentType, models.CASCADE, null=True)
     object_id = models.PositiveIntegerField(null=True)
 
-    class Meta:
-        verbose_name = _("VN__PROJECT_MEMBER")
-        verbose_name_plural = _("VN__PROJECT_MEMBERS")
-        unique_together = ("user", "role", "object_id")
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, models.CASCADE)
+
+    owner = GenericForeignKey()
+    content_type = models.ForeignKey(ContentType, models.CASCADE, null=True)

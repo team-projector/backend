@@ -99,19 +99,6 @@ class TeamFilter(django_filters.ModelChoiceFilter):
 class IssuesFilterSet(django_filters.FilterSet):
     """Set of filters for Issues."""
 
-    milestone = MilestoneFilter()
-    problems = ProblemsFilter()
-    project = django_filters.ModelChoiceFilter(queryset=Project.objects.all())
-    team = TeamFilter()
-    ticket = TicketFilter()
-    user = django_filters.ModelChoiceFilter(queryset=User.objects.all())
-
-    order_by = OrderingFilter(
-        fields=("due_date", "title", "created_at", "closed_at"),
-    )
-
-    q = SearchFilter(fields=("title", "=gl_url"))  # noqa: WPS111
-
     class Meta:
         model = Issue
         fields = (
@@ -124,3 +111,16 @@ class IssuesFilterSet(django_filters.FilterSet):
             "milestone",
             "ticket",
         )
+
+    milestone = MilestoneFilter()
+    problems = ProblemsFilter()
+    project = django_filters.ModelChoiceFilter(queryset=Project.objects.all())
+    team = TeamFilter()
+    ticket = TicketFilter()
+    user = django_filters.ModelChoiceFilter(queryset=User.objects.all())
+
+    order_by = OrderingFilter(
+        fields=("due_date", "title", "created_at", "closed_at"),
+    )
+
+    q = SearchFilter(fields=("title", "=gl_url"))  # noqa: WPS111

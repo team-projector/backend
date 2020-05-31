@@ -13,10 +13,10 @@ from apps.development.graphql.mutations.tickets.inputs import DeleteTicketInput
 class DeleteTicketMutation(SerializerMutation):
     """Delete ticket."""
 
-    permission_classes = (AllowProjectManager,)
-
     class Meta:
         serializer_class = DeleteTicketInput
+
+    permission_classes = (AllowProjectManager,)
 
     ok = graphene.Boolean()
 

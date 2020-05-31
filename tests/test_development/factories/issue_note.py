@@ -8,6 +8,9 @@ from tests.test_development.factories.issue import IssueFactory
 
 
 class IssueNoteFactory(factory.django.DjangoModelFactory):
+    class Meta:
+        model = Note
+
     gl_id = factory.Sequence(lambda seq: seq)
     created_at = factory.Faker(
         "date_time_this_year",
@@ -17,6 +20,3 @@ class IssueNoteFactory(factory.django.DjangoModelFactory):
     )
     content_object = factory.SubFactory(IssueFactory)
     data = {}  # noqa: WPS110
-
-    class Meta:
-        model = Note

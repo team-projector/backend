@@ -16,9 +16,6 @@ from apps.users.services.user.problems import get_user_problems
 class UserType(BaseDjangoObjectType):
     """User type."""
 
-    metrics = graphene.Field(UserMetricsType)
-    problems = graphene.List(graphene.String)
-
     class Meta:
         model = User
         exclude = ("password",)
@@ -26,14 +23,8 @@ class UserType(BaseDjangoObjectType):
         connection_class = DataSourceConnection
         name = "User"
 
-    def resolve_metrics(self, info, **kwargs):  # noqa: WPS110
-        """Get user metrics."""
-        provider = UserMetricsProvider(get_fields_from_info(info))
-        return provider.get_metrics(self)
-
-    def resolve_problems(self, info, **kwargs):  # noqa: WPS110
-        """Get user problems."""
-        return get_user_problems(self)
+    metrics = graphene.Field(UserMetricsType)
+    problems = graphene.List(graphene.String)
 
     @classmethod
     def get_queryset(
@@ -45,3 +36,12 @@ class UserType(BaseDjangoObjectType):
             queryset = queryset.filter(is_active=True)
 
         return queryset
+
+    def resolve_metrics(self, info, **kwargs):  # noqa: WPS110
+        """Get user metrics."""
+        provider = UserMetricsProvider(get_fields_from_info(info))
+        return provider.get_metrics(self)
+
+    def resolve_problems(self, info, **kwargs):  # noqa: WPS110
+        """Get user problems."""
+        return get_user_problems(self)

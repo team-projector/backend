@@ -4,9 +4,9 @@ import types
 from datetime import datetime
 from typing import Iterable, List
 
+from actstream.models import Action
 from django.apps import apps
 
-from actstream.models import Action
 from apps.core.activity.verbs import (
     ACTION_GITLAB_CALL_API,
     ACTION_GITLAB_WEBHOOK_TRIGGERED,
@@ -56,12 +56,10 @@ class GlStatusProvider:
 
         return status
 
-    @classmethod
-    def _get_last_issues(cls, count: int = 10) -> List[Issue]:
+    def _get_last_issues(self, count: int = 10) -> List[Issue]:
         return list(Issue.objects.order_by("-gl_last_sync")[:count])
 
-    @classmethod
-    def _get_last_sync(cls) -> datetime:
+    def _get_last_sync(self) -> datetime:
         querysets = [
             model.objects.filter(gl_last_sync__isnull=False).values(
                 "gl_last_sync",
@@ -80,8 +78,7 @@ class GlStatusProvider:
 
         return gl_last_sync_qs.get("gl_last_sync")  # type: ignore
 
-    @classmethod
-    def _get_services_stats(cls) -> Iterable[GlServiceStatus]:
+    def _get_services_stats(self) -> Iterable[GlServiceStatus]:
         stats = []
 
         for name, verb in ACTIONS_MAPS.items():

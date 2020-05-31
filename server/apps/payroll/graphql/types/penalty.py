@@ -14,13 +14,13 @@ from apps.payroll.services.salary.allowed import filter_allowed_for_user
 class PenaltyType(BaseDjangoObjectType):
     """Penalty type."""
 
-    owner = graphene.Field(WorkItem)
-
     class Meta:
         model = Penalty
         interfaces = (DatasourceRelayNode,)
         connection_class = DataSourceConnection
         name = "Penalty"
+
+    owner = graphene.Field(WorkItem)
 
     @classmethod
     def get_queryset(cls, queryset, info) -> QuerySet:  # noqa: WPS110

@@ -14,14 +14,14 @@ class CreateWorkBreakMutation(
 ):
     """Create work break mutation."""
 
-    form_class = WorkBreakForm
-
     class Arguments:
         comment = graphene.String(required=True)
         from_date = graphene.DateTime(required=True)
         reason = graphene.String(required=True)
         to_date = graphene.DateTime(required=True)
         user = graphene.ID(required=True)
+
+    form_class = WorkBreakForm
 
     work_break = graphene.Field(WorkBreakType)
 

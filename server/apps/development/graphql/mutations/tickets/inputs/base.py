@@ -13,20 +13,6 @@ from apps.development.models.ticket import Ticket, TicketState, TicketType
 class TicketBaseInput(serializers.ModelSerializer):
     """Ticket base serializer."""
 
-    # we should redefine this field because django-graphene has a bug with a
-    # choice fields. It creates enums types for these which leads to an error:
-    # "AssertionError: Found different types with the same name in the schema:
-    # type, type."
-    type = ChoicesField(  # noqa: A003
-        required=False, choices=TicketType.values,
-    )
-
-    state = ChoicesField(choices=TicketState.values, required=False)
-
-    issues = serializers.PrimaryKeyRelatedField(
-        many=True, required=False, write_only=True, queryset=Issue.objects,
-    )
-
     class Meta:
         model = Ticket
         fields = [
@@ -40,6 +26,20 @@ class TicketBaseInput(serializers.ModelSerializer):
             "state",
             "milestone",
         ]
+
+    # we should redefine this field because django-graphene has a bug with a
+    # choice fields. It creates enums types for these which leads to an error:
+    # "AssertionError: Found different types with the same name in the schema:
+    # type, type."
+    type = ChoicesField(  # noqa: A003
+        required=False, choices=TicketType.values,
+    )
+
+    state = ChoicesField(choices=TicketState.values, required=False)
+
+    issues = serializers.PrimaryKeyRelatedField(
+        many=True, required=False, write_only=True, queryset=Issue.objects,
+    )
 
     def get_fields(self) -> Dict[str, Field]:
         """Returns serializer fields."""

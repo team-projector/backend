@@ -14,14 +14,18 @@ from apps.development.models.note import Note, NoteType
 class NotableMixin(models.Model):
     """Create notes when loading issues or merge requests."""
 
+    class Meta:
+        abstract = True
+
     notes = GenericRelation(
         "development.Note",
         verbose_name=_("VN__NOTES"),
         help_text=_("HT__NOTES"),
     )
 
-    class Meta:
-        abstract = True
+    def __str__(self):
+        """Returns object string representation."""
+        return ""
 
     def adjust_spent_times(self) -> None:
         """Create spent times from parsed notes."""
@@ -53,10 +57,6 @@ class NotableMixin(models.Model):
                 note=note,
                 base=self,
             )
-
-    def __str__(self):
-        """Returns object string representation."""
-        return ""
 
     def _get_notes_for_processing(self) -> Iterable[Note]:
         notes: List[Note] = []

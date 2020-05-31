@@ -7,15 +7,13 @@ from apps.core.graphql.security.mixins.mutation import AuthMutation
 from apps.core.graphql.security.permissions import AllowAuthenticated
 
 
-class BaseMutation(
-    AuthMutation, graphene.Mutation,
-):
+class BaseMutation(AuthMutation, graphene.Mutation):
     """A base class mutation."""
-
-    permission_classes = (AllowAuthenticated,)
 
     class Meta:
         abstract = True
+
+    permission_classes = (AllowAuthenticated,)
 
     @classmethod
     def mutate(cls, root, info, **kwargs):  # noqa: WPS110

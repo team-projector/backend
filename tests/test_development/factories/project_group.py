@@ -7,7 +7,7 @@ from tests.test_development.factories.mixins.gl_field import GitlabFieldMixin
 
 
 class ProjectGroupFactory(GitlabFieldMixin):
-    title = factory.Faker("text", max_nb_chars=200)
-
     class Meta:
         model = ProjectGroup
+
+    title = factory.Faker("text", max_nb_chars=200)

@@ -11,6 +11,11 @@ from django.utils.translation import gettext_lazy as _
 class UserManager(BaseUserManager):
     """The User model manager."""
 
+    @cached_property
+    def system_user(self):
+        """Get system user."""
+        return self.get(login=settings.TP_SYSTEM_USER_LOGIN)
+
     def create_user(
         self, login: str, password: Optional[str] = None, **kwargs,
     ):
@@ -35,8 +40,3 @@ class UserManager(BaseUserManager):
         user.save(using=self._db)
 
         return user
-
-    @cached_property
-    def system_user(self):
-        """Get system user."""
-        return self.get(login=settings.TP_SYSTEM_USER_LOGIN)

@@ -18,6 +18,11 @@ class Project(GitlabEntityMixin):
     Fill from Gitlab.
     """
 
+    class Meta:
+        verbose_name = _("VN__PROJECT")
+        verbose_name_plural = _("VN__PROJECTS")
+        ordering = ("full_title", "title")
+
     title = models.CharField(
         max_length=DEFAULT_TITLE_LENGTH,
         verbose_name=_("VN__TITLE"),
@@ -29,15 +34,6 @@ class Project(GitlabEntityMixin):
         blank=True,
         verbose_name=_("VN__FULL_TITLE"),
         help_text=_("HT__FULL_TITLE"),
-    )
-
-    group = models.ForeignKey(
-        "development.ProjectGroup",
-        models.SET_NULL,
-        null=True,
-        blank=True,
-        verbose_name=_("VN__GROUP"),
-        help_text=_("HT__GROUP"),
     )
 
     is_active = models.BooleanField(
@@ -72,17 +68,21 @@ class Project(GitlabEntityMixin):
         help_text=_("HT__MERGE_REQUESTS_SYNC"),
     )
 
+    group = models.ForeignKey(
+        "development.ProjectGroup",
+        models.SET_NULL,
+        null=True,
+        blank=True,
+        verbose_name=_("VN__GROUP"),
+        help_text=_("HT__GROUP"),
+    )
+
     milestones = GenericRelation("Milestone", related_query_name="project")
-    members = GenericRelation(
+    members = GenericRelation(  # noqa: CCE001
         "development.ProjectMember", related_query_name="project",
     )
 
     objects = ProjectManager()  # noqa: WPS110
-
-    class Meta:
-        verbose_name = _("VN__PROJECT")
-        verbose_name_plural = _("VN__PROJECTS")
-        ordering = ("full_title", "title")
 
     def __str__(self):
         """Returns object string representation."""

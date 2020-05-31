@@ -7,6 +7,9 @@ from django.utils.translation import gettext_lazy as _
 class GitlabEntityMixin(models.Model):
     """A mixin for Gitlab entity."""
 
+    class Meta:
+        abstract = True
+
     gl_id = models.PositiveIntegerField(
         unique=True,
         blank=True,
@@ -27,9 +30,6 @@ class GitlabEntityMixin(models.Model):
         verbose_name=_("VN__GITLAB_LAST_SYNC"),
         help_text=_("HT__GITLAB_LAST_SYNC"),
     )
-
-    class Meta:
-        abstract = True
 
     def __str__(self):
         """Returns object string representation."""

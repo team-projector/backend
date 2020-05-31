@@ -11,13 +11,13 @@ from apps.users.services.user.login import login_user
 class LoginMutation(BaseMutation):
     """Login mutation returns token."""
 
-    permission_classes = (AllowAny,)
-
-    token = graphene.Field(TokenType)
-
     class Arguments:
         login = graphene.String(required=True)
         password = graphene.String(required=True)
+
+    permission_classes = (AllowAny,)
+
+    token = graphene.Field(TokenType)
 
     @classmethod
     def do_mutate(cls, root, info, login, password):  # noqa: WPS110

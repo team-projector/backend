@@ -11,10 +11,10 @@ from apps.payroll.models import WorkBreak
 class DeleteWorkBreakMutation(BaseMutation):
     """Delete work break after validation."""
 
-    permission_classes = (CanManageWorkBreak,)
-
     class Arguments:
         id = graphene.ID(required=True)  # noqa: A003
+
+    permission_classes = (CanManageWorkBreak,)
 
     ok = graphene.Boolean()
 

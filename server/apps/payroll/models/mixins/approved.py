@@ -20,6 +20,9 @@ APPROVED_STATE_MAX_LENGTH = 15
 class ApprovedMixin(models.Model):
     """A mixin for approving or decline work break."""
 
+    class Meta:
+        abstract = True
+
     approve_state = models.CharField(
         choices=ApprovedState.choices,
         default=ApprovedState.CREATED,
@@ -35,6 +38,12 @@ class ApprovedMixin(models.Model):
         help_text=_("HT__APPROVED_AT"),
     )
 
+    decline_reason = models.TextField(
+        blank=True,
+        verbose_name=_("VN__DECLINE_REASON"),
+        help_text=_("HT__DECLINE_REASON"),
+    )
+
     approved_by = models.ForeignKey(
         User,
         models.SET_NULL,
@@ -44,15 +53,6 @@ class ApprovedMixin(models.Model):
         verbose_name=_("VN__APPROVED_BY"),
         help_text=_("HT__APPROVED_BY"),
     )
-
-    decline_reason = models.TextField(
-        blank=True,
-        verbose_name=_("VN__DECLINE_REASON"),
-        help_text=_("HT__DECLINE_REASON"),
-    )
-
-    class Meta:
-        abstract = True
 
     def __str__(self):
         """Returns object string representation."""

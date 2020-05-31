@@ -53,6 +53,7 @@ polint = "*"
 dennis = "*"
 safety = "*"
 xenon = "*"
+flake8-class-attributes-order = "^0.1.1"
 
 [tool.black]
 line-length = 79

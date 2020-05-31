@@ -9,13 +9,20 @@ from apps.development.models import Issue
 class BaseIssueInput(serializers.ModelSerializer):
     """Ticket sync serializer."""
 
+    class Meta:
+        model = Issue
+        fields = ("id",)
+
     id = serializers.PrimaryKeyRelatedField(  # noqa:A003
         queryset=Issue.objects.all(),
     )
 
-    class Meta:
-        model = Issue
-        fields = ("id",)
+    @property
+    def validated_data(self):
+        """Validated data changing."""
+        ret = super().validated_data
+        ret["issue"] = ret.pop("id", None)
+        return ret
 
     def validate_id(self, issue):
         """Validates that user have permissions to mutate issue."""
@@ -30,10 +37,3 @@ class BaseIssueInput(serializers.ModelSerializer):
                 )
 
         return issue
-
-    @property
-    def validated_data(self):
-        """Validated data changing."""
-        ret = super().validated_data
-        ret["issue"] = ret.pop("id", None)
-        return ret

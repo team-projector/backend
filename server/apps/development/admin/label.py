@@ -29,7 +29,7 @@ class LabelAdmin(BaseModelAdmin):
     readonly_fields = ("title", "color_square")
 
     @mark_safe
-    def color_square(self, label):
+    def color_square(self, label):  # noqa: CCE001
         """Show current label with colored square near."""
         return COLOR_TEMPLATE.format(color=label.color)
 

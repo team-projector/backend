@@ -24,10 +24,10 @@ class ActiveFilter(django_filters.BooleanFilter):
 class MilestonesFilterSet(django_filters.FilterSet):
     """Set of filters for Milestone."""
 
-    active = ActiveFilter()
-    q = SearchFilter(fields=("title", "=gl_url"))  # noqa: WPS111
-    order_by = OrderingFilter(fields=("due_date",))
-
     class Meta:
         model = Milestone
         fields = ("active", "state")
+
+    active = ActiveFilter()
+    q = SearchFilter(fields=("title", "=gl_url"))  # noqa: WPS111
+    order_by = OrderingFilter(fields=("due_date",))

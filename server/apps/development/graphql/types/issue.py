@@ -20,16 +20,29 @@ from apps.development.services.issue.problems import get_issue_problems
 class IssueType(graphql.BaseDjangoObjectType):
     """Issue type."""
 
-    metrics = graphene.Field(IssueMetricsType)
-    problems = graphene.List(graphene.String)
-    time_spent = graphene.Field(graphene.Int)
-
     class Meta:
         model = Issue
         filter_fields: List[str] = []
         interfaces = (graphql.DatasourceRelayNode, WorkItem)
         connection_class = graphql.DataSourceConnection
         name = "Issue"
+
+    metrics = graphene.Field(IssueMetricsType)
+    problems = graphene.List(graphene.String)
+    time_spent = graphene.Field(graphene.Int)
+
+    @classmethod
+    def get_queryset(cls, queryset, info) -> QuerySet:  # noqa: WPS110
+        """Get issues."""
+        if isinstance(queryset, list):
+            return queryset
+
+        queryset = filter_allowed_for_user(queryset, info.context.user)
+
+        if graphql.is_field_selected(info, "edges.node.user"):
+            queryset = queryset.select_related("user")
+
+        return queryset
 
     def resolve_problems(self, info, **kwargs):  # noqa: WPS110
         """Get issue problems."""
@@ -44,16 +57,3 @@ class IssueType(graphql.BaseDjangoObjectType):
         if self.user:
             return get_user_time_spent(self, user=self.user)
         return 0
-
-    @classmethod
-    def get_queryset(cls, queryset, info) -> QuerySet:  # noqa: WPS110
-        """Get issues."""
-        if isinstance(queryset, list):
-            return queryset
-
-        queryset = filter_allowed_for_user(queryset, info.context.user)
-
-        if graphql.is_field_selected(info, "edges.node.user"):
-            queryset = queryset.select_related("user")
-
-        return queryset

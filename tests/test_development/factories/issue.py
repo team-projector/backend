@@ -10,6 +10,9 @@ from tests.test_development.factories.project import ProjectFactory
 
 
 class IssueFactory(GitlabFieldMixin):
+    class Meta:
+        model = Issue
+
     gl_iid = factory.Sequence(lambda seq: seq)
     title = factory.Faker("text", max_nb_chars=200)
     project = factory.SubFactory(ProjectFactory)
@@ -22,6 +25,3 @@ class IssueFactory(GitlabFieldMixin):
         tzinfo=pytz.UTC,
     )
     state = IssueState.OPENED
-
-    class Meta:
-        model = Issue

@@ -21,12 +21,12 @@ from apps.users.models import Token
 class CompleteGitlabAuthMutation(SerializerMutation):
     """Complete login mutation after redirection from Gitlab."""
 
+    class Meta:
+        serializer_class = GitLabCompleteAuthMutationInput
+
     permission_classes = (AllowAny,)
 
     token = graphene.Field(TokenType)
-
-    class Meta:
-        serializer_class = GitLabCompleteAuthMutationInput
 
     @classmethod
     def perform_mutate(

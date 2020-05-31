@@ -33,6 +33,11 @@ class TicketState(models.TextChoices):
 class Ticket(Timestamps):
     """The ticket model."""
 
+    class Meta:
+        verbose_name = _("VN__TICKET")
+        verbose_name_plural = _("VN__TICKETS")
+        ordering = ("-created_at",)
+
     type = models.CharField(  # noqa: A003
         choices=TicketType.choices,
         default=TicketType.FEATURE,
@@ -66,15 +71,6 @@ class Ticket(Timestamps):
         blank=True, verbose_name=_("VN__URL"), help_text=_("HT__URL"),
     )
 
-    milestone = models.ForeignKey(
-        "development.Milestone",
-        models.CASCADE,
-        related_name="ticket",
-        blank=True,
-        null=True,
-        verbose_name=_("VN__MILESTONE"),
-    )
-
     role = models.CharField(
         max_length=TICKET_ROLE_MAX_LENGTH,
         blank=True,
@@ -91,10 +87,14 @@ class Ticket(Timestamps):
         help_text=_("HT__STATE"),
     )
 
-    class Meta:
-        verbose_name = _("VN__TICKET")
-        verbose_name_plural = _("VN__TICKETS")
-        ordering = ("-created_at",)
+    milestone = models.ForeignKey(
+        "development.Milestone",
+        models.CASCADE,
+        related_name="ticket",
+        blank=True,
+        null=True,
+        verbose_name=_("VN__MILESTONE"),
+    )
 
     def __str__(self):
         """String representation."""

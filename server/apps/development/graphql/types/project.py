@@ -17,6 +17,12 @@ from apps.development.services.issue.summary import IssuesProjectSummary
 class ProjectType(BaseDjangoObjectType):
     """Project type."""
 
+    class Meta:
+        model = Project
+        interfaces = (DatasourceRelayNode, MilestoneOwner)
+        connection_class = DataSourceConnection
+        name = "Project"
+
     milestones = DataSourceConnectionField(
         MilestoneType, filterset_class=MilestonesFilterSet,
     )
@@ -28,14 +34,13 @@ class ProjectType(BaseDjangoObjectType):
         )
 
         if is_summary:
-            return ProjectType.handle_within_summary(self, **kwargs)
+            return self._handle_within_summary(**kwargs)
 
         resolver = ProjectMilestonesResolver(self, info, **kwargs)
 
         return resolver.execute()
 
-    @classmethod
-    def handle_within_summary(cls, project: Project, **kwargs):
+    def _handle_within_summary(self, project: Project, **kwargs):
         """Handle project milestones within issues project summary."""
         ordering = kwargs.get("order_by")
 
@@ -54,9 +59,3 @@ class ProjectType(BaseDjangoObjectType):
             )
 
         return project.active_milestones
-
-    class Meta:
-        model = Project
-        interfaces = (DatasourceRelayNode, MilestoneOwner)
-        connection_class = DataSourceConnection
-        name = "Project"
