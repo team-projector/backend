@@ -3,7 +3,6 @@
 from apps.development.graphql.resolvers import ProjectMilestonesResolver
 from apps.development.graphql.types.project import ProjectType
 from apps.development.models.milestone import MilestoneState
-from tests.helpers.objects import AttrDict
 from tests.test_development.factories import (
     ProjectFactory,
     ProjectGroupFactory,
@@ -12,17 +11,14 @@ from tests.test_development.factories import (
 )
 
 
-def test_project(user, client):
+def test_project(user, client, ghl_auth_mock_info):
     client.user = user
     project = ProjectFactory.create()
 
-    assert (
-        ProjectType().get_node(AttrDict({"context": client}), project.id)
-        == project
-    )
+    assert ProjectType().get_node(ghl_auth_mock_info, project.id) == project
 
 
-def test_project_milestones(user, client):
+def test_project_milestones(user, client, ghl_auth_mock_info):
     project = ProjectFactory.create()
 
     milestone1 = ProjectMilestoneFactory.create(
@@ -34,21 +30,21 @@ def test_project_milestones(user, client):
 
     client.user = user
     milestones = ProjectMilestonesResolver(
-        project=project, info=AttrDict({"context": client}), active=True,
+        project=project, info=ghl_auth_mock_info, active=True,
     ).execute()
 
     assert milestones.count() == 1
     assert milestones.first() == milestone1
 
     milestones = ProjectMilestonesResolver(
-        project=project, info=AttrDict({"context": client}), active=False,
+        project=project, info=ghl_auth_mock_info, active=False,
     ).execute()
 
     assert milestones.count() == 1
     assert milestones.first() == milestone2
 
 
-def test_project_group_milestones(user, client):
+def test_project_group_milestones(user, client, ghl_auth_mock_info):
     group = ProjectGroupFactory.create()
 
     milestone1 = ProjectGroupMilestoneFactory.create(
@@ -66,21 +62,21 @@ def test_project_group_milestones(user, client):
     client.user = user
 
     milestones = ProjectMilestonesResolver(
-        project=project, info=AttrDict({"context": client}), active=True,
+        project=project, info=ghl_auth_mock_info, active=True,
     ).execute()
 
     assert milestones.count() == 1
     assert milestones.first() == milestone1
 
     milestones = ProjectMilestonesResolver(
-        project=project, info=AttrDict({"context": client}), active=False,
+        project=project, info=ghl_auth_mock_info, active=False,
     ).execute()
 
     assert milestones.count() == 1
     assert milestones.first() == milestone2
 
 
-def test_project_group_parent_milestones(user, client):
+def test_project_group_parent_milestones(user, client, ghl_auth_mock_info):
     group_parent = ProjectGroupFactory.create()
 
     milestone1 = ProjectGroupMilestoneFactory.create(
@@ -100,21 +96,21 @@ def test_project_group_parent_milestones(user, client):
     client.user = user
 
     milestones = ProjectMilestonesResolver(
-        project=project, info=AttrDict({"context": client}), active=True,
+        project=project, info=ghl_auth_mock_info, active=True,
     ).execute()
 
     assert milestones.count() == 1
     assert milestones.first() == milestone1
 
     milestones = ProjectMilestonesResolver(
-        project=project, info=AttrDict({"context": client}), active=False,
+        project=project, info=ghl_auth_mock_info, active=False,
     ).execute()
 
     assert milestones.count() == 1
     assert milestones.first() == milestone2
 
 
-def test_resolve_milestones(user, client):
+def test_resolve_milestones(user, client, ghl_auth_mock_info):
     project = ProjectFactory.create()
 
     ProjectMilestoneFactory.create(owner=project, state=MilestoneState.ACTIVE)
@@ -124,13 +120,11 @@ def test_resolve_milestones(user, client):
 
     client.user = user
 
-    parent = ProjectType.get_node(
-        AttrDict({"context": client}), obj_id=project.id,
-    )
+    parent = ProjectType.get_node(ghl_auth_mock_info, obj_id=project.id)
     parent.parent_type = None
 
     milestones = ProjectType.resolve_milestones(
-        parent, AttrDict({"context": client}), active=False,
+        parent, ghl_auth_mock_info, active=False,
     )
 
     assert milestones.count() == 1

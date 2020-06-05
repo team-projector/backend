@@ -4,14 +4,13 @@ from django.utils import timezone
 
 from apps.development.graphql.types import IssuesProjectSummary, ProjectType
 from apps.development.models.milestone import MilestoneState
-from tests.helpers.objects import AttrDict
 from tests.test_development.factories import (
     IssueFactory,
     ProjectMilestoneFactory,
 )
 
 
-def test_active_milestones_sort(user, client):
+def test_active_milestones_sort(user, client, ghl_auth_mock_info):
     user.roles.MANAGER = True
     user.save()
 
@@ -23,13 +22,11 @@ def test_active_milestones_sort(user, client):
         state=MilestoneState.ACTIVE, owner=m1.owner, due_date=timezone.now(),
     )
 
-    parent = ProjectType.get_node(
-        AttrDict({"context": client}), obj_id=m1.owner.id,
-    )
+    parent = ProjectType.get_node(ghl_auth_mock_info, obj_id=m1.owner.id)
     parent.parent_type = IssuesProjectSummary()
 
     milestones = ProjectType.resolve_milestones(
-        parent, AttrDict({"context": client}), order_by="due_date",
+        parent, ghl_auth_mock_info, order_by="due_date",
     )
 
     assert len(milestones) == 3

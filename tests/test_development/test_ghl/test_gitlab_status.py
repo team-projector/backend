@@ -12,7 +12,6 @@ from apps.core.tasks import add_action_task
 from apps.development.graphql.resolvers import resolve_gitlab_status
 from apps.development.models import Issue, Project
 from apps.development.services.status.gitlab import get_gitlab_sync_status
-from tests.helpers.objects import AttrDict
 from tests.test_development.factories import IssueFactory
 
 
@@ -39,7 +38,7 @@ def test_status(user):
     ) == {issue.id for issue in sync_status.last_issues}
 
 
-def test_resolver(user, client):
+def test_resolver(user, client, ghl_auth_mock_info):
     IssueFactory.create_batch(size=20)
     Issue.objects.update(updated_at=timezone.now())
 
@@ -54,9 +53,7 @@ def test_resolver(user, client):
 
     client.user = user
 
-    sync_status = resolve_gitlab_status(
-        parent=None, info=AttrDict({"context": client}),
-    )
+    sync_status = resolve_gitlab_status(parent=None, info=ghl_auth_mock_info)
 
     assert sync_status.last_sync == project.gl_last_sync
     assert set(
