@@ -26,11 +26,11 @@ def check_user_progress_metrics(  # noqa: WPS211
         assert metric.start == metric.end
         assert metric.planned_work_hours == planned_work_hours
 
-        _check_timedelta_metric(metric, "time_spent", spents)
-        _check_timedelta_metric(metric, "time_estimate", time_estimates)
-        _check_timedelta_metric(metric, "loading", loadings)
-        _check_timedelta_metric(metric, "time_remains", time_remains)
-        _check_number_metric(metric, "issues_count", issues_counts)
+        _assert_timedelta_metric(metric, "time_spent", spents)
+        _assert_timedelta_metric(metric, "time_estimate", time_estimates)
+        _assert_timedelta_metric(metric, "loading", loadings)
+        _assert_timedelta_metric(metric, "time_remains", time_remains)
+        _assert_number_metric(metric, "issues_count", issues_counts)
 
 
 def check_user_progress_payroll_metrics(
@@ -47,8 +47,8 @@ def check_user_progress_payroll_metrics(
         assert metric.start == metric.end
         assert metric.planned_work_hours == planned_work_hours
 
-        _check_number_metric(metric, "payroll", payroll)
-        _check_number_metric(metric, "paid", paid)
+        _assert_number_metric(metric, "payroll", payroll)
+        _assert_number_metric(metric, "paid", paid)
 
 
 def _prepare_metrics(metrics):
@@ -61,7 +61,7 @@ def _prepare_metrics(metrics):
     }
 
 
-def _check_timedelta_metric(metric, metric_name, metric_values):
+def _assert_timedelta_metric(metric, metric_name, metric_values):
     dt = str(metric.start)
 
     if dt in metric_values:
@@ -73,7 +73,7 @@ def _check_timedelta_metric(metric, metric_name, metric_values):
         assert getattr(metric, metric_name) == 0
 
 
-def _check_number_metric(metric, metric_name, metric_values):
+def _assert_number_metric(metric, metric_name, metric_values):
     dt = str(metric.start)
 
     if dt in metric_values:
