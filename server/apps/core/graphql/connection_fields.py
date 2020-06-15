@@ -19,9 +19,7 @@ from apps.core.graphql.security.permissions import AllowAuthenticated
 MAX_SIZE = graphene_settings.RELAY_CONNECTION_MAX_LIMIT
 
 
-class DataSourceConnectionField(
-    AuthFilter, DjangoFilterConnectionField,
-):
+class DataSourceConnectionField(AuthFilter, DjangoFilterConnectionField):
     """Data source connection field."""
 
     permission_classes = (AllowAuthenticated,)
