@@ -4,8 +4,8 @@ from functools import reduce
 from operator import or_
 from typing import Iterable, Union
 
-from bitfield import Bit
 from django.db import models
+from jnt_django_toolbox.models.fields.bit.types import Bit
 
 from apps.development.models import TeamMember
 
