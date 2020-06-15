@@ -30,12 +30,12 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: flower-credentials
-                  key: flower.user
+                  key: user
             - name: FLOWER_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: flower-credentials
-                  key: flower.password
+                  key: password
             - name: FLOWER_PORT
               value: "5555"
             {{- include "env" . | nindent 12 }}
