@@ -9,7 +9,8 @@ ENV PYTHONFAULTHANDLER=1 \
   PIPENV_COLORBLIND=true \
   PIPENV_NOSPIN=true \
   C_FORCE_ROOT=true \
-  POETRY_VERSION=1.0.0
+  POETRY_VERSION=1.0.9 \
+  PATH="/root/.poetry/bin:${PATH}"
 
 WORKDIR /app
 
@@ -23,7 +24,6 @@ RUN apt update \
                       make \
                       git \
     && curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/${POETRY_VERSION}/get-poetry.py | python \
-    && export PATH="$PATH:$HOME/.poetry/bin" \
     && poetry config virtualenvs.create false \
     && poetry install --no-dev --no-interaction --no-ansi \
     && apt remove --purge -y gcc binutils \
@@ -51,7 +51,6 @@ CMD ["/bin/bash", "deploy/server/run.sh"]
 
 FROM base as test
 
-RUN export PATH="$PATH:$HOME/.poetry/bin" \
-    && poetry install --no-interaction --no-ansi
+RUN poetry install --no-interaction --no-ansi
 
 COPY . .
