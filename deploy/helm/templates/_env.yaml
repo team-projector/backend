@@ -1,92 +1,97 @@
 {{- define "env" -}}
-- name: POSTGRES_DB
+- name: DJANGO_DATABASE_NAME
   valueFrom:
     configMapKeyRef:
       name: database-config
-      key: database.name
-- name: POSTGRES_USER
-  valueFrom:
-    secretKeyRef:
-      name: database-credentials
-      key: database.user
-- name: POSTGRES_PASSWORD
-  valueFrom:
-    secretKeyRef:
-      name: database-credentials
-      key: database.password
+      key: name
 - name: DJANGO_DATABASE_HOST
   valueFrom:
     configMapKeyRef:
       name: database-config
-      key: database.host
+      key: host
+- name: DJANGO_DATABASE_PORT
+  valueFrom:
+    configMapKeyRef:
+      name: database-config
+      key: port
+- name: DJANGO_DATABASE_USER
+  valueFrom:
+    secretKeyRef:
+      name: database-credentials
+      key: user
+- name: DJANGO_DATABASE_PASSWORD
+  valueFrom:
+    secretKeyRef:
+      name: database-credentials
+      key: password
 - name: DJANGO_SECRET_KEY
   valueFrom:
     secretKeyRef:
       name: backend-secrets
-      key: backend.secret_key
+      key: secret_key
 - name: DJANGO_GITLAB_TOKEN
   valueFrom:
     secretKeyRef:
       name: backend-secrets
-      key: backend.gitlab_token
+      key: gitlab_token
 - name: DJANGO_SOCIAL_AUTH_GITLAB_KEY
   valueFrom:
     secretKeyRef:
       name: backend-secrets
-      key: backend.social_auth_gitlab_key
+      key: social_auth_gitlab_key
 - name: DJANGO_SOCIAL_AUTH_GITLAB_SECRET
   valueFrom:
     secretKeyRef:
       name: backend-secrets
-      key: backend.social_auth_gitlab_secret
+      key: social_auth_gitlab_secret
 - name: DJANGO_ENV
   valueFrom:
     configMapKeyRef:
       name: backend-config
-      key: backend.env
+      key: env
 - name: DJANGO_GITLAB_CHECK_WEBHOOKS
   valueFrom:
     configMapKeyRef:
       name: backend-config
-      key: backend.gitlab_check_webhooks
+      key: gitlab_check_webhooks
 - name: DOMAIN_NAME
   valueFrom:
     configMapKeyRef:
       name: global-config
-      key: global.domain
+      key: domain
 - name: DJANGO_EMAIL_HOST
   valueFrom:
     configMapKeyRef:
       name: backend-config
-      key: backend.email.host
+      key: email.host
 - name: DJANGO_EMAIL_PORT
   valueFrom:
     configMapKeyRef:
       name: backend-config
-      key: backend.email.port
+      key: email.port
 - name: DJANGO_DEFAULT_FROM_EMAIL
   valueFrom:
     configMapKeyRef:
       name: backend-config
-      key: backend.email.from_email
+      key: email.from_email
 - name: DJANGO_EMAIL_HOST_USER
   valueFrom:
     secretKeyRef:
       name: backend-secrets
-      key: backend.email.user
+      key: email.user
 - name: DJANGO_EMAIL_HOST_PASSWORD
   valueFrom:
     secretKeyRef:
       name: backend-secrets
-      key: backend.email.password
+      key: email.password
 - name: DJANGO_SLACK_TOKEN
   valueFrom:
     secretKeyRef:
       name: backend-secrets
-      key: backend.slack.token
+      key: slack.token
 - name: DJANGO_SENTRY_DSN
   valueFrom:
     secretKeyRef:
       name: backend-secrets
-      key: backend.sentry.dsn
+      key: sentry.dsn
 {{- end -}}

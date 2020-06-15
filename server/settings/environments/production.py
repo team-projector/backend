@@ -12,9 +12,9 @@ ALLOWED_HOSTS = ["localhost", DOMAIN_NAME]
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
-        "NAME": config("POSTGRES_DB"),
-        "USER": config("POSTGRES_USER"),
-        "PASSWORD": config("POSTGRES_PASSWORD"),
+        "NAME": config("DJANGO_DATABASE_NAME"),
+        "USER": config("DJANGO_DATABASE_USER"),
+        "PASSWORD": config("DJANGO_DATABASE_PASSWORD"),
         "HOST": config("DJANGO_DATABASE_HOST"),
         "PORT": config("DJANGO_DATABASE_PORT", cast=int, default=PG_PORT),
         "CONN_MAX_AGE": config("CONN_MAX_AGE", cast=int, default=60),
