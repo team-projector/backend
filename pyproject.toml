@@ -19,7 +19,6 @@ django-model-utils = "*"
 django-health-check = "*"
 django-activity-stream = {git = "https://github.com/justquick/django-activity-stream.git", rev = "master"}
 psycopg2-binary = "*"
-jnt-django-bitfield = "*"
 jnt-django-admin-tools = "*"
 social-auth-app-django = "*"
 social-auth-core = "*"
@@ -34,6 +33,7 @@ uwsgitop = "*"
 tqdm = "*"
 black = "^19.10b0"
 sentry-sdk = "^0.14.3"
+jnt-django-toolbox = "^0.1.0"
 
 [tool.poetry.dev-dependencies]
 pytest = "*"

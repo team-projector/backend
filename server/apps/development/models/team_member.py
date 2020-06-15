@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 
-from bitfield import BitField
 from django.conf import settings
 from django.db import models
 from django.utils.translation import gettext_lazy as _
+from jnt_django_toolbox.models.fields import BitField
 
 from apps.development.models.managers import TeamMemberManager
 
