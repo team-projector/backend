@@ -42,12 +42,12 @@ class SlackClient:
                 channel=channel["id"], blocks=blocks, **kwargs,
             )
 
-    def _get_slack_client(self) -> slack.WebClient:
+    def _get_slack_client(self) -> slack.WebClient:  # type: ignore
         token = settings.SLACK_TOKEN
         if not token:
             raise ImproperlyConfigured("'settings.SLACK_TOKEN' must be filled")
 
-        return slack.WebClient(token)
+        return slack.WebClient(token)  # type: ignore
 
     def _get_channel_user_by_email(self, email: str):
         """

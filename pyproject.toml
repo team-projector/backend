@@ -33,7 +33,7 @@ uwsgitop = "*"
 tqdm = "*"
 black = "^19.10b0"
 sentry-sdk = "^0.14.3"
-jnt-django-toolbox = "^0.1.0"
+jnt-django-toolbox = "*"
 
 [tool.poetry.dev-dependencies]
 pytest = "*"
