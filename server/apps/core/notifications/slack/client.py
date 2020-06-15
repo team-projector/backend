@@ -3,7 +3,7 @@
 from contextlib import suppress
 from typing import List
 
-import slack
+from slack import WebClient  # type: ignore
 from django.conf import settings
 from django.core.exceptions import ImproperlyConfigured
 from slack.errors import SlackApiError
@@ -42,12 +42,12 @@ class SlackClient:
                 channel=channel["id"], blocks=blocks, **kwargs,
             )
 
-    def _get_slack_client(self) -> slack.WebClient:
+    def _get_slack_client(self) -> WebClient:
         token = settings.SLACK_TOKEN
         if not token:
             raise ImproperlyConfigured("'settings.SLACK_TOKEN' must be filled")
 
-        return slack.WebClient(token)
+        return WebClient(token)
 
     def _get_channel_user_by_email(self, email: str):
         """
