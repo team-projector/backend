@@ -327,6 +327,7 @@ jsonfield = ["django-jsonfield (>=1.0.1)", "django-jsonfield-compat (>=0.4.4)"]
 reference = "6781960facc18d0d4e3bb28f2ab4acf4ec173989"
 type = "git"
 url = "https://github.com/justquick/django-activity-stream.git"
+
 [[package]]
 category = "main"
 description = "django-cors-headers is a Django application for handling the server headers required for Cross-Origin Resource Sharing (CORS)."
@@ -897,7 +898,7 @@ description = ""
 name = "jnt-django-toolbox"
 optional = false
 python-versions = ">=3.8,<4.0"
-version = "0.1.1"
+version = "0.1.4"
 
 [package.dependencies]
 django = ">=3"
@@ -2091,8 +2092,8 @@ jnt-django-admin-tools = [
     {file = "jnt_django_admin_tools-0.9.2-py3-none-any.whl", hash = "sha256:1898018ddc1e2d7c6bfaf69dbbb86808dfc08ec4bdfbebb0626228c603ce5c5f"},
 ]
 jnt-django-toolbox = [
-    {file = "jnt-django-toolbox-0.1.1.tar.gz", hash = "sha256:20a07e6e72c8e071f66576fd285d0c6bbd02987a3d90ee37cb3b30e9538334ba"},
-    {file = "jnt_django_toolbox-0.1.1-py3-none-any.whl", hash = "sha256:ebd898fdf18caa1c1dc4ca14b97a7ed7b9881f55091396210a514a76f73fc692"},
+    {file = "jnt-django-toolbox-0.1.4.tar.gz", hash = "sha256:bfcfc8610d37e7e4fc83b054d9e2491191c6f6dd55b302b8ac34dad0afabbc15"},
+    {file = "jnt_django_toolbox-0.1.4-py3-none-any.whl", hash = "sha256:aeac5aaa80019ef05f3ebca761e9fcbe5cb2da52244bdd0318963e6325b32366"},
 ]
 kombu = [
     {file = "kombu-4.6.10-py2.py3-none-any.whl", hash = "sha256:dc282bb277197d723bccda1a9ba30a27a28c9672d0ab93e9e51bb05a37bd29c3"},
