@@ -44,3 +44,4 @@ if sentry_dsn:
         release=TP_APP_VERSION,
         send_default_pii=True,
     )
+    sentry_sdk.utils.MAX_STRING_LENGTH = 2048
