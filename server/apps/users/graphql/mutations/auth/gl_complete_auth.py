@@ -6,7 +6,7 @@ import graphene
 from django.contrib.auth import REDIRECT_FIELD_NAME
 from graphql import ResolveInfo
 from social_core.actions import do_complete
-from social_django.views import _do_login  # noqa: WPS436
+from social_django.views import _do_login  # noqa: WPS450
 
 from apps.core.graphql.mutations import SerializerMutation
 from apps.core.graphql.security.permissions import AllowAny

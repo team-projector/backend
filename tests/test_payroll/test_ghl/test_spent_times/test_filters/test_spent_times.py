@@ -198,7 +198,7 @@ def test_filter_by_project(user):
         request=None,
     ).qs
 
-    assert set(queryset) == {*spends[:2]}
+    assert set(queryset) == set(spends[:2])
 
     queryset = SpentTimeFilterSet(
         data={"project": projects[1].pk},
@@ -206,7 +206,7 @@ def test_filter_by_project(user):
         request=None,
     ).qs
 
-    assert set(queryset) == {*spends[2:]}
+    assert set(queryset) == set(spends[2:])
 
 
 def test_filter_by_team(user, user2, make_team_leader):
@@ -239,7 +239,7 @@ def test_filter_by_team(user, user2, make_team_leader):
         request=None,
     ).qs
 
-    assert set(queryset) == {*spends[:2]}
+    assert set(queryset) == set(spends[:2])
 
     queryset = SpentTimeFilterSet(
         data={"team": teams[1].id},
@@ -247,7 +247,7 @@ def test_filter_by_team(user, user2, make_team_leader):
         request=None,
     ).qs
 
-    assert set(queryset) == {*spends[2:]}
+    assert set(queryset) == set(spends[2:])
 
 
 def test_order_by_date(user, issue):
