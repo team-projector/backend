@@ -28,19 +28,22 @@ class SyncMilestoneInput(serializers.ModelSerializer):
 
     def validate_id(self, milestone):
         """Validates that user have permissions to mutate milestone."""
+        if not milestone:
+            return None
+
         exc = ValidationError(
             "You don't have permissions to mutate this milestone",
         )
-        if milestone:
-            try:
-                allowed_milestone_qs = filter_allowed_for_user(
-                    Milestone.objects.filter(id=milestone.id),
-                    self.context["request"].user,
-                )
-            except GraphQLPermissionDenied:  # noqa:WPS329
+
+        try:
+            allowed_milestone_qs = filter_allowed_for_user(
+                Milestone.objects.filter(id=milestone.id),
+                self.context["request"].user,
+            )
+        except GraphQLPermissionDenied:  # noqa:WPS329
+            raise exc
+        else:
+            if not allowed_milestone_qs.exists():
                 raise exc
-            else:
-                if not allowed_milestone_qs.exists():
-                    raise exc
 
         return milestone
