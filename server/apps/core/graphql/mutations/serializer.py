@@ -77,7 +77,7 @@ class SerializerMutation(AuthMutation, graphene.Mutation):
         cls,
         root: Optional[object],
         info: ResolveInfo,  # noqa: WPS110
-        **input,  # noqa: A002
+        **input,  # noqa: WPS125
     ) -> "SerializerMutation":
         """Mutate handler."""
         cls.check_premissions(root, info, **input)
@@ -89,7 +89,7 @@ class SerializerMutation(AuthMutation, graphene.Mutation):
         cls,
         root: Optional[object],
         info: ResolveInfo,  # noqa: WPS110
-        **input,  # noqa: A002
+        **input,  # noqa: WPS125
     ) -> None:
         """Check permissions."""
         if not cls.has_permission(root, info, **input):
@@ -100,7 +100,7 @@ class SerializerMutation(AuthMutation, graphene.Mutation):
         cls,
         root: Optional[object],
         info: ResolveInfo,  # noqa: WPS110
-        **input,
+        **input,  # noqa: WPS125
     ) -> "SerializerMutation":
         """Mutate and get payload."""
         kwargs = cls.get_serializer_kwargs(root, info, **input)
@@ -116,7 +116,7 @@ class SerializerMutation(AuthMutation, graphene.Mutation):
         cls,
         root: Optional[object],
         info: ResolveInfo,  # noqa: WPS110
-        **input,
+        **input,  # noqa: WPS125
     ) -> Dict[str, object]:
         """Get serializer options."""
         return {

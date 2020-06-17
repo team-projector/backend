@@ -26,7 +26,7 @@ class TicketType(BaseDjangoObjectType):
         name = "Ticket"
 
     metrics = graphene.Field(TicketMetricsType)
-    type = graphene.String()  # noqa: A003
+    type = graphene.String()  # noqa: WPS125
     problems = graphene.List(graphene.String)
 
     @classmethod

@@ -19,7 +19,7 @@ class TeamFilter(django_filters.ModelChoiceFilter):
         """
         super().__init__(queryset=Team.objects.all())
 
-    def filter(self, queryset, value) -> QuerySet:  # noqa: A003, WPS110
+    def filter(self, queryset, value) -> QuerySet:  # noqa: WPS125, WPS110
         """Do filtering."""
         if not value:
             return queryset

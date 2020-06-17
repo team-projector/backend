@@ -38,7 +38,7 @@ class Ticket(Timestamps):
         verbose_name_plural = _("VN__TICKETS")
         ordering = ("-created_at",)
 
-    type = models.CharField(  # noqa: A003
+    type = models.CharField(  # noqa: WPS125
         choices=TicketType.choices,
         default=TicketType.FEATURE,
         max_length=TICKET_TYPE_MAX_LENGTH,

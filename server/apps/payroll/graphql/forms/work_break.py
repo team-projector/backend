@@ -11,7 +11,7 @@ User = get_user_model()
 class WorkBreakForm(forms.Form):
     """Work break form used for validation input data mutations."""
 
-    id = forms.IntegerField(required=False, min_value=0)  # noqa: A003
+    id = forms.IntegerField(required=False, min_value=0)  # noqa: WPS125
     user = forms.ModelChoiceField(required=False, queryset=User.objects.all())
     from_date = forms.DateTimeField(required=False)
     to_date = forms.DateTimeField(required=False)

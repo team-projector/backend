@@ -16,7 +16,9 @@ class SearchFilter(CharFilter):
         super().__init__()
         self.fields = kwargs.pop("fields", {})
 
-    def filter(self, queryset, search_value) -> models.QuerySet:  # noqa: A003
+    def filter(  # noqa: WPS125
+        self, queryset, search_value,
+    ) -> models.QuerySet:
         """Do filtering."""
         if not search_value or not self.fields:
             return queryset

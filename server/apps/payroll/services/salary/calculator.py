@@ -48,7 +48,7 @@ class SalaryCalculator:
 
         spent_data = self._get_spent_data(salary)
 
-        salary.sum = spent_data["total_sum"] or 0
+        salary.sum = spent_data["total_sum"] or 0  # noqa: WPS125
         salary.charged_time = spent_data["total_time_spent"] or 0
         salary.penalty = self._get_penalty(salary)
         salary.bonus = self._get_bonus(salary)

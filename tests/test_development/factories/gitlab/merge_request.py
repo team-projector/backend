@@ -12,7 +12,7 @@ from tests.test_users.factories.gitlab import GlUserFactory
 
 
 class GlMergeRequestFactory(factory.DictFactory):
-    id = factory.Faker("random_int")  # noqa: A003
+    id = factory.Faker("random_int")  # noqa: WPS125
     iid = factory.Faker("random_int")
     web_url = factory.Faker("url")
     title = factory.Sequence(lambda seq: "MergeRequest {0}".format(seq))

@@ -20,7 +20,7 @@ from tests.test_users.test_services.test_users.test_metrics.test_progress.test_d
 )
 
 
-def test_simple(user, freeze_to_noon):
+def test_simple(user):
     issue = IssueFactory.create(
         user=user,
         time_estimate=seconds(hours=15),
@@ -86,7 +86,7 @@ def test_simple(user, freeze_to_noon):
     )
 
 
-def test_negative_remains(user, freeze_to_noon):
+def test_negative_remains(user):
     issue = IssueFactory.create(
         user=user,
         time_estimate=seconds(hours=2),
@@ -119,7 +119,7 @@ def test_negative_remains(user, freeze_to_noon):
     )
 
 
-def test_loading_day_already_has_spends(user, freeze_to_noon):
+def test_loading_day_already_has_spends(user):
     issue = IssueFactory.create(
         user=user,
         time_estimate=int(seconds(hours=4)),
@@ -179,7 +179,7 @@ def test_loading_day_already_has_spends(user, freeze_to_noon):
     )
 
 
-def test_not_in_range(user, freeze_to_noon):
+def test_not_in_range(user):
     issue = IssueFactory.create(
         user=user,
         due_date=datetime.now(),
@@ -227,7 +227,7 @@ def test_not_in_range(user, freeze_to_noon):
     )
 
 
-def test_another_user(user, freeze_to_noon):
+def test_another_user(user):
     issue = IssueFactory.create(
         user=user,
         due_date=datetime.now(),
@@ -277,7 +277,7 @@ def test_another_user(user, freeze_to_noon):
     )
 
 
-def test_not_loading_over_daily_work_hours(user, freeze_to_noon):
+def test_not_loading_over_daily_work_hours(user):
     user.daily_work_hours = 4
     user.save()
 
@@ -319,7 +319,7 @@ def test_not_loading_over_daily_work_hours(user, freeze_to_noon):
     )
 
 
-def test_bad_group(user, freeze_to_noon):
+def test_bad_group(user):
     group = "test_bad_group"
     with pytest.raises(ValueError, match="Bad group '{0}'".format(group)):
         get_progress_metrics(
@@ -330,7 +330,7 @@ def test_bad_group(user, freeze_to_noon):
         )
 
 
-def test_provider_not_implemented(user, freeze_to_noon):
+def test_provider_not_implemented(user):
     with pytest.raises(NotImplementedError):
         ProgressMetricsProvider(
             user,

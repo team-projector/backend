@@ -13,7 +13,7 @@ class BaseIssueInput(serializers.ModelSerializer):
         model = Issue
         fields = ("id",)
 
-    id = serializers.PrimaryKeyRelatedField(  # noqa:A003
+    id = serializers.PrimaryKeyRelatedField(  # noqa:WPS125
         queryset=Issue.objects.all(),
     )
 

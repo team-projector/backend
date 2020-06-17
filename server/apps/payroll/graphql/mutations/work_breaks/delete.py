@@ -12,7 +12,7 @@ class DeleteWorkBreakMutation(BaseMutation):
     """Delete work break after validation."""
 
     class Arguments:
-        id = graphene.ID(required=True)  # noqa: A003
+        id = graphene.ID(required=True)  # noqa: WPS125
 
     permission_classes = (CanManageWorkBreak,)
 

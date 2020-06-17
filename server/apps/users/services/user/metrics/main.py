@@ -195,7 +195,7 @@ class _Aggregations:
 class _WorkItemFilters(NamedTuple):
     opened: models.Q
     closed: models.Q
-    all: Optional[models.Q]
+    all: Optional[models.Q]  # noqa: WPS125
 
 
 class _WorkItemAggregations:

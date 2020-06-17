@@ -25,7 +25,7 @@ class UpdateTicketInput(TicketBaseInput):
         many=True, required=False, write_only=True, queryset=Issue.objects,
     )
 
-    id = serializers.PrimaryKeyRelatedField(  # noqa:A003
+    id = serializers.PrimaryKeyRelatedField(  # noqa:WPS125
         queryset=Ticket.objects.all(),
     )
 

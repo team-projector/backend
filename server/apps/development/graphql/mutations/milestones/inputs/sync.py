@@ -15,7 +15,7 @@ class SyncMilestoneInput(serializers.ModelSerializer):
         model = Milestone
         fields = ("id",)
 
-    id = serializers.PrimaryKeyRelatedField(  # noqa:A003
+    id = serializers.PrimaryKeyRelatedField(  # noqa:WPS125
         queryset=Milestone.objects.all(),
     )
 

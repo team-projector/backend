@@ -83,5 +83,5 @@ class SpentTime(Payroll):  # noqa:WPS230
     def _adjust_sums(self) -> None:
         work_hours = self.time_spent / SECS_IN_HOUR
 
-        self.sum = work_hours * self.hour_rate  # noqa: WPS601
+        self.sum = work_hours * self.hour_rate  # noqa: WPS125
         self.customer_sum = work_hours * self.customer_rate  # noqa: WPS601

@@ -14,7 +14,7 @@ class DeclineWorkBreakMutation(BaseMutation):
     """Decline work break mutation."""
 
     class Arguments:
-        id = graphene.ID(required=True)  # noqa: A003
+        id = graphene.ID(required=True)  # noqa: WPS125
         decline_reason = graphene.String(required=True)
 
     permission_classes = (CanApproveDeclineWorkBreak,)

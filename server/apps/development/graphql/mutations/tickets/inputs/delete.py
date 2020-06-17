@@ -8,7 +8,7 @@ from apps.development.models import Ticket
 class DeleteTicketInput(serializers.Serializer):
     """Ticket delete serializer."""
 
-    id = serializers.PrimaryKeyRelatedField(  # noqa: A003
+    id = serializers.PrimaryKeyRelatedField(  # noqa: WPS125
         queryset=Ticket.objects.all(),
     )
 
