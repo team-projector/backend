@@ -5,6 +5,7 @@ from datetime import timedelta
 import pytest
 from django.utils import timezone
 
+from apps.core.gitlab import GITLAB_DATETIME_FORMAT
 from apps.core.graphql.errors import GraphQLPermissionDenied
 from apps.development.models import TeamMember
 from apps.payroll.models.work_break import WorkBreak, WorkBreakReason
@@ -29,8 +30,6 @@ mutation ($user: Int!, $id: ID!, $fromDate: DateTime!, $toDate: DateTime!,
   }
 }
 """
-
-DATE_TIME_FORMAT = "%Y-%m-%dT%H:%M:%S.%fZ"
 
 
 def test_query(user, ghl_client):
@@ -194,4 +193,4 @@ def test_change_work_break_user(
 
 
 def _date_strftime(date):
-    return date.strftime(DATE_TIME_FORMAT)
+    return date.strftime(GITLAB_DATETIME_FORMAT)

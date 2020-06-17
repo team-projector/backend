@@ -24,9 +24,9 @@ class IssuesGLWebhook(GLWebhook):
         sync_project_issue_task.delay(project_id, issue_id)
 
         logger.info(
-            "gitlab webhook was triggered: project = %s, issue = %s",
-            project_id,
-            issue_id,
+            "gitlab webhook was triggered: project = {0}, issue = {1}".format(
+                project_id, issue_id,
+            ),
         )
 
         add_action_task.delay(verb=ACTION_GITLAB_WEBHOOK_TRIGGERED)

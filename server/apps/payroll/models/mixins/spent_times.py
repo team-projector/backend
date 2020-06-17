@@ -13,7 +13,7 @@ class SpentTimesMixin(models.Model):
 
     time_spents = GenericRelation(
         "payroll.SpentTime",
-        related_query_name="%(class)ss",
+        related_query_name="%(class)ss",  # noqa: WPS323
         verbose_name=_("VN__TIME_SPENTS"),
         help_text=_("HT__TIME_SPENTS"),
     )

@@ -5,8 +5,8 @@ from typing import Dict, List, Optional
 
 from django.utils.timezone import make_aware
 
-GITLAB_DATETIME_FORMAT = "%Y-%m-%dT%H:%M:%S.%fZ"
-GITLAB_DATE_FORMAT = "%Y-%m-%d"
+GITLAB_DATETIME_FORMAT = "%Y-%m-%dT%H:%M:%S.%fZ"  # noqa: WPS323
+GITLAB_DATE_FORMAT = "%Y-%m-%d"  # noqa: WPS323
 STATE_MERGED = "merged"
 
 

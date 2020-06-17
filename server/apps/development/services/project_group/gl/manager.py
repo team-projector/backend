@@ -68,6 +68,6 @@ class ProjectGroupGlManager:
             full_title=gl_group.full_name,
         )
 
-        logger.info("Group '%s' is synced", group)
+        logger.info("Group '{0}' is synced".format(group))
 
         return group

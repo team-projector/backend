@@ -24,9 +24,9 @@ class MergeRequestsGLWebhook(GLWebhook):
         sync_project_merge_request_task.delay(project_id, merge_request_id)
 
         logger.info(
-            "gitlab webhook was triggered: project = %s, merge_request = %s",
-            project_id,
-            merge_request_id,
+            "gitlab webhook was triggered: project = {0}, merge_request = {1}".format(  # noqa: E501
+                project_id, merge_request_id,
+            ),
         )
 
         add_action_task.delay(verb=ACTION_GITLAB_WEBHOOK_TRIGGERED)

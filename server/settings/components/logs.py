@@ -11,9 +11,9 @@ LOGGING = {
     "disable_existing_loggers": False,
     "formatters": {
         "standard": {
-            "format": "[%(asctime)s]|%(levelname)s|%(module)s"
-            + ".%(funcName)s:%(lineno)s|%(message)s",
-            "datefmt": "%Y-%m-%d %H:%M:%S",
+            "format": "[%(asctime)s]|%(levelname)s|%(module)s"  # noqa: WPS323
+            + ".%(funcName)s:%(lineno)s|%(message)s",  # noqa: WPS323
+            "datefmt": "%Y-%m-%d %H:%M:%S",  # noqa: WPS323
         },
     },
     "handlers": {

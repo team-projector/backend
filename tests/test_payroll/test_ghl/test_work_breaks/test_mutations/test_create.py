@@ -4,6 +4,7 @@ from datetime import timedelta
 
 from django.utils import timezone
 
+from apps.core.gitlab import GITLAB_DATETIME_FORMAT
 from apps.payroll.models.work_break import WorkBreak, WorkBreakReason
 
 GHL_QUERY_CREATE_WORK_BREAK = """
@@ -22,8 +23,6 @@ $reason: String!, $comment: String!) {
   }
 }
 """
-
-DATE_TIME_FORMAT = "%Y-%m-%dT%H:%M:%S.%fZ"
 
 
 def test_query(user, ghl_client):
@@ -50,4 +49,4 @@ def test_query(user, ghl_client):
 
 
 def _date_strftime(date):
-    return date.strftime(DATE_TIME_FORMAT)
+    return date.strftime(GITLAB_DATETIME_FORMAT)

@@ -49,8 +49,8 @@ def test_query(user, ghl_client):
     metrics = progress_metrics[0]["metrics"]
 
     assert len(metrics) == 1
-    assert metrics[0]["start"] == date.strftime("%Y-%m-%d")
-    assert metrics[0]["end"] == date.strftime("%Y-%m-%d")
+    assert metrics[0]["start"] == date.strftime("%Y-%m-%d")  # noqa: WPS323
+    assert metrics[0]["end"] == date.strftime("%Y-%m-%d")  # noqa: WPS323
     assert not metrics[0]["issuesCount"]
 
 

@@ -26,8 +26,9 @@ class PipelineGLWebhook(GLWebhook):
             return
 
         logger.info(
-            "gitlab pipeline webhook was triggered: pipeline = %s",
-            pipeline["id"],
+            "gitlab pipeline webhook was triggered: pipeline = {0}".format(
+                pipeline["id"],
+            ),
         )
 
         user = User.objects.get(email=body["user"]["email"])

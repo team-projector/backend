@@ -56,7 +56,7 @@ def _prepare_metrics(metrics):
         return {}
 
     return {
-        metric_date.strftime("%Y-%m-%d"): time
+        metric_date.strftime("%Y-%m-%d"): time  # noqa: WPS323
         for metric_date, time in metrics.items()
     }
 

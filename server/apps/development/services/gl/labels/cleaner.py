@@ -30,7 +30,9 @@ class Label:
     def delete(self) -> None:
         """Deletes the label from gitlab."""
         logger.debug(
-            "Removing label %s from %s", self.name, self._parent.web_url,
+            "Removing label {0} from {1}".format(
+                self.name, self._parent.web_url,
+            ),
         )
 
         self._parent.labels.delete(self.id)
@@ -40,7 +42,7 @@ class Label:
         new_name = "__{0}__{1}".format(target.id, target.match_counter)
 
         logger.debug(
-            "'%s' will be renamed to '%s'", self.name, new_name,
+            "'{0}' will be renamed to '{1}'".format(self.name, new_name),
         )
 
         self.name = new_name
@@ -130,10 +132,9 @@ class Project(LabelsContainer):
         if initial != sorted(gl_api_obj.labels):
             gl_api_obj.save()
             logger.debug(
-                "Change labels for %s:\n%s -> %s",
-                gl_api_obj.web_url,
-                initial,
-                gl_api_obj.labels,
+                "Change labels for {0}:\n{1} -> {2}".format(
+                    gl_api_obj.web_url, initial, gl_api_obj.labels,
+                ),
             )
 
     def _replace_label_by_id(self, label_name) -> str:
@@ -263,7 +264,7 @@ class LabelsCleaner:
 
                 except Exception:
                     logger.exception(
-                        "Failed on %s operation: %s", num, operation,
+                        "Failed on {0} operation: {1}".format(num, operation),
                     )
                     break
 
