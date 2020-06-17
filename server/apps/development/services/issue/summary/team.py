@@ -41,23 +41,16 @@ class IssuesTeamSummaryProvider:
 
         total_issues_count = self._get_total_issues_count(summaries_qs)
 
-        summaries: List[IssuesTeamSummary] = []
+        return self._get_summaries(summaries_qs, total_issues_count)
 
-        summaries = self._apply_summary(
-            summaries, summaries_qs, total_issues_count,
-        )
-
-        return summaries
-
-    def _apply_summary(
-        self,
-        summaries: List[IssuesTeamSummary],
-        summaries_qs: models.QuerySet,
-        total_issues_count: int,
+    def _get_summaries(
+        self, summaries_qs: models.QuerySet, total_issues_count: int,
     ):
         summaries_team = {
             summary["user__teams"]: summary for summary in summaries_qs
         }
+
+        summaries: List[IssuesTeamSummary] = []
 
         team_qs = self._get_team_qs(summaries_qs)
 

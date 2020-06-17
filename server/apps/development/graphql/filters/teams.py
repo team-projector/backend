@@ -28,11 +28,9 @@ class TeamRolesFilter(django_filters.CharFilter):
             parsed_roles,
         )
 
-        queryset = queryset.annotate(
-            member_exists=Exists(team_members),
-        ).filter(member_exists=True)
-
-        return queryset
+        return queryset.annotate(member_exists=Exists(team_members)).filter(
+            member_exists=True,
+        )
 
     def _parse_roles(self, roles: str) -> List[str]:
         if not roles:

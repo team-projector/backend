@@ -55,23 +55,16 @@ class IssuesProjectSummaryProvider:
 
         total_issues_count = self._get_total_issues_count(summaries_qs)
 
-        summaries: List[IssuesProjectSummary] = []
+        return self._get_summaries(summaries_qs, total_issues_count)
 
-        summaries = self._apply_summary(
-            summaries, summaries_qs, total_issues_count,
-        )
-
-        return summaries
-
-    def _apply_summary(
-        self,
-        summaries: List[IssuesProjectSummary],
-        summaries_qs: models.QuerySet,
-        total_issues_count: int,
+    def _get_summaries(
+        self, summaries_qs: models.QuerySet, total_issues_count: int,
     ) -> List[IssuesProjectSummary]:
         summaries_project = {
             summary["project"]: summary for summary in summaries_qs
         }
+
+        summaries: List[IssuesProjectSummary] = []
 
         for project in self._get_project_qs(summaries_qs):
             summary = IssuesProjectSummary()
@@ -131,9 +124,8 @@ class IssuesProjectSummaryProvider:
         project_ids = [summary["project"] for summary in summaries_qs]
 
         projects_qs = Project.objects.filter(id__in=project_ids)
-        projects_qs = sorted(projects_qs, key=get_min_due_date)
 
-        return projects_qs
+        return sorted(projects_qs, key=get_min_due_date)
 
 
 def get_project_summaries(

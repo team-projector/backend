@@ -22,7 +22,7 @@ class ApiGraphQLView(GraphQLView):
         view = permission_classes((AllowAny,))(view)
         view = authentication_classes([TokenAuthentication])(view)
         view = api_view(["GET", "POST"])(view)
-        return view
+        return view  # noqa: WPS331
 
     def parse_body(self, request):
         """Parse body."""

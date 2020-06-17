@@ -29,13 +29,9 @@ class ApprovingFilter(django_filters.BooleanFilter):
             teams__in=teams, id=OuterRef("user_id"),
         )
 
-        queryset = queryset.annotate(
-            user_is_team_member=Exists(subquery),
-        ).filter(
+        return queryset.annotate(user_is_team_member=Exists(subquery)).filter(
             user_is_team_member=True, approve_state=ApprovedState.CREATED,
         )
-
-        return queryset
 
 
 class TeamFilter(django_filters.ModelChoiceFilter):
