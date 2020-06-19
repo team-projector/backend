@@ -3,8 +3,8 @@
 from datetime import datetime, timedelta
 
 from django.test import override_settings
+from jnt_django_toolbox.helpers.time import seconds
 
-from apps.core.utils.time import seconds
 from apps.development.models.issue import IssueState
 from apps.users.services.user.metrics import get_progress_metrics
 from tests.test_development.factories import IssueFactory

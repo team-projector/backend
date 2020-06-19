@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
 import pytest
+from jnt_django_toolbox.helpers.objects import dict2obj
 
-from apps.core.utils.objects import dict2obj
 from apps.development.models.note import NoteType
 from apps.development.services.note.gitlab import CommentParser
 from tests.test_development.factories.gitlab import GlNoteFactory

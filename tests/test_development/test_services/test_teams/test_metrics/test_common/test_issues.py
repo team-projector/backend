@@ -2,7 +2,8 @@
 
 from datetime import datetime, timedelta
 
-from apps.core.utils.time import seconds
+from jnt_django_toolbox.helpers.time import seconds
+
 from apps.development.graphql.types.team import TeamType
 from apps.development.models import Team
 from apps.development.models.issue import IssueState

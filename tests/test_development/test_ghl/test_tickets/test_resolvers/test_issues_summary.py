@@ -2,7 +2,8 @@
 
 from datetime import datetime
 
-from apps.core.utils.objects import dict2obj
+from jnt_django_toolbox.helpers.objects import dict2obj
+
 from apps.development.graphql.resolvers import resolve_issues_summary
 from apps.development.graphql.resolvers.issues_summary import (
     resolve_issues_project_summaries,

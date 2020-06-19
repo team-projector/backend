@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
-from apps.core.utils.objects import dict2obj
+from jnt_django_toolbox.helpers.objects import dict2obj
+
 from apps.development.models import ProjectGroup
 from apps.development.services.project_group.gl.manager import (
     ProjectGroupGlManager,

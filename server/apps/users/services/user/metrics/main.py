@@ -5,9 +5,9 @@ from typing import Dict, List, NamedTuple, Optional, Tuple
 
 from django.db import models
 from django.db.models.functions import Coalesce
+from jnt_django_toolbox.helpers.dicts import deep_get, deep_set, recursive_dict
 
 from apps.core.models.fields import MoneyField
-from apps.core.utils.dicts import deep_get, deep_set, recursive_dict
 from apps.development.models.issue import IssueState
 from apps.development.models.merge_request import MergeRequestState
 from apps.payroll.models import Bonus, Penalty, SpentTime

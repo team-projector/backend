@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
 from django.test import override_settings
+from jnt_django_toolbox.helpers.objects import dict2obj
 
-from apps.core.utils.objects import dict2obj
 from apps.development.models import Project
 from apps.development.services.project.gl.manager import ProjectGlManager
 from tests.test_development.factories import ProjectGroupFactory

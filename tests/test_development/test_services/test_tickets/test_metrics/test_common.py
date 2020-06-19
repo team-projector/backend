@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
 import pytest
+from jnt_django_toolbox.helpers.time import seconds
 
-from apps.core.utils.time import seconds
 from apps.development.models.issue import IssueState
 from apps.development.services.ticket.metrics import get_ticket_metrics
 from tests.test_development.factories import IssueFactory, TicketFactory

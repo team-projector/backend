@@ -4,8 +4,8 @@ from datetime import timedelta
 from decimal import Decimal
 
 import pytest
+from jnt_django_toolbox.helpers.time import seconds
 
-from apps.core.utils.time import seconds
 from apps.development.models.issue import IssueState
 from apps.payroll.models import Payroll, Salary
 from apps.payroll.services.salary.exceptions import EmptySalaryException

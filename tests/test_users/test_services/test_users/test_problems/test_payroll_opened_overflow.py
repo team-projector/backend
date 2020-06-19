@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
-from apps.core.utils.time import seconds
+from jnt_django_toolbox.helpers.time import seconds
+
 from apps.users.services.user.problems import get_user_problems
 from apps.users.services.user.problems.checkers import (
     PROBLEM_NOT_ENOUGH_TASKS,

@@ -6,8 +6,8 @@ from django.db import models
 from django.db.models import ExpressionWrapper
 from django.db.models.functions import Greatest, Least
 from django.utils.timezone import datetime, make_aware, now
+from jnt_django_toolbox.consts.time import SECONDS_PER_DAY
 
-from apps.core.consts import SECONDS_PER_DAY
 from apps.payroll.models import WorkBreak
 
 

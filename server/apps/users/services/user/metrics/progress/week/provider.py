@@ -3,7 +3,8 @@
 from datetime import date, timedelta
 from typing import List
 
-from apps.core.utils.date import begin_of_week
+from jnt_django_toolbox.helpers.date import begin_of_week
+
 from apps.users.services.user.metrics.progress import provider
 from apps.users.services.user.metrics.progress.week.metrics import (
     UserWeekMetricsGenerator,

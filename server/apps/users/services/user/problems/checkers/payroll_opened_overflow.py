@@ -2,8 +2,8 @@
 
 from django.db.models import Sum
 from django.db.models.functions import Coalesce
+from jnt_django_toolbox.consts.time import SECONDS_PER_HOUR
 
-from apps.core.consts import SECONDS_PER_HOUR
 from apps.development.models.issue import IssueState
 from apps.payroll.models import SpentTime
 from apps.users.models import User

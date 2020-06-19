@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
-from apps.core.utils.time import seconds
+from jnt_django_toolbox.helpers.time import seconds
+
 from apps.development.models.issue import IssueState
 from apps.payroll.graphql.resolvers import resolve_spent_times_summary
 from tests.test_development.factories import IssueFactory

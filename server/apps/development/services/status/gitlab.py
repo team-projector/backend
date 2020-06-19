@@ -4,9 +4,9 @@ import types
 from datetime import datetime
 from typing import Iterable, List
 
+from actstream.models import Action
 from django.apps import apps
 
-from actstream.models import Action
 from apps.core.activity.verbs import (
     ACTION_GITLAB_CALL_API,
     ACTION_GITLAB_WEBHOOK_TRIGGERED,

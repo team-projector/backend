@@ -3,10 +3,10 @@
 from datetime import date, datetime, timedelta
 
 from django.utils import timezone
+from jnt_django_toolbox.helpers.objects import dict2obj
+from jnt_django_toolbox.helpers.time import seconds
 
 from apps.core.gitlab.parsers import GITLAB_DATE_FORMAT, GITLAB_DATETIME_FORMAT
-from apps.core.utils.objects import dict2obj
-from apps.core.utils.time import seconds
 from apps.development.models import Note
 from apps.development.models.note import NoteType
 from apps.development.services.note.notes_parsers.base import (

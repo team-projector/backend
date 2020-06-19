@@ -2,7 +2,8 @@
 
 from datetime import datetime
 
-from apps.core.utils.time import seconds
+from jnt_django_toolbox.helpers.time import seconds
+
 from apps.development.models import Issue
 from apps.development.models.note import NoteType
 from apps.payroll.models import SpentTime

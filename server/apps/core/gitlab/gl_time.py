@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
 
-from apps.core.consts import (
+from jnt_django_toolbox.consts.time import (
     SECONDS_PER_DAY,
     SECONDS_PER_HOUR,
     SECONDS_PER_MINUTE,
-    SECONDS_PER_MONTH,
-    SECONDS_PER_WEEK,
 )
+
+from apps.core.consts import SECONDS_PER_MONTH, SECONDS_PER_WEEK
 
 GITLAB_TIME_INTERVALS = (
     ("mo", SECONDS_PER_MONTH),

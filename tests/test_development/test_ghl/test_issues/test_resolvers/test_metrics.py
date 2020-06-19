@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
-from apps.core.utils.time import seconds
+from jnt_django_toolbox.helpers.time import seconds
+
 from apps.development.graphql.types.issue import IssueType
 from tests.test_development.factories import IssueFactory
 from tests.test_development.test_services.test_issues.test_metrics import (

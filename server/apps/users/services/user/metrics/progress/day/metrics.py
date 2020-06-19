@@ -4,8 +4,8 @@ from datetime import date, datetime
 from typing import Dict, List
 
 from django.conf import settings
+from jnt_django_toolbox.helpers.time import seconds
 
-from apps.core.utils.time import seconds
 from apps.users.models import User
 from apps.users.services.user.metrics.progress import provider
 from apps.users.services.user.metrics.progress.day.stats import (

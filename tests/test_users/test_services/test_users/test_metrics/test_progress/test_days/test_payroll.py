@@ -3,9 +3,9 @@
 from datetime import datetime, timedelta
 
 from django.utils import timezone
+from jnt_django_toolbox.helpers.date import begin_of_week
+from jnt_django_toolbox.helpers.time import seconds
 
-from apps.core.utils.date import begin_of_week
-from apps.core.utils.time import seconds
 from apps.development.models.issue import IssueState
 from apps.users.services.user.metrics import get_progress_metrics
 from tests.test_development.factories import IssueFactory

@@ -2,8 +2,8 @@
 
 import pytest
 from django.utils import timezone
+from jnt_django_toolbox.helpers.time import seconds
 
-from apps.core.utils.time import seconds
 from apps.development.models.issue import IssueState
 from apps.development.models.merge_request import MergeRequestState
 from apps.users.services.user import metrics

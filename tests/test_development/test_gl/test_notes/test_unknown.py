@@ -2,8 +2,9 @@
 
 from datetime import datetime
 
+from jnt_django_toolbox.helpers.objects import dict2obj
+
 from apps.core.gitlab import GITLAB_DATETIME_FORMAT
-from apps.core.utils.objects import dict2obj
 from apps.development.models import Note
 from tests.test_development.factories import IssueFactory
 

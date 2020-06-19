@@ -5,8 +5,8 @@ from datetime import datetime, timedelta
 import pytest
 from django.db.models import Sum
 from django.utils import timezone
+from jnt_django_toolbox.helpers.time import seconds
 
-from apps.core.utils.time import seconds
 from apps.development.models.issue import IssueState
 from apps.users.services.user.metrics import get_progress_metrics
 from apps.users.services.user.metrics.progress.provider import (

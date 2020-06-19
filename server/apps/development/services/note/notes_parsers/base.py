@@ -6,7 +6,7 @@ from collections import defaultdict, namedtuple
 from functools import partial
 from typing import DefaultDict, Optional, Pattern
 
-from apps.core.utils.time import seconds
+from jnt_django_toolbox.helpers.time import seconds
 
 RE_SPEND_FULL: Pattern[str] = re.compile(
     r"^(?P<action>(added|subtracted)) (?P<spent>.+) "

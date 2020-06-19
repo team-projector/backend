@@ -898,7 +898,7 @@ description = ""
 name = "jnt-django-toolbox"
 optional = false
 python-versions = ">=3.8,<4.0"
-version = "0.1.4"
+version = "0.1.6"
 
 [package.dependencies]
 django = ">=3"
@@ -2092,8 +2092,8 @@ jnt-django-admin-tools = [
     {file = "jnt_django_admin_tools-0.9.2-py3-none-any.whl", hash = "sha256:1898018ddc1e2d7c6bfaf69dbbb86808dfc08ec4bdfbebb0626228c603ce5c5f"},
 ]
 jnt-django-toolbox = [
-    {file = "jnt-django-toolbox-0.1.4.tar.gz", hash = "sha256:bfcfc8610d37e7e4fc83b054d9e2491191c6f6dd55b302b8ac34dad0afabbc15"},
-    {file = "jnt_django_toolbox-0.1.4-py3-none-any.whl", hash = "sha256:aeac5aaa80019ef05f3ebca761e9fcbe5cb2da52244bdd0318963e6325b32366"},
+    {file = "jnt-django-toolbox-0.1.6.tar.gz", hash = "sha256:7626825762c5ee5c099a6c47df14dfd093249820a26b0bc239afe6eff586df55"},
+    {file = "jnt_django_toolbox-0.1.6-py3-none-any.whl", hash = "sha256:9052181364bdaca0ab29a160e5a580e555c431af8635070540b10aebb28edccd"},
 ]
 kombu = [
     {file = "kombu-4.6.10-py2.py3-none-any.whl", hash = "sha256:dc282bb277197d723bccda1a9ba30a27a28c9672d0ab93e9e51bb05a37bd29c3"},
@@ -2332,6 +2332,7 @@ regex = [
     {file = "regex-2020.6.8.tar.gz", hash = "sha256:e9b64e609d37438f7d6e68c2546d2cb8062f3adb27e6336bc129b51be20773ac"},
 ]
 requests = [
+    {file = "requests-2.23.0-py2.7.egg", hash = "sha256:5d2d0ffbb515f39417009a46c14256291061ac01ba8f875b90cad137de83beb4"},
     {file = "requests-2.23.0-py2.py3-none-any.whl", hash = "sha256:43999036bfa82904b6af1d99e4882b560e5e2c68e5c4b0aa03b655f3d7d73fee"},
     {file = "requests-2.23.0.tar.gz", hash = "sha256:b3f43d496c6daba4493e7c431722aeb7dbc6288f52a6e04e7b6023b0247817e6"},
 ]

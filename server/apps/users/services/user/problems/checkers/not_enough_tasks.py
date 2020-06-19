@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
 from django.db import models
+from jnt_django_toolbox.consts.time import SECONDS_PER_HOUR
 
-from apps.core.consts import SECONDS_PER_HOUR
 from apps.development.models.issue import Issue, IssueState
 from apps.development.models.merge_request import (
     MergeRequest,
