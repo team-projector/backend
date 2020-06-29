@@ -16,4 +16,4 @@ class AppConfig(BaseAppConfig):
         """Run this code when Django starts."""
         super().ready()
 
-        load_module_from_app(self.name, "graphql.fields")
+        load_module_from_app(self, "graphql.fields")
