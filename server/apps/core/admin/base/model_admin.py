@@ -3,10 +3,10 @@
 from typing import Dict
 from urllib.parse import urlencode
 
-from admin_tools.mixins import AdminAutocompleteFieldsMixin
 from django.contrib import admin
 from django.http import HttpRequest
 from django.shortcuts import redirect
+from jnt_admin_tools.mixins import AdminAutocompleteFieldsMixin
 
 from apps.core.admin.mixins import AdminFieldsOverridesMixin
 

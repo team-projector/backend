@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 
 INSTALLED_APPS = (
-    "admin_tools",
-    "admin_tools.theming",
-    "admin_tools.menu",
-    "admin_tools.dashboard",
+    "jnt_admin_tools",
+    "jnt_admin_tools.theming",
+    "jnt_admin_tools.menu",
+    "jnt_admin_tools.dashboard",
     # Default django apps:
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -15,6 +15,7 @@ INSTALLED_APPS = (
     "django.contrib.admin",
     "django.contrib.admindocs",
     # vendors
+    "jnt_django_toolbox",
     "graphene_django",
     "django_extensions",
     "django_filters",

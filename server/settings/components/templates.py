@@ -14,7 +14,7 @@ TEMPLATES = [
                 "django.contrib.messages.context_processors.messages",
             ],
             "loaders": [
-                "admin_tools.template_loaders.Loader",
+                "jnt_admin_tools.template_loaders.Loader",
                 (
                     (
                         "django.template.loaders.cached.Loader",

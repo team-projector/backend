@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
-from admin_tools.menu import Menu, items
 from django.urls import reverse
+from jnt_admin_tools.menu import Menu, items
 
 
 class AdminMenu(Menu):

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
-from admin_tools.mixins import AdminAutocompleteFieldsMixin
 from django.contrib.contenttypes.admin import GenericStackedInline
+from jnt_admin_tools.mixins import AdminAutocompleteFieldsMixin
 
 from apps.core.admin.mixins import AdminFieldsOverridesMixin
 

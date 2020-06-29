@@ -17,7 +17,7 @@ urlpatterns = [
     path("api/graphql", csrf_exempt(get_api_graphql_view())),
     path("api/", include("apps.development.api.urls", namespace="api")),
     path("api/", include("apps.users.pages.urls", namespace="social")),
-    path("admin_tools/", include("admin_tools.urls")),
+    path("admin_tools/", include("jnt_admin_tools.urls")),
     path("admin/", admin.site.urls),
 ]
 

@@ -2,13 +2,13 @@
 
 from typing import Dict
 
-from admin_tools.decorators import admin_field
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as DjUserAdmin
 from django.contrib.auth.forms import AdminPasswordChangeForm
 from django.http import HttpRequest
 from django.urls import reverse
 from django.utils.html import format_html
+from jnt_admin_tools.decorators import admin_field
 
 from apps.core.admin import base, mixins
 from apps.development.tasks import sync_user_task
