@@ -31,7 +31,7 @@ def test_connection_authenticated(admin_user, gql_client_authenticated):
     }
 
     {
-      allIssues(first:5, last:1, state: "opened") {
+      allIssues(first:5, last:1, state: "OPENED") {
         count
         edges {
           node {

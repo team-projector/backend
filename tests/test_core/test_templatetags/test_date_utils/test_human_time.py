@@ -12,7 +12,7 @@ def template():
 def test_render(template):
     rendered = template.render(Context({"duration": 125}))
 
-    assert rendered == "02:05"
+    assert rendered == "2m 5s"
 
 
 def test_render_not_valid(template):
