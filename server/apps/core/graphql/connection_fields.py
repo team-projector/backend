@@ -30,9 +30,7 @@ class DataSourceConnectionField(AuthFilter, DjangoFilterConnectionField):
         super().__init__(model_type, *args, **kwargs)
 
     @classmethod
-    def resolve_connection(
-        cls, connection, args, iterable,
-    ):
+    def resolve_connection(cls, connection, args, iterable, max_limit=None):
         """Resolve connection."""
         iterable = maybe_queryset(iterable)
         if isinstance(iterable, QuerySet):
