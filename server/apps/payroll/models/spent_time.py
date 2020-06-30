@@ -4,13 +4,12 @@ from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
 from django.db import models
 from django.utils.translation import gettext_lazy as _
+from jnt_django_toolbox.consts.time import SECONDS_PER_HOUR
 
 from apps.core.models.fields import MoneyField
 from apps.core.models.validators import tax_rate_validator
 from apps.payroll.models import Payroll
 from apps.payroll.models.managers import SpentTimeManager
-
-SECS_IN_HOUR = 60 * 60
 
 
 class SpentTime(Payroll):  # noqa:WPS230
@@ -81,7 +80,7 @@ class SpentTime(Payroll):  # noqa:WPS230
         super().save(*args, **kwargs)
 
     def _adjust_sums(self) -> None:
-        work_hours = self.time_spent / SECS_IN_HOUR
+        work_hours = self.time_spent / SECONDS_PER_HOUR
 
         self.sum = work_hours * self.hour_rate  # noqa: WPS125
         self.customer_sum = work_hours * self.customer_rate  # noqa: WPS601

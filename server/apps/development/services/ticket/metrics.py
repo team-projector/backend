@@ -2,11 +2,12 @@
 
 from django.db import models
 from django.db.models.functions import Coalesce
+from jnt_django_toolbox.consts.time import SECONDS_PER_HOUR
 
 from apps.development.models import Issue, Ticket
 from apps.development.models.issue import IssueState
 from apps.development.services.issue.metrics import IssuesContainerMetrics
-from apps.payroll.models.spent_time import SECS_IN_HOUR, SpentTime
+from apps.payroll.models.spent_time import SpentTime
 
 
 class TicketMetrics(IssuesContainerMetrics):
@@ -73,7 +74,7 @@ class TicketMetricsProvider:
             budget_estimate=Coalesce(
                 models.Sum(
                     models.F("time_estimate")
-                    / SECS_IN_HOUR
+                    / SECONDS_PER_HOUR
                     * models.F("user__customer_hour_rate"),
                     output_field=models.DecimalField(),
                 ),
