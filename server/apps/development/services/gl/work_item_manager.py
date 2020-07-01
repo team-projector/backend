@@ -9,6 +9,7 @@ from apps.development.services.project.gl.provider import ProjectGlProvider
 from apps.development.services.project_group.gl.provider import (
     ProjectGroupGlProvider,
 )
+from apps.payroll.services.spent_time.updater import adjust_spent_times
 from apps.users.services.user.gl.manager import UserGlManager
 
 
@@ -50,10 +51,10 @@ class BaseWorkItemGlManager:
         gl_target: Union[gl.ProjectIssue, gl.MergeRequest],
     ) -> None:
         """Load notes for work item."""
-        for gl_note in gl_target.notes.list(as_list=False, system=True):
+        for gl_note in gl_target.notes.list(as_list=False):
             Note.objects.update_from_gitlab(gl_note, target)
 
-        target.adjust_spent_times()
+        adjust_spent_times(target)
 
     def sync_participants(
         self,
