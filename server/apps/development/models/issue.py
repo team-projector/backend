@@ -124,15 +124,6 @@ class Issue(
         """Returns object string representation."""
         return self.title
 
-    def save(self, *args, **kwargs):
-        """Saving model."""
-        from apps.development.services.issue.tickets_checker import (  # noqa: WPS433 E501
-            assign_issues_to_ticket,
-        )
-
-        super().save(*args, **kwargs)
-        assign_issues_to_ticket(self)
-
     @cached_property
     def last_note_date(self) -> datetime:
         """Return last note date."""

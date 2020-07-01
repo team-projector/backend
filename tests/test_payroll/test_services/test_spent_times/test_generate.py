@@ -8,6 +8,7 @@ from django.utils import timezone
 from apps.core.gitlab import parse_gl_date
 from apps.development.models.note import NoteType
 from apps.payroll.models import SpentTime
+from apps.payroll.services.spent_time.updater import adjust_spent_times
 from tests.test_development.factories import IssueFactory, IssueNoteFactory
 from tests.test_users.factories.user import UserFactory
 
@@ -48,7 +49,7 @@ def test_simple(user):
         timezone.now() - timedelta(minutes=30),
     )
 
-    issue.adjust_spent_times()
+    adjust_spent_times(issue)
 
     _check_generated_time_spents(issue)
 
@@ -88,7 +89,7 @@ def test_different_created_at_and_date(user):
         date=(timezone.now() - timedelta(days=5)).date(),
     )
 
-    issue.adjust_spent_times()
+    adjust_spent_times(issue)
 
     _check_generated_time_spents(issue)
 
@@ -139,7 +140,7 @@ def test_many_resets(user):
         timedelta(hours=4),
     )
 
-    issue.adjust_spent_times()
+    adjust_spent_times(issue)
     _check_generated_time_spents(issue)
 
 
@@ -153,7 +154,7 @@ def test_only_reset(user):
         timezone.now() - timedelta(minutes=30),
     )
 
-    issue.adjust_spent_times()
+    adjust_spent_times(issue)
 
     _check_generated_time_spents(issue)
 
@@ -233,7 +234,7 @@ def test_multi_user_reset(user):
         timezone.now() - timedelta(minutes=30),
     )
 
-    issue.adjust_spent_times()
+    adjust_spent_times(issue)
 
     _check_generated_time_spents(issue)
 
@@ -261,7 +262,7 @@ def test_spents_but_moved_from(user):
         timedelta(hours=5),
     )
 
-    issue.adjust_spent_times()
+    adjust_spent_times(issue)
 
     assert not SpentTime.objects.filter(note=spent_before).exists()
     assert not SpentTime.objects.filter(note=moved_from).exists()
@@ -300,7 +301,7 @@ def test_spents_with_resets_but_moved_from(user):
         ),
     ]
 
-    issue.adjust_spent_times()
+    adjust_spent_times(issue)
 
     assert not SpentTime.objects.filter(note=notes[0]).exists()
     assert not SpentTime.objects.filter(note=notes[1]).exists()

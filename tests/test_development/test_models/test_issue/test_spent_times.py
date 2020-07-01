@@ -7,6 +7,7 @@ from jnt_django_toolbox.helpers.time import seconds
 from apps.development.models import Issue
 from apps.development.models.note import NoteType
 from apps.payroll.models import SpentTime
+from apps.payroll.services.spent_time.updater import adjust_spent_times
 from tests.test_development.factories import IssueNoteFactory
 from tests.test_payroll.factories import IssueSpentTimeFactory
 
@@ -19,7 +20,7 @@ def test_reset_spend(user):
     assert SpentTime.objects.count() == 0
 
     issue = Issue.objects.first()
-    issue.adjust_spent_times()
+    adjust_spent_times(issue)
 
     assert SpentTime.objects.count() == 1
     assert SpentTime.objects.first().time_spent == 0
@@ -35,7 +36,7 @@ def test_time_spend(user):
     assert SpentTime.objects.count() == 0
 
     issue = Issue.objects.first()
-    issue.adjust_spent_times()
+    adjust_spent_times(issue)
 
     assert SpentTime.objects.count() == 1
     assert SpentTime.objects.first().time_spent == seconds(hours=2)
@@ -49,7 +50,7 @@ def test_moved_from(user):
     assert SpentTime.objects.count() == 0
 
     issue = Issue.objects.first()
-    issue.adjust_spent_times()
+    adjust_spent_times(issue)
 
     assert SpentTime.objects.count() == 0
 
@@ -60,7 +61,7 @@ def test_type_not_exist(user):
     )
 
     issue = Issue.objects.first()
-    issue.adjust_spent_times()
+    adjust_spent_times(issue)
 
     assert SpentTime.objects.count() == 1
 
@@ -76,7 +77,7 @@ def test_spent_time_exists(user):
 
     assert SpentTime.objects.count() == 1
 
-    issue.adjust_spent_times()
+    adjust_spent_times(issue)
 
     assert SpentTime.objects.count() == 1
     assert SpentTime.objects.first().time_spent == 0

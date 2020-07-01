@@ -4,6 +4,7 @@ import pytest
 
 from apps.core.graphql.errors import GraphQLPermissionDenied
 from apps.development.models.note import NoteType
+from apps.payroll.services.spent_time.updater import adjust_spent_times
 from tests.test_development.factories import IssueFactory, IssueNoteFactory
 from tests.test_payroll.factories import SalaryFactory
 
@@ -91,4 +92,4 @@ def _create_spents(issue, size=3):
         data={"spent": 10, "date": issue.created_at.date()},
         user=issue.user,
     )
-    issue.adjust_spent_times()
+    adjust_spent_times(issue)

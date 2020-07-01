@@ -13,15 +13,20 @@ from apps.development.services.note.notes_parsers.base import (
 )
 
 
-def assign_issues_to_ticket(issue: Issue) -> None:
-    """Setting issue.ticket to related issues."""
+def adjust_issue_ticket(issue: Issue) -> None:
+    """Setting issue.ticket from related issues."""
     if issue.ticket:
-        related_issues = get_related_issues(issue).filter(
-            ticket_id__isnull=True,
-        )
-        for related_issue in related_issues:
-            related_issue.ticket = issue.ticket
-            related_issue.save()
+        return
+
+    related_issue = (
+        get_related_issues(issue)
+        .exclude(pk=issue.pk)
+        .filter(ticket_id__isnull=False)
+        .first()
+    )
+
+    if related_issue:
+        issue.ticket = related_issue.ticket
 
 
 def get_related_issues(issue: Issue) -> QuerySet:
