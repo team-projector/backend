@@ -9,9 +9,7 @@ from jnt_django_toolbox.helpers.time import seconds
 from apps.core.gitlab.parsers import GITLAB_DATE_FORMAT, GITLAB_DATETIME_FORMAT
 from apps.development.models import Note
 from apps.development.models.note import NoteType
-from apps.development.services.note.notes_parsers.base import (
-    SPEND_RESET_MESSAGE,
-)
+from apps.development.services.note.gl.parsers.base import SPEND_RESET_MESSAGE
 from tests.test_development.factories import IssueFactory
 
 

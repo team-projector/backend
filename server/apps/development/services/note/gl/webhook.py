@@ -23,7 +23,7 @@ class NotesGLWebhook(GLWebhook):
             return None
 
         project_id = body["project"]["id"]
-        sync_project_issue_task.delay(project_id, issue["id"])
+        sync_project_issue_task.delay(project_id, issue["iid"])
 
         logger.info(
             "gitlab webhook was triggered: project = {0}, issue = {1}".format(

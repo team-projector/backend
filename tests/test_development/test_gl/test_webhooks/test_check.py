@@ -17,6 +17,7 @@ CREATE_WEBHOOK_BODY = types.MappingProxyType(
         "issues_events": True,
         "merge_requests_events": True,
         "pipeline_events": True,
+        "note_events": True,
         "token": None,
     },
 )
@@ -70,6 +71,7 @@ def test_already_exists(db, gl_mocker, client):
                 "issues_events": True,
                 "merge_requests_events": True,
                 "pipeline_events": True,
+                "note_events": True,
                 "token": None,
             },
         ],
