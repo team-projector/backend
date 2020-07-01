@@ -7,9 +7,7 @@ from jnt_django_toolbox.helpers.objects import dict2obj
 from apps.core.gitlab import GITLAB_DATETIME_FORMAT
 from apps.development.models import Note
 from apps.development.models.note import NoteType
-from apps.development.services.note.notes_parsers.base import (
-    SPEND_RESET_MESSAGE,
-)
+from apps.development.services.note.gl.parsers.base import SPEND_RESET_MESSAGE
 from tests.test_development.factories import IssueFactory
 
 
