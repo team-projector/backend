@@ -3,7 +3,7 @@
 from typing import List, Optional
 
 from apps.development.models.note import NoteType
-from apps.development.services.note.notes_parsers.base import (
+from apps.development.services.note.gl.parsers.base import (
     RE_GITLAB_ISSUE_LINK,
     RE_ISSUE_NUMBER,
     BaseNoteParser,

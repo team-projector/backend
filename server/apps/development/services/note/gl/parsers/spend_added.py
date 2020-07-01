@@ -4,7 +4,7 @@ from typing import Match, Optional
 
 from apps.core.gitlab.parsers import parse_gl_date, parse_gl_datetime
 from apps.development.models.note import NoteType
-from apps.development.services.note.notes_parsers.base import (
+from apps.development.services.note.gl.parsers.base import (
     RE_SPEND_FULL,
     RE_SPEND_SHORT,
     BaseNoteParser,

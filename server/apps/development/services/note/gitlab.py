@@ -2,13 +2,13 @@
 
 from typing import Optional
 
-from apps.development.services.note.notes_parsers import (
+from apps.development.services.note.gl.parsers import (
     CommentParser,
     MovedFromParser,
     SpendAddedParser,
     SpendResetParser,
 )
-from apps.development.services.note.notes_parsers.base import NoteReadResult
+from apps.development.services.note.gl.parsers.base import NoteReadResult
 
 _notes_parsers = [
     SpendAddedParser(),

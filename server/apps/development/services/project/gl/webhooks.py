@@ -13,6 +13,7 @@ from apps.development.services.issue.gl.webhook import IssuesGLWebhook
 from apps.development.services.merge_request.gl.webhook import (
     MergeRequestsGLWebhook,
 )
+from apps.development.services.note.gl.webhook import NotesGLWebhook
 from apps.development.services.pipelines.gl.webhook import PipelineGLWebhook
 from apps.development.services.project.gl.provider import ProjectGlProvider
 
@@ -22,6 +23,7 @@ GITLAB_WEBHOOKS_CLASSES = (
     IssuesGLWebhook,
     MergeRequestsGLWebhook,
     PipelineGLWebhook,
+    NotesGLWebhook,
 )
 
 

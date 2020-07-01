@@ -3,7 +3,7 @@
 from typing import Optional
 
 from apps.development.models.note import NoteType
-from apps.development.services.note.notes_parsers.base import (
+from apps.development.services.note.gl.parsers.base import (
     RE_MOVED_FROM,
     BaseNoteParser,
     NoteReadResult,
