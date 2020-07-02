@@ -29,9 +29,9 @@ def update_issue_mutation(ghl_mutations):
 
 @pytest.fixture()
 def ticket(db):
-    return TicketFactory(milestone=ProjectMilestoneFactory())
+    return TicketFactory.create(milestone=ProjectMilestoneFactory())
 
 
 @pytest.fixture()
 def issue(user):
-    return IssueFactory(user=user)
+    return IssueFactory.create(user=user)

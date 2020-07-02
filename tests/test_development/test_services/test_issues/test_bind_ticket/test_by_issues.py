@@ -1,9 +1,7 @@
 # -*- coding: utf-8 -*-
 
-from apps.development.services.issue.tickets_checker import (
-    adjust_issue_ticket,
-    get_related_issues,
-)
+from apps.development.services.issue.related import get_related_issues
+from apps.development.services.issue.tickets.updater import update_issue_ticket
 from tests.test_development.factories import IssueFactory, TicketFactory
 
 
@@ -14,7 +12,7 @@ def test_assign_ticket(db):
     )
     issue2 = IssueFactory.create(ticket=None, description=issue1.gl_url)
 
-    adjust_issue_ticket(issue2)
+    update_issue_ticket(issue2)
 
     assert issue2.ticket == issue1.ticket
 
@@ -26,7 +24,7 @@ def test_issue_without_ticket(db):
     )
     issue2 = IssueFactory.create(ticket=None, description=issue1.gl_url)
 
-    adjust_issue_ticket(issue2)
+    update_issue_ticket(issue2)
     assert get_related_issues(issue2).count() == 1
 
     assert issue2.ticket is None
@@ -41,5 +39,5 @@ def test_already_has_ticket(db):
         ticket=TicketFactory.create(), description=issue1.gl_url,
     )
 
-    adjust_issue_ticket(issue2)
+    update_issue_ticket(issue2)
     assert issue2.ticket != issue1.ticket

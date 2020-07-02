@@ -11,6 +11,7 @@ from apps.development.graphql.mutations.issues.inputs.update import (
     UpdateIssueInput,
 )
 from apps.development.graphql.types import IssueType
+from apps.development.tasks import propagate_ticket_to_related_issues_task
 
 
 class UpdateIssueMutation(SerializerMutation):
@@ -32,5 +33,6 @@ class UpdateIssueMutation(SerializerMutation):
         issue = validated_data.pop("issue")
 
         update_from_validated_data(issue, validated_data)
+        propagate_ticket_to_related_issues_task.delay(issue_id=issue.pk)
 
         return cls(issue=issue)

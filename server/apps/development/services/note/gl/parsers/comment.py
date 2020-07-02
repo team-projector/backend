@@ -1,11 +1,13 @@
 # -*- coding: utf-8 -*-
 
-from typing import List, Optional
+from typing import Dict, List, Optional
 
 from apps.development.models.note import NoteType
+from apps.development.services.extractors import (
+    extract_issue_links,
+    extract_tickets_links,
+)
 from apps.development.services.note.gl.parsers.base import (
-    RE_GITLAB_ISSUE_LINK,
-    RE_ISSUE_NUMBER,
     BaseNoteParser,
     NoteReadResult,
 )
@@ -14,31 +16,27 @@ from apps.development.services.note.gl.parsers.base import (
 class CommentParser(BaseNoteParser):
     """Comment parser."""
 
-    def parse(self, gl_note) -> Optional[NoteReadResult]:
+    def parse(self, gl_note, work_item) -> Optional[NoteReadResult]:
         """Parse note."""
         is_system = getattr(gl_note, "system", False)  # noqa: WPS425
-
         if is_system:
             return None
 
-        note_data = {}
-
-        numbers = self._get_issue_numbers(gl_note)
-        links = self._get_issue_links(gl_note)
-
-        if numbers:
-            note_data["numbers"] = numbers
-
-        if links:
-            note_data["links"] = links
+        note_data: Dict[str, List[str]] = {}
+        self._extract_issues(gl_note, work_item, note_data)
+        self._extract_tickets(gl_note, note_data)
 
         if note_data:
             return NoteReadResult(NoteType.COMMENT, note_data)
 
         return None
 
-    def _get_issue_numbers(self, gl_note) -> List[str]:
-        return [match[2] for match in RE_ISSUE_NUMBER.findall(gl_note.body)]
+    def _extract_issues(self, gl_note, work_item, note_data) -> None:
+        issues = extract_issue_links(gl_note.body, work_item)
+        if issues:
+            note_data["issues"] = issues
 
-    def _get_issue_links(self, gl_note) -> List[str]:
-        return RE_GITLAB_ISSUE_LINK.findall(gl_note.body)
+    def _extract_tickets(self, gl_note, note_data) -> None:
+        tickets = extract_tickets_links(gl_note.body)
+        if tickets:
+            note_data["tickets"] = tickets

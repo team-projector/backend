@@ -10,7 +10,7 @@ from apps.development.models import Issue, MergeRequest, Milestone, Project
 from apps.development.services.gl.work_item_manager import (
     BaseWorkItemGlManager,
 )
-from apps.development.services.issue.tickets_checker import adjust_issue_ticket
+from apps.development.services.issue.tickets.updater import update_issue_ticket
 from apps.development.services.merge_request.gl.manager import (
     MergeRequestGlManager,
 )
@@ -101,7 +101,7 @@ class IssueGlManager(BaseWorkItemGlManager):
         self.sync_participants(issue, gl_issue)
         self.sync_merge_requests(issue, project, gl_issue, gl_project)
 
-        adjust_issue_ticket(issue)
+        update_issue_ticket(issue)
 
         issue.save()
 
