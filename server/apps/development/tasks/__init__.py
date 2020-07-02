@@ -4,6 +4,7 @@ from .issues import (
     sync_issues_task,
     sync_project_issue_task,
     sync_project_issues_task,
+    propagate_ticket_to_related_issues_task,
 )
 from .merge_requests import (
     sync_merge_requests_task,

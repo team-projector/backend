@@ -8,29 +8,9 @@ from typing import DefaultDict, Optional, Pattern
 
 from jnt_django_toolbox.helpers.time import seconds
 
-RE_SPEND_FULL: Pattern[str] = re.compile(
-    r"^(?P<action>(added|subtracted)) (?P<spent>.+) "
-    + r"of time spent at (?P<date>\d{4}-\d{2}-\d{2})$",
-)
-RE_SPEND_SHORT: Pattern[str] = re.compile(
-    r"^(?P<action>(added|subtracted)) (?P<spent>.+) of time spent$",
-)
-
 RE_SPEND_PART: Pattern[str] = re.compile(
     r"(?P<value>\d+)(?P<part>(mo|w|d|h|m|s))",
 )
-
-RE_MOVED_FROM: Pattern[str] = re.compile(r"^moved from .+#\d+$")
-
-RE_ISSUE_NUMBER: Pattern[str] = re.compile(
-    r"(^|\s)(#(?P<issue_number>\d+))(\s|[^\w]|$)",
-)
-RE_GITLAB_ISSUE_LINK: Pattern[str] = re.compile(
-    r"(?P<issue_link>https://gitlab.com.*/issues/\d+)",
-)
-
-
-SPEND_RESET_MESSAGE = "removed time spent"
 
 WEEK_PER_MONTH = 4
 DAYS_PER_WEEK = 5
@@ -88,6 +68,6 @@ def parse_spend(spent: str) -> int:
 class BaseNoteParser:
     """A base class note parser."""
 
-    def parse(self, gl_note) -> Optional[NoteReadResult]:
+    def parse(self, gl_note, work_item) -> Optional[NoteReadResult]:
         """Method should be implemented."""
         raise NotImplementedError

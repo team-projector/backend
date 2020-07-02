@@ -18,10 +18,10 @@ _notes_parsers = [
 ]
 
 
-def read_note(gl_note) -> Optional[NoteReadResult]:
+def read_note(gl_note, work_item) -> Optional[NoteReadResult]:
     """Read note."""
     for parser in _notes_parsers:
-        parse_data = parser.parse(gl_note)
+        parse_data = parser.parse(gl_note, work_item)
         if parse_data:
             return parse_data
 

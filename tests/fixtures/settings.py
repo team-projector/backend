@@ -7,6 +7,8 @@ import pytest
 def _django_settings(settings, tmpdir_factory) -> None:
     """Forces django test settings."""
     settings.MEDIA_ROOT = tmpdir_factory.mktemp("media", numbered=True)
+    settings.GITLAB_ADDRESS = "https://gitlab.com"
+    settings.DOMAIN_NAME = "https://teamprojector.com"
     settings.PASSWORD_HASHERS = [
         "django.contrib.auth.hashers.MD5PasswordHasher",
     ]

@@ -12,13 +12,14 @@ from apps.development.admin.filters import (
 )
 from apps.development.admin.inlines import NoteInline
 from apps.development.models import Issue
-from apps.development.tasks import sync_project_issue_task
+from apps.development.tasks import (
+    propagate_ticket_to_related_issues_task,
+    sync_project_issue_task,
+)
 
 
 @admin.register(Issue)
-class IssueAdmin(
-    ForceSyncEntityMixin, BaseModelAdmin,
-):
+class IssueAdmin(ForceSyncEntityMixin, BaseModelAdmin):
     """A class representing Issue model for admin dashboard."""
 
     list_display = (
@@ -46,3 +47,9 @@ class IssueAdmin(
         sync_project_issue_task.delay(
             issue.project.gl_id, issue.gl_iid,
         )
+
+    def save_model(self, request, instance, form, change):
+        """On save model."""
+        super().save_model(request, instance, form, change)
+        if "ticket" in form.changed_data:
+            propagate_ticket_to_related_issues_task.delay(issue_id=instance.pk)

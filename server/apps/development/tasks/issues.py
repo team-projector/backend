@@ -1,7 +1,10 @@
 # -*- coding: utf-8 -*-
 
-from apps.development.models import Project
+from apps.development.models import Issue, Project
 from apps.development.services.issue.gl.manager import IssueGlManager
+from apps.development.services.issue.tickets.propagator import (
+    propagate_ticket_to_related_issues,
+)
 from apps.development.services.project.gl.provider import ProjectGlProvider
 from celery_app import app
 
@@ -36,3 +39,11 @@ def sync_project_issue_task(project_id: int, iid: int) -> None:
     manager.update_project_issue(
         project, gl_project, gl_project.issues.get(iid),
     )
+
+
+@app.task
+def propagate_ticket_to_related_issues_task(issue_id: int) -> None:
+    """Propagate ticket from parent issues to child."""
+    issue = Issue.objects.filter(id=issue_id)
+    if issue:
+        propagate_ticket_to_related_issues(issue)
