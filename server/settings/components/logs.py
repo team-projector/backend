@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
+from typing import List
 
 import sentry_sdk
 from decouple import config
+from jnt_django_toolbox.profiling.profilers.base import BaseProfiler
 from sentry_sdk.integrations.django import DjangoIntegration
 
 from settings.components.tp import TP_APP_VERSION
@@ -46,4 +48,4 @@ if sentry_dsn:
     )
     sentry_sdk.utils.MAX_STRING_LENGTH = 2048
 
-REQUEST_PROFILERS = []
+REQUEST_PROFILERS: List[BaseProfiler] = []
