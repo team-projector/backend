@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 MIDDLEWARE = [
+    "jnt_django_toolbox.profiling.middleware.ProfilingMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "corsheaders.middleware.CorsMiddleware",

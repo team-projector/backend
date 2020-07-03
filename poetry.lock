@@ -276,6 +276,20 @@ version = "1.4.1"
 
 [[package]]
 category = "main"
+description = "Date parsing library designed to parse dates from HTML pages"
+name = "dateparser"
+optional = false
+python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*"
+version = "0.7.6"
+
+[package.dependencies]
+python-dateutil = "*"
+pytz = "*"
+regex = "!=2019.02.19"
+tzlocal = "*"
+
+[[package]]
+category = "main"
 description = "XML bomb protection for Python stdlib modules"
 marker = "python_version >= \"3.0\""
 name = "defusedxml"
@@ -899,9 +913,10 @@ description = ""
 name = "jnt-django-toolbox"
 optional = false
 python-versions = ">=3.8,<4.0"
-version = "0.1.11"
+version = "0.1.13"
 
 [package.dependencies]
+dateparser = ">=0.7.6,<0.8.0"
 django = ">=2"
 
 [[package]]
@@ -1625,6 +1640,17 @@ version = "3.7.4.2"
 
 [[package]]
 category = "main"
+description = "tzinfo object for the local timezone"
+name = "tzlocal"
+optional = false
+python-versions = "*"
+version = "2.1"
+
+[package.dependencies]
+pytz = "*"
+
+[[package]]
+category = "main"
 description = "ASCII transliterations of Unicode text"
 name = "unidecode"
 optional = false
@@ -1913,6 +1939,10 @@ darglint = [
     {file = "darglint-1.4.1-py3-none-any.whl", hash = "sha256:929f4127f2e5e5b8150d19eb4ceef424ee1432f747daec6b6ab295649e28abb8"},
     {file = "darglint-1.4.1.tar.gz", hash = "sha256:9147af9e6872e15209f67a70e6c7f16a821e516c0c06495fdb87e60ac0e5865a"},
 ]
+dateparser = [
+    {file = "dateparser-0.7.6-py2.py3-none-any.whl", hash = "sha256:7552c994f893b5cb8fcf103b4cd2ff7f57aab9bfd2619fdf0cf571c0740fd90b"},
+    {file = "dateparser-0.7.6.tar.gz", hash = "sha256:e875efd8c57c85c2d02b238239878db59ff1971f5a823457fcc69e493bf6ebfa"},
+]
 defusedxml = [
     {file = "defusedxml-0.7.0rc1-py2.py3-none-any.whl", hash = "sha256:8ede8ba04cf5bf7999e1492fa77df545db83717f52c5eab625f97228ebd539bf"},
     {file = "defusedxml-0.7.0rc1.tar.gz", hash = "sha256:aa621655d72cdd30f57073893b96cd0c3831a85b08b8e4954531bdac47e3e8c8"},
@@ -2105,8 +2135,8 @@ jnt-django-admin-tools = [
     {file = "jnt_django_admin_tools-0.9.7-py3-none-any.whl", hash = "sha256:8956ab08f9f610ba68fc74c03fa60b0f0da2cbda2c3415fb1378df42f776a444"},
 ]
 jnt-django-toolbox = [
-    {file = "jnt-django-toolbox-0.1.11.tar.gz", hash = "sha256:00a3140c1093f653b22f1dc722bbdbfd54b8584d48e9d3bb28d1fd2d6dc4c2f2"},
-    {file = "jnt_django_toolbox-0.1.11-py3-none-any.whl", hash = "sha256:dcdae1cba07cee7d2265277bf312ee6f856998248f12bf25e2649ac4548403d5"},
+    {file = "jnt-django-toolbox-0.1.13.tar.gz", hash = "sha256:8bbf6eeb613e99566573ab46ec79ac16e3493a2016b95a5a5da17d6ba63d1d12"},
+    {file = "jnt_django_toolbox-0.1.13-py3-none-any.whl", hash = "sha256:e341c27a54bb5447e5d8306f90449f07e1fa80c582c93cc8a243ea66ed7b00ea"},
 ]
 kombu = [
     {file = "kombu-4.6.11-py2.py3-none-any.whl", hash = "sha256:be48cdffb54a2194d93ad6533d73f69408486483d189fe9f5990ee24255b0e0a"},
@@ -2460,6 +2490,10 @@ typing-extensions = [
     {file = "typing_extensions-3.7.4.2-py2-none-any.whl", hash = "sha256:f8d2bd89d25bc39dabe7d23df520442fa1d8969b82544370e03d88b5a591c392"},
     {file = "typing_extensions-3.7.4.2-py3-none-any.whl", hash = "sha256:6e95524d8a547a91e08f404ae485bbb71962de46967e1b71a0cb89af24e761c5"},
     {file = "typing_extensions-3.7.4.2.tar.gz", hash = "sha256:79ee589a3caca649a9bfd2a8de4709837400dfa00b6cc81962a1e6a1815969ae"},
+]
+tzlocal = [
+    {file = "tzlocal-2.1-py2.py3-none-any.whl", hash = "sha256:e2cb6c6b5b604af38597403e9852872d7f534962ae2954c7f35efcb1ccacf4a4"},
+    {file = "tzlocal-2.1.tar.gz", hash = "sha256:643c97c5294aedc737780a49d9df30889321cbe1204eac2c2ec6134035a92e44"},
 ]
 unidecode = [
     {file = "Unidecode-1.1.1-py2.py3-none-any.whl", hash = "sha256:1d7a042116536098d05d599ef2b8616759f02985c85b4fef50c78a5aaf10822a"},

@@ -45,3 +45,5 @@ if sentry_dsn:
         send_default_pii=True,
     )
     sentry_sdk.utils.MAX_STRING_LENGTH = 2048
+
+REQUEST_PROFILERS = []

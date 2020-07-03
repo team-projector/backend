@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from decouple import config
+from jnt_django_toolbox.profiling.profilers import DatabaseQueriesProfiler
 
 PG_PORT = 5432
 
@@ -41,3 +42,7 @@ SECURE_HSTS_INCLUDE_SUBDOMAINS = True
 SECURE_HSTS_PRELOAD = True
 
 X_FRAME_OPTIONS = "DENY"
+
+REQUEST_PROFILERS = [
+    DatabaseQueriesProfiler(),
+]
