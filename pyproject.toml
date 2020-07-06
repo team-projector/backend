@@ -20,7 +20,7 @@ django-health-check = "*"
 django-activity-stream = {git = "https://github.com/justquick/django-activity-stream.git", rev = "master"}
 psycopg2-binary = "*"
 jnt-django-admin-tools = "*"
-jnt-django-toolbox = "*"
+jnt-django-toolbox = {version = "^0.1.14", extras = ["jaeger"]}
 social-auth-app-django = "*"
 social-auth-core = "*"
 celery = "*"
