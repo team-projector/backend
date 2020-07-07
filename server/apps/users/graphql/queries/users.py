@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
 import graphene
+from jnt_django_graphene_toolbox.relay_nodes import DatasourceRelayNode
 
-from apps.core.graphql.relay_nodes import DatasourceRelayNode
 from apps.users.graphql.resolvers import (
     resolve_me_user,
     resolve_user_progress_metrics,

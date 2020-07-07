@@ -2,8 +2,10 @@
 
 from django.utils import timezone
 from django_filters import OrderingFilter as BaseOrderingFilter
+from jnt_django_graphene_toolbox.filters.mixins import (
+    NullsAlwaysLastOrderingMixin,
+)
 
-from apps.core.graphql.filters.mixins import NullsAlwaysLastOrderingMixin
 from apps.development.models import Issue
 from tests.test_development.factories import IssueFactory
 

@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
 import pytest
+from jnt_django_graphene_toolbox.errors import GraphQLPermissionDenied
 
-from apps.core.graphql.errors import GraphQLPermissionDenied
 from apps.development.models import TeamMember
 from apps.payroll.graphql.filters import WorkBreakFilterSet
 from apps.payroll.models import WorkBreak

@@ -1,8 +1,10 @@
 # -*- coding: utf-8 -*-
 
 import graphene
+from jnt_django_graphene_toolbox.connection_fields import (
+    DataSourceConnectionField,
+)
 
-from apps.core.graphql.connection_fields import DataSourceConnectionField
 from apps.development.graphql.filters import MergeRequestFilterSet
 from apps.development.graphql.resolvers import resolve_merge_requests_summary
 from apps.development.graphql.types import (

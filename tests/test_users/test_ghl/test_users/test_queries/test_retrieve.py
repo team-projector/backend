@@ -1,8 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import pytest
-
-from apps.core.graphql.errors import GraphQLNotFound
+from jnt_django_graphene_toolbox.errors import GraphQLNotFound
 
 GHL_QUERY_USER = """
 query ($id: ID!) {

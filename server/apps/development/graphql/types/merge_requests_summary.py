@@ -1,14 +1,11 @@
 # -*- coding: utf-8 -*-
 
 import graphene
+from jnt_django_graphene_toolbox.security.mixins.node import AuthNode
+from jnt_django_graphene_toolbox.security.permissions import AllowAuthenticated
 
-from apps.core.graphql.security.mixins.node import AuthNode
-from apps.core.graphql.security.permissions import AllowAuthenticated
 
-
-class MergeRequestsSummaryType(
-    AuthNode, graphene.ObjectType,
-):
+class MergeRequestsSummaryType(AuthNode, graphene.ObjectType):
     """Merge requests summary type."""
 
     permission_classes = (AllowAuthenticated,)

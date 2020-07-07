@@ -3,8 +3,8 @@
 from datetime import datetime
 
 import pytest
+from jnt_django_graphene_toolbox.errors import GraphQLNotFound
 
-from apps.core.graphql.errors import GraphQLNotFound
 from apps.development.models import TeamMember
 from apps.users.graphql.resolvers import resolve_user_progress_metrics
 from tests.test_development.factories import TeamFactory, TeamMemberFactory

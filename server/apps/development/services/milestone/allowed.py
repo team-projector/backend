@@ -3,8 +3,8 @@
 from typing import List
 
 from django.db import models
+from jnt_django_graphene_toolbox.errors import GraphQLPermissionDenied
 
-from apps.core.graphql.errors import GraphQLPermissionDenied
 from apps.development.models import Milestone, ProjectGroup, ProjectMember
 from apps.development.models.project_member import ProjectMemberRole
 from apps.users.models import User

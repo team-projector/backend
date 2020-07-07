@@ -5,10 +5,10 @@ from typing import Optional
 import graphene
 from django.contrib.auth import REDIRECT_FIELD_NAME
 from graphql import ResolveInfo
+from jnt_django_graphene_toolbox.mutations.no_input import NoInputMutation
+from jnt_django_graphene_toolbox.security.permissions import AllowAny
 from social_core.actions import do_auth
 
-from apps.core.graphql.mutations.no_input import NoInputMutation
-from apps.core.graphql.security.permissions import AllowAny
 from apps.users.graphql.mutations.helpers.auth import page_social_auth
 
 

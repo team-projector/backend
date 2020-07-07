@@ -1,8 +1,7 @@
 # -*- coding: utf-8 -*-
 
-import pytest
+from jnt_django_graphene_toolbox.errors import GraphQLInputError
 
-from apps.core.graphql.errors import GraphQLInputError
 from apps.development.models.milestone import MilestoneState
 from tests.test_development.factories import ProjectGroupMilestoneFactory
 from tests.test_development.factories.gitlab import GlGroupMilestoneFactory
@@ -97,11 +96,12 @@ def test_without_access(
 ):
     milestone = ProjectGroupMilestoneFactory()
 
-    with pytest.raises(GraphQLInputError) as exc_info:
-        sync_milestone_mutation(
-            root=None, info=ghl_auth_mock_info, id=milestone.id,
-        )
+    resolve = sync_milestone_mutation(
+        root=None, info=ghl_auth_mock_info, id=milestone.id,
+    )
 
-    extensions = exc_info.value.extensions  # noqa: WPS441
+    assert isinstance(resolve, GraphQLInputError)
+
+    extensions = resolve.extensions  # noqa: WPS441
     assert len(extensions["fieldErrors"]) == 1
     assert extensions["fieldErrors"][0]["fieldName"] == "id"

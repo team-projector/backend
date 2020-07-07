@@ -1,19 +1,19 @@
 # -*- coding: utf-8 -*-
 
 import graphene
+from jnt_django_graphene_toolbox.mutations import BaseMutation
+from jnt_django_graphene_toolbox.mutations.mixins import (
+    ArgumentsValidationMixin,
+)
 
 from apps.core.graphql.helpers.generics import get_object_or_not_found
-from apps.core.graphql.mutations import BaseMutation
-from apps.core.graphql.mutations.mixins import ArgumentsValidationMixin
 from apps.payroll.graphql.forms import WorkBreakForm
 from apps.payroll.graphql.permissions import CanManageWorkBreak
 from apps.payroll.graphql.types import WorkBreakType
 from apps.payroll.models import WorkBreak
 
 
-class UpdateWorkBreakMutation(
-    ArgumentsValidationMixin, BaseMutation,
-):
+class UpdateWorkBreakMutation(ArgumentsValidationMixin, BaseMutation):
     """Update work break after validation."""
 
     class Arguments:

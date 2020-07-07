@@ -1,8 +1,11 @@
 # -*- coding: utf-8 -*-
 
 import pytest
+from jnt_django_graphene_toolbox.errors import (
+    GraphQLNotFound,
+    GraphQLPermissionDenied,
+)
 
-from apps.core.graphql.errors import GraphQLNotFound, GraphQLPermissionDenied
 from tests.test_development.factories import TeamFactory
 
 GHL_QUERY_TEAM = """

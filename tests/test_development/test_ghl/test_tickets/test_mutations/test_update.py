@@ -1,8 +1,10 @@
 # -*- coding: utf-8 -*-
 
-import pytest
+from jnt_django_graphene_toolbox.errors import (
+    GraphQLInputError,
+    GraphQLPermissionDenied,
+)
 
-from apps.core.graphql.errors import GraphQLInputError, GraphQLPermissionDenied
 from apps.development.models.ticket import TicketState
 from tests.test_development.factories import (
     IssueFactory,
@@ -57,13 +59,14 @@ def test_without_permissions(
     user, ghl_auth_mock_info, update_ticket_mutation, ticket,
 ):
     """Test non project manager."""
-    with pytest.raises(GraphQLPermissionDenied):
-        update_ticket_mutation(
-            root=None,
-            info=ghl_auth_mock_info,
-            id=ticket.id,
-            title="new_{0}".format(ticket.title),
-        )
+    resolve = update_ticket_mutation(
+        root=None,
+        info=ghl_auth_mock_info,
+        id=ticket.id,
+        title="new_{0}".format(ticket.title),
+    )
+
+    isinstance(resolve, GraphQLPermissionDenied)
 
 
 def test_attach_issues(
@@ -106,16 +109,17 @@ def test_both_params_attach_and_issues(
     """Test both attach and rewrite issues."""
     issue = IssueFactory(user=project_manager)
 
-    with pytest.raises(GraphQLInputError) as exc_info:
-        update_ticket_mutation(
-            root=None,
-            info=ghl_auth_mock_info,
-            id=ticket.pk,
-            issues=[issue.pk],
-            attach_issues=[issue.pk],
-        )
+    resolve = update_ticket_mutation(
+        root=None,
+        info=ghl_auth_mock_info,
+        id=ticket.pk,
+        issues=[issue.pk],
+        attach_issues=[issue.pk],
+    )
 
-    extensions = exc_info.value.extensions  # noqa: WPS441
+    isinstance(resolve, GraphQLInputError)
+
+    extensions = resolve.extensions  # noqa: WPS441
     assert len(extensions["fieldErrors"]) == 1
     assert extensions["fieldErrors"][0]["fieldName"] == "nonFieldErrors"
 

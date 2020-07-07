@@ -1,9 +1,11 @@
 # -*- coding: utf-8 -*-
 
 import graphene
+from jnt_django_graphene_toolbox.connection_fields import (
+    DataSourceConnectionField,
+)
+from jnt_django_graphene_toolbox.relay_nodes import DatasourceRelayNode
 
-from apps.core.graphql.connection_fields import DataSourceConnectionField
-from apps.core.graphql.relay_nodes import DatasourceRelayNode
 from apps.payroll.graphql.filters import PenaltyFilterSet
 from apps.payroll.graphql.types import PenaltyType
 

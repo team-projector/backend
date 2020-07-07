@@ -341,6 +341,7 @@ jsonfield = ["django-jsonfield (>=1.0.1)", "django-jsonfield-compat (>=0.4.4)"]
 reference = "6781960facc18d0d4e3bb28f2ab4acf4ec173989"
 type = "git"
 url = "https://github.com/justquick/django-activity-stream.git"
+
 [[package]]
 category = "main"
 description = "django-cors-headers is a Django application for handling the server headers required for Cross-Origin Resource Sharing (CORS)."
@@ -825,6 +826,22 @@ test = ["pytest (>=3.6.3)", "pytest-cov", "coveralls", "mock", "pytz", "pytest-d
 
 [[package]]
 category = "main"
+description = "Lib for adding file upload functionality to GraphQL mutations in Graphene Django and Flask-Graphql"
+name = "graphene-file-upload"
+optional = false
+python-versions = "*"
+version = "1.2.2"
+
+[package.dependencies]
+six = ">=1.11.0"
+
+[package.extras]
+all = ["Flask (>=1.0.2)", "graphene (>=2.1.2)", "Flask-Graphql (>=2.0.0)", "graphene-django (>=2.0.0)"]
+django = ["graphene-django (>=2.0.0)"]
+flask = ["Flask (>=1.0.2)", "graphene (>=2.1.2)", "Flask-Graphql (>=2.0.0)"]
+
+[[package]]
+category = "main"
 description = "GraphQL implementation for Python"
 name = "graphql-core"
 optional = false
@@ -921,6 +938,21 @@ version = "0.9.8"
 
 [package.dependencies]
 django = ">=2"
+
+[[package]]
+category = "main"
+description = ""
+name = "jnt-django-graphene-toolbox"
+optional = false
+python-versions = ">=3.8,<4.0"
+version = "0.1.4"
+
+[package.dependencies]
+django-filter = ">=2.3.0,<3.0.0"
+djangorestframework = ">=3.11.0,<4.0.0"
+graphene-file-upload = ">=1.2.2,<2.0.0"
+graphene_django = ">=2.10.1,<3.0.0"
+jnt_django_toolbox = ">=0.1.6,<0.2.0"
 
 [[package]]
 category = "main"
@@ -1835,7 +1867,7 @@ idna = ">=2.0"
 multidict = ">=4.0"
 
 [metadata]
-content-hash = "567b162831bfdd9f8f0ba8e55f9895ac398c4d2a20c1f6bd342d5374d058dfff"
+content-hash = "be1e695e73bfdc1ebc8a69728bad2d7bff1069a1e30ce284ad1f129053156499"
 python-versions = "^3.8"
 
 [metadata.files]
@@ -2178,6 +2210,10 @@ graphene-django = [
     {file = "graphene-django-2.11.0.tar.gz", hash = "sha256:6354016ceab1ca25b45bb3689ca8d53c8b004904e10aed0a5cc4db29c92cb690"},
     {file = "graphene_django-2.11.0-py2.py3-none-any.whl", hash = "sha256:b93b80eb34b72410cd16829f9776483640110d323a2a3169590a6d20d8b258b9"},
 ]
+graphene-file-upload = [
+    {file = "graphene_file_upload-1.2.2-py3-none-any.whl", hash = "sha256:034ff72d2834b7aebd06fda412fa88a10aba34bac604317f7552457e47040654"},
+    {file = "graphene_file_upload-1.2.2.tar.gz", hash = "sha256:b5f47a81f5614d1184ba9480a63835769b26303cb7759316122401784858e9c7"},
+]
 graphql-core = [
     {file = "graphql-core-2.3.2.tar.gz", hash = "sha256:aac46a9ac524c9855910c14c48fc5d60474def7f99fd10245e76608eba7af746"},
     {file = "graphql_core-2.3.2-py2.py3-none-any.whl", hash = "sha256:44c9bac4514e5e30c5a595fac8e3c76c1975cae14db215e8174c7fe995825bad"},
@@ -2207,6 +2243,10 @@ jaeger-client = [
 jnt-django-admin-tools = [
     {file = "jnt-django-admin-tools-0.9.8.tar.gz", hash = "sha256:b25981d7df8531cece33bb526c72387ea480b2b54c364f8f5b4b9d061a064896"},
     {file = "jnt_django_admin_tools-0.9.8-py3-none-any.whl", hash = "sha256:9196f28e897a4fb18ab454d57b793d3ebbe9cccc4b491ac4e208244f5c47e30c"},
+]
+jnt-django-graphene-toolbox = [
+    {file = "jnt-django-graphene-toolbox-0.1.4.tar.gz", hash = "sha256:cf10bcb3be415a7c634d057c885686d3231728cfc527f6edb1f8108700e686ef"},
+    {file = "jnt_django_graphene_toolbox-0.1.4-py3-none-any.whl", hash = "sha256:8fe68b390fd039bd0ee3120a16cbd9bdb7b40654450516bc639b27ced785bc1e"},
 ]
 jnt-django-toolbox = [
     {file = "jnt-django-toolbox-0.1.16.tar.gz", hash = "sha256:85c0b53865c143752e44bef6f8e7f32bfc8cfc4c972a376adfaad5ea023546f6"},

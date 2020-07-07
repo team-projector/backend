@@ -4,9 +4,9 @@ from datetime import timedelta
 
 import pytest
 from django.utils import timezone
+from jnt_django_graphene_toolbox.errors import GraphQLPermissionDenied
 
 from apps.core.gitlab import GITLAB_DATETIME_FORMAT
-from apps.core.graphql.errors import GraphQLPermissionDenied
 from apps.development.models import TeamMember
 from apps.payroll.models.work_break import WorkBreak, WorkBreakReason
 from apps.users.models import User

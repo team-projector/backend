@@ -4,9 +4,9 @@ from typing import Any, Dict, Optional
 
 import graphene
 from graphql import ResolveInfo
+from jnt_django_graphene_toolbox.mutations import SerializerMutation
 
 from apps.core.graphql.helpers.persisters import update_from_validated_data
-from apps.core.graphql.mutations import SerializerMutation
 from apps.core.graphql.security.permissions import AllowProjectManager
 from apps.development.graphql.mutations.tickets.inputs.update import (
     UpdateTicketInput,

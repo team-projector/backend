@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 
 import pytest
+from jnt_django_graphene_toolbox.errors import GraphQLPermissionDenied
 from jnt_django_toolbox.helpers.time import seconds
 
-from apps.core.graphql.errors import GraphQLPermissionDenied
 from apps.development.graphql.types import TicketType
 from apps.development.models.issue import IssueState
 from tests.test_development.factories import IssueFactory, TicketFactory

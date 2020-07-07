@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
 import pytest
+from jnt_django_graphene_toolbox.errors import GraphQLPermissionDenied
 
-from apps.core.graphql.errors import GraphQLPermissionDenied
 from apps.development.models.project_member import ProjectMemberRole
 from tests.test_development.factories import (
     ProjectFactory,

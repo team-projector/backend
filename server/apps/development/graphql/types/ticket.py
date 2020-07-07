@@ -2,11 +2,11 @@
 
 import graphene
 from django.db.models import QuerySet
+from jnt_django_graphene_toolbox.connections import DataSourceConnection
+from jnt_django_graphene_toolbox.relay_nodes import DatasourceRelayNode
+from jnt_django_graphene_toolbox.types import BaseDjangoObjectType
 
 from apps.core import graphql
-from apps.core.graphql import DatasourceRelayNode
-from apps.core.graphql.connections import DataSourceConnection
-from apps.core.graphql.types import BaseDjangoObjectType
 from apps.development.graphql.types.ticket_metrics import TicketMetricsType
 from apps.development.models import Ticket
 from apps.development.services.ticket import allowed, metrics

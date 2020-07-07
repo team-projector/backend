@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from apps.core.graphql.security.permissions import AllowAny
+from jnt_django_graphene_toolbox.security.permissions import AllowAny
 
 
 def test_success(ghl_mock_info):

@@ -2,8 +2,9 @@
 
 import graphene
 from graphene_django.debug import DjangoDebug
+from jnt_django_graphene_toolbox.views import PlaygroundGraphQLView
 
-from apps.core.graphql.views import ApiGraphQLView, PlaygroundGraphQLView
+from apps.core.graphql.views import ApiGraphQLView
 from apps.development.graphql.mutations import DevelopmentMutations
 from apps.development.graphql.queries import DevelopmentQueries
 from apps.payroll.graphql.mutations import PayrollMutations

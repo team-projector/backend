@@ -4,8 +4,8 @@ from typing import Any, Dict, Optional
 
 import graphene
 from graphql import ResolveInfo
+from jnt_django_graphene_toolbox.mutations import SerializerMutation
 
-from apps.core.graphql.mutations import SerializerMutation
 from apps.development.graphql.mutations.issues.inputs import SyncIssueInput
 from apps.development.graphql.types import IssueType
 from apps.development.tasks import sync_project_issue_task

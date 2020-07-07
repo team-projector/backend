@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 
 import graphene
+from jnt_django_graphene_toolbox.mutations import BaseMutation
 
 from apps.core.graphql.helpers.generics import get_object_or_not_found
-from apps.core.graphql.mutations import BaseMutation
 from apps.payroll.graphql.permissions import CanApproveDeclineWorkBreak
 from apps.payroll.graphql.types import WorkBreakType
 from apps.payroll.models import WorkBreak

@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
 from django.db.models import QuerySet
+from jnt_django_graphene_toolbox.errors import GraphQLPermissionDenied
 
-from apps.core.graphql.errors import GraphQLPermissionDenied
 from apps.development.models import Team, TeamMember
 from apps.development.services.team_members import filter_by_roles
 from apps.users.models import User

@@ -2,8 +2,7 @@
 
 import pytest
 from django_filters import OrderingFilter as BaseOrderingFilter
-
-from apps.core.graphql.filters.mixins import CamelCasedOrderingMixin
+from jnt_django_graphene_toolbox.filters.mixins import CamelCasedOrderingMixin
 
 
 class DemoFilter(CamelCasedOrderingMixin, BaseOrderingFilter):
