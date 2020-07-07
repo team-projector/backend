@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
 import pytest
+from jnt_django_graphene_toolbox.errors import GraphQLPermissionDenied
 
-from apps.core.graphql.errors import GraphQLPermissionDenied
 from apps.development.models import Milestone
 from apps.development.services.milestone.allowed import filter_allowed_for_user
 from tests.test_development.factories import (

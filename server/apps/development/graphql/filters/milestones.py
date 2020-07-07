@@ -2,9 +2,8 @@
 
 import django_filters
 from django.db.models import QuerySet
+from jnt_django_graphene_toolbox.filters import OrderingFilter, SearchFilter
 
-from apps.core.graphql.filters import SearchFilter
-from apps.core.graphql.filters.ordering import OrderingFilter
 from apps.development.models.milestone import Milestone, MilestoneState
 
 

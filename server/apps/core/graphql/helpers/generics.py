@@ -2,8 +2,7 @@
 
 from django.http import Http404
 from django.shortcuts import get_object_or_404
-
-from apps.core.graphql.errors import GraphQLNotFound
+from jnt_django_graphene_toolbox.errors import GraphQLNotFound
 
 
 def get_object_or_not_found(queryset, *filter_args, **filter_kwargs):

@@ -1,8 +1,7 @@
 # -*- coding: utf-8 -*-
 
-import pytest
+from jnt_django_graphene_toolbox.errors import GraphQLInputError
 
-from apps.core.graphql.errors import GraphQLInputError
 from apps.development.graphql.mutations.issues.inputs.add_spent import (
     ERROR_MSG_NO_GL_TOKEN,
 )
@@ -58,12 +57,13 @@ def test_query(project_manager, ghl_client, gl_mocker, user):
 def test_user_without_gl_token(
     issue, ghl_auth_mock_info, add_spent_issue_mutation,
 ):
-    with pytest.raises(GraphQLInputError) as exc_info:
-        add_spent_issue_mutation(
-            root=None, info=ghl_auth_mock_info, id=issue.id, seconds=60,
-        )
+    resolve = add_spent_issue_mutation(
+        root=None, info=ghl_auth_mock_info, id=issue.id, seconds=60,
+    )
 
-    extensions = exc_info.value.extensions  # noqa: WPS441
+    isinstance(resolve, GraphQLInputError)
+
+    extensions = resolve.extensions  # noqa: WPS441
     assert len(extensions["fieldErrors"]) == 1
     assert extensions["fieldErrors"][0]["fieldName"] == "nonFieldErrors"
     assert extensions["fieldErrors"][0]["messages"][0] == ERROR_MSG_NO_GL_TOKEN
@@ -73,11 +73,12 @@ def test_bad_time(issue, user, ghl_auth_mock_info, add_spent_issue_mutation):
     user.gl_token = "token"
     user.save()
 
-    with pytest.raises(GraphQLInputError) as exc_info:
-        add_spent_issue_mutation(
-            root=None, info=ghl_auth_mock_info, id=issue.id, seconds=-30,
-        )
+    resolve = add_spent_issue_mutation(
+        root=None, info=ghl_auth_mock_info, id=issue.id, seconds=-30,
+    )
 
-    extensions = exc_info.value.extensions  # noqa: WPS441
+    isinstance(resolve, GraphQLInputError)
+
+    extensions = resolve.extensions  # noqa: WPS441
     assert len(extensions["fieldErrors"]) == 1
     assert extensions["fieldErrors"][0]["fieldName"] == "seconds"

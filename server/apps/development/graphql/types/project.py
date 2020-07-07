@@ -2,10 +2,13 @@
 
 from datetime import datetime
 
-from apps.core.graphql.connection_fields import DataSourceConnectionField
-from apps.core.graphql.connections import DataSourceConnection
-from apps.core.graphql.relay_nodes import DatasourceRelayNode
-from apps.core.graphql.types import BaseDjangoObjectType
+from jnt_django_graphene_toolbox.connection_fields import (
+    DataSourceConnectionField,
+)
+from jnt_django_graphene_toolbox.connections import DataSourceConnection
+from jnt_django_graphene_toolbox.relay_nodes import DatasourceRelayNode
+from jnt_django_graphene_toolbox.types import BaseDjangoObjectType
+
 from apps.development.graphql.filters import MilestonesFilterSet
 from apps.development.graphql.interfaces import MilestoneOwner
 from apps.development.graphql.resolvers import ProjectMilestonesResolver

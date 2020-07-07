@@ -1,8 +1,6 @@
 # -*- coding: utf-8 -*-
 
-import pytest
-
-from apps.core.graphql.errors import GraphQLPermissionDenied
+from jnt_django_graphene_toolbox.errors import GraphQLPermissionDenied
 
 GHL_DELETE_TICKET = """
 mutation ($id: ID!) {
@@ -38,15 +36,13 @@ def test_success(
 
 def test_unauth(ghl_mock_info, delete_ticket_mutation):
     """Test unauth ticket deleting."""
-    with pytest.raises(GraphQLPermissionDenied):
-        delete_ticket_mutation(
-            root=None, info=ghl_mock_info,
-        )
+    resolve = delete_ticket_mutation(root=None, info=ghl_mock_info)
+
+    assert isinstance(resolve, GraphQLPermissionDenied)
 
 
 def test_not_project_manager(ghl_auth_mock_info, delete_ticket_mutation):
     """Test not project manager ticket deleting."""
-    with pytest.raises(GraphQLPermissionDenied):
-        delete_ticket_mutation(
-            root=None, info=ghl_auth_mock_info, id=1,
-        )
+    resolve = delete_ticket_mutation(root=None, info=ghl_auth_mock_info, id=1)
+
+    assert isinstance(resolve, GraphQLPermissionDenied)

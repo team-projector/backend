@@ -1,17 +1,17 @@
 # -*- coding: utf-8 -*-
 
 import graphene
+from jnt_django_graphene_toolbox.mutations import BaseMutation
+from jnt_django_graphene_toolbox.mutations.mixins import (
+    ArgumentsValidationMixin,
+)
 
-from apps.core.graphql.mutations import BaseMutation
-from apps.core.graphql.mutations.mixins import ArgumentsValidationMixin
 from apps.payroll.graphql.forms import WorkBreakForm
 from apps.payroll.graphql.types import WorkBreakType
 from apps.payroll.models import WorkBreak
 
 
-class CreateWorkBreakMutation(
-    ArgumentsValidationMixin, BaseMutation,
-):
+class CreateWorkBreakMutation(ArgumentsValidationMixin, BaseMutation):
     """Create work break mutation."""
 
     class Arguments:

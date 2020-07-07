@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
 
-from apps.core.graphql.connections import DataSourceConnection
-from apps.core.graphql.relay_nodes import DatasourceRelayNode
-from apps.core.graphql.types import BaseDjangoObjectType
+from jnt_django_graphene_toolbox.connections import DataSourceConnection
+from jnt_django_graphene_toolbox.relay_nodes import DatasourceRelayNode
+from jnt_django_graphene_toolbox.types import BaseDjangoObjectType
+
 from apps.users.models import Position
 
 

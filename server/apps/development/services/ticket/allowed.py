@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
-from apps.core.graphql.errors import GraphQLPermissionDenied
+from jnt_django_graphene_toolbox.errors import GraphQLPermissionDenied
+
 from apps.users.models import User
 
 

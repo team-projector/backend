@@ -2,8 +2,8 @@
 
 import django_filters
 from django.db.models import QuerySet
+from jnt_django_graphene_toolbox.filters import OrderingFilter
 
-from apps.core.graphql.filters.ordering import OrderingFilter
 from apps.development.models import Project, Team, TeamMember
 from apps.payroll.models import Salary, SpentTime
 from apps.users.models import User

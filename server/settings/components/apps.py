@@ -16,6 +16,7 @@ INSTALLED_APPS = (
     "django.contrib.admindocs",
     # vendors
     "jnt_django_toolbox",
+    "jnt_django_graphene_toolbox",
     "graphene_django",
     "django_extensions",
     "django_filters",

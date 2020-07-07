@@ -3,12 +3,12 @@
 from datetime import datetime
 
 import pytest
-
-from apps.core.graphql.errors import (
+from jnt_django_graphene_toolbox.errors import (
     INPUT_ERROR,
     GraphQLInputError,
     GraphQLPermissionDenied,
 )
+
 from apps.development.models.ticket import TicketState, TicketType
 from tests.test_development.factories import (
     IssueFactory,
@@ -77,18 +77,19 @@ def test_invalid_parameters(
     project_manager, ghl_auth_mock_info, create_ticket_mutation,
 ):
     """Test creation with invalid parameters."""
-    with pytest.raises(GraphQLInputError) as exc_info:
-        create_ticket_mutation(
-            root=None,
-            info=ghl_auth_mock_info,
-            title="test ticket",
-            type="invalid type",
-            url="invalid url",
-            milestone="",
-            state="invalid state",
-        )
+    resolve = create_ticket_mutation(
+        root=None,
+        info=ghl_auth_mock_info,
+        title="test ticket",
+        type="invalid type",
+        url="invalid url",
+        milestone="",
+        state="invalid state",
+    )
 
-    extensions = exc_info.value.extensions  # noqa:WPS441
+    isinstance(resolve, GraphQLInputError)
+
+    extensions = resolve.extensions
     assert extensions["code"] == INPUT_ERROR
 
     fields_with_errors = {
@@ -102,14 +103,15 @@ def test_without_permissions(user, ghl_auth_mock_info, create_ticket_mutation):
     """Test deletion without permissions."""
     milestone = ProjectMilestoneFactory()
 
-    with pytest.raises(GraphQLPermissionDenied):
-        create_ticket_mutation(
-            root=None,
-            info=ghl_auth_mock_info,
-            title="test ticket",
-            startDate=datetime.now().date(),
-            dueDate=datetime.now().date(),
-            type=TicketType.FEATURE,
-            url="http://test1.com",
-            milestone=milestone.pk,
-        )
+    resolve = create_ticket_mutation(
+        root=None,
+        info=ghl_auth_mock_info,
+        title="test ticket",
+        startDate=datetime.now().date(),
+        dueDate=datetime.now().date(),
+        type=TicketType.FEATURE,
+        url="http://test1.com",
+        milestone=milestone.pk,
+    )
+
+    isinstance(resolve, GraphQLPermissionDenied)

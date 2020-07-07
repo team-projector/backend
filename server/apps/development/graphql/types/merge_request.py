@@ -2,6 +2,9 @@
 
 import graphene
 from django.db import models
+from jnt_django_graphene_toolbox.connections import DataSourceConnection
+from jnt_django_graphene_toolbox.relay_nodes import DatasourceRelayNode
+from jnt_django_graphene_toolbox.types import BaseDjangoObjectType
 
 from apps.core import graphql
 from apps.development import models as development_models
@@ -20,13 +23,13 @@ from apps.development.services.merge_request.problems import (
 )
 
 
-class MergeRequestType(graphql.BaseDjangoObjectType):
+class MergeRequestType(BaseDjangoObjectType):
     """Merge request type."""
 
     class Meta:
         model = development_models.MergeRequest
-        interfaces = (graphql.DatasourceRelayNode, WorkItem)
-        connection_class = graphql.DataSourceConnection
+        interfaces = (DatasourceRelayNode, WorkItem)
+        connection_class = DataSourceConnection
         name = "MergeRequest"
 
     metrics = graphene.Field(MergeRequestMetricsType)

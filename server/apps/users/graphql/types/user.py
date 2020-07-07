@@ -2,11 +2,11 @@
 
 import graphene
 from django.db.models import QuerySet
+from jnt_django_graphene_toolbox.connections import DataSourceConnection
+from jnt_django_graphene_toolbox.relay_nodes import DatasourceRelayNode
+from jnt_django_graphene_toolbox.types import BaseDjangoObjectType
 
 from apps.core.graphql import get_fields_from_info
-from apps.core.graphql.connections import DataSourceConnection
-from apps.core.graphql.relay_nodes import DatasourceRelayNode
-from apps.core.graphql.types import BaseDjangoObjectType
 from apps.users.graphql.types.user_metrics import UserMetricsType
 from apps.users.models import User
 from apps.users.services.user.metrics.main import UserMetricsProvider

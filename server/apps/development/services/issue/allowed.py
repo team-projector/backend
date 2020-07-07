@@ -3,8 +3,8 @@
 from typing import Iterable
 
 from django.db.models import Exists, OuterRef, QuerySet
+from jnt_django_graphene_toolbox.errors import GraphQLPermissionDenied
 
-from apps.core.graphql.errors import GraphQLPermissionDenied
 from apps.development.models import (
     Project,
     ProjectGroup,

@@ -1,8 +1,10 @@
 # -*- coding: utf-8 -*-
 
 import graphene
+from jnt_django_graphene_toolbox.connection_fields import (
+    DataSourceConnectionField,
+)
 
-from apps.core.graphql.connection_fields import DataSourceConnectionField
 from apps.development.graphql.types.label import LabelType
 from apps.development.graphql.types.project import ProjectType
 from apps.users.graphql.types import UserType

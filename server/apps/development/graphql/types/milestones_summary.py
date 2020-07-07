@@ -1,9 +1,8 @@
 # -*- coding: utf-8 -*-
 
 import graphene
-
-from apps.core.graphql.security.mixins.node import AuthNode
-from apps.core.graphql.security.permissions import AllowAuthenticated
+from jnt_django_graphene_toolbox.security.mixins.node import AuthNode
+from jnt_django_graphene_toolbox.security.permissions import AllowAuthenticated
 
 
 class MilestonesSummaryType(AuthNode, graphene.ObjectType):

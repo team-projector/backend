@@ -1,8 +1,7 @@
 # -*- coding: utf-8 -*-
 
-import pytest
+from jnt_django_graphene_toolbox.errors import GraphQLInputError
 
-from apps.core.graphql.errors import GraphQLInputError
 from apps.development.models.issue import IssueState
 from tests.test_development.factories import IssueFactory
 from tests.test_development.test_gl.helpers import gl_mock, initializers
@@ -67,11 +66,12 @@ def test_without_access(
 ):
     issue = IssueFactory()
 
-    with pytest.raises(GraphQLInputError) as exc_info:
-        sync_issue_mutation(
-            root=None, info=ghl_auth_mock_info, id=issue.id,
-        )
+    resolve = sync_issue_mutation(
+        root=None, info=ghl_auth_mock_info, id=issue.id,
+    )
 
-    extensions = exc_info.value.extensions  # noqa: WPS441
+    assert isinstance(resolve, GraphQLInputError)
+
+    extensions = resolve.extensions
     assert len(extensions["fieldErrors"]) == 1
     assert extensions["fieldErrors"][0]["fieldName"] == "id"

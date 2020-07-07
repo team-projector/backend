@@ -4,6 +4,7 @@ import django_filters
 from django.db.models import QuerySet
 
 from apps.development.models import Team
+from apps.payroll.models import Salary
 from apps.payroll.services.salary.allowed import (
     check_allowed_filtering_by_team,
 )
@@ -29,6 +30,10 @@ class TeamFilter(django_filters.ModelChoiceFilter):
 
 class SalaryFilterSet(django_filters.FilterSet):
     """Set of filters for Salary."""
+
+    class Meta:
+        model = Salary
+        fields = ("user", "team")
 
     user = django_filters.ModelChoiceFilter(queryset=User.objects.all())
     team = TeamFilter()

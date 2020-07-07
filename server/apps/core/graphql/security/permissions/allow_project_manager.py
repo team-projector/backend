@@ -30,4 +30,4 @@ class AllowProjectManager:
         return self._is_project_manager(info.context.user)  # type:ignore
 
     def _is_project_manager(self, user) -> bool:
-        return user.is_authenticated and user.roles.MANAGER
+        return bool(user.is_authenticated and user.roles.MANAGER)
