@@ -7,6 +7,7 @@ from jnt_django_toolbox.helpers.objects import dict2obj
 from apps.core.gitlab import GITLAB_DATETIME_FORMAT
 from apps.development.models import Note
 from apps.development.models.note import NoteType
+from apps.development.services.note.gl.sync import update_note_from_gitlab
 from tests.test_development.factories import IssueFactory
 
 
@@ -15,7 +16,7 @@ def test_success(user):
 
     body = "moved from group/project#111"
 
-    Note.objects.update_from_gitlab(
+    update_note_from_gitlab(
         dict2obj(
             {
                 "id": 2,
@@ -47,7 +48,7 @@ def test_no_system(user):
 
     body = "moved from group/project#111"
 
-    Note.objects.update_from_gitlab(
+    update_note_from_gitlab(
         dict2obj(
             {
                 "id": 2,
@@ -73,7 +74,7 @@ def test_bad_issue_number(user):
 
     body = "moved from group/project#111b"
 
-    Note.objects.update_from_gitlab(
+    update_note_from_gitlab(
         dict2obj(
             {
                 "id": 2,

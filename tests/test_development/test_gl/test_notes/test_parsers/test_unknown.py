@@ -6,12 +6,13 @@ from jnt_django_toolbox.helpers.objects import dict2obj
 
 from apps.core.gitlab import GITLAB_DATETIME_FORMAT
 from apps.development.models import Note
+from apps.development.services.note.gl.sync import update_note_from_gitlab
 from tests.test_development.factories import IssueFactory
 
 
 def test_unsupported(user):
     issue = IssueFactory.create()
-    Note.objects.update_from_gitlab(
+    update_note_from_gitlab(
         dict2obj(
             {
                 "id": 2,

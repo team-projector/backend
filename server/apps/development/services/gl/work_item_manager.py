@@ -4,7 +4,8 @@ from typing import List, Optional, Union
 
 from gitlab.v4 import objects as gl
 
-from apps.development.models import Issue, Label, MergeRequest, Note
+from apps.development.models import Issue, Label, MergeRequest
+from apps.development.services.note.gl.sync import update_note_from_gitlab
 from apps.development.services.project.gl.provider import ProjectGlProvider
 from apps.development.services.project_group.gl.provider import (
     ProjectGroupGlProvider,
@@ -52,7 +53,7 @@ class BaseWorkItemGlManager:
     ) -> None:
         """Load notes for work item."""
         for gl_note in gl_target.notes.list(as_list=False):
-            Note.objects.update_from_gitlab(gl_note, target)
+            update_note_from_gitlab(gl_note, target)
 
         adjust_spent_times(target)
 

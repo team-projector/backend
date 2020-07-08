@@ -7,7 +7,6 @@ from django.core.serializers.json import DjangoJSONEncoder
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
-from apps.development.models.managers import NoteManager
 from apps.users.models import User
 
 
@@ -66,8 +65,6 @@ class Note(models.Model):
         verbose_name=_("VN__USER"),
         help_text=_("HT__USER"),
     )
-
-    objects = NoteManager()  # noqa: WPS110
 
     def __str__(self):
         """Returns object string representation."""
