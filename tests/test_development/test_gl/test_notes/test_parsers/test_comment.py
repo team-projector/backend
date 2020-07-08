@@ -33,11 +33,8 @@ def test_links(issue):
     gl_note = GlNoteFactory.create(body="issue {0}".format(link))
     note_type, note_data = comment_parser.parse(dict2obj(gl_note), issue)
 
-    links = note_data.get("issues")
-
     assert note_type == NoteType.COMMENT
-    assert len(links) == 1
-    assert links[0] == link
+    assert note_data.get("issues") == [link]
     assert note_data.get("numbers") is None
 
 

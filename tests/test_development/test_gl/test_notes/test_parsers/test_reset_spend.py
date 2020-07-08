@@ -10,13 +10,14 @@ from apps.development.models.note import NoteType
 from apps.development.services.note.gl.parsers.spend_reset import (
     SPEND_RESET_MESSAGE,
 )
+from apps.development.services.note.gl.sync import update_note_from_gitlab
 from tests.test_development.factories import IssueFactory
 
 
 def test_reset(user):
     issue = IssueFactory.create()
 
-    Note.objects.update_from_gitlab(
+    update_note_from_gitlab(
         dict2obj(
             {
                 "id": 2,
