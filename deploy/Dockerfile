@@ -25,6 +25,7 @@ RUN apt-get update \
                       nginx=1.14.2-2+deb10u1 \
                       make=4.2.1-1.2 \
                       git=1:2.20.1-2+deb10u3 \
+                      curl=7.64.0-4+deb10u1 \
     && curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/${POETRY_VERSION}/get-poetry.py | python \
     && poetry config virtualenvs.create false \
     && poetry install --no-dev --no-interaction --no-ansi \
