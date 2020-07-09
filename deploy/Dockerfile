@@ -19,7 +19,7 @@ COPY pyproject.toml poetry.lock ./
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 RUN apt-get update \
     && apt-get install --no-install-recommends -y \
-                      gcc=8.3.0 \
+                      gcc=4:8.3.0-1 \
                       binutils=2.31.1 \
                       gettext=0.19.8.1 \
                       nginx=1.14.2 \
