@@ -26,10 +26,11 @@ RUN apt-get update \
                       make=4.2.1-1.2 \
                       git=1:2.20.1-2+deb10u3 \
                       curl=7.64.0-4+deb10u1 \
+                      libc6-dev=2.28-10 \
     && curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/${POETRY_VERSION}/get-poetry.py | python \
     && poetry config virtualenvs.create false \
     && poetry install --no-dev --no-interaction --no-ansi \
-    && apt-get remove --purge -y gcc binutils git \
+    && apt-get remove --purge -y gcc binutils git curl libc6-dev \
     && apt-get autoremove -y \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
