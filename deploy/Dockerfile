@@ -30,7 +30,7 @@ RUN apt-get update \
     && curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/${POETRY_VERSION}/get-poetry.py | python \
     && poetry config virtualenvs.create false \
     && poetry install --no-dev --no-interaction --no-ansi \
-    && apt-get remove --purge -y gcc binutils git curl libc6-dev \
+    && apt-get remove --purge -y gcc binutils curl libc6-dev \
     && apt-get autoremove -y \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
