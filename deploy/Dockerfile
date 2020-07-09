@@ -16,18 +16,22 @@ WORKDIR /app
 
 COPY pyproject.toml poetry.lock ./
 
-RUN apt update \
-    && apt install -y gcc \
-                      binutils \
-                      gettext \
-                      nginx \
-                      make \
-                      git \
+SHELL ["/bin/bash", "-o", "pipefail", "-c"]
+RUN apt-get update \
+    && apt-get install --no-install-recommends -y \
+                      gcc=8.3.0 \
+                      binutils=2.31.1 \
+                      gettext=0.19.8.1 \
+                      nginx=1.14.2 \
+                      make=4.2.1 \
+                      git=2.20.1 \
     && curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/${POETRY_VERSION}/get-poetry.py | python \
     && poetry config virtualenvs.create false \
     && poetry install --no-dev --no-interaction --no-ansi \
-    && apt remove --purge -y gcc binutils \
-    && apt autoremove -y
+    && apt-get remove --purge -y gcc binutils git \
+    && apt-get autoremove -y \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
 
 # ---
 
