@@ -7,7 +7,7 @@ variables:
   GIT_STRATEGY: none
 
 stages:
-  - lint_dockerfile
+  - pre_build
   - build
   - test
   - publish
@@ -18,7 +18,7 @@ lint_dockerfile:
   variables:
     GIT_DEPTH: 1
     GIT_STRATEGY: fetch
-  stage: lint_dockerfile
+  stage: pre_build
   script:
     - hadolint deploy/Dockerfile
 
