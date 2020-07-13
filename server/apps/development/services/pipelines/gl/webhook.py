@@ -2,6 +2,7 @@
 
 import json
 import logging
+from typing import Optional
 
 from django.conf import settings
 from django.template.loader import render_to_string
@@ -31,8 +32,8 @@ class PipelineGLWebhook(GLWebhook):
             ),
         )
 
-        user = User.objects.get(email=body["user"]["email"])
-        if not user.is_active or not user.notify_pipeline_status:
+        user = self._get_user(body)
+        if not user:
             return
 
         rendered = render_to_string(
@@ -51,3 +52,10 @@ class PipelineGLWebhook(GLWebhook):
         slack.send_blocks(
             user, json.loads(rendered), icon_emoji=":gitlab:",
         )
+
+    def _get_user(self, source) -> Optional[User]:
+        user = User.objects.filter(email=source["user"]["email"]).first()
+        if user and user.is_active and user.notify_pipeline_status:
+            return user
+
+        return None
