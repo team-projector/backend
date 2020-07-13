@@ -21,6 +21,7 @@ django-activity-stream = {git = "https://github.com/justquick/django-activity-st
 psycopg2-binary = "*"
 jnt-django-admin-tools = "*"
 jnt-django-toolbox = {version = "^0.1.14", extras = ["jaeger"]}
+jnt-django-graphene-toolbox = "^0.1.0"
 social-auth-app-django = "*"
 social-auth-core = "*"
 celery = "*"
@@ -34,7 +35,6 @@ uwsgitop = "*"
 tqdm = "*"
 black = "^19.10b0"
 sentry-sdk = "^0.14.3"
-jnt-django-graphene-toolbox = "^0.1.0"
 
 [tool.poetry.dev-dependencies]
 pytest = "*"
