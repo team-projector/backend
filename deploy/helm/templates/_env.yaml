@@ -94,4 +94,9 @@
     secretKeyRef:
       name: backend-secrets
       key: sentry.dsn
+- name: DJANGO_FLUENTD_LOGGER_HOST
+  valueFrom:
+    secretKeyRef:
+      name: backend-config
+      key: logging.fluentd_host
 {{- end -}}

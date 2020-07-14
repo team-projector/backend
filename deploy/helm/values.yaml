@@ -7,6 +7,8 @@ email:
   host: smtp.eu.mailgun.org
   port: "587"
   from_email: system@teamprojector.com
+logging:
+  fluentd_host: ""
 secrets:
   secret_key: ""
   gitlab_token: ""

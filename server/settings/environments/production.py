@@ -46,3 +46,33 @@ X_FRAME_OPTIONS = "DENY"
 REQUEST_PROFILERS = [
     DatabaseQueriesProfiler(),
 ]
+
+FLUENTD_LOGGER_HOST = config("DJANGO_FLUENTD_LOGGER_HOST", default=None)
+if FLUENTD_LOGGER_HOST:
+    LOGGING = {
+        "version": 1,
+        "disable_existing_loggers": False,
+        "formatters": {
+            "fluentd": {
+                "()": "fluent.handler.FluentRecordFormatter",
+                "exclude_attrs": ("exc_info",),
+            }
+        },
+        "handlers": {
+            "fluentd": {
+                "level": "DEBUG",
+                "class": "fluent.handler.FluentHandler",
+                "formatter": "fluentd",
+                "tag": DOMAIN_NAME,
+                "host": FLUENTD_LOGGER_HOST,
+                "port": 24224,
+            },
+        },
+        "loggers": {
+            "apps": {
+                "handlers": ["fluentd"],
+                "level": "DEBUG",
+                "propagate": True,
+            },
+        },
+    }

@@ -8,3 +8,4 @@ data:
   email.host: {{ .Values.email.host }}
   email.port: {{ .Values.email.port | quote }}
   email.from_email: {{ .Values.email.from_email }}
+  logging.fluentd_host: {{ .Values.logging.fluentd_host }}
