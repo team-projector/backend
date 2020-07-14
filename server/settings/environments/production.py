@@ -56,7 +56,7 @@ if FLUENTD_LOGGER_HOST:
             "fluentd": {
                 "()": "fluent.handler.FluentRecordFormatter",
                 "exclude_attrs": ("exc_info",),
-            }
+            },
         },
         "handlers": {
             "fluentd": {
