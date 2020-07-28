@@ -9,3 +9,12 @@ compile_messages:
 
 pre_commit:
 	@./scripts/pre_commit.sh
+
+docker_remote:
+	@ ./develop/docker_remote.sh
+
+docker_local:
+	@ ./develop/docker_local.sh
+
+docker_stop:
+	@ ./develop/docker_stop.sh

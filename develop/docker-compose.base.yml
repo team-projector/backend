@@ -1,0 +1,19 @@
+version: '2.4'
+
+services:
+  postgres:
+    image: postgres:13
+    shm_size: '1gb'
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_PASSWORD: team_projector
+      POSTGRES_DB: team_projector
+      POSTGRES_USER: team_projector
+
+  redis:
+    restart: always
+    image: redis:6.0.6
+
+volumes:
+  pg_data:
