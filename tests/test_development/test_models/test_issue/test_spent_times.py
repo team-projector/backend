@@ -63,7 +63,7 @@ def test_type_not_exist(user):
     issue = Issue.objects.first()
     adjust_spent_times(issue)
 
-    assert SpentTime.objects.count() == 1
+    assert not SpentTime.objects.exists()
 
 
 def test_spent_time_exists(user):

@@ -8,6 +8,8 @@ from apps.development.models import Issue, MergeRequest
 from apps.development.models.note import Note, NoteType
 from apps.payroll.models import SpentTime  # noqa: WPS433
 
+TIME_SPENTS_NOTES = (NoteType.TIME_SPEND, NoteType.RESET_SPEND)
+
 
 def adjust_spent_times(work_item: Union[Issue, MergeRequest]) -> None:
     """Create spent times from parsed notes."""
@@ -47,7 +49,7 @@ def _get_notes_for_processing(
     for note in work_item.notes.all().order_by("created_at"):
         if note.type == NoteType.MOVED_FROM:
             notes = []
-        else:
+        elif note.type in TIME_SPENTS_NOTES:
             notes.append(note)
 
     return notes
