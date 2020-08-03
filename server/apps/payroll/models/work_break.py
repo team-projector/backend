@@ -55,7 +55,7 @@ class WorkBreak(ApprovedMixin, Timestamps):
     user = models.ForeignKey(  # noqa: CCE001
         settings.AUTH_USER_MODEL,
         models.CASCADE,
-        related_name="work_break",
+        related_name="work_breaks",
         verbose_name=_("VN__USER"),
         help_text=_("HT__USER"),
     )

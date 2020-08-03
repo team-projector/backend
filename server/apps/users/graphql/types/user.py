@@ -45,3 +45,7 @@ class UserType(BaseDjangoObjectType):
     def resolve_problems(self, info, **kwargs):  # noqa: WPS110
         """Get user problems."""
         return get_user_problems(self)
+
+    def resolve_work_breaks(self, info, **kwargs):  # noqa: WPS110
+        """Resolving work breaks from current user."""
+        return self.work_breaks.order_by("from_date")

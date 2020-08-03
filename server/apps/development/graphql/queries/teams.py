@@ -12,6 +12,8 @@ from apps.development.graphql.types import (
     TeamMemberProgressMetricsType,
     TeamType,
 )
+from apps.users.graphql.filters.user_work_breaks import UserWorkBreaksFilterSet
+from apps.users.graphql.types import UserType
 
 
 class TeamsQueries(graphene.ObjectType):
@@ -30,4 +32,8 @@ class TeamsQueries(graphene.ObjectType):
         end=graphene.Date(required=True),
         group=graphene.String(required=True),
         resolver=resolve_team_progress_metrics,
+    )
+
+    team_work_breaks = DataSourceConnectionField(
+        UserType, filterset_class=UserWorkBreaksFilterSet,
     )
