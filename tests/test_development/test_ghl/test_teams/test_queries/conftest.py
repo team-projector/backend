@@ -16,3 +16,8 @@ def team_query(ghl_queries):
 @pytest.fixture(scope="session")
 def team_progress_metrics_query(ghl_queries):
     return ghl_queries.fields["teamProgressMetrics"].resolver
+
+
+@pytest.fixture(scope="session")
+def team_work_breaks_query(ghl_queries):
+    return ghl_queries.fields["teamWorkBreaks"].resolver
