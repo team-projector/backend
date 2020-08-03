@@ -11,7 +11,7 @@ User = get_user_model()
 
 
 def filter_allowed_for_user(
-    queryset: QuerySet, user: User,
+    queryset: QuerySet, user: User,  # type: ignore
 ):
     """Filter work breaks for user."""
     users = TeamMember.objects.filter(
