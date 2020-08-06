@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
-from actstream import action
 from django.contrib.auth import get_user_model
 
+from actstream import action
 from celery_app import app
 
 User = get_user_model()
