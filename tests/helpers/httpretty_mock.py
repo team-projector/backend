@@ -28,6 +28,7 @@ class RequestCallbackFactory:
         uri: str,
         response_headers: Dict[str, str],
     ) -> List[object]:
+        """Call request callback."""
         response_headers["Content-Type"] = "application/json"
 
         return [self._status_code, response_headers, json.dumps(self._body)]
@@ -103,6 +104,7 @@ class HttprettyMock:
         request_callback: RequestCallback,
         priority: int = 0,
     ) -> None:
+        """Register url for mock."""
         httpretty.register_uri(
             method=method, uri=uri, body=request_callback, priority=priority,
         )

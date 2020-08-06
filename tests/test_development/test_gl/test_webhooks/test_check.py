@@ -43,6 +43,7 @@ class WebhookRequestCallback:
         uri: str,
         response_headers: Dict[str, str],
     ) -> List[object]:
+        """Call webhook request."""
         self.request_body = request.parsed_body
         response_headers["Content-Type"] = "application/json"
 
