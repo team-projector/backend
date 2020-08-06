@@ -98,6 +98,8 @@ class UserMetricsProvider:
 
 
 class _Aggregations:
+    """Aggregations."""
+
     issue_opened = models.Q(issues__state=IssueState.OPENED)
     issue_closed = models.Q(issues__state=IssueState.CLOSED)
     mreq_opened = models.Q(mergerequests__state=MergeRequestState.OPENED)
@@ -109,6 +111,7 @@ class _Aggregations:
     )
 
     def __call__(self) -> Dict[str, models.Expression]:
+        """Call aggregations."""
         ret = {
             "issues.opened_spent": Coalesce(
                 models.Sum("time_spent", filter=self.issue_opened), 0,
@@ -199,6 +202,8 @@ class _WorkItemFilters(NamedTuple):
 
 
 class _WorkItemAggregations:
+    """Work item aggregations."""
+
     tax_rate = models.ExpressionWrapper(
         models.F("tax_rate"), output_field=MoneyField(max_length=MoneyField),
     )
@@ -206,6 +211,7 @@ class _WorkItemAggregations:
     def __call__(
         self, filters: _WorkItemFilters,
     ) -> Dict[str, models.Expression]:
+        """Call work item aggregations."""
         return {
             "payroll": Coalesce(models.Sum("sum", filter=filters.all), 0),
             "payroll_opened": Coalesce(

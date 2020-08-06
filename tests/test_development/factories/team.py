@@ -15,5 +15,6 @@ class TeamFactory(factory.django.DjangoModelFactory):
 
     @factory.post_generation
     def members(self, create, extracted, **kwargs):
+        """Set members."""
         if create and extracted:
             self.members.set(extracted)
