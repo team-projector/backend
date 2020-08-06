@@ -13,6 +13,8 @@ from tests.test_users.factories import UserFactory
 
 
 class MergeRequestFactory(GitlabFieldMixin):
+    """Merge request factory."""
+
     class Meta:
         model = MergeRequest
 

@@ -11,11 +11,15 @@ from apps.users.services.token.create import create_user_token
 
 
 class _MockStorageMessages:
+    """Mock storage messages."""
+
     def add(self, level, message, extra_tags):
         """Mocked add."""
 
 
 class RequestFactory(DjangoRequestFactory):
+    """Request factory."""
+
     def __init__(self, *args, **kwargs) -> None:
         """Initializing."""
         super().__init__(*args, **kwargs)

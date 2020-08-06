@@ -10,6 +10,8 @@ from tests.test_development.factories.project import ProjectFactory
 
 
 class IssueFactory(GitlabFieldMixin):
+    """Issue factory."""
+
     class Meta:
         model = Issue
 

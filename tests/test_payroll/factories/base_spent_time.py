@@ -7,6 +7,8 @@ from apps.payroll.models import SpentTime
 
 
 class BaseSpentTimeFactory(factory.django.DjangoModelFactory):
+    """Base spent time factory."""
+
     class Meta:
         model = SpentTime
 

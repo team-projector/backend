@@ -79,7 +79,7 @@ def test_user_without_email_but_payed(admin_rf, salary_admin):
 def test_another_field_changed(admin_rf, salary_admin):
     user = UserFactory.create(email="test@mail.com")
     salary = SalaryFactory.create(user=user, payed=False)
-    salary.sum = 10.0  # noqa: WPS125
+    salary.sum = 10.0  # noqa: WPS125, A003, A002
 
     salary_admin.changeform_view(
         admin_rf.post(
@@ -99,7 +99,7 @@ def test_another_field_changed(admin_rf, salary_admin):
 def test_another_field_changed_and_payed(admin_rf, salary_admin):
     user = UserFactory.create(email="test@mail.com")
     salary = SalaryFactory.create(user=user, payed=False)
-    salary.sum = 10.0  # noqa: WPS125
+    salary.sum = 10.0  # noqa: WPS125, A003, A002
     salary.payed = True
 
     salary_admin.changeform_view(

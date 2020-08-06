@@ -17,7 +17,7 @@ class UpdateWorkBreakMutation(ArgumentsValidationMixin, BaseMutation):
     """Update work break after validation."""
 
     class Arguments:
-        id = graphene.ID(required=True)  # noqa: WPS125
+        id = graphene.ID(required=True)  # noqa: WPS125, A003
         comment = graphene.String(required=True)
         from_date = graphene.DateTime(required=True)
         reason = graphene.String(required=True)

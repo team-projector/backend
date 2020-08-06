@@ -4,7 +4,9 @@ import factory
 
 
 class GlUserFactory(factory.DictFactory):
-    id = factory.Faker("random_int")  # noqa: WPS125
+    """Gitlab user factory."""
+
+    id = factory.Faker("random_int")  # noqa: WPS125, A003
     name = factory.Sequence(lambda seq: "User {0}".format(seq))
     public_email = factory.Sequence(
         lambda seq: "public{0}@mail.com".format(seq),

@@ -31,6 +31,8 @@ def _gitlab_check_webhooks(settings) -> None:
 
 
 class WebhookRequestCallback:
+    """Webhook request callback class."""
+
     def __init__(self):
         """Initialize."""
         self.request_body = None

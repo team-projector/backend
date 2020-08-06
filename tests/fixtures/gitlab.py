@@ -16,6 +16,8 @@ RE_GITLAB_URL = re.compile(r"https://gitlab\.com.*")
 
 
 class GitlabMock(HttprettyMock):
+    """Gitlab mock."""
+
     base_api_url = "{0}/api/v4".format(settings.GITLAB_ADDRESS)
 
     def __init__(self) -> None:

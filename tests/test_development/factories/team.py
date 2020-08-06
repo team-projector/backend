@@ -6,6 +6,8 @@ from apps.development.models import Team
 
 
 class TeamFactory(factory.django.DjangoModelFactory):
+    """Team factory."""
+
     class Meta:
         model = Team
 

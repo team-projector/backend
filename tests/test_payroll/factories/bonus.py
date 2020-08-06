@@ -8,6 +8,8 @@ from tests.test_users.factories.user import UserFactory
 
 
 class BonusFactory(factory.django.DjangoModelFactory):
+    """Bonus factory."""
+
     class Meta:
         model = Bonus
 
@@ -17,5 +19,5 @@ class BonusFactory(factory.django.DjangoModelFactory):
         after_now=False,
         tzinfo=pytz.UTC,
     )
-    sum = factory.Faker("random_int")  # noqa: WPS125
+    sum = factory.Faker("random_int")  # noqa: WPS125, A003
     created_by = factory.SubFactory(UserFactory)

@@ -14,7 +14,7 @@ class ApproveWorkBreakMutation(BaseMutation):
     """Approve work break mutation."""
 
     class Arguments:
-        id = graphene.ID(required=True)  # noqa: WPS125
+        id = graphene.ID(required=True)  # noqa: WPS125, A003
 
     permission_classes = (CanApproveDeclineWorkBreak,)
 

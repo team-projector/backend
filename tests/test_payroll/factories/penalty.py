@@ -8,6 +8,8 @@ from tests.test_users.factories.user import UserFactory
 
 
 class PenaltyFactory(factory.django.DjangoModelFactory):
+    """Penalty factory."""
+
     class Meta:
         model = Penalty
 
@@ -17,5 +19,5 @@ class PenaltyFactory(factory.django.DjangoModelFactory):
         after_now=False,
         tzinfo=pytz.UTC,
     )
-    sum = factory.Faker("random_int")  # noqa: WPS125
+    sum = factory.Faker("random_int")  # noqa: WPS125, A003
     created_by = factory.SubFactory(UserFactory)

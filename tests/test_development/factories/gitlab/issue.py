@@ -12,7 +12,9 @@ from tests.test_users.factories.gitlab import GlUserFactory
 
 
 class GlIssueFactory(factory.DictFactory):
-    id = factory.Faker("random_int")  # noqa: WPS125
+    """Gitlab issue factory."""
+
+    id = factory.Faker("random_int")  # noqa: WPS125, A003
     iid = factory.Faker("random_int")
     web_url = factory.Faker("url")
     title = factory.Sequence(lambda seq: "Issue {0}".format(seq))

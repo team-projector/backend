@@ -16,7 +16,9 @@ from apps.users.models import User
 class ApprovingFilter(django_filters.BooleanFilter):
     """Filter work breaks by approved state."""
 
-    def filter(self, queryset, value) -> QuerySet:  # noqa: WPS125, WPS110
+    def filter(  # noqa: A003, WPS125
+        self, queryset, value,  # noqa: WPS110
+    ) -> QuerySet:
         """Do filtering."""
         if not value:
             return queryset
@@ -41,7 +43,9 @@ class TeamFilter(django_filters.ModelChoiceFilter):
         """Initialize self."""
         super().__init__(queryset=Team.objects.all())
 
-    def filter(self, queryset, value) -> QuerySet:  # noqa: WPS125, WPS110
+    def filter(  # noqa: A003, WPS125
+        self, queryset, value,  # noqa: WPS110
+    ) -> QuerySet:
         """Do filtering."""
         if not value:
             return queryset

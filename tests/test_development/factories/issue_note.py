@@ -8,6 +8,8 @@ from tests.test_development.factories.issue import IssueFactory
 
 
 class IssueNoteFactory(factory.django.DjangoModelFactory):
+    """Issue note factory."""
+
     class Meta:
         model = Note
 

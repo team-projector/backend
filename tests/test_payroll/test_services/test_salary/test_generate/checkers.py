@@ -7,7 +7,7 @@ from apps.users.models import Position
 def check_salary(  # noqa: WPS211
     salary: Salary,
     charged_time: int = 0,
-    sum: float = 0,  # noqa: WPS125
+    sum: float = 0,  # noqa: WPS125, A002
     penalty: float = 0,
     bonus: float = 0,
     taxes: float = 0,

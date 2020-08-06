@@ -8,6 +8,8 @@ from tests.test_development.factories.project_group import ProjectGroupFactory
 
 
 class ProjectGroupMilestoneFactory(MilestoneFactory):
+    """Project group milestone factory."""
+
     class Meta:
         model = Milestone
 
