@@ -10,6 +10,8 @@ from tests.test_development.factories.project_group_milestone import (
 
 
 class TicketFactory(factory.django.DjangoModelFactory):
+    """Ticket factory."""
+
     class Meta:
         model = Ticket
 

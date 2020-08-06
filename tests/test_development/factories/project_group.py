@@ -7,6 +7,8 @@ from tests.test_development.factories.mixins.gl_field import GitlabFieldMixin
 
 
 class ProjectGroupFactory(GitlabFieldMixin):
+    """Project group factory."""
+
     class Meta:
         model = ProjectGroup
 

@@ -9,6 +9,8 @@ from tests.test_users.factories.gitlab import GlUserFactory
 
 
 class GlIssueNoteWebhookFactory(factory.DictFactory):
+    """Gitlab issue note webhook factory."""
+
     object_kind = "note"
     event_type = "note"
     user = factory.SubFactory(GlUserFactory)

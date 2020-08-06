@@ -22,7 +22,7 @@ class Label:
         self, id_, name, parent: Union[GLGroupProject, GLGroup],
     ):
         """Inits a label."""
-        self.id = id_  # noqa: WPS125
+        self.id = id_  # noqa: WPS125, A003
         self.name = name
         self._parent = parent
         self.match_counter = 1

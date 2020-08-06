@@ -11,6 +11,8 @@ from apps.users.services.token.create import create_user_token
 
 
 class ApiRequestFactory(DjangoAPIRequestFactory):
+    """Api request factory."""
+
     def __init__(self, *args, **kwargs) -> None:
         """Initializing."""
         super().__init__(*args, **kwargs)

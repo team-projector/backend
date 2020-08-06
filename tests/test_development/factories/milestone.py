@@ -8,6 +8,8 @@ from tests.test_development.factories.project_group import ProjectGroupFactory
 
 
 class MilestoneFactory(GitlabFieldMixin):
+    """Milestone factory."""
+
     class Meta:
         abstract = True
         exclude = ["content_object"]

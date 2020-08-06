@@ -31,7 +31,7 @@ class TicketBaseInput(serializers.ModelSerializer):
     # choice fields. It creates enums types for these which leads to an error:
     # "AssertionError: Found different types with the same name in the schema:
     # type, type."
-    type = ChoicesField(  # noqa: WPS125
+    type = ChoicesField(  # noqa: WPS125, A003
         required=False, choices=TicketType.values,
     )
 

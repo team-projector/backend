@@ -6,6 +6,8 @@ from apps.users.models import User
 
 
 class UserFactory(factory.django.DjangoModelFactory):
+    """User factory."""
+
     class Meta:
         model = User
 

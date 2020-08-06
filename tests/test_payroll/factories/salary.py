@@ -7,6 +7,8 @@ from tests.test_users.factories.user import UserFactory
 
 
 class SalaryFactory(factory.django.DjangoModelFactory):
+    """Salary factory."""
+
     class Meta:
         model = Salary
 

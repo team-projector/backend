@@ -6,6 +6,8 @@ from apps.development.models import Label
 
 
 class LabelFactory(factory.django.DjangoModelFactory):
+    """Label factory."""
+
     class Meta:
         model = Label
 

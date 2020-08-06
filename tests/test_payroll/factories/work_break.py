@@ -11,6 +11,8 @@ from tests.test_users.factories.user import UserFactory
 
 
 class WorkBreakFactory(factory.django.DjangoModelFactory):
+    """Work break factory."""
+
     class Meta:
         model = WorkBreak
 

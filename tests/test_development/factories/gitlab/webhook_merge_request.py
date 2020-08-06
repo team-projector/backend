@@ -10,6 +10,8 @@ from tests.test_users.factories.gitlab import GlUserFactory
 
 
 class GlMergeRequestWebhookFactory(factory.DictFactory):
+    """Gitlab merge request webhook factory."""
+
     object_kind = "merge_request"
     event_type = "merge_request"
     user = factory.SubFactory(GlUserFactory)

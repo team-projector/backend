@@ -44,7 +44,7 @@ class Note(models.Model):
     updated_at = models.DateTimeField(null=True, blank=True)
     body = models.TextField()
 
-    type = models.CharField(  # noqa: WPS125
+    type = models.CharField(  # noqa: WPS125, A003
         choices=NoteType.choices,
         max_length=NOTE_TYPE_MAX_LENGTH,
         verbose_name=_("VN__TYPE"),
