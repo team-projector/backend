@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+import html
 import json
 import logging
 from typing import Optional
@@ -50,7 +51,7 @@ class PipelineGLWebhook(GLWebhook):
 
         slack = SlackClient()
         slack.send_blocks(
-            user, json.loads(rendered), icon_emoji=":gitlab:",
+            user, html.escape(json.loads(rendered)), icon_emoji=":gitlab:",
         )
 
     def _get_user(self, source) -> Optional[User]:
