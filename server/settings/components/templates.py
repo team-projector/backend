@@ -2,10 +2,15 @@
 
 from server import BASE_DIR
 
+PROJECT_TEMPLATES = [
+    BASE_DIR.joinpath("server", "apps", "core", "templates"),
+]
+
+
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [BASE_DIR.joinpath("server", "templates")],
+        "DIRS": PROJECT_TEMPLATES,
         "OPTIONS": {
             "context_processors": [
                 "django.template.context_processors.debug",
