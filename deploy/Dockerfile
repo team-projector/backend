@@ -28,6 +28,7 @@ RUN apt-get update \
                       git=1:2.20.1-2+deb10u3 \
                       curl=7.64.0-4+deb10u1 \
                       libc6-dev=2.28-10 \
+                      python3-dev \
     && curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/${POETRY_VERSION}/get-poetry.py | python \
     && poetry config virtualenvs.create false \
     && poetry install --no-dev --no-interaction --no-ansi \
