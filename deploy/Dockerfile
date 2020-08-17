@@ -27,8 +27,6 @@ RUN apt-get update \
                       git=1:2.20.1-2+deb10u3 \
                       curl=7.64.0-4+deb10u1 \
                       libc6-dev=2.28-10 \
-                      python3-dev \
-                      and-build-dependencies \
     && curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/${POETRY_VERSION}/get-poetry.py | python \
     && poetry config virtualenvs.create false \
     && poetry install --no-dev --no-interaction --no-ansi \
@@ -59,6 +57,13 @@ CMD ["/bin/bash", "deploy/server/run.sh"]
 
 FROM base as test
 
-RUN poetry install --no-interaction --no-ansi
+RUN apt-get update \
+    && apt-get install --no-install-recommends -y \
+                      gcc=4:8.3.0-1 \
+    && poetry install --no-interaction --no-ansi
+    && apt-get remove --purge -y gcc \
+    && apt-get autoremove -y \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
 
 COPY . .
