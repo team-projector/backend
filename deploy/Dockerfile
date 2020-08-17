@@ -60,7 +60,7 @@ FROM base as test
 RUN apt-get update \
     && apt-get install --no-install-recommends -y \
                       gcc=4:8.3.0-1 \
-    && poetry install --no-interaction --no-ansi
+    && poetry install --no-interaction --no-ansi \
     && apt-get remove --purge -y gcc \
     && apt-get autoremove -y \
     && apt-get clean \
