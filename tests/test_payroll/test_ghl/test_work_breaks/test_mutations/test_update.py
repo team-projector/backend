@@ -68,6 +68,12 @@ def test_query(user, ghl_client):
 def test_work_break_not_team_lead(
     ghl_auth_mock_info, update_work_break_mutation,
 ):
+    """
+    Test work break not team lead.
+
+    :param ghl_auth_mock_info:
+    :param update_work_break_mutation:
+    """
     work_break = WorkBreakFactory.create(comment="django")
 
     update_variables = {
@@ -91,6 +97,12 @@ def test_work_break_not_team_lead(
 def test_update_work_break_another_user(
     ghl_auth_mock_info, update_work_break_mutation,
 ):
+    """
+    Test update work break another user.
+
+    :param ghl_auth_mock_info:
+    :param update_work_break_mutation:
+    """
     team = TeamFactory.create()
 
     TeamMemberFactory.create(
@@ -128,6 +140,15 @@ def test_update_another_user_but_team_lead(
     make_team_developer,
     make_team_leader,
 ):
+    """
+    Test update another user but team lead.
+
+    :param ghl_auth_mock_info:
+    :param update_work_break_mutation:
+    :param team:
+    :param make_team_developer:
+    :param make_team_leader:
+    """
     another_user = UserFactory.create()
     make_team_leader(team, ghl_auth_mock_info.context.user)
     make_team_developer(team, another_user)
@@ -157,6 +178,12 @@ def test_update_another_user_but_team_lead(
 def test_change_work_break_user(
     ghl_auth_mock_info, update_work_break_mutation,
 ):
+    """
+    Test change work break user.
+
+    :param ghl_auth_mock_info:
+    :param update_work_break_mutation:
+    """
     team = TeamFactory.create()
     user2 = UserFactory.create()
     user3 = UserFactory.create()
@@ -193,4 +220,9 @@ def test_change_work_break_user(
 
 
 def _date_strftime(date):
+    """
+    Date strftime.
+
+    :param date:
+    """
     return date.strftime(GITLAB_DATETIME_FORMAT)

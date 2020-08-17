@@ -17,6 +17,11 @@ from tests.test_payroll.factories import (
 
 
 def test_payroll_metrics(user):
+    """
+    Test payroll metrics.
+
+    :param user:
+    """
     merge_request = MergeRequestFactory.create(
         user=user,
         time_estimate=seconds(hours=6),
@@ -42,6 +47,11 @@ def test_payroll_metrics(user):
 
 
 def test_paid_metrics(user):
+    """
+    Test paid metrics.
+
+    :param user:
+    """
     merge_request = MergeRequestFactory.create(
         user=user,
         time_estimate=seconds(hours=6),
@@ -80,6 +90,11 @@ def test_paid_metrics(user):
 
 
 def test_complex_metrics(user):
+    """
+    Test complex metrics.
+
+    :param user:
+    """
     merge_request = MergeRequestFactory.create(
         user=user,
         time_estimate=seconds(hours=6),
@@ -114,6 +129,11 @@ def test_complex_metrics(user):
 
 
 def test_remains(user):
+    """
+    Test remains.
+
+    :param user:
+    """
     merge_requests = [
         MergeRequestFactory.create(
             user=user,
@@ -145,6 +165,11 @@ def test_remains(user):
 
 
 def test_efficiency(user):
+    """
+    Test efficiency.
+
+    :param user:
+    """
     merge_requests = [
         MergeRequestFactory.create(
             user=user,

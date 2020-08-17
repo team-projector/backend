@@ -15,11 +15,18 @@ from tests.test_payroll.factories import IssueSpentTimeFactory
 
 @pytest.fixture()
 def issue():
+    """Issue."""
     return IssueFactory.create(state=IssueState.CLOSED)
 
 
 @pytest.fixture()
 def issue_spent_time(user, issue):
+    """
+    Issue spent time.
+
+    :param user:
+    :param issue:
+    """
     user.hour_rate = 15
     user.save(update_fields=("hour_rate",))
 
@@ -29,6 +36,12 @@ def issue_spent_time(user, issue):
 
 
 def test_get_form(admin_rf, salary_admin):
+    """
+    Test get form.
+
+    :param admin_rf:
+    :param salary_admin:
+    """
     response = salary_admin.generate_salaries(
         admin_rf.get("/admin/payroll/salary/"),
     )
@@ -41,6 +54,13 @@ def test_get_form(admin_rf, salary_admin):
 
 
 def test_generate_salaries(issue_spent_time, admin_rf, salary_admin):
+    """
+    Test generate salaries.
+
+    :param issue_spent_time:
+    :param admin_rf:
+    :param salary_admin:
+    """
     response = salary_admin.generate_salaries(
         admin_rf.post(
             "/admin/payroll/salary/",

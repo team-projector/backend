@@ -17,6 +17,11 @@ from tests.test_development.factories import IssueFactory
 
 
 def test_added(user):
+    """
+    Test added.
+
+    :param user:
+    """
     issue = IssueFactory.create()
     date_str = date.today().strftime(GITLAB_DATE_FORMAT)
 
@@ -51,6 +56,11 @@ def test_added(user):
 
 
 def test_subtracted(user):
+    """
+    Test subtracted.
+
+    :param user:
+    """
     issue = IssueFactory.create()
     date_str = date.today().strftime(GITLAB_DATE_FORMAT)
 
@@ -84,6 +94,11 @@ def test_subtracted(user):
 
 
 def test_removed(user):
+    """
+    Test removed.
+
+    :param user:
+    """
     issue = IssueFactory.create()
 
     update_note_from_gitlab(
@@ -114,6 +129,11 @@ def test_removed(user):
 
 
 def test_already_exists(user):
+    """
+    Test already exists.
+
+    :param user:
+    """
     issue = IssueFactory.create()
 
     Note.objects.create(gl_id=2, content_object=issue, user=user, data={})
@@ -145,6 +165,11 @@ def test_already_exists(user):
 
 
 def test_already_has_another(user):
+    """
+    Test already has another.
+
+    :param user:
+    """
     issue = IssueFactory.create()
 
     Note.objects.create(gl_id=3, content_object=issue, user=user, data={})
@@ -172,6 +197,11 @@ def test_already_has_another(user):
 
 
 def test_has_prior(user):
+    """
+    Test has prior.
+
+    :param user:
+    """
     issue = IssueFactory.create()
 
     Note.objects.create(
@@ -205,6 +235,11 @@ def test_has_prior(user):
 
 
 def test_body_without_date(user):
+    """
+    Test body without date.
+
+    :param user:
+    """
     issue = IssueFactory.create()
 
     note_date = date.today()

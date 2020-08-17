@@ -6,6 +6,13 @@ from tests.test_payroll.factories import SalaryFactory
 
 
 def test_true(user, admin_rf, payroll_admin):
+    """
+    Test true.
+
+    :param user:
+    :param admin_rf:
+    :param payroll_admin:
+    """
     payroll = Payroll.objects.create(
         created_by=user, user=user, salary=SalaryFactory.create(user=user),
     )
@@ -26,6 +33,13 @@ def test_true(user, admin_rf, payroll_admin):
 
 
 def test_false(user, admin_rf, payroll_admin):
+    """
+    Test false.
+
+    :param user:
+    :param admin_rf:
+    :param payroll_admin:
+    """
     payroll = Payroll.objects.create(created_by=user, user=user)
 
     has_salary_filter = HasSalaryFilter(

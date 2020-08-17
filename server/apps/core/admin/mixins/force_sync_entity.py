@@ -33,6 +33,13 @@ class ForceSyncEntityMixin(BaseModelAdmin):
         raise NotImplementedError
 
     def _sync_obj(self, request, instance) -> None:
+        """
+        Sync obj.
+
+        :param request:
+        :param instance:
+        :rtype: None
+        """
         self.sync_handler(instance)
         self.message_user(
             request,

@@ -31,6 +31,12 @@ def test_query(user, ghl_client):
 
 
 def test_not_team_lead(ghl_auth_mock_info, work_break_query):
+    """
+    Test not team lead.
+
+    :param ghl_auth_mock_info:
+    :param work_break_query:
+    """
     work_break = WorkBreakFactory.create()
 
     with pytest.raises(GraphQLNotFound):
@@ -40,6 +46,12 @@ def test_not_team_lead(ghl_auth_mock_info, work_break_query):
 
 
 def test_as_team_lead(ghl_auth_mock_info, work_break_query):
+    """
+    Test as team lead.
+
+    :param ghl_auth_mock_info:
+    :param work_break_query:
+    """
     team = TeamFactory.create()
     user = UserFactory.create()
 

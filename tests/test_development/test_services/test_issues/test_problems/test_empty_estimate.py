@@ -10,6 +10,11 @@ from tests.test_development.factories import IssueFactory
 
 
 def test_empty_estimate(user):
+    """
+    Test empty estimate.
+
+    :param user:
+    """
     issue = IssueFactory.create(
         user=user, due_date=datetime.now().date(), time_estimate=None,
     )
@@ -18,6 +23,11 @@ def test_empty_estimate(user):
 
 
 def test_zero_estimate(user):
+    """
+    Test zero estimate.
+
+    :param user:
+    """
     issue = IssueFactory.create(
         user=user, due_date=datetime.now().date(), time_estimate=0,
     )

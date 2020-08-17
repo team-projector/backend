@@ -10,6 +10,12 @@ from tests.test_development.factories import IssueFactory, TicketFactory
 
 
 def test_resolve_metrics(user, ghl_auth_mock_info):
+    """
+    Test resolve metrics.
+
+    :param user:
+    :param ghl_auth_mock_info:
+    """
     user.roles.MANAGER = True
     user.save()
 
@@ -29,6 +35,12 @@ def test_resolve_metrics(user, ghl_auth_mock_info):
 
 
 def test_resolve_metrics_not_pm(user, ghl_auth_mock_info):
+    """
+    Test resolve metrics not pm.
+
+    :param user:
+    :param ghl_auth_mock_info:
+    """
     ticket = TicketFactory.create()
 
     IssueFactory.create(

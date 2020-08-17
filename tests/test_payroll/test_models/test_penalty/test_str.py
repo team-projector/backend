@@ -4,6 +4,11 @@ from tests.test_payroll.factories import PenaltyFactory
 
 
 def test_str(user):
+    """
+    Test str.
+
+    :param user:
+    """
     penalty = PenaltyFactory.create(user=user, sum=150)
 
     assert str(penalty) == "{0} [{1}]: 150".format(

@@ -29,9 +29,19 @@ def update_issue_mutation(ghl_mutations):
 
 @pytest.fixture()
 def ticket(db):
+    """
+    Ticket.
+
+    :param db:
+    """
     return TicketFactory.create(milestone=ProjectMilestoneFactory())
 
 
 @pytest.fixture()
 def issue(user):
+    """
+    Issue.
+
+    :param user:
+    """
     return IssueFactory.create(user=user)

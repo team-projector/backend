@@ -32,11 +32,26 @@ class CommentParser(BaseNoteParser):
         return None
 
     def _extract_issues(self, gl_note, work_item, note_data) -> None:
+        """
+        Extract issues.
+
+        :param gl_note:
+        :param work_item:
+        :param note_data:
+        :rtype: None
+        """
         issues = extract_issue_links(gl_note.body, work_item)
         if issues:
             note_data["issues"] = issues
 
     def _extract_tickets(self, gl_note, note_data) -> None:
+        """
+        Extract tickets.
+
+        :param gl_note:
+        :param note_data:
+        :rtype: None
+        """
         tickets = extract_tickets_links(gl_note.body)
         if tickets:
             note_data["tickets"] = tickets

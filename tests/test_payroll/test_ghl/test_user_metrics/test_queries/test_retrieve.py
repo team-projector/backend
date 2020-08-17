@@ -55,6 +55,12 @@ GHL_USER_METRICS = """
 
 
 def test_query(user, ghl_client):
+    """
+    Test query.
+
+    :param user:
+    :param ghl_client:
+    """
     ghl_client.set_user(user)
 
     response = ghl_client.execute(GHL_USER_METRICS)

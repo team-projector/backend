@@ -5,6 +5,12 @@ from tests.test_development.factories.gitlab import GlProjectFactory
 
 
 def init_project(gl_kwargs=None, model_kwargs=None):
+    """
+    Init project.
+
+    :param gl_kwargs:
+    :param model_kwargs:
+    """
     gl_kwargs = gl_kwargs or {}
     model_kwargs = model_kwargs or {}
 

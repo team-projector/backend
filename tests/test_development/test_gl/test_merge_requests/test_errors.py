@@ -14,6 +14,12 @@ from tests.test_development.test_gl.helpers import gl_mock
 
 
 def test_server_error(db, gl_mocker):
+    """
+    Test server error.
+
+    :param db:
+    :param gl_mocker:
+    """
     gl_project = GlProjectFactory.create()
     ProjectFactory.create(gl_id=gl_project["id"])
     gl_mock.register_project(
@@ -25,6 +31,12 @@ def test_server_error(db, gl_mocker):
 
 
 def test_project_not_found(db, gl_mocker):
+    """
+    Test project not found.
+
+    :param db:
+    :param gl_mocker:
+    """
     gl_project = GlProjectFactory.create()
     ProjectFactory.create(gl_id=gl_project["id"])
     gl_mock.register_project(

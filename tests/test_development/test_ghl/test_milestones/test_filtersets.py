@@ -6,6 +6,11 @@ from tests.test_development.factories import ProjectMilestoneFactory
 
 
 def test_filter_by_state(db):
+    """
+    Test filter by state.
+
+    :param db:
+    """
     ProjectMilestoneFactory.create(state=MilestoneState.ACTIVE)
     ProjectMilestoneFactory.create(state=MilestoneState.ACTIVE)
     ProjectMilestoneFactory.create(state=MilestoneState.CLOSED)

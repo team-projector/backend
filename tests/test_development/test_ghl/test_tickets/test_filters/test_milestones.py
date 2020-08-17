@@ -9,6 +9,11 @@ from tests.test_development.factories import (
 
 
 def test_filter(db):
+    """
+    Test filter.
+
+    :param db:
+    """
     milestones = ProjectMilestoneFactory.create_batch(2)
     TicketFactory.create(milestone=milestones[0])
     TicketFactory.create(milestone=milestones[1])

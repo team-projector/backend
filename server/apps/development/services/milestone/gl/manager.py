@@ -67,11 +67,25 @@ class MilestoneGlManager:
     def _update_milestone(
         self, gl_milestone, owner: Union[ProjectGroup, Project],
     ) -> None:
+        """
+        Update milestone.
+
+        :param gl_milestone:
+        :param owner:
+        :type owner: Union[ProjectGroup, Project]
+        :rtype: None
+        """
         Milestone.objects.update_from_gitlab(
             owner=owner, **self._build_parameters(gl_milestone),
         )
 
     def _build_parameters(self, gl_milestone) -> Dict[str, object]:
+        """
+        Build parameters.
+
+        :param gl_milestone:
+        :rtype: Dict[str, object]
+        """
         return {
             "gl_id": gl_milestone.id,
             "gl_iid": gl_milestone.iid,

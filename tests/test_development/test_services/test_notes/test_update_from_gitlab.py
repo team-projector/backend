@@ -11,6 +11,13 @@ from tests.test_users.factories.gitlab import GlUserFactory
 
 
 def test_load_new(db, gl_mocker, gl_client):
+    """
+    Test load new.
+
+    :param db:
+    :param gl_mocker:
+    :param gl_client:
+    """
     gl_author = GlUserFactory.create()
     gl_mock.register_user(gl_mocker, gl_author)
     gl_note = GlNoteFactory.create(
@@ -32,6 +39,13 @@ def test_load_new(db, gl_mocker, gl_client):
 
 
 def test_update_immutable(db, gl_mocker, gl_client):
+    """
+    Test update immutable.
+
+    :param db:
+    :param gl_mocker:
+    :param gl_client:
+    """
     gl_author = GlUserFactory.create()
     gl_mock.register_user(gl_mocker, gl_author)
     gl_note = GlNoteFactory.create(
@@ -52,6 +66,13 @@ def test_update_immutable(db, gl_mocker, gl_client):
 
 
 def test_update_mutable(db, gl_mocker, gl_client):
+    """
+    Test update mutable.
+
+    :param db:
+    :param gl_mocker:
+    :param gl_client:
+    """
     gl_author = GlUserFactory.create()
     gl_mock.register_user(gl_mocker, gl_author)
 

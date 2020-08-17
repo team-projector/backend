@@ -23,6 +23,12 @@ def _gitlab_webhook_secret_token(settings) -> None:
 
 
 def test_no_token(api_rf, gl_webhook_view):
+    """
+    Test no token.
+
+    :param api_rf:
+    :param gl_webhook_view:
+    """
     webhook = GlIssueWebhookFactory.create()
 
     with pytest.raises(AuthenticationFailed):
@@ -30,6 +36,12 @@ def test_no_token(api_rf, gl_webhook_view):
 
 
 def test_bad_token(api_rf, gl_webhook_view):
+    """
+    Test bad token.
+
+    :param api_rf:
+    :param gl_webhook_view:
+    """
     webhook = GlIssueWebhookFactory.create()
 
     with pytest.raises(AuthenticationFailed):
@@ -44,6 +56,14 @@ def test_bad_token(api_rf, gl_webhook_view):
 
 
 def test_sync_with_secret_token(db, gl_mocker, gl_webhook_view, api_rf):
+    """
+    Test sync with secret token.
+
+    :param db:
+    :param gl_mocker:
+    :param gl_webhook_view:
+    :param api_rf:
+    """
     project, gl_project = initializers.init_project()
     gl_assignee = GlUserFactory.create()
     gl_issue = GlIssueFactory.create(

@@ -48,6 +48,13 @@ def test_not_found(ghl_auth_mock_info, team_query):
 
 
 def test_not_member(user, ghl_auth_mock_info, team_query):
+    """
+    Test not member.
+
+    :param user:
+    :param ghl_auth_mock_info:
+    :param team_query:
+    """
     with pytest.raises(GraphQLNotFound):
         team_query(
             root=None, info=ghl_auth_mock_info, id=TeamFactory.create().pk,

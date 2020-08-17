@@ -13,6 +13,12 @@ from tests.test_development.factories import (
 
 
 def test_filter_by_user(team_leader, team_developer):
+    """
+    Test filter by user.
+
+    :param team_leader:
+    :param team_developer:
+    """
     team = TeamFactory.create()
     TeamMemberFactory.create(
         user=team_leader, team=team, roles=TeamMember.roles.LEADER,
@@ -40,6 +46,11 @@ def test_filter_by_user(team_leader, team_developer):
 
 
 def test_filter_by_state(user):
+    """
+    Test filter by state.
+
+    :param user:
+    """
     merge_request_opened = MergeRequestFactory.create(
         user=user, state=MergeRequestState.OPENED,
     )
@@ -65,6 +76,11 @@ def test_filter_by_state(user):
 
 
 def test_filter_by_projects(user):
+    """
+    Test filter by projects.
+
+    :param user:
+    """
     projects = ProjectFactory.create_batch(2)
     MergeRequestFactory.create(user=user, project=projects[0])
     MergeRequestFactory.create(user=user, project=projects[1])
@@ -89,6 +105,11 @@ def test_filter_by_projects(user):
 
 
 def test_ordering(user):
+    """
+    Test ordering.
+
+    :param user:
+    """
     merge_requests = [
         MergeRequestFactory.create(title=title, user=user)
         for title in ("agent", "cloud", "bar")
@@ -101,6 +122,11 @@ def test_ordering(user):
 
 
 def test_ordering_desc(user):
+    """
+    Test ordering desc.
+
+    :param user:
+    """
     merge_requests = [
         MergeRequestFactory.create(title=title, user=user)
         for title in ("agent", "cloud", "bar")

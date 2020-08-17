@@ -17,9 +17,19 @@ def sync_milestone_mutation(ghl_mutations):
 
 @pytest.fixture()
 def ticket(db):
+    """
+    Ticket.
+
+    :param db:
+    """
     return TicketFactory(milestone=ProjectMilestoneFactory())
 
 
 @pytest.fixture()
 def milestone(user):
+    """
+    Milestone.
+
+    :param user:
+    """
     return MilestoneFactory(user=user)

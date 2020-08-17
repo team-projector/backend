@@ -9,6 +9,14 @@ from tests.test_development.test_gl.helpers import gl_mock
 
 
 def test_another_kind_object(db, gl_mocker, gl_webhook_view, api_rf):
+    """
+    Test another kind object.
+
+    :param db:
+    :param gl_mocker:
+    :param gl_webhook_view:
+    :param api_rf:
+    """
     gl_project = GlProjectFactory.create()
     gl_mock.mock_project_endpoints(gl_mocker, gl_project)
 

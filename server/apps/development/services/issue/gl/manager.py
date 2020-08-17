@@ -155,6 +155,19 @@ class IssueGlManager(BaseWorkItemGlManager):
         project: Project,
         gl_project: gl.Project,
     ) -> MergeRequest:
+        """
+        Sync merge request.
+
+        :param gl_id:
+        :type gl_id: int
+        :param gl_iid:
+        :type gl_iid: int
+        :param project:
+        :type project: Project
+        :param gl_project:
+        :type gl_project: gl.Project
+        :rtype: MergeRequest
+        """
         merge_request = MergeRequest.objects.filter(gl_id=gl_id).first()
 
         if not merge_request:

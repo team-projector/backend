@@ -44,6 +44,11 @@ class MergeRequestsSummaryProvider:
         )
 
     def _count(self, **filters) -> models.Count:
+        """
+        Count.
+
+        :rtype: models.Count
+        """
         return models.Count("id", filter=models.Q(**filters))
 
 

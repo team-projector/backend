@@ -17,6 +17,11 @@ from tests.test_development.factories import (
 
 
 def test_empty_estimate(user):
+    """
+    Test empty estimate.
+
+    :param user:
+    """
     problem_issue = IssueFactory.create(
         user=user, state=IssueState.OPENED, time_estimate=None,
     )
@@ -30,6 +35,11 @@ def test_empty_estimate(user):
 
 
 def test_empty_estimate_but_closed(user):
+    """
+    Test empty estimate but closed.
+
+    :param user:
+    """
     problem_issue = IssueFactory.create(
         user=user, state=IssueState.CLOSED, time_estimate=None,
     )
@@ -42,6 +52,11 @@ def test_empty_estimate_but_closed(user):
 
 
 def test_zero_estimate(user):
+    """
+    Test zero estimate.
+
+    :param user:
+    """
     problem_issue = IssueFactory.create(
         user=user, state=IssueState.OPENED, time_estimate=0,
     )
@@ -55,6 +70,11 @@ def test_zero_estimate(user):
 
 
 def test_not_assigned(user):
+    """
+    Test not assigned.
+
+    :param user:
+    """
     label_done = LabelFactory.create(title="Done")
 
     problem_issue = IssueFactory.create(
@@ -71,6 +91,11 @@ def test_not_assigned(user):
 
 
 def test_not_assigned_but_closed(user):
+    """
+    Test not assigned but closed.
+
+    :param user:
+    """
     label_done = LabelFactory.create(title="Done")
 
     problem_issue = IssueFactory.create(
@@ -86,6 +111,11 @@ def test_not_assigned_but_closed(user):
 
 
 def test_two_errors_per_merge_request(user):
+    """
+    Test two errors per merge request.
+
+    :param user:
+    """
     label_done = LabelFactory.create(title="Done")
 
     problem_issue = IssueFactory.create(
@@ -102,6 +132,11 @@ def test_two_errors_per_merge_request(user):
 
 
 def test_resolver(user):
+    """
+    Test resolver.
+
+    :param user:
+    """
     problem_issue = IssueFactory.create(
         user=user, state=IssueState.OPENED, time_estimate=None,
     )

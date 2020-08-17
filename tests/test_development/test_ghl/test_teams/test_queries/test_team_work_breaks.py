@@ -43,6 +43,12 @@ def test_query(user, ghl_client):
 
 
 def test_query_with_dates(user, ghl_client):
+    """
+    Test query with dates.
+
+    :param user:
+    :param ghl_client:
+    """
     base_date = timezone.now()
 
     TeamFactory.create(members=[user])
@@ -109,4 +115,10 @@ def _check_work_breaks(response, work_breaks):
 
 
 def _assert_id(source, current_obj):
+    """
+    Assert id.
+
+    :param source:
+    :param current_obj:
+    """
     assert source["node"]["id"] == str(current_obj.id)

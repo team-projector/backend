@@ -5,6 +5,11 @@ from tests.test_payroll.factories import IssueSpentTimeFactory
 
 
 def test_str(user):
+    """
+    Test str.
+
+    :param user:
+    """
     issue = IssueFactory.create(title="issue_title_test")
     spent_time = IssueSpentTimeFactory.create(
         user=user, time_spent=150, base=issue,

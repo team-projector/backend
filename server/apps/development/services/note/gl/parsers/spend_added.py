@@ -43,6 +43,13 @@ class SpendAddedParser(BaseNoteParser):
         )
 
     def _extract_date(self, gl_note, match: Match[str]):
+        """
+        Extract date.
+
+        :param gl_note:
+        :param match:
+        :type match: Match[str]
+        """
         if match.lastgroup == "date":
             return parse_gl_date(match.group("date"))
 

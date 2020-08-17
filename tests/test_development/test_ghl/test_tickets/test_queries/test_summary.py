@@ -22,6 +22,11 @@ query {
 
 @pytest.fixture()
 def tickets(db):
+    """
+    Tickets.
+
+    :param db:
+    """
     return (
         TicketFactory.create(state=TicketState.TESTING),
         TicketFactory.create(state=TicketState.ACCEPTING),
@@ -30,6 +35,12 @@ def tickets(db):
 
 
 def test_raw_query(ghl_client, tickets):
+    """
+    Test raw query.
+
+    :param ghl_client:
+    :param tickets:
+    """
     response = ghl_client.execute(GHL_QUERY_TICKETS_SUMMARY)
 
     assert "errors" not in response
@@ -49,6 +60,13 @@ def test_raw_query(ghl_client, tickets):
 def test_filter_by_milestone(
     tickets_summary_query, ghl_auth_mock_info, tickets,
 ):
+    """
+    Test filter by milestone.
+
+    :param tickets_summary_query:
+    :param ghl_auth_mock_info:
+    :param tickets:
+    """
     response = tickets_summary_query(
         parent=None,
         root=None,

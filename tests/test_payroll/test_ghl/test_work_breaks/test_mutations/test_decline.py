@@ -51,6 +51,12 @@ def test_query(user, ghl_client):
 
 
 def test_not_team_lead(ghl_auth_mock_info, decline_work_break_mutation):
+    """
+    Test not team lead.
+
+    :param ghl_auth_mock_info:
+    :param decline_work_break_mutation:
+    """
     work_break = WorkBreakFactory.create()
 
     with pytest.raises(GraphQLPermissionDenied):
@@ -72,6 +78,16 @@ def test_other_team_teamlead(  # noqa: WPS211
     make_team_leader,
     decline_work_break_mutation,
 ):
+    """
+    Test other team teamlead.
+
+    :param user:
+    :param ghl_auth_mock_info:
+    :param team:
+    :param make_team_developer:
+    :param make_team_leader:
+    :param decline_work_break_mutation:
+    """
     make_team_leader(team, user)
 
     another_team = TeamFactory.create()
@@ -87,6 +103,12 @@ def test_other_team_teamlead(  # noqa: WPS211
 
 
 def test_owner(ghl_auth_mock_info, decline_work_break_mutation):
+    """
+    Test owner.
+
+    :param ghl_auth_mock_info:
+    :param decline_work_break_mutation:
+    """
     work_break = WorkBreakFactory.create(user=ghl_auth_mock_info.context.user)
 
     with pytest.raises(GraphQLPermissionDenied):

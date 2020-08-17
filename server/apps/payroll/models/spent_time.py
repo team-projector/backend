@@ -80,6 +80,11 @@ class SpentTime(Payroll):  # noqa:WPS230
         super().save(*args, **kwargs)
 
     def _adjust_sums(self) -> None:
+        """
+        Adjust sums.
+
+        :rtype: None
+        """
         work_hours = self.time_spent / SECONDS_PER_HOUR
 
         self.sum = work_hours * self.hour_rate  # noqa: WPS125

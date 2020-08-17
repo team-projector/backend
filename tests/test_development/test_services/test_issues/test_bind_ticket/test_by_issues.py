@@ -6,6 +6,11 @@ from tests.test_development.factories import IssueFactory, TicketFactory
 
 
 def test_assign_ticket(db):
+    """
+    Test assign ticket.
+
+    :param db:
+    """
     url_template = "https://gitlab.com/junte/team-projector/backend/issues/{0}"
     issue1 = IssueFactory.create(
         ticket=TicketFactory.create(), gl_url=url_template.format("12"),
@@ -18,6 +23,11 @@ def test_assign_ticket(db):
 
 
 def test_issue_without_ticket(db):
+    """
+    Test issue without ticket.
+
+    :param db:
+    """
     url_template = "https://gitlab.com/junte/team-projector/backend/issues/{0}"
     issue1 = IssueFactory.create(
         ticket=None, gl_url=url_template.format("12"),
@@ -31,6 +41,11 @@ def test_issue_without_ticket(db):
 
 
 def test_already_has_ticket(db):
+    """
+    Test already has ticket.
+
+    :param db:
+    """
     url_template = "https://gitlab.com/junte/team-projector/backend/issues/{0}"
     issue1 = IssueFactory.create(
         ticket=TicketFactory.create(), gl_url=url_template.format("12"),

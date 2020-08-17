@@ -30,6 +30,12 @@ Context = namedtuple(
 
 @pytest.fixture()
 def context(gl_mocker) -> Context:
+    """
+    Context.
+
+    :param gl_mocker:
+    :rtype: Context
+    """
     project, gl_project = initializers.init_project()
     gl_user = GlUserFactory.create()
     merge_request, gl_merge_request = initializers.init_merge_request(
@@ -57,6 +63,12 @@ def context(gl_mocker) -> Context:
 
 
 def test_load(db, context):
+    """
+    Test load.
+
+    :param db:
+    :param context:
+    """
     MergeRequestGlManager().sync_merge_requests()
 
     context.merge_request.refresh_from_db()
@@ -69,6 +81,13 @@ def test_load(db, context):
 
 
 def test_no_milestone_in_db(db, context, gl_client):
+    """
+    Test no milestone in db.
+
+    :param db:
+    :param context:
+    :param gl_client:
+    """
     gl_project_loaded = gl_client.projects.get(id=context.project.gl_id)
 
     MergeRequestGlManager().sync_project_merge_requests(
@@ -84,6 +103,13 @@ def test_no_milestone_in_db(db, context, gl_client):
 
 
 def test_milestone_in_db(db, context, gl_client):
+    """
+    Test milestone in db.
+
+    :param db:
+    :param context:
+    :param gl_client:
+    """
     milestone = ProjectMilestoneFactory.create(
         gl_id=context.gl_merge_request["milestone"]["id"],
     )

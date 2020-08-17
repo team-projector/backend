@@ -75,6 +75,12 @@ class ProjectWebhookManager:
             gl_project.hooks.create(payload)
 
     def _check_webhooks(self, tp_webhooks) -> bool:
+        """
+        Check webhooks.
+
+        :param tp_webhooks:
+        :rtype: bool
+        """
         has_valid = False
 
         for webhook in tp_webhooks:

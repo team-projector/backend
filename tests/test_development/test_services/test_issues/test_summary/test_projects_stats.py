@@ -23,6 +23,11 @@ from tests.test_development.test_services.test_issues.test_summary.helpers impor
 
 
 def test_project_summary(user):
+    """
+    Test project summary.
+
+    :param user:
+    """
     projects = ProjectFactory.create_batch(2)
 
     IssueFactory.create_batch(
@@ -70,6 +75,11 @@ def test_project_summary(user):
 
 
 def test_sort_projects_by_milestone_flat(db):
+    """
+    Test sort projects by milestone flat.
+
+    :param db:
+    """
     projects = []
     for days in range(3):
         milestone = ProjectMilestoneFactory(state=MilestoneState.ACTIVE)
@@ -92,6 +102,11 @@ def test_sort_projects_by_milestone_flat(db):
 
 
 def test_sort_projects_by_milestone_neested(db):
+    """
+    Test sort projects by milestone neested.
+
+    :param db:
+    """
     projects = []
     for days in range(3):
         group = ProjectGroupFactory.create(parent=ProjectGroupFactory.create())

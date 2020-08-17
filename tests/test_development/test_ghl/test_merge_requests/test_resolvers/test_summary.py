@@ -7,6 +7,14 @@ from tests.test_users.factories.user import UserFactory
 
 
 def test_resolver_summary(user, team, make_team_leader, ghl_auth_mock_info):
+    """
+    Test resolver summary.
+
+    :param user:
+    :param team:
+    :param make_team_leader:
+    :param ghl_auth_mock_info:
+    """
     make_team_leader(team, user)
 
     MergeRequestFactory.create_batch(

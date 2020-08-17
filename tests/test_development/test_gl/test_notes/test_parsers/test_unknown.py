@@ -11,6 +11,11 @@ from tests.test_development.factories import IssueFactory
 
 
 def test_unsupported(user):
+    """
+    Test unsupported.
+
+    :param user:
+    """
     issue = IssueFactory.create()
     update_note_from_gitlab(
         dict2obj(

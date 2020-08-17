@@ -41,6 +41,13 @@ class TicketMetricsProvider:
         return metrics
 
     def _fill_issues_metrics(self, metrics: TicketMetrics) -> None:
+        """
+        Fill issues metrics.
+
+        :param metrics:
+        :type metrics: TicketMetrics
+        :rtype: None
+        """
         issues = Issue.objects.filter(ticket=self.ticket)
 
         if not issues:
@@ -100,6 +107,13 @@ class TicketMetricsProvider:
         metrics.budget_estimate = stats["budget_estimate"]
 
     def _fill_payroll_metrics(self, metrics: TicketMetrics) -> None:
+        """
+        Fill payroll metrics.
+
+        :param metrics:
+        :type metrics: TicketMetrics
+        :rtype: None
+        """
         payroll = SpentTime.objects.filter(
             issues__ticket=self.ticket,
         ).aggregate(

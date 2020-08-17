@@ -13,6 +13,13 @@ from tests.test_development.factories import (
 
 
 def test_not_project_manager(project_developer, group_customer, group):
+    """
+    Test not project manager.
+
+    :param project_developer:
+    :param group_customer:
+    :param group:
+    """
     project = ProjectFactory.create()
     ProjectMilestoneFactory.create(owner=project)
     ProjectMilestoneFactory.create(owner=group)
@@ -22,6 +29,12 @@ def test_not_project_manager(project_developer, group_customer, group):
 
 
 def test_projects(user, make_project_manager):
+    """
+    Test projects.
+
+    :param user:
+    :param make_project_manager:
+    """
     projects = ProjectFactory.create_batch(2)
     make_project_manager(projects[0], user)
     make_project_manager(projects[1], user)
@@ -40,6 +53,12 @@ def test_projects(user, make_project_manager):
 
 
 def test_groups(user, make_group_manager):
+    """
+    Test groups.
+
+    :param user:
+    :param make_group_manager:
+    """
     groups = ProjectGroupFactory.create_batch(2)
     make_group_manager(groups[0], user)
     make_group_manager(groups[1], user)
@@ -58,6 +77,13 @@ def test_groups(user, make_group_manager):
 
 
 def test_group_and_projects(user, make_project_manager, make_group_manager):
+    """
+    Test group and projects.
+
+    :param user:
+    :param make_project_manager:
+    :param make_group_manager:
+    """
     group = ProjectGroupFactory.create()
     project = ProjectFactory.create()
 
@@ -78,6 +104,13 @@ def test_group_and_projects(user, make_project_manager, make_group_manager):
 
 
 def test_group_with_projects(user, make_project_manager, make_group_manager):
+    """
+    Test group with projects.
+
+    :param user:
+    :param make_project_manager:
+    :param make_group_manager:
+    """
     group = ProjectGroupFactory.create()
     projects = ProjectFactory.create_batch(2, group=group)
 
@@ -100,6 +133,13 @@ def test_group_with_projects(user, make_project_manager, make_group_manager):
 def test_parent_group_with_groups(
     user, make_project_manager, make_group_manager,
 ):
+    """
+    Test parent group with groups.
+
+    :param user:
+    :param make_project_manager:
+    :param make_group_manager:
+    """
     parent_group = ProjectGroupFactory.create()
     make_group_manager(parent_group, user)
 
@@ -121,6 +161,13 @@ def test_parent_group_with_groups(
 def test_parent_group_with_groups_and_projects(
     user, make_project_manager, make_group_manager,
 ):
+    """
+    Test parent group with groups and projects.
+
+    :param user:
+    :param make_project_manager:
+    :param make_group_manager:
+    """
     parent_group = ProjectGroupFactory.create()
     make_group_manager(parent_group, user)
 

@@ -12,6 +12,11 @@ from tests.test_development.factories import IssueFactory
 
 
 def test_success(user):
+    """
+    Test success.
+
+    :param user:
+    """
     issue = IssueFactory.create()
 
     body = "moved from group/project#111"
@@ -44,6 +49,11 @@ def test_success(user):
 
 
 def test_no_system(user):
+    """
+    Test no system.
+
+    :param user:
+    """
     issue = IssueFactory.create()
 
     body = "moved from group/project#111"
@@ -70,6 +80,11 @@ def test_no_system(user):
 
 
 def test_bad_issue_number(user):
+    """
+    Test bad issue number.
+
+    :param user:
+    """
     issue = IssueFactory.create()
 
     body = "moved from group/project#111b"

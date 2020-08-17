@@ -25,6 +25,12 @@ query {
 
 
 def test_query(user, gql_client_authenticated):
+    """
+    Test query.
+
+    :param user:
+    :param gql_client_authenticated:
+    """
     PenaltyFactory.create_batch(size=3, user=user)
 
     response = gql_client_authenticated.execute(GHL_QUERY_ALL_PENALTIES)
@@ -34,6 +40,12 @@ def test_query(user, gql_client_authenticated):
 
 
 def test_unauth(ghl_mock_info, all_penalties_query):
+    """
+    Test unauth.
+
+    :param ghl_mock_info:
+    :param all_penalties_query:
+    """
     with pytest.raises(GraphQLPermissionDenied):
         all_penalties_query(
             root=None, info=ghl_mock_info,
@@ -41,6 +53,13 @@ def test_unauth(ghl_mock_info, all_penalties_query):
 
 
 def test_not_allowed_for_user(user, all_penalties_query, ghl_auth_mock_info):
+    """
+    Test not allowed for user.
+
+    :param user:
+    :param all_penalties_query:
+    :param ghl_auth_mock_info:
+    """
     PenaltyFactory.create_batch(size=2, user=UserFactory())
     response = all_penalties_query(root=None, info=ghl_auth_mock_info)
 
@@ -48,6 +67,13 @@ def test_not_allowed_for_user(user, all_penalties_query, ghl_auth_mock_info):
 
 
 def test_allowed_to_leader(user, all_penalties_query, ghl_auth_mock_info):
+    """
+    Test allowed to leader.
+
+    :param user:
+    :param all_penalties_query:
+    :param ghl_auth_mock_info:
+    """
     team = TeamFactory()
     TeamMemberFactory.create(
         user=user, team=team, roles=TeamMember.roles.LEADER,

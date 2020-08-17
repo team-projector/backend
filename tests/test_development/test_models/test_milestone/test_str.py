@@ -7,6 +7,11 @@ from tests.test_development.factories import (
 
 
 def test_str(db):
+    """
+    Test str.
+
+    :param db:
+    """
     project = ProjectFactory.create(title="project_title_test")
     milestone = ProjectMilestoneFactory.create(
         title="milestone_title_test", owner=project,

@@ -10,6 +10,12 @@ from tests.test_users.factories.user import UserFactory
 
 
 def test_single(user, calculator):
+    """
+    Test single.
+
+    :param user:
+    :param calculator:
+    """
     issue = IssueFactory.create(state=IssueState.CLOSED)
 
     IssueSpentTimeFactory.create(
@@ -31,6 +37,12 @@ def test_single(user, calculator):
 
 
 def test_many(user, calculator):
+    """
+    Test many.
+
+    :param user:
+    :param calculator:
+    """
     issues = IssueFactory.create_batch(3, state=IssueState.CLOSED)
     users = UserFactory.create_batch(2)
 

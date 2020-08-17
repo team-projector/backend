@@ -22,6 +22,12 @@ Context = namedtuple(
 
 @pytest.fixture()
 def context(gl_mocker) -> Context:
+    """
+    Context.
+
+    :param gl_mocker:
+    :rtype: Context
+    """
     project, gl_project = initializers.init_project()
     gl_assignee = GlUserFactory.create()
     issue, gl_issue = initializers.init_issue(
@@ -44,6 +50,12 @@ def context(gl_mocker) -> Context:
 
 
 def test_load(db, context):
+    """
+    Test load.
+
+    :param db:
+    :param context:
+    """
     IssueGlManager().sync_issues()
 
     context.issue.refresh_from_db()
@@ -53,6 +65,12 @@ def test_load(db, context):
 
 
 def test_update_last_sync(db, context):
+    """
+    Test update last sync.
+
+    :param db:
+    :param context:
+    """
     IssueGlManager().sync_project_issues(context.project)
 
     issue = Issue.objects.first()
@@ -67,6 +85,13 @@ def test_update_last_sync(db, context):
 
 
 def test_no_milestone_in_db(db, context, gl_client):
+    """
+    Test no milestone in db.
+
+    :param db:
+    :param context:
+    :param gl_client:
+    """
     gl_project_loaded = gl_client.projects.get(id=context.project.gl_id)
     gl_issue_manager = gl_project_loaded.issues.get(id=context.gl_issue["iid"])
 
@@ -84,6 +109,13 @@ def test_no_milestone_in_db(db, context, gl_client):
 
 
 def test_milestone_in_db(db, context, gl_client):
+    """
+    Test milestone in db.
+
+    :param db:
+    :param context:
+    :param gl_client:
+    """
     milestone = ProjectMilestoneFactory.create(
         gl_id=context.gl_issue["milestone"]["id"],
     )

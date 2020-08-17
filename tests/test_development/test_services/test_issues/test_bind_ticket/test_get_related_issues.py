@@ -6,12 +6,22 @@ from tests.test_development.factories import IssueFactory, IssueNoteFactory
 
 
 def test_no_related_issues(db):
+    """
+    Test no related issues.
+
+    :param db:
+    """
     issue = IssueFactory.create(description="Empty string")
 
     assert not get_related_issues(issue).exists()
 
 
 def test_issues_by_description(db):
+    """
+    Test issues by description.
+
+    :param db:
+    """
     url_template = "https://gitlab.com/junte/team-projector/backend/issues/{0}"
     issue1 = IssueFactory.create(gl_url=url_template.format(12))
     issue2 = IssueFactory.create(gl_url=url_template.format(15))
@@ -31,6 +41,11 @@ def test_issues_by_description(db):
 
 
 def test_issues_by_note(db):
+    """
+    Test issues by note.
+
+    :param db:
+    """
     url_template = "https://gitlab.com/junte/team-projector/backend/issues/{0}"
     issue1 = IssueFactory.create(gl_url=url_template.format(12))
     issue2 = IssueFactory.create(gl_url=url_template.format(15))
@@ -57,6 +72,11 @@ def test_issues_by_note(db):
 
 
 def test_by_alternative(db):
+    """
+    Test by alternative.
+
+    :param db:
+    """
     url_template = "https://gitlab.com/junte/team-projector/backend/issues/{0}"
     alt_template = (
         "https://gitlab.com/junte/team-projector/backend/-/issues/{0}"

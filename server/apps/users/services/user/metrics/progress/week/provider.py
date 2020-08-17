@@ -23,6 +23,11 @@ class WeekMetricsProvider(provider.ProgressMetricsProvider):
         return [generator.generate_metric(week) for week in self._get_weeks()]
 
     def _get_weeks(self) -> List[date]:
+        """
+        Get weeks.
+
+        :rtype: List[date]
+        """
         ret: List[date] = []
 
         current = self.start

@@ -57,9 +57,21 @@ class GlStatusProvider:
         return status
 
     def _get_last_issues(self, count: int = 10) -> List[Issue]:
+        """
+        Get last issues.
+
+        :param count:
+        :type count: int, defaults to 10
+        :rtype: List[Issue]
+        """
         return list(Issue.objects.order_by("-gl_last_sync")[:count])
 
     def _get_last_sync(self) -> datetime:
+        """
+        Get last sync.
+
+        :rtype: datetime
+        """
         querysets = [
             model.objects.filter(gl_last_sync__isnull=False).values(
                 "gl_last_sync",
@@ -79,6 +91,11 @@ class GlStatusProvider:
         return gl_last_sync_qs.get("gl_last_sync")  # type: ignore
 
     def _get_services_stats(self) -> Iterable[GlServiceStatus]:
+        """
+        Get services stats.
+
+        :rtype: Iterable[GlServiceStatus]
+        """
         stats = []
 
         for name, verb in ACTIONS_MAPS.items():

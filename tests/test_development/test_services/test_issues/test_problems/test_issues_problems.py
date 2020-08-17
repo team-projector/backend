@@ -9,6 +9,11 @@ from tests.test_development.factories import IssueFactory
 
 
 def test_two_errors_per_issue(user):
+    """
+    Test two errors per issue.
+
+    :param user:
+    """
     issue = IssueFactory.create(user=user, time_estimate=None, due_date=None)
 
     problems = get_issue_problems(issue)

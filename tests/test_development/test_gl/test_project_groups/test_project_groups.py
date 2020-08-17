@@ -12,6 +12,12 @@ from tests.test_development.test_gl.helpers import gl_checkers, gl_mock
 
 
 def test_load_all(db, gl_mocker):
+    """
+    Test load all.
+
+    :param db:
+    :param gl_mocker:
+    """
     parent_gl_group = GlGroupFactory.create()
     child_gl_group = GlGroupFactory(parent_id=parent_gl_group["id"])
 
@@ -26,6 +32,11 @@ def test_load_all(db, gl_mocker):
 
 
 def test_single_group(db):
+    """
+    Test single group.
+
+    :param db:
+    """
     gl_group = GlGroupFactory.create()
 
     group = ProjectGroupGlManager().update_group(dict2obj(gl_group), None)
@@ -34,6 +45,11 @@ def test_single_group(db):
 
 
 def test_single_group_with_parent(db):
+    """
+    Test single group with parent.
+
+    :param db:
+    """
     gl_parent = GlGroupFactory.create()
     parent = ProjectGroupFactory.create(gl_id=gl_parent["id"])
 

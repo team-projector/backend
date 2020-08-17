@@ -40,6 +40,13 @@ class AssetsProvider:
         self._opened_files.clear()
 
     def _find_path(self, filename: str) -> Optional[str]:
+        """
+        Find path.
+
+        :param filename:
+        :type filename: str
+        :rtype: Optional[str]
+        """
         path = self._cwd
 
         while path.parents:

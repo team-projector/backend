@@ -11,10 +11,20 @@ from tests.test_users.factories.user import UserFactory
 
 @pytest.fixture()
 def ticket(db):
+    """
+    Ticket.
+
+    :param db:
+    """
     return TicketFactory.create()
 
 
 def test_metrics_without_issues(ticket):
+    """
+    Test metrics without issues.
+
+    :param ticket:
+    """
     metrics = get_ticket_metrics(ticket)
 
     assert metrics.issues_count == 0
@@ -23,6 +33,11 @@ def test_metrics_without_issues(ticket):
 
 
 def test_metrics(ticket):
+    """
+    Test metrics.
+
+    :param ticket:
+    """
     IssueFactory.create(
         ticket=ticket,
         state=IssueState.OPENED,
@@ -51,6 +66,11 @@ def test_metrics(ticket):
 
 
 def test_budget_estimated(ticket):
+    """
+    Test budget estimated.
+
+    :param ticket:
+    """
     user1 = UserFactory.create(customer_hour_rate=3)
 
     IssueFactory.create(
@@ -101,6 +121,11 @@ def test_budget_estimated(ticket):
 
 
 def test_opened_time_remains_with_closed_issues(ticket):
+    """
+    Test opened time remains with closed issues.
+
+    :param ticket:
+    """
     IssueFactory.create_batch(
         size=3, ticket=ticket, state=IssueState.CLOSED,
     )
@@ -114,6 +139,11 @@ def test_opened_time_remains_with_closed_issues(ticket):
 
 
 def test_opened_time_remains(ticket):
+    """
+    Test opened time remains.
+
+    :param ticket:
+    """
     IssueFactory.create(
         ticket=ticket,
         state=IssueState.OPENED,
@@ -142,6 +172,11 @@ def test_opened_time_remains(ticket):
 
 
 def test_opened_time_remains_random(ticket):
+    """
+    Test opened time remains random.
+
+    :param ticket:
+    """
     issues = IssueFactory.create_batch(
         size=3, ticket=ticket, state=IssueState.OPENED,
     )

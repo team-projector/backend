@@ -26,6 +26,14 @@ syncIssue(
 
 
 def test_query(project_manager, ghl_client, gl_mocker, user):
+    """
+    Test query.
+
+    :param project_manager:
+    :param ghl_client:
+    :param gl_mocker:
+    :param user:
+    """
     project, gl_project = initializers.init_project()
 
     gl_assignee = GlUserFactory.create()
@@ -64,6 +72,13 @@ def test_query(project_manager, ghl_client, gl_mocker, user):
 def test_without_access(
     user, ghl_auth_mock_info, sync_issue_mutation,
 ):
+    """
+    Test without access.
+
+    :param user:
+    :param ghl_auth_mock_info:
+    :param sync_issue_mutation:
+    """
     issue = IssueFactory()
 
     resolve = sync_issue_mutation(

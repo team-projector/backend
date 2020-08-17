@@ -12,10 +12,20 @@ from tests.test_users.factories.user import UserFactory
 
 @pytest.fixture()
 def user(db):
+    """
+    User.
+
+    :param db:
+    """
     return UserFactory.create(hour_rate=100)
 
 
 def test_paid(user):
+    """
+    Test paid.
+
+    :param user:
+    """
     issue = IssueFactory.create(user=user)
     salary = SalaryFactory.create(user=user)
 
@@ -34,6 +44,11 @@ def test_paid(user):
 
 
 def test_payroll_metrics(user):
+    """
+    Test payroll metrics.
+
+    :param user:
+    """
     issue = IssueFactory.create(user=user)
 
     IssueSpentTimeFactory.create(

@@ -14,6 +14,11 @@ from tests.test_users.test_services.test_users.test_metrics.test_progress.test_d
 
 
 def test_replay(user):
+    """
+    Test replay.
+
+    :param user:
+    """
     IssueFactory.create(
         user=user,
         due_date=datetime.now() + timedelta(days=10),
@@ -32,6 +37,11 @@ def test_replay(user):
 
 
 def test_has_spents(user):
+    """
+    Test has spents.
+
+    :param user:
+    """
     IssueFactory.create(
         user=user,
         due_date=datetime.now() + timedelta(days=10),
@@ -50,6 +60,11 @@ def test_has_spents(user):
 
 
 def test_replay_without_active_issues(user):
+    """
+    Test replay without active issues.
+
+    :param user:
+    """
     IssueFactory.create(
         user=user,
         due_date=datetime.now() + timedelta(days=10),
@@ -70,6 +85,11 @@ def test_replay_without_active_issues(user):
 
 @override_settings(TP_WEEKENDS_DAYS=[0, 1, 2, 3, 4, 5, 6])
 def test_not_apply_loading_weekends(user):
+    """
+    Test not apply loading weekends.
+
+    :param user:
+    """
     IssueFactory.create(
         user=user,
         due_date=datetime.now() + timedelta(days=10),

@@ -22,6 +22,12 @@ from tests.test_users.factories.user import UserFactory
 
 
 def test_common(user, calculator):
+    """
+    Test common.
+
+    :param user:
+    :param calculator:
+    """
     issue = IssueFactory.create(state=IssueState.CLOSED)
     IssueSpentTimeFactory.create(
         user=user, base=issue, time_spent=timedelta(hours=1).total_seconds(),
@@ -54,6 +60,12 @@ def test_common(user, calculator):
 
 
 def test_no_payrolls(user, calculator):
+    """
+    Test no payrolls.
+
+    :param user:
+    :param calculator:
+    """
     salary = None
 
     with pytest.raises(EmptySalaryException):
@@ -64,6 +76,12 @@ def test_no_payrolls(user, calculator):
 
 
 def test_empty_total(user, calculator):
+    """
+    Test empty total.
+
+    :param user:
+    :param calculator:
+    """
     salary = None
 
     issue = IssueFactory.create(state=IssueState.CLOSED)
@@ -82,6 +100,12 @@ def test_empty_total(user, calculator):
 
 
 def test_with_penalty(user, calculator):
+    """
+    Test with penalty.
+
+    :param user:
+    :param calculator:
+    """
     issue = IssueFactory.create(state=IssueState.CLOSED)
 
     IssueSpentTimeFactory.create(
@@ -114,6 +138,12 @@ def test_with_penalty(user, calculator):
 
 
 def test_with_bonus(user, calculator):
+    """
+    Test with bonus.
+
+    :param user:
+    :param calculator:
+    """
     issue = IssueFactory.create(state=IssueState.CLOSED)
 
     IssueSpentTimeFactory.create(
@@ -146,6 +176,12 @@ def test_with_bonus(user, calculator):
 
 
 def test_penalty_and_bonus(user, calculator):
+    """
+    Test penalty and bonus.
+
+    :param user:
+    :param calculator:
+    """
     issue = IssueFactory.create(state=IssueState.CLOSED)
 
     IssueSpentTimeFactory.create(
@@ -180,6 +216,12 @@ def test_penalty_and_bonus(user, calculator):
 
 
 def test_some_already_with_salary(user, calculator):
+    """
+    Test some already with salary.
+
+    :param user:
+    :param calculator:
+    """
     prev_salary = SalaryFactory.create(user=user)
     issue = IssueFactory.create(state=IssueState.CLOSED)
 
@@ -221,6 +263,12 @@ def test_some_already_with_salary(user, calculator):
 
 
 def test_with_another_user(user, calculator):
+    """
+    Test with another user.
+
+    :param user:
+    :param calculator:
+    """
     user2 = UserFactory.create()
     issue = IssueFactory.create(state=IssueState.CLOSED)
 
@@ -255,6 +303,12 @@ def test_with_another_user(user, calculator):
 
 
 def test_with_opened_issues_mr(user, calculator):
+    """
+    Test with opened issues mr.
+
+    :param user:
+    :param calculator:
+    """
     closed_issue = IssueFactory.create(state=IssueState.CLOSED)
     opened_issue = IssueFactory.create(state=IssueState.OPENED)
     opened_mr = MergeRequestFactory.create(state=IssueState.OPENED)
@@ -297,6 +351,12 @@ def test_with_opened_issues_mr(user, calculator):
 
 
 def test_taxes(user, calculator):
+    """
+    Test taxes.
+
+    :param user:
+    :param calculator:
+    """
     user.tax_rate = 0.3
     user.save()
 

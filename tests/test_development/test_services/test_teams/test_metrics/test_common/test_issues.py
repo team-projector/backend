@@ -15,6 +15,12 @@ from tests.test_development.test_services.test_teams.test_metrics.test_common.ch
 
 
 def test_basic(team: Team):
+    """
+    Test basic.
+
+    :param team:
+    :type team: Team
+    """
     IssueFactory.create_batch(
         2,
         user=team.members.all()[0],
@@ -41,6 +47,12 @@ def test_basic(team: Team):
 
 
 def test_problems(team: Team):
+    """
+    Test problems.
+
+    :param team:
+    :type team: Team
+    """
     IssueFactory.create(
         user=team.members.all()[0],
         due_date=None,
@@ -81,6 +93,12 @@ def test_problems(team: Team):
 
 
 def test_resolver(team: Team):
+    """
+    Test resolver.
+
+    :param team:
+    :type team: Team
+    """
     IssueFactory.create_batch(
         2,
         user=team.members.all()[0],

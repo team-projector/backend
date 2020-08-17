@@ -15,6 +15,24 @@ def check_user_progress_metrics(  # noqa: WPS211
     efficiencies: Dict[date, float] = None,
     time_remains: Dict[date, timedelta] = None,
 ):
+    """
+    Check user progress metrics.
+
+    :param metrics:
+    :type metrics: UserProgressMetricsList
+    :param spents:
+    :type spents: Dict[date, timedelta], optional
+    :param issues_counts:
+    :type issues_counts: Dict[date, int], optional
+    :param time_estimates:
+    :type time_estimates: Dict[date, timedelta], optional
+    :param loadings:
+    :type loadings: Dict[date, timedelta], optional
+    :param efficiencies:
+    :type efficiencies: Dict[date, float], optional
+    :param time_remains:
+    :type time_remains: Dict[date, timedelta], optional
+    """
     spents = _prepare_metrics(spents)
     time_estimates = _prepare_metrics(time_estimates)
     issues_counts = _prepare_metrics(issues_counts)
@@ -52,6 +70,11 @@ def check_user_progress_payroll_metrics(
 
 
 def _prepare_metrics(metrics):
+    """
+    Prepare metrics.
+
+    :param metrics:
+    """
     if metrics is None:
         return {}
 
@@ -62,6 +85,13 @@ def _prepare_metrics(metrics):
 
 
 def _assert_timedelta_metric(metric, metric_name, metric_values):
+    """
+    Assert timedelta metric.
+
+    :param metric:
+    :param metric_name:
+    :param metric_values:
+    """
     dt = str(metric.start)
 
     if dt in metric_values:
@@ -74,6 +104,13 @@ def _assert_timedelta_metric(metric, metric_name, metric_values):
 
 
 def _assert_number_metric(metric, metric_name, metric_values):
+    """
+    Assert number metric.
+
+    :param metric:
+    :param metric_name:
+    :param metric_values:
+    """
     dt = str(metric.start)
 
     if dt in metric_values:

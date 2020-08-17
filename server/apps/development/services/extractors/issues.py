@@ -18,6 +18,11 @@ class _Extractor:
         return cls.instance
 
     def __init__(self) -> None:
+        """
+        Init.
+
+        :rtype: None
+        """
         self.re_issue_number: Pattern[str] = re.compile(
             r"(^|\s)(#(?P<issue_number>\d+))(\s|[^\w]|$)",
         )
@@ -31,6 +36,15 @@ class _Extractor:
     def extract(
         self, text: str, work_item: Union[Issue, MergeRequest] = None,
     ) -> List[str]:
+        """
+        Extract.
+
+        :param text:
+        :type text: str
+        :param work_item:
+        :type work_item: Union[Issue, MergeRequest], optional
+        :rtype: List[str]
+        """
         if not text:
             return []
 
@@ -45,6 +59,13 @@ class _Extractor:
         return list(set(links))
 
     def _iids_to_links(self, work_item, iids) -> List[str]:
+        """
+        Iids to links.
+
+        :param work_item:
+        :param iids:
+        :rtype: List[str]
+        """
         parsed = urlparse(work_item.gl_url)
         url_template = "{0}://{1}{2}/{{0}}".format(
             parsed.scheme,

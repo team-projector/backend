@@ -17,6 +17,11 @@ from tests.test_payroll.test_services.test_spent_times.test_summary import (
 
 
 def test_without_spents(user):
+    """
+    Test without spents.
+
+    :param user:
+    """
     IssueFactory.create_batch(
         5, user=user, state=IssueState.OPENED, total_time_spent=1000,
     )
@@ -32,6 +37,11 @@ def test_without_spents(user):
 
 
 def test_issues_spents(user):
+    """
+    Test issues spents.
+
+    :param user:
+    """
     issue_opened = IssueFactory.create(user=user)
 
     IssueSpentTimeFactory.create(
@@ -70,6 +80,11 @@ def test_issues_spents(user):
 
 
 def test_merge_requests_spents(user):
+    """
+    Test merge requests spents.
+
+    :param user:
+    """
     mr_opened = MergeRequestFactory.create(user=user)
 
     MergeRequestSpentTimeFactory.create(
@@ -123,6 +138,11 @@ def test_merge_requests_spents(user):
 
 
 def test_complex_spents(user):
+    """
+    Test complex spents.
+
+    :param user:
+    """
     IssueSpentTimeFactory.create(
         user=user,
         base=IssueFactory.create(user=user),

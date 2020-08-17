@@ -49,4 +49,9 @@ def test_query(user, ghl_client):
 
 
 def _date_strftime(date):
+    """
+    Date strftime.
+
+    :param date:
+    """
     return date.strftime(GITLAB_DATETIME_FORMAT)

@@ -10,6 +10,11 @@ from tests.test_development.factories import (
 
 
 def test_all_fields(db):
+    """
+    Test all fields.
+
+    :param db:
+    """
     summary = TicketsSummaryProvider(Ticket.objects.all()).get_data()
     assert summary == {
         "accepting_count": 0,
@@ -23,6 +28,11 @@ def test_all_fields(db):
 
 
 def test_selected_fields(db):
+    """
+    Test selected fields.
+
+    :param db:
+    """
     summary = TicketsSummaryProvider(
         Ticket.objects.all(), fields=("count", "doing_count"),
     ).get_data()
@@ -31,6 +41,11 @@ def test_selected_fields(db):
 
 
 def test_prefiltered_qs(db):
+    """
+    Test prefiltered qs.
+
+    :param db:
+    """
     milestone = ProjectGroupMilestoneFactory.create()
     TicketFactory.create(state=TicketState.PLANNING, milestone=milestone)
     TicketFactory.create(state=TicketState.PLANNING)

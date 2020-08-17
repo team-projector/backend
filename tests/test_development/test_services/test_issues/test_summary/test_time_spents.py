@@ -23,6 +23,11 @@ from tests.test_users.factories.user import UserFactory
 
 
 def test_by_user(user):
+    """
+    Test by user.
+
+    :param user:
+    """
     issues = IssueFactory.create_batch(
         5, user=user, state=IssueState.OPENED, due_date=datetime.now(),
     )
@@ -56,6 +61,11 @@ def test_by_user(user):
 
 
 def test_by_team(user):
+    """
+    Test by team.
+
+    :param user:
+    """
     issues = IssueFactory.create_batch(
         5, user=user, state=IssueState.OPENED, due_date=datetime.now(),
     )
@@ -102,6 +112,11 @@ def test_by_team(user):
 
 
 def test_by_project(user):
+    """
+    Test by project.
+
+    :param user:
+    """
     projects = ProjectFactory.create_batch(2)
 
     issues = IssueFactory.create_batch(
@@ -157,6 +172,11 @@ def test_by_project(user):
 
 
 def test_by_state(user):
+    """
+    Test by state.
+
+    :param user:
+    """
     issue_opened = IssueFactory.create(
         user=user, due_date=datetime.now(), state=IssueState.OPENED,
     )
@@ -202,6 +222,11 @@ def test_by_state(user):
 
 
 def test_by_milestone(user):
+    """
+    Test by milestone.
+
+    :param user:
+    """
     milestones = ProjectMilestoneFactory.create_batch(2)
     issues = [
         IssueFactory.create(
@@ -242,6 +267,11 @@ def test_by_milestone(user):
 
 
 def test_by_ticket(user):
+    """
+    Test by ticket.
+
+    :param user:
+    """
     tickets = TicketFactory.create_batch(2)
     issues = [
         IssueFactory.create(

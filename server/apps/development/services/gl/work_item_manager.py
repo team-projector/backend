@@ -75,6 +75,15 @@ class BaseWorkItemGlManager:
         label_title: gl.ProjectLabel,
         project_labels: List[gl.ProjectLabel],
     ) -> Optional[Label]:
+        """
+        Get or create label.
+
+        :param label_title:
+        :type label_title: gl.ProjectLabel
+        :param project_labels:
+        :type project_labels: List[gl]
+        :rtype: Optional[Label]
+        """
         label = Label.objects.filter(title=label_title).first()
 
         return label or self._create_label(label_title, project_labels)
@@ -84,6 +93,15 @@ class BaseWorkItemGlManager:
         label_title: gl.ProjectLabel,
         project_labels: List[gl.ProjectLabel],
     ) -> Optional[Label]:
+        """
+        Create label.
+
+        :param label_title:
+        :type label_title: gl.ProjectLabel
+        :param project_labels:
+        :type project_labels: List[gl]
+        :rtype: Optional[Label]
+        """
         gl_label = next(
             (
                 project_label

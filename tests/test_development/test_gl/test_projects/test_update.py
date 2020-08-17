@@ -14,6 +14,12 @@ from tests.test_development.test_gl.helpers import gl_checkers, gl_mock
 
 
 def test_success(db, gl_mocker):
+    """
+    Test success.
+
+    :param db:
+    :param gl_mocker:
+    """
     group = ProjectGroupFactory.create()
     gl_project = GlProjectFactory.create()
 
@@ -26,6 +32,12 @@ def test_success(db, gl_mocker):
 
 
 def test_bad_id(db, gl_mocker):
+    """
+    Test bad id.
+
+    :param db:
+    :param gl_mocker:
+    """
     group = ProjectGroupFactory.create()
     gl_project = GlProjectFactory.create(id="bad_gl_id")
 
@@ -36,6 +48,13 @@ def test_bad_id(db, gl_mocker):
 
 @override_settings(GITLAB_CHECK_WEBHOOKS=True, DOMAIN_NAME="test.com")
 def test_check_webhooks(db, gl_mocker, gl_client):
+    """
+    Test check webhooks.
+
+    :param db:
+    :param gl_mocker:
+    :param gl_client:
+    """
     group = ProjectGroupFactory.create()
     gl_project = GlProjectFactory.create()
 

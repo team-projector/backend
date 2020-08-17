@@ -65,6 +65,11 @@ class SpentTimeQuerySet(models.QuerySet):
         return queryset
 
     def _sum(self, **filters) -> Coalesce:
+        """
+        Sum.
+
+        :rtype: Coalesce
+        """
         return Coalesce(
             models.Sum("time_spent", filter=models.Q(**filters)), 0,
         )

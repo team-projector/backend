@@ -12,11 +12,25 @@ def unescape_text(source, field) -> None:
 
 
 def _unescape_text_list(source, field) -> None:
+    """
+    Unescape text list.
+
+    :param source:
+    :param field:
+    :rtype: None
+    """
     for source_object in source:
         unescape_text(source_object, field)
 
 
 def _unescape_text_dict(source, field) -> None:
+    """
+    Unescape text dict.
+
+    :param source:
+    :param field:
+    :rtype: None
+    """
     for key, key_value in source.items():
         if key == field and isinstance(key_value, str):
             source[key] = html.unescape(key_value)

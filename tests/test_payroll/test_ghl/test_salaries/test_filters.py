@@ -12,6 +12,11 @@ from tests.test_users.factories.user import UserFactory
 
 
 def test_salaries_filter_by_user(user):
+    """
+    Test salaries filter by user.
+
+    :param user:
+    """
     SalaryFactory.create_batch(size=3, user=user)
 
     user2 = UserFactory.create()
@@ -26,6 +31,12 @@ def test_salaries_filter_by_user(user):
 
 
 def test_salaries_filter_by_team(user, client):
+    """
+    Test salaries filter by team.
+
+    :param user:
+    :param client:
+    """
     user2 = UserFactory.create()
     salaries_user2 = SalaryFactory.create_batch(size=2, user=user2)
 
@@ -50,6 +61,12 @@ def test_salaries_filter_by_team(user, client):
 
 
 def test_salaries_filter_by_team_not_leader(user, client):
+    """
+    Test salaries filter by team not leader.
+
+    :param user:
+    :param client:
+    """
     user2 = UserFactory.create()
     SalaryFactory.create_batch(size=2, user=user2)
 

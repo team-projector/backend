@@ -20,6 +20,12 @@ query ($id: ID!) {
 
 
 def test_query(user, ghl_client):
+    """
+    Test query.
+
+    :param user:
+    :param ghl_client:
+    """
     penalty = PenaltyFactory(user=user)
     ghl_client.set_user(user)
 
@@ -32,6 +38,14 @@ def test_query(user, ghl_client):
 
 
 def test_unauth(db, ghl_mock_info, penalty_query, user):
+    """
+    Test unauth.
+
+    :param db:
+    :param ghl_mock_info:
+    :param penalty_query:
+    :param user:
+    """
     penalty = PenaltyFactory(user=user)
 
     with pytest.raises(GraphQLPermissionDenied):
@@ -41,6 +55,12 @@ def test_unauth(db, ghl_mock_info, penalty_query, user):
 
 
 def test_not_found(ghl_auth_mock_info, penalty_query):
+    """
+    Test not found.
+
+    :param ghl_auth_mock_info:
+    :param penalty_query:
+    """
     with pytest.raises(GraphQLNotFound):
         penalty_query(
             root=None, info=ghl_auth_mock_info, id=1,
@@ -48,6 +68,13 @@ def test_not_found(ghl_auth_mock_info, penalty_query):
 
 
 def test_not_allowed_for_user(user, penalty_query, ghl_auth_mock_info):
+    """
+    Test not allowed for user.
+
+    :param user:
+    :param penalty_query:
+    :param ghl_auth_mock_info:
+    """
     penalty = PenaltyFactory(user=UserFactory())
     with pytest.raises(GraphQLNotFound):
         penalty_query(

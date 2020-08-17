@@ -51,6 +51,12 @@ class PayrollAdmin(BaseModelAdmin):
                 return self._get_inheritance_link(node)
 
     def _get_inheritance_link(self, node) -> str:
+        """
+        Get inheritance link.
+
+        :param node:
+        :rtype: str
+        """
         meta = node._meta  # noqa: WPS437
 
         url = reverse(
@@ -64,6 +70,12 @@ class PayrollAdmin(BaseModelAdmin):
         )
 
     def _get_accessor_names(self, model) -> Iterable[str]:
+        """
+        Get accessor names.
+
+        :param model:
+        :rtype: Iterable[str]
+        """
         related_objects = [
             item
             for item in model._meta.get_fields()  # noqa: WPS437, WPS110

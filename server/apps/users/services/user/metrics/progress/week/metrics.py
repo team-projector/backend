@@ -41,6 +41,15 @@ class UserWeekMetricsGenerator:
     def _apply_stats(  # noqa: WPS211
         self, week: date, metric: provider.UserProgressMetrics,
     ) -> None:
+        """
+        Apply stats.
+
+        :param week:
+        :type week: date
+        :param metric:
+        :type metric: provider.UserProgressMetrics
+        :rtype: None
+        """
         deadline = self._deadline_stats.get(week)
         if deadline:
             metric.issues_count = deadline["issues_count"]

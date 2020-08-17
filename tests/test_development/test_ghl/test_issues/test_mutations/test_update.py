@@ -23,6 +23,14 @@ updateIssue(
 
 
 def test_query(issue, ticket, ghl_client, user):
+    """
+    Test query.
+
+    :param issue:
+    :param ticket:
+    :param ghl_client:
+    :param user:
+    """
     assert issue.ticket is None
 
     ghl_client.set_user(user)
@@ -45,6 +53,14 @@ def test_query(issue, ticket, ghl_client, user):
 def test_without_access(
     user, ghl_auth_mock_info, update_issue_mutation, ticket,
 ):
+    """
+    Test without access.
+
+    :param user:
+    :param ghl_auth_mock_info:
+    :param update_issue_mutation:
+    :param ticket:
+    """
     issue = IssueFactory.create()
 
     resolve = update_issue_mutation(
@@ -61,6 +77,14 @@ def test_without_access(
 def test_ticket_propagation(
     user, ghl_auth_mock_info, update_issue_mutation, ticket,
 ):
+    """
+    Test ticket propagation.
+
+    :param user:
+    :param ghl_auth_mock_info:
+    :param update_issue_mutation:
+    :param ticket:
+    """
     child_issue = IssueFactory.create(
         ticket=None,
         gl_url="https://gitlab.com/junte/team-projector/backend/issues/12",

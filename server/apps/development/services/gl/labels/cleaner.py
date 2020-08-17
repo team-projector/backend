@@ -121,6 +121,12 @@ class Project(LabelsContainer):
                 self._adjust_labels_for_single_item(gl_api_obj)
 
     def _adjust_labels_for_single_item(self, gl_api_obj) -> None:
+        """
+        Adjust labels for single item.
+
+        :param gl_api_obj:
+        :rtype: None
+        """
         initial = sorted(gl_api_obj.labels)
         gl_api_obj.labels = list(
             {
@@ -138,6 +144,12 @@ class Project(LabelsContainer):
             )
 
     def _replace_label_by_id(self, label_name) -> str:
+        """
+        Replace label by id.
+
+        :param label_name:
+        :rtype: str
+        """
         name_parts = label_name.split("__")
         if len(label_name.split("__")) != 3:
             return label_name
@@ -271,6 +283,12 @@ class LabelsCleaner:
         return operations
 
     def _get_operations(self, group: Group):
+        """
+        Get operations.
+
+        :param group:
+        :type group: Group
+        """
         tree = LabelsContainerTree(group)
 
         with capture_gitlab_requests(
@@ -297,6 +315,15 @@ class LabelsCleaner:
     def _process_element_renaming(
         self, element: TreeElement, parent_labels: Dict[int, Label],
     ) -> None:
+        """
+        Process element renaming.
+
+        :param element:
+        :type element: TreeElement
+        :param parent_labels:
+        :type parent_labels: Dict[int, Label]
+        :rtype: None
+        """
         parent_labels = parent_labels.copy()
         for label in element.container.labels.values():
             match = label.find_match(parent_labels.values())

@@ -11,6 +11,13 @@ from tests.test_development.factories import (
 
 
 def test_active_milestones_sort(user, client, ghl_auth_mock_info):
+    """
+    Test active milestones sort.
+
+    :param user:
+    :param client:
+    :param ghl_auth_mock_info:
+    """
     user.roles.MANAGER = True
     user.save()
 
@@ -34,6 +41,11 @@ def test_active_milestones_sort(user, client, ghl_auth_mock_info):
 
 
 def test_resolve_project(user):
+    """
+    Test resolve project.
+
+    :param user:
+    """
     issue = IssueFactory.create(user=user)
 
     project = IssuesProjectSummary.resolve_project(issue, None)

@@ -59,6 +59,11 @@ class IssuesSummaryProvider:
         return summary
 
     def _get_counts_by_state(self) -> QuerySet:
+        """
+        Get counts by state.
+
+        :rtype: QuerySet
+        """
         return (
             self._queryset.values("state")
             .annotate(count=Count("*"))
@@ -66,6 +71,11 @@ class IssuesSummaryProvider:
         )
 
     def _get_time_spent(self) -> int:
+        """
+        Get time spent.
+
+        :rtype: int
+        """
         queryset = SpentTime.objects.filter(issues__isnull=False)
 
         filters_map = {
@@ -91,6 +101,11 @@ class IssuesSummaryProvider:
         )
 
     def _get_problems_count(self) -> int:
+        """
+        Get problems count.
+
+        :rtype: int
+        """
         queryset = annotate_issue_problems(self._queryset)
         queryset = filter_issue_problems(queryset)
 

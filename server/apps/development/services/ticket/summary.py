@@ -36,6 +36,11 @@ class TicketsSummaryProvider:
         return self._queryset.aggregate(**aggregations)
 
     def _get_fields_expressions(self) -> Dict[str, Aggregate]:
+        """
+        Get fields expressions.
+
+        :rtype: Dict[str, Aggregate]
+        """
         state_fields = {
             "{0}_count".format(state.lower()): state
             for state in TicketState.values

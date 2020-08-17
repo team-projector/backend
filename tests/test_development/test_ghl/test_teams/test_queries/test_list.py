@@ -48,6 +48,13 @@ def test_unauth(user, ghl_mock_info, all_teams_query):
 
 
 def test_some_teams(user, ghl_auth_mock_info, all_teams_query):
+    """
+    Test some teams.
+
+    :param user:
+    :param ghl_auth_mock_info:
+    :param all_teams_query:
+    """
     teams = TeamFactory.create_batch(2, members=[user])
     TeamFactory.create_batch(2)
 

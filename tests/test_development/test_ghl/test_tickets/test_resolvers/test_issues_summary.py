@@ -24,6 +24,12 @@ from tests.test_users.factories.user import UserFactory
 
 
 def test_issues_summary(user, ghl_auth_mock_info):
+    """
+    Test issues summary.
+
+    :param user:
+    :param ghl_auth_mock_info:
+    """
     IssueFactory.create_batch(
         5,
         user=user,
@@ -43,6 +49,11 @@ def test_issues_summary(user, ghl_auth_mock_info):
 
 
 def test_issues_project_summaries(user):
+    """
+    Test issues project summaries.
+
+    :param user:
+    """
     project = ProjectFactory()
 
     IssueFactory.create_batch(
@@ -64,6 +75,11 @@ def test_issues_project_summaries(user):
 
 
 def test_issues_team_summaries(user):
+    """
+    Test issues team summaries.
+
+    :param user:
+    """
     team = TeamFactory.create()
     TeamMemberFactory.create(
         user=user, team=team, roles=TeamMember.roles.DEVELOPER,
