@@ -22,7 +22,8 @@ RUN apt-get update \
                       gcc=4:8.3.0-1 \
                       binutils=2.31.1-16 \
                       gettext=0.19.8.1-9 \
-                      nginx=1.14.2-2+deb10u1 \
+                      nginx \
+#                      nginx=1.14.2-2+deb10u1 \
                       make=4.2.1-1.2 \
                       git=1:2.20.1-2+deb10u3 \
                       curl=7.64.0-4+deb10u1 \

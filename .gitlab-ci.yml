@@ -13,7 +13,7 @@ stages:
   - publish
   - deploy
 
-lint_dockerfile:
+.lint_dockerfile:
   image: hadolint/hadolint:v1.18.0-6-ga0d655d-debian
   variables:
     GIT_DEPTH: 1
