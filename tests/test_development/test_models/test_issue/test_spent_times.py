@@ -13,6 +13,11 @@ from tests.test_payroll.factories import IssueSpentTimeFactory
 
 
 def test_reset_spend(user):
+    """
+    Test reset spend.
+
+    :param user:
+    """
     IssueNoteFactory.create(
         type=NoteType.RESET_SPEND, user=user,
     )
@@ -27,6 +32,11 @@ def test_reset_spend(user):
 
 
 def test_time_spend(user):
+    """
+    Test time spend.
+
+    :param user:
+    """
     IssueNoteFactory.create(
         type=NoteType.TIME_SPEND,
         user=user,
@@ -43,6 +53,11 @@ def test_time_spend(user):
 
 
 def test_moved_from(user):
+    """
+    Test moved from.
+
+    :param user:
+    """
     IssueNoteFactory.create(
         type=NoteType.MOVED_FROM, user=user,
     )
@@ -56,6 +71,11 @@ def test_moved_from(user):
 
 
 def test_type_not_exist(user):
+    """
+    Test type not exist.
+
+    :param user:
+    """
     IssueNoteFactory.create(
         type="not_exist", user=user,
     )
@@ -67,6 +87,11 @@ def test_type_not_exist(user):
 
 
 def test_spent_time_exists(user):
+    """
+    Test spent time exists.
+
+    :param user:
+    """
     note = IssueNoteFactory.create(type=NoteType.RESET_SPEND, user=user)
 
     issue = Issue.objects.first()

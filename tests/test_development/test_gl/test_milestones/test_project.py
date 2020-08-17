@@ -11,6 +11,12 @@ from tests.test_development.test_gl.helpers import (
 
 
 def test_all(db, gl_mocker):
+    """
+    Test all.
+
+    :param db:
+    :param gl_mocker:
+    """
     project, gl_project = initializers.init_project()
     gl_milestone = GlProjectMilestoneFactory.create()
 
@@ -25,6 +31,12 @@ def test_all(db, gl_mocker):
 
 
 def test_single(db, gl_mocker):
+    """
+    Test single.
+
+    :param db:
+    :param gl_mocker:
+    """
     project, gl_project = initializers.init_project()
     gl_milestone = GlProjectMilestoneFactory.create()
 

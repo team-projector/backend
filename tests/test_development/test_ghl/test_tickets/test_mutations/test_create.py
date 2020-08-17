@@ -37,6 +37,7 @@ createTicket(
 
 @pytest.fixture()
 def ticket():
+    """Ticket."""
     return TicketFactory(milestone=ProjectMilestoneFactory())
 
 

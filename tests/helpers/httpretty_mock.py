@@ -110,4 +110,11 @@ class HttprettyMock:
         )
 
     def _prepare_uri(self, path: str) -> str:
+        """
+        Prepare uri.
+
+        :param path:
+        :type path: str
+        :rtype: str
+        """
         return "{0}{1}".format(self.base_api_url, path)

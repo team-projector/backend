@@ -12,6 +12,12 @@ from tests.test_development.test_services.test_teams.test_metrics.test_common.ch
 
 
 def test_basic(team: Team):
+    """
+    Test basic.
+
+    :param team:
+    :type team: Team
+    """
     MergeRequestFactory.create_batch(
         2,
         user=team.members.all()[0],

@@ -6,6 +6,12 @@ from tests.test_payroll.factories import WorkBreakFactory
 
 
 def test_filter_by_user(team_leader, team_developer):
+    """
+    Test filter by user.
+
+    :param team_leader:
+    :param team_developer:
+    """
     work_breaks = [
         WorkBreakFactory.create(user=team_leader),
         WorkBreakFactory.create(user=team_developer),

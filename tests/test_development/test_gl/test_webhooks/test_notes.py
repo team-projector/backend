@@ -15,6 +15,14 @@ from tests.test_users.factories.gitlab import GlUserFactory
 
 
 def test_success(db, gl_mocker, gl_webhook_view, api_rf):
+    """
+    Test success.
+
+    :param db:
+    :param gl_mocker:
+    :param gl_webhook_view:
+    :param api_rf:
+    """
     project, gl_project = initializers.init_project()
     gl_assignee = GlUserFactory.create()
     gl_issue = GlIssueFactory.create(
@@ -41,6 +49,14 @@ def test_success(db, gl_mocker, gl_webhook_view, api_rf):
 
 
 def test_merge_requests(db, gl_mocker, gl_webhook_view, api_rf):
+    """
+    Test merge requests.
+
+    :param db:
+    :param gl_mocker:
+    :param gl_webhook_view:
+    :param api_rf:
+    """
     project, gl_project = initializers.init_project()
     gl_user = GlUserFactory.create()
     gl_merge_request = GlMergeRequestFactory.create(

@@ -9,6 +9,13 @@ from tests.test_development.test_gl.helpers import gl_mock, initializers
 
 
 def test_load(db, gl_mocker, gl_client):
+    """
+    Test load.
+
+    :param db:
+    :param gl_mocker:
+    :param gl_client:
+    """
     project, gl_project = initializers.init_project()
     gl_label = GlLabelFactory.create()
 
@@ -38,6 +45,13 @@ def test_load(db, gl_mocker, gl_client):
 
 
 def test_with_cached_labels(db, gl_mocker, gl_client):
+    """
+    Test with cached labels.
+
+    :param db:
+    :param gl_mocker:
+    :param gl_client:
+    """
     project, gl_project = initializers.init_project()
 
     gl_label = GlLabelFactory.create()
@@ -89,6 +103,13 @@ def test_with_cached_labels(db, gl_mocker, gl_client):
 
 
 def test_empty(db, gl_mocker, gl_client):
+    """
+    Test empty.
+
+    :param db:
+    :param gl_mocker:
+    :param gl_client:
+    """
     project, gl_project = initializers.init_project()
     gl_label = GlLabelFactory.create()
 

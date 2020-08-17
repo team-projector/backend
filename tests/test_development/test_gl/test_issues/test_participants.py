@@ -10,6 +10,13 @@ from tests.test_users.factories.gitlab import GlUserFactory
 
 
 def test_participants(db, gl_mocker, gl_client):
+    """
+    Test participants.
+
+    :param db:
+    :param gl_mocker:
+    :param gl_client:
+    """
     project, gl_project = initializers.init_project()
     issue, gl_issue = initializers.init_issue(project, gl_project)
     gl_participants = GlUserFactory.create_batch(2)

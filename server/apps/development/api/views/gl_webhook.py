@@ -41,6 +41,13 @@ class GlWebhookView(View):
         return HttpResponse()
 
     def _check_webhook_secret_token(self, secret_token: str) -> None:
+        """
+        Check webhook secret token.
+
+        :param secret_token:
+        :type secret_token: str
+        :rtype: None
+        """
         if not settings.GITLAB_WEBHOOK_SECRET_TOKEN:
             return
 
@@ -48,6 +55,13 @@ class GlWebhookView(View):
             raise AuthenticationFailed("Invalid token")
 
     def _get_webhook(self, object_kind: str) -> Optional[GLWebhook]:
+        """
+        Get webhook.
+
+        :param object_kind:
+        :type object_kind: str
+        :rtype: Optional[GLWebhook]
+        """
         webhook_class = next(
             (
                 hook

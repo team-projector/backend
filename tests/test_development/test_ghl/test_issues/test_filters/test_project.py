@@ -6,6 +6,11 @@ from tests.test_development.factories import IssueFactory, ProjectFactory
 
 
 def test_by_project(user):
+    """
+    Test by project.
+
+    :param user:
+    """
     project = ProjectFactory.create()
 
     IssueFactory.create(user=user, project=project)

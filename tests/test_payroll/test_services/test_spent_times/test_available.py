@@ -7,6 +7,11 @@ from tests.test_users.factories.user import UserFactory
 
 
 def test_my_spents(user):
+    """
+    Test my spents.
+
+    :param user:
+    """
     spents = IssueSpentTimeFactory.create_batch(size=3, user=user)
 
     IssueSpentTimeFactory.create_batch(size=5, user=UserFactory.create())
@@ -15,6 +20,13 @@ def test_my_spents(user):
 
 
 def test_in_team_not_viewer(user, team, make_team_developer):
+    """
+    Test in team not viewer.
+
+    :param user:
+    :param team:
+    :param make_team_developer:
+    """
     user2 = UserFactory.create()
     make_team_developer(team, user)
     make_team_developer(team, user2)
@@ -25,18 +37,37 @@ def test_in_team_not_viewer(user, team, make_team_developer):
 
 
 def test_as_team_leader(team_developer, team_leader):
+    """
+    Test as team leader.
+
+    :param team_developer:
+    :param team_leader:
+    """
     spent = IssueSpentTimeFactory.create(user=team_developer)
 
     assert list(SpentTime.objects.allowed_for_user(team_leader)) == [spent]
 
 
 def test_as_team_watcher(team_developer, team_watcher):
+    """
+    Test as team watcher.
+
+    :param team_developer:
+    :param team_watcher:
+    """
     spent = IssueSpentTimeFactory.create(user=team_developer)
 
     assert list(SpentTime.objects.allowed_for_user(team_watcher)) == [spent]
 
 
 def test_as_leader_another_team(user, make_team_developer, team_leader):
+    """
+    Test as leader another team.
+
+    :param user:
+    :param make_team_developer:
+    :param team_leader:
+    """
     team = TeamFactory.create()
     make_team_developer(team, user)
 
@@ -46,6 +77,13 @@ def test_as_leader_another_team(user, make_team_developer, team_leader):
 
 
 def test_as_watcher_another_team(user, make_team_developer, team_watcher):
+    """
+    Test as watcher another team.
+
+    :param user:
+    :param make_team_developer:
+    :param team_watcher:
+    """
     team = TeamFactory.create()
     make_team_developer(team, user)
 
@@ -57,6 +95,14 @@ def test_as_watcher_another_team(user, make_team_developer, team_watcher):
 def test_my_spents_and_as_leader(
     user, make_team_developer, team_developer, team_leader,
 ):
+    """
+    Test my spents and as leader.
+
+    :param user:
+    :param make_team_developer:
+    :param team_developer:
+    :param team_leader:
+    """
     team = TeamFactory.create()
     make_team_developer(team, team_leader)
 

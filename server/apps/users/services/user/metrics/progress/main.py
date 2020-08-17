@@ -18,6 +18,19 @@ from apps.users.services.user.metrics.progress.week.provider import (
 def _create_provider(
     user: User, start: date, end: date, group: str,
 ) -> ProgressMetricsProvider:
+    """
+    Create provider.
+
+    :param user:
+    :type user: User
+    :param start:
+    :type start: date
+    :param end:
+    :type end: date
+    :param group:
+    :type group: str
+    :rtype: ProgressMetricsProvider
+    """
     if group == "day":
         return DayMetricsProvider(user, start, end)
     elif group == "week":

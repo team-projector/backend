@@ -12,6 +12,13 @@ from tests.test_development.factories import (
 
 
 def test_project(user, client, ghl_auth_mock_info):
+    """
+    Test project.
+
+    :param user:
+    :param client:
+    :param ghl_auth_mock_info:
+    """
     client.user = user
     project = ProjectFactory.create()
 
@@ -19,6 +26,13 @@ def test_project(user, client, ghl_auth_mock_info):
 
 
 def test_project_milestones(user, client, ghl_auth_mock_info):
+    """
+    Test project milestones.
+
+    :param user:
+    :param client:
+    :param ghl_auth_mock_info:
+    """
     project = ProjectFactory.create()
 
     milestone1 = ProjectMilestoneFactory.create(
@@ -45,6 +59,13 @@ def test_project_milestones(user, client, ghl_auth_mock_info):
 
 
 def test_project_group_milestones(user, client, ghl_auth_mock_info):
+    """
+    Test project group milestones.
+
+    :param user:
+    :param client:
+    :param ghl_auth_mock_info:
+    """
     group = ProjectGroupFactory.create()
 
     milestone1 = ProjectGroupMilestoneFactory.create(
@@ -77,6 +98,13 @@ def test_project_group_milestones(user, client, ghl_auth_mock_info):
 
 
 def test_project_group_parent_milestones(user, client, ghl_auth_mock_info):
+    """
+    Test project group parent milestones.
+
+    :param user:
+    :param client:
+    :param ghl_auth_mock_info:
+    """
     group_parent = ProjectGroupFactory.create()
 
     milestone1 = ProjectGroupMilestoneFactory.create(
@@ -111,6 +139,13 @@ def test_project_group_parent_milestones(user, client, ghl_auth_mock_info):
 
 
 def test_resolve_milestones(user, client, ghl_auth_mock_info):
+    """
+    Test resolve milestones.
+
+    :param user:
+    :param client:
+    :param ghl_auth_mock_info:
+    """
     project = ProjectFactory.create()
 
     ProjectMilestoneFactory.create(owner=project, state=MilestoneState.ACTIVE)

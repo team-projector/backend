@@ -16,6 +16,11 @@ from tests.test_users.test_services.test_users.test_metrics.test_progress.test_d
 
 
 def test_opened(user):
+    """
+    Test opened.
+
+    :param user:
+    """
     user.hour_rate = 100
     user.save()
 
@@ -67,6 +72,11 @@ def test_opened(user):
 
 
 def test_paid(user):
+    """
+    Test paid.
+
+    :param user:
+    """
     user.hour_rate = 100
     user.save()
 
@@ -131,6 +141,11 @@ def test_paid(user):
 
 
 def test_closed(user):
+    """
+    Test closed.
+
+    :param user:
+    """
     user.hour_rate = 100
     user.save()
 
@@ -184,6 +199,11 @@ def test_closed(user):
 
 
 def test_complex(user):
+    """
+    Test complex.
+
+    :param user:
+    """
     user.hour_rate = 100
     user.save()
 

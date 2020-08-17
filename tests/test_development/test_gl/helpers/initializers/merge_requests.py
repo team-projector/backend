@@ -5,6 +5,14 @@ from tests.test_development.factories.gitlab import GlMergeRequestFactory
 
 
 def init_merge_request(project, gl_project, gl_kwargs=None, model_kwargs=None):
+    """
+    Init merge request.
+
+    :param project:
+    :param gl_project:
+    :param gl_kwargs:
+    :param model_kwargs:
+    """
     gl_kwargs = gl_kwargs or {}
     model_kwargs = model_kwargs or {}
 

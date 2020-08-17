@@ -9,6 +9,12 @@ from tests.test_development.factories import IssueFactory, TicketFactory
 
 
 def test_by_ticket(user, auth_rf):
+    """
+    Test by ticket.
+
+    :param user:
+    :param auth_rf:
+    """
     user.roles.MANAGER = True
     user.save()
 
@@ -27,6 +33,12 @@ def test_by_ticket(user, auth_rf):
 
 
 def test_not_project_manager(user, auth_rf):
+    """
+    Test not project manager.
+
+    :param user:
+    :param auth_rf:
+    """
     ticket = TicketFactory.create()
     IssueFactory.create_batch(3, user=user, ticket=ticket)
 

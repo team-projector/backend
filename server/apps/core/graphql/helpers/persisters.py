@@ -38,6 +38,14 @@ def update_from_validated_data(
 
 
 def _update_m2m_fields(instance: Model, m2m_fields) -> None:
+    """
+    Update m2m fields.
+
+    :param instance:
+    :type instance: Model
+    :param m2m_fields:
+    :rtype: None
+    """
     for attr_name, attr_value in m2m_fields:
         field = getattr(instance, attr_name)
         field.set(attr_value)

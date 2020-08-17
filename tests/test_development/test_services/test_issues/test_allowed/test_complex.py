@@ -15,6 +15,16 @@ def test_complex(  # noqa: WPS211
     make_project_manager,
     make_project_developer,
 ):
+    """
+    Test complex.
+
+    :param project:
+    :param team_watcher:
+    :param team_leader:
+    :param team_developer:
+    :param make_project_manager:
+    :param make_project_developer:
+    """
     make_project_manager(project, team_watcher)
     make_project_developer(project, team_leader)
     make_project_developer(project, team_developer)

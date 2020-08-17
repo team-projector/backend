@@ -11,6 +11,12 @@ from tests.test_payroll.factories import IssueSpentTimeFactory
 
 
 def test_resolver(user, ghl_auth_mock_info):
+    """
+    Test resolver.
+
+    :param user:
+    :param ghl_auth_mock_info:
+    """
     issue = IssueFactory.create(
         user=user,
         time_estimate=seconds(hours=6),

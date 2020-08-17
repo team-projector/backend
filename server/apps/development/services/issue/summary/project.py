@@ -20,6 +20,11 @@ def get_min_due_date(project):
 
 
 def _get_key(milestone):
+    """
+    Get key.
+
+    :param milestone:
+    """
     return getattr(milestone, "due_date", None) or datetime.max.date()
 
 
@@ -60,6 +65,15 @@ class IssuesProjectSummaryProvider:
     def _get_summaries(
         self, summaries_qs: models.QuerySet, total_issues_count: int,
     ) -> List[IssuesProjectSummary]:
+        """
+        Get summaries.
+
+        :param summaries_qs:
+        :type summaries_qs: models.QuerySet
+        :param total_issues_count:
+        :type total_issues_count: int
+        :rtype: List[IssuesProjectSummary]
+        """
         summaries_project = {
             summary["project"]: summary for summary in summaries_qs
         }
@@ -80,6 +94,16 @@ class IssuesProjectSummaryProvider:
     def _get_issues_summary(
         self, summaries, project: Project, total_issues_count: int,
     ) -> ProjectIssuesSummary:
+        """
+        Get issues summary.
+
+        :param summaries:
+        :param project:
+        :type project: Project
+        :param total_issues_count:
+        :type total_issues_count: int
+        :rtype: ProjectIssuesSummary
+        """
         issues_summary = ProjectIssuesSummary()
         issues_summary.opened_count = summaries[project.id][
             "issues_opened_count"
@@ -92,6 +116,11 @@ class IssuesProjectSummaryProvider:
         return issues_summary
 
     def _get_summaries_qs(self) -> models.QuerySet:
+        """
+        Get summaries qs.
+
+        :rtype: models.QuerySet
+        """
         return (
             self.queryset.annotate(
                 time_remains=models.Case(
@@ -118,9 +147,23 @@ class IssuesProjectSummaryProvider:
         )
 
     def _get_total_issues_count(self, summaries_qs: models.QuerySet) -> int:
+        """
+        Get total issues count.
+
+        :param summaries_qs:
+        :type summaries_qs: models.QuerySet
+        :rtype: int
+        """
         return sum(summary["issues_opened_count"] for summary in summaries_qs)
 
     def _get_project_qs(self, summaries_qs: models.QuerySet) -> List[Project]:
+        """
+        Get project qs.
+
+        :param summaries_qs:
+        :type summaries_qs: models.QuerySet
+        :rtype: List[Project]
+        """
         project_ids = [summary["project"] for summary in summaries_qs]
 
         projects_qs = Project.objects.filter(id__in=project_ids)

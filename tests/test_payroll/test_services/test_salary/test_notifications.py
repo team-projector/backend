@@ -9,6 +9,11 @@ from tests.test_users.factories.user import UserFactory
 
 
 def test_send_salary_email_report(db):
+    """
+    Test send salary email report.
+
+    :param db:
+    """
     user = UserFactory.create(email="test1@mail.com")
 
     salary = SalaryFactory.create(user=user, payed=True)
@@ -26,6 +31,11 @@ def test_send_salary_email_report(db):
 
 
 def test_without_email(db):
+    """
+    Test without email.
+
+    :param db:
+    """
     user = UserFactory.create(email="")
 
     salary = SalaryFactory.create(user=user, payed=True)

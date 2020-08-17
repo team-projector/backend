@@ -8,6 +8,7 @@ from apps.core.gitlab.parsers import parse_gl_datetime
 
 
 def test_success():
+    """Test success."""
     gl_datetime = "2000-01-01T12:00:00.000000Z"
 
     assert parse_gl_datetime(gl_datetime) == make_aware(
@@ -16,4 +17,5 @@ def test_success():
 
 
 def test_empty():
+    """Test empty."""
     assert parse_gl_datetime("") is None

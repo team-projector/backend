@@ -14,6 +14,13 @@ from tests.test_users.factories.gitlab import GlUserFactory
 
 
 def test_check_deleted(db, gl_mocker, gl_client):
+    """
+    Test check deleted.
+
+    :param db:
+    :param gl_mocker:
+    :param gl_client:
+    """
     project, gl_project = initializers.init_project()
     gl_assignee = GlUserFactory.create()
     issue, gl_issue = initializers.init_issue(
@@ -33,6 +40,13 @@ def test_check_deleted(db, gl_mocker, gl_client):
 
 
 def test_server_error(db, gl_mocker, gl_client):
+    """
+    Test server error.
+
+    :param db:
+    :param gl_mocker:
+    :param gl_client:
+    """
     gl_project = GlProjectFactory.create()
     project = ProjectFactory.create(gl_id=gl_project["id"])
 

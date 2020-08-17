@@ -11,6 +11,13 @@ from tests.test_development.test_gl.helpers import (
 
 
 def test_from_one_group(db, gl_mocker, gl_client):
+    """
+    Test from one group.
+
+    :param db:
+    :param gl_mocker:
+    :param gl_client:
+    """
     group, gl_group = initializers.init_group()
     gl_projects = GlProjectFactory.create_batch(2)
 
@@ -24,6 +31,13 @@ def test_from_one_group(db, gl_mocker, gl_client):
 
 
 def test_from_many_groups(db, gl_mocker, gl_client):
+    """
+    Test from many groups.
+
+    :param db:
+    :param gl_mocker:
+    :param gl_client:
+    """
     first_group, gl_first_group = initializers.init_group()
     second_group, gl_second_group = initializers.init_group()
     gl_projects = GlProjectFactory.create_batch(2)

@@ -6,6 +6,11 @@ from tests.test_users.factories.user import UserFactory
 
 
 def test_by_assignee(user):
+    """
+    Test by assignee.
+
+    :param user:
+    """
     another_user = UserFactory.create()
 
     IssueSpentTimeFactory.create_batch(4, user=user)
@@ -17,6 +22,12 @@ def test_by_assignee(user):
 
 
 def test_by_team_leader(team_developer, team_leader):
+    """
+    Test by team leader.
+
+    :param team_developer:
+    :param team_leader:
+    """
     IssueSpentTimeFactory.create_batch(4, user=team_developer)
     allowed = SpentTime.objects.allowed_for_user(team_leader)
 
@@ -24,6 +35,12 @@ def test_by_team_leader(team_developer, team_leader):
 
 
 def test_by_team_leader_and_user(team_developer, team_leader):
+    """
+    Test by team leader and user.
+
+    :param team_developer:
+    :param team_leader:
+    """
     IssueSpentTimeFactory.create_batch(4, user=team_developer)
     IssueSpentTimeFactory.create_batch(3, user=team_leader)
 
@@ -33,6 +50,12 @@ def test_by_team_leader_and_user(team_developer, team_leader):
 
 
 def test_by_team_watcher(team_developer, team_watcher):
+    """
+    Test by team watcher.
+
+    :param team_developer:
+    :param team_watcher:
+    """
     IssueSpentTimeFactory.create_batch(4, user=team_developer)
 
     allowed = SpentTime.objects.allowed_for_user(team_watcher)

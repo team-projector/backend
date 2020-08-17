@@ -8,6 +8,11 @@ from tests.test_development.factories import IssueFactory
 
 
 def test_by_due_date(user):
+    """
+    Test by due date.
+
+    :param user:
+    """
     issue = IssueFactory.create(user=user, due_date=datetime.now())
     IssueFactory.create(user=user, due_date=datetime.now() + timedelta(days=1))
     IssueFactory.create(user=user, due_date=datetime.now() - timedelta(days=1))

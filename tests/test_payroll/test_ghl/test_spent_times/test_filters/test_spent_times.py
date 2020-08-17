@@ -24,6 +24,14 @@ from tests.test_payroll.factories import (
 
 
 def test_filter_by_salary(user, user2, issue, salary):
+    """
+    Test filter by salary.
+
+    :param user:
+    :param user2:
+    :param issue:
+    :param salary:
+    """
     IssueSpentTimeFactory.create(
         date=timezone.now() - timedelta(hours=2),
         user=user2,
@@ -97,6 +105,13 @@ def test_filter_by_salary_not_exists(user, user2, issue, salary):
 
 
 def test_filter_by_date(user, user2, issue):
+    """
+    Test filter by date.
+
+    :param user:
+    :param user2:
+    :param issue:
+    """
     spend_date = date(2020, 3, 3)
 
     IssueSpentTimeFactory.create(
@@ -132,6 +147,13 @@ def test_filter_by_date(user, user2, issue):
 
 
 def test_by_date_and_user(user, user2, issue):
+    """
+    Test by date and user.
+
+    :param user:
+    :param user2:
+    :param issue:
+    """
     spend_date = date(2019, 3, 3)
 
     IssueSpentTimeFactory.create(
@@ -173,6 +195,11 @@ def test_by_date_and_user(user, user2, issue):
 
 
 def test_filter_by_project(user):
+    """
+    Test filter by project.
+
+    :param user:
+    """
     projects = ProjectFactory.create_batch(2)
     issue = IssueFactory.create(user=user, project=projects[0])
     merge_request = MergeRequestFactory.create(user=user, project=projects[1])
@@ -210,6 +237,13 @@ def test_filter_by_project(user):
 
 
 def test_filter_by_team(user, user2, make_team_leader):
+    """
+    Test filter by team.
+
+    :param user:
+    :param user2:
+    :param make_team_leader:
+    """
     teams = TeamFactory.create_batch(2)
 
     make_team_leader(teams[0], user)
@@ -251,6 +285,12 @@ def test_filter_by_team(user, user2, make_team_leader):
 
 
 def test_order_by_date(user, issue):
+    """
+    Test order by date.
+
+    :param user:
+    :param issue:
+    """
     issue = IssueFactory.create()
 
     spends = [
@@ -298,6 +338,11 @@ def test_order_by_date(user, issue):
 
 
 def test_filter_by_state(user):
+    """
+    Test filter by state.
+
+    :param user:
+    """
     i_opened, _ = [
         IssueSpentTimeFactory.create(
             user=user,
@@ -330,6 +375,11 @@ def test_filter_by_state(user):
 
 
 def test_filter_by_state_all(user):
+    """
+    Test filter by state all.
+
+    :param user:
+    """
     issue = IssueFactory.create(user=user)
     merge_request = MergeRequestFactory.create(user=user)
 

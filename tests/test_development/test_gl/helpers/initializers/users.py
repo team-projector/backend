@@ -5,6 +5,12 @@ from tests.test_users.factories.gitlab import GlUserFactory
 
 
 def init_user(mocker, gl_kwargs=None):
+    """
+    Init user.
+
+    :param mocker:
+    :param gl_kwargs:
+    """
     gl_kwargs = gl_kwargs or {}
 
     gl_user = GlUserFactory.create(**gl_kwargs)

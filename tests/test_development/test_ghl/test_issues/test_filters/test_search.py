@@ -6,6 +6,11 @@ from tests.test_development.factories import IssueFactory
 
 
 def test_by_title_single(user):
+    """
+    Test by title single.
+
+    :param user:
+    """
     issue = IssueFactory.create(title="create", user=user, gl_url="foobar")
     IssueFactory.create(title="react", user=user)
 
@@ -18,6 +23,11 @@ def test_by_title_single(user):
 
 
 def test_by_title_many(user):
+    """
+    Test by title many.
+
+    :param user:
+    """
     issues = [
         IssueFactory.create(title="create", user=user, gl_url="foobar"),
         IssueFactory.create(title="react", user=user),
@@ -32,6 +42,11 @@ def test_by_title_many(user):
 
 
 def test_empty_queryset(user):
+    """
+    Test empty queryset.
+
+    :param user:
+    """
     IssueFactory.create(title="issue", user=user)
 
     queryset = IssuesFilterSet(
@@ -42,6 +57,11 @@ def test_empty_queryset(user):
 
 
 def test_by_gl_url(user):
+    """
+    Test by gl url.
+
+    :param user:
+    """
     issue = IssueFactory.create(title="create", user=user, gl_url="foobar")
 
     queryset = IssuesFilterSet(

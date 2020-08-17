@@ -10,6 +10,11 @@ from tests.test_users.factories.user import UserFactory
 
 
 def test_counts_by_state(user):
+    """
+    Test counts by state.
+
+    :param user:
+    """
     MergeRequestFactory.create_batch(
         7, user=user, state=MergeRequestState.OPENED, total_time_spent=0,
     )

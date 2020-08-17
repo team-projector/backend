@@ -15,6 +15,11 @@ from tests.test_users.factories import UserFactory
 
 
 def test_resolver(db):
+    """
+    Test resolver.
+
+    :param db:
+    """
     user = UserFactory.create(customer_hour_rate=100, hour_rate=1000)
     milestone = ProjectMilestoneFactory.create(budget=10000)
 

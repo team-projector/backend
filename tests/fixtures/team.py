@@ -50,18 +50,43 @@ def team_leader(team, make_team_leader):
 
 
 def _make_team_developer(team, user=None):
+    """
+    Make team developer.
+
+    :param team:
+    :param user:
+    """
     return _add_or_update_user_in_team(team, TeamMember.roles.DEVELOPER, user)
 
 
 def _make_team_watcher(team, user=None):
+    """
+    Make team watcher.
+
+    :param team:
+    :param user:
+    """
     return _add_or_update_user_in_team(team, TeamMember.roles.WATCHER, user)
 
 
 def _make_team_leader(team, user=None):
+    """
+    Make team leader.
+
+    :param team:
+    :param user:
+    """
     return _add_or_update_user_in_team(team, TeamMember.roles.LEADER, user)
 
 
 def _add_or_update_user_in_team(team, role, user):
+    """
+    Add or update user in team.
+
+    :param team:
+    :param role:
+    :param user:
+    """
     if not user:
         user = UserFactory.create()
 

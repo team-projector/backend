@@ -47,6 +47,12 @@ class UserMetricsProvider:
         return ret
 
     def _get_time_spent_aggregations(self, user: User):
+        """
+        Get time spent aggregations.
+
+        :param user:
+        :type user: User
+        """
         ret = SpentTime.objects.filter(
             salary__isnull=True, user=user,
         ).aggregate(
@@ -86,6 +92,12 @@ class UserMetricsProvider:
         return self._penalty
 
     def _is_metric_requested(self, metric: str):
+        """
+        Is metric requested.
+
+        :param metric:
+        :type metric: str
+        """
         if not self._fields:
             return True
 

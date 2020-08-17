@@ -52,6 +52,11 @@ def check_user_progress_payroll_metrics(
 
 
 def _prepare_metrics(metrics):
+    """
+    Prepare metrics.
+
+    :param metrics:
+    """
     if metrics is None:
         return {}
 
@@ -62,6 +67,13 @@ def _prepare_metrics(metrics):
 
 
 def _assert_timedelta_metric(metric, metric_name, metric_values):
+    """
+    Assert timedelta metric.
+
+    :param metric:
+    :param metric_name:
+    :param metric_values:
+    """
     dt = str(metric.start)
 
     if dt in metric_values:
@@ -74,6 +86,13 @@ def _assert_timedelta_metric(metric, metric_name, metric_values):
 
 
 def _assert_number_metric(metric, metric_name, metric_values):
+    """
+    Assert number metric.
+
+    :param metric:
+    :param metric_name:
+    :param metric_values:
+    """
     dt = str(metric.start)
 
     if dt in metric_values:

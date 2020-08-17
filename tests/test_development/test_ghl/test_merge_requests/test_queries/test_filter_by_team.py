@@ -110,6 +110,13 @@ def test_many_members(
 def test_many_teams(
     user, ghl_auth_mock_info, all_merge_requests_query,
 ):
+    """
+    Test many teams.
+
+    :param user:
+    :param ghl_auth_mock_info:
+    :param all_merge_requests_query:
+    """
     team = TeamFactory()
 
     TeamMemberFactory.create(

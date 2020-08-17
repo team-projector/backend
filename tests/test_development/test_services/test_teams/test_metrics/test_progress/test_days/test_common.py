@@ -22,6 +22,13 @@ from tests.test_users.test_services.test_users.test_metrics.test_progress.test_d
 
 
 def test_simple(team, team_developer, team_leader):
+    """
+    Test simple.
+
+    :param team:
+    :param team_developer:
+    :param team_leader:
+    """
     issue = IssueFactory.create(
         user=team_developer,
         time_estimate=seconds(hours=15),
@@ -95,6 +102,13 @@ def test_simple(team, team_developer, team_leader):
 
 
 def test_negative_remains(team, team_developer, team_leader):
+    """
+    Test negative remains.
+
+    :param team:
+    :param team_developer:
+    :param team_leader:
+    """
     issue = IssueFactory.create(user=team_developer, due_date=datetime.now())
 
     IssueSpentTimeFactory.create(
@@ -134,6 +148,13 @@ def test_negative_remains(team, team_developer, team_leader):
 
 
 def test_loading_day_already_has_spends(team, team_developer, team_leader):
+    """
+    Test loading day already has spends.
+
+    :param team:
+    :param team_developer:
+    :param team_leader:
+    """
     issues = [
         IssueFactory.create(user=team_developer, due_date=datetime.now()),
         IssueFactory.create(
@@ -202,6 +223,13 @@ def test_loading_day_already_has_spends(team, team_developer, team_leader):
 
 
 def test_not_in_range(team, team_developer, team_leader):
+    """
+    Test not in range.
+
+    :param team:
+    :param team_developer:
+    :param team_leader:
+    """
     issue = IssueFactory.create(
         user=team_developer,
         due_date=datetime.now(),
@@ -255,6 +283,13 @@ def test_not_in_range(team, team_developer, team_leader):
 
 
 def test_another_user_not_in_team(team, team_developer, team_leader):
+    """
+    Test another user not in team.
+
+    :param team:
+    :param team_developer:
+    :param team_leader:
+    """
     issue = IssueFactory.create(
         user=team_developer,
         due_date=datetime.now(),
@@ -303,6 +338,14 @@ def test_another_user_not_in_team(team, team_developer, team_leader):
 def test_another_user_in_team(
     team, team_developer, team_leader, make_team_developer,
 ):
+    """
+    Test another user in team.
+
+    :param team:
+    :param team_developer:
+    :param team_leader:
+    :param make_team_developer:
+    """
     issue = IssueFactory.create(user=team_developer, due_date=datetime.now())
 
     another_user = UserFactory.create()
@@ -377,6 +420,11 @@ def test_another_user_in_team(
 
 
 def test_bad_group(db):
+    """
+    Test bad group.
+
+    :param db:
+    """
     group = "test_bad_group"
     with pytest.raises(ValueError, match="Bad group '{0}'".format(group)):
         get_progress_metrics(
@@ -388,6 +436,11 @@ def test_bad_group(db):
 
 
 def test_provider_not_implemented(user):
+    """
+    Test provider not implemented.
+
+    :param user:
+    """
     with pytest.raises(NotImplementedError):
         ProgressMetricsProvider(
             TeamFactory.create(),

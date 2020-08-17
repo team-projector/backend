@@ -14,5 +14,6 @@ def _weekends_days(settings) -> None:
 
 @pytest.fixture()
 def _freeze_to_noon():
+    """Freeze to noon."""
     with freeze_time("{0} 12:00:00".format(datetime.now().date())):
         yield

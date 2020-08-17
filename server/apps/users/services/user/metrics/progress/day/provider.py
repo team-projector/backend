@@ -38,6 +38,13 @@ class DayMetricsProvider(provider.ProgressMetricsProvider):
     def _get_metrics(  # noqa: WPS211
         self, generator: UserDaysMetricsGenerator,
     ) -> provider.UserProgressMetricsList:
+        """
+        Get metrics.
+
+        :param generator:
+        :type generator: UserDaysMetricsGenerator
+        :rtype: provider.UserProgressMetricsList
+        """
         current = self.start
 
         metrics: provider.UserProgressMetricsList = []
@@ -56,6 +63,16 @@ class DayMetricsProvider(provider.ProgressMetricsProvider):
         active_issues: List[Dict[str, object]],
         generator: UserDaysMetricsGenerator,
     ) -> None:
+        """
+        Replay loading.
+
+        :param now:
+        :param active_issues:
+        :type active_issues: List[Dict]
+        :param generator:
+        :type generator: UserDaysMetricsGenerator
+        :rtype: None
+        """
         current = now
 
         while current < self.start:

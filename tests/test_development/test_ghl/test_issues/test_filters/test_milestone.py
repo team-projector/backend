@@ -12,6 +12,12 @@ from tests.test_development.factories import (
 
 
 def test_filter_by_milestone(user, auth_rf):
+    """
+    Test filter by milestone.
+
+    :param user:
+    :param auth_rf:
+    """
     user.roles.MANAGER = True
     user.save()
 
@@ -33,6 +39,12 @@ def test_filter_by_milestone(user, auth_rf):
 
 
 def test_not_project_manager(user, auth_rf):
+    """
+    Test not project manager.
+
+    :param user:
+    :param auth_rf:
+    """
     milestone = ProjectMilestoneFactory.create()
     IssueFactory.create_batch(3, user=user, milestone=milestone)
 

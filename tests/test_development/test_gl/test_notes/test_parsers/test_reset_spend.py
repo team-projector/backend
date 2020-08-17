@@ -15,6 +15,11 @@ from tests.test_development.factories import IssueFactory
 
 
 def test_reset(user):
+    """
+    Test reset.
+
+    :param user:
+    """
     issue = IssueFactory.create()
 
     update_note_from_gitlab(

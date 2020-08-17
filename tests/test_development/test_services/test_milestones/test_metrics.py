@@ -32,6 +32,12 @@ def milestone(db):
 
 
 def test_without_issues(user, milestone):
+    """
+    Test without issues.
+
+    :param user:
+    :param milestone:
+    """
     IssueFactory.create_batch(3, user=user)
     IssueSpentTimeFactory.create(
         user=user,
@@ -48,6 +54,12 @@ def test_without_issues(user, milestone):
 
 
 def test_with_issues(user, milestone):
+    """
+    Test with issues.
+
+    :param user:
+    :param milestone:
+    """
     IssueFactory.create_batch(
         3, user=user, milestone=milestone, total_time_spent=0,
     )
@@ -63,6 +75,12 @@ def test_with_issues(user, milestone):
 
 
 def test_payrolls(user, milestone):
+    """
+    Test payrolls.
+
+    :param user:
+    :param milestone:
+    """
     issues = [
         IssueFactory.create(user=user, milestone=milestone),
         IssueFactory.create(user=user, milestone=milestone),
@@ -108,6 +126,12 @@ def test_payrolls(user, milestone):
 
 
 def test_no_spents(user, milestone):
+    """
+    Test no spents.
+
+    :param user:
+    :param milestone:
+    """
     IssueFactory.create_batch(2, user=user, milestone=milestone)
     IssueFactory.create(user=user)
 
@@ -122,6 +146,11 @@ def test_no_spents(user, milestone):
 
 
 def test_payrolls_no_budget(db):
+    """
+    Test payrolls no budget.
+
+    :param db:
+    """
     checkers.check_milestone_metrics(
         get_milestone_metrics(ProjectMilestoneFactory.create(budget=0)),
     )

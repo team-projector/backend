@@ -7,6 +7,11 @@ from tests.test_development.factories import IssueFactory, TicketFactory
 
 
 def test_assign_ticket(db):
+    """
+    Test assign ticket.
+
+    :param db:
+    """
     child_issue = IssueFactory.create(
         ticket=None,
         gl_url="https://gitlab.com/junte/team-projector/backend/issues/12",

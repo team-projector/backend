@@ -64,12 +64,26 @@ class SalaryCalculator:
         return salary
 
     def _get_spent_data(self, salary: Salary) -> models.QuerySet:
+        """
+        Get spent data.
+
+        :param salary:
+        :type salary: Salary
+        :rtype: models.QuerySet
+        """
         return SpentTime.objects.filter(salary=salary).aggregate(
             total_sum=models.Sum("sum"),
             total_time_spent=models.Sum("time_spent"),
         )
 
     def _get_penalty(self, salary: Salary) -> models.QuerySet:
+        """
+        Get penalty.
+
+        :param salary:
+        :type salary: Salary
+        :rtype: models.QuerySet
+        """
         return (
             Penalty.objects.filter(salary=salary).aggregate(
                 total_sum=models.Sum("sum"),
@@ -78,6 +92,13 @@ class SalaryCalculator:
         )
 
     def _get_bonus(self, salary: Salary) -> models.QuerySet:
+        """
+        Get bonus.
+
+        :param salary:
+        :type salary: Salary
+        :rtype: models.QuerySet
+        """
         return (
             Bonus.objects.filter(salary=salary).aggregate(
                 total_sum=models.Sum("sum"),
@@ -86,6 +107,15 @@ class SalaryCalculator:
         )
 
     def _lock_payrolls(self, user: User, salary: Salary) -> int:
+        """
+        Lock payrolls.
+
+        :param user:
+        :type user: User
+        :param salary:
+        :type salary: Salary
+        :rtype: int
+        """
         locked = Penalty.objects.filter(
             salary__isnull=True, user=user,
         ).update(salary=salary)

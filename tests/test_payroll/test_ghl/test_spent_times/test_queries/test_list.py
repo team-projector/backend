@@ -85,6 +85,12 @@ def test_filter_by_salary(user, ghl_auth_mock_info, all_spent_times_query):
 
 
 def _create_spents(issue, size=3):
+    """
+    Create spents.
+
+    :param issue:
+    :param size:
+    """
     IssueNoteFactory.create_batch(
         size,
         content_object=issue,

@@ -12,6 +12,13 @@ from tests.test_users.factories.gitlab import GlUserFactory
 
 
 def test_load_issue_notes(db, gl_mocker, gl_client):
+    """
+    Test load issue notes.
+
+    :param db:
+    :param gl_mocker:
+    :param gl_client:
+    """
     project, gl_project = initializers.init_project()
     issue, gl_issue = initializers.init_issue(project, gl_project)
     gl_author = GlUserFactory.create()

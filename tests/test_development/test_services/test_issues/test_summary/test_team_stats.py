@@ -20,6 +20,11 @@ from tests.test_users.factories.user import UserFactory
 
 
 def test_team_summary(db):
+    """
+    Test team summary.
+
+    :param db:
+    """
     users = UserFactory.create_batch(2)
     teams = TeamFactory.create_batch(2)
     TeamMemberFactory.create(

@@ -28,6 +28,7 @@ def delete_ticket_mutation(ghl_mutations):
 
 @pytest.fixture()
 def ticket():
+    """Ticket."""
     return TicketFactory(milestone=ProjectMilestoneFactory())
 
 

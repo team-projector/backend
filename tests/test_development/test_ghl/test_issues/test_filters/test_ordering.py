@@ -8,6 +8,11 @@ from tests.test_development.factories import IssueFactory
 
 
 def test_by_title_asc(user):
+    """
+    Test by title asc.
+
+    :param user:
+    """
     issues = [
         IssueFactory.create(title="agent", user=user),
         IssueFactory.create(title="bar", user=user),
@@ -22,6 +27,11 @@ def test_by_title_asc(user):
 
 
 def test_by_title_desc(user):
+    """
+    Test by title desc.
+
+    :param user:
+    """
     issues = [
         IssueFactory.create(title="agent", user=user),
         IssueFactory.create(title="bar", user=user),
@@ -36,6 +46,11 @@ def test_by_title_desc(user):
 
 
 def test_by_due_date_asc(user):
+    """
+    Test by due date asc.
+
+    :param user:
+    """
     issues = [
         IssueFactory.create(
             due_date=datetime.now() - timedelta(days=3), user=user,
@@ -54,6 +69,11 @@ def test_by_due_date_asc(user):
 
 
 def test_by_due_date_desc(user):
+    """
+    Test by due date desc.
+
+    :param user:
+    """
     issues = [
         IssueFactory.create(
             due_date=datetime.now() - timedelta(days=3), user=user,

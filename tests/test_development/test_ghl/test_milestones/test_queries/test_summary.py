@@ -23,6 +23,11 @@ query {
 
 @pytest.fixture()
 def milestones(user):
+    """
+    Milestones.
+
+    :param user:
+    """
     project = ProjectFactory.create()
     ProjectMemberFactory.create(
         user=user, role=ProjectMemberRole.MANAGER, owner=project,
@@ -38,6 +43,12 @@ def milestones(user):
 
 
 def test_raw_query(gql_client_authenticated, milestones):
+    """
+    Test raw query.
+
+    :param gql_client_authenticated:
+    :param milestones:
+    """
     response = gql_client_authenticated.execute(GHL_QUERY_MILESTONES_SUMMARY)
 
     assert "errors" not in response
@@ -49,6 +60,13 @@ def test_raw_query(gql_client_authenticated, milestones):
 def test_filter_by_state(
     milestones_summary_query, ghl_auth_mock_info, milestones,
 ):
+    """
+    Test filter by state.
+
+    :param milestones_summary_query:
+    :param ghl_auth_mock_info:
+    :param milestones:
+    """
     response = milestones_summary_query(
         parent=None,
         root=None,

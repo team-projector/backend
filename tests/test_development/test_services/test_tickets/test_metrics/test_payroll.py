@@ -15,6 +15,11 @@ from tests.test_users.factories.user import UserFactory
 
 
 def test_metrics(db):
+    """
+    Test metrics.
+
+    :param db:
+    """
     ticket = TicketFactory.create()
     user = UserFactory.create(customer_hour_rate=3, hour_rate=2)
 

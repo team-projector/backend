@@ -26,6 +26,12 @@ class TokenAuthentication(DrfTokenAuth):
         return user, token
 
     def _is_expired(self, token) -> bool:
+        """
+        Is expired.
+
+        :param token:
+        :rtype: bool
+        """
         return token.created < timezone.now() - timedelta(
             minutes=settings.TOKEN_EXPIRE_PERIOD,
         )

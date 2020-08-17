@@ -55,6 +55,12 @@ class Command(BaseCommand):
                 pbar.update()
 
     def _generate_operations(self, client) -> Tuple[Any, ...]:  # type: ignore
+        """
+        Generate operations.
+
+        :param client:
+        :rtype: Tuple[Any, __Ellipsis__]
+        """
         total = self._get_total(client)
         cleaner = LabelsCleaner(client=client)
 
@@ -62,6 +68,12 @@ class Command(BaseCommand):
             original_f = Project._adjust_labels_for_single_item  # noqa: WPS437
 
             def _wrapped(proj, gl_api_obj):  # noqa:WPS430
+                """
+            Wrapped.
+
+            :param proj:
+            :param gl_api_obj:
+            """
                 original_f(proj, gl_api_obj)
                 pbar.update()
 
@@ -70,6 +82,12 @@ class Command(BaseCommand):
             return cleaner.clean_group(self.group_for_sync, dry_run=True)
 
     def _get_total(self, client) -> int:
+        """
+        Get total.
+
+        :param client:
+        :rtype: int
+        """
         gr = client.groups.get(self.group_for_sync)
         stats = client.http_get("/groups/{0}/issues_statistics".format(gr.id))
         issues_count = stats.get("statistics").get("counts").get("all")
@@ -77,5 +95,10 @@ class Command(BaseCommand):
         return len(mergerequests) + issues_count
 
     def _parse_params(self, *args, **options) -> None:
+        """
+        Parse params.
+
+        :rtype: None
+        """
         self.group_for_sync = options.get("group")
         self.only_log = options.get("log")

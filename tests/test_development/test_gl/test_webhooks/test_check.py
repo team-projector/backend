@@ -51,6 +51,13 @@ class WebhookRequestCallback:
 
 
 def test_register_new(db, gl_mocker, client):
+    """
+    Test register new.
+
+    :param db:
+    :param gl_mocker:
+    :param client:
+    """
     project, gl_project = initializers.init_project()
     callback = WebhookRequestCallback()
 
@@ -63,6 +70,13 @@ def test_register_new(db, gl_mocker, client):
 
 
 def test_already_exists(db, gl_mocker, client):
+    """
+    Test already exists.
+
+    :param db:
+    :param gl_mocker:
+    :param client:
+    """
     project, gl_project = initializers.init_project()
 
     gl_mock.mock_project_endpoints(
@@ -84,6 +98,13 @@ def test_already_exists(db, gl_mocker, client):
 
 
 def test_exists_another(db, gl_mocker, client):
+    """
+    Test exists another.
+
+    :param db:
+    :param gl_mocker:
+    :param client:
+    """
     project, gl_project = initializers.init_project()
     callback = WebhookRequestCallback()
 
@@ -107,6 +128,13 @@ def test_exists_another(db, gl_mocker, client):
 
 
 def test_fix_wrong(db, gl_mocker, client):
+    """
+    Test fix wrong.
+
+    :param db:
+    :param gl_mocker:
+    :param client:
+    """
     project, gl_project = initializers.init_project()
     create_callback = WebhookRequestCallback()
     delete_callback = WebhookRequestCallback()

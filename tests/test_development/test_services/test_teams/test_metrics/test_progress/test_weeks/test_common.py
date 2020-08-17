@@ -21,6 +21,13 @@ from tests.test_users.test_services.test_users.test_metrics.test_progress.test_w
 
 
 def test_simple(team, team_developer, team_leader):
+    """
+    Test simple.
+
+    :param team:
+    :param team_developer:
+    :param team_leader:
+    """
     issue = IssueFactory.create(user=team_developer, due_date=datetime.now())
 
     monday = begin_of_week(timezone.now().date())
@@ -79,6 +86,13 @@ def test_simple(team, team_developer, team_leader):
 
 
 def test_efficiency_more100(team, team_developer, team_leader):
+    """
+    Test efficiency more100.
+
+    :param team:
+    :param team_developer:
+    :param team_leader:
+    """
     issue = IssueFactory.create(user=team_developer, due_date=datetime.now())
 
     monday = begin_of_week(timezone.now().date())
@@ -139,6 +153,12 @@ def test_efficiency_more100(team, team_developer, team_leader):
 
 
 def test_efficiency_less100(team, team_developer):
+    """
+    Test efficiency less100.
+
+    :param team:
+    :param team_developer:
+    """
     issue = IssueFactory.create(user=team_developer, due_date=datetime.now())
     monday = begin_of_week(timezone.now().date())
 
@@ -196,6 +216,12 @@ def test_efficiency_less100(team, team_developer):
 
 
 def test_efficiency_zero_estimate(team, team_developer):
+    """
+    Test efficiency zero estimate.
+
+    :param team:
+    :param team_developer:
+    """
     issue = IssueFactory.create(user=team_developer, due_date=datetime.now())
     monday = begin_of_week(timezone.now().date())
 
@@ -251,6 +277,12 @@ def test_efficiency_zero_estimate(team, team_developer):
 
 
 def test_efficiency_zero_spend(team, team_developer):
+    """
+    Test efficiency zero spend.
+
+    :param team:
+    :param team_developer:
+    """
     monday = begin_of_week(timezone.now().date())
     IssueFactory.create(
         user=team_developer,
@@ -279,6 +311,12 @@ def test_efficiency_zero_spend(team, team_developer):
 
 
 def test_many_weeks(team, team_developer):
+    """
+    Test many weeks.
+
+    :param team:
+    :param team_developer:
+    """
     issue = IssueFactory.create(user=team_developer, due_date=datetime.now())
 
     monday = begin_of_week(timezone.now().date())
@@ -337,6 +375,12 @@ def test_many_weeks(team, team_developer):
 
 
 def test_not_in_range(team, team_developer):
+    """
+    Test not in range.
+
+    :param team:
+    :param team_developer:
+    """
     issue = IssueFactory.create(user=team_developer, due_date=datetime.now())
     monday = begin_of_week(timezone.now().date())
 
@@ -392,6 +436,12 @@ def test_not_in_range(team, team_developer):
 
 
 def test_another_user(team, team_developer):
+    """
+    Test another user.
+
+    :param team:
+    :param team_developer:
+    """
     issue = IssueFactory.create(user=team_developer, due_date=datetime.now())
 
     another_user = UserFactory.create()
@@ -449,6 +499,12 @@ def test_another_user(team, team_developer):
 
 
 def test_many_issues(team, team_developer):
+    """
+    Test many issues.
+
+    :param team:
+    :param team_developer:
+    """
     issue = IssueFactory.create(user=team_developer, due_date=datetime.now())
 
     monday = begin_of_week(datetime.now().date())

@@ -37,6 +37,13 @@ class Command(createsuperuser.Command):
             self.stdout.write("Superuser created successfully.")
 
     def _fill_user_data_required_fields(self, user_data, options) -> None:
+        """
+        Fill user data required fields.
+
+        :param user_data:
+        :param options:
+        :rtype: None
+        """
         for field_name in self.UserModel.REQUIRED_FIELDS:
             env_var = "DJANGO_SUPERUSER_{0}".format(field_name.upper())
 

@@ -37,6 +37,7 @@ class GitlabMock(HttprettyMock):
 
 @pytest.fixture()
 def gl_mocker():
+    """Gl mocker."""
     httpretty.enable(allow_net_connect=False)
 
     yield GitlabMock()
@@ -46,11 +47,22 @@ def gl_mocker():
 
 @pytest.fixture()
 def gl_client(gl_mocker):
+    """
+    Gl client.
+
+    :param gl_mocker:
+    """
     return get_default_gitlab_client()
 
 
 @pytest.fixture()
 def gl_token_request_info(rf) -> ResolveInfo:
+    """
+    Gl token request info.
+
+    :param rf:
+    :rtype: ResolveInfo
+    """
     request = rf.get(GitLabOAuth2.AUTHORIZATION_URL)
     setattr(request, "session", {"gitlab_state": "gitlab_state"})  # noqa: B010
 

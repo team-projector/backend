@@ -11,6 +11,12 @@ from tests.test_development.test_gl.helpers import gl_mock, initializers
 
 
 def test_server_error(db, gl_mocker):
+    """
+    Test server error.
+
+    :param db:
+    :param gl_mocker:
+    """
     group, gl_group = initializers.init_group()
     gl_mock.register_group(
         gl_mocker, gl_group, status_code=HTTPStatus.INTERNAL_SERVER_ERROR,
@@ -21,6 +27,12 @@ def test_server_error(db, gl_mocker):
 
 
 def test_not_found(db, gl_mocker):
+    """
+    Test not found.
+
+    :param db:
+    :param gl_mocker:
+    """
     group, gl_group = initializers.init_group()
     gl_mock.register_group(
         gl_mocker, gl_group, status_code=HTTPStatus.NOT_FOUND,
@@ -30,6 +42,12 @@ def test_not_found(db, gl_mocker):
 
 
 def test_deactivate_if_not_found(db, gl_mocker):
+    """
+    Test deactivate if not found.
+
+    :param db:
+    :param gl_mocker:
+    """
     project, gl_project = initializers.init_project(
         model_kwargs={"is_active": False},
     )

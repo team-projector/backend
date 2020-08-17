@@ -43,6 +43,11 @@ class SlackClient:
             )
 
     def _get_slack_client(self) -> slack.WebClient:  # type: ignore
+        """
+        Get slack client.
+
+        :rtype: slack.WebClient
+        """
         token = settings.SLACK_TOKEN
         if not token:
             raise ImproperlyConfigured("'settings.SLACK_TOKEN' must be filled")

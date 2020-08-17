@@ -27,6 +27,14 @@ syncMilestone(
 
 
 def test_query(make_group_manager, ghl_client, gl_mocker, user):
+    """
+    Test query.
+
+    :param make_group_manager:
+    :param ghl_client:
+    :param gl_mocker:
+    :param user:
+    """
     group, gl_group = initializers.init_group()
     gl_milestone = GlGroupMilestoneFactory.create(state=MilestoneState.CLOSED)
 
@@ -65,6 +73,15 @@ def test_project_milestone(
     gl_mocker,
     make_group_manager,
 ):
+    """
+    Test project milestone.
+
+    :param user:
+    :param ghl_auth_mock_info:
+    :param sync_milestone_mutation:
+    :param gl_mocker:
+    :param make_group_manager:
+    """
     group, gl_project = initializers.init_project()
     gl_milestone = GlGroupMilestoneFactory.create(state=MilestoneState.CLOSED)
 
@@ -94,6 +111,13 @@ def test_project_milestone(
 def test_without_access(
     user, ghl_auth_mock_info, sync_milestone_mutation,
 ):
+    """
+    Test without access.
+
+    :param user:
+    :param ghl_auth_mock_info:
+    :param sync_milestone_mutation:
+    """
     milestone = ProjectGroupMilestoneFactory()
 
     resolve = sync_milestone_mutation(

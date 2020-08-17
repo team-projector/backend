@@ -7,6 +7,13 @@ from tests.test_development.test_gl.helpers import gl_mock, initializers
 
 
 def test_labels(db, gl_mocker, gl_client):
+    """
+    Test labels.
+
+    :param db:
+    :param gl_mocker:
+    :param gl_client:
+    """
     project, gl_project = initializers.init_project()
     gl_label = GlLabelFactory.create()
     issue, gl_issue = initializers.init_issue(
@@ -33,6 +40,13 @@ def test_labels(db, gl_mocker, gl_client):
 
 
 def test_cached_labels(db, gl_mocker, gl_client):
+    """
+    Test cached labels.
+
+    :param db:
+    :param gl_mocker:
+    :param gl_client:
+    """
     project, gl_project = initializers.init_project()
     gl_label = GlLabelFactory.create()
     first_issue, gl_first_issue = initializers.init_issue(
@@ -81,6 +95,13 @@ def test_cached_labels(db, gl_mocker, gl_client):
 
 
 def test_labels_is_empty(db, gl_mocker, gl_client):
+    """
+    Test labels is empty.
+
+    :param db:
+    :param gl_mocker:
+    :param gl_client:
+    """
     project, gl_project = initializers.init_project()
     gl_label = GlLabelFactory.create()
     issue, gl_issue = initializers.init_issue(

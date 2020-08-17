@@ -16,6 +16,12 @@ def load_for_group(group) -> QuerySet:
 
 
 def _get_group_milestones(group) -> QuerySet:
+    """
+    Get group milestones.
+
+    :param group:
+    :rtype: QuerySet
+    """
     milestones = Milestone.objects.filter(
         project_group__pk=group.id, state=MilestoneState.ACTIVE,
     )

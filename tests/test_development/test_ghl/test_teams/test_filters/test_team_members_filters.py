@@ -7,6 +7,11 @@ from tests.test_users.factories.user import UserFactory
 
 
 def test_filter_by_role_developer(user):
+    """
+    Test filter by role developer.
+
+    :param user:
+    """
     _prepare_data()
 
     queryset = TeamMembersFilterSet(
@@ -17,6 +22,11 @@ def test_filter_by_role_developer(user):
 
 
 def test_filter_by_role_leader(user):
+    """
+    Test filter by role leader.
+
+    :param user:
+    """
     _prepare_data()
 
     queryset = TeamMembersFilterSet(
@@ -27,6 +37,11 @@ def test_filter_by_role_leader(user):
 
 
 def test_filter_by_role_watcher(user):
+    """
+    Test filter by role watcher.
+
+    :param user:
+    """
     _prepare_data()
 
     queryset = TeamMembersFilterSet(
@@ -37,6 +52,11 @@ def test_filter_by_role_watcher(user):
 
 
 def test_filter_by_incorrect_role(user):
+    """
+    Test filter by incorrect role.
+
+    :param user:
+    """
     _prepare_data()
 
     queryset = TeamMembersFilterSet(
@@ -47,6 +67,11 @@ def test_filter_by_incorrect_role(user):
 
 
 def test_filter_by_none_role(user):
+    """
+    Test filter by none role.
+
+    :param user:
+    """
     _prepare_data()
 
     queryset = TeamMembersFilterSet(
@@ -57,6 +82,7 @@ def test_filter_by_none_role(user):
 
 
 def _prepare_data():
+    """Prepare data."""
     users = UserFactory.create_batch(2)
     teams = TeamFactory.create_batch(2)
 

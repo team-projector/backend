@@ -14,11 +14,17 @@ from tests.test_users.factories.user import UserFactory
 
 
 def test_parse_date():
+    """Test parse date."""
     assert parse_gl_date("") is None
     assert parse_gl_date("2000-01-01") == datetime(2000, 1, 1).date()
 
 
 def test_simple(user):
+    """
+    Test simple.
+
+    :param user:
+    """
     issue = IssueFactory.create()
 
     _create_note(
@@ -55,6 +61,11 @@ def test_simple(user):
 
 
 def test_different_created_at_and_date(user):
+    """
+    Test different created at and date.
+
+    :param user:
+    """
     issue = IssueFactory.create()
 
     _create_note(
@@ -95,6 +106,11 @@ def test_different_created_at_and_date(user):
 
 
 def test_many_resets(user):
+    """
+    Test many resets.
+
+    :param user:
+    """
     issue = IssueFactory.create()
 
     _create_note(
@@ -145,6 +161,11 @@ def test_many_resets(user):
 
 
 def test_only_reset(user):
+    """
+    Test only reset.
+
+    :param user:
+    """
     issue = IssueFactory.create()
 
     _create_note(
@@ -160,6 +181,11 @@ def test_only_reset(user):
 
 
 def test_multi_user_reset(user):
+    """
+    Test multi user reset.
+
+    :param user:
+    """
     issue = IssueFactory.create()
 
     user2 = UserFactory.create()
@@ -240,6 +266,11 @@ def test_multi_user_reset(user):
 
 
 def test_spents_but_moved_from(user):
+    """
+    Test spents but moved from.
+
+    :param user:
+    """
     issue = IssueFactory.create()
 
     spent_before = _create_note(
@@ -270,6 +301,11 @@ def test_spents_but_moved_from(user):
 
 
 def test_spents_with_resets_but_moved_from(user):
+    """
+    Test spents with resets but moved from.
+
+    :param user:
+    """
     issue = IssueFactory.create()
 
     notes = [
@@ -315,6 +351,17 @@ def test_spents_with_resets_but_moved_from(user):
 def _create_note(  # noqa: WPS211
     user, issue, note_type, created_at, spent: timedelta = None, date=None,
 ):
+    """
+    Create note.
+
+    :param user:
+    :param issue:
+    :param note_type:
+    :param created_at:
+    :param spent:
+    :type spent: timedelta, optional
+    :param date:
+    """
     return IssueNoteFactory.create(
         type=note_type,
         created_at=created_at,
@@ -331,6 +378,11 @@ def _create_note(  # noqa: WPS211
 
 
 def _check_generated_time_spents(issue):
+    """
+    Check generated time spents.
+
+    :param issue:
+    """
     users_spents = defaultdict(int)
 
     for note in issue.notes.all().order_by("created_at"):

@@ -12,11 +12,21 @@ from tests.test_development.factories import (
 
 
 def test_all_fields(db):
+    """
+    Test all fields.
+
+    :param db:
+    """
     summary = MilestonesSummaryProvider(Milestone.objects.all()).get_data()
     assert summary == {"count": 0, "active_count": 0, "closed_count": 0}
 
 
 def test_selected_fields(db):
+    """
+    Test selected fields.
+
+    :param db:
+    """
     summary = MilestonesSummaryProvider(
         Milestone.objects.all(), fields=("count", "active_count"),
     ).get_data()
@@ -25,6 +35,11 @@ def test_selected_fields(db):
 
 
 def test_prefiltered_qs(db):
+    """
+    Test prefiltered qs.
+
+    :param db:
+    """
     project = ProjectFactory.create()
     ProjectMilestoneFactory.create(state=MilestoneState.ACTIVE, owner=project)
     ProjectMilestoneFactory.create(state=MilestoneState.CLOSED, owner=project)

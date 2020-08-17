@@ -58,6 +58,11 @@ class TeamMetricsProvider:
         return metrics
 
     def _get_issues_metrics(self) -> IssueTeamMetrics:
+        """
+        Get issues metrics.
+
+        :rtype: IssueTeamMetrics
+        """
         issues = IssueTeamMetrics()
 
         issues.count = self.issues.count()
@@ -67,6 +72,11 @@ class TeamMetricsProvider:
         return issues
 
     def _get_merge_requests_metrics(self) -> MergeRequestTeamMetrics:
+        """
+        Get merge requests metrics.
+
+        :rtype: MergeRequestTeamMetrics
+        """
         merge_requests = MergeRequestTeamMetrics()
 
         merge_requests.count = self.merge_requests.count()
@@ -80,9 +90,21 @@ class TeamMetricsProvider:
         return merge_requests
 
     def _get_opened_count(self, workitems) -> int:
+        """
+        Get opened count.
+
+        :param workitems:
+        :rtype: int
+        """
         return workitems.filter(state=IssueState.OPENED).count()
 
     def _get_opened_estimated(self, workitems) -> int:
+        """
+        Get opened estimated.
+
+        :param workitems:
+        :rtype: int
+        """
         return (
             workitems.filter(state=IssueState.OPENED).aggregate(
                 total_time_estimate=Sum("time_estimate"),

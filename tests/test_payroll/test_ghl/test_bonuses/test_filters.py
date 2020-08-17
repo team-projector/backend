@@ -7,6 +7,11 @@ from tests.test_users.factories.user import UserFactory
 
 
 def test_bonuses_filter_by_user(user):
+    """
+    Test bonuses filter by user.
+
+    :param user:
+    """
     BonusFactory.create_batch(size=3, user=user)
 
     user2 = UserFactory.create()
@@ -21,6 +26,11 @@ def test_bonuses_filter_by_user(user):
 
 
 def test_bonuses_filter_by_salary(user):
+    """
+    Test bonuses filter by salary.
+
+    :param user:
+    """
     salary = SalaryFactory(user=user)
     BonusFactory.create_batch(size=3, user=user)
     bonuses_salary2 = BonusFactory.create_batch(

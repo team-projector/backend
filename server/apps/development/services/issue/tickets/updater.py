@@ -25,6 +25,11 @@ class IssueTicketProvider:
         return ticket
 
     def _get_from_ticket_link(self) -> Optional[Ticket]:
+        """
+        Get from ticket link.
+
+        :rtype: Optional[Ticket]
+        """
         tickets_ids = extract_tickets_links(self._issue.description)
         tickets_ids += sum(
             (
@@ -40,6 +45,11 @@ class IssueTicketProvider:
         return Ticket.objects.filter(pk__in=tickets_ids).first()
 
     def _get_from_issues(self) -> Optional[Ticket]:
+        """
+        Get from issues.
+
+        :rtype: Optional[Ticket]
+        """
         related_issue = (
             get_related_issues(self._issue)
             .exclude(pk=self._issue.pk)

@@ -39,6 +39,12 @@ class NotEnoughTasksChecker(BaseProblemChecker):
         return issues_time_remains + mrs_time_remains < daily_work_hours
 
     def _aggregate_time_remains(self, queryset) -> int:
+        """
+        Aggregate time remains.
+
+        :param queryset:
+        :rtype: int
+        """
         return (
             queryset.annotate(
                 time_remains=(

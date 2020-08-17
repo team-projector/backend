@@ -55,6 +55,12 @@ class PipelineGLWebhook(GLWebhook):
         slack.send_blocks(user, slack_msg, icon_emoji=":gitlab:")
 
     def _get_user(self, source) -> Optional[User]:
+        """
+        Get user.
+
+        :param source:
+        :rtype: Optional[User]
+        """
         user = User.objects.filter(email=source["user"]["email"]).first()
         if user and user.is_active and user.notify_pipeline_status:
             return user

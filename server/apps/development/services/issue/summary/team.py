@@ -46,6 +46,14 @@ class IssuesTeamSummaryProvider:
     def _get_summaries(
         self, summaries_qs: models.QuerySet, total_issues_count: int,
     ):
+        """
+        Get summaries.
+
+        :param summaries_qs:
+        :type summaries_qs: models.QuerySet
+        :param total_issues_count:
+        :type total_issues_count: int
+        """
         summaries_team = {
             summary["user__teams"]: summary for summary in summaries_qs
         }
@@ -68,6 +76,16 @@ class IssuesTeamSummaryProvider:
     def _get_issues_summary(
         self, summaries, team: Team, total_issues_count: int,
     ) -> TeamIssuesSummary:
+        """
+        Get issues summary.
+
+        :param summaries:
+        :param team:
+        :type team: Team
+        :param total_issues_count:
+        :type total_issues_count: int
+        :rtype: TeamIssuesSummary
+        """
         issues_summary = TeamIssuesSummary()
         issues_summary.opened_count = summaries[team.id]["issues_opened_count"]
         issues_summary.remains = summaries[team.id]["total_time_remains"]
@@ -77,6 +95,11 @@ class IssuesTeamSummaryProvider:
         return issues_summary
 
     def _get_summaries_qs(self) -> models.QuerySet:
+        """
+        Get summaries qs.
+
+        :rtype: models.QuerySet
+        """
         return (
             self.queryset.annotate(
                 time_remains=models.Case(
@@ -103,9 +126,23 @@ class IssuesTeamSummaryProvider:
         )
 
     def _get_total_issues_count(self, summaries_qs: models.QuerySet) -> int:
+        """
+        Get total issues count.
+
+        :param summaries_qs:
+        :type summaries_qs: models.QuerySet
+        :rtype: int
+        """
         return sum(summary["issues_opened_count"] for summary in summaries_qs)
 
     def _get_team_qs(self, summaries_qs: models.QuerySet) -> models.QuerySet:
+        """
+        Get team qs.
+
+        :param summaries_qs:
+        :type summaries_qs: models.QuerySet
+        :rtype: models.QuerySet
+        """
         team_ids = [summary["user__teams"] for summary in summaries_qs]
 
         return Team.objects.filter(id__in=team_ids)

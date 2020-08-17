@@ -7,6 +7,13 @@ from tests.test_development.factories import TeamFactory, TeamMemberFactory
 
 
 def test_filter_by_role(user, ghl_auth_mock_info, make_team_leader):
+    """
+    Test filter by role.
+
+    :param user:
+    :param ghl_auth_mock_info:
+    :param make_team_leader:
+    """
     TeamFactory.create_batch(5)
     team = TeamFactory.create()
 
@@ -31,6 +38,12 @@ def test_filter_by_role(user, ghl_auth_mock_info, make_team_leader):
 
 
 def test_filter_many_roles(user, ghl_auth_mock_info):
+    """
+    Test filter many roles.
+
+    :param user:
+    :param ghl_auth_mock_info:
+    """
     TeamFactory.create_batch(5)
     team = TeamFactory.create()
 
@@ -67,6 +80,12 @@ def test_filter_many_roles(user, ghl_auth_mock_info):
 
 
 def test_filter_by_user_and_many_roles(user, ghl_auth_mock_info):
+    """
+    Test filter by user and many roles.
+
+    :param user:
+    :param ghl_auth_mock_info:
+    """
     TeamFactory.create_batch(5)
     team = TeamFactory.create()
 
@@ -87,6 +106,12 @@ def test_filter_by_user_and_many_roles(user, ghl_auth_mock_info):
 
 
 def test_search(user, make_team_leader):
+    """
+    Test search.
+
+    :param user:
+    :param make_team_leader:
+    """
     teams = [
         TeamFactory.create(title="create"),
         TeamFactory.create(title="react"),
@@ -119,6 +144,12 @@ def test_search(user, make_team_leader):
 
 
 def test_order_by_title(user, make_team_leader):
+    """
+    Test order by title.
+
+    :param user:
+    :param make_team_leader:
+    """
     teams = [
         TeamFactory.create(title="agent"),
         TeamFactory.create(title="cloud"),

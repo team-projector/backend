@@ -62,6 +62,15 @@ class UserDaysMetricsGenerator:
     def _apply_stats(
         self, day: date, metric: provider.UserProgressMetrics,
     ) -> None:
+        """
+        Apply stats.
+
+        :param day:
+        :type day: date
+        :param metric:
+        :type metric: provider.UserProgressMetrics
+        :rtype: None
+        """
         time_spent = self._time_spents.get(day)
         if time_spent:
             metric.time_spent = time_spent["period_spent"]
@@ -80,6 +89,14 @@ class UserDaysMetricsGenerator:
     def _update_loading(
         self, current, metric: provider.UserProgressMetrics,
     ) -> None:
+        """
+        Update loading.
+
+        :param current:
+        :param metric:
+        :type metric: provider.UserProgressMetrics
+        :rtype: None
+        """
         is_update_loading = (
             current >= self._now
             and current.weekday() not in settings.TP_WEEKENDS_DAYS
@@ -109,6 +126,15 @@ class UserDaysMetricsGenerator:
         metric: provider.UserProgressMetrics,
         active_issues: List[Dict[str, object]],
     ) -> None:
+        """
+        Apply deadline issues loading.
+
+        :param metric:
+        :type metric: provider.UserProgressMetrics
+        :param active_issues:
+        :type active_issues: List[Dict]
+        :rtype: None
+        """
         deadline_issues = [
             issue
             for issue in active_issues
@@ -124,6 +150,15 @@ class UserDaysMetricsGenerator:
         metric: provider.UserProgressMetrics,
         active_issues: List[Dict[str, object]],
     ) -> None:
+        """
+        Apply active issues loading.
+
+        :param metric:
+        :type metric: provider.UserProgressMetrics
+        :param active_issues:
+        :type active_issues: List[Dict]
+        :rtype: None
+        """
         for issue in active_issues[:]:
             available_time = self._max_day_loading - metric.loading
 

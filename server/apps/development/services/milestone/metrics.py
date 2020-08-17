@@ -47,6 +47,13 @@ class MilestoneMetricsProvider(IssuesContainerMetricsProvider):
         return metrics
 
     def _fill_payroll_metrics(self, metrics: MilestoneMetrics) -> None:
+        """
+        Fill payroll metrics.
+
+        :param metrics:
+        :type metrics: MilestoneMetrics
+        :rtype: None
+        """
         payroll = SpentTime.objects.filter(
             models.Q(issues__milestone=self.milestone)
             | models.Q(mergerequests__milestone=self.milestone),

@@ -57,6 +57,13 @@ def test_query(project_manager, ghl_client, gl_mocker, user):
 def test_user_without_gl_token(
     issue, ghl_auth_mock_info, add_spent_issue_mutation,
 ):
+    """
+    Test user without gl token.
+
+    :param issue:
+    :param ghl_auth_mock_info:
+    :param add_spent_issue_mutation:
+    """
     resolve = add_spent_issue_mutation(
         root=None, info=ghl_auth_mock_info, id=issue.id, seconds=60,
     )
@@ -70,6 +77,14 @@ def test_user_without_gl_token(
 
 
 def test_bad_time(issue, user, ghl_auth_mock_info, add_spent_issue_mutation):
+    """
+    Test bad time.
+
+    :param issue:
+    :param user:
+    :param ghl_auth_mock_info:
+    :param add_spent_issue_mutation:
+    """
     user.gl_token = "token"
     user.save()
 

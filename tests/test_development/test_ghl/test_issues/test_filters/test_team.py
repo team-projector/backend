@@ -12,6 +12,11 @@ from tests.test_users.factories.user import UserFactory
 
 
 def test_by_team_with_one_member(user):
+    """
+    Test by team with one member.
+
+    :param user:
+    """
     team = TeamFactory.create()
 
     TeamMemberFactory.create(
@@ -30,6 +35,11 @@ def test_by_team_with_one_member(user):
 
 
 def test_by_team_with_many_members(user):
+    """
+    Test by team with many members.
+
+    :param user:
+    """
     team = TeamFactory.create()
 
     TeamMemberFactory.create(
@@ -55,6 +65,11 @@ def test_by_team_with_many_members(user):
 
 
 def test_by_team_with_watcher(user):
+    """
+    Test by team with watcher.
+
+    :param user:
+    """
     team = TeamFactory.create()
 
     TeamMemberFactory.create(

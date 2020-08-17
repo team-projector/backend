@@ -16,6 +16,11 @@ from tests.test_development.factories import IssueFactory
 
 
 def test_status(user):
+    """
+    Test status.
+
+    :param user:
+    """
     IssueFactory.create_batch(size=20)
     Issue.objects.update(updated_at=timezone.now())
 
@@ -39,6 +44,13 @@ def test_status(user):
 
 
 def test_resolver(user, client, ghl_auth_mock_info):
+    """
+    Test resolver.
+
+    :param user:
+    :param client:
+    :param ghl_auth_mock_info:
+    """
     IssueFactory.create_batch(size=20)
     Issue.objects.update(updated_at=timezone.now())
 

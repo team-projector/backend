@@ -10,6 +10,12 @@ from tests.test_payroll.factories import (
 
 
 def test_bonus(user, payroll_admin):
+    """
+    Test bonus.
+
+    :param user:
+    :param payroll_admin:
+    """
     bonus = BonusFactory.create(user=user)
 
     payroll = Payroll.objects.first()
@@ -20,6 +26,12 @@ def test_bonus(user, payroll_admin):
 
 
 def test_payment(user, payroll_admin):
+    """
+    Test payment.
+
+    :param user:
+    :param payroll_admin:
+    """
     payment = PaymentFactory.create(user=user)
 
     payroll = Payroll.objects.first()
@@ -30,6 +42,12 @@ def test_payment(user, payroll_admin):
 
 
 def test_penalty(user, payroll_admin):
+    """
+    Test penalty.
+
+    :param user:
+    :param payroll_admin:
+    """
     penalty = PenaltyFactory.create(user=user)
 
     payroll = Payroll.objects.first()
@@ -40,6 +58,12 @@ def test_penalty(user, payroll_admin):
 
 
 def test_spenttime(user, payroll_admin):
+    """
+    Test spenttime.
+
+    :param user:
+    :param payroll_admin:
+    """
     spenttime = IssueSpentTimeFactory.create(user=user)
 
     payroll = Payroll.objects.first()
@@ -52,5 +76,11 @@ def test_spenttime(user, payroll_admin):
 
 
 def test_payroll(user, payroll_admin):
+    """
+    Test payroll.
+
+    :param user:
+    :param payroll_admin:
+    """
     payroll = Payroll.objects.create(user=user, created_by=user)
     assert payroll_admin.inheritance(payroll) is None

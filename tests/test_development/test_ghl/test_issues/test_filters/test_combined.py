@@ -8,6 +8,11 @@ from tests.test_development.factories import IssueFactory
 
 
 def test_filter_by_due_date_and_state(user):
+    """
+    Test filter by due date and state.
+
+    :param user:
+    """
     issue = IssueFactory.create(
         user=user, state=IssueState.OPENED, due_date=datetime.now(),
     )

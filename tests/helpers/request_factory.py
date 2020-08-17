@@ -53,5 +53,12 @@ class RequestFactory(DjangoRequestFactory):
         return request
 
     def _auth_if_need(self, request: HttpRequest) -> None:
+        """
+        Auth if need.
+
+        :param request:
+        :type request: HttpRequest
+        :rtype: None
+        """
         request.user = self._user or AnonymousUser()
         request.auth = self._token

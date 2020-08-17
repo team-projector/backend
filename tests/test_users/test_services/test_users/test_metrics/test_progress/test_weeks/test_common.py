@@ -19,6 +19,11 @@ from tests.test_users.test_services.test_users.test_metrics.test_progress.test_w
 
 
 def test_simple(user):
+    """
+    Test simple.
+
+    :param user:
+    """
     monday = begin_of_week(timezone.now().date())
 
     issue = IssueFactory.create(
@@ -72,6 +77,11 @@ def test_simple(user):
 
 
 def test_efficiency_more100(user):
+    """
+    Test efficiency more100.
+
+    :param user:
+    """
     monday = begin_of_week(timezone.now().date())
     issue = IssueFactory.create(
         user=user,
@@ -126,6 +136,11 @@ def test_efficiency_more100(user):
 
 
 def test_efficiency_less100(user):
+    """
+    Test efficiency less100.
+
+    :param user:
+    """
     monday = begin_of_week(timezone.now().date())
     issue = IssueFactory.create(
         user=user,
@@ -180,6 +195,11 @@ def test_efficiency_less100(user):
 
 
 def test_efficiency_zero_estimate(user):
+    """
+    Test efficiency zero estimate.
+
+    :param user:
+    """
     monday = begin_of_week(timezone.now().date())
     issue = IssueFactory.create(
         user=user,
@@ -232,6 +252,11 @@ def test_efficiency_zero_estimate(user):
 
 
 def test_efficiency_zero_spend(user):
+    """
+    Test efficiency zero spend.
+
+    :param user:
+    """
     monday = begin_of_week(timezone.now().date())
     IssueFactory.create(
         user=user,
@@ -255,6 +280,11 @@ def test_efficiency_zero_spend(user):
 
 
 def test_many_weeks(user):
+    """
+    Test many weeks.
+
+    :param user:
+    """
     monday = begin_of_week(timezone.now().date())
     issue = IssueFactory.create(
         user=user,
@@ -310,6 +340,11 @@ def test_many_weeks(user):
 
 
 def test_not_in_range(user):
+    """
+    Test not in range.
+
+    :param user:
+    """
     monday = begin_of_week(timezone.now().date())
     issue = IssueFactory.create(
         user=user,
@@ -362,6 +397,11 @@ def test_not_in_range(user):
 
 
 def test_another_user(user):
+    """
+    Test another user.
+
+    :param user:
+    """
     monday = begin_of_week(timezone.now().date())
     issue = IssueFactory.create(
         user=user,
@@ -416,6 +456,11 @@ def test_another_user(user):
 
 
 def test_many_issues(user):
+    """
+    Test many issues.
+
+    :param user:
+    """
     monday = begin_of_week(datetime.now().date())
     issue = IssueFactory.create(
         user=user,

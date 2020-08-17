@@ -23,6 +23,12 @@ from apps.development.services.note.gl.parsers.base import parse_spend
     ],
 )
 def test_parse(spent, expected):
+    """
+    Test parse.
+
+    :param spent:
+    :param expected:
+    """
     expected_secs = expected.total_seconds()
 
     assert parse_spend(spent) == expected_secs, "{0} = {1} secs".format(

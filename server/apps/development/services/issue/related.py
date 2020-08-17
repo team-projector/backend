@@ -28,11 +28,24 @@ def get_related_issues(issue: Issue) -> QuerySet:
 
 
 def _add_alternative_urls(links) -> List[str]:
+    """
+    Add alternative urls.
+
+    :param links:
+    :rtype: List[str]
+    """
     alt_links = [_get_alternative_link(link) for link in links]
     return [*links, *alt_links]
 
 
 def _get_alternative_link(link: str) -> str:
+    """
+    Get alternative link.
+
+    :param link:
+    :type link: str
+    :rtype: str
+    """
     parsed = urlparse(link)
     web_url_path = "/".join(parsed.path.split("/")[:-1])
 

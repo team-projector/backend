@@ -6,6 +6,12 @@ from tests.test_payroll.factories import WorkBreakFactory
 
 
 def test_approve_by_teamlead(team_leader, team_developer):
+    """
+    Test approve by teamlead.
+
+    :param team_leader:
+    :param team_developer:
+    """
     work_break = WorkBreakFactory.create(user=team_developer)
 
     work_break_service.Manager(work_break).approve(approved_by=team_leader)
@@ -17,6 +23,12 @@ def test_approve_by_teamlead(team_leader, team_developer):
 
 
 def test_decline_by_teamlead(team_leader, team_developer):
+    """
+    Test decline by teamlead.
+
+    :param team_leader:
+    :param team_developer:
+    """
     work_break = WorkBreakFactory.create(user=team_developer)
 
     work_break_service.Manager(work_break).decline(

@@ -10,6 +10,11 @@ from tests.test_payroll.factories import IssueSpentTimeFactory
 
 
 def test_owner(user):
+    """
+    Test owner.
+
+    :param user:
+    """
     issue = IssueFactory.create()
     merge_request = MergeRequestFactory.create()
 

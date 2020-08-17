@@ -12,6 +12,11 @@ from tests.test_users.factories.user import UserFactory
 
 
 def test_counts(user):
+    """
+    Test counts.
+
+    :param user:
+    """
     IssueFactory.create_batch(
         5,
         user=user,
@@ -33,6 +38,11 @@ def test_counts(user):
 
 
 def test_problems(user):
+    """
+    Test problems.
+
+    :param user:
+    """
     IssueFactory.create_batch(4, user=user, total_time_spent=0)
     IssueFactory.create(
         user=user, total_time_spent=0, due_date=datetime.now(),

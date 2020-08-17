@@ -2,6 +2,13 @@
 
 
 def check_group(group, gl_group, parent=None):  # noqa: WPS218
+    """
+    Check group.
+
+    :param group:
+    :param gl_group:
+    :param parent:
+    """
     assert group.gl_id == gl_group["id"]
     assert group.gl_url == gl_group["web_url"]
     assert group.gl_avatar == gl_group["avatar_url"]
@@ -11,6 +18,12 @@ def check_group(group, gl_group, parent=None):  # noqa: WPS218
 
 
 def check_issue(issue, gl_issue):  # noqa: WPS218
+    """
+    Check issue.
+
+    :param issue:
+    :param gl_issue:
+    """
     assert issue.gl_id == gl_issue["id"]
     assert issue.gl_iid == gl_issue["iid"]
     assert issue.gl_url == gl_issue["web_url"]
@@ -21,6 +34,13 @@ def check_issue(issue, gl_issue):  # noqa: WPS218
 
 
 def check_milestone(milestone, gl_milestone, owner):  # noqa: WPS218
+    """
+    Check milestone.
+
+    :param milestone:
+    :param gl_milestone:
+    :param owner:
+    """
     assert milestone.gl_id == gl_milestone["id"]
     assert milestone.gl_iid == gl_milestone["iid"]
     assert milestone.gl_url == gl_milestone["web_url"]
@@ -35,6 +55,12 @@ def check_milestone(milestone, gl_milestone, owner):  # noqa: WPS218
 
 
 def check_merge_request(merge_request, gl_merge_request):  # noqa: WPS218
+    """
+    Check merge request.
+
+    :param merge_request:
+    :param gl_merge_request:
+    """
     assert merge_request.gl_id == gl_merge_request["id"]
     assert merge_request.gl_iid == gl_merge_request["iid"]
     assert merge_request.gl_url == gl_merge_request["web_url"]
@@ -45,6 +71,13 @@ def check_merge_request(merge_request, gl_merge_request):  # noqa: WPS218
 
 
 def check_project(project, gl_project, group=None):  # noqa: WPS218
+    """
+    Check project.
+
+    :param project:
+    :param gl_project:
+    :param group:
+    """
     assert project.gl_id == gl_project["id"]
     assert project.gl_url == gl_project["web_url"]
     assert project.gl_avatar == gl_project["avatar_url"]
@@ -54,6 +87,12 @@ def check_project(project, gl_project, group=None):  # noqa: WPS218
 
 
 def check_user(user, gl_user):
+    """
+    Check user.
+
+    :param user:
+    :param gl_user:
+    """
     assert user.login == gl_user["username"]
     assert user.email == gl_user["public_email"]
     assert user.name == gl_user["name"]

@@ -15,23 +15,57 @@ from apps.users.services.token.create import create_user_token
 
 @pytest.fixture()
 def auth() -> TokenAuthentication:
+    """
+    Auth.
+
+    :rtype: TokenAuthentication
+    """
     return TokenAuthentication()
 
 
 @pytest.fixture()
 def user_token(user: User) -> Token:
+    """
+    User token.
+
+    :param user:
+    :type user: User
+    :rtype: Token
+    """
     return create_user_token(user)
 
 
 def set_http_auth_header(request: HttpRequest, token: Token) -> None:
+    """
+    Set http auth header.
+
+    :param request:
+    :type request: HttpRequest
+    :param token:
+    :type token: Token
+    :rtype: None
+    """
     request.META.update(HTTP_AUTHORIZATION="Bearer {0}".format(token.key))
 
 
 def test_fail(rf, auth):
+    """
+    Test fail.
+
+    :param rf:
+    :param auth:
+    """
     assert auth.authenticate(rf.get("/")) is None
 
 
 def test_success(rf, auth, user_token):
+    """
+    Test success.
+
+    :param rf:
+    :param auth:
+    :param user_token:
+    """
     request = rf.get("/")
     set_http_auth_header(request, user_token)
 
@@ -39,6 +73,13 @@ def test_success(rf, auth, user_token):
 
 
 def test_expired_token(rf, auth, user_token):
+    """
+    Test expired token.
+
+    :param rf:
+    :param auth:
+    :param user_token:
+    """
     user_token.created = timezone.now() - timedelta(
         minutes=settings.TOKEN_EXPIRE_PERIOD + 60,
     )
@@ -52,6 +93,13 @@ def test_expired_token(rf, auth, user_token):
 
 
 def test_invalid_token(rf, auth, user_token):
+    """
+    Test invalid token.
+
+    :param rf:
+    :param auth:
+    :param user_token:
+    """
     user_token.key = "{0}123456".format(user_token.key)
 
     request = rf.get("/")

@@ -32,6 +32,13 @@ class TeamRolesFilter(django_filters.CharFilter):
         )
 
     def _parse_roles(self, roles: str) -> List[str]:
+        """
+        Parse roles.
+
+        :param roles:
+        :type roles: str
+        :rtype: List[str]
+        """
         if not roles:
             return []
 

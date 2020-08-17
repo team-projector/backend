@@ -24,12 +24,23 @@ calculator = UserMetricsProvider
 
 @pytest.fixture()
 def user(db):
+    """
+    User.
+
+    :param db:
+    """
     yield UserFactory.create(
         login="user", hour_rate=100, tax_rate=15,
     )
 
 
 def test_issues_opened_count(user, ghl_auth_mock_info):
+    """
+    Test issues opened count.
+
+    :param user:
+    :param ghl_auth_mock_info:
+    """
     IssueFactory.create_batch(5, user=user)
 
     expected = metrics.issues_opened_count_resolver(None, ghl_auth_mock_info)
@@ -37,6 +48,12 @@ def test_issues_opened_count(user, ghl_auth_mock_info):
 
 
 def test_mr_opened_count(user, ghl_auth_mock_info):
+    """
+    Test mr opened count.
+
+    :param user:
+    :param ghl_auth_mock_info:
+    """
     MergeRequestFactory.create_batch(5, user=user)
 
     expected = metrics.mr_opened_count_resolver(None, ghl_auth_mock_info)
@@ -44,6 +61,12 @@ def test_mr_opened_count(user, ghl_auth_mock_info):
 
 
 def test_issues_opened_count_exists_closed(user, ghl_auth_mock_info):
+    """
+    Test issues opened count exists closed.
+
+    :param user:
+    :param ghl_auth_mock_info:
+    """
     IssueFactory.create_batch(5, user=user)
     IssueFactory.create_batch(5, user=user, state=IssueState.CLOSED)
 
@@ -52,6 +75,12 @@ def test_issues_opened_count_exists_closed(user, ghl_auth_mock_info):
 
 
 def test_mr_opened_count_exists_closed(user, ghl_auth_mock_info):
+    """
+    Test mr opened count exists closed.
+
+    :param user:
+    :param ghl_auth_mock_info:
+    """
     MergeRequestFactory.create_batch(2, user=user)
     MergeRequestFactory.create_batch(5, user=user, state=IssueState.CLOSED)
 
@@ -60,6 +89,12 @@ def test_mr_opened_count_exists_closed(user, ghl_auth_mock_info):
 
 
 def test_issues_opened_count_another_user(user, ghl_auth_mock_info):
+    """
+    Test issues opened count another user.
+
+    :param user:
+    :param ghl_auth_mock_info:
+    """
     IssueFactory.create_batch(2, user=user)
     IssueFactory.create_batch(5, user=UserFactory.create())
 
@@ -68,6 +103,12 @@ def test_issues_opened_count_another_user(user, ghl_auth_mock_info):
 
 
 def test_mr_opened_count_another_user(user, ghl_auth_mock_info):
+    """
+    Test mr opened count another user.
+
+    :param user:
+    :param ghl_auth_mock_info:
+    """
     MergeRequestFactory.create_batch(2, user=user)
     MergeRequestFactory.create_batch(5, user=UserFactory.create())
 
@@ -76,6 +117,11 @@ def test_mr_opened_count_another_user(user, ghl_auth_mock_info):
 
 
 def test_payroll_opened(user):
+    """
+    Test payroll opened.
+
+    :param user:
+    """
     issue = IssueFactory.create(state=IssueState.OPENED)
     mr = MergeRequestFactory.create(state=MergeRequestState.OPENED)
 
@@ -132,6 +178,11 @@ def test_payroll_opened(user):
 
 
 def test_payroll_opened_has_salary(user):
+    """
+    Test payroll opened has salary.
+
+    :param user:
+    """
     issue = IssueFactory.create(state=IssueState.OPENED)
     mr = MergeRequestFactory.create(state=MergeRequestState.OPENED)
 
@@ -195,6 +246,11 @@ def test_payroll_opened_has_salary(user):
 
 
 def test_payroll_opened_has_closed(user):
+    """
+    Test payroll opened has closed.
+
+    :param user:
+    """
     issue = IssueFactory.create(state=IssueState.CLOSED)
 
     IssueSpentTimeFactory.create(
@@ -244,6 +300,11 @@ def test_payroll_opened_has_closed(user):
 
 
 def test_payroll_opened_another_user(user):
+    """
+    Test payroll opened another user.
+
+    :param user:
+    """
     issue = IssueFactory.create(state=IssueState.OPENED)
 
     another_user = UserFactory.create()
@@ -289,6 +350,11 @@ def test_payroll_opened_another_user(user):
 
 
 def test_payroll_closed(user):
+    """
+    Test payroll closed.
+
+    :param user:
+    """
     issue = IssueFactory.create(state=IssueState.CLOSED)
 
     IssueSpentTimeFactory.create(
@@ -332,6 +398,11 @@ def test_payroll_closed(user):
 
 
 def test_payroll_closed_has_salary(user):
+    """
+    Test payroll closed has salary.
+
+    :param user:
+    """
     issue = IssueFactory.create(state=IssueState.CLOSED)
 
     IssueSpentTimeFactory.create(
@@ -378,6 +449,11 @@ def test_payroll_closed_has_salary(user):
 
 
 def test_payroll_opened_has_opened(user):
+    """
+    Test payroll opened has opened.
+
+    :param user:
+    """
     issue = IssueFactory.create(state=IssueState.OPENED)
 
     IssueSpentTimeFactory.create(
@@ -431,6 +507,11 @@ def test_payroll_opened_has_opened(user):
 
 
 def test_payroll_closed_another_user(user):
+    """
+    Test payroll closed another user.
+
+    :param user:
+    """
     issue = IssueFactory.create(state=IssueState.CLOSED)
     mr = MergeRequestFactory.create(state=IssueState.CLOSED)
 
@@ -485,6 +566,12 @@ def test_payroll_closed_another_user(user):
 
 
 def test_last_salary_date(user, ghl_auth_mock_info):
+    """
+    Test last salary date.
+
+    :param user:
+    :param ghl_auth_mock_info:
+    """
     SalaryFactory(
         user=user,
         period_to=timezone.now() - timezone.timedelta(days=30),
@@ -499,6 +586,11 @@ def test_last_salary_date(user, ghl_auth_mock_info):
 
 
 def test_bonus(user):
+    """
+    Test bonus.
+
+    :param user:
+    """
     bonuses = BonusFactory.create_batch(10, user=user)
 
     metrics = calculator().get_metrics(user)
@@ -509,6 +601,11 @@ def test_bonus(user):
 
 
 def test_bonus_have_salaries(user):
+    """
+    Test bonus have salaries.
+
+    :param user:
+    """
     bonuses = BonusFactory.create_batch(10, user=user)
     BonusFactory.create_batch(
         5, user=user, salary=SalaryFactory.create(user=user),
@@ -522,6 +619,11 @@ def test_bonus_have_salaries(user):
 
 
 def test_bonus_another_user(user):
+    """
+    Test bonus another user.
+
+    :param user:
+    """
     bonuses = BonusFactory.create_batch(10, user=user)
 
     BonusFactory.create_batch(5, user=UserFactory.create())
@@ -534,6 +636,11 @@ def test_bonus_another_user(user):
 
 
 def test_penalty(user):
+    """
+    Test penalty.
+
+    :param user:
+    """
     penalties = PenaltyFactory.create_batch(10, user=user)
 
     metrics = calculator().get_metrics(user)
@@ -543,6 +650,11 @@ def test_penalty(user):
 
 
 def test_penalty_have_salaries(user):
+    """
+    Test penalty have salaries.
+
+    :param user:
+    """
     penalties = PenaltyFactory.create_batch(10, user=user)
     PenaltyFactory.create_batch(
         5, user=user, salary=SalaryFactory.create(user=user),
@@ -555,6 +667,11 @@ def test_penalty_have_salaries(user):
 
 
 def test_penalty_another_user(user):
+    """
+    Test penalty another user.
+
+    :param user:
+    """
     penalties = PenaltyFactory.create_batch(10, user=user)
 
     PenaltyFactory.create_batch(5, user=UserFactory.create())
@@ -566,6 +683,12 @@ def test_penalty_another_user(user):
 
 
 def test_paid_work_breaks_days(user, ghl_auth_mock_info):
+    """
+    Test paid work breaks days.
+
+    :param user:
+    :param ghl_auth_mock_info:
+    """
     now = timezone.now()
     WorkBreakFactory(
         user=user,
@@ -580,6 +703,12 @@ def test_paid_work_breaks_days(user, ghl_auth_mock_info):
 
 
 def test_paid_work_breaks_days_not_paid_not_count(user, ghl_auth_mock_info):
+    """
+    Test paid work breaks days not paid not count.
+
+    :param user:
+    :param ghl_auth_mock_info:
+    """
     now = timezone.now()
     WorkBreakFactory(
         user=user,
@@ -596,6 +725,12 @@ def test_paid_work_breaks_days_not_paid_not_count(user, ghl_auth_mock_info):
 def test_paid_work_breaks_days_not_this_year(
     user, ghl_auth_mock_info,
 ):
+    """
+    Test paid work breaks days not this year.
+
+    :param user:
+    :param ghl_auth_mock_info:
+    """
     now = timezone.now()
     WorkBreakFactory(
         user=user,
@@ -610,6 +745,12 @@ def test_paid_work_breaks_days_not_this_year(
 
 
 def test_paid_work_breaks_lower_boundary_of_year(user, ghl_auth_mock_info):
+    """
+    Test paid work breaks lower boundary of year.
+
+    :param user:
+    :param ghl_auth_mock_info:
+    """
     now = timezone.now()
     WorkBreakFactory(
         user=user,
@@ -624,6 +765,12 @@ def test_paid_work_breaks_lower_boundary_of_year(user, ghl_auth_mock_info):
 
 
 def test_paid_work_breaks_upper_boundary_of_year(user, ghl_auth_mock_info):
+    """
+    Test paid work breaks upper boundary of year.
+
+    :param user:
+    :param ghl_auth_mock_info:
+    """
     now = timezone.now()
     WorkBreakFactory(
         user=user,
@@ -638,6 +785,11 @@ def test_paid_work_breaks_upper_boundary_of_year(user, ghl_auth_mock_info):
 
 
 def test_complex(user):
+    """
+    Test complex.
+
+    :param user:
+    """
     BonusFactory.create_batch(10, sum=100, user=user)
     PenaltyFactory.create_batch(10, sum=50, user=user)
 
@@ -699,6 +851,13 @@ def test_complex(user):
 def _check_payroll(
     metrics, payroll_opened=0, payroll_closed=0,
 ):
+    """
+    Check payroll.
+
+    :param metrics:
+    :param payroll_opened:
+    :param payroll_closed:
+    """
     assert payroll_opened == metrics["payroll_opened"]
     assert payroll_closed == metrics["payroll_closed"]
     assert payroll_opened + payroll_closed == metrics["payroll"]
@@ -707,6 +866,14 @@ def _check_payroll(
 def _check_taxes(
     metrics, taxes_opened=0, taxes_closed=0, taxes=0,
 ):
+    """
+    Check taxes.
+
+    :param metrics:
+    :param taxes_opened:
+    :param taxes_closed:
+    :param taxes:
+    """
     assert taxes_opened == metrics["taxes_opened"]
     assert taxes_closed == metrics["taxes_closed"]
     assert taxes == metrics["taxes"]
@@ -719,6 +886,15 @@ def _check_spent(
     mr_closed_spent=0.0,
     mr_opened_spent=0.0,
 ):
+    """
+    Check spent.
+
+    :param metrics:
+    :param issues_closed_spent:
+    :param issues_opened_spent:
+    :param mr_closed_spent:
+    :param mr_opened_spent:
+    """
     assert issues_closed_spent == metrics["issues"]["closed_spent"]
     assert issues_opened_spent == metrics["issues"]["opened_spent"]
 

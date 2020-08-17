@@ -12,6 +12,12 @@ from tests.test_payroll.test_services.test_spent_times.test_summary import (
 
 
 def test_resolver(user, ghl_auth_mock_info):
+    """
+    Test resolver.
+
+    :param user:
+    :param ghl_auth_mock_info:
+    """
     IssueSpentTimeFactory.create(
         user=user,
         base=IssueFactory.create(user=user),

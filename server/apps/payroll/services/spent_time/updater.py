@@ -44,6 +44,13 @@ def adjust_spent_times(work_item: Union[Issue, MergeRequest]) -> None:
 def _get_notes_for_processing(
     work_item: Union[Issue, MergeRequest],
 ) -> Iterable[Note]:
+    """
+    Get notes for processing.
+
+    :param work_item:
+    :type work_item: Union[Issue, MergeRequest]
+    :rtype: Iterable[Note]
+    """
     notes: List[Note] = []
 
     for note in work_item.notes.all().order_by("created_at"):

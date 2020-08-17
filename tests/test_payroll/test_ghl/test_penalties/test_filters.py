@@ -7,6 +7,11 @@ from tests.test_users.factories.user import UserFactory
 
 
 def test_penalties_filter_by_user(user):
+    """
+    Test penalties filter by user.
+
+    :param user:
+    """
     PenaltyFactory.create_batch(size=3, user=user)
 
     user2 = UserFactory.create()
@@ -21,6 +26,11 @@ def test_penalties_filter_by_user(user):
 
 
 def test_penalties_filter_by_salary(user):
+    """
+    Test penalties filter by salary.
+
+    :param user:
+    """
     salary = SalaryFactory(user=user)
     PenaltyFactory.create_batch(size=3, user=user)
     penalties_salary2 = PenaltyFactory.create_batch(
@@ -36,6 +46,11 @@ def test_penalties_filter_by_salary(user):
 
 
 def test_salary_is_null(user):
+    """
+    Test salary is null.
+
+    :param user:
+    """
     PenaltyFactory.create_batch(size=2, user=user, salary=None)
 
     queryset = PenaltyFilterSet(
@@ -46,6 +61,11 @@ def test_salary_is_null(user):
 
 
 def test_salary_is_null_empty(user):
+    """
+    Test salary is null empty.
+
+    :param user:
+    """
     PenaltyFactory.create_batch(
         size=2, user=user, salary=SalaryFactory.create(user=user),
     )

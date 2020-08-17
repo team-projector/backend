@@ -9,6 +9,12 @@ from tests.test_users.factories.user import UserFactory
 
 
 def test_send_notification(admin_rf, salary_admin):
+    """
+    Test send notification.
+
+    :param admin_rf:
+    :param salary_admin:
+    """
     user = UserFactory.create(email="test1@mail.com")
 
     salary = SalaryFactory.create(user=user, payed=False)
@@ -36,6 +42,12 @@ def test_send_notification(admin_rf, salary_admin):
 
 
 def test_payed_changed_to_false(admin_rf, salary_admin):
+    """
+    Test payed changed to false.
+
+    :param admin_rf:
+    :param salary_admin:
+    """
     user = UserFactory.create(email="test@mail.com")
 
     salary = SalaryFactory.create(user=user, payed=True)
@@ -57,6 +69,12 @@ def test_payed_changed_to_false(admin_rf, salary_admin):
 
 
 def test_user_without_email_but_payed(admin_rf, salary_admin):
+    """
+    Test user without email but payed.
+
+    :param admin_rf:
+    :param salary_admin:
+    """
     user = UserFactory.create()
     salary = SalaryFactory.create(user=user, payed=False)
     salary.payed = True
@@ -77,6 +95,12 @@ def test_user_without_email_but_payed(admin_rf, salary_admin):
 
 
 def test_another_field_changed(admin_rf, salary_admin):
+    """
+    Test another field changed.
+
+    :param admin_rf:
+    :param salary_admin:
+    """
     user = UserFactory.create(email="test@mail.com")
     salary = SalaryFactory.create(user=user, payed=False)
     salary.sum = 10.0  # noqa: WPS125, A003, A002
@@ -97,6 +121,12 @@ def test_another_field_changed(admin_rf, salary_admin):
 
 
 def test_another_field_changed_and_payed(admin_rf, salary_admin):
+    """
+    Test another field changed and payed.
+
+    :param admin_rf:
+    :param salary_admin:
+    """
     user = UserFactory.create(email="test@mail.com")
     salary = SalaryFactory.create(user=user, payed=False)
     salary.sum = 10.0  # noqa: WPS125, A003, A002

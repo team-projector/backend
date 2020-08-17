@@ -5,6 +5,14 @@ from tests.test_development.factories.gitlab import GlIssueFactory
 
 
 def init_issue(project, gl_project, gl_kwargs=None, model_kwargs=None):
+    """
+    Init issue.
+
+    :param project:
+    :param gl_project:
+    :param gl_kwargs:
+    :param model_kwargs:
+    """
     gl_kwargs = gl_kwargs or {}
     model_kwargs = model_kwargs or {}
 

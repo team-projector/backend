@@ -10,6 +10,11 @@ from tests.test_development.factories import (
 
 
 def test_by_description(db):
+    """
+    Test by description.
+
+    :param db:
+    """
     ticket = TicketFactory.create()
     issue = IssueFactory.create(
         description="ticket https://teamprojector.com/en/manager/milestones/1;ticket={0}".format(  # noqa: E501
@@ -23,6 +28,11 @@ def test_by_description(db):
 
 
 def test_by_notes(db):
+    """
+    Test by notes.
+
+    :param db:
+    """
     ticket = TicketFactory.create()
     issue = IssueFactory.create(description="")
 
@@ -38,6 +48,11 @@ def test_by_notes(db):
 
 
 def test_ticket_not_exists(db):
+    """
+    Test ticket not exists.
+
+    :param db:
+    """
     ticket = TicketFactory.create()
     issue = IssueFactory.create(description="")
 

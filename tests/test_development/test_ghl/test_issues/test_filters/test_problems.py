@@ -8,6 +8,11 @@ from tests.test_development.factories import IssueFactory
 
 
 def test_no_filter(user):
+    """
+    Test no filter.
+
+    :param user:
+    """
     IssueFactory.create_batch(2, user=user)
     IssueFactory.create_batch(
         5, user=user, due_date=datetime.now().date(), time_estimate=1000,
@@ -19,6 +24,11 @@ def test_no_filter(user):
 
 
 def test_has_problems(user):
+    """
+    Test has problems.
+
+    :param user:
+    """
     issues = IssueFactory.create_batch(2, user=user)
     IssueFactory.create_batch(
         5, user=user, due_date=datetime.now().date(), time_estimate=1000,
@@ -33,6 +43,11 @@ def test_has_problems(user):
 
 
 def test_no_problems(user):
+    """
+    Test no problems.
+
+    :param user:
+    """
     issues = IssueFactory.create_batch(2, user=user)
     IssueFactory.create_batch(
         5, user=user, due_date=datetime.now().date(), time_estimate=1000,
