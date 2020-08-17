@@ -954,7 +954,7 @@ description = "A collection of tools for the django administration interface"
 name = "jnt-django-admin-tools"
 optional = false
 python-versions = ">=3.6,<4.0"
-version = "0.9.8"
+version = "0.9.9"
 
 [package.dependencies]
 django = ">=2"
@@ -2288,8 +2288,8 @@ jaeger-client = [
     {file = "jaeger-client-4.3.0.tar.gz", hash = "sha256:7f72c341a21e3dcbc8498d1ed17c93e0eec71c5becc5c9333c4293793d4e6433"},
 ]
 jnt-django-admin-tools = [
-    {file = "jnt-django-admin-tools-0.9.8.tar.gz", hash = "sha256:b25981d7df8531cece33bb526c72387ea480b2b54c364f8f5b4b9d061a064896"},
-    {file = "jnt_django_admin_tools-0.9.8-py3-none-any.whl", hash = "sha256:9196f28e897a4fb18ab454d57b793d3ebbe9cccc4b491ac4e208244f5c47e30c"},
+    {file = "jnt-django-admin-tools-0.9.9.tar.gz", hash = "sha256:373cbb533dcda7a7824d499a746fb6cc416ec7ef982d78ee509084339bd38606"},
+    {file = "jnt_django_admin_tools-0.9.9-py3-none-any.whl", hash = "sha256:e5a97af27d63ecd5865ff726d9e90a4cf7829f382e033cd1a5b98b3d9fc1ccb2"},
 ]
 jnt-django-graphene-toolbox = [
     {file = "jnt-django-graphene-toolbox-0.1.11.tar.gz", hash = "sha256:f06efb81b4f70741221166d02dae5aceebdbe93e738b0aa561017ffd997abe78"},
