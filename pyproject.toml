@@ -39,6 +39,7 @@ fluent-logger = "^0.9.6"
 
 [tool.poetry.dev-dependencies]
 pytest = "*"
+pytest-forked = "1.2.0"
 pytest-cov = "*"
 pytest-django = "*"
 pytest-xdist = "*"

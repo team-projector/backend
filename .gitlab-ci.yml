@@ -48,7 +48,7 @@ test:
     - postgres:12.1
   script:
     - cd /app
-    - pytest -n 1 --dist=loadscope --cov=server --cov-report=html:coverage_html
+    - pytest -n auto --dist=loadscope --cov=server --cov-report=html:coverage_html
     - mkdir $CI_PROJECT_DIR/coverage
     - coverage report -m > $CI_PROJECT_DIR/coverage/report.log
     - cat $CI_PROJECT_DIR/coverage/report.log | tail -n 1
