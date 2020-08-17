@@ -60,6 +60,7 @@ FROM base as test
 RUN apt-get update \
     && apt-get install --no-install-recommends -y \
                       gcc=4:8.3.0-1 \
+                      libc6-dev=2.28-10 \
     && poetry install --no-interaction --no-ansi \
     && apt-get remove --purge -y gcc \
     && apt-get autoremove -y \
