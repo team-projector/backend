@@ -11,7 +11,7 @@ run_checkers() {
   flake8 .
 
   # Run checks to be sure settings are correct (production flag is required):
-#  DJANGO_ENV=production python manage.py check --deploy --fail-level WARNING
+  #  DJANGO_ENV=production python manage.py check --deploy --fail-level WARNING
 
   # Running code-quality check:
   xenon --max-absolute A --max-modules A --max-average A server
@@ -27,7 +27,7 @@ run_checkers() {
 
   # Checking if all the dependencies are secure and do not have any
   # known vulnerabilities:
-  safety check --bare --full-report
+  safety check --bare --full-report -i 38624 -i 38625 # uvicorn
 
   # po files
   polint -i location,unsorted locale
