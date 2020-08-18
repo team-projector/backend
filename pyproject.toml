@@ -38,7 +38,7 @@ sentry-sdk = "^0.14.3"
 fluent-logger = "^0.9.6"
 
 [tool.poetry.dev-dependencies]
-pytest = "*"
+pytest = "5.*" # problem with integrity
 pytest-cov = "*"
 pytest-django = "*"
 pytest-xdist = "*"
