@@ -56,7 +56,6 @@ dennis = "*"
 safety = "*"
 xenon = "*"
 flake8-class-attributes-order = "^0.1.1"
-isort = ">=4.3.5 <5"
 
 [tool.black]
 line-length = 79

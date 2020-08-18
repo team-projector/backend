@@ -917,6 +917,11 @@ optional = false
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
 version = "4.3.21"
 
+[package.dependencies]
+[package.dependencies.toml]
+optional = true
+version = "*"
+
 [package.extras]
 pipfile = ["pipreqs", "requirementslib"]
 pyproject = ["toml"]
@@ -1892,7 +1897,7 @@ idna = ">=2.0"
 multidict = ">=4.0"
 
 [metadata]
-content-hash = "2739eadb33ede8cc30ee391569358cefa83b19d1bedfc66b87dcf95bb542a599"
+content-hash = "5806dd72f7d32335abfceeb4b14b57a8c1ce0129874d75fbc2176df166a0f7ea"
 python-versions = "^3.8"
 
 [metadata.files]
