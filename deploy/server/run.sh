@@ -6,9 +6,9 @@ set -o errexit
 
 nginx
 
-_UWSGI_OPTS="--ini deploy/server/uwsgi.ini"
-if [ "${UWSGI_PROCESSES_AUTO:-}" == "1" ]; then
-  _UWSGI_OPTS="${_UWSGI_OPTS} --processes $(nproc)"
-fi
+WORKER_CLASS="uvicorn.workers.UvicornH11Worker"
+GUNICORN_CONF="deploy/server/gunicorn_conf.py"
+APP_MODULE="server.asgi"
 
-uwsgi $_UWSGI_OPTS
+# Start Gunicorn
+exec gunicorn -k "$WORKER_CLASS" -c "$GUNICORN_CONF" "$APP_MODULE"
