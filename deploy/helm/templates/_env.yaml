@@ -89,11 +89,11 @@
     secretKeyRef:
       name: backend-secrets
       key: slack.token
-- name: DJANGO_SENTRY_DSN
-  valueFrom:
-    secretKeyRef:
-      name: backend-secrets
-      key: sentry.dsn
+#- name: DJANGO_SENTRY_DSN
+#  valueFrom:
+#    secretKeyRef:
+#      name: backend-secrets
+#      key: sentry.dsn
 - name: DJANGO_FLUENTD_LOGGER_HOST
   valueFrom:
     configMapKeyRef:
