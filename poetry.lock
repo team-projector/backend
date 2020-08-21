@@ -93,13 +93,12 @@ description = "Classes Without Boilerplate"
 name = "attrs"
 optional = false
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
-version = "19.3.0"
+version = "20.1.0"
 
 [package.extras]
-azure-pipelines = ["coverage", "hypothesis", "pympler", "pytest (>=4.3.0)", "six", "zope.interface", "pytest-azurepipelines"]
-dev = ["coverage", "hypothesis", "pympler", "pytest (>=4.3.0)", "six", "zope.interface", "sphinx", "pre-commit"]
-docs = ["sphinx", "zope.interface"]
-tests = ["coverage", "hypothesis", "pympler", "pytest (>=4.3.0)", "six", "zope.interface"]
+dev = ["coverage (>=5.0.2)", "hypothesis", "pympler", "pytest (>=4.3.0)", "six", "zope.interface", "sphinx", "sphinx-rtd-theme", "pre-commit"]
+docs = ["sphinx", "sphinx-rtd-theme", "zope.interface"]
+tests = ["coverage (>=5.0.2)", "hypothesis", "pympler", "pytest (>=4.3.0)", "six", "zope.interface"]
 
 [[package]]
 category = "dev"
@@ -316,10 +315,10 @@ description = "A high-level Python Web framework that encourages rapid developme
 name = "django"
 optional = false
 python-versions = ">=3.6"
-version = "3.0.9"
+version = "3.1"
 
 [package.dependencies]
-asgiref = ">=3.2,<4.0"
+asgiref = ">=3.2.10,<3.3.0"
 pytz = "*"
 sqlparse = ">=0.2.2"
 
@@ -988,7 +987,7 @@ description = "A collection of tools for the django administration interface"
 name = "jnt-django-admin-tools"
 optional = false
 python-versions = ">=3.6,<4.0"
-version = "0.9.10"
+version = "0.9.11"
 
 [package.dependencies]
 django = ">=2"
@@ -999,7 +998,7 @@ description = ""
 name = "jnt-django-graphene-toolbox"
 optional = false
 python-versions = ">=3.8,<4.0"
-version = "0.1.11"
+version = "0.1.13"
 
 [package.dependencies]
 django-filter = ">=2.3.0,<3.0.0"
@@ -1015,7 +1014,7 @@ description = ""
 name = "jnt-django-toolbox"
 optional = false
 python-versions = ">=3.8,<4.0"
-version = "0.1.19"
+version = "0.1.20"
 
 [package.dependencies]
 dateparser = ">=0.7.6,<0.8.0"
@@ -1953,7 +1952,7 @@ idna = ">=2.0"
 multidict = ">=4.0"
 
 [metadata]
-content-hash = "87d8b124620a7ae0f14a56a78727259e8a599bb08a87425d7e5188fdd28aa66c"
+content-hash = "844ce161588cbfff46f8cafebe512cdb17b6160d3d4054fb9f39738c6832a441"
 python-versions = "^3.8"
 
 [metadata.files]
@@ -2004,8 +2003,8 @@ atomicwrites = [
     {file = "atomicwrites-1.4.0.tar.gz", hash = "sha256:ae70396ad1a434f9c7046fd2dd196fc04b12f9e91ffb859164193be8b6168a7a"},
 ]
 attrs = [
-    {file = "attrs-19.3.0-py2.py3-none-any.whl", hash = "sha256:08a96c641c3a74e44eb59afb61a24f2cb9f4d7188748e76ba4bb5edfa3cb7d1c"},
-    {file = "attrs-19.3.0.tar.gz", hash = "sha256:f7b7ce16570fe9965acd6d30101a28f62fb4a7f9e926b3bbc9b61f8b04247e72"},
+    {file = "attrs-20.1.0-py2.py3-none-any.whl", hash = "sha256:2867b7b9f8326499ab5b0e2d12801fa5c98842d2cbd22b35112ae04bf85b4dff"},
+    {file = "attrs-20.1.0.tar.gz", hash = "sha256:0ef97238856430dcf9228e07f316aefc17e8939fc8507e18c6501b761ef1a42a"},
 ]
 bandit = [
     {file = "bandit-1.6.2-py2.py3-none-any.whl", hash = "sha256:336620e220cf2d3115877685e264477ff9d9abaeb0afe3dc7264f55fa17a3952"},
@@ -2143,8 +2142,8 @@ dennis = [
     {file = "dennis-0.9.tar.gz", hash = "sha256:8c942dd5da7d03c65daebc069c5ee5c7f1374ac9b0c8c89c627caa66fe822604"},
 ]
 django = [
-    {file = "Django-3.0.9-py3-none-any.whl", hash = "sha256:96fbe04e8ba0df289171e7f6970e0ff8b472bf4f909ed9e0e5beccbac7e1dbbe"},
-    {file = "Django-3.0.9.tar.gz", hash = "sha256:c22b4cd8e388f8219dc121f091e53a8701f9f5bca9aa132b5254263cab516215"},
+    {file = "Django-3.1-py3-none-any.whl", hash = "sha256:1a63f5bb6ff4d7c42f62a519edc2adbb37f9b78068a5a862beff858b68e3dc8b"},
+    {file = "Django-3.1.tar.gz", hash = "sha256:2d390268a13c655c97e0e2ede9d117007996db692c1bb93eabebd4fb7ea7012b"},
 ]
 django-activity-stream = []
 django-cors-headers = [
@@ -2355,16 +2354,16 @@ jaeger-client = [
     {file = "jaeger-client-4.3.0.tar.gz", hash = "sha256:7f72c341a21e3dcbc8498d1ed17c93e0eec71c5becc5c9333c4293793d4e6433"},
 ]
 jnt-django-admin-tools = [
-    {file = "jnt-django-admin-tools-0.9.10.tar.gz", hash = "sha256:1bd58a4b7a78c53f2475345516a87268eb891c339a59b6a1f961d04fd31b11e7"},
-    {file = "jnt_django_admin_tools-0.9.10-py3-none-any.whl", hash = "sha256:d79b6bba47a9cf515cb3668fadc54def934b9696ffdeb3feaabbc14ca2a2f53e"},
+    {file = "jnt-django-admin-tools-0.9.11.tar.gz", hash = "sha256:36d4cfb586c9172434cfa7a9d8c126f42302f072b790db1798226f862da24ece"},
+    {file = "jnt_django_admin_tools-0.9.11-py3-none-any.whl", hash = "sha256:d6aa0616ef895aac8236171be6c0551024b838577acfa9cd0ca92fbf4d684fc6"},
 ]
 jnt-django-graphene-toolbox = [
-    {file = "jnt-django-graphene-toolbox-0.1.11.tar.gz", hash = "sha256:f06efb81b4f70741221166d02dae5aceebdbe93e738b0aa561017ffd997abe78"},
-    {file = "jnt_django_graphene_toolbox-0.1.11-py3-none-any.whl", hash = "sha256:fd20f267e1a839e4e7a54da11cd51fb052c0951f6775deb13a6f4827d87277a3"},
+    {file = "jnt-django-graphene-toolbox-0.1.13.tar.gz", hash = "sha256:f47e82b86a9f22f122eae53c226b1add6b0a6be3951fddcf473d19b0674929e1"},
+    {file = "jnt_django_graphene_toolbox-0.1.13-py3-none-any.whl", hash = "sha256:591b80a433334de11b0ceea4669c6185980cc498d0bdf2ecb16b7d76bd9adb35"},
 ]
 jnt-django-toolbox = [
-    {file = "jnt-django-toolbox-0.1.19.tar.gz", hash = "sha256:dfe04e09f424861e87427b9b99c10422b2bcfef41098b22984631e37db3e9fc4"},
-    {file = "jnt_django_toolbox-0.1.19-py3-none-any.whl", hash = "sha256:261c494c9c7df9f84951721efcbc8f3ab161f893698e40bda7f9658e88f3426d"},
+    {file = "jnt-django-toolbox-0.1.20.tar.gz", hash = "sha256:450a4d2c54cdbf4fc6dc889c0382a3a07b78c07a46744ef9dcd25a8efd13630f"},
+    {file = "jnt_django_toolbox-0.1.20-py3-none-any.whl", hash = "sha256:d568d63ee48db53e4addcdc3403f582381306cd9435aa6e345167fc04979da5d"},
 ]
 kombu = [
     {file = "kombu-4.6.11-py2.py3-none-any.whl", hash = "sha256:be48cdffb54a2194d93ad6533d73f69408486483d189fe9f5990ee24255b0e0a"},
