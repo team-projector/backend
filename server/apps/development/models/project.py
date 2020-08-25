@@ -111,4 +111,4 @@ class Project(GitlabEntityMixin):
         if not ret and self.group:
             return load_for_group(self.group)
 
-        return ret or []
+        return ret
