@@ -1,0 +1,49 @@
+query ($user: ID, $dueDate: Date) {
+  issues: issuesSummary(user: $user, dueDate: $dueDate, state: "OPENED") {
+    count
+    problemsCount
+    projects {
+      project {
+        id
+        title
+        fullTitle
+        glUrl
+        milestones(active: true) {
+          edges {
+            node {
+              title
+              dueDate
+              glUrl
+              problems
+              __typename
+            }
+            __typename
+          }
+          __typename
+        }
+        group {
+          title
+          __typename
+        }
+        __typename
+      }
+      issues {
+        remains
+        percentage
+        openedCount
+        __typename
+      }
+      __typename
+    }
+    __typename
+  }
+  mergeRequests: mergeRequestsSummary(user: $user, state: "OPENED") {
+    count
+    __typename
+  }
+  spentTimes: spentTimesSummary(user: $user, date: $dueDate) {
+    spent
+    openedSpent
+    __typename
+  }
+}
