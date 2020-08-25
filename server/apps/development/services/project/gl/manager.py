@@ -36,7 +36,12 @@ class ProjectGlManager:
             return
 
         for gl_project in gl_group.projects.list(all=True):
-            self.update_project(group, gl_project)
+            is_shared = any(
+                shared_group["group_id"] == gl_group.id
+                for shared_group in gl_project.shared_with_groups
+            )
+            if not is_shared:
+                self.update_project(group, gl_project)
 
     def update_project(
         self, group: ProjectGroup, gl_project: gl.Project,
