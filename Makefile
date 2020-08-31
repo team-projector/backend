@@ -18,3 +18,6 @@ docker_local:
 
 docker_stop:
 	@ ./develop/docker_stop.sh
+
+release:
+	@ ./scripts/release.sh
