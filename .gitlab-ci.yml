@@ -58,18 +58,28 @@ test:
     paths:
       - coverage
 
-publish_master:
+.base_publish:
   stage: publish
   dependencies: []
-  services:
-    - docker:dind
-  script:
+  before_script:
     - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN registry.gitlab.com
     - docker pull $DOCKER_IMAGE
-    - docker tag $DOCKER_IMAGE $CI_REGISTRY_IMAGE:master
-    - docker push $CI_REGISTRY_IMAGE:master
+  script:
+    - docker push $TARGET_IMAGE
+
+publish_dev:
+  extends: .base_publish
   only:
     - master
+  variables:
+    TARGET_IMAGE: $DOCKER_IMAGE/unstable:${CI_PIPELINE_ID}
+
+publish_prod:
+  extends: .base_publish
+  only:
+    - tags
+  variables:
+    TARGET_IMAGE: $DOCKER_IMAGE/stable:${CI_PIPELINE_ID}
 
 deploy_master:
   image: junte/helm-deploy:1.3-helm2.16.1
@@ -82,7 +92,7 @@ deploy_master:
   script:
     - helm_deploy
   environment:
-    name: production
+    name: development
     url: $SITE_ADDRESS
   only:
     - master

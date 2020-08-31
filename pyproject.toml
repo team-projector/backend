@@ -48,6 +48,7 @@ flake8 = "*"
 flake8-django = "*"
 flake8-pytest-style = "*"
 flake8-pytest = "*"
+flake8-class-attributes-order = "^0.1.1"
 mypy = "*"
 httpretty = "*"
 wemake-python-styleguide = "*"
@@ -55,7 +56,6 @@ polint = "*"
 dennis = "*"
 safety = "*"
 xenon = "*"
-flake8-class-attributes-order = "^0.1.1"
 
 [tool.black]
 line-length = 79
