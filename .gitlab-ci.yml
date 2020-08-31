@@ -68,21 +68,21 @@ test:
     - docker tag $DOCKER_IMAGE $TARGET_IMAGE
     - docker push $TARGET_IMAGE
 
-publish_dev:
+publish_unstable:
   extends: .base_publish
   only:
     - master
   variables:
     TARGET_IMAGE: $CI_REGISTRY_IMAGE/unstable:${CI_PIPELINE_ID}
 
-publish_prod:
+publish_stable:
   extends: .base_publish
   only:
     - tags
   variables:
     TARGET_IMAGE: $CI_REGISTRY_IMAGE/stable:${CI_PIPELINE_ID}
 
-deploy_master:
+deploy_unstable:
   stage: deploy
   image: junte/helm-deploy:1.8-helm2.16.1
   only:
