@@ -84,7 +84,7 @@ publish_prod:
 
 deploy_master:
   stage: deploy
-  image: junte/helm-deploy:1.6-helm2.16.1
+  image: junte/helm-deploy:1.8-helm2.16.1
   only:
     - master
   dependencies: []
