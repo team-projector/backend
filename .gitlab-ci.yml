@@ -81,7 +81,7 @@ publish_stable:
   only:
     - tags
   variables:
-    TARGET_IMAGE: $CI_REGISTRY_IMAGE/stable:${CI_PIPELINE_ID}
+    TARGET_IMAGE: $CI_REGISTRY_IMAGE/stable:${CI_COMMIT_TAG}
 
 deploy_unstable:
   stage: deploy
