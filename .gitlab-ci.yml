@@ -2,8 +2,8 @@ image: docker:latest
 
 variables:
   DOCKER_CACHE_IMAGE: $CI_REGISTRY_IMAGE/cache
-  DOCKER_IMAGE: $CI_REGISTRY_IMAGE/tmp/${CI_PIPELINE_IID}_${CI_COMMIT_SHA}
-  DOCKER_TEST_IMAGE: $CI_REGISTRY_IMAGE/tmp/test_${CI_PIPELINE_IID}_${CI_COMMIT_SHA}
+  DOCKER_IMAGE: $CI_REGISTRY_IMAGE/tmp:${CI_PIPELINE_IID}_${CI_COMMIT_SHA}
+  DOCKER_TEST_IMAGE: $CI_REGISTRY_IMAGE/tmp:${CI_PIPELINE_IID}_${CI_COMMIT_SHA}_test
   GIT_STRATEGY: none
 
 stages:
@@ -25,7 +25,7 @@ lint_dockerfile:
 build:
   stage: build
   variables:
-    GIT_DEPTH: 5
+    GIT_DEPTH: 1
     GIT_STRATEGY: fetch
   services:
     - docker:dind
