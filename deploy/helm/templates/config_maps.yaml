@@ -3,9 +3,9 @@ kind: ConfigMap
 metadata:
   name: backend-config
 data:
-  gitlab_check_webhooks: {{ .Values.gitlab_check_webhooks | quote}}
   env: {{ .Values.env }}
   email.host: {{ .Values.email.host }}
   email.port: {{ .Values.email.port | quote }}
   email.from_email: {{ .Values.email.from_email }}
-  logging.fluentd_host: {{ .Values.logging.fluentd_host }}
+  fluentd.host: {{ .Values.fluentd.host }}
+  sentry.dsn: {{ .Values.sentry.dsn }}
