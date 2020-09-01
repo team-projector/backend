@@ -32,7 +32,7 @@ class ProjectWebhookManager:
 
     def check_project_webhooks(self, project: Project) -> None:
         """Check whether webhooks for project are needed."""
-        if not config.GITLAB_CHECK_WEBHOOKS:
+        if not config.GITLAB_ADD_WEBHOOKS:
             return
 
         gl_project = self.project_provider.get_gl_project(project)
