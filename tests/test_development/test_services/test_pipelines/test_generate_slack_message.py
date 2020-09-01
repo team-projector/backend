@@ -2,7 +2,7 @@
 
 import json
 
-from django.conf import settings
+from constance import config
 from django.template.loader import render_to_string
 
 from apps.core.services.html import unescape_text
@@ -16,7 +16,7 @@ def test_generate_message(assets):
     rendered = render_to_string(
         "slack/pipeline.json",
         {
-            "gitlab_address": settings.GITLAB_ADDRESS,
+            "gitlab_address": config.GITLAB_ADDRESS,
             "pipeline": pipeline,
             "project": body["project"],
             "commit": body["commit"],

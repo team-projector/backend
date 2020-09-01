@@ -3,7 +3,7 @@
 import json
 from typing import Optional
 
-from django.conf import settings
+from constance import config
 from django.http import HttpResponse
 from django.utils.decorators import method_decorator
 from django.views import View
@@ -11,9 +11,7 @@ from django.views.decorators.csrf import csrf_exempt
 from rest_framework.exceptions import AuthenticationFailed
 
 from apps.development.services.gl.webhook import GLWebhook
-from apps.development.services.project.gl.webhooks import (
-    GITLAB_WEBHOOKS_CLASSES,
-)
+from apps.development.services.webhooks import webhook_classes
 
 
 class GlWebhookView(View):
@@ -26,7 +24,7 @@ class GlWebhookView(View):
 
     def post(self, request) -> HttpResponse:
         """Request handler."""
-        if settings.GITLAB_NO_SYNC:
+        if not config.GITLAB_SYNC:
             return HttpResponse()
 
         self._check_webhook_secret_token(
@@ -48,10 +46,10 @@ class GlWebhookView(View):
         :type secret_token: str
         :rtype: None
         """
-        if not settings.GITLAB_WEBHOOK_SECRET_TOKEN:
+        if not config.GITLAB_WEBHOOK_SECRET_TOKEN:
             return
 
-        if settings.GITLAB_WEBHOOK_SECRET_TOKEN != secret_token:
+        if config.GITLAB_WEBHOOK_SECRET_TOKEN != secret_token:
             raise AuthenticationFailed("Invalid token")
 
     def _get_webhook(self, object_kind: str) -> Optional[GLWebhook]:
@@ -65,7 +63,7 @@ class GlWebhookView(View):
         webhook_class = next(
             (
                 hook
-                for hook in GITLAB_WEBHOOKS_CLASSES
+                for hook in webhook_classes
                 if hook.object_kind == object_kind
             ),
             None,

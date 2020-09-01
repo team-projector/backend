@@ -6,9 +6,10 @@ from apps.development.api.views import GlWebhookView
 
 
 @pytest.fixture(autouse=True)
-def _gitlab_webhook_secret_token(settings) -> None:
+def _gitlab_webhook_secret_token(override_config) -> None:
     """Set test gitlab token."""
-    settings.GITLAB_WEBHOOK_SECRET_TOKEN = None
+    with override_config(GITLAB_WEBHOOK_SECRET_TOKEN=None):
+        yield
 
 
 @pytest.fixture()

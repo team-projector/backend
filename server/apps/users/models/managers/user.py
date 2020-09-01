@@ -2,7 +2,7 @@
 
 from typing import Optional
 
-from django.conf import settings
+from constance import config
 from django.contrib.auth.base_user import BaseUserManager
 from django.utils.functional import cached_property
 from django.utils.translation import gettext_lazy as _
@@ -14,7 +14,7 @@ class UserManager(BaseUserManager):
     @cached_property
     def system_user(self):
         """Get system user."""
-        return self.get(login=settings.TP_SYSTEM_USER_LOGIN)
+        return self.get(login=config.SYTEM_USER)
 
     def create_user(
         self, login: str, password: Optional[str] = None, **kwargs,

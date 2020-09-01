@@ -4,7 +4,7 @@ import re
 
 import httpretty
 import pytest
-from django.conf import settings
+from constance import config
 from graphene_django.rest_framework.tests.test_mutation import mock_info
 from graphql import ResolveInfo
 from social_core.backends.gitlab import GitLabOAuth2
@@ -18,7 +18,7 @@ RE_GITLAB_URL = re.compile(r"https://gitlab\.com.*")
 class GitlabMock(HttprettyMock):
     """Gitlab mock."""
 
-    base_api_url = "{0}/api/v4".format(settings.GITLAB_ADDRESS)
+    base_api_url = "{0}/api/v4".format(config.GITLAB_ADDRESS)
 
     def __init__(self) -> None:
         """Initializing."""
