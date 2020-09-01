@@ -48,7 +48,7 @@ def test_bad_id(db, gl_mocker):
 
 
 @override_settings(DOMAIN_NAME="test.com")
-@override_config(GITLAB_CHECK_WEBHOOKS=True)
+@override_config(GITLAB_ADD_WEBHOOKS=True)
 def test_check_webhooks(db, gl_mocker, gl_client):
     """
     Test check webhooks.

@@ -27,7 +27,7 @@ CREATE_WEBHOOK_BODY = types.MappingProxyType(
 def _gitlab_check_webhooks(settings, override_config) -> None:
     """Set check webhooks."""
     settings.DOMAIN_NAME = "test.com"
-    with override_config(GITLAB_CHECK_WEBHOOKS=True):
+    with override_config(GITLAB_ADD_WEBHOOKS=True):
         yield
 
 
