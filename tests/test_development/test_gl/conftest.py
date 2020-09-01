@@ -4,6 +4,7 @@ import pytest
 
 
 @pytest.fixture(autouse=True)
-def _gitlab_token(settings) -> None:
+def _gitlab_token(override_config) -> None:
     """Set test gitlab token."""
-    settings.GITLAB_TOKEN = "GITLAB_TOKEN"
+    with override_config(GITLAB_TOKEN="GITLAB_TOKEN"):
+        yield

@@ -4,7 +4,7 @@ from contextlib import suppress
 from typing import List
 
 import slack
-from django.conf import settings
+from constance import config
 from django.core.exceptions import ImproperlyConfigured
 from slack.errors import SlackApiError
 
@@ -48,7 +48,7 @@ class SlackClient:
 
         :rtype: slack.WebClient
         """
-        token = settings.SLACK_TOKEN
+        token = config.SLACK_TOKEN
         if not token:
             raise ImproperlyConfigured("'settings.SLACK_TOKEN' must be filled")
 

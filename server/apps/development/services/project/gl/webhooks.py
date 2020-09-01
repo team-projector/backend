@@ -2,6 +2,7 @@
 
 import logging
 
+from constance import config
 from django.conf import settings
 from django.urls import reverse
 from django.utils.functional import cached_property
@@ -9,22 +10,10 @@ from gitlab import GitlabError
 from gitlab.v4 import objects as gl
 
 from apps.development.models import Project
-from apps.development.services.issue.gl.webhook import IssuesGLWebhook
-from apps.development.services.merge_request.gl.webhook import (
-    MergeRequestsGLWebhook,
-)
-from apps.development.services.note.gl.webhook import NotesGLWebhook
-from apps.development.services.pipelines.gl.webhook import PipelineGLWebhook
 from apps.development.services.project.gl.provider import ProjectGlProvider
+from apps.development.services.webhooks import webhook_classes
 
 logger = logging.getLogger(__name__)
-
-GITLAB_WEBHOOKS_CLASSES = (
-    IssuesGLWebhook,
-    MergeRequestsGLWebhook,
-    PipelineGLWebhook,
-    NotesGLWebhook,
-)
 
 
 class ProjectWebhookManager:
@@ -43,7 +32,7 @@ class ProjectWebhookManager:
 
     def check_project_webhooks(self, project: Project) -> None:
         """Check whether webhooks for project are needed."""
-        if not settings.GITLAB_CHECK_WEBHOOKS:
+        if not config.GITLAB_CHECK_WEBHOOKS:
             return
 
         gl_project = self.project_provider.get_gl_project(project)
@@ -66,10 +55,10 @@ class ProjectWebhookManager:
         if not has_valid:
             payload = {
                 "url": self.webhook_url,
-                "token": settings.GITLAB_WEBHOOK_SECRET_TOKEN,
+                "token": config.GITLAB_WEBHOOK_SECRET_TOKEN,
             }
 
-            for webhook_class in GITLAB_WEBHOOKS_CLASSES:
+            for webhook_class in webhook_classes:
                 payload[webhook_class.settings_field] = True
 
             gl_project.hooks.create(payload)
@@ -100,5 +89,5 @@ class ProjectWebhookManager:
         """Validate webhook."""
         return webhook.url == webhook_url and all(
             getattr(webhook, webhook_class.settings_field)
-            for webhook_class in GITLAB_WEBHOOKS_CLASSES
+            for webhook_class in webhook_classes
         )

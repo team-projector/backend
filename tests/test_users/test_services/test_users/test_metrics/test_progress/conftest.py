@@ -7,9 +7,10 @@ from freezegun import freeze_time
 
 
 @pytest.fixture(autouse=True)
-def _weekends_days(settings) -> None:
+def _weekends_days(override_config) -> None:
     """Set test gitlab token."""
-    settings.TP_WEEKENDS_DAYS = []
+    with override_config(WEEKENDS_DAYS=[]):
+        yield
 
 
 @pytest.fixture()

@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+from constance.test.pytest import override_config
 from django.test import override_settings
 from jnt_django_toolbox.helpers.objects import dict2obj
 
@@ -46,7 +47,8 @@ def test_bad_id(db, gl_mocker):
     assert not Project.objects.exists()
 
 
-@override_settings(GITLAB_CHECK_WEBHOOKS=True, DOMAIN_NAME="test.com")
+@override_settings(DOMAIN_NAME="test.com")
+@override_config(GITLAB_CHECK_WEBHOOKS=True)
 def test_check_webhooks(db, gl_mocker, gl_client):
     """
     Test check webhooks.
