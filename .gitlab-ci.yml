@@ -65,7 +65,6 @@ test:
     - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN registry.gitlab.com
     - docker pull $DOCKER_IMAGE
   script:
-    - env
     - docker tag $DOCKER_IMAGE $TARGET_IMAGE
     - docker push $TARGET_IMAGE
 
