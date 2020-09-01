@@ -5,7 +5,10 @@ from jnt_admin_tools.menu import Menu, items
 
 from apps.core.admin.menus import AdminMenuItem
 
-MANAGEMENT_MENU_ITEMS = (("Job queue", "/admin/flower/", None),)
+MANAGEMENT_MENU_ITEMS = (
+    ("Job queue", "/admin/flower/", None),
+    ("Configuration", reverse("admin:configuration"), None),
+)
 
 UTILS_MENU_ITEMS = (
     (
