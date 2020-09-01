@@ -18,16 +18,17 @@ CREATE_WEBHOOK_BODY = types.MappingProxyType(
         "merge_requests_events": True,
         "pipeline_events": True,
         "note_events": True,
-        "token": None,
+        "token": "",
     },
 )
 
 
 @pytest.fixture(autouse=True)
-def _gitlab_check_webhooks(settings) -> None:
+def _gitlab_check_webhooks(settings, override_config) -> None:
     """Set check webhooks."""
-    settings.GITLAB_CHECK_WEBHOOKS = True
     settings.DOMAIN_NAME = "test.com"
+    with override_config(GITLAB_CHECK_WEBHOOKS=True):
+        yield
 
 
 class WebhookRequestCallback:

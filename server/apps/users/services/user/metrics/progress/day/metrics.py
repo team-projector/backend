@@ -3,7 +3,7 @@
 from datetime import date, datetime
 from typing import Dict, List
 
-from django.conf import settings
+from constance import config
 from jnt_django_toolbox.helpers.time import seconds
 
 from apps.users.models import User
@@ -99,7 +99,7 @@ class UserDaysMetricsGenerator:
         """
         is_update_loading = (
             current >= self._now
-            and current.weekday() not in settings.TP_WEEKENDS_DAYS
+            and current.weekday() not in config.WEEKENDS_DAYS
         )
 
         if not is_update_loading:

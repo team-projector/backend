@@ -29,9 +29,7 @@ def user(db):
 
     :param db:
     """
-    yield UserFactory.create(
-        login="user", hour_rate=100, tax_rate=15,
-    )
+    return UserFactory.create(login="user", hour_rate=100, tax_rate=15)
 
 
 def test_issues_opened_count(user, ghl_auth_mock_info):

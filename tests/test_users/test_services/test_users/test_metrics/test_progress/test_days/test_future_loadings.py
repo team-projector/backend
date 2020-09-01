@@ -2,7 +2,7 @@
 
 from datetime import datetime, timedelta
 
-from django.test import override_settings
+from constance.test.pytest import override_config
 from jnt_django_toolbox.helpers.time import seconds
 
 from apps.development.models.issue import IssueState
@@ -83,7 +83,7 @@ def test_replay_without_active_issues(user):
     )
 
 
-@override_settings(TP_WEEKENDS_DAYS=[0, 1, 2, 3, 4, 5, 6])
+@override_config(WEEKENDS_DAYS=[0, 1, 2, 3, 4, 5, 6])
 def test_not_apply_loading_weekends(user):
     """
     Test not apply loading weekends.

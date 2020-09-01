@@ -13,3 +13,5 @@ DATABASES = {
 }
 
 CELERY_TASK_ALWAYS_EAGER = True
+
+CONSTANCE_BACKEND = "constance.backends.memory.MemoryBackend"

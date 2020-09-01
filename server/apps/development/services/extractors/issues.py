@@ -4,7 +4,7 @@ import re
 from typing import List, Pattern, Union
 from urllib.parse import urlparse
 
-from django.conf import settings
+from constance import config
 
 from apps.development.models import MergeRequest
 from apps.development.models.issue import Issue
@@ -28,9 +28,7 @@ class _Extractor:
         )
 
         self.re_gitlab_issue_link: Pattern[str] = re.compile(
-            r"(?P<issue_link>{0}.*/issues/\d+)".format(
-                settings.GITLAB_ADDRESS,
-            ),
+            r"(?P<issue_link>{0}.*/issues/\d+)".format(config.GITLAB_ADDRESS),
         )
 
     def extract(

@@ -15,6 +15,8 @@ INSTALLED_APPS = (
     "django.contrib.admin",
     "django.contrib.admindocs",
     # vendors
+    "constance",
+    "constance.backends.database",
     "jnt_django_toolbox",
     "jnt_django_graphene_toolbox",
     "graphene_django",
