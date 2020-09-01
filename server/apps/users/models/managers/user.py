@@ -14,7 +14,7 @@ class UserManager(BaseUserManager):
     @cached_property
     def system_user(self):
         """Get system user."""
-        return self.get(login=config.SYTEM_USER)
+        return self.get(login=config.SYSTEM_USER)
 
     def create_user(
         self, login: str, password: Optional[str] = None, **kwargs,
