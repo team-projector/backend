@@ -4,7 +4,6 @@ variables:
   DOCKER_CACHE_IMAGE: $CI_REGISTRY_IMAGE/cache
   DOCKER_IMAGE: $CI_REGISTRY_IMAGE/tmp:${CI_PIPELINE_IID}_${CI_COMMIT_SHA}
   DOCKER_TEST_IMAGE: $CI_REGISTRY_IMAGE/tmp:${CI_PIPELINE_IID}_${CI_COMMIT_SHA}_test
-  GIT_STRATEGY: none
 
 stages:
   - pre_build
@@ -15,33 +14,25 @@ stages:
 
 lint_dockerfile:
   image: hadolint/hadolint:v1.18.0-6-ga0d655d-debian
-  variables:
-    GIT_DEPTH: 1
-    GIT_STRATEGY: fetch
   stage: pre_build
   script:
     - hadolint deploy/Dockerfile
 
 build:
   stage: build
-  variables:
-    GIT_DEPTH: 1
-    GIT_STRATEGY: fetch
-  services:
-    - docker:dind
   script:
     - ./scripts/ci_build_images.sh
 
 quality:
-  image: $DOCKER_TEST_IMAGE
   stage: test
+  image: $DOCKER_TEST_IMAGE
   script:
     - cd /app
     - make check_quality
 
 test:
-  image: $DOCKER_TEST_IMAGE
   stage: test
+  image: $DOCKER_TEST_IMAGE
   variables:
     DJANGO_ENV: test
   services:
@@ -82,18 +73,17 @@ publish_stable:
   variables:
     TARGET_IMAGE: $CI_REGISTRY_IMAGE/stable:${CI_COMMIT_TAG}
 
-deploy_unstable:
+deploy_development:
   stage: deploy
   image: junte/helm-deploy:1.8-helm2.16.1
+  environment:
+    name: development
+    url: $SITE_ADDRESS
   only:
     - master
   dependencies: []
   variables:
-    GIT_DEPTH: 5
-    GIT_STRATEGY: fetch
     HELM_IMAGE_TAG: ${CI_PIPELINE_ID}
   script:
     - helm_deploy
-  environment:
-    name: development
-    url: $SITE_ADDRESS
+
