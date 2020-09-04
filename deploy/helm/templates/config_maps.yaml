@@ -7,5 +7,3 @@ data:
   email.host: {{ .Values.email.host }}
   email.port: {{ .Values.email.port | quote }}
   email.from_email: {{ .Values.email.from_email }}
-  fluentd.host: {{ .Values.fluentd.host }}
-  sentry.dsn: {{ .Values.sentry.dsn }}

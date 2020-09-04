@@ -29,16 +29,6 @@
     secretKeyRef:
       name: backend-secrets
       key: secret_key
-- name: DJANGO_SOCIAL_AUTH_GITLAB_KEY
-  valueFrom:
-    secretKeyRef:
-      name: backend-secrets
-      key: social_auth_gitlab_key
-- name: DJANGO_SOCIAL_AUTH_GITLAB_SECRET
-  valueFrom:
-    secretKeyRef:
-      name: backend-secrets
-      key: social_auth_gitlab_secret
 - name: DJANGO_ENV
   valueFrom:
     configMapKeyRef:
@@ -74,16 +64,16 @@
     secretKeyRef:
       name: backend-secrets
       key: email.password
-- name: DJANGO_SENTRY_DSN
+- name: DJANGO_SENTRY
   valueFrom:
     configMapKeyRef:
-      name: backend-config
-      key: sentry.dsn
-- name: DJANGO_FLUENTD_LOGGER_HOST
+      name: services-config
+      key: sentry
+- name: DJANGO_FLUENTD
   valueFrom:
     configMapKeyRef:
-      name: backend-config
-      key: fluentd.host
+      name: services-config
+      key: fluentd
 - name: DJANGO_MEMCACHED
   valueFrom:
     configMapKeyRef:

@@ -45,8 +45,8 @@ REQUEST_PROFILERS = [
     DatabaseQueriesProfiler(),
 ]
 
-FLUENTD_LOGGER_HOST = config("DJANGO_FLUENTD_LOGGER_HOST", default=None)
-if FLUENTD_LOGGER_HOST:
+FLUENTD_HOST = config("DJANGO_FLUENTD", default=None)
+if FLUENTD_HOST:
     LOGGING = {
         "version": 1,
         "disable_existing_loggers": False,
@@ -62,7 +62,7 @@ if FLUENTD_LOGGER_HOST:
                 "class": "fluent.handler.FluentHandler",
                 "formatter": "fluentd",
                 "tag": DOMAIN_NAME,
-                "host": FLUENTD_LOGGER_HOST,
+                "host": FLUENTD_HOST,
                 "port": 24224,
             },
         },

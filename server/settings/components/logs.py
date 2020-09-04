@@ -38,7 +38,7 @@ LOGGING = {
     },
 }
 
-sentry_dsn = config("DJANGO_SENTRY_DSN", default=None)
+sentry_dsn = config("DJANGO_SENTRY", default=None)
 if sentry_dsn:
     sentry_sdk.init(  # type:ignore
         dsn=sentry_dsn,
