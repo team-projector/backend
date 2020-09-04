@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 import calendar
 from collections import OrderedDict
 
@@ -37,7 +39,6 @@ CONSTANCE_CONFIG = {
         "",
         "weekend_days",
     ),
-    "SYSTEM_USER": ("system", "", str),
     "GITLAB_ADDRESS": ("https://gitlab.com", "", str),
     "GITLAB_SYNC": (True, "", bool),
     "GITLAB_TOKEN": ("", "", "str_required"),
@@ -50,7 +51,7 @@ CONSTANCE_CONFIG = {
 
 CONSTANCE_CONFIG_FIELDSETS = OrderedDict(
     (
-        ("System", ("SYSTEM_USER", "WEEKENDS_DAYS")),
+        ("System", ("WEEKENDS_DAYS",)),
         (
             "Gitlab",
             (

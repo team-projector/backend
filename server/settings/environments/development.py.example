@@ -23,3 +23,5 @@ SECRET_KEY = 'dev'
 GITLAB_TOKEN = '...'
 
 SLACK_TOKEN = '...'
+
+CONSTANCE_BACKEND = "constance.backends.memory.MemoryBackend"
