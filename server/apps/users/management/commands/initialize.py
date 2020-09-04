@@ -17,4 +17,3 @@ class Command(BaseCommand):
     def handle(self, *args, **options):  # noqa: WPS110
         """Call function."""
         create_system_user()
-        self.stdout.write(self.style.SUCCESS("System user created"))
