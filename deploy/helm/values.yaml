@@ -6,14 +6,8 @@ email:
   host: smtp.eu.mailgun.org
   port: "587"
   from_email: system@teamprojector.com
-fluentd:
-  host: ""
-sentry:
-  dsn: ""
 secrets:
   secret_key: ""
-  social_auth_gitlab_key: ""
-  social_auth_gitlab_secret: ""
   email:
     user: ""
     password: ""
