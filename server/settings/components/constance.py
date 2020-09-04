@@ -43,6 +43,8 @@ CONSTANCE_CONFIG = {
     "GITLAB_TOKEN": ("", "", "str_required"),
     "GITLAB_WEBHOOK_SECRET_TOKEN": ("", "", str),
     "GITLAB_ADD_WEBHOOKS": (False, "", bool),
+    "OAUTH_GITLAB_KEY": ("", "", str),
+    "OAUTH_GITLAB_SECRET": ("", "", str),
     "SLACK_TOKEN": ("", "", str),
 }
 
@@ -57,6 +59,8 @@ CONSTANCE_CONFIG_FIELDSETS = OrderedDict(
                 "GITLAB_TOKEN",
                 "GITLAB_WEBHOOK_SECRET_TOKEN",
                 "GITLAB_ADD_WEBHOOKS",
+                "OAUTH_GITLAB_KEY",
+                "OAUTH_GITLAB_SECRET",
             ),
         ),
         ("Notifications", ("SLACK_TOKEN",)),
