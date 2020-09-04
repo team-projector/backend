@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import pytest
+from constance import config
 from django.conf import settings
 from social_core.backends.gitlab import GitLabOAuth2
 
@@ -13,12 +14,15 @@ mutation {
 """
 
 
-@pytest.fixture(scope="module", autouse=True)
-def _gitlab_login() -> None:
+@pytest.fixture(autouse=True)
+def _gitlab_login(override_config) -> None:
     """Forces django to use gitlab settings."""
     settings.SOCIAL_AUTH_GITLAB_REDIRECT_URI = "redirect_uri"
-    settings.SOCIAL_AUTH_GITLAB_KEY = "test_gitlab_key"
-    settings.SOCIAL_AUTH_GITLAB_SECRET = "test_gitlab_secret"
+    with override_config(
+        OAUTH_GITLAB_KEY="test_gitlab_key",
+        OAUTH_GITLAB_SECRET="test_gitlab_secret",
+    ):
+        yield
 
 
 def test_query(user, ghl_client):
@@ -37,7 +41,7 @@ def test_query(user, ghl_client):
 
     redirect_url = response["data"]["loginGitlab"]["redirectUrl"]
 
-    client = "client_id={0}".format(settings.SOCIAL_AUTH_GITLAB_KEY)
+    client = "client_id={0}".format(config.OAUTH_GITLAB_KEY)
     redirect = "redirect_uri={0}".format(
         settings.SOCIAL_AUTH_GITLAB_REDIRECT_URI,
     )

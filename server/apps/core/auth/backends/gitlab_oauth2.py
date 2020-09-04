@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+from constance import config
 from django.http import HttpResponseBadRequest
 from django.utils import timezone
 from social_core.backends.gitlab import GitLabOAuth2 as SocialGitLabOAuth2
@@ -54,3 +55,7 @@ class GitLabOAuth2Backend(SocialGitLabOAuth2):
         For example "state" and "code" values returned from Gitlab.
         """
         self.data = kwargs  # noqa: WPS110
+
+    def get_key_and_secret(self):
+        """Return tuple with Consumer Key and Consumer Secret."""
+        return config.OAUTH_GITLAB_KEY, config.OAUTH_GITLAB_SECRET
