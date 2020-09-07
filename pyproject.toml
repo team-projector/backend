@@ -20,24 +20,24 @@ django-health-check = "*"
 django-activity-stream = {git = "https://github.com/justquick/django-activity-stream.git", rev = "master"}
 psycopg2-binary = "*"
 jnt-django-admin-tools = "*"
-jnt-django-toolbox = {version = "^0.1.14", extras = ["jaeger"]}
-jnt-django-graphene-toolbox = "^0.1.0"
+jnt-django-toolbox = {version = "*", extras = ["jaeger"]}
+jnt-django-graphene-toolbox = "*"
 social-auth-app-django = "*"
 social-auth-core = "*"
 celery = "*"
 flower = "*"
-redis = "3.3.11"
+redis = "*"
 xlsxwriter = "*"
 graphene-django = "*"
 slackclient = "*"
 tqdm = "*"
 black = "^19.10b0"
 sentry-sdk = "*"
-fluent-logger = "^0.9.6"
-gunicorn = "^20.0.4"
-uvicorn = "^0.11.8"
-django-constance = {extras = ["database"], version = "^2.7.0"}
-python-memcached = "^1.59"
+fluent-logger = "*"
+gunicorn = "*"
+uvicorn = "*"
+django-constance = {extras = ["database"], version = "*"}
+python-memcached = "*"
 
 [tool.poetry.dev-dependencies]
 pytest = "5.*" # problem with integrity
@@ -50,7 +50,7 @@ flake8 = "*"
 flake8-django = "*"
 flake8-pytest-style = "*"
 flake8-pytest = "*"
-flake8-class-attributes-order = "^0.1.1"
+flake8-class-attributes-order = "*"
 mypy = "*"
 httpretty = "*"
 wemake-python-styleguide = "*"
