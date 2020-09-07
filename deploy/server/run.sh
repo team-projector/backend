@@ -3,6 +3,7 @@
 set -o errexit
 
 ./manage.py migrate
+./manage.py initialize
 
 nginx
 
