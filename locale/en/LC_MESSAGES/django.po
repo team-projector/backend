@@ -661,3 +661,6 @@ msgstr "Close"
 
 msgid "VN__ADMIN_DASHBOARD"
 msgstr "Admin Dashboard"
+
+msgid "Constance"
+msgstr "Configuration"
