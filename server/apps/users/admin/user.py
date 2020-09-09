@@ -62,6 +62,7 @@ class UserAdmin(
                     "is_active",
                     "last_login",
                     "position",
+                    "groups",
                 ),
             },
         ),
