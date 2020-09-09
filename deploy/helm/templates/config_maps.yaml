@@ -1,9 +1,0 @@
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: backend-config
-data:
-  env: {{ .Values.env }}
-  email.host: {{ .Values.email.host }}
-  email.port: {{ .Values.email.port | quote }}
-  email.from_email: {{ .Values.email.from_email }}
