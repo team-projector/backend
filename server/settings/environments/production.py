@@ -75,5 +75,4 @@ if FLUENTD_HOST:
         },
     }
 
-# constance
 CONSTANCE_DATABASE_CACHE_BACKEND = "default"
