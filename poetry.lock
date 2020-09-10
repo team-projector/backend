@@ -341,6 +341,7 @@ jsonfield = ["django-jsonfield (>=1.0.1)", "django-jsonfield-compat (>=0.4.4)"]
 reference = "e7a919c83f175ea46d66b2fdb5613c4fcde486e1"
 type = "git"
 url = "https://github.com/justquick/django-activity-stream.git"
+
 [[package]]
 category = "main"
 description = "Django live settings with pluggable backends, including Redis."
@@ -996,23 +997,6 @@ xdg_home = ["appdirs (>=1.4.0)"]
 
 [[package]]
 category = "main"
-description = "Jaeger Python OpenTracing Tracer implementation"
-name = "jaeger-client"
-optional = false
-python-versions = "*"
-version = "4.3.0"
-
-[package.dependencies]
-opentracing = ">=2.1,<3.0"
-threadloop = ">=1,<2"
-thrift = "*"
-tornado = ">=4.3"
-
-[package.extras]
-tests = ["mock (1.0.1)", "pycurl (>=7.43,<8)", "pytest (>=3.7.0,<3.8.0)", "pytest-cov (2.5.1)", "coverage (<4.4)", "pytest-timeout (1.3.1)", "pytest-tornado", "pytest-benchmark (>=3.0.0rc1,<3.2)", "pytest-localserver", "flake8", "flake8-quotes", "codecov", "opentracing_instrumentation (>=3,<4)", "prometheus_client (0.3.1)", "tchannel (>=0.27)"]
-
-[[package]]
-category = "main"
 description = "A collection of tools for the django administration interface"
 name = "jnt-django-admin-tools"
 optional = false
@@ -1028,7 +1012,7 @@ description = ""
 name = "jnt-django-graphene-toolbox"
 optional = false
 python-versions = ">=3.8,<4.0"
-version = "0.1.13"
+version = "0.1.15"
 
 [package.dependencies]
 django-filter = ">=2.3.0,<3.0.0"
@@ -1049,10 +1033,6 @@ version = "0.1.20"
 [package.dependencies]
 dateparser = ">=0.7.6,<0.8.0"
 django = ">=2"
-
-[package.dependencies.jaeger-client]
-optional = true
-version = ">=4.3.0,<5.0.0"
 
 [package.extras]
 jaeger = ["jaeger-client (>=4.3.0,<5.0.0)"]
@@ -1166,17 +1146,6 @@ version = "3.1.0"
 rsa = ["cryptography"]
 signals = ["blinker"]
 signedtoken = ["cryptography", "pyjwt (>=1.0.0)"]
-
-[[package]]
-category = "main"
-description = "OpenTracing API for Python. See documentation at http://opentracing.io"
-name = "opentracing"
-optional = false
-python-versions = "*"
-version = "2.3.0"
-
-[package.extras]
-tests = ["doubles", "flake8", "flake8-quotes", "mock", "pytest", "pytest-cov", "pytest-mock", "sphinx", "sphinx-rtd-theme", "six (>=1.10.0,<2.0)", "gevent", "tornado"]
 
 [[package]]
 category = "dev"
@@ -1780,33 +1749,6 @@ version = "1.3"
 
 [[package]]
 category = "main"
-description = "Tornado IOLoop Backed Concurrent Futures"
-name = "threadloop"
-optional = false
-python-versions = "*"
-version = "1.0.2"
-
-[package.dependencies]
-tornado = "*"
-
-[[package]]
-category = "main"
-description = "Python bindings for the Apache Thrift RPC system"
-name = "thrift"
-optional = false
-python-versions = "*"
-version = "0.13.0"
-
-[package.dependencies]
-six = ">=1.7.2"
-
-[package.extras]
-all = ["tornado (>=4.0)", "twisted"]
-tornado = ["tornado (>=4.0)"]
-twisted = ["twisted"]
-
-[[package]]
-category = "main"
 description = "Python Library for Tom's Obvious, Minimal Language"
 name = "toml"
 optional = false
@@ -1816,6 +1758,7 @@ version = "0.10.1"
 [[package]]
 category = "main"
 description = "Tornado is a Python web framework and asynchronous networking library, originally developed at FriendFeed."
+marker = "python_version >= \"3.5.2\""
 name = "tornado"
 optional = false
 python-versions = ">= 3.5"
@@ -2403,16 +2346,13 @@ isort = [
     {file = "isort-4.3.21-py2.py3-none-any.whl", hash = "sha256:6e811fcb295968434526407adb8796944f1988c5b65e8139058f2014cbe100fd"},
     {file = "isort-4.3.21.tar.gz", hash = "sha256:54da7e92468955c4fceacd0c86bd0ec997b0e1ee80d97f67c35a78b719dccab1"},
 ]
-jaeger-client = [
-    {file = "jaeger-client-4.3.0.tar.gz", hash = "sha256:7f72c341a21e3dcbc8498d1ed17c93e0eec71c5becc5c9333c4293793d4e6433"},
-]
 jnt-django-admin-tools = [
     {file = "jnt-django-admin-tools-0.9.11.tar.gz", hash = "sha256:36d4cfb586c9172434cfa7a9d8c126f42302f072b790db1798226f862da24ece"},
     {file = "jnt_django_admin_tools-0.9.11-py3-none-any.whl", hash = "sha256:d6aa0616ef895aac8236171be6c0551024b838577acfa9cd0ca92fbf4d684fc6"},
 ]
 jnt-django-graphene-toolbox = [
-    {file = "jnt-django-graphene-toolbox-0.1.13.tar.gz", hash = "sha256:f47e82b86a9f22f122eae53c226b1add6b0a6be3951fddcf473d19b0674929e1"},
-    {file = "jnt_django_graphene_toolbox-0.1.13-py3-none-any.whl", hash = "sha256:591b80a433334de11b0ceea4669c6185980cc498d0bdf2ecb16b7d76bd9adb35"},
+    {file = "jnt-django-graphene-toolbox-0.1.15.tar.gz", hash = "sha256:ce30ed316b1b00d44aa76316f35d3616945f25f54bfd075263cd716a57cd86f1"},
+    {file = "jnt_django_graphene_toolbox-0.1.15-py3-none-any.whl", hash = "sha256:a68ac161243f12b907169c249dccb4b6c645af1b4ebd661c8a459531d9eda97c"},
 ]
 jnt-django-toolbox = [
     {file = "jnt-django-toolbox-0.1.20.tar.gz", hash = "sha256:450a4d2c54cdbf4fc6dc889c0382a3a07b78c07a46744ef9dcd25a8efd13630f"},
@@ -2499,9 +2439,6 @@ mypy-extensions = [
 oauthlib = [
     {file = "oauthlib-3.1.0-py2.py3-none-any.whl", hash = "sha256:df884cd6cbe20e32633f1db1072e9356f53638e4361bef4e8b03c9127c9328ea"},
     {file = "oauthlib-3.1.0.tar.gz", hash = "sha256:bee41cc35fcca6e988463cacc3bcb8a96224f470ca547e697b604cc697b2f889"},
-]
-opentracing = [
-    {file = "opentracing-2.3.0.tar.gz", hash = "sha256:33b10634917a7496a7e3a18b18b7c055053d0a8da5101e2a95d454783cac9765"},
 ]
 packaging = [
     {file = "packaging-20.4-py2.py3-none-any.whl", hash = "sha256:998416ba6962ae7fbd6596850b80e17859a5753ba17c32284f67bfff33784181"},
@@ -2759,13 +2696,6 @@ testfixtures = [
 text-unidecode = [
     {file = "text-unidecode-1.3.tar.gz", hash = "sha256:bad6603bb14d279193107714b288be206cac565dfa49aa5b105294dd5c4aab93"},
     {file = "text_unidecode-1.3-py2.py3-none-any.whl", hash = "sha256:1311f10e8b895935241623731c2ba64f4c455287888b18189350b67134a822e8"},
-]
-threadloop = [
-    {file = "threadloop-1.0.2-py2-none-any.whl", hash = "sha256:5c90dbefab6ffbdba26afb4829d2a9df8275d13ac7dc58dccb0e279992679599"},
-    {file = "threadloop-1.0.2.tar.gz", hash = "sha256:8b180aac31013de13c2ad5c834819771992d350267bddb854613ae77ef571944"},
-]
-thrift = [
-    {file = "thrift-0.13.0.tar.gz", hash = "sha256:9af1c86bf73433afc6010ed376a6c6aca2b54099cc0d61895f640870a9ae7d89"},
 ]
 toml = [
     {file = "toml-0.10.1-py2.py3-none-any.whl", hash = "sha256:bda89d5935c2eac546d648028b9901107a595863cb36bae0c73ac804a9b4ce88"},
