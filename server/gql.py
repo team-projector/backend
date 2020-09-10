@@ -3,8 +3,7 @@
 import graphene
 import graphql
 from graphene_django.debug import DjangoDebug
-from jnt_django_graphene_toolbox.backends import GraphQLBackend
-from jnt_django_graphene_toolbox.views import PlaygroundGraphQLView
+from jnt_django_graphene_toolbox import backends, scheme, views
 
 from apps.core.graphql.views import ApiGraphQLView
 from apps.development.graphql.mutations import DevelopmentMutations
@@ -32,8 +31,8 @@ class Mutation(  # noqa: WPS215
     """Class representing all available mutations."""
 
 
-graphql.set_default_backend(GraphQLBackend())
-schema = graphene.Schema(query=Query, mutation=Mutation)
+graphql.set_default_backend(backends.GraphQLBackend())
+schema = scheme.Schema(query=Query, mutation=Mutation)
 
 
 def get_api_graphql_view():
@@ -43,4 +42,4 @@ def get_api_graphql_view():
 
 def get_graphql_view():
     """Get graphql view."""
-    return PlaygroundGraphQLView.as_view(graphiql=True, schema=schema)
+    return views.PlaygroundGraphQLView.as_view(graphiql=True, schema=schema)
