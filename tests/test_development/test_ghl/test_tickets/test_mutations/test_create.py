@@ -4,10 +4,10 @@ from datetime import datetime
 
 import pytest
 from jnt_django_graphene_toolbox.errors import (
-    INPUT_ERROR,
     GraphQLInputError,
     GraphQLPermissionDenied,
 )
+from jnt_django_graphene_toolbox.errors.input import INPUT_ERROR
 
 from apps.development.models.ticket import TicketState, TicketType
 from tests.test_development.factories import (
