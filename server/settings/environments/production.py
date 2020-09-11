@@ -65,12 +65,12 @@ if FLUENTD_HOST:
             "django": {
                 "handlers": ("fluentd",),
                 "level": "WARNING",
-                "propagate": True,
+                "propagate": False,
             },
             "apps": {
                 "handlers": ("fluentd",),
                 "level": "DEBUG",
-                "propagate": True,
+                "propagate": False,
             },
         },
     }
