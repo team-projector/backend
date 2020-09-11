@@ -3,8 +3,6 @@
 from decouple import config
 from jnt_django_toolbox.profiling.profilers import DatabaseQueriesProfiler
 
-PG_PORT = 5432
-
 SECRET_KEY = config("DJANGO_SECRET_KEY")
 DOMAIN_NAME = config("DOMAIN_NAME")
 
@@ -17,7 +15,7 @@ DATABASES = {
         "USER": config("DJANGO_DATABASE_USER"),
         "PASSWORD": config("DJANGO_DATABASE_PASSWORD"),
         "HOST": config("DJANGO_DATABASE_HOST"),
-        "PORT": config("DJANGO_DATABASE_PORT", cast=int, default=PG_PORT),
+        "PORT": config("DJANGO_DATABASE_PORT", cast=int, default=5432),
         "CONN_MAX_AGE": config("CONN_MAX_AGE", cast=int, default=60),
     },
 }
