@@ -39,9 +39,7 @@ SECURE_HSTS_PRELOAD = True
 
 X_FRAME_OPTIONS = "DENY"
 
-REQUEST_PROFILERS = [
-    DatabaseQueriesProfiler(),
-]
+REQUEST_PROFILERS = (DatabaseQueriesProfiler(),)
 
 FLUENTD_HOST = config("DJANGO_FLUENTD", default=None)
 if FLUENTD_HOST:
@@ -66,7 +64,7 @@ if FLUENTD_HOST:
         "loggers": {
             "django": {
                 "handlers": ("fluentd",),
-                "level": "INFO",
+                "level": "WARNING",
                 "propagate": True,
             },
             "apps": {
