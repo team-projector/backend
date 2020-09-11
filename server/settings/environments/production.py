@@ -64,8 +64,13 @@ if FLUENTD_HOST:
             },
         },
         "loggers": {
+            "django": {
+                "handlers": ("fluentd",),
+                "level": "INFO",
+                "propagate": True,
+            },
             "apps": {
-                "handlers": ["fluentd"],
+                "handlers": ("fluentd",),
                 "level": "DEBUG",
                 "propagate": True,
             },
