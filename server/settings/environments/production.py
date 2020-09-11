@@ -49,7 +49,6 @@ FLUENTD_HOST = config("DJANGO_FLUENTD", default=None)
 if FLUENTD_HOST:
     LOGGING = {
         "version": 1,
-        "disable_existing_loggers": False,
         "formatters": {
             "fluentd": {
                 "()": "fluent.handler.FluentRecordFormatter",

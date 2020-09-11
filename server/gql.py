@@ -1,9 +1,8 @@
 # -*- coding: utf-8 -*-
 
 import graphene
-import graphql
 from graphene_django.debug import DjangoDebug
-from jnt_django_graphene_toolbox import backends, scheme, views
+from jnt_django_graphene_toolbox import scheme, views
 
 from apps.core.graphql.views import ApiGraphQLView
 from apps.development.graphql.mutations import DevelopmentMutations
@@ -31,7 +30,6 @@ class Mutation(  # noqa: WPS215
     """Class representing all available mutations."""
 
 
-graphql.set_default_backend(backends.GraphQLBackend())
 schema = scheme.Schema(query=Query, mutation=Mutation)
 
 

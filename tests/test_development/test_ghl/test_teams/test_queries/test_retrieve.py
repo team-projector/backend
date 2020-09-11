@@ -28,7 +28,21 @@ def test_query(user, ghl_client):
         GHL_QUERY_TEAM, variable_values={"id": team.pk},
     )
 
+    assert "errors" not in response
     assert response["data"]["team"]["id"] == str(team.pk)
+
+
+def test_query_found(user, ghl_client):
+    """Test retrieve team raw query."""
+    team = TeamFactory.create(members=[user])
+
+    ghl_client.set_user(user)
+
+    response = ghl_client.execute(
+        GHL_QUERY_TEAM, variable_values={"id": team.pk + 1},
+    )
+
+    assert "errors" in response
 
 
 def test_unauth(ghl_mock_info, team_query):

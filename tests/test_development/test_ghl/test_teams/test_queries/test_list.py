@@ -27,6 +27,7 @@ def test_query(user, gql_client_authenticated):
 
     response = gql_client_authenticated.execute(GHL_QUERY_ALL_TEAMS)
 
+    assert "errors" not in response
     assert response["data"]["allTeams"]["count"] == 5
 
 
