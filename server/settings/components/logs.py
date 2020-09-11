@@ -41,8 +41,7 @@ LOGGING = {
 }
 
 
-def before_send_sentry_handler(event, hint):
-    """Skip graphql user errors."""
+def _before_send_sentry_handler(event, hint):
     exc_info = hint.get("exc_info")
     if exc_info:
         exc_type, exc_value, tb = exc_info
@@ -59,7 +58,7 @@ if sentry_dsn:
         integrations=[DjangoIntegration(), CeleryIntegration()],
         release=TP_APP_VERSION,
         send_default_pii=True,
-        before_send=before_send_sentry_handler,
+        before_send=_before_send_sentry_handler,
     )
     sentry_sdk.utils.MAX_STRING_LENGTH = 4096
 
