@@ -18,7 +18,6 @@ class GitlabEntityMixin(models.Model):
     )
 
     gl_url = models.URLField(
-        unique=True,
         blank=True,
         verbose_name=_("VN__GITLAB_URL"),
         help_text=_("HT__GITLAB_URL"),
