@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from urllib3.exceptions import ReadTimeoutError
+from requests.exceptions import ReadTimeout
 
 from apps.development.models import ProjectGroup
 from apps.development.services.project_group.gl.manager import (
@@ -11,7 +11,7 @@ from apps.development.services.project_group.gl.provider import (
 from celery_app import app
 
 
-@app.task(throws=(ReadTimeoutError,))
+@app.task(throws=(ReadTimeout,))
 def sync_project_group_task(gl_id: int) -> None:
     """Syncing project group."""
     group = ProjectGroup.objects.get(gl_id=gl_id)
