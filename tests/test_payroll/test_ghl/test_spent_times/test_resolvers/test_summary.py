@@ -30,11 +30,15 @@ def test_resolver(user, ghl_auth_mock_info):
     )
 
     summary = resolve_spent_times_summary(
-        parent=None, info=ghl_auth_mock_info, state=IssueState.OPENED,
+        parent=None,
+        info=ghl_auth_mock_info,
+        state=IssueState.OPENED,
     )
 
     checkers.check_time_spent_summary(
-        summary, spent=seconds(hours=2), opened_spent=seconds(hours=2),
+        summary,
+        spent=seconds(hours=2),
+        opened_spent=seconds(hours=2),
     )
     checkers.check_time_spent_issues_summary(
         summary.issues,

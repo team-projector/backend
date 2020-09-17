@@ -18,14 +18,16 @@ def test_filter_by_user(team_leader, team_developer):
     ]
 
     queryset = WorkBreakFilterSet(
-        data={"user": team_leader.pk}, queryset=WorkBreak.objects.all(),
+        data={"user": team_leader.pk},
+        queryset=WorkBreak.objects.all(),
     ).qs
 
     assert queryset.count() == 1
     assert queryset.first() == work_breaks[0]
 
     queryset = WorkBreakFilterSet(
-        data={"user": team_developer.pk}, queryset=WorkBreak.objects.all(),
+        data={"user": team_developer.pk},
+        queryset=WorkBreak.objects.all(),
     ).qs
 
     assert queryset.count() == 1

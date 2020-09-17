@@ -20,7 +20,10 @@ def test_owner(user):
 
     spends = [
         IssueSpentTimeFactory.create(
-            date=timezone.now(), user=user, base=issue, time_spent=0,
+            date=timezone.now(),
+            user=user,
+            base=issue,
+            time_spent=0,
         ),
         IssueSpentTimeFactory.create(
             date=timezone.now() - timedelta(hours=4),

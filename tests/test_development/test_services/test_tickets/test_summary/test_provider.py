@@ -34,7 +34,8 @@ def test_selected_fields(db):
     :param db:
     """
     summary = TicketsSummaryProvider(
-        Ticket.objects.all(), fields=("count", "doing_count"),
+        Ticket.objects.all(),
+        fields=("count", "doing_count"),
     ).get_data()
 
     assert summary == {"count": 0, "doing_count": 0}

@@ -55,7 +55,9 @@ def test_query(user, gql_client_authenticated):
 
 
 def test_team_members_combined(
-    user, all_merge_requests_query, ghl_auth_mock_info,
+    user,
+    all_merge_requests_query,
+    ghl_auth_mock_info,
 ):
     """Test access by the leader role."""
     MergeRequestFactory.create_batch(2, user=user)
@@ -73,7 +75,9 @@ def test_team_members_combined(
 
 
 def test_merge_requests_no_teamlead_or_owner(
-    user, all_merge_requests_query, ghl_auth_mock_info,
+    user,
+    all_merge_requests_query,
+    ghl_auth_mock_info,
 ):
     """Test no access."""
     MergeRequestFactory(user=UserFactory())
@@ -85,7 +89,8 @@ def test_merge_requests_no_teamlead_or_owner(
 
 @override_settings(DEBUG=True)
 def test_user_is_prefetched(
-    user, gql_client_authenticated,
+    user,
+    gql_client_authenticated,
 ):
     """Test no n+1 for merge request users."""
     MergeRequestFactory(user=user)

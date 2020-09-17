@@ -27,7 +27,9 @@ class ProjectGroupGlManager:
 
         while gl_groups:
             self.sync_group(
-                gl_groups[0], gl_groups, gl_groups_map,
+                gl_groups[0],
+                gl_groups,
+                gl_groups_map,
             )
 
     def sync_group(
@@ -56,7 +58,9 @@ class ProjectGroupGlManager:
         return self.update_group(gl_group, parent)
 
     def update_group(
-        self, gl_group: gl.Group, parent: Optional[ProjectGroup],
+        self,
+        gl_group: gl.Group,
+        parent: Optional[ProjectGroup],
     ) -> ProjectGroup:
         """Update project group data based on gitlab."""
         group, _ = ProjectGroup.objects.update_from_gitlab(

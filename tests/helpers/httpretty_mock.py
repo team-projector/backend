@@ -8,7 +8,8 @@ import httpretty
 from httpretty.core import HTTPrettyRequest
 
 RequestCallback = Callable[
-    [HTTPrettyRequest, str, Dict[str, str]], List[object],  # noqa: WPS221
+    [HTTPrettyRequest, str, Dict[str, str]],
+    List[object],  # noqa: WPS221
 ]
 
 
@@ -16,7 +17,9 @@ class RequestCallbackFactory:
     """Create request callback."""
 
     def __init__(
-        self, body: Optional[object] = None, status_code: int = HTTPStatus.OK,
+        self,
+        body: Optional[object] = None,
+        status_code: int = HTTPStatus.OK,
     ) -> None:
         """Initializing."""
         self._body = {} if body is None else body
@@ -106,7 +109,10 @@ class HttprettyMock:
     ) -> None:
         """Register url for mock."""
         httpretty.register_uri(
-            method=method, uri=uri, body=request_callback, priority=priority,
+            method=method,
+            uri=uri,
+            body=request_callback,
+            priority=priority,
         )
 
     def _prepare_uri(self, path: str) -> str:

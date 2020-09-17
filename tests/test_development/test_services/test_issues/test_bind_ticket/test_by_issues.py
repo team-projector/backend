@@ -13,7 +13,8 @@ def test_assign_ticket(db):
     """
     url_template = "https://gitlab.com/junte/team-projector/backend/issues/{0}"
     issue1 = IssueFactory.create(
-        ticket=TicketFactory.create(), gl_url=url_template.format("12"),
+        ticket=TicketFactory.create(),
+        gl_url=url_template.format("12"),
     )
     issue2 = IssueFactory.create(ticket=None, description=issue1.gl_url)
 
@@ -30,7 +31,8 @@ def test_issue_without_ticket(db):
     """
     url_template = "https://gitlab.com/junte/team-projector/backend/issues/{0}"
     issue1 = IssueFactory.create(
-        ticket=None, gl_url=url_template.format("12"),
+        ticket=None,
+        gl_url=url_template.format("12"),
     )
     issue2 = IssueFactory.create(ticket=None, description=issue1.gl_url)
 
@@ -48,10 +50,12 @@ def test_already_has_ticket(db):
     """
     url_template = "https://gitlab.com/junte/team-projector/backend/issues/{0}"
     issue1 = IssueFactory.create(
-        ticket=TicketFactory.create(), gl_url=url_template.format("12"),
+        ticket=TicketFactory.create(),
+        gl_url=url_template.format("12"),
     )
     issue2 = IssueFactory.create(
-        ticket=TicketFactory.create(), description=issue1.gl_url,
+        ticket=TicketFactory.create(),
+        description=issue1.gl_url,
     )
 
     update_issue_ticket(issue2)

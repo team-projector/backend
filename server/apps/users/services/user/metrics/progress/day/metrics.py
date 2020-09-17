@@ -33,7 +33,9 @@ class UserDaysMetricsGenerator:
 
         stats = UserDayStatsProvider()
         self._time_spents = stats.get_time_spents(
-            self._user, self._start, self._end,
+            self._user,
+            self._start,
+            self._end,
         )
         self._due_day_stats = stats.get_due_day_stats(self._user)
         self._payrolls_stats = stats.get_payrolls_stats(self._user)
@@ -60,7 +62,9 @@ class UserDaysMetricsGenerator:
         self._update_loading(current, metric)
 
     def _apply_stats(
-        self, day: date, metric: provider.UserProgressMetrics,
+        self,
+        day: date,
+        metric: provider.UserProgressMetrics,
     ) -> None:
         """
         Apply stats.
@@ -87,7 +91,9 @@ class UserDaysMetricsGenerator:
             metric.paid = payrolls["total_paid"]
 
     def _update_loading(
-        self, current, metric: provider.UserProgressMetrics,
+        self,
+        current,
+        metric: provider.UserProgressMetrics,
     ) -> None:
         """
         Update loading.
@@ -111,14 +117,16 @@ class UserDaysMetricsGenerator:
         metric.loading = metric.time_spent
 
         self._apply_deadline_issues_loading(
-            metric, self._active_issues,
+            metric,
+            self._active_issues,
         )
 
         if metric.loading > self._max_day_loading:
             return
 
         self._apply_active_issues_loading(
-            metric, self._active_issues,
+            metric,
+            self._active_issues,
         )
 
     def _apply_deadline_issues_loading(

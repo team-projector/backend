@@ -6,11 +6,15 @@ from apps.users.models import Token
 
 
 def test_complete_login(
-    user, gl_mocker, complete_gl_auth_mutation, gl_token_request_info,
+    user,
+    gl_mocker,
+    complete_gl_auth_mutation,
+    gl_token_request_info,
 ):
     """Test complete login."""
     gl_mocker.register_get(
-        "/user", {"id": user.pk, "username": user.login, "email": user.email},
+        "/user",
+        {"id": user.pk, "username": user.login, "email": user.email},
     )
 
     gl_mocker.base_api_url = GitLabOAuth2.ACCESS_TOKEN_URL
@@ -35,11 +39,15 @@ def test_complete_login(
 
 
 def test_not_login(
-    user, gl_mocker, complete_gl_auth_mutation, gl_token_request_info,
+    user,
+    gl_mocker,
+    complete_gl_auth_mutation,
+    gl_token_request_info,
 ):
     """Test not login user."""
     gl_mocker.register_get(
-        "/user", {"id": user.pk, "username": "test_user", "email": user.email},
+        "/user",
+        {"id": user.pk, "username": "test_user", "email": user.email},
     )
 
     gl_mocker.base_api_url = GitLabOAuth2.ACCESS_TOKEN_URL

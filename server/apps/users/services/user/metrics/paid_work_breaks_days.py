@@ -12,7 +12,9 @@ from apps.payroll.models import WorkBreak
 
 
 def paid_work_breaks_days_resolver(
-    parent, info, **kwargs,  # noqa:WPS110
+    parent,
+    info,  # noqa: WPS110
+    **kwargs,
 ) -> int:
     """Returns overall paid work break days for user."""
     user = info.context.user

@@ -48,7 +48,8 @@ def test_unauth(ghl_mock_info, all_penalties_query):
     """
     with pytest.raises(GraphQLPermissionDenied):
         all_penalties_query(
-            root=None, info=ghl_mock_info,
+            root=None,
+            info=ghl_mock_info,
         )
 
 
@@ -76,12 +77,16 @@ def test_allowed_to_leader(user, all_penalties_query, ghl_auth_mock_info):
     """
     team = TeamFactory()
     TeamMemberFactory.create(
-        user=user, team=team, roles=TeamMember.roles.LEADER,
+        user=user,
+        team=team,
+        roles=TeamMember.roles.LEADER,
     )
 
     developer = UserFactory()
     TeamMemberFactory.create(
-        user=developer, team=team, roles=TeamMember.roles.DEVELOPER,
+        user=developer,
+        team=team,
+        roles=TeamMember.roles.DEVELOPER,
     )
 
     PenaltyFactory.create_batch(size=2, user=developer)

@@ -19,13 +19,19 @@ def test_single(user, calculator):
     issue = IssueFactory.create(state=IssueState.CLOSED)
 
     IssueSpentTimeFactory.create(
-        user=user, base=issue, time_spent=seconds(hours=1),
+        user=user,
+        base=issue,
+        time_spent=seconds(hours=1),
     )
     IssueSpentTimeFactory.create(
-        user=user, base=issue, time_spent=-seconds(hours=2),
+        user=user,
+        base=issue,
+        time_spent=-seconds(hours=2),
     )
     IssueSpentTimeFactory.create(
-        user=user, base=issue, time_spent=seconds(hours=5),
+        user=user,
+        base=issue,
+        time_spent=seconds(hours=5),
     )
 
     calculator.generate_bulk()
@@ -47,13 +53,19 @@ def test_many(user, calculator):
     users = UserFactory.create_batch(2)
 
     IssueSpentTimeFactory.create(
-        user=user, base=issues[0], time_spent=seconds(hours=1),
+        user=user,
+        base=issues[0],
+        time_spent=seconds(hours=1),
     )
     IssueSpentTimeFactory.create(
-        user=users[0], base=issues[1], time_spent=seconds(hours=2),
+        user=users[0],
+        base=issues[1],
+        time_spent=seconds(hours=2),
     )
     IssueSpentTimeFactory.create(
-        user=users[1], base=issues[2], time_spent=seconds(hours=5),
+        user=users[1],
+        base=issues[2],
+        time_spent=seconds(hours=5),
     )
 
     calculator.generate_bulk()

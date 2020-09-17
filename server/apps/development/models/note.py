@@ -36,7 +36,8 @@ class Note(models.Model):
     object_id = models.IntegerField()
 
     gl_id = models.PositiveIntegerField(
-        verbose_name=_("VN__GITLAB_ID"), help_text=_("HT__GITLAB_ID"),
+        verbose_name=_("VN__GITLAB_ID"),
+        help_text=_("HT__GITLAB_ID"),
     )
 
     created_at = models.DateTimeField(null=True, blank=True)
@@ -68,5 +69,7 @@ class Note(models.Model):
     def __str__(self):
         """Returns object string representation."""
         return "{0} [{1}]: {2}".format(
-            self.user, self.created_at, self.get_type_display(),
+            self.user,
+            self.created_at,
+            self.get_type_display(),
         )

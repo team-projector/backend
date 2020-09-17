@@ -15,5 +15,6 @@ class PenaltiesQueries(graphene.ObjectType):
 
     penalty = DatasourceRelayNode.Field(PenaltyType)
     all_penalties = DataSourceConnectionField(
-        PenaltyType, filterset_class=PenaltyFilterSet,
+        PenaltyType,
+        filterset_class=PenaltyFilterSet,
     )

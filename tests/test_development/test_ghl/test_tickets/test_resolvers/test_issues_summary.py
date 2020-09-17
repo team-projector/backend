@@ -38,11 +38,15 @@ def test_issues_summary(user, ghl_auth_mock_info):
         due_date=datetime.now(),
     )
     IssueFactory.create_batch(
-        3, user=UserFactory.create(), state=IssueState.OPENED,
+        3,
+        user=UserFactory.create(),
+        state=IssueState.OPENED,
     )
 
     summary = resolve_issues_summary(
-        parent=None, info=ghl_auth_mock_info, user=user.pk,
+        parent=None,
+        info=ghl_auth_mock_info,
+        user=user.pk,
     )
 
     checkers.check_summary(summary, count=5, opened_count=5)
@@ -66,7 +70,8 @@ def test_issues_project_summaries(user):
     )
 
     issues = resolve_issues_project_summaries(
-        dict2obj({"queryset": Issue.objects.all()}), None,
+        dict2obj({"queryset": Issue.objects.all()}),
+        None,
     )[0].issues
 
     assert issues.opened_count == 5
@@ -82,7 +87,9 @@ def test_issues_team_summaries(user):
     """
     team = TeamFactory.create()
     TeamMemberFactory.create(
-        user=user, team=team, roles=TeamMember.roles.DEVELOPER,
+        user=user,
+        team=team,
+        roles=TeamMember.roles.DEVELOPER,
     )
     IssueFactory.create_batch(
         5,
@@ -93,7 +100,8 @@ def test_issues_team_summaries(user):
     )
 
     issues = resolve_issues_team_summaries(
-        dict2obj({"queryset": Issue.objects.all()}), None,
+        dict2obj({"queryset": Issue.objects.all()}),
+        None,
     )[0].issues
 
     assert issues.opened_count == 5

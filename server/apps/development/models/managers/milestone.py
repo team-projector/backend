@@ -10,7 +10,9 @@ class MilestoneManager(models.Manager):
     """The merge request model manager."""
 
     def update_from_gitlab(
-        self, gl_id, **kwargs,
+        self,
+        gl_id,
+        **kwargs,
     ) -> Tuple[models.Model, bool]:
         """Save milestone by Gitlab id."""
         kwargs["gl_last_sync"] = timezone.now()

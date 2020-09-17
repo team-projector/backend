@@ -27,7 +27,8 @@ class Command(BaseCommand):
 
         if self._need_create_superuser():
             management.call_command(
-                createsuperuser.Command(), interactive=False,
+                createsuperuser.Command(),
+                interactive=False,
             )
 
     def _need_create_superuser(self) -> bool:

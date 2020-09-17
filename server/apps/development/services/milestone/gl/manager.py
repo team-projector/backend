@@ -26,11 +26,14 @@ class MilestoneGlManager:
 
         for gl_milestone in gl_group.milestones.list():
             self._update_milestone(
-                gl_milestone, group,
+                gl_milestone,
+                group,
             )
 
     def sync_project_group_milestone(
-        self, group: ProjectGroup, gl_milestone_id: int,
+        self,
+        group: ProjectGroup,
+        gl_milestone_id: int,
     ) -> None:
         """Load milestone for group."""
         gl_group = self.group_provider.get_gl_group(group)
@@ -38,7 +41,8 @@ class MilestoneGlManager:
             return
 
         self._update_milestone(
-            gl_group.milestones.get(gl_milestone_id), group,
+            gl_group.milestones.get(gl_milestone_id),
+            group,
         )
 
     def sync_project_milestones(self, project: Project) -> None:
@@ -49,11 +53,14 @@ class MilestoneGlManager:
 
         for gl_milestone in gl_project.milestones.list():
             self._update_milestone(
-                gl_milestone, project,
+                gl_milestone,
+                project,
             )
 
     def sync_project_milestone(
-        self, project: Project, gl_milestone_id: int,
+        self,
+        project: Project,
+        gl_milestone_id: int,
     ) -> None:
         """Load milestone for project."""
         gl_project = self.project_provider.get_gl_project(project)
@@ -61,11 +68,14 @@ class MilestoneGlManager:
             return
 
         self._update_milestone(
-            gl_project.milestones.get(gl_milestone_id), project,
+            gl_project.milestones.get(gl_milestone_id),
+            project,
         )
 
     def _update_milestone(
-        self, gl_milestone, owner: Union[ProjectGroup, Project],
+        self,
+        gl_milestone,
+        owner: Union[ProjectGroup, Project],
     ) -> None:
         """
         Update milestone.
@@ -76,7 +86,8 @@ class MilestoneGlManager:
         :rtype: None
         """
         Milestone.objects.update_from_gitlab(
-            owner=owner, **self._build_parameters(gl_milestone),
+            owner=owner,
+            **self._build_parameters(gl_milestone),
         )
 
     def _build_parameters(self, gl_milestone) -> Dict[str, object]:

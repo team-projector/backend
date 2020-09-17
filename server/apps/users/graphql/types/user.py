@@ -28,7 +28,9 @@ class UserType(BaseDjangoObjectType):
 
     @classmethod
     def get_queryset(
-        cls, queryset: QuerySet, info,  # noqa: WPS110
+        cls,
+        queryset: QuerySet,
+        info,  # noqa: WPS110
     ) -> QuerySet:
         """Get queryset."""
         # TODO fix it (team members case)

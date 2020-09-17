@@ -29,20 +29,29 @@ def test_payroll_metrics(user):
     )
 
     MergeRequestSpentTimeFactory.create(
-        user=user, base=merge_request, time_spent=seconds(hours=3),
+        user=user,
+        base=merge_request,
+        time_spent=seconds(hours=3),
     )
     MergeRequestSpentTimeFactory.create(
-        user=user, base=merge_request, time_spent=seconds(hours=2),
+        user=user,
+        base=merge_request,
+        time_spent=seconds(hours=2),
     )
     MergeRequestSpentTimeFactory.create(
-        user=user, base=merge_request, time_spent=seconds(hours=4),
+        user=user,
+        base=merge_request,
+        time_spent=seconds(hours=4),
     )
     MergeRequestSpentTimeFactory.create(
-        user=user, base=merge_request, time_spent=-seconds(hours=3),
+        user=user,
+        base=merge_request,
+        time_spent=-seconds(hours=3),
     )
 
     checkers.check_merge_request_metrics(
-        get_merge_request_metrics(merge_request), payroll=6 * user.hour_rate,
+        get_merge_request_metrics(merge_request),
+        payroll=6 * user.hour_rate,
     )
 
 
@@ -85,7 +94,8 @@ def test_paid_metrics(user):
     )
 
     checkers.check_merge_request_metrics(
-        get_merge_request_metrics(merge_request), paid=6 * user.hour_rate,
+        get_merge_request_metrics(merge_request),
+        paid=6 * user.hour_rate,
     )
 
 
@@ -115,10 +125,14 @@ def test_complex_metrics(user):
         time_spent=seconds(hours=2),
     )
     MergeRequestSpentTimeFactory.create(
-        user=user, base=merge_request, time_spent=seconds(hours=4),
+        user=user,
+        base=merge_request,
+        time_spent=seconds(hours=4),
     )
     MergeRequestSpentTimeFactory.create(
-        user=user, base=merge_request, time_spent=-seconds(hours=3),
+        user=user,
+        base=merge_request,
+        time_spent=-seconds(hours=3),
     )
 
     checkers.check_merge_request_metrics(

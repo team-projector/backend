@@ -23,7 +23,9 @@ def test_empty_estimate(user):
     :param user:
     """
     problem_issue = IssueFactory.create(
-        user=user, state=IssueState.OPENED, time_estimate=None,
+        user=user,
+        state=IssueState.OPENED,
+        time_estimate=None,
     )
 
     merge_request = MergeRequestFactory.create(user=user)
@@ -41,7 +43,9 @@ def test_empty_estimate_but_closed(user):
     :param user:
     """
     problem_issue = IssueFactory.create(
-        user=user, state=IssueState.CLOSED, time_estimate=None,
+        user=user,
+        state=IssueState.CLOSED,
+        time_estimate=None,
     )
 
     merge_request = MergeRequestFactory.create(user=user)
@@ -58,7 +62,9 @@ def test_zero_estimate(user):
     :param user:
     """
     problem_issue = IssueFactory.create(
-        user=user, state=IssueState.OPENED, time_estimate=0,
+        user=user,
+        state=IssueState.OPENED,
+        time_estimate=0,
     )
 
     merge_request = MergeRequestFactory.create(user=user)
@@ -78,7 +84,9 @@ def test_not_assigned(user):
     label_done = LabelFactory.create(title="Done")
 
     problem_issue = IssueFactory.create(
-        user=user, state=IssueState.OPENED, time_estimate=seconds(hours=1),
+        user=user,
+        state=IssueState.OPENED,
+        time_estimate=seconds(hours=1),
     )
     problem_issue.labels.add(label_done)
 
@@ -99,7 +107,9 @@ def test_not_assigned_but_closed(user):
     label_done = LabelFactory.create(title="Done")
 
     problem_issue = IssueFactory.create(
-        user=user, state=IssueState.CLOSED, time_estimate=seconds(hours=1),
+        user=user,
+        state=IssueState.CLOSED,
+        time_estimate=seconds(hours=1),
     )
     problem_issue.labels.add(label_done)
 
@@ -119,7 +129,9 @@ def test_two_errors_per_merge_request(user):
     label_done = LabelFactory.create(title="Done")
 
     problem_issue = IssueFactory.create(
-        user=user, state=IssueState.OPENED, time_estimate=0,
+        user=user,
+        state=IssueState.OPENED,
+        time_estimate=0,
     )
     problem_issue.labels.add(label_done)
 
@@ -138,7 +150,9 @@ def test_resolver(user):
     :param user:
     """
     problem_issue = IssueFactory.create(
-        user=user, state=IssueState.OPENED, time_estimate=None,
+        user=user,
+        state=IssueState.OPENED,
+        time_estimate=None,
     )
 
     merge_request = MergeRequestFactory.create(user=user)

@@ -51,8 +51,10 @@ def test_complex(  # noqa: WPS211
 
     helpers.check_allowed_for_user(team_watcher, issues)
     helpers.check_allowed_for_user(
-        team_leader, lists.sub_list(issues, (0, 1, 2, 4, 5)),
+        team_leader,
+        lists.sub_list(issues, (0, 1, 2, 4, 5)),
     )
     helpers.check_allowed_for_user(
-        team_developer, lists.sub_list(issues, (2, 4, 5)),
+        team_developer,
+        lists.sub_list(issues, (2, 4, 5)),
     )

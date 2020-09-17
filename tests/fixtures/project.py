@@ -55,21 +55,27 @@ def project_customer(project, make_project_customer):
 def _make_project_manager(project, user=None):
     """Create or bind project manager."""
     return _add_or_update_user_in_project(
-        project, ProjectMemberRole.MANAGER, user,
+        project,
+        ProjectMemberRole.MANAGER,
+        user,
     )
 
 
 def _make_project_developer(project, user=None):
     """Create or bind project developer."""
     return _add_or_update_user_in_project(
-        project, ProjectMemberRole.DEVELOPER, user,
+        project,
+        ProjectMemberRole.DEVELOPER,
+        user,
     )
 
 
 def _make_project_customer(project, user=None):
     """Create or bind project customer."""
     return _add_or_update_user_in_project(
-        project, ProjectMemberRole.CUSTOMER, user,
+        project,
+        ProjectMemberRole.CUSTOMER,
+        user,
     )
 
 

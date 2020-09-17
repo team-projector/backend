@@ -20,7 +20,8 @@ def test_by_title_asc(user):
     ]
 
     queryset = IssuesFilterSet(
-        data={"order_by": "title"}, queryset=Issue.objects.all(),
+        data={"order_by": "title"},
+        queryset=Issue.objects.all(),
     ).qs
 
     assert list(queryset) == issues
@@ -39,7 +40,8 @@ def test_by_title_desc(user):
     ]
 
     queryset = IssuesFilterSet(
-        data={"order_by": "-title"}, queryset=Issue.objects.all(),
+        data={"order_by": "-title"},
+        queryset=Issue.objects.all(),
     ).qs
 
     assert list(queryset) == issues[::-1]
@@ -53,16 +55,19 @@ def test_by_due_date_asc(user):
     """
     issues = [
         IssueFactory.create(
-            due_date=datetime.now() - timedelta(days=3), user=user,
+            due_date=datetime.now() - timedelta(days=3),
+            user=user,
         ),
         IssueFactory.create(due_date=datetime.now(), user=user),
         IssueFactory.create(
-            due_date=datetime.now() + timedelta(days=1), user=user,
+            due_date=datetime.now() + timedelta(days=1),
+            user=user,
         ),
     ]
 
     queryset = IssuesFilterSet(
-        data={"order_by": "dueDate"}, queryset=Issue.objects.all(),
+        data={"order_by": "dueDate"},
+        queryset=Issue.objects.all(),
     ).qs
 
     assert list(queryset) == issues
@@ -76,16 +81,19 @@ def test_by_due_date_desc(user):
     """
     issues = [
         IssueFactory.create(
-            due_date=datetime.now() - timedelta(days=3), user=user,
+            due_date=datetime.now() - timedelta(days=3),
+            user=user,
         ),
         IssueFactory.create(due_date=datetime.now(), user=user),
         IssueFactory.create(
-            due_date=datetime.now() + timedelta(days=1), user=user,
+            due_date=datetime.now() + timedelta(days=1),
+            user=user,
         ),
     ]
 
     queryset = IssuesFilterSet(
-        data={"order_by": "-dueDate"}, queryset=Issue.objects.all(),
+        data={"order_by": "-dueDate"},
+        queryset=Issue.objects.all(),
     ).qs
 
     assert list(queryset) == issues[::-1]

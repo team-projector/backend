@@ -25,18 +25,24 @@ class DayMetricsProvider(provider.ProgressMetricsProvider):
         active_issues = self._get_active_issues() if now <= self.end else []
 
         generator = UserDaysMetricsGenerator(
-            self.user, self.start, self.end, active_issues,
+            self.user,
+            self.start,
+            self.end,
+            active_issues,
         )
 
         if self.start > now:
             self._replay_loading(
-                now, active_issues, generator,
+                now,
+                active_issues,
+                generator,
             )
 
         return self._get_metrics(generator)
 
     def _get_metrics(  # noqa: WPS211
-        self, generator: UserDaysMetricsGenerator,
+        self,
+        generator: UserDaysMetricsGenerator,
     ) -> provider.UserProgressMetricsList:
         """
         Get metrics.

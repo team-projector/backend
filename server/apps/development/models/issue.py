@@ -25,7 +25,9 @@ ISSUE_STATE_MAX_LENGTH = 255
 
 
 class Issue(
-    TrackableMixin, GitlabEntityMixin, GitlabInternalIdMixin,
+    TrackableMixin,
+    GitlabEntityMixin,
+    GitlabInternalIdMixin,
 ):
     """
     The issue model.
@@ -74,7 +76,9 @@ class Issue(
     is_merged = models.BooleanField(default=False)
 
     labels = models.ManyToManyField(
-        "development.Label", related_name="issues", blank=True,
+        "development.Label",
+        related_name="issues",
+        blank=True,
     )
 
     project = models.ForeignKey(
@@ -97,7 +101,10 @@ class Issue(
     )
 
     milestone = models.ForeignKey(
-        "development.Milestone", models.CASCADE, null=True, blank=True,
+        "development.Milestone",
+        models.CASCADE,
+        null=True,
+        blank=True,
     )
 
     ticket = models.ForeignKey(
@@ -115,7 +122,9 @@ class Issue(
     )
 
     merge_requests = models.ManyToManyField(  # noqa: CCE001
-        "development.MergeRequest", blank=True, related_name="issues",
+        "development.MergeRequest",
+        blank=True,
+        related_name="issues",
     )
 
     objects = IssueManager()  # noqa: WPS110

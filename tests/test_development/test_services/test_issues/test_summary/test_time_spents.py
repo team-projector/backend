@@ -29,7 +29,10 @@ def test_by_user(user):
     :param user:
     """
     issues = IssueFactory.create_batch(
-        5, user=user, state=IssueState.OPENED, due_date=datetime.now(),
+        5,
+        user=user,
+        state=IssueState.OPENED,
+        due_date=datetime.now(),
     )
 
     another_user = UserFactory.create()
@@ -41,7 +44,10 @@ def test_by_user(user):
     )
 
     IssueSpentTimeFactory.create(
-        date=datetime.now(), user=user, base=issues[0], time_spent=100,
+        date=datetime.now(),
+        user=user,
+        base=issues[0],
+        time_spent=100,
     )
 
     IssueSpentTimeFactory.create(
@@ -67,14 +73,19 @@ def test_by_team(user):
     :param user:
     """
     issues = IssueFactory.create_batch(
-        5, user=user, state=IssueState.OPENED, due_date=datetime.now(),
+        5,
+        user=user,
+        state=IssueState.OPENED,
+        due_date=datetime.now(),
     )
 
     another_user = UserFactory.create()
 
     team = TeamFactory.create()
     TeamMemberFactory.create(
-        user=user, team=team, roles=TeamMember.roles.LEADER,
+        user=user,
+        team=team,
+        roles=TeamMember.roles.LEADER,
     )
 
     TeamMemberFactory.create(
@@ -91,7 +102,10 @@ def test_by_team(user):
     )
 
     IssueSpentTimeFactory.create(
-        date=datetime.now(), user=user, base=issues[0], time_spent=100,
+        date=datetime.now(),
+        user=user,
+        base=issues[0],
+        time_spent=100,
     )
 
     IssueSpentTimeFactory.create(
@@ -128,7 +142,10 @@ def test_by_project(user):
     )
 
     IssueSpentTimeFactory.create(
-        date=datetime.now(), user=user, base=issues[0], time_spent=100,
+        date=datetime.now(),
+        user=user,
+        base=issues[0],
+        time_spent=100,
     )
 
     IssueSpentTimeFactory.create(
@@ -178,11 +195,16 @@ def test_by_state(user):
     :param user:
     """
     issue_opened = IssueFactory.create(
-        user=user, due_date=datetime.now(), state=IssueState.OPENED,
+        user=user,
+        due_date=datetime.now(),
+        state=IssueState.OPENED,
     )
 
     IssueSpentTimeFactory.create(
-        date=datetime.now(), user=user, base=issue_opened, time_spent=100,
+        date=datetime.now(),
+        user=user,
+        base=issue_opened,
+        time_spent=100,
     )
     IssueSpentTimeFactory.create(
         date=timezone.now() - timedelta(days=2),
@@ -192,10 +214,15 @@ def test_by_state(user):
     )
 
     issue_closed = IssueFactory.create(
-        user=user, due_date=datetime.now(), state=IssueState.CLOSED,
+        user=user,
+        due_date=datetime.now(),
+        state=IssueState.CLOSED,
     )
     IssueSpentTimeFactory.create(
-        date=datetime.now(), user=user, base=issue_closed, time_spent=400,
+        date=datetime.now(),
+        user=user,
+        base=issue_closed,
+        time_spent=400,
     )
 
     summary = get_issues_summary(
@@ -206,7 +233,11 @@ def test_by_state(user):
     )
 
     checkers.check_summary(
-        summary, count=2, opened_count=1, closed_count=1, time_spent=100,
+        summary,
+        count=2,
+        opened_count=1,
+        closed_count=1,
+        time_spent=100,
     )
 
     summary = get_issues_summary(
@@ -217,7 +248,11 @@ def test_by_state(user):
     )
 
     checkers.check_summary(
-        summary, count=2, opened_count=1, closed_count=1, time_spent=400,
+        summary,
+        count=2,
+        opened_count=1,
+        closed_count=1,
+        time_spent=400,
     )
 
 
@@ -243,10 +278,16 @@ def test_by_milestone(user):
         ),
     ]
     IssueSpentTimeFactory.create(
-        date=datetime.now(), user=user, base=issues[0], time_spent=100,
+        date=datetime.now(),
+        user=user,
+        base=issues[0],
+        time_spent=100,
     )
     IssueSpentTimeFactory.create(
-        date=datetime.now(), user=user, base=issues[1], time_spent=300,
+        date=datetime.now(),
+        user=user,
+        base=issues[1],
+        time_spent=300,
     )
 
     summary = get_issues_summary(
@@ -288,10 +329,16 @@ def test_by_ticket(user):
         ),
     ]
     IssueSpentTimeFactory.create(
-        date=datetime.now(), user=user, base=issues[0], time_spent=100,
+        date=datetime.now(),
+        user=user,
+        base=issues[0],
+        time_spent=100,
     )
     IssueSpentTimeFactory.create(
-        date=datetime.now(), user=user, base=issues[1], time_spent=300,
+        date=datetime.now(),
+        user=user,
+        base=issues[1],
+        time_spent=300,
     )
 
     IssueFactory.create_batch(

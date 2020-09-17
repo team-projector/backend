@@ -30,7 +30,8 @@ class SyncIssueMutation(SerializerMutation):
         issue = validated_data.pop("issue")
 
         sync_project_issue_task.delay(
-            issue.project.gl_id, issue.gl_iid,
+            issue.project.gl_id,
+            issue.gl_iid,
         )
 
         return cls(issue=issue)

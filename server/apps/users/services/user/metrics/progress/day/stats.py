@@ -15,7 +15,10 @@ class UserDayStatsProvider:
     """User per day stats provider."""
 
     def get_time_spents(
-        self, user: User, start: date, end: date,
+        self,
+        user: User,
+        start: date,
+        end: date,
     ) -> Dict[date, Dict[str, int]]:
         """Get user time spents in range."""
         queryset = (

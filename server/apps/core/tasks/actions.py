@@ -12,5 +12,6 @@ User = get_user_model()
 def add_action_task(**kwargs) -> None:
     """Add action."""
     action.send(
-        kwargs.pop("sender_id", User.objects.system_user), **kwargs,
+        kwargs.pop("sender_id", User.objects.system_user),
+        **kwargs,
     )

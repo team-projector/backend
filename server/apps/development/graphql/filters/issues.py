@@ -35,7 +35,9 @@ class TicketFilter(django_filters.ModelChoiceFilter):
         super().__init__(queryset=Ticket.objects.all())
 
     def filter(  # noqa: A003, WPS125
-        self, queryset, value,  # noqa: WPS110
+        self,
+        queryset,
+        value,  # noqa: WPS110
     ) -> QuerySet:
         """Do filtering."""
         if not value:
@@ -54,7 +56,9 @@ class MilestoneFilter(django_filters.ModelChoiceFilter):
         super().__init__(queryset=Milestone.objects.all())
 
     def filter(  # noqa: A003, WPS125
-        self, queryset, value,  # noqa: WPS110
+        self,
+        queryset,
+        value,  # noqa: WPS110
     ) -> QuerySet:
         """Do filtering."""
         if not value:
@@ -69,7 +73,9 @@ class ProblemsFilter(django_filters.BooleanFilter):
     """Filter issues by problem."""
 
     def filter(  # noqa: A003, WPS125
-        self, queryset, value,  # noqa: WPS110
+        self,
+        queryset,
+        value,  # noqa: WPS110
     ) -> QuerySet:
         """Do filtering."""
         if value is None:
@@ -93,7 +99,9 @@ class TeamFilter(django_filters.ModelChoiceFilter):
         super().__init__(queryset=Team.objects.all())
 
     def filter(  # noqa: A003, WPS125
-        self, queryset, value,  # noqa: WPS110
+        self,
+        queryset,
+        value,  # noqa: WPS110
     ) -> QuerySet:
         """Do filtering."""
         if not value:

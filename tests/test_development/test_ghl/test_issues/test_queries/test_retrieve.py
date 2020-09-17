@@ -25,7 +25,8 @@ def test_query(user, ghl_client):
     ghl_client.set_user(user)
 
     response = ghl_client.execute(
-        GHL_QUERY_ISSUE, variable_values={"id": issue.pk},
+        GHL_QUERY_ISSUE,
+        variable_values={"id": issue.pk},
     )
 
     assert "errors" not in response
@@ -38,7 +39,9 @@ def test_unauth(db, ghl_mock_info, issue_query):
 
     with pytest.raises(GraphQLPermissionDenied):
         issue_query(
-            root=None, info=ghl_mock_info, id=issue.pk,
+            root=None,
+            info=ghl_mock_info,
+            id=issue.pk,
         )
 
 
@@ -46,5 +49,7 @@ def test_not_found(ghl_auth_mock_info, issue_query):
     """Test not found issue retrieving."""
     with pytest.raises(GraphQLNotFound):
         issue_query(
-            root=None, info=ghl_auth_mock_info, id=1,
+            root=None,
+            info=ghl_auth_mock_info,
+            id=1,
         )

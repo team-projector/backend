@@ -26,7 +26,10 @@ def test_participants(db, gl_mocker, gl_client):
 
     gl_mock.mock_project_endpoints(gl_mocker, gl_project)
     gl_mock.mock_issue_endpoints(
-        gl_mocker, gl_project, gl_issue, participants=gl_participants,
+        gl_mocker,
+        gl_project,
+        gl_issue,
+        participants=gl_participants,
     )
 
     gl_project = gl_client.projects.get(id=project.gl_id)

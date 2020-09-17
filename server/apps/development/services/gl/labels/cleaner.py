@@ -19,7 +19,10 @@ class Label:
     """Label object with label id, name and gl api parent refer."""
 
     def __init__(
-        self, id_, name, parent: Union[GLGroupProject, GLGroup],
+        self,
+        id_,
+        name,
+        parent: Union[GLGroupProject, GLGroup],
     ):
         """Inits a label."""
         self.id = id_  # noqa: WPS125, A003
@@ -31,7 +34,8 @@ class Label:
         """Deletes the label from gitlab."""
         logger.debug(
             "Removing label {0} from {1}".format(
-                self.name, self._parent.web_url,
+                self.name,
+                self._parent.web_url,
             ),
         )
 
@@ -84,7 +88,8 @@ class LabelsContainer:
     def _get_labels(self) -> Dict[int, Label]:
         """Get labels for group or project and returns them as Label object."""
         labels = self.gl_api_object.labels.list(
-            all=True, include_ancestor_groups=False,
+            all=True,
+            include_ancestor_groups=False,
         )
 
         return {
@@ -139,7 +144,9 @@ class Project(LabelsContainer):
             gl_api_obj.save()
             logger.debug(
                 "Change labels for {0}:\n{1} -> {2}".format(
-                    gl_api_obj.web_url, initial, gl_api_obj.labels,
+                    gl_api_obj.web_url,
+                    initial,
+                    gl_api_obj.labels,
                 ),
             )
 
@@ -202,7 +209,9 @@ class LabelsContainerTree:
 
     @classmethod
     def get_labels_containers_tree(
-        cls, root: Union[Project, Group], tree=None,
+        cls,
+        root: Union[Project, Group],
+        tree=None,
     ):
         """Builds tree from the element."""
         if not tree:
@@ -220,7 +229,8 @@ class LabelsContainerTree:
         return TreeElement(root, children)
 
     def get_containers(
-        self, element: Optional[TreeElement] = None,
+        self,
+        element: Optional[TreeElement] = None,
     ) -> Generator[Union[Project, Group], None, None]:
         """Returns all containers in the tree."""
         if not element:
@@ -233,7 +243,8 @@ class LabelsContainerTree:
             yield from self.get_containers(child)
 
     def get_marked_labels(
-        self, element: Optional[TreeElement] = None,
+        self,
+        element: Optional[TreeElement] = None,
     ) -> Dict[int, Label]:
         """Returns all labels in the tree which have a form of __<id>__<n>."""
         if element is None:
@@ -261,7 +272,9 @@ class LabelsCleaner:
         self._client = client
 
     def clean_group(  # noqa:WPS210
-        self, group_key: Union[str, int], dry_run=False,
+        self,
+        group_key: Union[str, int],
+        dry_run=False,
     ):
         """Cleans the group with a given key from duplicate labels."""
         group = Group(group_key, client=self._client)
@@ -292,10 +305,13 @@ class LabelsCleaner:
         tree = LabelsContainerTree(group)
 
         with capture_gitlab_requests(
-            gl_client=self._client, put=HTTPStatus.OK, delete=HTTPStatus.OK,
+            gl_client=self._client,
+            put=HTTPStatus.OK,
+            delete=HTTPStatus.OK,
         ) as captured:
             self._process_element_renaming(
-                tree.root, tree.root.container.labels,
+                tree.root,
+                tree.root.container.labels,
             )
 
             projects = [
@@ -313,7 +329,9 @@ class LabelsCleaner:
             return captured
 
     def _process_element_renaming(
-        self, element: TreeElement, parent_labels: Dict[int, Label],
+        self,
+        element: TreeElement,
+        parent_labels: Dict[int, Label],
     ) -> None:
         """
         Process element renaming.

@@ -23,7 +23,9 @@ def register_group(mocker, group, status_code: int = HTTPStatus.OK):
     :type status_code: int, defaults to HTTPStatus.OK
     """
     mocker.register_get(
-        "/groups/{0}".format(group["id"]), group, status_code=status_code,
+        "/groups/{0}".format(group["id"]),
+        group,
+        status_code=status_code,
     )
 
 
@@ -36,7 +38,8 @@ def register_group_milestones(mocker, group, milestones):
     :param milestones:
     """
     mocker.register_get(
-        "/groups/{0}/milestones".format(group["id"]), milestones,
+        "/groups/{0}/milestones".format(group["id"]),
+        milestones,
     )
     for milestone in milestones:
         mocker.register_get(
@@ -54,7 +57,8 @@ def register_group_projects(mocker, group, projects):
     :param projects:
     """
     mocker.register_get(
-        "/groups/{0}/projects".format(group["id"]), projects,
+        "/groups/{0}/projects".format(group["id"]),
+        projects,
     )
 
 

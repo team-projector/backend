@@ -44,7 +44,8 @@ def test_unauth(user, ghl_mock_info, all_teams_query):
     """Test not auth query."""
     with pytest.raises(GraphQLPermissionDenied):
         all_teams_query(
-            root=None, info=ghl_mock_info,
+            root=None,
+            info=ghl_mock_info,
         )
 
 

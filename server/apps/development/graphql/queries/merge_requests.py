@@ -17,7 +17,8 @@ class MergeRequestQueries(graphene.ObjectType):
     """Class representing list of available fields for merge request queries."""
 
     all_merge_requests = DataSourceConnectionField(
-        MergeRequestType, filterset_class=MergeRequestFilterSet,
+        MergeRequestType,
+        filterset_class=MergeRequestFilterSet,
     )
 
     merge_requests_summary = graphene.Field(

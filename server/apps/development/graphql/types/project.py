@@ -27,7 +27,8 @@ class ProjectType(BaseDjangoObjectType):
         name = "Project"
 
     milestones = DataSourceConnectionField(
-        MilestoneType, filterset_class=MilestonesFilterSet,
+        MilestoneType,
+        filterset_class=MilestonesFilterSet,
     )
 
     def resolve_milestones(self: Project, info, **kwargs):  # noqa: WPS110

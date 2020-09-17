@@ -51,7 +51,8 @@ def test_issues_by_note(db):
     issue2 = IssueFactory.create(gl_url=url_template.format(15))
     issue3 = IssueFactory.create()
     issue4 = IssueFactory.create(
-        gl_url=url_template.format(14), description="",
+        gl_url=url_template.format(14),
+        description="",
     )
 
     note_params = {
@@ -60,7 +61,8 @@ def test_issues_by_note(db):
     }
 
     IssueNoteFactory.create(
-        data={"issues": [issue1.gl_url, issue2.gl_url]}, **note_params,
+        data={"issues": [issue1.gl_url, issue2.gl_url]},
+        **note_params,
     )
 
     related_issues = get_related_issues(issue4)
@@ -87,7 +89,9 @@ def test_by_alternative(db):
         IssueFactory.create(gl_url=alt_template.format(15), gl_iid=15),
         IssueFactory.create(),
         IssueFactory.create(
-            gl_url=url_template.format(14), description="", gl_iid=14,
+            gl_url=url_template.format(14),
+            description="",
+            gl_iid=14,
         ),
     ]
 

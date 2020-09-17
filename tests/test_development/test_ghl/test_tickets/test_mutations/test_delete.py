@@ -16,7 +16,8 @@ def test_query(project_manager, ghl_client, ticket):
     ghl_client.set_user(project_manager)
 
     response = ghl_client.execute(
-        GHL_DELETE_TICKET, variable_values={"id": ticket.pk},
+        GHL_DELETE_TICKET,
+        variable_values={"id": ticket.pk},
     )
 
     assert "errors" not in response
@@ -24,11 +25,16 @@ def test_query(project_manager, ghl_client, ticket):
 
 
 def test_success(
-    project_manager, ghl_auth_mock_info, delete_ticket_mutation, ticket,
+    project_manager,
+    ghl_auth_mock_info,
+    delete_ticket_mutation,
+    ticket,
 ):
     """Test success ticket delete."""
     response = delete_ticket_mutation(
-        root=None, info=ghl_auth_mock_info, id=ticket.pk,
+        root=None,
+        info=ghl_auth_mock_info,
+        id=ticket.pk,
     )
 
     assert response.ok

@@ -45,7 +45,8 @@ class IssueAdmin(ForceSyncEntityMixin, BaseModelAdmin):
     def sync_handler(self, issue):
         """Syncing issue."""
         sync_project_issue_task.delay(
-            issue.project.gl_id, issue.gl_iid,
+            issue.project.gl_id,
+            issue.gl_iid,
         )
 
     def save_model(self, request, instance, form, change):

@@ -32,7 +32,8 @@ def test_replay(user):
 
     assert len(metrics) == (end - start).days + 1
     checkers.check_user_progress_metrics(
-        metrics, loadings={start: timedelta(hours=7)},
+        metrics,
+        loadings={start: timedelta(hours=7)},
     )
 
 
@@ -55,7 +56,8 @@ def test_has_spents(user):
 
     assert len(metrics) == (end - start).days + 1
     checkers.check_user_progress_metrics(
-        metrics, loadings={start: timedelta(hours=5)},
+        metrics,
+        loadings={start: timedelta(hours=5)},
     )
 
 
@@ -79,7 +81,8 @@ def test_replay_without_active_issues(user):
 
     assert len(metrics) == (end - start).days + 1
     checkers.check_user_progress_metrics(
-        metrics, loadings={start: timedelta(seconds=0)},
+        metrics,
+        loadings={start: timedelta(seconds=0)},
     )
 
 
@@ -104,5 +107,6 @@ def test_not_apply_loading_weekends(user):
 
     assert len(metrics) == (end - start).days + 1
     checkers.check_user_progress_metrics(
-        metrics, loadings={start: timedelta(seconds=0)},
+        metrics,
+        loadings={start: timedelta(seconds=0)},
     )

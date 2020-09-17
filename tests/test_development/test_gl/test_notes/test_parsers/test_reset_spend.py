@@ -28,10 +28,12 @@ def test_reset(user):
                 "id": 2,
                 "body": SPEND_RESET_MESSAGE,
                 "created_at": datetime.strftime(
-                    datetime.now(), GITLAB_DATETIME_FORMAT,
+                    datetime.now(),
+                    GITLAB_DATETIME_FORMAT,
                 ),
                 "updated_at": datetime.strftime(
-                    datetime.now(), GITLAB_DATETIME_FORMAT,
+                    datetime.now(),
+                    GITLAB_DATETIME_FORMAT,
                 ),
                 "author": {"id": user.gl_id},
             },

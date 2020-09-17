@@ -66,7 +66,8 @@ class TicketMetricsProvider:
             ),
             opened_time_estimate=Coalesce(
                 models.Sum(
-                    "time_estimate", filter=models.Q(state=IssueState.OPENED),
+                    "time_estimate",
+                    filter=models.Q(state=IssueState.OPENED),
                 ),
                 0,
             ),

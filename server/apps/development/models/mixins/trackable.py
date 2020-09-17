@@ -5,7 +5,8 @@ from apps.payroll.models.mixins import SpentTimesMixin
 
 
 class TrackableMixin(
-    NotableMixin, SpentTimesMixin,
+    NotableMixin,
+    SpentTimesMixin,
 ):
     """Mixin for trackable entities."""
 

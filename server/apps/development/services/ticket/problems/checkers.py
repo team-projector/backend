@@ -57,5 +57,6 @@ class OverDueDateChecker(BaseProblemChecker):
             return prefetched
 
         return ticket.issues.filter(
-            due_date__gt=ticket.due_date, state=IssueState.OPENED,
+            due_date__gt=ticket.due_date,
+            state=IssueState.OPENED,
         ).exists()

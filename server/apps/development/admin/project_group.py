@@ -11,7 +11,8 @@ from apps.development.tasks import sync_project_group_task
 
 @admin.register(ProjectGroup)
 class ProjectGroupAdmin(
-    ForceSyncEntityMixin, BaseModelAdmin,
+    ForceSyncEntityMixin,
+    BaseModelAdmin,
 ):
     """A class representing Project Group model for admin dashboard."""
 

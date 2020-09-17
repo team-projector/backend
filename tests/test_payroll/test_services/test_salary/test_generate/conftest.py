@@ -18,7 +18,9 @@ def user(db):
     :param db:
     """
     return UserFactory.create(
-        hour_rate=100, tax_rate=15, position=PositionFactory.create(),
+        hour_rate=100,
+        tax_rate=15,
+        position=PositionFactory.create(),
     )
 
 

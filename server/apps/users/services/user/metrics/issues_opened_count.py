@@ -10,7 +10,8 @@ def issues_opened_count_resolver(parent, info, **kwargs) -> int:  # noqa:WPS110
 
     if user.is_authenticated:
         return Issue.objects.filter(
-            user=user, state=IssueState.OPENED,
+            user=user,
+            state=IssueState.OPENED,
         ).count()
 
     return 0

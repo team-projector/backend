@@ -25,7 +25,9 @@ def test_filter_by_milestone(user, auth_rf):
     IssueFactory.create_batch(3, user=user, milestone=milestone)
 
     IssueFactory.create_batch(
-        2, user=user, milestone=ProjectMilestoneFactory.create(),
+        2,
+        user=user,
+        milestone=ProjectMilestoneFactory.create(),
     )
 
     queryset = IssuesFilterSet(

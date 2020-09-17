@@ -15,7 +15,9 @@ class Command(BaseCommand):
     def add_arguments(self, parser):
         """Add call arguments."""
         parser.add_argument(
-            "--group", type=str, help="Gitlab group_id for sync labels",
+            "--group",
+            type=str,
+            help="Gitlab group_id for sync labels",
         )
         parser.add_argument(
             "-l",
@@ -69,11 +71,11 @@ class Command(BaseCommand):
 
             def _wrapped(proj, gl_api_obj):  # noqa:WPS430
                 """
-            Wrapped.
+                Wrapped.
 
-            :param proj:
-            :param gl_api_obj:
-            """
+                :param proj:
+                :param gl_api_obj:
+                """
                 original_f(proj, gl_api_obj)
                 pbar.update()
 

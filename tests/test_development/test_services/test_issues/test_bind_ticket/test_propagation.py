@@ -17,7 +17,8 @@ def test_assign_ticket(db):
         gl_url="https://gitlab.com/junte/team-projector/backend/issues/12",
     )
     issue = IssueFactory.create(
-        ticket=TicketFactory.create(), description=child_issue.gl_url,
+        ticket=TicketFactory.create(),
+        description=child_issue.gl_url,
     )
 
     propagate_ticket_to_related_issues(issue)

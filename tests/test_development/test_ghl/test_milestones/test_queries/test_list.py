@@ -30,7 +30,9 @@ def test_query(user, gql_client_authenticated):
     """Test getting all milestones raw query."""
     project = ProjectFactory.create()
     ProjectMemberFactory.create(
-        user=user, role=ProjectMemberRole.MANAGER, owner=project,
+        user=user,
+        role=ProjectMemberRole.MANAGER,
+        owner=project,
     )
     ProjectMilestoneFactory.create_batch(5, owner=project)
 
@@ -45,7 +47,8 @@ def test_not_permissions(ghl_auth_mock_info, all_milestones_query):
 
     with pytest.raises(GraphQLPermissionDenied):
         all_milestones_query(
-            root=None, info=ghl_auth_mock_info,
+            root=None,
+            info=ghl_auth_mock_info,
         )
 
 
@@ -65,7 +68,9 @@ def test_search_by_title(ghl_auth_mock_info, all_milestones_query):
     milestone.save()
 
     response = all_milestones_query(
-        root=None, info=ghl_auth_mock_info, q="project_milestone",
+        root=None,
+        info=ghl_auth_mock_info,
+        q="project_milestone",
     )
 
     assert response.length == 1
@@ -113,7 +118,9 @@ def test_search_by_gl_url_not_full(ghl_auth_mock_info, all_milestones_query):
     milestone.save()
 
     response = all_milestones_query(
-        root=None, info=ghl_auth_mock_info, q="https://gl.com/project/",
+        root=None,
+        info=ghl_auth_mock_info,
+        q="https://gl.com/project/",
     )
 
     assert not response.length
@@ -130,7 +137,9 @@ def test_search_no_results(ghl_auth_mock_info, all_milestones_query):
     ProjectMilestoneFactory.create_batch(5, owner=project)
 
     response = all_milestones_query(
-        root=None, info=ghl_auth_mock_info, q="example_query_search",
+        root=None,
+        info=ghl_auth_mock_info,
+        q="example_query_search",
     )
 
     assert not response.length

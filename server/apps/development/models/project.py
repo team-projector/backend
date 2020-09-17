@@ -79,7 +79,8 @@ class Project(GitlabEntityMixin):
 
     milestones = GenericRelation("Milestone", related_query_name="project")
     members = GenericRelation(  # noqa: CCE001
-        "development.ProjectMember", related_query_name="project",
+        "development.ProjectMember",
+        related_query_name="project",
     )
 
     objects = ProjectManager()  # noqa: WPS110

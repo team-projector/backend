@@ -93,7 +93,10 @@ def test_as_watcher_another_team(user, make_team_developer, team_watcher):
 
 
 def test_my_spents_and_as_leader(
-    user, make_team_developer, team_developer, team_leader,
+    user,
+    make_team_developer,
+    team_developer,
+    team_leader,
 ):
     """
     Test my spents and as leader.

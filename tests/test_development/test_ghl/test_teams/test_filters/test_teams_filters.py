@@ -123,21 +123,24 @@ def test_search(user, make_team_leader):
     make_team_leader(teams[2], user)
 
     queryset = TeamsFilterSet(
-        data={"q": "ate"}, queryset=Team.objects.all(),
+        data={"q": "ate"},
+        queryset=Team.objects.all(),
     ).qs
 
     assert queryset.count() == 1
     assert queryset.first() == teams[0]
 
     queryset = TeamsFilterSet(
-        data={"q": "rea"}, queryset=Team.objects.all(),
+        data={"q": "rea"},
+        queryset=Team.objects.all(),
     ).qs
 
     assert queryset.count() == 2
     assert set(queryset) == {teams[0], teams[1]}
 
     queryset = TeamsFilterSet(
-        data={"q": "012345"}, queryset=Team.objects.all(),
+        data={"q": "012345"},
+        queryset=Team.objects.all(),
     ).qs
 
     assert queryset.count() == 0
@@ -161,13 +164,15 @@ def test_order_by_title(user, make_team_leader):
     make_team_leader(teams[2], user)
 
     queryset = TeamsFilterSet(
-        data={"order_by": "title"}, queryset=Team.objects.all(),
+        data={"order_by": "title"},
+        queryset=Team.objects.all(),
     ).qs
 
     assert list(queryset) == lists.sub_list(teams, (0, 2, 1))
 
     queryset = TeamsFilterSet(
-        data={"order_by": "-title"}, queryset=Team.objects.all(),
+        data={"order_by": "-title"},
+        queryset=Team.objects.all(),
     ).qs
 
     assert list(queryset) == lists.sub_list(teams, (1, 2, 0))

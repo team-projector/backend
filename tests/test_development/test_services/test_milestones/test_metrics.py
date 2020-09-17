@@ -61,7 +61,10 @@ def test_with_issues(user, milestone):
     :param milestone:
     """
     IssueFactory.create_batch(
-        3, user=user, milestone=milestone, total_time_spent=0,
+        3,
+        user=user,
+        milestone=milestone,
+        total_time_spent=0,
     )
 
     checkers.check_milestone_metrics(
@@ -88,16 +91,24 @@ def test_payrolls(user, milestone):
     ]
 
     IssueSpentTimeFactory.create(
-        user=user, base=issues[0], time_spent=seconds(hours=1),
+        user=user,
+        base=issues[0],
+        time_spent=seconds(hours=1),
     )
     IssueSpentTimeFactory.create(
-        user=user, base=issues[0], time_spent=seconds(hours=2),
+        user=user,
+        base=issues[0],
+        time_spent=seconds(hours=2),
     )
     IssueSpentTimeFactory.create(
-        user=user, base=issues[1], time_spent=-seconds(hours=1),
+        user=user,
+        base=issues[1],
+        time_spent=-seconds(hours=1),
     )
     IssueSpentTimeFactory.create(
-        user=user, base=issues[2], time_spent=seconds(hours=3),
+        user=user,
+        base=issues[2],
+        time_spent=seconds(hours=3),
     )
 
     MergeRequestSpentTimeFactory.create(
@@ -108,7 +119,8 @@ def test_payrolls(user, milestone):
     MergeRequestSpentTimeFactory.create(
         user=user,
         base=MergeRequestFactory.create(
-            user=user, milestone=ProjectMilestoneFactory(),
+            user=user,
+            milestone=ProjectMilestoneFactory(),
         ),
         time_spent=seconds(hours=10),
     )

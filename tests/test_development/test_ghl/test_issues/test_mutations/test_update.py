@@ -51,7 +51,10 @@ def test_query(issue, ticket, ghl_client, user):
 
 
 def test_without_access(
-    user, ghl_auth_mock_info, update_issue_mutation, ticket,
+    user,
+    ghl_auth_mock_info,
+    update_issue_mutation,
+    ticket,
 ):
     """
     Test without access.
@@ -64,7 +67,10 @@ def test_without_access(
     issue = IssueFactory.create()
 
     resolve = update_issue_mutation(
-        root=None, info=ghl_auth_mock_info, id=issue.id, ticket=ticket.id,
+        root=None,
+        info=ghl_auth_mock_info,
+        id=issue.id,
+        ticket=ticket.id,
     )
 
     assert isinstance(resolve, GraphQLInputError)
@@ -75,7 +81,10 @@ def test_without_access(
 
 
 def test_ticket_propagation(
-    user, ghl_auth_mock_info, update_issue_mutation, ticket,
+    user,
+    ghl_auth_mock_info,
+    update_issue_mutation,
+    ticket,
 ):
     """
     Test ticket propagation.
@@ -90,11 +99,16 @@ def test_ticket_propagation(
         gl_url="https://gitlab.com/junte/team-projector/backend/issues/12",
     )
     issue = IssueFactory.create(
-        user=user, ticket=None, description=child_issue.gl_url,
+        user=user,
+        ticket=None,
+        description=child_issue.gl_url,
     )
 
     update_issue_mutation(
-        root=None, info=ghl_auth_mock_info, id=issue.pk, ticket=ticket.id,
+        root=None,
+        info=ghl_auth_mock_info,
+        id=issue.pk,
+        ticket=ticket.id,
     )
 
     child_issue.refresh_from_db()

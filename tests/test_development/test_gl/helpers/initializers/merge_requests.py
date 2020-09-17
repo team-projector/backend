@@ -17,7 +17,8 @@ def init_merge_request(project, gl_project, gl_kwargs=None, model_kwargs=None):
     model_kwargs = model_kwargs or {}
 
     gl_merge_request = GlMergeRequestFactory.create(
-        project_id=gl_project["id"], **gl_kwargs,
+        project_id=gl_project["id"],
+        **gl_kwargs,
     )
 
     merge_request = MergeRequestFactory.create(

@@ -76,10 +76,14 @@ def test_filter_by_salary(user, user2, issue, salary):
 def test_filter_by_salary_not_exists(user, user2, issue, salary):
     """Will getting all TimeSpents, salary not exists will ignored."""
     IssueSpentTimeFactory.create(
-        date=timezone.now() - timedelta(hours=2), user=user2, base=issue,
+        date=timezone.now() - timedelta(hours=2),
+        user=user2,
+        base=issue,
     )
     IssueSpentTimeFactory.create(
-        date=timezone.now() - timedelta(hours=1), user=user2, base=issue,
+        date=timezone.now() - timedelta(hours=1),
+        user=user2,
+        base=issue,
     )
     IssueSpentTimeFactory.create(
         date=timezone.now() - timedelta(hours=4),
@@ -206,16 +210,24 @@ def test_filter_by_project(user):
 
     spends = [
         IssueSpentTimeFactory.create(
-            user=user, base=issue, time_spent=int(seconds(hours=5)),
+            user=user,
+            base=issue,
+            time_spent=int(seconds(hours=5)),
         ),
         IssueSpentTimeFactory.create(
-            user=user, base=issue, time_spent=int(seconds(hours=2)),
+            user=user,
+            base=issue,
+            time_spent=int(seconds(hours=2)),
         ),
         MergeRequestSpentTimeFactory.create(
-            user=user, base=merge_request, time_spent=int(seconds(hours=4)),
+            user=user,
+            base=merge_request,
+            time_spent=int(seconds(hours=4)),
         ),
         MergeRequestSpentTimeFactory.create(
-            user=user, base=merge_request, time_spent=int(seconds(hours=1)),
+            user=user,
+            base=merge_request,
+            time_spent=int(seconds(hours=1)),
         ),
     ]
 
@@ -254,16 +266,24 @@ def test_filter_by_team(user, user2, make_team_leader):
 
     spends = [
         IssueSpentTimeFactory.create(
-            user=user, base=issue, time_spent=int(seconds(hours=5)),
+            user=user,
+            base=issue,
+            time_spent=int(seconds(hours=5)),
         ),
         IssueSpentTimeFactory.create(
-            user=user, base=issue, time_spent=int(seconds(hours=2)),
+            user=user,
+            base=issue,
+            time_spent=int(seconds(hours=2)),
         ),
         MergeRequestSpentTimeFactory.create(
-            user=user2, base=merge_request, time_spent=int(seconds(hours=4)),
+            user=user2,
+            base=merge_request,
+            time_spent=int(seconds(hours=4)),
         ),
         MergeRequestSpentTimeFactory.create(
-            user=user2, base=merge_request, time_spent=int(seconds(hours=1)),
+            user=user2,
+            base=merge_request,
+            time_spent=int(seconds(hours=1)),
         ),
     ]
 
@@ -385,15 +405,21 @@ def test_filter_by_state_all(user):
 
     spends = [
         IssueSpentTimeFactory.create(
-            user=user, base=issue, time_spent=int(seconds(hours=5)),
+            user=user,
+            base=issue,
+            time_spent=int(seconds(hours=5)),
         ),
         MergeRequestSpentTimeFactory.create(
-            user=user, base=merge_request, time_spent=int(seconds(hours=4)),
+            user=user,
+            base=merge_request,
+            time_spent=int(seconds(hours=4)),
         ),
     ]
 
     queryset = SpentTimeFilterSet(
-        data={"state": "all"}, queryset=SpentTime.objects.all(), request=None,
+        data={"state": "all"},
+        queryset=SpentTime.objects.all(),
+        request=None,
     ).qs
 
     assert len(queryset) == 2

@@ -10,7 +10,9 @@ from apps.development.services.issue.summary import (
 
 
 def resolve_issues_summary(
-    parent, info, **kwargs,  # noqa: WPS110
+    parent,
+    info,  # noqa: WPS110
+    **kwargs,
 ):
     """Resolve issues summary."""
     filterset = IssuesFilterSet(
@@ -23,14 +25,18 @@ def resolve_issues_summary(
 
 
 def resolve_issues_project_summaries(
-    parent, info, **kwargs,  # noqa: WPS110
+    parent,
+    info,  # noqa: WPS110
+    **kwargs,
 ):
     """Resolve issues project summaries."""
     return get_project_summaries(parent.queryset, **kwargs)
 
 
 def resolve_issues_team_summaries(
-    parent, info, **kwargs,  # noqa: WPS110
+    parent,
+    info,  # noqa: WPS110
+    **kwargs,
 ):
     """Resolve issues team summaries."""
     return get_team_summaries(parent.queryset, **kwargs)

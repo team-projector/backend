@@ -20,7 +20,10 @@ class UserManager(BaseUserManager):
         return get_system_user()
 
     def create_user(
-        self, login: str, password: Optional[str] = None, **kwargs,
+        self,
+        login: str,
+        password: Optional[str] = None,
+        **kwargs,
     ):
         """Create user."""
         if not login:
@@ -34,7 +37,9 @@ class UserManager(BaseUserManager):
         return user
 
     def create_superuser(
-        self, login: str, password: str,
+        self,
+        login: str,
+        password: str,
     ):
         """Create superuser."""
         user = self.create_user(login, password=password)

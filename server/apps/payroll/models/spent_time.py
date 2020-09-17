@@ -28,7 +28,9 @@ class SpentTime(Payroll):  # noqa:WPS230
     )
 
     hour_rate = models.FloatField(
-        null=True, verbose_name=_("VN__RATE"), help_text=_("HT__RATE"),
+        null=True,
+        verbose_name=_("VN__RATE"),
+        help_text=_("HT__RATE"),
     )
 
     tax_rate = models.FloatField(
@@ -45,7 +47,8 @@ class SpentTime(Payroll):  # noqa:WPS230
     )
 
     time_spent = models.IntegerField(
-        verbose_name=_("VN__TIME_SPENT"), help_text=_("HT__TIME_SPENT"),
+        verbose_name=_("VN__TIME_SPENT"),
+        help_text=_("HT__TIME_SPENT"),
     )
 
     object_id = models.PositiveIntegerField()

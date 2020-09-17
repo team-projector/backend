@@ -11,7 +11,8 @@ def test_success():
 
 
 @pytest.mark.parametrize(
-    "states", [[], [{"state": "opened"}], [{"state": "bla"}]],
+    "states",
+    [[], [{"state": "opened"}], [{"state": "bla"}]],
 )
 def test_fail(states):
     """

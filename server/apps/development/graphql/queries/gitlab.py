@@ -10,5 +10,6 @@ class GitlabQueries(graphene.ObjectType):
     """Class representing list of available fields for Gitlabd queries."""
 
     gitlab_status = graphene.Field(
-        GitlabStatusType, resolver=resolve_gitlab_status,
+        GitlabStatusType,
+        resolver=resolve_gitlab_status,
     )

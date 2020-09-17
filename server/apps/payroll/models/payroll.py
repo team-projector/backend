@@ -17,7 +17,9 @@ class Payroll(Timestamps):
         ordering = ("-created_at",)
 
     sum = MoneyField(  # noqa: WPS125, A003
-        default=0, verbose_name=_("VN__SUM"), help_text=_("HT__SUM"),
+        default=0,
+        verbose_name=_("VN__SUM"),
+        help_text=_("HT__SUM"),
     )
 
     created_by = models.ForeignKey(

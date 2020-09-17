@@ -37,7 +37,9 @@ def test_query(project_manager, ghl_client, gl_mocker, user):
 
     gl_project_issue = GlIssueFactory.create(id=gl_project["id"])
     issue = IssueFactory.create(
-        gl_iid=gl_project_issue["iid"], user=user, project=project,
+        gl_iid=gl_project_issue["iid"],
+        user=user,
+        project=project,
     )
 
     IssueFactory.create_batch(5, project=project)
@@ -55,7 +57,9 @@ def test_query(project_manager, ghl_client, gl_mocker, user):
 
 
 def test_user_without_gl_token(
-    issue, ghl_auth_mock_info, add_spent_issue_mutation,
+    issue,
+    ghl_auth_mock_info,
+    add_spent_issue_mutation,
 ):
     """
     Test user without gl token.
@@ -65,7 +69,10 @@ def test_user_without_gl_token(
     :param add_spent_issue_mutation:
     """
     resolve = add_spent_issue_mutation(
-        root=None, info=ghl_auth_mock_info, id=issue.id, seconds=60,
+        root=None,
+        info=ghl_auth_mock_info,
+        id=issue.id,
+        seconds=60,
     )
 
     isinstance(resolve, GraphQLInputError)
@@ -89,7 +96,10 @@ def test_bad_time(issue, user, ghl_auth_mock_info, add_spent_issue_mutation):
     user.save()
 
     resolve = add_spent_issue_mutation(
-        root=None, info=ghl_auth_mock_info, id=issue.id, seconds=-30,
+        root=None,
+        info=ghl_auth_mock_info,
+        id=issue.id,
+        seconds=-30,
     )
 
     isinstance(resolve, GraphQLInputError)

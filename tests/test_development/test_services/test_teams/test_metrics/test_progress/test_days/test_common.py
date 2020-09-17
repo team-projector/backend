@@ -336,7 +336,10 @@ def test_another_user_not_in_team(team, team_developer, team_leader):
 
 
 def test_another_user_in_team(
-    team, team_developer, team_leader, make_team_developer,
+    team,
+    team_developer,
+    team_leader,
+    make_team_developer,
 ):
     """
     Test another user in team.

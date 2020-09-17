@@ -45,7 +45,9 @@ def test_problems(user):
     """
     IssueFactory.create_batch(4, user=user, total_time_spent=0)
     IssueFactory.create(
-        user=user, total_time_spent=0, due_date=datetime.now(),
+        user=user,
+        total_time_spent=0,
+        due_date=datetime.now(),
     )
     IssueFactory.create_batch(2, user=UserFactory.create(), total_time_spent=0)
 

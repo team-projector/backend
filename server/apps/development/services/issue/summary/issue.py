@@ -34,7 +34,9 @@ class IssuesSummaryProvider:
     """Issues summary provider."""
 
     def __init__(
-        self, queryset: QuerySet, **kwargs,
+        self,
+        queryset: QuerySet,
+        **kwargs,
     ):
         """Initialize self."""
         self._queryset = queryset

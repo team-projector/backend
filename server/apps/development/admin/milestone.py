@@ -13,7 +13,8 @@ from apps.development.tasks import (
 
 @admin.register(Milestone)
 class MilestoneAdmin(
-    ForceSyncEntityMixin, BaseModelAdmin,
+    ForceSyncEntityMixin,
+    BaseModelAdmin,
 ):
     """A class representing Milestone model for admin dashboard."""
 
@@ -24,9 +25,11 @@ class MilestoneAdmin(
         """Syncing milestone."""
         if milestone.content_type.model_class() == Project:
             sync_project_milestone_task.delay(
-                milestone.owner.gl_id, milestone.gl_id,
+                milestone.owner.gl_id,
+                milestone.gl_id,
             )
         elif milestone.content_type.model_class() == ProjectGroup:
             sync_project_group_milestone_task.delay(
-                milestone.owner.gl_id, milestone.gl_id,
+                milestone.owner.gl_id,
+                milestone.gl_id,
             )

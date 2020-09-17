@@ -15,5 +15,6 @@ class BonusesQueries(graphene.ObjectType):
 
     bonus = DatasourceRelayNode.Field(BonusType)
     all_bonuses = DataSourceConnectionField(
-        BonusType, filterset_class=BonusFilterSet,
+        BonusType,
+        filterset_class=BonusFilterSet,
     )

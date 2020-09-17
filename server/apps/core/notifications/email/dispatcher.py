@@ -11,7 +11,10 @@ class SystemEmailDispatcher:
     """A class for sending emails."""
 
     def mail_users(
-        self, subject: str, text: str, recipient_list: List[str],
+        self,
+        subject: str,
+        text: str,
+        recipient_list: List[str],
     ) -> None:
         """
         Send email.

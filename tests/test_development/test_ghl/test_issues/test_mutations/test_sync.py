@@ -49,7 +49,9 @@ def test_query(project_manager, ghl_client, gl_mocker, user):
     gl_mock.register_user(gl_mocker, gl_assignee)
     gl_mock.mock_issue_endpoints(gl_mocker, gl_project, gl_issue)
     gl_mock.mock_project_endpoints(
-        gl_mocker, gl_project, issues=[gl_issue],
+        gl_mocker,
+        gl_project,
+        issues=[gl_issue],
     )
 
     assert issue.state == IssueState.OPENED
@@ -57,7 +59,8 @@ def test_query(project_manager, ghl_client, gl_mocker, user):
     ghl_client.set_user(user)
 
     response = ghl_client.execute(
-        GHL_QUERY_SYNC_ISSUE, variable_values={"id": issue.pk},
+        GHL_QUERY_SYNC_ISSUE,
+        variable_values={"id": issue.pk},
     )
 
     assert "errors" not in response
@@ -70,7 +73,9 @@ def test_query(project_manager, ghl_client, gl_mocker, user):
 
 
 def test_without_access(
-    user, ghl_auth_mock_info, sync_issue_mutation,
+    user,
+    ghl_auth_mock_info,
+    sync_issue_mutation,
 ):
     """
     Test without access.
@@ -82,7 +87,9 @@ def test_without_access(
     issue = IssueFactory()
 
     resolve = sync_issue_mutation(
-        root=None, info=ghl_auth_mock_info, id=issue.id,
+        root=None,
+        info=ghl_auth_mock_info,
+        id=issue.id,
     )
 
     assert isinstance(resolve, GraphQLInputError)

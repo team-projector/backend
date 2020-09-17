@@ -22,7 +22,8 @@ class TeamRolesFilter(django_filters.CharFilter):
 
         team_members = filter_by_roles(
             TeamMember.objects.filter(
-                team=OuterRef("pk"), user=self.parent.request.user,
+                team=OuterRef("pk"),
+                user=self.parent.request.user,
             ),
             parsed_roles,
         )

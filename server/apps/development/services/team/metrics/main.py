@@ -38,7 +38,9 @@ class TeamMetricsProvider:
     """Team metrics provider."""
 
     def __init__(
-        self, issues: Issue, merge_requests: MergeRequest,
+        self,
+        issues: Issue,
+        merge_requests: MergeRequest,
     ):
         """Initialize self."""
         self.issues = issues

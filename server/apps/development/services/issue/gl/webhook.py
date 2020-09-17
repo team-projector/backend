@@ -25,7 +25,8 @@ class IssuesGLWebhook(GLWebhook):
 
         logger.info(
             "gitlab webhook was triggered: project = {0}, issue = {1}".format(
-                project_id, issue_id,
+                project_id,
+                issue_id,
             ),
         )
 

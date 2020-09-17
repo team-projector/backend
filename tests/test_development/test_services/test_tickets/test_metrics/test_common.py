@@ -127,7 +127,9 @@ def test_opened_time_remains_with_closed_issues(ticket):
     :param ticket:
     """
     IssueFactory.create_batch(
-        size=3, ticket=ticket, state=IssueState.CLOSED,
+        size=3,
+        ticket=ticket,
+        state=IssueState.CLOSED,
     )
 
     metrics = get_ticket_metrics(ticket)
@@ -178,7 +180,9 @@ def test_opened_time_remains_random(ticket):
     :param ticket:
     """
     issues = IssueFactory.create_batch(
-        size=3, ticket=ticket, state=IssueState.OPENED,
+        size=3,
+        ticket=ticket,
+        state=IssueState.OPENED,
     )
 
     IssueFactory.create(

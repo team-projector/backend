@@ -28,7 +28,9 @@ def test_team_summary(db):
     users = UserFactory.create_batch(2)
     teams = TeamFactory.create_batch(2)
     TeamMemberFactory.create(
-        user=users[0], team=teams[0], roles=TeamMember.roles.DEVELOPER,
+        user=users[0],
+        team=teams[0],
+        roles=TeamMember.roles.DEVELOPER,
     )
     IssueFactory.create_batch(
         5,
@@ -39,7 +41,9 @@ def test_team_summary(db):
     )
 
     TeamMemberFactory.create(
-        user=users[1], team=teams[1], roles=TeamMember.roles.DEVELOPER,
+        user=users[1],
+        team=teams[1],
+        roles=TeamMember.roles.DEVELOPER,
     )
     IssueFactory.create_batch(
         3,

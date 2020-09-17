@@ -14,16 +14,22 @@ def test_issues_summary_query(user, gql_client_authenticated, assets):
     project = ProjectFactory.create()
     milestone = ProjectMilestoneFactory.create(owner=project)
     ProjectMemberFactory.create(
-        user=user, role=ProjectMemberRole.MANAGER, owner=project,
+        user=user,
+        role=ProjectMemberRole.MANAGER,
+        owner=project,
     )
     IssueFactory.create_batch(
-        5, user=user, project=project, milestone=milestone,
+        5,
+        user=user,
+        project=project,
+        milestone=milestone,
     )
 
     query = assets.open_file("issues_summary.ghl", "r").read()
 
     response = gql_client_authenticated.execute(
-        query, variable_values={"id": user.pk},
+        query,
+        variable_values={"id": user.pk},
     )
 
     assert "errors" not in response

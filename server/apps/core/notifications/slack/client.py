@@ -27,7 +27,9 @@ class SlackClient:
         channel = self._get_channel_user_by_email(user.email)
         if channel:
             self._client.chat_postMessage(
-                channel=channel["id"], text=msg, **kwargs,
+                channel=channel["id"],
+                text=msg,
+                **kwargs,
             )
 
     def send_blocks(self, user: User, blocks: List[object], **kwargs) -> None:
@@ -39,7 +41,9 @@ class SlackClient:
         channel = self._get_channel_user_by_email(user.email)
         if channel:
             self._client.chat_postMessage(
-                channel=channel["id"], blocks=blocks, **kwargs,
+                channel=channel["id"],
+                blocks=blocks,
+                **kwargs,
             )
 
     def _get_slack_client(self) -> slack.WebClient:  # type: ignore

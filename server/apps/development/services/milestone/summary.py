@@ -23,10 +23,12 @@ class MilestonesSummaryProvider:
         aggregations = {
             "count": models.Count("*"),
             "active_count": models.Count(
-                "id", filter=models.Q(state=MilestoneState.ACTIVE),
+                "id",
+                filter=models.Q(state=MilestoneState.ACTIVE),
             ),
             "closed_count": models.Count(
-                "id", filter=models.Q(state=MilestoneState.CLOSED),
+                "id",
+                filter=models.Q(state=MilestoneState.CLOSED),
             ),
         }
 

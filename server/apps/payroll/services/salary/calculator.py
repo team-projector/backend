@@ -18,7 +18,10 @@ class SalaryCalculator:
     """Salary calculator."""
 
     def __init__(
-        self, initiator: User, period_from: date, period_to: date,
+        self,
+        initiator: User,
+        period_from: date,
+        period_to: date,
     ):
         """Initialize self."""
         self.initiator = initiator
@@ -117,7 +120,8 @@ class SalaryCalculator:
         :rtype: int
         """
         locked = Penalty.objects.filter(
-            salary__isnull=True, user=user,
+            salary__isnull=True,
+            user=user,
         ).update(salary=salary)
         locked += Bonus.objects.filter(salary__isnull=True, user=user).update(
             salary=salary,

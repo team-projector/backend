@@ -45,7 +45,9 @@ class ProjectGlManager:
                 self.update_project(group, gl_project)
 
     def update_project(
-        self, group: ProjectGroup, gl_project: gl.Project,
+        self,
+        group: ProjectGroup,
+        gl_project: gl.Project,
     ) -> None:
         """Update project based on gitlab data."""
         msg = "Updating project '{0}'...".format(gl_project.name)

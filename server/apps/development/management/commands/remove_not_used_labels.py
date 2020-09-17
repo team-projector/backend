@@ -11,6 +11,7 @@ class Command(BaseCommand):
     def handle(self, *args, **options):  # noqa: WPS110
         """Call function."""
         deleted, _ = Label.objects.filter(
-            merge_requests__isnull=True, issues__isnull=True,
+            merge_requests__isnull=True,
+            issues__isnull=True,
         ).delete()
         self.stdout.write("{0} labels were removed.".format(deleted))

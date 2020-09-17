@@ -31,7 +31,8 @@ def sync_project_group_milestones_task(project_group_id: int) -> None:
 
 @app.task(throws=(ReadTimeout,))
 def sync_project_group_milestone_task(
-    group_id: int, milestone_id: int,
+    group_id: int,
+    milestone_id: int,
 ) -> None:
     """Syncing milestone in a group."""
     group = ProjectGroup.objects.get(gl_id=group_id)
