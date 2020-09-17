@@ -26,7 +26,9 @@ def test_empty_due_day_but_closed(user):
     :param user:
     """
     issue = IssueFactory.create(
-        user=user, due_date=None, state=IssueState.CLOSED,
+        user=user,
+        due_date=None,
+        state=IssueState.CLOSED,
     )
 
     assert not get_issue_problems(issue)

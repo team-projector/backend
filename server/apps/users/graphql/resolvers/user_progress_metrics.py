@@ -24,11 +24,15 @@ def resolve_user_progress_metrics(parent, info, **kwargs):  # noqa: WPS110
     """Resolve progress metrics for user."""
     user = get_object_or_not_found(
         filter_allowed_for_user(
-            get_user_model().objects.all(), info.context.user,
+            get_user_model().objects.all(),
+            info.context.user,
         ),
         pk=kwargs["user"],
     )
 
     return get_progress_metrics(
-        user, kwargs["start"], kwargs["end"], kwargs["group"],
+        user,
+        kwargs["start"],
+        kwargs["end"],
+        kwargs["group"],
     )

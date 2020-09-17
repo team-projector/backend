@@ -19,7 +19,9 @@ def send_email_report(salary: Salary) -> None:
     text = "Salary has been paid."
 
     SystemEmailDispatcher().mail_users(
-        subject=subject, text=text, recipient_list=[salary.user.email],
+        subject=subject,
+        text=text,
+        recipient_list=[salary.user.email],
     )
 
 
@@ -32,5 +34,7 @@ def send_slack_report(salary: Salary) -> None:
 
     slack = SlackClient()
     slack.send_text(
-        salary.user, msg, icon_emoji=":moneybag:",
+        salary.user,
+        msg,
+        icon_emoji=":moneybag:",
     )

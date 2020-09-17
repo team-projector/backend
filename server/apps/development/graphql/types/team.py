@@ -28,7 +28,8 @@ class TeamType(BaseDjangoObjectType):
 
     metrics = graphene.Field(TeamMetricsType)
     members = DataSourceConnectionField(
-        TeamMemberType, filterset_class=TeamMembersFilterSet,
+        TeamMemberType,
+        filterset_class=TeamMembersFilterSet,
     )
 
     @classmethod

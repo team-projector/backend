@@ -27,7 +27,8 @@ class ProjectWebhookManager:
     def webhook_url(self) -> str:
         """Get webhook url."""
         return "https://{domain}{path}".format(
-            domain=settings.DOMAIN_NAME, path=reverse("api:gl-webhook"),
+            domain=settings.DOMAIN_NAME,
+            path=reverse("api:gl-webhook"),
         )
 
     def check_project_webhooks(self, project: Project) -> None:
@@ -84,7 +85,9 @@ class ProjectWebhookManager:
         return has_valid
 
     def _validate_webhook(
-        self, webhook: gl.ProjectHook, webhook_url: str,
+        self,
+        webhook: gl.ProjectHook,
+        webhook_url: str,
     ) -> bool:
         """Validate webhook."""
         return webhook.url == webhook_url and all(

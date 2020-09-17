@@ -54,7 +54,8 @@ class UserMetricsProvider:
         :type user: User
         """
         ret = SpentTime.objects.filter(
-            salary__isnull=True, user=user,
+            salary__isnull=True,
+            user=user,
         ).aggregate(
             **{
                 key: aggr
@@ -77,7 +78,8 @@ class UserMetricsProvider:
             return self._bonus
 
         self._bonus = Bonus.objects.filter(
-            user=user, salary__isnull=True,
+            user=user,
+            salary__isnull=True,
         ).aggregate(total=Coalesce(models.Sum("sum"), 0))["total"]
         return self._bonus
 
@@ -87,7 +89,8 @@ class UserMetricsProvider:
             return self._penalty
 
         self._penalty = Penalty.objects.filter(
-            user=user, salary__isnull=True,
+            user=user,
+            salary__isnull=True,
         ).aggregate(total=Coalesce(models.Sum("sum"), 0))["total"]
         return self._penalty
 
@@ -126,7 +129,8 @@ class _Aggregations:
         """Call aggregations."""
         ret = {
             "issues.opened_spent": Coalesce(
-                models.Sum("time_spent", filter=self.issue_opened), 0,
+                models.Sum("time_spent", filter=self.issue_opened),
+                0,
             ),
             "issues.closed_spent": Coalesce(
                 models.Sum(
@@ -148,11 +152,13 @@ class _Aggregations:
                 0,
             ),
             "merge_requests.opened_spent": Coalesce(
-                models.Sum("time_spent", filter=self.mreq_opened), 0,
+                models.Sum("time_spent", filter=self.mreq_opened),
+                0,
             ),
             "opened_spent": Coalesce(
                 models.Sum(
-                    "time_spent", filter=self.issue_opened | self.mreq_opened,
+                    "time_spent",
+                    filter=self.issue_opened | self.mreq_opened,
                 ),
                 0,
             ),
@@ -217,36 +223,43 @@ class _WorkItemAggregations:
     """Work item aggregations."""
 
     tax_rate = models.ExpressionWrapper(
-        models.F("tax_rate"), output_field=MoneyField(max_length=MoneyField),
+        models.F("tax_rate"),
+        output_field=MoneyField(max_length=MoneyField),
     )
 
     def __call__(
-        self, filters: _WorkItemFilters,
+        self,
+        filters: _WorkItemFilters,
     ) -> Dict[str, models.Expression]:
         """Call work item aggregations."""
         return {
             "payroll": Coalesce(models.Sum("sum", filter=filters.all), 0),
             "payroll_opened": Coalesce(
-                models.Sum("sum", filter=filters.opened), 0,
+                models.Sum("sum", filter=filters.opened),
+                0,
             ),
             "payroll_closed": Coalesce(
-                models.Sum("sum", filter=filters.closed), 0,
+                models.Sum("sum", filter=filters.closed),
+                0,
             ),
             "taxes": Coalesce(
                 models.Sum(
-                    models.F("sum") * self.tax_rate, filter=filters.all,
+                    models.F("sum") * self.tax_rate,
+                    filter=filters.all,
                 ),
                 0,
             ),
             "taxes_opened": Coalesce(
                 models.Sum(
-                    models.F("sum") * self.tax_rate, filter=filters.opened,
+                    models.F("sum") * self.tax_rate,
+                    filter=filters.opened,
                 ),
                 0,
             ),
             "taxes_closed": Coalesce(
                 models.Sum(
-                    models.F("sum") * self.tax_rate, filter=filters.closed,
+                    models.F("sum") * self.tax_rate,
+                    filter=filters.closed,
                 ),
                 0,
             ),

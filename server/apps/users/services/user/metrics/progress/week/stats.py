@@ -17,7 +17,10 @@ class UserWeekStatsProvider:
     """User per week stats."""
 
     def __init__(
-        self, user: User, start: date, end: date,
+        self,
+        user: User,
+        start: date,
+        end: date,
     ):
         """Initializing."""
         self._user = user

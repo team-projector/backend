@@ -14,7 +14,10 @@ from apps.users.graphql.queries import UsersQueries
 
 
 class Query(  # noqa: WPS215
-    DevelopmentQueries, PayrollQueries, UsersQueries, graphene.ObjectType,
+    DevelopmentQueries,
+    PayrollQueries,
+    UsersQueries,
+    graphene.ObjectType,
 ):
     """Class representing all available queries."""
 

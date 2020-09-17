@@ -93,7 +93,10 @@ def test_as_watcher_another_team(user, make_team_watcher, team_developer):
 
 
 def test_my_work_breaks_and_as_leader(
-    user, make_team_leader, team, team_developer,
+    user,
+    make_team_leader,
+    team,
+    team_developer,
 ):
     """
     Test my work breaks and as leader.

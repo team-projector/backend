@@ -38,7 +38,9 @@ def test_query(user, ghl_client):
 
     team = TeamFactory.create()
     TeamMemberFactory.create(
-        team=team, user=user, roles=TeamMember.roles.LEADER,
+        team=team,
+        user=user,
+        roles=TeamMember.roles.LEADER,
     )
 
     user.roles = User.roles.TEAM_LEADER
@@ -56,7 +58,8 @@ def test_query(user, ghl_client):
     }
 
     response = ghl_client.execute(
-        GHL_QUERY_UPDATE_WORK_BREAK, variable_values=update_variables,
+        GHL_QUERY_UPDATE_WORK_BREAK,
+        variable_values=update_variables,
     )
 
     dto = response["data"]["updateWorkBreak"]["workBreak"]
@@ -66,7 +69,8 @@ def test_query(user, ghl_client):
 
 
 def test_work_break_not_team_lead(
-    ghl_auth_mock_info, update_work_break_mutation,
+    ghl_auth_mock_info,
+    update_work_break_mutation,
 ):
     """
     Test work break not team lead.
@@ -87,7 +91,9 @@ def test_work_break_not_team_lead(
 
     with pytest.raises(GraphQLPermissionDenied):
         update_work_break_mutation(
-            root=None, info=ghl_auth_mock_info, **update_variables,
+            root=None,
+            info=ghl_auth_mock_info,
+            **update_variables,
         )
     work_break.refresh_from_db()
 
@@ -95,7 +101,8 @@ def test_work_break_not_team_lead(
 
 
 def test_update_work_break_another_user(
-    ghl_auth_mock_info, update_work_break_mutation,
+    ghl_auth_mock_info,
+    update_work_break_mutation,
 ):
     """
     Test update work break another user.
@@ -113,7 +120,9 @@ def test_update_work_break_another_user(
 
     user2 = UserFactory.create()
     TeamMemberFactory.create(
-        team=team, user=user2, roles=TeamMember.roles.DEVELOPER,
+        team=team,
+        user=user2,
+        roles=TeamMember.roles.DEVELOPER,
     )
 
     work_break = WorkBreakFactory.create(user=user2, comment="created")
@@ -129,7 +138,9 @@ def test_update_work_break_another_user(
 
     with pytest.raises(GraphQLPermissionDenied):
         update_work_break_mutation(
-            root=None, info=ghl_auth_mock_info, **update_variables,
+            root=None,
+            info=ghl_auth_mock_info,
+            **update_variables,
         )
 
 
@@ -165,7 +176,9 @@ def test_update_another_user_but_team_lead(
     }
 
     update_work_break_mutation(
-        root=None, info=ghl_auth_mock_info, **update_variables,
+        root=None,
+        info=ghl_auth_mock_info,
+        **update_variables,
     )
 
     work_break.refresh_from_db()
@@ -176,7 +189,8 @@ def test_update_another_user_but_team_lead(
 
 
 def test_change_work_break_user(
-    ghl_auth_mock_info, update_work_break_mutation,
+    ghl_auth_mock_info,
+    update_work_break_mutation,
 ):
     """
     Test change work break user.
@@ -194,7 +208,9 @@ def test_change_work_break_user(
         roles=TeamMember.roles.LEADER,
     )
     TeamMemberFactory.create(
-        team=team, user=user2, roles=TeamMember.roles.DEVELOPER,
+        team=team,
+        user=user2,
+        roles=TeamMember.roles.DEVELOPER,
     )
 
     work_break = WorkBreakFactory.create(user=user2, comment="created")
@@ -209,7 +225,9 @@ def test_change_work_break_user(
     }
 
     update_work_break_mutation(
-        root=None, info=ghl_auth_mock_info, **update_variables,
+        root=None,
+        info=ghl_auth_mock_info,
+        **update_variables,
     )
 
     work_break.refresh_from_db()

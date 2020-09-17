@@ -282,7 +282,10 @@ def test_spents_but_moved_from(user):
     )
 
     moved_from = _create_note(
-        user, issue, NoteType.MOVED_FROM, timezone.now() - timedelta(hours=1),
+        user,
+        issue,
+        NoteType.MOVED_FROM,
+        timezone.now() - timedelta(hours=1),
     )
 
     spent_after = _create_note(
@@ -349,7 +352,12 @@ def test_spents_with_resets_but_moved_from(user):
 
 
 def _create_note(  # noqa: WPS211
-    user, issue, note_type, created_at, spent: timedelta = None, date=None,
+    user,
+    issue,
+    note_type,
+    created_at,
+    spent: timedelta = None,
+    date=None,
 ):
     """
     Create note.

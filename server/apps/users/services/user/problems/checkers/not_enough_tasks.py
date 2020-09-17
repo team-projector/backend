@@ -28,7 +28,8 @@ class NotEnoughTasksChecker(BaseProblemChecker):
         """
         issues = Issue.objects.filter(user=user, state=IssueState.OPENED)
         merge_requests = MergeRequest.objects.filter(
-            user=user, state=MergeRequestState.OPENED,
+            user=user,
+            state=MergeRequestState.OPENED,
         )
 
         issues_time_remains = self._aggregate_time_remains(issues)

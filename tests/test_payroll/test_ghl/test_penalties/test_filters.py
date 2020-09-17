@@ -18,7 +18,8 @@ def test_penalties_filter_by_user(user):
     penalties_user2 = PenaltyFactory.create_batch(size=5, user=user2)
 
     queryset = PenaltyFilterSet(
-        data={"user": user2.id}, queryset=Penalty.objects.all(),
+        data={"user": user2.id},
+        queryset=Penalty.objects.all(),
     ).qs
 
     assert queryset.count() == 5
@@ -34,11 +35,14 @@ def test_penalties_filter_by_salary(user):
     salary = SalaryFactory(user=user)
     PenaltyFactory.create_batch(size=3, user=user)
     penalties_salary2 = PenaltyFactory.create_batch(
-        size=5, user=user, salary=salary,
+        size=5,
+        user=user,
+        salary=salary,
     )
 
     queryset = PenaltyFilterSet(
-        data={"salary": salary.id}, queryset=Penalty.objects.all(),
+        data={"salary": salary.id},
+        queryset=Penalty.objects.all(),
     ).qs
 
     assert queryset.count() == 5
@@ -54,7 +58,8 @@ def test_salary_is_null(user):
     PenaltyFactory.create_batch(size=2, user=user, salary=None)
 
     queryset = PenaltyFilterSet(
-        data={"salary": None}, queryset=Penalty.objects.all(),
+        data={"salary": None},
+        queryset=Penalty.objects.all(),
     ).qs
 
     assert queryset.count() == 2
@@ -67,11 +72,14 @@ def test_salary_is_null_empty(user):
     :param user:
     """
     PenaltyFactory.create_batch(
-        size=2, user=user, salary=SalaryFactory.create(user=user),
+        size=2,
+        user=user,
+        salary=SalaryFactory.create(user=user),
     )
 
     queryset = PenaltyFilterSet(
-        data={"salary": None}, queryset=Penalty.objects.all(),
+        data={"salary": None},
+        queryset=Penalty.objects.all(),
     ).qs
 
     assert not queryset.exists()

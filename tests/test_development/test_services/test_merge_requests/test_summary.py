@@ -16,16 +16,28 @@ def test_counts_by_state(user):
     :param user:
     """
     MergeRequestFactory.create_batch(
-        7, user=user, state=MergeRequestState.OPENED, total_time_spent=0,
+        7,
+        user=user,
+        state=MergeRequestState.OPENED,
+        total_time_spent=0,
     )
     MergeRequestFactory.create_batch(
-        5, user=user, state=MergeRequestState.CLOSED, total_time_spent=0,
+        5,
+        user=user,
+        state=MergeRequestState.CLOSED,
+        total_time_spent=0,
     )
     MergeRequestFactory.create_batch(
-        3, user=user, state=MergeRequestState.MERGED, total_time_spent=0,
+        3,
+        user=user,
+        state=MergeRequestState.MERGED,
+        total_time_spent=0,
     )
     MergeRequestFactory.create_batch(
-        2, user=user, state="", total_time_spent=0,
+        2,
+        user=user,
+        state="",
+        total_time_spent=0,
     )
     MergeRequestFactory.create_batch(
         2,

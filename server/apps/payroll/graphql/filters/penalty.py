@@ -15,5 +15,6 @@ class PenaltyFilterSet(django_filters.FilterSet):
 
     user = django_filters.ModelChoiceFilter(queryset=User.objects.all())
     salary = django_filters.ModelChoiceFilter(
-        queryset=Salary.objects.all(), null_value=None,
+        queryset=Salary.objects.all(),
+        null_value=None,
     )

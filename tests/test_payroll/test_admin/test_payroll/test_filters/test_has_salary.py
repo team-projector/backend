@@ -14,7 +14,9 @@ def test_true(user, admin_rf, payroll_admin):
     :param payroll_admin:
     """
     payroll = Payroll.objects.create(
-        created_by=user, user=user, salary=SalaryFactory.create(user=user),
+        created_by=user,
+        user=user,
+        salary=SalaryFactory.create(user=user),
     )
 
     has_salary_filter = HasSalaryFilter(
@@ -50,7 +52,8 @@ def test_false(user, admin_rf, payroll_admin):
     )
 
     payroll_without_salaries = has_salary_filter.queryset(
-        None, Payroll.objects,
+        None,
+        Payroll.objects,
     )
 
     assert payroll_without_salaries.count() == 1

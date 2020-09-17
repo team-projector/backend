@@ -27,10 +27,12 @@ def test_success(user):
                 "id": 2,
                 "body": body,
                 "created_at": datetime.strftime(
-                    datetime.now(), GITLAB_DATETIME_FORMAT,
+                    datetime.now(),
+                    GITLAB_DATETIME_FORMAT,
                 ),
                 "updated_at": datetime.strftime(
-                    datetime.now(), GITLAB_DATETIME_FORMAT,
+                    datetime.now(),
+                    GITLAB_DATETIME_FORMAT,
                 ),
                 "author": {"id": user.gl_id},
                 "system": True,
@@ -64,10 +66,12 @@ def test_no_system(user):
                 "id": 2,
                 "body": body,
                 "created_at": datetime.strftime(
-                    datetime.now(), GITLAB_DATETIME_FORMAT,
+                    datetime.now(),
+                    GITLAB_DATETIME_FORMAT,
                 ),
                 "updated_at": datetime.strftime(
-                    datetime.now(), GITLAB_DATETIME_FORMAT,
+                    datetime.now(),
+                    GITLAB_DATETIME_FORMAT,
                 ),
                 "author": {"id": user.gl_id},
                 "system": False,
@@ -95,10 +99,12 @@ def test_bad_issue_number(user):
                 "id": 2,
                 "body": body,
                 "created_at": datetime.strftime(
-                    datetime.now(), GITLAB_DATETIME_FORMAT,
+                    datetime.now(),
+                    GITLAB_DATETIME_FORMAT,
                 ),
                 "updated_at": datetime.strftime(
-                    datetime.now(), GITLAB_DATETIME_FORMAT,
+                    datetime.now(),
+                    GITLAB_DATETIME_FORMAT,
                 ),
                 "author": {"id": user.gl_id},
                 "system": True,

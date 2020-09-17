@@ -28,7 +28,8 @@ def test_selected_fields(db):
     :param db:
     """
     summary = MilestonesSummaryProvider(
-        Milestone.objects.all(), fields=("count", "active_count"),
+        Milestone.objects.all(),
+        fields=("count", "active_count"),
     ).get_data()
 
     assert summary == {"count": 0, "active_count": 0}

@@ -18,7 +18,8 @@ def test_query(user, ghl_client):
     ghl_client.set_user(user)
 
     response = ghl_client.execute(
-        GHL_QUERY_USER, variable_values={"id": user.id},
+        GHL_QUERY_USER,
+        variable_values={"id": user.id},
     )
 
     assert "errors" not in response
@@ -39,5 +40,7 @@ def test_inactive(user, ghl_auth_mock_info, user_query):
 
     with pytest.raises(GraphQLNotFound):
         user_query(
-            root=None, info=ghl_auth_mock_info, id=user.id,
+            root=None,
+            info=ghl_auth_mock_info,
+            id=user.id,
         )

@@ -17,7 +17,8 @@ class IssuesQueries(graphene.ObjectType):
     issue = DatasourceRelayNode.Field(IssueType)
 
     all_issues = DataSourceConnectionField(
-        IssueType, filterset_class=IssuesFilterSet,
+        IssueType,
+        filterset_class=IssuesFilterSet,
     )
 
     issues_summary = graphene.Field(

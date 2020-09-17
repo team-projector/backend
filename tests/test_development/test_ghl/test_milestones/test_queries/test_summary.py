@@ -30,14 +30,18 @@ def milestones(user):
     """
     project = ProjectFactory.create()
     ProjectMemberFactory.create(
-        user=user, role=ProjectMemberRole.MANAGER, owner=project,
+        user=user,
+        role=ProjectMemberRole.MANAGER,
+        owner=project,
     )
     return (
         ProjectMilestoneFactory.create(
-            state=MilestoneState.ACTIVE, owner=project,
+            state=MilestoneState.ACTIVE,
+            owner=project,
         ),
         ProjectMilestoneFactory.create(
-            state=MilestoneState.CLOSED, owner=project,
+            state=MilestoneState.CLOSED,
+            owner=project,
         ),
     )
 
@@ -58,7 +62,9 @@ def test_raw_query(gql_client_authenticated, milestones):
 
 
 def test_filter_by_state(
-    milestones_summary_query, ghl_auth_mock_info, milestones,
+    milestones_summary_query,
+    ghl_auth_mock_info,
+    milestones,
 ):
     """
     Test filter by state.

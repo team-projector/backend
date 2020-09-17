@@ -11,11 +11,13 @@ User = get_user_model()
 
 
 def filter_allowed_for_user(
-    queryset: QuerySet, user: User,  # type: ignore
+    queryset: QuerySet,
+    user: User,  # type: ignore
 ):
     """Filter work breaks for user."""
     users = TeamMember.objects.filter(
-        user=user, roles=TeamMember.roles.LEADER,
+        user=user,
+        roles=TeamMember.roles.LEADER,
     ).values_list("team__members", flat=True)
 
     return queryset.filter(id__in=(*users, user.id))  # type: ignore
@@ -29,7 +31,9 @@ class UserFilter(django_filters.ModelChoiceFilter):
         super().__init__(queryset=User.objects.all())
 
     def filter(  # noqa: WPS125, A003
-        self, queryset, value,  # noqa: WPS110
+        self,
+        queryset,
+        value,  # noqa: WPS110
     ) -> QuerySet:
         """Do filtering."""
         if not value:
@@ -46,7 +50,9 @@ class TeamFilter(django_filters.ModelChoiceFilter):
         super().__init__(queryset=Team.objects.all())
 
     def filter(  # noqa: WPS125, A003
-        self, queryset, value,  # noqa: WPS110
+        self,
+        queryset,
+        value,  # noqa: WPS110
     ) -> QuerySet:
         """Do filtering."""
         if not value:

@@ -64,7 +64,10 @@ def test_simple(user):
     issue.save()
 
     metrics = get_progress_metrics(
-        user, monday - timedelta(days=5), monday + timedelta(days=5), "week",
+        user,
+        monday - timedelta(days=5),
+        monday + timedelta(days=5),
+        "week",
     )
 
     assert len(metrics) == 2
@@ -122,7 +125,10 @@ def test_efficiency_more100(user):
     issue.save()
 
     metrics = get_progress_metrics(
-        user, monday - timedelta(days=5), monday + timedelta(days=5), "week",
+        user,
+        monday - timedelta(days=5),
+        monday + timedelta(days=5),
+        "week",
     )
 
     assert len(metrics) == 2
@@ -181,7 +187,10 @@ def test_efficiency_less100(user):
     issue.save()
 
     metrics = get_progress_metrics(
-        user, monday - timedelta(days=5), monday + timedelta(days=5), "week",
+        user,
+        monday - timedelta(days=5),
+        monday + timedelta(days=5),
+        "week",
     )
 
     assert len(metrics) == 2
@@ -240,7 +249,10 @@ def test_efficiency_zero_estimate(user):
     issue.save()
 
     metrics = get_progress_metrics(
-        user, monday - timedelta(days=5), monday + timedelta(days=5), "week",
+        user,
+        monday - timedelta(days=5),
+        monday + timedelta(days=5),
+        "week",
     )
 
     assert len(metrics) == 2
@@ -268,7 +280,10 @@ def test_efficiency_zero_spend(user):
     )
 
     metrics = get_progress_metrics(
-        user, monday - timedelta(days=5), monday + timedelta(days=5), "week",
+        user,
+        monday - timedelta(days=5),
+        monday + timedelta(days=5),
+        "week",
     )
 
     assert len(metrics) == 2
@@ -324,7 +339,10 @@ def test_many_weeks(user):
     issue.save()
 
     metrics = get_progress_metrics(
-        user, monday - timedelta(days=5), monday + timedelta(days=5), "week",
+        user,
+        monday - timedelta(days=5),
+        monday + timedelta(days=5),
+        "week",
     )
 
     assert len(metrics) == 2
@@ -384,7 +402,10 @@ def test_not_in_range(user):
     issue.save()
 
     metrics = get_progress_metrics(
-        user, monday, monday + timedelta(weeks=1, days=5), "week",
+        user,
+        monday,
+        monday + timedelta(weeks=1, days=5),
+        "week",
     )
 
     assert len(metrics) == 2
@@ -443,7 +464,10 @@ def test_another_user(user):
     issue.save()
 
     metrics = get_progress_metrics(
-        user, monday - timedelta(days=5), monday + timedelta(days=5), "week",
+        user,
+        monday - timedelta(days=5),
+        monday + timedelta(days=5),
+        "week",
     )
 
     assert len(metrics) == 2
@@ -512,7 +536,10 @@ def test_many_issues(user):
     another_issue.save()
 
     metrics = get_progress_metrics(
-        user, monday - timedelta(days=5), monday + timedelta(days=5), "week",
+        user,
+        monday - timedelta(days=5),
+        monday + timedelta(days=5),
+        "week",
     )
 
     assert len(metrics) == 2

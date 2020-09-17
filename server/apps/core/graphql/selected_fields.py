@@ -8,7 +8,8 @@ from graphql.utils.ast_to_dict import ast_to_dict
 
 
 def collect_fields(
-    node, fragments: Dict[str, object],
+    node,
+    fragments: Dict[str, object],
 ):
     """Collect fields."""
     field = {}
@@ -23,7 +24,8 @@ def collect_fields(
             elif leaf["kind"] == "FragmentSpread":
                 field.update(
                     collect_fields(
-                        fragments[leaf["name"]["value"]], fragments,
+                        fragments[leaf["name"]["value"]],
+                        fragments,
                     ),
                 )
 

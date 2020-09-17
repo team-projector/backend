@@ -32,7 +32,9 @@ class _Extractor:
         )
 
     def extract(
-        self, text: str, work_item: Union[Issue, MergeRequest] = None,
+        self,
+        text: str,
+        work_item: Union[Issue, MergeRequest] = None,
     ) -> List[str]:
         """
         Extract.

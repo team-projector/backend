@@ -11,7 +11,9 @@ class ActiveFilter(django_filters.BooleanFilter):
     """Filter milestone by active state."""
 
     def filter(  # noqa: WPS125, A003
-        self, queryset, value,  # noqa: WPS110
+        self,
+        queryset,
+        value,  # noqa: WPS110
     ) -> QuerySet:
         """Do filtering."""
         if value is None:

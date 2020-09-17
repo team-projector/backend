@@ -11,7 +11,11 @@ from tests.test_users.factories.user import UserFactory
 
 
 def test_filter_by_team(
-    user, team, ghl_auth_mock_info, team_developer, team_leader,
+    user,
+    team,
+    ghl_auth_mock_info,
+    team_developer,
+    team_leader,
 ):
     """
     Test filter by team.
@@ -42,7 +46,11 @@ def test_filter_by_team(
 
 
 def test_filter_by_team_not_allowed(
-    user, ghl_auth_mock_info, team, make_team_developer, team_developer,
+    user,
+    ghl_auth_mock_info,
+    team,
+    make_team_developer,
+    team_developer,
 ):
     """
     Test filter by team not allowed.

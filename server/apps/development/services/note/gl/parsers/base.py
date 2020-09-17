@@ -20,7 +20,10 @@ HOURS_PER_MONTH = WEEK_PER_MONTH * HOURS_PER_WEEK
 
 
 def spend_handler_helper(
-    bag: DefaultDict[str, int], time_value: int, key: str, multiplier: int = 1,
+    bag: DefaultDict[str, int],
+    time_value: int,
+    key: str,
+    multiplier: int = 1,
 ):
     """Helps to handle different units of time via multiplier."""
     bag[key] += time_value * multiplier
@@ -59,7 +62,8 @@ def parse_spend(spent: str) -> int:
             continue
 
         GITLAB_SPEND_HANDLERS[match.group("part")](
-            bag, int(match.group("value")),
+            bag,
+            int(match.group("value")),
         )
 
     return int(seconds(**bag))

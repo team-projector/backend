@@ -22,7 +22,8 @@ class DeleteWorkBreakMutation(BaseMutation):
     def do_mutate(cls, root, info, **kwargs):  # noqa: WPS110
         """Delete work break.If successful delete return "True"."""
         work_break = get_object_or_not_found(
-            WorkBreak.objects.all(), pk=kwargs["id"],
+            WorkBreak.objects.all(),
+            pk=kwargs["id"],
         )
 
         work_break.delete()

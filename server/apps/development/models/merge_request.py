@@ -26,7 +26,9 @@ MERGE_REQUESTS_STATE_MAX_LENGTH = 255
 
 
 class MergeRequest(
-    TrackableMixin, GitlabEntityMixin, GitlabInternalIdMixin,
+    TrackableMixin,
+    GitlabEntityMixin,
+    GitlabInternalIdMixin,
 ):
     """
     The merge request model.
@@ -70,7 +72,9 @@ class MergeRequest(
     closed_at = models.DateTimeField(null=True, blank=True)
 
     labels = models.ManyToManyField(
-        "development.Label", related_name="merge_requests", blank=True,
+        "development.Label",
+        related_name="merge_requests",
+        blank=True,
     )
 
     project = models.ForeignKey(
@@ -104,7 +108,10 @@ class MergeRequest(
     )
 
     milestone = models.ForeignKey(
-        "development.Milestone", models.CASCADE, null=True, blank=True,
+        "development.Milestone",
+        models.CASCADE,
+        null=True,
+        blank=True,
     )
 
     participants = models.ManyToManyField(  # noqa: CCE001

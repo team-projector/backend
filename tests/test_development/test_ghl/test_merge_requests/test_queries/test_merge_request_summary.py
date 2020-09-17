@@ -21,7 +21,8 @@ def test_query(user, ghl_client):
     ghl_client.set_user(user)
 
     response = ghl_client.execute(
-        GHL_QUERY_MERGE_REQUEST_SUMMARY, variable_values={"user": user.id},
+        GHL_QUERY_MERGE_REQUEST_SUMMARY,
+        variable_values={"user": user.id},
     )
 
     assert "errors" not in response

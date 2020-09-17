@@ -17,7 +17,8 @@ def test_by_due_date_asc(db):
     ]
 
     queryset = TicketsFilterSet(
-        data={"order_by": "dueDate"}, queryset=Ticket.objects.all(),
+        data={"order_by": "dueDate"},
+        queryset=Ticket.objects.all(),
     ).qs
 
     assert queryset.count() == 3
@@ -33,7 +34,8 @@ def test_by_due_date_desc(db):
     ]
 
     queryset = TicketsFilterSet(
-        data={"order_by": "-dueDate"}, queryset=Ticket.objects.all(),
+        data={"order_by": "-dueDate"},
+        queryset=Ticket.objects.all(),
     ).qs
 
     assert queryset.count() == 3
@@ -49,7 +51,8 @@ def test_by_title_asc(db):
     ]
 
     queryset = TicketsFilterSet(
-        data={"order_by": "title"}, queryset=Ticket.objects.all(),
+        data={"order_by": "title"},
+        queryset=Ticket.objects.all(),
     ).qs
 
     assert queryset.count() == 3
@@ -65,7 +68,8 @@ def test_by_title_desc(db):
     ]
 
     queryset = TicketsFilterSet(
-        data={"order_by": "-title"}, queryset=Ticket.objects.all(),
+        data={"order_by": "-title"},
+        queryset=Ticket.objects.all(),
     ).qs
 
     assert queryset.count() == 3
@@ -76,18 +80,22 @@ def test_by_due_date_and_title(db):
     """Test complex ordering by date and title."""
     tickets = [
         TicketFactory.create(
-            due_date=datetime.now() + timedelta(days=1), title="BB",
+            due_date=datetime.now() + timedelta(days=1),
+            title="BB",
         ),
         TicketFactory.create(
-            due_date=datetime.now() + timedelta(days=1), title="AA",
+            due_date=datetime.now() + timedelta(days=1),
+            title="AA",
         ),
         TicketFactory.create(
-            due_date=datetime.now() + timedelta(days=2), title="CC",
+            due_date=datetime.now() + timedelta(days=2),
+            title="CC",
         ),
     ]
 
     queryset = TicketsFilterSet(
-        data={"order_by": "dueDate,title"}, queryset=Ticket.objects.all(),
+        data={"order_by": "dueDate,title"},
+        queryset=Ticket.objects.all(),
     ).qs
 
     assert queryset.count() == 3

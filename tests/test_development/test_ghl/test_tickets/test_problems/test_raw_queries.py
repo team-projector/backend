@@ -58,7 +58,8 @@ def test_retreive(user, ghl_client):
     ghl_client.set_user(user)
 
     response = ghl_client.execute(
-        GHL_QUERY_TICKET, variable_values={"id": issue.ticket_id},
+        GHL_QUERY_TICKET,
+        variable_values={"id": issue.ticket_id},
     )
 
     assert "errors" not in response

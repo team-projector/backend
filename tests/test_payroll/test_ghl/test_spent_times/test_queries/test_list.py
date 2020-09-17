@@ -45,12 +45,15 @@ def test_unauth(ghl_mock_info, all_spent_times_query):
     """Test unauth issues list."""
     with pytest.raises(GraphQLPermissionDenied):
         all_spent_times_query(
-            root=None, info=ghl_mock_info,
+            root=None,
+            info=ghl_mock_info,
         )
 
 
 def test_empty_filter_by_salary(
-    user, ghl_auth_mock_info, all_spent_times_query,
+    user,
+    ghl_auth_mock_info,
+    all_spent_times_query,
 ):
     """Test filtering time spents by salary not exists."""
     issue = IssueFactory.create(user=user)
@@ -58,7 +61,9 @@ def test_empty_filter_by_salary(
     salary = SalaryFactory.create(user=user)
 
     response = all_spent_times_query(
-        root=None, info=ghl_auth_mock_info, salary=salary.id,
+        root=None,
+        info=ghl_auth_mock_info,
+        salary=salary.id,
     )
 
     assert not response.length
@@ -77,7 +82,9 @@ def test_filter_by_salary(user, ghl_auth_mock_info, all_spent_times_query):
     spent_time.save()
 
     response = all_spent_times_query(
-        root=None, info=ghl_auth_mock_info, salary=salary.id,
+        root=None,
+        info=ghl_auth_mock_info,
+        salary=salary.id,
     )
 
     assert response.length == 1

@@ -58,7 +58,9 @@ def test_raw_query(ghl_client, tickets):
 
 
 def test_filter_by_milestone(
-    tickets_summary_query, ghl_auth_mock_info, tickets,
+    tickets_summary_query,
+    ghl_auth_mock_info,
+    tickets,
 ):
     """
     Test filter by milestone.

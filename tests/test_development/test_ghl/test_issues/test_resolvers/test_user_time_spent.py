@@ -30,10 +30,14 @@ def test_some_spends(issue, user):
     """Test user time spent for issue."""
     spends = [
         IssueSpentTimeFactory.create(
-            user=user, base=issue, time_spent=int(seconds(hours=5)),
+            user=user,
+            base=issue,
+            time_spent=int(seconds(hours=5)),
         ),
         IssueSpentTimeFactory.create(
-            user=user, base=issue, time_spent=int(seconds(hours=2)),
+            user=user,
+            base=issue,
+            time_spent=int(seconds(hours=2)),
         ),
     ]
 
@@ -47,10 +51,14 @@ def test_different_user_spents(issue, user):
     user2 = UserFactory.create()
     spends = [
         IssueSpentTimeFactory.create(
-            user=user, base=issue, time_spent=int(seconds(hours=5)),
+            user=user,
+            base=issue,
+            time_spent=int(seconds(hours=5)),
         ),
         IssueSpentTimeFactory.create(
-            user=user2, base=issue, time_spent=int(seconds(hours=2)),
+            user=user2,
+            base=issue,
+            time_spent=int(seconds(hours=2)),
         ),
     ]
 

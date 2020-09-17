@@ -17,5 +17,8 @@ def resolve_team_progress_metrics(parent, info, **kwargs):  # noqa: WPS110
     check_allow_get_metrics_by_user(team, info.context.user)
 
     return get_progress_metrics(
-        team, kwargs["start"], kwargs["end"], kwargs["group"],
+        team,
+        kwargs["start"],
+        kwargs["end"],
+        kwargs["group"],
     )

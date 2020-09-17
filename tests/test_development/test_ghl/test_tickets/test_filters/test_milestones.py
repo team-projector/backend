@@ -20,7 +20,8 @@ def test_filter(db):
 
     for milestone in milestones:
         tickets = TicketsFilterSet(
-            data={"milestone": milestone.pk}, queryset=Ticket.objects.all(),
+            data={"milestone": milestone.pk},
+            queryset=Ticket.objects.all(),
         ).qs
 
         assert tickets.count() == 1

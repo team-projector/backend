@@ -30,10 +30,16 @@ def test_paid(user):
     salary = SalaryFactory.create(user=user)
 
     IssueSpentTimeFactory.create(
-        user=user, base=issue, salary=salary, time_spent=seconds(hours=3),
+        user=user,
+        base=issue,
+        salary=salary,
+        time_spent=seconds(hours=3),
     )
     IssueSpentTimeFactory.create(
-        user=user, base=issue, salary=salary, time_spent=-seconds(hours=1),
+        user=user,
+        base=issue,
+        salary=salary,
+        time_spent=-seconds(hours=1),
     )
 
     total_paid = SpentTime.objects.annotate_payrolls(payroll=False).aggregate(
@@ -52,10 +58,14 @@ def test_payroll_metrics(user):
     issue = IssueFactory.create(user=user)
 
     IssueSpentTimeFactory.create(
-        user=user, base=issue, time_spent=seconds(hours=3),
+        user=user,
+        base=issue,
+        time_spent=seconds(hours=3),
     )
     IssueSpentTimeFactory.create(
-        user=user, base=issue, time_spent=-seconds(hours=1),
+        user=user,
+        base=issue,
+        time_spent=-seconds(hours=1),
     )
 
     total_payroll = SpentTime.objects.annotate_payrolls(paid=False).aggregate(

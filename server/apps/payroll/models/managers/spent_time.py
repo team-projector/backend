@@ -39,7 +39,9 @@ class SpentTimeQuerySet(models.QuerySet):
         )
 
     def annotate_payrolls(
-        self, paid: bool = True, payroll: bool = True,
+        self,
+        paid: bool = True,
+        payroll: bool = True,
     ) -> models.QuerySet:
         """Get total sum payroll or paid."""
         queryset = self
@@ -71,7 +73,8 @@ class SpentTimeQuerySet(models.QuerySet):
         :rtype: Coalesce
         """
         return Coalesce(
-            models.Sum("time_spent", filter=models.Q(**filters)), 0,
+            models.Sum("time_spent", filter=models.Q(**filters)),
+            0,
         )
 
 

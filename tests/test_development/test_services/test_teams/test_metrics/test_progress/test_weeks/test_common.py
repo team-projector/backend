@@ -66,7 +66,10 @@ def test_simple(team, team_developer, team_leader):
     issue.save()
 
     metrics = get_progress_metrics(
-        team, monday - timedelta(days=5), monday + timedelta(days=5), "week",
+        team,
+        monday - timedelta(days=5),
+        monday + timedelta(days=5),
+        "week",
     )
 
     assert len(metrics) == 2
@@ -132,7 +135,10 @@ def test_efficiency_more100(team, team_developer, team_leader):
     issue.save()
 
     metrics = get_progress_metrics(
-        team, monday - timedelta(days=5), monday + timedelta(days=5), "week",
+        team,
+        monday - timedelta(days=5),
+        monday + timedelta(days=5),
+        "week",
     )
 
     assert len(metrics) == 2
@@ -197,7 +203,10 @@ def test_efficiency_less100(team, team_developer):
     issue.save()
 
     metrics = get_progress_metrics(
-        team, monday - timedelta(days=5), monday + timedelta(days=5), "week",
+        team,
+        monday - timedelta(days=5),
+        monday + timedelta(days=5),
+        "week",
     )
 
     developer_metrics = next(
@@ -260,7 +269,10 @@ def test_efficiency_zero_estimate(team, team_developer):
     issue.save()
 
     metrics = get_progress_metrics(
-        team, monday - timedelta(days=5), monday + timedelta(days=5), "week",
+        team,
+        monday - timedelta(days=5),
+        monday + timedelta(days=5),
+        "week",
     )
 
     developer_metrics = next(
@@ -294,7 +306,10 @@ def test_efficiency_zero_spend(team, team_developer):
     )
 
     metrics = get_progress_metrics(
-        team, monday - timedelta(days=5), monday + timedelta(days=5), "week",
+        team,
+        monday - timedelta(days=5),
+        monday + timedelta(days=5),
+        "week",
     )
 
     developer_metrics = next(
@@ -354,7 +369,10 @@ def test_many_weeks(team, team_developer):
     issue.save()
 
     metrics = get_progress_metrics(
-        team, monday - timedelta(days=5), monday + timedelta(days=5), "week",
+        team,
+        monday - timedelta(days=5),
+        monday + timedelta(days=5),
+        "week",
     )
 
     developer_metrics = next(
@@ -418,7 +436,10 @@ def test_not_in_range(team, team_developer):
     issue.save()
 
     metrics = get_progress_metrics(
-        team, monday, monday + timedelta(weeks=1, days=5), "week",
+        team,
+        monday,
+        monday + timedelta(weeks=1, days=5),
+        "week",
     )
 
     developer_metrics = next(
@@ -554,7 +575,10 @@ def test_many_issues(team, team_developer):
     another_issue.save()
 
     metrics = get_progress_metrics(
-        team, monday - timedelta(days=5), monday + timedelta(days=5), "week",
+        team,
+        monday - timedelta(days=5),
+        monday + timedelta(days=5),
+        "week",
     )
 
     developer_metrics = next(

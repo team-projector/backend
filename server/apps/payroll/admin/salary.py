@@ -61,7 +61,9 @@ class SalaryAdmin(BaseModelAdmin):
         )
 
         return render(
-            request, "admin/payrolls/forms/generate_salaries.html", context,
+            request,
+            "admin/payrolls/forms/generate_salaries.html",
+            context,
         )
 
     def save_model(self, request, salary, form, change):

@@ -17,7 +17,8 @@ def test_by_project(user):
     IssueFactory.create_batch(3, user=user)
 
     issues = IssuesFilterSet(
-        data={"project": project.pk}, queryset=Issue.objects.all(),
+        data={"project": project.pk},
+        queryset=Issue.objects.all(),
     ).qs
 
     assert issues.count() == 1

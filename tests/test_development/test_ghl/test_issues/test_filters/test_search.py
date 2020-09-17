@@ -15,7 +15,8 @@ def test_by_title_single(user):
     IssueFactory.create(title="react", user=user)
 
     queryset = IssuesFilterSet(
-        data={"q": "ate"}, queryset=Issue.objects.all(),
+        data={"q": "ate"},
+        queryset=Issue.objects.all(),
     ).qs
 
     assert queryset.count() == 1
@@ -34,7 +35,8 @@ def test_by_title_many(user):
     ]
 
     queryset = IssuesFilterSet(
-        data={"q": "rea"}, queryset=Issue.objects.all(),
+        data={"q": "rea"},
+        queryset=Issue.objects.all(),
     ).qs
 
     assert queryset.count() == 2
@@ -50,7 +52,8 @@ def test_empty_queryset(user):
     IssueFactory.create(title="issue", user=user)
 
     queryset = IssuesFilterSet(
-        data={"q": "012345"}, queryset=Issue.objects.all(),
+        data={"q": "012345"},
+        queryset=Issue.objects.all(),
     ).qs
 
     assert not queryset.exists()
@@ -65,7 +68,8 @@ def test_by_gl_url(user):
     issue = IssueFactory.create(title="create", user=user, gl_url="foobar")
 
     queryset = IssuesFilterSet(
-        data={"q": "foobar"}, queryset=Issue.objects.all(),
+        data={"q": "foobar"},
+        queryset=Issue.objects.all(),
     ).qs
 
     assert queryset.count() == 1

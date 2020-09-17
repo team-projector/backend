@@ -36,22 +36,28 @@ def test_project_milestones(user, client, ghl_auth_mock_info):
     project = ProjectFactory.create()
 
     milestone1 = ProjectMilestoneFactory.create(
-        owner=project, state=MilestoneState.ACTIVE,
+        owner=project,
+        state=MilestoneState.ACTIVE,
     )
     milestone2 = ProjectMilestoneFactory.create(
-        owner=project, state=MilestoneState.CLOSED,
+        owner=project,
+        state=MilestoneState.CLOSED,
     )
 
     client.user = user
     milestones = ProjectMilestonesResolver(
-        project=project, info=ghl_auth_mock_info, active=True,
+        project=project,
+        info=ghl_auth_mock_info,
+        active=True,
     ).execute()
 
     assert milestones.count() == 1
     assert milestones.first() == milestone1
 
     milestones = ProjectMilestonesResolver(
-        project=project, info=ghl_auth_mock_info, active=False,
+        project=project,
+        info=ghl_auth_mock_info,
+        active=False,
     ).execute()
 
     assert milestones.count() == 1
@@ -69,28 +75,36 @@ def test_project_group_milestones(user, client, ghl_auth_mock_info):
     group = ProjectGroupFactory.create()
 
     milestone1 = ProjectGroupMilestoneFactory.create(
-        owner=group, state=MilestoneState.ACTIVE,
+        owner=group,
+        state=MilestoneState.ACTIVE,
     )
     ProjectGroupMilestoneFactory.create_batch(
-        3, owner=group, state=MilestoneState.CLOSED,
+        3,
+        owner=group,
+        state=MilestoneState.CLOSED,
     )
 
     project = ProjectFactory.create(group=group)
     milestone2 = ProjectGroupMilestoneFactory.create(
-        owner=project, state=MilestoneState.CLOSED,
+        owner=project,
+        state=MilestoneState.CLOSED,
     )
 
     client.user = user
 
     milestones = ProjectMilestonesResolver(
-        project=project, info=ghl_auth_mock_info, active=True,
+        project=project,
+        info=ghl_auth_mock_info,
+        active=True,
     ).execute()
 
     assert milestones.count() == 1
     assert milestones.first() == milestone1
 
     milestones = ProjectMilestonesResolver(
-        project=project, info=ghl_auth_mock_info, active=False,
+        project=project,
+        info=ghl_auth_mock_info,
+        active=False,
     ).execute()
 
     assert milestones.count() == 1
@@ -108,30 +122,38 @@ def test_project_group_parent_milestones(user, client, ghl_auth_mock_info):
     group_parent = ProjectGroupFactory.create()
 
     milestone1 = ProjectGroupMilestoneFactory.create(
-        owner=group_parent, state=MilestoneState.ACTIVE,
+        owner=group_parent,
+        state=MilestoneState.ACTIVE,
     )
     ProjectGroupMilestoneFactory.create_batch(
-        3, owner=group_parent, state=MilestoneState.CLOSED,
+        3,
+        owner=group_parent,
+        state=MilestoneState.CLOSED,
     )
 
     group = ProjectGroupFactory.create(parent=group_parent)
 
     project = ProjectFactory.create(group=group)
     milestone2 = ProjectGroupMilestoneFactory.create(
-        owner=group, state=MilestoneState.CLOSED,
+        owner=group,
+        state=MilestoneState.CLOSED,
     )
 
     client.user = user
 
     milestones = ProjectMilestonesResolver(
-        project=project, info=ghl_auth_mock_info, active=True,
+        project=project,
+        info=ghl_auth_mock_info,
+        active=True,
     ).execute()
 
     assert milestones.count() == 1
     assert milestones.first() == milestone1
 
     milestones = ProjectMilestonesResolver(
-        project=project, info=ghl_auth_mock_info, active=False,
+        project=project,
+        info=ghl_auth_mock_info,
+        active=False,
     ).execute()
 
     assert milestones.count() == 1
@@ -150,7 +172,8 @@ def test_resolve_milestones(user, client, ghl_auth_mock_info):
 
     ProjectMilestoneFactory.create(owner=project, state=MilestoneState.ACTIVE)
     milestone2 = ProjectMilestoneFactory.create(
-        owner=project, state=MilestoneState.CLOSED,
+        owner=project,
+        state=MilestoneState.CLOSED,
     )
 
     client.user = user
@@ -159,7 +182,9 @@ def test_resolve_milestones(user, client, ghl_auth_mock_info):
     parent.parent_type = None
 
     milestones = ProjectType.resolve_milestones(
-        parent, ghl_auth_mock_info, active=False,
+        parent,
+        ghl_auth_mock_info,
+        active=False,
     )
 
     assert milestones.count() == 1

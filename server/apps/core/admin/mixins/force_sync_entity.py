@@ -17,7 +17,10 @@ class ForceSyncEntityMixin(BaseModelAdmin):
         extra_context["show_force_sync"] = True
 
         return super().change_view(
-            request, object_id, form_url, extra_context=extra_context,
+            request,
+            object_id,
+            form_url,
+            extra_context=extra_context,
         )
 
     def response_change(self, request, instance):
@@ -44,6 +47,7 @@ class ForceSyncEntityMixin(BaseModelAdmin):
         self.message_user(
             request,
             "{0} '{1}' is syncing".format(
-                instance._meta.verbose_name, instance,  # noqa: WPS437
+                instance._meta.verbose_name,  # noqa: WPS437
+                instance,
             ),
         )

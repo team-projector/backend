@@ -75,7 +75,9 @@ def test_query(project_manager, ghl_client):
 
 
 def test_invalid_parameters(
-    project_manager, ghl_auth_mock_info, create_ticket_mutation,
+    project_manager,
+    ghl_auth_mock_info,
+    create_ticket_mutation,
 ):
     """Test creation with invalid parameters."""
     resolve = create_ticket_mutation(

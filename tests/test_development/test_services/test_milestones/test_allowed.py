@@ -131,7 +131,9 @@ def test_group_with_projects(user, make_project_manager, make_group_manager):
 
 
 def test_parent_group_with_groups(
-    user, make_project_manager, make_group_manager,
+    user,
+    make_project_manager,
+    make_group_manager,
 ):
     """
     Test parent group with groups.
@@ -159,7 +161,9 @@ def test_parent_group_with_groups(
 
 
 def test_parent_group_with_groups_and_projects(
-    user, make_project_manager, make_group_manager,
+    user,
+    make_project_manager,
+    make_group_manager,
 ):
     """
     Test parent group with groups and projects.

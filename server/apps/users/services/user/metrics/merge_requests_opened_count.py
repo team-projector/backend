@@ -10,7 +10,8 @@ def mr_opened_count_resolver(parent, info, **kwargs) -> int:  # noqa:WPS110
 
     if user.is_authenticated:
         return MergeRequest.objects.filter(
-            user=user, state=MergeRequestState.OPENED,
+            user=user,
+            state=MergeRequestState.OPENED,
         ).count()
 
     return 0

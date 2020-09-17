@@ -26,7 +26,11 @@ class MergeRequestsSpentTimesSummary:
     merged_spent: int = 0
 
     def __init__(
-        self, spent=0, closed_spent=0, opened_spent=0, merged_spent=0,
+        self,
+        spent=0,
+        closed_spent=0,
+        opened_spent=0,
+        merged_spent=0,
     ) -> None:
         """Initialize self."""
         self.spent = spent  # noqa: WPS601
@@ -74,7 +78,8 @@ class SpentTimesSummaryProvider:
     """Spent times summary provider."""
 
     def __init__(
-        self, queryset: QuerySet,
+        self,
+        queryset: QuerySet,
     ):
         """Initialize self."""
         self.queryset = queryset

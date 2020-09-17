@@ -49,7 +49,8 @@ class NotAssignedChecker(BaseProblemChecker):
         )
 
     def _is_done_opened_issues_exists(
-        self, merge_request: MergeRequest,
+        self,
+        merge_request: MergeRequest,
     ) -> bool:
         """
         Is done opened issues exists.
@@ -59,7 +60,8 @@ class NotAssignedChecker(BaseProblemChecker):
         :rtype: bool
         """
         return merge_request.issues.filter(
-            labels__title__iexact="done", state=MergeRequestState.OPENED,
+            labels__title__iexact="done",
+            state=MergeRequestState.OPENED,
         ).exists()
 
 

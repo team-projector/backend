@@ -8,11 +8,14 @@ from apps.development.services.issue.summary import IssuesProjectSummary
 
 
 def resolve_project_milestones(
-    project: Project, info, **kwargs,  # noqa: WPS110
+    project: Project,
+    info,  # noqa: WPS110
+    **kwargs,
 ):
     """Get project milestones."""
     is_summary = isinstance(
-        getattr(project, "parent_type", None), IssuesProjectSummary,
+        getattr(project, "parent_type", None),
+        IssuesProjectSummary,
     )
 
     if is_summary and isinstance(project, Project):

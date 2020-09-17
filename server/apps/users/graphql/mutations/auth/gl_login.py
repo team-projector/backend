@@ -21,7 +21,9 @@ class LoginGitlabMutation(NoInputMutation):
 
     @classmethod
     def perform_mutate(
-        cls, root: Optional[object], info: ResolveInfo,  # noqa: WPS110
+        cls,
+        root: Optional[object],
+        info: ResolveInfo,  # noqa: WPS110
     ) -> "LoginGitlabMutation":
         """Returns redirect url for Gitlab."""
         request = page_social_auth(info.context)

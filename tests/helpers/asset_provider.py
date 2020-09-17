@@ -17,7 +17,10 @@ class AssetsProvider:
         self._opened_files = []
 
     def open_file(
-        self, filename: str, mode: str = "rb", encoding: str = None,
+        self,
+        filename: str,
+        mode: str = "rb",
+        encoding: str = None,
     ) -> TextIOWrapper:
         """Open file and return a stream."""
         filepath = self._find_path(filename)

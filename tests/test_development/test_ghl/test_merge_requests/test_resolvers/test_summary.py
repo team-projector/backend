@@ -18,7 +18,10 @@ def test_resolver_summary(user, team, make_team_leader, ghl_auth_mock_info):
     make_team_leader(team, user)
 
     MergeRequestFactory.create_batch(
-        7, user=user, state=MergeRequestState.OPENED, total_time_spent=0,
+        7,
+        user=user,
+        state=MergeRequestState.OPENED,
+        total_time_spent=0,
     )
 
     MergeRequestFactory.create_batch(
@@ -29,7 +32,9 @@ def test_resolver_summary(user, team, make_team_leader, ghl_auth_mock_info):
     )
 
     summary = resolve_merge_requests_summary(
-        parent=None, info=ghl_auth_mock_info, user=user,
+        parent=None,
+        info=ghl_auth_mock_info,
+        user=user,
     )
 
     assert summary.count == 7

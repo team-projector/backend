@@ -18,7 +18,9 @@ from apps.users.models import User
 
 @admin.register(User)
 class UserAdmin(
-    mixins.ForceSyncEntityMixin, DjUserAdmin, base.BaseModelAdmin,
+    mixins.ForceSyncEntityMixin,
+    DjUserAdmin,
+    base.BaseModelAdmin,
 ):
     """A class representing User model for admin dashboard."""
 
@@ -102,7 +104,8 @@ class UserAdmin(
         return format_html(
             '<a href="{}">change password</a>',  # noqa: P103
             reverse(
-                "admin:auth_user_password_change", kwargs={"id": instance.pk},
+                "admin:auth_user_password_change",
+                kwargs={"id": instance.pk},
             ),
         )
 

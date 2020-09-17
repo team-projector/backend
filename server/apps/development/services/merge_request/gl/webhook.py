@@ -25,7 +25,8 @@ class MergeRequestsGLWebhook(GLWebhook):
 
         logger.info(
             "gitlab webhook was triggered: project = {0}, merge_request = {1}".format(  # noqa: E501
-                project_id, merge_request_id,
+                project_id,
+                merge_request_id,
             ),
         )
 

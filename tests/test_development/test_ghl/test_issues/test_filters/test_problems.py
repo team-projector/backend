@@ -15,7 +15,10 @@ def test_no_filter(user):
     """
     IssueFactory.create_batch(2, user=user)
     IssueFactory.create_batch(
-        5, user=user, due_date=datetime.now().date(), time_estimate=1000,
+        5,
+        user=user,
+        due_date=datetime.now().date(),
+        time_estimate=1000,
     )
 
     issues = IssuesFilterSet(queryset=Issue.objects.all()).qs
@@ -31,11 +34,15 @@ def test_has_problems(user):
     """
     issues = IssueFactory.create_batch(2, user=user)
     IssueFactory.create_batch(
-        5, user=user, due_date=datetime.now().date(), time_estimate=1000,
+        5,
+        user=user,
+        due_date=datetime.now().date(),
+        time_estimate=1000,
     )
 
     queryset = IssuesFilterSet(
-        data={"problems": True}, queryset=Issue.objects.all(),
+        data={"problems": True},
+        queryset=Issue.objects.all(),
     ).qs
 
     assert queryset.count() == 2
@@ -50,11 +57,15 @@ def test_no_problems(user):
     """
     issues = IssueFactory.create_batch(2, user=user)
     IssueFactory.create_batch(
-        5, user=user, due_date=datetime.now().date(), time_estimate=1000,
+        5,
+        user=user,
+        due_date=datetime.now().date(),
+        time_estimate=1000,
     )
 
     queryset = IssuesFilterSet(
-        data={"problems": False}, queryset=Issue.objects.all(),
+        data={"problems": False},
+        queryset=Issue.objects.all(),
     ).qs
 
     assert queryset.count() == 5

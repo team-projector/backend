@@ -16,6 +16,7 @@ class WorkBreakForm(forms.Form):
     from_date = forms.DateTimeField(required=False)
     to_date = forms.DateTimeField(required=False)
     reason = forms.ChoiceField(
-        required=False, choices=WorkBreakReason.choices,
+        required=False,
+        choices=WorkBreakReason.choices,
     )
     comment = forms.CharField(required=False, empty_value=None)

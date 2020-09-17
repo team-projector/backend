@@ -15,7 +15,8 @@ def test_filter_by_role_developer(user):
     _prepare_data()
 
     queryset = TeamMembersFilterSet(
-        data={"roles": "DEVELOPER"}, queryset=TeamMember.objects.all(),
+        data={"roles": "DEVELOPER"},
+        queryset=TeamMember.objects.all(),
     ).qs
 
     assert queryset.count() == 2
@@ -30,7 +31,8 @@ def test_filter_by_role_leader(user):
     _prepare_data()
 
     queryset = TeamMembersFilterSet(
-        data={"roles": "LEADER"}, queryset=TeamMember.objects.all(),
+        data={"roles": "LEADER"},
+        queryset=TeamMember.objects.all(),
     ).qs
 
     assert queryset.count() == 1
@@ -45,7 +47,8 @@ def test_filter_by_role_watcher(user):
     _prepare_data()
 
     queryset = TeamMembersFilterSet(
-        data={"roles": "WATCHER"}, queryset=TeamMember.objects.all(),
+        data={"roles": "WATCHER"},
+        queryset=TeamMember.objects.all(),
     ).qs
 
     assert queryset.count() == 1
@@ -60,7 +63,8 @@ def test_filter_by_incorrect_role(user):
     _prepare_data()
 
     queryset = TeamMembersFilterSet(
-        data={"roles": "incorrect value"}, queryset=TeamMember.objects.all(),
+        data={"roles": "incorrect value"},
+        queryset=TeamMember.objects.all(),
     ).qs
 
     assert queryset.count() == 4
@@ -75,7 +79,8 @@ def test_filter_by_none_role(user):
     _prepare_data()
 
     queryset = TeamMembersFilterSet(
-        data={"roles": None}, queryset=TeamMember.objects.all(),
+        data={"roles": None},
+        queryset=TeamMember.objects.all(),
     ).qs
 
     assert queryset.count() == 4
@@ -87,15 +92,23 @@ def _prepare_data():
     teams = TeamFactory.create_batch(2)
 
     TeamMemberFactory.create(
-        user=users[0], team=teams[0], roles=TeamMember.roles.LEADER,
+        user=users[0],
+        team=teams[0],
+        roles=TeamMember.roles.LEADER,
     )
     TeamMemberFactory.create(
-        user=users[1], team=teams[0], roles=TeamMember.roles.DEVELOPER,
+        user=users[1],
+        team=teams[0],
+        roles=TeamMember.roles.DEVELOPER,
     )
 
     TeamMemberFactory.create(
-        user=users[0], team=teams[1], roles=TeamMember.roles.WATCHER,
+        user=users[0],
+        team=teams[1],
+        roles=TeamMember.roles.WATCHER,
     )
     TeamMemberFactory.create(
-        user=users[1], team=teams[1], roles=TeamMember.roles.DEVELOPER,
+        user=users[1],
+        team=teams[1],
+        roles=TeamMember.roles.DEVELOPER,
     )

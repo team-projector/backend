@@ -15,5 +15,6 @@ class Penalty(Payroll):
         ordering = ("-created_at",)
 
     comment = models.TextField(
-        verbose_name=_("VN__COMMENT"), help_text=_("HT__COMMENT"),
+        verbose_name=_("VN__COMMENT"),
+        help_text=_("HT__COMMENT"),
     )

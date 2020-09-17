@@ -54,31 +54,45 @@ class Salary(Timestamps):
     )
 
     taxes = MoneyField(
-        default=0, verbose_name=_("VN__TAXES"), help_text=_("HT__TAXES"),
+        default=0,
+        verbose_name=_("VN__TAXES"),
+        help_text=_("HT__TAXES"),
     )
 
     bonus = MoneyField(
-        default=0, verbose_name=_("VN__BONUS"), help_text=_("HT__BONUS"),
+        default=0,
+        verbose_name=_("VN__BONUS"),
+        help_text=_("HT__BONUS"),
     )
 
     penalty = MoneyField(
-        default=0, verbose_name=_("VN__PENALTY"), help_text=_("HT__PENALTY"),
+        default=0,
+        verbose_name=_("VN__PENALTY"),
+        help_text=_("HT__PENALTY"),
     )
 
     sum = MoneyField(  # noqa: WPS125, A003
-        default=0, verbose_name=_("VN__SUM"), help_text=_("HT__SUM"),
+        default=0,
+        verbose_name=_("VN__SUM"),
+        help_text=_("HT__SUM"),
     )
 
     total = MoneyField(
-        default=0, verbose_name=_("VN__TOTAL"), help_text=_("HT__TOTAL"),
+        default=0,
+        verbose_name=_("VN__TOTAL"),
+        help_text=_("HT__TOTAL"),
     )
 
     payed = models.BooleanField(
-        default=False, verbose_name=_("VN__PAYED"), help_text=_("HT__PAYED"),
+        default=False,
+        verbose_name=_("VN__PAYED"),
+        help_text=_("HT__PAYED"),
     )
 
     comment = models.TextField(
-        blank=True, verbose_name=_("VN__COMMENT"), help_text=_("HT__COMMENT"),
+        blank=True,
+        verbose_name=_("VN__COMMENT"),
+        help_text=_("HT__COMMENT"),
     )
 
     created_by = models.ForeignKey(

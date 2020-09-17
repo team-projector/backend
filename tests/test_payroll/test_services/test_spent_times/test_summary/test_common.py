@@ -23,10 +23,16 @@ def test_without_spents(user):
     :param user:
     """
     IssueFactory.create_batch(
-        5, user=user, state=IssueState.OPENED, total_time_spent=1000,
+        5,
+        user=user,
+        state=IssueState.OPENED,
+        total_time_spent=1000,
     )
     MergeRequestFactory.create_batch(
-        5, user=user, state=MergeRequestState.OPENED, total_time_spent=1000,
+        5,
+        user=user,
+        state=MergeRequestState.OPENED,
+        total_time_spent=1000,
     )
 
     summary = spent_time_service.get_summary(SpentTime.objects.all())
@@ -45,21 +51,29 @@ def test_issues_spents(user):
     issue_opened = IssueFactory.create(user=user)
 
     IssueSpentTimeFactory.create(
-        user=user, base=issue_opened, time_spent=seconds(hours=2),
+        user=user,
+        base=issue_opened,
+        time_spent=seconds(hours=2),
     )
 
     IssueSpentTimeFactory.create(
-        user=user, base=issue_opened, time_spent=seconds(hours=3),
+        user=user,
+        base=issue_opened,
+        time_spent=seconds(hours=3),
     )
 
     issue_closed = IssueFactory.create(user=user, state=IssueState.CLOSED)
 
     IssueSpentTimeFactory.create(
-        user=user, base=issue_closed, time_spent=seconds(hours=2),
+        user=user,
+        base=issue_closed,
+        time_spent=seconds(hours=2),
     )
 
     IssueSpentTimeFactory.create(
-        user=user, base=issue_closed, time_spent=seconds(hours=1),
+        user=user,
+        base=issue_closed,
+        time_spent=seconds(hours=1),
     )
 
     summary = spent_time_service.get_summary(SpentTime.objects.all())
@@ -88,35 +102,49 @@ def test_merge_requests_spents(user):
     mr_opened = MergeRequestFactory.create(user=user)
 
     MergeRequestSpentTimeFactory.create(
-        user=user, base=mr_opened, time_spent=seconds(hours=2),
+        user=user,
+        base=mr_opened,
+        time_spent=seconds(hours=2),
     )
 
     MergeRequestSpentTimeFactory.create(
-        user=user, base=mr_opened, time_spent=seconds(hours=3),
+        user=user,
+        base=mr_opened,
+        time_spent=seconds(hours=3),
     )
 
     mr_closed = MergeRequestFactory.create(
-        user=user, state=MergeRequestState.CLOSED,
+        user=user,
+        state=MergeRequestState.CLOSED,
     )
 
     MergeRequestSpentTimeFactory.create(
-        user=user, base=mr_closed, time_spent=seconds(hours=2),
+        user=user,
+        base=mr_closed,
+        time_spent=seconds(hours=2),
     )
 
     MergeRequestSpentTimeFactory.create(
-        user=user, base=mr_closed, time_spent=seconds(hours=1),
+        user=user,
+        base=mr_closed,
+        time_spent=seconds(hours=1),
     )
 
     mr_merged = MergeRequestFactory.create(
-        user=user, state=MergeRequestState.MERGED,
+        user=user,
+        state=MergeRequestState.MERGED,
     )
 
     MergeRequestSpentTimeFactory.create(
-        user=user, base=mr_merged, time_spent=seconds(hours=1),
+        user=user,
+        base=mr_merged,
+        time_spent=seconds(hours=1),
     )
 
     MergeRequestSpentTimeFactory.create(
-        user=user, base=mr_merged, time_spent=seconds(hours=5),
+        user=user,
+        base=mr_merged,
+        time_spent=seconds(hours=5),
     )
 
     summary = spent_time_service.get_summary(SpentTime.objects.all())
@@ -164,7 +192,8 @@ def test_complex_spents(user):
     MergeRequestSpentTimeFactory.create(
         user=user,
         base=MergeRequestFactory.create(
-            user=user, state=MergeRequestState.CLOSED,
+            user=user,
+            state=MergeRequestState.CLOSED,
         ),
         time_spent=seconds(hours=3),
     )
@@ -172,7 +201,8 @@ def test_complex_spents(user):
     MergeRequestSpentTimeFactory.create(
         user=user,
         base=MergeRequestFactory.create(
-            user=user, state=MergeRequestState.MERGED,
+            user=user,
+            state=MergeRequestState.MERGED,
         ),
         time_spent=seconds(hours=6),
     )

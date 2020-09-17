@@ -31,7 +31,6 @@ xlsxwriter = "*"
 graphene-django = "*"
 slackclient = "*"
 tqdm = "*"
-black = "^19.10b0"
 sentry-sdk = "*"
 fluent-logger = "*"
 gunicorn = "*"
@@ -58,6 +57,7 @@ polint = "*"
 dennis = "*"
 safety = "*"
 xenon = "*"
+black = "^20.8b1"
 
 [tool.black]
 line-length = 79

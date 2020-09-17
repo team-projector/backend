@@ -17,7 +17,10 @@ from apps.development.services.team.metrics.progress.week import (
 
 
 def create_provider(
-    team: Team, start: date, end: date, group: str,
+    team: Team,
+    start: date,
+    end: date,
+    group: str,
 ) -> ProgressMetricsProvider:
     """Create progress metrics provider."""
     if group == "day":
@@ -32,7 +35,10 @@ TeamMemberProgressMetricsList = List[TeamMemberProgressMetrics]
 
 
 def get_progress_metrics(
-    team: Team, start: date, end: date, grp: str,
+    team: Team,
+    start: date,
+    end: date,
+    grp: str,
 ) -> TeamMemberProgressMetricsList:
     """Get progress metrics for team member."""
     provider = create_provider(team, start, end, grp)

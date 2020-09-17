@@ -32,7 +32,8 @@ def test_decline_by_teamlead(team_leader, team_developer):
     work_break = WorkBreakFactory.create(user=team_developer)
 
     work_break_service.Manager(work_break).decline(
-        approved_by=team_leader, decline_reason="reason",
+        approved_by=team_leader,
+        decline_reason="reason",
     )
 
     work_break.refresh_from_db()

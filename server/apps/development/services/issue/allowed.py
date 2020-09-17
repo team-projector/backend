@@ -38,7 +38,9 @@ def filter_allowed_for_user(queryset: QuerySet, user: User) -> QuerySet:
 def get_allowed_projects(user) -> Iterable[Project]:
     """Get allowed projects for user."""
     members = ProjectMember.objects.filter(
-        user=user, role=ProjectMemberRole.MANAGER, id=OuterRef("members__id"),
+        user=user,
+        role=ProjectMemberRole.MANAGER,
+        id=OuterRef("members__id"),
     )
 
     projects = list(

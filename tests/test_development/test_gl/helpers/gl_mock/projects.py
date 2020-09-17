@@ -50,7 +50,8 @@ def register_delete_project_hook(mocker, project, response=None):
     :param response:
     """
     mocker.register_delete(
-        "/projects/{0}/hooks".format(project["id"]), response,
+        "/projects/{0}/hooks".format(project["id"]),
+        response,
     )
 
 
@@ -85,12 +86,14 @@ def register_project_milestones(mocker, project, milestones):
     :param milestones:
     """
     mocker.register_get(
-        "/projects/{0}/milestones".format(project["id"]), milestones,
+        "/projects/{0}/milestones".format(project["id"]),
+        milestones,
     )
     for milestone in milestones:
         mocker.register_get(
             "/projects/{0}/milestones/{1}".format(
-                project["id"], milestone["id"],
+                project["id"],
+                milestone["id"],
             ),
             milestone,
         )
@@ -105,7 +108,8 @@ def register_project_merge_requests(mocker, project, merge_requests):
     :param merge_requests:
     """
     mocker.register_get(
-        "/projects/{0}/merge_requests".format(project["id"]), merge_requests,
+        "/projects/{0}/merge_requests".format(project["id"]),
+        merge_requests,
     )
 
 
@@ -122,5 +126,7 @@ def mock_project_endpoints(mocker, project, **kwargs):
     register_project_milestones(mocker, project, kwargs.get("milestones", []))
     register_project_hooks(mocker, project, kwargs.get("hooks", []))
     register_project_merge_requests(
-        mocker, project, kwargs.get("merge_requests", []),
+        mocker,
+        project,
+        kwargs.get("merge_requests", []),
     )

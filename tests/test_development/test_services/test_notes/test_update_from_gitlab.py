@@ -21,7 +21,8 @@ def test_load_new(db, gl_mocker, gl_client):
     gl_author = GlUserFactory.create()
     gl_mock.register_user(gl_mocker, gl_author)
     gl_note = GlNoteFactory.create(
-        author=gl_author, body="added 1h of time spent at 2000-01-01",
+        author=gl_author,
+        body="added 1h of time spent at 2000-01-01",
     )
     issue = IssueFactory.create()
 
@@ -49,7 +50,8 @@ def test_update_immutable(db, gl_mocker, gl_client):
     gl_author = GlUserFactory.create()
     gl_mock.register_user(gl_mocker, gl_author)
     gl_note = GlNoteFactory.create(
-        author=gl_author, body="added 1h of time spent at 2000-01-01",
+        author=gl_author,
+        body="added 1h of time spent at 2000-01-01",
     )
     issue = IssueFactory.create()
 
@@ -81,7 +83,8 @@ def test_update_mutable(db, gl_mocker, gl_client):
         "https://gitlab.com/junte/esanum/social/backend/-/issues/3511",
     ]
     gl_note = GlNoteFactory.create(
-        author=gl_author, body="link {0}".format(links[0]),
+        author=gl_author,
+        body="link {0}".format(links[0]),
     )
     issue = IssueFactory.create()
 

@@ -12,7 +12,8 @@ from apps.development.tasks import sync_project_merge_request_task
 
 @admin.register(MergeRequest)
 class MergeRequestAdmin(
-    ForceSyncEntityMixin, BaseModelAdmin,
+    ForceSyncEntityMixin,
+    BaseModelAdmin,
 ):
     """A class representing Merge Request model for admin dashboard."""
 
@@ -33,5 +34,6 @@ class MergeRequestAdmin(
     def sync_handler(self, merge_request):
         """Syncing merge request."""
         sync_project_merge_request_task.delay(
-            merge_request.project.gl_id, merge_request.gl_iid,
+            merge_request.project.gl_id,
+            merge_request.gl_iid,
         )

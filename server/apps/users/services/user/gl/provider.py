@@ -9,7 +9,8 @@ class UserGlProvider(BaseGlProvider):
 
     @gitlab_api_call
     def get_gl_user(
-        self, gl_user_id: int,
+        self,
+        gl_user_id: int,
     ):
         """Get user from gitlab."""
         return self.gl_client.users.get(gl_user_id)

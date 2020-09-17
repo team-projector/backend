@@ -153,10 +153,14 @@ def test_fix_wrong(db, gl_mocker, client):
         ],
     )
     gl_mock.register_create_project_hook(
-        gl_mocker, gl_project, create_callback,
+        gl_mocker,
+        gl_project,
+        create_callback,
     )
     gl_mock.register_delete_project_hook(
-        gl_mocker, gl_project, delete_callback,
+        gl_mocker,
+        gl_project,
+        delete_callback,
     )
 
     ProjectWebhookManager().check_project_webhooks(project)

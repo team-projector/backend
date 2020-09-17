@@ -8,7 +8,11 @@ from tests.test_users.factories.user import UserFactory
 
 
 def test_approving_list(
-    user, ghl_auth_mock_info, team, make_team_leader, team_developer,
+    user,
+    ghl_auth_mock_info,
+    team,
+    make_team_leader,
+    team_developer,
 ):
     """
     Test approving list.
@@ -23,7 +27,9 @@ def test_approving_list(
 
     WorkBreakFactory.create_batch(5, user=team_developer)
     WorkBreakFactory.create_batch(
-        4, user=team_developer, approve_state=ApprovedState.APPROVED,
+        4,
+        user=team_developer,
+        approve_state=ApprovedState.APPROVED,
     )
     WorkBreakFactory.create_batch(3, user=UserFactory.create())
 
@@ -45,7 +51,11 @@ def test_approving_list(
 
 
 def test_approving_list_not_teamlead(
-    user, ghl_auth_mock_info, team, make_team_developer, team_developer,
+    user,
+    ghl_auth_mock_info,
+    team,
+    make_team_developer,
+    team_developer,
 ):
     """
     Test approving list not teamlead.
@@ -61,7 +71,9 @@ def test_approving_list_not_teamlead(
     WorkBreakFactory.create_batch(5, user=user)
     WorkBreakFactory.create_batch(5, user=team_developer)
     WorkBreakFactory.create_batch(
-        4, user=team_developer, approve_state=ApprovedState.APPROVED,
+        4,
+        user=team_developer,
+        approve_state=ApprovedState.APPROVED,
     )
     WorkBreakFactory.create_batch(3, user=UserFactory.create())
 

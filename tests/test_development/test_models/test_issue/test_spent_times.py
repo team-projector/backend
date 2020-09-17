@@ -19,7 +19,8 @@ def test_reset_spend(user):
     :param user:
     """
     IssueNoteFactory.create(
-        type=NoteType.RESET_SPEND, user=user,
+        type=NoteType.RESET_SPEND,
+        user=user,
     )
 
     assert SpentTime.objects.count() == 0
@@ -59,7 +60,8 @@ def test_moved_from(user):
     :param user:
     """
     IssueNoteFactory.create(
-        type=NoteType.MOVED_FROM, user=user,
+        type=NoteType.MOVED_FROM,
+        user=user,
     )
 
     assert SpentTime.objects.count() == 0
@@ -77,7 +79,8 @@ def test_type_not_exist(user):
     :param user:
     """
     IssueNoteFactory.create(
-        type="not_exist", user=user,
+        type="not_exist",
+        user=user,
     )
 
     issue = Issue.objects.first()
@@ -97,7 +100,10 @@ def test_spent_time_exists(user):
     issue = Issue.objects.first()
 
     IssueSpentTimeFactory(
-        user=user, base=issue, note=note, time_spent=0,
+        user=user,
+        base=issue,
+        note=note,
+        time_spent=0,
     )
 
     assert SpentTime.objects.count() == 1

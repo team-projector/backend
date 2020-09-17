@@ -17,22 +17,27 @@ class ApprovingFilter(django_filters.BooleanFilter):
     """Filter work breaks by approved state."""
 
     def filter(  # noqa: A003, WPS125
-        self, queryset, value,  # noqa: WPS110
+        self,
+        queryset,
+        value,  # noqa: WPS110
     ) -> QuerySet:
         """Do filtering."""
         if not value:
             return queryset
 
         teams = TeamMember.objects.filter(
-            user=self.parent.request.user, roles=TeamMember.roles.LEADER,
+            user=self.parent.request.user,
+            roles=TeamMember.roles.LEADER,
         ).values_list("team", flat=True)
 
         subquery = User.objects.filter(
-            teams__in=teams, id=OuterRef("user_id"),
+            teams__in=teams,
+            id=OuterRef("user_id"),
         )
 
         return queryset.annotate(user_is_team_member=Exists(subquery)).filter(
-            user_is_team_member=True, approve_state=ApprovedState.CREATED,
+            user_is_team_member=True,
+            approve_state=ApprovedState.CREATED,
         )
 
 
@@ -44,7 +49,9 @@ class TeamFilter(django_filters.ModelChoiceFilter):
         super().__init__(queryset=Team.objects.all())
 
     def filter(  # noqa: A003, WPS125
-        self, queryset, value,  # noqa: WPS110
+        self,
+        queryset,
+        value,  # noqa: WPS110
     ) -> QuerySet:
         """Do filtering."""
         if not value:

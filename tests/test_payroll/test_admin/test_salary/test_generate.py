@@ -31,7 +31,9 @@ def issue_spent_time(user, issue):
     user.save(update_fields=("hour_rate",))
 
     return IssueSpentTimeFactory.create(
-        user=user, base=issue, time_spent=seconds(hours=5),
+        user=user,
+        base=issue,
+        time_spent=seconds(hours=5),
     )
 
 

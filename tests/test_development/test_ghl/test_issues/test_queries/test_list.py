@@ -47,5 +47,6 @@ def test_unauth(ghl_mock_info, all_issues_query):
     """Test unauth issues list."""
     with pytest.raises(GraphQLPermissionDenied):
         all_issues_query(
-            root=None, info=ghl_mock_info,
+            root=None,
+            info=ghl_mock_info,
         )

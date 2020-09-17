@@ -24,7 +24,9 @@ def test_resolver(user, ghl_auth_mock_info):
     )
 
     IssueSpentTimeFactory.create(
-        user=user, base=issue, time_spent=seconds(hours=6),
+        user=user,
+        base=issue,
+        time_spent=seconds(hours=6),
     )
 
     checkers.check_issues_metrics(

@@ -14,7 +14,8 @@ def test_leader(team_leader, team_developer):
     :param team_developer:
     """
     helpers.check_allowed_for_user(
-        team_leader, IssueFactory.create_batch(4, user=team_developer),
+        team_leader,
+        IssueFactory.create_batch(4, user=team_developer),
     )
 
 

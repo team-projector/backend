@@ -11,7 +11,8 @@ from apps.development.models import TeamMember
 
 
 def filter_by_roles(
-    queryset: models.QuerySet, roles: Iterable[Union[str, Bit]],
+    queryset: models.QuerySet,
+    roles: Iterable[Union[str, Bit]],
 ) -> models.QuerySet:
     """Get team members by role."""
     roles = [

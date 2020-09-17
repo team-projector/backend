@@ -20,12 +20,17 @@ def test_load(db, gl_mocker, gl_client):
     gl_label = GlLabelFactory.create()
 
     merge_request, gl_merge_request = initializers.init_merge_request(
-        project, gl_project, gl_kwargs={"labels": [gl_label["name"]]},
+        project,
+        gl_project,
+        gl_kwargs={"labels": [gl_label["name"]]},
     )
 
     gl_mock.mock_project_endpoints(gl_mocker, gl_project, labels=[gl_label])
     gl_mock.mock_merge_request_endpoints(
-        gl_mocker, gl_project, gl_merge_request, labels=[gl_label],
+        gl_mocker,
+        gl_project,
+        gl_merge_request,
+        labels=[gl_label],
     )
 
     gl_project_manager = gl_client.projects.get(id=project.gl_id)
@@ -34,7 +39,9 @@ def test_load(db, gl_mocker, gl_client):
     )
 
     MergeRequestGlManager().sync_labels(
-        merge_request, gl_merge_request_manager, gl_project_manager,
+        merge_request,
+        gl_merge_request_manager,
+        gl_project_manager,
     )
 
     merge_request = MergeRequest.objects.first()
@@ -57,19 +64,29 @@ def test_with_cached_labels(db, gl_mocker, gl_client):
     gl_label = GlLabelFactory.create()
 
     merge_request1, gl_merge_request1 = initializers.init_merge_request(
-        project, gl_project, gl_kwargs={"labels": [gl_label["name"]]},
+        project,
+        gl_project,
+        gl_kwargs={"labels": [gl_label["name"]]},
     )
 
     merge_request2, gl_merge_request2 = initializers.init_merge_request(
-        project, gl_project, gl_kwargs={"labels": [gl_label["name"]]},
+        project,
+        gl_project,
+        gl_kwargs={"labels": [gl_label["name"]]},
     )
 
     gl_mock.mock_project_endpoints(gl_mocker, gl_project, labels=[gl_label])
     gl_mock.mock_merge_request_endpoints(
-        gl_mocker, gl_project, gl_merge_request1, labels=[gl_label],
+        gl_mocker,
+        gl_project,
+        gl_merge_request1,
+        labels=[gl_label],
     )
     gl_mock.mock_merge_request_endpoints(
-        gl_mocker, gl_project, gl_merge_request2, labels=[gl_label],
+        gl_mocker,
+        gl_project,
+        gl_merge_request2,
+        labels=[gl_label],
     )
 
     gl_project_manager = gl_client.projects.get(id=project.gl_id)
@@ -80,7 +97,9 @@ def test_with_cached_labels(db, gl_mocker, gl_client):
     assert getattr(gl_project_manager, "cached_labels", None) is None
 
     MergeRequestGlManager().sync_labels(
-        merge_request1, gl_merge_request_manager, gl_project_manager,
+        merge_request1,
+        gl_merge_request_manager,
+        gl_project_manager,
     )
 
     assert gl_project_manager.cached_labels is not None
@@ -94,7 +113,9 @@ def test_with_cached_labels(db, gl_mocker, gl_client):
     )
 
     MergeRequestGlManager().sync_labels(
-        merge_request2, gl_merge_request_manager, gl_project_manager,
+        merge_request2,
+        gl_merge_request_manager,
+        gl_project_manager,
     )
 
     merge_request2.refresh_from_db()
@@ -114,12 +135,17 @@ def test_empty(db, gl_mocker, gl_client):
     gl_label = GlLabelFactory.create()
 
     merge_request, gl_merge_request = initializers.init_merge_request(
-        project, gl_project, gl_kwargs={"labels": [gl_label["name"]]},
+        project,
+        gl_project,
+        gl_kwargs={"labels": [gl_label["name"]]},
     )
 
     gl_mock.mock_project_endpoints(gl_mocker, gl_project)
     gl_mock.mock_merge_request_endpoints(
-        gl_mocker, gl_project, gl_merge_request, labels=[gl_label],
+        gl_mocker,
+        gl_project,
+        gl_merge_request,
+        labels=[gl_label],
     )
 
     gl_project_manager = gl_client.projects.get(id=project.gl_id)
@@ -128,7 +154,9 @@ def test_empty(db, gl_mocker, gl_client):
     )
 
     MergeRequestGlManager().sync_labels(
-        merge_request, gl_merge_request_manager, gl_project_manager,
+        merge_request,
+        gl_merge_request_manager,
+        gl_project_manager,
     )
 
     merge_request = MergeRequest.objects.first()

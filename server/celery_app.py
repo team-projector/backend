@@ -25,7 +25,9 @@ def setup_periodic_tasks(sender, **kwargs):
     from apps.users.tasks import clear_expired_tokens_task  # noqa: WPS433
 
     sender.add_periodic_task(
-        60 * 60, sync_all_task.s(), name="gitlab sync",
+        60 * 60,
+        sync_all_task.s(),
+        name="gitlab sync",
     )
 
     sender.add_periodic_task(

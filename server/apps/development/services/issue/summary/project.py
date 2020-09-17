@@ -48,7 +48,9 @@ class IssuesProjectSummaryProvider:
     """Issues project summary provider."""
 
     def __init__(
-        self, queryset: models.QuerySet, order_by: Optional[str],
+        self,
+        queryset: models.QuerySet,
+        order_by: Optional[str],
     ):
         """Initialize self."""
         self.queryset = queryset
@@ -63,7 +65,9 @@ class IssuesProjectSummaryProvider:
         return self._get_summaries(summaries_qs, total_issues_count)
 
     def _get_summaries(
-        self, summaries_qs: models.QuerySet, total_issues_count: int,
+        self,
+        summaries_qs: models.QuerySet,
+        total_issues_count: int,
     ) -> List[IssuesProjectSummary]:
         """
         Get summaries.
@@ -86,13 +90,18 @@ class IssuesProjectSummaryProvider:
 
             summary.project = project
             summary.issues = self._get_issues_summary(
-                summaries_project, project, total_issues_count,
+                summaries_project,
+                project,
+                total_issues_count,
             )
 
         return summaries
 
     def _get_issues_summary(
-        self, summaries, project: Project, total_issues_count: int,
+        self,
+        summaries,
+        project: Project,
+        total_issues_count: int,
     ) -> ProjectIssuesSummary:
         """
         Get issues summary.
@@ -172,7 +181,8 @@ class IssuesProjectSummaryProvider:
 
 
 def get_project_summaries(
-    queryset: models.QuerySet, order_by: Optional[str] = None,
+    queryset: models.QuerySet,
+    order_by: Optional[str] = None,
 ) -> List[IssuesProjectSummary]:
     """Get summaries for project."""
     provider = IssuesProjectSummaryProvider(queryset, order_by)

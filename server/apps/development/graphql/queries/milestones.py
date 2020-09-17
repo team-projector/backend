@@ -17,9 +17,11 @@ class MilestonesQueries(graphene.ObjectType):
     milestone = DatasourceRelayNode.Field(MilestoneType)
 
     all_milestones = DataSourceConnectionField(
-        MilestoneType, filterset_class=MilestonesFilterSet,
+        MilestoneType,
+        filterset_class=MilestonesFilterSet,
     )
 
     milestones_summary = graphene.Field(
-        MilestonesSummaryType, resolver=resolve_milestones_summary,
+        MilestonesSummaryType,
+        resolver=resolve_milestones_summary,
     )

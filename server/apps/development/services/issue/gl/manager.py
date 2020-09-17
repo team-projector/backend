@@ -36,7 +36,9 @@ class IssueGlManager(BaseWorkItemGlManager):
             self.sync_project_issues(project, full_reload)
 
     def sync_project_issues(
-        self, project: Project, full_reload: bool = False,
+        self,
+        project: Project,
+        full_reload: bool = False,
     ) -> None:
         """Load project issues."""
         logger.info("Syncing project '{0}' issues".format(project))
@@ -112,7 +114,9 @@ class IssueGlManager(BaseWorkItemGlManager):
         logger.info("Issue '{0}' is synced".format(issue))
 
     def check_project_deleted_issues(
-        self, project: Project, gl_project: gl.Project,
+        self,
+        project: Project,
+        gl_project: gl.Project,
     ) -> None:
         """Whether issues were deleted from project."""
         gl_issues = set()
@@ -127,7 +131,8 @@ class IssueGlManager(BaseWorkItemGlManager):
 
         logger.info(
             "Project '{0}' deleted issues ckecked: removed {1}".format(
-                project, len(diff),
+                project,
+                len(diff),
             ),
         )
 
@@ -142,7 +147,10 @@ class IssueGlManager(BaseWorkItemGlManager):
         issue.merge_requests.set(
             (
                 self._sync_merge_request(
-                    mr["id"], mr["iid"], project, gl_project,
+                    mr["id"],
+                    mr["iid"],
+                    project,
+                    gl_project,
                 )
                 for mr in gl_issue.closed_by()
             ),
@@ -174,7 +182,9 @@ class IssueGlManager(BaseWorkItemGlManager):
             gl_merge_request = gl_project.mergerequests.get(gl_iid)
 
             merge_request = self.merge_requests_manager.update_merge_request(
-                project, gl_project, gl_merge_request,
+                project,
+                gl_project,
+                gl_merge_request,
             )
 
         return merge_request
