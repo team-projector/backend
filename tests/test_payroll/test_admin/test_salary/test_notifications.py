@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from django.conf import settings
+from constance.test import override_config
 from django.core import mail
 
 from tests.helpers import db, objects
@@ -8,6 +8,7 @@ from tests.test_payroll.factories import SalaryFactory
 from tests.test_users.factories.user import UserFactory
 
 
+@override_config(DEFAULT_FROM_EMAIL="foo@bar")
 def test_send_notification(admin_rf, salary_admin):
     """
     Test send notification.
@@ -37,7 +38,7 @@ def test_send_notification(admin_rf, salary_admin):
     assert salary.payed
     assert len(mail.outbox) == 1
     assert mail.outbox[0].body is not None
-    assert mail.outbox[0].from_email == settings.SERVER_EMAIL
+    assert mail.outbox[0].from_email == "foo@bar"
     assert mail.outbox[0].to == [user.email]
 
 
