@@ -2,7 +2,7 @@
 
 from typing import List
 
-from django.conf import settings
+from constance import config
 from django.core.mail import send_mail
 from django.template.loader import get_template
 
@@ -30,7 +30,7 @@ class SystemEmailDispatcher:
         send_mail(
             subject=subject,
             message=text,
-            from_email=settings.DEFAULT_FROM_EMAIL,
+            from_email=config.DEFAULT_FROM_EMAIL,
             recipient_list=recipient_list,
             html_message=renderer,
         )

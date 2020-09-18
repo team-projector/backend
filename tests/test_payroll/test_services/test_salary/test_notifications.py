@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from django.conf import settings
+from constance.test import override_config
 from django.core import mail
 
 from apps.payroll.tasks.salaries import send_salary_email_report_task
@@ -8,6 +8,7 @@ from tests.test_payroll.factories import SalaryFactory
 from tests.test_users.factories.user import UserFactory
 
 
+@override_config(DEFAULT_FROM_EMAIL="foo@bar")
 def test_send_salary_email_report(db):
     """
     Test send salary email report.
@@ -26,7 +27,7 @@ def test_send_salary_email_report(db):
 
     assert len(mail.outbox) == 1
     assert mail.outbox[0].body is not None
-    assert mail.outbox[0].from_email == settings.SERVER_EMAIL
+    assert mail.outbox[0].from_email == "foo@bar"
     assert mail.outbox[0].to == [user.email]
 
 
