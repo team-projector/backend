@@ -20,6 +20,8 @@ lint_dockerfile:
 
 build:
   stage: build
+  services:
+    - docker:dind
   script:
     - ./scripts/ci_build_images.sh
 
@@ -52,6 +54,8 @@ test:
 .base_publish:
   stage: publish
   dependencies: []
+  services:
+    - docker:dind
   before_script:
     - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN registry.gitlab.com
     - docker pull $DOCKER_IMAGE
