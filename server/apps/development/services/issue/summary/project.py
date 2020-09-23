@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from datetime import datetime
-from typing import List, Optional
+from typing import List, NamedTuple, Optional
 
 from django.db import models
 from django.db.models.functions import Coalesce
@@ -10,25 +10,7 @@ from apps.development.models import Project
 from apps.development.models.issue import IssueState
 
 
-def get_min_due_date(project):
-    """Get minimum due date."""
-    sorted_milestones = sorted(project.active_milestones, key=_get_key)
-    if sorted_milestones:
-        return sorted_milestones[0].due_date or datetime.max.date()
-
-    return datetime.max.date()
-
-
-def _get_key(milestone):
-    """
-    Get key.
-
-    :param milestone:
-    """
-    return getattr(milestone, "due_date", None) or datetime.max.date()
-
-
-class ProjectIssuesSummary:
+class ProjectIssuesSummary(NamedTuple):
     """Project issues summary."""
 
     opened_count: int = 0
@@ -36,12 +18,50 @@ class ProjectIssuesSummary:
     remains: int = 0
 
 
-class IssuesProjectSummary:
+class IssuesProjectSummary(NamedTuple):
     """Issues project summary."""
 
     project: Project
     issues: ProjectIssuesSummary
-    order_by: str
+
+
+class _SortProjectSummaries:
+    def sort(
+        self,
+        summaries: List[IssuesProjectSummary],
+        order_by: Optional[str],
+    ):
+        if order_by == "issues__remains":
+            return sorted(summaries, key=self._get_remains)
+        elif order_by == "-issues__remains":
+            return sorted(summaries, key=self._get_remains, reverse=True)
+        return sorted(summaries, key=self._get_min_due_date)
+
+    def _get_min_due_date(self, summary: IssuesProjectSummary):
+        """Get minimum due date."""
+        sorted_milestones = sorted(
+            summary.project.active_milestones,
+            key=self._get_key,
+        )
+        if sorted_milestones:
+            return sorted_milestones[0].due_date or datetime.max.date()
+
+        return datetime.max.date()
+
+    def _get_remains(self, summary: IssuesProjectSummary):
+        """Get remains from summary."""
+        return summary.issues.remains
+
+    def _get_key(self, milestone):
+        """
+        Get key.
+
+        :param milestone:
+        """
+        return getattr(milestone, "due_date", None) or datetime.max.date()
+
+
+sort_project_summaries = _SortProjectSummaries().sort
 
 
 class IssuesProjectSummaryProvider:
@@ -62,7 +82,8 @@ class IssuesProjectSummaryProvider:
 
         total_issues_count = self._get_total_issues_count(summaries_qs)
 
-        return self._get_summaries(summaries_qs, total_issues_count)
+        summaries = self._get_summaries(summaries_qs, total_issues_count)
+        return sort_project_summaries(summaries, self.order_by)
 
     def _get_summaries(
         self,
@@ -85,15 +106,15 @@ class IssuesProjectSummaryProvider:
         summaries: List[IssuesProjectSummary] = []
 
         for project in self._get_project_qs(summaries_qs):
-            summary = IssuesProjectSummary()
-            summaries.append(summary)
-
-            summary.project = project
-            summary.issues = self._get_issues_summary(
-                summaries_project,
-                project,
-                total_issues_count,
+            summary = IssuesProjectSummary(
+                project=project,
+                issues=self._get_issues_summary(
+                    summaries_project,
+                    project,
+                    total_issues_count,
+                ),
             )
+            summaries.append(summary)
 
         return summaries
 
@@ -113,16 +134,13 @@ class IssuesProjectSummaryProvider:
         :type total_issues_count: int
         :rtype: ProjectIssuesSummary
         """
-        issues_summary = ProjectIssuesSummary()
-        issues_summary.opened_count = summaries[project.id][
-            "issues_opened_count"
-        ]
-        issues_summary.remains = summaries[project.id]["total_time_remains"]
-        issues_summary.percentage = (
-            issues_summary.opened_count / total_issues_count
-        )
+        opened_count = summaries[project.id]["issues_opened_count"]
 
-        return issues_summary
+        return ProjectIssuesSummary(
+            opened_count=opened_count,
+            remains=summaries[project.id]["total_time_remains"],
+            percentage=(opened_count / total_issues_count),
+        )
 
     def _get_summaries_qs(self) -> models.QuerySet:
         """
@@ -174,10 +192,7 @@ class IssuesProjectSummaryProvider:
         :rtype: List[Project]
         """
         project_ids = [summary["project"] for summary in summaries_qs]
-
-        projects_qs = Project.objects.filter(id__in=project_ids)
-
-        return sorted(projects_qs, key=get_min_due_date)
+        return Project.objects.filter(id__in=project_ids)
 
 
 def get_project_summaries(
