@@ -1,4 +1,8 @@
 # -*- coding: utf-8 -*-
+
+from http import HTTPStatus
+
+from gitlab import GitlabHttpError
 from requests.exceptions import ReadTimeout
 
 from apps.development.models import Issue, Project
@@ -37,11 +41,14 @@ def sync_project_issue_task(project_id: int, iid: int) -> None:
         return
 
     manager = IssueGlManager()
-    manager.update_project_issue(
-        project,
-        gl_project,
-        gl_project.issues.get(iid),
-    )
+
+    try:
+        gl_issue = gl_project.issues.get(iid)
+    except GitlabHttpError as err:
+        if err.response_code != HTTPStatus.NOT_FOUND:
+            raise
+    else:
+        manager.update_project_issue(project, gl_project, gl_issue)
 
 
 @app.task
