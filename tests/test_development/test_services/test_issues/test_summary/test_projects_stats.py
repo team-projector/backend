@@ -7,10 +7,14 @@ from django.utils import timezone
 from apps.development.models.issue import Issue
 from apps.development.models.milestone import MilestoneState
 from apps.development.services.issue.summary import (
+    IssuesProjectSummary,
     get_issues_summary,
     get_project_summaries,
 )
-from apps.development.services.issue.summary.project import get_min_due_date
+from apps.development.services.issue.summary.project import (
+    ProjectIssuesSummary,
+    sort_project_summaries,
+)
 from tests.test_development.factories import (
     IssueFactory,
     ProjectFactory,
@@ -80,7 +84,7 @@ def test_sort_projects_by_milestone_flat(db):
 
     :param db:
     """
-    projects = []
+    summaries = []
     for days in range(3):
         milestone = ProjectMilestoneFactory(state=MilestoneState.ACTIVE)
         ProjectMilestoneFactory(
@@ -93,10 +97,15 @@ def test_sort_projects_by_milestone_flat(db):
             state=MilestoneState.ACTIVE,
         )
 
-        projects.append(milestone.owner)
+        summaries.append(
+            IssuesProjectSummary(milestone.owner, ProjectIssuesSummary()),
+        )
 
-    expected = [project.id for project in projects]
-    actual = [project.id for project in sorted(projects, key=get_min_due_date)]
+    expected = [summary.project.id for summary in summaries]
+    actual = [
+        summary.project.id
+        for summary in sort_project_summaries(summaries, None)
+    ]
 
     assert expected == actual
 
@@ -107,7 +116,7 @@ def test_sort_projects_by_milestone_neested(db):
 
     :param db:
     """
-    projects = []
+    summaries = []
     for days in range(3):
         group = ProjectGroupFactory.create(parent=ProjectGroupFactory.create())
         project = ProjectFactory.create(group=group)
@@ -124,9 +133,52 @@ def test_sort_projects_by_milestone_neested(db):
             state=MilestoneState.ACTIVE,
         )
 
-        projects.append(project)
+        summaries.append(IssuesProjectSummary(project, ProjectIssuesSummary()))
 
-    expected = [project.id for project in projects][::-1]
-    actual = [project.id for project in sorted(projects, key=get_min_due_date)]
+    expected = [summary.project.id for summary in summaries][::-1]
+    actual = [
+        summary.project.id
+        for summary in sort_project_summaries(summaries, None)
+    ]
 
     assert expected == actual
+
+
+def test_sort_by_remains_desc(db):
+    """
+    Test sort projects by milestone flat.
+
+    :param db:
+    """
+    projects = ProjectFactory.create_batch(3)
+    summaries = [
+        IssuesProjectSummary(projects[0], ProjectIssuesSummary(remains=1000)),
+        IssuesProjectSummary(projects[1], ProjectIssuesSummary(remains=0)),
+        IssuesProjectSummary(projects[2], ProjectIssuesSummary(remains=3000)),
+    ]
+
+    assert sort_project_summaries(summaries, "-issues__remains") == [
+        summaries[2],
+        summaries[0],
+        summaries[1],
+    ]
+
+
+def test_sort_by_remains_asc(db):
+    """
+    Test sort projects by milestone flat.
+
+    :param db:
+    """
+    projects = ProjectFactory.create_batch(3)
+    summaries = [
+        IssuesProjectSummary(projects[0], ProjectIssuesSummary(remains=1000)),
+        IssuesProjectSummary(projects[1], ProjectIssuesSummary(remains=0)),
+        IssuesProjectSummary(projects[2], ProjectIssuesSummary(remains=3000)),
+    ]
+
+    assert sort_project_summaries(summaries, "issues__remains") == [
+        summaries[1],
+        summaries[0],
+        summaries[2],
+    ]
