@@ -8,7 +8,7 @@ compile_messages:
 	@./manage.py compilemessages
 
 pre_commit:
-	@./scripts/pre_commit.sh
+	@ pre-commit
 
 docker_remote:
 	@ ./develop/docker_remote.sh
