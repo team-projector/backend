@@ -3,6 +3,10 @@
 set -o errexit
 set -o nounset
 
+#echo $1
+
+#poetry shell
+
 run_checkers() {
   CHANGED_FILES=$(git diff --name-only --no-ext-diff --diff-filter=ACMRTUXB HEAD | grep -E "\.py$" || true)
 
