@@ -6,9 +6,25 @@ repos:
         name: black
         language: system
         entry: poetry run black --check
+        exclude: .*\/migrations
         types: [python]
       - id: flake8
         name: flake8
         language: system
         entry: poetry run flake8
         types: [ python ]
+      - id: polint
+        name: polint
+        language: system
+        entry: poetry run polint -i location,unsorted,untranslated locale
+        pass_filenames: false
+      - id: dennis
+        name: dennis
+        language: system
+        entry: poetry run dennis-cmd lint --errorsonly locale
+        pass_filenames: false
+  - repo: https://github.com/Junte/pre-commit
+    rev: 11ab9c4b495108051bb67f0d275f16c9231195fb
+    hooks:
+      - id: check-commit-message
+        stages: [ commit-msg ]

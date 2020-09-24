@@ -10,6 +10,12 @@ compile_messages:
 pre_commit:
 	@ pre-commit
 
+pre_commit_install:
+	@ pre-commit install && pre-commit install --hook-type commit-msg
+
+pre_commit_update:
+	@ pre-commit autoupdate
+
 docker_remote:
 	@ ./develop/docker_remote.sh
 
