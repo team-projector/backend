@@ -88,7 +88,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     roles = BitField(flags=UserRole.choices, default=0)
 
     is_staff = models.BooleanField(
-        default=True,
+        default=False,
         verbose_name=_("VN__IS_STAFF"),
         help_text=_("HT__IS_STAFF"),
     )
