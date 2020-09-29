@@ -63,23 +63,3 @@ def test_salary_is_null(user):
     ).qs
 
     assert queryset.count() == 2
-
-
-def test_salary_is_null_empty(user):
-    """
-    Test salary is null empty.
-
-    :param user:
-    """
-    PenaltyFactory.create_batch(
-        size=2,
-        user=user,
-        salary=SalaryFactory.create(user=user),
-    )
-
-    queryset = PenaltyFilterSet(
-        data={"salary": None},
-        queryset=Penalty.objects.all(),
-    ).qs
-
-    assert not queryset.exists()
