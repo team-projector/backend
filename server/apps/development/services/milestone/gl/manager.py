@@ -2,6 +2,8 @@
 
 from typing import Dict, Union
 
+from django.utils import timezone
+
 from apps.core.gitlab.parsers import parse_gl_date, parse_gl_datetime
 from apps.development.models import Milestone, Project, ProjectGroup
 from apps.development.services.project.gl.provider import ProjectGlProvider
@@ -85,9 +87,11 @@ class MilestoneGlManager:
         :type owner: Union[ProjectGroup, Project]
         :rtype: None
         """
-        Milestone.objects.update_from_gitlab(
-            owner=owner,
-            **self._build_parameters(gl_milestone),
+        fields = self._build_parameters(gl_milestone)
+        fields["owner"] = owner
+        Milestone.objects.update_or_create(
+            gl_id=gl_milestone.id,
+            defaults=fields,
         )
 
     def _build_parameters(self, gl_milestone) -> Dict[str, object]:
@@ -98,7 +102,6 @@ class MilestoneGlManager:
         :rtype: Dict[str, object]
         """
         return {
-            "gl_id": gl_milestone.id,
             "gl_iid": gl_milestone.iid,
             "gl_url": gl_milestone.web_url,
             "title": gl_milestone.title,
@@ -108,4 +111,5 @@ class MilestoneGlManager:
             "created_at": parse_gl_datetime(gl_milestone.created_at),
             "updated_at": parse_gl_datetime(gl_milestone.updated_at),
             "state": gl_milestone.state.upper(),
+            "gl_last_sync": timezone.now(),
         }

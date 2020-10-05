@@ -8,6 +8,9 @@ from django.db.models.functions import Coalesce, TruncDay
 
 from apps.development.models.issue import Issue, IssueState
 from apps.payroll.models import SpentTime
+from apps.payroll.services.spent_time.summary import (
+    spent_time_aggregation_service,
+)
 from apps.users.models import User
 
 
@@ -65,9 +68,9 @@ class UserDayStatsProvider:
 
     def get_payrolls_stats(self, user: User) -> Dict[date, Dict[str, int]]:
         """Get user payrolls."""
-        queryset = SpentTime.objects.annotate(
-            date_truncated=TruncDay("date"),
-        ).annotate_payrolls()
+        queryset = spent_time_aggregation_service.annotate_payrolls(
+            SpentTime.objects.annotate(date_truncated=TruncDay("date")),
+        )
 
         queryset = (
             queryset.filter(user=user, date_truncated__isnull=False)

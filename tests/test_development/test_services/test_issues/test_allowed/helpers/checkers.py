@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from apps.development.models import Issue
+from apps.development.services.issue.allowed import filter_allowed_for_user
 
 
 def check_allowed_for_user(user, issues):
@@ -10,7 +11,7 @@ def check_allowed_for_user(user, issues):
     :param user:
     :param issues:
     """
-    allowed = Issue.objects.allowed_for_user(user)
+    allowed = filter_allowed_for_user(Issue.objects.all(), user)
 
     assert allowed.count() == len(issues)
     assert set(allowed) == set(issues)

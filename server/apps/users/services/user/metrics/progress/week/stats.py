@@ -10,6 +10,9 @@ from jnt_django_toolbox.helpers.date import date2datetime
 
 from apps.development.models.issue import Issue, IssueState
 from apps.payroll.models import SpentTime
+from apps.payroll.services.spent_time.summary import (
+    spent_time_aggregation_service,
+)
 from apps.users.models import User
 
 
@@ -101,9 +104,9 @@ class UserWeekStatsProvider:
 
     def get_payrolls_stats(self) -> Dict[date, Dict[str, float]]:
         """Get user payrolls."""
-        queryset = SpentTime.objects.annotate(
-            week=TruncWeek("date"),
-        ).annotate_payrolls()
+        queryset = spent_time_aggregation_service.annotate_payrolls(
+            SpentTime.objects.annotate(week=TruncWeek("date")),
+        )
 
         queryset = (
             queryset.filter(
