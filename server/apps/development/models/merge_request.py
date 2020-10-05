@@ -10,7 +10,6 @@ from django.utils.translation import gettext_lazy as _
 
 from apps.core.consts import DEFAULT_TITLE_LENGTH
 from apps.core.models.mixins import GitlabEntityMixin, GitlabInternalIdMixin
-from apps.development.models.managers import MergeRequestManager
 from apps.development.models.mixins import TrackableMixin
 
 
@@ -119,8 +118,6 @@ class MergeRequest(
         blank=True,
         related_name="participant_merge_requests",
     )
-
-    objects = MergeRequestManager()  # noqa: WPS110
 
     def __str__(self):
         """Returns object string representation."""

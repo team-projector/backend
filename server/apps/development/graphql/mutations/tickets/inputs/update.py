@@ -11,6 +11,7 @@ from apps.development.graphql.mutations.tickets.inputs.base import (
 )
 from apps.development.models import Issue
 from apps.development.models.ticket import Ticket
+from apps.development.services.issue.allowed import filter_allowed_for_user
 
 ISSUES_PARAM_ERROR = 'Please, choose one parameter: "attachIssues" or "issues"'
 
@@ -47,7 +48,8 @@ class UpdateTicketInput(TicketBaseInput):
             field.required = False
 
         if self.context:
-            issues_qs = Issue.objects.allowed_for_user(
+            issues_qs = filter_allowed_for_user(
+                Issue.objects.all(),
                 self.context["request"].user,
             )
             fields["attach_issues"].child_relation.queryset = issues_qs

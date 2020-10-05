@@ -5,6 +5,9 @@ from django.db.models import Sum
 from jnt_django_toolbox.helpers.time import seconds
 
 from apps.payroll.models import SpentTime
+from apps.payroll.services.spent_time.summary import (
+    spent_time_aggregation_service,
+)
 from tests.test_development.factories import IssueFactory
 from tests.test_payroll.factories import IssueSpentTimeFactory, SalaryFactory
 from tests.test_users.factories.user import UserFactory
@@ -42,9 +45,10 @@ def test_paid(user):
         time_spent=-seconds(hours=1),
     )
 
-    total_paid = SpentTime.objects.annotate_payrolls(payroll=False).aggregate(
-        total_paid=Sum("paid"),
-    )["total_paid"]
+    total_paid = spent_time_aggregation_service.annotate_payrolls(
+        SpentTime.objects.all(),
+        payroll=False,
+    ).aggregate(total_paid=Sum("paid"))["total_paid"]
 
     assert total_paid == 2 * user.hour_rate
 
@@ -68,8 +72,9 @@ def test_payroll_metrics(user):
         time_spent=-seconds(hours=1),
     )
 
-    total_payroll = SpentTime.objects.annotate_payrolls(paid=False).aggregate(
-        total_payroll=Sum("payroll"),
-    )["total_payroll"]
+    total_payroll = spent_time_aggregation_service.annotate_payrolls(
+        SpentTime.objects.all(),
+        paid=False,
+    ).aggregate(total_payroll=Sum("payroll"))["total_payroll"]
 
     assert total_payroll == 2 * user.hour_rate

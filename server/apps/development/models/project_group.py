@@ -6,7 +6,6 @@ from django.utils.translation import gettext_lazy as _
 
 from apps.core.consts import DEFAULT_TITLE_LENGTH
 from apps.core.models.mixins import GitlabEntityMixin
-from apps.development.models.managers import ProjectGroupManager
 
 
 class ProjectGroup(GitlabEntityMixin):
@@ -64,8 +63,6 @@ class ProjectGroup(GitlabEntityMixin):
         "development.ProjectMember",
         related_query_name="project_group",
     )
-
-    objects = ProjectGroupManager()  # noqa: WPS110
 
     def __str__(self):
         """Returns object string representation."""

@@ -3,6 +3,7 @@
 import logging
 
 from django.db import DatabaseError
+from django.utils import timezone
 from gitlab.v4 import objects as gl
 
 from apps.development.models import Project, ProjectGroup
@@ -26,7 +27,7 @@ class ProjectGlManager:
 
     def sync_all_projects(self) -> None:
         """Sync all projects."""
-        for group in ProjectGroup.objects.for_sync():
+        for group in ProjectGroup.objects.filter(is_active=True):
             self.sync_group_projects(group)
 
     def sync_group_projects(self, group: ProjectGroup) -> None:
@@ -53,16 +54,20 @@ class ProjectGlManager:
         msg = "Updating project '{0}'...".format(gl_project.name)
 
         logger.info(msg)
-
+        fields = {
+            "gl_url": gl_project.web_url,
+            "gl_avatar": gl_project.avatar_url or "",
+            "group": group,
+            "full_title": gl_project.name_with_namespace,
+            "title": gl_project.name,
+            "is_archived": gl_project.archived,
+            "gl_last_sync": timezone.now(),
+        }
         try:
-            project, _ = Project.objects.update_from_gitlab(
+
+            project, _ = Project.objects.update_or_create(
                 gl_id=gl_project.id,
-                gl_url=gl_project.web_url,
-                gl_avatar=gl_project.avatar_url or "",
-                group=group,
-                full_title=gl_project.name_with_namespace,
-                title=gl_project.name,
-                is_archived=gl_project.archived,
+                defaults=fields,
             )
         except (DatabaseError, ValueError):
             logger.exception("Error on update project from gitlab")

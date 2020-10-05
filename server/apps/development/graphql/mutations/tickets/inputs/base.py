@@ -8,6 +8,7 @@ from rest_framework.fields import Field
 from apps.core.drf.fields.choices_field import ChoicesField
 from apps.development.models import Issue
 from apps.development.models.ticket import Ticket, TicketState, TicketType
+from apps.development.services.issue.allowed import filter_allowed_for_user
 
 
 class TicketBaseInput(serializers.ModelSerializer):
@@ -50,7 +51,8 @@ class TicketBaseInput(serializers.ModelSerializer):
         fields = super().get_fields()
 
         if self.context:
-            issues_qs = Issue.objects.allowed_for_user(
+            issues_qs = filter_allowed_for_user(
+                Issue.objects.all(),
                 self.context["request"].user,
             )
             fields["issues"].child_relation.queryset = issues_qs

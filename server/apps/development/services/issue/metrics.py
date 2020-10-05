@@ -7,6 +7,9 @@ from django.db.models.functions import Coalesce
 from apps.development.models import Issue
 from apps.development.models.issue import IssueState
 from apps.payroll.models import SpentTime
+from apps.payroll.services.spent_time.summary import (
+    spent_time_aggregation_service,
+)
 from apps.users.models import User
 
 
@@ -21,9 +24,9 @@ class IssueMetrics:
 
 def get_issue_metrics(issue: Issue) -> IssueMetrics:
     """Get metrics for issue."""
-    payroll = SpentTime.objects.filter(
-        issues__id=issue.id,
-    ).aggregate_payrolls()
+    payroll = spent_time_aggregation_service.aggregate_payrolls(
+        SpentTime.objects.filter(issues__id=issue.id),
+    )
 
     metrics = IssueMetrics()
     metrics.remains = issue.time_remains

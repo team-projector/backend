@@ -8,7 +8,6 @@ from model_utils import FieldTracker
 from apps.core.models.fields import MoneyField
 from apps.core.models.mixins import Timestamps
 from apps.core.models.validators import tax_rate_validator
-from apps.payroll.models.managers import SalaryManager
 from apps.users.models import Position
 
 
@@ -118,8 +117,6 @@ class Salary(Timestamps):
         verbose_name=_("VN__POSITION"),
         help_text=_("HT__POSITION"),
     )
-
-    objects = SalaryManager()  # noqa: WPS110
 
     field_tracker = FieldTracker()
 

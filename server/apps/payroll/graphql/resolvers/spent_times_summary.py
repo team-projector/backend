@@ -3,6 +3,7 @@
 from apps.payroll.graphql.filters import SpentTimeFilterSet
 from apps.payroll.models import SpentTime
 from apps.payroll.services import spent_time as spent_time_service
+from apps.payroll.services.spent_time.allowed import filter_allowed_for_user
 
 
 def resolve_spent_times_summary(
@@ -13,7 +14,10 @@ def resolve_spent_times_summary(
     """Resolve spent times summary."""
     filterset = SpentTimeFilterSet(
         data=kwargs,
-        queryset=SpentTime.objects.allowed_for_user(info.context.user),
+        queryset=filter_allowed_for_user(
+            SpentTime.objects.all(),
+            info.context.user,
+        ),
         request=info.context,
     )
 

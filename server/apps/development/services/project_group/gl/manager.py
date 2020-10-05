@@ -3,6 +3,7 @@
 import logging
 from typing import Dict, Optional
 
+from django.utils import timezone
 from gitlab.v4 import objects as gl
 
 from apps.development.models import ProjectGroup
@@ -63,13 +64,17 @@ class ProjectGroupGlManager:
         parent: Optional[ProjectGroup],
     ) -> ProjectGroup:
         """Update project group data based on gitlab."""
-        group, _ = ProjectGroup.objects.update_from_gitlab(
+        fields = {
+            "gl_url": gl_group.web_url or "",
+            "gl_avatar": gl_group.avatar_url or "",
+            "parent": parent,
+            "title": gl_group.name,
+            "full_title": gl_group.full_name,
+            "gl_last_sync": timezone.now(),
+        }
+        group, _ = ProjectGroup.objects.update_or_create(
             gl_id=gl_group.id,
-            gl_url=gl_group.web_url or "",
-            gl_avatar=gl_group.avatar_url or "",
-            parent=parent,
-            title=gl_group.name,
-            full_title=gl_group.full_name,
+            defaults=fields,
         )
 
         logger.info("Group '{0}' is synced".format(group))

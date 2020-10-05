@@ -62,7 +62,6 @@ class MergeRequestGlManager(BaseWorkItemGlManager):
         time_stats = gl_merge_request.time_stats()
 
         fields = {
-            "gl_id": gl_merge_request.id,
             "gl_iid": gl_merge_request.iid,
             "gl_url": gl_merge_request.web_url,
             "project": project,
@@ -79,6 +78,7 @@ class MergeRequestGlManager(BaseWorkItemGlManager):
             "author": self.user_manager.extract_user_from_data(
                 gl_merge_request.author,
             ),
+            "gl_last_sync": timezone.now(),
         }
 
         if gl_merge_request.milestone:
@@ -89,8 +89,9 @@ class MergeRequestGlManager(BaseWorkItemGlManager):
             if milestone:
                 fields["milestone"] = milestone
 
-        merge_request, _ = models.MergeRequest.objects.update_from_gitlab(
-            **fields,
+        merge_request, _ = models.MergeRequest.objects.update_or_create(
+            gl_id=gl_merge_request.id,
+            defaults=fields,
         )
 
         self.sync_labels(merge_request, gl_merge_request, gl_project)
