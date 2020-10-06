@@ -25,6 +25,7 @@ class IssuesSummaryType(graphene.ObjectType):
     projects = graphene.List(
         IssuesProjectSummary,
         order_by=graphene.String(),
+        is_archived=graphene.Boolean(),
         resolver=resolve_issues_project_summaries,
     )
     teams = graphene.List(
