@@ -36,6 +36,7 @@ class Note(models.Model):
     object_id = models.IntegerField()
 
     gl_id = models.PositiveIntegerField(
+        unique=True,
         verbose_name=_("VN__GITLAB_ID"),
         help_text=_("HT__GITLAB_ID"),
     )
