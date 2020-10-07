@@ -1,6 +1,81 @@
 # -*- coding: utf-8 -*-
 
+from django.db import models
 from django.db.models import QuerySet
+from django.db.models.functions import Coalesce
+
+
+class _AggregationService:
+    def aggregate_payrolls(self, spent_times: QuerySet):
+        """Get total sum payroll and paid."""
+        return self.annotate_payrolls(spent_times).aggregate(
+            total_payroll=Coalesce(models.Sum("payroll"), 0),
+            total_paid=Coalesce(models.Sum("paid"), 0),
+        )
+
+    def summaries(self, spent_times: QuerySet):
+        """Get spent time summaries."""
+        from apps.development.models import issue  # noqa: WPS433
+        from apps.development.models.merge_request import (  # noqa: WPS433
+            MergeRequestState,
+        )
+
+        return spent_times.aggregate(
+            total_issues=self._sum(issues__isnull=False),
+            opened_issues=self._sum(issues__state=issue.IssueState.OPENED),
+            closed_issues=self._sum(issues__state=issue.IssueState.CLOSED),
+            total_merges=self._sum(mergerequests__isnull=False),
+            opened_merges=self._sum(
+                mergerequests__state=MergeRequestState.OPENED,
+            ),
+            closed_merges=self._sum(
+                mergerequests__state=MergeRequestState.CLOSED,
+            ),
+            merged_merges=self._sum(
+                mergerequests__state=MergeRequestState.MERGED,
+            ),
+        )
+
+    def annotate_payrolls(
+        self,
+        spent_times: QuerySet,
+        paid: bool = True,
+        payroll: bool = True,
+    ) -> models.QuerySet:
+        """Get total sum payroll or paid."""
+        if paid:
+            spent_times = spent_times.annotate(
+                paid=models.Case(
+                    models.When(salary__isnull=False, then=models.F("sum")),
+                    default=0,
+                    output_field=models.FloatField(),
+                ),
+            )
+
+        if payroll:
+            spent_times = spent_times.annotate(
+                payroll=models.Case(
+                    models.When(salary__isnull=True, then=models.F("sum")),
+                    default=0,
+                    output_field=models.FloatField(),
+                ),
+            )
+
+        return spent_times
+
+    def _sum(self, **filters) -> Coalesce:
+        """
+        Sum.
+
+        :rtype: Coalesce
+        """
+        return Coalesce(
+            models.Sum("time_spent", filter=models.Q(**filters)),
+            0,
+        )
+
+
+spent_time_aggregation_service = _AggregationService()
 
 
 class IssuesSpentTimesSummary:
@@ -86,7 +161,9 @@ class SpentTimesSummaryProvider:
 
     def execute(self) -> SpentTimesSummary:
         """Calculate summaries."""
-        spent_summaries = self.queryset.summaries()
+        spent_summaries = spent_time_aggregation_service.summaries(
+            self.queryset,
+        )
 
         issues_summaries = IssuesSpentTimesSummary(
             spent=spent_summaries["total_issues"],

@@ -78,6 +78,46 @@ def test_project_summary(user):
     )
 
 
+def test_project_summary_without_is_archive(user):
+    """Test filtering archived projects."""
+    projects = ProjectFactory.create_batch(2, is_archived=False)
+
+    projects[1].is_archived = True
+    projects[1].save()
+
+    IssueFactory.create_batch(
+        5,
+        user=user,
+        total_time_spent=300,
+        time_estimate=400,
+        project=projects[0],
+        due_date=datetime.now().date(),
+    )
+
+    IssueFactory.create_batch(
+        3,
+        user=user,
+        total_time_spent=100,
+        time_estimate=400,
+        project=projects[1],
+        due_date=datetime.now().date(),
+    )
+
+    summary = get_issues_summary(
+        Issue.objects.filter(user=user),
+        due_date=datetime.now().date(),
+        user=user,
+    )
+
+    summary_projects = get_project_summaries(
+        summary.queryset,
+        is_archived=False,
+    )
+
+    assert len(summary_projects) == 1
+    assert summary_projects[0].project == projects[0]
+
+
 def test_sort_projects_by_milestone_flat(db):
     """
     Test sort projects by milestone flat.

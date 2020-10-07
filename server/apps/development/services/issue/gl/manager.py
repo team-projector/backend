@@ -72,7 +72,6 @@ class IssueGlManager(BaseWorkItemGlManager):
         time_stats = gl_issue.time_stats()
 
         fields = {
-            "gl_id": gl_issue.id,
             "gl_iid": gl_issue.iid,
             "gl_url": gl_issue.web_url,
             "project": project,
@@ -89,6 +88,7 @@ class IssueGlManager(BaseWorkItemGlManager):
             ),
             "is_merged": gitlab.parse_state_merged(gl_issue.closed_by()),
             "description": gl_issue.description or "",
+            "gl_last_sync": timezone.now(),
         }
 
         if gl_issue.milestone:
@@ -99,7 +99,10 @@ class IssueGlManager(BaseWorkItemGlManager):
             if milestone:
                 fields["milestone"] = milestone
 
-        issue, _ = Issue.objects.update_from_gitlab(**fields)
+        issue, _ = Issue.objects.update_or_create(
+            gl_id=gl_issue.id,
+            defaults=fields,
+        )
 
         self.sync_labels(issue, gl_issue, gl_project)
         self.sync_notes(issue, gl_issue)

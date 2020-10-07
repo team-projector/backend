@@ -2,6 +2,7 @@
 
 from apps.payroll.graphql.filters import BonusFilterSet
 from apps.payroll.models import Bonus
+from tests.test_development.factories import TeamFactory, TeamMemberFactory
 from tests.test_payroll.factories import BonusFactory, SalaryFactory
 from tests.test_users.factories.user import UserFactory
 
@@ -47,3 +48,36 @@ def test_bonuses_filter_by_salary(user):
 
     assert queryset.count() == 5
     assert set(queryset) == set(bonuses_salary2)
+
+
+def test_bonuses_filter_by_team(user):
+    """Test filter bonuses by team."""
+    bonuses = BonusFactory.create_batch(size=3, user=user)
+
+    team = TeamFactory()
+    TeamMemberFactory.create(user=user, team=team)
+
+    BonusFactory.create_batch(size=5, user=UserFactory.create())
+
+    queryset = BonusFilterSet(
+        data={"team": team.id},
+        queryset=Bonus.objects.all(),
+    ).qs
+
+    assert queryset.count() == 3
+    assert set(queryset) == set(bonuses)
+
+
+def test_bonuses_filter_by_team_empty(user):
+    """Test filter bonuses by team is empty."""
+    BonusFactory.create_batch(size=3, user=user)
+
+    team = TeamFactory()
+    TeamMemberFactory.create(user=UserFactory.create(), team=team)
+
+    queryset = BonusFilterSet(
+        data={"team": team.id},
+        queryset=Bonus.objects.all(),
+    ).qs
+
+    assert not queryset.exists()

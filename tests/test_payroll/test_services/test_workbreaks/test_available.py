@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from apps.payroll.models import WorkBreak
+from apps.payroll.services.work_break import filter_allowed_for_user
 from tests.test_development.factories import TeamFactory
 from tests.test_payroll.factories import WorkBreakFactory
 from tests.test_users.factories.user import UserFactory
@@ -16,7 +17,9 @@ def test_my_work_breaks(user):
 
     WorkBreakFactory.create_batch(size=5, user=UserFactory.create())
 
-    assert set(WorkBreak.objects.allowed_for_user(user)) == set(work_breaks)
+    assert set(filter_allowed_for_user(WorkBreak.objects.all(), user)) == set(
+        work_breaks,
+    )
 
 
 def test_in_team_not_viewer(user, team, make_team_developer):
@@ -33,7 +36,7 @@ def test_in_team_not_viewer(user, team, make_team_developer):
 
     WorkBreakFactory.create(user=user2)
 
-    assert not WorkBreak.objects.allowed_for_user(user).exists()
+    assert not filter_allowed_for_user(WorkBreak.objects.all(), user).exists()
 
 
 def test_as_team_leader(team_leader, team_developer):
@@ -45,7 +48,9 @@ def test_as_team_leader(team_leader, team_developer):
     """
     work_break = WorkBreakFactory.create(user=team_developer)
 
-    assert list(WorkBreak.objects.allowed_for_user(team_leader)) == [
+    assert list(
+        filter_allowed_for_user(WorkBreak.objects.all(), team_leader),
+    ) == [
         work_break,
     ]
 
@@ -59,7 +64,10 @@ def test_as_team_watcher(team_watcher, team_developer):
     """
     WorkBreakFactory.create(user=team_developer)
 
-    assert not WorkBreak.objects.allowed_for_user(team_watcher).exists()
+    assert not filter_allowed_for_user(
+        WorkBreak.objects.all(),
+        team_watcher,
+    ).exists()
 
 
 def test_as_leader_another_team(user, make_team_leader, team_developer):
@@ -74,7 +82,7 @@ def test_as_leader_another_team(user, make_team_leader, team_developer):
 
     WorkBreakFactory.create(user=team_developer)
 
-    assert not WorkBreak.objects.allowed_for_user(user).exists()
+    assert not filter_allowed_for_user(WorkBreak.objects.all(), user).exists()
 
 
 def test_as_watcher_another_team(user, make_team_watcher, team_developer):
@@ -89,7 +97,7 @@ def test_as_watcher_another_team(user, make_team_watcher, team_developer):
 
     WorkBreakFactory.create(user=team_developer)
 
-    assert not WorkBreak.objects.allowed_for_user(user).exists()
+    assert not filter_allowed_for_user(WorkBreak.objects.all(), user).exists()
 
 
 def test_my_work_breaks_and_as_leader(
@@ -113,7 +121,10 @@ def test_my_work_breaks_and_as_leader(
         *WorkBreakFactory.create_batch(size=3, user=team_developer),
     }
 
-    assert set(WorkBreak.objects.allowed_for_user(user)) == work_breaks
+    assert (
+        set(filter_allowed_for_user(WorkBreak.objects.all(), user))
+        == work_breaks
+    )
 
 
 def test_double_work_breaks(user, make_team_leader):
@@ -128,4 +139,6 @@ def test_double_work_breaks(user, make_team_leader):
     make_team_leader(TeamFactory.create(), user)
     make_team_leader(TeamFactory.create(), user)
 
-    assert set(WorkBreak.objects.allowed_for_user(user)) == set(work_breaks)
+    assert set(filter_allowed_for_user(WorkBreak.objects.all(), user)) == set(
+        work_breaks,
+    )

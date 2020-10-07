@@ -9,7 +9,6 @@ from jnt_django_toolbox.consts.time import SECONDS_PER_HOUR
 from apps.core.models.fields import MoneyField
 from apps.core.models.validators import tax_rate_validator
 from apps.payroll.models import Payroll
-from apps.payroll.models.managers import SpentTimeManager
 
 
 class SpentTime(Payroll):  # noqa:WPS230
@@ -64,8 +63,6 @@ class SpentTime(Payroll):  # noqa:WPS230
         blank=True,
         related_name="time_spend",
     )
-
-    objects = SpentTimeManager()  # noqa: WPS110, CCE001
 
     def __str__(self):
         """Returns object string representation."""

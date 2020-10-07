@@ -7,7 +7,6 @@ from django.utils.translation import gettext_lazy as _
 
 from apps.core.consts import DEFAULT_TITLE_LENGTH
 from apps.core.models.mixins import GitlabEntityMixin
-from apps.development.models.managers import ProjectManager
 from apps.development.models.milestone import MilestoneState
 
 
@@ -82,8 +81,6 @@ class Project(GitlabEntityMixin):
         "development.ProjectMember",
         related_query_name="project",
     )
-
-    objects = ProjectManager()  # noqa: WPS110
 
     def __str__(self):
         """Returns object string representation."""

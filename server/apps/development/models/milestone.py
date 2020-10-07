@@ -11,7 +11,6 @@ from apps.core.models.mixins import (
     GitlabInternalIdMixin,
     Timestamps,
 )
-from apps.development.models.managers import MilestoneManager
 
 
 class MilestoneState(models.TextChoices):
@@ -85,8 +84,6 @@ class Milestone(
         ContentType,
         models.CASCADE,
     )
-
-    objects = MilestoneManager()  # noqa: WPS110
 
     def __str__(self):
         """Returns object string representation."""

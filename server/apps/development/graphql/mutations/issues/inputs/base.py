@@ -4,6 +4,7 @@ from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 
 from apps.development.models import Issue
+from apps.development.services.issue.allowed import filter_allowed_for_user
 
 
 class BaseIssueInput(serializers.ModelSerializer):
@@ -26,14 +27,17 @@ class BaseIssueInput(serializers.ModelSerializer):
 
     def validate_id(self, issue):
         """Validates that user have permissions to mutate issue."""
-        if issue:
-            allowed_issue_qs = Issue.objects.allowed_for_user(
-                self.context["request"].user,
-            ).filter(id=issue.id)
+        if not issue:
+            return None
 
-            if not allowed_issue_qs.exists():
-                raise ValidationError(
-                    "You don't have permissions to mutate this issue",
-                )
+        allowed_for_user = filter_allowed_for_user(
+            Issue.objects.filter(id=issue.id),
+            self.context["request"].user,
+        )
+
+        if not allowed_for_user.exists():
+            raise ValidationError(
+                "You don't have permissions to mutate this issue",
+            )
 
         return issue

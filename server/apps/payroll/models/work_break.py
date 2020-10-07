@@ -5,7 +5,6 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 
 from apps.core.models.mixins import Timestamps
-from apps.payroll.models.managers import WorkBreakManager
 from apps.payroll.models.mixins import ApprovedMixin
 
 
@@ -64,8 +63,6 @@ class WorkBreak(ApprovedMixin, Timestamps):
         verbose_name=_("VN__USER"),
         help_text=_("HT__USER"),
     )
-
-    objects = WorkBreakManager()  # noqa: WPS110
 
     def __str__(self):
         """Returns object string representation."""

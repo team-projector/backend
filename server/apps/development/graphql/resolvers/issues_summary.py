@@ -2,6 +2,7 @@
 
 from apps.development.graphql.filters import IssuesFilterSet
 from apps.development.models import Issue
+from apps.development.services.issue.allowed import filter_allowed_for_user
 from apps.development.services.issue.summary import (
     get_issues_summary,
     get_project_summaries,
@@ -15,9 +16,10 @@ def resolve_issues_summary(
     **kwargs,
 ):
     """Resolve issues summary."""
+    queryset = filter_allowed_for_user(Issue.objects.all(), info.context.user)
     filterset = IssuesFilterSet(
         data=kwargs,
-        queryset=Issue.objects.allowed_for_user(info.context.user),
+        queryset=queryset,
         request=info.context,
     )
 
