@@ -2,6 +2,7 @@
 
 from apps.payroll.graphql.filters import PenaltyFilterSet
 from apps.payroll.models import Penalty
+from tests.test_development.factories import TeamFactory, TeamMemberFactory
 from tests.test_payroll.factories import PenaltyFactory, SalaryFactory
 from tests.test_users.factories.user import UserFactory
 
@@ -63,3 +64,36 @@ def test_salary_is_null(user):
     ).qs
 
     assert queryset.count() == 2
+
+
+def test_penalties_filter_by_team(user):
+    """Test filter penalties by team."""
+    penalties = PenaltyFactory.create_batch(size=3, user=user)
+
+    team = TeamFactory()
+    TeamMemberFactory.create(user=user, team=team)
+
+    PenaltyFactory.create_batch(size=5, user=UserFactory.create())
+
+    queryset = PenaltyFilterSet(
+        data={"team": team.id},
+        queryset=Penalty.objects.all(),
+    ).qs
+
+    assert queryset.count() == 3
+    assert set(queryset) == set(penalties)
+
+
+def test_penalties_filter_by_team_empty(user):
+    """Test filter penalties by team is empty."""
+    PenaltyFactory.create_batch(size=3, user=user)
+
+    team = TeamFactory()
+    TeamMemberFactory.create(user=UserFactory.create(), team=team)
+
+    queryset = PenaltyFilterSet(
+        data={"team": team.id},
+        queryset=Penalty.objects.all(),
+    ).qs
+
+    assert not queryset.exists()
