@@ -229,3 +229,9 @@ p.datetime br {
 div.constance > #changelist {
     display: block;
 }
+
+/* SIDEBAR */
+
+.toggle-nav-sidebar {
+    color: #6F74DD;
+}
