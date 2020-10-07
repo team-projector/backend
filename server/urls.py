@@ -8,6 +8,7 @@ from django.urls import include, path
 from django.utils.translation import gettext_lazy as _
 from django.views.decorators.csrf import csrf_exempt
 
+from apps.core.pages.views.backend_config import BackendConfigView
 from gql import get_api_graphql_view, get_graphql_view
 
 admin.site.site_header = _("VN__ADMIN_DASHBOARD")
@@ -30,6 +31,11 @@ urlpatterns = [
     path("api/", include("apps.users.pages.urls", namespace="social")),
     path("admin_tools/", include("jnt_admin_tools.urls")),
     path("admin/", include((admin_urls, "admin"))),
+    path(
+        "backend/config.js",
+        BackendConfigView.as_view(),
+        name="backend-config",
+    ),
 ]
 
 if settings.DEBUG:

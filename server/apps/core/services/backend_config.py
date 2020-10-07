@@ -1,0 +1,57 @@
+# -*- coding: utf-8 -*-
+from typing import Dict
+
+from constance import config
+from django.core.cache import BaseCache, cache
+
+_TEMPLATE = """backend = {{
+  config: {{
+    {0}
+  }}
+}}
+"""
+
+_CACHE_KEY = "backend_config"
+_CACHE_EXPIRE_AFTER = 60 * 60  # seconds
+
+
+class BackendConfigService:
+    """Generates config.js file content required for angular app setup."""
+
+    def __init__(
+        self,
+        cache_manager: BaseCache,
+        cache_key: str,
+        expire_after: int,
+    ):
+        """Inject dependencies."""
+        self._cache_key = cache_key
+        self._expire_after = expire_after
+        self._cache = cache_manager
+
+    def get_config(self):
+        """:returns config content."""
+        config_file_content = self._cache.get(self._cache_key)
+        if not config_file_content:
+            config_file_content = _TEMPLATE.format(
+                ",\n".join(
+                    "{0}: {1}".format(key, config_value)
+                    for key, config_value in self._get_config_map().items()
+                ),
+            )
+        self._cache.add(
+            self._cache_key,
+            config_file_content,
+            timeout=self._expire_after,
+        )
+        return config_file_content
+
+    def _get_config_map(self) -> Dict[str, str]:
+        return {"firstWeekDay": config.FIRST_WEEK_DAY}
+
+
+get_config = BackendConfigService(
+    cache_manager=cache,
+    cache_key=_CACHE_KEY,
+    expire_after=_CACHE_EXPIRE_AFTER,
+).get_config
