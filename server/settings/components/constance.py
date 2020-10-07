@@ -25,6 +25,13 @@ CONSTANCE_ADDITIONAL_FIELDS = {
             "choices": [(getattr(calendar, day), day) for day in WEEK_DAYS],
         },
     ),
+    "first_week_day": (
+        "django.forms.ChoiceField",
+        {
+            "required": True,
+            "choices": [(0, WEEK_DAYS[6]), (1, WEEK_DAYS[0])],
+        },
+    ),
     "str_required": (
         "django.forms.CharField",
         {
@@ -41,6 +48,7 @@ CONSTANCE_CONFIG = {
         "",
         "weekend_days",
     ),
+    "FIRST_WEEK_DAY": (calendar.MONDAY, "", "first_week_day"),
     "GITLAB_ADDRESS": ("https://gitlab.com", "", str),
     "GITLAB_SYNC": (True, "", bool),
     "GITLAB_TOKEN": ("", "", "str_required"),
@@ -60,7 +68,7 @@ CONSTANCE_CONFIG = {
 
 CONSTANCE_CONFIG_FIELDSETS = OrderedDict(
     (
-        ("System", ("WEEKENDS_DAYS",)),
+        ("System", ("WEEKENDS_DAYS", "FIRST_WEEK_DAY")),
         (
             "Gitlab",
             (
