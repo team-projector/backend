@@ -61,7 +61,7 @@ def test_not_allowed_for_user(user, all_penalties_query, ghl_auth_mock_info):
     :param all_penalties_query:
     :param ghl_auth_mock_info:
     """
-    PenaltyFactory.create_batch(size=2, user=UserFactory())
+    PenaltyFactory.create_batch(size=2, user=UserFactory.create())
     response = all_penalties_query(root=None, info=ghl_auth_mock_info)
 
     assert response.length == 0
