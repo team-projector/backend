@@ -2,7 +2,9 @@
 from typing import Dict
 
 from constance import config
+from constance.signals import config_updated
 from django.core.cache import BaseCache, cache
+from django.dispatch import receiver
 
 _TEMPLATE = """backend = {{
   config: {{
@@ -13,6 +15,13 @@ _TEMPLATE = """backend = {{
 
 _CACHE_KEY = "backend_config"
 _CACHE_EXPIRE_AFTER = 60 * 60  # seconds
+
+
+@receiver(config_updated)
+def _flush_backend_config_cache(sender, key, old_value, new_value, **kwargs):
+    if key != "FIRST_WEEK_DAY":
+        return
+    cache.delete(_CACHE_KEY)
 
 
 class BackendConfigService:
