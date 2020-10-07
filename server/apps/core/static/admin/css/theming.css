@@ -94,7 +94,7 @@ a:hover {
     color: #fff;
 }
 
-.submit-row input.default {
+.button.default, input[type=submit].default, .submit-row input.default {
     background: #3949AB;
     color: #fff;
 }
@@ -135,7 +135,7 @@ div.breadcrumbs a {
 
 /* MODULES */
 
-.module h2 {
+.module h2, .module caption, .inline-group h2 {
   background: #6F74DD;
 }
 
@@ -222,4 +222,10 @@ p.datetime br {
 
 .datetimeshortcuts a:focus .clock-icon, .datetimeshortcuts a:hover .clock-icon {
     background-position: 0 0;
+}
+
+/* CONFIGURATION */
+
+div.constance > #changelist {
+    display: block;
 }
