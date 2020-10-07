@@ -12,6 +12,7 @@ from apps.core.pages.views.backend_config import BackendConfigView
 from gql import get_api_graphql_view, get_graphql_view
 
 admin.site.site_header = _("VN__ADMIN_DASHBOARD")
+admin.site.enable_nav_sidebar = False
 
 constance_admin = admin.site._registry.get(Config)  # noqa:WPS437
 
