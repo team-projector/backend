@@ -1,8 +1,8 @@
 from http import HTTPStatus
 
 from gitlab import GitlabHttpError
-from requests.exceptions import ReadTimeout
 
+from apps.core.exceptions import sync_exceptions
 from apps.development.models import Issue, Project
 from apps.development.services.issue.gl.manager import IssueGlManager
 from apps.development.services.issue.tickets.propagator import (
@@ -12,14 +12,14 @@ from apps.development.services.project.gl.provider import ProjectGlProvider
 from celery_app import app
 
 
-@app.task(queue="low_priority", throws=(ReadTimeout,))
+@app.task(queue="low_priority", throws=sync_exceptions)
 def sync_issues_task() -> None:
     """Syncing issues from Gitlab."""
     for project_id in Project.objects.values_list("id", flat=True):
         sync_project_issues_task.delay(project_id)
 
 
-@app.task(queue="low_priority", throws=(ReadTimeout,))
+@app.task(queue="low_priority", throws=sync_exceptions)
 def sync_project_issues_task(project_id: int) -> None:
     """Syncing issues for project from Gitlab."""
     project = Project.objects.get(id=project_id)
@@ -28,7 +28,7 @@ def sync_project_issues_task(project_id: int) -> None:
     manager.sync_project_issues(project)
 
 
-@app.task(throws=(ReadTimeout,))
+@app.task(throws=sync_exceptions)
 def sync_project_issue_task(project_id: int, iid: int) -> None:
     """Syncing issue for project from Gitlab."""
     project = Project.objects.get(gl_id=project_id)

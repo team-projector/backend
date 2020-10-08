@@ -1,5 +1,4 @@
-from requests.exceptions import ReadTimeout
-
+from apps.core.exceptions import sync_exceptions
 from apps.development.models import Project, ProjectGroup
 from apps.development.services.project.gl.manager import ProjectGlManager
 from apps.development.services.project.gl.provider import ProjectGlProvider
@@ -7,7 +6,7 @@ from apps.development.tasks import sync_project_milestones_task
 from celery_app import app
 
 
-@app.task(throws=(ReadTimeout,))
+@app.task(throws=sync_exceptions)
 def sync_project_task(group_id: int, project_id: int) -> None:
     """Syncing project from Gitlab."""
     project = Project.objects.get(id=project_id)
