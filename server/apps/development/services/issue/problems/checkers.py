@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from typing import ClassVar
 
 from django.db import models

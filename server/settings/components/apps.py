@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 INSTALLED_APPS = (
     "jnt_admin_tools",
     "jnt_admin_tools.theming",

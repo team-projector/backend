@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 import factory
 from django.contrib.contenttypes.models import ContentType
 

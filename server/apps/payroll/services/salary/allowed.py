@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from django.db.models import QuerySet
 from jnt_django_graphene_toolbox.errors import GraphQLPermissionDenied
 

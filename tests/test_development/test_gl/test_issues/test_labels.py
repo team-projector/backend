@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from apps.development.models import Issue
 from apps.development.services.issue.gl.manager import IssueGlManager
 from tests.test_development.factories.gitlab import GlLabelFactory

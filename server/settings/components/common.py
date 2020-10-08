@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from decouple import config
 
 ROOT_URLCONF = "server.urls"

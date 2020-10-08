@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from apps.development.graphql.filters import MergeRequestFilterSet
 from apps.development.models import MergeRequest
 from apps.development.services.merge_request.allowed import (

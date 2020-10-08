@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from .bonus import BonusFactory
 from .issue_spent_time import IssueSpentTimeFactory
 from .merge_request_spent_time import MergeRequestSpentTimeFactory

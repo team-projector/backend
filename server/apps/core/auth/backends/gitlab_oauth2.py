@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from constance import config
 from django.http import HttpResponseBadRequest
 from django.utils import timezone

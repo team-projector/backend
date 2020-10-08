@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from .main import (
     annotate_issue_problems,
     exclude_issue_problems,

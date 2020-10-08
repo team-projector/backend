@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from apps.development.services.merge_request.metrics import MergeRequestMetrics
 
 

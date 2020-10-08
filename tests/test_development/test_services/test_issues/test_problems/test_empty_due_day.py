@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from apps.development.models.issue import IssueState
 from apps.development.services.issue.problems import get_issue_problems
 from apps.development.services.issue.problems.checkers import (

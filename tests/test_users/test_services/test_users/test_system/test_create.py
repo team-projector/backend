@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from apps.users.models import User
 from apps.users.services.user.system import SYSTEM_USERNAME, create_system_user
 

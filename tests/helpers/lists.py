@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 import typing
 
 T = typing.TypeVar("T")  # noqa: WPS111

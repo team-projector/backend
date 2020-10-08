@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from jnt_django_toolbox.consts.time import (
     SECONDS_PER_DAY,
     SECONDS_PER_HOUR,

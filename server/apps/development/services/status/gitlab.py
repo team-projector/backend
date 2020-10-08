@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 import types
 from datetime import datetime
 from typing import Iterable, List

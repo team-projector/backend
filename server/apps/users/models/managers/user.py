@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from typing import Optional
 
 from django.contrib.auth.base_user import BaseUserManager

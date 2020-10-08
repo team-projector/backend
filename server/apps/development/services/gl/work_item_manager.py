@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from typing import List, Optional, Union
 
 from gitlab.v4 import objects as gl

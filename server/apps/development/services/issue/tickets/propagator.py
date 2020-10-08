@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from apps.development.services.issue.related import get_related_issues
 
 

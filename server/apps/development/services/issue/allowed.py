@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from typing import Iterable
 
 from django.db.models import Exists, OuterRef, QuerySet

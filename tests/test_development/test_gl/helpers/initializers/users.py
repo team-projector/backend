@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from tests.test_development.test_gl.helpers import gl_mock
 from tests.test_users.factories.gitlab import GlUserFactory
 

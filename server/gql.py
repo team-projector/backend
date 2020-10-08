@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 import graphene
 from graphene_django.debug import DjangoDebug
 from jnt_django_graphene_toolbox import scheme, views

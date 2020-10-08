@@ -1,6 +1,3 @@
-# -*- coding: utf-8 -*-
-
-
 def register_project_milestone(mocker, project, milestone):
     """
     Register project milestone.

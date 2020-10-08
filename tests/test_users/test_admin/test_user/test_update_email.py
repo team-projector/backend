@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from http import HTTPStatus
 
 from tests.test_users.factories.user import UserFactory

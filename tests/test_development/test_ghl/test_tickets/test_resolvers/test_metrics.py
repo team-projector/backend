@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 import pytest
 from jnt_django_graphene_toolbox.errors import GraphQLPermissionDenied
 from jnt_django_toolbox.helpers.time import seconds

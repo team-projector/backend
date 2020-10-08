@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from apps.payroll.graphql.filters import BonusFilterSet
 from apps.payroll.models import Bonus
 from tests.test_development.factories import TeamFactory, TeamMemberFactory

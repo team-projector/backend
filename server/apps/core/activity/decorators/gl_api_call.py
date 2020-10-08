@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 import functools
 
 from apps.core.activity.verbs import ACTION_GITLAB_CALL_API

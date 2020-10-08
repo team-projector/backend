@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from jnt_admin_tools.autocomplete_filter import AutocompleteFilter
 
 

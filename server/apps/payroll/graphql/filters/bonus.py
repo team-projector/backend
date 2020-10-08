@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 import django_filters
 
 from apps.payroll.graphql.filters.team import TeamFilter

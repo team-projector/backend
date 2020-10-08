@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from apps.development.graphql.filters import TicketsFilterSet
 from apps.development.models import Ticket
 from tests.test_development.factories import (

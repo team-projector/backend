@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from apps.core.graphql.helpers.generics import get_object_or_not_found
 from apps.development.models import Team
 from apps.development.services.team.allowed import (

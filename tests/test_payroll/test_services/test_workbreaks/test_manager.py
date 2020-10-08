@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from apps.payroll.models.mixins.approved import ApprovedState
 from apps.payroll.services import work_break as work_break_service
 from tests.test_payroll.factories import WorkBreakFactory

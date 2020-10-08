@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from .salary import SalaryType
 from .penalty import PenaltyType
 from .spent_time import SpentTimeType

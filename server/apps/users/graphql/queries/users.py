@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 import graphene
 from jnt_django_graphene_toolbox.relay_nodes import DatasourceRelayNode
 

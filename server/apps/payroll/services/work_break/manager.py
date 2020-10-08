@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from django.utils import timezone
 
 from apps.payroll.models.mixins.approved import ApprovedState

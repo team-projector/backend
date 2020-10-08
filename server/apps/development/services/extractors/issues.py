@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 import re
 from typing import List, Pattern, Union
 from urllib.parse import urlparse

@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from apps.payroll.graphql.filters import PenaltyFilterSet
 from apps.payroll.models import Penalty
 from tests.test_development.factories import TeamFactory, TeamMemberFactory

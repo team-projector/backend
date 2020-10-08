@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from rest_framework import serializers
 
 from apps.development.graphql.mutations.issues.inputs import BaseIssueInput

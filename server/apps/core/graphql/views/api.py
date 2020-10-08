@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from jnt_django_graphene_toolbox.views import BaseApiGraphQLView
 from rest_framework.permissions import AllowAny
 

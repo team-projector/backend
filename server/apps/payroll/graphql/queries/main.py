@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from apps.payroll.graphql.queries import (
     bonuses,
     penalties,

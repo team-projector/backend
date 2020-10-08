@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 SECRET_KEY = "test.key"  # noqa: S105
 
 DATABASES = {

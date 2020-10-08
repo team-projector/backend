@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from typing import List
 
 from jnt_django_graphene_toolbox.connections import DataSourceConnection

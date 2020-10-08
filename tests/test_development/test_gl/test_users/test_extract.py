@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from apps.users.services.user.gl.manager import UserGlManager
 from tests.test_users.factories.gitlab import GlUserFactory
 

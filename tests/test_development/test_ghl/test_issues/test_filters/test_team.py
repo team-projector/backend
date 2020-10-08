@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from apps.development.graphql.filters import IssuesFilterSet
 from apps.development.models import TeamMember
 from apps.development.models.issue import Issue

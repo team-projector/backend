@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from .main import (
     annotate_ticket_problems,
     get_ticket_problems,

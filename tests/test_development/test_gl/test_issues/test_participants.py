@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from apps.development.services.issue.gl.manager import IssueGlManager
 from tests.test_development.test_gl.helpers import (
     gl_checkers,

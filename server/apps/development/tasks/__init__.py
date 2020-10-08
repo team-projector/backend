@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from .issues import (
     sync_issues_task,
     sync_project_issue_task,

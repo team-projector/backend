@@ -1,6 +1,3 @@
-# -*- coding: utf-8 -*-
-
-
 def test_change_password_link(user, user_admin):
     """Test change password link."""
     link = user_admin.change_password_link(user)

@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from jnt_django_graphene_toolbox.errors import GraphQLInputError
 
 from apps.development.graphql.mutations.issues.inputs.add_spent import (

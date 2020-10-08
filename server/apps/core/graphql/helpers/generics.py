@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from django.http import Http404
 from django.shortcuts import get_object_or_404
 from jnt_django_graphene_toolbox.errors import GraphQLNotFound

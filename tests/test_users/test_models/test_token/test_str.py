@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from apps.users.services.token.create import create_user_token
 from tests.test_users.factories.user import UserFactory
 

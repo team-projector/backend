@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from apps.development.models.note import NoteType
 from apps.development.services.issue.tickets.updater import update_issue_ticket
 from tests.test_development.factories import (

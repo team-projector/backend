@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from constance.test.pytest import override_config
 from django.test import override_settings
 from jnt_django_toolbox.helpers.objects import dict2obj

@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from django.contrib.contenttypes.admin import GenericStackedInline
 from jnt_admin_tools.mixins import AdminAutocompleteFieldsMixin
 

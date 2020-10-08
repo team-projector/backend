@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from .generic_stacked import BaseGenericStackedInline
 from .generic_tabular import BaseGenericTabularInline
 from .stacked import BaseStackedInline

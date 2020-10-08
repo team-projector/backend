@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from apps.development.models.project_member import ProjectMemberRole
 from tests.test_development.factories import (
     IssueFactory,

@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 import json
 from http import HTTPStatus
 from typing import Callable, Dict, List, Optional, Pattern, Union

@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from constance.admin import Config
 from django.conf import settings
 from django.conf.urls.static import static

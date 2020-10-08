@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from apps.development.services.ticket.metrics import TicketMetrics
 
 

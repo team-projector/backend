@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from apps.development.models import Ticket
 from apps.development.models.ticket import TicketState
 from apps.development.services.ticket.summary import TicketsSummaryProvider

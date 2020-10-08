@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from apps.development.models import MergeRequest
 from apps.development.services.merge_request.gl.manager import (
     MergeRequestGlManager,

@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from .token import TokenType
 from .user import UserType
 from .user_metrics import UserMetricsType

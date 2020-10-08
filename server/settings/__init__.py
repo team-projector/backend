@@ -1,6 +1,3 @@
-# -*- coding: utf-8 -*-
-
-
 from os import environ
 
 from split_settings.tools import include

@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from apps.development.models.mixins import NotableMixin
 from apps.payroll.models.mixins import SpentTimesMixin
 

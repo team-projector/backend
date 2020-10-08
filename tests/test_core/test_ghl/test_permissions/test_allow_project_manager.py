@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from apps.core.graphql.security.permissions import AllowProjectManager
 
 

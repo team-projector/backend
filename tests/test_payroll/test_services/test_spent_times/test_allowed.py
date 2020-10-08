@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from apps.payroll.models import SpentTime
 from apps.payroll.services.spent_time.allowed import filter_allowed_for_user
 from tests.test_payroll.factories import IssueSpentTimeFactory
