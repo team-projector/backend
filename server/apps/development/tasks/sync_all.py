@@ -1,6 +1,6 @@
 from constance import config
-from requests.exceptions import ReadTimeout
 
+from apps.core.exceptions import sync_exceptions
 from apps.development.services.project.gl.manager import ProjectGlManager
 from apps.development.services.project_group.gl.manager import (
     ProjectGroupGlManager,
@@ -14,7 +14,7 @@ from apps.development.tasks.milestones import (
 from celery_app import app
 
 
-@app.task(queue="low_priority", throws=(ReadTimeout,))
+@app.task(queue="low_priority", throws=sync_exceptions)
 def sync_all_task() -> None:
     """Syncing everything."""
     if not config.GITLAB_SYNC:
