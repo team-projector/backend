@@ -6,7 +6,7 @@ from jnt_django_toolbox.helpers.time import seconds
 
 from apps.development.models.issue import IssueState
 from apps.payroll.models import Payroll, Salary
-from apps.payroll.services.salary.exceptions import EmptySalaryException
+from apps.payroll.services.salary.exceptions import EmptySalaryError
 from tests.test_development.factories import IssueFactory, MergeRequestFactory
 from tests.test_payroll.factories import (
     BonusFactory,
@@ -72,7 +72,7 @@ def test_no_payrolls(user, calculator):
     """
     salary = None
 
-    with pytest.raises(EmptySalaryException):
+    with pytest.raises(EmptySalaryError):
         salary = calculator.generate(user)
 
     assert salary is None
@@ -100,7 +100,7 @@ def test_empty_total(user, calculator):
         time_spent=-timedelta(hours=1).total_seconds(),
     )
 
-    with pytest.raises(EmptySalaryException):
+    with pytest.raises(EmptySalaryError):
         salary = calculator.generate(user)
 
     assert salary is None

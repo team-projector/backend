@@ -8,7 +8,7 @@ from django.db import models, transaction
 from apps.development.models.issue import IssueState
 from apps.development.models.merge_request import MergeRequestState
 from apps.payroll.models import Bonus, Penalty, Salary, SpentTime
-from apps.payroll.services.salary.exceptions import EmptySalaryException
+from apps.payroll.services.salary.exceptions import EmptySalaryError
 from apps.users.models import User
 
 
@@ -29,7 +29,7 @@ class SalaryCalculator:
     def generate_bulk(self):
         """Generate salaries for active users."""
         for user in User.objects.filter(is_active=True):
-            with suppress(EmptySalaryException):
+            with suppress(EmptySalaryError):
                 self.generate(user)
 
     @transaction.atomic
@@ -56,7 +56,7 @@ class SalaryCalculator:
         salary.total = salary.sum + salary.bonus - salary.penalty
 
         if not salary.total:
-            raise EmptySalaryException
+            raise EmptySalaryError
 
         if user.tax_rate:
             salary.taxes = salary.total * Decimal.from_float(user.tax_rate)
@@ -140,6 +140,6 @@ class SalaryCalculator:
         )
 
         if locked == 0:
-            raise EmptySalaryException
+            raise EmptySalaryError
 
         return locked

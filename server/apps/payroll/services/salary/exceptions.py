@@ -1,5 +1,5 @@
-from apps.core.exceptions import AppException
+from apps.core.errors import ApplicationError
 
 
-class EmptySalaryException(AppException):
+class EmptySalaryError(ApplicationError):
     """Exception if payrolls not locked."""

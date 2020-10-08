@@ -1,7 +1,7 @@
 from requests.exceptions import ConnectTimeout, ReadTimeout
 
 
-class AppException(Exception):
+class ApplicationError(Exception):
     """Application exception."""
 
     def __init__(self, message=None):
@@ -9,4 +9,4 @@ class AppException(Exception):
         self.message = message
 
 
-sync_exceptions = ConnectTimeout, ReadTimeout
+sync_errors = ConnectTimeout, ReadTimeout
