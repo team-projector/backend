@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from django.db.models import QuerySet
 from jnt_django_graphene_toolbox.connections import DataSourceConnection
 from jnt_django_graphene_toolbox.relay_nodes import DatasourceRelayNode

@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from constance.test import override_config
 from django.core import mail
 

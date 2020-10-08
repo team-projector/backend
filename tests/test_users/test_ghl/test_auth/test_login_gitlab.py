@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 import pytest
 from constance import config
 from django.conf import settings

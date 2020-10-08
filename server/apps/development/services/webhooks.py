@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from apps.development.services.issue.gl.webhook import IssuesGLWebhook
 from apps.development.services.merge_request.gl.webhook import (
     MergeRequestsGLWebhook,

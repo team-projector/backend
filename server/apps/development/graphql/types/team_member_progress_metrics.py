@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 import graphene
 
 from apps.users.graphql.types import UserProgressMetricsType, UserType

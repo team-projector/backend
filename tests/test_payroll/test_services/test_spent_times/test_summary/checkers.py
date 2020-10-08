@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from apps.payroll.services.spent_time.summary import (
     IssuesSpentTimesSummary,
     MergeRequestsSpentTimesSummary,

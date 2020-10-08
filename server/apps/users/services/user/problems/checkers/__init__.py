@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from .not_enough_tasks import PROBLEM_NOT_ENOUGH_TASKS, NotEnoughTasksChecker
 from .payroll_opened_overflow import (
     PROBLEM_PAYROLL_OPENED_OVERFLOW,

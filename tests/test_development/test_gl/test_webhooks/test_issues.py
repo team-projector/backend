@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from apps.development.models import Issue
 from tests.test_development.factories.gitlab import (
     GlIssueFactory,

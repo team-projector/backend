@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from .issue import Issue
 from .label import Label
 from .merge_request import MergeRequest

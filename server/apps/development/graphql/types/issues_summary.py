@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 import graphene
 
 from apps.development.graphql.resolvers.issues_summary import (

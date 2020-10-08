@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from tests.test_development.factories import IssueFactory
 from tests.test_payroll.factories import IssueSpentTimeFactory
 

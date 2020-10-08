@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from django.utils.functional import cached_property
 
 from apps.core.gitlab.client import get_default_gitlab_client

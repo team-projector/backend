@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from django.apps import AppConfig
 from jnt_django_toolbox.helpers.modules import load_module_from_app
 

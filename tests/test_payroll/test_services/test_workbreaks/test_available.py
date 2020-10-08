@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from apps.payroll.models import WorkBreak
 from apps.payroll.services.work_break import filter_allowed_for_user
 from tests.test_development.factories import TeamFactory

@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from jnt_django_graphene_toolbox.errors import GraphQLInputError
 
 from apps.development.models.issue import IssueState

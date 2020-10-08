@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from apps.development.models import MergeRequest
 from apps.development.models.merge_request import MergeRequestState
 

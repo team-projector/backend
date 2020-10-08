@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from constance import config
 from requests.exceptions import ReadTimeout
 

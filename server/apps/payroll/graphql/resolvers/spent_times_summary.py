@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from apps.payroll.graphql.filters import SpentTimeFilterSet
 from apps.payroll.models import SpentTime
 from apps.payroll.services import spent_time as spent_time_service

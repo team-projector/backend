@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from requests.exceptions import ReadTimeout
 
 from apps.development.models import Project

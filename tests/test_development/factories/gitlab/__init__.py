@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from .group import GlGroupFactory
 from .group_milestone import GlGroupMilestoneFactory
 from .issue import GlIssueFactory

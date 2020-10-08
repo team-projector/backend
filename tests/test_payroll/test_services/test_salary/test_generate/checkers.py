@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from apps.payroll.models import Salary
 from apps.users.models import Position
 

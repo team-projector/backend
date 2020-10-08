@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from .gitlab_service_status import GitlabServiceStatusType
 from .gitlab_status import GitlabStatusType
 from .issue import IssueType

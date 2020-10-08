@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 import django_filters
 from django.db.models import Exists, OuterRef, QuerySet
 from jnt_django_graphene_toolbox.filters import OrderingFilter

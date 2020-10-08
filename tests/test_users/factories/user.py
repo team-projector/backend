@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 import factory
 
 from apps.users.models import User

@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from .group_milestones import (
     mock_group_milestone_endpoints,
     register_group_milestone,

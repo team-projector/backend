@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 import pytest
 
 from tests.helpers.api_request_factory import ApiRequestFactory

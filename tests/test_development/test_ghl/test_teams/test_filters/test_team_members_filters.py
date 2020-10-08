@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from apps.development.graphql.filters import TeamMembersFilterSet
 from apps.development.models import TeamMember
 from tests.test_development.factories import TeamFactory, TeamMemberFactory

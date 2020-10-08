@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from apps.payroll.graphql.filters import WorkBreakFilterSet
 from apps.payroll.models import WorkBreak
 from tests.test_payroll.factories import WorkBreakFactory

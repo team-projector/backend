@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 import pytest
 from django.http import HttpRequest
 from rest_framework.request import Request

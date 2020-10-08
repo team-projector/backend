@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 import pytest
 from django.db.models import Sum
 from jnt_django_toolbox.helpers.time import seconds

@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from .issue import IssueFactory
 from .issue_note import IssueNoteFactory
 from .label import LabelFactory

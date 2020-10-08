@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from jnt_django_toolbox.helpers.time import seconds
 
 from apps.development.models.merge_request import MergeRequestState

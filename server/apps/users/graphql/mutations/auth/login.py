@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 import graphene
 from jnt_django_graphene_toolbox.mutations import BaseMutation
 from jnt_django_graphene_toolbox.security.permissions import AllowAny

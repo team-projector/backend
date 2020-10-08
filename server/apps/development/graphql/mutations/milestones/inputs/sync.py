@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from jnt_django_graphene_toolbox.errors import GraphQLPermissionDenied
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError

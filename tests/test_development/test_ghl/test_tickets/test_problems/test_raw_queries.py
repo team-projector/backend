@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from django.utils import timezone
 
 from apps.development.services.ticket.problems import PROBLEM_OVER_DUE_DATE

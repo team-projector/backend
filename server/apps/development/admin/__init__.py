@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from .issue import IssueAdmin
 from .label import LabelAdmin
 from .merge_request import MergeRequestAdmin

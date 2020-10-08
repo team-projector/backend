@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 import graphene
 
 from apps.development.graphql.resolvers import resolve_gitlab_status

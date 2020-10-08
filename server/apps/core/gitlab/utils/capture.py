@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from contextlib import ContextDecorator
 from typing import Any, List, Tuple
 

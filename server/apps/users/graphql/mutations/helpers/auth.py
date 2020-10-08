@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from django.http import HttpRequest
 from social_django.compat import reverse
 from social_django.utils import load_backend, load_strategy

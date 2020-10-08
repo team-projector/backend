@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from django.core.management.base import BaseCommand
 
 from apps.development.services.project.gl.manager import ProjectGlManager

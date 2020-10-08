@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from apps.core.activity.verbs import ACTION_GITLAB_CALL_API
 from apps.core.gitlab import get_gitlab_client
 from apps.core.gitlab.gl_time import gl_duration

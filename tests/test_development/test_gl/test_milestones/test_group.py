@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from apps.development.models import Milestone
 from apps.development.services.milestone.gl.manager import MilestoneGlManager
 from tests.test_development.factories.gitlab import GlGroupMilestoneFactory

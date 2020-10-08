@@ -1,6 +1,3 @@
-# -*- coding: utf-8 -*-
-
-
 def register_user(mocker, user):
     """Mock user retrive gitlab endpoint."""
     mocker.register_get(

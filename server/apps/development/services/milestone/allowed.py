@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from typing import List
 
 from django.db import models

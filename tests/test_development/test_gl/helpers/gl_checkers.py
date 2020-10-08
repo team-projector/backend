@@ -1,6 +1,3 @@
-# -*- coding: utf-8 -*-
-
-
 def check_group(group, gl_group, parent=None):  # noqa: WPS218
     """
     Check group.

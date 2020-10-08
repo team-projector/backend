@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from django.contrib.auth import authenticate
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _

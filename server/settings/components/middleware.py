@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 MIDDLEWARE = [
     "jnt_django_toolbox.profiling.middleware.ProfilingMiddleware",
     "django.middleware.security.SecurityMiddleware",

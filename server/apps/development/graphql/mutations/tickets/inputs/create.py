@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from typing import Dict
 
 from rest_framework.fields import Field

@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from django.contrib.auth.forms import UserChangeForm
 from django.core.exceptions import ValidationError
 

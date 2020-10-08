@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from apps.development.graphql.mutations import issues, milestones, tickets
 
 

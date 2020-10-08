@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from functools import reduce
 from operator import or_
 from typing import Iterable, Union

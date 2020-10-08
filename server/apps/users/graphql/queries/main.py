@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from apps.users.graphql.queries import users
 
 

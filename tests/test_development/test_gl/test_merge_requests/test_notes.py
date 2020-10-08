@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from apps.development.models.note import NoteType
 from apps.development.services.merge_request.gl.manager import (
     MergeRequestGlManager,

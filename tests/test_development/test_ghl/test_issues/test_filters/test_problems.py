@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from datetime import datetime
 
 from apps.development.graphql.filters import IssuesFilterSet

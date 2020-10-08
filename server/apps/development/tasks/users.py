@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from requests.exceptions import ReadTimeout
 
 from apps.users.services.user.gl.manager import UserGlManager

@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from tests.test_development.factories import ProjectFactory
 from tests.test_development.factories.gitlab import GlProjectFactory
 

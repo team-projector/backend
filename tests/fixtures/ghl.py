@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 import pytest
 from django.contrib.auth.models import AnonymousUser
 from graphene.test import Client as GQLClient

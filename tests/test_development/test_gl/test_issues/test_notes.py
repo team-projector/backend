@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from apps.development.models.note import NoteType
 from apps.development.services.issue.gl.manager import IssueGlManager
 from tests.test_development.factories.gitlab import GlNoteFactory

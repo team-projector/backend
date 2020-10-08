@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from .payroll import Payroll
 from .penalty import Penalty
 from .payment import Payment

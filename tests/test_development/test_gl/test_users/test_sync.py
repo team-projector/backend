@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from apps.users.models import User
 from apps.users.services.user.gl.manager import UserGlManager
 from tests.test_development.test_gl.helpers import gl_checkers, gl_mock

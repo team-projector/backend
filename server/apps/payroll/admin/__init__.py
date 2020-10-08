@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from .bonus import BonusAdmin
 from .payment import PaymentAdmin
 from .payroll import PayrollAdmin

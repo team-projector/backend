@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from django.db.models import Sum
 
 from apps.development.models import Issue, MergeRequest, Team, TeamMember

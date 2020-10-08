@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from decouple import config
 from jnt_django_toolbox.profiling.profilers import DatabaseQueriesProfiler
 

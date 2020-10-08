@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from server import BASE_DIR
 
 PROJECT_TEMPLATES = [

@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from decimal import Decimal
 from typing import Dict, List, NamedTuple, Optional, Tuple
 

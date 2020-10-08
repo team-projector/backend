@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 import logging
 
 from apps.core.activity.verbs import ACTION_GITLAB_WEBHOOK_TRIGGERED

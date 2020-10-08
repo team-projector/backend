@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 import pytest
 from django.template import Context, Template
 

@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from apps.development.models import Project, Team
 from apps.development.services.issue.summary.issue import IssuesSummary
 

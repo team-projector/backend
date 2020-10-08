@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from .approve import ApproveWorkBreakMutation
 from .create import CreateWorkBreakMutation
 from .decline import DeclineWorkBreakMutation

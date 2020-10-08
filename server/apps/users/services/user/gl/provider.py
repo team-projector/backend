@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from apps.core.activity.decorators import gitlab_api_call
 from apps.core.gitlab.provider import BaseGlProvider
 

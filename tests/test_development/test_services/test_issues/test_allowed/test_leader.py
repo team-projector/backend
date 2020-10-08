@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from tests.test_development.factories import IssueFactory
 from tests.test_development.test_services.test_issues.test_allowed import (
     helpers,

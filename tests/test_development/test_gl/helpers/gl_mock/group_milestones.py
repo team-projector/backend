@@ -1,6 +1,3 @@
-# -*- coding: utf-8 -*-
-
-
 def register_group_milestone(mocker, group, milestone):
     """
     Register group milestone.

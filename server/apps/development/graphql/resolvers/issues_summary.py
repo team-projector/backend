@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from apps.development.graphql.filters import IssuesFilterSet
 from apps.development.models import Issue
 from apps.development.services.issue.allowed import filter_allowed_for_user

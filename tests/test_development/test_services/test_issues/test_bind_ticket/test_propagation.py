@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from apps.development.services.issue.tickets.propagator import (
     propagate_ticket_to_related_issues,
 )
