@@ -41,8 +41,8 @@ FROM base as production
 
 ARG APP_VERSION
 
-RUN addgroup -r --gid 10001 app \
-    && adduser -r --uid 10001 --group app --home /app --shell /sbin/false app
+RUN addgroup --gid 10001 app \
+    && adduser --uid 10001 --group app --home /app --shell /sbin/false app
 
 COPY . .
 
