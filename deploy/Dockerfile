@@ -64,7 +64,7 @@ RUN export DJANGO_ENV=build \
 ENV DJANGO_ENV=production \
     APP_VERSION=$APP_VERSION
 
-USER app
+#USER app
 
 CMD ["/bin/bash", "deploy/server/run.sh"]
 
