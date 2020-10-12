@@ -57,12 +57,11 @@ RUN export DJANGO_ENV=build \
     && chown -R app:app /app \
     && chmod -R 755 /app \
     && chown -R app:app /var/log/nginx \
-    && chown -R app:app /var/lib/nginx \
     && chown -R app:app /etc/nginx/conf.d \
     && touch /var/run/nginx.pid \
     && chown -R app:app /var/run/nginx.pid \
-    && touch /var/run/celerybeat-schedule |
-    && chown -R app:app /var/run/celerybeat-schedule \
+    && touch /var/run/celerybeat-schedule \
+    && chown -R app:app /var/run/celerybeat-schedule
 
 ENV DJANGO_ENV=production \
     APP_VERSION=$APP_VERSION
