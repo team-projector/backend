@@ -14,7 +14,7 @@ def error_handler(method):
         try:
             return method(*args, **kwargs)
         except Exception as error:
-            logger.error("Failed to send a data to Slack {0}".format(error))
+            logger.warning("Failed to send a data to Slack {0}".format(error))
             return None
 
     return wrapper
