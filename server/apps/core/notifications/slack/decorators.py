@@ -31,7 +31,7 @@ def error_handler(method):
                 ),
             )
 
-            logger.warning("\n".join(msg))
+            logger.error("\n".join(msg))
             return None
 
     return wrapper
