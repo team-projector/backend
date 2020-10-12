@@ -106,6 +106,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     gl_id = models.PositiveIntegerField(
         null=True,
         blank=True,
+        unique=True,
         verbose_name=_("VN__GITLAB_ID"),
         help_text=_("HT__GITLAB_ID"),
     )
