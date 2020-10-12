@@ -14,9 +14,6 @@ ENV PYTHONFAULTHANDLER=1 \
 
 WORKDIR /app
 
-RUN addgroup -gid 10001 app \
-    && adduser -group app -uid 10001 -D -h /app -s /sbin/nologin app
-
 COPY pyproject.toml poetry.lock ./
 
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
@@ -43,6 +40,9 @@ RUN apt-get update \
 FROM base as production
 
 ARG APP_VERSION
+
+RUN addgroup -gid 10001 app \
+    && adduser -group app -uid 10001 -D -h /app -s /sbin/nologin app
 
 COPY . .
 
