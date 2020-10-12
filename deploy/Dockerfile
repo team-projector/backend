@@ -41,15 +41,32 @@ FROM base as production
 
 ARG APP_VERSION
 
+RUN addgroup --system --gid 10001 app \
+    && adduser --system --uid 10001 \
+        --shell /sbin/false \
+        --disabled-login --ingroup app \
+        --no-create-home --home /app  \
+        app
+
 COPY . .
 
 RUN export DJANGO_ENV=build \
     && python manage.py collectstatic --noinput --verbosity 0 \
     && django-admin compilemessages \
-    && cp deploy/nginx/* /etc/nginx
+    && cp deploy/nginx/* /etc/nginx \
+    && chown -R app:app /app \
+    && chmod -R 755 /app \
+    && chown -R app:app /var/log/nginx \
+    && chown -R app:app /etc/nginx/conf.d \
+    && touch /var/run/nginx.pid \
+    && chown -R app:app /var/run/nginx.pid \
+    && touch /var/run/celerybeat-schedule \
+    && chown -R app:app /var/run/celerybeat-schedule
 
 ENV DJANGO_ENV=production \
     APP_VERSION=$APP_VERSION
+
+USER app
 
 CMD ["/bin/bash", "deploy/server/run.sh"]
 
