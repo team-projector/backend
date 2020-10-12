@@ -1,3 +1,4 @@
+from gitlab import GitlabHttpError
 from requests.exceptions import ConnectTimeout, ReadTimeout
 
 
@@ -9,4 +10,4 @@ class ApplicationError(Exception):
         self.message = message
 
 
-sync_errors = ConnectTimeout, ReadTimeout
+sync_errors = ConnectTimeout, ReadTimeout, GitlabHttpError
