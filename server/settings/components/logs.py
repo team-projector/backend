@@ -49,6 +49,29 @@ def _before_send_sentry_handler(event, hint):
     return event
 
 
+class _BeforeSendHandler:
+    """Sentry before send handler."""
+
+    def __call__(self, event, hint):
+        """Filter by exception."""
+        exc_info = hint.get("exc_info")
+        skip_event = (
+            exc_info and self._skip_by_error(exc_info)
+        ) or self._skip_by_message(event)
+
+        if not skip_event:
+            return event
+
+    def _skip_by_error(self, exc_info) -> bool:
+        """Skip GraphQLError."""
+        exc_type, exc_value, tb = exc_info
+        return isinstance(exc_value, GraphQLError)
+
+    def _skip_by_message(self, event) -> bool:
+        """Skip read time out."""
+        return "The read operation timed out" in event["logentry"]["message"]
+
+
 sentry_dsn = config("DJANGO_SENTRY", default=None)
 if sentry_dsn:
     sentry_sdk.init(  # type:ignore
@@ -56,7 +79,7 @@ if sentry_dsn:
         integrations=[DjangoIntegration(), CeleryIntegration()],
         release=TP_APP_VERSION,
         send_default_pii=True,
-        before_send=_before_send_sentry_handler,
+        before_send=_BeforeSendHandler(),
     )
     sentry_sdk.utils.MAX_STRING_LENGTH = 4096
 

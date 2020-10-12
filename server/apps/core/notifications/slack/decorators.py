@@ -14,7 +14,24 @@ def error_handler(method):
         try:
             return method(*args, **kwargs)
         except Exception as error:
-            logger.warning("Failed to send a data to Slack {0}".format(error))
+            # TODO: temporary for debug exception class.
+            msg = list("Failed to send a data to Slack")
+            msg.append("Error: {0}".format(error))
+            msg.append(
+                "Error class name: {0}".format(error.__class__.__name__),
+            )
+            msg.append(
+                "MRO: {0}".format(
+                    " < ".join(
+                        [
+                            mro_type.__name__
+                            for mro_type in error.__class__.mro()
+                        ],
+                    ),
+                ),
+            )
+
+            logger.warning("\n".join(msg))
             return None
 
     return wrapper
