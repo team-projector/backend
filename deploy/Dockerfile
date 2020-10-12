@@ -13,6 +13,9 @@ ENV PYTHONFAULTHANDLER=1 \
   PATH="/root/.poetry/bin:${PATH}"
 
 WORKDIR /app
+RUN addgroup -g 10001 app \
+    && adduser -G app -u 10001 \
+    && -D -h /app -s /sbin/nologin app
 
 COPY pyproject.toml poetry.lock ./
 
@@ -50,6 +53,8 @@ RUN export DJANGO_ENV=build \
 
 ENV DJANGO_ENV=production \
     APP_VERSION=$APP_VERSION
+
+USER app
 
 CMD ["/bin/bash", "deploy/server/run.sh"]
 
