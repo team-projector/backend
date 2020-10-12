@@ -52,6 +52,6 @@ def sync_project_issue_task(project_id: int, iid: int) -> None:
 @app.task
 def propagate_ticket_to_related_issues_task(issue_id: int) -> None:
     """Propagate ticket from parent issues to child."""
-    issue = Issue.objects.filter(id=issue_id)
+    issue = Issue.objects.filter(id=issue_id).first()
     if issue:
         propagate_ticket_to_related_issues(issue)
