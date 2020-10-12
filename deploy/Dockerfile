@@ -44,7 +44,7 @@ ARG APP_VERSION
 RUN addgroup --system --gid 10001 app \
     && adduser --system --uid 10001 \
         --shell /sbin/false \
-        --disabled-login --ingroup app --ingroup nginx \
+        --disabled-login --ingroup app \
         --no-create-home --home /app  \
         app
 
@@ -53,7 +53,14 @@ COPY . .
 RUN export DJANGO_ENV=build \
     && python manage.py collectstatic --noinput --verbosity 0 \
     && django-admin compilemessages \
-    && cp deploy/nginx/* /etc/nginx
+    && cp deploy/nginx/* /etc/nginx \
+    && chown -R app:app /app \
+    && chmod -R 755 /app \
+    && chown -R app:app /var/cache/nginx \
+    && chown -R app:app /var/log/nginx \
+    && chown -R app:app /etc/nginx/conf.d \
+    && touch /var/run/nginx.pid \
+    && chown -R app:app /var/run/nginx.pid
 
 ENV DJANGO_ENV=production \
     APP_VERSION=$APP_VERSION
