@@ -13,9 +13,9 @@ ENV PYTHONFAULTHANDLER=1 \
   PATH="/root/.poetry/bin:${PATH}"
 
 WORKDIR /app
+
 RUN addgroup -g 10001 app \
-    && adduser -G app -u 10001 \
-    && -D -h /app -s /sbin/nologin app
+    && adduser -G app -u 10001 -D -h /app -s /sbin/nologin app
 
 COPY pyproject.toml poetry.lock ./
 
