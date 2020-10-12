@@ -56,7 +56,7 @@ RUN export DJANGO_ENV=build \
     && cp deploy/nginx/* /etc/nginx \
     && chown -R app:app /app \
     && chmod -R 755 /app \
-    && chown -R app:app /var/cache/nginx \
+#    && chown -R app:app /var/cache/nginx \
     && chown -R app:app /var/log/nginx \
     && chown -R app:app /etc/nginx/conf.d \
     && touch /var/run/nginx.pid \
