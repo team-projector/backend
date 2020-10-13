@@ -2,7 +2,7 @@ from apps.development.services.issue.related import get_related_issues
 
 
 def propagate_ticket_to_related_issues(issue) -> None:
-    """Propage ticket from parent issue to child."""
+    """Propagate ticket from parent issue to child."""
     if not issue.ticket:
         return
 
