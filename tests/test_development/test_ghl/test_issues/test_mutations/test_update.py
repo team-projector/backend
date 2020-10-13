@@ -109,6 +109,7 @@ def test_ticket_propagation(
         ticket=ticket.id,
     )
 
+    issue.refresh_from_db()
     child_issue.refresh_from_db()
 
     assert issue.ticket == child_issue.ticket
