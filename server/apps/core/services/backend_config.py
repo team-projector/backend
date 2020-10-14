@@ -1,16 +1,10 @@
+import json
 from typing import Dict
 
 from constance import config
 from constance.signals import config_updated
 from django.core.cache import BaseCache, cache
 from django.dispatch import receiver
-
-_TEMPLATE = """backend = {{
-  config: {{
-    {0}
-  }}
-}}
-"""
 
 _CACHE_KEY = "backend_config"
 _CACHE_EXPIRE_AFTER = 60 * 60  # seconds
@@ -41,11 +35,8 @@ class BackendConfigService:
         """:returns config content."""
         config_file_content = self._cache.get(self._cache_key)
         if not config_file_content:
-            config_file_content = _TEMPLATE.format(
-                ",\n".join(
-                    "{0}: {1}".format(key, config_value)
-                    for key, config_value in self._get_config_map().items()
-                ),
+            config_file_content = "backend = {0}".format(
+                json.dumps({"config": self._get_config_map()}),
             )
         self._cache.add(
             self._cache_key,
