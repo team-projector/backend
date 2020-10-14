@@ -20,7 +20,7 @@ class _Node:
     children: List["_Node"] = field(default_factory=list)
 
     def get_ancestor(self, ancestor_id: int) -> Optional["_Node"]:
-        if not self.parent:
+        if not (self.parent and self.parent.group):
             return None
 
         if self.parent.group.id == ancestor_id:
@@ -34,7 +34,11 @@ class _GlGroupForest:
         self.nodes: List[_Node] = self._build_nodes(gl_groups)
 
     def filter_nodes(self, filter_ids: Iterable[int] = ()) -> List[_Node]:
-        filtered = [node for node in self.nodes if node.group.id in filter_ids]
+        filtered = [
+            node
+            for node in self.nodes
+            if node.group and node.group.id in filter_ids
+        ]
         by_roots = self._get_nodes_by_roots(filter_ids)
         for node in by_roots:
             if node in filtered:
