@@ -19,7 +19,7 @@ def test_cached():
     )
     config = service.get_config()
 
-    assert config == "backend = {\n  config: {\n    firstWeekDay: 0\n  }\n}\n"
+    assert config == 'backend = {"config": {"firstWeekDay": 0}}'
     assert cache.get.call_args.args == ("config",)
     assert cache.add.call_args.args == ("config", config)
     assert cache.add.call_args.kwargs["timeout"] == 10
@@ -35,4 +35,4 @@ def test_config_alter_constance_value(override_config):
     )
     with override_config(FIRST_WEEK_DAY=1):
         config = service.get_config()
-    assert config == "backend = {\n  config: {\n    firstWeekDay: 1\n  }\n}\n"
+    assert config == 'backend = {"config": {"firstWeekDay": 1}}'
