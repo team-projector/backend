@@ -1,4 +1,5 @@
 import logging
+from dataclasses import dataclass, field
 from typing import Dict, Iterable, List, Optional
 
 from django.utils import timezone
@@ -10,6 +11,61 @@ from apps.development.services.project_group.gl.provider import (
 )
 
 logger = logging.getLogger(__name__)
+
+
+@dataclass
+class _Node:
+    group: Optional[gl.Group] = None
+    parent: Optional["_Node"] = None
+    children: List["_Node"] = field(default_factory=list)
+
+    def get_ancestor(self, ancestor_id: int) -> Optional["_Node"]:
+        if not self.parent:
+            return None
+
+        if self.parent.group.id == ancestor_id:
+            return self.parent
+
+        return self.parent.get_ancestor(ancestor_id)
+
+
+class _GlGroupForest:
+    def __init__(self, gl_groups: List[gl.Group]):
+        self.nodes: List[_Node] = self._build_nodes(gl_groups)
+
+    def filter_nodes(self, filter_ids: Iterable[int] = ()) -> List[_Node]:
+        filtered = [node for node in self.nodes if node.group.id in filter_ids]
+        by_roots = self._get_nodes_by_roots(filter_ids)
+        for node in by_roots:
+            if node in filtered:
+                continue
+            filtered.append(node)
+        return filtered
+
+    def _get_nodes_by_roots(self, root_ids: Iterable[int]):
+        root_ids = set(root_ids)
+        filtered_nodes = []
+
+        for node in self.nodes:
+            for ancestor_id in root_ids:
+                if node.get_ancestor(ancestor_id):
+                    filtered_nodes.append(node)
+                    break
+
+        return filtered_nodes
+
+    def _build_nodes(self, gl_groups: List[gl.Group]) -> List[_Node]:
+        nodes: Dict[int, _Node] = {}
+        for group in gl_groups:
+            node: _Node = nodes.setdefault(group.id, _Node())
+            node.group = group
+
+            if group.parent_id:
+                parent_node = nodes.setdefault(group.parent_id, _Node())
+                node.parent = parent_node
+                parent_node.children.append(node)
+
+        return list(nodes.values())
 
 
 class ProjectGroupGlManager:
@@ -83,4 +139,6 @@ class ProjectGroupGlManager:
         gl_groups = self.provider.get_gl_groups(all=True)
         if not filter_ids:
             return gl_groups
-        return [group for group in gl_groups if group.id in filter_ids]
+
+        nodes = _GlGroupForest(gl_groups).filter_nodes(filter_ids=filter_ids)
+        return [node.group for node in nodes]

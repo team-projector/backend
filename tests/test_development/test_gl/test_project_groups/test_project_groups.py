@@ -37,17 +37,35 @@ def test_load_filtered(db, gl_mocker):
     :param gl_mocker:
     """
     parent_gl_group = GlGroupFactory.create()
+    another_parent_gl_group = GlGroupFactory.create()
+
     child_gl_group = GlGroupFactory(parent_id=parent_gl_group["id"])
+    another_child_gl_group = GlGroupFactory(
+        parent_id=another_parent_gl_group["id"],
+    )
 
-    gl_mock.register_groups(gl_mocker, [parent_gl_group, child_gl_group])
+    gl_mock.register_groups(
+        gl_mocker,
+        [
+            parent_gl_group,
+            child_gl_group,
+            another_parent_gl_group,
+            another_child_gl_group,
+        ],
+    )
 
-    ProjectGroupGlManager().sync_groups(filter_ids=[child_gl_group["id"]])
+    ProjectGroupGlManager().sync_groups(filter_ids=[parent_gl_group["id"]])
 
+    parent_group = ProjectGroup.objects.get(gl_id=parent_gl_group["id"])
+    gl_checkers.check_group(parent_group, parent_gl_group)
     child_group = ProjectGroup.objects.get(gl_id=child_gl_group["id"])
-    gl_checkers.check_group(child_group, child_gl_group)
+    gl_checkers.check_group(child_group, child_gl_group, parent_group)
 
     assert not ProjectGroup.objects.filter(
-        gl_id=parent_gl_group["id"],
+        gl_id__in=[
+            another_parent_gl_group["id"],
+            another_child_gl_group["id"],
+        ],
     ).exists()
 
 
