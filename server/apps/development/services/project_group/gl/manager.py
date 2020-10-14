@@ -21,11 +21,7 @@ class ProjectGroupGlManager:
 
     def sync_groups(self, filter_ids: Iterable[int] = ()) -> None:
         """Sync groups with gitlab."""
-        gl_groups = self.provider.get_gl_groups(all=True)
-        if filter_ids:
-            gl_groups = [
-                group for group in gl_groups if group.id in filter_ids
-            ]
+        gl_groups = self._get_groups(filter_ids)
         gl_groups_map = {gl_group.id: gl_group for gl_group in gl_groups}
 
         while gl_groups:
@@ -82,3 +78,9 @@ class ProjectGroupGlManager:
         logger.info("Group '{0}' is synced".format(group))
 
         return group
+
+    def _get_groups(self, filter_ids: Iterable[int] = ()) -> List[gl.Group]:
+        gl_groups = self.provider.get_gl_groups(all=True)
+        if not filter_ids:
+            return gl_groups
+        return [group for group in gl_groups if group.id in filter_ids]
