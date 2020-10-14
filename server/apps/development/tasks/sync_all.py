@@ -20,7 +20,9 @@ def sync_all_task() -> None:
     if not config.GITLAB_SYNC:
         return
 
-    ProjectGroupGlManager().sync_all_groups()
+    ProjectGroupGlManager().sync_groups(
+        filter_ids=config.GITLAB_ROOT_GROUPS or (),
+    )
     sync_groups_milestones_task()
 
     ProjectGlManager().sync_all_projects()

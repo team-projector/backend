@@ -1,5 +1,6 @@
 import logging
-from typing import Dict, Optional
+from dataclasses import dataclass, field
+from typing import Dict, Iterable, List, Optional
 
 from django.utils import timezone
 from gitlab.v4 import objects as gl
@@ -12,6 +13,65 @@ from apps.development.services.project_group.gl.provider import (
 logger = logging.getLogger(__name__)
 
 
+@dataclass
+class _Node:
+    id: int  # noqa: WPS125
+    group: Optional[gl.Group] = None
+    parent: Optional["_Node"] = None
+    children: List["_Node"] = field(default_factory=list)
+
+    def get_ancestor(self, ancestor_id: int) -> Optional["_Node"]:
+        if not self.parent:
+            return None
+
+        if self.parent.id == ancestor_id:
+            return self.parent
+
+        return self.parent.get_ancestor(ancestor_id)
+
+
+class _GlGroupForest:
+    def __init__(self, gl_groups: List[gl.Group]):
+        self.nodes: List[_Node] = self._build_nodes(gl_groups)
+
+    def filter_nodes(self, filter_ids: Iterable[int] = ()) -> List[_Node]:
+        filtered = [node for node in self.nodes if node.id in filter_ids]
+        by_roots = self._get_nodes_by_roots(filter_ids)
+        for node in by_roots:
+            if node in filtered:
+                continue
+            filtered.append(node)
+        return filtered
+
+    def _get_nodes_by_roots(self, root_ids: Iterable[int]):
+        root_ids = set(root_ids)
+        filtered_nodes = []
+
+        for node in self.nodes:
+            for ancestor_id in root_ids:
+                if node.get_ancestor(ancestor_id):
+                    filtered_nodes.append(node)
+                    break
+
+        return filtered_nodes
+
+    def _build_nodes(self, gl_groups: List[gl.Group]) -> List[_Node]:
+        nodes: Dict[int, _Node] = {}
+        for group in gl_groups:
+            node: _Node = nodes.setdefault(group.id, _Node(group.id))
+            node.group = group
+
+            if group.parent_id:
+                parent_node = nodes.setdefault(
+                    group.parent_id,
+                    _Node(group.parent_id),
+                )
+                node.parent = parent_node
+                parent_node.children.append(node)
+
+        return list(nodes.values())
+
+
 class ProjectGroupGlManager:
     """Gitlab manager for project groups."""
 
@@ -19,9 +79,9 @@ class ProjectGroupGlManager:
         """Initializing."""
         self.provider = ProjectGroupGlProvider()
 
-    def sync_all_groups(self) -> None:
-        """Sync all groups with gitlab."""
-        gl_groups = self.provider.get_gl_groups(all=True)
+    def sync_groups(self, filter_ids: Iterable[int] = ()) -> None:
+        """Sync groups with gitlab."""
+        gl_groups = self._get_groups(filter_ids)
         gl_groups_map = {gl_group.id: gl_group for gl_group in gl_groups}
 
         while gl_groups:
@@ -34,7 +94,7 @@ class ProjectGroupGlManager:
     def sync_group(
         self,
         gl_group: gl.Group,
-        gl_groups: gl.Group,
+        gl_groups: List[gl.Group],
         gl_groups_map: Dict[int, gl.Group],
     ) -> ProjectGroup:
         """Sync group with gitlab."""
@@ -78,3 +138,11 @@ class ProjectGroupGlManager:
         logger.info("Group '{0}' is synced".format(group))
 
         return group
+
+    def _get_groups(self, filter_ids: Iterable[int] = ()) -> List[gl.Group]:
+        gl_groups = self.provider.get_gl_groups(all=True)
+        if not filter_ids:
+            return gl_groups
+
+        nodes = _GlGroupForest(gl_groups).filter_nodes(filter_ids=filter_ids)
+        return [node.group for node in nodes]
