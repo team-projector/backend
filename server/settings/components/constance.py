@@ -38,6 +38,10 @@ CONSTANCE_ADDITIONAL_FIELDS = {
             "widget_kwargs": {"attrs": {"rows": 3}},
         },
     ),
+    "gitlab_root_groups": (
+        "apps.core.models.fields.integer_array.IntegerArrayField",
+        {"min_value": 1, "required": False},
+    ),
 }
 
 CONSTANCE_CONFIG = {
@@ -52,6 +56,11 @@ CONSTANCE_CONFIG = {
     "GITLAB_TOKEN": ("", "", "str_required"),
     "GITLAB_WEBHOOK_SECRET_TOKEN": empty_default_str,
     "GITLAB_ADD_WEBHOOKS": (False, "", bool),
+    "GITLAB_ROOT_GROUPS": (
+        "",
+        "Comma separated array of gitlab group's ids",
+        "gitlab_root_groups",
+    ),
     "OAUTH_GITLAB_KEY": empty_default_str,
     "OAUTH_GITLAB_SECRET": empty_default_str,
     "SLACK_TOKEN": empty_default_str,
@@ -77,6 +86,7 @@ CONSTANCE_CONFIG_FIELDSETS = OrderedDict(
                 "GITLAB_ADD_WEBHOOKS",
                 "OAUTH_GITLAB_KEY",
                 "OAUTH_GITLAB_SECRET",
+                "GITLAB_ROOT_GROUPS",
             ),
         ),
         ("Notifications", ("SLACK_TOKEN",)),
