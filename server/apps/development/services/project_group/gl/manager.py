@@ -15,15 +15,16 @@ logger = logging.getLogger(__name__)
 
 @dataclass
 class _Node:
+    id: int  # noqa: WPS125
     group: Optional[gl.Group] = None
     parent: Optional["_Node"] = None
     children: List["_Node"] = field(default_factory=list)
 
     def get_ancestor(self, ancestor_id: int) -> Optional["_Node"]:
-        if not (self.parent and self.parent.group):
+        if not self.parent:
             return None
 
-        if self.parent.group.id == ancestor_id:
+        if self.parent.id == ancestor_id:
             return self.parent
 
         return self.parent.get_ancestor(ancestor_id)
@@ -34,11 +35,7 @@ class _GlGroupForest:
         self.nodes: List[_Node] = self._build_nodes(gl_groups)
 
     def filter_nodes(self, filter_ids: Iterable[int] = ()) -> List[_Node]:
-        filtered = [
-            node
-            for node in self.nodes
-            if node.group and node.group.id in filter_ids
-        ]
+        filtered = [node for node in self.nodes if node.id in filter_ids]
         by_roots = self._get_nodes_by_roots(filter_ids)
         for node in by_roots:
             if node in filtered:
@@ -61,11 +58,14 @@ class _GlGroupForest:
     def _build_nodes(self, gl_groups: List[gl.Group]) -> List[_Node]:
         nodes: Dict[int, _Node] = {}
         for group in gl_groups:
-            node: _Node = nodes.setdefault(group.id, _Node())
+            node: _Node = nodes.setdefault(group.id, _Node(group.id))
             node.group = group
 
             if group.parent_id:
-                parent_node = nodes.setdefault(group.parent_id, _Node())
+                parent_node = nodes.setdefault(
+                    group.parent_id,
+                    _Node(group.parent_id),
+                )
                 node.parent = parent_node
                 parent_node.children.append(node)
 
