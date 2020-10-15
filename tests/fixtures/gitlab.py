@@ -43,7 +43,7 @@ class GitlabMock(HttprettyMock):
 def gl_mocker():
     """Gl mocker."""
     httpretty.enable(allow_net_connect=False)
-
+    httpretty.reset()
     yield GitlabMock()
 
     httpretty.disable()
