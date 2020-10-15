@@ -1,4 +1,7 @@
 import logging
+from datetime import date
+from functools import partial
+from typing import Dict, Optional, Union
 
 from django.db import DatabaseError
 from django.utils import timezone
@@ -14,8 +17,29 @@ from apps.development.services.project_group.gl.provider import (
 logger = logging.getLogger(__name__)
 
 
+def _get_work_items(
+    work_item: str,
+    gl_project: gl.Project,
+    created_after: Optional[date] = None,
+    updated_after: Optional[date] = None,
+):
+    kwargs: Dict[str, Union[bool, str]] = {
+        "as_list": False,
+    }
+    if created_after:
+        kwargs["created_after"] = str(created_after)
+
+    if updated_after:
+        kwargs["updated_after"] = str(updated_after)
+
+    return getattr(gl_project, work_item).list(**kwargs)
+
+
 class ProjectGlManager:
     """Project gitlab manager."""
+
+    get_project_issues = partial(_get_work_items, "issues")
+    get_project_merge_requests = partial(_get_work_items, "mergerequests")
 
     def __init__(self):
         """Initializing."""

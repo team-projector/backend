@@ -42,6 +42,13 @@ CONSTANCE_ADDITIONAL_FIELDS = {
         "apps.core.models.fields.integer_array.IntegerArrayField",
         {"min_value": 1, "required": False},
     ),
+    "gitlab_sync_start_date": (
+        "django.forms.DateField",
+        {
+            "widget": "django.contrib.admin.widgets.AdminDateWidget",
+            "required": False,
+        },
+    ),
 }
 
 CONSTANCE_CONFIG = {
@@ -61,6 +68,7 @@ CONSTANCE_CONFIG = {
         "Comma separated array of gitlab group's ids",
         "gitlab_root_groups",
     ),
+    "GITLAB_SYNC_START_DATE": ("", "", "gitlab_sync_start_date"),
     "OAUTH_GITLAB_KEY": empty_default_str,
     "OAUTH_GITLAB_SECRET": empty_default_str,
     "SLACK_TOKEN": empty_default_str,
@@ -87,6 +95,7 @@ CONSTANCE_CONFIG_FIELDSETS = OrderedDict(
                 "OAUTH_GITLAB_KEY",
                 "OAUTH_GITLAB_SECRET",
                 "GITLAB_ROOT_GROUPS",
+                "GITLAB_SYNC_START_DATE",
             ),
         ),
         ("Notifications", ("SLACK_TOKEN",)),

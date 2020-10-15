@@ -1,5 +1,6 @@
 from http import HTTPStatus
 
+from constance import config
 from gitlab import GitlabHttpError
 
 from apps.core.errors import sync_errors
@@ -25,7 +26,10 @@ def sync_project_issues_task(project_id: int) -> None:
     project = Project.objects.get(id=project_id)
 
     manager = IssueGlManager()
-    manager.sync_project_issues(project)
+    manager.sync_project_issues(
+        project,
+        start_date=config.GITLAB_SYNC_START_DATE or None,
+    )
 
 
 @app.task(throws=sync_errors)

@@ -1,3 +1,5 @@
+from constance import config
+
 from apps.core.errors import sync_errors
 from apps.development.models import Project
 from apps.development.services.merge_request.gl.manager import (
@@ -20,7 +22,10 @@ def sync_project_merge_requests_task(project_id: int) -> None:
     project = Project.objects.get(id=project_id)
 
     manager = MergeRequestGlManager()
-    manager.sync_project_merge_requests(project)
+    manager.sync_project_merge_requests(
+        project,
+        start_date=config.GITLAB_SYNC_START_DATE or None,
+    )
 
 
 @app.task(throws=sync_errors)
