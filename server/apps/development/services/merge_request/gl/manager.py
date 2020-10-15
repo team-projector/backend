@@ -1,5 +1,6 @@
 import logging
 from datetime import date
+from typing import Optional
 
 from django.utils import timezone
 from gitlab.v4 import objects as gl
@@ -19,7 +20,7 @@ class MergeRequestGlManager(BaseWorkItemGlManager):
 
     def sync_merge_requests(
         self,
-        start_date: date = None,
+        start_date: Optional[date] = None,
         full_reload: bool = False,
     ) -> None:
         """Sync merge requests from all projects."""
@@ -29,26 +30,28 @@ class MergeRequestGlManager(BaseWorkItemGlManager):
     def sync_project_merge_requests(
         self,
         project: models.Project,
-        start_date: date = None,
+        start_date: Optional[date] = None,
         full_reload: bool = False,
     ) -> None:
         """Load merge requests from project."""
+        from apps.development.services.project.gl.manager import (  # noqa:WPS433, E501
+            ProjectGlManager,
+        )
+
         gl_project = self.project_provider.get_gl_project(project)
         if not gl_project:
             return
 
         logger.info("Syncing project '{0}' merge_requests".format(project))
 
-        args = {
-            "as_list": False,
-        }
-        if start_date:
-            args["created_after"] = str(start_date)
-
-        if not full_reload and project.gl_last_merge_requests_sync:
-            args["updated_after"] = project.gl_last_merge_requests_sync
-
-        for gl_merge_request in gl_project.mergerequests.list(**args):
+        merge_requests = ProjectGlManager().get_project_merge_requests(
+            gl_project,
+            created_after=start_date,
+            updated_after=None
+            if full_reload
+            else project.gl_last_merge_requests_sync,
+        )
+        for gl_merge_request in merge_requests:
             self.update_merge_request(
                 project,
                 gl_project,

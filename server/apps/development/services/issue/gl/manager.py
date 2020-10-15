@@ -1,5 +1,6 @@
 import logging
 from datetime import date
+from typing import Optional
 
 from django.utils import timezone
 from gitlab.v4 import objects as gl
@@ -31,7 +32,7 @@ class IssueGlManager(BaseWorkItemGlManager):
 
     def sync_issues(
         self,
-        start_date: date = None,
+        start_date: Optional[date] = None,
         full_reload: bool = False,
     ) -> None:
         """Load issues for all projects."""
@@ -41,29 +42,29 @@ class IssueGlManager(BaseWorkItemGlManager):
     def sync_project_issues(
         self,
         project: Project,
-        start_date: date = None,
+        start_date: Optional[date] = None,
         full_reload: bool = False,
     ) -> None:
         """Load project issues."""
+        from apps.development.services.project.gl.manager import (  # noqa:WPS433, E501
+            ProjectGlManager,
+        )
+
         logger.info("Syncing project '{0}' issues".format(project))
 
         gl_project = self.project_provider.get_gl_project(project)
         if not gl_project:
             return
 
-        args = {
-            "as_list": False,
-        }
-        if start_date:
-            args["created_after"] = str(start_date)
-
-        if not full_reload and project.gl_last_issues_sync:
-            args["updated_after"] = project.gl_last_issues_sync
-
         project.gl_last_issues_sync = timezone.now()
         project.save(update_fields=("gl_last_issues_sync",))
 
-        for gl_issue in gl_project.issues.list(**args):
+        issues = ProjectGlManager().get_project_issues(
+            gl_project,
+            created_after=start_date,
+            updated_after=None if full_reload else project.gl_last_issues_sync,
+        )
+        for gl_issue in issues:
             self.update_project_issue(project, gl_project, gl_issue)
 
         self.check_project_deleted_issues(project, gl_project)
