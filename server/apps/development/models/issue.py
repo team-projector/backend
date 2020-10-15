@@ -124,6 +124,16 @@ class Issue(
         related_name="issues",
     )
 
+    created_by = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="+",
+        verbose_name=_("VN__CREATED_BY"),
+        help_text=_("HT__CREATED_BY"),
+    )
+
     def __str__(self):
         """Returns object string representation."""
         return self.title
