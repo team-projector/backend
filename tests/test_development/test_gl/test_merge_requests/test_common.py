@@ -1,5 +1,7 @@
 from collections import namedtuple
+from datetime import date
 
+import httpretty
 import pytest
 
 from apps.development.services.merge_request.gl.manager import (
@@ -131,3 +133,19 @@ def test_milestone_in_db(db, context, gl_client):
     gl_checkers.check_merge_request(merge_request, context.gl_merge_request)
     gl_checkers.check_user(merge_request.user, context.gl_assignee)
     assert merge_request.milestone == milestone
+
+
+def test_start_date(db, context):
+    """
+    Start_date should be properly passed to gl api endpoint.
+
+    :param db:
+    :param context:
+    :return:
+    """
+    MergeRequestGlManager().sync_project_merge_requests(
+        context.project,
+        start_date=date(2010, 5, 30),
+    )
+    query_params = httpretty.latest_requests()[1].querystring
+    assert query_params["created_after"] == ["2010-05-30"]

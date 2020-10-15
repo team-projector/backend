@@ -1,4 +1,5 @@
 import logging
+from datetime import date
 
 from django.utils import timezone
 from gitlab.v4 import objects as gl
@@ -16,14 +17,19 @@ logger = logging.getLogger(__name__)
 class MergeRequestGlManager(BaseWorkItemGlManager):
     """Merge requests gitlab manager."""
 
-    def sync_merge_requests(self, full_reload: bool = False) -> None:
+    def sync_merge_requests(
+        self,
+        start_date: date = None,
+        full_reload: bool = False,
+    ) -> None:
         """Sync merge requests from all projects."""
         for project in models.Project.objects.all():
-            self.sync_project_merge_requests(project, full_reload)
+            self.sync_project_merge_requests(project, start_date, full_reload)
 
     def sync_project_merge_requests(
         self,
         project: models.Project,
+        start_date: date = None,
         full_reload: bool = False,
     ) -> None:
         """Load merge requests from project."""
@@ -36,6 +42,8 @@ class MergeRequestGlManager(BaseWorkItemGlManager):
         args = {
             "as_list": False,
         }
+        if start_date:
+            args["created_after"] = str(start_date)
 
         if not full_reload and project.gl_last_merge_requests_sync:
             args["updated_after"] = project.gl_last_merge_requests_sync

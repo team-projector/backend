@@ -1,4 +1,5 @@
 import logging
+from datetime import date
 
 from django.utils import timezone
 from gitlab.v4 import objects as gl
@@ -28,14 +29,19 @@ class IssueGlManager(BaseWorkItemGlManager):
 
         self.merge_requests_manager = MergeRequestGlManager()
 
-    def sync_issues(self, full_reload: bool = False) -> None:
+    def sync_issues(
+        self,
+        start_date: date = None,
+        full_reload: bool = False,
+    ) -> None:
         """Load issues for all projects."""
         for project in Project.objects.all():
-            self.sync_project_issues(project, full_reload)
+            self.sync_project_issues(project, start_date, full_reload)
 
     def sync_project_issues(
         self,
         project: Project,
+        start_date: date = None,
         full_reload: bool = False,
     ) -> None:
         """Load project issues."""
@@ -48,6 +54,8 @@ class IssueGlManager(BaseWorkItemGlManager):
         args = {
             "as_list": False,
         }
+        if start_date:
+            args["created_after"] = str(start_date)
 
         if not full_reload and project.gl_last_issues_sync:
             args["updated_after"] = project.gl_last_issues_sync
