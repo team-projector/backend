@@ -26,3 +26,4 @@ class GlIssueFactory(factory.DictFactory):
     labels = []
     milestone = factory.SubFactory(GlProjectMilestoneFactory)
     description = factory.Faker("text", max_nb_chars=50)
+    created_by = factory.SubFactory(GlUserFactory)
