@@ -653,17 +653,17 @@ msgstr "English"
 msgid "VN__ADMIN_DASHBOARD"
 msgstr "Admin Dashboard"
 
-#~ msgid "You do not have permission to perform this action."
-#~ msgstr "You do not have permission to perform this action."
+msgid "You do not have permission to perform this action."
+msgstr "You do not have permission to perform this action."
 
-#~ msgid "Not found."
-#~ msgstr "Not found."
+msgid "Not found."
+msgstr "Not found."
 
-#~ msgid "Input error."
-#~ msgstr "Input error."
+msgid "Input error."
+msgstr "Input error."
 
-#~ msgid "MSG__VALUE_MUST_BE_IS_NUMBER"
-#~ msgstr "Value must be is number"
+msgid "MSG__VALUE_MUST_BE_IS_NUMBER"
+msgstr "Value must be is number"
 
-#~ msgid "Constance"
-#~ msgstr "Configuration"
+msgid "Constance"
+msgstr "Configuration"
