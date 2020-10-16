@@ -130,8 +130,8 @@ class Issue(
         null=True,
         blank=True,
         related_name="author_issues",
-        verbose_name=_("VN__CREATED_BY"),
-        help_text=_("HT__CREATED_BY"),
+        verbose_name=_("VN__AUTHOR"),
+        help_text=_("HT__AUTHOR"),
     )
 
     def __str__(self):

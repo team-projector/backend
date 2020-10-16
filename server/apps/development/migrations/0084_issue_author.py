@@ -16,6 +16,6 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='issue',
             name='author',
-            field=models.ForeignKey(blank=True, help_text='HT__CREATED_BY', null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='author_issues', to=settings.AUTH_USER_MODEL, verbose_name='VN__CREATED_BY'),
+            field=models.ForeignKey(blank=True, help_text='HT__AUTHOR', null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='author_issues', to=settings.AUTH_USER_MODEL, verbose_name='VN__AUTHOR'),
         ),
     ]
