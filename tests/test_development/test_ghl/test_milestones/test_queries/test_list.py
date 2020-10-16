@@ -1,6 +1,7 @@
 import pytest
 from jnt_django_graphene_toolbox.errors import GraphQLPermissionDenied
 
+from apps.development.models.milestone import MilestoneState
 from apps.development.models.project_member import ProjectMemberRole
 from tests.test_development.factories import (
     ProjectFactory,
@@ -141,3 +142,30 @@ def test_search_no_results(ghl_auth_mock_info, all_milestones_query):
     )
 
     assert not response.length
+
+
+@pytest.mark.parametrize(("active", "count"), [(True, 3), (False, 2)])
+def test_filter_by_active(
+    ghl_auth_mock_info, all_milestones_query, active, count,
+):
+    """Test filtering by active param."""
+    project = ProjectFactory.create()
+    ProjectMemberFactory.create(
+        user=ghl_auth_mock_info.context.user,
+        role=ProjectMemberRole.MANAGER,
+        owner=project,
+    )
+    ProjectMilestoneFactory.create_batch(
+        3, owner=project, state=MilestoneState.ACTIVE,
+    )
+    ProjectMilestoneFactory.create_batch(
+        2, owner=project, state=MilestoneState.CLOSED,
+    )
+
+    response = all_milestones_query(
+        root=None,
+        info=ghl_auth_mock_info,
+        active=active,
+    )
+
+    assert response.length == count
