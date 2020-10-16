@@ -1,13 +1,5 @@
-from jnt_django_graphene_toolbox.errors import GraphQLInputError
-
 from apps.development.models import MergeRequest
-from apps.development.models.issue import IssueState
 from apps.development.models.merge_request import MergeRequestState
-from apps.development.services.merge_request.gl.manager import (
-    MergeRequestGlManager,
-)
-from tests.test_development.factories import IssueFactory
-from tests.test_development.factories.gitlab import GlLabelFactory
 from tests.test_development.test_gl.helpers import gl_mock, initializers
 from tests.test_users.factories.gitlab import GlUserFactory
 from tests.test_users.factories.user import UserFactory

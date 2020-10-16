@@ -1,8 +1,8 @@
 from apps.development.graphql.mutations import (
     issues,
+    merge_requests,
     milestones,
     tickets,
-    merge_requests,
 )
 
 
