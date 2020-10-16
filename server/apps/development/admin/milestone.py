@@ -18,6 +18,7 @@ class MilestoneAdmin(
 
     list_display = ("id", "title", "start_date", "due_date", "budget", "state")
     search_fields = ("title",)
+    list_filter = ("state",)
 
     def sync_handler(self, milestone):
         """Syncing milestone."""
