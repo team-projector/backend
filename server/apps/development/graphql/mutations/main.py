@@ -1,4 +1,9 @@
-from apps.development.graphql.mutations import issues, milestones, tickets
+from apps.development.graphql.mutations import (
+    issues,
+    merge_requests,
+    milestones,
+    tickets,
+)
 
 
 class DevelopmentMutations:
@@ -13,3 +18,5 @@ class DevelopmentMutations:
     add_spend_time_issue = issues.AddSpentToIssueMutation.Field()
     sync_issue = issues.SyncIssueMutation.Field()
     update_issue = issues.UpdateIssueMutation.Field()
+
+    sync_merge_request = merge_requests.SyncMergeRequestMutation.Field()
