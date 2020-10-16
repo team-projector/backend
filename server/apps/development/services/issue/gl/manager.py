@@ -93,6 +93,9 @@ class IssueGlManager(BaseWorkItemGlManager):
             "user": self.user_manager.extract_user_from_data(
                 gl_issue.assignee,
             ),
+            "author": self.user_manager.extract_user_from_data(
+                gl_issue.author,
+            ),
             "is_merged": gitlab.parse_state_merged(gl_issue.closed_by()),
             "description": gl_issue.description or "",
             "gl_last_sync": timezone.now(),
