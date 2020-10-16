@@ -26,9 +26,4 @@ class GlIssueFactory(factory.DictFactory):
     labels = []
     milestone = factory.SubFactory(GlProjectMilestoneFactory)
     description = factory.Faker("text", max_nb_chars=50)
-
-    @factory.post_generation
-    def author(self, create, extracted, **kwargs):
-        """Post generate author for object."""
-        if create:
-            self["author"] = self["assignee"]
+    author = None

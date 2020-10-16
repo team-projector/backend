@@ -93,7 +93,7 @@ class IssueGlManager(BaseWorkItemGlManager):
             "user": self.user_manager.extract_user_from_data(
                 gl_issue.assignee,
             ),
-            "created_by": self.user_manager.extract_user_from_data(
+            "author": self.user_manager.extract_user_from_data(
                 gl_issue.author,
             ),
             "is_merged": gitlab.parse_state_merged(gl_issue.closed_by()),

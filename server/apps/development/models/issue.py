@@ -124,12 +124,12 @@ class Issue(
         related_name="issues",
     )
 
-    created_by = models.ForeignKey(
+    author = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         models.SET_NULL,
         null=True,
         blank=True,
-        related_name="+",
+        related_name="author_issues",
         verbose_name=_("VN__CREATED_BY"),
         help_text=_("HT__CREATED_BY"),
     )
