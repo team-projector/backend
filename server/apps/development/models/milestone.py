@@ -10,15 +10,14 @@ from apps.core.models.mixins import (
     Timestamps,
 )
 
+MILESTONE_STATE_MAX_LENGTH = 20
+
 
 class MilestoneState(models.TextChoices):
     """Milestone state choices."""
 
-    ACTIVE = "ACTIVE", _("CH__ACTIVE")  # noqa: WPS115
-    CLOSED = "CLOSED", _("CH__CLOSED")  # noqa: WPS115
-
-
-MILESTONE_STATE_MAX_LENGTH = 20
+    ACTIVE = "ACTIVE", _("CH__STATE_ACTIVE")  # noqa: WPS115
+    CLOSED = "CLOSED", _("CH__STATE_CLOSED")  # noqa: WPS115
 
 
 class Milestone(

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-03-31 12:35+0300\n"
+"POT-Creation-Date: 2020-10-16 12:31+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -19,15 +19,6 @@ msgstr ""
 
 msgid "VN__CORE"
 msgstr "Core"
-
-msgid "You do not have permission to perform this action."
-msgstr "You do not have permission to perform this action."
-
-msgid "Not found."
-msgstr "Not found."
-
-msgid "Input error."
-msgstr "Input error."
 
 msgid "VN__GITLAB_ID"
 msgstr "GitLab ID"
@@ -56,8 +47,29 @@ msgstr "GitLab Internal ID"
 msgid "MSG__VALUE_MUST_BE_FROM_0_TO_1"
 msgstr "Value must be from 0 to 1"
 
-msgid "MSG__VALUE_MUST_BE_IS_NUMBER"
-msgstr "Value must be is number"
+msgid "Force sync"
+msgstr "Force sync"
+
+msgid "Save"
+msgstr "Save"
+
+msgid "Delete"
+msgstr "Delete"
+
+msgid "Save as new"
+msgstr "Save as new"
+
+msgid "Save and add another"
+msgstr "Save and add another"
+
+msgid "Save and continue editing"
+msgstr "Save and continue editing"
+
+msgid "Save and view"
+msgstr "Save and view"
+
+msgid "Close"
+msgstr "Close"
 
 msgid "VN__DEVELOPMENT"
 msgstr "Development"
@@ -70,6 +82,12 @@ msgstr "opened"
 
 msgid "CH__CLOSED"
 msgstr "closed"
+
+msgid "VN__ISSUE"
+msgstr "Issue"
+
+msgid "VN__ISSUES"
+msgstr "Issues"
 
 msgid "VN__TITLE"
 msgstr "Title"
@@ -107,17 +125,11 @@ msgstr "User"
 msgid "HT__USER"
 msgstr "User"
 
-msgid "VN__ISSUE"
-msgstr "Issue"
+msgid "VN__AUTHOR"
+msgstr "Author"
 
-msgid "VN__ISSUES"
-msgstr "Issues"
-
-msgid "VN__COLOR"
-msgstr "Color"
-
-msgid "HT__COLOR"
-msgstr "Color"
+msgid "HT__AUTHOR"
+msgstr "Author"
 
 msgid "VN__LABEL"
 msgstr "Label"
@@ -125,14 +137,14 @@ msgstr "Label"
 msgid "VN__LABELS"
 msgstr "Labels"
 
+msgid "VN__COLOR"
+msgstr "Color"
+
+msgid "HT__COLOR"
+msgstr "Color"
+
 msgid "CH__MERGED"
 msgstr "merged"
-
-msgid "VN__AUTHOR"
-msgstr "Author"
-
-msgid "HT__AUTHOR"
-msgstr "Author"
 
 msgid "VN__MERGE_REQUEST"
 msgstr "Merge Request"
@@ -140,8 +152,17 @@ msgstr "Merge Request"
 msgid "VN__MERGE_REQUESTS"
 msgstr "Merge Requests"
 
-msgid "CH__ACTIVE"
-msgstr "Is active"
+msgid "CH__STATE_ACTIVE"
+msgstr "Active"
+
+msgid "CH__STATE_CLOSED"
+msgstr "Closed"
+
+msgid "VN__MILESTONE"
+msgstr "Milestone"
+
+msgid "VN__MILESTONES"
+msgstr "Milestones"
 
 msgid "VN__DESCRIPTION"
 msgstr "Description"
@@ -167,12 +188,6 @@ msgstr "Budget"
 msgid "HT__BUDGET"
 msgstr "Budget"
 
-msgid "VN__MILESTONE"
-msgstr "Milestone"
-
-msgid "VN__MILESTONES"
-msgstr "Milestones"
-
 msgid "VN__NOTES"
 msgstr "Notes"
 
@@ -191,26 +206,23 @@ msgstr "Moved from"
 msgid "CH__COMMENT"
 msgstr "Comment"
 
+msgid "VN__NOTE"
+msgstr "Note"
+
 msgid "VN__TYPE"
 msgstr "Type"
 
 msgid "HT__TYPE"
 msgstr "Type"
 
-msgid "VN__NOTE"
-msgstr "Note"
+msgid "VN__PROJECTS"
+msgstr "Projects"
 
 msgid "VN__FULL_TITLE"
 msgstr "Full title"
 
 msgid "HT__FULL_TITLE"
 msgstr "Full title"
-
-msgid "VN__GROUP"
-msgstr "Group"
-
-msgid "HT__GROUP"
-msgstr "Group"
 
 msgid "VN__IS_ACTIVE"
 msgstr "Is active"
@@ -242,20 +254,23 @@ msgstr "GitLab merge requests sync"
 msgid "HT__MERGE_REQUESTS_SYNC"
 msgstr "GitLab merge requests sync"
 
-msgid "VN__PROJECTS"
-msgstr "Projects"
+msgid "VN__GROUP"
+msgstr "Group"
 
-msgid "VN__PARENT"
-msgstr "Parent"
-
-msgid "HT__PARENT"
-msgstr "Parent"
+msgid "HT__GROUP"
+msgstr "Group"
 
 msgid "VN__PROJECT_GROUP"
 msgstr "Project group"
 
 msgid "VN__PROJECT_GROUPS"
 msgstr "Project groups"
+
+msgid "VN__PARENT"
+msgstr "Parent"
+
+msgid "HT__PARENT"
+msgstr "Parent"
 
 msgid "CH__DEVELOPER"
 msgstr "Developer"
@@ -266,17 +281,17 @@ msgstr "Manager"
 msgid "CH__CUSTOMER"
 msgstr "Customer"
 
-msgid "VN__ROLE"
-msgstr "Role"
-
-msgid "HT__ROLE"
-msgstr "Role"
-
 msgid "VN__PROJECT_MEMBER"
 msgstr "Project Members"
 
 msgid "VN__PROJECT_MEMBERS"
 msgstr "Project Members"
+
+msgid "VN__ROLE"
+msgstr "Role"
+
+msgid "HT__ROLE"
+msgstr "Role"
 
 msgid "VN__TEAM"
 msgstr "Team"
@@ -290,14 +305,14 @@ msgstr "Leader"
 msgid "CH__WATCHER"
 msgstr "Watcher"
 
-msgid "HT__TEAM"
-msgstr "Team"
-
 msgid "VN__TEAM_MEMBER"
 msgstr "Team Member"
 
 msgid "VN__TEAM_MEMBERS"
 msgstr "Team Members"
+
+msgid "HT__TEAM"
+msgstr "Team"
 
 msgid "CH__FEATURE"
 msgstr "Feature"
@@ -326,17 +341,17 @@ msgstr "Accepting"
 msgid "CH__DONE"
 msgstr "Done"
 
-msgid "VN__URL"
-msgstr "Url"
-
-msgid "HT__URL"
-msgstr "Url"
-
 msgid "VN__TICKET"
 msgstr "Ticket"
 
 msgid "VN__TICKETS"
 msgstr "Tickets"
+
+msgid "VN__URL"
+msgstr "Url"
+
+msgid "HT__URL"
+msgstr "Url"
 
 msgid "Yes"
 msgstr "Yes"
@@ -347,17 +362,17 @@ msgstr "No"
 msgid "VN__PAYROLL"
 msgstr "Payroll"
 
-msgid "VN__COMMENT"
-msgstr "Comment"
-
-msgid "HT__COMMENT"
-msgstr "Comment"
-
 msgid "VN__BONUS"
 msgstr "Bonus"
 
 msgid "VN__BONUSES"
 msgstr "Bonuses"
+
+msgid "VN__COMMENT"
+msgstr "Comment"
+
+msgid "HT__COMMENT"
+msgstr "Comment"
 
 msgid "CH__APPROVED"
 msgstr "Approved"
@@ -377,17 +392,17 @@ msgstr "Approved at"
 msgid "HT__APPROVED_AT"
 msgstr "Approved at"
 
-msgid "VN__APPROVED_BY"
-msgstr "Approved by"
-
-msgid "HT__APPROVED_BY"
-msgstr "Approved by"
-
 msgid "VN__DECLINE_REASON"
 msgstr "Decline reason"
 
 msgid "HT__DECLINE_REASON"
 msgstr "Decline reason"
+
+msgid "VN__APPROVED_BY"
+msgstr "Approved by"
+
+msgid "HT__APPROVED_BY"
+msgstr "Approved by"
 
 msgid "VN__TIME_SPENTS"
 msgstr "Time spents"
@@ -401,11 +416,8 @@ msgstr "Payment"
 msgid "VN__PAYMENTS"
 msgstr "Payments"
 
-msgid "VN__CREATED_BY"
-msgstr "Created by"
-
-msgid "HT__CREATED_BY"
-msgstr "Created by"
+msgid "VN__PAYROLLS"
+msgstr "Payrolls"
 
 msgid "VN__SUM"
 msgstr "Sum"
@@ -413,14 +425,17 @@ msgstr "Sum"
 msgid "HT__SUM"
 msgstr "Sum"
 
+msgid "VN__CREATED_BY"
+msgstr "Created by"
+
+msgid "HT__CREATED_BY"
+msgstr "Created by"
+
 msgid "VN__SALARY"
 msgstr "Salary"
 
 msgid "HT__SALARY"
 msgstr "Salary"
-
-msgid "VN__PAYROLLS"
-msgstr "Payrolls"
 
 msgid "VN__PENALTY"
 msgstr "Penalty"
@@ -428,11 +443,8 @@ msgstr "Penalty"
 msgid "VN__PENALTIES"
 msgstr "Penalties"
 
-msgid "VN__POSITION"
-msgstr "Position"
-
-msgid "HT__POSITION"
-msgstr " "
+msgid "VN__SALARIES"
+msgstr "Salaries"
 
 msgid "VN__PERIOD_FROM"
 msgstr "Period from"
@@ -488,8 +500,17 @@ msgstr "Payed"
 msgid "HT__PAYED"
 msgstr "Payed"
 
-msgid "VN__SALARIES"
-msgstr "Salaries"
+msgid "VN__POSITION"
+msgstr "Position"
+
+msgid "HT__POSITION"
+msgstr " "
+
+msgid "VN__SPENT_TIME"
+msgstr "Spent time"
+
+msgid "VN__SPENT_TIMES"
+msgstr "Spent times"
 
 msgid "VN__CUSTOMER_SUM"
 msgstr "Customer sum"
@@ -515,12 +536,6 @@ msgstr "Spent time"
 msgid "HT__TIME_SPENT"
 msgstr "Spent time"
 
-msgid "VN__SPENT_TIME"
-msgstr "Spent time"
-
-msgid "VN__SPENT_TIMES"
-msgstr "Spent times"
-
 msgid "CH__DAYOFF"
 msgstr "Dayoff"
 
@@ -529,6 +544,12 @@ msgstr "Vacation"
 
 msgid "CH__DISEASE"
 msgstr "Disease"
+
+msgid "VN__WORKBREAK"
+msgstr "Workbreak"
+
+msgid "VN__WORKBREAKS"
+msgstr "Workbreaks"
 
 msgid "VN__DATE_FROM"
 msgstr "From"
@@ -553,12 +574,6 @@ msgstr "Paid"
 
 msgid "HT__PAID"
 msgstr "Paid"
-
-msgid "VN__WORKBREAK"
-msgstr "Workbreak"
-
-msgid "VN__WORKBREAKS"
-msgstr "Workbreaks"
 
 msgid "VN__USERS"
 msgstr "Users"
@@ -635,32 +650,20 @@ msgstr "Must include login and password"
 msgid "MSG__ENGLISH"
 msgstr "English"
 
-msgid "Force sync"
-msgstr "Force sync"
-
-msgid "Save"
-msgstr "Save"
-
-msgid "Delete"
-msgstr "Delete"
-
-msgid "Save as new"
-msgstr "Save as new"
-
-msgid "Save and add another"
-msgstr "Save and add another"
-
-msgid "Save and continue editing"
-msgstr "Save and continue editing"
-
-msgid "Save and view"
-msgstr "Save and view"
-
-msgid "Close"
-msgstr "Close"
-
 msgid "VN__ADMIN_DASHBOARD"
 msgstr "Admin Dashboard"
 
-msgid "Constance"
-msgstr "Configuration"
+#~ msgid "You do not have permission to perform this action."
+#~ msgstr "You do not have permission to perform this action."
+
+#~ msgid "Not found."
+#~ msgstr "Not found."
+
+#~ msgid "Input error."
+#~ msgstr "Input error."
+
+#~ msgid "MSG__VALUE_MUST_BE_IS_NUMBER"
+#~ msgstr "Value must be is number"
+
+#~ msgid "Constance"
+#~ msgstr "Configuration"
