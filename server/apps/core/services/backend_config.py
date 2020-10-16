@@ -46,7 +46,10 @@ class BackendConfigService:
         return config_file_content
 
     def _get_config_map(self) -> Dict[str, str]:
-        return {"firstWeekDay": config.FIRST_WEEK_DAY}
+        return {
+            "firstWeekDay": config.FIRST_WEEK_DAY,
+            "currencyCode": config.CURRENCY_CODE,
+        }
 
 
 get_config = BackendConfigService(
