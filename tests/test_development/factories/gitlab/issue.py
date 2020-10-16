@@ -29,5 +29,6 @@ class GlIssueFactory(factory.DictFactory):
 
     @factory.post_generation
     def author(self, create, extracted, **kwargs):
+        """Post generate author for object."""
         if create:
             self["author"] = self["assignee"]
