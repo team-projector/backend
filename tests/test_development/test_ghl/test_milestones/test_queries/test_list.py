@@ -146,7 +146,10 @@ def test_search_no_results(ghl_auth_mock_info, all_milestones_query):
 
 @pytest.mark.parametrize(("active", "count"), [(True, 3), (False, 2)])
 def test_filter_by_active(
-    ghl_auth_mock_info, all_milestones_query, active, count,
+    ghl_auth_mock_info,
+    all_milestones_query,
+    active,
+    count,
 ):
     """Test filtering by active param."""
     project = ProjectFactory.create()
@@ -156,10 +159,14 @@ def test_filter_by_active(
         owner=project,
     )
     ProjectMilestoneFactory.create_batch(
-        3, owner=project, state=MilestoneState.ACTIVE,
+        3,
+        owner=project,
+        state=MilestoneState.ACTIVE,
     )
     ProjectMilestoneFactory.create_batch(
-        2, owner=project, state=MilestoneState.CLOSED,
+        2,
+        owner=project,
+        state=MilestoneState.CLOSED,
     )
 
     response = all_milestones_query(
