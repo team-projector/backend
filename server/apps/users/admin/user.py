@@ -35,7 +35,7 @@ class UserAdmin(
     list_filter = ("is_active", "is_staff")
     ordering = ("login",)
     sortable_by = ()
-    search_fields = ("login",)
+    search_fields = ("login", "name")
     add_fieldsets = (
         (
             None,

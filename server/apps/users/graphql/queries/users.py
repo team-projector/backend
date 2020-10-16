@@ -1,6 +1,8 @@
 import graphene
+from jnt_django_graphene_toolbox.connection_fields import DataSourceConnectionField
 from jnt_django_graphene_toolbox.relay_nodes import DatasourceRelayNode
 
+from apps.users.graphql.filters.user import UserFilterSet
 from apps.users.graphql.resolvers import (
     resolve_me_user,
     resolve_user_progress_metrics,
@@ -23,3 +25,8 @@ class UsersQueries(graphene.ObjectType):
     )
 
     me = graphene.Field(UserType, resolver=resolve_me_user)
+
+    all_users = DataSourceConnectionField(
+        UserType,
+        filterset_class=UserFilterSet,
+    )
