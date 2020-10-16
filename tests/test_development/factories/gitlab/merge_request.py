@@ -25,3 +25,4 @@ class GlMergeRequestFactory(factory.DictFactory):
     assignee = factory.SubFactory(GlUserFactory)
     labels = []
     milestone = factory.SubFactory(GlProjectMilestoneFactory)
+    author = None
