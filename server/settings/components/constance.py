@@ -13,6 +13,11 @@ WEEK_DAYS = (
     "SUNDAY",
 )
 
+CURRENCY_CODES = (
+    "usd",
+    "rur",
+)
+
 empty_default_str = ("", "", str)
 
 CONSTANCE_ADDITIONAL_FIELDS = {
@@ -49,6 +54,13 @@ CONSTANCE_ADDITIONAL_FIELDS = {
             "required": False,
         },
     ),
+    "currency_code": (
+        "django.forms.ChoiceField",
+        {
+            "required": True,
+            "choices": [(CURRENCY_CODES[0], CURRENCY_CODES[0]), (CURRENCY_CODES[1], CURRENCY_CODES[1])],
+        },
+    ),
 }
 
 CONSTANCE_CONFIG = {
@@ -58,6 +70,7 @@ CONSTANCE_CONFIG = {
         "weekend_days",
     ),
     "FIRST_WEEK_DAY": (calendar.MONDAY, "", "first_week_day"),
+    "CURRENCY_CODE": (CURRENCY_CODES[0], "", "currency_code"),
     "GITLAB_ADDRESS": ("https://gitlab.com", "", str),
     "GITLAB_SYNC": (True, "", bool),
     "GITLAB_TOKEN": ("", "", "str_required"),
@@ -83,7 +96,7 @@ CONSTANCE_CONFIG = {
 
 CONSTANCE_CONFIG_FIELDSETS = OrderedDict(
     (
-        ("System", ("WEEKENDS_DAYS", "FIRST_WEEK_DAY")),
+        ("System", ("WEEKENDS_DAYS", "FIRST_WEEK_DAY", "CURRENCY_CODE")),
         (
             "Gitlab",
             (
