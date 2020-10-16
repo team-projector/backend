@@ -1,5 +1,7 @@
 import graphene
-from jnt_django_graphene_toolbox.connection_fields import DataSourceConnectionField
+from jnt_django_graphene_toolbox.connection_fields import (
+    DataSourceConnectionField,
+)
 from jnt_django_graphene_toolbox.relay_nodes import DatasourceRelayNode
 
 from apps.users.graphql.filters.user import UserFilterSet
