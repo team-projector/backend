@@ -37,7 +37,10 @@ def test_config_alter_constance_value(override_config):
     )
     with override_config(FIRST_WEEK_DAY=1):
         config = service.get_config()
-    assert config == 'backend = {"config": {"firstWeekDay": 1}}'
+    assert (
+        config
+        == 'backend = {"config": {"firstWeekDay": 1, "currencyCode": "usd"}}'
+    )
 
 
 def test_config_alter_constance_value_currency(override_config):

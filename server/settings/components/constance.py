@@ -58,7 +58,10 @@ CONSTANCE_ADDITIONAL_FIELDS = {
         "django.forms.ChoiceField",
         {
             "required": True,
-            "choices": [(CURRENCY_CODES[0], CURRENCY_CODES[0]), (CURRENCY_CODES[1], CURRENCY_CODES[1])],
+            "choices": [
+                (CURRENCY_CODES[0], CURRENCY_CODES[0]),
+                (CURRENCY_CODES[1], CURRENCY_CODES[1]),
+            ],
         },
     ),
 }
