@@ -101,6 +101,7 @@ def test_paid_metrics(user):
 
     checkers.check_issues_metrics(
         get_issue_metrics(issue),
+        payroll=6 * user.hour_rate,
         paid=6 * user.hour_rate,
     )
 
@@ -143,7 +144,7 @@ def test_complex_metrics(user):
 
     checkers.check_issues_metrics(
         get_issue_metrics(issue),
-        payroll=user.hour_rate,
+        payroll=6 * user.hour_rate,
         paid=5 * user.hour_rate,
     )
 

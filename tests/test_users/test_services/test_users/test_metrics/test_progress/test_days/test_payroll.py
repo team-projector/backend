@@ -82,9 +82,7 @@ def test_paid(user):
     user.save()
 
     issue = IssueFactory.create(user=user, due_date=datetime.now())
-
     monday = begin_of_week(timezone.now().date())
-
     salary = SalaryFactory.create(user=user)
 
     IssueSpentTimeFactory.create(
@@ -135,7 +133,11 @@ def test_paid(user):
 
     checkers.check_user_progress_payroll_metrics(
         metrics,
-        payroll={monday: 0},
+        payroll={
+            monday: 3 * user.hour_rate,
+            monday + timedelta(days=1): user.hour_rate,
+            monday + timedelta(days=2): 2 * user.hour_rate,
+        },
         paid={
             monday: 3 * user.hour_rate,
             monday + timedelta(days=1): user.hour_rate,
@@ -281,7 +283,7 @@ def test_complex(user):
         metrics,
         payroll={
             monday: 6 * user.hour_rate,
-            monday + timedelta(days=1): 4 * user.hour_rate,
+            monday + timedelta(days=1): 7 * user.hour_rate,
             monday + timedelta(days=2): 2 * user.hour_rate,
         },
         paid={monday + timedelta(days=1): 3 * user.hour_rate},

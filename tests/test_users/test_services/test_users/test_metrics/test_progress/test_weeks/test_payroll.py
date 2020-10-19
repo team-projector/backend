@@ -133,7 +133,7 @@ def test_paid(user):
 
     checkers.check_user_progress_payroll_metrics(
         metrics,
-        payroll={monday: 0},
+        payroll={monday: 6 * user.hour_rate},
         paid={monday: 6 * user.hour_rate},
     )
 
@@ -270,6 +270,6 @@ def test_complex(user):
 
     checkers.check_user_progress_payroll_metrics(
         metrics,
-        payroll={monday: 12 * user.hour_rate},
+        payroll={monday: 15 * user.hour_rate},
         paid={monday: 3 * user.hour_rate},
     )

@@ -45,34 +45,6 @@ def test_paid(user):
 
     total_paid = spent_time_aggregation_service.annotate_payrolls(
         SpentTime.objects.all(),
-        payroll=False,
     ).aggregate(total_paid=Sum("paid"))["total_paid"]
 
     assert total_paid == 2 * user.hour_rate
-
-
-def test_payroll_metrics(user):
-    """
-    Test payroll metrics.
-
-    :param user:
-    """
-    issue = IssueFactory.create(user=user)
-
-    IssueSpentTimeFactory.create(
-        user=user,
-        base=issue,
-        time_spent=seconds(hours=3),
-    )
-    IssueSpentTimeFactory.create(
-        user=user,
-        base=issue,
-        time_spent=-seconds(hours=1),
-    )
-
-    total_payroll = spent_time_aggregation_service.annotate_payrolls(
-        SpentTime.objects.all(),
-        paid=False,
-    ).aggregate(total_payroll=Sum("payroll"))["total_payroll"]
-
-    assert total_payroll == 2 * user.hour_rate

@@ -74,7 +74,7 @@ class UserDayStatsProvider:
             queryset.filter(user=user, date_truncated__isnull=False)
             .values("date_truncated")
             .annotate(
-                total_payroll=Coalesce(models.Sum("payroll"), 0),
+                total_payroll=Coalesce(models.Sum("sum"), 0),
                 total_paid=Coalesce(models.Sum("paid"), 0),
             )
             .order_by()

@@ -7,7 +7,7 @@ class _AggregationService:
     def aggregate_payrolls(self, spent_times: QuerySet):
         """Get total sum payroll and paid."""
         return self.annotate_payrolls(spent_times).aggregate(
-            total_payroll=Coalesce(models.Sum("payroll"), 0),
+            total_payroll=Coalesce(models.Sum("sum"), 0),
             total_paid=Coalesce(models.Sum("paid"), 0),
         )
 
@@ -37,29 +37,15 @@ class _AggregationService:
     def annotate_payrolls(
         self,
         spent_times: QuerySet,
-        paid: bool = True,
-        payroll: bool = True,
     ) -> models.QuerySet:
-        """Get total sum payroll or paid."""
-        if paid:
-            spent_times = spent_times.annotate(
-                paid=models.Case(
-                    models.When(salary__isnull=False, then=models.F("sum")),
-                    default=0,
-                    output_field=models.FloatField(),
-                ),
-            )
-
-        if payroll:
-            spent_times = spent_times.annotate(
-                payroll=models.Case(
-                    models.When(salary__isnull=True, then=models.F("sum")),
-                    default=0,
-                    output_field=models.FloatField(),
-                ),
-            )
-
-        return spent_times
+        """Get total sum paid."""
+        return spent_times.annotate(
+            paid=models.Case(
+                models.When(salary__isnull=False, then=models.F("sum")),
+                default=0,
+                output_field=models.FloatField(),
+            ),
+        )
 
     def _sum(self, **filters) -> Coalesce:
         """
