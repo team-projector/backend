@@ -10,4 +10,5 @@ class SkillAdmin(BaseModelAdmin):
     """A class represents skill model for admin dashboard."""
 
     search_fields = ("title", "group__title")
+    list_display = ("title", "group")
     inlines = (SkillLevelInline,)
