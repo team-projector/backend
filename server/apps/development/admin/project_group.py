@@ -12,7 +12,7 @@ class ProjectGroupAdmin(
     ForceSyncEntityMixin,
     BaseModelAdmin,
 ):
-    """A class representing Project Group model for admin dashboard."""
+    """A class represents Project Group model for admin dashboard."""
 
     list_display = ("title", "parent", "is_active", "gl_url", "gl_last_sync")
     list_filter = ("is_active",)

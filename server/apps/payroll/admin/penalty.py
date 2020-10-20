@@ -7,7 +7,7 @@ from apps.users.admin.filters import UserFilter
 
 @admin.register(Penalty)
 class PenaltyAdmin(BaseModelAdmin):
-    """A class representing Penalty model for admin dashboard."""
+    """A class represents Penalty model for admin dashboard."""
 
     list_display = ("user", "created_by", "created_at", "sum")
     list_filter = (UserFilter,)

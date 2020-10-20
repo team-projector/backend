@@ -2,7 +2,7 @@ from jnt_django_graphene_toolbox.connections import DataSourceConnection
 from jnt_django_graphene_toolbox.relay_nodes import DatasourceRelayNode
 from jnt_django_graphene_toolbox.types import BaseDjangoObjectType
 
-from apps.users.models import Position
+from apps.skills.models import Position
 
 
 class PositionType(BaseDjangoObjectType):

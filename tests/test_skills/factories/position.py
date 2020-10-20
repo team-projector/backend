@@ -1,6 +1,6 @@
 import factory
 
-from apps.users.models import Position
+from apps.skills.models import Position
 
 
 class PositionFactory(factory.django.DjangoModelFactory):

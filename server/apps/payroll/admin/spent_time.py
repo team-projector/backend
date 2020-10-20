@@ -7,7 +7,7 @@ from apps.users.admin.filters import UserFilter
 
 @admin.register(SpentTime)
 class SpentTimeAdmin(BaseModelAdmin):
-    """A class representing Spent Time model for admin dashboard."""
+    """A class represents Spent Time model for admin dashboard."""
 
     list_display = (
         "user",

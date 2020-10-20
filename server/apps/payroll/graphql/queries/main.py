@@ -14,4 +14,4 @@ class PayrollQueries(  # noqa: WPS215
     work_breaks.WorkBreaksQueries,
     bonuses.BonusesQueries,
 ):
-    """Class representing list of all queries."""
+    """Class represents list of all queries."""

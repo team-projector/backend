@@ -7,7 +7,7 @@ from apps.development.graphql.mutations import (
 
 
 class DevelopmentMutations:
-    """Class representing list of all mutations."""
+    """Class represents list of all mutations."""
 
     sync_milestone = milestones.SyncMilestoneMutation.Field()
 

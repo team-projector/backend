@@ -11,7 +11,7 @@ from apps.users.models import User
 
 
 class SlackClient:
-    """A class representing client for Slack."""
+    """A class represents client for Slack."""
 
     def __init__(self):
         """Initialize self."""

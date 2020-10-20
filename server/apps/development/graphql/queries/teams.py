@@ -15,7 +15,7 @@ from apps.users.graphql.types import UserType
 
 
 class TeamsQueries(graphene.ObjectType):
-    """Class representing list of available fields for team queries."""
+    """Class represents list of available fields for team queries."""
 
     team = DatasourceRelayNode.Field(TeamType)
 

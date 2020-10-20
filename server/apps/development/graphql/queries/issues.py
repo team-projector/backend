@@ -10,7 +10,7 @@ from apps.development.graphql.types import IssuesSummaryType, IssueType
 
 
 class IssuesQueries(graphene.ObjectType):
-    """Class representing list of available fields for issue queries."""
+    """Class represents list of available fields for issue queries."""
 
     issue = DatasourceRelayNode.Field(IssueType)
 

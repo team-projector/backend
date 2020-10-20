@@ -1,5 +1,5 @@
 from apps.payroll.models import Salary
-from apps.users.models import Position
+from apps.skills.models import Position
 
 
 def check_salary(  # noqa: WPS211

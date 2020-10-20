@@ -4,7 +4,7 @@ from django.utils.translation import gettext_lazy as _
 from jnt_django_toolbox.models.fields import BitField
 
 from apps.core.models.validators import tax_rate_validator
-from apps.users.models import Position
+from apps.skills.models import Position
 from apps.users.models.managers import UserManager
 
 

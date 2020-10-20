@@ -4,7 +4,7 @@ from apps.core.utils.apps import BaseAppConfig
 
 
 class AppConfig(BaseAppConfig):
-    """Class representing "payroll" application."""
+    """Class represents "payroll" application."""
 
     name = "apps.payroll"
     verbose_name = _("VN__PAYROLL")

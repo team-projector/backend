@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-10-16 12:31+0300\n"
+"POT-Creation-Date: 2020-10-20 14:14+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -575,6 +575,27 @@ msgstr "Paid"
 msgid "HT__PAID"
 msgstr "Paid"
 
+msgid "VN__SKILLS"
+msgstr "Skills"
+
+msgid "VN__SKILL_LEVEL"
+msgstr "Skill level"
+
+msgid "HT__SKILL_LEVEL"
+msgstr "Skill level"
+
+msgid "VN__SKILL"
+msgstr "Skill"
+
+msgid "HT__SKILL"
+msgstr "Skill"
+
+msgid "VN__CONFIRMED_BY"
+msgstr "Confirmed by"
+
+msgid "HT__CONFIRMED_BY"
+msgstr "Confirmed by"
+
 msgid "VN__USERS"
 msgstr "Users"
 
@@ -652,18 +673,3 @@ msgstr "English"
 
 msgid "VN__ADMIN_DASHBOARD"
 msgstr "Admin Dashboard"
-
-msgid "You do not have permission to perform this action."
-msgstr "You do not have permission to perform this action."
-
-msgid "Not found."
-msgstr "Not found."
-
-msgid "Input error."
-msgstr "Input error."
-
-msgid "MSG__VALUE_MUST_BE_IS_NUMBER"
-msgstr "Value must be is number"
-
-msgid "Constance"
-msgstr "Configuration"

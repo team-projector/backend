@@ -5,7 +5,7 @@ from apps.core.utils.apps import BaseAppConfig
 
 
 class AppConfig(BaseAppConfig):
-    """Class representing the "core" application."""
+    """Class represents the "core" application."""
 
     name = "apps.core"
     verbose_name = _("VN__CORE")

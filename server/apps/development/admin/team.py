@@ -7,7 +7,7 @@ from apps.development.models import Team
 
 @admin.register(Team)
 class TeamAdmin(BaseModelAdmin):
-    """A class representing Project Group model for admin dashboard."""
+    """A class represents Project Group model for admin dashboard."""
 
     list_display = ("title",)
     search_fields = ("title",)

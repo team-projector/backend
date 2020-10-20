@@ -9,7 +9,7 @@ admin.site.unregister(Group)
 
 @admin.register(Group)
 class GroupAdmin(BaseModelAdmin):
-    """A class representing Group model for admin dashboard."""
+    """A class represents Group model for admin dashboard."""
 
     form = GroupAdminForm
     list_display = ("name",)
