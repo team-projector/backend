@@ -9,7 +9,7 @@ ENV PYTHONFAULTHANDLER=1 \
   PIPENV_COLORBLIND=true \
   PIPENV_NOSPIN=true \
   C_FORCE_ROOT=true \
-  POETRY_VERSION=1.0.9 \
+  POETRY_VERSION=1.1.3 \
   PATH="/root/.poetry/bin:${PATH}"
 
 WORKDIR /app
