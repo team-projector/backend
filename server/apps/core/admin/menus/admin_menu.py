@@ -19,7 +19,7 @@ UTILS_MENU_ITEMS = (
 
 
 class AdminMenu(Menu):
-    """A class representing menu admin dashboard."""
+    """A class represents menu admin dashboard."""
 
     def __init__(self, **kwargs):
         """

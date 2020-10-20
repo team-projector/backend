@@ -6,6 +6,6 @@ from apps.users.models import Position
 
 @admin.register(Position)
 class PositionAdmin(BaseModelAdmin):
-    """A class representing Position model for admin dashboard."""
+    """A class represents Position model for admin dashboard."""
 
     search_fields = ("title",)

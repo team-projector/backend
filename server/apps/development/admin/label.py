@@ -17,7 +17,7 @@ COLOR_TEMPLATE = """
 
 @admin.register(Label)
 class LabelAdmin(BaseModelAdmin):
-    """A class representing Label model for admin dashboard."""
+    """A class represents Label model for admin dashboard."""
 
     list_display = ("title", "color_square")
     search_fields = ("title",)

@@ -7,7 +7,7 @@ from apps.users.admin.filters import UserFilter
 
 @admin.register(Bonus)
 class BonusAdmin(BaseModelAdmin):
-    """A class representing Bonus model for admin dashboard."""
+    """A class represents Bonus model for admin dashboard."""
 
     list_display = ("user", "created_by", "created_at", "sum")
     list_filter = (UserFilter,)

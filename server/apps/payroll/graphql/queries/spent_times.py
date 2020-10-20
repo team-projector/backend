@@ -9,7 +9,7 @@ from apps.payroll.graphql.types import SpentTimesSummaryType, SpentTimeType
 
 
 class TimeExpensesQueries(graphene.ObjectType):
-    """Class representing list of available fields for spent times queries."""
+    """Class represents list of available fields for spent times queries."""
 
     all_spent_times = DataSourceConnectionField(
         SpentTimeType,

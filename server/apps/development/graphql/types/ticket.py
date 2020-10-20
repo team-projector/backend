@@ -15,7 +15,7 @@ from apps.development.services.ticket.problems import (
 
 
 class TicketType(BaseDjangoObjectType):
-    """Class representing list of available fields for ticket queries."""
+    """Class represents list of available fields for ticket queries."""
 
     class Meta:
         model = Ticket

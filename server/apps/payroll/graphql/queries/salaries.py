@@ -9,7 +9,7 @@ from apps.payroll.graphql.types import SalaryType
 
 
 class SalariesQueries(graphene.ObjectType):
-    """Class representing list of available fields for salary queries."""
+    """Class represents list of available fields for salary queries."""
 
     salary = DatasourceRelayNode.Field(SalaryType)
     all_salaries = DataSourceConnectionField(

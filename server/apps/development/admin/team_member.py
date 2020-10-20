@@ -8,7 +8,7 @@ from apps.users.admin.filters import UserFilter
 
 @admin.register(TeamMember)
 class TeamMemberAdmin(BaseModelAdmin):
-    """A class representing Project Group model for admin dashboard."""
+    """A class represents Project Group model for admin dashboard."""
 
     list_display = ("team", "user")
     search_fields = ("team", "user__login", "user__email")

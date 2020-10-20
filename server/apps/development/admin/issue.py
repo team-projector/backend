@@ -18,7 +18,7 @@ from apps.development.tasks import (
 
 @admin.register(Issue)
 class IssueAdmin(ForceSyncEntityMixin, BaseModelAdmin):
-    """A class representing Issue model for admin dashboard."""
+    """A class represents Issue model for admin dashboard."""
 
     list_display = (
         "title",

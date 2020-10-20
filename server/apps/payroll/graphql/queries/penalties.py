@@ -9,7 +9,7 @@ from apps.payroll.graphql.types import PenaltyType
 
 
 class PenaltiesQueries(graphene.ObjectType):
-    """Class representing list of available fields for penalty queries."""
+    """Class represents list of available fields for penalty queries."""
 
     penalty = DatasourceRelayNode.Field(PenaltyType)
     all_penalties = DataSourceConnectionField(

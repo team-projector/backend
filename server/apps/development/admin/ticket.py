@@ -6,7 +6,7 @@ from apps.development.models import Ticket
 
 @admin.register(Ticket)
 class TicketAdmin(BaseModelAdmin):
-    """A class representing Ticket model for admin dashboard."""
+    """A class represents Ticket model for admin dashboard."""
 
     list_display = ("title", "start_date", "due_date", "url")
     search_fields = ("title",)

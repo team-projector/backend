@@ -17,7 +17,7 @@ class Query(  # noqa: WPS215
     UsersQueries,
     graphene.ObjectType,
 ):
-    """Class representing all available queries."""
+    """Class represents all available queries."""
 
     debug = graphene.Field(DjangoDebug, name="_debug")
 
@@ -28,7 +28,7 @@ class Mutation(  # noqa: WPS215
     UsersMutations,
     graphene.ObjectType,
 ):
-    """Class representing all available mutations."""
+    """Class represents all available mutations."""
 
 
 schema = scheme.Schema(query=Query, mutation=Mutation)

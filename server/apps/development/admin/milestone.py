@@ -14,7 +14,7 @@ class MilestoneAdmin(
     ForceSyncEntityMixin,
     BaseModelAdmin,
 ):
-    """A class representing Milestone model for admin dashboard."""
+    """A class represents Milestone model for admin dashboard."""
 
     list_display = ("id", "title", "start_date", "due_date", "budget", "state")
     search_fields = ("title",)

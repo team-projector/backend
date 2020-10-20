@@ -12,7 +12,7 @@ from apps.development.graphql.types import TicketsSummaryType, TicketType
 
 
 class TicketsQueries(graphene.ObjectType):
-    """Class representing list of available fields for ticket queries."""
+    """Class represents list of available fields for ticket queries."""
 
     ticket = DatasourceRelayNode.Field(TicketType)
 

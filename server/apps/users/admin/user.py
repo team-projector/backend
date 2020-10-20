@@ -20,7 +20,7 @@ class UserAdmin(
     DjUserAdmin,
     base.BaseModelAdmin,
 ):
-    """A class representing User model for admin dashboard."""
+    """A class represents User model for admin dashboard."""
 
     list_display = (
         "login",

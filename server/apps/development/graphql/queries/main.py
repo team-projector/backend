@@ -18,4 +18,4 @@ class DevelopmentQueries(  # noqa: WPS215
     teams.TeamsQueries,
     gitlab.GitlabQueries,
 ):
-    """Class representing list of all queries."""
+    """Class represents list of all queries."""
