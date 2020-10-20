@@ -6,3 +6,4 @@ class SkillLevelInline(BaseStackedInline):
     """Skill level inline."""
 
     model = SkillLevel
+    ordering = ("level",)
