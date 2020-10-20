@@ -11,4 +11,5 @@ class SkillAdmin(BaseModelAdmin):
 
     search_fields = ("title", "group__title")
     list_display = ("title", "group")
+    list_filter = ("group",)
     inlines = (SkillLevelInline,)
