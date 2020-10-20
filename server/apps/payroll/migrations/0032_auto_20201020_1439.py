@@ -9,6 +9,7 @@ class Migration(migrations.Migration):
     dependencies = [
         ('skills', '0004_auto_20201020_1347'),
         ('payroll', '0031_auto_20200803_1133'),
+        ('users', '0028_auto_20201020_1410'),
     ]
 
     operations = [
