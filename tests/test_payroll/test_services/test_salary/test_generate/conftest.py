@@ -4,7 +4,7 @@ import pytest
 from django.utils import timezone
 
 from apps.payroll.services.salary.calculator import SalaryCalculator
-from tests.test_users.factories.position import PositionFactory
+from tests.test_skills.factories import PositionFactory
 from tests.test_users.factories.user import UserFactory
 
 

@@ -6,7 +6,7 @@ from model_utils import FieldTracker
 from apps.core.models.fields import MoneyField
 from apps.core.models.mixins import Timestamps
 from apps.core.models.validators import tax_rate_validator
-from apps.users.models import Position
+from apps.skills.models import Position
 
 
 class Salary(Timestamps):

@@ -582,7 +582,7 @@ msgid "VN__SKILL_LEVEL"
 msgstr "Skill level"
 
 msgid "HT__SKILL_LEVEL"
-msgstr ""
+msgstr "Skill level"
 
 msgid "VN__SKILL"
 msgstr "Skill"
