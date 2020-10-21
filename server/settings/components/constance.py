@@ -87,6 +87,7 @@ CONSTANCE_CONFIG = {
     "GITLAB_SYNC_START_DATE": ("", "", "gitlab_sync_start_date"),
     "OAUTH_GITLAB_KEY": empty_default_str,
     "OAUTH_GITLAB_SECRET": empty_default_str,
+    "GITLAB_LOGIN_ENABLED": (True, "", bool),
     "SLACK_TOKEN": empty_default_str,
     # email
     "EMAIL_HOST": empty_default_str,
@@ -112,6 +113,7 @@ CONSTANCE_CONFIG_FIELDSETS = OrderedDict(
                 "OAUTH_GITLAB_SECRET",
                 "GITLAB_ROOT_GROUPS",
                 "GITLAB_SYNC_START_DATE",
+                "GITLAB_LOGIN_ENABLED",
             ),
         ),
         ("Notifications", ("SLACK_TOKEN",)),
