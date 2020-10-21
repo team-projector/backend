@@ -2,6 +2,7 @@ from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
 from django.db import models
 from django.utils.translation import gettext_lazy as _
+from jnt_django_toolbox.models.fields import EnumField
 
 from apps.core.consts import DEFAULT_MAX_DIGITS, DEFAULT_TITLE_LENGTH
 from apps.core.models.mixins import (
@@ -51,9 +52,8 @@ class Milestone(
         help_text=_("HT__START_DATE"),
     )
 
-    state = models.CharField(
-        choices=MilestoneState.choices,
-        max_length=MILESTONE_STATE_MAX_LENGTH,
+    state = EnumField(
+        enum=MilestoneState,
         blank=True,
         verbose_name=_("VN__STATE"),
         help_text=_("HT__STATE"),

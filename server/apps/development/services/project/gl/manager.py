@@ -82,7 +82,7 @@ class ProjectGlManager:
             "group": group,
             "full_title": gl_project.name_with_namespace,
             "title": gl_project.name,
-            "is_archived": gl_project.archived,
+            "is_active": not gl_project.archived,
             "gl_last_sync": timezone.now(),
         }
         try:

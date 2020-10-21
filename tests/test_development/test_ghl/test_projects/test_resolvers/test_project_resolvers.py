@@ -46,7 +46,7 @@ def test_project_milestones(user, client, ghl_auth_mock_info):
     milestones = ProjectMilestonesResolver(
         project=project,
         info=ghl_auth_mock_info,
-        active=True,
+        state=MilestoneState.ACTIVE,
     ).execute()
 
     assert milestones.count() == 1
@@ -55,7 +55,7 @@ def test_project_milestones(user, client, ghl_auth_mock_info):
     milestones = ProjectMilestonesResolver(
         project=project,
         info=ghl_auth_mock_info,
-        active=False,
+        state=MilestoneState.CLOSED,
     ).execute()
 
     assert milestones.count() == 1
@@ -93,7 +93,7 @@ def test_project_group_milestones(user, client, ghl_auth_mock_info):
     milestones = ProjectMilestonesResolver(
         project=project,
         info=ghl_auth_mock_info,
-        active=True,
+        state=MilestoneState.ACTIVE,
     ).execute()
 
     assert milestones.count() == 1
@@ -102,7 +102,7 @@ def test_project_group_milestones(user, client, ghl_auth_mock_info):
     milestones = ProjectMilestonesResolver(
         project=project,
         info=ghl_auth_mock_info,
-        active=False,
+        state=MilestoneState.CLOSED,
     ).execute()
 
     assert milestones.count() == 1
@@ -142,7 +142,7 @@ def test_project_group_parent_milestones(user, client, ghl_auth_mock_info):
     milestones = ProjectMilestonesResolver(
         project=project,
         info=ghl_auth_mock_info,
-        active=True,
+        state=MilestoneState.ACTIVE,
     ).execute()
 
     assert milestones.count() == 1
@@ -151,7 +151,7 @@ def test_project_group_parent_milestones(user, client, ghl_auth_mock_info):
     milestones = ProjectMilestonesResolver(
         project=project,
         info=ghl_auth_mock_info,
-        active=False,
+        state=MilestoneState.CLOSED,
     ).execute()
 
     assert milestones.count() == 1
@@ -182,7 +182,7 @@ def test_resolve_milestones(user, client, ghl_auth_mock_info):
     milestones = ProjectType.resolve_milestones(
         parent,
         ghl_auth_mock_info,
-        active=False,
+        state=MilestoneState.CLOSED,
     )
 
     assert milestones.count() == 1

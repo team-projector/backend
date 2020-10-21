@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-10-20 14:14+0300\n"
+"POT-Creation-Date: 2020-10-21 11:38+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -215,6 +215,15 @@ msgstr "Type"
 msgid "HT__TYPE"
 msgstr "Type"
 
+msgid "CH__DEVELOPING"
+msgstr "Developing"
+
+msgid "CH__SUPPORTING"
+msgstr "Supporting"
+
+msgid "CH__ARCHIVED"
+msgstr "Archived"
+
 msgid "VN__PROJECTS"
 msgstr "Projects"
 
@@ -229,12 +238,6 @@ msgstr "Is active"
 
 msgid "HT__IS_ACTIVE"
 msgstr "Is active"
-
-msgid "VN__IS_ARCHIVED"
-msgstr "Is archived"
-
-msgid "HT__IS_ARCHIVED"
-msgstr "Is archived"
 
 msgid "VN__GITLAB_AVATAR"
 msgstr "GitLab avatar"
