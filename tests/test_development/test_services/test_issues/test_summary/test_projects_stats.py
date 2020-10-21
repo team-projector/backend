@@ -76,11 +76,11 @@ def test_project_summary(user):
     )
 
 
-def test_project_summary_without_is_archive(user):
-    """Test filtering archived projects."""
-    projects = ProjectFactory.create_batch(2, is_archived=False)
+def test_project_summary_without_is_active(user):
+    """Test filtering active projects."""
+    projects = ProjectFactory.create_batch(2, is_active=True)
 
-    projects[1].is_archived = True
+    projects[1].is_active = False
     projects[1].save()
 
     IssueFactory.create_batch(
@@ -109,7 +109,7 @@ def test_project_summary_without_is_archive(user):
 
     summary_projects = get_project_summaries(
         summary.queryset,
-        is_archived=False,
+        is_active=True,
     )
 
     assert len(summary_projects) == 1

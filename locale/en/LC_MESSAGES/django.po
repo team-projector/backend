@@ -676,9 +676,3 @@ msgstr "English"
 
 msgid "VN__ADMIN_DASHBOARD"
 msgstr "Admin Dashboard"
-
-#~ msgid "VN__IS_ARCHIVED"
-#~ msgstr "Is archived"
-
-#~ msgid "HT__IS_ARCHIVED"
-#~ msgstr "Is archived"
