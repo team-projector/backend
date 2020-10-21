@@ -68,7 +68,9 @@ def test_config_alter_constance_login_enabled(override_config):
         config = service.get_config()
 
     _assert_constance_value(
-        config, "gitlabLoginEnabled", False,  # noqa: WPS425
+        config,
+        "gitlabLoginEnabled",
+        False,  # noqa: WPS425
     )
 
 
