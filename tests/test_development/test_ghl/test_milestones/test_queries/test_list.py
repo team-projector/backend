@@ -21,7 +21,6 @@ query {
     }
   }
 }
-
 """
 
 
@@ -144,11 +143,14 @@ def test_search_no_results(ghl_auth_mock_info, all_milestones_query):
     assert not response.length
 
 
-@pytest.mark.parametrize(("active", "count"), [(True, 3), (False, 2)])
-def test_filter_by_active(
+@pytest.mark.parametrize(
+    ("state", "count"),
+    [(MilestoneState.ACTIVE, 3), (MilestoneState.CLOSED, 2)],
+)
+def test_filter_by_state(
     ghl_auth_mock_info,
     all_milestones_query,
-    active,
+    state,
     count,
 ):
     """Test filtering by active param."""
@@ -159,20 +161,15 @@ def test_filter_by_active(
         owner=project,
     )
     ProjectMilestoneFactory.create_batch(
-        3,
+        count,
         owner=project,
-        state=MilestoneState.ACTIVE,
-    )
-    ProjectMilestoneFactory.create_batch(
-        2,
-        owner=project,
-        state=MilestoneState.CLOSED,
+        state=state,
     )
 
     response = all_milestones_query(
         root=None,
         info=ghl_auth_mock_info,
-        active=active,
+        state=state,
     )
 
     assert response.length == count

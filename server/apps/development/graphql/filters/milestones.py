@@ -27,8 +27,7 @@ class MilestonesFilterSet(django_filters.FilterSet):
 
     class Meta:
         model = Milestone
-        fields = ("active", "state")
+        fields = ("state",)
 
-    active = ActiveFilter()
     q = SearchFilter(fields=("title", "=gl_url"))  # noqa: WPS111
     order_by = OrderingFilter(fields=("due_date",))
