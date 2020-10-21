@@ -2,10 +2,19 @@ from django.contrib.contenttypes.fields import GenericRelation
 from django.db import models
 from django.utils.functional import cached_property
 from django.utils.translation import gettext_lazy as _
+from jnt_django_toolbox.models.fields import EnumField
 
 from apps.core.consts import DEFAULT_TITLE_LENGTH
 from apps.core.models.mixins import GitlabEntityMixin
 from apps.development.models.milestone import MilestoneState
+
+
+class ProjectState(models.TextChoices):
+    """Project state choices."""
+
+    DEVELOPING = "DEVELOPING", _("CH__DEVELOPING")  # noqa: WPS115
+    SUPPORTING = "SUPPORTING", _("CH__SUPPORTING")  # noqa: WPS115
+    ARCHIVED = "ARCHIVED", _("CH__ARCHIVED")  # noqa: WPS115
 
 
 class Project(GitlabEntityMixin):
@@ -37,12 +46,6 @@ class Project(GitlabEntityMixin):
         default=True,
         verbose_name=_("VN__IS_ACTIVE"),
         help_text=_("HT__IS_ACTIVE"),
-    )
-
-    is_archived = models.BooleanField(
-        default=False,
-        verbose_name=_("VN__IS_ARCHIVED"),
-        help_text=_("HT__IS_ARCHIVED"),
     )
 
     gl_avatar = models.URLField(
@@ -78,6 +81,13 @@ class Project(GitlabEntityMixin):
     members = GenericRelation(  # noqa: CCE001
         "development.ProjectMember",
         related_query_name="project",
+    )
+
+    state = EnumField(
+        enum=ProjectState,
+        default=ProjectState.DEVELOPING,
+        verbose_name=_("VN__STATE"),
+        help_text=_("HT__STATE"),
     )
 
     def __str__(self):
