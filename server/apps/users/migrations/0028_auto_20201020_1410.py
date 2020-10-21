@@ -17,6 +17,7 @@ def forwards_func(apps, schema_editor):
 class Migration(migrations.Migration):
     dependencies = [
         ("users", "0027_auto_20201012_1224"),
+        ("skills", "0001_initial"),
     ]
 
     operations = [
