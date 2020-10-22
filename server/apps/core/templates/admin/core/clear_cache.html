@@ -1,0 +1,14 @@
+{% extends "admin/base_site.html" %}
+
+{% block title %}{{ title }} | {{ site_title|default:_('Django site admin') }}{% endblock %}
+
+{% block content %}
+<div id="content-main">
+    <h4>The cache will be cleared!</h4>
+
+    <form action="" method="POST">
+        {% csrf_token %}
+        <input value="Clear" name="clear_cache" type="submit">
+    </form>
+</div>
+{% endblock %}
