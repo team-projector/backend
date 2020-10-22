@@ -17,7 +17,7 @@ django-extensions = "*"
 django-filter = "*"
 django-model-utils = "*"
 django-health-check = "*"
-django-activity-stream = {git = "https://github.com/justquick/django-activity-stream.git", rev = "master"}
+django-activity-stream = "*"
 psycopg2-binary = "*"
 jnt-django-admin-tools = "*"
 jnt-django-toolbox = {version = "*", extras = ["jaeger"]}

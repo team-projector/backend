@@ -25,12 +25,11 @@ RUN apt-get update \
                       gettext=0.19.* \
                       nginx=1.14.* \
                       make=4.2.* \
-                      git=1:2.20.* \
                       curl=7.64.* \
     && curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/${POETRY_VERSION}/get-poetry.py | python \
     && poetry config virtualenvs.create false \
     && poetry install --no-dev --no-interaction --no-ansi \
-    && apt-get remove --purge -y gcc binutils curl libc6-dev git \
+    && apt-get remove --purge -y gcc binutils curl libc6-dev \
     && apt-get autoremove -y \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
@@ -66,7 +65,7 @@ ENV DJANGO_ENV=production \
 
 #USER app
 
-CMD ["/bin/bash", "deploy/server/run.sh"]
+CMD ["/bin/bash", "deploy/server/backend.sh"]
 
 # ---
 
