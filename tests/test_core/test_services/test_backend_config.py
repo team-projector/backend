@@ -74,6 +74,24 @@ def test_config_alter_constance_login_enabled(override_config):
     )
 
 
+def test_config_alter_constance_demo_mode(override_config):
+    """Test config is depends on constance variables."""
+    cache = _MockedCache()
+    service = BackendConfigService(
+        cache_manager=cache,
+        cache_key="config",
+        expire_after=10,
+    )
+    with override_config(DEMO_MODE=True):
+        config = service.get_config()
+
+    _assert_constance_value(
+        config,
+        "demoMode",
+        True,  # noqa: WPS425
+    )
+
+
 def _assert_config(config):
     constances = settings.CONSTANCE_CONFIG
     _assert_constance_value(
@@ -90,6 +108,11 @@ def _assert_config(config):
         config,
         "gitlabLoginEnabled",
         constances["GITLAB_LOGIN_ENABLED"][0],
+    )
+    _assert_constance_value(
+        config,
+        "demoMode",
+        constances["DEMO_MODE"][0],
     )
 
 

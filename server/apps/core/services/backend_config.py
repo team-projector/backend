@@ -50,6 +50,7 @@ class BackendConfigService:
             "firstWeekDay": config.FIRST_WEEK_DAY,
             "currencyCode": config.CURRENCY_CODE,
             "gitlabLoginEnabled": config.GITLAB_LOGIN_ENABLED,
+            "demoMode": config.DEMO_MODE,
         }
 
 
