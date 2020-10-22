@@ -74,6 +74,7 @@ CONSTANCE_CONFIG = {
     ),
     "FIRST_WEEK_DAY": (calendar.MONDAY, "", "first_week_day"),
     "CURRENCY_CODE": (CURRENCY_CODES[0], "", "currency_code"),
+    "DEMO_MODE": (False, "", bool),
     "GITLAB_ADDRESS": ("https://gitlab.com", "", str),
     "GITLAB_SYNC": (True, "", bool),
     "GITLAB_TOKEN": ("", "", "str_required"),
@@ -100,7 +101,10 @@ CONSTANCE_CONFIG = {
 
 CONSTANCE_CONFIG_FIELDSETS = OrderedDict(
     (
-        ("System", ("WEEKENDS_DAYS", "FIRST_WEEK_DAY", "CURRENCY_CODE")),
+        (
+            "System",
+            ("WEEKENDS_DAYS", "FIRST_WEEK_DAY", "CURRENCY_CODE", "DEMO_MODE"),
+        ),
         (
             "Gitlab",
             (
