@@ -1,6 +1,6 @@
+from actstream.models import Follow
 from django.contrib import admin
 
-from actstream.models import Follow
 from apps.core.admin.base import BaseModelAdmin
 
 admin.site.unregister(Follow)
