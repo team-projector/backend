@@ -20,20 +20,15 @@ CREATE_WEBHOOK_BODY = types.MappingProxyType(
     },
 )
 
+pytestmark = pytest.mark.override_config(
+    GITLAB_ADD_WEBHOOKS=True,
+)
+
 
 @pytest.fixture(autouse=True)
-def _gitlab_check_webhooks(settings, override_config) -> None:
+def _settings_domain(settings, override_config) -> None:
     """Set check webhooks."""
     settings.DOMAIN_NAME = "test.com"
-    with override_config(GITLAB_ADD_WEBHOOKS=True):
-        yield
-
-
-@pytest.fixture()
-def _gitlab_webhook_token(override_config) -> None:
-    """Set webhook secret token."""
-    with override_config(GITLAB_WEBHOOK_SECRET_TOKEN="test_secret"):
-        yield
 
 
 class WebhookRequestCallback:
@@ -143,132 +138,6 @@ def test_fix_wrong(db, gl_mocker, client):
             "issues_events": True,
             "merge_requests_events": False,
             "token": None,
-        },
-    )
-
-    ProjectWebhookManager().check_project_webhooks(project)
-
-    assert create_callback.request_body is not None
-    assert create_callback.request_body == CREATE_WEBHOOK_BODY
-
-
-@pytest.mark.usefixtures("_gitlab_webhook_token")
-def test_set_webhook_token(db, gl_mocker, client):
-    """
-    Test set webhook.
-
-    :param db:
-    :param gl_mocker:
-    :param client:
-    """
-    project, gl_project = initializers.init_project()
-
-    create_callback = _mock_gl_endpoints(
-        gl_mocker,
-        gl_project,
-        dict(CREATE_WEBHOOK_BODY),
-    )
-
-    ProjectWebhookManager().check_project_webhooks(project)
-
-    assert create_callback.request_body is not None
-    assert create_callback.request_body == {
-        "url": "https://test.com/api/gl-webhook",
-        "issues_events": True,
-        "merge_requests_events": True,
-        "pipeline_events": True,
-        "note_events": True,
-        "token": "test_secret",
-    }
-
-
-@pytest.mark.usefixtures("_gitlab_webhook_token")
-def test_update_webhook_token(db, gl_mocker, client):
-    """
-    Test set webhook.
-
-    :param db:
-    :param gl_mocker:
-    :param client:
-    """
-    project, gl_project = initializers.init_project()
-
-    create_callback = _mock_gl_endpoints(
-        gl_mocker,
-        gl_project,
-        {
-            "url": "https://test.com/api/gl-webhook",
-            "issues_events": True,
-            "merge_requests_events": True,
-            "pipeline_events": True,
-            "note_events": True,
-            "token": "old",
-        },
-    )
-
-    ProjectWebhookManager().check_project_webhooks(project)
-
-    assert create_callback.request_body is not None
-    assert create_callback.request_body == {
-        "url": "https://test.com/api/gl-webhook",
-        "issues_events": True,
-        "merge_requests_events": True,
-        "pipeline_events": True,
-        "note_events": True,
-        "token": "test_secret",
-    }
-
-
-@pytest.mark.usefixtures("_gitlab_webhook_token")
-def test_same_webhook_token(db, gl_mocker, client):
-    """
-    Test set webhook.
-
-    :param db:
-    :param gl_mocker:
-    :param client:
-    """
-    project, gl_project = initializers.init_project()
-
-    create_callback = _mock_gl_endpoints(
-        gl_mocker,
-        gl_project,
-        {
-            "url": "https://test.com/api/gl-webhook",
-            "issues_events": True,
-            "merge_requests_events": True,
-            "pipeline_events": True,
-            "note_events": True,
-            "token": "test_secret",
-        },
-    )
-
-    ProjectWebhookManager().check_project_webhooks(project)
-
-    assert create_callback.request_body is None
-
-
-def test_reset_webhook_token(db, gl_mocker, client):
-    """
-    Test set webhook.
-
-    :param gitlab_webhook_token:
-    :param db:
-    :param gl_mocker:
-    :param client:
-    """
-    project, gl_project = initializers.init_project()
-
-    create_callback = _mock_gl_endpoints(
-        gl_mocker,
-        gl_project,
-        {
-            "url": "https://test.com/api/gl-webhook",
-            "issues_events": True,
-            "merge_requests_events": True,
-            "pipeline_events": True,
-            "note_events": True,
-            "token": "test_secret",
         },
     )
 
