@@ -30,4 +30,4 @@ class ApproveWorkBreakMutation(BaseMutation):
             approved_by=info.context.user,
         )
 
-        return ApproveWorkBreakMutation(work_break=work_break)
+        return cls(work_break=work_break)

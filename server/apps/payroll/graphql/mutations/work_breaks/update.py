@@ -42,4 +42,4 @@ class UpdateWorkBreakMutation(ArgumentsValidationMixin, BaseMutation):
         work_break.user = cleaned_data["user"]
         work_break.save()
 
-        return UpdateWorkBreakMutation(work_break=work_break)
+        return cls(work_break=work_break)

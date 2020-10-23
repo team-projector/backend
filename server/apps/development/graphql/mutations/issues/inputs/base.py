@@ -19,9 +19,9 @@ class BaseIssueInput(serializers.ModelSerializer):
     @property
     def validated_data(self):
         """Validated data changing."""
-        ret = super().validated_data
-        ret["issue"] = ret.pop("id", None)
-        return ret
+        validated_data = super().validated_data
+        validated_data["issue"] = validated_data.pop("id", None)
+        return validated_data
 
     def validate_id(self, issue):
         """Validates that user have permissions to mutate issue."""

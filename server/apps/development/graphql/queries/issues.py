@@ -13,12 +13,10 @@ class IssuesQueries(graphene.ObjectType):
     """Class represents list of available fields for issue queries."""
 
     issue = DatasourceRelayNode.Field(IssueType)
-
     all_issues = DataSourceConnectionField(
         IssueType,
         filterset_class=IssuesFilterSet,
     )
-
     issues_summary = graphene.Field(
         IssuesSummaryType,
         due_date=graphene.Date(),

@@ -29,6 +29,13 @@ def _gitlab_check_webhooks(settings, override_config) -> None:
         yield
 
 
+@pytest.fixture()
+def _gitlab_webhook_token(override_config) -> None:
+    """Set webhook secret token."""
+    with override_config(GITLAB_WEBHOOK_SECRET_TOKEN="test_secret"):
+        yield
+
+
 class WebhookRequestCallback:
     """Webhook request callback class."""
 
@@ -58,14 +65,11 @@ def test_register_new(db, gl_mocker, client):
     :param client:
     """
     project, gl_project = initializers.init_project()
-    callback = WebhookRequestCallback()
 
-    gl_mock.mock_project_endpoints(gl_mocker, gl_project)
-    gl_mock.register_create_project_hook(gl_mocker, gl_project, callback)
-
+    create_callback = _mock_gl_endpoints(gl_mocker, gl_project)
     ProjectWebhookManager().check_project_webhooks(project)
 
-    assert callback.request_body == CREATE_WEBHOOK_BODY
+    assert create_callback.request_body == CREATE_WEBHOOK_BODY
 
 
 def test_already_exists(db, gl_mocker, client):
@@ -78,22 +82,21 @@ def test_already_exists(db, gl_mocker, client):
     """
     project, gl_project = initializers.init_project()
 
-    gl_mock.mock_project_endpoints(
+    create_callback = _mock_gl_endpoints(
         gl_mocker,
         gl_project,
-        hooks=[
-            {
-                "url": "https://test.com/api/gl-webhook",
-                "issues_events": True,
-                "merge_requests_events": True,
-                "pipeline_events": True,
-                "note_events": True,
-                "token": None,
-            },
-        ],
+        {
+            "url": "https://test.com/api/gl-webhook",
+            "issues_events": True,
+            "merge_requests_events": True,
+            "pipeline_events": True,
+            "note_events": True,
+            "token": None,
+        },
     )
 
     ProjectWebhookManager().check_project_webhooks(project)
+    assert create_callback.request_body is None
 
 
 def test_exists_another(db, gl_mocker, client):
@@ -105,21 +108,17 @@ def test_exists_another(db, gl_mocker, client):
     :param client:
     """
     project, gl_project = initializers.init_project()
-    callback = WebhookRequestCallback()
 
-    gl_mock.mock_project_endpoints(
+    callback = _mock_gl_endpoints(
         gl_mocker,
         gl_project,
-        hooks=[
-            {
-                "url": "https://another.com/api/gl-webhook",
-                "issues_events": True,
-                "merge_requests_events": True,
-                "token": None,
-            },
-        ],
+        {
+            "url": "https://another.com/api/gl-webhook",
+            "issues_events": True,
+            "merge_requests_events": True,
+            "token": None,
+        },
     )
-    gl_mock.register_create_project_hook(gl_mocker, gl_project, callback)
 
     ProjectWebhookManager().check_project_webhooks(project)
 
@@ -135,21 +134,161 @@ def test_fix_wrong(db, gl_mocker, client):
     :param client:
     """
     project, gl_project = initializers.init_project()
-    create_callback = WebhookRequestCallback()
-    delete_callback = WebhookRequestCallback()
 
+    create_callback = _mock_gl_endpoints(
+        gl_mocker,
+        gl_project,
+        {
+            "url": "https://test.com/api/gl-webhook",
+            "issues_events": True,
+            "merge_requests_events": False,
+            "token": None,
+        },
+    )
+
+    ProjectWebhookManager().check_project_webhooks(project)
+
+    assert create_callback.request_body is not None
+    assert create_callback.request_body == CREATE_WEBHOOK_BODY
+
+
+@pytest.mark.usefixtures("_gitlab_webhook_token")
+def test_set_webhook_token(db, gl_mocker, client):
+    """
+    Test set webhook.
+
+    :param db:
+    :param gl_mocker:
+    :param client:
+    """
+    project, gl_project = initializers.init_project()
+
+    create_callback = _mock_gl_endpoints(
+        gl_mocker,
+        gl_project,
+        dict(CREATE_WEBHOOK_BODY),
+    )
+
+    ProjectWebhookManager().check_project_webhooks(project)
+
+    assert create_callback.request_body is not None
+    assert create_callback.request_body == {
+        "url": "https://test.com/api/gl-webhook",
+        "issues_events": True,
+        "merge_requests_events": True,
+        "pipeline_events": True,
+        "note_events": True,
+        "token": "test_secret",
+    }
+
+
+@pytest.mark.usefixtures("_gitlab_webhook_token")
+def test_update_webhook_token(db, gl_mocker, client):
+    """
+    Test set webhook.
+
+    :param db:
+    :param gl_mocker:
+    :param client:
+    """
+    project, gl_project = initializers.init_project()
+
+    create_callback = _mock_gl_endpoints(
+        gl_mocker,
+        gl_project,
+        {
+            "url": "https://test.com/api/gl-webhook",
+            "issues_events": True,
+            "merge_requests_events": True,
+            "pipeline_events": True,
+            "note_events": True,
+            "token": "old",
+        },
+    )
+
+    ProjectWebhookManager().check_project_webhooks(project)
+
+    assert create_callback.request_body is not None
+    assert create_callback.request_body == {
+        "url": "https://test.com/api/gl-webhook",
+        "issues_events": True,
+        "merge_requests_events": True,
+        "pipeline_events": True,
+        "note_events": True,
+        "token": "test_secret",
+    }
+
+
+@pytest.mark.usefixtures("_gitlab_webhook_token")
+def test_same_webhook_token(db, gl_mocker, client):
+    """
+    Test set webhook.
+
+    :param db:
+    :param gl_mocker:
+    :param client:
+    """
+    project, gl_project = initializers.init_project()
+
+    create_callback = _mock_gl_endpoints(
+        gl_mocker,
+        gl_project,
+        {
+            "url": "https://test.com/api/gl-webhook",
+            "issues_events": True,
+            "merge_requests_events": True,
+            "pipeline_events": True,
+            "note_events": True,
+            "token": "test_secret",
+        },
+    )
+
+    ProjectWebhookManager().check_project_webhooks(project)
+
+    assert create_callback.request_body is None
+
+
+def test_reset_webhook_token(db, gl_mocker, client):
+    """
+    Test set webhook.
+
+    :param gitlab_webhook_token:
+    :param db:
+    :param gl_mocker:
+    :param client:
+    """
+    project, gl_project = initializers.init_project()
+
+    create_callback = _mock_gl_endpoints(
+        gl_mocker,
+        gl_project,
+        {
+            "url": "https://test.com/api/gl-webhook",
+            "issues_events": True,
+            "merge_requests_events": True,
+            "pipeline_events": True,
+            "note_events": True,
+            "token": "test_secret",
+        },
+    )
+
+    ProjectWebhookManager().check_project_webhooks(project)
+
+    assert create_callback.request_body is not None
+    assert create_callback.request_body == CREATE_WEBHOOK_BODY
+
+
+def _mock_gl_endpoints(
+    gl_mocker,
+    gl_project,
+    hook=None,
+) -> WebhookRequestCallback:
     gl_mock.mock_project_endpoints(
         gl_mocker,
         gl_project,
-        hooks=[
-            {
-                "url": "https://test.com/api/gl-webhook",
-                "issues_events": True,
-                "merge_requests_events": False,
-                "token": None,
-            },
-        ],
+        hooks=[hook] if hook else [],
     )
+    create_callback = WebhookRequestCallback()
     gl_mock.register_create_project_hook(
         gl_mocker,
         gl_project,
@@ -158,10 +297,7 @@ def test_fix_wrong(db, gl_mocker, client):
     gl_mock.register_delete_project_hook(
         gl_mocker,
         gl_project,
-        delete_callback,
+        WebhookRequestCallback(),
     )
 
-    ProjectWebhookManager().check_project_webhooks(project)
-
-    assert create_callback.request_body is not None
-    assert create_callback.request_body == CREATE_WEBHOOK_BODY
+    return create_callback

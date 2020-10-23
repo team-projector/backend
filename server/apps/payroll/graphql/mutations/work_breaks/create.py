@@ -28,4 +28,4 @@ class CreateWorkBreakMutation(ArgumentsValidationMixin, BaseMutation):
         """Create work break after validation."""
         work_break = WorkBreak.objects.create(**cleaned_data)
 
-        return CreateWorkBreakMutation(work_break=work_break)
+        return cls(work_break=work_break)

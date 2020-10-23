@@ -1,6 +1,9 @@
+from typing import Optional
+
 import pytest
 
-from apps.development.models import TeamMember
+from apps.development.models import Team, TeamMember
+from apps.users.models import User
 from tests.test_development.factories import TeamFactory, TeamMemberFactory
 from tests.test_users.factories import UserFactory
 
@@ -48,43 +51,18 @@ def team_leader(team, make_team_leader):
 
 
 def _make_team_developer(team, user=None):
-    """
-    Make team developer.
-
-    :param team:
-    :param user:
-    """
     return _add_or_update_user_in_team(team, TeamMember.roles.DEVELOPER, user)
 
 
 def _make_team_watcher(team, user=None):
-    """
-    Make team watcher.
-
-    :param team:
-    :param user:
-    """
     return _add_or_update_user_in_team(team, TeamMember.roles.WATCHER, user)
 
 
 def _make_team_leader(team, user=None):
-    """
-    Make team leader.
-
-    :param team:
-    :param user:
-    """
     return _add_or_update_user_in_team(team, TeamMember.roles.LEADER, user)
 
 
-def _add_or_update_user_in_team(team, role, user):
-    """
-    Add or update user in team.
-
-    :param team:
-    :param role:
-    :param user:
-    """
+def _add_or_update_user_in_team(team: Team, role: int, user: Optional[User]):
     if not user:
         user = UserFactory.create()
 

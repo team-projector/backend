@@ -34,9 +34,9 @@ class UpdateTicketInput(TicketBaseInput):
     @property
     def validated_data(self):
         """Validated data changing."""
-        ret = super().validated_data
-        ret["ticket"] = ret.pop("id", None)
-        return ret
+        validated_data = super().validated_data
+        validated_data["ticket"] = validated_data.pop("id", None)
+        return validated_data
 
     def get_fields(self) -> Dict[str, Field]:
         """Returns serializer fields."""

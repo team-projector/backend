@@ -88,7 +88,12 @@ class ProjectWebhookManager:
         webhook_url: str,
     ) -> bool:
         """Validate webhook."""
-        return webhook.url == webhook_url and all(
-            getattr(webhook, webhook_class.settings_field)
-            for webhook_class in webhook_classes
+        return (
+            webhook.url == webhook_url
+            and (webhook.token or "")
+            == (config.GITLAB_WEBHOOK_SECRET_TOKEN or "")
+            and all(
+                getattr(webhook, webhook_class.settings_field)
+                for webhook_class in webhook_classes
+            )
         )

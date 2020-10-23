@@ -41,7 +41,7 @@ class UpdateTicketMutation(SerializerMutation):
 
         if issues is not None:
             Issue.objects.filter(ticket=ticket).exclude(
-                id__in=[iss.id for iss in issues],
+                id__in=[issue.pk for issue in issues],
             ).update(ticket=None)
 
             ticket.issues.add(*issues)

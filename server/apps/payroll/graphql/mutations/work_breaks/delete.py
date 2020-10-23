@@ -26,4 +26,4 @@ class DeleteWorkBreakMutation(BaseMutation):
 
         work_break.delete()
 
-        return DeleteWorkBreakMutation(ok=True)
+        return cls(ok=True)
