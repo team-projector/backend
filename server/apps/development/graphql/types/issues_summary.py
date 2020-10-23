@@ -12,6 +12,13 @@ from apps.development.graphql.types.issues_team_summary import (
 )
 
 
+class ProjectState(graphene.Enum):
+    # TODO: implement converter: django.enum -> graphene.enum
+    DEVELOPING = "DEVELOPING"
+    SUPPORTING = "SUPPORTING"
+    ARCHIVED = "ARCHIVED"
+
+
 class IssuesSummaryType(graphene.ObjectType):
     """Issues summary type."""
 
@@ -23,7 +30,7 @@ class IssuesSummaryType(graphene.ObjectType):
     projects = graphene.List(
         IssuesProjectSummary,
         order_by=graphene.String(),
-        is_archived=graphene.Boolean(),
+        state=graphene.Argument(ProjectState),
         resolver=resolve_issues_project_summaries,
     )
     teams = graphene.List(
