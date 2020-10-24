@@ -26,11 +26,11 @@ class WeekMetricsProvider(provider.ProgressMetricsProvider):
 
         :rtype: List[date]
         """
-        ret: List[date] = []
+        weeks: List[date] = []
 
         current = self.start
         while current <= self.end:
-            ret.append(begin_of_week(current))
+            weeks.append(begin_of_week(current))
             current += WEEK_STEP
 
-        return ret
+        return weeks

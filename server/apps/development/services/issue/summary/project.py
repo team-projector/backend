@@ -70,11 +70,13 @@ class IssuesProjectSummaryProvider:
         queryset: models.QuerySet,
         order_by: Optional[str],
         is_active: Optional[bool],
+        state: Optional[str],
     ):
         """Initialize self."""
         self.queryset = queryset
         self.order_by = order_by
         self.is_active = is_active
+        self.state = state
 
     def execute(self) -> List[IssuesProjectSummary]:
         """Calculate and return summary."""
@@ -197,6 +199,9 @@ class IssuesProjectSummaryProvider:
         if self.is_active is not None:
             queryset = queryset.filter(is_active=self.is_active)
 
+        if self.state is not None:
+            queryset = queryset.filter(state=self.state)
+
         return queryset
 
 
@@ -204,8 +209,14 @@ def get_project_summaries(
     queryset: models.QuerySet,
     order_by: Optional[str] = None,
     is_active: Optional[bool] = None,
+    state: Optional[str] = None,
 ) -> List[IssuesProjectSummary]:
     """Get summaries for project."""
-    provider = IssuesProjectSummaryProvider(queryset, order_by, is_active)
+    provider = IssuesProjectSummaryProvider(
+        queryset,
+        order_by,
+        is_active,
+        state,
+    )
 
     return provider.execute()

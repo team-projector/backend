@@ -10,6 +10,7 @@ from apps.development.graphql.types.issues_project_summary import (
 from apps.development.graphql.types.issues_team_summary import (
     IssuesTeamSummary,
 )
+from apps.development.models.project import ProjectState
 
 
 class IssuesSummaryType(graphene.ObjectType):
@@ -23,7 +24,9 @@ class IssuesSummaryType(graphene.ObjectType):
     projects = graphene.List(
         IssuesProjectSummary,
         order_by=graphene.String(),
-        is_archived=graphene.Boolean(),
+        state=graphene.Argument(
+            graphene.Enum.from_enum(ProjectState),
+        ),
         resolver=resolve_issues_project_summaries,
     )
     teams = graphene.List(
