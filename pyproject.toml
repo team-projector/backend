@@ -37,6 +37,7 @@ gunicorn = "*"
 uvicorn = "*"
 django-constance = {extras = ["database"], version = "*"}
 python-memcached = "*"
+premailer = "^3.7.0"
 
 [tool.poetry.dev-dependencies]
 pytest = "5.*" # problem with integrity

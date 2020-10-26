@@ -1,7 +1,18 @@
 import calendar
 from collections import OrderedDict
 
+from django.db import models
+
 CONSTANCE_BACKEND = "constance.backends.database.DatabaseBackend"
+
+
+class Currency(models.TextChoices):
+    """Currency choices."""
+
+    RUR = "rur", "₽"  # noqa: WPS115
+    USD = "usd", "$"  # noqa: WPS115
+    EUR = "eur", "€"  # noqa: WPS115
+
 
 WEEK_DAYS = (
     "MONDAY",
@@ -13,10 +24,6 @@ WEEK_DAYS = (
     "SUNDAY",
 )
 
-CURRENCY_CODES = (
-    "usd",
-    "rur",
-)
 
 empty_default_str = ("", "", str)
 
@@ -58,10 +65,7 @@ CONSTANCE_ADDITIONAL_FIELDS = {
         "django.forms.ChoiceField",
         {
             "required": True,
-            "choices": [
-                (CURRENCY_CODES[0], CURRENCY_CODES[0]),
-                (CURRENCY_CODES[1], CURRENCY_CODES[1]),
-            ],
+            "choices": Currency.choices,
         },
     ),
 }
@@ -73,7 +77,7 @@ CONSTANCE_CONFIG = {
         "weekend_days",
     ),
     "FIRST_WEEK_DAY": (calendar.MONDAY, "", "first_week_day"),
-    "CURRENCY_CODE": (CURRENCY_CODES[0], "", "currency_code"),
+    "CURRENCY_CODE": (Currency.USD.value, "", "currency_code"),
     "DEMO_MODE": (False, "", bool),
     "GITLAB_ADDRESS": ("https://gitlab.com", "", str),
     "GITLAB_SYNC": (True, "", bool),
