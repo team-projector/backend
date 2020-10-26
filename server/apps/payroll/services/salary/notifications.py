@@ -1,3 +1,5 @@
+from typing import Dict
+
 from django.conf import settings
 from django.contrib.contenttypes.models import ContentType
 from django.db import models
@@ -57,7 +59,7 @@ def send_slack_report(salary: Salary) -> None:
     )
 
 
-def _get_spend_data(salary):
+def _get_spend_data(salary) -> Dict[str, Dict[str, float]]:
     """Get spend data for salary."""
     return {
         "issues": _get_spend_data_for_model(salary, Issue),
@@ -65,7 +67,7 @@ def _get_spend_data(salary):
     }
 
 
-def _get_spend_data_for_model(salary, model):
+def _get_spend_data_for_model(salary, model) -> Dict[str, float]:
     """Get spend data for salary by base model."""
     return salary.payrolls.filter(
         spenttime__content_type=ContentType.objects.get_for_model(model),

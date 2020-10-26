@@ -77,7 +77,7 @@ CONSTANCE_CONFIG = {
         "weekend_days",
     ),
     "FIRST_WEEK_DAY": (calendar.MONDAY, "", "first_week_day"),
-    "CURRENCY_CODE": (Currency.USD.value, "", "currency_code"),
+    "CURRENCY_CODE": (Currency.USD, "", "currency_code"),
     "DEMO_MODE": (False, "", bool),
     "GITLAB_ADDRESS": ("https://gitlab.com", "", str),
     "GITLAB_SYNC": (True, "", bool),

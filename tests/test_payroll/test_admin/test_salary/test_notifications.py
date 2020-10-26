@@ -17,6 +17,7 @@ def test_send_notification(admin_rf, salary_admin):
     user = UserFactory.create(email="test1@mail.com")
 
     salary = SalaryFactory.create(user=user, payed=False)
+    salary.payed = True
 
     SalaryFactory.create_batch(3, user=user, payed=False)
     SalaryFactory.create_batch(2, user=user, payed=True)
