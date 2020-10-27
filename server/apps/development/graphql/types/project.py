@@ -1,3 +1,4 @@
+import graphene
 from jnt_django_graphene_toolbox.connection_fields import (
     DataSourceConnectionField,
 )
@@ -11,7 +12,9 @@ from apps.development.graphql.resolvers.project_milestones import (
     resolve_project_milestones,
 )
 from apps.development.graphql.types.milestone import MilestoneType
+from apps.development.graphql.types.project_metrics import ProjectMetricsType
 from apps.development.models import Project
+from apps.development.services.project.metrics import get_project_metrics
 
 
 class ProjectType(BaseDjangoObjectType):
@@ -27,7 +30,12 @@ class ProjectType(BaseDjangoObjectType):
         MilestoneType,
         filterset_class=MilestonesFilterSet,
     )
+    metrics = graphene.Field(ProjectMetricsType)
 
     def resolve_milestones(self: Project, info, **kwargs):  # noqa: WPS110
         """Get project milestones."""
         return resolve_project_milestones(self, info, **kwargs)
+
+    def resolve_metrics(self: Project, info, **kwargs):  # noqa: WPS110
+        """Get project metrics."""
+        return get_project_metrics(self)
