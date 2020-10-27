@@ -53,12 +53,14 @@ RUN export DJANGO_ENV=build \
     && python manage.py collectstatic --noinput --verbosity 0 \
     && django-admin compilemessages \
     && cp deploy/nginx/* /etc/nginx \
-    && chown -R app:app /app \
     && chmod -R 755 /app \
-    && touch /var/run/nginx.pid \
-    && chown app:app /var/run/nginx.pid \
-    && touch /var/run/celerybeat-schedule \
-    && chown app:app /var/run/celerybeat-schedule
+    && mkdir /var/run/app \
+    && mkdir /var/run/nginx \
+    && chown app:app /var/run/nginx \
+    && chown app:app /var/run/app \
+    && chown app:app /var/log/nginx \
+    && ln -sf /dev/stdout /var/log/nginx/access.log \
+    && ln -sf /dev/stderr /var/log/nginx/error.log
 
 ENV DJANGO_ENV=production \
     APP_VERSION=$APP_VERSION
