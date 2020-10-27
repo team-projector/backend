@@ -25,14 +25,14 @@ build:
   script:
     - ./scripts/ci_build_images.sh
 
-quality:
+.quality:
   stage: test
   image: $DOCKER_TEST_IMAGE
   script:
     - cd /app
     - make check_quality
 
-test:
+.test:
   stage: test
   image: $DOCKER_TEST_IMAGE
   variables:
