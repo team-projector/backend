@@ -7,7 +7,7 @@ if [ "${CELERY_CONCURRENCY:-}" != "" ]; then
   _CELERY_OPTS="${_CELERY_OPTS} --concurrency ${CELERY_CONCURRENCY}"
 fi
 
-if [ "${$CELERY_QUEUES:-}" != "" ]; then
+if [ "${CELERY_QUEUES:-}" != "" ]; then
   _CELERY_OPTS="${_CELERY_OPTS} -Q ${CELERY_QUEUES}"
 fi
 
