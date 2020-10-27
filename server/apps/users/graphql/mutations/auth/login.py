@@ -4,17 +4,22 @@ import graphene
 from graphql import ResolveInfo
 from jnt_django_graphene_toolbox.mutations import SerializerMutation
 from jnt_django_graphene_toolbox.security.permissions import AllowAny
+from rest_framework import serializers
 
-from apps.users.graphql.mutations.inputs import LoginInput
 from apps.users.graphql.types import TokenType
-from apps.users.services.user.login import user_login
+from apps.users.services.user.auth import user_login
+
+
+class _InputSerializer(serializers.Serializer):
+    login = serializers.CharField()
+    password = serializers.CharField()
 
 
 class LoginMutation(SerializerMutation):
     """Login mutation returns token."""
 
     class Meta:
-        serializer_class = LoginInput
+        serializer_class = _InputSerializer
 
     permission_classes = (AllowAny,)
 

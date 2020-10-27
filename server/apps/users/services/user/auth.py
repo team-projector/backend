@@ -25,3 +25,8 @@ def user_login(login: str, password: str, request) -> Token:
         return token  # noqa: WPS331
 
     raise AuthenticationFailed(_("MSG_MUST_INCLUDE_LOGIN_AND_PASSWORD"))
+
+
+def user_logout(request) -> None:
+    """Logout user."""
+    request.auth.delete()

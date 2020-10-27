@@ -5,22 +5,25 @@ from django.contrib.auth import REDIRECT_FIELD_NAME
 from graphql import ResolveInfo
 from jnt_django_graphene_toolbox.mutations import SerializerMutation
 from jnt_django_graphene_toolbox.security.permissions import AllowAny
+from rest_framework import serializers
 from social_core.actions import do_complete
 from social_django.views import _do_login  # noqa: WPS450
 
 from apps.users.graphql.mutations.helpers.auth import page_social_auth
-from apps.users.graphql.mutations.inputs.gl_complete_auth import (
-    GitLabCompleteAuthMutationInput,
-)
 from apps.users.graphql.types import TokenType
 from apps.users.models import Token
+
+
+class _InputSerializer(serializers.Serializer):
+    code = serializers.CharField()
+    state = serializers.CharField()
 
 
 class CompleteGitlabAuthMutation(SerializerMutation):
     """Complete login mutation after redirection from Gitlab."""
 
     class Meta:
-        serializer_class = GitLabCompleteAuthMutationInput
+        serializer_class = _InputSerializer
 
     permission_classes = (AllowAny,)
 
