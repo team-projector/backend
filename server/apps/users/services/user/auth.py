@@ -7,7 +7,7 @@ from apps.users.models import Token
 from apps.users.services.token.create import create_user_token
 
 
-def user_login(login: str, password: str, request) -> Token:
+def login_user(login: str, password: str, request) -> Token:
     """Login user."""
     if login and password:
         user = authenticate(request=request, login=login, password=password)
@@ -27,6 +27,6 @@ def user_login(login: str, password: str, request) -> Token:
     raise AuthenticationFailed(_("MSG_MUST_INCLUDE_LOGIN_AND_PASSWORD"))
 
 
-def user_logout(request) -> None:
+def logout_user(request) -> None:
     """Logout user."""
     request.auth.delete()

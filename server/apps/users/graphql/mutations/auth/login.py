@@ -7,7 +7,7 @@ from jnt_django_graphene_toolbox.security.permissions import AllowAny
 from rest_framework import serializers
 
 from apps.users.graphql.types import TokenType
-from apps.users.services.user.auth import user_login
+from apps.users.services.user.auth import login_user
 
 
 class _InputSerializer(serializers.Serializer):
@@ -33,7 +33,7 @@ class LoginMutation(SerializerMutation):
         validated_data: Dict[str, Any],
     ) -> "LoginMutation":
         """After successful login return token."""
-        token = user_login(
+        token = login_user(
             validated_data["login"],
             validated_data["password"],
             info.context,

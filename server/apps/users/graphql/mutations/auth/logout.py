@@ -1,7 +1,7 @@
 import graphene
 from jnt_django_graphene_toolbox.mutations import BaseMutation
 
-from apps.users.services.user.auth import user_logout
+from apps.users.services.user.auth import logout_user
 
 
 class LogoutMutation(BaseMutation):
@@ -12,6 +12,6 @@ class LogoutMutation(BaseMutation):
     @classmethod
     def do_mutate(cls, root, info):  # noqa: WPS110
         """After successful logout return "success"."""
-        user_logout(info.context)
+        logout_user(info.context)
 
         return cls(status="success")
