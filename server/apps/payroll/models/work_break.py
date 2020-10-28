@@ -26,12 +26,12 @@ class WorkBreak(ApprovedMixin, Timestamps):
         verbose_name_plural = _("VN__WORKBREAKS")
         ordering = ("-from_date",)
 
-    from_date = models.DateTimeField(
+    from_date = models.DateField(
         verbose_name=_("VN__DATE_FROM"),
         help_text=_("HT__DATE_FROM"),
     )
 
-    to_date = models.DateTimeField(
+    to_date = models.DateField(
         verbose_name=_("VN__DATE_TO"),
         help_text=_("HT__DATE_TO"),
     )
@@ -60,6 +60,12 @@ class WorkBreak(ApprovedMixin, Timestamps):
         related_name="work_breaks",
         verbose_name=_("VN__USER"),
         help_text=_("HT__USER"),
+    )
+
+    paid_days = models.PositiveIntegerField(
+        default=0,
+        verbose_name=_("VN__PAID_DAYS"),
+        help_text=_("HT__PAID_DAYS"),
     )
 
     def __str__(self):
