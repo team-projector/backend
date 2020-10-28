@@ -3,10 +3,10 @@ from apps.development.graphql.queries import (
     issues,
     merge_requests,
     milestones,
+    project_groups,
     projects,
     teams,
     tickets,
-    project_groups,
 )
 
 
