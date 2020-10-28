@@ -1,6 +1,7 @@
 from django.conf import settings
 from django.db import models
 from django.utils.translation import gettext_lazy as _
+from jnt_django_toolbox.models.fields import EnumField
 
 from apps.core.models.mixins import Timestamps
 from apps.payroll.models.mixins import ApprovedMixin
@@ -35,10 +36,9 @@ class WorkBreak(ApprovedMixin, Timestamps):
         help_text=_("HT__DATE_TO"),
     )
 
-    reason = models.CharField(
-        choices=WorkBreakReason.choices,
+    reason = EnumField(
+        enum=WorkBreakReason,
         blank=False,
-        max_length=WORK_BREAK_REASON_MAX_LENGTH,
         verbose_name=_("VN__REASON"),
         help_text=_("HT__REASON"),
     )
