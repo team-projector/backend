@@ -1,7 +1,4 @@
-from typing import Optional
-
 import graphene
-from graphql import ResolveInfo
 from jnt_django_graphene_toolbox.mutations import SerializerMutation
 
 from apps.payroll.graphql.mutations.work_breaks.inputs import (
@@ -25,8 +22,8 @@ class DeclineWorkBreakMutation(SerializerMutation):
     @classmethod
     def perform_mutate(
         cls,
-        root: Optional[object],
-        info: ResolveInfo,  # noqa: WPS110
+        root,
+        info,  # noqa: WPS110
         validated_data,
     ) -> "DeclineWorkBreakMutation":
         """Perform mutation implementation."""

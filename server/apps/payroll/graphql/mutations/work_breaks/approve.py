@@ -1,7 +1,4 @@
-from typing import Optional
-
 import graphene
-from graphql import ResolveInfo
 from jnt_django_graphene_toolbox.mutations import SerializerMutation
 
 from apps.payroll.graphql.mutations.work_breaks.inputs import (
@@ -25,13 +22,12 @@ class ApproveWorkBreakMutation(SerializerMutation):
     @classmethod
     def perform_mutate(
         cls,
-        root: Optional[object],
-        info: ResolveInfo,  # noqa: WPS110
+        root,
+        info,  # noqa: WPS110
         validated_data,
     ) -> "ApproveWorkBreakMutation":
         """Perform mutation implementation."""
         work_break = validated_data["work_break"]
-
         work_break_service.Manager(work_break).approve(
             approved_by=info.context.user,
         )
