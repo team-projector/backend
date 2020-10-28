@@ -3,6 +3,7 @@ from apps.development.graphql.queries import (
     issues,
     merge_requests,
     milestones,
+    project_groups,
     projects,
     teams,
     tickets,
@@ -17,5 +18,6 @@ class DevelopmentQueries(  # noqa: WPS215
     projects.ProjectsQueries,
     teams.TeamsQueries,
     gitlab.GitlabQueries,
+    project_groups.ProjectGroupsQueries,
 ):
     """Class represents list of all queries."""
