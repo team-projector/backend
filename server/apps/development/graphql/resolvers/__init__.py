@@ -4,3 +4,5 @@ from .merge_requests_summary import resolve_merge_requests_summary
 from .milestones import ProjectMilestonesResolver
 from .team_progress_metrics import resolve_team_progress_metrics
 from .milestones_summary import resolve_milestones_summary
+from .projects_summary import resolve_projects_summary
+from .project_groups_summary import resolve_project_groups_summary

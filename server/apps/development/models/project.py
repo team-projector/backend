@@ -6,15 +6,8 @@ from jnt_django_toolbox.models.fields import EnumField
 
 from apps.core.consts import DEFAULT_TITLE_LENGTH
 from apps.core.models.mixins import GitlabEntityMixin
+from apps.development.models.choices.project_state import ProjectState
 from apps.development.models.milestone import MilestoneState
-
-
-class ProjectState(models.TextChoices):
-    """Project state choices."""
-
-    DEVELOPING = "DEVELOPING", _("CH__DEVELOPING")  # noqa: WPS115
-    SUPPORTING = "SUPPORTING", _("CH__SUPPORTING")  # noqa: WPS115
-    ARCHIVED = "ARCHIVED", _("CH__ARCHIVED")  # noqa: WPS115
 
 
 class Project(GitlabEntityMixin):

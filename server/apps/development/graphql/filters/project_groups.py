@@ -4,8 +4,8 @@ from jnt_django_graphene_toolbox.filters import OrderingFilter, SearchFilter
 from apps.development.models import Project
 
 
-class ProjectsFilterSet(django_filters.FilterSet):
-    """Set of filters for projects."""
+class ProjectGroupsFilterSet(django_filters.FilterSet):
+    """Set of filters for project groups."""
 
     class Meta:
         model = Project

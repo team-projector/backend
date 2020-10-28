@@ -1,9 +1,11 @@
 from django.contrib.contenttypes.fields import GenericRelation
 from django.db import models
 from django.utils.translation import gettext_lazy as _
+from jnt_django_toolbox.models.fields import EnumField
 
 from apps.core.consts import DEFAULT_TITLE_LENGTH
 from apps.core.models.mixins import GitlabEntityMixin
+from apps.development.models.choices.project_state import ProjectState
 
 
 class ProjectGroup(GitlabEntityMixin):
@@ -60,6 +62,13 @@ class ProjectGroup(GitlabEntityMixin):
     members = GenericRelation(  # noqa: CCE001
         "development.ProjectMember",
         related_query_name="project_group",
+    )
+
+    state = EnumField(
+        enum=ProjectState,
+        default=ProjectState.DEVELOPING,
+        verbose_name=_("VN__STATE"),
+        help_text=_("HT__STATE"),
     )
 
     def __str__(self):
