@@ -48,7 +48,7 @@ msgid "MSG__VALUE_MUST_BE_FROM_0_TO_1"
 msgstr "Value must be from 0 to 1"
 
 msgid "Django site admin"
-msgstr ""
+msgstr " "
 
 msgid "Force sync"
 msgstr "Force sync"

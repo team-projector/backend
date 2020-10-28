@@ -76,3 +76,25 @@ class WorkBreak(ApprovedMixin, Timestamps):
             self.from_date,
             self.to_date,
         )
+
+    def save(
+        self,
+        force_insert=False,
+        force_update=False,
+        using=None,
+        update_fields=None,
+    ):
+        """Save the current instance."""
+        self._fill_paid_days()
+        super().save(
+            force_insert=force_insert,
+            force_update=force_update,
+            using=using,
+            update_fields=update_fields,
+        )
+
+    def _fill_paid_days(self):
+        if self.paid_days:
+            return
+
+        self.paid_days = (self.to_date - self.from_date).days

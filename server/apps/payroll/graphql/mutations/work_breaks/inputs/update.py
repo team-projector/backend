@@ -15,7 +15,8 @@ class UpdateWorkBreakInput(serializers.Serializer):
         source="work_break",
     )
     comment = serializers.CharField()
-    from_date = serializers.DateTimeField()
+    from_date = serializers.DateField()
+    to_date = serializers.DateField()
     reason = EnumField(enum=WorkBreakReason)
-    to_date = serializers.DateTimeField()
     user = serializers.PrimaryKeyRelatedField(queryset=User.objects.all())
+    paid_days = serializers.IntegerField(min_value=0, required=False)
