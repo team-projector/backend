@@ -1,6 +1,5 @@
 from datetime import timedelta
 
-import pytest
 from django.utils import timezone
 from jnt_django_graphene_toolbox.errors import GraphQLPermissionDenied
 
@@ -13,8 +12,8 @@ from tests.test_payroll.factories import WorkBreakFactory
 from tests.test_users.factories import UserFactory
 
 GHL_QUERY_UPDATE_WORK_BREAK = """
-mutation ($user: Int!, $id: ID!, $fromDate: DateTime!, $toDate: DateTime!,
- $reason: String!, $comment: String!) {
+mutation ($user: ID!, $id: ID!, $fromDate: DateTime!, $toDate: DateTime!,
+ $reason: WorkBreakReason!, $comment: String!) {
   updateWorkBreak(user: $user, id: $id, fromDate: $fromDate, toDate: $toDate,
    reason: $reason, comment: $comment) {
     workBreak {
@@ -87,12 +86,13 @@ def test_work_break_not_team_lead(
         "comment": "test comment",
     }
 
-    with pytest.raises(GraphQLPermissionDenied):
-        update_work_break_mutation(
-            root=None,
-            info=ghl_auth_mock_info,
-            **update_variables,
-        )
+    response = update_work_break_mutation(
+        root=None,
+        info=ghl_auth_mock_info,
+        **update_variables,
+    )
+    assert isinstance(response, GraphQLPermissionDenied)
+
     work_break.refresh_from_db()
 
     assert work_break.comment == "django"
@@ -134,12 +134,12 @@ def test_update_work_break_another_user(
         "comment": "test comment",
     }
 
-    with pytest.raises(GraphQLPermissionDenied):
-        update_work_break_mutation(
-            root=None,
-            info=ghl_auth_mock_info,
-            **update_variables,
-        )
+    response = update_work_break_mutation(
+        root=None,
+        info=ghl_auth_mock_info,
+        **update_variables,
+    )
+    assert isinstance(response, GraphQLPermissionDenied)
 
 
 def test_update_another_user_but_team_lead(

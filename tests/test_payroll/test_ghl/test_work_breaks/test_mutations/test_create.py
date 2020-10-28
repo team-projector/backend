@@ -7,7 +7,7 @@ from apps.payroll.models.work_break import WorkBreak, WorkBreakReason
 
 GHL_QUERY_CREATE_WORK_BREAK = """
 mutation ($user: ID!, $fromDate: DateTime!, $toDate: DateTime!,
-$reason: String!, $comment: String!) {
+$reason: WorkBreakReason!, $comment: String!) {
   createWorkBreak(user: $user, fromDate: $fromDate, toDate: $toDate,
   reason: $reason, comment: $comment) {
     workBreak {

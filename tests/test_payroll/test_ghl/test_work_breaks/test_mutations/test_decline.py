@@ -1,4 +1,3 @@
-import pytest
 from jnt_django_graphene_toolbox.errors import GraphQLPermissionDenied
 
 from apps.development.models import TeamMember
@@ -61,12 +60,13 @@ def test_not_team_lead(ghl_auth_mock_info, decline_work_break_mutation):
     """
     work_break = WorkBreakFactory.create()
 
-    with pytest.raises(GraphQLPermissionDenied):
-        decline_work_break_mutation(
-            root=None,
-            info=ghl_auth_mock_info,
-            id=work_break.pk,
-        )
+    response = decline_work_break_mutation(
+        root=None,
+        info=ghl_auth_mock_info,
+        id=work_break.pk,
+    )
+
+    assert isinstance(response, GraphQLPermissionDenied)
 
     work_break.refresh_from_db()
 
@@ -100,12 +100,12 @@ def test_other_team_teamlead(  # noqa: WPS211
 
     work_break = WorkBreakFactory.create(user=another_user)
 
-    with pytest.raises(GraphQLPermissionDenied):
-        decline_work_break_mutation(
-            root=None,
-            info=ghl_auth_mock_info,
-            id=work_break.id,
-        )
+    response = decline_work_break_mutation(
+        root=None,
+        info=ghl_auth_mock_info,
+        id=work_break.id,
+    )
+    assert isinstance(response, GraphQLPermissionDenied)
 
 
 def test_owner(ghl_auth_mock_info, decline_work_break_mutation):
@@ -117,12 +117,12 @@ def test_owner(ghl_auth_mock_info, decline_work_break_mutation):
     """
     work_break = WorkBreakFactory.create(user=ghl_auth_mock_info.context.user)
 
-    with pytest.raises(GraphQLPermissionDenied):
-        decline_work_break_mutation(
-            root=None,
-            info=ghl_auth_mock_info,
-            id=work_break.pk,
-        )
+    response = decline_work_break_mutation(
+        root=None,
+        info=ghl_auth_mock_info,
+        id=work_break.pk,
+    )
+    assert isinstance(response, GraphQLPermissionDenied)
 
     work_break.refresh_from_db()
 

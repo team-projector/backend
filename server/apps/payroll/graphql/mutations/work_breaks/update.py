@@ -1,45 +1,36 @@
-import graphene
-from jnt_django_graphene_toolbox.mutations import BaseMutation
-from jnt_django_graphene_toolbox.mutations.mixins import (
-    ArgumentsValidationMixin,
-)
+from typing import Optional
 
-from apps.core.graphql.helpers.generics import get_object_or_not_found
-from apps.payroll.graphql.forms import WorkBreakForm
+import graphene
+from graphql import ResolveInfo
+from jnt_django_graphene_toolbox.mutations import SerializerMutation
+
+from apps.core.graphql.helpers.persisters import update_from_validated_data
+from apps.payroll.graphql.mutations.work_breaks.inputs import (
+    UpdateWorkBreakInput,
+)
 from apps.payroll.graphql.permissions import CanManageWorkBreak
 from apps.payroll.graphql.types import WorkBreakType
-from apps.payroll.models import WorkBreak
 
 
-class UpdateWorkBreakMutation(ArgumentsValidationMixin, BaseMutation):
+class UpdateWorkBreakMutation(SerializerMutation):
     """Update work break after validation."""
 
-    class Arguments:
-        id = graphene.ID(required=True)  # noqa: WPS125, A003
-        comment = graphene.String(required=True)
-        from_date = graphene.DateTime(required=True)
-        reason = graphene.String(required=True)
-        to_date = graphene.DateTime(required=True)
-        user = graphene.Int(required=True)
+    class Meta:
+        serializer_class = UpdateWorkBreakInput
 
     permission_classes = (CanManageWorkBreak,)
-    form_class = WorkBreakForm
 
     work_break = graphene.Field(WorkBreakType)
 
     @classmethod
-    def perform_mutate(cls, info, cleaned_data):  # noqa: WPS110
-        """Update work break."""
-        work_break = get_object_or_not_found(
-            WorkBreak.objects.all(),
-            pk=cleaned_data["id"],
-        )
-
-        work_break.comment = cleaned_data["comment"]
-        work_break.from_date = cleaned_data["from_date"]
-        work_break.reason = cleaned_data["reason"]
-        work_break.to_date = cleaned_data["to_date"]
-        work_break.user = cleaned_data["user"]
-        work_break.save()
+    def perform_mutate(
+        cls,
+        root: Optional[object],
+        info: ResolveInfo,  # noqa: WPS110
+        validated_data,
+    ) -> "UpdateWorkBreakMutation":
+        """Perform mutation implementation."""
+        work_break = validated_data.pop("work_break")
+        update_from_validated_data(work_break, validated_data)
 
         return cls(work_break=work_break)
