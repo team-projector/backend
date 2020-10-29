@@ -2,14 +2,14 @@ from datetime import timedelta
 
 from django.utils import timezone
 
-from apps.core.gitlab import GITLAB_DATETIME_FORMAT
+from apps.core.gitlab import GITLAB_DATE_FORMAT
 from apps.payroll.models.work_break import WorkBreak, WorkBreakReason
 
 GHL_QUERY_CREATE_WORK_BREAK = """
-mutation ($user: ID!, $fromDate: DateTime!, $toDate: DateTime!,
-$reason: WorkBreakReason!, $comment: String!) {
+mutation ($user: ID!, $fromDate: Date!, $toDate: Date!,
+$reason: WorkBreakReason!, $comment: String!, $paidDays: Int) {
   createWorkBreak(user: $user, fromDate: $fromDate, toDate: $toDate,
-  reason: $reason, comment: $comment) {
+  reason: $reason, comment: $comment, paidDays: $paidDays) {
     workBreak {
       user {
         id
@@ -17,6 +17,7 @@ $reason: WorkBreakReason!, $comment: String!) {
       }
       id
       comment
+      paidDays
     }
   }
 }
@@ -33,6 +34,7 @@ def test_query(user, ghl_client):
         "toDate": _date_strftime(timezone.now() + timedelta(seconds=10)),
         "reason": WorkBreakReason.DAYOFF,
         "comment": "test comment",
+        "paidDays": 3,
     }
 
     response = ghl_client.execute(
@@ -45,6 +47,7 @@ def test_query(user, ghl_client):
     assert WorkBreak.objects.count() == 1
     assert dto["comment"] == create_variables["comment"]
     assert dto["user"]["id"] == str(user.id)
+    assert dto["paidDays"] == create_variables["paidDays"]
 
 
 def _date_strftime(date):
@@ -53,4 +56,4 @@ def _date_strftime(date):
 
     :param date:
     """
-    return date.strftime(GITLAB_DATETIME_FORMAT)
+    return date.strftime(GITLAB_DATE_FORMAT)
