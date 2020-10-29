@@ -1,3 +1,5 @@
+from datetime import date, datetime
+
 from django.conf import settings
 from django.db import models
 from django.utils.translation import gettext_lazy as _
@@ -93,8 +95,19 @@ class WorkBreak(ApprovedMixin, Timestamps):
             update_fields=update_fields,
         )
 
-    def _fill_paid_days(self):
+    def _fill_paid_days(self) -> None:
+        """Fill paid days."""
         if self.paid_days:
             return
 
-        self.paid_days = (self.to_date - self.from_date).days
+        current_year = datetime.now().year
+        to_date = self.to_date
+        from_date = self.from_date
+
+        if to_date.year > current_year:
+            to_date = date(current_year + 1, 1, 1)
+
+        if from_date.year < current_year:
+            from_date = date(current_year, 1, 1)
+
+        self.paid_days = max(((to_date - from_date).days, 0))  # noqa: WPS601

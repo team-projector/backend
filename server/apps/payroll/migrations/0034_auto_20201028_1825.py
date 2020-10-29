@@ -3,6 +3,13 @@
 from django.db import migrations, models
 
 
+def resave_workb_reaks(apps, schema_editor):
+    WorkBreak = apps.get_model("payroll", "WorkBreak")
+
+    for work_break in WorkBreak.objects.all():
+        work_break.save()
+
+
 class Migration(migrations.Migration):
 
     dependencies = [
@@ -25,4 +32,5 @@ class Migration(migrations.Migration):
             name='to_date',
             field=models.DateField(help_text='HT__DATE_TO', verbose_name='VN__DATE_TO'),
         ),
+        migrations.RunPython(resave_workb_reaks)
     ]
