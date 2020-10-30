@@ -1040,7 +1040,7 @@ description = ""
 name = "jnt-django-toolbox"
 optional = false
 python-versions = ">=3.8,<4.0"
-version = "0.1.27"
+version = "0.1.28"
 
 [package.dependencies]
 dateparser = ">=0.7.6,<0.8.0"
@@ -1972,7 +1972,7 @@ idna = ">=2.0"
 multidict = ">=4.0"
 
 [metadata]
-content-hash = "bcd6e86faa97315e1a13d0d718af35b74a074789027e54131a4fbf6cbb7490b7"
+content-hash = "ed946bf15fbd33033930849c08b7e68018b8a5f11ec281fb1ed9970fa7996ef3"
 python-versions = "^3.8"
 
 [metadata.files]
@@ -2400,8 +2400,8 @@ jnt-django-graphene-toolbox = [
     {file = "jnt_django_graphene_toolbox-0.1.21-py3-none-any.whl", hash = "sha256:de24660b7865c5930194305826d59d4d89d511261734082e26132e34640d6810"},
 ]
 jnt-django-toolbox = [
-    {file = "jnt-django-toolbox-0.1.27.tar.gz", hash = "sha256:cb501a3006907277d3505fda48c3154f72ee7fc7ea2a59f08ce491864a5c38f6"},
-    {file = "jnt_django_toolbox-0.1.27-py3-none-any.whl", hash = "sha256:275a8be93ada5b6da3d5c14d55937539c78dd886bea9b82ec03cc2a52c30723d"},
+    {file = "jnt-django-toolbox-0.1.28.tar.gz", hash = "sha256:9d0759777d13783f3f9679fbfd4bf336ad907f04f5304003e2d57d55649161bc"},
+    {file = "jnt_django_toolbox-0.1.28-py3-none-any.whl", hash = "sha256:61f396807eb7c5808fb5458f4f35423bb562070a88b55250d34a48eabc1aabdd"},
 ]
 kombu = [
     {file = "kombu-4.6.11-py2.py3-none-any.whl", hash = "sha256:be48cdffb54a2194d93ad6533d73f69408486483d189fe9f5990ee24255b0e0a"},
