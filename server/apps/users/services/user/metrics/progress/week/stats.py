@@ -2,10 +2,11 @@ from datetime import date
 from typing import Dict
 
 from django.db import models
-from django.db.models.functions import Cast, Coalesce, TruncDate, TruncWeek
+from django.db.models.functions import Cast, Coalesce, TruncDate
 from django.utils.timezone import make_aware
 from jnt_django_toolbox.helpers.date import date2datetime
 
+from apps.core.models.query import TruncWeek
 from apps.development.models.issue import Issue, IssueState
 from apps.payroll.models import SpentTime
 from apps.payroll.services.spent_time.summary import (

@@ -1,5 +1,7 @@
+import calendar
 from datetime import datetime, timedelta
 
+from constance import config, test
 from django.utils import timezone
 from jnt_django_toolbox.helpers.date import begin_of_week
 from jnt_django_toolbox.helpers.time import seconds
@@ -272,4 +274,66 @@ def test_complex(user):
         metrics,
         payroll={monday: 15 * user.hour_rate},
         paid={monday: 3 * user.hour_rate},
+    )
+
+
+@test.override_config(FIRST_WEEK_DAY=calendar.WEDNESDAY)
+def test_first_week_day(user):
+    """
+    Test change first weekday.
+
+    :param user:
+    """
+    user.hour_rate = 100
+    user.save()
+
+    issue = IssueFactory.create(
+        user=user,
+        due_date=datetime.now(),
+        state=IssueState.CLOSED,
+    )
+    wednesday = begin_of_week(timezone.now().date(), config.FIRST_WEEK_DAY)
+
+    IssueSpentTimeFactory.create(
+        date=wednesday,
+        user=user,
+        base=issue,
+        time_spent=seconds(hours=3),
+    )
+    IssueSpentTimeFactory.create(
+        date=wednesday + timedelta(days=2, hours=5),
+        user=user,
+        base=issue,
+        time_spent=seconds(hours=2),
+    )
+    IssueSpentTimeFactory.create(
+        date=wednesday + timedelta(days=1),
+        user=user,
+        base=issue,
+        time_spent=seconds(hours=4),
+    )
+    IssueSpentTimeFactory.create(
+        date=wednesday + timedelta(days=1, hours=5),
+        user=user,
+        base=issue,
+        time_spent=-seconds(hours=3),
+    )
+    IssueSpentTimeFactory.create(
+        date=wednesday + timedelta(days=10),
+        user=user,
+        base=issue,
+        time_spent=-seconds(hours=3),
+    )
+
+    metrics = get_progress_metrics(
+        user,
+        wednesday - timedelta(days=5),
+        wednesday + timedelta(days=5),
+        "week",
+    )
+
+    checkers.check_user_progress_payroll_metrics(
+        metrics,
+        payroll={wednesday: 6 * user.hour_rate},
+        paid={wednesday: 0},
     )
