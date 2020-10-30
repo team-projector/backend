@@ -26,7 +26,12 @@ def _generate_trunc_week_template() -> str:
 
 
 class TruncWeek(Func):
-    """Trancate week for database."""
+    """
+    Truncate week for database.
+
+    If we using config FIRST_WEEK_DAY:
+    we need to return not only "Monday" as default, but and any days.
+    """
 
     def __init__(self, *args, **kwargs):
         """Initialize truncate week expression."""
