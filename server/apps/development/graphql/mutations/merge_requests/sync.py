@@ -3,19 +3,29 @@ from typing import Any, Dict, Optional
 import graphene
 from graphql import ResolveInfo
 from jnt_django_graphene_toolbox.mutations import SerializerMutation
+from rest_framework import serializers
 
-from apps.development.graphql.mutations.merge_requests.inputs import (
-    SyncMergeRequestInput,
-)
 from apps.development.graphql.types import MergeRequestType
+from apps.development.models import MergeRequest
 from apps.development.tasks import sync_project_merge_request_task
+
+
+class _InputSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = MergeRequest
+        fields = ("id",)
+
+    id = serializers.PrimaryKeyRelatedField(  # noqa:WPS125, A003
+        queryset=MergeRequest.objects.all(),
+        source="merge_request",
+    )
 
 
 class SyncMergeRequestMutation(SerializerMutation):
     """Syncing merge request mutation."""
 
     class Meta:
-        serializer_class = SyncMergeRequestInput
+        serializer_class = _InputSerializer
 
     merge_request = graphene.Field(MergeRequestType)
 

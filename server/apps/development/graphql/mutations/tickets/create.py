@@ -3,18 +3,31 @@ from typing import Dict, Optional
 import graphene
 from graphql import ResolveInfo
 from jnt_django_graphene_toolbox.mutations import SerializerMutation
+from rest_framework.fields import Field
 
 from apps.core.graphql.security.permissions import AllowProjectManager
-from apps.development.graphql.mutations.tickets.inputs import CreateTicketInput
+from apps.development.graphql.mutations.tickets.inputs.base import (
+    TicketBaseInput,
+)
 from apps.development.graphql.types import TicketType
 from apps.development.models import Ticket
+
+
+class _InputSerializer(TicketBaseInput):
+    def get_fields(self) -> Dict[str, Field]:
+        """Returns serializer fields."""
+        fields = super().get_fields()
+
+        fields["milestone"].required = True
+        fields["milestone"].allow_null = False
+        return fields
 
 
 class CreateTicketMutation(SerializerMutation):
     """Create ticket mutation."""
 
     class Meta:
-        serializer_class = CreateTicketInput
+        serializer_class = _InputSerializer
 
     ticket = graphene.Field(TicketType)
     permission_classes = (AllowProjectManager,)

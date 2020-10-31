@@ -1,19 +1,25 @@
 import graphene
 from jnt_django_graphene_toolbox.mutations import SerializerMutation
+from rest_framework import serializers
 
-from apps.payroll.graphql.mutations.work_breaks.inputs import (
-    ApproveWorkBreakInput,
-)
 from apps.payroll.graphql.permissions import CanApproveDeclineWorkBreak
 from apps.payroll.graphql.types import WorkBreakType
+from apps.payroll.models import WorkBreak
 from apps.payroll.services import work_break as work_break_service
+
+
+class _InputSerializer(serializers.Serializer):
+    id = serializers.PrimaryKeyRelatedField(  # noqa: A003, WPS125
+        queryset=WorkBreak.objects.all(),
+        source="work_break",
+    )
 
 
 class ApproveWorkBreakMutation(SerializerMutation):
     """Approve work break mutation."""
 
     class Meta:
-        serializer_class = ApproveWorkBreakInput
+        serializer_class = _InputSerializer
 
     permission_classes = (CanApproveDeclineWorkBreak,)
 

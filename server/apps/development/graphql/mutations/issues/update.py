@@ -3,20 +3,27 @@ from typing import Any, Dict, Optional
 import graphene
 from graphql import ResolveInfo
 from jnt_django_graphene_toolbox.mutations import SerializerMutation
+from rest_framework import serializers
 
 from apps.core.graphql.helpers.persisters import update_from_validated_data
-from apps.development.graphql.mutations.issues.inputs.update import (
-    UpdateIssueInput,
-)
+from apps.development.graphql.mutations.issues.inputs import BaseIssueInput
 from apps.development.graphql.types import IssueType
+from apps.development.models import Ticket
 from apps.development.tasks import propagate_ticket_to_related_issues_task
+
+
+class _InputSerializer(BaseIssueInput):
+    class Meta(BaseIssueInput.Meta):
+        fields = ("id", "ticket")
+
+    ticket = serializers.PrimaryKeyRelatedField(queryset=Ticket.objects.all())
 
 
 class UpdateIssueMutation(SerializerMutation):
     """Update issue mutation."""
 
     class Meta:
-        serializer_class = UpdateIssueInput
+        serializer_class = _InputSerializer
 
     issue = graphene.Field(IssueType)
 
