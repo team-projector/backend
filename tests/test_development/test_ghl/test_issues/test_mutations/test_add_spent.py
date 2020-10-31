@@ -1,6 +1,6 @@
 from jnt_django_graphene_toolbox.errors import GraphQLInputError
 
-from apps.development.graphql.mutations.issues.inputs.add_spent import (
+from apps.development.graphql.mutations.issues.add_spent import (
     ERROR_MSG_NO_GL_TOKEN,
 )
 from tests.test_development.factories import IssueFactory, ProjectFactory
