@@ -1,6 +1,6 @@
+from actstream.models import Follow
 from django.contrib import admin
 
-from actstream.models import Follow
 from apps.core.admin.base import BaseModelAdmin
 
 admin.site.unregister(Follow)
@@ -8,7 +8,7 @@ admin.site.unregister(Follow)
 
 @admin.register(Follow)
 class FollowAdmin(BaseModelAdmin):
-    """A class representing Follow model for admin dashboard."""
+    """A class represents Follow model for admin dashboard."""
 
     list_display = (
         "__str__",

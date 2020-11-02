@@ -20,13 +20,15 @@ CREATE_WEBHOOK_BODY = types.MappingProxyType(
     },
 )
 
+pytestmark = pytest.mark.override_config(
+    GITLAB_ADD_WEBHOOKS=True,
+)
+
 
 @pytest.fixture(autouse=True)
-def _gitlab_check_webhooks(settings, override_config) -> None:
+def _settings_domain(settings, override_config) -> None:
     """Set check webhooks."""
     settings.DOMAIN_NAME = "test.com"
-    with override_config(GITLAB_ADD_WEBHOOKS=True):
-        yield
 
 
 class WebhookRequestCallback:
@@ -58,14 +60,11 @@ def test_register_new(db, gl_mocker, client):
     :param client:
     """
     project, gl_project = initializers.init_project()
-    callback = WebhookRequestCallback()
 
-    gl_mock.mock_project_endpoints(gl_mocker, gl_project)
-    gl_mock.register_create_project_hook(gl_mocker, gl_project, callback)
-
+    create_callback = _mock_gl_endpoints(gl_mocker, gl_project)
     ProjectWebhookManager().check_project_webhooks(project)
 
-    assert callback.request_body == CREATE_WEBHOOK_BODY
+    assert create_callback.request_body == CREATE_WEBHOOK_BODY
 
 
 def test_already_exists(db, gl_mocker, client):
@@ -78,22 +77,21 @@ def test_already_exists(db, gl_mocker, client):
     """
     project, gl_project = initializers.init_project()
 
-    gl_mock.mock_project_endpoints(
+    create_callback = _mock_gl_endpoints(
         gl_mocker,
         gl_project,
-        hooks=[
-            {
-                "url": "https://test.com/api/gl-webhook",
-                "issues_events": True,
-                "merge_requests_events": True,
-                "pipeline_events": True,
-                "note_events": True,
-                "token": None,
-            },
-        ],
+        {
+            "url": "https://test.com/api/gl-webhook",
+            "issues_events": True,
+            "merge_requests_events": True,
+            "pipeline_events": True,
+            "note_events": True,
+            "token": None,
+        },
     )
 
     ProjectWebhookManager().check_project_webhooks(project)
+    assert create_callback.request_body is None
 
 
 def test_exists_another(db, gl_mocker, client):
@@ -105,21 +103,17 @@ def test_exists_another(db, gl_mocker, client):
     :param client:
     """
     project, gl_project = initializers.init_project()
-    callback = WebhookRequestCallback()
 
-    gl_mock.mock_project_endpoints(
+    callback = _mock_gl_endpoints(
         gl_mocker,
         gl_project,
-        hooks=[
-            {
-                "url": "https://another.com/api/gl-webhook",
-                "issues_events": True,
-                "merge_requests_events": True,
-                "token": None,
-            },
-        ],
+        {
+            "url": "https://another.com/api/gl-webhook",
+            "issues_events": True,
+            "merge_requests_events": True,
+            "token": None,
+        },
     )
-    gl_mock.register_create_project_hook(gl_mocker, gl_project, callback)
 
     ProjectWebhookManager().check_project_webhooks(project)
 
@@ -135,21 +129,35 @@ def test_fix_wrong(db, gl_mocker, client):
     :param client:
     """
     project, gl_project = initializers.init_project()
-    create_callback = WebhookRequestCallback()
-    delete_callback = WebhookRequestCallback()
 
+    create_callback = _mock_gl_endpoints(
+        gl_mocker,
+        gl_project,
+        {
+            "url": "https://test.com/api/gl-webhook",
+            "issues_events": True,
+            "merge_requests_events": False,
+            "token": None,
+        },
+    )
+
+    ProjectWebhookManager().check_project_webhooks(project)
+
+    assert create_callback.request_body is not None
+    assert create_callback.request_body == CREATE_WEBHOOK_BODY
+
+
+def _mock_gl_endpoints(
+    gl_mocker,
+    gl_project,
+    hook=None,
+) -> WebhookRequestCallback:
     gl_mock.mock_project_endpoints(
         gl_mocker,
         gl_project,
-        hooks=[
-            {
-                "url": "https://test.com/api/gl-webhook",
-                "issues_events": True,
-                "merge_requests_events": False,
-                "token": None,
-            },
-        ],
+        hooks=[hook] if hook else [],
     )
+    create_callback = WebhookRequestCallback()
     gl_mock.register_create_project_hook(
         gl_mocker,
         gl_project,
@@ -158,10 +166,7 @@ def test_fix_wrong(db, gl_mocker, client):
     gl_mock.register_delete_project_hook(
         gl_mocker,
         gl_project,
-        delete_callback,
+        WebhookRequestCallback(),
     )
 
-    ProjectWebhookManager().check_project_webhooks(project)
-
-    assert create_callback.request_body is not None
-    assert create_callback.request_body == CREATE_WEBHOOK_BODY
+    return create_callback

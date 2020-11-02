@@ -13,14 +13,17 @@ class Command(BaseCommand):
     Initializing system.
 
     Includes:
-    1. create system user
-    2. create super user by provided credentials via env:
+    1. Migrate database
+    2. create system user
+    3. create super user by provided credentials via env:
     - DJANGO_SUPERUSER_PASSWORD
     - DJANGO_SUPERUSER_LOGIN
     """
 
     def handle(self, *args, **options):  # noqa: WPS110
         """Call function."""
+        management.call_command("migrate")
+
         create_system_user()
 
         if self._need_create_superuser():

@@ -13,7 +13,7 @@ class MergeRequestAdmin(
     ForceSyncEntityMixin,
     BaseModelAdmin,
 ):
-    """A class representing Merge Request model for admin dashboard."""
+    """A class represents Merge Request model for admin dashboard."""
 
     list_display = (
         "title",

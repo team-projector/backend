@@ -1,29 +1,42 @@
-import graphene
-from jnt_django_graphene_toolbox.mutations import BaseMutation
+from typing import Optional
 
-from apps.core.graphql.helpers.generics import get_object_or_not_found
+import graphene
+from graphql import ResolveInfo
+from jnt_django_graphene_toolbox.mutations import SerializerMutation
+from rest_framework import serializers
+
 from apps.payroll.graphql.permissions import CanManageWorkBreak
 from apps.payroll.models import WorkBreak
 
 
-class DeleteWorkBreakMutation(BaseMutation):
+class _InputSerializer(serializers.Serializer):
+    """DeleteWorkBreakInput serializer."""
+
+    id = serializers.PrimaryKeyRelatedField(  # noqa: A003, WPS125
+        queryset=WorkBreak.objects.all(),
+        source="work_break",
+    )
+
+
+class DeleteWorkBreakMutation(SerializerMutation):
     """Delete work break after validation."""
 
-    class Arguments:
-        id = graphene.ID(required=True)  # noqa: WPS125, A003
+    class Meta:
+        serializer_class = _InputSerializer
 
     permission_classes = (CanManageWorkBreak,)
 
     ok = graphene.Boolean()
 
     @classmethod
-    def do_mutate(cls, root, info, **kwargs):  # noqa: WPS110
-        """Delete work break.If successful delete return "True"."""
-        work_break = get_object_or_not_found(
-            WorkBreak.objects.all(),
-            pk=kwargs["id"],
-        )
-
+    def perform_mutate(
+        cls,
+        root: Optional[object],
+        info: ResolveInfo,  # noqa: WPS110
+        validated_data,
+    ) -> "DeleteWorkBreakMutation":
+        """Perform mutation implementation."""
+        work_break = validated_data["work_break"]
         work_break.delete()
 
-        return DeleteWorkBreakMutation(ok=True)
+        return cls(ok=True)

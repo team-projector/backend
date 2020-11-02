@@ -13,12 +13,9 @@ from tests.test_development.test_gl.helpers import (
 )
 from tests.test_users.factories.gitlab import GlUserFactory
 
-
-@pytest.fixture(autouse=True)
-def _gitlab_webhook_secret_token(override_config) -> None:
-    """Set test gitlab token."""
-    with override_config(GITLAB_WEBHOOK_SECRET_TOKEN="SECRET_TOKEN"):
-        yield
+pytestmark = pytest.mark.override_config(
+    GITLAB_WEBHOOK_SECRET_TOKEN="SECRET_TOKEN",
+)
 
 
 def test_no_token(api_rf, gl_webhook_view):

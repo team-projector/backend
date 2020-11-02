@@ -1,10 +1,9 @@
 from datetime import timedelta
 
-import pytest
 from django.utils import timezone
 from jnt_django_graphene_toolbox.errors import GraphQLPermissionDenied
 
-from apps.core.gitlab import GITLAB_DATETIME_FORMAT
+from apps.core.gitlab import GITLAB_DATE_FORMAT
 from apps.development.models import TeamMember
 from apps.payroll.models.work_break import WorkBreak, WorkBreakReason
 from apps.users.models import User
@@ -13,10 +12,10 @@ from tests.test_payroll.factories import WorkBreakFactory
 from tests.test_users.factories import UserFactory
 
 GHL_QUERY_UPDATE_WORK_BREAK = """
-mutation ($user: Int!, $id: ID!, $fromDate: DateTime!, $toDate: DateTime!,
- $reason: String!, $comment: String!) {
+mutation ($user: ID!, $id: ID!, $fromDate: Date!, $toDate: Date!,
+ $reason: WorkBreakReason!, $comment: String!, $paidDays: Int) {
   updateWorkBreak(user: $user, id: $id, fromDate: $fromDate, toDate: $toDate,
-   reason: $reason, comment: $comment) {
+   reason: $reason, comment: $comment, paidDays: $paidDays) {
     workBreak {
       user {
         id
@@ -24,6 +23,7 @@ mutation ($user: Int!, $id: ID!, $fromDate: DateTime!, $toDate: DateTime!,
       }
       id
       comment
+      paidDays
     }
   }
 }
@@ -87,12 +87,13 @@ def test_work_break_not_team_lead(
         "comment": "test comment",
     }
 
-    with pytest.raises(GraphQLPermissionDenied):
-        update_work_break_mutation(
-            root=None,
-            info=ghl_auth_mock_info,
-            **update_variables,
-        )
+    response = update_work_break_mutation(
+        root=None,
+        info=ghl_auth_mock_info,
+        **update_variables,
+    )
+    assert isinstance(response, GraphQLPermissionDenied)
+
     work_break.refresh_from_db()
 
     assert work_break.comment == "django"
@@ -134,12 +135,12 @@ def test_update_work_break_another_user(
         "comment": "test comment",
     }
 
-    with pytest.raises(GraphQLPermissionDenied):
-        update_work_break_mutation(
-            root=None,
-            info=ghl_auth_mock_info,
-            **update_variables,
-        )
+    response = update_work_break_mutation(
+        root=None,
+        info=ghl_auth_mock_info,
+        **update_variables,
+    )
+    assert isinstance(response, GraphQLPermissionDenied)
 
 
 def test_update_another_user_but_team_lead(
@@ -167,8 +168,8 @@ def test_update_another_user_but_team_lead(
     update_variables = {
         "id": work_break.pk,
         "user": another_user.pk,
-        "from_date": timezone.now(),
-        "to_date": timezone.now(),
+        "from_date": timezone.now().date(),
+        "to_date": timezone.now().date(),
         "reason": WorkBreakReason.DAYOFF,
         "comment": "updated",
     }
@@ -216,10 +217,11 @@ def test_change_work_break_user(
     update_variables = {
         "id": work_break.pk,
         "user": user3.id,
-        "from_date": timezone.now(),
-        "to_date": timezone.now(),
+        "from_date": timezone.now().date(),
+        "to_date": timezone.now().date(),
         "reason": WorkBreakReason.DAYOFF,
         "comment": "updated",
+        "paid_days": 7,
     }
 
     update_work_break_mutation(
@@ -233,6 +235,7 @@ def test_change_work_break_user(
     assert WorkBreak.objects.count() == 1
     assert work_break.comment == "updated"
     assert work_break.user == user3
+    assert work_break.paid_days == update_variables["paid_days"]
 
 
 def _date_strftime(date):
@@ -241,4 +244,4 @@ def _date_strftime(date):
 
     :param date:
     """
-    return date.strftime(GITLAB_DATETIME_FORMAT)
+    return date.strftime(GITLAB_DATE_FORMAT)

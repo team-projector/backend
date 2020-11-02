@@ -131,9 +131,7 @@ class IssuesFilterSet(django_filters.FilterSet):
     team = TeamFilter()
     ticket = TicketFilter()
     user = django_filters.ModelChoiceFilter(queryset=User.objects.all())
-
     order_by = OrderingFilter(
         fields=("due_date", "title", "created_at", "closed_at"),
     )
-
     q = SearchFilter(fields=("title", "=gl_url"))  # noqa: WPS111

@@ -8,7 +8,7 @@ query ($user: ID, $dueDate: Date) {
         title
         fullTitle
         glUrl
-        milestones(active: true) {
+        milestones(state: ACTIVE) {
           edges {
             node {
               title

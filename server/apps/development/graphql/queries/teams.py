@@ -15,15 +15,13 @@ from apps.users.graphql.types import UserType
 
 
 class TeamsQueries(graphene.ObjectType):
-    """Class representing list of available fields for team queries."""
+    """Class represents list of available fields for team queries."""
 
     team = DatasourceRelayNode.Field(TeamType)
-
     all_teams = DataSourceConnectionField(
         TeamType,
         filterset_class=TeamsFilterSet,
     )
-
     team_progress_metrics = graphene.Field(
         graphene.List(TeamMemberProgressMetricsType),
         team=graphene.ID(required=True),
@@ -32,7 +30,6 @@ class TeamsQueries(graphene.ObjectType):
         group=graphene.String(required=True),
         resolver=resolve_team_progress_metrics,
     )
-
     team_work_breaks = DataSourceConnectionField(
         UserType,
         filterset_class=UserWorkBreaksFilterSet,

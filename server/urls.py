@@ -6,6 +6,7 @@ from django.urls import include, path
 from django.utils.translation import gettext_lazy as _
 from django.views.decorators.csrf import csrf_exempt
 
+from apps.core.admin.views import ClearCacheAdminView
 from apps.core.pages.views.backend_config import BackendConfigView
 from gql import get_api_graphql_view, get_graphql_view
 
@@ -21,6 +22,7 @@ admin_urls = (
         constance_admin.admin_site.admin_view(constance_admin.changelist_view),
         name="configuration",
     ),
+    path("clear-cache", ClearCacheAdminView.as_view(), name="clear-cache"),
 )
 urlpatterns = [
     path("ht/", include("health_check.urls")),

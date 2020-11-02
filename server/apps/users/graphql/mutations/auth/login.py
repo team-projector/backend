@@ -1,25 +1,42 @@
+from typing import Any, Dict, Optional
+
 import graphene
-from jnt_django_graphene_toolbox.mutations import BaseMutation
+from graphql import ResolveInfo
+from jnt_django_graphene_toolbox.mutations import SerializerMutation
 from jnt_django_graphene_toolbox.security.permissions import AllowAny
+from rest_framework import serializers
 
 from apps.users.graphql.types import TokenType
-from apps.users.services.user.login import login_user
+from apps.users.services.user.auth import login_user
 
 
-class LoginMutation(BaseMutation):
+class _InputSerializer(serializers.Serializer):
+    login = serializers.CharField()
+    password = serializers.CharField()
+
+
+class LoginMutation(SerializerMutation):
     """Login mutation returns token."""
 
-    class Arguments:
-        login = graphene.String(required=True)
-        password = graphene.String(required=True)
+    class Meta:
+        serializer_class = _InputSerializer
 
     permission_classes = (AllowAny,)
 
     token = graphene.Field(TokenType)
 
     @classmethod
-    def do_mutate(cls, root, info, login, password):  # noqa: WPS110
+    def perform_mutate(  # type: ignore
+        cls,
+        root: Optional[object],
+        info: ResolveInfo,  # noqa: WPS110
+        validated_data: Dict[str, Any],
+    ) -> "LoginMutation":
         """After successful login return token."""
-        token = login_user(login, password, info.context)
+        token = login_user(
+            validated_data["login"],
+            validated_data["password"],
+            info.context,
+        )
 
-        return LoginMutation(token=token)
+        return cls(token=token)

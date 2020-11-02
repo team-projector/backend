@@ -1,6 +1,7 @@
 from datetime import date, timedelta
 from typing import List
 
+from constance import config
 from jnt_django_toolbox.helpers.date import begin_of_week
 
 from apps.users.services.user.metrics.progress import provider
@@ -26,11 +27,11 @@ class WeekMetricsProvider(provider.ProgressMetricsProvider):
 
         :rtype: List[date]
         """
-        ret: List[date] = []
+        weeks: List[date] = []
 
         current = self.start
         while current <= self.end:
-            ret.append(begin_of_week(current))
+            weeks.append(begin_of_week(current, config.FIRST_WEEK_DAY))
             current += WEEK_STEP
 
-        return ret
+        return weeks

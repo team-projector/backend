@@ -9,7 +9,7 @@ from apps.payroll.graphql.types import BonusType
 
 
 class BonusesQueries(graphene.ObjectType):
-    """Class representing list of available fields for bonuses queries."""
+    """Class represents list of available fields for bonuses queries."""
 
     bonus = DatasourceRelayNode.Field(BonusType)
     all_bonuses = DataSourceConnectionField(

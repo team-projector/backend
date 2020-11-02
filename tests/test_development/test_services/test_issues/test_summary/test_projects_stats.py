@@ -4,6 +4,7 @@ from django.utils import timezone
 
 from apps.development.models.issue import Issue
 from apps.development.models.milestone import MilestoneState
+from apps.development.models.project import ProjectState
 from apps.development.services.issue.summary import (
     IssuesProjectSummary,
     get_issues_summary,
@@ -76,11 +77,11 @@ def test_project_summary(user):
     )
 
 
-def test_project_summary_without_is_archive(user):
-    """Test filtering archived projects."""
-    projects = ProjectFactory.create_batch(2, is_archived=False)
+def test_project_summary_without_is_active(user):
+    """Test filtering active projects."""
+    projects = ProjectFactory.create_batch(2, is_active=True)
 
-    projects[1].is_archived = True
+    projects[1].is_active = False
     projects[1].save()
 
     IssueFactory.create_batch(
@@ -109,7 +110,51 @@ def test_project_summary_without_is_archive(user):
 
     summary_projects = get_project_summaries(
         summary.queryset,
-        is_archived=False,
+        is_active=True,
+    )
+
+    assert len(summary_projects) == 1
+    assert summary_projects[0].project == projects[0]
+
+
+def test_project_summary_by_state(user):
+    """Test filtering active projects."""
+    projects = ProjectFactory.create_batch(
+        2,
+        is_active=True,
+        state=ProjectState.DEVELOPING,
+    )
+
+    projects[1].state = (ProjectState.ARCHIVED,)
+    projects[1].save()
+
+    IssueFactory.create_batch(
+        5,
+        user=user,
+        total_time_spent=300,
+        time_estimate=400,
+        project=projects[0],
+        due_date=datetime.now().date(),
+    )
+
+    IssueFactory.create_batch(
+        3,
+        user=user,
+        total_time_spent=100,
+        time_estimate=400,
+        project=projects[1],
+        due_date=datetime.now().date(),
+    )
+
+    summary = get_issues_summary(
+        Issue.objects.filter(user=user),
+        due_date=datetime.now().date(),
+        user=user,
+    )
+
+    summary_projects = get_project_summaries(
+        summary.queryset,
+        state=ProjectState.DEVELOPING,
     )
 
     assert len(summary_projects) == 1
@@ -148,9 +193,9 @@ def test_sort_projects_by_milestone_flat(db):
     assert expected == actual
 
 
-def test_sort_projects_by_milestone_neested(db):
+def test_sort_projects_by_milestone_nested(db):
     """
-    Test sort projects by milestone neested.
+    Test sort projects by milestone nested.
 
     :param db:
     """

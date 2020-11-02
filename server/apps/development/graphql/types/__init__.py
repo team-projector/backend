@@ -21,3 +21,5 @@ from .team_metrics import TeamMetricsType
 from .ticket import TicketType
 from .tickets_summary import TicketsSummaryType
 from .milestones_summary import MilestonesSummaryType
+from .projects_summary import ProjectsSummaryType
+from .project_groups_summary import ProjectGroupsSummaryType

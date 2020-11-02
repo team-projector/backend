@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-10-16 12:31+0300\n"
+"POT-Creation-Date: 2020-10-28 18:26+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -47,6 +47,9 @@ msgstr "GitLab Internal ID"
 msgid "MSG__VALUE_MUST_BE_FROM_0_TO_1"
 msgstr "Value must be from 0 to 1"
 
+msgid "Django site admin"
+msgstr " "
+
 msgid "Force sync"
 msgstr "Force sync"
 
@@ -76,6 +79,15 @@ msgstr "Development"
 
 msgid "MSG_PLEASE_PROVIDE_PERSONAL_GL_TOKEN"
 msgstr "Please fill personal gitlab token in profile"
+
+msgid "CH__DEVELOPING"
+msgstr "Developing"
+
+msgid "CH__SUPPORTING"
+msgstr "Supporting"
+
+msgid "CH__ARCHIVED"
+msgstr "Archived"
 
 msgid "CH__OPENED"
 msgstr "opened"
@@ -229,12 +241,6 @@ msgstr "Is active"
 
 msgid "HT__IS_ACTIVE"
 msgstr "Is active"
-
-msgid "VN__IS_ARCHIVED"
-msgstr "Is archived"
-
-msgid "HT__IS_ARCHIVED"
-msgstr "Is archived"
 
 msgid "VN__GITLAB_AVATAR"
 msgstr "GitLab avatar"
@@ -575,6 +581,33 @@ msgstr "Paid"
 msgid "HT__PAID"
 msgstr "Paid"
 
+msgid "VN__PAID_DAYS"
+msgstr "Paid days"
+
+msgid "HT__PAID_DAYS"
+msgstr " "
+
+msgid "VN__SKILLS"
+msgstr "Skills"
+
+msgid "VN__SKILL_LEVEL"
+msgstr "Skill level"
+
+msgid "HT__SKILL_LEVEL"
+msgstr "Skill level"
+
+msgid "VN__SKILL"
+msgstr "Skill"
+
+msgid "HT__SKILL"
+msgstr "Skill"
+
+msgid "VN__CONFIRMED_BY"
+msgstr "Confirmed by"
+
+msgid "HT__CONFIRMED_BY"
+msgstr "Confirmed by"
+
 msgid "VN__USERS"
 msgstr "Users"
 
@@ -652,18 +685,3 @@ msgstr "English"
 
 msgid "VN__ADMIN_DASHBOARD"
 msgstr "Admin Dashboard"
-
-msgid "You do not have permission to perform this action."
-msgstr "You do not have permission to perform this action."
-
-msgid "Not found."
-msgstr "Not found."
-
-msgid "Input error."
-msgstr "Input error."
-
-msgid "MSG__VALUE_MUST_BE_IS_NUMBER"
-msgstr "Value must be is number"
-
-msgid "Constance"
-msgstr "Configuration"

@@ -15,7 +15,7 @@ from apps.users.admin.filters import UserFilter
 
 @admin.register(Payroll)
 class PayrollAdmin(BaseModelAdmin):
-    """A class representing Payroll model for admin dashboard."""
+    """A class represents Payroll model for admin dashboard."""
 
     list_display = ("user", "created_by", "created_at", "sum")
     list_filter = (UserFilter, HasSalaryFilter)

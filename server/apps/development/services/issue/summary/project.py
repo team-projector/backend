@@ -69,12 +69,14 @@ class IssuesProjectSummaryProvider:
         self,
         queryset: models.QuerySet,
         order_by: Optional[str],
-        is_archived: Optional[bool],
+        is_active: Optional[bool],
+        state: Optional[str],
     ):
         """Initialize self."""
         self.queryset = queryset
         self.order_by = order_by
-        self.is_archived = is_archived
+        self.is_active = is_active
+        self.state = state
 
     def execute(self) -> List[IssuesProjectSummary]:
         """Calculate and return summary."""
@@ -194,8 +196,11 @@ class IssuesProjectSummaryProvider:
         project_ids = [summary["project"] for summary in summaries_qs]
         queryset = Project.objects.filter(id__in=project_ids)
 
-        if self.is_archived is not None:
-            queryset = queryset.filter(is_archived=self.is_archived)
+        if self.is_active is not None:
+            queryset = queryset.filter(is_active=self.is_active)
+
+        if self.state is not None:
+            queryset = queryset.filter(state=self.state)
 
         return queryset
 
@@ -203,9 +208,15 @@ class IssuesProjectSummaryProvider:
 def get_project_summaries(
     queryset: models.QuerySet,
     order_by: Optional[str] = None,
-    is_archived: Optional[bool] = None,
+    is_active: Optional[bool] = None,
+    state: Optional[str] = None,
 ) -> List[IssuesProjectSummary]:
     """Get summaries for project."""
-    provider = IssuesProjectSummaryProvider(queryset, order_by, is_archived)
+    provider = IssuesProjectSummaryProvider(
+        queryset,
+        order_by,
+        is_active,
+        state,
+    )
 
     return provider.execute()

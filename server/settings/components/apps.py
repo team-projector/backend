@@ -33,4 +33,5 @@ INSTALLED_APPS = (
     "apps.users",
     "apps.development",
     "apps.payroll",
+    "apps.skills",
 )

@@ -1,7 +1,18 @@
 import calendar
 from collections import OrderedDict
 
+from django.db import models
+
 CONSTANCE_BACKEND = "constance.backends.database.DatabaseBackend"
+
+
+class Currency(models.TextChoices):
+    """Currency choices."""
+
+    RUR = "rur", "₽"  # noqa: WPS115
+    USD = "usd", "$"  # noqa: WPS115
+    EUR = "eur", "€"  # noqa: WPS115
+
 
 WEEK_DAYS = (
     "MONDAY",
@@ -13,10 +24,6 @@ WEEK_DAYS = (
     "SUNDAY",
 )
 
-CURRENCY_CODES = (
-    "usd",
-    "rur",
-)
 
 empty_default_str = ("", "", str)
 
@@ -58,10 +65,7 @@ CONSTANCE_ADDITIONAL_FIELDS = {
         "django.forms.ChoiceField",
         {
             "required": True,
-            "choices": [
-                (CURRENCY_CODES[0], CURRENCY_CODES[0]),
-                (CURRENCY_CODES[1], CURRENCY_CODES[1]),
-            ],
+            "choices": Currency.choices,
         },
     ),
 }
@@ -73,7 +77,8 @@ CONSTANCE_CONFIG = {
         "weekend_days",
     ),
     "FIRST_WEEK_DAY": (calendar.MONDAY, "", "first_week_day"),
-    "CURRENCY_CODE": (CURRENCY_CODES[0], "", "currency_code"),
+    "CURRENCY_CODE": (Currency.USD, "", "currency_code"),
+    "DEMO_MODE": (False, "", bool),
     "GITLAB_ADDRESS": ("https://gitlab.com", "", str),
     "GITLAB_SYNC": (True, "", bool),
     "GITLAB_TOKEN": ("", "", "str_required"),
@@ -87,6 +92,7 @@ CONSTANCE_CONFIG = {
     "GITLAB_SYNC_START_DATE": ("", "", "gitlab_sync_start_date"),
     "OAUTH_GITLAB_KEY": empty_default_str,
     "OAUTH_GITLAB_SECRET": empty_default_str,
+    "GITLAB_LOGIN_ENABLED": (True, "", bool),
     "SLACK_TOKEN": empty_default_str,
     # email
     "EMAIL_HOST": empty_default_str,
@@ -99,7 +105,10 @@ CONSTANCE_CONFIG = {
 
 CONSTANCE_CONFIG_FIELDSETS = OrderedDict(
     (
-        ("System", ("WEEKENDS_DAYS", "FIRST_WEEK_DAY", "CURRENCY_CODE")),
+        (
+            "System",
+            ("WEEKENDS_DAYS", "FIRST_WEEK_DAY", "CURRENCY_CODE", "DEMO_MODE"),
+        ),
         (
             "Gitlab",
             (
@@ -112,6 +121,7 @@ CONSTANCE_CONFIG_FIELDSETS = OrderedDict(
                 "OAUTH_GITLAB_SECRET",
                 "GITLAB_ROOT_GROUPS",
                 "GITLAB_SYNC_START_DATE",
+                "GITLAB_LOGIN_ENABLED",
             ),
         ),
         ("Notifications", ("SLACK_TOKEN",)),

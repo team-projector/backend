@@ -37,7 +37,7 @@ class UserFilter(django_filters.ModelChoiceFilter):
         if not value:
             return queryset
 
-        return queryset.filter(id=value.id)
+        return queryset.filter(pk=value.pk)
 
 
 class TeamFilter(django_filters.ModelChoiceFilter):

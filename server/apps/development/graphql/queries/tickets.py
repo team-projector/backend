@@ -12,15 +12,13 @@ from apps.development.graphql.types import TicketsSummaryType, TicketType
 
 
 class TicketsQueries(graphene.ObjectType):
-    """Class representing list of available fields for ticket queries."""
+    """Class represents list of available fields for ticket queries."""
 
     ticket = DatasourceRelayNode.Field(TicketType)
-
     all_tickets = DataSourceConnectionField(
         TicketType,
         filterset_class=TicketsFilterSet,
     )
-
     tickets_summary = graphene.Field(
         TicketsSummaryType,
         milestone=graphene.ID(),

@@ -56,9 +56,6 @@ class IssueGlManager(BaseWorkItemGlManager):
         if not gl_project:
             return
 
-        project.gl_last_issues_sync = timezone.now()
-        project.save(update_fields=("gl_last_issues_sync",))
-
         issues = ProjectGlManager().get_project_issues(
             gl_project,
             created_after=start_date,
@@ -68,6 +65,9 @@ class IssueGlManager(BaseWorkItemGlManager):
             self.update_project_issue(project, gl_project, gl_issue)
 
         self.check_project_deleted_issues(project, gl_project)
+
+        project.gl_last_issues_sync = timezone.now()
+        project.save(update_fields=("gl_last_issues_sync",))
 
     def update_project_issue(
         self,

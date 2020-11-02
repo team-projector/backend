@@ -25,7 +25,7 @@ keepalive_str = os.getenv("KEEP_ALIVE", "5")
 
 # Gunicorn config variables
 workers = web_concurrency
-bind = "unix:/var/run/django.sock"
+bind = "unix:/var/run/app/gunicorn.sock"
 worker_tmp_dir = "/dev/shm"
 graceful_timeout = int(graceful_timeout_str)
 max_requests = 5000

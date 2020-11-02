@@ -1,6 +1,9 @@
+from datetime import date, datetime
+
 from django.conf import settings
 from django.db import models
 from django.utils.translation import gettext_lazy as _
+from jnt_django_toolbox.models.fields import EnumField
 
 from apps.core.models.mixins import Timestamps
 from apps.payroll.models.mixins import ApprovedMixin
@@ -25,20 +28,19 @@ class WorkBreak(ApprovedMixin, Timestamps):
         verbose_name_plural = _("VN__WORKBREAKS")
         ordering = ("-from_date",)
 
-    from_date = models.DateTimeField(
+    from_date = models.DateField(
         verbose_name=_("VN__DATE_FROM"),
         help_text=_("HT__DATE_FROM"),
     )
 
-    to_date = models.DateTimeField(
+    to_date = models.DateField(
         verbose_name=_("VN__DATE_TO"),
         help_text=_("HT__DATE_TO"),
     )
 
-    reason = models.CharField(
-        choices=WorkBreakReason.choices,
+    reason = EnumField(
+        enum=WorkBreakReason,
         blank=False,
-        max_length=WORK_BREAK_REASON_MAX_LENGTH,
         verbose_name=_("VN__REASON"),
         help_text=_("HT__REASON"),
     )
@@ -62,6 +64,12 @@ class WorkBreak(ApprovedMixin, Timestamps):
         help_text=_("HT__USER"),
     )
 
+    paid_days = models.PositiveIntegerField(
+        default=0,
+        verbose_name=_("VN__PAID_DAYS"),
+        help_text=_("HT__PAID_DAYS"),
+    )
+
     def __str__(self):
         """Returns object string representation."""
         return "{0}: {1} ({2} - {3})".format(
@@ -70,3 +78,36 @@ class WorkBreak(ApprovedMixin, Timestamps):
             self.from_date,
             self.to_date,
         )
+
+    def save(
+        self,
+        force_insert=False,
+        force_update=False,
+        using=None,
+        update_fields=None,
+    ):
+        """Save the current instance."""
+        self._fill_paid_days()
+        super().save(
+            force_insert=force_insert,
+            force_update=force_update,
+            using=using,
+            update_fields=update_fields,
+        )
+
+    def _fill_paid_days(self) -> None:
+        """Fill paid days."""
+        if self.paid_days:
+            return
+
+        current_year = datetime.now().year
+        to_date = self.to_date
+        from_date = self.from_date
+
+        if to_date.year > current_year:
+            to_date = date(current_year + 1, 1, 1)
+
+        if from_date.year < current_year:
+            from_date = date(current_year, 1, 1)
+
+        self.paid_days = max(((to_date - from_date).days, 0))  # noqa: WPS601

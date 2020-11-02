@@ -2,7 +2,7 @@ from apps.payroll.graphql.mutations import work_breaks
 
 
 class PayrollMutations:
-    """Class representing list of all mutations."""
+    """Class represents list of all mutations."""
 
     approve_work_break = work_breaks.ApproveWorkBreakMutation.Field()
     create_work_break = work_breaks.CreateWorkBreakMutation.Field()
