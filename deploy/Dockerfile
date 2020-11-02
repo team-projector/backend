@@ -25,7 +25,6 @@ RUN apt-get update \
                       gettext=0.19.* \
                       nginx=1.14.* \
                       make=4.2.* \
-                      git=1:2.20.* \
                       curl=7.64.* \
     && curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/${POETRY_VERSION}/get-poetry.py | python \
     && poetry config virtualenvs.create false \
@@ -54,17 +53,19 @@ RUN export DJANGO_ENV=build \
     && python manage.py collectstatic --noinput --verbosity 0 \
     && django-admin compilemessages \
     && cp deploy/nginx/* /etc/nginx \
-    && chown -R app:app /app \
     && chmod -R 755 /app \
-    && touch /var/run/nginx.pid \
-    && chown app:app /var/run/nginx.pid \
-    && touch /var/run/celerybeat-schedule \
-    && chown app:app /var/run/celerybeat-schedule
+    && mkdir /var/run/app \
+    && mkdir /var/run/nginx \
+    && chown app:app /var/run/nginx \
+    && chown app:app /var/run/app \
+    && chown app:app /var/log/nginx \
+    && ln -sf /dev/stdout /var/log/nginx/access.log \
+    && ln -sf /dev/stderr /var/log/nginx/error.log
 
 ENV DJANGO_ENV=production \
     APP_VERSION=$APP_VERSION
 
-#USER app
+USER app
 
 CMD ["/bin/bash", "deploy/server/backend.sh"]
 
