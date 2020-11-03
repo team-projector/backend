@@ -1,9 +1,17 @@
 import json
 from unittest.mock import MagicMock
 
-from django.conf import settings
+import factory
+import pytest
+from factory.fuzzy import FuzzyChoice
 
-from apps.core.services.backend_config import BackendConfigService
+from apps.core.services.backend_config import (
+    CONSTANCE_CONFIG_MAPPING,
+    BackendConfig,
+    BackendConfigService,
+    Currency,
+    constance_config_provider,
+)
 
 
 class _MockedCache:
@@ -12,112 +20,68 @@ class _MockedCache:
         self.get = MagicMock(return_value=return_value)
 
 
+class _BackendConfigFactory(factory.Factory):
+    class Meta:
+        model = BackendConfig
+
+    firstWeekDay = FuzzyChoice([0, 1])  # noqa: WPS115, N815
+    currencyCode = FuzzyChoice(Currency)  # noqa: WPS115, N815
+    gitlabLoginEnabled = factory.Faker("boolean")  # noqa: WPS115, N815
+    demoMode = factory.Faker("boolean")  # noqa: WPS115, N815
+    staticHead = factory.Faker("text")  # noqa: WPS115, N815
+
+
+@pytest.mark.parametrize(
+    "provider",
+    [_BackendConfigFactory.create, constance_config_provider],
+)
+def test_providers(provider):
+    """Test config_provider."""
+    config = provider()
+    cache = _MockedCache()
+    service = BackendConfigService(
+        cache_manager=cache,
+        config_provider=lambda: config,
+        cache_key="config",
+        expire_after=10,
+    )
+    assert service.get_config() == "backend = {0}".format(
+        json.dumps({"config": config}),
+    )
+
+
 def test_cached():
     """Test a cache is properly used for serving config."""
     cache = _MockedCache()
     service = BackendConfigService(
         cache_manager=cache,
+        config_provider=_BackendConfigFactory.create,
         cache_key="config",
         expire_after=10,
     )
     config = service.get_config()
 
-    _assert_config(config)
     assert cache.get.call_args.args == ("config",)
     assert cache.add.call_args.args == ("config", config)
     assert cache.add.call_args.kwargs["timeout"] == 10
 
 
-def test_config_alter_constance_first_day(override_config):
-    """Test config is depends on constance variables."""
-    cache = _MockedCache()
-    service = BackendConfigService(
-        cache_manager=cache,
-        cache_key="config",
-        expire_after=10,
-    )
-    with override_config(FIRST_WEEK_DAY=1):
-        config = service.get_config()
-
-    _assert_constance_value(config, "firstWeekDay", 1)
-
-
-def test_config_alter_constance_value_currency(override_config):
-    """Test config is depends on constance variables."""
-    cache = _MockedCache()
-    service = BackendConfigService(
-        cache_manager=cache,
-        cache_key="config",
-        expire_after=10,
-    )
-    with override_config(CURRENCY_CODE="rur"):
-        config = service.get_config()
-
-    _assert_constance_value(config, "currencyCode", "rur")
-
-
-def test_config_alter_constance_login_enabled(override_config):
-    """Test config is depends on constance variables."""
-    cache = _MockedCache()
-    service = BackendConfigService(
-        cache_manager=cache,
-        cache_key="config",
-        expire_after=10,
-    )
-    with override_config(GITLAB_LOGIN_ENABLED=False):
-        config = service.get_config()
-
-    _assert_constance_value(
-        config,
-        "gitlabLoginEnabled",
-        False,  # noqa: WPS425
-    )
-
-
-def test_config_alter_constance_demo_mode(override_config):
-    """Test config is depends on constance variables."""
-    cache = _MockedCache()
-    service = BackendConfigService(
-        cache_manager=cache,
-        cache_key="config",
-        expire_after=10,
-    )
-    with override_config(DEMO_MODE=True):
-        config = service.get_config()
-
-    _assert_constance_value(
-        config,
-        "demoMode",
-        True,  # noqa: WPS425
-    )
-
-
-def _assert_config(config):
-    constances = settings.CONSTANCE_CONFIG
-    _assert_constance_value(
-        config,
+@pytest.mark.parametrize(
+    "config_key",
+    [
         "firstWeekDay",
-        constances["FIRST_WEEK_DAY"][0],
-    )
-    _assert_constance_value(
-        config,
         "currencyCode",
-        constances["CURRENCY_CODE"][0],
-    )
-    _assert_constance_value(
-        config,
         "gitlabLoginEnabled",
-        constances["GITLAB_LOGIN_ENABLED"][0],
-    )
-    _assert_constance_value(
-        config,
         "demoMode",
-        constances["DEMO_MODE"][0],
-    )
-
-
-def _assert_constance_value(config, key_name, constance_value):
-    backend = json.loads(config.replace("backend = ", ""))
-
-    assert key_name in backend["config"]
-    assert backend["config"][key_name] == constance_value
+        "staticHead",
+    ],
+)
+def test_constance_provider_alter_value(override_config, config_key):
+    """Test config is depends on constance variables."""
+    backend_config = _BackendConfigFactory.create()
+    constance_key = CONSTANCE_CONFIG_MAPPING[config_key]
+    with override_config(**{constance_key: backend_config[config_key]}):
+        assert (
+            constance_config_provider()[config_key]
+            == backend_config[config_key]
+        )
