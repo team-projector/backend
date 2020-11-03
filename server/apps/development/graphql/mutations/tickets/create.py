@@ -13,7 +13,9 @@ from apps.development.graphql.types import TicketType
 from apps.development.models import Ticket
 
 
-class _InputSerializer(TicketBaseInput):
+class InputSerializer(TicketBaseInput):
+    """InputSerializer."""
+
     def get_fields(self) -> Dict[str, Field]:
         """Returns serializer fields."""
         fields = super().get_fields()
@@ -27,7 +29,7 @@ class CreateTicketMutation(SerializerMutation):
     """Create ticket mutation."""
 
     class Meta:
-        serializer_class = _InputSerializer
+        serializer_class = InputSerializer
 
     ticket = graphene.Field(TicketType)
     permission_classes = (AllowProjectManager,)

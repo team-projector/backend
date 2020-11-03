@@ -10,7 +10,9 @@ from apps.users.graphql.types import TokenType
 from apps.users.services.user.auth import login_user
 
 
-class _InputSerializer(serializers.Serializer):
+class InputSerializer(serializers.Serializer):
+    """InputSerializer."""
+
     login = serializers.CharField()
     password = serializers.CharField()
 
@@ -19,7 +21,7 @@ class LoginMutation(SerializerMutation):
     """Login mutation returns token."""
 
     class Meta:
-        serializer_class = _InputSerializer
+        serializer_class = InputSerializer
 
     permission_classes = (AllowAny,)
 

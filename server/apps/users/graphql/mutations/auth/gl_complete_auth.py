@@ -14,7 +14,9 @@ from apps.users.graphql.types import TokenType
 from apps.users.models import Token
 
 
-class _InputSerializer(serializers.Serializer):
+class InputSerializer(serializers.Serializer):
+    """InputSerializer."""
+
     code = serializers.CharField()
     state = serializers.CharField()
 
@@ -23,7 +25,7 @@ class CompleteGitlabAuthMutation(SerializerMutation):
     """Complete login mutation after redirection from Gitlab."""
 
     class Meta:
-        serializer_class = _InputSerializer
+        serializer_class = InputSerializer
 
     permission_classes = (AllowAny,)
 

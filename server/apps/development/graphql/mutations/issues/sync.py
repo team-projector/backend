@@ -9,7 +9,7 @@ from apps.development.graphql.types import IssueType
 from apps.development.tasks import sync_project_issue_task
 
 
-class _InputSerializer(BaseIssueInput):
+class InputSerializer(BaseIssueInput):
     """Ticket sync serializer."""
 
 
@@ -17,7 +17,7 @@ class SyncIssueMutation(SerializerMutation):
     """Syncing issue mutation."""
 
     class Meta:
-        serializer_class = _InputSerializer
+        serializer_class = InputSerializer
 
     issue = graphene.Field(IssueType)
 

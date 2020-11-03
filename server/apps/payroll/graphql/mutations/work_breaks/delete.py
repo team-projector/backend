@@ -9,7 +9,7 @@ from apps.payroll.graphql.permissions import CanManageWorkBreak
 from apps.payroll.models import WorkBreak
 
 
-class _InputSerializer(serializers.Serializer):
+class InputSerializer(serializers.Serializer):
     """DeleteWorkBreakInput serializer."""
 
     id = serializers.PrimaryKeyRelatedField(  # noqa: A003, WPS125
@@ -22,7 +22,7 @@ class DeleteWorkBreakMutation(SerializerMutation):
     """Delete work break after validation."""
 
     class Meta:
-        serializer_class = _InputSerializer
+        serializer_class = InputSerializer
 
     permission_classes = (CanManageWorkBreak,)
 
