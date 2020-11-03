@@ -31,7 +31,7 @@ class WeekMetricsProvider(provider.ProgressMetricsProvider):
 
         current = self.start
         while current <= self.end:
-            weeks.append(begin_of_week(current, config.FIRST_WEEK_DAY))
+            weeks.append(begin_of_week(current, int(config.FIRST_WEEK_DAY)))
             current += WEEK_STEP
 
         return weeks
