@@ -5,13 +5,8 @@ from django.utils.timezone import now
 from apps.payroll.models import WorkBreak
 
 
-def paid_work_breaks_days_resolver(
-    parent,
-    info,  # noqa: WPS110
-    **kwargs,
-) -> int:
+def paid_work_breaks_days_resolver(user) -> int:
     """Returns overall paid work break days for user."""
-    user = info.context.user
     if not user.is_authenticated:
         return 0
 
