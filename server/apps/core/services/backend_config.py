@@ -1,20 +1,53 @@
 import json
-from typing import Dict
+import types
+from typing import Callable, TypedDict
 
 from constance import config
 from constance.signals import config_updated
 from django.core.cache import BaseCache, cache
+from django.db import models
 from django.dispatch import receiver
+
+
+class Currency(models.TextChoices):
+    """Currency choices."""
+
+    RUR = "rur", "₽"  # noqa: WPS115
+    USD = "usd", "$"  # noqa: WPS115
+    EUR = "eur", "€"  # noqa: WPS115
+
 
 _CACHE_KEY = "backend_config"
 _CACHE_EXPIRE_AFTER = 60 * 60  # seconds
 
+CONSTANCE_CONFIG_MAPPING = types.MappingProxyType(
+    {
+        "firstWeekDay": "FIRST_WEEK_DAY",
+        "currencyCode": "CURRENCY_CODE",
+        "gitlabLoginEnabled": "GITLAB_LOGIN_ENABLED",
+        "demoMode": "DEMO_MODE",
+        "staticHead": "STATIC_HEAD",
+    },
+)
+
 
 @receiver(config_updated)
 def _flush_backend_config_cache(sender, key, old_value, new_value, **kwargs):
-    if key != "FIRST_WEEK_DAY":
+    constance_keys = CONSTANCE_CONFIG_MAPPING.values()
+
+    if key not in constance_keys:
         return
     cache.delete(_CACHE_KEY)
+
+
+class BackendConfig(TypedDict):
+    """Backend config dict."""
+
+    firstWeekDay: int  # noqa: WPS115, N815
+    currencyCode: Currency  # noqa: WPS115, N815
+    gitlabLoginEnabled: bool  # noqa: WPS115, N815
+    demoMode: bool  # noqa: WPS115, N815
+    staticHead: str  # noqa: WPS115, N815
 
 
 class BackendConfigService:
@@ -23,6 +56,7 @@ class BackendConfigService:
     def __init__(
         self,
         cache_manager: BaseCache,
+        config_provider: Callable[[], BackendConfig],
         cache_key: str,
         expire_after: int,
     ):
@@ -30,13 +64,14 @@ class BackendConfigService:
         self._cache_key = cache_key
         self._expire_after = expire_after
         self._cache = cache_manager
+        self._config_provider = config_provider
 
     def get_config(self):
         """:returns config content."""
         config_file_content = self._cache.get(self._cache_key)
         if not config_file_content:
             config_file_content = "backend = {0}".format(
-                json.dumps({"config": self._get_config_map()}),
+                json.dumps({"config": self._config_provider()}),
             )
         self._cache.add(
             self._cache_key,
@@ -45,17 +80,20 @@ class BackendConfigService:
         )
         return config_file_content
 
-    def _get_config_map(self) -> Dict[str, str]:
-        return {
-            "firstWeekDay": config.FIRST_WEEK_DAY,
-            "currencyCode": config.CURRENCY_CODE,
-            "gitlabLoginEnabled": config.GITLAB_LOGIN_ENABLED,
-            "demoMode": config.DEMO_MODE,
-        }
+
+def constance_config_provider() -> BackendConfig:
+    """Maps constance keys to BackendConfig."""
+    return BackendConfig(
+        **{
+            service_key: getattr(config, constance_key)
+            for service_key, constance_key in CONSTANCE_CONFIG_MAPPING.items()
+        },
+    )
 
 
 get_config = BackendConfigService(
     cache_manager=cache,
+    config_provider=constance_config_provider,
     cache_key=_CACHE_KEY,
     expire_after=_CACHE_EXPIRE_AFTER,
 ).get_config
