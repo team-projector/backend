@@ -75,7 +75,7 @@ class BackendConfigService:
 
 def constance_config_provider() -> BackendConfig:
     """Maps constance keys to BackendConfig."""
-    return BackendConfig(
+    return BackendConfig(  # type: ignore
         **{
             service_key: getattr(config, constance_key)
             for service_key, constance_key in CONSTANCE_CONFIG_MAPPING.items()
