@@ -1,9 +1,18 @@
 import calendar
 from collections import OrderedDict
 
-from apps.core.services.backend_config import Currency
+from django.db import models
 
 CONSTANCE_BACKEND = "constance.backends.database.DatabaseBackend"
+
+
+class Currency(models.TextChoices):
+    """Currency choices."""
+
+    RUR = "rur", "₽"  # noqa: WPS115
+    USD = "usd", "$"  # noqa: WPS115
+    EUR = "eur", "€"  # noqa: WPS115
+
 
 WEEK_DAYS = (
     "MONDAY",

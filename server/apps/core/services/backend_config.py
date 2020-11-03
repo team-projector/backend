@@ -5,17 +5,9 @@ from typing import Callable, TypedDict
 from constance import config
 from constance.signals import config_updated
 from django.core.cache import BaseCache, cache
-from django.db import models
 from django.dispatch import receiver
 
-
-class Currency(models.TextChoices):
-    """Currency choices."""
-
-    RUR = "rur", "₽"  # noqa: WPS115
-    USD = "usd", "$"  # noqa: WPS115
-    EUR = "eur", "€"  # noqa: WPS115
-
+from settings.components.constance import Currency
 
 _CACHE_KEY = "backend_config"
 _CACHE_EXPIRE_AFTER = 60 * 60  # seconds
