@@ -22,6 +22,8 @@ ONE_WEEK = timedelta(weeks=1)
         calendar.FRIDAY,
         calendar.SATURDAY,
         calendar.SUNDAY,
+        "2",
+        "4",
     ],
 )
 def user(user, request):
@@ -32,7 +34,10 @@ def user(user, request):
 
 def test_trunc_week(user):
     """Test trunc week as 'begin_of_week'."""
-    start_week = begin_of_week(datetime.now().date(), config.FIRST_WEEK_DAY)
+    start_week = begin_of_week(
+        datetime.now().date(),
+        int(config.FIRST_WEEK_DAY),
+    )
     spent_times = _create_spent_times(user, start_week)
     _assert_spent_times(spent_times, start_week)
 
