@@ -10,7 +10,9 @@ from apps.development.models import MergeRequest
 from apps.development.tasks import sync_project_merge_request_task
 
 
-class _InputSerializer(serializers.ModelSerializer):
+class InputSerializer(serializers.ModelSerializer):
+    """InputSerializer."""
+
     class Meta:
         model = MergeRequest
         fields = ("id",)
@@ -25,7 +27,7 @@ class SyncMergeRequestMutation(SerializerMutation):
     """Syncing merge request mutation."""
 
     class Meta:
-        serializer_class = _InputSerializer
+        serializer_class = InputSerializer
 
     merge_request = graphene.Field(MergeRequestType)
 

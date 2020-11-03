@@ -9,7 +9,9 @@ from apps.core.graphql.security.permissions import AllowProjectManager
 from apps.development.models import Ticket
 
 
-class _InputSerializer(serializers.Serializer):
+class InputSerializer(serializers.Serializer):
+    """InputSerializer."""
+
     id = serializers.PrimaryKeyRelatedField(  # noqa: WPS125, A003
         queryset=Ticket.objects.all(),
     )
@@ -26,7 +28,7 @@ class DeleteTicketMutation(SerializerMutation):
     """Delete ticket."""
 
     class Meta:
-        serializer_class = _InputSerializer
+        serializer_class = InputSerializer
 
     permission_classes = (AllowProjectManager,)
 

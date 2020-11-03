@@ -15,7 +15,9 @@ from apps.payroll.models.work_break import WorkBreak, WorkBreakReason
 User = get_user_model()
 
 
-class _InputSerializer(serializers.Serializer):
+class InputSerializer(serializers.Serializer):
+    """InputSerializer."""
+
     id = serializers.PrimaryKeyRelatedField(  # noqa: A003, WPS125
         queryset=WorkBreak.objects.all(),
         source="work_break",
@@ -32,7 +34,7 @@ class UpdateWorkBreakMutation(SerializerMutation):
     """Update work break after validation."""
 
     class Meta:
-        serializer_class = _InputSerializer
+        serializer_class = InputSerializer
 
     permission_classes = (CanManageWorkBreak,)
 

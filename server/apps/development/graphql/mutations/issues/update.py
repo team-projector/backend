@@ -12,7 +12,9 @@ from apps.development.models import Ticket
 from apps.development.tasks import propagate_ticket_to_related_issues_task
 
 
-class _InputSerializer(BaseIssueInput):
+class InputSerializer(BaseIssueInput):
+    """InputSerializer."""
+
     class Meta(BaseIssueInput.Meta):
         fields = ("id", "ticket")
 
@@ -23,7 +25,7 @@ class UpdateIssueMutation(SerializerMutation):
     """Update issue mutation."""
 
     class Meta:
-        serializer_class = _InputSerializer
+        serializer_class = InputSerializer
 
     issue = graphene.Field(IssueType)
 
