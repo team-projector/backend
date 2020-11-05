@@ -9,7 +9,7 @@ from apps.core.notifications.slack.client import SlackClient
 from apps.core.utils.mail import render_email_html
 from apps.development.models import Issue, MergeRequest
 from apps.payroll.models.salary import Salary
-from settings.components.constance import Currency
+from constance import config
 
 
 def is_payed(salary: Salary) -> bool:
@@ -24,9 +24,6 @@ def send_email_report(salary: Salary) -> None:
 
     subject = "Salary report"
     text = "Salary has been paid."
-    currency = Currency[
-        settings.CONSTANCE_CONFIG["CURRENCY_CODE"][0].upper()
-    ].label
 
     mail_users(
         subject=subject,
@@ -37,8 +34,9 @@ def send_email_report(salary: Salary) -> None:
             {
                 "title": subject,
                 "salary": salary,
-                "currency": currency,
+                "currency": config.CURRENCY_CODE.label,
                 "spend_data": _get_spend_data(salary),
+                "domain": settings.DOMAIN_NAME,
             },
         ),
     )
