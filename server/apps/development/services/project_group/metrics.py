@@ -29,8 +29,7 @@ class ProjectGroupMetricsProvider(IssuesContainerMetricsProvider):
     def filter_issues(self, queryset: models.QuerySet) -> models.QuerySet:
         """Filter issues."""
         return queryset.filter(
-            milestone__isnull=False,
-            project__group=self.project_group,
+            milestone__in=self.project_group.milestones.all(),
         )
 
     def get_metrics(self) -> ProjectGroupMetrics:
@@ -57,12 +56,10 @@ class ProjectGroupMetricsProvider(IssuesContainerMetricsProvider):
         """
         payroll = SpentTime.objects.filter(
             models.Q(
-                issues__milestone__isnull=False,
-                issues__project__group=self.project_group,
+                issues__milestone__in=self.project_group.milestones.all(),
             )
             | models.Q(
-                mergerequests__milestone__isnull=False,
-                mergerequests__project__group=self.project_group,
+                mergerequests__milestone__in=self.project_group.milestones.all(),
             ),
         ).aggregate(
             total_sum=Coalesce(models.Sum("sum"), 0),

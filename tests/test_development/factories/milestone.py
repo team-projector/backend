@@ -17,3 +17,4 @@ class MilestoneFactory(GitlabFieldMixin):
     content_type = factory.LazyAttribute(
         lambda instance: ContentType.objects.get_for_model(instance.owner),
     )
+    gl_id = factory.Sequence(lambda seq: seq)
