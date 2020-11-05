@@ -54,12 +54,13 @@ class ProjectGroupMetricsProvider(IssuesContainerMetricsProvider):
         :type metrics: ProjectGroupMetrics
         :rtype: None
         """
+        milestones = self.project_group.milestones.all()
         payroll = SpentTime.objects.filter(
             models.Q(
-                issues__milestone__in=self.project_group.milestones.all(),
+                issues__milestone__in=milestones,
             )
             | models.Q(
-                mergerequests__milestone__in=self.project_group.milestones.all(),
+                mergerequests__milestone__in=milestones,
             ),
         ).aggregate(
             total_sum=Coalesce(models.Sum("sum"), 0),
