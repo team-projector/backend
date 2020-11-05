@@ -10,6 +10,10 @@ from apps.development.models.issue import IssueState
 from apps.development.models.merge_request import MergeRequestState
 from apps.payroll.models import Bonus, Penalty, SpentTime
 from apps.users.models import User
+from apps.users.services.user.metrics import (
+    last_salary_date_resolver,
+    paid_work_breaks_days_resolver,
+)
 
 
 class UserMetricsProvider:
@@ -24,25 +28,41 @@ class UserMetricsProvider:
     def get_metrics(self, user: User):
         """Calculate and return metrics."""
         metrics = self._get_time_spent_aggregations(user)
-        ret = recursive_dict()
+        return_metrics = recursive_dict()
 
         for field, metric in metrics.items():
-            deep_set(ret, field, metric)
+            deep_set(return_metrics, field, metric)
 
-        if ret.get("taxes", None) is not None:
+        if return_metrics.get("taxes", None) is not None:
             bonus = self._get_bonus(user) - self._get_penalty(user)
-            ret["taxes"] += bonus * Decimal.from_float(user.tax_rate)
-            ret["taxes"] = max(ret["taxes"], Decimal(0)).quantize(
+            return_metrics["taxes"] += bonus * Decimal.from_float(
+                user.tax_rate,
+            )
+            return_metrics["taxes"] = max(
+                return_metrics["taxes"],
+                Decimal(0),
+            ).quantize(
                 Decimal("1.00"),
             )
 
-        if self._is_metric_requested("bonus"):
-            ret["bonus"] = self._get_bonus(user)
+        self._fill_metrics(user, return_metrics)
 
-        if self._is_metric_requested("penalty"):
-            ret["penalty"] = self._get_penalty(user)
+        return return_metrics
 
-        return ret
+    def _fill_metrics(self, user, metrics) -> None:
+        """Fill metrics."""
+        metric_request_map = {
+            "bonus": self._get_bonus,
+            "penalty": self._get_penalty,
+            "paid_work_breaks_days": paid_work_breaks_days_resolver,
+            "last_salary_date": last_salary_date_resolver,
+        }
+
+        for requested_field, func in metric_request_map.items():
+            if not self._is_metric_requested(requested_field):
+                continue
+
+            metrics[requested_field] = func(user)
 
     def _get_time_spent_aggregations(self, user: User):
         """

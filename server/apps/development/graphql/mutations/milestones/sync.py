@@ -16,7 +16,9 @@ from apps.development.tasks import (
 )
 
 
-class _InputSerializer(serializers.ModelSerializer):
+class InputSerializer(serializers.ModelSerializer):
+    """InputSerializer."""
+
     class Meta:
         model = Milestone
         fields = ("id",)
@@ -59,7 +61,7 @@ class SyncMilestoneMutation(SerializerMutation):
     """Syncing milestone mutation."""
 
     class Meta:
-        serializer_class = _InputSerializer
+        serializer_class = InputSerializer
 
     milestone = graphene.Field(MilestoneType)
 

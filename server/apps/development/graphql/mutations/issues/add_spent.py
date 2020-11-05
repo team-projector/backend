@@ -14,7 +14,9 @@ from apps.payroll.services.spent_time.gitlab import add_spent_time
 ERROR_MSG_NO_GL_TOKEN = _("MSG_PLEASE_PROVIDE_PERSONAL_GL_TOKEN")
 
 
-class _InputSerializer(BaseIssueInput):
+class InputSerializer(BaseIssueInput):
+    """InputSerializer."""
+
     class Meta(BaseIssueInput.Meta):
         fields = ("id", "seconds")
 
@@ -33,7 +35,7 @@ class AddSpentToIssueMutation(SerializerMutation):
     """Add spend issue mutation."""
 
     class Meta:
-        serializer_class = _InputSerializer
+        serializer_class = InputSerializer
 
     issue = graphene.Field(IssueType)
 

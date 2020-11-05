@@ -18,7 +18,9 @@ from apps.development.services.issue.allowed import filter_allowed_for_user
 ISSUES_PARAM_ERROR = 'Please, choose one parameter: "attachIssues" or "issues"'
 
 
-class _InputSerializer(TicketBaseInput):
+class InputSerializer(TicketBaseInput):
+    """InputSerializer."""
+
     class Meta(TicketBaseInput.Meta):
         fields = ["id", *TicketBaseInput.Meta.fields, "attach_issues"]
 
@@ -68,7 +70,7 @@ class UpdateTicketMutation(SerializerMutation):
     """Update ticket mutation."""
 
     class Meta:
-        serializer_class = _InputSerializer
+        serializer_class = InputSerializer
 
     ticket = graphene.Field(TicketType)
     permission_classes = (AllowProjectManager,)

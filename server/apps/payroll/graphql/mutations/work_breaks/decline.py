@@ -8,7 +8,9 @@ from apps.payroll.models.work_break import WorkBreak
 from apps.payroll.services import work_break as work_break_service
 
 
-class _InputSerializer(serializers.Serializer):
+class InputSerializer(serializers.Serializer):
+    """InputSerializer."""
+
     id = serializers.PrimaryKeyRelatedField(  # noqa: A003, WPS125
         queryset=WorkBreak.objects.all(),
         source="work_break",
@@ -20,7 +22,7 @@ class DeclineWorkBreakMutation(SerializerMutation):
     """Decline work break mutation."""
 
     class Meta:
-        serializer_class = _InputSerializer
+        serializer_class = InputSerializer
 
     permission_classes = (CanApproveDeclineWorkBreak,)
 

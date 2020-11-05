@@ -4,7 +4,6 @@ from apps.users.graphql.types.work_item_user_metrics import (
     IssueUserMetricsType,
     MergeRequestUserMetricsType,
 )
-from apps.users.services.user import metrics
 
 
 class UserMetricsType(graphene.ObjectType):
@@ -13,9 +12,7 @@ class UserMetricsType(graphene.ObjectType):
     payroll_closed = graphene.Float()
     payroll_opened = graphene.Float()
     payroll = graphene.Float()
-    paid_work_breaks_days = graphene.Int(
-        resolver=metrics.paid_work_breaks_days_resolver,
-    )
+    paid_work_breaks_days = graphene.Int()
 
     bonus = graphene.Float()
     penalty = graphene.Float()
@@ -30,6 +27,4 @@ class UserMetricsType(graphene.ObjectType):
     issues = graphene.Field(IssueUserMetricsType)
     merge_requests = graphene.Field(MergeRequestUserMetricsType)
 
-    last_salary_date = graphene.Date(
-        resolver=metrics.last_salary_date_resolver,
-    )
+    last_salary_date = graphene.Date()
