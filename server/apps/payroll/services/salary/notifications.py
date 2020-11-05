@@ -1,5 +1,6 @@
 from typing import Dict
 
+from constance import config
 from django.conf import settings
 from django.contrib.contenttypes.models import ContentType
 from django.db import models
@@ -9,7 +10,6 @@ from apps.core.notifications.slack.client import SlackClient
 from apps.core.utils.mail import render_email_html
 from apps.development.models import Issue, MergeRequest
 from apps.payroll.models.salary import Salary
-from constance import config
 
 
 def is_payed(salary: Salary) -> bool:
