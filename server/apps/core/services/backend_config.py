@@ -75,12 +75,19 @@ class BackendConfigService:
 
 def constance_config_provider() -> BackendConfig:
     """Maps constance keys to BackendConfig."""
-    return BackendConfig(  # type: ignore
+    constance_config = BackendConfig(  # type: ignore
         **{
             service_key: getattr(config, constance_key)
             for service_key, constance_key in CONSTANCE_CONFIG_MAPPING.items()
         },
     )
+
+    if "firstWeekDay" in constance_config:
+        constance_config["firstWeekDay"] = int(  # noqa: WPS529
+            constance_config["firstWeekDay"],  # noqa: WPS529
+        )
+
+    return constance_config
 
 
 get_config = BackendConfigService(
