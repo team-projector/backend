@@ -6,7 +6,7 @@ from django.contrib.auth.forms import AdminPasswordChangeForm
 from django.http import HttpRequest
 from django.urls import reverse
 from django.utils.html import format_html
-from jnt_admin_tools.decorators import admin_field
+from jnt_django_toolbox.admin.decorators import admin_field
 
 from apps.core.admin import base, mixins
 from apps.development.tasks import sync_user_task

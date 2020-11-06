@@ -32,7 +32,7 @@ class AdminMenu(Menu):
 
         self.children += [
             items.MenuItem("Home", reverse_lazy("admin:index")),
-            items.AppList(title="Applications"),
+            items.AppList(title="Applications", exclude=["constance.*"]),
             AdminMenuItem("Management", MANAGEMENT_MENU_ITEMS),
             AdminMenuItem("Utils", UTILS_MENU_ITEMS),
         ]
