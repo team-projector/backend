@@ -35,7 +35,7 @@ CONSTANCE_ADDITIONAL_FIELDS = {
         },
     ),
     "first_week_day": (
-        "django.forms.ChoiceField",
+        "apps.core.models.fields.ChoiceIntegerField",
         {
             "required": True,
             "choices": [(0, WEEK_DAYS[6]), (1, WEEK_DAYS[0])],
