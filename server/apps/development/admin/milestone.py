@@ -1,7 +1,10 @@
 from django.contrib import admin
+from django.http import HttpRequest
+from django.shortcuts import redirect
 
 from apps.core.admin.base import BaseModelAdmin
 from apps.core.admin.mixins import ForceSyncEntityMixin
+from apps.development.admin.filters import OwnerContentTypeFilter, OwnerFilter
 from apps.development.models import Milestone, Project, ProjectGroup
 from apps.development.tasks import (
     sync_project_group_milestone_task,
@@ -18,7 +21,7 @@ class MilestoneAdmin(
 
     list_display = ("id", "title", "start_date", "due_date", "budget", "state")
     search_fields = ("title",)
-    list_filter = ("state",)
+    list_filter = ("state", OwnerContentTypeFilter)
 
     def sync_handler(self, milestone):
         """Syncing milestone."""
@@ -32,3 +35,40 @@ class MilestoneAdmin(
                 milestone.owner.gl_id,
                 milestone.gl_id,
             )
+
+    def get_list_filter(self, request):
+        """Get list filters."""
+        list_filters = super().get_list_filter(request)
+
+        if request.GET.get("content_type__id__exact"):
+            list_filters = list(list_filters)
+            list_filters.append(OwnerFilter)
+            list_filters = tuple(list_filters)
+
+        return list_filters
+
+    def changelist_view(self, request: HttpRequest, extra_context=None):
+        """
+        The "change list" admin view for this model.
+
+        Apply filter for object_id only with content_type.
+        """
+        content_type_filter = request.GET.get("content_type__id__exact")
+        object_id_filter = request.GET.get("object_id__exact")
+
+        if object_id_filter and not content_type_filter:
+            path = request.META.get("PATH_INFO", "")
+            query_string = request.META.get("QUERY_STRING", "").replace(
+                "?",
+                "",
+            )
+
+            query_params = [
+                query
+                for query in query_string.split("&")
+                if not query.startswith("object_id__exact=")
+            ]
+
+            return redirect("{0}?{1}".format(path, "&".join(query_params)))
+
+        return super().changelist_view(request, extra_context=extra_context)
