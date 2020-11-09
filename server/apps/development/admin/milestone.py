@@ -56,8 +56,8 @@ class MilestoneAdmin(
 
         if object_id_filter and not content_type_filter:
             query_params = [
-                "{0}={1}".format(query, param)
-                for query, param in request.GET.items()
+                "{0}={1}".format(query, query_value)
+                for query, query_value in request.GET.items()
                 if query != "object_id__exact"
             ]
 
