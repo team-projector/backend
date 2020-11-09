@@ -6,6 +6,9 @@ from apps.development.services.project_group.gl.manager import (
 from apps.development.services.project_group.gl.provider import (
     ProjectGroupGlProvider,
 )
+from apps.development.tasks.milestones import (
+    sync_project_group_milestones_task,
+)
 from celery_app import app
 
 
@@ -28,3 +31,5 @@ def sync_project_group_task(gl_id: int) -> None:
         gl_group,
         parent,
     )
+
+    sync_project_group_milestones_task.delay(group.pk)
