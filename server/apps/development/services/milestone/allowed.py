@@ -32,12 +32,11 @@ def get_members(user: User) -> List[ProjectMember]:
     """Get project managers."""
     members = ProjectMember.objects.filter(
         user=user,
-        role=ProjectMemberRole.MANAGER,
     )
 
     if not members:
         raise GraphQLPermissionDenied(
-            "Only project managers can view project resources",
+            "Only project members can view milestones",
         )
 
     return list(members)
@@ -62,3 +61,15 @@ def get_group_milestones(
         get_group_milestones(children_groups, milestones_ids)
 
     return milestones_ids
+
+
+def is_project_manager(user: User, milestone: Milestone) -> bool:
+    """Check project manager for current milestone."""
+    members = ProjectMember.objects.filter(
+        user=user,
+        role=ProjectMemberRole.MANAGER,
+    )
+    return Milestone.objects.filter(
+        project__members__in=members,
+        id=milestone.pk,
+    ).exists()
