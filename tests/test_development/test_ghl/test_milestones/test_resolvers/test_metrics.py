@@ -6,8 +6,8 @@ from apps.development.graphql.types.milestone import MilestoneType
 from apps.development.models.project_member import ProjectMemberRole
 from tests.test_development.factories import (
     IssueFactory,
-    ProjectMilestoneFactory,
     ProjectMemberFactory,
+    ProjectMilestoneFactory,
 )
 from tests.test_development.test_services.test_milestones.helpers import (
     checkers,
