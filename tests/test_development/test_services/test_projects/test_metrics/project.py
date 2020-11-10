@@ -15,6 +15,17 @@ from tests.test_payroll.factories import IssueSpentTimeFactory
 
 
 @pytest.fixture()
+def user(user):
+    """Update user."""
+    user.tax_rate = 0.3
+    user.hour_rate = 50
+    user.customer_hour_rate = 80
+    user.save()
+
+    return user
+
+
+@pytest.fixture()
 def project(db):
     """Create project."""
     return ProjectFactory.create()
@@ -40,11 +51,6 @@ def issues(project, milestones):
 
 def test_project_metrics(user, project, issues):
     """Test project metrics."""
-    user.tax_rate = 0.3
-    user.hour_rate = 50
-    user.customer_hour_rate = 80
-    user.save()
-
     issue = issues[0]
     issue.user = user
     issue.save()
@@ -59,6 +65,24 @@ def test_project_metrics(user, project, issues):
     assert metrics.budget_spent == 80
     assert metrics.payroll == 50
     assert metrics.profit == 250
+
+
+def test_project_metrics_negative_profit(user, project, issues):
+    """Test project metrics negative profit."""
+    issue = issues[0]
+    issue.user = user
+    issue.save()
+
+    _add_spent_time(issue, user, timedelta(hours=100).total_seconds())
+    _generate_payroll(user, issue.created_at)
+
+    metrics = get_project_metrics(project)
+
+    assert metrics.budget == 300
+    assert metrics.budget_remains == -7700
+    assert metrics.budget_spent == 8000
+    assert metrics.payroll == 5000
+    assert metrics.profit == -4700
 
 
 def _add_issue(project, milestone, const) -> Issue:
