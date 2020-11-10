@@ -22,8 +22,27 @@ def test_not_project_manager(project_developer, group_customer, group):
     ProjectMilestoneFactory.create(owner=project)
     ProjectMilestoneFactory.create(owner=group)
 
+    assert not filter_allowed_for_user(
+        Milestone.objects.all(),
+        project_developer,
+    )
+
+
+def test_not_project_member(user, project_developer, group_customer, group):
+    """
+    Test not project manager.
+
+    :param user:
+    :param project_developer:
+    :param group_customer:
+    :param group:
+    """
+    project = ProjectFactory.create()
+    ProjectMilestoneFactory.create(owner=project)
+    ProjectMilestoneFactory.create(owner=group)
+
     with pytest.raises(GraphQLPermissionDenied):
-        filter_allowed_for_user(Milestone.objects.all(), project_developer)
+        filter_allowed_for_user(Milestone.objects.all(), user)
 
 
 def test_projects(user, make_project_manager):
