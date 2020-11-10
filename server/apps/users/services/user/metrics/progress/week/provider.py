@@ -44,4 +44,4 @@ class WeekMetricsProvider(provider.ProgressMetricsProvider):
 
     def _get_first_week_day(self) -> int:
         """Return number of day from calendar."""
-        return WEEK_DAY_MAP.get(config.FIRST_WEEK_DAY)
+        return WEEK_DAY_MAP.get(config.FIRST_WEEK_DAY)  # type: ignore
