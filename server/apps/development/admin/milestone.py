@@ -41,9 +41,7 @@ class MilestoneAdmin(
         list_filters = super().get_list_filter(request)
 
         if request.GET.get("content_type__id__exact"):
-            list_filters = list(list_filters)
-            list_filters.append(OwnerFilter)
-            list_filters = tuple(list_filters)
+            list_filters = list_filters + (OwnerFilter,)
 
         return list_filters
 
@@ -57,18 +55,14 @@ class MilestoneAdmin(
         object_id_filter = request.GET.get("object_id__exact")
 
         if object_id_filter and not content_type_filter:
-            path = request.META.get("PATH_INFO", "")
-            query_string = request.META.get("QUERY_STRING", "").replace(
-                "?",
-                "",
-            )
-
             query_params = [
-                query
-                for query in query_string.split("&")
-                if not query.startswith("object_id__exact=")
+                "{0}={1}".format(query, query_value)
+                for query, query_value in request.GET.items()
+                if query != "object_id__exact"
             ]
 
-            return redirect("{0}?{1}".format(path, "&".join(query_params)))
+            return redirect(
+                "{0}?{1}".format(request.path, "&".join(query_params)),
+            )
 
         return super().changelist_view(request, extra_context=extra_context)
