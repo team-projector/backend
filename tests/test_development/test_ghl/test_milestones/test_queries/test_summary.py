@@ -2,6 +2,7 @@ import pytest
 
 from apps.development.models.milestone import MilestoneState
 from apps.development.models.project_member import ProjectMemberRole
+from apps.users.models import User
 from tests.test_development.factories import (
     ProjectFactory,
     ProjectMemberFactory,
@@ -44,13 +45,16 @@ def milestones(user):
     )
 
 
-def test_raw_query(gql_client_authenticated, milestones):
+def test_raw_query(user, gql_client_authenticated, milestones):
     """
     Test raw query.
 
     :param gql_client_authenticated:
     :param milestones:
     """
+    user.roles = User.roles.DEVELOPER
+    user.save()
+
     response = gql_client_authenticated.execute(GHL_QUERY_MILESTONES_SUMMARY)
 
     assert "errors" not in response

@@ -4,6 +4,7 @@ from jnt_django_toolbox.helpers.time import seconds
 
 from apps.development.graphql.types import TicketType
 from apps.development.models.issue import IssueState
+from apps.users.models import User
 from tests.test_development.factories import IssueFactory, TicketFactory
 
 
@@ -39,6 +40,9 @@ def test_resolve_metrics_not_pm(user, ghl_auth_mock_info):
     :param user:
     :param ghl_auth_mock_info:
     """
+    user.roles = User.roles.DEVELOPER
+    user.save()
+
     ticket = TicketFactory.create()
 
     IssueFactory.create(

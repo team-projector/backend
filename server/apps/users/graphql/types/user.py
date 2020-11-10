@@ -33,7 +33,7 @@ class UserType(BaseDjangoObjectType):
         """Get queryset."""
         # TODO fix it (team members case)
         if issubclass(queryset.model, User):
-            queryset = queryset.filter(is_active=True)
+            queryset = queryset.filter(is_active=True, roles__gt=0)
 
         return queryset
 

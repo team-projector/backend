@@ -3,6 +3,7 @@ from jnt_django_graphene_toolbox.errors import GraphQLPermissionDenied
 
 from apps.development.graphql.filters import IssuesFilterSet
 from apps.development.models.issue import Issue
+from apps.users.models import User
 from tests.test_development.factories import (
     IssueFactory,
     ProjectMilestoneFactory,
@@ -45,6 +46,9 @@ def test_not_project_manager(user, auth_rf):
     :param user:
     :param auth_rf:
     """
+    user.roles = User.roles.DEVELOPER
+    user.save()
+
     milestone = ProjectMilestoneFactory.create()
     IssueFactory.create_batch(3, user=user, milestone=milestone)
 

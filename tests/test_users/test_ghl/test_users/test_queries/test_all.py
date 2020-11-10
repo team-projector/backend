@@ -3,6 +3,7 @@ from datetime import date
 import pytest
 
 from apps.core.gitlab import GITLAB_DATE_FORMAT
+from apps.users.models import User
 from tests.test_payroll.factories import SalaryFactory, WorkBreakFactory
 from tests.test_users.factories import UserFactory
 
@@ -15,12 +16,14 @@ def raw_query(assets):
 
 def test_raw_query(user, ghl_client, raw_query):
     """Test getting all users raw query."""
+    UserFactory.create(roles=0)
     ghl_client.set_user(user)
 
     response = ghl_client.execute(raw_query)
 
     assert "errors" not in response
     assert response["data"]["users"]["count"] == 1
+    assert User.objects.count() == 2
 
 
 def test_success(user, ghl_auth_mock_info, all_users_query):
