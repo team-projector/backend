@@ -38,9 +38,8 @@ class ProjectMetricsProvider(IssuesContainerMetricsProvider):
         self._fill_payroll_metrics(metrics)
         self._fill_budget_metrics(metrics)
 
-        if metrics.budget:
-            metrics.profit = metrics.budget - metrics.payroll
-            metrics.budget_remains = metrics.budget - metrics.budget_spent
+        metrics.profit = metrics.budget - metrics.payroll
+        metrics.budget_remains = metrics.budget - metrics.budget_spent
 
         return metrics
 

@@ -38,9 +38,8 @@ class MilestoneMetricsProvider(IssuesContainerMetricsProvider):
         self._fill_payroll_metrics(metrics)
         metrics.budget = self.milestone.budget
 
-        if metrics.budget:
-            metrics.profit = metrics.budget - metrics.payroll
-            metrics.budget_remains = metrics.budget - metrics.budget_spent
+        metrics.profit = metrics.budget - metrics.payroll
+        metrics.budget_remains = metrics.budget - metrics.budget_spent
 
         return metrics
 

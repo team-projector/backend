@@ -85,6 +85,26 @@ def test_project_metrics_negative_profit(user, project, issues):
     assert metrics.profit == -4700
 
 
+def test_project_metrics_budget_empty(user, project, issues):
+    """Test project metrics negative profit."""
+    project.milestones.update(budget=0)
+
+    issue = issues[0]
+    issue.user = user
+    issue.save()
+
+    _add_spent_time(issue, user, timedelta(hours=100).total_seconds())
+    _generate_payroll(user, issue.created_at)
+
+    metrics = get_project_metrics(project)
+
+    assert metrics.budget == 0
+    assert metrics.budget_remains == -8000
+    assert metrics.budget_spent == 8000
+    assert metrics.payroll == 5000
+    assert metrics.profit == -5000
+
+
 def _add_issue(project, milestone, const) -> Issue:
     """Create issue."""
     return IssueFactory.create(
