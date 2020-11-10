@@ -16,11 +16,7 @@ from tests.test_payroll.factories import IssueSpentTimeFactory
 
 
 def test_resolver(user, ghl_auth_mock_info):
-    """
-    Test resolver.
-
-    :param db:
-    """
+    """Test resolver."""
     user.customer_hour_rate = 100
     user.hour_rate = 1000
     user.save()
