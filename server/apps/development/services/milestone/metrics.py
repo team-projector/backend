@@ -1,12 +1,17 @@
+from django.contrib.auth import get_user_model
 from django.db import models
 from django.db.models.functions import Coalesce
+from jnt_django_graphene_toolbox.errors import GraphQLPermissionDenied
 
 from apps.development.models import Milestone
 from apps.development.services.issue.metrics import (
     IssuesContainerMetrics,
     IssuesContainerMetricsProvider,
 )
+from apps.development.services.milestone.allowed import is_project_manager
 from apps.payroll.models import SpentTime
+
+User = get_user_model()
 
 
 class MilestoneMetrics(IssuesContainerMetrics):
@@ -67,3 +72,16 @@ class MilestoneMetricsProvider(IssuesContainerMetricsProvider):
 def get_milestone_metrics(milestone: Milestone) -> MilestoneMetrics:
     """Get metrics for milestone."""
     return MilestoneMetricsProvider(milestone).get_metrics()
+
+
+def get_milestone_metrics_for_user(
+    user: User,  # type: ignore
+    milestone: Milestone,
+) -> MilestoneMetrics:
+    """Get milestone metrics for user."""
+    if is_project_manager(user, milestone):
+        return get_milestone_metrics(milestone)
+
+    raise GraphQLPermissionDenied(
+        "Only project managers can view project resources",
+    )

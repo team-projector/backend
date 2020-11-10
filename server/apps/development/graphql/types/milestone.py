@@ -10,8 +10,12 @@ from apps.development.graphql.types.milestone_metrics import (
 )
 from apps.development.models import Milestone
 from apps.development.services.milestone.allowed import filter_allowed_for_user
-from apps.development.services.milestone.metrics import get_milestone_metrics
-from apps.development.services.milestone.problems import get_milestone_problems
+from apps.development.services.milestone.metrics import (
+    get_milestone_metrics_for_user,
+)
+from apps.development.services.milestone.problems import (
+    get_milestone_problems_for_user,
+)
 
 
 class MilestoneType(BaseDjangoObjectType):
@@ -34,8 +38,8 @@ class MilestoneType(BaseDjangoObjectType):
 
     def resolve_metrics(self, info, **kwargs):  # noqa: WPS110
         """Get milestone metrics."""
-        return get_milestone_metrics(self)
+        return get_milestone_metrics_for_user(info.context.user, self)
 
     def resolve_problems(self, info, **kwargs):  # noqa: WPS110
         """Get milestone problems."""
-        return get_milestone_problems(self)
+        return get_milestone_problems_for_user(info.context.user, self)

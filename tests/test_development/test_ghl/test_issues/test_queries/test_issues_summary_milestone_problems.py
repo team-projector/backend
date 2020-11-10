@@ -77,10 +77,12 @@ def test_issues_summary_as_developer(
         variable_values={"id": user.pk},
     )
 
-    assert "errors" not in response
-    assert response["data"]["issues"]["count"] == 5
+    assert "errors" in response
 
 
 def _get_query(assets) -> str:
     """Get raw query."""
-    return assets.open_file("issues_summary.ghl", "r").read()
+    return assets.open_file(
+        "issues_summary_milestone_problems.ghl",
+        "r",
+    ).read()

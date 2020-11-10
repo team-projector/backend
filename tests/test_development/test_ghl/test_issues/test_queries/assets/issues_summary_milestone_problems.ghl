@@ -20,6 +20,7 @@ query ($user: ID, $team: ID, $dueDate: Date) {
               title
               dueDate
               glUrl
+              problems
               __typename
             }
             __typename
