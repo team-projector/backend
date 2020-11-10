@@ -1,13 +1,11 @@
 import pytest
-from django.contrib.auth import get_user_model
 from jnt_django_graphene_toolbox.errors import GraphQLPermissionDenied
 from jnt_django_toolbox.helpers.time import seconds
 
 from apps.development.graphql.types import TicketType
 from apps.development.models.issue import IssueState
+from apps.users.models import User
 from tests.test_development.factories import IssueFactory, TicketFactory
-
-User = get_user_model()
 
 
 def test_resolve_metrics(user, ghl_auth_mock_info):

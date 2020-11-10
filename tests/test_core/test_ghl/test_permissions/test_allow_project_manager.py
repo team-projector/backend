@@ -1,8 +1,5 @@
-from django.contrib.auth import get_user_model
-
 from apps.core.graphql.security.permissions import AllowProjectManager
-
-User = get_user_model()
+from apps.users.models import User
 
 
 def test_success(user, ghl_auth_mock_info):

@@ -1,15 +1,13 @@
 import pytest
-from django.contrib.auth import get_user_model
 from jnt_django_graphene_toolbox.errors import GraphQLPermissionDenied
 
 from apps.development.graphql.filters import IssuesFilterSet
 from apps.development.models.issue import Issue
+from apps.users.models import User
 from tests.test_development.factories import (
     IssueFactory,
     ProjectMilestoneFactory,
 )
-
-User = get_user_model()
 
 
 def test_filter_by_milestone(user, auth_rf):

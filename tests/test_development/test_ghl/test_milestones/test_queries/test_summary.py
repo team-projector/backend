@@ -1,8 +1,8 @@
 import pytest
-from django.contrib.auth import get_user_model
 
 from apps.development.models.milestone import MilestoneState
 from apps.development.models.project_member import ProjectMemberRole
+from apps.users.models import User
 from tests.test_development.factories import (
     ProjectFactory,
     ProjectMemberFactory,
@@ -18,8 +18,6 @@ query {
     }
 }
 """
-
-User = get_user_model()
 
 
 @pytest.fixture()

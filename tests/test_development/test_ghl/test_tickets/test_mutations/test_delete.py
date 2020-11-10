@@ -1,5 +1,6 @@
-from django.contrib.auth import get_user_model
 from jnt_django_graphene_toolbox.errors import GraphQLPermissionDenied
+
+from apps.users.models import User
 
 GHL_DELETE_TICKET = """
 mutation ($id: ID!) {
@@ -8,8 +9,6 @@ mutation ($id: ID!) {
   }
 }
 """
-
-User = get_user_model()
 
 
 def test_query(project_manager, ghl_client, ticket):

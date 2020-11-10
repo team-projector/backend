@@ -1,12 +1,10 @@
 import pytest
-from django.contrib.auth import get_user_model
 from jnt_django_graphene_toolbox.errors import GraphQLPermissionDenied
 
 from apps.development.graphql.filters import IssuesFilterSet
 from apps.development.models.issue import Issue
+from apps.users.models import User
 from tests.test_development.factories import IssueFactory, TicketFactory
-
-User = get_user_model()
 
 
 def test_by_ticket(user, auth_rf):

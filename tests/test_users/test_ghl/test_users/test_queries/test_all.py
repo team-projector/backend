@@ -1,13 +1,11 @@
 from datetime import date
 
 import pytest
-from django.contrib.auth import get_user_model
 
 from apps.core.gitlab import GITLAB_DATE_FORMAT
+from apps.users.models import User
 from tests.test_payroll.factories import SalaryFactory, WorkBreakFactory
 from tests.test_users.factories import UserFactory
-
-User = get_user_model()
 
 
 @pytest.fixture()
