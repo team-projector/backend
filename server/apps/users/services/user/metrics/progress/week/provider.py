@@ -1,3 +1,4 @@
+import calendar
 from datetime import date, timedelta
 from typing import List
 
@@ -10,6 +11,10 @@ from apps.users.services.user.metrics.progress.week.metrics import (
 )
 
 WEEK_STEP = timedelta(weeks=1)
+WEEK_DAY_MAP = {  # noqa: WPS407
+    0: calendar.SUNDAY,
+    1: calendar.MONDAY,
+}
 
 
 class WeekMetricsProvider(provider.ProgressMetricsProvider):
@@ -29,9 +34,14 @@ class WeekMetricsProvider(provider.ProgressMetricsProvider):
         """
         weeks: List[date] = []
 
+        first_day = self._get_first_week_day()
         current = self.start
         while current <= self.end:
-            weeks.append(begin_of_week(current, int(config.FIRST_WEEK_DAY)))
+            weeks.append(begin_of_week(current, first_day))
             current += WEEK_STEP
 
         return weeks
+
+    def _get_first_week_day(self) -> int:
+        """Return number of day from calendar."""
+        return WEEK_DAY_MAP.get(config.FIRST_WEEK_DAY)  # type: ignore
