@@ -14,3 +14,4 @@ class UserFactory(factory.django.DjangoModelFactory):
     hour_rate = factory.Faker("random_int", min=100, max=999)
     is_staff = False
     is_active = True
+    roles = User.roles.MANAGER

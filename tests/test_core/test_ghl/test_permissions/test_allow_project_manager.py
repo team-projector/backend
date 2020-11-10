@@ -1,4 +1,8 @@
+from django.contrib.auth import get_user_model
+
 from apps.core.graphql.security.permissions import AllowProjectManager
+
+User = get_user_model()
 
 
 def test_success(user, ghl_auth_mock_info):
@@ -22,8 +26,11 @@ def test_unauth(ghl_mock_info):
     assert not perms.has_filter_permission(info=ghl_mock_info)
 
 
-def test_not_project_manager(ghl_auth_mock_info):
+def test_not_project_manager(user, ghl_auth_mock_info):
     """Check if not project manager user has"t permissions."""
+    user.roles = User.roles.DEVELOPER
+    user.save()
+
     perms = AllowProjectManager()
 
     assert not perms.has_node_permission(info=ghl_auth_mock_info, obj_id="1")

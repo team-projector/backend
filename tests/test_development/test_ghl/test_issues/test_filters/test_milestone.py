@@ -1,4 +1,5 @@
 import pytest
+from django.contrib.auth import get_user_model
 from jnt_django_graphene_toolbox.errors import GraphQLPermissionDenied
 
 from apps.development.graphql.filters import IssuesFilterSet
@@ -7,6 +8,8 @@ from tests.test_development.factories import (
     IssueFactory,
     ProjectMilestoneFactory,
 )
+
+User = get_user_model()
 
 
 def test_filter_by_milestone(user, auth_rf):
@@ -45,6 +48,9 @@ def test_not_project_manager(user, auth_rf):
     :param user:
     :param auth_rf:
     """
+    user.roles = User.roles.DEVELOPER
+    user.save()
+
     milestone = ProjectMilestoneFactory.create()
     IssueFactory.create_batch(3, user=user, milestone=milestone)
 

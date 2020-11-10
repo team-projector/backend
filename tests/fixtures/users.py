@@ -21,6 +21,7 @@ def user(db, django_user_model, django_username_field):
         return django_user_model.objects.create_user(
             DEFAULT_USERNAME,
             DEFAULT_USER_PASSWORD,
+            roles=django_user_model.roles.MANAGER,
         )
 
 

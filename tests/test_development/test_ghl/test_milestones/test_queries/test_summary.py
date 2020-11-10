@@ -1,4 +1,5 @@
 import pytest
+from django.contrib.auth import get_user_model
 
 from apps.development.models.milestone import MilestoneState
 from apps.development.models.project_member import ProjectMemberRole
@@ -17,6 +18,8 @@ query {
     }
 }
 """
+
+User = get_user_model()
 
 
 @pytest.fixture()
@@ -44,13 +47,16 @@ def milestones(user):
     )
 
 
-def test_raw_query(gql_client_authenticated, milestones):
+def test_raw_query(user, gql_client_authenticated, milestones):
     """
     Test raw query.
 
     :param gql_client_authenticated:
     :param milestones:
     """
+    user.roles = User.roles.DEVELOPER
+    user.save()
+
     response = gql_client_authenticated.execute(GHL_QUERY_MILESTONES_SUMMARY)
 
     assert "errors" not in response

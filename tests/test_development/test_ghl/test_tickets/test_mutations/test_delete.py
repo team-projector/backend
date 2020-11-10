@@ -1,3 +1,4 @@
+from django.contrib.auth import get_user_model
 from jnt_django_graphene_toolbox.errors import GraphQLPermissionDenied
 
 GHL_DELETE_TICKET = """
@@ -7,6 +8,8 @@ mutation ($id: ID!) {
   }
 }
 """
+
+User = get_user_model()
 
 
 def test_query(project_manager, ghl_client, ticket):
@@ -45,8 +48,10 @@ def test_unauth(ghl_mock_info, delete_ticket_mutation):
     assert isinstance(resolve, GraphQLPermissionDenied)
 
 
-def test_not_project_manager(ghl_auth_mock_info, delete_ticket_mutation):
+def test_not_project_manager(user, ghl_auth_mock_info, delete_ticket_mutation):
     """Test not project manager ticket deleting."""
+    user.roles = User.roles.DEVELOPER
+    user.save()
     resolve = delete_ticket_mutation(root=None, info=ghl_auth_mock_info, id=1)
 
     assert isinstance(resolve, GraphQLPermissionDenied)

@@ -1,10 +1,13 @@
 import pytest
+from django.contrib.auth import get_user_model
 from jnt_django_graphene_toolbox.errors import GraphQLPermissionDenied
 from jnt_django_toolbox.helpers.time import seconds
 
 from apps.development.graphql.types import TicketType
 from apps.development.models.issue import IssueState
 from tests.test_development.factories import IssueFactory, TicketFactory
+
+User = get_user_model()
 
 
 def test_resolve_metrics(user, ghl_auth_mock_info):
@@ -39,6 +42,9 @@ def test_resolve_metrics_not_pm(user, ghl_auth_mock_info):
     :param user:
     :param ghl_auth_mock_info:
     """
+    user.roles = User.roles.DEVELOPER
+    user.save()
+
     ticket = TicketFactory.create()
 
     IssueFactory.create(
