@@ -69,7 +69,15 @@ def is_project_manager(user: User, milestone: Milestone) -> bool:
         user=user,
         role=ProjectMemberRole.MANAGER,
     )
-    return Milestone.objects.filter(
+
+    project_milestones = Milestone.objects.filter(
         project__members__in=members,
-        id=milestone.pk,
-    ).exists()
+    ).values("id")
+
+    milestones_ids = [milestone.get("id") for milestone in project_milestones]
+
+    groups = ProjectGroup.objects.filter(members__in=members)
+
+    milestones_ids = get_group_milestones(groups, milestones_ids)
+
+    return milestone.pk in milestones_ids
