@@ -11,7 +11,7 @@ from apps.development.graphql.mutations.issues.inputs import BaseIssueInput
 from apps.development.graphql.types import IssueType
 from apps.payroll.services.spent_time.gitlab import add_spent_time
 
-ERROR_MSG_NO_GL_TOKEN = _("MSG_PLEASE_PROVIDE_PERSONAL_GL_TOKEN")
+ERROR_MSG_NO_GL_TOKEN = _("MSG__PLEASE_PROVIDE_PERSONAL_GL_TOKEN")
 
 
 class InputSerializer(BaseIssueInput):
