@@ -41,7 +41,8 @@ class BaseModelAdmin(
         has_default = bool(self.get_default_filters(request))
         is_get_request = request.method == "GET"
         from_another_url = self._get_referer_path(request) != request.META.get(
-            "PATH_INFO", "",
+            "PATH_INFO",
+            "",
         )
 
         return all(
