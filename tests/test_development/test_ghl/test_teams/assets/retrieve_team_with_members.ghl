@@ -1,0 +1,16 @@
+query ($id: ID!) {
+  team(id: $id) {
+    members(orderBy: "user__name") {
+      count
+      edges {
+        node {
+          roles
+          user {
+            id
+            name
+          }
+        }
+      }
+    }
+  }
+}
