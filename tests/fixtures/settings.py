@@ -18,5 +18,8 @@ def _django_settings(settings, tmpdir_factory) -> None:
 @pytest.fixture(autouse=True)
 def _constance_config(override_config) -> None:
     """Forces constance config."""
-    with override_config(GITLAB_ADDRESS="https://gitlab.com"):
+    with override_config(
+        GITLAB_ADDRESS="https://gitlab.com",
+        FIRST_WEEK_DAY=1,
+    ):
         yield

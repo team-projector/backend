@@ -1,11 +1,11 @@
-from datetime import datetime, timedelta
+from datetime import date, datetime, timedelta
 
 from django.db.models import Sum
-from django.utils import timezone
 from django.utils.timezone import make_aware
 from jnt_django_toolbox.helpers.date import begin_of_week, date2datetime
 from jnt_django_toolbox.helpers.time import seconds
 
+from apps.core.services.constances import get_first_week_day
 from apps.development.models.issue import IssueState
 from apps.development.services.team.metrics.progress import (
     get_progress_metrics,
@@ -28,7 +28,7 @@ def test_simple(team, team_developer, team_leader):
     """
     issue = IssueFactory.create(user=team_developer, due_date=datetime.now())
 
-    monday = begin_of_week(timezone.now().date())
+    monday = _get_begin_of_week()
 
     IssueSpentTimeFactory.create(
         date=monday + timedelta(days=4),
@@ -96,7 +96,7 @@ def test_efficiency_more100(team, team_developer, team_leader):
     """
     issue = IssueFactory.create(user=team_developer, due_date=datetime.now())
 
-    monday = begin_of_week(timezone.now().date())
+    monday = _get_begin_of_week()
 
     IssueSpentTimeFactory.create(
         date=monday + timedelta(days=4),
@@ -164,7 +164,7 @@ def test_efficiency_less100(team, team_developer):
     :param team_developer:
     """
     issue = IssueFactory.create(user=team_developer, due_date=datetime.now())
-    monday = begin_of_week(timezone.now().date())
+    monday = _get_begin_of_week()
 
     IssueSpentTimeFactory.create(
         date=monday + timedelta(days=4),
@@ -230,7 +230,7 @@ def test_efficiency_zero_estimate(team, team_developer):
     :param team_developer:
     """
     issue = IssueFactory.create(user=team_developer, due_date=datetime.now())
-    monday = begin_of_week(timezone.now().date())
+    monday = _get_begin_of_week()
 
     IssueSpentTimeFactory.create(
         date=monday + timedelta(days=4),
@@ -293,7 +293,7 @@ def test_efficiency_zero_spend(team, team_developer):
     :param team:
     :param team_developer:
     """
-    monday = begin_of_week(timezone.now().date())
+    monday = _get_begin_of_week()
     IssueFactory.create(
         user=team_developer,
         time_estimate=seconds(hours=2),
@@ -332,7 +332,7 @@ def test_many_weeks(team, team_developer):
     """
     issue = IssueFactory.create(user=team_developer, due_date=datetime.now())
 
-    monday = begin_of_week(timezone.now().date())
+    monday = _get_begin_of_week()
 
     IssueSpentTimeFactory.create(
         date=monday - timedelta(days=4),
@@ -398,7 +398,7 @@ def test_not_in_range(team, team_developer):
     :param team_developer:
     """
     issue = IssueFactory.create(user=team_developer, due_date=datetime.now())
-    monday = begin_of_week(timezone.now().date())
+    monday = _get_begin_of_week()
 
     IssueSpentTimeFactory.create(
         date=monday - timedelta(days=4),
@@ -464,7 +464,7 @@ def test_another_user(team, team_developer):
     issue = IssueFactory.create(user=team_developer, due_date=datetime.now())
 
     another_user = UserFactory.create()
-    monday = begin_of_week(timezone.now().date())
+    monday = _get_begin_of_week()
 
     IssueSpentTimeFactory.create(
         date=monday + timedelta(days=4),
@@ -591,3 +591,7 @@ def test_many_issues(team, team_developer):
         issues_counts={monday: 2},
         time_estimates={monday: timedelta(days=1, hours=1)},
     )
+
+
+def _get_begin_of_week() -> date:
+    return begin_of_week(datetime.now().date(), get_first_week_day())

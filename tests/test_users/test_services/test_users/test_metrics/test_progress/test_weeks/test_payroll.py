@@ -1,10 +1,11 @@
 from datetime import datetime, timedelta
 
-from constance import config, test
+from constance.test import override_config
 from django.utils import timezone
 from jnt_django_toolbox.helpers.date import begin_of_week
 from jnt_django_toolbox.helpers.time import seconds
 
+from apps.core.services.constances import get_first_week_day
 from apps.development.models.issue import IssueState
 from apps.users.services.user.metrics import get_progress_metrics
 from tests.test_development.factories import IssueFactory
@@ -276,7 +277,7 @@ def test_complex(user):
     )
 
 
-@test.override_config(FIRST_WEEK_DAY=1)
+@override_config(FIRST_WEEK_DAY=0)
 def test_first_week_day(user):
     """
     Test change first weekday.
@@ -291,34 +292,34 @@ def test_first_week_day(user):
         due_date=datetime.now(),
         state=IssueState.CLOSED,
     )
-    monday = begin_of_week(timezone.now().date(), config.FIRST_WEEK_DAY)
+    sunday = begin_of_week(timezone.now().date(), get_first_week_day())
 
     IssueSpentTimeFactory.create(
-        date=monday,
+        date=sunday,
         user=user,
         base=issue,
         time_spent=seconds(hours=3),
     )
     IssueSpentTimeFactory.create(
-        date=monday + timedelta(days=2, hours=5),
+        date=sunday + timedelta(days=2, hours=5),
         user=user,
         base=issue,
         time_spent=seconds(hours=2),
     )
     IssueSpentTimeFactory.create(
-        date=monday + timedelta(days=1),
+        date=sunday + timedelta(days=1),
         user=user,
         base=issue,
         time_spent=seconds(hours=4),
     )
     IssueSpentTimeFactory.create(
-        date=monday + timedelta(days=1, hours=5),
+        date=sunday + timedelta(days=1, hours=5),
         user=user,
         base=issue,
         time_spent=-seconds(hours=3),
     )
     IssueSpentTimeFactory.create(
-        date=monday + timedelta(days=10),
+        date=sunday + timedelta(days=10),
         user=user,
         base=issue,
         time_spent=-seconds(hours=3),
@@ -326,13 +327,13 @@ def test_first_week_day(user):
 
     metrics = get_progress_metrics(
         user,
-        monday - timedelta(days=5),
-        monday + timedelta(days=5),
+        sunday - timedelta(days=5),
+        sunday + timedelta(days=5),
         "week",
     )
 
     checkers.check_user_progress_payroll_metrics(
         metrics,
-        payroll={monday: 6 * user.hour_rate},
-        paid={monday: 0},
+        payroll={sunday: 6 * user.hour_rate},
+        paid={sunday: 0},
     )

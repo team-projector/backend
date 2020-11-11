@@ -1,5 +1,6 @@
-from constance import config
 from django.db.models import Func
+
+from apps.core.services.constances import get_first_week_day
 
 
 def _generate_trunc_week_template() -> str:
@@ -7,7 +8,7 @@ def _generate_trunc_week_template() -> str:
     expression = "%(expressions)s"  # noqa: WPS323
     days_passed = "(extract(ISODOW from {0}) - 1 - {1})".format(
         expression,
-        config.FIRST_WEEK_DAY,
+        get_first_week_day(),
     )
 
     return """
