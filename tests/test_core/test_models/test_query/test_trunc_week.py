@@ -1,12 +1,11 @@
-import calendar
 from datetime import datetime, timedelta
 
 import pytest
-from constance import config
 from constance.test import override_config
 from jnt_django_toolbox.helpers.date import begin_of_week
 
 from apps.core.models.query import TruncWeek
+from apps.core.services.constances import get_first_week_day
 from apps.payroll.models import SpentTime
 from tests.test_payroll.factories import IssueSpentTimeFactory
 
@@ -15,15 +14,10 @@ ONE_WEEK = timedelta(weeks=1)
 
 @pytest.fixture(
     params=[
-        calendar.MONDAY,
-        calendar.TUESDAY,
-        calendar.WEDNESDAY,
-        calendar.THURSDAY,
-        calendar.FRIDAY,
-        calendar.SATURDAY,
-        calendar.SUNDAY,
-        "2",
-        "4",
+        0,
+        1,
+        "1",
+        "0",
     ],
 )
 def user(user, request):
@@ -36,7 +30,7 @@ def test_trunc_week(user):
     """Test trunc week as 'begin_of_week'."""
     start_week = begin_of_week(
         datetime.now().date(),
-        int(config.FIRST_WEEK_DAY),
+        get_first_week_day(),
     )
     spent_times = _create_spent_times(user, start_week)
     _assert_spent_times(spent_times, start_week)
