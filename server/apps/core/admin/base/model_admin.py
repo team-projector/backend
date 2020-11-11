@@ -1,5 +1,5 @@
 from typing import Dict
-from urllib.parse import urlencode
+from urllib.parse import urlencode, urlparse
 
 from django.contrib import admin
 from django.http import HttpRequest
@@ -23,19 +23,35 @@ class BaseModelAdmin(
 
     def changelist_view(self, request: HttpRequest, extra_context=None):
         """The "change list" admin view for this model."""
-        ref = request.META.get("HTTP_REFERER", "")
-        path = request.META.get("PATH_INFO", "")
-
-        default_filters = self.get_default_filters(request)
-
-        if request.GET or (ref and ref.endswith(path)) or not default_filters:
-            return super().changelist_view(
-                request,
-                extra_context=extra_context,
+        if self._need_apply_default_filters(request):
+            return redirect(
+                "{0}?{1}".format(
+                    request.META.get("PATH_INFO"),
+                    urlencode(self.get_default_filters(request)),
+                ),
             )
 
-        query = urlencode(default_filters)
-        return redirect("{0}?{1}".format(path, query))
+        return super().changelist_view(request, extra_context=extra_context)
 
     def get_default_filters(self, request: HttpRequest) -> Dict[str, str]:
         """Set default filters to the page."""
+
+    def _need_apply_default_filters(self, request) -> bool:
+        has_query = bool(request.META.get("QUERY_STRING"))
+        has_default = bool(self.get_default_filters(request))
+        is_get_request = request.method == "GET"
+        from_another_url = self._get_referer_path(request) != request.META.get(
+            "PATH_INFO", "",
+        )
+
+        return all(
+            (
+                has_default,
+                is_get_request,
+                from_another_url,
+                not has_query,
+            ),
+        )
+
+    def _get_referer_path(self, request) -> str:
+        return urlparse(request.META.get("HTTP_REFERER", "")).path
