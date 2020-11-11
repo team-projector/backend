@@ -1,3 +1,4 @@
+from django.db.models import QuerySet
 from jnt_django_graphene_toolbox.connections import DataSourceConnection
 from jnt_django_graphene_toolbox.relay_nodes import DatasourceRelayNode
 
@@ -13,3 +14,12 @@ class TeamMemberType(UserType):
         interfaces = (DatasourceRelayNode,)
         connection_class = DataSourceConnection
         name = "TeamMember"
+
+    @classmethod
+    def get_queryset(
+        cls,
+        queryset: QuerySet,
+        info,  # noqa: WPS110
+    ) -> QuerySet:
+        """Get queryset."""
+        return queryset.filter(user__is_active=True)

@@ -5,25 +5,17 @@ from jnt_django_graphene_toolbox.errors import (
 )
 
 from tests.test_development.factories import TeamFactory
-
-GHL_QUERY_TEAM = """
-query ($id: ID!) {
-  team(id: $id) {
-    id
-    title
-  }
-}
-"""
+from tests.test_users.factories import UserFactory
 
 
-def test_query(user, ghl_client):
+def test_query(user, ghl_client, assets):
     """Test retrieve team raw query."""
     team = TeamFactory.create(members=[user])
 
     ghl_client.set_user(user)
 
     response = ghl_client.execute(
-        GHL_QUERY_TEAM,
+        _get_query(assets),
         variable_values={"id": team.pk},
     )
 
@@ -31,14 +23,14 @@ def test_query(user, ghl_client):
     assert response["data"]["team"]["id"] == str(team.pk)
 
 
-def test_query_found(user, ghl_client):
+def test_query_found(user, ghl_client, assets):
     """Test retrieve team raw query."""
     team = TeamFactory.create(members=[user])
 
     ghl_client.set_user(user)
 
     response = ghl_client.execute(
-        GHL_QUERY_TEAM,
+        _get_query(assets),
         variable_values={"id": team.pk + 1},
     )
 
@@ -79,3 +71,32 @@ def test_not_member(user, ghl_auth_mock_info, team_query):
             info=ghl_auth_mock_info,
             id=TeamFactory.create().pk,
         )
+
+
+def test_get_team_with_members(user, ghl_client, assets):
+    """Test retrieve team with members, filter inactive."""
+    inactive_user = UserFactory.create(is_active=False)
+    team = TeamFactory.create(members=[user, inactive_user])
+
+    ghl_client.set_user(user)
+
+    response = ghl_client.execute(
+        _get_query_with_members(assets),
+        variable_values={"id": team.pk},
+    )
+
+    assert "errors" not in response
+    members = response["data"]["team"]["members"]
+    assert members["count"] == 1
+    node = members["edges"][0]["node"]
+    assert node["user"]["id"] == str(user.pk)
+
+
+def _get_query(assets) -> str:
+    """Get raw query."""
+    return assets.open_file("retrieve_team.ghl", "r").read()
+
+
+def _get_query_with_members(assets) -> str:
+    """Get raw query."""
+    return assets.open_file("retrieve_team_with_members.ghl", "r").read()
