@@ -1,6 +1,7 @@
 from django.urls import reverse_lazy
-from jnt_admin_tools.menu import Menu, items
 from django.utils.translation import gettext_lazy as _
+from jnt_admin_tools.menu import Menu, items
+
 from apps.core.admin.menus import AdminMenuItem
 
 MANAGEMENT_MENU_ITEMS = (
@@ -34,7 +35,10 @@ class AdminMenu(Menu):
 
         self.children += [
             items.MenuItem(_("VN__HOME"), reverse_lazy("admin:index")),
-            items.AppList(title=_("VN__APPLICATIONS"), exclude=["constance.*"]),
+            items.AppList(
+                title=_("VN__APPLICATIONS"),
+                exclude=["constance.*"],
+            ),
             AdminMenuItem(_("VN__MANAGEMENT"), MANAGEMENT_MENU_ITEMS),
             AdminMenuItem(_("VN__UTILS"), UTILS_MENU_ITEMS),
         ]
