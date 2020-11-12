@@ -8,6 +8,10 @@ from apps.skills.models import SkillGroup
 class Skill(models.Model):
     """The skill model."""
 
+    class Meta:
+        verbose_name = _("VN__SKILL")
+        verbose_name_plural = _("VN__SKILLS")
+
     title = models.CharField(
         max_length=DEFAULT_TITLE_LENGTH,
         unique=True,

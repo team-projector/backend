@@ -7,6 +7,10 @@ from apps.skills.models import Position, SkillLevel
 class PositionSkillLevel(models.Model):
     """Represent position required skill level."""
 
+    class Meta:
+        verbose_name = _("VN__POSITION_SKILL_LEVEL")
+        verbose_name_plural = _("VN__POSITION_SKILL_LEVELS")
+
     position = models.ForeignKey(
         Position,
         models.CASCADE,

@@ -7,6 +7,10 @@ from apps.core.consts import DEFAULT_TITLE_LENGTH
 class Position(models.Model):
     """The Position model."""
 
+    class Meta:
+        verbose_name = _("VN__POSITION")
+        verbose_name_plural = _("VN__POSITIONS")
+
     title = models.CharField(
         max_length=DEFAULT_TITLE_LENGTH,
         unique=True,

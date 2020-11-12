@@ -7,6 +7,10 @@ from apps.core.consts import DEFAULT_TITLE_LENGTH
 class SkillGroup(models.Model):
     """The skill group model."""
 
+    class Meta:
+        verbose_name = _("VN__SKILL_GROUP")
+        verbose_name_plural = _("VN__SKILL_GROUPS")
+
     title = models.CharField(
         max_length=DEFAULT_TITLE_LENGTH,
         unique=True,

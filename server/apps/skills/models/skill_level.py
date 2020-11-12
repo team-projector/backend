@@ -9,6 +9,8 @@ class SkillLevel(models.Model):
 
     class Meta:
         unique_together = ("skill", "level")
+        verbose_name = _("VN__SKILL_LEVEL")
+        verbose_name_plural = _("VN__SKILL_LEVELS")
 
     level = models.PositiveSmallIntegerField()
 

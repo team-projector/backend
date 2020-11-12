@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-11-11 18:23+0300\n"
+"POT-Creation-Date: 2020-11-12 12:57+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,6 +16,33 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgid "VN__JOB_QUEUE"
+msgstr "Job queue"
+
+msgid "Constance"
+msgstr "Configuration"
+
+msgid "VN__CLEAR_CACHE"
+msgstr "Clear cache"
+
+msgid "VN__GENERATE_SALARIES"
+msgstr "Generate salaries"
+
+msgid "VN__GRAPHQL_PLAYGROUND"
+msgstr "GraphQL playground"
+
+msgid "VN__HOME"
+msgstr "Home"
+
+msgid "VN__APPLICATIONS"
+msgstr "Applications"
+
+msgid "VN__MANAGEMENT"
+msgstr "Management"
+
+msgid "VN__UTILS"
+msgstr "Utils"
 
 msgid "VN__CORE"
 msgstr "Core"
@@ -159,10 +186,10 @@ msgid "CH__MERGED"
 msgstr "merged"
 
 msgid "VN__MERGE_REQUEST"
-msgstr "Merge Request"
+msgstr "Merge request"
 
 msgid "VN__MERGE_REQUESTS"
-msgstr "Merge Requests"
+msgstr "Merge requests"
 
 msgid "CH__STATE_ACTIVE"
 msgstr "Active"
@@ -288,10 +315,10 @@ msgid "CH__CUSTOMER"
 msgstr "Customer"
 
 msgid "VN__PROJECT_MEMBER"
-msgstr "Project Members"
+msgstr "Project members"
 
 msgid "VN__PROJECT_MEMBERS"
-msgstr "Project Members"
+msgstr "Project members"
 
 msgid "VN__ROLE"
 msgstr "Role"
@@ -312,10 +339,10 @@ msgid "CH__WATCHER"
 msgstr "Watcher"
 
 msgid "VN__TEAM_MEMBER"
-msgstr "Team Member"
+msgstr "Team member"
 
 msgid "VN__TEAM_MEMBERS"
-msgstr "Team Members"
+msgstr "Team members"
 
 msgid "HT__TEAM"
 msgstr "Team"
@@ -590,6 +617,15 @@ msgstr " "
 msgid "VN__SKILLS"
 msgstr "Skills"
 
+msgid "VN__POSITIONS"
+msgstr "Positions"
+
+msgid "VN__POSITION_SKILL_LEVEL"
+msgstr "Position skill level"
+
+msgid "VN__POSITION_SKILL_LEVELS"
+msgstr "Position skill levels"
+
 msgid "VN__SKILL_LEVEL"
 msgstr "Skill level"
 
@@ -599,8 +635,23 @@ msgstr "Skill level"
 msgid "VN__SKILL"
 msgstr "Skill"
 
+msgid "VN__SKILL_GROUP"
+msgstr "Skill group"
+
+msgid "VN__SKILL_GROUPS"
+msgstr "Skill groups"
+
+msgid "VN__SKILL_LEVELS"
+msgstr "Skill levels"
+
 msgid "HT__SKILL"
 msgstr "Skill"
+
+msgid "VN__USER_SKILL_LEVEL"
+msgstr "User skill level"
+
+msgid "VN__USER_SKILL_LEVELS"
+msgstr "User skill levels"
 
 msgid "VN__CONFIRMED_BY"
 msgstr "Confirmed by"
