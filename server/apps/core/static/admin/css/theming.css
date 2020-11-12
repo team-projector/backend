@@ -33,6 +33,10 @@
     font-size: 12px;
 }
 
+#header ul li {
+    position: static;
+}
+
 /* LINKS */
 
 a:link, a:visited {
