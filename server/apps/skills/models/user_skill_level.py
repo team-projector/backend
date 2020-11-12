@@ -16,6 +16,8 @@ class UserSkillLevel(models.Model):
                 check=~models.Q(user=models.F("confirmed_by")),
             ),
         )
+        verbose_name = _("VN__USER_SKILL_LEVEL")
+        verbose_name_plural = _("VN__USER_SKILL_LEVELS")
 
     confirm_date = models.DateTimeField()
 

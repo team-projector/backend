@@ -1,21 +1,23 @@
 from django.urls import reverse_lazy
 from jnt_admin_tools.menu import Menu, items
-
+from django.utils.translation import gettext_lazy as _
 from apps.core.admin.menus import AdminMenuItem
 
 MANAGEMENT_MENU_ITEMS = (
-    ("Job queue", "/admin/flower/", None),
-    ("Configuration", reverse_lazy("admin:configuration"), None),
+    (_("VN__JOB_QUEUE"), "/admin/flower/", None),
+    # _("Constance") - for lib constance
+    (_("Constance"), reverse_lazy("admin:configuration"), None),
 )
 
+
 UTILS_MENU_ITEMS = (
-    ("Clear cache", reverse_lazy("admin:clear-cache"), None),
+    (_("VN__CLEAR_CACHE"), reverse_lazy("admin:clear-cache"), None),
     (
-        "Generate salaries",
+        _("VN__GENERATE_SALARIES"),
         reverse_lazy("admin:generate-salaries"),
         "payroll.add_salary",
     ),
-    ("GraphQL playground", "/graphql/", None),
+    (_("VN__GRAPHQL_PLAYGROUND"), "/graphql/", None),
 )
 
 
@@ -31,8 +33,8 @@ class AdminMenu(Menu):
         super().__init__(**kwargs)
 
         self.children += [
-            items.MenuItem("Home", reverse_lazy("admin:index")),
-            items.AppList(title="Applications", exclude=["constance.*"]),
-            AdminMenuItem("Management", MANAGEMENT_MENU_ITEMS),
-            AdminMenuItem("Utils", UTILS_MENU_ITEMS),
+            items.MenuItem(_("VN__HOME"), reverse_lazy("admin:index")),
+            items.AppList(title=_("VN__APPLICATIONS"), exclude=["constance.*"]),
+            AdminMenuItem(_("VN__MANAGEMENT"), MANAGEMENT_MENU_ITEMS),
+            AdminMenuItem(_("VN__UTILS"), UTILS_MENU_ITEMS),
         ]
