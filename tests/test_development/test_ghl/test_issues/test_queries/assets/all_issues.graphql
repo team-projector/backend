@@ -1,0 +1,11 @@
+query {
+  allIssues {
+    count
+    edges {
+      node {
+        id
+        title
+      }
+    }
+  }
+}

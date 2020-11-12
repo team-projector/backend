@@ -1,0 +1,8 @@
+mutation ($id: ID!, $seconds: Int!) {
+  addSpendTimeIssue(id: $id, seconds: $seconds) {
+    issue {
+      id
+      totalTimeSpent
+    }
+  }
+}

@@ -6,24 +6,8 @@ from tests.test_development.test_gl.helpers import gl_mock, initializers
 from tests.test_users.factories.gitlab import GlUserFactory
 from tests.test_users.factories.user import UserFactory
 
-GHL_QUERY_SYNC_ISSUE = """
-mutation (
-    $id: ID!
-) {
-syncIssue(
-    id: $id
-) {
-    issue {
-      id
-      state
-      glIid
-      }
-    }
-  }
-"""
 
-
-def test_query(project_manager, ghl_client, gl_mocker, user):
+def test_query(project_manager, ghl_client, gl_mocker, user, ghl_raw):
     """
     Test query.
 
@@ -57,7 +41,7 @@ def test_query(project_manager, ghl_client, gl_mocker, user):
     ghl_client.set_user(user)
 
     response = ghl_client.execute(
-        GHL_QUERY_SYNC_ISSUE,
+        ghl_raw("sync_issue"),
         variable_values={"id": issue.pk},
     )
 

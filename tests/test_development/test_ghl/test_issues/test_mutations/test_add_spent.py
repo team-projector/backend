@@ -9,23 +9,8 @@ from tests.test_development.factories.gitlab import (
     GlProjectFactory,
 )
 
-GHL_QUERY_ADD_SPENT_TO_ISSUE = """
-mutation (
-    $id: ID!, $seconds: Int!
-) {
-addSpendTimeIssue(
-    id: $id, seconds: $seconds
-) {
-    issue {
-      id
-      totalTimeSpent
-      }
-    }
-  }
-"""
 
-
-def test_query(project_manager, ghl_client, gl_mocker, user):
+def test_query(project_manager, ghl_client, gl_mocker, user, ghl_raw):
     """Test add spent raw query."""
     user.gl_token = "token"
     user.save()
@@ -44,7 +29,7 @@ def test_query(project_manager, ghl_client, gl_mocker, user):
     ghl_client.set_user(user)
 
     response = ghl_client.execute(
-        GHL_QUERY_ADD_SPENT_TO_ISSUE,
+        ghl_raw("add_spend_time_issue"),
         variable_values={"id": issue.pk, "seconds": 60},
     )
 

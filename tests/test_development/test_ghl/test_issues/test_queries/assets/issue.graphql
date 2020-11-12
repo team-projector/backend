@@ -1,0 +1,6 @@
+query ($id: ID!) {
+  issue (id: $id) {
+    id
+    title
+  }
+}
