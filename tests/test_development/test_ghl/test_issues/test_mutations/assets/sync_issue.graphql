@@ -1,0 +1,9 @@
+mutation ($id: ID!) {
+  syncIssue(id: $id) {
+    issue {
+      id
+      state
+      glIid
+    }
+  }
+}

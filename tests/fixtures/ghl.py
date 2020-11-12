@@ -6,6 +6,7 @@ from graphql import ResolveInfo
 
 from gql import schema
 from tests.helpers.ghl_client import GraphQLClient
+from tests.helpers.ghl_raw_query_provider import GhlRawQueryProvider
 
 
 def _get_mock_info(request):
@@ -95,3 +96,9 @@ def ghl_mock_info(rf) -> ResolveInfo:
     request = rf.get("/graphql/")
 
     return _get_mock_info(request)
+
+
+@pytest.fixture()
+def ghl_raw(request) -> GhlRawQueryProvider:
+    """Ghl raw query provider."""
+    return GhlRawQueryProvider(request.fspath.dirname)

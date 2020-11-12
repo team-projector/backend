@@ -1,0 +1,10 @@
+mutation ($id: ID!, $ticket: ID!) {
+  updateIssue(id: $id, ticket: $ticket) {
+    issue {
+      id
+      ticket {
+        id
+      }
+    }
+  }
+}

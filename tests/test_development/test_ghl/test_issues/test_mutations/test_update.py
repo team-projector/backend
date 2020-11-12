@@ -2,25 +2,8 @@ from jnt_django_graphene_toolbox.errors import GraphQLInputError
 
 from tests.test_development.factories import IssueFactory
 
-GHL_QUERY_UPDATE_ISSUE = """
-mutation (
-    $id: ID!, $ticket: ID!
-) {
-updateIssue(
-    id: $id, ticket: $ticket
-) {
-    issue {
-      id
-      ticket {
-        id
-        }
-      }
-    }
-  }
-"""
 
-
-def test_query(issue, ticket, ghl_client, user):
+def test_query(issue, ticket, ghl_client, user, ghl_raw):
     """
     Test query.
 
@@ -34,7 +17,7 @@ def test_query(issue, ticket, ghl_client, user):
     ghl_client.set_user(user)
 
     response = ghl_client.execute(
-        GHL_QUERY_UPDATE_ISSUE,
+        ghl_raw("update_issue"),
         variable_values={"id": issue.pk, "ticket": ticket.pk},
     )
 
