@@ -1,12 +1,8 @@
 from datetime import datetime, timedelta
 
-from apps.development.graphql.filters import (
-    IssuesFilterSet,
-    TicketIssuesFilterSet,
-)
-from apps.development.models.issue import Issue, IssueState
+from apps.development.graphql.filters import IssuesFilterSet
+from apps.development.models.issue import Issue
 from tests.test_development.factories import IssueFactory
-from tests.test_users.factories import UserFactory
 
 
 def test_by_title_asc(user):
@@ -99,38 +95,3 @@ def test_by_due_date_desc(user):
     ).qs
 
     assert list(queryset) == issues[::-1]
-
-
-def test_by_user_state(user):
-    """
-    Test order by user state.
-
-    :param user:
-    """
-    issues = [
-        IssueFactory.create(
-            title="title 1",
-            due_date=datetime.now() - timedelta(days=3),
-            user=UserFactory.create(),
-            state=IssueState.OPENED,
-        ),
-        IssueFactory.create(
-            title="title 2",
-            due_date=datetime.now(),
-            user=user,
-            state=IssueState.CLOSED,
-        ),
-        IssueFactory.create(
-            title="title 3",
-            due_date=datetime.now() + timedelta(days=1),
-            user=user,
-        ),
-    ]
-
-    queryset = TicketIssuesFilterSet(
-        data={"order_by": "user,state"},
-        queryset=Issue.objects.all(),
-    ).qs
-    sorted_issues = [issues[1], issues[2], issues[0]]
-
-    assert list(queryset) == sorted_issues
