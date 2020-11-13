@@ -42,7 +42,7 @@ class SyncMergeRequestMutation(SerializerMutation):
         merge_request = validated_data.pop("merge_request")
 
         if merge_request.project:
-            sync_project_merge_request_task.delay(
+            sync_project_merge_request_task(
                 merge_request.project.gl_id,
                 merge_request.gl_iid,
             )

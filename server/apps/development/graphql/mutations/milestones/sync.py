@@ -76,12 +76,12 @@ class SyncMilestoneMutation(SerializerMutation):
         milestone = validated_data.pop("milestone")
 
         if milestone.content_type.model_class() == Project:
-            sync_project_milestone_task.delay(
+            sync_project_milestone_task(
                 milestone.owner.gl_id,
                 milestone.gl_id,
             )
         elif milestone.content_type.model_class() == ProjectGroup:
-            sync_project_group_milestone_task.delay(
+            sync_project_group_milestone_task(
                 milestone.owner.gl_id,
                 milestone.gl_id,
             )

@@ -31,7 +31,7 @@ class SyncIssueMutation(SerializerMutation):
         """Syncing issue."""
         issue = validated_data.pop("issue")
 
-        sync_project_issue_task.delay(
+        sync_project_issue_task(
             issue.project.gl_id,
             issue.gl_iid,
         )
