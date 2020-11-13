@@ -1,5 +1,6 @@
 import pytest
 
+from apps.development.models import TeamMember
 from tests.test_development.factories import TeamFactory
 from tests.test_users.factories import UserFactory
 
@@ -11,4 +12,9 @@ def team(user):
 
     :param user:
     """
-    return TeamFactory.create(members=UserFactory.create_batch(2))
+    team = TeamFactory.create(members=UserFactory.create_batch(2))
+    TeamMember.objects.filter(user__in=team.members.all()).update(
+        roles=TeamMember.roles.LEADER,
+    )
+
+    return team
