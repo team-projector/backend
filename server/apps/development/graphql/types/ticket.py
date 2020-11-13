@@ -1,11 +1,15 @@
 import graphene
 from django.db.models import QuerySet
+from jnt_django_graphene_toolbox.connection_fields import (
+    DataSourceConnectionField,
+)
 from jnt_django_graphene_toolbox.connections import DataSourceConnection
 from jnt_django_graphene_toolbox.relay_nodes import DatasourceRelayNode
 from jnt_django_graphene_toolbox.types import BaseDjangoObjectType
 
 from apps.core import graphql
-from apps.development.graphql.types.ticket_metrics import TicketMetricsType
+from apps.development.graphql.filters import TicketIssuesFilterSet
+from apps.development.graphql.types import IssueType, TicketMetricsType
 from apps.development.models import Ticket
 from apps.development.services.ticket import allowed, metrics
 from apps.development.services.ticket.problems import (
@@ -26,6 +30,10 @@ class TicketType(BaseDjangoObjectType):
     metrics = graphene.Field(TicketMetricsType)
     type = graphene.String()  # noqa: WPS125, A003
     problems = graphene.List(graphene.String)
+    issues = DataSourceConnectionField(
+        IssueType,
+        filterset_class=TicketIssuesFilterSet,
+    )
 
     @classmethod
     def get_queryset(cls, queryset, info) -> QuerySet:  # noqa: WPS110

@@ -6,3 +6,4 @@ from .teams import TeamsFilterSet
 from .tickets import TicketsFilterSet
 from .projects import ProjectsFilterSet
 from .project_groups import ProjectGroupsFilterSet
+from .ticket_issues import TicketIssuesFilterSet
