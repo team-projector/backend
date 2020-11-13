@@ -5,8 +5,8 @@ from django.conf import settings
 from django.contrib.contenttypes.models import ContentType
 from django.db import models
 
+from apps.core.notifications import slack
 from apps.core.notifications.email.dispatcher import mail_users
-from apps.core.notifications.slack.client import SlackClient
 from apps.core.utils.mail import render_email_html
 from apps.development.models import Issue, MergeRequest
 from apps.payroll.models.salary import Salary
@@ -47,12 +47,9 @@ def send_slack_report(salary: Salary) -> None:
     if not salary.user.email:
         return
 
-    msg = "Salary has been paid."
-
-    slack = SlackClient()
     slack.send_text(
         salary.user,
-        msg,
+        "Salary has been paid.",
         icon_emoji=":moneybag:",
     )
 
