@@ -1,10 +1,65 @@
-query {
-  allIssues {
+query ($milestone: ID, $ticket: ID, $team: ID, $user: ID, $project: ID, $dueDate: Date, $state: String, $problems: Boolean, $orderBy: String, $offset: Int, $first: Int, $q: String) {
+  allIssues(milestone: $milestone, ticket: $ticket, team: $team, user: $user, project: $project, dueDate: $dueDate, state: $state, problems: $problems, orderBy: $orderBy, offset: $offset, first: $first, q: $q) {
     count
     edges {
       node {
-        id
         title
+        id
+        dueDate
+        labels {
+          count
+          edges {
+            node {
+              title
+              color
+            }
+          }
+        }
+        project {
+          title
+          group {
+            title
+          }
+        }
+        state
+        createdAt
+        timeEstimate
+        timeSpent
+        totalTimeSpent
+        timeEstimate
+        glUrl
+        ticket {
+          id
+          title
+          url
+        }
+        author {
+          id
+          name
+          glAvatar
+        }
+        user {
+          id
+          name
+          glAvatar
+        }
+        participants {
+          count
+          edges {
+            node {
+              name
+              glAvatar
+            }
+          }
+        }
+        closedAt
+        problems
+        metrics {
+          remains
+          efficiency
+          payroll
+          paid
+        }
       }
     }
   }
