@@ -5,7 +5,7 @@ from typing import Optional
 from constance import config
 from django.template.loader import render_to_string
 
-from apps.core.notifications.slack.client import SlackClient
+from apps.core.notifications import slack
 from apps.core.services.html import unescape_text
 from apps.development.services.gl.webhook import GLWebhook
 from apps.users.models import User
@@ -47,7 +47,6 @@ class PipelineGLWebhook(GLWebhook):
             },
         )
 
-        slack = SlackClient()
         slack_msg = json.loads(rendered)
         unescape_text(slack_msg, "text")
         slack.send_blocks(user, slack_msg, icon_emoji=":gitlab:")

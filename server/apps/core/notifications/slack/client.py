@@ -35,7 +35,7 @@ class SlackClient:
     @error_handler
     def send_blocks(self, user: User, blocks: List[object], **kwargs) -> None:
         """
-        Send plain text to user.
+        Send rich text to user.
 
          https://api.slack.com/methods/chat.postMessage
         """
@@ -55,7 +55,7 @@ class SlackClient:
         """
         token = config.SLACK_TOKEN
         if not token:
-            raise ImproperlyConfigured("'settings.SLACK_TOKEN' must be filled")
+            raise ImproperlyConfigured("SLACK_TOKEN must be configured")
 
         return slack.WebClient(token)  # type: ignore
 
