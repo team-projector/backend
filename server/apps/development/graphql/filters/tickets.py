@@ -16,4 +16,6 @@ class TicketsFilterSet(django_filters.FilterSet):
     milestone = django_filters.ModelChoiceFilter(
         queryset=Milestone.objects.all(),
     )
-    order_by = OrderingFilter(fields=("due_date", "start_date", "title"))
+    order_by = OrderingFilter(
+        fields=("due_date", "start_date", "title", "state"),
+    )
