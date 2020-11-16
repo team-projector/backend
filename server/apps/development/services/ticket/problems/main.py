@@ -6,7 +6,11 @@ from apps.development.models.ticket import Ticket
 from apps.development.services.ticket.problems import checkers
 
 ticket_problem_checkers = [
-    checker_class() for checker_class in (checkers.OverDueDateChecker,)
+    checker_class()
+    for checker_class in (
+        checkers.OverDueDateChecker,
+        checkers.NotReadyChecker,
+    )
 ]
 
 
