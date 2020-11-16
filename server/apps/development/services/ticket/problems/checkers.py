@@ -6,6 +6,7 @@ from apps.development.models import Ticket
 from apps.development.models.issue import Issue, IssueState
 
 PROBLEM_OVER_DUE_DATE = "OVER_DUE_DATE"
+PROBLEM_NOT_READY = "NOT_READY"
 
 
 class BaseProblemChecker:
@@ -58,3 +59,27 @@ class OverDueDateChecker(BaseProblemChecker):
             due_date__gt=ticket.due_date,
             state=IssueState.OPENED,
         ).exists()
+
+
+class NotReadyChecker(BaseProblemChecker):
+    """If ticket has issues without user."""
+
+    annotate_field = "problem_not_ready"
+    problem_code = PROBLEM_NOT_READY
+
+    def get_annotation(self) -> models.Expression:
+        """Get condition."""
+        not_ready = Issue.objects.filter(
+            ticket_id=models.OuterRef("id"),
+            user__isnull=True,
+        )
+
+        return models.Exists(not_ready)
+
+    def ticket_has_problem(self, ticket: Ticket) -> bool:
+        """Current ticket has problem."""
+        prefetched = getattr(ticket, self.annotate_field, None)
+        if prefetched is not None:
+            return prefetched
+
+        return ticket.issues.filter(user__isnull=True).exists()

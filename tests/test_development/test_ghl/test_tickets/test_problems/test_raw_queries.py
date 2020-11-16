@@ -9,6 +9,7 @@ def test_list(user, ghl_client, ghl_raw):
     for ticket in TicketFactory.create_batch(5, due_date=timezone.now()):
         IssueFactory(
             ticket=ticket,
+            user=user,
             due_date=timezone.now() + timezone.timedelta(days=1),
         )
 
@@ -28,6 +29,7 @@ def test_retreive(user, ghl_client, ghl_raw):
     issue = IssueFactory(
         ticket=TicketFactory(due_date=timezone.now()),
         due_date=timezone.now() + timezone.timedelta(days=1),
+        user=user,
     )
 
     ghl_client.set_user(user)

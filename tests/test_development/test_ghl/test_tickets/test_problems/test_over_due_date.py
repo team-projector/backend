@@ -11,15 +11,16 @@ from tests.test_development.factories import IssueFactory, TicketFactory
 _over_due_date_checker = checkers.OverDueDateChecker()
 
 
-def test_has_problem(db):
+def test_has_problem(user):
     """
     Test has problem.
 
-    :param db:
+    :param user:
     """
     issue = IssueFactory(
         ticket=TicketFactory(due_date=timezone.now()),
         due_date=timezone.now() + timezone.timedelta(days=1),
+        user=user,
     )
     assert _over_due_date_checker.ticket_has_problem(issue.ticket)
 
