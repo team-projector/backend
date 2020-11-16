@@ -9,26 +9,8 @@ from apps.payroll.models.work_break import WorkBreak, WorkBreakReason
 
 CURRENT_YEAR = timezone.now().year
 
-GHL_QUERY_CREATE_WORK_BREAK = """
-mutation ($user: ID!, $fromDate: Date!, $toDate: Date!,
-$reason: WorkBreakReason!, $comment: String!, $paidDays: Int) {
-  createWorkBreak(user: $user, fromDate: $fromDate, toDate: $toDate,
-  reason: $reason, comment: $comment, paidDays: $paidDays) {
-    workBreak {
-      user {
-        id
-        name
-      }
-      id
-      comment
-      paidDays
-    }
-  }
-}
-"""
 
-
-def test_query(user, ghl_client):
+def test_query(user, ghl_client, ghl_raw):
     """Test create raw query."""
     ghl_client.set_user(user)
 
@@ -42,7 +24,7 @@ def test_query(user, ghl_client):
     }
 
     response = ghl_client.execute(
-        GHL_QUERY_CREATE_WORK_BREAK,
+        ghl_raw("create_work_break"),
         variable_values=create_variables,
     )
 

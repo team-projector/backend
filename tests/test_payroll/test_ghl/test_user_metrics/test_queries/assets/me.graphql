@@ -1,0 +1,50 @@
+{
+  me {
+    id
+    name
+    glAvatar
+    roles
+    hourRate
+    taxRate
+    annualPaidWorkBreaksDays
+    position {
+      title
+    }
+    metrics {
+      lastSalaryDate
+      paidWorkBreaksDays
+      bonus
+      penalty
+      issues {
+        openedCount
+        openedSpent
+        closedSpent
+        payrollClosed
+        payrollOpened
+        payroll
+        taxesClosed
+        taxesOpened
+        taxes
+      }
+      mergeRequests {
+        openedCount
+        openedSpent
+        closedSpent
+        payrollClosed
+        payrollOpened
+        payroll
+        taxesClosed
+        taxesOpened
+        taxes
+      }
+      openedSpent
+      closedSpent
+      payrollClosed
+      payrollOpened
+      payroll
+      taxesClosed
+      taxesOpened
+      taxes
+    }
+  }
+}

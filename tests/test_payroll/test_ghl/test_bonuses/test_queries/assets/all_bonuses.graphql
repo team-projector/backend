@@ -1,0 +1,12 @@
+query {
+  allBonuses {
+    count
+    edges {
+      node {
+        id
+        sum
+        comment
+      }
+    }
+  }
+}

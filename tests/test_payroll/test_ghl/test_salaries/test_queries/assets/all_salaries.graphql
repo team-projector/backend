@@ -1,0 +1,12 @@
+query {
+  allSalaries {
+    count
+    edges {
+      node {
+        id
+        sum
+        comment
+      }
+    }
+  }
+}

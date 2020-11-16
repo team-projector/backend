@@ -4,19 +4,15 @@ from tests.test_development.test_gl.helpers import gl_mock, initializers
 from tests.test_users.factories.gitlab import GlUserFactory
 from tests.test_users.factories.user import UserFactory
 
-GHL_QUERY_SYNC_MERGE_REQUEST = """
-mutation ($id: ID!) {
-  response: syncMergeRequest(id: $id) {
-    mergeRequest {
-      id
-      glUrl
-    }
-  }
-}
-"""
 
-
-def test_raw_query(project_manager, ghl_client, gl_mocker, user, gl_client):
+def test_raw_query(  # noqa: WPS211
+    project_manager,
+    ghl_client,
+    gl_mocker,
+    user,
+    gl_client,
+    ghl_raw,
+):
     """Test raw query."""
     gl_assignee = GlUserFactory.create()
     UserFactory.create(gl_id=gl_assignee["id"])
@@ -46,7 +42,7 @@ def test_raw_query(project_manager, ghl_client, gl_mocker, user, gl_client):
     ghl_client.set_user(user)
 
     response = ghl_client.execute(
-        GHL_QUERY_SYNC_MERGE_REQUEST,
+        ghl_raw("sync_merge_request"),
         variable_values={"id": merge_request.pk},
     )
 

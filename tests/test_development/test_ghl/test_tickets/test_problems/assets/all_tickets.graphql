@@ -1,0 +1,11 @@
+query {
+  allTickets {
+    count
+    edges {
+      node {
+        id
+        problems
+      }
+    }
+  }
+}

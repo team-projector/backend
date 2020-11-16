@@ -1,22 +1,13 @@
 from apps.development.models.choices.project_state import ProjectState
 from tests.test_development.factories import ProjectGroupFactory
 
-GHL_QUERY_PROJECTS_SUMMARY = """
-query {
-  projectGroupsSummary {
-    count
-    archivedCount
-    supportingCount
-    developingCount
-  }
-}
-"""
 
-
-def test_raw_query(user, gql_client_authenticated):
+def test_raw_query(user, gql_client_authenticated, ghl_raw):
     """Test getting all project groups raw query."""
     _create_project_groups()
-    response = gql_client_authenticated.execute(GHL_QUERY_PROJECTS_SUMMARY)
+    response = gql_client_authenticated.execute(
+        ghl_raw("project_groups_summary"),
+    )
 
     assert "errors" not in response
     summary = response["data"]["projectGroupsSummary"]

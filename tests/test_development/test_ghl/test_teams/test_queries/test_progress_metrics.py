@@ -6,20 +6,8 @@ from jnt_django_graphene_toolbox.errors import GraphQLPermissionDenied
 from apps.development.models import TeamMember
 from tests.test_development.factories import TeamFactory, TeamMemberFactory
 
-GHL_QUERY_TEAM_PROGRESS_METRICS = """
-query ($id: ID!, $start: Date!, $end: Date!, $group: String!) {
-  teamProgressMetrics(team: $id, start: $start, end: $end, group: $group) {
-    metrics {
-      start
-      end
-      issuesCount
-    }
-  }
-}
-"""
 
-
-def test_query(user, ghl_client):
+def test_query(user, ghl_client, ghl_raw):
     """Test team progress metrics raw query."""
     team = TeamFactory.create()
     TeamMemberFactory.create(
@@ -33,7 +21,7 @@ def test_query(user, ghl_client):
     date = datetime.now().date()
 
     response = ghl_client.execute(
-        GHL_QUERY_TEAM_PROGRESS_METRICS,
+        ghl_raw("team_progress_metrics"),
         variable_values={
             "id": team.pk,
             "start": date,

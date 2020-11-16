@@ -2,21 +2,13 @@ from jnt_django_graphene_toolbox.errors import GraphQLPermissionDenied
 
 from apps.users.models import User
 
-GHL_DELETE_TICKET = """
-mutation ($id: ID!) {
-  deleteTicket (id: $id) {
-    ok
-  }
-}
-"""
 
-
-def test_query(project_manager, ghl_client, ticket):
+def test_query(project_manager, ghl_client, ticket, ghl_raw):
     """Test delete ticket raw query."""
     ghl_client.set_user(project_manager)
 
     response = ghl_client.execute(
-        GHL_DELETE_TICKET,
+        ghl_raw("delete_ticket"),
         variable_values={"id": ticket.pk},
     )
 

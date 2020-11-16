@@ -1,0 +1,6 @@
+query ($id: ID!) {
+  ticket (id: $id) {
+    id
+    problems
+  }
+}

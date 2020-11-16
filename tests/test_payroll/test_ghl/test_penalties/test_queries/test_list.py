@@ -6,23 +6,8 @@ from tests.test_development.factories import TeamFactory, TeamMemberFactory
 from tests.test_payroll.factories import PenaltyFactory
 from tests.test_users.factories import UserFactory
 
-GHL_QUERY_ALL_PENALTIES = """
-query {
-  allPenalties {
-    count
-    edges {
-      node {
-        id
-        sum
-        comment
-      }
-    }
-  }
-}
-"""
 
-
-def test_query(user, gql_client_authenticated):
+def test_query(user, gql_client_authenticated, ghl_raw):
     """
     Test query.
 
@@ -31,7 +16,7 @@ def test_query(user, gql_client_authenticated):
     """
     PenaltyFactory.create_batch(size=3, user=user)
 
-    response = gql_client_authenticated.execute(GHL_QUERY_ALL_PENALTIES)
+    response = gql_client_authenticated.execute(ghl_raw("all_penalties"))
 
     assert "errors" not in response
     assert response["data"]["allPenalties"]["count"] == 3

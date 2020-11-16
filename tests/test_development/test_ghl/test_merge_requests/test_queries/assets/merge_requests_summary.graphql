@@ -1,0 +1,8 @@
+query ($user: ID!) {
+  mergeRequestsSummary (user: $user) {
+    count
+    openedCount
+    closedCount
+    mergedCount
+  }
+}

@@ -1,0 +1,15 @@
+mutation ($user: ID!, $id: ID!, $fromDate: Date!, $toDate: Date!,
+ $reason: WorkBreakReason!, $comment: String!, $paidDays: Int) {
+  updateWorkBreak(user: $user, id: $id, fromDate: $fromDate, toDate: $toDate,
+   reason: $reason, comment: $comment, paidDays: $paidDays) {
+    workBreak {
+      user {
+        id
+        name
+      }
+      id
+      comment
+      paidDays
+    }
+  }
+}

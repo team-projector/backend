@@ -1,25 +1,14 @@
 from tests.test_development.factories import MergeRequestFactory
 
-GHL_QUERY_MERGE_REQUEST_SUMMARY = """
-query ($user: ID!) {
-  mergeRequestsSummary (user: $user) {
-    count
-    openedCount
-    closedCount
-    mergedCount
-  }
-}
-"""
 
-
-def test_query(user, ghl_client):
+def test_query(user, ghl_client, ghl_raw):
     """Test getting merge requests summary via a raw query."""
     MergeRequestFactory(user=user)
 
     ghl_client.set_user(user)
 
     response = ghl_client.execute(
-        GHL_QUERY_MERGE_REQUEST_SUMMARY,
+        ghl_raw("merge_requests_summary"),
         variable_values={"user": user.id},
     )
 

@@ -1,0 +1,15 @@
+query {
+  allMergeRequests {
+    count
+    edges {
+      node {
+        id
+        title
+        user {
+          id
+          roles
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,11 @@
+query ($state: ProjectState, $offset: Int, $first: Int) {
+  allProjectGroups(state: $state, offset: $offset, first: $first) {
+    count
+    edges {
+      node {
+        id
+        title
+      }
+    }
+  }
+}

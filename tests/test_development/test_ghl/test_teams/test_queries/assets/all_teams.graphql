@@ -1,0 +1,11 @@
+{
+  allTeams {
+    count
+    edges {
+      node {
+        id
+        title
+      }
+    }
+  }
+}

@@ -1,25 +1,17 @@
 from datetime import date
 
-import pytest
-
 from apps.core.gitlab import GITLAB_DATE_FORMAT
 from apps.users.models import User
 from tests.test_payroll.factories import SalaryFactory, WorkBreakFactory
 from tests.test_users.factories import UserFactory
 
 
-@pytest.fixture()
-def raw_query(assets):
-    """Getting raw query from disk."""
-    return assets.open_file("all_users.ghl", "r").read()
-
-
-def test_raw_query(user, ghl_client, raw_query):
+def test_raw_query(user, ghl_client, ghl_raw):
     """Test getting all users raw query."""
     UserFactory.create(roles=0)
     ghl_client.set_user(user)
 
-    response = ghl_client.execute(raw_query)
+    response = ghl_client.execute(ghl_raw("all_users"))
 
     assert "errors" not in response
     assert response["data"]["users"]["count"] == 1
@@ -36,7 +28,7 @@ def test_success(user, ghl_auth_mock_info, all_users_query):
     assert response.edges[0].node == user
 
 
-def test_metrics_some_users(user, ghl_client, raw_query):
+def test_metrics_some_users(user, ghl_client, ghl_raw):
     """Test getting all users raw query."""
     user1 = UserFactory.create()
 
@@ -57,7 +49,7 @@ def test_metrics_some_users(user, ghl_client, raw_query):
     work_break1 = WorkBreakFactory.create(paid_days=5, user=user1, paid=True)
 
     ghl_client.set_user(user)
-    response = ghl_client.execute(raw_query)
+    response = ghl_client.execute(ghl_raw("all_users"))
 
     assert "errors" not in response
 

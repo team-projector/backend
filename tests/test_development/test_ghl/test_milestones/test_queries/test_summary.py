@@ -9,16 +9,6 @@ from tests.test_development.factories import (
     ProjectMilestoneFactory,
 )
 
-GHL_QUERY_MILESTONES_SUMMARY = """
-query {
-    milestonesSummary {
-        count
-        activeCount
-        closedCount
-    }
-}
-"""
-
 
 @pytest.fixture()
 def milestones(user):
@@ -45,7 +35,7 @@ def milestones(user):
     )
 
 
-def test_raw_query(user, gql_client_authenticated, milestones):
+def test_raw_query(user, gql_client_authenticated, milestones, ghl_raw):
     """
     Test raw query.
 
@@ -55,7 +45,7 @@ def test_raw_query(user, gql_client_authenticated, milestones):
     user.roles = User.roles.DEVELOPER
     user.save()
 
-    response = gql_client_authenticated.execute(GHL_QUERY_MILESTONES_SUMMARY)
+    response = gql_client_authenticated.execute(ghl_raw("milestones_summary"))
 
     assert "errors" not in response
 

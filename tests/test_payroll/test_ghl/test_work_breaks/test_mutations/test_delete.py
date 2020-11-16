@@ -1,23 +1,15 @@
 from apps.payroll.models.work_break import WorkBreak
 from tests.test_payroll.factories import WorkBreakFactory
 
-GHL_QUERY_DELETE_WORK_BREAK = """
-mutation ($id: ID!) {
-  deleteWorkBreak(id: $id) {
-    ok
-  }
-}
-"""
 
-
-def test_query(user, ghl_client):
+def test_query(user, ghl_client, ghl_raw):
     """Test delete raw query."""
     ghl_client.set_user(user)
 
     work_break = WorkBreakFactory.create(user=user)
 
     response = ghl_client.execute(
-        GHL_QUERY_DELETE_WORK_BREAK,
+        ghl_raw("delete_work_break"),
         variable_values={"id": work_break.id},
     )
 

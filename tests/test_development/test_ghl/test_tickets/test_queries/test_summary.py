@@ -3,20 +3,6 @@ import pytest
 from apps.development.models.ticket import TicketState
 from tests.test_development.factories import TicketFactory
 
-GHL_QUERY_TICKETS_SUMMARY = """
-query {
-    ticketsSummary {
-        count
-        createdCount
-        planningCount
-        doingCount
-        testingCount
-        acceptingCount
-        doneCount
-    }
-}
-"""
-
 
 @pytest.fixture()
 def tickets(db):
@@ -32,14 +18,14 @@ def tickets(db):
     )
 
 
-def test_raw_query(ghl_client, tickets):
+def test_raw_query(ghl_client, tickets, ghl_raw):
     """
     Test raw query.
 
     :param ghl_client:
     :param tickets:
     """
-    response = ghl_client.execute(GHL_QUERY_TICKETS_SUMMARY)
+    response = ghl_client.execute(ghl_raw("tickets_summary"))
 
     assert "errors" not in response
 

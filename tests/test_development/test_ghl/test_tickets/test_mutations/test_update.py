@@ -9,33 +9,14 @@ from tests.test_development.factories import (
     ProjectMilestoneFactory,
 )
 
-GHL_QUERY_UPDATE_TICKET = """
-mutation (
-    $id: ID!, $attachIssues: [ID!], $type: String, $title: String,
-    $role: String, $startDate: Date, $dueDate: Date, $url: String,
-    $issues: [ID!], $state: String!
-) {
-updateTicket(
-    id: $id, attachIssues: $attachIssues, type: $type, title: $title,
-    startDate: $startDate, dueDate: $dueDate, url: $url, issues: $issues,
-    role: $role, state: $state
-) {
-    ticket {
-      id
-      title
-      }
-    }
-  }
-"""
 
-
-def test_query(project_manager, ghl_client, ticket):
+def test_query(project_manager, ghl_client, ticket, ghl_raw):
     """Test update ticket raw query."""
     ghl_client.set_user(project_manager)
 
     new_title = "new_{0}".format(ticket.title)
     response = ghl_client.execute(
-        GHL_QUERY_UPDATE_TICKET,
+        ghl_raw("update_ticket"),
         variable_values={
             "id": ticket.pk,
             "title": new_title,

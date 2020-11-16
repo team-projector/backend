@@ -1,0 +1,12 @@
+query {
+  allPenalties {
+    count
+    edges {
+      node {
+        id
+        sum
+        comment
+      }
+    }
+  }
+}

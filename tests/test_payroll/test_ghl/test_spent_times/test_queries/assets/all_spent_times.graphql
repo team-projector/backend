@@ -1,0 +1,10 @@
+query {
+  allSpentTimes {
+    count
+    edges {
+      node {
+        id
+      }
+    }
+  }
+}

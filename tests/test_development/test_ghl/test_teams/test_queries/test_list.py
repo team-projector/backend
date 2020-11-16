@@ -4,26 +4,12 @@ from jnt_django_graphene_toolbox.errors import GraphQLPermissionDenied
 from tests.test_development.factories import TeamFactory
 from tests.test_users.factories import UserFactory
 
-GHL_QUERY_ALL_TEAMS = """
-{
-  allTeams {
-    count
-    edges {
-      node {
-        id
-        title
-      }
-    }
-  }
-}
-"""
 
-
-def test_query(user, gql_client_authenticated):
+def test_query(user, gql_client_authenticated, ghl_raw):
     """Test getting all teams raw query."""
     TeamFactory.create_batch(5, members=[user])
 
-    response = gql_client_authenticated.execute(GHL_QUERY_ALL_TEAMS)
+    response = gql_client_authenticated.execute(ghl_raw("all_teams"))
 
     assert "errors" not in response
     assert response["data"]["allTeams"]["count"] == 5

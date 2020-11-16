@@ -1,0 +1,6 @@
+query ($id: ID!) {
+  salary (id: $id) {
+    id
+    comment
+  }
+}

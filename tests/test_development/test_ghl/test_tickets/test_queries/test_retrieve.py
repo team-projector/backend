@@ -6,24 +6,15 @@ from jnt_django_graphene_toolbox.errors import (
 
 from tests.test_development.factories import TicketFactory
 
-GHL_QUERY_TICKET = """
-query ($id: ID!) {
-  ticket (id: $id) {
-    id
-    title
-  }
-}
-"""
 
-
-def test_query(user, ghl_client):
+def test_query(user, ghl_client, ghl_raw):
     """Test getting ticket raw query."""
     ticket = TicketFactory.create()
 
     ghl_client.set_user(user)
 
     response = ghl_client.execute(
-        GHL_QUERY_TICKET,
+        ghl_raw("ticket"),
         variable_values={"id": ticket.pk},
     )
 

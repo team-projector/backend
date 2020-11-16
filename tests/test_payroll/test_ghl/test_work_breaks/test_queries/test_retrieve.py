@@ -6,23 +6,15 @@ from tests.test_development.factories import TeamFactory, TeamMemberFactory
 from tests.test_payroll.factories import WorkBreakFactory
 from tests.test_users.factories import UserFactory
 
-GHL_QUERY_WORK_BREAK = """
-query ($id: ID!) {
-  workBreak(id: $id) {
-    id
-  }
-}
-"""
 
-
-def test_query(user, ghl_client):
+def test_query(user, ghl_client, ghl_raw):
     """Test raw query."""
     ghl_client.set_user(user)
 
     work_break = WorkBreakFactory.create(user=user)
 
     response = ghl_client.execute(
-        GHL_QUERY_WORK_BREAK,
+        ghl_raw("work_break"),
         variable_values={"id": work_break.pk},
     )
 

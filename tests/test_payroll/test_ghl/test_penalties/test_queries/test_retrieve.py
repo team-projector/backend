@@ -7,17 +7,8 @@ from jnt_django_graphene_toolbox.errors import (
 from tests.test_payroll.factories import PenaltyFactory
 from tests.test_users.factories import UserFactory
 
-GHL_QUERY_PENALTY = """
-query ($id: ID!) {
-  penalty (id: $id) {
-    id
-    comment
-  }
-}
-"""
 
-
-def test_query(user, ghl_client):
+def test_query(user, ghl_client, ghl_raw):
     """
     Test query.
 
@@ -28,7 +19,7 @@ def test_query(user, ghl_client):
     ghl_client.set_user(user)
 
     response = ghl_client.execute(
-        GHL_QUERY_PENALTY,
+        ghl_raw("penalty"),
         variable_values={"id": penalty.pk},
     )
 

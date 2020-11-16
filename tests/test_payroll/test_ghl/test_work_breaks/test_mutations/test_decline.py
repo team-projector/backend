@@ -6,18 +6,8 @@ from tests.test_development.factories import TeamFactory, TeamMemberFactory
 from tests.test_payroll.factories import WorkBreakFactory
 from tests.test_users.factories import UserFactory
 
-GHL_QUERY_DECLINE_WORK_BREAK = """
-mutation ($id: ID!, $declineReason: String!) {
-  declineWorkBreak(id: $id, declineReason: $declineReason) {
-    workBreak {
-      id
-    }
-  }
-}
-"""
 
-
-def test_query(user, ghl_client):
+def test_query(user, ghl_client, ghl_raw):
     """Test decline raw query."""
     ghl_client.set_user(user)
 
@@ -37,7 +27,7 @@ def test_query(user, ghl_client):
     work_break = WorkBreakFactory.create(user=user1)
 
     response = ghl_client.execute(
-        GHL_QUERY_DECLINE_WORK_BREAK,
+        ghl_raw("decline_work_break"),
         variable_values={"id": work_break.pk, "declineReason": "reason"},
     )
 
