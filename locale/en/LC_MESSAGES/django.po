@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-11-12 12:57+0300\n"
+"POT-Creation-Date: 2020-11-16 06:06+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -100,6 +100,9 @@ msgstr "Save and view"
 
 msgid "Close"
 msgstr "Close"
+
+msgid "MSG__YOU_MUST_CHOOSE_AT_LEAST_ONE_ROLE"
+msgstr "You must choose at least one role"
 
 msgid "VN__DEVELOPMENT"
 msgstr "Development"
