@@ -1,0 +1,9 @@
+mutation ($id: ID!) {
+  syncMilestone(id: $id) {
+    milestone {
+      id
+      state
+      glIid
+    }
+  }
+}

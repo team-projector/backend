@@ -1,22 +1,11 @@
 from apps.development.models.project import ProjectState
 from tests.test_development.factories import ProjectFactory
 
-GHL_QUERY_PROJECTS_SUMMARY = """
-query {
-  projectsSummary {
-    count
-    archivedCount
-    supportingCount
-    developingCount
-  }
-}
-"""
 
-
-def test_raw_query(user, gql_client_authenticated):
+def test_raw_query(user, gql_client_authenticated, ghl_raw):
     """Test getting all projects raw query."""
     _create_projects()
-    response = gql_client_authenticated.execute(GHL_QUERY_PROJECTS_SUMMARY)
+    response = gql_client_authenticated.execute(ghl_raw("projects_summary"))
 
     assert "errors" not in response
     summary = response["data"]["projectsSummary"]

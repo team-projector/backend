@@ -1,24 +1,14 @@
 from apps.users.models import User
 
-GHL_QUERY_ME = """
-query {
-    me {
-        id
-        login
-        roles
-    }
-}
-"""
 
-
-def test_query(user, ghl_client):
+def test_query(user, ghl_client, ghl_raw):
     """Test me raw query."""
     user.roles = User.roles.DEVELOPER | User.roles.MANAGER
     user.save()
 
     ghl_client.set_user(user)
 
-    response = ghl_client.execute(GHL_QUERY_ME)
+    response = ghl_client.execute(ghl_raw("me"))
 
     assert response["data"]["me"]["id"] == str(user.id)
     assert response["data"]["me"]["roles"] == ["DEVELOPER", "MANAGER"]

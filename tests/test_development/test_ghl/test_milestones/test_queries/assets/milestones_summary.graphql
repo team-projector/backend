@@ -1,0 +1,7 @@
+query {
+    milestonesSummary {
+        count
+        activeCount
+        closedCount
+    }
+}

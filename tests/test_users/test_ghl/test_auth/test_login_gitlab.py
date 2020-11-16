@@ -3,14 +3,6 @@ from constance import config
 from django.conf import settings
 from social_core.backends.gitlab import GitLabOAuth2
 
-GHL_QUERY_LOGIN_GITLAB = """
-mutation {
-  loginGitlab {
-    redirectUrl
-  }
-}
-"""
-
 
 @pytest.fixture(autouse=True)
 def _gitlab_login(override_config) -> None:
@@ -23,7 +15,7 @@ def _gitlab_login(override_config) -> None:
         yield
 
 
-def test_query(user, ghl_client):
+def test_query(user, ghl_client, ghl_raw):
     """Test raw query."""
     context = {
         "session": {},
@@ -34,7 +26,7 @@ def test_query(user, ghl_client):
     }
 
     response = ghl_client.execute(
-        GHL_QUERY_LOGIN_GITLAB,
+        ghl_raw("login_gitlab"),
         extra_context=context,
     )
 

@@ -14,24 +14,6 @@ from tests.test_development.factories import (
     TicketFactory,
 )
 
-GHL_QUERY_CREATE_TICKET = """
-mutation (
-    $milestone: ID!, $type: String!, $title: String!, $role: String,
-    $startDate: Date, $dueDate: Date, $url: String, $issues: [ID!],
-    $state: String!
-) {
-createTicket(
-    milestone: $milestone, type: $type, title: $title, startDate: $startDate,
-    dueDate: $dueDate, url: $url, issues: $issues, role: $role, state: $state
-) {
-    ticket {
-      id
-      title
-      }
-    }
-  }
-"""
-
 
 @pytest.fixture()
 def ticket():
@@ -39,7 +21,7 @@ def ticket():
     return TicketFactory(milestone=ProjectMilestoneFactory())
 
 
-def test_query(project_manager, ghl_client):
+def test_query(project_manager, ghl_client, ghl_raw):
     """Test create ticket raw query."""
     ghl_client.set_user(project_manager)
 
@@ -48,7 +30,7 @@ def test_query(project_manager, ghl_client):
     issues = IssueFactory.create_batch(size=2, user=project_manager)
 
     response = ghl_client.execute(
-        GHL_QUERY_CREATE_TICKET,
+        ghl_raw("create_ticket"),
         variable_values={
             "title": "test ticket",
             "type": TicketType.FEATURE,

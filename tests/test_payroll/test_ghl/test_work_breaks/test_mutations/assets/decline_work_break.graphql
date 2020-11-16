@@ -1,0 +1,7 @@
+mutation ($id: ID!, $declineReason: String!) {
+  declineWorkBreak(id: $id, declineReason: $declineReason) {
+    workBreak {
+      id
+    }
+  }
+}

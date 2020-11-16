@@ -3,28 +3,14 @@ from jnt_django_graphene_toolbox.errors import GraphQLPermissionDenied
 
 from tests.test_development.factories import TicketFactory
 
-GHL_QUERY_ALL_TICKETS = """
-query {
-  allTickets {
-    count
-    edges {
-      node {
-        id
-        title
-      }
-    }
-  }
-}
-"""
 
-
-def test_query(user, ghl_client):
+def test_query(user, ghl_client, ghl_raw):
     """Test getting all tickets raw query."""
     TicketFactory.create_batch(5)
 
     ghl_client.set_user(user)
 
-    response = ghl_client.execute(GHL_QUERY_ALL_TICKETS)
+    response = ghl_client.execute(ghl_raw("all_tickets"))
 
     assert "errors" not in response
     assert response["data"]["allTickets"]["count"] == 5

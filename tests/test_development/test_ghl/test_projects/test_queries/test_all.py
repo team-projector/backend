@@ -4,26 +4,12 @@ from jnt_django_graphene_toolbox.errors import GraphQLPermissionDenied
 from apps.development.models.project import ProjectState
 from tests.test_development.factories import ProjectFactory
 
-GHL_QUERY_ALL_PROJECTS = """
-query ($state: ProjectState, $offset: Int, $first: Int) {
-  allProjects(state: $state, offset: $offset, first: $first) {
-    count
-    edges {
-      node {
-        id
-        title
-      }
-    }
-  }
-}
-"""
 
-
-def test_query(user, gql_client_authenticated):
+def test_query(user, gql_client_authenticated, ghl_raw):
     """Test getting all projects raw query."""
     ProjectFactory.create_batch(3)
 
-    response = gql_client_authenticated.execute(GHL_QUERY_ALL_PROJECTS)
+    response = gql_client_authenticated.execute(ghl_raw("all_projects"))
 
     assert "errors" not in response
     assert response["data"]["allProjects"]["count"] == 3

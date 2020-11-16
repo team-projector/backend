@@ -11,26 +11,8 @@ from tests.test_development.factories import TeamFactory, TeamMemberFactory
 from tests.test_payroll.factories import WorkBreakFactory
 from tests.test_users.factories import UserFactory
 
-GHL_QUERY_UPDATE_WORK_BREAK = """
-mutation ($user: ID!, $id: ID!, $fromDate: Date!, $toDate: Date!,
- $reason: WorkBreakReason!, $comment: String!, $paidDays: Int) {
-  updateWorkBreak(user: $user, id: $id, fromDate: $fromDate, toDate: $toDate,
-   reason: $reason, comment: $comment, paidDays: $paidDays) {
-    workBreak {
-      user {
-        id
-        name
-      }
-      id
-      comment
-      paidDays
-    }
-  }
-}
-"""
 
-
-def test_query(user, ghl_client):
+def test_query(user, ghl_client, ghl_raw):
     """Test update raw query."""
     ghl_client.set_user(user)
 
@@ -56,7 +38,7 @@ def test_query(user, ghl_client):
     }
 
     response = ghl_client.execute(
-        GHL_QUERY_UPDATE_WORK_BREAK,
+        ghl_raw("update_work_break"),
         variable_values=update_variables,
     )
 

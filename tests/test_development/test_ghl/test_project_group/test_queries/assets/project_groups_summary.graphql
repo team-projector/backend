@@ -1,0 +1,8 @@
+query {
+  projectGroupsSummary {
+    count
+    archivedCount
+    supportingCount
+    developingCount
+  }
+}

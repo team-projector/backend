@@ -4,23 +4,13 @@ from rest_framework.exceptions import AuthenticationFailed
 from apps.users.models import Token
 from tests.fixtures.users import DEFAULT_USER_PASSWORD, DEFAULT_USERNAME
 
-GHL_QUERY_LOGIN = """
-mutation ($login: String!, $password: String!) {
-    login(login: $login, password: $password) {
-        token {
-          key
-        }
-    }
-}
-"""
 
-
-def test_query(user, ghl_client):
+def test_query(user, ghl_client, ghl_raw):
     """Test login raw query."""
     assert not Token.objects.filter(user=user).exists()
 
     response = ghl_client.execute(
-        GHL_QUERY_LOGIN,
+        ghl_raw("login"),
         variable_values={
             "login": DEFAULT_USERNAME,
             "password": DEFAULT_USER_PASSWORD,

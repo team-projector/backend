@@ -9,22 +9,8 @@ from tests.test_development.factories import (
     ProjectMilestoneFactory,
 )
 
-GHL_QUERY_ALL_ISSUES = """
-query {
-  allMilestones {
-    count
-    edges {
-      node {
-        id
-        title
-      }
-    }
-  }
-}
-"""
 
-
-def test_query(user, gql_client_authenticated):
+def test_query(user, gql_client_authenticated, ghl_raw):
     """Test getting all milestones raw query."""
     project = ProjectFactory.create()
     ProjectMemberFactory.create(
@@ -34,7 +20,7 @@ def test_query(user, gql_client_authenticated):
     )
     ProjectMilestoneFactory.create_batch(5, owner=project)
 
-    response = gql_client_authenticated.execute(GHL_QUERY_ALL_ISSUES)
+    response = gql_client_authenticated.execute(ghl_raw("all_milestones"))
 
     assert response["data"]["allMilestones"]["count"] == 5
 

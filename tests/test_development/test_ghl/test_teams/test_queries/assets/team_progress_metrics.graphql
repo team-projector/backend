@@ -1,0 +1,9 @@
+query ($id: ID!, $start: Date!, $end: Date!, $group: String!) {
+  teamProgressMetrics(team: $id, start: $start, end: $end, group: $group) {
+    metrics {
+      start
+      end
+      issuesCount
+    }
+  }
+}

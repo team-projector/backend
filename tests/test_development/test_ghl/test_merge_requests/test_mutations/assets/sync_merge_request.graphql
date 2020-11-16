@@ -1,0 +1,8 @@
+mutation ($id: ID!) {
+  response: syncMergeRequest(id: $id) {
+    mergeRequest {
+      id
+      glUrl
+    }
+  }
+}

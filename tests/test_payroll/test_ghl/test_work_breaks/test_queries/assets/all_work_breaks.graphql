@@ -1,0 +1,14 @@
+query ($team: ID, $user: ID, $offset: Int, $first: Int) {
+  breaks: allWorkBreaks(team: $team, user: $user, offset: $offset,
+   first: $first) {
+    count
+    edges {
+      node {
+        id
+        user {
+          id
+        }
+      }
+    }
+  }
+}

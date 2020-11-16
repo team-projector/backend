@@ -6,26 +6,13 @@ from apps.payroll.services.spent_time.updater import adjust_spent_times
 from tests.test_development.factories import IssueFactory, IssueNoteFactory
 from tests.test_payroll.factories import SalaryFactory
 
-GHL_QUERY_ALL_SPENT_TIMES = """
-query {
-  allSpentTimes {
-    count
-    edges {
-      node {
-        id
-      }
-    }
-  }
-}
-"""
 
-
-def test_query(user, gql_client_authenticated):
+def test_query(user, gql_client_authenticated, ghl_raw):
     """Test getting all time spents raw query."""
     issue = IssueFactory.create(user=user)
     _create_spents(issue, 5)
 
-    response = gql_client_authenticated.execute(GHL_QUERY_ALL_SPENT_TIMES)
+    response = gql_client_authenticated.execute(ghl_raw("all_spent_times"))
 
     assert "errors" not in response
     assert response["data"]["allSpentTimes"]["count"] == 5

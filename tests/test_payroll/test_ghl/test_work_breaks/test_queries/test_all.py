@@ -1,31 +1,14 @@
 from apps.payroll.models import WorkBreak
 from tests.test_payroll.factories import WorkBreakFactory
 
-GHL_QUERY_ALL_WORK_BREAKS = """
-query ($team: ID, $user: ID, $offset: Int, $first: Int) {
-  breaks: allWorkBreaks(team: $team, user: $user, offset: $offset,
-   first: $first) {
-    count
-    edges {
-      node {
-        id
-        user {
-          id
-        }
-      }
-    }
-  }
-}
-"""
 
-
-def test_query(user, ghl_client):
+def test_query(user, ghl_client, ghl_raw):
     """Test create raw query."""
     ghl_client.set_user(user)
 
     work_break = WorkBreakFactory.create(user=user)
 
-    response = ghl_client.execute(GHL_QUERY_ALL_WORK_BREAKS)
+    response = ghl_client.execute(ghl_raw("all_work_breaks"))
 
     assert response["data"]["breaks"]["count"] == 1
 

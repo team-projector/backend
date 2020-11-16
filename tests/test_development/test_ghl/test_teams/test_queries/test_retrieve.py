@@ -8,14 +8,14 @@ from tests.test_development.factories import TeamFactory
 from tests.test_users.factories import UserFactory
 
 
-def test_query(user, ghl_client, assets):
+def test_query(user, ghl_client, ghl_raw):
     """Test retrieve team raw query."""
     team = TeamFactory.create(members=[user])
 
     ghl_client.set_user(user)
 
     response = ghl_client.execute(
-        _get_query(assets),
+        ghl_raw("team"),
         variable_values={"id": team.pk},
     )
 
@@ -23,14 +23,14 @@ def test_query(user, ghl_client, assets):
     assert response["data"]["team"]["id"] == str(team.pk)
 
 
-def test_query_found(user, ghl_client, assets):
+def test_query_found(user, ghl_client, ghl_raw):
     """Test retrieve team raw query."""
     team = TeamFactory.create(members=[user])
 
     ghl_client.set_user(user)
 
     response = ghl_client.execute(
-        _get_query(assets),
+        ghl_raw("team"),
         variable_values={"id": team.pk + 1},
     )
 
@@ -73,7 +73,7 @@ def test_not_member(user, ghl_auth_mock_info, team_query):
         )
 
 
-def test_get_team_with_members(user, ghl_client, assets):
+def test_get_team_with_members(user, ghl_client, ghl_raw):
     """Test retrieve team with members, filter inactive."""
     inactive_user = UserFactory.create(is_active=False)
     team = TeamFactory.create(members=[user, inactive_user])
@@ -81,7 +81,7 @@ def test_get_team_with_members(user, ghl_client, assets):
     ghl_client.set_user(user)
 
     response = ghl_client.execute(
-        _get_query_with_members(assets),
+        ghl_raw("team_with_members"),
         variable_values={"id": team.pk},
     )
 
@@ -90,13 +90,3 @@ def test_get_team_with_members(user, ghl_client, assets):
     assert members["count"] == 1
     node = members["edges"][0]["node"]
     assert node["user"]["id"] == str(user.pk)
-
-
-def _get_query(assets) -> str:
-    """Get raw query."""
-    return assets.open_file("retrieve_team.ghl", "r").read()
-
-
-def _get_query_with_members(assets) -> str:
-    """Get raw query."""
-    return assets.open_file("retrieve_team_with_members.ghl", "r").read()

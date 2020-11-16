@@ -1,0 +1,6 @@
+query ($id: ID!) {
+  bonus (id: $id) {
+    id
+    comment
+  }
+}

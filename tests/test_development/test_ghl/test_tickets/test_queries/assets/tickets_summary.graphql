@@ -1,0 +1,11 @@
+query {
+    ticketsSummary {
+        count
+        createdCount
+        planningCount
+        doingCount
+        testingCount
+        acceptingCount
+        doneCount
+    }
+}

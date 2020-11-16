@@ -5,42 +5,20 @@ from django.utils import timezone
 from tests.test_development.factories import TeamFactory
 from tests.test_payroll.factories import WorkBreakFactory
 
-GHL_QUERY_TEAM_WORK_BREAKS = """
-query ($team: ID, $user: ID, $offset: Int, $first: Int) {
-  teamWorkBreaks(team: $team, user: $user, offset: $offset, first: $first) {
-    count
-    edges {
-      node {
-        id
-        name
-        workBreaks {
-          edges {
-            node {
-              id
-              fromDate
-            }
-          }
-        }
-      }
-    }
-  }
-}
-"""
 
-
-def test_query(user, ghl_client):
+def test_query(user, ghl_client, ghl_raw):
     """Test retrieve team raw query."""
     TeamFactory.create(members=[user])
 
     ghl_client.set_user(user)
 
-    response = ghl_client.execute(GHL_QUERY_TEAM_WORK_BREAKS)
+    response = ghl_client.execute(ghl_raw("team_work_breaks"))
 
     assert "errors" not in response
     assert response["data"]["teamWorkBreaks"]["count"] == 1
 
 
-def test_query_with_dates(user, ghl_client):
+def test_query_with_dates(user, ghl_client, ghl_raw):
     """
     Test query with dates.
 
@@ -70,7 +48,7 @@ def test_query_with_dates(user, ghl_client):
 
     ghl_client.set_user(user)
 
-    response = ghl_client.execute(GHL_QUERY_TEAM_WORK_BREAKS)
+    response = ghl_client.execute(ghl_raw("team_work_breaks"))
 
     assert "errors" not in response
 

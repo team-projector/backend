@@ -1,0 +1,16 @@
+mutation (
+    $id: ID!, $attachIssues: [ID!], $type: String, $title: String,
+    $role: String, $startDate: Date, $dueDate: Date, $url: String,
+    $issues: [ID!], $state: String!
+) {
+updateTicket(
+    id: $id, attachIssues: $attachIssues, type: $type, title: $title,
+    startDate: $startDate, dueDate: $dueDate, url: $url, issues: $issues,
+    role: $role, state: $state
+) {
+    ticket {
+      id
+      title
+      }
+    }
+  }
