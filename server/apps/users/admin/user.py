@@ -1,9 +1,6 @@
-from typing import Dict
-
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as DjUserAdmin
 from django.contrib.auth.forms import AdminPasswordChangeForm
-from django.http import HttpRequest
 from django.urls import reverse
 from django.utils.html import format_html
 from jnt_django_toolbox.admin.decorators import admin_field
@@ -110,9 +107,3 @@ class UserAdmin(
     def sync_handler(self, user):
         """Syncing user from Gitlab."""
         sync_user_task.delay(user.gl_id)
-
-    def get_default_filters(self, request: HttpRequest) -> Dict[str, str]:
-        """Set default filters to the page."""
-        return {
-            "is_active__exact": "1",
-        }
