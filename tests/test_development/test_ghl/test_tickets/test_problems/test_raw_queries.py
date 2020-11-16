@@ -32,6 +32,7 @@ def test_list(user, ghl_client):
     for ticket in TicketFactory.create_batch(5, due_date=timezone.now()):
         IssueFactory(
             ticket=ticket,
+            user=user,
             due_date=timezone.now() + timezone.timedelta(days=1),
         )
 
@@ -46,11 +47,12 @@ def test_list(user, ghl_client):
         assert edge["node"]["problems"] == [PROBLEM_OVER_DUE_DATE]
 
 
-def test_retreive(user, ghl_client):
+def test_retrieve(user, ghl_client):
     """Test getting ticket with problems."""
     issue = IssueFactory(
         ticket=TicketFactory(due_date=timezone.now()),
         due_date=timezone.now() + timezone.timedelta(days=1),
+        user=user,
     )
 
     ghl_client.set_user(user)
