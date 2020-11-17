@@ -42,11 +42,7 @@ class GitlabMock(HttprettyMock):
 @pytest.fixture()
 def gl_mocker():
     """Gl mocker."""
-    httpretty.enable(allow_net_connect=False)
-    httpretty.reset()
-    yield GitlabMock()
-
-    httpretty.disable()
+    return GitlabMock()
 
 
 @pytest.fixture()

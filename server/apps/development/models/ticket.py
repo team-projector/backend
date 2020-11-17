@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
@@ -99,3 +100,8 @@ class Ticket(Timestamps):
     def __str__(self):
         """String representation."""
         return self.title
+
+    @property
+    def site_url(self):
+        """Get ticket url on main site."""
+        return "https://{0}/tickets/{1}".format(settings.DOMAIN_NAME, self.pk)

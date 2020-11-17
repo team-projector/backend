@@ -10,7 +10,7 @@ from apps.development.models import (
     TeamMember,
 )
 from apps.development.models.project_member import ProjectMemberRole
-from apps.development.services.team_members import filter_by_roles
+from apps.development.services.team_members.filters import filter_by_roles
 from apps.users.models import User
 
 
@@ -41,15 +41,8 @@ def get_allowed_projects(user) -> Iterable[Project]:
         id=OuterRef("members__id"),
     )
 
-    projects = list(
-        Project.objects.annotate(is_allowed=Exists(members)).filter(
-            is_allowed=True,
-        ),
-    )
-
-    groups = ProjectGroup.objects.annotate(is_allowed=Exists(members)).filter(
-        is_allowed=True,
-    )
+    projects = list(Project.objects.filter(Exists(members)))
+    groups = ProjectGroup.objects.filter(Exists(members))
 
     for group in groups:
         projects.extend(get_projects_from_group(group))

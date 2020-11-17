@@ -10,11 +10,11 @@ class UserAdminForm(UserChangeForm):
         email = self.cleaned_data.get("email")
 
         if email:
-            qs = self._meta.model.objects.filter(email=email).exclude(
+            emails = self._meta.model.objects.filter(email=email).exclude(
                 pk=self.instance.pk,
             )
 
-            if qs.exists():
+            if emails.exists():
                 raise ValidationError("Value should be unique or empty.")
 
         return email

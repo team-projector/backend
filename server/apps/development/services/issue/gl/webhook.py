@@ -2,13 +2,13 @@ import logging
 
 from apps.core.activity.verbs import ACTION_GITLAB_WEBHOOK_TRIGGERED
 from apps.core.tasks import add_action_task
-from apps.development.services.gl.webhook import GLWebhook
+from apps.development.services.gl.webhook import BaseGLWebhook
 from apps.development.tasks import sync_project_issue_task
 
 logger = logging.getLogger(__name__)
 
 
-class IssuesGLWebhook(GLWebhook):
+class IssuesGLWebhook(BaseGLWebhook):
     """Issue GitLab webhook handler."""
 
     object_kind = "issue"

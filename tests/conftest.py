@@ -9,4 +9,5 @@ pytest_plugins = (
     "tests.fixtures.project",
     "tests.fixtures.group",
     "tests.fixtures.assets",
+    "tests.fixtures.http",
 )

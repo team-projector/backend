@@ -12,7 +12,7 @@ def test_generate_message(assets):
     pipeline = body["object_attributes"]
 
     rendered = render_to_string(
-        "slack/pipeline.json",
+        "slack/pipeline_status_changed.json",
         {
             "gitlab_address": config.GITLAB_ADDRESS,
             "pipeline": pipeline,

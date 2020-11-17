@@ -3,7 +3,7 @@ from django.db.models import QuerySet
 
 from apps.core.graphql.helpers.generics import get_object_or_not_found
 from apps.development.models import TeamMember
-from apps.development.services.team_members import filter_by_roles
+from apps.development.services.team_members.filters import filter_by_roles
 from apps.users.models import User
 from apps.users.services.user.metrics import get_progress_metrics
 

@@ -1,0 +1,20 @@
+{% load date_utils %}
+
+[
+  {
+    "type": "section",
+    "text": {
+      "type": "mrkdwn",
+      "text": "Issue *<{{ issue.gl_url }}|{{ issue.title }}>* was attached to ticket *<{{ ticket.site_url }}|{{ ticket.title }}>*"
+    }
+  },
+  {
+    "type": "section",
+    "fields": [
+      {
+        "type": "mrkdwn",
+        "text": "*Project:*\n*<{{ project.gl_url }}|{{ project.full_title }}>*"
+      }
+    ]
+  }
+]
