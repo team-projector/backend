@@ -1,19 +1,16 @@
-import json
 import logging
 from typing import Optional
 
 from constance import config
-from django.template.loader import render_to_string
 
 from apps.core.notifications import slack
-from apps.core.services.html import unescape_text
-from apps.development.services.gl.webhook import GLWebhook
+from apps.development.services.gl.webhook import BaseGLWebhook
 from apps.users.models import User
 
 logger = logging.getLogger(__name__)
 
 
-class PipelineGLWebhook(GLWebhook):
+class PipelineGLWebhook(BaseGLWebhook):
     """Pipeline GitLab webhook handler."""
 
     object_kind = "pipeline"
@@ -35,8 +32,8 @@ class PipelineGLWebhook(GLWebhook):
         if not user:
             return
 
-        rendered = render_to_string(
-            "slack/pipeline.json",
+        blocks = slack.render_blocks(
+            "slack/pipeline_status_changed.json",
             {
                 "gitlab_address": config.GITLAB_ADDRESS,
                 "pipeline": pipeline,
@@ -47,9 +44,7 @@ class PipelineGLWebhook(GLWebhook):
             },
         )
 
-        slack_msg = json.loads(rendered)
-        unescape_text(slack_msg, "text")
-        slack.send_blocks(user, slack_msg, icon_emoji=":gitlab:")
+        slack.send_blocks(user, blocks, icon_emoji=":gitlab:")
 
     def _get_user(self, source) -> Optional[User]:
         """

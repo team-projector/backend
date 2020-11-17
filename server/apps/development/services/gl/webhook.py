@@ -2,7 +2,7 @@ from abc import ABC, abstractmethod
 from typing import Optional
 
 
-class GLWebhook(ABC):
+class BaseGLWebhook(ABC):
     """Base class for gitlab webhooks."""
 
     object_kind: Optional[str] = None

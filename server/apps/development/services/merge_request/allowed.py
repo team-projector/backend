@@ -1,7 +1,7 @@
 from django.db.models import QuerySet
 
 from apps.development.models import TeamMember
-from apps.development.services.team_members import filter_by_roles
+from apps.development.services.team_members.filters import filter_by_roles
 from apps.users.models import User
 
 

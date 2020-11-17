@@ -61,6 +61,13 @@ class Project(GitlabEntityMixin):
         help_text=_("HT__MERGE_REQUESTS_SYNC"),
     )
 
+    state = EnumField(
+        enum=ProjectState,
+        default=ProjectState.DEVELOPING,
+        verbose_name=_("VN__STATE"),
+        help_text=_("HT__STATE"),
+    )
+
     group = models.ForeignKey(
         "development.ProjectGroup",
         models.SET_NULL,
@@ -74,13 +81,6 @@ class Project(GitlabEntityMixin):
     members = GenericRelation(  # noqa: CCE001
         "development.ProjectMember",
         related_query_name="project",
-    )
-
-    state = EnumField(
-        enum=ProjectState,
-        default=ProjectState.DEVELOPING,
-        verbose_name=_("VN__STATE"),
-        help_text=_("HT__STATE"),
     )
 
     def __str__(self):

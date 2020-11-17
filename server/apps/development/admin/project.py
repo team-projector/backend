@@ -8,13 +8,17 @@ from apps.development.tasks import sync_project_task
 
 
 @admin.register(Project)
-class ProjectAdmin(
-    ForceSyncEntityMixin,
-    BaseModelAdmin,
-):
+class ProjectAdmin(ForceSyncEntityMixin, BaseModelAdmin):
     """A class represents Project model for admin dashboard."""
 
-    list_display = ("title", "group", "is_active", "gl_url", "gl_last_sync")
+    list_display = (
+        "title",
+        "group",
+        "is_active",
+        "state",
+        "gl_url",
+        "gl_last_sync",
+    )
     list_filter = ("state", "is_active")
     search_fields = ("title", "group__title", "gl_url")
     inlines = (ProjectMemberInline,)

@@ -8,7 +8,7 @@ from django.views import View
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework.exceptions import AuthenticationFailed
 
-from apps.development.services.gl.webhook import GLWebhook
+from apps.development.services.gl.webhook import BaseGLWebhook
 from apps.development.services.webhooks import webhook_classes
 
 
@@ -50,13 +50,13 @@ class GlWebhookView(View):
         if config.GITLAB_WEBHOOK_SECRET_TOKEN != secret_token:
             raise AuthenticationFailed("Invalid token")
 
-    def _get_webhook(self, object_kind: str) -> Optional[GLWebhook]:
+    def _get_webhook(self, object_kind: str) -> Optional[BaseGLWebhook]:
         """
         Get webhook.
 
         :param object_kind:
         :type object_kind: str
-        :rtype: Optional[GLWebhook]
+        :rtype: Optional[BaseGLWebhook]
         """
         webhook_class = next(
             (

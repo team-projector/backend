@@ -6,7 +6,7 @@ from jnt_django_graphene_toolbox.filters import OrderingFilter, SearchFilter
 
 from apps.development.models import Team, TeamMember
 from apps.development.models.team_member import TeamMemberRole
-from apps.development.services.team_members import filter_by_roles
+from apps.development.services.team_members.filters import filter_by_roles
 
 
 class TeamRolesFilter(django_filters.CharFilter):
