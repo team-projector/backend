@@ -10,4 +10,4 @@ class ProjectFactory(GitlabFieldMixin):
     class Meta:
         model = Project
 
-    title = factory.Faker("text", max_nb_chars=200)
+    title = factory.Faker("sentence")

@@ -33,7 +33,8 @@ def _get_slack_client() -> Optional[SlackClient]:
 
 def render_blocks(template, context) -> List[object]:
     """Prepare blocks for sending to slack."""
-    slack_msg = json.loads(render_to_string(template, context))
+    rendered = render_to_string(template, context)
+    slack_msg = json.loads(rendered)
     unescape_text(slack_msg, "text")
 
     return slack_msg

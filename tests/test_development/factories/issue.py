@@ -14,7 +14,7 @@ class IssueFactory(GitlabFieldMixin):
         model = Issue
 
     gl_iid = factory.Sequence(lambda seq: seq)
-    title = factory.Faker("text", max_nb_chars=200)
+    title = factory.Faker("sentence")
     project = factory.SubFactory(ProjectFactory)
     time_estimate = factory.Faker("random_int", min=1, max=1000)
     total_time_spent = factory.Faker("random_int")

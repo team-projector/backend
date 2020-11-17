@@ -72,7 +72,7 @@ def update_issue_ticket(issue: Issue) -> None:
         return
 
     provider = IssueTicketProvider(issue)
-    issue.ticket = provider.get_ticket_for_issue()
+    set_issue_ticket(issue, provider.get_ticket_for_issue())
 
 
 def set_issue_ticket(issue: Issue, ticket: Ticket) -> None:

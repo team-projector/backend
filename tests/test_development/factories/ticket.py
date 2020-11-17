@@ -13,7 +13,7 @@ class TicketFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = Ticket
 
-    title = factory.Faker("text", max_nb_chars=200)
+    title = factory.Faker("sentence")
     url = factory.Sequence(
         lambda seq: "https://team-projector-{0}.com".format(seq),
     )

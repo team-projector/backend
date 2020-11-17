@@ -6,7 +6,6 @@ from constance import config
 from django.core.exceptions import ImproperlyConfigured
 from slack.errors import SlackApiError
 
-from apps.core.notifications.slack.decorators import error_handler
 from apps.users.models import User
 
 
@@ -17,7 +16,6 @@ class SlackClient:
         """Initialize self."""
         self._client = self._get_slack_client()
 
-    @error_handler
     def send_text(self, user: User, msg: str, **kwargs) -> None:
         """
         Send plain text to user.
@@ -32,7 +30,6 @@ class SlackClient:
                 **kwargs,
             )
 
-    @error_handler
     def send_blocks(self, user: User, blocks: List[object], **kwargs) -> None:
         """
         Send rich text to user.

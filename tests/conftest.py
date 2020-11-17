@@ -10,4 +10,5 @@ pytest_plugins = (
     "tests.fixtures.group",
     "tests.fixtures.assets",
     "tests.fixtures.http",
+    "tests.fixtures.slack",
 )
