@@ -28,6 +28,8 @@ def _get_slack_client() -> Optional[SlackClient]:
     with contextlib.suppress(ImproperlyConfigured):
         return SlackClient()
 
+    return None
+
 
 def render_blocks(template, context) -> List[object]:
     """Prepare blocks for sending to slack."""

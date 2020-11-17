@@ -1,4 +1,4 @@
-from typing import Iterable
+from typing import Iterable, Set
 
 from apps.development.models import Project
 from apps.development.models.project_member import ProjectMemberRole
@@ -10,7 +10,7 @@ def get_project_managers(project: Project) -> Iterable[User]:
     if not project:
         return []
 
-    managers = set()
+    managers: Set[User] = set()
     managers.update(
         member.user
         for member in project.members.filter(role=ProjectMemberRole.MANAGER)
