@@ -74,7 +74,7 @@ class _BeforeSendHandler:
 
 sentry_dsn = config("DJANGO_SENTRY", default=None)
 if sentry_dsn:
-    sentry_sdk.init(
+    sentry_sdk.init(  # type:ignore
         dsn=sentry_dsn,
         integrations=[DjangoIntegration(), CeleryIntegration()],
         release=TP_APP_VERSION,
