@@ -5,7 +5,7 @@
     "type": "section",
     "text": {
       "type": "mrkdwn",
-      "text": "Issue *<{{ issue.gl_url }}|{{ issue.title }}>* was attached to ticket *<{{ ticket.site_url }}|{{ ticket.title }}>*"
+      "text": "Issue *<{{ issue.gl_url }}|{{ issue.title }}>* was attached to ticket *<{{ ticket.site_url }}|{{ ticket.title }} [{{ ticket.state }}]>*"
     }
   },
   {
