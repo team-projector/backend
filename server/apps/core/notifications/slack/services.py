@@ -1,6 +1,6 @@
 import contextlib
 import json
-from typing import Any, Dict, List, Optional
+from typing import List, Optional
 
 from django.core.exceptions import ImproperlyConfigured
 from django.template.loader import render_to_string
@@ -27,7 +27,7 @@ def send_blocks(user: User, blocks: List[object], **kwargs) -> None:
 def send_blocks_template(
     user: User,
     template: str,
-    context: Dict[str, Any],
+    context,
     **kwargs,
 ) -> None:
     """Send rich message from template to user."""
@@ -47,7 +47,7 @@ def _get_slack_client() -> Optional[SlackClient]:
 
 def render_template_to_blocks(
     template: str,
-    context: Dict[str, Any],
+    context,
 ) -> List[object]:
     """Prepare blocks for sending to slack."""
     rendered = render_to_string(template, context)
