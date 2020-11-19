@@ -1,3 +1,5 @@
+import pytest
+
 from apps.development.models.note import NoteType
 from apps.development.services.issue.tickets.updater import update_issue_ticket
 from tests.test_development.factories import (
@@ -7,18 +9,32 @@ from tests.test_development.factories import (
 )
 
 
-def test_by_description(db):
+@pytest.mark.parametrize(
+    "description",
+    [
+        (
+            "https://teamprojector.com/en/manager/milestones/1;ticket={0}"
+            + " https://teamprojector.com/en/manager/milestones/1;ticket=150 "
+        ),
+        (
+            "ticket https://teamprojector.com/tickets/{0} ticket "
+            + "https://teamprojector.com/en/manager/milestones/1;ticket={0}"
+        ),
+        "\n\n\n\n\n ticket https://teamprojector.com/tickets/{0}",
+        (
+            "ticket https://teamprojector.com/tickets/{0}"
+            + "https://teamprojector.com/tickets/{0}"
+        ),
+    ],
+)
+def test_by_description(db, description):
     """
     Test by description.
 
     :param db:
     """
     ticket = TicketFactory.create()
-    issue = IssueFactory.create(
-        description="ticket https://teamprojector.com/en/manager/milestones/1;ticket={0}".format(  # noqa: E501
-            ticket.pk,
-        ),
-    )
+    issue = IssueFactory.create(description=description.format(ticket.pk))
 
     update_issue_ticket(issue)
 

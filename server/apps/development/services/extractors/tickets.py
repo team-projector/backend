@@ -18,7 +18,7 @@ class _Extractor:
         :rtype: None
         """
         self.re_ticket: Pattern[str] = re.compile(
-            r"{0}/[^/]+/manager/milestones/\d+;ticket=(?P<ticket_id>\d+)".format(  # noqa: E501
+            r"{0}/([^/]+/manager/milestones/\d+;ticket=|tickets/)(?P<ticket_id>\d+)".format(  # noqa: E501
                 settings.DOMAIN_NAME,
             ),
         )
@@ -34,7 +34,12 @@ class _Extractor:
         if not text:
             return []
 
-        return list(set(self.re_ticket.findall(text)))
+        return list(
+            {
+                match.groupdict()["ticket_id"]
+                for match in self.re_ticket.finditer(text)
+            },
+        )
 
 
 def extract_tickets_links(text: str) -> List[str]:
