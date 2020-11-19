@@ -90,7 +90,7 @@ def notify_issue_managers(issue: Issue):
     if not issue.project or not issue.ticket:
         return
 
-    blocks = slack.render_blocks(
+    blocks = slack.render_template_to_blocks(
         "slack/ticket_assigned.json",
         {
             "gitlab_address": config.GITLAB_ADDRESS,

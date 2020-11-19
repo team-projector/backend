@@ -32,7 +32,8 @@ class PipelineGLWebhook(BaseGLWebhook):
         if not user:
             return
 
-        blocks = slack.render_blocks(
+        slack.send_blocks_template(
+            user,
             "slack/pipeline_status_changed.json",
             {
                 "gitlab_address": config.GITLAB_ADDRESS,
@@ -42,9 +43,8 @@ class PipelineGLWebhook(BaseGLWebhook):
                 "merge_request": body["merge_request"],
                 "gl_user": body["user"],
             },
+            icon_emoji=":gitlab:",
         )
-
-        slack.send_blocks(user, blocks, icon_emoji=":gitlab:")
 
     def _get_user(self, source) -> Optional[User]:
         """
