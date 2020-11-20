@@ -1,0 +1,750 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr " "
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2020-11-18 18:10+0300\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n"
+"%100>=11 && n%100<=14)? 2 : 3);\n"
+
+msgid "VN__JOB_QUEUE"
+msgstr "Очередь задач"
+
+msgid "Constance"
+msgstr "Конфигурация"
+
+msgid "VN__CLEAR_CACHE"
+msgstr "Очистить кэш"
+
+msgid "VN__GENERATE_SALARIES"
+msgstr "Рассчитать зарплату"
+
+msgid "VN__GRAPHQL_PLAYGROUND"
+msgstr "GraphQL интерактивная среда"
+
+msgid "VN__HOME"
+msgstr "Домой"
+
+msgid "VN__APPLICATIONS"
+msgstr "Приложения"
+
+msgid "VN__MANAGEMENT"
+msgstr "Управление"
+
+msgid "VN__UTILS"
+msgstr "Утилиты"
+
+msgid "VN__CORE"
+msgstr "Основные приложения"
+
+msgid "VN__GITLAB_ID"
+msgstr "Идентификатор в gitlab"
+
+msgid "HT__GITLAB_ID"
+msgstr "Идентификатор в gitlab"
+
+msgid "VN__GITLAB_URL"
+msgstr "Ссылка на gitlab"
+
+msgid "HT__GITLAB_URL"
+msgstr "Ссылка на gitlab"
+
+msgid "VN__GITLAB_LAST_SYNC"
+msgstr "Дата синхронизации с gitlab"
+
+msgid "HT__GITLAB_LAST_SYNC"
+msgstr "Время последней синхронизации с gitlab"
+
+msgid "VN__GITLAB_INTERNAL_ID"
+msgstr "Внутренний gitlab id"
+
+msgid "HT__GITLAB_INTERNAL_ID"
+msgstr "Внутренний идентификатор gitlab"
+
+msgid "MSG__VALUE_MUST_BE_FROM_0_TO_1"
+msgstr "Значение должно быть между 0 и 1"
+
+msgid "Django site admin"
+msgstr "Панель администрирования"
+
+msgid "Force sync"
+msgstr "Принудительная синхронизация"
+
+msgid "Save"
+msgstr "Сохранить"
+
+msgid "Delete"
+msgstr "Удалить"
+
+msgid "Save as new"
+msgstr "Сохранить как новый"
+
+msgid "Save and add another"
+msgstr "Сохранить и добавить"
+
+msgid "Save and continue editing"
+msgstr "Сохранить и продолжить редактирование"
+
+msgid "Save and view"
+msgstr "Сохранить и просматреть"
+
+msgid "Close"
+msgstr "Закрыть"
+
+msgid "MSG__YOU_MUST_CHOOSE_AT_LEAST_ONE_ROLE"
+msgstr "Вы должны выбрать хотя бы одну роль"
+
+msgid "VN__DEVELOPMENT"
+msgstr "Разработка"
+
+msgid "MSG__PLEASE_PROVIDE_PERSONAL_GL_TOKEN"
+msgstr "Пожалуйсте, укажите персональый gitlab token"
+
+msgid "CH__DEVELOPING"
+msgstr "Разработка"
+
+msgid "CH__SUPPORTING"
+msgstr "Поддержка"
+
+msgid "CH__ARCHIVED"
+msgstr "В архиве"
+
+msgid "CH__OPENED"
+msgstr "Открыто"
+
+msgid "CH__CLOSED"
+msgstr "Закрыто"
+
+msgid "VN__ISSUE"
+msgstr "Задача"
+
+msgid "VN__ISSUES"
+msgstr "Задачи"
+
+msgid "VN__TITLE"
+msgstr "Заголовок"
+
+msgid "HT__TITLE"
+msgstr " "
+
+msgid "VN__TIME_ESTIMATE"
+msgstr "Времы выполнения"
+
+msgid "HT__TIME_ESTIMATE"
+msgstr " "
+
+msgid "VN__TOTAL_TIME_SPENT"
+msgstr "Всего затрачено времени"
+
+msgid "HT__TOTAL_TIME_SPENT"
+msgstr " "
+
+msgid "VN__STATE"
+msgstr "Состояние"
+
+msgid "HT__STATE"
+msgstr " "
+
+msgid "VN__PROJECT"
+msgstr "Проект"
+
+msgid "HT__PROJECT"
+msgstr " "
+
+msgid "VN__USER"
+msgstr "Пользователь"
+
+msgid "HT__USER"
+msgstr " "
+
+msgid "VN__AUTHOR"
+msgstr "Автор"
+
+msgid "HT__AUTHOR"
+msgstr " "
+
+msgid "VN__LABEL"
+msgstr "Метка"
+
+msgid "VN__LABELS"
+msgstr "Метки"
+
+msgid "VN__COLOR"
+msgstr "Цвет"
+
+msgid "HT__COLOR"
+msgstr " "
+
+msgid "CH__MERGED"
+msgstr "Объединено"
+
+msgid "VN__MERGE_REQUEST"
+msgstr "Запрос на объединение"
+
+msgid "VN__MERGE_REQUESTS"
+msgstr "Запросы на объединение"
+
+msgid "CH__STATE_ACTIVE"
+msgstr "Активно"
+
+msgid "CH__STATE_CLOSED"
+msgstr "Закрыто"
+
+msgid "VN__MILESTONE"
+msgstr "Этап разработки"
+
+msgid "VN__MILESTONES"
+msgstr "Этапы разработки"
+
+msgid "VN__DESCRIPTION"
+msgstr "Описание"
+
+msgid "HT__DESCRIPTION"
+msgstr " "
+
+msgid "VN__START_DATE"
+msgstr "Дата начала"
+
+msgid "HT__START_DATE"
+msgstr " "
+
+msgid "VN__DUE_DATE"
+msgstr "DUE_DATE"
+
+msgid "HT__DUE_DATE"
+msgstr "Срок выполнения"
+
+msgid "VN__BUDGET"
+msgstr "Бюджет"
+
+msgid "HT__BUDGET"
+msgstr " "
+
+msgid "VN__NOTES"
+msgstr "Примечания к задачам"
+
+msgid "HT__NOTES"
+msgstr " "
+
+msgid "CH__TIME_SPEND"
+msgstr "Затраченное время"
+
+msgid "CH__RESET_SPEND"
+msgstr "Сброс затраченного времени"
+
+msgid "CH__MOVED_FROM"
+msgstr "Перемещено"
+
+msgid "CH__COMMENT"
+msgstr "Комментарий"
+
+msgid "VN__NOTE"
+msgstr "NOTE"
+
+msgid "VN__TYPE"
+msgstr "Тип"
+
+msgid "HT__TYPE"
+msgstr " "
+
+msgid "VN__PROJECTS"
+msgstr "Проекты"
+
+msgid "VN__FULL_TITLE"
+msgstr "Полное наименование"
+
+msgid "HT__FULL_TITLE"
+msgstr " "
+
+msgid "VN__IS_ACTIVE"
+msgstr "Активно"
+
+msgid "HT__IS_ACTIVE"
+msgstr " "
+
+msgid "VN__GITLAB_AVATAR"
+msgstr "Ааватар из Gitlab"
+
+msgid "HT__GITLAB_AVATAR"
+msgstr " "
+
+msgid "VN__GITLAB_LAST_ISSUES_SYNC"
+msgstr "Время последней синхронизации задач"
+
+msgid "HT__GITLAB_LAST_ISSUES_SYNC"
+msgstr " "
+
+msgid "VN__GITLAB_MERGE_REQUESTS_SYNC"
+msgstr "Время последней синхронизации MERGE_REQUESTS"
+
+msgid "HT__MERGE_REQUESTS_SYNC"
+msgstr " "
+
+msgid "VN__GROUP"
+msgstr "Группа"
+
+msgid "HT__GROUP"
+msgstr " "
+
+msgid "VN__PROJECT_GROUP"
+msgstr "Группа проектов"
+
+msgid "VN__PROJECT_GROUPS"
+msgstr "Группы проектов"
+
+msgid "VN__PARENT"
+msgstr "Родитель"
+
+msgid "HT__PARENT"
+msgstr " "
+
+msgid "CH__DEVELOPER"
+msgstr "Разработчик"
+
+msgid "CH__MANAGER"
+msgstr "Менеджер"
+
+msgid "CH__CUSTOMER"
+msgstr "Заказчик"
+
+msgid "VN__PROJECT_MEMBER"
+msgstr "Участник проекта"
+
+msgid "VN__PROJECT_MEMBERS"
+msgstr "Участники проекта"
+
+msgid "VN__ROLE"
+msgstr "Роль"
+
+msgid "HT__ROLE"
+msgstr " "
+
+msgid "VN__TEAM"
+msgstr "Команда"
+
+msgid "VN__TEAMS"
+msgstr "Команды"
+
+msgid "CH__LEADER"
+msgstr "Лидер"
+
+msgid "CH__WATCHER"
+msgstr "Наблюдатель"
+
+msgid "VN__TEAM_MEMBER"
+msgstr "Участник команды"
+
+msgid "VN__TEAM_MEMBERS"
+msgstr "Участиник команды"
+
+msgid "HT__TEAM"
+msgstr " "
+
+msgid "CH__FEATURE"
+msgstr "FEATURE"
+
+msgid "CH__IMPROVEMENT"
+msgstr "Улучшение"
+
+msgid "CH__BUG_FIXING"
+msgstr "Исправление ошибок"
+
+msgid "CH__CREATED"
+msgstr "Создано"
+
+msgid "CH__PLANNING"
+msgstr "Запланировано"
+
+msgid "CH__DOING"
+msgstr "В процессе"
+
+msgid "CH__TESTING"
+msgstr "Тестирование"
+
+msgid "CH__ACCEPTING"
+msgstr "Согласование"
+
+msgid "CH__DONE"
+msgstr "Завершено"
+
+msgid "VN__TICKET"
+msgstr "Тикет"
+
+msgid "VN__TICKETS"
+msgstr "Тикеты"
+
+msgid "VN__URL"
+msgstr "URL"
+
+msgid "HT__URL"
+msgstr " "
+
+msgid "Yes"
+msgstr "Да"
+
+msgid "No"
+msgstr "Нет"
+
+msgid "VN__PAYROLL"
+msgstr "Зарплата"
+
+msgid "VN__BONUS"
+msgstr "Бонус"
+
+msgid "VN__BONUSES"
+msgstr "Бонусы"
+
+msgid "VN__COMMENT"
+msgstr "Комментарий"
+
+msgid "HT__COMMENT"
+msgstr " "
+
+msgid "CH__APPROVED"
+msgstr "Подтверждено"
+
+msgid "CH__DECLINED"
+msgstr "Отклонено"
+
+msgid "VN__APPROVE_STATE"
+msgstr "Состояние"
+
+msgid "HT__APPROVE_STATE"
+msgstr " "
+
+msgid "VN__APPROVED_AT"
+msgstr "Дата подтверждения"
+
+msgid "HT__APPROVED_AT"
+msgstr " "
+
+msgid "VN__DECLINE_REASON"
+msgstr "Причина отклонения"
+
+msgid "HT__DECLINE_REASON"
+msgstr " "
+
+msgid "VN__APPROVED_BY"
+msgstr "Кем подтверждено"
+
+msgid "HT__APPROVED_BY"
+msgstr " "
+
+msgid "VN__TIME_SPENTS"
+msgstr "Затраченное время"
+
+msgid "HT__TIME_SPENTS"
+msgstr " "
+
+msgid "VN__PAYMENT"
+msgstr "Оплата"
+
+msgid "VN__PAYMENTS"
+msgstr "Оплаты"
+
+msgid "VN__PAYROLLS"
+msgstr "Общая сумма зарплаты"
+
+msgid "VN__SUM"
+msgstr "Сумма"
+
+msgid "HT__SUM"
+msgstr " "
+
+msgid "VN__CREATED_BY"
+msgstr "Кем создано"
+
+msgid "HT__CREATED_BY"
+msgstr " "
+
+msgid "VN__SALARY"
+msgstr "Зарплата"
+
+msgid "HT__SALARY"
+msgstr " "
+
+msgid "VN__PENALTY"
+msgstr "Штраф"
+
+msgid "VN__PENALTIES"
+msgstr "Штрафы"
+
+msgid "VN__SALARIES"
+msgstr "Зарплаты"
+
+msgid "VN__PERIOD_FROM"
+msgstr "Начало периода"
+
+msgid "HT__PERIOD_FROM"
+msgstr " "
+
+msgid "VN__PERIOD_TO"
+msgstr "Окончание периода"
+
+msgid "HT__PERIOD_TO"
+msgstr " "
+
+msgid "VN__CHARGED_TIME"
+msgstr " "
+
+msgid "HT__CHARGED_TIME"
+msgstr " "
+
+msgid "VN__HOUR_RATE"
+msgstr "Часовая ставка"
+
+msgid "HT__HOUR_RATE"
+msgstr " "
+
+msgid "VN__TAX_RATE"
+msgstr "Налоговая ставка"
+
+msgid "HT__TAX_RATE"
+msgstr " "
+
+msgid "VN__TAXES"
+msgstr "Налоги"
+
+msgid "HT__TAXES"
+msgstr " "
+
+msgid "HT__BONUS"
+msgstr " "
+
+msgid "HT__PENALTY"
+msgstr " "
+
+msgid "VN__TOTAL"
+msgstr "Итого"
+
+msgid "HT__TOTAL"
+msgstr " "
+
+msgid "VN__PAYED"
+msgstr "Выплачено"
+
+msgid "HT__PAYED"
+msgstr " "
+
+msgid "VN__POSITION"
+msgstr "Позиция"
+
+msgid "HT__POSITION"
+msgstr " "
+
+msgid "VN__SPENT_TIME"
+msgstr "Затраченное время"
+
+msgid "VN__SPENT_TIMES"
+msgstr "Затраченное время"
+
+msgid "VN__CUSTOMER_SUM"
+msgstr "Сумма заказчика"
+
+msgid "HT__CUSTOMER_SUM"
+msgstr " "
+
+msgid "VN__RATE"
+msgstr "Часовая ставка"
+
+msgid "HT__RATE"
+msgstr " "
+
+msgid "VN__CUSTOMER_RATE"
+msgstr "Ставка заказчика"
+
+msgid "HT__CUSTOMER_RATE"
+msgstr " "
+
+msgid "VN__TIME_SPENT"
+msgstr "Затраченное время"
+
+msgid "HT__TIME_SPENT"
+msgstr " "
+
+msgid "CH__DAYOFF"
+msgstr "Выходной"
+
+msgid "CH__VACATION"
+msgstr "Отпуск"
+
+msgid "CH__DISEASE"
+msgstr "Болезнь"
+
+msgid "VN__WORKBREAK"
+msgstr "Перерыв в работе"
+
+msgid "VN__WORKBREAKS"
+msgstr "Перерывы в работе"
+
+msgid "VN__DATE_FROM"
+msgstr "Дата начала"
+
+msgid "HT__DATE_FROM"
+msgstr " "
+
+msgid "VN__DATE_TO"
+msgstr "Дата окончания"
+
+msgid "HT__DATE_TO"
+msgstr " "
+
+msgid "VN__REASON"
+msgstr "Причина"
+
+msgid "HT__REASON"
+msgstr " "
+
+msgid "VN__PAID"
+msgstr "Оплачено"
+
+msgid "HT__PAID"
+msgstr " "
+
+msgid "VN__PAID_DAYS"
+msgstr "Оплачено дней"
+
+msgid "HT__PAID_DAYS"
+msgstr " "
+
+msgid "VN__SKILLS"
+msgstr "Навыки"
+
+msgid "VN__POSITIONS"
+msgstr "Позиции"
+
+msgid "VN__POSITION_SKILL_LEVEL"
+msgstr "Позиция для навыка"
+
+msgid "VN__POSITION_SKILL_LEVELS"
+msgstr "Позиции для навыков"
+
+msgid "VN__SKILL_LEVEL"
+msgstr "Уровень навыка"
+
+msgid "HT__SKILL_LEVEL"
+msgstr " "
+
+msgid "VN__SKILL"
+msgstr "Навык"
+
+msgid "VN__SKILL_GROUP"
+msgstr "Группа навыков"
+
+msgid "VN__SKILL_GROUPS"
+msgstr "Группы навыков"
+
+msgid "VN__SKILL_LEVELS"
+msgstr "Уровни навыка"
+
+msgid "HT__SKILL"
+msgstr " "
+
+msgid "VN__USER_SKILL_LEVEL"
+msgstr "Уровень навыка пользователя"
+
+msgid "VN__USER_SKILL_LEVELS"
+msgstr "Уровни навыков пользователей"
+
+msgid "VN__CONFIRMED_BY"
+msgstr "Кем подтверждено"
+
+msgid "HT__CONFIRMED_BY"
+msgstr " "
+
+msgid "VN__USERS"
+msgstr "Пользователи"
+
+msgid "VN__USER_MUST_HAVE_A_LOGIN"
+msgstr "У пользователя должен быть указан логин"
+
+msgid "VN__TOKEN"
+msgstr "Токен"
+
+msgid "VN__TOKENS"
+msgstr "Токены"
+
+msgid "CH__TEAM_LEADER"
+msgstr "Лидер команды"
+
+msgid "CH__SHAREHOLDER"
+msgstr "Участник"
+
+msgid "VN__LOGIN"
+msgstr "Логин"
+
+msgid "HT__LOGIN"
+msgstr " "
+
+msgid "VN__NAME"
+msgstr "Имя"
+
+msgid "HT__NAME"
+msgstr " "
+
+msgid "VN__EMAIL"
+msgstr "Электронная почта"
+
+msgid "HT__EMAIL"
+msgstr " "
+
+msgid "VN__CUSTOMER_HOUR_RATE"
+msgstr "Часовая ставка заказчика"
+
+msgid "HT__CUSTOMER_HOUR_RATE"
+msgstr " "
+
+msgid "VN__ANNUAL_PAID_WORK_BREAKS_DAYS"
+msgstr "Количество оплачиваемых дней в году"
+
+msgid "HT__ANNUAL_PAID_WORK_BREAKS_DAYS"
+msgstr " "
+
+msgid "VN__IS_STAFF"
+msgstr "Доступ к администрированию"
+
+msgid "HT__IS_STAFF"
+msgstr " "
+
+msgid "VN__PERSONAL_GITLAB_TOKEN"
+msgstr "Персональный gitlab токен"
+
+msgid "HT__PERSONAL_GITLAB_TOKEN"
+msgstr " "
+
+msgid "VN__NOTIFY_PIPELINE_STATUS"
+msgstr "Оповещать о статусах сборки проекта"
+
+msgid "HT__NOTIFY_PIPELINE_STATUS"
+msgstr " "
+
+msgid "MSG__UNABLE_TO_LOGIN_WITH_PROVIDED_CREDENTIALS"
+msgstr "Невозможно авторизоваться с представленным данными"
+
+msgid "MSG__MUST_INCLUDE_LOGIN_AND_PASSWORD"
+msgstr "Необходимо предоставить логин и пароль"
+
+msgid "MSG__AUTHENTICATION_ERROR"
+msgstr "Ошибка авторизации"
+
+msgid "MSG__ENGLISH"
+msgstr "Английский"
+
+msgid "MSG__RUSSIAN"
+msgstr "Русский"
+
+msgid "VN__ADMIN_DASHBOARD"
+msgstr "Панель администрирования"

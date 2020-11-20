@@ -12,6 +12,7 @@ LANGUAGE_CODE = "en"
 
 LANGUAGES = [
     ("en", _("MSG__ENGLISH")),
+    ("ru", _("MSG__RUSSIAN")),
 ]
 
 LOCALE_PATHS = [

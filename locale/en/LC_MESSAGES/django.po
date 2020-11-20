@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-11-18 13:15+0300\n"
+"POT-Creation-Date: 2020-11-18 18:10+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -739,6 +739,9 @@ msgstr "Authentication error"
 
 msgid "MSG__ENGLISH"
 msgstr "English"
+
+msgid "MSG__RUSSIAN"
+msgstr "Russian"
 
 msgid "VN__ADMIN_DASHBOARD"
 msgstr "Admin Dashboard"
