@@ -4,6 +4,7 @@ from django.utils.translation import gettext_lazy as _
 from apps.core.consts import DEFAULT_TITLE_LENGTH
 
 COLOR_MAX_LENGTH = 10
+LABEL_DONE = "done"
 
 
 class Label(models.Model):

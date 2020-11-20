@@ -21,3 +21,4 @@ from .project_groups import sync_project_group_task
 from .projects import sync_project_task
 from .sync_all import sync_all_task
 from .users import sync_user_task
+from .tickets import notify_if_ticket_completed_task
