@@ -3,6 +3,7 @@ from typing import ClassVar, List
 from django.db import models
 
 from apps.development.models import MergeRequest
+from apps.development.models.label import LABEL_DONE
 from apps.development.models.merge_request import MergeRequestState
 
 PROBLEM_EMPTY_ESTIMATE = "EMPTY_ESTIMATE"
@@ -58,7 +59,7 @@ class NotAssignedChecker(BaseProblemChecker):
         :rtype: bool
         """
         return merge_request.issues.filter(
-            labels__title__iexact="done",
+            labels__title__iexact=LABEL_DONE,
             state=MergeRequestState.OPENED,
         ).exists()
 
