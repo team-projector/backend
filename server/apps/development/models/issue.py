@@ -179,10 +179,10 @@ class Issue(
 
 
 @receiver(signals.m2m_changed, sender=Issue.labels.through)
-def _on_issue_labeling(instance: Issue, action, pk_set, **kwargs):
+def _handle_issue_labeling(instance: Issue, action, pk_set, **kwargs):
     """Calling required functionality after m2m was updated with new objs."""
     from apps.development.services.issue.labels import (  # noqa: WPS433
-        on_issue_labeling,
+        handle_issue_labeling,
     )
 
     if action != "post_add":
@@ -191,4 +191,4 @@ def _on_issue_labeling(instance: Issue, action, pk_set, **kwargs):
     if not pk_set:
         return
 
-    on_issue_labeling(instance, pk_set)
+    handle_issue_labeling(instance, pk_set)

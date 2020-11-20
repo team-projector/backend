@@ -20,10 +20,10 @@ def patched_notify_task():
 
 
 @pytest.fixture(autouse=True)
-def _mock_on_issue_labeling():
+def _mock_handle_issue_labeling():
     """We disable m2m signal here."""
     with patch(
-        "apps.development.services.issue.labels.on_issue_labeling",
+        "apps.development.services.issue.labels.handle_issue_labeling",
     ):
         yield
 

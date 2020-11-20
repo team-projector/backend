@@ -5,7 +5,7 @@ from apps.development.models.label import LABEL_DONE, Label
 from apps.development.tasks import notify_if_ticket_completed_task
 
 
-def on_issue_labeling(issue: Issue, labels_ids: Set[int]):
+def handle_issue_labeling(issue: Issue, labels_ids: Set[int]):
     """This service used as an entry point for the m2m signal."""
     handle_done_label(issue, labels_ids)
 

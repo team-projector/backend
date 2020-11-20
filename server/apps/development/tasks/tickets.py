@@ -6,7 +6,7 @@ from celery_app import app
 @app.task
 def notify_if_ticket_completed_task(ticket_pk):
     """Send notifications to the users if a ticket is completed."""
-    ticket = Ticket.objects.filter(pd=ticket_pk).first()
+    ticket = Ticket.objects.filter(pk=ticket_pk).first()
     if not ticket:
         return
 
