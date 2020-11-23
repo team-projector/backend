@@ -1,6 +1,6 @@
 import pytest
 
-from apps.development.models.project_member import ProjectMemberRole
+from apps.development.models.project_member import ProjectMember
 from tests.test_development.factories import (
     ProjectFactory,
     ProjectMemberFactory,
@@ -54,7 +54,7 @@ def _make_project_manager(project, user=None):
     """Create or bind project manager."""
     return _add_or_update_user_in_project(
         project,
-        ProjectMemberRole.MANAGER,
+        ProjectMember.roles.MANAGER,
         user,
     )
 
@@ -63,7 +63,7 @@ def _make_project_developer(project, user=None):
     """Create or bind project developer."""
     return _add_or_update_user_in_project(
         project,
-        ProjectMemberRole.DEVELOPER,
+        ProjectMember.roles.DEVELOPER,
         user,
     )
 
@@ -72,16 +72,16 @@ def _make_project_customer(project, user=None):
     """Create or bind project customer."""
     return _add_or_update_user_in_project(
         project,
-        ProjectMemberRole.CUSTOMER,
+        ProjectMember.roles.CUSTOMER,
         user,
     )
 
 
-def _add_or_update_user_in_project(project, role, user):
+def _add_or_update_user_in_project(project, roles, user):
     """Create user and add into project with given role."""
     if not user:
         user = UserFactory.create()
 
-    ProjectMemberFactory.create(user=user, role=role, owner=project)
+    ProjectMemberFactory.create(user=user, roles=roles, owner=project)
 
     return user

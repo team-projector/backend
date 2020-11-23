@@ -2,7 +2,7 @@ import pytest
 from jnt_django_graphene_toolbox.errors import GraphQLPermissionDenied
 
 from apps.development.models.milestone import MilestoneState
-from apps.development.models.project_member import ProjectMemberRole
+from apps.development.models.project_member import ProjectMember
 from tests.test_development.factories import (
     ProjectFactory,
     ProjectMemberFactory,
@@ -15,7 +15,7 @@ def test_query(user, gql_client_authenticated, ghl_raw):
     project = ProjectFactory.create()
     ProjectMemberFactory.create(
         user=user,
-        role=ProjectMemberRole.MANAGER,
+        roles=ProjectMember.roles.MANAGER,
         owner=project,
     )
     ProjectMilestoneFactory.create_batch(5, owner=project)
@@ -41,7 +41,7 @@ def test_search_by_title(ghl_auth_mock_info, all_milestones_query):
     project = ProjectFactory.create()
     ProjectMemberFactory.create(
         user=ghl_auth_mock_info.context.user,
-        role=ProjectMemberRole.MANAGER,
+        roles=ProjectMember.roles.MANAGER,
         owner=project,
     )
     milestones = ProjectMilestoneFactory.create_batch(5, owner=project)
@@ -66,7 +66,7 @@ def test_search_by_gl_url(ghl_auth_mock_info, all_milestones_query):
     project = ProjectFactory.create()
     ProjectMemberFactory.create(
         user=ghl_auth_mock_info.context.user,
-        role=ProjectMemberRole.MANAGER,
+        roles=ProjectMember.roles.MANAGER,
         owner=project,
     )
     milestones = ProjectMilestoneFactory.create_batch(5, owner=project)
@@ -91,7 +91,7 @@ def test_search_by_gl_url_not_full(ghl_auth_mock_info, all_milestones_query):
     project = ProjectFactory.create()
     ProjectMemberFactory.create(
         user=ghl_auth_mock_info.context.user,
-        role=ProjectMemberRole.MANAGER,
+        roles=ProjectMember.roles.MANAGER,
         owner=project,
     )
     milestones = ProjectMilestoneFactory.create_batch(5, owner=project)
@@ -115,7 +115,7 @@ def test_search_no_results(ghl_auth_mock_info, all_milestones_query):
     project = ProjectFactory.create()
     ProjectMemberFactory.create(
         user=ghl_auth_mock_info.context.user,
-        role=ProjectMemberRole.MANAGER,
+        roles=ProjectMember.roles.MANAGER,
         owner=project,
     )
     ProjectMilestoneFactory.create_batch(5, owner=project)
@@ -143,7 +143,7 @@ def test_filter_by_state(
     project = ProjectFactory.create()
     ProjectMemberFactory.create(
         user=ghl_auth_mock_info.context.user,
-        role=ProjectMemberRole.MANAGER,
+        roles=ProjectMember.roles.MANAGER,
         owner=project,
     )
     ProjectMilestoneFactory.create_batch(

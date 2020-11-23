@@ -4,7 +4,6 @@ from django.db import models
 from jnt_django_graphene_toolbox.errors import GraphQLPermissionDenied
 
 from apps.development.models import Milestone, ProjectGroup, ProjectMember
-from apps.development.models.project_member import ProjectMemberRole
 from apps.users.models import User
 
 
@@ -67,7 +66,7 @@ def is_project_manager(user: User, milestone: Milestone) -> bool:
     """Check project manager for current milestone."""
     members = ProjectMember.objects.filter(
         user=user,
-        role=ProjectMemberRole.MANAGER,
+        roles=ProjectMember.roles.MANAGER,
     )
 
     project_milestones = Milestone.objects.filter(

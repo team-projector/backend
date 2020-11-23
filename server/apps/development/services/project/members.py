@@ -1,7 +1,9 @@
-from typing import Iterable, Set
+from typing import Iterable
+
+from django.db import models
 
 from apps.development.models import Project
-from apps.development.models.project_member import ProjectMemberRole
+from apps.development.models.project_member import ProjectMember
 from apps.users.models import User
 
 
@@ -10,18 +12,16 @@ def get_project_managers(project: Project) -> Iterable[User]:
     if not project:
         return []
 
-    managers: Set[User] = set()
-    managers.update(
-        member.user
-        for member in project.members.filter(role=ProjectMemberRole.MANAGER)
-    )
+    query_manager = models.Q(roles=ProjectMember.roles.MANAGER)
 
-    parent = project.group
-    while parent:
-        managers.update(
-            member.user
-            for member in parent.members.filter(role=ProjectMemberRole.MANAGER)
+    project_members = project.members.filter(query_manager).values("user_id")
+
+    project_group = project.group
+    while project_group:
+        project_members = project_members.union(
+            project_group.members.filter(query_manager).values("user_id"),
         )
-        parent = parent.parent
 
-    return list(managers)
+        project_group = project_group.parent
+
+    return list(User.objects.filter(id__in=project_members))
