@@ -1,7 +1,7 @@
 import pytest
 
 from apps.development.services.ticket.problems import (
-    PROBLEM_NOT_READY,
+    UNASSIGNED_ISSUES,
     get_ticket_problems,
 )
 from tests.test_development.factories import IssueFactory, TicketFactory
@@ -27,7 +27,7 @@ def ticket_not_ready(db):
 
 def test_not_ready_ticket(ticket, ticket_not_ready):
     """Test not ready ticket."""
-    assert get_ticket_problems(ticket_not_ready) == [PROBLEM_NOT_READY]
+    assert get_ticket_problems(ticket_not_ready) == [UNASSIGNED_ISSUES]
 
 
 def test_no_problems(ticket, ticket_not_ready):
