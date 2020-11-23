@@ -6,7 +6,7 @@ from apps.development.models import Ticket
 from apps.development.models.issue import Issue, IssueState
 
 PROBLEM_OVER_DUE_DATE = "OVER_DUE_DATE"
-PROBLEM_NOT_READY = "NOT_READY"
+UNASSIGNED_ISSUES = "UNASSIGNED_ISSUES"
 
 
 class BaseProblemChecker:
@@ -61,11 +61,11 @@ class OverDueDateChecker(BaseProblemChecker):
         ).exists()
 
 
-class NotReadyChecker(BaseProblemChecker):
+class UnassignedIssuesChecker(BaseProblemChecker):
     """If ticket has issues without user."""
 
-    annotate_field = "problem_not_ready"
-    problem_code = PROBLEM_NOT_READY
+    annotate_field = "unassigned_issues"
+    problem_code = UNASSIGNED_ISSUES
 
     def get_annotation(self) -> models.Expression:
         """Get condition."""

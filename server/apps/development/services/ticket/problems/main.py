@@ -9,7 +9,7 @@ ticket_problem_checkers = [
     checker_class()
     for checker_class in (
         checkers.OverDueDateChecker,
-        checkers.NotReadyChecker,
+        checkers.UnassignedIssuesChecker,
     )
 ]
 
