@@ -83,6 +83,16 @@ class Project(GitlabEntityMixin):
         related_query_name="project",
     )
 
+    team = models.ForeignKey(
+        "development.Team",
+        models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="projects",
+        verbose_name=_("VN__TEAM"),
+        help_text=_("HT__TEAM"),
+    )
+
     def __str__(self):
         """Returns object string representation."""
         return self.full_title or self.title

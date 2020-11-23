@@ -2,6 +2,7 @@ from django.contrib import admin
 
 from apps.core.admin.base import BaseModelAdmin
 from apps.core.admin.mixins import ForceSyncEntityMixin
+from apps.development.admin.filters import TeamFilter
 from apps.development.admin.inlines import ProjectMemberInline
 from apps.development.models import ProjectGroup
 from apps.development.tasks import sync_project_group_task
@@ -15,7 +16,7 @@ class ProjectGroupAdmin(
     """A class represents Project Group model for admin dashboard."""
 
     list_display = ("title", "parent", "is_active", "gl_url", "gl_last_sync")
-    list_filter = ("is_active", "state")
+    list_filter = ("is_active", "state", TeamFilter)
     search_fields = ("title",)
     inlines = (ProjectMemberInline,)
 
