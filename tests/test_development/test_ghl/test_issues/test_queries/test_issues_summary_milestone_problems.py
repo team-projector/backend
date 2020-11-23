@@ -1,7 +1,10 @@
 import pytest
 
 from apps.development.models.milestone import MilestoneState
-from apps.development.models.project_member import ProjectMemberRole
+from apps.development.models.project_member import (
+    ProjectMember,
+    ProjectMemberRole,
+)
 from tests.test_development.factories import (
     IssueFactory,
     ProjectFactory,
@@ -34,7 +37,7 @@ def test_issues_summary_query(
     """Test getting issues summary raw query."""
     ProjectMemberFactory.create(
         user=user,
-        role=ProjectMemberRole.MANAGER,
+        roles=ProjectMember.roles.MANAGER,
         owner=milestone.owner,
     )
     IssueFactory.create_batch(

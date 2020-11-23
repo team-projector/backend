@@ -3,6 +3,7 @@ from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
 from django.db import models
 from django.utils.translation import gettext_lazy as _
+from jnt_django_toolbox.models.fields import BitField
 
 from apps.core.models.mixins import Timestamps
 
@@ -24,14 +25,9 @@ class ProjectMember(Timestamps):
     class Meta:
         verbose_name = _("VN__PROJECT_MEMBER")
         verbose_name_plural = _("VN__PROJECT_MEMBERS")
-        unique_together = ("user", "role", "object_id")
+        unique_together = ("user", "object_id", "content_type")
 
-    role = models.CharField(
-        choices=ProjectMemberRole.choices,
-        max_length=PROJECT_MEMBER_ROLE_MAX_LENGTH,
-        verbose_name=_("VN__ROLE"),
-        help_text=_("HT__ROLE"),
-    )
+    roles = BitField(flags=ProjectMemberRole.choices, default=0)
 
     object_id = models.PositiveIntegerField(null=True)
 

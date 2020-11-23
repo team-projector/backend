@@ -3,7 +3,10 @@ from jnt_django_graphene_toolbox.errors import GraphQLPermissionDenied
 from jnt_django_toolbox.helpers.time import seconds
 
 from apps.development.graphql.types.milestone import MilestoneType
-from apps.development.models.project_member import ProjectMemberRole
+from apps.development.models.project_member import (
+    ProjectMember,
+    ProjectMemberRole,
+)
 from tests.test_development.factories import (
     IssueFactory,
     ProjectMemberFactory,
@@ -24,7 +27,7 @@ def test_resolver(user, ghl_auth_mock_info):
     milestone = ProjectMilestoneFactory.create(budget=10000)
     ProjectMemberFactory.create(
         user=user,
-        role=ProjectMemberRole.MANAGER,
+        roles=ProjectMember.roles.MANAGER,
         owner=milestone.owner,
     )
 

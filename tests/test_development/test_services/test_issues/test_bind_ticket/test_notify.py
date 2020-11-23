@@ -1,7 +1,7 @@
 import pytest
 from httpretty import UnmockedError
 
-from apps.development.models.project_member import ProjectMemberRole
+from apps.development.models.project_member import ProjectMember
 from apps.development.services.issue.tickets.updater import update_issue_ticket
 from tests.helpers.db import trigger_on_commit
 from tests.test_development.factories import (
@@ -30,7 +30,7 @@ def test_assign_ticket(db, slack):
 
     ProjectMemberFactory.create(
         owner=project,
-        role=ProjectMemberRole.MANAGER,
+        roles=ProjectMember.roles.MANAGER,
     )
 
     update_issue_ticket(issue2)
