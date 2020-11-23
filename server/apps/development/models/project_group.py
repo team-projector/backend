@@ -71,6 +71,16 @@ class ProjectGroup(GitlabEntityMixin):
         help_text=_("HT__STATE"),
     )
 
+    team = models.ForeignKey(
+        "development.Team",
+        models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="project_groups",
+        verbose_name=_("VN__TEAM"),
+        help_text=_("HT__TEAM"),
+    )
+
     def __str__(self):
         """Returns object string representation."""
         return self.title
