@@ -1,10 +1,7 @@
 import pytest
 
 from apps.development.models.milestone import MilestoneState
-from apps.development.models.project_member import (
-    ProjectMember,
-    ProjectMemberRole,
-)
+from apps.development.models.project_member import ProjectMember
 from tests.test_development.factories import (
     IssueFactory,
     ProjectFactory,
@@ -65,7 +62,7 @@ def test_issues_summary_as_developer(
     """Test issues summary as developer."""
     ProjectMemberFactory.create(
         user=user,
-        role=ProjectMemberRole.DEVELOPER,
+        roles=ProjectMember.roles.DEVELOPER,
         owner=milestone.owner,
     )
     IssueFactory.create_batch(

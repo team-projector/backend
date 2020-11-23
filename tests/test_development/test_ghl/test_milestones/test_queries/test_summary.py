@@ -1,7 +1,7 @@
 import pytest
 
 from apps.development.models.milestone import MilestoneState
-from apps.development.models.project_member import ProjectMemberRole
+from apps.development.models.project_member import ProjectMember
 from apps.users.models import User
 from tests.test_development.factories import (
     ProjectFactory,
@@ -20,7 +20,7 @@ def milestones(user):
     project = ProjectFactory.create()
     ProjectMemberFactory.create(
         user=user,
-        role=ProjectMemberRole.MANAGER,
+        roles=ProjectMember.roles.MANAGER,
         owner=project,
     )
     return (

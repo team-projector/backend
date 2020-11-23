@@ -5,10 +5,7 @@ from jnt_django_graphene_toolbox.errors import GraphQLPermissionDenied
 
 from apps.development.graphql.types.milestone import MilestoneType
 from apps.development.models.milestone import MilestoneState
-from apps.development.models.project_member import (
-    ProjectMember,
-    ProjectMemberRole,
-)
+from apps.development.models.project_member import ProjectMember
 from apps.development.services.milestone.problems import PROBLEM_OVER_DUE_DAY
 from tests.test_development.factories import (
     ProjectMemberFactory,
@@ -45,7 +42,7 @@ def test_resolver_not_manager(user, ghl_auth_mock_info):
     milestone = ProjectMilestoneFactory.create(budget=10000)
     ProjectMemberFactory.create(
         user=user,
-        role=ProjectMemberRole.DEVELOPER,
+        roles=ProjectMember.roles.DEVELOPER,
         owner=milestone.owner,
     )
 
