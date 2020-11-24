@@ -26,7 +26,8 @@ def test_raw_query(user, project, ghl_client, gl_mocker, ghl_raw):
 
     gl_mocker.register_post(
         "/projects/{0}/issues/{1}/time_estimate".format(
-            project.gl_id, issue_data["iid"],
+            project.gl_id,
+            issue_data["iid"],
         ),
         {},
     )
@@ -38,7 +39,8 @@ def test_raw_query(user, project, ghl_client, gl_mocker, ghl_raw):
 
     gl_mocker.register_get(
         "/projects/{0}/issues/{1}/time_stats".format(
-            project.gl_id, issue_data["iid"],
+            project.gl_id,
+            issue_data["iid"],
         ),
         _gl_time_stats(estimate),
     )
@@ -50,7 +52,8 @@ def test_raw_query(user, project, ghl_client, gl_mocker, ghl_raw):
 
     gl_mocker.register_get(
         "/projects/{0}/issues/{1}/notes".format(
-            project.gl_id, issue_data["iid"],
+            project.gl_id,
+            issue_data["iid"],
         ),
         [],
     )
