@@ -1,0 +1,9 @@
+mutation ($title: String!, $project: ID!, $milestone: ID, $developer: ID!, $labels: [String], $estimate: Int!, $dueDate: Date!) {
+  createIssue(title: $title, project: $project, milestone: $milestone, developer: $developer, labels: $labels, estimate: $estimate, dueDate: $dueDate) {
+    issue {
+      glId
+      glUrl
+      id
+    }
+  }
+}
