@@ -28,5 +28,4 @@ class CreateIssueMutation(SerializerMutation):
         validated_data: Dict[str, Any],
     ) -> "CreateIssueMutation":
         """Create issue."""
-
         return cls(issue=create_issue(NewIssueData(**validated_data)))

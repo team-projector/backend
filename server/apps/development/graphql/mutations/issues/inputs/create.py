@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from apps.development.models import Project, Milestone
+from apps.development.models import Milestone, Project
 from apps.users.models import User
 
 
@@ -15,7 +15,8 @@ class CreateIssueInput(serializers.Serializer):
     )
     developer = serializers.PrimaryKeyRelatedField(queryset=User.objects)
     labels = serializers.ListField(
-        child=serializers.CharField(), required=False
+        child=serializers.CharField(),
+        required=False,
     )
     estimate = serializers.IntegerField()
-    dueDate = serializers.DateField(source="due_date")
+    dueDate = serializers.DateField(source="due_date")  # noqa: N815, WPS115

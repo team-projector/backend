@@ -10,6 +10,8 @@ from apps.users.models import User
 
 @dataclass
 class NewIssueData:
+    """Source issue data for create."""
+
     project: Project
     title: str
     developer: User
