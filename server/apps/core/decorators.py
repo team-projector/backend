@@ -10,6 +10,7 @@ class SuppressErrors:
 
     def __call__(self, func):
         """Wrapper for method."""
+
         def wrapped(*args, **kwargs):  # noqa: WPS430
             with suppress(*self._exceptions):
                 return func(*args, **kwargs)
