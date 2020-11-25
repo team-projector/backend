@@ -1,7 +1,8 @@
+from urllib.error import HTTPError, URLError
+
 import pytest
 
 from apps.core.decorators import suppress_errors
-from urllib.error import URLError, HTTPError
 
 
 def test_suppress_errors():
