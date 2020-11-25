@@ -1,12 +1,13 @@
 from contextlib import suppress
 from typing import List
+from urllib.error import URLError
 
 import slack
 from constance import config
 from django.core.exceptions import ImproperlyConfigured
 from slack.errors import SlackApiError
 
-from apps.core.notifications.slack.decorators import url_error_handler
+from apps.core.decorators import suppress_errors
 from apps.users.models import User
 
 
@@ -17,7 +18,7 @@ class SlackClient:
         """Initialize self."""
         self._client = self._get_slack_client()
 
-    @url_error_handler
+    @suppress_errors(URLError)
     def send_text(self, user: User, msg: str, **kwargs) -> None:
         """
         Send plain text to user.
@@ -32,7 +33,7 @@ class SlackClient:
                 **kwargs,
             )
 
-    @url_error_handler
+    @suppress_errors(URLError)
     def send_blocks(self, user: User, blocks: List[object], **kwargs) -> None:
         """
         Send rich text to user.
