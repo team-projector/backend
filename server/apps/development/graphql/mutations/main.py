@@ -18,5 +18,6 @@ class DevelopmentMutations:
     add_spend_time_issue = issues.AddSpentToIssueMutation.Field()
     sync_issue = issues.SyncIssueMutation.Field()
     update_issue = issues.UpdateIssueMutation.Field()
+    create_issue = issues.CreateIssueMutation.Field()
 
     sync_merge_request = merge_requests.SyncMergeRequestMutation.Field()
