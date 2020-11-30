@@ -4,14 +4,18 @@ from urllib.parse import urlencode, urlparse
 from django.contrib import admin
 from django.http import HttpRequest
 from django.shortcuts import redirect
-from jnt_admin_tools.mixins import AdminAutocompleteFieldsMixin
+from jnt_admin_tools.mixins import (
+    AdminAutocompleteFieldsMixin,
+    AdminClickableLinksMixin,
+)
 
 from apps.core.admin.mixins import AdminFieldsOverridesMixin
 
 
-class BaseModelAdmin(
+class BaseModelAdmin(  # noqa: WPS215
     AdminAutocompleteFieldsMixin,
     AdminFieldsOverridesMixin,
+    AdminClickableLinksMixin,
     admin.ModelAdmin,
 ):
     """A base class for admin dashboard."""
