@@ -78,7 +78,7 @@ publish_stable:
     TARGET_IMAGE: $CI_REGISTRY_IMAGE/stable:${CI_COMMIT_TAG}
 
 .base_deploy:
-  image: curlimages/curl:7.72.0
+  image: registry.gitlab.com/junte/docker-hub/curl:7.72.0
   stage: deploy
   dependencies: []
   script:
