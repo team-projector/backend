@@ -8,7 +8,7 @@ from django.db import models, transaction
 from apps.development.models.issue import IssueState
 from apps.development.models.merge_request import MergeRequestState
 from apps.payroll.models import Bonus, Penalty, Salary, SpentTime
-from apps.payroll.services.salary.exceptions import EmptySalaryError
+from apps.payroll.services.salary.errors import EmptySalaryError
 from apps.users.models import User
 
 

@@ -6,7 +6,7 @@ from jnt_django_toolbox.helpers.time import seconds
 
 from apps.development.models.issue import IssueState
 from apps.payroll.models import Payroll, Salary
-from apps.payroll.services.salary.exceptions import EmptySalaryError
+from apps.payroll.services.salary.errors import EmptySalaryError
 from tests.test_development.factories import IssueFactory, MergeRequestFactory
 from tests.test_payroll.factories import (
     BonusFactory,

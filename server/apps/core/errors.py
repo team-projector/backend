@@ -1,6 +1,9 @@
-class ApplicationError(Exception):
-    """Application exception."""
+class BaseServiceError(Exception):
+    """Base exception for services errors."""
 
-    def __init__(self, message=None):
-        """Initialize self."""
-        self.message = message
+    code: str
+    message: str
+
+    def __init__(self):
+        """Initialize."""
+        super().__init__(self.message)

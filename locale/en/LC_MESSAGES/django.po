@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-11-18 18:10+0300\n"
+"POT-Creation-Date: 2020-11-30 18:47+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -296,6 +296,12 @@ msgstr "Group"
 msgid "HT__GROUP"
 msgstr "Group"
 
+msgid "VN__TEAM"
+msgstr "Team"
+
+msgid "HT__TEAM"
+msgstr "Team"
+
 msgid "VN__PROJECT_GROUP"
 msgstr "Project group"
 
@@ -323,15 +329,6 @@ msgstr "Project members"
 msgid "VN__PROJECT_MEMBERS"
 msgstr "Project members"
 
-msgid "VN__ROLE"
-msgstr "Role"
-
-msgid "HT__ROLE"
-msgstr "Role"
-
-msgid "VN__TEAM"
-msgstr "Team"
-
 msgid "VN__TEAMS"
 msgstr "Teams"
 
@@ -346,9 +343,6 @@ msgstr "Team member"
 
 msgid "VN__TEAM_MEMBERS"
 msgstr "Team members"
-
-msgid "HT__TEAM"
-msgstr "Team"
 
 msgid "CH__FEATURE"
 msgstr "Feature"
@@ -388,6 +382,12 @@ msgstr "Url"
 
 msgid "HT__URL"
 msgstr "Url"
+
+msgid "VN__ROLE"
+msgstr "Role"
+
+msgid "HT__ROLE"
+msgstr "Role"
 
 msgid "Yes"
 msgstr "Yes"
@@ -616,6 +616,9 @@ msgstr "Paid days"
 
 msgid "HT__PAID_DAYS"
 msgstr " "
+
+msgid "MSG_EMPTY_SALARY"
+msgstr "Empty salary"
 
 msgid "VN__SKILLS"
 msgstr "Skills"

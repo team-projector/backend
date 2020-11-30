@@ -3,12 +3,10 @@
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
-#, fuzzy
 msgid ""
-msgstr " "
-"Project-Id-Version: PACKAGE VERSION\n"
+msgstr ""
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-11-18 18:10+0300\n"
+"POT-Creation-Date: 2020-11-30 18:47+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,6 +14,7 @@ msgstr " "
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+" Project-Id-Version: PACKAGE VERSION\n"
 "Plural-Forms: nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
 "%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n"
 "%100>=11 && n%100<=14)? 2 : 3);\n"
@@ -299,6 +298,12 @@ msgstr "Группа"
 msgid "HT__GROUP"
 msgstr " "
 
+msgid "VN__TEAM"
+msgstr "Команда"
+
+msgid "HT__TEAM"
+msgstr " "
+
 msgid "VN__PROJECT_GROUP"
 msgstr "Группа проектов"
 
@@ -326,15 +331,6 @@ msgstr "Участник проекта"
 msgid "VN__PROJECT_MEMBERS"
 msgstr "Участники проекта"
 
-msgid "VN__ROLE"
-msgstr "Роль"
-
-msgid "HT__ROLE"
-msgstr " "
-
-msgid "VN__TEAM"
-msgstr "Команда"
-
 msgid "VN__TEAMS"
 msgstr "Команды"
 
@@ -349,9 +345,6 @@ msgstr "Участник команды"
 
 msgid "VN__TEAM_MEMBERS"
 msgstr "Участиник команды"
-
-msgid "HT__TEAM"
-msgstr " "
 
 msgid "CH__FEATURE"
 msgstr "FEATURE"
@@ -390,6 +383,12 @@ msgid "VN__URL"
 msgstr "URL"
 
 msgid "HT__URL"
+msgstr " "
+
+msgid "VN__ROLE"
+msgstr "Роль"
+
+msgid "HT__ROLE"
 msgstr " "
 
 msgid "Yes"
@@ -619,6 +618,9 @@ msgstr "Оплачено дней"
 
 msgid "HT__PAID_DAYS"
 msgstr " "
+
+msgid "MSG_EMPTY_SALARY"
+msgstr "Пустая зарплата"
 
 msgid "VN__SKILLS"
 msgstr "Навыки"
