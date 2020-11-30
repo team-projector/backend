@@ -1,6 +1,6 @@
 from constance import config
 
-from apps.core.errors import sync_errors
+from apps.core.gitlab.errors import sync_errors
 from apps.development.models import Project
 from apps.development.services.merge_request.gl.manager import (
     MergeRequestGlManager,

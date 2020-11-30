@@ -1,4 +1,4 @@
-from apps.core.errors import sync_errors
+from apps.core.gitlab.errors import sync_errors
 from apps.users.services.user.gl.manager import UserGlManager
 from celery_app import app
 

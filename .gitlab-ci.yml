@@ -1,4 +1,4 @@
-image: docker:latest
+image: registry.gitlab.com/junte/docker-hub/docker:19
 
 variables:
   DOCKER_CACHE_IMAGE: $CI_REGISTRY_IMAGE/cache
@@ -13,7 +13,7 @@ stages:
   - deploy
 
 lint_dockerfile:
-  image: hadolint/hadolint:v1.18.0-6-ga0d655d-debian
+  image: registry.gitlab.com/junte/docker-hub/hadolint/hadolint:v1.19.0-44-gf364c91-debian
   stage: pre_build
   script:
     - hadolint deploy/Dockerfile
@@ -21,7 +21,7 @@ lint_dockerfile:
 build:
   stage: build
   services:
-    - docker:dind
+    - registry.gitlab.com/junte/docker-hub/docker:19-dind
   script:
     - ./scripts/ci_build_images.sh
 

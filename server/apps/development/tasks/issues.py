@@ -3,7 +3,7 @@ from http import HTTPStatus
 from constance import config
 from gitlab import GitlabHttpError
 
-from apps.core.errors import sync_errors
+from apps.core.gitlab.errors import sync_errors
 from apps.development.models import Issue, Project
 from apps.development.services.issue.gl.manager import IssueGlManager
 from apps.development.services.issue.tickets.propagator import (

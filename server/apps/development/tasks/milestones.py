@@ -1,4 +1,4 @@
-from apps.core.errors import sync_errors
+from apps.core.gitlab.errors import sync_errors
 from apps.development.models import Project, ProjectGroup
 from apps.development.services.milestone.gl.manager import MilestoneGlManager
 from celery_app import app

@@ -1,4 +1,4 @@
-from apps.core.errors import sync_errors
+from apps.core.gitlab.errors import sync_errors
 from apps.development.models import ProjectGroup
 from apps.development.services.project_group.gl.manager import (
     ProjectGroupGlManager,

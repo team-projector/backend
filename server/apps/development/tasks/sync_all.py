@@ -1,6 +1,6 @@
 from constance import config
 
-from apps.core.errors import sync_errors
+from apps.core.gitlab.errors import sync_errors
 from apps.development.services.project.gl.manager import ProjectGlManager
 from apps.development.services.project_group.gl.manager import (
     ProjectGroupGlManager,
