@@ -98,3 +98,26 @@ def test_without_permissions(user, ghl_auth_mock_info, create_ticket_mutation):
     )
 
     isinstance(resolve, GraphQLPermissionDenied)
+
+
+def test_role_url_is_null(
+    project_manager,
+    ghl_auth_mock_info,
+    create_ticket_mutation,
+):
+    """Test if url and/or role is none."""
+    resolve = create_ticket_mutation(
+        root=None,
+        info=ghl_auth_mock_info,
+        title="test ticket",
+        type=TicketType.FEATURE,
+        state=TicketState.DOING,
+        milestone=ProjectMilestoneFactory.create().id,
+        url=None,
+        role=None,
+    )
+
+    ticket = resolve.ticket
+    assert ticket.title == "test ticket"
+    assert ticket.url == ""
+    assert ticket.role == ""
