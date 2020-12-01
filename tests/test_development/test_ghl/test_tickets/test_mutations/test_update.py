@@ -157,3 +157,29 @@ def test_update_milestone(
     ticket.refresh_from_db()
 
     assert new_milestone == ticket.milestone
+
+
+def test_not_update_url(
+    project_manager,
+    ghl_auth_mock_info,
+    update_ticket_mutation,
+    ticket,
+):
+    """Test not update url."""
+    ticket.url = "https://www.test.com"
+    ticket.save()
+
+    assert ticket.state == TicketState.CREATED
+
+    update_ticket_mutation(
+        root=None,
+        info=ghl_auth_mock_info,
+        id=ticket.id,
+        state=TicketState.PLANNING,
+        url=None,
+    )
+
+    ticket.refresh_from_db()
+
+    assert TicketState.PLANNING == ticket.state
+    assert not ticket.url

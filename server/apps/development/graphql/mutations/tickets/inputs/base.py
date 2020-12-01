@@ -1,5 +1,7 @@
 from typing import Dict
 
+from django.core.validators import URLValidator
+from jnt_django_graphene_toolbox.serializers.fields.char import CharField
 from rest_framework import serializers
 from rest_framework.fields import Field
 
@@ -43,6 +45,8 @@ class TicketBaseInput(serializers.ModelSerializer):
         write_only=True,
         queryset=Issue.objects,
     )
+    role = CharField(required=False)
+    url = CharField(required=False, validators=(URLValidator(),))
 
     def get_fields(self) -> Dict[str, Field]:
         """Returns serializer fields."""
