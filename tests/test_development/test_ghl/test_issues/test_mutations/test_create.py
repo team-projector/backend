@@ -68,6 +68,8 @@ def test_raw_query(user, project, ghl_client, gl_mocker, ghl_raw):
             "developer": user.pk,
             "estimate": estimate,
             "dueDate": str(datetime.now().date()),
+            "milestone": None,
+            "labels": [],
         },
     )
 
