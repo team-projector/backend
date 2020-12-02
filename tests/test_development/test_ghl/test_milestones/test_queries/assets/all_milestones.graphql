@@ -1,5 +1,5 @@
-query {
-  allMilestones {
+query ($project: ID) {
+  allMilestones(project: $project) {
     count
     edges {
       node {
