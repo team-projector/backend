@@ -11,9 +11,21 @@ from tests.test_development.factories import ProjectFactory
 def projects(db):
     """Generate projects."""
     return (
-        ProjectFactory.create(title="C", state=ProjectState.DEVELOPING),
-        ProjectFactory.create(title="B", state=ProjectState.ARCHIVED),
-        ProjectFactory.create(title="A", state=ProjectState.SUPPORTING),
+        ProjectFactory.create(
+            title="C",
+            state=ProjectState.DEVELOPING,
+            full_title="D",
+        ),
+        ProjectFactory.create(
+            title="B",
+            state=ProjectState.ARCHIVED,
+            full_title="B",
+        ),
+        ProjectFactory.create(
+            title="A",
+            state=ProjectState.SUPPORTING,
+            full_title="A",
+        ),
     )
 
 
@@ -24,6 +36,8 @@ def projects(db):
         ("-title", (0, 1, 2)),
         ("state", (1, 0, 2)),
         ("-state", (2, 0, 1)),
+        ("fullTitle", (2, 1, 0)),
+        ("-fullTitle", (0, 1, 2)),
     ],
 )
 def test_order_by(projects, order_by, indexes):

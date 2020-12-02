@@ -48,4 +48,4 @@ class ProjectsFilterSet(django_filters.FilterSet):
 
     state = ProjectStatesFilter(enum=ProjectState)
     q = SearchFilter(fields=("title", "=gl_url"))  # noqa: WPS111
-    order_by = OrderingFilter(fields=("title", "state"))
+    order_by = OrderingFilter(fields=("title", "state", "full_title"))
