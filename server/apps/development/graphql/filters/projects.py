@@ -15,7 +15,7 @@ from apps.development.models.choices.project_state import ProjectState
 class MultipleEnumChoiceField(MultipleChoiceField):
     """MultipleEnumChoiceField."""
 
-    def __init__(self, enum, *args, **kwargs):
+    def __init__(self, enum, *args, **kwargs) -> None:
         """Init MultipleEnumChoiceField."""
         self.enum = enum
         kwargs["choices"] = enum.choices
@@ -33,7 +33,7 @@ class ProjectStatesFilter(StringsArrayFilter):
 
     field_class = MultipleEnumChoiceField
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, **kwargs) -> None:
         """Init project states filter."""
         kwargs.setdefault("lookup_expr", "in")
         super().__init__(*args, **kwargs)
