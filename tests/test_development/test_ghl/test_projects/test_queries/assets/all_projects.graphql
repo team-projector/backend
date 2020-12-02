@@ -1,4 +1,4 @@
-query ($state: ProjectState, $offset: Int, $first: Int) {
+query ($state: [ProjectState], $offset: Int, $first: Int) {
   allProjects(state: $state, offset: $offset, first: $first) {
     count
     edges {
