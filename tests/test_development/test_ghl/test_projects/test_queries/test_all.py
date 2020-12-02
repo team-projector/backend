@@ -48,7 +48,7 @@ def test_filter_by_state(
     response = all_projects_query(
         root=None,
         info=ghl_auth_mock_info,
-        state=state,
+        state=[state],
     )
 
     assert response.length == count
