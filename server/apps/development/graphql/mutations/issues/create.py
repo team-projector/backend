@@ -22,6 +22,7 @@ class InputSerializer(serializers.Serializer):
     milestone = serializers.PrimaryKeyRelatedField(
         queryset=Milestone.objects,
         required=False,
+        allow_null=True,
     )
     developer = serializers.PrimaryKeyRelatedField(queryset=User.objects)
     labels = serializers.ListField(
