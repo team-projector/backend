@@ -67,7 +67,7 @@ def test_raw_query(user, project, ghl_client, gl_mocker, ghl_raw):
         variable_values={
             "title": "Test issue",
             "project": project.pk,
-            "developer": user.pk,
+            "user": user.pk,
             "estimate": estimate,
             "dueDate": str(datetime.now().date()),
             "milestone": None,
