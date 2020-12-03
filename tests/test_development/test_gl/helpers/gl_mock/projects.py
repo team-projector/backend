@@ -84,7 +84,7 @@ class _ProjectMocker:
         )
 
 
-def register_create_project_hook(mocker, project, response):
+def mock_create_project_hook(mocker, project, response):
     """
     Register create project hook.
 
@@ -95,7 +95,7 @@ def register_create_project_hook(mocker, project, response):
     mocker.register_post("/projects/{0}/hooks".format(project["id"]), response)
 
 
-def register_delete_project_hook(mocker, project, response=None):
+def mock_delete_project_hook(mocker, project, response=None):
     """
     Register delete project hook.
 
@@ -109,16 +109,22 @@ def register_delete_project_hook(mocker, project, response=None):
     )
 
 
-def mock_project_endpoints(mocker, project, **kwargs):
+def mock_project_endpoints(
+    mocker,
+    project,
+    status_code: int = HTTPStatus.OK,
+    **kwargs,
+):
     """
     Mock project endpoints.
 
+    :param status_code:
     :param mocker:
     :param project:
     """
     project_mocker = _ProjectMocker(mocker, project)
-    project_mocker.mock_project()
-    project_mocker.mock_issues(kwargs.get("isrues", []))
+    project_mocker.mock_project(status_code)
+    project_mocker.mock_issues(kwargs.get("issues", []))
     project_mocker.mock_labels(kwargs.get("labels", []))
     project_mocker.mock_milestones(kwargs.get("milestones", []))
     project_mocker.mock_hooks(kwargs.get("hooks", []))

@@ -158,12 +158,12 @@ def _mock_gl_endpoints(
         hooks=[hook] if hook else [],
     )
     create_callback = WebhookRequestCallback()
-    gl_mock.register_create_project_hook(
+    gl_mock.mock_create_project_hook(
         gl_mocker,
         gl_project,
         create_callback,
     )
-    gl_mock.register_delete_project_hook(
+    gl_mock.mock_delete_project_hook(
         gl_mocker,
         gl_project,
         WebhookRequestCallback(),

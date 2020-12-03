@@ -30,7 +30,7 @@ from .project_milestones import (
 )
 from .projects import (
     mock_project_endpoints,
-    register_create_project_hook,
-    register_delete_project_hook,
+    mock_create_project_hook,
+    mock_delete_project_hook,
 )
 from .users import register_user
