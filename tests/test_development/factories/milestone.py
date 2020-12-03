@@ -18,3 +18,8 @@ class MilestoneFactory(GitlabFieldMixin):
         lambda instance: ContentType.objects.get_for_model(instance.owner),
     )
     gl_id = factory.Sequence(lambda seq: seq)
+
+    @factory.post_generation
+    def _propagate_owners(self, create, extracted, **kwargs):
+        """Set milestones of owner."""
+        self.owner.milestones.add(self)
