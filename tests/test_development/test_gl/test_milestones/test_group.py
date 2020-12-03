@@ -16,7 +16,7 @@ def test_all(db, gl_mocker):
     :param gl_mocker:
     """
     group, gl_group = initializers.init_group()
-    gl_milestone = GlGroupMilestoneFactory.create()
+    gl_milestone = GlGroupMilestoneFactory.create(group_id=gl_group["id"])
 
     gl_mock.mock_group_endpoints(
         gl_mocker,
@@ -28,6 +28,12 @@ def test_all(db, gl_mocker):
 
     milestone = Milestone.objects.get(gl_id=gl_milestone["id"])
     gl_checkers.check_milestone(milestone, gl_milestone, group)
+    assert (
+        list(
+            group.milestones.filter(projectgroupmilestone__is_inherited=False),
+        )
+        == [milestone]
+    )
 
 
 def test_single(db, gl_mocker):

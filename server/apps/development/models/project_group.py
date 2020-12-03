@@ -54,8 +54,9 @@ class ProjectGroup(GitlabEntityMixin):
         help_text=_("HT__PARENT"),
     )
 
-    milestones = GenericRelation(
+    milestones = models.ManyToManyField(
         "development.Milestone",
+        through="development.ProjectGroupMilestone",
         related_query_name="project_group",
     )
 

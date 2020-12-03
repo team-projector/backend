@@ -44,8 +44,7 @@ def test_filter_by_project_empty(project, milestones):
 
 def test_filter_by_project(project, milestones):
     """Test filter by project."""
-    milestones[2].owner = project
-    milestones[2].save()
+    project.milestones.add(milestones[2])
 
     filter_set = MilestonesFilterSet(
         {"project": project.pk},
