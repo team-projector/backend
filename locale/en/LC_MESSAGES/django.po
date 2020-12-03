@@ -107,7 +107,7 @@ msgstr "You must choose at least one role"
 msgid "VN__DEVELOPMENT"
 msgstr "Development"
 
-msgid "MSG__PLEASE_PROVIDE_PERSONAL_GL_TOKEN"
+msgid "MSG__NO_PERSONAL_GL_TOKEN"
 msgstr "Please fill personal gitlab token in profile"
 
 msgid "CH__DEVELOPING"

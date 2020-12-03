@@ -11,6 +11,8 @@ from tests.test_users.factories.gitlab import GlUserFactory
 def test_raw_query(user, project, ghl_client, gl_mocker, ghl_raw):
     """Test raw query."""
     estimate = 500
+    user.gl_token = "token"
+    user.save()
 
     gl_mocker.register_get(
         "/projects/{0}".format(project.gl_id),
@@ -65,7 +67,7 @@ def test_raw_query(user, project, ghl_client, gl_mocker, ghl_raw):
         variable_values={
             "title": "Test issue",
             "project": project.pk,
-            "developer": user.pk,
+            "user": user.pk,
             "estimate": estimate,
             "dueDate": str(datetime.now().date()),
             "milestone": None,
