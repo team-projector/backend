@@ -41,7 +41,7 @@ class _WorkItemMilestonesSyncer:
                     milestone,
                     work_item,
                 )
-                direct_milestones_ids.append(milestone)
+                direct_milestones_ids.append(milestone.id)
             else:
                 inherited_milestones_ids.append(milestone.id)
 
