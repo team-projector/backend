@@ -7,6 +7,7 @@ from rest_framework import serializers
 
 from apps.development.graphql.types import IssueType
 from apps.development.models import Milestone, Project
+from apps.development.services.errors import NoPersonalGitLabToken
 from apps.development.services.gl.issues.create import (
     NewIssueData,
     create_issue,
@@ -24,13 +25,21 @@ class InputSerializer(serializers.Serializer):
         required=False,
         allow_null=True,
     )
-    developer = serializers.PrimaryKeyRelatedField(queryset=User.objects)
+    user = serializers.PrimaryKeyRelatedField(queryset=User.objects)
     labels = serializers.ListField(
         child=serializers.CharField(),
         required=False,
     )
     estimate = serializers.IntegerField()
     dueDate = serializers.DateField(source="due_date")  # noqa: N815, WPS115
+
+    def validate(self, attrs):
+        """Validates input parameters."""
+        attrs["author"] = self.context["request"].user
+        if not attrs["author"].gl_token:
+            raise NoPersonalGitLabToken
+
+        return attrs
 
 
 class CreateIssueMutation(SerializerMutation):

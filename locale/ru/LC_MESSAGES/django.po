@@ -109,7 +109,7 @@ msgstr "Вы должны выбрать хотя бы одну роль"
 msgid "VN__DEVELOPMENT"
 msgstr "Разработка"
 
-msgid "MSG__PLEASE_PROVIDE_PERSONAL_GL_TOKEN"
+msgid "MSG__NO_PERSONAL_GL_TOKEN"
 msgstr "Пожалуйсте, укажите персональый gitlab token"
 
 msgid "CH__DEVELOPING"

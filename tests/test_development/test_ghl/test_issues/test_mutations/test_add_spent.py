@@ -1,8 +1,6 @@
 from jnt_django_graphene_toolbox.errors import GraphQLInputError
 
-from apps.development.graphql.mutations.issues.add_spent import (
-    ERROR_MSG_NO_GL_TOKEN,
-)
+from apps.development.services.errors import NoPersonalGitLabToken
 from tests.test_development.factories import IssueFactory, ProjectFactory
 from tests.test_development.factories.gitlab import (
     GlIssueFactory,
@@ -63,7 +61,10 @@ def test_user_without_gl_token(
     extensions = resolve.extensions  # noqa: WPS441
     assert len(extensions["fieldErrors"]) == 1
     assert extensions["fieldErrors"][0]["fieldName"] == "nonFieldErrors"
-    assert extensions["fieldErrors"][0]["messages"][0] == ERROR_MSG_NO_GL_TOKEN
+    assert (
+        extensions["fieldErrors"][0]["messages"][0]
+        == NoPersonalGitLabToken.default_detail
+    )
 
 
 def test_bad_time(issue, user, ghl_auth_mock_info, add_spent_issue_mutation):
