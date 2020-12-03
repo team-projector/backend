@@ -54,7 +54,7 @@ def test_deactivate_if_not_found(db, gl_mocker):
         model_kwargs={"is_active": False},
     )
 
-    gl_mock.register_project(
+    gl_mock.mock_project_endpoints(
         gl_mocker,
         gl_project,
         status_code=HTTPStatus.NOT_FOUND,

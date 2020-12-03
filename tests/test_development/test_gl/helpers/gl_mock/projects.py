@@ -1,31 +1,87 @@
 from http import HTTPStatus
 
 
-def register_project(mocker, project, status_code: int = HTTPStatus.OK):
-    """
-    Register project.
+class _ProjectMocker:
+    def __init__(self, mocker, project):
+        """Initialize."""
+        self._mocker = mocker
+        self._project = project
 
-    :param mocker:
-    :param project:
-    :param status_code:
-    :type status_code: int, defaults to HTTPStatus.OK
-    """
-    mocker.register_get(
-        "/projects/{0}".format(project["id"]),
-        project,
-        status_code=status_code,
-    )
+    def mock_project(self, status_code: int = HTTPStatus.OK):
+        """
+        Register project.
 
+        :param status_code:
+        :type status_code: int, defaults to HTTPStatus.OK
+        """
+        self._mocker.register_get(
+            "/projects/{0}".format(self._project["id"]),
+            self._project,
+            status_code=status_code,
+        )
 
-def register_project_hooks(mocker, project, hooks):
-    """
-    Register project hooks.
+    def mock_hooks(self, hooks):
+        """
+        Register project hooks.
 
-    :param mocker:
-    :param project:
-    :param hooks:
-    """
-    mocker.register_get("/projects/{0}/hooks".format(project["id"]), hooks)
+        :param hooks:
+        """
+        self._mocker.register_get(
+            "/projects/{0}/hooks".format(self._project["id"]),
+            hooks,
+        )
+
+    def mock_labels(self, labels):
+        """
+        Register project labels.
+
+        :param labels:
+        """
+        self._mocker.register_get(
+            "/projects/{0}/labels".format(self._project["id"]),
+            labels,
+        )
+
+    def mock_issues(self, issues):
+        """
+        Register project issues.
+
+        :param issues:
+        """
+        self._mocker.register_get(
+            "/projects/{0}/issues".format(self._project["id"]),
+            issues,
+        )
+
+    def mock_milestones(self, milestones):
+        """
+        Register project milestones.
+
+        :param milestones:
+        """
+        self._mocker.register_get(
+            "/projects/{0}/milestones".format(self._project["id"]),
+            milestones,
+        )
+        for milestone in milestones:
+            self._mocker.register_get(
+                "/projects/{0}/milestones/{1}".format(
+                    self._project["id"],
+                    milestone["id"],
+                ),
+                milestone,
+            )
+
+    def mock_merge_requests(self, merge_requests):
+        """
+        Register project merge requests.
+
+        :param merge_requests:
+        """
+        self._mocker.register_get(
+            "/projects/{0}/merge_requests".format(self._project["id"]),
+            merge_requests,
+        )
 
 
 def register_create_project_hook(mocker, project, response):
@@ -53,64 +109,6 @@ def register_delete_project_hook(mocker, project, response=None):
     )
 
 
-def register_project_labels(mocker, project, labels):
-    """
-    Register project labels.
-
-    :param mocker:
-    :param project:
-    :param labels:
-    """
-    mocker.register_get("/projects/{0}/labels".format(project["id"]), labels)
-
-
-def register_project_issues(mocker, project, issues):
-    """
-    Register project issues.
-
-    :param mocker:
-    :param project:
-    :param issues:
-    """
-    mocker.register_get("/projects/{0}/issues".format(project["id"]), issues)
-
-
-def register_project_milestones(mocker, project, milestones):
-    """
-    Register project milestones.
-
-    :param mocker:
-    :param project:
-    :param milestones:
-    """
-    mocker.register_get(
-        "/projects/{0}/milestones".format(project["id"]),
-        milestones,
-    )
-    for milestone in milestones:
-        mocker.register_get(
-            "/projects/{0}/milestones/{1}".format(
-                project["id"],
-                milestone["id"],
-            ),
-            milestone,
-        )
-
-
-def register_project_merge_requests(mocker, project, merge_requests):
-    """
-    Register project merge requests.
-
-    :param mocker:
-    :param project:
-    :param merge_requests:
-    """
-    mocker.register_get(
-        "/projects/{0}/merge_requests".format(project["id"]),
-        merge_requests,
-    )
-
-
 def mock_project_endpoints(mocker, project, **kwargs):
     """
     Mock project endpoints.
@@ -118,13 +116,10 @@ def mock_project_endpoints(mocker, project, **kwargs):
     :param mocker:
     :param project:
     """
-    register_project(mocker, project)
-    register_project_issues(mocker, project, kwargs.get("issues", []))
-    register_project_labels(mocker, project, kwargs.get("labels", []))
-    register_project_milestones(mocker, project, kwargs.get("milestones", []))
-    register_project_hooks(mocker, project, kwargs.get("hooks", []))
-    register_project_merge_requests(
-        mocker,
-        project,
-        kwargs.get("merge_requests", []),
-    )
+    project_mocker = _ProjectMocker(mocker, project)
+    project_mocker.mock_project()
+    project_mocker.mock_issues(kwargs.get("isrues", []))
+    project_mocker.mock_labels(kwargs.get("labels", []))
+    project_mocker.mock_milestones(kwargs.get("milestones", []))
+    project_mocker.mock_hooks(kwargs.get("hooks", []))
+    project_mocker.mock_merge_requests(kwargs.get("merge_requests", []))

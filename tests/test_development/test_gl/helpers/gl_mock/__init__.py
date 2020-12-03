@@ -32,9 +32,5 @@ from .projects import (
     mock_project_endpoints,
     register_create_project_hook,
     register_delete_project_hook,
-    register_project,
-    register_project_issues,
-    register_project_labels,
-    register_project_merge_requests,
 )
 from .users import register_user

@@ -51,7 +51,7 @@ def test_server_error(db, gl_mocker, gl_client):
     gl_project = GlProjectFactory.create()
     project = ProjectFactory.create(gl_id=gl_project["id"])
 
-    gl_mock.register_project(
+    gl_mock.mock_project_endpoints(
         gl_mocker,
         gl_project,
         status_code=HTTPStatus.INTERNAL_SERVER_ERROR,
