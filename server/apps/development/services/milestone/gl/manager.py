@@ -33,27 +33,22 @@ class _WorkItemMilestonesSyncer:
             all=True,
             include_parent_milestones=True,
         )
-
-        gl_direct = [
-            milestone
-            for milestone in gl_milestones
-            if self._is_owner_of_milestone(gl_work_item, milestone)
-        ]
-
-        for gl_milestone in gl_direct:
-            self._update_milestone(
-                gl_milestone,
-                work_item,
-            )
+        direct_milestones_ids = []
+        inherited_milestones_ids = []
+        for milestone in gl_milestones:
+            if self._is_owner_of_milestone(gl_work_item, milestone):
+                self._update_milestone(
+                    milestone,
+                    work_item,
+                )
+                direct_milestones_ids.append(milestone)
+            else:
+                inherited_milestones_ids.append(milestone.id)
 
         self._set_work_item_milestones(
             work_item,
-            [milestone.id for milestone in gl_direct],
-            [
-                milestone.id
-                for milestone in gl_milestones
-                if not self._is_owner_of_milestone(gl_work_item, milestone)
-            ],
+            direct_milestones_ids,
+            inherited_milestones_ids,
         )
 
     def _update_milestone(
@@ -114,7 +109,11 @@ class _WorkItemMilestonesSyncer:
             "gl_last_sync": timezone.now(),
         }
 
-    def _is_owner_of_milestone(self, work_item, milestone):
+    def _is_owner_of_milestone(
+        self,
+        work_item: Union[gl.Project, gl.Group],
+        milestone: Union[gl.ProjectMilestone, gl.GroupMilestone],
+    ):
         if isinstance(work_item, gl.Project):
             return milestone.project_id == work_item.id
 
