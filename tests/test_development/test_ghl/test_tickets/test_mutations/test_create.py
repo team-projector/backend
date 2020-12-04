@@ -41,6 +41,7 @@ def test_query(project_manager, ghl_client, ghl_raw):
             "issues": [str(issue.pk) for issue in issues],
             "role": "Manager",
             "state": TicketState.DOING,
+            "estimate": None,
         },
     )
 

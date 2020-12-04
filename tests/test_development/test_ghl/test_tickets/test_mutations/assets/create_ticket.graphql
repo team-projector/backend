@@ -1,11 +1,12 @@
 mutation (
     $milestone: ID!, $type: String!, $title: String!, $role: String,
     $startDate: Date, $dueDate: Date, $url: String, $issues: [ID!],
-    $state: String!
+    $state: String!, $estimate: Int
 ) {
 createTicket(
     milestone: $milestone, type: $type, title: $title, startDate: $startDate,
-    dueDate: $dueDate, url: $url, issues: $issues, role: $role, state: $state
+    dueDate: $dueDate, url: $url, issues: $issues, role: $role, state: $state,
+    estimate: $estimate
 ) {
     ticket {
       id

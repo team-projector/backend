@@ -3,7 +3,7 @@ from jnt_django_graphene_toolbox.errors import (
     GraphQLPermissionDenied,
 )
 
-from apps.development.models.ticket import TicketState
+from apps.development.models.ticket import Ticket, TicketState
 from tests.test_development.factories import (
     IssueFactory,
     ProjectMilestoneFactory,
@@ -183,3 +183,27 @@ def test_not_update_url(
 
     assert TicketState.PLANNING == ticket.state
     assert not ticket.url
+
+
+def test_update_estimate(
+    project_manager,
+    ghl_auth_mock_info,
+    update_ticket_mutation,
+    ticket,
+):
+    """Test update estimate."""
+    Ticket.objects.filter(id=ticket.pk).update(estimate=0)
+
+    estimate = 111
+
+    update_ticket_mutation(
+        root=None,
+        info=ghl_auth_mock_info,
+        id=ticket.id,
+        state=TicketState.PLANNING,
+        estimate=estimate,
+    )
+
+    ticket.refresh_from_db()
+
+    assert ticket.estimate == estimate
