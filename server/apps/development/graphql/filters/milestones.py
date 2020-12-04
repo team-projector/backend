@@ -1,4 +1,5 @@
 import django_filters
+from django.db import models
 from jnt_django_graphene_toolbox.filters import OrderingFilter, SearchFilter
 
 from apps.development.models import Project
@@ -8,12 +9,16 @@ from apps.development.models.milestone import Milestone
 class ProjectFilter(django_filters.ModelChoiceFilter):
     """Project filter class."""
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, **kwargs) -> None:
         """Init filter class."""
         kwargs.setdefault("queryset", Project.objects.all())
         super().__init__(*args, **kwargs)
 
-    def filter(self, queryset, project):  # noqa: A003 WPS125
+    def filter(  # noqa: A003 WPS125
+        self,
+        queryset,
+        project,
+    ) -> models.Queryset:
         """Filter queryset by project."""
         if project:
             queryset = queryset.filter(id__in=project.milestones.all())
