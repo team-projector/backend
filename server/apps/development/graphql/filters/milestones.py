@@ -18,7 +18,7 @@ class ProjectFilter(django_filters.ModelChoiceFilter):
         self,
         queryset,
         project,
-    ) -> models.Queryset:
+    ) -> models.QuerySet:
         """Filter queryset by project."""
         if project:
             queryset = queryset.filter(id__in=project.milestones.all())
