@@ -79,6 +79,12 @@ class Ticket(Timestamps):
         help_text=_("HT__ROLE"),
     )
 
+    estimate = models.PositiveIntegerField(
+        default=0,
+        verbose_name=_("VN__ESTIMATE"),
+        help_text=_("HT__ESTIMATE"),
+    )
+
     state = models.CharField(
         choices=TicketState.choices,
         default=TicketState.CREATED,

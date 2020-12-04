@@ -26,6 +26,7 @@ class TicketBaseInput(serializers.ModelSerializer):
             "role",
             "state",
             "milestone",
+            "estimate",
         ]
 
     # we should redefine this field because django-graphene has a bug with a
@@ -47,6 +48,15 @@ class TicketBaseInput(serializers.ModelSerializer):
     )
     role = CharField(required=False)
     url = CharField(required=False, validators=(URLValidator(),))
+    estimate = serializers.IntegerField(
+        min_value=0,
+        required=False,
+        allow_null=True,
+    )
+
+    def validate_estimate(self, estimate) -> int:
+        """Validate estimate."""
+        return estimate or 0
 
     def get_fields(self) -> Dict[str, Field]:
         """Returns serializer fields."""

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-11-30 18:47+0300\n"
+"POT-Creation-Date: 2020-12-04 14:46+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -106,9 +106,6 @@ msgstr "You must choose at least one role"
 
 msgid "VN__DEVELOPMENT"
 msgstr "Development"
-
-msgid "MSG__NO_PERSONAL_GL_TOKEN"
-msgstr "Please fill personal gitlab token in profile"
 
 msgid "CH__DEVELOPING"
 msgstr "Developing"
@@ -388,6 +385,15 @@ msgstr "Role"
 
 msgid "HT__ROLE"
 msgstr "Role"
+
+msgid "VN__ESTIMATE"
+msgstr "Estimate"
+
+msgid "HT__ESTIMATE"
+msgstr " "
+
+msgid "MSG__NO_PERSONAL_GL_TOKEN"
+msgstr "Please fill personal gitlab token in profile"
 
 msgid "Yes"
 msgstr "Yes"
