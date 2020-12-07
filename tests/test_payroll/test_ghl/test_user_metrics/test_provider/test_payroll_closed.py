@@ -188,7 +188,10 @@ def test_payroll_closed_another_user(user):
         taxes_closed=user.tax_rate * user.hour_rate * 5,
         taxes=user.hour_rate * 5 * user.tax_rate,
     )
-    checkers.check_payroll(metrics["issues"], payroll_closed=user.hour_rate * 5)
+    checkers.check_payroll(
+        metrics["issues"],
+        payroll_closed=user.hour_rate * 5,
+    )
 
     checkers.check_taxes(
         metrics["merge_requests"],
