@@ -2,19 +2,15 @@ from datetime import timedelta
 
 import pytest
 
-from apps.development.models.issue import Issue, IssueState
 from apps.development.services.project_group.metrics import (
     get_project_group_metrics,
 )
-from apps.payroll.models import SpentTime
-from apps.payroll.services.salary.calculator import SalaryCalculator
+from tests.helpers.metrics import add_issue, add_spent_time, generate_payroll
 from tests.test_development.factories import (
-    IssueFactory,
     ProjectFactory,
     ProjectGroupFactory,
     ProjectGroupMilestoneFactory,
 )
-from tests.test_payroll.factories import IssueSpentTimeFactory
 
 
 @pytest.fixture()
@@ -48,7 +44,13 @@ def projects(project_group):
 @pytest.fixture()
 def issues(projects):
     """Create issues."""
-    return [_add_issue(project) for project in projects]
+    milestone = projects[0].group.milestones.first()
+    issues = []
+    for project_number, project in enumerate(projects):
+        issues.append(add_issue(project, milestone, const=project_number + 1))
+        issues.append(add_issue(project, milestone, const=project_number + 2))
+
+    return issues
 
 
 def test_metrics(user, project_group, issues):
@@ -57,16 +59,16 @@ def test_metrics(user, project_group, issues):
     issue.user = user
     issue.save()
 
-    _add_spent_time(issue, user, timedelta(hours=1).total_seconds())
-    _generate_payroll(user, issue.created_at)
+    add_spent_time(issue, user, timedelta(hours=2).total_seconds())
+    generate_payroll(user, issue.created_at)
 
     metrics = get_project_group_metrics(project_group)
 
     assert metrics.budget == 500
-    assert metrics.budget_remains == 420
-    assert metrics.budget_spent == 80
-    assert metrics.payroll == 50
-    assert metrics.profit == 450
+    assert metrics.budget_remains == 340
+    assert metrics.budget_spent == 160
+    assert metrics.payroll == 100
+    assert metrics.profit == 400
 
 
 def test_some_milestones(user):
@@ -81,13 +83,13 @@ def test_some_milestones(user):
 
     project = ProjectFactory.create(group=milestone1.owner)
 
-    issue1 = _add_issue(project, milestone1)
-    issue2 = _add_issue(project, milestone2)
+    issue1 = add_issue(project, milestone1)
+    issue2 = add_issue(project, milestone2)
 
-    _add_spent_time(issue1, user, timedelta(hours=1).total_seconds())
-    _add_spent_time(issue2, user, timedelta(hours=3).total_seconds())
+    add_spent_time(issue1, user, timedelta(hours=1).total_seconds())
+    add_spent_time(issue2, user, timedelta(hours=3).total_seconds())
 
-    _generate_payroll(user, issue1.created_at)
+    generate_payroll(user, issue1.created_at)
 
     metrics = get_project_group_metrics(milestone1.owner)
 
@@ -104,8 +106,8 @@ def test_empty(user, project_group, issues):
     issue.user = user
     issue.save()
 
-    _add_spent_time(issue, user, timedelta(hours=1).total_seconds())
-    _generate_payroll(user, issue.created_at)
+    add_spent_time(issue, user, timedelta(hours=1).total_seconds())
+    generate_payroll(user, issue.created_at)
 
     project_group.milestones.clear()
 
@@ -116,36 +118,3 @@ def test_empty(user, project_group, issues):
     assert not metrics.budget_spent
     assert not metrics.payroll
     assert not metrics.profit
-
-
-def _add_issue(project, milestone=None) -> Issue:
-    """Create issue."""
-    milestone = milestone or project.group.milestones.first()
-
-    return IssueFactory.create(
-        project=project,
-        milestone=milestone,
-        state=IssueState.CLOSED,
-        time_estimate=100,
-        total_time_spent=70,
-    )
-
-
-def _add_spent_time(base, user, time_spent) -> SpentTime:
-    """Add spent time for issue."""
-    return IssueSpentTimeFactory.create(
-        user=user,
-        base=base,
-        time_spent=time_spent,
-    )
-
-
-def _generate_payroll(user, payroll_date) -> None:
-    """Generate salary for user."""
-    calculator = SalaryCalculator(
-        user,
-        (payroll_date - timedelta(days=1)).date(),
-        (payroll_date + timedelta(days=1)).date(),
-    )
-
-    calculator.generate(user)

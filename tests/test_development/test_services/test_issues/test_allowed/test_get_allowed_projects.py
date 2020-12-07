@@ -10,12 +10,6 @@ from tests.test_development.factories import (
 
 
 @pytest.fixture()
-def project(db):
-    """Create project."""
-    return ProjectFactory.create()
-
-
-@pytest.fixture()
 def project_group(project):
     """Create project group."""
     project.group = ProjectGroupFactory.create()

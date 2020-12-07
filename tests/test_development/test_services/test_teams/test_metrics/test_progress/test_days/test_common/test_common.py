@@ -1,6 +1,5 @@
 from datetime import datetime, timedelta
 
-import pytest
 from django.db.models import Sum
 from django.utils import timezone
 from jnt_django_toolbox.helpers.time import seconds
@@ -8,10 +7,7 @@ from jnt_django_toolbox.helpers.time import seconds
 from apps.development.services.team.metrics.progress import (
     get_progress_metrics,
 )
-from apps.development.services.team.metrics.progress.base import (
-    ProgressMetricsProvider,
-)
-from tests.test_development.factories import IssueFactory, TeamFactory
+from tests.test_development.factories import IssueFactory
 from tests.test_payroll.factories import IssueSpentTimeFactory
 from tests.test_users.factories.user import UserFactory
 from tests.test_users.test_services.test_users.test_metrics.test_progress.test_days import (  # noqa: E501
@@ -418,33 +414,3 @@ def test_another_user_in_team(
             timezone.now() + timedelta(days=1): timedelta(hours=3),
         },
     )
-
-
-def test_bad_group(db):
-    """
-    Test bad group.
-
-    :param db:
-    """
-    group = "test_bad_group"
-    with pytest.raises(ValueError, match="Bad group '{0}'".format(group)):
-        get_progress_metrics(
-            TeamFactory.create(),
-            timezone.now().date() - timedelta(days=5),
-            timezone.now().date() + timedelta(days=5),
-            group,
-        )
-
-
-def test_provider_not_implemented(user):
-    """
-    Test provider not implemented.
-
-    :param user:
-    """
-    with pytest.raises(NotImplementedError):
-        ProgressMetricsProvider(
-            TeamFactory.create(),
-            datetime.now().date() - timedelta(days=5),
-            datetime.now().date() + timedelta(days=5),
-        ).get_user_metrics(user)
