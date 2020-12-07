@@ -11,6 +11,7 @@ from apps.development.services.note.gl.parsers.spend_reset import (
     SPEND_RESET_MESSAGE,
 )
 from apps.development.services.note.gl.sync import update_note_from_gitlab
+from tests.helpers.checkers import assert_instance_fields
 from tests.test_development.factories import IssueFactory
 
 
@@ -47,12 +48,15 @@ def test_added(user):
     assert Note.objects.count() == 1
 
     note = Note.objects.first()
-    assert note.gl_id == 2
-    assert note.user == user
-    assert note.type == NoteType.TIME_SPEND
-    assert note.body == body
     assert note.data["spent"] == seconds(hours=1, minutes=1)
     assert note.data["date"] == date_str
+    assert_instance_fields(
+        note,
+        gl_id=2,
+        user=user,
+        type=NoteType.TIME_SPEND,
+        body=body,
+    )
 
 
 def test_subtracted(user):
@@ -87,12 +91,15 @@ def test_subtracted(user):
     assert Note.objects.count() == 1
 
     note = Note.objects.first()
-    assert note.gl_id == 2
-    assert note.user == user
-    assert note.body == body
-    assert note.type == NoteType.TIME_SPEND
     assert note.data["spent"] == -seconds(hours=1, minutes=1)
     assert note.data["date"] == date_str
+    assert_instance_fields(
+        note,
+        gl_id=2,
+        user=user,
+        type=NoteType.TIME_SPEND,
+        body=body,
+    )
 
 
 def test_removed(user):
@@ -125,11 +132,15 @@ def test_removed(user):
     assert Note.objects.count() == 1
 
     note = Note.objects.first()
-    assert note.gl_id == 2
-    assert note.user == user
-    assert note.body == SPEND_RESET_MESSAGE
-    assert note.type == NoteType.RESET_SPEND
+
     assert not note.data
+    assert_instance_fields(
+        note,
+        gl_id=2,
+        user=user,
+        type=NoteType.RESET_SPEND,
+        body=SPEND_RESET_MESSAGE,
+    )
 
 
 def test_already_exists(user):
@@ -278,9 +289,14 @@ def test_body_without_date(user):
     assert Note.objects.count() == 1
 
     note = Note.objects.first()
-    assert note.gl_id == 2
-    assert note.user == user
-    assert note.type == NoteType.TIME_SPEND
-    assert note.body == body
+
     assert note.data["spent"] == seconds(hours=1, minutes=1)
     assert note.data["date"] == note_date.strftime(GITLAB_DATE_FORMAT)
+
+    assert_instance_fields(
+        note,
+        gl_id=2,
+        user=user,
+        type=NoteType.TIME_SPEND,
+        body=body,
+    )

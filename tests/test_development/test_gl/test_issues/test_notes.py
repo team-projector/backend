@@ -1,5 +1,6 @@
 from apps.development.models.note import NoteType
 from apps.development.services.issue.gl.manager import IssueGlManager
+from tests.helpers.checkers import assert_instance_fields
 from tests.test_development.factories.gitlab import GlNoteFactory
 from tests.test_development.test_gl.helpers import (
     gl_checkers,
@@ -41,13 +42,16 @@ def test_load_issue_notes(db, gl_mocker, gl_client):
 
     note = issue.notes.first()
 
-    assert note.gl_id == gl_note["id"]
-    assert note.type == NoteType.TIME_SPEND
-    assert note.body == "added 1h of time spent at 2000-01-01"
     assert note.created_at is not None
     assert note.updated_at is not None
-    assert note.user.login == gl_author["username"]
-    assert note.content_object == issue
-    assert note.data == {"date": "2000-01-01", "spent": 3600}
 
+    assert_instance_fields(
+        note,
+        gl_id=gl_note["id"],
+        type=NoteType.TIME_SPEND,
+        body="added 1h of time spent at 2000-01-01",
+        content_object=issue,
+        data={"date": "2000-01-01", "spent": 3600},
+    )
+    assert_instance_fields(note.user, login=gl_author["username"])
     gl_checkers.check_user(note.user, gl_author)
