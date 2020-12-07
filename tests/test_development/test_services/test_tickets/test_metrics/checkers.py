@@ -1,4 +1,5 @@
 from apps.development.services.ticket.metrics import TicketMetrics
+from tests.helpers.checkers import assert_instance_fields
 
 
 def check_ticket_metrics(  # noqa: WPS211
@@ -11,9 +12,12 @@ def check_ticket_metrics(  # noqa: WPS211
     profit: float = 0.0,
 ):
     """Check ticket metrics."""
-    assert metrics.issues_count == issues_count
-    assert metrics.budget_estimate == budget_estimate
-    assert metrics.budget_spent == budget_spent
-    assert metrics.budget_remains == budget_remains
-    assert metrics.payroll == payroll
-    assert metrics.profit == profit
+    assert_instance_fields(
+        metrics,
+        issues_count=issues_count,
+        budget_estimate=budget_estimate,
+        budget_spent=budget_spent,
+        budget_remains=budget_remains,
+        payroll=payroll,
+        profit=profit,
+    )

@@ -9,6 +9,7 @@ from apps.development.services.note.gl.parsers.spend_reset import (
     SPEND_RESET_MESSAGE,
 )
 from apps.development.services.note.gl.sync import update_note_from_gitlab
+from tests.helpers.checkers import assert_instance_fields
 from tests.test_development.factories import IssueFactory
 
 
@@ -42,8 +43,12 @@ def test_reset(user):
     assert Note.objects.count() == 1
 
     note = Note.objects.first()
-    assert note.gl_id == 2
-    assert note.user == user
-    assert note.body == SPEND_RESET_MESSAGE
-    assert note.type == NoteType.RESET_SPEND
+
     assert not note.data
+    assert_instance_fields(
+        note,
+        gl_id=2,
+        user=user,
+        body=SPEND_RESET_MESSAGE,
+        type=NoteType.RESET_SPEND,
+    )

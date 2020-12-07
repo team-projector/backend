@@ -950,7 +950,7 @@ def _check_taxes(
     assert taxes == metrics["taxes"]
 
 
-def _check_spent(
+def _check_spent(  # noqa: WPS218
     metrics,
     issues_closed_spent=0.0,
     issues_opened_spent=0.0,

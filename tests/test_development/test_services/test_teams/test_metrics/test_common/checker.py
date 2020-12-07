@@ -1,4 +1,5 @@
 from apps.development.services.team.metrics.main import TeamMetrics
+from tests.helpers.checkers import assert_instance_fields
 
 
 def check_team_metrics(  # noqa: WPS211
@@ -27,11 +28,19 @@ def check_team_metrics(  # noqa: WPS211
     assert metrics.problems_count == problems_count
 
     issues_metrics = metrics.issues
-    assert issues_metrics.count == issues_count
-    assert issues_metrics.opened_count == issues_opened_count
-    assert issues_metrics.opened_estimated == issues_opened_estimated
+
+    assert_instance_fields(
+        issues_metrics,
+        count=issues_count,
+        opened_count=issues_opened_count,
+        opened_estimated=issues_opened_estimated,
+    )
 
     mr_metrics = metrics.merge_requests
-    assert mr_metrics.count == merge_requests_count
-    assert mr_metrics.opened_count == merge_requests_opened_count
-    assert mr_metrics.opened_estimated == merge_requests_opened_estimated
+
+    assert_instance_fields(
+        mr_metrics,
+        count=merge_requests_count,
+        opened_count=merge_requests_opened_count,
+        opened_estimated=merge_requests_opened_estimated,
+    )
