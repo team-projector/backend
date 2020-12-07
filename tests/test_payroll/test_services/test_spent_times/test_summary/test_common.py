@@ -91,7 +91,7 @@ def test_issues_spents(user):
     checkers.check_time_spent_merge_requests_summary(summary.merge_requests)
 
 
-def test_merge_requests_spents(user):
+def test_merge_requests_spents(user):  # noqa: WPS213
     """
     Test merge requests spents.
 

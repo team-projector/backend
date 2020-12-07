@@ -8,7 +8,13 @@ from tests.test_development.factories.gitlab import (
 from tests.test_users.factories.gitlab import GlUserFactory
 
 
-def test_raw_query(user, project, ghl_client, gl_mocker, ghl_raw):
+def test_raw_query(  # noqa: WPS213
+    user,
+    project,
+    ghl_client,
+    gl_mocker,
+    ghl_raw,
+):
     """Test raw query."""
     estimate = 500
     user.gl_token = "token"

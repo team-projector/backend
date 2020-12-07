@@ -50,7 +50,7 @@ def test_last_salary_date(user, ghl_auth_mock_info):
     assert last_salary_date == salary.period_to.date()
 
 
-def test_complex(user):
+def test_complex(user):  # noqa: WPS213
     """
     Test complex.
 

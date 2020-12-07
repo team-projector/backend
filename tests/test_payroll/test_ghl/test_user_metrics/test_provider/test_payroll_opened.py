@@ -28,7 +28,7 @@ def user(db):
     return UserFactory.create(login="user", hour_rate=100, tax_rate=15)
 
 
-def test_payroll_opened(user):
+def test_payroll_opened(user):  # noqa: WPS213
     """
     Test payroll opened.
 
@@ -100,7 +100,7 @@ def test_payroll_opened(user):
     )
 
 
-def test_payroll_opened_has_salary(user):
+def test_payroll_opened_has_salary(user):  # noqa: WPS213
     """
     Test payroll opened has salary.
 
@@ -183,7 +183,7 @@ def test_payroll_opened_has_salary(user):
     )
 
 
-def test_payroll_opened_has_closed(user):
+def test_payroll_opened_has_closed(user):  # noqa: WPS213
     """
     Test payroll opened has closed.
 
@@ -241,7 +241,7 @@ def test_payroll_opened_has_closed(user):
     checkers.check_payroll(metrics["merge_requests"])
 
 
-def test_payroll_opened_another_user(user):
+def test_payroll_opened_another_user(user):  # noqa: WPS213
     """
     Test payroll opened another user.
 
@@ -300,7 +300,7 @@ def test_payroll_opened_another_user(user):
     checkers.check_payroll(metrics["merge_requests"])
 
 
-def test_payroll_opened_has_opened(user):
+def test_payroll_opened_has_opened(user):  # noqa: WPS213
     """
     Test payroll opened has opened.
 

@@ -86,14 +86,13 @@ def test_only_reset(user):
     _check_generated_time_spents(issue)
 
 
-def test_multi_user_reset(user):
+def test_multi_user_reset(user):  # noqa: WPS213
     """
     Test multi user reset.
 
     :param user:
     """
     issue = IssueFactory.create()
-
     user2 = UserFactory.create()
 
     _create_note(
