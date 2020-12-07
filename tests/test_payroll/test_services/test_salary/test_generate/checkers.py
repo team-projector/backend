@@ -1,5 +1,6 @@
 from apps.payroll.models import Salary
 from apps.skills.models import Position
+from tests.helpers.checkers import assert_instance_fields
 
 
 def check_salary(  # noqa: WPS211
@@ -15,12 +16,15 @@ def check_salary(  # noqa: WPS211
     position: Position = None,
 ):
     """Check salary."""
-    assert salary.charged_time == charged_time
-    assert salary.sum == sum
-    assert salary.penalty == penalty
-    assert salary.bonus == bonus
-    assert salary.taxes == taxes
-    assert salary.hour_rate == hour_rate
-    assert salary.tax_rate == tax_rate
-    assert salary.position == position
-    assert salary.total == total
+    assert_instance_fields(
+        salary,
+        charged_time=charged_time,
+        sum=sum,
+        penalty=penalty,
+        bonus=bonus,
+        taxes=taxes,
+        hour_rate=hour_rate,
+        tax_rate=tax_rate,
+        position=position,
+        total=total,
+    )

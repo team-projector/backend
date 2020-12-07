@@ -2,6 +2,7 @@ from jnt_django_toolbox.helpers.objects import dict2obj
 
 from apps.development.models.note import NoteType
 from apps.development.services.note.gl.sync import update_note_from_gitlab
+from tests.helpers.checkers import assert_instance_fields
 from tests.test_development.factories import IssueFactory
 from tests.test_development.factories.gitlab import GlNoteFactory
 from tests.test_development.test_gl.helpers import gl_mock
@@ -28,13 +29,16 @@ def test_load_new(db, gl_mocker, gl_client):
 
     note = issue.notes.first()
 
-    assert note.gl_id == gl_note["id"]
-    assert note.type == NoteType.TIME_SPEND
-    assert note.body == "added 1h of time spent at 2000-01-01"
     assert note.created_at is not None
     assert note.updated_at is not None
-    assert note.content_object == issue
-    assert note.data == {"date": "2000-01-01", "spent": 3600}
+    assert_instance_fields(
+        note,
+        gl_id=gl_note["id"],
+        type=NoteType.TIME_SPEND,
+        body="added 1h of time spent at 2000-01-01",
+        content_object=issue,
+        data={"date": "2000-01-01", "spent": 3600},
+    )
 
 
 def test_update_immutable(db, gl_mocker, gl_client):
