@@ -3,16 +3,9 @@ import pytest
 from apps.development.models.project_member import ProjectMember
 from apps.development.services.project.members import get_project_managers
 from tests.test_development.factories import (
-    ProjectFactory,
     ProjectGroupFactory,
     ProjectMemberFactory,
 )
-
-
-@pytest.fixture()
-def project(db, user):
-    """Create project."""
-    return ProjectFactory.create()
 
 
 @pytest.fixture()
@@ -25,11 +18,6 @@ def project_group(project):
     return group
 
 
-def test_project_none():
-    """Test if project is none."""
-    assert not get_project_managers(None)
-
-
 def test_project_manager(project):
     """Test manager in project."""
     manager = ProjectMemberFactory.create(
@@ -38,6 +26,7 @@ def test_project_manager(project):
     )
 
     assert set(get_project_managers(project)) == {manager.user}
+    assert not get_project_managers(None)
 
 
 def test_many_managers(project):

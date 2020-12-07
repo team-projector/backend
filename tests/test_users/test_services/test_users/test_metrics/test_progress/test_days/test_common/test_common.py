@@ -1,15 +1,11 @@
 from datetime import datetime, timedelta
 
-import pytest
 from django.db.models import Sum
 from django.utils import timezone
 from jnt_django_toolbox.helpers.time import seconds
 
 from apps.development.models.issue import IssueState
 from apps.users.services.user.metrics import get_progress_metrics
-from apps.users.services.user.metrics.progress.provider import (
-    ProgressMetricsProvider,
-)
 from tests.test_development.factories import IssueFactory
 from tests.test_payroll.factories import IssueSpentTimeFactory
 from tests.test_users.factories.user import UserFactory
@@ -345,33 +341,3 @@ def test_not_loading_over_daily_work_hours(user):
         },
         planned_work_hours=4,
     )
-
-
-def test_bad_group(user):
-    """
-    Test bad group.
-
-    :param user:
-    """
-    group = "test_bad_group"
-    with pytest.raises(ValueError, match="Bad group '{0}'".format(group)):
-        get_progress_metrics(
-            user,
-            datetime.now().date() - timedelta(days=5),
-            datetime.now().date() + timedelta(days=5),
-            group,
-        )
-
-
-def test_provider_not_implemented(user):
-    """
-    Test provider not implemented.
-
-    :param user:
-    """
-    with pytest.raises(NotImplementedError):
-        ProgressMetricsProvider(
-            user,
-            datetime.now().date() - timedelta(days=5),
-            datetime.now().date() + timedelta(days=5),
-        ).get_metrics()

@@ -1,12 +1,9 @@
 from datetime import timedelta
-from decimal import Decimal
 
-import pytest
 from jnt_django_toolbox.helpers.time import seconds
 
 from apps.development.models.issue import IssueState
-from apps.payroll.models import Payroll, Salary
-from apps.payroll.services.salary.errors import EmptySalaryError
+from apps.payroll.models import Payroll
 from tests.test_development.factories import IssueFactory, MergeRequestFactory
 from tests.test_payroll.factories import (
     BonusFactory,
@@ -61,50 +58,6 @@ def test_common(user, calculator):
     )
 
     assert Payroll.objects.filter(salary=salary).count() == 4
-
-
-def test_no_payrolls(user, calculator):
-    """
-    Test no payrolls.
-
-    :param user:
-    :param calculator:
-    """
-    salary = None
-
-    with pytest.raises(EmptySalaryError):
-        salary = calculator.generate(user)
-
-    assert salary is None
-    assert Salary.objects.count() == 0
-
-
-def test_empty_total(user, calculator):
-    """
-    Test empty total.
-
-    :param user:
-    :param calculator:
-    """
-    salary = None
-
-    issue = IssueFactory.create(state=IssueState.CLOSED)
-    IssueSpentTimeFactory.create(
-        user=user,
-        base=issue,
-        time_spent=timedelta(hours=1).total_seconds(),
-    )
-    IssueSpentTimeFactory.create(
-        user=user,
-        base=issue,
-        time_spent=-timedelta(hours=1).total_seconds(),
-    )
-
-    with pytest.raises(EmptySalaryError):
-        salary = calculator.generate(user)
-
-    assert salary is None
-    assert not Salary.objects.exists()
 
 
 def test_with_penalty(user, calculator):
@@ -382,51 +335,3 @@ def test_with_opened_issues_mr(user, calculator):
         position=user.position,
     )
     assert Payroll.objects.filter(salary=salary).count() == 2
-
-
-def test_taxes(user, calculator):
-    """
-    Test taxes.
-
-    :param user:
-    :param calculator:
-    """
-    user.tax_rate = 0.3
-    user.save()
-
-    issue = IssueFactory.create(state=IssueState.CLOSED)
-
-    IssueSpentTimeFactory.create(
-        user=user,
-        base=issue,
-        time_spent=timedelta(hours=1).total_seconds(),
-    )
-    IssueSpentTimeFactory.create(
-        user=user,
-        base=issue,
-        time_spent=-timedelta(hours=2).total_seconds(),
-    )
-    IssueSpentTimeFactory.create(
-        user=user,
-        base=issue,
-        time_spent=timedelta(hours=5).total_seconds(),
-    )
-
-    bonus = BonusFactory.create(user=user)
-    penalty = PenaltyFactory.create(user=user, sum=100)
-
-    salary = calculator.generate(user)
-
-    checkers.check_salary(
-        salary,
-        charged_time=seconds(hours=4),
-        hour_rate=100,
-        bonus=bonus.sum,
-        penalty=penalty.sum,
-        sum=user.hour_rate * 4,
-        tax_rate=user.tax_rate,
-        taxes=salary.total * Decimal.from_float(user.tax_rate),
-        total=salary.sum + bonus.sum - penalty.sum,
-        position=user.position,
-    )
-    assert Payroll.objects.filter(salary=salary).count() == 5
