@@ -50,31 +50,13 @@ def test_last_salary_date(user, ghl_auth_mock_info):
     assert last_salary_date == salary.period_to.date()
 
 
-def test_complex(user):  # noqa: WPS213
-    """
-    Test complex.
-
-    :param user:
-    """
+def test_complex(user):
+    """Test complex."""
     BonusFactory.create_batch(10, sum=100, user=user)
     PenaltyFactory.create_batch(10, sum=50, user=user)
 
     issue = IssueFactory.create(user=user, state=IssueState.OPENED)
-    IssueSpentTimeFactory.create(
-        user=user,
-        base=issue,
-        time_spent=seconds(hours=4),
-    )
-    IssueSpentTimeFactory.create(
-        user=user,
-        base=issue,
-        time_spent=seconds(hours=2),
-    )
-    IssueSpentTimeFactory.create(
-        user=user,
-        base=IssueFactory.create(user=user, state=IssueState.CLOSED),
-        time_spent=seconds(hours=5),
-    )
+    _add_spents(user, issue)
 
     metrics = calculator().get_metrics(user)
 
@@ -100,6 +82,28 @@ def test_complex(user):  # noqa: WPS213
         taxes=(user.hour_rate * 11 + bonus - penalty) * user.tax_rate,
     )
 
+    _check_issues_merge_requests(metrics, user)
+
+
+def _add_spents(user, issue) -> None:
+    IssueSpentTimeFactory.create(
+        user=user,
+        base=issue,
+        time_spent=seconds(hours=4),
+    )
+    IssueSpentTimeFactory.create(
+        user=user,
+        base=issue,
+        time_spent=seconds(hours=2),
+    )
+    IssueSpentTimeFactory.create(
+        user=user,
+        base=IssueFactory.create(user=user, state=IssueState.CLOSED),
+        time_spent=seconds(hours=5),
+    )
+
+
+def _check_issues_merge_requests(metrics, user) -> None:
     # check issues
     checkers.check_payroll(
         metrics["issues"],

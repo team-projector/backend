@@ -7,8 +7,10 @@ from tests.test_development.factories.gitlab import (
 )
 from tests.test_users.factories.gitlab import GlUserFactory
 
+ESTIMATE = 500
 
-def test_raw_query(  # noqa: WPS213
+
+def test_raw_query(
     user,
     project,
     ghl_client,
@@ -16,7 +18,6 @@ def test_raw_query(  # noqa: WPS213
     ghl_raw,
 ):
     """Test raw query."""
-    estimate = 500
     user.gl_token = "token"
     user.save()
 
@@ -27,6 +28,34 @@ def test_raw_query(  # noqa: WPS213
 
     issue_data = _gl_issue_response(project, user)
 
+    _register_urls(gl_mocker, project, issue_data)
+
+    ghl_client.set_user(user)
+
+    response = ghl_client.execute(
+        ghl_raw("create_issue"),
+        variable_values={
+            "title": "Test issue",
+            "project": project.pk,
+            "user": user.pk,
+            "estimate": ESTIMATE,
+            "dueDate": str(datetime.now().date()),
+            "milestone": None,
+            "labels": [],
+        },
+    )
+
+    assert "errors" not in response
+
+    issue = Issue.objects.filter(gl_id=issue_data["id"]).first()
+
+    assert issue is not None
+    assert issue.title == issue_data["title"]
+    assert issue.time_estimate == ESTIMATE
+    assert issue.project == project
+
+
+def _register_urls(gl_mocker, project, issue_data) -> None:
     gl_mocker.register_post(
         "/projects/{0}/issues".format(project.gl_id),
         issue_data,
@@ -50,7 +79,7 @@ def test_raw_query(  # noqa: WPS213
             project.gl_id,
             issue_data["iid"],
         ),
-        _gl_time_stats(estimate),
+        _gl_time_stats(ESTIMATE),
     )
 
     gl_mocker.register_get(
@@ -65,30 +94,6 @@ def test_raw_query(  # noqa: WPS213
         ),
         [],
     )
-
-    ghl_client.set_user(user)
-
-    response = ghl_client.execute(
-        ghl_raw("create_issue"),
-        variable_values={
-            "title": "Test issue",
-            "project": project.pk,
-            "user": user.pk,
-            "estimate": estimate,
-            "dueDate": str(datetime.now().date()),
-            "milestone": None,
-            "labels": [],
-        },
-    )
-
-    assert "errors" not in response
-
-    issue = Issue.objects.filter(gl_id=issue_data["id"]).first()
-
-    assert issue is not None
-    assert issue.title == issue_data["title"]
-    assert issue.time_estimate == estimate
-    assert issue.project == project
 
 
 def _gl_time_stats(estimate):
