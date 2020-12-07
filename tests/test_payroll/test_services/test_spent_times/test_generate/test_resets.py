@@ -94,29 +94,15 @@ def test_multi_user_reset(user):
     """
     issue = IssueFactory.create()
 
-    user2 = UserFactory.create()
+    _create_user_notes(user, issue)
+    _create_another_user_notes(UserFactory.create(), issue)
 
-    _create_note(
-        user2,
-        issue,
-        NoteType.TIME_SPEND,
-        timezone.now() - timedelta(hours=6),
-        timedelta(hours=4),
-    )
-    _create_note(
-        user2,
-        issue,
-        NoteType.TIME_SPEND,
-        timezone.now() - timedelta(hours=5),
-        -timedelta(hours=3),
-    )
-    _create_note(
-        user2,
-        issue,
-        NoteType.RESET_SPEND,
-        timezone.now() - timedelta(hours=4),
-    )
+    adjust_spent_times(issue)
 
+    _check_generated_time_spents(issue)
+
+
+def _create_user_notes(user, issue):
     _create_note(
         user,
         issue,
@@ -152,23 +138,42 @@ def test_multi_user_reset(user):
         timezone.now() - timedelta(minutes=30),
     )
 
+
+def _create_another_user_notes(user, issue):
     _create_note(
-        user2,
+        user,
+        issue,
+        NoteType.TIME_SPEND,
+        timezone.now() - timedelta(hours=6),
+        timedelta(hours=4),
+    )
+    _create_note(
+        user,
+        issue,
+        NoteType.TIME_SPEND,
+        timezone.now() - timedelta(hours=5),
+        -timedelta(hours=3),
+    )
+    _create_note(
+        user,
+        issue,
+        NoteType.RESET_SPEND,
+        timezone.now() - timedelta(hours=4),
+    )
+
+    _create_note(
+        user,
         issue,
         NoteType.TIME_SPEND,
         timezone.now() - timedelta(hours=1),
         timedelta(hours=5),
     )
     _create_note(
-        user2,
+        user,
         issue,
         NoteType.RESET_SPEND,
         timezone.now() - timedelta(minutes=30),
     )
-
-    adjust_spent_times(issue)
-
-    _check_generated_time_spents(issue)
 
 
 def _create_note(  # noqa: WPS211
