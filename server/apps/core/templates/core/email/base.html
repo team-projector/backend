@@ -1,0 +1,142 @@
+{% load date_utils %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta content="width=device-width, initial-scale=1" name="viewport">
+  <link
+    data-premailer="ignore"
+    href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700&display=swap" rel="stylesheet">
+  <title>{{ title }}</title>
+  <style>
+    body {
+      text-align: left;
+      margin: 0 auto;
+      max-width: 600px;
+      width: 100%;
+      font-size: 14px;
+      font-family: Open Sans;
+      color: #3949AB;
+    }
+
+    table {
+      background-color: #F3F4FC;
+      width: 100%;
+      table-layout: fixed;
+    }
+
+    td {
+      vertical-align: middle;
+      padding: 12px 0;
+    }
+
+    td:first-child,
+    td:last-child {
+      width: 48px;
+    }
+
+    td:nth-child(4) {
+      text-align: right;
+    }
+
+    td > * {
+      vertical-align: middle;
+    }
+
+    span {
+      white-space: nowrap;
+    }
+
+    a {
+      text-decoration: none;
+    }
+
+    h4 {
+      font-size: 14px;
+      font-weight: bold;
+      margin: 0;
+    }
+
+    thead tr {
+      background-color: #3949AB;
+      height: 100px;
+    }
+
+    thead tr h1 {
+      color: white;
+      font-size: 24px;
+      white-space: nowrap;
+    }
+
+    tr[data-developer] {
+      background-color: white;
+    }
+
+    [data-developer] [data-detail] {
+      display: flex;
+      align-items: center;
+      padding: 14px 0;
+    }
+
+    [data-developer] [data-detail] img {
+      margin-right: 16px;
+    }
+
+    [data-developer] [data-detail] h4 {
+      margin-bottom: 8px;
+    }
+
+    [data-developer] [data-detail] [data-rate] {
+      display: inline-block;
+      padding: 4px 8px;
+      border-radius: 4px;
+      background-color: #E6E9FA;
+    }
+
+    [data-divider] {
+      border-bottom: 1px solid #6F74DD;
+    }
+
+    [data-earned] {
+      text-align: right;
+    }
+
+    [data-earned] p {
+      font-size: 12px;
+    }
+
+    [data-earned] span {
+      font-size: 26px;
+      font-weight: bold;
+    }
+
+    [data-footer] td {
+      text-align: center;
+      background-color: #3949AB;
+      color: #6F74DD;
+      padding: 32px 0;
+    }
+
+    [data-footer] > * {
+      margin-top: 24px;
+    }
+
+    [data-footer] [data-link] {
+      font-size: 18px;
+      color: white;
+    }
+
+  </style>
+  {% block extrastyle %}{% endblock extrastyle %}
+  {% if style %}
+  <style>{{ style }}</style>
+  {% endif %}
+</head>
+<body>
+<table border="0" cellpadding="0" cellspacing="0">
+  {% block head %}{% endblock head %}
+  {% block content %}{% endblock content %}
+  {% block footer %}{% endblock footer %}
+</table>
+</body>
+</html>

@@ -14,4 +14,7 @@ def transform(html: str) -> str:
 
 def render_email_html(template_name: str, context=None) -> str:
     """Render email html with transform styles."""
+    context = context or {}
+    context.setdefault("title", "")
+    context.setdefault("style", "")
     return transform(get_template(template_name).render(context))
