@@ -1,9 +1,12 @@
+from collections import namedtuple
 from datetime import date
 
 from apps.core.gitlab import GITLAB_DATE_FORMAT
 from apps.users.models import User
 from tests.test_payroll.factories import SalaryFactory, WorkBreakFactory
 from tests.test_users.factories import UserFactory
+
+UserPaidData = namedtuple("UserPaidData", ("user", "salary", "work_break"))
 
 
 def test_raw_query(user, ghl_client, ghl_raw):
@@ -30,20 +33,8 @@ def test_success(user, ghl_auth_mock_info, all_users_query):
 
 def test_metrics_some_users(user, ghl_client, ghl_raw):
     """Test getting all users raw query."""
-    user1 = UserFactory.create()
-
-    salary = SalaryFactory.create(
-        payed=True,
-        created_by=user,
-        user=user,
-        period_to=date(2020, 10, 10),
-    )
-    salary1 = SalaryFactory.create(
-        payed=True,
-        created_by=user,
-        user=user1,
-        period_to=date(2020, 10, 15),
-    )
+    user_paid_data = _get_user_paid_data(date(2020, 10, 10), 3, user)
+    user1_paid_data = _get_user_paid_data(date(2020, 10, 15), 5)
 
     ghl_client.set_user(user)
     response = ghl_client.execute(ghl_raw("all_users"))
@@ -55,13 +46,13 @@ def test_metrics_some_users(user, ghl_client, ghl_raw):
 
     _check_user_metrics(
         _get_user_node(user, user_nodes),
-        salary,
-        WorkBreakFactory.create(paid_days=3, user=user, paid=True),
+        user_paid_data.salary,
+        user_paid_data.work_break,
     )
     _check_user_metrics(
-        _get_user_node(user1, user_nodes),
-        salary1,
-        WorkBreakFactory.create(paid_days=5, user=user1, paid=True),
+        _get_user_node(user1_paid_data.user, user_nodes),
+        user1_paid_data.salary,
+        user1_paid_data.work_break,
     )
 
 
@@ -82,3 +73,18 @@ def _get_user_node(user, user_nodes):
     ]
 
     return filtered[0]
+
+
+def _get_user_paid_data(period_to, paid_days, user=None) -> UserPaidData:
+    user = user or UserFactory.create()
+
+    return UserPaidData(
+        user,
+        SalaryFactory.create(
+            payed=True,
+            created_by=user,
+            user=user,
+            period_to=period_to,
+        ),
+        WorkBreakFactory.create(paid_days=paid_days, user=user, paid=True),
+    )
