@@ -1,5 +1,6 @@
 from datetime import datetime, timedelta
 
+import pytest
 from django.db.models import Sum
 from jnt_django_toolbox.helpers.date import begin_of_week
 from jnt_django_toolbox.helpers.time import seconds
@@ -11,13 +12,18 @@ from apps.development.services.team.metrics.progress import (
 )
 from tests.test_development.factories import IssueFactory
 from tests.test_payroll.factories import IssueSpentTimeFactory
-from tests.test_users.factories.user import UserFactory
 from tests.test_users.test_services.test_users.test_metrics.test_progress.test_weeks import (  # noqa: E501
     checkers,
 )
 
 
-def test_simple(team, team_developer, team_leader):
+@pytest.fixture()
+def issue(team_developer):
+    """Create issue."""
+    return IssueFactory.create(user=team_developer, due_date=datetime.now())
+
+
+def test_simple(team, team_developer, team_leader, issue):
     """
     Test simple.
 
@@ -25,8 +31,6 @@ def test_simple(team, team_developer, team_leader):
     :param team_developer:
     :param team_leader:
     """
-    issue = IssueFactory.create(user=team_developer, due_date=datetime.now())
-
     monday = begin_of_week(datetime.now().date(), get_first_week_day())
 
     IssueSpentTimeFactory.create(
@@ -85,15 +89,13 @@ def test_simple(team, team_developer, team_leader):
     )
 
 
-def test_many_weeks(team, team_developer):
+def test_many_weeks(team, team_developer, issue):
     """
     Test many weeks.
 
     :param team:
     :param team_developer:
     """
-    issue = IssueFactory.create(user=team_developer, due_date=datetime.now())
-
     monday = begin_of_week(datetime.now().date(), get_first_week_day())
 
     IssueSpentTimeFactory.create(
@@ -152,14 +154,13 @@ def test_many_weeks(team, team_developer):
     )
 
 
-def test_not_in_range(team, team_developer):
+def test_not_in_range(team, team_developer, issue):
     """
     Test not in range.
 
     :param team:
     :param team_developer:
     """
-    issue = IssueFactory.create(user=team_developer, due_date=datetime.now())
     monday = begin_of_week(datetime.now().date(), get_first_week_day())
 
     IssueSpentTimeFactory.create(
@@ -216,16 +217,13 @@ def test_not_in_range(team, team_developer):
     )
 
 
-def test_another_user(team, team_developer):
+def test_another_user(team, team_developer, another_user, issue):
     """
     Test another user.
 
     :param team:
     :param team_developer:
     """
-    issue = IssueFactory.create(user=team_developer, due_date=datetime.now())
-
-    another_user = UserFactory.create()
     monday = begin_of_week(datetime.now().date(), get_first_week_day())
 
     IssueSpentTimeFactory.create(
@@ -279,15 +277,13 @@ def test_another_user(team, team_developer):
     )
 
 
-def test_many_issues(team, team_developer):
+def test_many_issues(team, team_developer, issue):
     """
     Test many issues.
 
     :param team:
     :param team_developer:
     """
-    issue = IssueFactory.create(user=team_developer, due_date=datetime.now())
-
     monday = begin_of_week(datetime.now().date())
     another_issue = IssueFactory.create(
         user=team_developer,

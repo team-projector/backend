@@ -26,10 +26,6 @@ def test_success(db, gl_mocker, gl_webhook_view, api_rf):
         project_id=gl_project["id"],
         assignee=gl_assignee,
     )
-    webhook_data = GlIssueWebhookFactory.create(
-        project=gl_project,
-        object_attributes=gl_issue,
-    )
 
     gl_mock.register_user(gl_mocker, gl_assignee)
     gl_mock.mock_project_endpoints(
@@ -39,7 +35,16 @@ def test_success(db, gl_mocker, gl_webhook_view, api_rf):
     )
     gl_mock.mock_issue_endpoints(gl_mocker, gl_project, gl_issue)
 
-    gl_webhook_view(api_rf.post("/", data=webhook_data, format="json"))
+    gl_webhook_view(
+        api_rf.post(
+            "/",
+            data=GlIssueWebhookFactory.create(
+                project=gl_project,
+                object_attributes=gl_issue,
+            ),
+            format="json",
+        ),
+    )
 
     assert Issue.objects.count() == 1
 

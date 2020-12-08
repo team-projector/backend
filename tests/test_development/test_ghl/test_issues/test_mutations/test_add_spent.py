@@ -1,3 +1,4 @@
+import pytest
 from jnt_django_graphene_toolbox.errors import GraphQLInputError
 
 from apps.development.services.errors import NoPersonalGitLabToken
@@ -8,23 +9,28 @@ from tests.test_development.factories.gitlab import (
 )
 
 
-def test_query(project_manager, ghl_client, gl_mocker, user, ghl_raw):
-    """Test add spent raw query."""
-    user.gl_token = "token"
-    user.save()
+@pytest.fixture()
+def gl_project(db):
+    """Create Gitlab fake project."""
+    return GlProjectFactory.create()
 
-    gl_project = GlProjectFactory.create()
+
+def test_query(project_manager, ghl_client, gl_mocker, ghl_raw, gl_project):
+    """Test add spent raw query."""
+    project_manager.gl_token = "token"
+    project_manager.save()
+
     project = ProjectFactory.create(gl_id=gl_project["id"])
 
     gl_project_issue = GlIssueFactory.create(id=gl_project["id"])
     issue = IssueFactory.create(
         gl_iid=gl_project_issue["iid"],
-        user=user,
+        user=project_manager,
         project=project,
     )
 
     IssueFactory.create_batch(5, project=project)
-    ghl_client.set_user(user)
+    ghl_client.set_user(project_manager)
 
     response = ghl_client.execute(
         ghl_raw("add_spend_time_issue"),

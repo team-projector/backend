@@ -45,9 +45,6 @@ def test_metrics_some_users(user, ghl_client, ghl_raw):
         period_to=date(2020, 10, 15),
     )
 
-    work_break = WorkBreakFactory.create(paid_days=3, user=user, paid=True)
-    work_break1 = WorkBreakFactory.create(paid_days=5, user=user1, paid=True)
-
     ghl_client.set_user(user)
     response = ghl_client.execute(ghl_raw("all_users"))
 
@@ -56,11 +53,16 @@ def test_metrics_some_users(user, ghl_client, ghl_raw):
     user_nodes = response["data"]["users"]["edges"]
     assert len(user_nodes) == 2
 
-    user_node = _get_user_node(user, user_nodes)
-    user_node1 = _get_user_node(user1, user_nodes)
-
-    _check_user_metrics(user_node, salary, work_break)
-    _check_user_metrics(user_node1, salary1, work_break1)
+    _check_user_metrics(
+        _get_user_node(user, user_nodes),
+        salary,
+        WorkBreakFactory.create(paid_days=3, user=user, paid=True),
+    )
+    _check_user_metrics(
+        _get_user_node(user1, user_nodes),
+        salary1,
+        WorkBreakFactory.create(paid_days=5, user=user1, paid=True),
+    )
 
 
 def _check_user_metrics(user_node, salary, work_break):

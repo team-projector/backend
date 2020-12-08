@@ -1,34 +1,9 @@
-import pytest
-
 from apps.development.graphql.filters import MilestonesFilterSet
 from apps.development.models import Milestone
 from apps.development.services.milestone.gl.manager import MilestoneGlManager
-from tests.test_development.factories import (
-    ProjectFactory,
-    ProjectGroupFactory,
-    ProjectGroupMilestoneFactory,
-    ProjectMilestoneFactory,
-)
+from tests.test_development.factories import ProjectGroupMilestoneFactory
 from tests.test_development.factories.gitlab import GlProjectMilestoneFactory
 from tests.test_development.test_gl.helpers import gl_mock, initializers
-
-
-@pytest.fixture()
-def project_group(db):
-    """Create project group."""
-    return ProjectGroupFactory.create()
-
-
-@pytest.fixture()
-def project(project_group):
-    """Create project."""
-    return ProjectFactory.create(group=project_group)
-
-
-@pytest.fixture()
-def milestones(db):
-    """Create project milestones."""
-    return ProjectMilestoneFactory.create_batch(4)
 
 
 def test_empty_filter(milestones):
@@ -57,14 +32,7 @@ def test_filter_by_project(project, milestones):
     """Test filter by project."""
     project.milestones.add(milestones[2])
 
-    filter_set = MilestonesFilterSet(
-        {"project": project.pk},
-        queryset=Milestone.objects,
-    )
-
-    assert filter_set.is_valid()
-    assert filter_set.qs.count() == 1
-    assert filter_set.qs.first() == milestones[2]
+    _assert_filter_set({"project": project.pk}, milestones[2])
 
 
 def test_filter_inherit(db, gl_mocker):
@@ -84,11 +52,15 @@ def test_filter_inherit(db, gl_mocker):
 
     MilestoneGlManager().sync_project_milestones(project)
 
+    _assert_filter_set({"project": project.pk}, group_milestone)
+
+
+def _assert_filter_set(query, value_result) -> None:
     filter_set = MilestonesFilterSet(
-        {"project": project.pk},
+        query,
         queryset=Milestone.objects,
     )
 
     assert filter_set.is_valid()
     assert filter_set.qs.count() == 1
-    assert filter_set.qs.first() == group_milestone
+    assert filter_set.qs.first() == value_result

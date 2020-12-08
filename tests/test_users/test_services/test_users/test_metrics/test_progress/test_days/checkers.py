@@ -4,7 +4,7 @@ from typing import Dict
 from apps.users.services.user.metrics import UserProgressMetricsList
 
 
-def check_user_progress_metrics(  # noqa: WPS211
+def check_user_progress_metrics(  # noqa: WPS210 WPS211
     metrics: UserProgressMetricsList,
     spents: Dict[date, timedelta] = None,
     loadings: Dict[date, timedelta] = None,

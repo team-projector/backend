@@ -1,6 +1,6 @@
 from jnt_django_graphene_toolbox.errors import GraphQLInputError
 
-from apps.development.models.issue import IssueState
+from apps.development.models.issue import Issue, IssueState
 from tests.test_development.factories import IssueFactory
 from tests.test_development.test_gl.helpers import gl_mock, initializers
 from tests.test_users.factories.gitlab import GlUserFactory
@@ -16,6 +16,27 @@ def test_query(project_manager, ghl_client, gl_mocker, user, ghl_raw):
     :param gl_mocker:
     :param user:
     """
+    issue = _prepare_sync_data(user, gl_mocker)
+
+    assert issue.state == IssueState.OPENED
+
+    ghl_client.set_user(user)
+
+    response = ghl_client.execute(
+        ghl_raw("sync_issue"),
+        variable_values={"id": issue.pk},
+    )
+
+    assert "errors" not in response
+
+    dto = response["data"]["syncIssue"]["issue"]
+    assert dto["id"] == str(issue.id)
+
+    issue.refresh_from_db()
+    assert issue.state == IssueState.CLOSED
+
+
+def _prepare_sync_data(user, gl_mocker) -> Issue:
     project, gl_project = initializers.init_project()
 
     gl_assignee = GlUserFactory.create()
@@ -36,22 +57,7 @@ def test_query(project_manager, ghl_client, gl_mocker, user, ghl_raw):
         issues=[gl_issue],
     )
 
-    assert issue.state == IssueState.OPENED
-
-    ghl_client.set_user(user)
-
-    response = ghl_client.execute(
-        ghl_raw("sync_issue"),
-        variable_values={"id": issue.pk},
-    )
-
-    assert "errors" not in response
-
-    dto = response["data"]["syncIssue"]["issue"]
-    assert dto["id"] == str(issue.id)
-
-    issue.refresh_from_db()
-    assert issue.state == IssueState.CLOSED
+    return issue
 
 
 def test_without_access(

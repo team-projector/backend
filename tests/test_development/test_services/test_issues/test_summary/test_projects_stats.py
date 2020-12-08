@@ -218,13 +218,12 @@ def test_sort_projects_by_milestone_nested(db):
 
         summaries.append(IssuesProjectSummary(project, ProjectIssuesSummary()))
 
-    expected = [summary.project.id for summary in summaries][::-1]
     actual = [
         summary.project.id
         for summary in sort_project_summaries(summaries, None)
     ]
 
-    assert expected == actual
+    assert [summary.project.id for summary in summaries][::-1] == actual
 
 
 def test_sort_by_remains_desc(db):

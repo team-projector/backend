@@ -91,31 +91,12 @@ def test_issues_spents(user):
     checkers.check_time_spent_merge_requests_summary(summary.merge_requests)
 
 
-def test_merge_requests_spents(user):
+def test_merge_requests_spents(user, mr_opened, mr_closed, mr_merged):
     """
     Test merge requests spents.
 
     :param user:
     """
-    mr_opened = MergeRequestFactory.create(user=user)
-    mr_closed = MergeRequestFactory.create(
-        user=user,
-        state=MergeRequestState.CLOSED,
-    )
-    mr_merged = MergeRequestFactory.create(
-        user=user,
-        state=MergeRequestState.MERGED,
-    )
-
-    for opened_spent in (2, 3):
-        _add_spend(user, mr_opened, opened_spent)
-
-    for closed_spent in (2, 1):
-        _add_spend(user, mr_closed, closed_spent)
-
-    for merged_spent in (1, 5):
-        _add_spend(user, mr_merged, merged_spent)
-
     summary = spent_time_service.get_summary(SpentTime.objects.all())
 
     checkers.check_time_spent_summary(
@@ -196,13 +177,4 @@ def test_complex_spents(user):
         closed_spent=seconds(hours=3),
         merged_spent=seconds(hours=6),
         spent=seconds(hours=14),
-    )
-
-
-def _add_spend(user, base, hours) -> None:
-    """Add spent time for merge request."""
-    MergeRequestSpentTimeFactory.create(
-        user=user,
-        base=base,
-        time_spent=seconds(hours=hours),
     )

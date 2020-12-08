@@ -1,6 +1,9 @@
+from typing import Tuple
+
 from apps.development.graphql.resolvers import ProjectMilestonesResolver
 from apps.development.graphql.types.project import ProjectType
-from apps.development.models.milestone import MilestoneState
+from apps.development.models import ProjectGroup
+from apps.development.models.milestone import Milestone, MilestoneState
 from tests.test_development.factories import (
     ProjectFactory,
     ProjectGroupFactory,
@@ -117,19 +120,7 @@ def test_project_group_parent_milestones(user, client, ghl_auth_mock_info):
     :param client:
     :param ghl_auth_mock_info:
     """
-    group_parent = ProjectGroupFactory.create()
-
-    milestone1 = ProjectGroupMilestoneFactory.create(
-        owner=group_parent,
-        state=MilestoneState.ACTIVE,
-    )
-    ProjectGroupMilestoneFactory.create_batch(
-        3,
-        owner=group_parent,
-        state=MilestoneState.CLOSED,
-    )
-
-    group = ProjectGroupFactory.create(parent=group_parent)
+    group, milestone1 = _prepare_project_group_parent()
 
     project = ProjectFactory.create(group=group)
     milestone2 = ProjectGroupMilestoneFactory.create(
@@ -187,3 +178,19 @@ def test_resolve_milestones(user, client, ghl_auth_mock_info):
 
     assert milestones.count() == 1
     assert milestones.first() == milestone2
+
+
+def _prepare_project_group_parent() -> Tuple[ProjectGroup, Milestone]:
+    group_parent = ProjectGroupFactory.create()
+
+    milestone = ProjectGroupMilestoneFactory.create(
+        owner=group_parent,
+        state=MilestoneState.ACTIVE,
+    )
+    ProjectGroupMilestoneFactory.create_batch(
+        3,
+        owner=group_parent,
+        state=MilestoneState.CLOSED,
+    )
+
+    return ProjectGroupFactory.create(parent=group_parent), milestone
