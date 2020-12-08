@@ -7,5 +7,5 @@ def test_transform(assets):
         transform(
             assets.open_file("raw_template.html", "r").read(),
         )
-        == assets.open_file("rendered_template.html", "r").read()
+        == assets.open_file("raw_rendered_template.html", "r").read()
     )

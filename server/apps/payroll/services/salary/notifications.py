@@ -30,7 +30,7 @@ def send_email_report(salary: Salary) -> None:
         text=text,
         recipient_list=[salary.user.email],
         html_message=render_email_html(
-            "email/salary_email.html",
+            "email/salary.html",
             {
                 "title": subject,
                 "salary": salary,
