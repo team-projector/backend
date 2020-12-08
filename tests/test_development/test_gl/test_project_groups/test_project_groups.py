@@ -58,8 +58,11 @@ def test_load_filtered(db, gl_mocker):
 
     parent_group = ProjectGroup.objects.get(gl_id=parent_gl_group["id"])
     gl_checkers.check_group(parent_group, parent_gl_group)
-    child_group = ProjectGroup.objects.get(gl_id=child_gl_group["id"])
-    gl_checkers.check_group(child_group, child_gl_group, parent_group)
+    gl_checkers.check_group(
+        ProjectGroup.objects.get(gl_id=child_gl_group["id"]),
+        child_gl_group,
+        parent_group,
+    )
 
     assert not ProjectGroup.objects.filter(
         gl_id__in=[

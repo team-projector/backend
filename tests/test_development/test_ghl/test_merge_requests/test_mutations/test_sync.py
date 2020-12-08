@@ -14,6 +14,27 @@ def test_raw_query(  # noqa: WPS211
     ghl_raw,
 ):
     """Test raw query."""
+    merge_request = _prepare_sync_data(gl_mocker)
+
+    assert merge_request.state == MergeRequestState.OPENED
+
+    merge_request.state = MergeRequestState.CLOSED
+    merge_request.save()
+
+    ghl_client.set_user(user)
+
+    response = ghl_client.execute(
+        ghl_raw("sync_merge_request"),
+        variable_values={"id": merge_request.pk},
+    )
+
+    assert "errors" not in response
+    merge_request.refresh_from_db()
+
+    assert merge_request.state == MergeRequestState.OPENED
+
+
+def _prepare_sync_data(gl_mocker) -> MergeRequest:
     gl_assignee = GlUserFactory.create()
     UserFactory.create(gl_id=gl_assignee["id"])
 
@@ -32,21 +53,4 @@ def test_raw_query(  # noqa: WPS211
         gl_merge_request,
     )
 
-    merge_request = MergeRequest.objects.first()
-
-    assert merge_request.state == MergeRequestState.OPENED
-
-    merge_request.state = MergeRequestState.CLOSED
-    merge_request.save()
-
-    ghl_client.set_user(user)
-
-    response = ghl_client.execute(
-        ghl_raw("sync_merge_request"),
-        variable_values={"id": merge_request.pk},
-    )
-
-    assert "errors" not in response
-    merge_request.refresh_from_db()
-
-    assert merge_request.state == MergeRequestState.OPENED
+    return MergeRequest.objects.first()

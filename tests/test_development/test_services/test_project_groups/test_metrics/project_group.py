@@ -84,10 +84,13 @@ def test_some_milestones(user):
     project = ProjectFactory.create(group=milestone1.owner)
 
     issue1 = add_issue(project, milestone1)
-    issue2 = add_issue(project, milestone2)
 
     add_spent_time(issue1, user, timedelta(hours=1).total_seconds())
-    add_spent_time(issue2, user, timedelta(hours=3).total_seconds())
+    add_spent_time(
+        add_issue(project, milestone2),
+        user,
+        timedelta(hours=3).total_seconds(),
+    )
 
     generate_payroll(user, issue1.created_at)
 

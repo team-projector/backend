@@ -1,5 +1,6 @@
 from datetime import datetime, timedelta
 
+import pytest
 from django.db.models import Sum
 from django.utils import timezone
 from jnt_django_toolbox.helpers.time import seconds
@@ -13,6 +14,12 @@ from tests.test_users.factories.user import UserFactory
 from tests.test_users.test_services.test_users.test_metrics.test_progress.test_days import (  # noqa: E501
     checkers,
 )
+
+
+@pytest.fixture()
+def issue(team_developer):
+    """Create issue."""
+    return IssueFactory.create(user=team_developer, due_date=datetime.now())
 
 
 def test_simple(team, team_developer, team_leader):
@@ -329,11 +336,13 @@ def test_another_user_not_in_team(team, team_developer, team_leader):
     assert not any(metric.user == another_user for metric in metrics)
 
 
-def test_another_user_in_team(
+def test_another_user_in_team(  # noqa: WPS211
     team,
     team_developer,
     team_leader,
     make_team_developer,
+    issue,
+    another_user,
 ):
     """
     Test another user in team.
@@ -343,9 +352,6 @@ def test_another_user_in_team(
     :param team_leader:
     :param make_team_developer:
     """
-    issue = IssueFactory.create(user=team_developer, due_date=datetime.now())
-
-    another_user = UserFactory.create()
     make_team_developer(team, another_user)
 
     IssueSpentTimeFactory.create(

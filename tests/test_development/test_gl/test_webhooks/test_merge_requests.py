@@ -27,10 +27,6 @@ def test_success(db, gl_mocker, gl_webhook_view, api_rf):
         assignee=gl_user,
         author=gl_user,
     )
-    webhook_data = GlMergeRequestWebhookFactory.create(
-        project=gl_project,
-        object_attributes=gl_merge_request,
-    )
 
     gl_mock.register_user(gl_mocker, gl_user)
     gl_mock.mock_project_endpoints(
@@ -44,7 +40,16 @@ def test_success(db, gl_mocker, gl_webhook_view, api_rf):
         gl_merge_request,
     )
 
-    gl_webhook_view(api_rf.post("/", data=webhook_data, format="json"))
+    gl_webhook_view(
+        api_rf.post(
+            "/",
+            data=GlMergeRequestWebhookFactory.create(
+                project=gl_project,
+                object_attributes=gl_merge_request,
+            ),
+            format="json",
+        ),
+    )
 
     merge_request = MergeRequest.objects.first()
 
