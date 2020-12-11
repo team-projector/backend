@@ -12,7 +12,7 @@ stages:
   - publish
   - deploy
 
-lint_dockerfile:
+dockerfile:lint:
   image: registry.gitlab.com/junte/docker-hub/hadolint/hadolint:v1.19.0-44-gf364c91-debian
   stage: pre_build
   script:
@@ -51,7 +51,7 @@ test:
     paths:
       - coverage
 
-.base_publish:
+.publish:base:
   stage: publish
   dependencies: []
   services:
@@ -63,29 +63,29 @@ test:
     - docker tag $DOCKER_IMAGE $TARGET_IMAGE
     - docker push $TARGET_IMAGE
 
-publish_unstable:
-  extends: .base_publish
+publish:unstable:
+  extends: .publish:base
   only:
     - master
   variables:
     TARGET_IMAGE: $CI_REGISTRY_IMAGE/unstable:${CI_PIPELINE_ID}
 
-publish_stable:
-  extends: .base_publish
+publish:stable:
+  extends: .publish:base
   only:
     - tags
   variables:
     TARGET_IMAGE: $CI_REGISTRY_IMAGE/stable:${CI_COMMIT_TAG}
 
-.base_deploy:
+.deploy:base:
   image: registry.gitlab.com/junte/docker-hub/curl:7.72.0
   stage: deploy
   dependencies: []
   script:
     - curl -k -X POST -d "component=${DEPLOYER_COMPONENT}&key=${DEPLOYER_KEY}&tag=${CI_PIPELINE_ID}" ${DEPLOYER_HOST}
 
-deploy_development:
-  extends: .base_deploy
+deploy:development:
+  extends: .deploy:base
   only:
     - master
   environment:
