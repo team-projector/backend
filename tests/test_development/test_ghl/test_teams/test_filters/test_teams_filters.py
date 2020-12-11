@@ -3,6 +3,8 @@ from apps.development.models import Team, TeamMember
 from tests.helpers import lists
 from tests.test_development.factories import TeamFactory, TeamMemberFactory
 
+KEY_ROLES = "roles"
+
 
 def test_filter_by_role(user, ghl_auth_mock_info, make_team_leader):
     """
@@ -18,7 +20,7 @@ def test_filter_by_role(user, ghl_auth_mock_info, make_team_leader):
     make_team_leader(team, user)
 
     queryset = TeamsFilterSet(
-        data={"roles": "DEVELOPER"},
+        data={KEY_ROLES: "DEVELOPER"},
         queryset=Team.objects.all(),
         request=ghl_auth_mock_info.context,
     ).qs
@@ -26,7 +28,7 @@ def test_filter_by_role(user, ghl_auth_mock_info, make_team_leader):
     assert queryset.count() == 0
 
     queryset = TeamsFilterSet(
-        data={"roles": "LEADER"},
+        data={KEY_ROLES: "LEADER"},
         queryset=Team.objects.all(),
         request=ghl_auth_mock_info.context,
     ).qs
@@ -52,7 +54,7 @@ def test_filter_many_roles(user, ghl_auth_mock_info):
     )
 
     queryset = TeamsFilterSet(
-        data={"roles": "LEADER"},
+        data={KEY_ROLES: "LEADER"},
         queryset=Team.objects.all(),
         request=ghl_auth_mock_info.context,
     ).qs
@@ -61,7 +63,7 @@ def test_filter_many_roles(user, ghl_auth_mock_info):
     assert queryset.first() == team
 
     queryset = TeamsFilterSet(
-        data={"roles": "DEVELOPER"},
+        data={KEY_ROLES: "DEVELOPER"},
         queryset=Team.objects.all(),
         request=ghl_auth_mock_info.context,
     ).qs
@@ -69,7 +71,7 @@ def test_filter_many_roles(user, ghl_auth_mock_info):
     assert queryset.first() == team
 
     queryset = TeamsFilterSet(
-        data={"roles": "WATCHER"},
+        data={KEY_ROLES: "WATCHER"},
         queryset=Team.objects.all(),
         request=ghl_auth_mock_info.context,
     ).qs
@@ -94,7 +96,7 @@ def test_filter_by_user_and_many_roles(user, ghl_auth_mock_info):
     )
 
     queryset = TeamsFilterSet(
-        data={"roles": "LEADER,WATCHER"},
+        data={KEY_ROLES: "LEADER,WATCHER"},
         queryset=Team.objects.all(),
         request=ghl_auth_mock_info.context,
     ).qs

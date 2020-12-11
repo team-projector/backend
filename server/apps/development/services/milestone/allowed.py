@@ -6,6 +6,8 @@ from jnt_django_graphene_toolbox.errors import GraphQLPermissionDenied
 from apps.development.models import Milestone, ProjectGroup, ProjectMember
 from apps.users.models import User
 
+KEY_ID = "id"
+
 
 def filter_allowed_for_user(
     queryset: models.QuerySet,
@@ -16,9 +18,11 @@ def filter_allowed_for_user(
 
     project_milestones = Milestone.objects.filter(
         project__members__in=members,
-    ).values("id")
+    ).values(KEY_ID)
 
-    milestones_ids = [milestone.get("id") for milestone in project_milestones]
+    milestones_ids = [
+        milestone.get(KEY_ID) for milestone in project_milestones
+    ]
 
     groups = ProjectGroup.objects.filter(members__in=members)
 
@@ -49,10 +53,10 @@ def get_group_milestones(
     milestones_on_level = Milestone.objects.filter(
         models.Q(project_group__in=groups)
         | models.Q(project__group__in=groups),
-    ).values("id")
+    ).values(KEY_ID)
 
     for milestone in milestones_on_level:
-        milestones_ids.append(milestone.get("id"))
+        milestones_ids.append(milestone.get(KEY_ID))
 
     children_groups = ProjectGroup.objects.filter(parent__in=groups)
 
@@ -71,9 +75,11 @@ def is_project_manager(user: User, milestone: Milestone) -> bool:
 
     project_milestones = Milestone.objects.filter(
         project__members__in=members,
-    ).values("id")
+    ).values(KEY_ID)
 
-    milestones_ids = [milestone.get("id") for milestone in project_milestones]
+    milestones_ids = [
+        milestone.get(KEY_ID) for milestone in project_milestones
+    ]
 
     groups = ProjectGroup.objects.filter(members__in=members)
 

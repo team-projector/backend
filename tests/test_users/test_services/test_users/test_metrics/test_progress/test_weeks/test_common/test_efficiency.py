@@ -14,6 +14,8 @@ from tests.test_users.test_services.test_users.test_metrics.test_progress.test_w
     checkers,
 )
 
+METRICS_GROUP_WEEK = "week"
+
 
 def test_efficiency_more100(user):
     """
@@ -64,7 +66,7 @@ def test_efficiency_more100(user):
         user,
         monday - timedelta(days=5),
         monday + timedelta(days=5),
-        "week",
+        METRICS_GROUP_WEEK,
     )
 
     assert len(metrics) == 2
@@ -126,7 +128,7 @@ def test_efficiency_less100(user):
         user,
         monday - timedelta(days=5),
         monday + timedelta(days=5),
-        "week",
+        METRICS_GROUP_WEEK,
     )
 
     assert len(metrics) == 2
@@ -188,7 +190,7 @@ def test_efficiency_zero_estimate(user):
         user,
         monday - timedelta(days=5),
         monday + timedelta(days=5),
-        "week",
+        METRICS_GROUP_WEEK,
     )
 
     assert len(metrics) == 2
@@ -219,7 +221,7 @@ def test_efficiency_zero_spend(user):
         user,
         monday - timedelta(days=5),
         monday + timedelta(days=5),
-        "week",
+        METRICS_GROUP_WEEK,
     )
 
     assert len(metrics) == 2

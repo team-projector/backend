@@ -16,13 +16,14 @@ from apps.development.models import Issue, Ticket
 from apps.development.services.issue.allowed import filter_allowed_for_user
 
 ISSUES_PARAM_ERROR = 'Please, choose one parameter: "attachIssues" or "issues"'
+KEY_ATTACH_ISSUES = "attach_issues"
 
 
 class InputSerializer(TicketBaseInput):
     """InputSerializer."""
 
     class Meta(TicketBaseInput.Meta):
-        fields = ["id", *TicketBaseInput.Meta.fields, "attach_issues"]
+        fields = ["id", *TicketBaseInput.Meta.fields, KEY_ATTACH_ISSUES]
 
     attach_issues = serializers.PrimaryKeyRelatedField(
         many=True,
@@ -54,13 +55,13 @@ class InputSerializer(TicketBaseInput):
                 Issue.objects.all(),
                 self.context["request"].user,
             )
-            fields["attach_issues"].child_relation.queryset = issues_qs
+            fields[KEY_ATTACH_ISSUES].child_relation.queryset = issues_qs
 
         return fields
 
     def validate(self, attrs):
         """Validates input parameters."""
-        if attrs.get("issues") and attrs.get("attach_issues"):
+        if attrs.get("issues") and attrs.get(KEY_ATTACH_ISSUES):
             raise exceptions.ValidationError(ISSUES_PARAM_ERROR)
 
         return attrs
@@ -84,7 +85,7 @@ class UpdateTicketMutation(SerializerMutation):
     ) -> "UpdateTicketMutation":
         """Overrideable mutation operation."""
         ticket = validated_data.pop("ticket")
-        attach_issues = validated_data.pop("attach_issues", None)
+        attach_issues = validated_data.pop(KEY_ATTACH_ISSUES, None)
         issues = validated_data.pop("issues", None)
 
         update_from_validated_data(ticket, validated_data)

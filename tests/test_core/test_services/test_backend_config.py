@@ -52,17 +52,18 @@ def test_providers(provider):
 
 def test_cached():
     """Test a cache is properly used for serving config."""
+    cache_key = "config"
     cache = _MockedCache()
     service = BackendConfigService(
         cache_manager=cache,
         config_provider=_BackendConfigFactory.create,
-        cache_key="config",
+        cache_key=cache_key,
         expire_after=10,
     )
     config = service.get_config()
 
-    assert cache.get.call_args.args == ("config",)
-    assert cache.add.call_args.args == ("config", config)
+    assert cache.get.call_args.args == (cache_key,)
+    assert cache.add.call_args.args == (cache_key, config)
     assert cache.add.call_args.kwargs["timeout"] == 10
 
 

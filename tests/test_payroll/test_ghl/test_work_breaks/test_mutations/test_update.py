@@ -11,6 +11,15 @@ from tests.test_development.factories import TeamFactory, TeamMemberFactory
 from tests.test_payroll.factories import WorkBreakFactory
 from tests.test_users.factories import UserFactory
 
+COMMENT_CREATED = "created"
+COMMENT_UPDATED = "updated"
+KEY_ID = "id"
+KEY_USER = "user"
+KEY_REASON = "reason"
+KEY_COMMENT = "comment"
+KEY_FROM_DATE = "from_date"
+KEY_TO_DATE = "to_date"
+
 
 def test_query(user, ghl_client, ghl_raw):
     """Test update raw query."""
@@ -26,15 +35,15 @@ def test_query(user, ghl_client, ghl_raw):
     user.roles = User.roles.TEAM_LEADER
     user.save()
 
-    work_break = WorkBreakFactory.create(user=user, comment="created")
+    work_break = WorkBreakFactory.create(user=user, comment=COMMENT_CREATED)
 
     update_variables = {
-        "id": work_break.pk,
-        "user": user.id,
+        KEY_ID: work_break.pk,
+        KEY_USER: user.id,
         "fromDate": _date_strftime(timezone.now()),
         "toDate": _date_strftime(timezone.now() + timedelta(minutes=10)),
-        "reason": WorkBreakReason.DAYOFF,
-        "comment": "test comment",
+        KEY_REASON: WorkBreakReason.DAYOFF,
+        KEY_COMMENT: "test comment",
     }
 
     response = ghl_client.execute(
@@ -43,9 +52,9 @@ def test_query(user, ghl_client, ghl_raw):
     )
 
     dto = response["data"]["updateWorkBreak"]["workBreak"]
-    assert dto["id"] == str(work_break.pk)
-    assert dto["user"]["id"] == str(update_variables["user"])
-    assert dto["comment"] == update_variables["comment"]
+    assert dto[KEY_ID] == str(work_break.pk)
+    assert dto[KEY_USER][KEY_ID] == str(update_variables[KEY_USER])
+    assert dto[KEY_COMMENT] == update_variables[KEY_COMMENT]
 
 
 def test_work_break_not_team_lead(
@@ -61,12 +70,12 @@ def test_work_break_not_team_lead(
     work_break = WorkBreakFactory.create(comment="django")
 
     update_variables = {
-        "id": work_break.pk,
-        "user": ghl_auth_mock_info.context.user.id,
-        "from_date": timezone.now(),
-        "to_date": timezone.now(),
-        "reason": WorkBreakReason.DAYOFF,
-        "comment": "test comment",
+        KEY_ID: work_break.pk,
+        KEY_USER: ghl_auth_mock_info.context.user.id,
+        KEY_FROM_DATE: timezone.now(),
+        KEY_TO_DATE: timezone.now(),
+        KEY_REASON: WorkBreakReason.DAYOFF,
+        KEY_COMMENT: "test comment",
     }
 
     response = update_work_break_mutation(
@@ -106,15 +115,15 @@ def test_update_work_break_another_user(
         roles=TeamMember.roles.DEVELOPER,
     )
 
-    work_break = WorkBreakFactory.create(user=user2, comment="created")
+    work_break = WorkBreakFactory.create(user=user2, comment=COMMENT_CREATED)
 
     update_variables = {
-        "id": work_break.pk,
-        "user": ghl_auth_mock_info.context.user.id,
-        "from_date": timezone.now(),
-        "to_date": timezone.now(),
-        "reason": WorkBreakReason.DAYOFF,
-        "comment": "test comment",
+        KEY_ID: work_break.pk,
+        KEY_USER: ghl_auth_mock_info.context.user.id,
+        KEY_FROM_DATE: timezone.now(),
+        KEY_TO_DATE: timezone.now(),
+        KEY_REASON: WorkBreakReason.DAYOFF,
+        KEY_COMMENT: "test comment",
     }
 
     response = update_work_break_mutation(
@@ -145,15 +154,18 @@ def test_update_another_user_but_team_lead(
     make_team_leader(team, ghl_auth_mock_info.context.user)
     make_team_developer(team, another_user)
 
-    work_break = WorkBreakFactory.create(user=another_user, comment="created")
+    work_break = WorkBreakFactory.create(
+        user=another_user,
+        comment=COMMENT_CREATED,
+    )
 
     update_variables = {
-        "id": work_break.pk,
-        "user": another_user.pk,
-        "from_date": timezone.now().date(),
-        "to_date": timezone.now().date(),
-        "reason": WorkBreakReason.DAYOFF,
-        "comment": "updated",
+        KEY_ID: work_break.pk,
+        KEY_USER: another_user.pk,
+        KEY_FROM_DATE: timezone.now().date(),
+        KEY_TO_DATE: timezone.now().date(),
+        KEY_REASON: WorkBreakReason.DAYOFF,
+        KEY_COMMENT: COMMENT_UPDATED,
     }
 
     update_work_break_mutation(
@@ -165,7 +177,7 @@ def test_update_another_user_but_team_lead(
     work_break.refresh_from_db()
 
     assert WorkBreak.objects.count() == 1
-    assert work_break.comment == "updated"
+    assert work_break.comment == COMMENT_UPDATED
     assert work_break.user == another_user
 
 
@@ -194,15 +206,15 @@ def test_change_work_break_user(
         roles=TeamMember.roles.DEVELOPER,
     )
 
-    work_break = WorkBreakFactory.create(user=user2, comment="created")
+    work_break = WorkBreakFactory.create(user=user2, comment=COMMENT_CREATED)
 
     update_variables = {
-        "id": work_break.pk,
-        "user": user3.id,
-        "from_date": timezone.now().date(),
-        "to_date": timezone.now().date(),
-        "reason": WorkBreakReason.DAYOFF,
-        "comment": "updated",
+        KEY_ID: work_break.pk,
+        KEY_USER: user3.id,
+        KEY_FROM_DATE: timezone.now().date(),
+        KEY_TO_DATE: timezone.now().date(),
+        KEY_REASON: WorkBreakReason.DAYOFF,
+        KEY_COMMENT: COMMENT_UPDATED,
         "paid_days": 7,
     }
 
@@ -215,7 +227,7 @@ def test_change_work_break_user(
     work_break.refresh_from_db()
 
     assert WorkBreak.objects.count() == 1
-    assert work_break.comment == "updated"
+    assert work_break.comment == COMMENT_UPDATED
     assert work_break.user == user3
     assert work_break.paid_days == update_variables["paid_days"]
 

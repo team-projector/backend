@@ -12,6 +12,8 @@ from tests.test_users.test_services.test_users.test_metrics.test_progress.test_d
     checkers,
 )
 
+METRICS_GROUP_DAY = "day"
+
 
 def test_opened(user):
     """
@@ -59,7 +61,7 @@ def test_opened(user):
 
     start = monday - timedelta(days=5)
     end = monday + timedelta(days=5)
-    metrics = get_progress_metrics(user, start, end, "day")
+    metrics = get_progress_metrics(user, start, end, METRICS_GROUP_DAY)
 
     checkers.check_user_progress_payroll_metrics(
         metrics,
@@ -128,7 +130,7 @@ def test_paid(user):
         user,
         monday - timedelta(days=5),
         monday + timedelta(days=5),
-        "day",
+        METRICS_GROUP_DAY,
     )
 
     checkers.check_user_progress_payroll_metrics(
@@ -196,7 +198,7 @@ def test_closed(user):
         user,
         monday - timedelta(days=5),
         monday + timedelta(days=5),
-        "day",
+        METRICS_GROUP_DAY,
     )
 
     checkers.check_user_progress_payroll_metrics(
@@ -276,7 +278,7 @@ def test_complex(user):
         user,
         monday - timedelta(days=5),
         monday + timedelta(days=5),
-        "day",
+        METRICS_GROUP_DAY,
     )
 
     checkers.check_user_progress_payroll_metrics(

@@ -15,6 +15,8 @@ from tests.test_users.test_services.test_users.test_metrics.test_progress.test_d
     checkers,
 )
 
+METRICS_GROUP_DAY = "day"
+
 
 @pytest.fixture()
 def issue(team_developer):
@@ -68,7 +70,7 @@ def test_simple(team, team_developer, team_leader):
 
     start = timezone.now().date() - timedelta(days=5)
     end = timezone.now().date() + timedelta(days=5)
-    metrics = get_progress_metrics(team, start, end, "day")
+    metrics = get_progress_metrics(team, start, end, METRICS_GROUP_DAY)
 
     assert len(metrics) == 2
 
@@ -128,7 +130,7 @@ def test_negative_remains(team, team_developer, team_leader):
 
     start = timezone.now().date() - timedelta(days=5)
     end = timezone.now().date() + timedelta(days=5)
-    metrics = get_progress_metrics(team, start, end, "day")
+    metrics = get_progress_metrics(team, start, end, METRICS_GROUP_DAY)
 
     assert len(metrics) == 2
 
@@ -196,7 +198,7 @@ def test_loading_day_already_has_spends(team, team_developer, team_leader):
 
     start = timezone.now().date() - timedelta(days=5)
     end = timezone.now().date() + timedelta(days=5)
-    metrics = get_progress_metrics(team, start, end, "day")
+    metrics = get_progress_metrics(team, start, end, METRICS_GROUP_DAY)
 
     assert len(metrics) == 2
 
@@ -265,7 +267,7 @@ def test_not_in_range(team, team_developer, team_leader):
 
     start = timezone.now().date() - timedelta(days=3)
     end = timezone.now().date() + timedelta(days=3)
-    metrics = get_progress_metrics(team, start, end, "day")
+    metrics = get_progress_metrics(team, start, end, METRICS_GROUP_DAY)
 
     developer_metrics = next(
         metric.metrics for metric in metrics if metric.user == team_developer
@@ -329,7 +331,7 @@ def test_another_user_not_in_team(team, team_developer, team_leader):
         team,
         timezone.now().date() - timedelta(days=5),
         timezone.now().date() + timedelta(days=5),
-        "day",
+        METRICS_GROUP_DAY,
     )
 
     assert len(metrics) == 2
@@ -385,7 +387,7 @@ def test_another_user_in_team(  # noqa: WPS211
 
     start = timezone.now().date() - timedelta(days=5)
     end = timezone.now().date() + timedelta(days=5)
-    metrics = get_progress_metrics(team, start, end, "day")
+    metrics = get_progress_metrics(team, start, end, METRICS_GROUP_DAY)
 
     assert len(metrics) == 3
 

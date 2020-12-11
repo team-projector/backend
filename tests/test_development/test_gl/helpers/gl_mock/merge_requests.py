@@ -1,5 +1,8 @@
 from tests.test_development.factories.gitlab import GlTimeStats
 
+KEY_ID = "id"
+KEY_IID = "iid"
+
 
 def register_merge_request(mocker, project, merge_request):
     """
@@ -11,8 +14,8 @@ def register_merge_request(mocker, project, merge_request):
     """
     mocker.register_get(
         "/projects/{0}/merge_requests/{1}".format(
-            project["id"],
-            merge_request["iid"],
+            project[KEY_ID],
+            merge_request[KEY_IID],
         ),
         merge_request,
     )
@@ -34,8 +37,8 @@ def register_merge_request_participants(
     """
     mocker.register_get(
         "/projects/{0}/merge_requests/{1}/participants".format(
-            project["id"],
-            merge_request["iid"],
+            project[KEY_ID],
+            merge_request[KEY_IID],
         ),
         participants,
     )
@@ -52,8 +55,8 @@ def register_merge_request_time_stats(mocker, project, merge_request, stats):
     """
     mocker.register_get(
         "/projects/{0}/merge_requests/{1}/time_stats".format(
-            project["id"],
-            merge_request["iid"],
+            project[KEY_ID],
+            merge_request[KEY_IID],
         ),
         stats,
     )
@@ -70,8 +73,8 @@ def register_merge_request_labels(mocker, project, merge_request, labels):
     """
     mocker.register_get(
         "/projects/{0}/merge_requests/{1}/labels".format(
-            project["id"],
-            merge_request["iid"],
+            project[KEY_ID],
+            merge_request[KEY_IID],
         ),
         labels,
     )
@@ -88,8 +91,8 @@ def register_merge_request_notes(mocker, project, merge_request, notes):
     """
     mocker.register_get(
         "/projects/{0}/merge_requests/{1}/notes".format(
-            project["id"],
-            merge_request["iid"],
+            project[KEY_ID],
+            merge_request[KEY_IID],
         ),
         notes,
     )

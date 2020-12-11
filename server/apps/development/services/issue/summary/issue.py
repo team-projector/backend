@@ -13,6 +13,8 @@ from apps.development.services.issue.summary import (
 )
 from apps.payroll.models import SpentTime
 
+KEY_STATE = "state"
+
 
 class IssuesSummary:
     """Issues summary."""
@@ -48,9 +50,9 @@ class IssuesSummaryProvider:
         for count_state in self._get_counts_by_state():
             summary.count += count_state["count"]
 
-            if count_state["state"] == IssueState.OPENED:
+            if count_state[KEY_STATE] == IssueState.OPENED:
                 summary.opened_count = count_state["count"]
-            elif count_state["state"] == IssueState.CLOSED:
+            elif count_state[KEY_STATE] == IssueState.CLOSED:
                 summary.closed_count = count_state["count"]
 
         summary.time_spent = self._get_time_spent()
@@ -65,7 +67,7 @@ class IssuesSummaryProvider:
         :rtype: QuerySet
         """
         return (
-            self._queryset.values("state")
+            self._queryset.values(KEY_STATE)
             .annotate(count=Count("*"))
             .order_by()
         )

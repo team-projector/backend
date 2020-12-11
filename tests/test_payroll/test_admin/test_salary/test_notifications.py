@@ -5,6 +5,8 @@ from tests.helpers import db, objects
 from tests.test_payroll.factories import SalaryFactory
 from tests.test_users.factories.user import UserFactory
 
+SALARY_CHANGE_TEMPLATE_URL = "/admin/payroll/salary/{0}/change/"
+
 
 @override_config(DEFAULT_FROM_EMAIL="foo@bar")
 def test_send_notification(admin_rf, salary_admin):
@@ -24,7 +26,7 @@ def test_send_notification(admin_rf, salary_admin):
 
     salary_admin.changeform_view(
         admin_rf.post(
-            "/admin/payroll/salary/{0}/change/".format(salary.pk),
+            SALARY_CHANGE_TEMPLATE_URL.format(salary.pk),
             objects.model_to_dict_form(salary),
         ),
         object_id=str(salary.id),
@@ -54,7 +56,7 @@ def test_payed_changed_to_false(admin_rf, salary_admin):
 
     salary_admin.changeform_view(
         admin_rf.post(
-            "/admin/payroll/salary/{0}/change/".format(salary.pk),
+            SALARY_CHANGE_TEMPLATE_URL.format(salary.pk),
             objects.model_to_dict_form(salary),
         ),
         object_id=str(salary.id),
@@ -80,7 +82,7 @@ def test_user_without_email_but_payed(admin_rf, salary_admin):
 
     salary_admin.changeform_view(
         admin_rf.post(
-            "/admin/payroll/salary/{0}/change/".format(salary.pk),
+            SALARY_CHANGE_TEMPLATE_URL.format(salary.pk),
             objects.model_to_dict_form(salary),
         ),
         object_id=str(salary.id),
@@ -106,7 +108,7 @@ def test_another_field_changed(admin_rf, salary_admin):
 
     salary_admin.changeform_view(
         admin_rf.post(
-            "/admin/payroll/salary/{0}/change/".format(salary.pk),
+            SALARY_CHANGE_TEMPLATE_URL.format(salary.pk),
             objects.model_to_dict_form(salary),
         ),
         object_id=str(salary.id),
@@ -133,7 +135,7 @@ def test_another_field_changed_and_payed(admin_rf, salary_admin):
 
     salary_admin.changeform_view(
         admin_rf.post(
-            "/admin/payroll/salary/{0}/change/".format(salary.pk),
+            SALARY_CHANGE_TEMPLATE_URL.format(salary.pk),
             objects.model_to_dict_form(salary),
         ),
         object_id=str(salary.id),

@@ -14,6 +14,14 @@ from apps.development.services.note.gl.sync import update_note_from_gitlab
 from tests.helpers.checkers import assert_instance_fields
 from tests.test_development.factories import IssueFactory
 
+KEY_ID = "id"
+KEY_AUTHOR = "author"
+KEY_BODY = "body"
+KEY_CREATED_AT = "created_at"
+KEY_UPDATED_AT = "updated_at"
+
+BODY_TEMPLATE = "added 1h 1m of time spent at {0}"
+
 
 def test_added(user):
     """
@@ -24,22 +32,22 @@ def test_added(user):
     issue = IssueFactory.create()
     date_str = date.today().strftime(GITLAB_DATE_FORMAT)
 
-    body = "added 1h 1m of time spent at {0}".format(date_str)
+    body = BODY_TEMPLATE.format(date_str)
 
     update_note_from_gitlab(
         dict2obj(
             {
-                "id": 2,
-                "body": body,
-                "created_at": datetime.strftime(
+                KEY_ID: 2,
+                KEY_BODY: body,
+                KEY_CREATED_AT: datetime.strftime(
                     datetime.now(),
                     GITLAB_DATETIME_FORMAT,
                 ),
-                "updated_at": datetime.strftime(
+                KEY_UPDATED_AT: datetime.strftime(
                     datetime.now(),
                     GITLAB_DATETIME_FORMAT,
                 ),
-                "author": {"id": user.gl_id},
+                KEY_AUTHOR: {KEY_ID: user.gl_id},
             },
         ),
         issue,
@@ -72,17 +80,17 @@ def test_subtracted(user):
     update_note_from_gitlab(
         dict2obj(
             {
-                "id": 2,
-                "body": body,
-                "created_at": datetime.strftime(
+                KEY_ID: 2,
+                KEY_BODY: body,
+                KEY_CREATED_AT: datetime.strftime(
                     datetime.now(),
                     GITLAB_DATETIME_FORMAT,
                 ),
-                "updated_at": datetime.strftime(
+                KEY_UPDATED_AT: datetime.strftime(
                     datetime.now(),
                     GITLAB_DATETIME_FORMAT,
                 ),
-                "author": {"id": user.gl_id},
+                KEY_AUTHOR: {KEY_ID: user.gl_id},
             },
         ),
         issue,
@@ -113,17 +121,17 @@ def test_removed(user):
     update_note_from_gitlab(
         dict2obj(
             {
-                "id": 2,
-                "body": SPEND_RESET_MESSAGE,
-                "created_at": datetime.strftime(
+                KEY_ID: 2,
+                KEY_BODY: SPEND_RESET_MESSAGE,
+                KEY_CREATED_AT: datetime.strftime(
                     datetime.now(),
                     GITLAB_DATETIME_FORMAT,
                 ),
-                "updated_at": datetime.strftime(
+                KEY_UPDATED_AT: datetime.strftime(
                     datetime.now(),
                     GITLAB_DATETIME_FORMAT,
                 ),
-                "author": {"id": user.gl_id},
+                KEY_AUTHOR: {KEY_ID: user.gl_id},
             },
         ),
         issue,
@@ -156,19 +164,19 @@ def test_already_exists(user):
     update_note_from_gitlab(
         dict2obj(
             {
-                "id": 2,
-                "body": "added 1h 1m of time spent at {0}".format(
+                KEY_ID: 2,
+                KEY_BODY: BODY_TEMPLATE.format(
                     date.today().strftime(GITLAB_DATE_FORMAT),
                 ),
-                "created_at": datetime.strftime(
+                KEY_CREATED_AT: datetime.strftime(
                     datetime.now(),
                     GITLAB_DATETIME_FORMAT,
                 ),
-                "updated_at": datetime.strftime(
+                KEY_UPDATED_AT: datetime.strftime(
                     datetime.now(),
                     GITLAB_DATETIME_FORMAT,
                 ),
-                "author": {"id": user.gl_id},
+                KEY_AUTHOR: {KEY_ID: user.gl_id},
             },
         ),
         issue,
@@ -194,19 +202,19 @@ def test_already_has_another(user):
     update_note_from_gitlab(
         dict2obj(
             {
-                "id": 2,
-                "body": "added 1h 1m of time spent at {0}".format(
+                KEY_ID: 2,
+                KEY_BODY: BODY_TEMPLATE.format(
                     date.today().strftime(GITLAB_DATE_FORMAT),
                 ),
-                "created_at": datetime.strftime(
+                KEY_CREATED_AT: datetime.strftime(
                     datetime.now(),
                     GITLAB_DATETIME_FORMAT,
                 ),
-                "updated_at": datetime.strftime(
+                KEY_UPDATED_AT: datetime.strftime(
                     datetime.now(),
                     GITLAB_DATETIME_FORMAT,
                 ),
-                "author": {"id": user.gl_id},
+                KEY_AUTHOR: {KEY_ID: user.gl_id},
             },
         ),
         issue,
@@ -234,19 +242,19 @@ def test_has_prior(user):
     update_note_from_gitlab(
         dict2obj(
             {
-                "id": 2,
-                "body": "added 1h 1m of time spent at {0}".format(
+                KEY_ID: 2,
+                KEY_BODY: BODY_TEMPLATE.format(
                     date.today().strftime(GITLAB_DATE_FORMAT),
                 ),
-                "created_at": datetime.strftime(
+                KEY_CREATED_AT: datetime.strftime(
                     datetime.now(),
                     GITLAB_DATETIME_FORMAT,
                 ),
-                "updated_at": datetime.strftime(
+                KEY_UPDATED_AT: datetime.strftime(
                     datetime.now(),
                     GITLAB_DATETIME_FORMAT,
                 ),
-                "author": {"id": user.gl_id},
+                KEY_AUTHOR: {KEY_ID: user.gl_id},
             },
         ),
         issue,
@@ -270,17 +278,17 @@ def test_body_without_date(user):
     update_note_from_gitlab(
         dict2obj(
             {
-                "id": 2,
-                "body": body,
-                "created_at": datetime.strftime(
+                KEY_ID: 2,
+                KEY_BODY: body,
+                KEY_CREATED_AT: datetime.strftime(
                     datetime.now(),
                     GITLAB_DATETIME_FORMAT,
                 ),
-                "updated_at": datetime.strftime(
+                KEY_UPDATED_AT: datetime.strftime(
                     datetime.now(),
                     GITLAB_DATETIME_FORMAT,
                 ),
-                "author": {"id": user.gl_id},
+                KEY_AUTHOR: {KEY_ID: user.gl_id},
             },
         ),
         issue,

@@ -3,6 +3,8 @@ from apps.development.models import TeamMember
 from tests.test_development.factories import TeamFactory, TeamMemberFactory
 from tests.test_users.factories.user import UserFactory
 
+KEY_ROLES = "roles"
+
 
 def test_filter_by_role_developer(user):
     """
@@ -13,7 +15,7 @@ def test_filter_by_role_developer(user):
     _prepare_data()
 
     queryset = TeamMembersFilterSet(
-        data={"roles": "DEVELOPER"},
+        data={KEY_ROLES: "DEVELOPER"},
         queryset=TeamMember.objects.all(),
     ).qs
 
@@ -29,7 +31,7 @@ def test_filter_by_role_leader(user):
     _prepare_data()
 
     queryset = TeamMembersFilterSet(
-        data={"roles": "LEADER"},
+        data={KEY_ROLES: "LEADER"},
         queryset=TeamMember.objects.all(),
     ).qs
 
@@ -45,7 +47,7 @@ def test_filter_by_role_watcher(user):
     _prepare_data()
 
     queryset = TeamMembersFilterSet(
-        data={"roles": "WATCHER"},
+        data={KEY_ROLES: "WATCHER"},
         queryset=TeamMember.objects.all(),
     ).qs
 
@@ -61,7 +63,7 @@ def test_filter_by_incorrect_role(user):
     _prepare_data()
 
     queryset = TeamMembersFilterSet(
-        data={"roles": "incorrect value"},
+        data={KEY_ROLES: "incorrect value"},
         queryset=TeamMember.objects.all(),
     ).qs
 
@@ -77,7 +79,7 @@ def test_filter_by_none_role(user):
     _prepare_data()
 
     queryset = TeamMembersFilterSet(
-        data={"roles": None},
+        data={KEY_ROLES: None},
         queryset=TeamMember.objects.all(),
     ).qs
 

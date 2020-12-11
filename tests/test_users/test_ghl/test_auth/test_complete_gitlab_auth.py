@@ -4,6 +4,14 @@ from social_core.backends.gitlab import GitLabOAuth2
 
 from apps.users.models import Token
 
+KEY_TOKEN_TYPE = "token_type"
+KEY_EXPIRES_IN = "expires_in"
+KEY_ACCESS_TOKEN = "access_token"
+KEY_REFRESH_TOKEN = "refresh_token"
+
+ACCESS_TOKEN = "access_token"
+REFRESH_TOKEN = "refresh_token"
+
 
 def test_complete_login(
     user,
@@ -21,10 +29,10 @@ def test_complete_login(
     gl_mocker.register_post(
         "",
         {
-            "access_token": "access_token",
-            "token_type": "bearer",
-            "expires_in": 7200,
-            "refresh_token": "refresh_token",
+            KEY_ACCESS_TOKEN: ACCESS_TOKEN,
+            KEY_REFRESH_TOKEN: REFRESH_TOKEN,
+            KEY_TOKEN_TYPE: "bearer",
+            KEY_EXPIRES_IN: 7200,
         },
     )
 
@@ -54,10 +62,10 @@ def test_user_not_in_system(
     gl_mocker.register_post(
         "",
         {
-            "access_token": "access_token",
-            "token_type": "bearer",
-            "expires_in": 7200,
-            "refresh_token": "refresh_token",
+            KEY_ACCESS_TOKEN: ACCESS_TOKEN,
+            KEY_REFRESH_TOKEN: REFRESH_TOKEN,
+            KEY_TOKEN_TYPE: "bearer",
+            KEY_EXPIRES_IN: 7200,
         },
     )
 
@@ -86,10 +94,10 @@ def test_not_login(
     gl_mocker.register_post(
         "",
         {
-            "access_token": "access_token",
-            "token_type": "bearer",
-            "expires_in": 7200,
-            "refresh_token": "refresh_token",
+            KEY_ACCESS_TOKEN: ACCESS_TOKEN,
+            KEY_REFRESH_TOKEN: REFRESH_TOKEN,
+            KEY_TOKEN_TYPE: "bearer",
+            KEY_EXPIRES_IN: 7200,
         },
     )
 

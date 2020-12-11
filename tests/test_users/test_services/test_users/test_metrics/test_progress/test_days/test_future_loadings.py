@@ -10,6 +10,8 @@ from tests.test_users.test_services.test_users.test_metrics.test_progress.test_d
     checkers,
 )
 
+METRICS_GROUP_DAY = "day"
+
 
 def test_replay(user):
     """
@@ -26,7 +28,7 @@ def test_replay(user):
 
     start = datetime.now().date() + timedelta(days=1)
     end = datetime.now().date() + timedelta(days=5)
-    metrics = get_progress_metrics(user, start, end, "day")
+    metrics = get_progress_metrics(user, start, end, METRICS_GROUP_DAY)
 
     assert len(metrics) == (end - start).days + 1
     checkers.check_user_progress_metrics(
@@ -50,7 +52,7 @@ def test_has_spents(user):
 
     start = datetime.now().date() + timedelta(days=1)
     end = datetime.now().date() + timedelta(days=5)
-    metrics = get_progress_metrics(user, start, end, "day")
+    metrics = get_progress_metrics(user, start, end, METRICS_GROUP_DAY)
 
     assert len(metrics) == (end - start).days + 1
     checkers.check_user_progress_metrics(
@@ -75,7 +77,7 @@ def test_replay_without_active_issues(user):
 
     start = datetime.now().date() + timedelta(days=1)
     end = datetime.now().date() + timedelta(days=3)
-    metrics = get_progress_metrics(user, start, end, "day")
+    metrics = get_progress_metrics(user, start, end, METRICS_GROUP_DAY)
 
     assert len(metrics) == (end - start).days + 1
     checkers.check_user_progress_metrics(
@@ -101,7 +103,7 @@ def test_not_apply_loading_weekends(user):
 
     start = datetime.now().date() + timedelta(days=1)
     end = datetime.now().date() + timedelta(days=5)
-    metrics = get_progress_metrics(user, start, end, "day")
+    metrics = get_progress_metrics(user, start, end, METRICS_GROUP_DAY)
 
     assert len(metrics) == (end - start).days + 1
     checkers.check_user_progress_metrics(

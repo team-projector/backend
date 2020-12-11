@@ -2,6 +2,9 @@ from apps.development.graphql.filters import IssuesFilterSet
 from apps.development.models.issue import Issue
 from tests.test_development.factories import IssueFactory
 
+KEY_SEARCH = "q"
+GL_URL = "foobar"
+
 
 def test_by_title_single(user):
     """
@@ -9,11 +12,11 @@ def test_by_title_single(user):
 
     :param user:
     """
-    issue = IssueFactory.create(title="create", user=user, gl_url="foobar")
+    issue = IssueFactory.create(title="create", user=user, gl_url=GL_URL)
     IssueFactory.create(title="react", user=user)
 
     queryset = IssuesFilterSet(
-        data={"q": "ate"},
+        data={KEY_SEARCH: "ate"},
         queryset=Issue.objects.all(),
     ).qs
 
@@ -28,12 +31,12 @@ def test_by_title_many(user):
     :param user:
     """
     issues = [
-        IssueFactory.create(title="create", user=user, gl_url="foobar"),
+        IssueFactory.create(title="create", user=user, gl_url=KEY_SEARCH),
         IssueFactory.create(title="react", user=user),
     ]
 
     queryset = IssuesFilterSet(
-        data={"q": "rea"},
+        data={KEY_SEARCH: "rea"},
         queryset=Issue.objects.all(),
     ).qs
 
@@ -50,7 +53,7 @@ def test_empty_queryset(user):
     IssueFactory.create(title="issue", user=user)
 
     queryset = IssuesFilterSet(
-        data={"q": "012345"},
+        data={KEY_SEARCH: "012345"},
         queryset=Issue.objects.all(),
     ).qs
 
@@ -63,10 +66,10 @@ def test_by_gl_url(user):
 
     :param user:
     """
-    issue = IssueFactory.create(title="create", user=user, gl_url="foobar")
+    issue = IssueFactory.create(title="create", user=user, gl_url=KEY_SEARCH)
 
     queryset = IssuesFilterSet(
-        data={"q": "foobar"},
+        data={KEY_SEARCH: KEY_SEARCH},
         queryset=Issue.objects.all(),
     ).qs
 

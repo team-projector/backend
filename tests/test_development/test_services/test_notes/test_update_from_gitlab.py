@@ -8,6 +8,8 @@ from tests.test_development.factories.gitlab import GlNoteFactory
 from tests.test_development.test_gl.helpers import gl_mock
 from tests.test_users.factories.gitlab import GlUserFactory
 
+NOTE_BODY = "added 1h of time spent at 2000-01-01"
+
 
 def test_load_new(db, gl_mocker, gl_client):
     """
@@ -21,7 +23,7 @@ def test_load_new(db, gl_mocker, gl_client):
     gl_mock.register_user(gl_mocker, gl_author)
     gl_note = GlNoteFactory.create(
         author=gl_author,
-        body="added 1h of time spent at 2000-01-01",
+        body=NOTE_BODY,
     )
     issue = IssueFactory.create()
 
@@ -35,7 +37,7 @@ def test_load_new(db, gl_mocker, gl_client):
         note,
         gl_id=gl_note["id"],
         type=NoteType.TIME_SPEND,
-        body="added 1h of time spent at 2000-01-01",
+        body=NOTE_BODY,
         content_object=issue,
         data={"date": "2000-01-01", "spent": 3600},
     )
@@ -53,7 +55,7 @@ def test_update_immutable(db, gl_mocker, gl_client):
     gl_mock.register_user(gl_mocker, gl_author)
     gl_note = GlNoteFactory.create(
         author=gl_author,
-        body="added 1h of time spent at 2000-01-01",
+        body=NOTE_BODY,
     )
     issue = IssueFactory.create()
 
@@ -65,7 +67,7 @@ def test_update_immutable(db, gl_mocker, gl_client):
 
     assert note.gl_id == gl_note["id"]
     assert note.type == NoteType.TIME_SPEND
-    assert note.body == "added 1h of time spent at 2000-01-01"
+    assert note.body == NOTE_BODY
     assert note.data == {"date": "2000-01-01", "spent": 3600}
 
 

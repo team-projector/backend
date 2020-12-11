@@ -1,5 +1,8 @@
 from tests.test_development.factories.gitlab import GlTimeStats
 
+KEY_ID = "id"
+KEY_IID = "iid"
+
 
 def register_issue(mocker, project, issue):
     """
@@ -10,7 +13,7 @@ def register_issue(mocker, project, issue):
     :param issue:
     """
     mocker.register_get(
-        "/projects/{0}/issues/{1}".format(project["id"], issue["iid"]),
+        "/projects/{0}/issues/{1}".format(project[KEY_ID], issue[KEY_IID]),
         issue,
     )
 
@@ -26,8 +29,8 @@ def register_issue_participants(mocker, project, issue, participants):
     """
     mocker.register_get(
         "/projects/{0}/issues/{1}/participants".format(
-            project["id"],
-            issue["iid"],
+            project[KEY_ID],
+            issue[KEY_IID],
         ),
         participants,
     )
@@ -43,7 +46,10 @@ def register_issue_notes(mocker, project, issue, notes):
     :param notes:
     """
     mocker.register_get(
-        "/projects/{0}/issues/{1}/notes".format(project["id"], issue["iid"]),
+        "/projects/{0}/issues/{1}/notes".format(
+            project[KEY_ID],
+            issue[KEY_IID],
+        ),
         notes,
     )
 
@@ -58,7 +64,10 @@ def register_issue_labels(mocker, project, issue, labels):
     :param labels:
     """
     mocker.register_get(
-        "/projects/{0}/issues/{1}/labels".format(project["id"], issue["iid"]),
+        "/projects/{0}/issues/{1}/labels".format(
+            project[KEY_ID],
+            issue[KEY_IID],
+        ),
         labels,
     )
 
@@ -74,8 +83,8 @@ def register_issue_time_stats(mocker, project, issue, stats):
     """
     mocker.register_get(
         "/projects/{0}/issues/{1}/time_stats".format(
-            project["id"],
-            issue["iid"],
+            project[KEY_ID],
+            issue[KEY_IID],
         ),
         stats,
     )
@@ -92,8 +101,8 @@ def register_issue_closed_by(mocker, project, issue, closed_by):
     """
     mocker.register_get(
         "/projects/{0}/issues/{1}/closed_by".format(
-            project["id"],
-            issue["iid"],
+            project[KEY_ID],
+            issue[KEY_IID],
         ),
         closed_by,
     )

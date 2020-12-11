@@ -5,11 +5,13 @@ from tests.test_development.factories import ProjectGroupMilestoneFactory
 from tests.test_development.factories.gitlab import GlProjectMilestoneFactory
 from tests.test_development.test_gl.helpers import gl_mock, initializers
 
+KEY_PROJECT = "project"
+
 
 def test_empty_filter(milestones):
     """Test not filter."""
     filter_set = MilestonesFilterSet(
-        {"project": None},
+        {KEY_PROJECT: None},
         queryset=Milestone.objects,
     )
 
@@ -20,7 +22,7 @@ def test_empty_filter(milestones):
 def test_filter_by_project_empty(project, milestones):
     """Test filter by project."""
     filter_set = MilestonesFilterSet(
-        {"project": project.pk},
+        {KEY_PROJECT: project.pk},
         queryset=Milestone.objects,
     )
 
@@ -32,7 +34,7 @@ def test_filter_by_project(project, milestones):
     """Test filter by project."""
     project.milestones.add(milestones[2])
 
-    _assert_filter_set({"project": project.pk}, milestones[2])
+    _assert_filter_set({KEY_PROJECT: project.pk}, milestones[2])
 
 
 def test_filter_inherit(db, gl_mocker):
@@ -52,7 +54,7 @@ def test_filter_inherit(db, gl_mocker):
 
     MilestoneGlManager().sync_project_milestones(project)
 
-    _assert_filter_set({"project": project.pk}, group_milestone)
+    _assert_filter_set({KEY_PROJECT: project.pk}, group_milestone)
 
 
 def _assert_filter_set(query, value_result) -> None:

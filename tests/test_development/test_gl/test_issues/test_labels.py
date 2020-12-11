@@ -5,6 +5,7 @@ from apps.development.services.issue.gl.manager import IssueGlManager
 from tests.test_development.factories.gitlab import GlLabelFactory
 from tests.test_development.test_gl.helpers import gl_mock, initializers
 
+KEY_NAME = "name"
 GL_LOADER = namedtuple(
     "GlLoader",
     (
@@ -39,7 +40,7 @@ def test_labels(db, gl_mocker, gl_client):
 
     assert gl_loader.issue.gl_id == gl_loader.gl_issue["id"]
     assert gl_loader.issue.labels.count() == 1
-    assert gl_loader.issue.labels.first().title == gl_loader.gl_label["name"]
+    assert gl_loader.issue.labels.first().title == gl_loader.gl_label[KEY_NAME]
 
 
 def test_cached_labels(db, gl_mocker, gl_client):
@@ -63,12 +64,12 @@ def test_cached_labels(db, gl_mocker, gl_client):
     assert gl_loader.gl_project_manager.cached_labels is not None
 
     gl_loader.issue.refresh_from_db()
-    assert gl_loader.issue.labels.first().title == gl_loader.gl_label["name"]
+    assert gl_loader.issue.labels.first().title == gl_loader.gl_label[KEY_NAME]
 
     second_issue, gl_second_issue = initializers.init_issue(
         gl_loader.project,
         gl_loader.gl_project,
-        gl_kwargs={"labels": [gl_loader.gl_label["name"]]},
+        gl_kwargs={"labels": [gl_loader.gl_label[KEY_NAME]]},
     )
 
     gl_mock.mock_issue_endpoints(
@@ -89,7 +90,7 @@ def test_cached_labels(db, gl_mocker, gl_client):
     )
 
     second_issue.refresh_from_db()
-    assert second_issue.labels.first().title == gl_loader.gl_label["name"]
+    assert second_issue.labels.first().title == gl_loader.gl_label[KEY_NAME]
 
 
 def test_labels_is_empty(db, gl_mocker, gl_client):
@@ -120,7 +121,7 @@ def _create_gl_loader(gl_mocker, gl_client) -> GL_LOADER:
     issue, gl_issue = initializers.init_issue(
         project,
         gl_project,
-        gl_kwargs={"labels": [gl_label["name"]]},
+        gl_kwargs={"labels": [gl_label[KEY_NAME]]},
     )
 
     gl_mock.mock_project_endpoints(gl_mocker, gl_project, labels=[gl_label])
@@ -148,7 +149,7 @@ def _create_gl_loader_empty_labels(gl_mocker, gl_client) -> GL_LOADER:
     issue, gl_issue = initializers.init_issue(
         project,
         gl_project,
-        gl_kwargs={"labels": [gl_label["name"]]},
+        gl_kwargs={"labels": [gl_label[KEY_NAME]]},
     )
 
     gl_mock.mock_project_endpoints(gl_mocker, gl_project)

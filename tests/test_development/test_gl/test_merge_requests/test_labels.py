@@ -7,6 +7,7 @@ from apps.development.services.merge_request.gl.manager import (
 from tests.test_development.factories.gitlab import GlLabelFactory
 from tests.test_development.test_gl.helpers import gl_mock, initializers
 
+KEY_NAME = "name"
 GL_LOADER = namedtuple(
     "GlLoader",
     ("project", "gl_project", "gl_label", "merge_request", "gl_merge_request"),
@@ -50,7 +51,7 @@ def test_load(db, gl_mocker, gl_client):
 
     assert merge_request is not None
     assert merge_request.gl_id == gl_loader.gl_merge_request["id"]
-    assert merge_request.labels.first().title == gl_loader.gl_label["name"]
+    assert merge_request.labels.first().title == gl_loader.gl_label[KEY_NAME]
 
 
 def test_with_cached_labels(db, gl_mocker, gl_client):
@@ -66,7 +67,7 @@ def test_with_cached_labels(db, gl_mocker, gl_client):
     merge_request2, gl_merge_request2 = initializers.init_merge_request(
         gl_loader.project,
         gl_loader.gl_project,
-        gl_kwargs={"labels": [gl_loader.gl_label["name"]]},
+        gl_kwargs={"labels": [gl_loader.gl_label[KEY_NAME]]},
     )
 
     gl_mock.mock_project_endpoints(
@@ -106,7 +107,7 @@ def test_with_cached_labels(db, gl_mocker, gl_client):
 
     assert (
         gl_loader.merge_request.labels.first().title
-        == gl_loader.gl_label["name"]
+        == gl_loader.gl_label[KEY_NAME]
     )
 
     gl_merge_request_manager = gl_project_manager.mergerequests.get(
@@ -121,7 +122,7 @@ def test_with_cached_labels(db, gl_mocker, gl_client):
 
     merge_request2.refresh_from_db()
 
-    assert merge_request2.labels.first().title == gl_loader.gl_label["name"]
+    assert merge_request2.labels.first().title == gl_loader.gl_label[KEY_NAME]
 
 
 def test_empty(db, gl_mocker, gl_client):
@@ -156,7 +157,7 @@ def test_empty(db, gl_mocker, gl_client):
     merge_request = MergeRequest.objects.first()
 
     assert merge_request.gl_id == gl_loader.gl_merge_request["id"]
-    assert merge_request.labels.count() == 0
+    assert not merge_request.labels.exists()
 
 
 def _create_gitlab_loader() -> GL_LOADER:
@@ -166,7 +167,7 @@ def _create_gitlab_loader() -> GL_LOADER:
     merge_request, gl_merge_request = initializers.init_merge_request(
         project,
         gl_project,
-        gl_kwargs={"labels": [gl_label["name"]]},
+        gl_kwargs={"labels": [gl_label[KEY_NAME]]},
     )
 
     return GL_LOADER(

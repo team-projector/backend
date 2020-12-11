@@ -4,6 +4,8 @@ from apps.development.graphql.filters import IssuesFilterSet
 from apps.development.models.issue import Issue
 from tests.test_development.factories import IssueFactory
 
+KEY_ORDERING = "order_by"
+
 
 def test_by_title_asc(user):
     """
@@ -18,7 +20,7 @@ def test_by_title_asc(user):
     ]
 
     queryset = IssuesFilterSet(
-        data={"order_by": "title"},
+        data={KEY_ORDERING: "title"},
         queryset=Issue.objects.all(),
     ).qs
 
@@ -38,7 +40,7 @@ def test_by_title_desc(user):
     ]
 
     queryset = IssuesFilterSet(
-        data={"order_by": "-title"},
+        data={KEY_ORDERING: "-title"},
         queryset=Issue.objects.all(),
     ).qs
 
@@ -64,7 +66,7 @@ def test_by_due_date_asc(user):
     ]
 
     queryset = IssuesFilterSet(
-        data={"order_by": "dueDate"},
+        data={KEY_ORDERING: "dueDate"},
         queryset=Issue.objects.all(),
     ).qs
 
@@ -90,7 +92,7 @@ def test_by_due_date_desc(user):
     ]
 
     queryset = IssuesFilterSet(
-        data={"order_by": "-dueDate"},
+        data={KEY_ORDERING: "-dueDate"},
         queryset=Issue.objects.all(),
     ).qs
 

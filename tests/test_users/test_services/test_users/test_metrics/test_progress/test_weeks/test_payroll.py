@@ -14,6 +14,8 @@ from tests.test_users.test_services.test_users.test_metrics.test_progress.test_w
     checkers,
 )
 
+METRICS_GROUP_WEEK = "week"
+
 
 def test_opened(user):
     """
@@ -62,7 +64,7 @@ def test_opened(user):
         user,
         monday - timedelta(days=5),
         monday + timedelta(days=5),
-        "week",
+        METRICS_GROUP_WEEK,
     )
 
     checkers.check_user_progress_payroll_metrics(
@@ -130,7 +132,7 @@ def test_paid(user):
         user,
         monday - timedelta(days=5),
         monday + timedelta(days=5),
-        "week",
+        METRICS_GROUP_WEEK,
     )
 
     checkers.check_user_progress_payroll_metrics(
@@ -191,7 +193,7 @@ def test_closed(user):
         user,
         monday - timedelta(days=5),
         monday + timedelta(days=5),
-        "week",
+        METRICS_GROUP_WEEK,
     )
 
     checkers.check_user_progress_payroll_metrics(
@@ -267,7 +269,7 @@ def test_complex(user):
         user,
         monday - timedelta(days=5),
         monday + timedelta(days=5),
-        "week",
+        METRICS_GROUP_WEEK,
     )
 
     checkers.check_user_progress_payroll_metrics(
@@ -329,7 +331,7 @@ def test_first_week_day(user):
         user,
         sunday - timedelta(days=5),
         sunday + timedelta(days=5),
-        "week",
+        METRICS_GROUP_WEEK,
     )
 
     checkers.check_user_progress_payroll_metrics(
