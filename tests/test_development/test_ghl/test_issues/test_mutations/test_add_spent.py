@@ -8,6 +8,9 @@ from tests.test_development.factories.gitlab import (
     GlProjectFactory,
 )
 
+FIELD_FIELD_ERRORS = "fieldErrors"
+KEY_ID = "id"
+
 
 @pytest.fixture()
 def gl_project(db):
@@ -20,9 +23,9 @@ def test_query(project_manager, ghl_client, gl_mocker, ghl_raw, gl_project):
     project_manager.gl_token = "token"
     project_manager.save()
 
-    project = ProjectFactory.create(gl_id=gl_project["id"])
+    project = ProjectFactory.create(gl_id=gl_project[KEY_ID])
 
-    gl_project_issue = GlIssueFactory.create(id=gl_project["id"])
+    gl_project_issue = GlIssueFactory.create(id=gl_project[KEY_ID])
     issue = IssueFactory.create(
         gl_iid=gl_project_issue["iid"],
         user=project_manager,
@@ -34,13 +37,13 @@ def test_query(project_manager, ghl_client, gl_mocker, ghl_raw, gl_project):
 
     response = ghl_client.execute(
         ghl_raw("add_spend_time_issue"),
-        variable_values={"id": issue.pk, "seconds": 60},
+        variable_values={KEY_ID: issue.pk, "seconds": 60},
     )
 
     assert "errors" not in response
 
     dto = response["data"]["addSpendTimeIssue"]["issue"]
-    assert dto["id"] == str(issue.id)
+    assert dto[KEY_ID] == str(issue.id)
 
 
 def test_user_without_gl_token(
@@ -65,10 +68,10 @@ def test_user_without_gl_token(
     isinstance(resolve, GraphQLInputError)
 
     extensions = resolve.extensions  # noqa: WPS441
-    assert len(extensions["fieldErrors"]) == 1
-    assert extensions["fieldErrors"][0]["fieldName"] == "nonFieldErrors"
+    assert len(extensions[FIELD_FIELD_ERRORS]) == 1
+    assert extensions[FIELD_FIELD_ERRORS][0]["fieldName"] == "nonFieldErrors"
     assert (
-        extensions["fieldErrors"][0]["messages"][0]
+        extensions[FIELD_FIELD_ERRORS][0]["messages"][0]
         == NoPersonalGitLabToken.default_detail
     )
 
@@ -95,5 +98,5 @@ def test_bad_time(issue, user, ghl_auth_mock_info, add_spent_issue_mutation):
     isinstance(resolve, GraphQLInputError)
 
     extensions = resolve.extensions  # noqa: WPS441
-    assert len(extensions["fieldErrors"]) == 1
-    assert extensions["fieldErrors"][0]["fieldName"] == "seconds"
+    assert len(extensions[FIELD_FIELD_ERRORS]) == 1
+    assert extensions[FIELD_FIELD_ERRORS][0]["fieldName"] == "seconds"

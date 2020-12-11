@@ -16,6 +16,10 @@ from tests.test_users.test_services.test_users.test_metrics.test_progress.test_w
     checkers,
 )
 
+KEY_TIME_SPENT = "time_spent"
+KEY_SPENT = "spent"
+METRICS_GROUP_WEEK = "week"
+
 
 @pytest.fixture()
 def issue(team_developer):
@@ -60,8 +64,8 @@ def test_simple(team, team_developer, team_leader, issue):
 
     issue.time_estimate = seconds(hours=15)
     issue.total_time_spent = issue.time_spents.aggregate(
-        spent=Sum("time_spent"),
-    )["spent"]
+        spent=Sum(KEY_TIME_SPENT),
+    )[KEY_SPENT]
     issue.state = IssueState.OPENED
     issue.due_date = monday + timedelta(days=1)
     issue.save()
@@ -70,7 +74,7 @@ def test_simple(team, team_developer, team_leader, issue):
         team,
         monday - timedelta(days=5),
         monday + timedelta(days=5),
-        "week",
+        METRICS_GROUP_WEEK,
     )
 
     assert len(metrics) == 2
@@ -125,8 +129,8 @@ def test_many_weeks(team, team_developer, issue):
 
     issue.time_estimate = seconds(hours=15)
     issue.total_time_spent = issue.time_spents.aggregate(
-        spent=Sum("time_spent"),
-    )["spent"]
+        spent=Sum(KEY_TIME_SPENT),
+    )[KEY_SPENT]
     issue.due_date = monday + timedelta(days=2)
     issue.save()
 
@@ -134,7 +138,7 @@ def test_many_weeks(team, team_developer, issue):
         team,
         monday - timedelta(days=5),
         monday + timedelta(days=5),
-        "week",
+        METRICS_GROUP_WEEK,
     )
 
     developer_metrics = next(
@@ -190,8 +194,8 @@ def test_not_in_range(team, team_developer, issue):
 
     issue.time_estimate = seconds(hours=15)
     issue.total_time_spent = issue.time_spents.aggregate(
-        spent=Sum("time_spent"),
-    )["spent"]
+        spent=Sum(KEY_TIME_SPENT),
+    )[KEY_SPENT]
     issue.state = IssueState.OPENED
     issue.due_date = monday + timedelta(days=1)
     issue.save()
@@ -200,7 +204,7 @@ def test_not_in_range(team, team_developer, issue):
         team,
         monday,
         monday + timedelta(weeks=1, days=5),
-        "week",
+        METRICS_GROUP_WEEK,
     )
 
     developer_metrics = next(
@@ -253,15 +257,15 @@ def test_another_user(team, team_developer, another_user, issue):
 
     issue.time_estimate = seconds(hours=15)
     issue.total_time_spent = issue.time_spents.aggregate(
-        spent=Sum("time_spent"),
-    )["spent"]
+        spent=Sum(KEY_TIME_SPENT),
+    )[KEY_SPENT]
     issue.state = IssueState.OPENED
     issue.due_date = monday + timedelta(days=1)
     issue.save()
 
     start = monday - timedelta(days=5)
     end = monday + timedelta(days=5)
-    metrics = get_progress_metrics(team, start, end, "week")
+    metrics = get_progress_metrics(team, start, end, METRICS_GROUP_WEEK)
 
     developer_metrics = next(
         metric.metrics for metric in metrics if metric.user == team_developer
@@ -319,22 +323,22 @@ def test_many_issues(team, team_developer, issue):
 
     issue.time_estimate = seconds(hours=15)
     issue.total_time_spent = issue.time_spents.aggregate(
-        spent=Sum("time_spent"),
-    )["spent"]
+        spent=Sum(KEY_TIME_SPENT),
+    )[KEY_SPENT]
     issue.state = IssueState.OPENED
     issue.due_date = monday + timedelta(days=1)
     issue.save()
 
     another_issue.total_time_spent = another_issue.time_spents.aggregate(
-        spent=Sum("time_spent"),
-    )["spent"]
+        spent=Sum(KEY_TIME_SPENT),
+    )[KEY_SPENT]
     another_issue.save()
 
     metrics = get_progress_metrics(
         team,
         monday - timedelta(days=5),
         monday + timedelta(days=5),
-        "week",
+        METRICS_GROUP_WEEK,
     )
 
     developer_metrics = next(

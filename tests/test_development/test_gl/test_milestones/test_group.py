@@ -7,6 +7,8 @@ from tests.test_development.test_gl.helpers import (
     initializers,
 )
 
+KEY_ID = "id"
+
 
 def test_all(db, gl_mocker):
     """
@@ -16,7 +18,7 @@ def test_all(db, gl_mocker):
     :param gl_mocker:
     """
     group, gl_group = initializers.init_group()
-    gl_milestone = GlGroupMilestoneFactory.create(group_id=gl_group["id"])
+    gl_milestone = GlGroupMilestoneFactory.create(group_id=gl_group[KEY_ID])
 
     gl_mock.mock_group_endpoints(
         gl_mocker,
@@ -26,7 +28,7 @@ def test_all(db, gl_mocker):
 
     MilestoneGlManager().sync_project_group_milestones(group)
 
-    milestone = Milestone.objects.get(gl_id=gl_milestone["id"])
+    milestone = Milestone.objects.get(gl_id=gl_milestone[KEY_ID])
     gl_checkers.check_milestone(milestone, gl_milestone, group)
     assert (
         list(
@@ -55,8 +57,8 @@ def test_single(db, gl_mocker):
 
     MilestoneGlManager().sync_project_group_milestone(
         group,
-        gl_milestone["id"],
+        gl_milestone[KEY_ID],
     )
 
-    milestone = Milestone.objects.get(gl_id=gl_milestone["id"])
+    milestone = Milestone.objects.get(gl_id=gl_milestone[KEY_ID])
     gl_checkers.check_milestone(milestone, gl_milestone, group)

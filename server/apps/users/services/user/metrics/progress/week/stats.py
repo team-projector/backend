@@ -14,6 +14,8 @@ from apps.payroll.services.spent_time.summary import (
 )
 from apps.users.models import User
 
+GROUP_STATS_WEEK = "week"
+
 
 class UserWeekStatsProvider:
     """User per week stats."""
@@ -38,12 +40,12 @@ class UserWeekStatsProvider:
                 date__range=(self._start, self._end),
                 week__isnull=False,
             )
-            .values("week")
+            .values(GROUP_STATS_WEEK)
             .annotate(period_spent=models.Sum("time_spent"))
             .order_by()
         )
 
-        return {stats["week"]: stats for stats in queryset}
+        return {stats[GROUP_STATS_WEEK]: stats for stats in queryset}
 
     def get_deadlines_stats(self) -> Dict[date, Dict[str, int]]:
         """Get user deadlines."""
@@ -55,7 +57,7 @@ class UserWeekStatsProvider:
                 due_date__lt=self._end,
                 week__isnull=False,
             )
-            .values("week")
+            .values(GROUP_STATS_WEEK)
             .annotate(
                 issues_count=models.Count("*"),
                 total_time_estimate=Coalesce(models.Sum("time_estimate"), 0),
@@ -63,7 +65,7 @@ class UserWeekStatsProvider:
             .order_by()
         )
 
-        return {stats["week"]: stats for stats in queryset}
+        return {stats[GROUP_STATS_WEEK]: stats for stats in queryset}
 
     def get_efficiency_stats(self) -> Dict[date, Dict[str, float]]:
         """Get user efficiency."""
@@ -82,7 +84,7 @@ class UserWeekStatsProvider:
                 time_estimate__gt=0,
                 week__isnull=False,
             )
-            .values("week")
+            .values(GROUP_STATS_WEEK)
             .annotate(
                 avg_efficiency=Coalesce(
                     Cast(
@@ -99,7 +101,7 @@ class UserWeekStatsProvider:
             .order_by()
         )
 
-        return {stats["week"]: stats for stats in queryset}
+        return {stats[GROUP_STATS_WEEK]: stats for stats in queryset}
 
     def get_payrolls_stats(self) -> Dict[date, Dict[str, float]]:
         """Get user payrolls."""
@@ -113,7 +115,7 @@ class UserWeekStatsProvider:
                 date__range=(self._start, self._end),
                 week__isnull=False,
             )
-            .values("week")
+            .values(GROUP_STATS_WEEK)
             .annotate(
                 total_payroll=Coalesce(models.Sum("sum"), 0),
                 total_paid=Coalesce(models.Sum("paid"), 0),
@@ -121,4 +123,4 @@ class UserWeekStatsProvider:
             .order_by()
         )
 
-        return {stats["week"]: stats for stats in queryset}
+        return {stats[GROUP_STATS_WEEK]: stats for stats in queryset}

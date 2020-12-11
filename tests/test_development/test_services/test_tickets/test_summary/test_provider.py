@@ -6,6 +6,8 @@ from tests.test_development.factories import (
     TicketFactory,
 )
 
+KEY_COUNT = "count"
+
 
 def test_all_fields(db):
     """
@@ -16,7 +18,7 @@ def test_all_fields(db):
     summary = TicketsSummaryProvider(Ticket.objects.all()).get_data()
     assert summary == {
         "accepting_count": 0,
-        "count": 0,
+        KEY_COUNT: 0,
         "created_count": 0,
         "doing_count": 0,
         "done_count": 0,
@@ -36,7 +38,7 @@ def test_selected_fields(db):
         fields=("count", "doing_count"),
     ).get_data()
 
-    assert summary == {"count": 0, "doing_count": 0}
+    assert summary == {KEY_COUNT: 0, "doing_count": 0}
 
 
 def test_prefiltered_qs(db):
@@ -56,4 +58,4 @@ def test_prefiltered_qs(db):
         fields=("count", "planning_count", "created_count"),
     ).get_data()
 
-    assert summary == {"count": 2, "planning_count": 1, "created_count": 1}
+    assert summary == {KEY_COUNT: 2, "planning_count": 1, "created_count": 1}

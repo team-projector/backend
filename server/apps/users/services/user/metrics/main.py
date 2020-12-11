@@ -15,6 +15,10 @@ from apps.users.services.user.metrics import (
     paid_work_breaks_days_resolver,
 )
 
+KEY_METRICS_TAXES = "taxes"
+FIELD_SUM = "sum"
+FIELD_TIME_SPENT = "time_spent"
+
 
 class UserMetricsProvider:
     """Merge Request user metrics."""
@@ -33,13 +37,13 @@ class UserMetricsProvider:
         for field, metric in metrics.items():
             deep_set(return_metrics, field, metric)
 
-        if return_metrics.get("taxes", None) is not None:
+        if return_metrics.get(KEY_METRICS_TAXES, None) is not None:
             bonus = self._get_bonus(user) - self._get_penalty(user)
-            return_metrics["taxes"] += bonus * Decimal.from_float(
+            return_metrics[KEY_METRICS_TAXES] += bonus * Decimal.from_float(
                 user.tax_rate,
             )
-            return_metrics["taxes"] = max(
-                return_metrics["taxes"],
+            return_metrics[KEY_METRICS_TAXES] = max(
+                return_metrics[KEY_METRICS_TAXES],
                 Decimal(0),
             ).quantize(
                 Decimal("1.00"),
@@ -98,7 +102,7 @@ class UserMetricsProvider:
         self._bonus = Bonus.objects.filter(
             user=user,
             salary__isnull=True,
-        ).aggregate(total=Coalesce(models.Sum("sum"), 0))["total"]
+        ).aggregate(total=Coalesce(models.Sum(FIELD_SUM), 0))["total"]
         return self._bonus
 
     def _get_penalty(self, user) -> Decimal:
@@ -109,7 +113,7 @@ class UserMetricsProvider:
         self._penalty = Penalty.objects.filter(
             user=user,
             salary__isnull=True,
-        ).aggregate(total=Coalesce(models.Sum("sum"), 0))["total"]
+        ).aggregate(total=Coalesce(models.Sum(FIELD_SUM), 0))["total"]
         return self._penalty
 
     def _is_metric_requested(self, metric: str):
@@ -147,19 +151,19 @@ class _Aggregations:
         """Call aggregations."""
         ret = {
             "issues.opened_spent": Coalesce(
-                models.Sum("time_spent", filter=self.issue_opened),
+                models.Sum(FIELD_TIME_SPENT, filter=self.issue_opened),
                 0,
             ),
             "issues.closed_spent": Coalesce(
                 models.Sum(
-                    "time_spent",
+                    FIELD_TIME_SPENT,
                     filter=models.Q(issues__state=IssueState.CLOSED),
                 ),
                 0,
             ),
             "merge_requests.closed_spent": Coalesce(
                 models.Sum(
-                    "time_spent",
+                    FIELD_TIME_SPENT,
                     filter=models.Q(
                         mergerequests__state__in=(
                             MergeRequestState.CLOSED,
@@ -170,19 +174,19 @@ class _Aggregations:
                 0,
             ),
             "merge_requests.opened_spent": Coalesce(
-                models.Sum("time_spent", filter=self.mreq_opened),
+                models.Sum(FIELD_TIME_SPENT, filter=self.mreq_opened),
                 0,
             ),
             "opened_spent": Coalesce(
                 models.Sum(
-                    "time_spent",
+                    FIELD_TIME_SPENT,
                     filter=self.issue_opened | self.mreq_opened,
                 ),
                 0,
             ),
             "closed_spent": Coalesce(
                 models.Sum(
-                    "time_spent",
+                    FIELD_TIME_SPENT,
                     filter=models.Q(
                         models.Q(issues__state=IssueState.CLOSED)
                         | models.Q(
@@ -251,32 +255,32 @@ class _WorkItemAggregations:
     ) -> Dict[str, models.Expression]:
         """Call work item aggregations."""
         return {
-            "payroll": Coalesce(models.Sum("sum", filter=filters.all), 0),
+            "payroll": Coalesce(models.Sum(FIELD_SUM, filter=filters.all), 0),
             "payroll_opened": Coalesce(
-                models.Sum("sum", filter=filters.opened),
+                models.Sum(FIELD_SUM, filter=filters.opened),
                 0,
             ),
             "payroll_closed": Coalesce(
-                models.Sum("sum", filter=filters.closed),
+                models.Sum(FIELD_SUM, filter=filters.closed),
                 0,
             ),
             "taxes": Coalesce(
                 models.Sum(
-                    models.F("sum") * self.tax_rate,
+                    models.F(FIELD_SUM) * self.tax_rate,
                     filter=filters.all,
                 ),
                 0,
             ),
             "taxes_opened": Coalesce(
                 models.Sum(
-                    models.F("sum") * self.tax_rate,
+                    models.F(FIELD_SUM) * self.tax_rate,
                     filter=filters.opened,
                 ),
                 0,
             ),
             "taxes_closed": Coalesce(
                 models.Sum(
-                    models.F("sum") * self.tax_rate,
+                    models.F(FIELD_SUM) * self.tax_rate,
                     filter=filters.closed,
                 ),
                 0,

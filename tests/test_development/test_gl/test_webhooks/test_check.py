@@ -9,14 +9,21 @@ from httpretty.core import HTTPrettyRequest
 from apps.development.services.project.gl.webhooks import ProjectWebhookManager
 from tests.test_development.test_gl.helpers import gl_mock, initializers
 
+KEY_URL = "url"
+KEY_ISSUES_EVENTS = "issues_events"
+KEY_MERGE_REQUEST_EVENTS = "merge_requests_events"
+KEY_PIPELINE_EVENTS = "pipeline_events"
+KEY_NOTE_EVENTS = "note_events"
+KEY_TOKEN = "token"
+
 CREATE_WEBHOOK_BODY = types.MappingProxyType(
     {
-        "url": "https://test.com/api/gl-webhook",
-        "issues_events": True,
-        "merge_requests_events": True,
-        "pipeline_events": True,
-        "note_events": True,
-        "token": "",
+        KEY_URL: "https://test.com/api/gl-webhook",
+        KEY_ISSUES_EVENTS: True,
+        KEY_MERGE_REQUEST_EVENTS: True,
+        KEY_PIPELINE_EVENTS: True,
+        KEY_NOTE_EVENTS: True,
+        KEY_TOKEN: "",
     },
 )
 
@@ -81,12 +88,12 @@ def test_already_exists(db, gl_mocker, client):
         gl_mocker,
         gl_project,
         {
-            "url": "https://test.com/api/gl-webhook",
-            "issues_events": True,
-            "merge_requests_events": True,
-            "pipeline_events": True,
-            "note_events": True,
-            "token": None,
+            KEY_URL: "https://test.com/api/gl-webhook",
+            KEY_ISSUES_EVENTS: True,
+            KEY_MERGE_REQUEST_EVENTS: True,
+            KEY_PIPELINE_EVENTS: True,
+            KEY_NOTE_EVENTS: True,
+            KEY_TOKEN: None,
         },
     )
 
@@ -108,10 +115,10 @@ def test_exists_another(db, gl_mocker, client):
         gl_mocker,
         gl_project,
         {
-            "url": "https://another.com/api/gl-webhook",
-            "issues_events": True,
-            "merge_requests_events": True,
-            "token": None,
+            KEY_URL: "https://another.com/api/gl-webhook",
+            KEY_ISSUES_EVENTS: True,
+            KEY_MERGE_REQUEST_EVENTS: True,
+            KEY_TOKEN: None,
         },
     )
 
@@ -134,10 +141,10 @@ def test_fix_wrong(db, gl_mocker, client):
         gl_mocker,
         gl_project,
         {
-            "url": "https://test.com/api/gl-webhook",
-            "issues_events": True,
-            "merge_requests_events": False,
-            "token": None,
+            KEY_URL: "https://test.com/api/gl-webhook",
+            KEY_ISSUES_EVENTS: True,
+            KEY_MERGE_REQUEST_EVENTS: False,
+            KEY_TOKEN: None,
         },
     )
 

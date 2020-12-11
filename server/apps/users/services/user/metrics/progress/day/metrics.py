@@ -10,6 +10,8 @@ from apps.users.services.user.metrics.progress.day.stats import (
     UserDayStatsProvider,
 )
 
+KEY_REMAINING = "remaining"
+
 
 class UserDaysMetricsGenerator:
     """User days metrics generator."""
@@ -148,7 +150,7 @@ class UserDaysMetricsGenerator:
         ]
 
         for issue in deadline_issues:
-            metric.loading += issue["remaining"]
+            metric.loading += issue[KEY_REMAINING]
             active_issues.remove(issue)
 
     def _apply_active_issues_loading(
@@ -168,10 +170,10 @@ class UserDaysMetricsGenerator:
         for issue in active_issues[:]:
             available_time = self._max_day_loading - metric.loading
 
-            loading = min(available_time, issue["remaining"])
+            loading = min(available_time, issue[KEY_REMAINING])
 
             metric.loading += loading
 
-            issue["remaining"] -= loading
-            if not issue["remaining"]:
+            issue[KEY_REMAINING] -= loading
+            if not issue[KEY_REMAINING]:
                 active_issues.remove(issue)

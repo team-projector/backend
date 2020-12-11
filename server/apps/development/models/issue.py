@@ -21,6 +21,7 @@ class IssueState(models.TextChoices):
 
 
 ISSUE_STATE_MAX_LENGTH = 255
+ISSUES_RELATED_NAME = "issues"
 
 
 class Issue(
@@ -76,7 +77,7 @@ class Issue(
 
     labels = models.ManyToManyField(
         "development.Label",
-        related_name="issues",
+        related_name=ISSUES_RELATED_NAME,
         blank=True,
     )
 
@@ -85,7 +86,7 @@ class Issue(
         models.SET_NULL,
         null=True,
         blank=True,
-        related_name="issues",
+        related_name=ISSUES_RELATED_NAME,
         verbose_name=_("VN__PROJECT"),
         help_text=_("HT__PROJECT"),
     )
@@ -111,7 +112,7 @@ class Issue(
         on_delete=models.SET_NULL,
         null=True,
         blank=True,
-        related_name="issues",
+        related_name=ISSUES_RELATED_NAME,
     )
 
     participants = models.ManyToManyField(
@@ -123,7 +124,7 @@ class Issue(
     merge_requests = models.ManyToManyField(  # noqa: CCE001
         "development.MergeRequest",
         blank=True,
-        related_name="issues",
+        related_name=ISSUES_RELATED_NAME,
     )
 
     author = models.ForeignKey(

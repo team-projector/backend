@@ -10,6 +10,8 @@ from apps.core.graphql.security.authentication import TokenAuthentication
 from apps.users.models import Token, User
 from apps.users.services.token.create import create_user_token
 
+ROOT_URL = "/"
+
 
 @pytest.fixture()
 def auth() -> TokenAuthentication:
@@ -53,7 +55,7 @@ def test_fail(rf, auth):
     :param rf:
     :param auth:
     """
-    assert auth.authenticate(rf.get("/")) is None
+    assert auth.authenticate(rf.get(ROOT_URL)) is None
 
 
 def test_success(rf, auth, user_token):
@@ -64,7 +66,7 @@ def test_success(rf, auth, user_token):
     :param auth:
     :param user_token:
     """
-    request = rf.get("/")
+    request = rf.get(ROOT_URL)
     set_http_auth_header(request, user_token)
 
     assert auth.authenticate(request) is not None
@@ -83,7 +85,7 @@ def test_expired_token(rf, auth, user_token):
     )
     user_token.save()
 
-    request = rf.get("/")
+    request = rf.get(ROOT_URL)
     set_http_auth_header(request, user_token)
 
     with pytest.raises(AuthenticationFailed, match="Token has expired"):
@@ -100,7 +102,7 @@ def test_invalid_token(rf, auth, user_token):
     """
     user_token.key = "{0}123456".format(user_token.key)
 
-    request = rf.get("/")
+    request = rf.get(ROOT_URL)
     set_http_auth_header(request, user_token)
 
     with pytest.raises(AuthenticationFailed, match="Invalid token."):

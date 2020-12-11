@@ -1,5 +1,7 @@
 from http import HTTPStatus
 
+KEY_ID = "id"
+
 
 class _ProjectMocker:
     def __init__(self, mocker, project):
@@ -15,7 +17,7 @@ class _ProjectMocker:
         :type status_code: int, defaults to HTTPStatus.OK
         """
         self._mocker.register_get(
-            "/projects/{0}".format(self._project["id"]),
+            "/projects/{0}".format(self._project[KEY_ID]),
             self._project,
             status_code=status_code,
         )
@@ -27,7 +29,7 @@ class _ProjectMocker:
         :param hooks:
         """
         self._mocker.register_get(
-            "/projects/{0}/hooks".format(self._project["id"]),
+            "/projects/{0}/hooks".format(self._project[KEY_ID]),
             hooks,
         )
 
@@ -38,7 +40,7 @@ class _ProjectMocker:
         :param labels:
         """
         self._mocker.register_get(
-            "/projects/{0}/labels".format(self._project["id"]),
+            "/projects/{0}/labels".format(self._project[KEY_ID]),
             labels,
         )
 
@@ -49,7 +51,7 @@ class _ProjectMocker:
         :param issues:
         """
         self._mocker.register_get(
-            "/projects/{0}/issues".format(self._project["id"]),
+            "/projects/{0}/issues".format(self._project[KEY_ID]),
             issues,
         )
 
@@ -60,14 +62,14 @@ class _ProjectMocker:
         :param milestones:
         """
         self._mocker.register_get(
-            "/projects/{0}/milestones".format(self._project["id"]),
+            "/projects/{0}/milestones".format(self._project[KEY_ID]),
             milestones,
         )
         for milestone in milestones:
             self._mocker.register_get(
                 "/projects/{0}/milestones/{1}".format(
-                    self._project["id"],
-                    milestone["id"],
+                    self._project[KEY_ID],
+                    milestone[KEY_ID],
                 ),
                 milestone,
             )
@@ -79,7 +81,7 @@ class _ProjectMocker:
         :param merge_requests:
         """
         self._mocker.register_get(
-            "/projects/{0}/merge_requests".format(self._project["id"]),
+            "/projects/{0}/merge_requests".format(self._project[KEY_ID]),
             merge_requests,
         )
 
@@ -92,7 +94,10 @@ def mock_create_project_hook(mocker, project, response):
     :param project:
     :param response:
     """
-    mocker.register_post("/projects/{0}/hooks".format(project["id"]), response)
+    mocker.register_post(
+        "/projects/{0}/hooks".format(project[KEY_ID]),
+        response,
+    )
 
 
 def mock_delete_project_hook(mocker, project, response=None):
@@ -104,7 +109,7 @@ def mock_delete_project_hook(mocker, project, response=None):
     :param response:
     """
     mocker.register_delete(
-        "/projects/{0}/hooks".format(project["id"]),
+        "/projects/{0}/hooks".format(project[KEY_ID]),
         response,
     )
 

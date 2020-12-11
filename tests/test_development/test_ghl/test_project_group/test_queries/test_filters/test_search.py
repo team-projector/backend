@@ -4,6 +4,8 @@ from apps.development.graphql.filters import ProjectGroupsFilterSet
 from apps.development.models import ProjectGroup
 from tests.test_development.factories import ProjectGroupFactory
 
+KEY_SEARCH = "q"
+
 
 @pytest.fixture()
 def groups(db):
@@ -18,7 +20,7 @@ def groups(db):
 def test_search_empty(groups):
     """Test search no parameter."""
     filter_set = ProjectGroupsFilterSet(
-        {"q": ""},
+        {KEY_SEARCH: ""},
         ProjectGroup.objects.all(),
     )
 
@@ -29,7 +31,7 @@ def test_search_empty(groups):
 def test_search_not_found(groups):
     """Test search not found."""
     filter_set = ProjectGroupsFilterSet(
-        {"q": "d"},
+        {KEY_SEARCH: "d"},
         ProjectGroup.objects.all(),
     )
 
@@ -40,7 +42,7 @@ def test_search_not_found(groups):
 def test_search_by_title(groups):
     """Test search by title."""
     filter_set = ProjectGroupsFilterSet(
-        {"q": "b"},
+        {KEY_SEARCH: "b"},
         ProjectGroup.objects.all(),
     )
 
@@ -52,7 +54,7 @@ def test_search_by_title(groups):
 def test_search_by_gl_url(groups):
     """Test search by gl_url."""
     filter_set = ProjectGroupsFilterSet(
-        {"q": groups[2].gl_url},
+        {KEY_SEARCH: groups[2].gl_url},
         ProjectGroup.objects.all(),
     )
 
@@ -64,7 +66,7 @@ def test_search_by_gl_url(groups):
 def test_search_by_gl_url_not_found(groups):
     """Test search by gl_url not found."""
     filter_set = ProjectGroupsFilterSet(
-        {"q": "http://gl.com/d"},
+        {KEY_SEARCH: "http://gl.com/d"},
         ProjectGroup.objects.all(),
     )
 

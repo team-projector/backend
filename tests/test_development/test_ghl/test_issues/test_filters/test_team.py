@@ -8,6 +8,8 @@ from tests.test_development.factories import (
 )
 from tests.test_users.factories.user import UserFactory
 
+KEY_TEAM = "team"
+
 
 def test_by_team_with_one_member(user):
     """
@@ -27,7 +29,7 @@ def test_by_team_with_one_member(user):
     IssueFactory.create_batch(5, user=UserFactory.create())
 
     queryset = IssuesFilterSet(
-        data={"team": team.id},
+        data={KEY_TEAM: team.id},
         queryset=Issue.objects.all(),
     ).qs
 
@@ -62,7 +64,7 @@ def test_by_team_with_many_members(user):
     IssueFactory.create_batch(4, user=UserFactory.create())
 
     queryset = IssuesFilterSet(
-        data={"team": team.id},
+        data={KEY_TEAM: team.id},
         queryset=Issue.objects.all(),
     ).qs
 
@@ -102,7 +104,7 @@ def test_by_team_with_watcher(user):
     )
 
     queryset = IssuesFilterSet(
-        data={"team": team.id},
+        data={KEY_TEAM: team.id},
         queryset=Issue.objects.all(),
     ).qs
 
@@ -110,7 +112,7 @@ def test_by_team_with_watcher(user):
     assert all(issue.user == user for issue in queryset)
 
     queryset = IssuesFilterSet(
-        data={"team": another_team.id},
+        data={KEY_TEAM: another_team.id},
         queryset=Issue.objects.all(),
     ).qs
 

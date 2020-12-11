@@ -8,6 +8,9 @@ from tests.test_development.factories import (
     ProjectMilestoneFactory,
 )
 
+KEY_COUNT = "count"
+KEY_ACTIVE_COUNT = "active_count"
+
 
 def test_all_fields(db):
     """
@@ -16,7 +19,7 @@ def test_all_fields(db):
     :param db:
     """
     summary = MilestonesSummaryProvider(Milestone.objects.all()).get_data()
-    assert summary == {"count": 0, "active_count": 0, "closed_count": 0}
+    assert summary == {KEY_COUNT: 0, KEY_ACTIVE_COUNT: 0, "closed_count": 0}
 
 
 def test_selected_fields(db):
@@ -30,7 +33,7 @@ def test_selected_fields(db):
         fields=("count", "active_count"),
     ).get_data()
 
-    assert summary == {"count": 0, "active_count": 0}
+    assert summary == {KEY_COUNT: 0, KEY_ACTIVE_COUNT: 0}
 
 
 def test_prefiltered_qs(db):
@@ -50,4 +53,4 @@ def test_prefiltered_qs(db):
         fields=("count", "active_count", "closed_count"),
     ).get_data()
 
-    assert summary == {"count": 2, "active_count": 1, "closed_count": 1}
+    assert summary == {KEY_COUNT: 2, KEY_ACTIVE_COUNT: 1, "closed_count": 1}

@@ -7,6 +7,8 @@ from tests.test_development.test_gl.helpers import gl_mock, initializers
 from tests.test_users.factories.gitlab import GlUserFactory
 from tests.test_users.factories.user import UserFactory
 
+KEY_ID = "id"
+
 
 def test_query(make_group_manager, ghl_client, gl_mocker, user, ghl_raw):
     """
@@ -26,13 +28,13 @@ def test_query(make_group_manager, ghl_client, gl_mocker, user, ghl_raw):
     ghl_client.set_user(user)
     response = ghl_client.execute(
         ghl_raw("sync_milestone"),
-        variable_values={"id": milestone.pk},
+        variable_values={KEY_ID: milestone.pk},
     )
 
     assert "errors" not in response
 
     dto = response["data"]["syncMilestone"]["milestone"]
-    assert dto["id"] == str(milestone.id)
+    assert dto[KEY_ID] == str(milestone.id)
 
     milestone.refresh_from_db()
     assert milestone.state == MilestoneState.CLOSED
@@ -58,7 +60,7 @@ def test_project_milestone(
     gl_milestone = GlGroupMilestoneFactory.create(state=MilestoneState.CLOSED)
 
     gl_assignee = GlUserFactory.create()
-    UserFactory.create(gl_id=gl_assignee["id"])
+    UserFactory.create(gl_id=gl_assignee[KEY_ID])
 
     gl_mock.register_user(gl_mocker, gl_assignee)
     gl_mock.mock_project_endpoints(
@@ -68,7 +70,7 @@ def test_project_milestone(
     )
 
     milestone = ProjectGroupMilestoneFactory.create(
-        gl_id=gl_milestone["id"],
+        gl_id=gl_milestone[KEY_ID],
         owner=group,
         state=MilestoneState.ACTIVE,
     )
@@ -110,14 +112,14 @@ def test_without_access(
 
     extensions = resolve.extensions  # noqa: WPS441
     assert len(extensions["fieldErrors"]) == 1
-    assert extensions["fieldErrors"][0]["fieldName"] == "id"
+    assert extensions["fieldErrors"][0]["fieldName"] == KEY_ID
 
 
 def _prepare_sync_data(gl_mocker, group, gl_group) -> Milestone:
     gl_milestone = GlGroupMilestoneFactory.create(state=MilestoneState.CLOSED)
 
     gl_assignee = GlUserFactory.create()
-    UserFactory.create(gl_id=gl_assignee["id"])
+    UserFactory.create(gl_id=gl_assignee[KEY_ID])
 
     gl_mock.register_user(gl_mocker, gl_assignee)
     gl_mock.mock_group_endpoints(
@@ -127,7 +129,7 @@ def _prepare_sync_data(gl_mocker, group, gl_group) -> Milestone:
     )
 
     return ProjectGroupMilestoneFactory.create(
-        gl_id=gl_milestone["id"],
+        gl_id=gl_milestone[KEY_ID],
         owner=group,
         state=MilestoneState.ACTIVE,
     )

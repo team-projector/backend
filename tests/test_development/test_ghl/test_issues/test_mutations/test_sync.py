@@ -6,6 +6,8 @@ from tests.test_development.test_gl.helpers import gl_mock, initializers
 from tests.test_users.factories.gitlab import GlUserFactory
 from tests.test_users.factories.user import UserFactory
 
+KEY_ID = "id"
+
 
 def test_query(project_manager, ghl_client, gl_mocker, user, ghl_raw):
     """
@@ -24,13 +26,13 @@ def test_query(project_manager, ghl_client, gl_mocker, user, ghl_raw):
 
     response = ghl_client.execute(
         ghl_raw("sync_issue"),
-        variable_values={"id": issue.pk},
+        variable_values={KEY_ID: issue.pk},
     )
 
     assert "errors" not in response
 
     dto = response["data"]["syncIssue"]["issue"]
-    assert dto["id"] == str(issue.id)
+    assert dto[KEY_ID] == str(issue.id)
 
     issue.refresh_from_db()
     assert issue.state == IssueState.CLOSED
@@ -40,7 +42,7 @@ def _prepare_sync_data(user, gl_mocker) -> Issue:
     project, gl_project = initializers.init_project()
 
     gl_assignee = GlUserFactory.create()
-    UserFactory.create(gl_id=gl_assignee["id"])
+    UserFactory.create(gl_id=gl_assignee[KEY_ID])
 
     issue, gl_issue = initializers.init_issue(
         project,
@@ -84,4 +86,4 @@ def test_without_access(
 
     extensions = resolve.extensions
     assert len(extensions["fieldErrors"]) == 1
-    assert extensions["fieldErrors"][0]["fieldName"] == "id"
+    assert extensions["fieldErrors"][0]["fieldName"] == KEY_ID

@@ -2,6 +2,8 @@ from jnt_django_graphene_toolbox.errors import GraphQLInputError
 
 from tests.test_development.factories import IssueFactory
 
+KEY_ID = "id"
+
 
 def test_query(issue, ticket, ghl_client, user, ghl_raw):
     """
@@ -18,14 +20,14 @@ def test_query(issue, ticket, ghl_client, user, ghl_raw):
 
     response = ghl_client.execute(
         ghl_raw("update_issue"),
-        variable_values={"id": issue.pk, "ticket": ticket.pk},
+        variable_values={KEY_ID: issue.pk, "ticket": ticket.pk},
     )
 
     assert "errors" not in response
 
     dto = response["data"]["updateIssue"]["issue"]
-    assert dto["id"] == str(issue.id)
-    assert dto["ticket"]["id"] == str(ticket.id)
+    assert dto[KEY_ID] == str(issue.id)
+    assert dto["ticket"][KEY_ID] == str(ticket.id)
 
     issue.refresh_from_db()
     assert issue.ticket == ticket
@@ -58,7 +60,7 @@ def test_without_access(
 
     extensions = resolve.extensions
     assert len(extensions["fieldErrors"]) == 1
-    assert extensions["fieldErrors"][0]["fieldName"] == "id"
+    assert extensions["fieldErrors"][0]["fieldName"] == KEY_ID
 
 
 def test_ticket_propagation(

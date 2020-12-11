@@ -3,8 +3,10 @@ from apps.development.models import Project, ProjectGroup
 from apps.development.services.milestone.gl.manager import MilestoneGlManager
 from celery_app import app
 
+QUEUE_LOW_PRIORITY = "low_priority"
 
-@app.task(queue="low_priority", throws=sync_errors)
+
+@app.task(queue=QUEUE_LOW_PRIORITY, throws=sync_errors)
 def sync_groups_milestones_task() -> None:
     """Syncing milestones in groups."""
     groups = ProjectGroup.objects.filter(is_active=True)
@@ -13,7 +15,7 @@ def sync_groups_milestones_task() -> None:
         sync_project_group_milestones_task.delay(project_group_id)
 
 
-@app.task(queue="low_priority", throws=sync_errors)
+@app.task(queue=QUEUE_LOW_PRIORITY, throws=sync_errors)
 def sync_projects_milestones_task() -> None:
     """Syncing milestones in projects."""
     projects = Project.objects.filter(is_active=True)
@@ -22,7 +24,7 @@ def sync_projects_milestones_task() -> None:
         sync_project_milestones_task.delay(project_id)
 
 
-@app.task(queue="low_priority", throws=sync_errors)
+@app.task(queue=QUEUE_LOW_PRIORITY, throws=sync_errors)
 def sync_project_group_milestones_task(project_group_id: int) -> None:
     """Load milestones for group."""
     group = ProjectGroup.objects.get(id=project_group_id)
@@ -39,7 +41,7 @@ def sync_project_group_milestone_task(
     MilestoneGlManager().sync_project_group_milestone(group, milestone_id)
 
 
-@app.task(queue="low_priority", throws=sync_errors)
+@app.task(queue=QUEUE_LOW_PRIORITY, throws=sync_errors)
 def sync_project_milestones_task(project_id: int) -> None:
     """Load milestones for project."""
     project = Project.objects.get(id=project_id)

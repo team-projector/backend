@@ -8,6 +8,8 @@ from apps.development.models.note import NoteType
 from apps.development.services.note.gl.sync import update_note_from_gitlab
 from tests.test_development.factories import IssueFactory
 
+KEY_ID = "id"
+
 
 def test_success(user):
     """
@@ -22,7 +24,7 @@ def test_success(user):
     update_note_from_gitlab(
         dict2obj(
             {
-                "id": 2,
+                KEY_ID: 2,
                 "body": body,
                 "created_at": datetime.strftime(
                     datetime.now(),
@@ -32,7 +34,7 @@ def test_success(user):
                     datetime.now(),
                     GITLAB_DATETIME_FORMAT,
                 ),
-                "author": {"id": user.gl_id},
+                "author": {KEY_ID: user.gl_id},
                 "system": True,
             },
         ),
@@ -61,7 +63,7 @@ def test_no_system(user):
     update_note_from_gitlab(
         dict2obj(
             {
-                "id": 2,
+                KEY_ID: 2,
                 "body": body,
                 "created_at": datetime.strftime(
                     datetime.now(),
@@ -71,7 +73,7 @@ def test_no_system(user):
                     datetime.now(),
                     GITLAB_DATETIME_FORMAT,
                 ),
-                "author": {"id": user.gl_id},
+                "author": {KEY_ID: user.gl_id},
                 "system": False,
             },
         ),
@@ -94,7 +96,7 @@ def test_bad_issue_number(user):
     update_note_from_gitlab(
         dict2obj(
             {
-                "id": 2,
+                KEY_ID: 2,
                 "body": body,
                 "created_at": datetime.strftime(
                     datetime.now(),
@@ -104,7 +106,7 @@ def test_bad_issue_number(user):
                     datetime.now(),
                     GITLAB_DATETIME_FORMAT,
                 ),
-                "author": {"id": user.gl_id},
+                "author": {KEY_ID: user.gl_id},
                 "system": True,
             },
         ),

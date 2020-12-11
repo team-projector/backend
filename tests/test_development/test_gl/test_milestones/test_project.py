@@ -8,6 +8,8 @@ from tests.test_development.test_gl.helpers import (
     initializers,
 )
 
+KEY_ID = "id"
+
 
 def test_all(db, gl_mocker):
     """
@@ -27,7 +29,7 @@ def test_all(db, gl_mocker):
 
     MilestoneGlManager().sync_project_milestones(project)
 
-    milestone = Milestone.objects.get(gl_id=gl_milestone["id"])
+    milestone = Milestone.objects.get(gl_id=gl_milestone[KEY_ID])
     gl_checkers.check_milestone(milestone, gl_milestone, project)
     assert (
         list(
@@ -48,7 +50,7 @@ def test_inheriting_milestones(db, gl_mocker):
     gl_milestone1 = GlProjectMilestoneFactory.create()
     gl_milestone2 = GlProjectMilestoneFactory.create(project_id=None)
     group_milestone = ProjectGroupMilestoneFactory.create(
-        gl_id=gl_milestone2["id"],
+        gl_id=gl_milestone2[KEY_ID],
     )
 
     gl_mock.mock_project_endpoints(
@@ -89,7 +91,7 @@ def test_single(db, gl_mocker):
         gl_milestone,
     )
 
-    MilestoneGlManager().sync_project_milestone(project, gl_milestone["id"])
+    MilestoneGlManager().sync_project_milestone(project, gl_milestone[KEY_ID])
 
-    milestone = Milestone.objects.get(gl_id=gl_milestone["id"])
+    milestone = Milestone.objects.get(gl_id=gl_milestone[KEY_ID])
     gl_checkers.check_milestone(milestone, gl_milestone, project)

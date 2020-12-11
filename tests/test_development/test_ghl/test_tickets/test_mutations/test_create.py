@@ -14,6 +14,8 @@ from tests.test_development.factories import (
     TicketFactory,
 )
 
+TICKET_TITLE = "test ticket"
+
 
 @pytest.fixture()
 def ticket():
@@ -32,7 +34,7 @@ def test_query(project_manager, ghl_client, ghl_raw):
     response = ghl_client.execute(
         ghl_raw("create_ticket"),
         variable_values={
-            "title": "test ticket",
+            "title": TICKET_TITLE,
             "type": TicketType.FEATURE,
             "startDate": str(datetime.now().date()),
             "dueDate": str(datetime.now().date()),
@@ -48,7 +50,7 @@ def test_query(project_manager, ghl_client, ghl_raw):
     assert "errors" not in response
 
     dto = response["data"]["createTicket"]["ticket"]
-    assert dto["title"] == "test ticket"
+    assert dto["title"] == TICKET_TITLE
 
     for issue in issues:
         issue.refresh_from_db()
@@ -64,7 +66,7 @@ def test_invalid_parameters(
     resolve = create_ticket_mutation(
         root=None,
         info=ghl_auth_mock_info,
-        title="test ticket",
+        title=TICKET_TITLE,
         type="invalid type",
         url="invalid url",
         milestone="",
@@ -90,7 +92,7 @@ def test_without_permissions(user, ghl_auth_mock_info, create_ticket_mutation):
     resolve = create_ticket_mutation(
         root=None,
         info=ghl_auth_mock_info,
-        title="test ticket",
+        title=TICKET_TITLE,
         startDate=datetime.now().date(),
         dueDate=datetime.now().date(),
         type=TicketType.FEATURE,
@@ -110,7 +112,7 @@ def test_role_url_is_null(
     resolve = create_ticket_mutation(
         root=None,
         info=ghl_auth_mock_info,
-        title="test ticket",
+        title=TICKET_TITLE,
         type=TicketType.FEATURE,
         state=TicketState.DOING,
         milestone=ProjectMilestoneFactory.create().id,
@@ -119,6 +121,6 @@ def test_role_url_is_null(
     )
 
     ticket = resolve.ticket
-    assert ticket.title == "test ticket"
-    assert ticket.url == ""
-    assert ticket.role == ""
+    assert ticket.title == TICKET_TITLE
+    assert not ticket.url
+    assert not ticket.role

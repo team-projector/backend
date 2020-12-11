@@ -6,6 +6,8 @@ from apps.development.models.ticket import TicketState
 from tests.helpers import lists
 from tests.test_development.factories import TicketFactory
 
+KEY_ORDERING = "order_by"
+
 
 def test_by_due_date_asc(db):
     """Test ordering by date asc."""
@@ -16,7 +18,7 @@ def test_by_due_date_asc(db):
     ]
 
     queryset = TicketsFilterSet(
-        data={"order_by": "dueDate"},
+        data={KEY_ORDERING: "dueDate"},
         queryset=Ticket.objects.all(),
     ).qs
 
@@ -33,7 +35,7 @@ def test_by_due_date_desc(db):
     ]
 
     queryset = TicketsFilterSet(
-        data={"order_by": "-dueDate"},
+        data={KEY_ORDERING: "-dueDate"},
         queryset=Ticket.objects.all(),
     ).qs
 
@@ -50,7 +52,7 @@ def test_by_title_asc(db):
     ]
 
     queryset = TicketsFilterSet(
-        data={"order_by": "title"},
+        data={KEY_ORDERING: "title"},
         queryset=Ticket.objects.all(),
     ).qs
 
@@ -67,7 +69,7 @@ def test_by_title_desc(db):
     ]
 
     queryset = TicketsFilterSet(
-        data={"order_by": "-title"},
+        data={KEY_ORDERING: "-title"},
         queryset=Ticket.objects.all(),
     ).qs
 
@@ -90,7 +92,7 @@ def test_by_due_date_and_title(db):
     ]
 
     queryset = TicketsFilterSet(
-        data={"order_by": "dueDate,title"},
+        data={KEY_ORDERING: "dueDate,title"},
         queryset=Ticket.objects.all(),
     ).qs
 
@@ -116,7 +118,7 @@ def test_order_by_state(db):
     ]
 
     queryset = TicketsFilterSet(
-        data={"order_by": "state"},
+        data={KEY_ORDERING: "state"},
         queryset=Ticket.objects.all(),
     ).qs
 
@@ -142,7 +144,7 @@ def test_order_by_state_desc(db):
     ]
 
     queryset = TicketsFilterSet(
-        data={"order_by": "-state"},
+        data={KEY_ORDERING: "-state"},
         queryset=Ticket.objects.all(),
     ).qs
 

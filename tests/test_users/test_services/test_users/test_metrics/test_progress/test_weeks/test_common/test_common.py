@@ -13,6 +13,10 @@ from tests.test_users.test_services.test_users.test_metrics.test_progress.test_w
     checkers,
 )
 
+METRICS_GROUP_WEEK = "week"
+FIELD_TIME_SPENT = "time_spent"
+KEY_SPENT = "spent"
+
 
 def test_simple(user):
     """
@@ -55,15 +59,15 @@ def test_simple(user):
     )
 
     issue.total_time_spent = issue.time_spents.aggregate(
-        spent=Sum("time_spent"),
-    )["spent"]
+        spent=Sum(FIELD_TIME_SPENT),
+    )[KEY_SPENT]
     issue.save()
 
     metrics = get_progress_metrics(
         user,
         monday - timedelta(days=5),
         monday + timedelta(days=5),
-        "week",
+        METRICS_GROUP_WEEK,
     )
 
     assert len(metrics) == 2
@@ -115,15 +119,15 @@ def test_many_weeks(user):
     )
 
     issue.total_time_spent = issue.time_spents.aggregate(
-        spent=Sum("time_spent"),
-    )["spent"]
+        spent=Sum(FIELD_TIME_SPENT),
+    )[KEY_SPENT]
     issue.save()
 
     metrics = get_progress_metrics(
         user,
         monday - timedelta(days=5),
         monday + timedelta(days=5),
-        "week",
+        METRICS_GROUP_WEEK,
     )
 
     assert len(metrics) == 2
@@ -178,15 +182,15 @@ def test_not_in_range(user):
     )
 
     issue.total_time_spent = issue.time_spents.aggregate(
-        spent=Sum("time_spent"),
-    )["spent"]
+        spent=Sum(FIELD_TIME_SPENT),
+    )[KEY_SPENT]
     issue.save()
 
     metrics = get_progress_metrics(
         user,
         monday,
         monday + timedelta(weeks=1, days=5),
-        "week",
+        METRICS_GROUP_WEEK,
     )
 
     assert len(metrics) == 2
@@ -240,15 +244,15 @@ def test_another_user(user):
     )
 
     issue.total_time_spent = issue.time_spents.aggregate(
-        spent=Sum("time_spent"),
-    )["spent"]
+        spent=Sum(FIELD_TIME_SPENT),
+    )[KEY_SPENT]
     issue.save()
 
     metrics = get_progress_metrics(
         user,
         monday - timedelta(days=5),
         monday + timedelta(days=5),
-        "week",
+        METRICS_GROUP_WEEK,
     )
 
     assert len(metrics) == 2
@@ -307,20 +311,20 @@ def test_many_issues(user):
     )
 
     issue.total_time_spent = issue.time_spents.aggregate(
-        spent=Sum("time_spent"),
-    )["spent"]
+        spent=Sum(FIELD_TIME_SPENT),
+    )[KEY_SPENT]
     issue.save()
 
     another_issue.total_time_spent = another_issue.time_spents.aggregate(
-        spent=Sum("time_spent"),
-    )["spent"]
+        spent=Sum(FIELD_TIME_SPENT),
+    )[KEY_SPENT]
     another_issue.save()
 
     metrics = get_progress_metrics(
         user,
         monday - timedelta(days=5),
         monday + timedelta(days=5),
-        "week",
+        METRICS_GROUP_WEEK,
     )
 
     assert len(metrics) == 2

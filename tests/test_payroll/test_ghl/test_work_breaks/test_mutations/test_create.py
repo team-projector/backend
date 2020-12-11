@@ -9,17 +9,21 @@ from apps.payroll.models.work_break import WorkBreak, WorkBreakReason
 
 CURRENT_YEAR = timezone.now().year
 
+KEY_USER = "user"
+KEY_COMMENT = "comment"
+KEY_PAID_DAYS = "paid_days"
+
 
 def test_query(user, ghl_client, ghl_raw):
     """Test create raw query."""
     ghl_client.set_user(user)
 
     create_variables = {
-        "user": user.id,
+        KEY_USER: user.id,
+        KEY_COMMENT: "test comment",
         "fromDate": _date_strftime(timezone.now()),
         "toDate": _date_strftime(timezone.now() + timedelta(seconds=10)),
         "reason": WorkBreakReason.DAYOFF,
-        "comment": "test comment",
         "paidDays": 3,
     }
 
@@ -31,8 +35,8 @@ def test_query(user, ghl_client, ghl_raw):
     dto = response["data"]["createWorkBreak"]["workBreak"]
 
     assert WorkBreak.objects.count() == 1
-    assert dto["comment"] == create_variables["comment"]
-    assert dto["user"]["id"] == str(user.id)
+    assert dto[KEY_COMMENT] == create_variables[KEY_COMMENT]
+    assert dto[KEY_USER]["id"] == str(user.id)
     assert dto["paidDays"] == create_variables["paidDays"]
 
 
@@ -76,15 +80,15 @@ def test_fill_paid_days(user, from_date, to_date, paid_days):
     input_data = {
         "from_date": _date_strftime(from_date),
         "to_date": _date_strftime(to_date),
-        "comment": "test",
         "reason": str(WorkBreakReason.VACATION),
-        "user": user.pk,
+        KEY_COMMENT: "test",
+        KEY_USER: user.pk,
     }
 
     serializer = InputSerializer(data=input_data)
 
     assert serializer.is_valid()
-    assert serializer.validated_data["paid_days"] == paid_days
+    assert serializer.validated_data[KEY_PAID_DAYS] == paid_days
 
 
 def test_not_fill_paid_days(user):
@@ -92,16 +96,16 @@ def test_not_fill_paid_days(user):
     input_data = {
         "from_date": _date_strftime(date(CURRENT_YEAR, 2, 3)),
         "to_date": _date_strftime(date(CURRENT_YEAR, 2, 10)),
-        "comment": "test",
         "reason": str(WorkBreakReason.VACATION),
-        "user": user.pk,
-        "paid_days": 30,
+        KEY_COMMENT: "test",
+        KEY_USER: user.pk,
+        KEY_PAID_DAYS: 30,
     }
 
     serializer = InputSerializer(data=input_data)
 
     assert serializer.is_valid()
-    assert serializer.validated_data["paid_days"] == 30
+    assert serializer.validated_data[KEY_PAID_DAYS] == 30
 
 
 def _date_strftime(date):

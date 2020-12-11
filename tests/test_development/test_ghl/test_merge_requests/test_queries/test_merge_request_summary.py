@@ -13,7 +13,10 @@ def test_query(user, ghl_client, ghl_raw):
     )
 
     assert "errors" not in response
-    assert response["data"]["mergeRequestsSummary"]["count"] == 1
-    assert response["data"]["mergeRequestsSummary"]["openedCount"] == 1
-    assert response["data"]["mergeRequestsSummary"]["closedCount"] == 0
-    assert response["data"]["mergeRequestsSummary"]["mergedCount"] == 0
+
+    merge_requests_summary = response["data"]["mergeRequestsSummary"]
+
+    assert merge_requests_summary["count"] == 1
+    assert merge_requests_summary["openedCount"] == 1
+    assert not merge_requests_summary["closedCount"]
+    assert not merge_requests_summary["mergedCount"]

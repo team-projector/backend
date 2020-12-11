@@ -37,7 +37,7 @@ class TicketFilter(django_filters.ModelChoiceFilter):
         queryset,
         value,  # noqa: WPS110
     ) -> QuerySet:
-        """Do filtering."""
+        """Do filtering by ticket."""
         if not value:
             return queryset
 
@@ -58,7 +58,7 @@ class MilestoneFilter(django_filters.ModelChoiceFilter):
         queryset,
         value,  # noqa: WPS110
     ) -> QuerySet:
-        """Do filtering."""
+        """Do filtering by milestone."""
         if not value:
             return queryset
 
@@ -75,7 +75,7 @@ class ProblemsFilter(django_filters.BooleanFilter):
         queryset,
         value,  # noqa: WPS110
     ) -> QuerySet:
-        """Do filtering."""
+        """Do filtering by problem."""
         if value is None:
             return queryset
 
@@ -101,7 +101,7 @@ class TeamFilter(django_filters.ModelChoiceFilter):
         queryset,
         value,  # noqa: WPS110
     ) -> QuerySet:
-        """Do filtering."""
+        """Do filtering by team."""
         if not value:
             return queryset
 

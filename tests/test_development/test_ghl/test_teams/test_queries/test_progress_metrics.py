@@ -6,6 +6,8 @@ from jnt_django_graphene_toolbox.errors import GraphQLPermissionDenied
 from apps.development.models import TeamMember
 from tests.test_development.factories import TeamFactory, TeamMemberFactory
 
+GROUP_DAY = "day"
+
 
 def test_query(user, ghl_client, ghl_raw):
     """Test team progress metrics raw query."""
@@ -26,7 +28,7 @@ def test_query(user, ghl_client, ghl_raw):
             "id": team.pk,
             "start": date,
             "end": date,
-            "group": "day",
+            "group": GROUP_DAY,
         },
     )
 
@@ -54,7 +56,7 @@ def test_not_leader(user, ghl_auth_mock_info, team_progress_metrics_query):
             team=team.pk,
             start=date,
             end=date,
-            group="day",
+            group=GROUP_DAY,
         )
 
 
@@ -75,7 +77,7 @@ def test_another_team(user, ghl_auth_mock_info, team_progress_metrics_query):
             team=TeamFactory.create().pk,
             start=date,
             end=date,
-            group="day",
+            group=GROUP_DAY,
         )
 
 
@@ -100,5 +102,5 @@ def test_metrics_developer(
             team=team.pk,
             start=date,
             end=date,
-            group="day",
+            group=GROUP_DAY,
         )

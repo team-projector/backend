@@ -10,6 +10,9 @@ from apps.payroll.services.spent_time.summary import (
 )
 from apps.users.models import User
 
+KEY_TIME_SPENT = "time_spent"
+KEY_TIME_ESTIMATE = "time_estimate"
+
 
 class IssueMetrics:
     """Issue metrics."""
@@ -82,13 +85,15 @@ class IssuesContainerMetricsProvider:
             issues_count=models.Count("*"),
         )
 
-        metrics.time_estimate = stats["time_estimate"]
-        metrics.time_remains = stats["time_estimate"] - stats["time_spent"]
+        metrics.time_estimate = stats[KEY_TIME_ESTIMATE]
+        metrics.time_remains = stats[KEY_TIME_ESTIMATE] - stats[KEY_TIME_SPENT]
 
-        if stats["time_spent"]:
-            metrics.efficiency = stats["time_estimate"] / stats["time_spent"]
+        if stats[KEY_TIME_SPENT]:
+            metrics.efficiency = (
+                stats[KEY_TIME_ESTIMATE] / stats[KEY_TIME_SPENT]
+            )
 
-        metrics.time_spent = stats["time_spent"]
+        metrics.time_spent = stats[KEY_TIME_SPENT]
 
         metrics.issues_closed_count = stats["issues_closed_count"]
         metrics.issues_opened_count = stats["issues_opened_count"]

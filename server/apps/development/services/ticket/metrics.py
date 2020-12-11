@@ -7,6 +7,9 @@ from apps.development.models.issue import IssueState
 from apps.development.services.issue.metrics import IssuesContainerMetrics
 from apps.payroll.models.spent_time import SpentTime
 
+FIELD_TIME_SPENT = "time_spent"
+FIELD_TIME_ESTIMATE = "time_estimate"
+
 
 class TicketMetrics(IssuesContainerMetrics):
     """Ticket metrics."""
@@ -52,7 +55,7 @@ class TicketMetricsProvider:
             return
 
         stats = issues.aggregate(
-            time_estimate=Coalesce(models.Sum("time_estimate"), 0),
+            time_estimate=Coalesce(models.Sum(FIELD_TIME_ESTIMATE), 0),
             time_spent=Coalesce(models.Sum("total_time_spent"), 0),
             issues_closed_count=Coalesce(
                 models.Count("id", filter=models.Q(state=IssueState.CLOSED)),
@@ -64,7 +67,7 @@ class TicketMetricsProvider:
             ),
             opened_time_estimate=Coalesce(
                 models.Sum(
-                    "time_estimate",
+                    FIELD_TIME_ESTIMATE,
                     filter=models.Q(state=IssueState.OPENED),
                 ),
                 0,
@@ -79,7 +82,7 @@ class TicketMetricsProvider:
             issues_count=models.Count("*"),
             budget_estimate=Coalesce(
                 models.Sum(
-                    models.F("time_estimate")
+                    models.F(FIELD_TIME_ESTIMATE)
                     / SECONDS_PER_HOUR
                     * models.F("user__customer_hour_rate"),
                     output_field=models.DecimalField(),
@@ -88,16 +91,20 @@ class TicketMetricsProvider:
             ),
         )
 
-        metrics.time_estimate = stats["time_estimate"]
-        metrics.time_remains = stats["time_estimate"] - stats["time_spent"]
+        metrics.time_estimate = stats[FIELD_TIME_ESTIMATE]
+        metrics.time_remains = (
+            stats[FIELD_TIME_ESTIMATE] - stats[FIELD_TIME_SPENT]
+        )
         metrics.opened_time_remains = (
             stats["opened_time_estimate"] - stats["opened_time_spent"]
         )
 
-        if stats["time_spent"]:
-            metrics.efficiency = stats["time_estimate"] / stats["time_spent"]
+        if stats[FIELD_TIME_SPENT]:
+            metrics.efficiency = (
+                stats[FIELD_TIME_ESTIMATE] / stats[FIELD_TIME_SPENT]
+            )
 
-        metrics.time_spent = stats["time_spent"]
+        metrics.time_spent = stats[FIELD_TIME_SPENT]
 
         metrics.issues_closed_count = stats["issues_closed_count"]
         metrics.issues_opened_count = stats["issues_opened_count"]
