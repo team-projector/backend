@@ -55,7 +55,7 @@ test:
   stage: publish
   dependencies: []
   services:
-    - docker:dind
+    - registry.gitlab.com/junte/docker-hub/docker:19-dind
   before_script:
     - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN registry.gitlab.com
     - docker pull $DOCKER_IMAGE
