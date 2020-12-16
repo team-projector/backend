@@ -3,7 +3,6 @@ from typing import Optional
 
 from django.conf import settings
 from django.db import models
-from django.db.models import signals
 from django.dispatch import receiver
 from django.utils.functional import cached_property
 from django.utils.translation import gettext_lazy as _
@@ -179,7 +178,7 @@ class Issue(
         )
 
 
-@receiver(signals.m2m_changed, sender=Issue.labels.through)
+@receiver(models.signals.m2m_changed, sender=Issue.labels.through)
 def _handle_issue_labeling(instance: Issue, action, pk_set, **kwargs):
     """Calling required functionality after m2m was updated with new objs."""
     from apps.development.services.issue.labels import (  # noqa: WPS433

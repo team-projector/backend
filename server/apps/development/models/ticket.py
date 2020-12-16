@@ -1,11 +1,10 @@
 from django.conf import settings
 from django.db import models
 from django.utils.translation import gettext_lazy as _
+from jnt_django_toolbox.models.fields import EnumField
 
 from apps.core.consts import DEFAULT_TITLE_LENGTH
 from apps.core.models.mixins import Timestamps
-
-from jnt_django_toolbox.models.fields import EnumField
 
 TICKET_TYPE_MAX_LENGTH = 50
 TICKET_ROLE_MAX_LENGTH = 50

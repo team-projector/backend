@@ -2,7 +2,6 @@ import django_filters
 from jnt_django_graphene_toolbox.filters import OrderingFilter
 
 from apps.development.models import Milestone, Ticket
-from apps.development.models.ticket import TicketState
 
 
 class TicketsFilterSet(django_filters.FilterSet):
