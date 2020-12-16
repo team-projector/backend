@@ -3,6 +3,7 @@ from django.contrib.contenttypes.models import ContentType
 from django.core.serializers.json import DjangoJSONEncoder
 from django.db import models
 from django.utils.translation import gettext_lazy as _
+from jnt_django_toolbox.models.fields import EnumField
 
 from apps.users.models import User
 
@@ -43,9 +44,8 @@ class Note(models.Model):
     updated_at = models.DateTimeField(null=True, blank=True)
     body = models.TextField()
 
-    type = models.CharField(  # noqa: WPS125, A003
-        choices=NoteType.choices,
-        max_length=NOTE_TYPE_MAX_LENGTH,
+    type = EnumField(  # noqa: WPS125, A003
+        enum=NoteType,
         verbose_name=_("VN__TYPE"),
         help_text=_("HT__TYPE"),
     )

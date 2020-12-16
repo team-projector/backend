@@ -3,10 +3,10 @@ from typing import Optional
 
 from django.conf import settings
 from django.db import models
-from django.db.models import signals
 from django.dispatch import receiver
 from django.utils.functional import cached_property
 from django.utils.translation import gettext_lazy as _
+from jnt_django_toolbox.models.fields import EnumField
 
 from apps.core.consts import DEFAULT_TITLE_LENGTH
 from apps.core.models.mixins import GitlabEntityMixin, GitlabInternalIdMixin
@@ -60,9 +60,8 @@ class Issue(
         help_text=_("HT__TOTAL_TIME_SPENT"),
     )
 
-    state = models.CharField(
-        choices=IssueState.choices,
-        max_length=ISSUE_STATE_MAX_LENGTH,
+    state = EnumField(
+        enum=IssueState,
         blank=True,
         verbose_name=_("VN__STATE"),
         help_text=_("HT__STATE"),
@@ -179,7 +178,7 @@ class Issue(
         )
 
 
-@receiver(signals.m2m_changed, sender=Issue.labels.through)
+@receiver(models.signals.m2m_changed, sender=Issue.labels.through)
 def _handle_issue_labeling(instance: Issue, action, pk_set, **kwargs):
     """Calling required functionality after m2m was updated with new objs."""
     from apps.development.services.issue.labels import (  # noqa: WPS433

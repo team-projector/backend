@@ -1,5 +1,5 @@
-query {
-  allTickets {
+query ($state: TicketState) {
+  allTickets(state: $state) {
     count
     edges {
       node {
