@@ -7,6 +7,7 @@ from django.db.models import signals
 from django.dispatch import receiver
 from django.utils.functional import cached_property
 from django.utils.translation import gettext_lazy as _
+from jnt_django_toolbox.models.fields import EnumField
 
 from apps.core.consts import DEFAULT_TITLE_LENGTH
 from apps.core.models.mixins import GitlabEntityMixin, GitlabInternalIdMixin
@@ -60,9 +61,8 @@ class Issue(
         help_text=_("HT__TOTAL_TIME_SPENT"),
     )
 
-    state = models.CharField(
-        choices=IssueState.choices,
-        max_length=ISSUE_STATE_MAX_LENGTH,
+    state = EnumField(
+        enum=IssueState,
         blank=True,
         verbose_name=_("VN__STATE"),
         help_text=_("HT__STATE"),

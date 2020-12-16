@@ -5,6 +5,8 @@ from django.utils.translation import gettext_lazy as _
 from apps.core.consts import DEFAULT_TITLE_LENGTH
 from apps.core.models.mixins import Timestamps
 
+from jnt_django_toolbox.models.fields import EnumField
+
 TICKET_TYPE_MAX_LENGTH = 50
 TICKET_ROLE_MAX_LENGTH = 50
 TICKET_STATE_MAX_LENGTH = 50
@@ -37,10 +39,9 @@ class Ticket(Timestamps):
         verbose_name_plural = _("VN__TICKETS")
         ordering = ("-created_at",)
 
-    type = models.CharField(  # noqa: WPS125, A003
-        choices=TicketType.choices,
+    type = EnumField(  # noqa: WPS125, A003
+        enum=TicketType,
         default=TicketType.FEATURE,
-        max_length=TICKET_TYPE_MAX_LENGTH,
         blank=True,
         verbose_name=_("VN__TYPE"),
         help_text=_("HT__TYPE"),
@@ -85,10 +86,9 @@ class Ticket(Timestamps):
         help_text=_("HT__ESTIMATE"),
     )
 
-    state = models.CharField(
-        choices=TicketState.choices,
+    state = EnumField(
+        enum=TicketState,
         default=TicketState.CREATED,
-        max_length=TICKET_STATE_MAX_LENGTH,
         blank=True,
         verbose_name=_("VN__STATE"),
         help_text=_("HT__STATE"),
