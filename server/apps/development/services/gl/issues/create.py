@@ -41,7 +41,9 @@ def create_issue(issue_data: NewIssueData) -> Issue:
     gl_project = gl_client.projects.get(issue_data.project.gl_id)
 
     gl_issue = gl_project.issues.create(new_issue_data)
-    gl_issue.time_estimate("{0}s".format(issue_data.estimate))
+
+    if issue_data.estimate:
+        gl_issue.time_estimate("{0}s".format(issue_data.estimate))
 
     IssueGlManager().update_project_issue(
         issue_data.project,

@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 
 import pytest
 
@@ -13,33 +13,75 @@ def project(db):
 
 
 @pytest.fixture()
-def user_request(auth_rf):
-    """Mock request."""
-    return auth_rf.post("/")
+def context(auth_rf):
+    """Mock context."""
+    return {"request": auth_rf.post("/")}
 
 
-def test_valid_data(user, project, user_request):
+def test_valid_data(user, project, context):
     """Test valid data."""
     user.gl_token = "token"
     user.save()
 
     serializer = InputSerializer(
         data=_source_data(user, project),
-        context={"request": user_request},
+        context=context,
     )
 
     assert serializer.is_valid()
     assert serializer.validated_data.get("author") == user
 
 
-def test_no_valid_data(user, project, user_request):
+def test_estimate_as_none(user, project, context):
+    """Test valid data."""
+    user.gl_token = "token"
+    user.save()
+
+    estimate_field = "estimate"
+
+    source_data = _source_data(user, project)
+    source_data[estimate_field] = None
+    serializer = InputSerializer(
+        data=source_data,
+        context=context,
+    )
+
+    assert serializer.is_valid()
+    assert serializer.validated_data.get(estimate_field) == 0
+
+
+def test_no_valid_data(user, project, context):
     """Test no valid data."""
     serializer = InputSerializer(
         data=_source_data(user, project),
-        context={"request": user_request},
+        context=context,
     )
 
     assert not serializer.is_valid()
+
+
+@pytest.mark.parametrize(
+    ("field", "field_value"),
+    [
+        ("estimate", -1),
+        ("dueDate", str((datetime.now() - timedelta(days=2)).date())),
+    ],
+)
+def test_no_valid_fields(user, project, context, field, field_value):
+    """Test no valid fields."""
+    user.gl_token = "token"
+    user.save()
+
+    source_data = _source_data(user, project)
+    source_data[field] = field_value
+    serializer = InputSerializer(
+        data=source_data,
+        context=context,
+    )
+
+    assert not serializer.is_valid()
+    assert len(serializer.errors) == 1
+    assert field in serializer.errors
 
 
 def _source_data(user, project):
