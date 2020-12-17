@@ -1,9 +1,11 @@
+from datetime import datetime
 from typing import Any, Dict, Optional
 
 import graphene
+from django.utils.translation import gettext_lazy as _
 from graphql import ResolveInfo
 from jnt_django_graphene_toolbox.mutations import SerializerMutation
-from rest_framework import serializers
+from rest_framework import exceptions, serializers
 
 from apps.development.graphql.types import IssueType
 from apps.development.models import Milestone, Project
@@ -30,7 +32,7 @@ class InputSerializer(serializers.Serializer):
         child=serializers.CharField(),
         required=False,
     )
-    estimate = serializers.IntegerField()
+    estimate = serializers.IntegerField(required=False, allow_null=True)
     dueDate = serializers.DateField(source="due_date")  # noqa: N815, WPS115
 
     def validate(self, attrs):
@@ -40,6 +42,24 @@ class InputSerializer(serializers.Serializer):
             raise NoPersonalGitLabToken
 
         return attrs
+
+    def validate_estimate(self, estimate) -> int:
+        """Validate estimate."""
+        estimate = estimate or 0
+
+        if estimate < 0:
+            raise exceptions.ValidationError(_("MSG__ESTIMATE_MUST_BE_MORE_0"))
+
+        return estimate
+
+    def validate_dueDate(self, due_date):  # noqa: N802
+        """Validate due date. Date should not be in the past."""
+        if due_date < datetime.now().date():
+            raise exceptions.ValidationError(
+                _("MSG__DUE_DATE_SHOULD_NOT_BE_IN_THE_PAST"),
+            )
+
+        return due_date
 
 
 class CreateIssueMutation(SerializerMutation):
