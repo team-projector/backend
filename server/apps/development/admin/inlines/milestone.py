@@ -21,6 +21,10 @@ class MilestoneInline(BaseGenericTabularInline):
         """Check has add permissions."""
         return False
 
+    def has_change_permission(self, *args):
+        """Check has change permissions."""
+        return False
+
     def has_delete_permission(self, *args):
         """Check has delete permissions."""
         return False
