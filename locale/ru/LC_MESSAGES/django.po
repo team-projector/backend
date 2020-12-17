@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-12-04 14:46+0300\n"
+"POT-Creation-Date: 2020-12-17 12:14+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -108,6 +108,12 @@ msgstr "Вы должны выбрать хотя бы одну роль"
 
 msgid "VN__DEVELOPMENT"
 msgstr "Разработка"
+
+msgid "MSG__ESTIMATE_MUST_BE_MORE_0"
+msgstr "Время выполнения задачи должно быть больше 0"
+
+msgid "MSG__DUE_DATE_SHOULD_NOT_BE_IN_THE_PAST"
+msgstr "Дата выполнения не должна быть в прошлом"
 
 msgid "CH__DEVELOPING"
 msgstr "Разработка"
