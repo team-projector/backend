@@ -1,5 +1,5 @@
 import graphene
-from jnt_django_graphene_toolbox.mutations import SerializerMutation
+from jnt_django_graphene_toolbox.mutations import AuthSerializerMutation
 from rest_framework import serializers
 
 from apps.payroll.graphql.permissions import CanApproveDeclineWorkBreak
@@ -18,7 +18,7 @@ class InputSerializer(serializers.Serializer):
     decline_reason = serializers.CharField()
 
 
-class DeclineWorkBreakMutation(SerializerMutation):
+class DeclineWorkBreakMutation(AuthSerializerMutation):
     """Decline work break mutation."""
 
     class Meta:

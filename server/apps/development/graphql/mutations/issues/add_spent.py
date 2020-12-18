@@ -2,7 +2,7 @@ from typing import Any, Dict, Optional
 
 import graphene
 from graphql import ResolveInfo
-from jnt_django_graphene_toolbox.mutations import SerializerMutation
+from jnt_django_graphene_toolbox.mutations import AuthSerializerMutation
 from rest_framework import serializers
 
 from apps.development.graphql.mutations.issues.inputs import BaseIssueInput
@@ -28,7 +28,7 @@ class InputSerializer(BaseIssueInput):
         return attrs
 
 
-class AddSpentToIssueMutation(SerializerMutation):
+class AddSpentToIssueMutation(AuthSerializerMutation):
     """Add spend issue mutation."""
 
     class Meta:

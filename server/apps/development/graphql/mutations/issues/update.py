@@ -2,7 +2,7 @@ from typing import Any, Dict, Optional
 
 import graphene
 from graphql import ResolveInfo
-from jnt_django_graphene_toolbox.mutations import SerializerMutation
+from jnt_django_graphene_toolbox.mutations import AuthSerializerMutation
 from rest_framework import serializers
 
 from apps.core.graphql.helpers.persisters import update_from_validated_data
@@ -21,7 +21,7 @@ class InputSerializer(BaseIssueInput):
     ticket = serializers.PrimaryKeyRelatedField(queryset=Ticket.objects.all())
 
 
-class UpdateIssueMutation(SerializerMutation):
+class UpdateIssueMutation(AuthSerializerMutation):
     """Update issue mutation."""
 
     class Meta:

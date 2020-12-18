@@ -1,16 +1,22 @@
-FROM python:3.8.4-slim as base
+FROM python:3.8.6-slim as base
 
-ENV PYTHONFAULTHANDLER=1 \
-  PYTHONUNBUFFERED=1 \
-  PYTHONHASHSEED=random \
-  PIP_NO_CACHE_DIR=off \
-  PIP_DEFAULT_TIMEOUT=100 \
-  PIPENV_HIDE_EMOJIS=true \
-  PIPENV_COLORBLIND=true \
-  PIPENV_NOSPIN=true \
-  C_FORCE_ROOT=true \
-  POETRY_VERSION=1.1.0 \
-  PATH="/root/.poetry/bin:${PATH}"
+ENV C_FORCE_ROOT=true \
+    # python
+    PYTHONFAULTHANDLER=1 \
+    PYTHONUNBUFFERED=1 \
+    PYTHONHASHSEED=random \
+    # pip
+    PIP_NO_CACHE_DIR=off \
+    PIP_DISABLE_PIP_VERSION_CHECK=on \
+    PIP_DEFAULT_TIMEOUT=100 \
+    # prometheus
+    prometheus_multiproc_dir=/var/run/prometheus \
+    # poetry:
+    POETRY_VERSION=1.1.4 \
+    POETRY_NO_INTERACTION=1 \
+    POETRY_VIRTUALENVS_CREATE=false \
+    POETRY_CACHE_DIR='/var/cache/pypoetry' \
+    PATH="$PATH:/root/.poetry/bin"
 
 WORKDIR /app
 
@@ -27,12 +33,12 @@ RUN apt-get update \
                       make=4.2.* \
                       curl=7.64.* \
     && curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/${POETRY_VERSION}/get-poetry.py | python \
-    && poetry config virtualenvs.create false \
-    && poetry install --no-dev --no-interaction --no-ansi \
+    && poetry install --no-dev --no-ansi \
     && apt-get remove --purge -y gcc binutils curl libc6-dev \
     && apt-get autoremove -y \
     && apt-get clean \
-    && rm -rf /var/lib/apt/lists/*
+    && rm -rf /var/lib/apt/lists/* \
+    && rm -rf "$POETRY_CACHE_DIR"
 
 # ---
 
@@ -77,7 +83,7 @@ RUN apt-get update \
     && apt-get install --no-install-recommends -y \
                       gcc=4:8.3.* \
                       libc6-dev=2.* \
-    && poetry install --no-interaction --no-ansi \
+    && poetry install --no-ansi \
     && apt-get remove --purge -y gcc libc6-dev \
     && apt-get autoremove -y \
     && apt-get clean \

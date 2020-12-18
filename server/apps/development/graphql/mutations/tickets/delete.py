@@ -2,7 +2,7 @@ from typing import Optional
 
 import graphene
 from graphql import ResolveInfo
-from jnt_django_graphene_toolbox.mutations import SerializerMutation
+from jnt_django_graphene_toolbox.mutations import AuthSerializerMutation
 from rest_framework import serializers
 
 from apps.core.graphql.security.permissions import AllowProjectManager
@@ -24,7 +24,7 @@ class InputSerializer(serializers.Serializer):
         return ret
 
 
-class DeleteTicketMutation(SerializerMutation):
+class DeleteTicketMutation(AuthSerializerMutation):
     """Delete ticket."""
 
     class Meta:

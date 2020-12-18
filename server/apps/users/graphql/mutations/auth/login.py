@@ -1,44 +1,55 @@
-from typing import Any, Dict, Optional
+from typing import Optional
 
 import graphene
 from graphql import ResolveInfo
-from jnt_django_graphene_toolbox.mutations import SerializerMutation
 from jnt_django_graphene_toolbox.security.permissions import AllowAny
 from rest_framework import serializers
 
+from apps.core.graphql.mutations import BaseUseCaseMutation
+from apps.users.application.use_cases.users import (
+    LoginInputDto,
+    LoginOutputDto,
+    LoginUseCase,
+)
 from apps.users.graphql.types import TokenType
-from apps.users.services.user.auth import login_user
 
 
-class InputSerializer(serializers.Serializer):
+class LoginInputSerializer(serializers.Serializer):
     """InputSerializer."""
 
     login = serializers.CharField()
     password = serializers.CharField()
 
 
-class LoginMutation(SerializerMutation):
+class LoginMutation(BaseUseCaseMutation):
     """Login mutation returns token."""
 
     class Meta:
-        serializer_class = InputSerializer
-
-    permission_classes = (AllowAny,)
+        serializer_class = LoginInputSerializer
+        use_case_class = LoginUseCase
+        permission_classes = (AllowAny,)
 
     token = graphene.Field(TokenType)
 
     @classmethod
-    def perform_mutate(  # type: ignore
+    def get_input_dto(
         cls,
         root: Optional[object],
         info: ResolveInfo,  # noqa: WPS110
-        validated_data: Dict[str, Any],
-    ) -> "LoginMutation":
-        """After successful login return token."""
-        token = login_user(
-            validated_data["login"],
-            validated_data["password"],
-            info.context,
+        validated_data,
+    ) -> LoginInputDto:
+        """Returns dto for use case."""
+        return LoginInputDto(
+            username=validated_data["login"],
+            password=validated_data["password"],
         )
 
-        return cls(token=token)
+    @classmethod
+    def present(
+        cls,
+        root: Optional[object],
+        info: ResolveInfo,  # noqa: WPS110,
+        output_dto: LoginOutputDto,
+    ) -> "BaseUseCaseMutation":
+        """Generate response."""
+        return cls(token=output_dto.token)

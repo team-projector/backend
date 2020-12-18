@@ -2,7 +2,7 @@ from typing import Dict, Optional
 
 import graphene
 from graphql import ResolveInfo
-from jnt_django_graphene_toolbox.mutations import SerializerMutation
+from jnt_django_graphene_toolbox.mutations import AuthSerializerMutation
 from rest_framework.fields import Field
 
 from apps.core.graphql.security.permissions import AllowProjectManager
@@ -25,7 +25,7 @@ class InputSerializer(TicketBaseInput):
         return fields
 
 
-class CreateTicketMutation(SerializerMutation):
+class CreateTicketMutation(AuthSerializerMutation):
     """Create ticket mutation."""
 
     class Meta:
