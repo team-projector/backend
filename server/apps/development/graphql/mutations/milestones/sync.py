@@ -3,7 +3,7 @@ from typing import Any, Dict, Optional
 import graphene
 from graphql import ResolveInfo
 from jnt_django_graphene_toolbox.errors import GraphQLPermissionDenied
-from jnt_django_graphene_toolbox.mutations import SerializerMutation
+from jnt_django_graphene_toolbox.mutations import AuthSerializerMutation
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 
@@ -57,7 +57,7 @@ class InputSerializer(serializers.ModelSerializer):
         return milestone
 
 
-class SyncMilestoneMutation(SerializerMutation):
+class SyncMilestoneMutation(AuthSerializerMutation):
     """Syncing milestone mutation."""
 
     class Meta:

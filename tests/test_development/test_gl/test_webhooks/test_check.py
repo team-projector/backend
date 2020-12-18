@@ -14,7 +14,7 @@ KEY_ISSUES_EVENTS = "issues_events"
 KEY_MERGE_REQUEST_EVENTS = "merge_requests_events"
 KEY_PIPELINE_EVENTS = "pipeline_events"
 KEY_NOTE_EVENTS = "note_events"
-KEY_TOKEN = "token"
+KEY_TOKEN = "token"  # noqa: S105
 
 CREATE_WEBHOOK_BODY = types.MappingProxyType(
     {

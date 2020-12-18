@@ -1,4 +1,7 @@
-class BaseServiceError(Exception):
+import abc
+
+
+class BaseServiceError(Exception, metaclass=abc.ABCMeta):
     """Base exception for services errors."""
 
     code: str

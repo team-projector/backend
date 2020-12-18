@@ -2,7 +2,7 @@ from typing import Any, Dict, Optional
 
 import graphene
 from graphql import ResolveInfo
-from jnt_django_graphene_toolbox.mutations import SerializerMutation
+from jnt_django_graphene_toolbox.mutations import AuthSerializerMutation
 
 from apps.development.graphql.mutations.issues.inputs import BaseIssueInput
 from apps.development.graphql.types import IssueType
@@ -13,7 +13,7 @@ class InputSerializer(BaseIssueInput):
     """Ticket sync serializer."""
 
 
-class SyncIssueMutation(SerializerMutation):
+class SyncIssueMutation(AuthSerializerMutation):
     """Syncing issue mutation."""
 
     class Meta:

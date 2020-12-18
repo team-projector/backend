@@ -2,7 +2,7 @@ from typing import Any, Dict, Optional
 
 import graphene
 from graphql import ResolveInfo
-from jnt_django_graphene_toolbox.mutations import SerializerMutation
+from jnt_django_graphene_toolbox.mutations import AuthSerializerMutation
 from rest_framework import exceptions, serializers
 from rest_framework.fields import Field
 
@@ -67,7 +67,7 @@ class InputSerializer(TicketBaseInput):
         return attrs
 
 
-class UpdateTicketMutation(SerializerMutation):
+class UpdateTicketMutation(AuthSerializerMutation):
     """Update ticket mutation."""
 
     class Meta:

@@ -4,7 +4,7 @@ from typing import Any, Dict, Optional
 import graphene
 from django.utils.translation import gettext_lazy as _
 from graphql import ResolveInfo
-from jnt_django_graphene_toolbox.mutations import SerializerMutation
+from jnt_django_graphene_toolbox.mutations import AuthSerializerMutation
 from rest_framework import exceptions, serializers
 
 from apps.development.graphql.types import IssueType
@@ -62,7 +62,7 @@ class InputSerializer(serializers.Serializer):
         return due_date
 
 
-class CreateIssueMutation(SerializerMutation):
+class CreateIssueMutation(AuthSerializerMutation):
     """Create issue mutation."""
 
     class Meta:

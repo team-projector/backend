@@ -4,13 +4,13 @@ from social_core.backends.gitlab import GitLabOAuth2
 
 from apps.users.models import Token
 
-KEY_TOKEN_TYPE = "token_type"
+KEY_TOKEN_TYPE = "token_type"  # noqa: S105
 KEY_EXPIRES_IN = "expires_in"
-KEY_ACCESS_TOKEN = "access_token"
-KEY_REFRESH_TOKEN = "refresh_token"
+KEY_ACCESS_TOKEN = "access_token"  # noqa: S105
+KEY_REFRESH_TOKEN = "refresh_token"  # noqa: S105
 
-ACCESS_TOKEN = "access_token"
-REFRESH_TOKEN = "refresh_token"
+ACCESS_TOKEN = "access_token"  # noqa: S105
+REFRESH_TOKEN = "refresh_token"  # noqa: S105
 
 
 def test_complete_login(
