@@ -1,11 +1,14 @@
 import abc
+from typing import Generic, TypeVar
+
+TOutputDto = TypeVar("TOutputDto")
 
 
-class BasePresenter(abc.ABC):
+class BasePresenter(Generic[TOutputDto], abc.ABC):
     """Abstract class for all presenters."""
 
     @abc.abstractmethod
-    def present(self, output_dto) -> None:
+    def present(self, output_dto: TOutputDto) -> None:
         """Process output dto."""
 
     @abc.abstractmethod
@@ -13,10 +16,10 @@ class BasePresenter(abc.ABC):
         """Return output dto in additional format."""
 
 
-class EmptyPresenter(BasePresenter):
+class EmptyPresenter(Generic[TOutputDto], BasePresenter[TOutputDto]):
     """Presenter without any logic."""
 
-    def present(self, output_dto) -> None:
+    def present(self, output_dto: TOutputDto) -> None:
         """Nothing."""
 
     def get_presented_data(self):

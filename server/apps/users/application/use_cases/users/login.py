@@ -44,7 +44,7 @@ class AuthenticationError(LoginError):
     message = _("MSG__UNABLE_TO_LOGIN_WITH_PROVIDED_CREDENTIALS")
 
 
-class LoginUseCase(BaseUseCase):
+class LoginUseCase(BaseUseCase[LoginInputDto, LoginOutputDto]):
     """Login process."""
 
     def execute(self, input_dto: LoginInputDto) -> None:
