@@ -11,7 +11,7 @@ from rest_framework.serializers import Serializer
 from apps.core.application.errors import BaseApplicationError
 from apps.core.application.use_cases import BaseUseCase
 from apps.core.graphql.errors import ApplicationGraphQLError
-from apps.core.graphql.mutations import MutationPresenter
+from apps.core.graphql.mutations import BaseMutationPresenter
 
 
 class UseCaseMutationOptions(SerializerMutationOptions):
@@ -19,6 +19,7 @@ class UseCaseMutationOptions(SerializerMutationOptions):
 
     use_case_class: Optional[Type[BaseUseCase]] = None
     serializer_class: Optional[Type[Serializer]] = None
+    presenter_class: Optional[Type[BaseMutationPresenter]] = None
     permission_classes = None
 
 
@@ -29,10 +30,11 @@ class BaseUseCaseMutation(SerializerMutation):
         abstract = True
 
     @classmethod
-    def __init_subclass_with_meta__(
+    def __init_subclass_with_meta__(  # noqa: WPS211
         cls,
         permission_classes=None,
         use_case_class=None,
+        presenter_class=None,
         _meta=None,
         **options,
     ):
@@ -42,6 +44,7 @@ class BaseUseCaseMutation(SerializerMutation):
 
         _meta.use_case_class = use_case_class
         _meta.permission_classes = permission_classes
+        _meta.presenter_class = presenter_class
         super().__init_subclass_with_meta__(_meta=_meta, **options)
 
     @classmethod
@@ -68,7 +71,7 @@ class BaseUseCaseMutation(SerializerMutation):
         validated_data,
     ) -> Union["BaseUseCaseMutation", GraphQLError]:
         """Overrideable mutation operation."""
-        presenter = MutationPresenter()
+        presenter = cls._meta.presenter_class(cls)
         use_case = cls._meta.use_case_class(presenter)
 
         try:
@@ -76,7 +79,7 @@ class BaseUseCaseMutation(SerializerMutation):
         except BaseApplicationError as err:
             return ApplicationGraphQLError(err)
         else:
-            return cls.present(root, info, presenter.get_presented_data())
+            return presenter.get_response()
 
     @classmethod
     def present(

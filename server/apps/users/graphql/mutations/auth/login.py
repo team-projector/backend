@@ -5,7 +5,10 @@ from graphql import ResolveInfo
 from jnt_django_graphene_toolbox.security.permissions import AllowAny
 from rest_framework import serializers
 
-from apps.core.graphql.mutations import BaseUseCaseMutation
+from apps.core.graphql.mutations import (
+    BaseMutationPresenter,
+    BaseUseCaseMutation,
+)
 from apps.users.application.use_cases.users import (
     LoginInputDto,
     LoginOutputDto,
@@ -21,13 +24,24 @@ class LoginInputSerializer(serializers.Serializer):
     password = serializers.CharField()
 
 
+class LoginPresenter(BaseMutationPresenter[LoginOutputDto]):
+    """Login presenter."""
+
+    def get_response_data(self):
+        """Returns response fields."""
+        return {
+            "token": self.output_dto.token,
+        }
+
+
 class LoginMutation(BaseUseCaseMutation):
     """Login mutation returns token."""
 
     class Meta:
+        permission_classes = (AllowAny,)
         serializer_class = LoginInputSerializer
         use_case_class = LoginUseCase
-        permission_classes = (AllowAny,)
+        presenter_class = LoginPresenter
 
     token = graphene.Field(TokenType)
 
@@ -43,13 +57,3 @@ class LoginMutation(BaseUseCaseMutation):
             username=validated_data["login"],
             password=validated_data["password"],
         )
-
-    @classmethod
-    def present(
-        cls,
-        root: Optional[object],
-        info: ResolveInfo,  # noqa: WPS110,
-        output_dto: LoginOutputDto,
-    ) -> "BaseUseCaseMutation":
-        """Generate response."""
-        return cls(token=output_dto.token)
