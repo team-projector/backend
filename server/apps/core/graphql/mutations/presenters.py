@@ -1,5 +1,5 @@
 import abc
-from typing import Generic, TypeVar
+from typing import Dict, Generic, Optional, TypeVar
 
 from apps.core.application.use_cases import BasePresenter
 
@@ -19,7 +19,7 @@ class BaseMutationPresenter(
 
     def __init__(self, mutation_class):
         """Initialize."""
-        self.output_dto: TOutputDto = None
+        self.output_dto: Optional[TOutputDto] = None
         self._mutation_class = mutation_class
 
     def present(self, output_dto: TOutputDto) -> None:
@@ -30,6 +30,6 @@ class BaseMutationPresenter(
         """Returns response."""
         return self._mutation_class(**self.get_response_data())
 
-    def get_response_data(self):
+    def get_response_data(self) -> Dict[str, object]:
         """Returns response fields."""
         return {}

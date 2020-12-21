@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Dict, Optional
 
 import graphene
 from graphql import ResolveInfo
@@ -27,7 +27,7 @@ class LoginInputSerializer(serializers.Serializer):
 class LoginPresenter(BaseMutationPresenter[LoginOutputDto]):
     """Login presenter."""
 
-    def get_response_data(self):
+    def get_response_data(self) -> Dict[str, object]:
         """Returns response fields."""
         return {
             "token": self.output_dto.token,
