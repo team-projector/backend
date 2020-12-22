@@ -7,8 +7,9 @@ from django.utils.translation import gettext_lazy as _
 
 from apps.core.application.errors import BaseApplicationError
 from apps.core.application.use_cases import BaseUseCase
+from apps.core.injector import injector
+from apps.users.application.interfaces import ITokenService
 from apps.users.models import Token
-from apps.users.services.token import create_user_token
 
 
 @dataclass(frozen=True)
@@ -59,10 +60,11 @@ class LoginUseCase(BaseUseCase[LoginInputDto, LoginOutputDto]):
         if not user:
             raise AuthenticationError
 
-        token = create_user_token(user)
-
         user.last_login = timezone.now()
         user.save(update_fields=("last_login",))
+
+        token_service = injector.get(ITokenService)
+        token = token_service.create_user_token(user)
 
         self.presenter.present(LoginOutputDto(token=token))
 

@@ -38,6 +38,7 @@ uvicorn = "*"
 django-constance = {extras = ["database"], version = "*"}
 python-memcached = "*"
 premailer = "*"
+injector = "^0.18.4"
 
 [tool.poetry.dev-dependencies]
 pytest = "5.*" # problem with integrity

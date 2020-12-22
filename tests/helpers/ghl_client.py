@@ -5,7 +5,7 @@ from graphene.test import Client
 from jnt_django_toolbox.helpers.objects import dict2obj
 
 from apps.users.models import Token, User
-from apps.users.services.token.create import create_user_token
+from apps.users.services.token import create_user_token
 from gql import schema
 
 
