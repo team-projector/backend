@@ -7,7 +7,7 @@ from constance import config
 from django.core.exceptions import ImproperlyConfigured
 from slack.errors import SlackApiError
 
-from apps.core.decorators import suppress_errors
+from apps.core.utils.decorators import suppress_errors
 from apps.users.models import User
 
 

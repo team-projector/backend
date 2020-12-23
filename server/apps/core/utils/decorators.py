@@ -2,7 +2,7 @@ from contextlib import suppress
 
 
 class SuppressErrors:
-    """Base suppress errors class."""
+    """Suppress errors class ."""
 
     def __init__(self, *exceptions):
         """Initializing."""

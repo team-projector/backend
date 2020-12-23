@@ -2,7 +2,7 @@ from urllib.error import HTTPError, URLError
 
 import pytest
 
-from apps.core.decorators import suppress_errors
+from apps.core.utils.decorators import suppress_errors
 
 
 def test_suppress_errors():

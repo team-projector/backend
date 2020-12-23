@@ -1,6 +1,6 @@
 from django.utils.translation import gettext_lazy as _
 
-from apps.core.injector import injector
+from apps.core import injector
 from apps.core.utils.apps import BaseAppConfig
 
 
