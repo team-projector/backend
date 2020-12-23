@@ -1,6 +1,6 @@
 from django.db.models import Func
 
-from apps.core.services.constances import get_first_week_day
+from apps.core.services.week import get_first_week_day
 
 
 def _generate_trunc_week_template() -> str:

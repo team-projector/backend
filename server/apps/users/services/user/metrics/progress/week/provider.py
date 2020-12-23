@@ -3,7 +3,7 @@ from typing import List
 
 from jnt_django_toolbox.helpers.date import begin_of_week
 
-from apps.core.services.constances import get_first_week_day
+from apps.core.services.week import get_first_week_day
 from apps.users.services.user.metrics.progress import provider
 from apps.users.services.user.metrics.progress.week.metrics import (
     UserWeekMetricsGenerator,

@@ -3,7 +3,7 @@ import json
 from constance import config
 from django.template.loader import render_to_string
 
-from apps.core.services.html import unescape_text
+from apps.core.utils.html import unescape_text
 
 
 def test_generate_message(assets):

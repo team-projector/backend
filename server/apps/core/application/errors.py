@@ -2,7 +2,7 @@ import abc
 
 
 class BaseApplicationError(Exception, metaclass=abc.ABCMeta):
-    """Base exception for usecase errors."""
+    """Base exception for application errors."""
 
     code: str
     message: str

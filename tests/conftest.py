@@ -1,6 +1,6 @@
 pytest_plugins = (
-    "tests.fixtures.ghl",
-    "tests.fixtures.ghl_mock",
+    "tests.fixtures.gql",
+    "tests.fixtures.gql_mock",
     "tests.fixtures.settings",
     "tests.fixtures.gitlab",
     "tests.fixtures.users",
