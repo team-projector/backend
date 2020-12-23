@@ -7,8 +7,8 @@ from django.utils import timezone
 from rest_framework.exceptions import AuthenticationFailed
 
 from apps.core.graphql.security.authentication import TokenAuthentication
+from apps.users.application.interfaces import ITokenService
 from apps.users.models import Token, User
-from apps.users.services.token import TokenService
 
 ROOT_URL = "/"
 
@@ -24,7 +24,7 @@ def auth() -> TokenAuthentication:
 
 
 @pytest.fixture()
-def user_token(token_service: TokenService, user: User) -> Token:
+def user_token(token_service: ITokenService, user: User) -> Token:
     """
     User token.
 
