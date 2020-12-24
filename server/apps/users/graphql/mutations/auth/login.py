@@ -8,7 +8,7 @@ from rest_framework import serializers
 from apps.core import injector
 from apps.core.graphql.mutations.mixins import ErrorHandlerMixin
 from apps.users.graphql.types import TokenType
-from apps.users.services.login import LoginInputDto, LoginService
+from apps.users.services.auth.login import LoginInputDto, LoginService
 
 
 class LoginInputSerializer(serializers.Serializer):

@@ -2,7 +2,7 @@ from jnt_django_graphene_toolbox.errors import GraphQLInputError
 
 from apps.core.graphql.errors import GenericGraphQLError
 from apps.users.models import Token
-from apps.users.services.login import AuthenticationError
+from apps.users.services.auth.login import AuthenticationError
 from tests.fixtures.users import DEFAULT_USER_PASSWORD, DEFAULT_USERNAME
 
 

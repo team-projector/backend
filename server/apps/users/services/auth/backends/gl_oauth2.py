@@ -25,7 +25,6 @@ class GitLabOAuth2Backend(SocialGitLabOAuth2):
         User must be exist in DB.
         """
         user = super().auth_complete(*args, **kwargs)
-
         if not user:
             return HttpResponseBadRequest("Invalid token")
 

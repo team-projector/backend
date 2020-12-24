@@ -19,13 +19,6 @@ class LoginInputDto:
     password: str
 
 
-@dataclass(frozen=True)
-class LoginOutputDto:
-    """Login output data."""
-
-    token: Token
-
-
 class LoginError(BaseServiceError, metaclass=abc.ABCMeta):
     """Base class for login errors."""
 
