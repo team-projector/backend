@@ -1,12 +1,11 @@
 from typing import Optional
 
 import graphene
-from django.contrib.auth import REDIRECT_FIELD_NAME
 from graphql import ResolveInfo
 from jnt_django_graphene_toolbox.mutations import BaseMutation
-from social_core.actions import do_auth
 
-from apps.users.graphql.mutations.helpers.auth import page_social_auth
+from apps.core import injector
+from apps.users.services.auth.social_login import SocialLoginService
 
 
 class LoginGitlabMutation(BaseMutation):
@@ -19,10 +18,9 @@ class LoginGitlabMutation(BaseMutation):
         cls,
         root: Optional[object],
         info: ResolveInfo,  # noqa: WPS110
+        **kwargs,
     ) -> "LoginGitlabMutation":
         """Returns redirect url for Gitlab."""
-        request = page_social_auth(info.context)
-
-        response = do_auth(request.backend, redirect_name=REDIRECT_FIELD_NAME)
-
-        return cls(redirect_url=response.url)
+        service = injector.get(SocialLoginService)
+        redirect_url = service.begin_login(info.context)
+        return cls(redirect_url=redirect_url)

@@ -13,7 +13,7 @@ from apps.users.services.token import TokenService
 
 @dataclass(frozen=True)
 class LoginInputDto:
-    """Login unput data."""
+    """Login input data."""
 
     username: str
     password: str

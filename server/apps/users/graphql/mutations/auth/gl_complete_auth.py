@@ -5,8 +5,9 @@ from graphql import ResolveInfo
 from jnt_django_graphene_toolbox.mutations import BaseSerializerMutation
 from rest_framework import serializers
 
+from apps.core import injector
 from apps.users.graphql.types import TokenType
-from apps.users.services.user.auth import complete_social_auth
+from apps.users.services.auth.social_login import SocialLoginService
 
 
 class InputSerializer(serializers.Serializer):
@@ -32,4 +33,6 @@ class CompleteGitlabAuthMutation(BaseSerializerMutation):
         validated_data: Dict[str, str],
     ) -> "CompleteGitlabAuthMutation":
         """After successful login return class with token."""
-        return cls(token=complete_social_auth(info.context, validated_data))
+        service = injector.get(SocialLoginService)
+        token = service.complete_login(info.context, validated_data)
+        return cls(token=token)
