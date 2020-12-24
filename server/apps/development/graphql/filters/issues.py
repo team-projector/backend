@@ -1,8 +1,9 @@
 import django_filters
 from django.contrib.auth import get_user_model
 from django.db.models import QuerySet
-from jnt_django_graphene_toolbox.filters import OrderingFilter, SearchFilter
+from jnt_django_graphene_toolbox.filters import SearchFilter
 
+from apps.core.graphql.queries.filters import OrderingFilter
 from apps.development.models import (
     Issue,
     Milestone,

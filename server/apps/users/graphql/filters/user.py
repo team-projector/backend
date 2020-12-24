@@ -1,6 +1,7 @@
 import django_filters
 from django.contrib.auth import get_user_model
-from jnt_django_graphene_toolbox.filters import OrderingFilter
+
+from apps.core.graphql.queries.filters import OrderingFilter
 
 User = get_user_model()
 
