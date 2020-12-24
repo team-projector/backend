@@ -1,10 +1,10 @@
 import django_filters
 from jnt_django_graphene_toolbox.filters import (
     EnumMultipleFilter,
-    OrderingFilter,
     SearchFilter,
 )
 
+from apps.core.graphql.queries.filters import OrderingFilter
 from apps.development.models import Project
 from apps.development.models.choices.project_state import ProjectState
 
