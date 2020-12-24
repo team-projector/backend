@@ -1,7 +1,7 @@
 import pytest
 from constance.test import override_config
 
-from apps.core.services.constances import WEEK_DAY_MAP, get_first_week_day
+from apps.core.services.week import WEEK_DAY_MAP, get_first_week_day
 
 
 @pytest.fixture(params=[0, 1, "1", "0"])

@@ -8,7 +8,7 @@ from rest_framework.exceptions import AuthenticationFailed
 
 from apps.core.graphql.security.authentication import TokenAuthentication
 from apps.users.models import Token, User
-from apps.users.services.token.create import create_user_token
+from apps.users.services.token import TokenService
 
 ROOT_URL = "/"
 
@@ -24,15 +24,16 @@ def auth() -> TokenAuthentication:
 
 
 @pytest.fixture()
-def user_token(user: User) -> Token:
+def user_token(token_service: TokenService, user: User) -> Token:
     """
     User token.
 
+    :param token_service:
     :param user:
     :type user: User
     :rtype: Token
     """
-    return create_user_token(user)
+    return token_service.create_user_token(user)
 
 
 def set_http_auth_header(request: HttpRequest, token: Token) -> None:

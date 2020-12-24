@@ -1,15 +1,10 @@
 import abc
 
+from apps.core.errors import BaseError
 
-class BaseApplicationError(Exception, metaclass=abc.ABCMeta):
-    """Base exception for usecase errors."""
 
-    code: str
-    message: str
-
-    def __init__(self):
-        """Initialize."""
-        super().__init__(self.message)
+class BaseApplicationError(BaseError, metaclass=abc.ABCMeta):
+    """Base exception for application errors."""
 
 
 class AuthenticationErrorMixin(BaseApplicationError):

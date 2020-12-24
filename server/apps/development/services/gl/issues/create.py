@@ -4,6 +4,7 @@ from typing import List, Optional
 
 from apps.core.gitlab.client import get_gitlab_client
 from apps.development.models import Issue, Milestone, Project
+from apps.development.services.errors import NoPersonalGitLabToken
 from apps.development.services.issue.gl.manager import IssueGlManager
 from apps.users.models import User
 
@@ -24,6 +25,9 @@ class NewIssueData:
 
 def create_issue(issue_data: NewIssueData) -> Issue:
     """Create issue in gitlab and return synced issue."""
+    if not issue_data.author.gl_token:
+        raise NoPersonalGitLabToken
+
     new_issue_data = {
         "title": issue_data.title,
         "assignee_ids": [issue_data.user.gl_id],

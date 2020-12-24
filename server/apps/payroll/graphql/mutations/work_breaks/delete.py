@@ -2,7 +2,8 @@ from typing import Optional
 
 import graphene
 from graphql import ResolveInfo
-from jnt_django_graphene_toolbox.mutations import AuthSerializerMutation
+from jnt_django_graphene_toolbox.mutations import BaseSerializerMutation
+from jnt_django_graphene_toolbox.security.permissions import AllowAuthenticated
 from rest_framework import serializers
 
 from apps.payroll.graphql.permissions import CanManageWorkBreak
@@ -18,18 +19,17 @@ class InputSerializer(serializers.Serializer):
     )
 
 
-class DeleteWorkBreakMutation(AuthSerializerMutation):
+class DeleteWorkBreakMutation(BaseSerializerMutation):
     """Delete work break after validation."""
 
     class Meta:
         serializer_class = InputSerializer
-
-    permission_classes = (CanManageWorkBreak,)
+        permission_classes = (AllowAuthenticated, CanManageWorkBreak)
 
     ok = graphene.Boolean()
 
     @classmethod
-    def perform_mutate(
+    def mutate_and_get_payload(
         cls,
         root: Optional[object],
         info: ResolveInfo,  # noqa: WPS110

@@ -1,12 +1,12 @@
 from jnt_django_graphene_toolbox.errors import BaseGraphQLError
 
-from apps.core.application.errors import BaseApplicationError
+from apps.core.errors import BaseError
 
 
-class ApplicationGraphQLError(BaseGraphQLError):
+class GenericGraphQLError(BaseGraphQLError):
     """Wrap errors from application layer."""
 
-    def __init__(self, error: BaseApplicationError):
+    def __init__(self, error: BaseError):
         """Initialize."""
         self.original_error = error
 

@@ -5,7 +5,7 @@ from django.http import HttpRequest
 from rest_framework.test import APIRequestFactory as DjangoAPIRequestFactory
 
 from apps.users.models import Token, User
-from apps.users.services.token.create import create_user_token
+from apps.users.services.token import TokenService
 
 
 class ApiRequestFactory(DjangoAPIRequestFactory):
@@ -17,13 +17,14 @@ class ApiRequestFactory(DjangoAPIRequestFactory):
 
         self._user: Optional[User] = None
         self._token: Optional[Token] = None
+        self._token_service = TokenService()
 
     def set_user(self, user: User, token: Optional[Token] = None) -> None:
         """Set user for auth requests."""
         self._user = user
 
         if token is None:
-            token = create_user_token(user)
+            token = self._token_service.create_user_token(user)
 
         self._token = token
 

@@ -5,7 +5,7 @@ from django.utils import timezone
 from jnt_django_toolbox.helpers.date import begin_of_week
 from jnt_django_toolbox.helpers.time import seconds
 
-from apps.core.services.constances import get_first_week_day
+from apps.core.services.week import get_first_week_day
 from apps.development.models.issue import IssueState
 from apps.users.services.user.metrics import get_progress_metrics
 from tests.test_development.factories import IssueFactory

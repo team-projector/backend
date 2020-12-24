@@ -3,7 +3,8 @@ from typing import Optional
 import graphene
 from django.contrib.auth import get_user_model
 from graphql import ResolveInfo
-from jnt_django_graphene_toolbox.mutations import AuthSerializerMutation
+from jnt_django_graphene_toolbox.mutations import BaseSerializerMutation
+from jnt_django_graphene_toolbox.security.permissions import AllowAuthenticated
 from jnt_django_graphene_toolbox.serializers.fields import EnumField
 from rest_framework import serializers
 
@@ -30,18 +31,17 @@ class InputSerializer(serializers.Serializer):
     paid_days = serializers.IntegerField(min_value=0, required=False)
 
 
-class UpdateWorkBreakMutation(AuthSerializerMutation):
+class UpdateWorkBreakMutation(BaseSerializerMutation):
     """Update work break after validation."""
 
     class Meta:
         serializer_class = InputSerializer
-
-    permission_classes = (CanManageWorkBreak,)
+        permission_classes = (AllowAuthenticated, CanManageWorkBreak)
 
     work_break = graphene.Field(WorkBreakType)
 
     @classmethod
-    def perform_mutate(
+    def mutate_and_get_payload(
         cls,
         root: Optional[object],
         info: ResolveInfo,  # noqa: WPS110

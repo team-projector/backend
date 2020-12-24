@@ -5,7 +5,7 @@ from constance.test import override_config
 from jnt_django_toolbox.helpers.date import begin_of_week
 
 from apps.core.models.query import TruncWeek
-from apps.core.services.constances import get_first_week_day
+from apps.core.services.week import get_first_week_day
 from apps.payroll.models import SpentTime
 from tests.test_payroll.factories import IssueSpentTimeFactory
 

@@ -2,7 +2,7 @@ from typing import Optional
 
 import graphene
 from graphql import ResolveInfo
-from jnt_django_graphene_toolbox.mutations import AuthSerializerMutation
+from jnt_django_graphene_toolbox.mutations import BaseSerializerMutation
 from rest_framework import serializers
 
 from apps.core.graphql.security.permissions import AllowProjectManager
@@ -19,23 +19,22 @@ class InputSerializer(serializers.Serializer):
     @property
     def validated_data(self):
         """Validated data changing."""
-        ret = super().validated_data
-        ret["ticket"] = ret.pop("id", None)
-        return ret
+        validated_data = super().validated_data
+        validated_data["ticket"] = validated_data.pop("id", None)
+        return validated_data
 
 
-class DeleteTicketMutation(AuthSerializerMutation):
+class DeleteTicketMutation(BaseSerializerMutation):
     """Delete ticket."""
 
     class Meta:
         serializer_class = InputSerializer
-
-    permission_classes = (AllowProjectManager,)
+        permission_classes = (AllowProjectManager,)
 
     ok = graphene.Boolean()
 
     @classmethod
-    def perform_mutate(
+    def mutate_and_get_payload(
         cls,
         root: Optional[object],
         info: ResolveInfo,  # noqa: WPS110

@@ -6,7 +6,7 @@ from django.core.exceptions import ImproperlyConfigured
 from django.template.loader import render_to_string
 
 from apps.core.notifications.slack.client import SlackClient
-from apps.core.services.html import unescape_text
+from apps.core.utils.html import unescape_text
 from apps.users.models import User
 
 
