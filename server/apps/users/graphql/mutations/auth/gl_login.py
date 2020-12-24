@@ -3,22 +3,19 @@ from typing import Optional
 import graphene
 from django.contrib.auth import REDIRECT_FIELD_NAME
 from graphql import ResolveInfo
-from jnt_django_graphene_toolbox.mutations.no_input import NoInputMutation
-from jnt_django_graphene_toolbox.security.permissions import AllowAny
+from jnt_django_graphene_toolbox.mutations import BaseMutation
 from social_core.actions import do_auth
 
 from apps.users.graphql.mutations.helpers.auth import page_social_auth
 
 
-class LoginGitlabMutation(NoInputMutation):
+class LoginGitlabMutation(BaseMutation):
     """Login mutation through Gitlab returns url."""
-
-    permission_classes = (AllowAny,)
 
     redirect_url = graphene.String()
 
     @classmethod
-    def perform_mutate(
+    def mutate_and_get_payload(
         cls,
         root: Optional[object],
         info: ResolveInfo,  # noqa: WPS110

@@ -1,8 +1,8 @@
 from jnt_django_graphene_toolbox.errors import GraphQLInputError
 
-from apps.core.graphql.errors import ApplicationGraphQLError
-from apps.users.application.use_cases.users.login import AuthenticationError
+from apps.core.graphql.errors import GenericGraphQLError
 from apps.users.models import Token
+from apps.users.services.login import AuthenticationError
 from tests.fixtures.users import DEFAULT_USER_PASSWORD, DEFAULT_USERNAME
 
 
@@ -50,7 +50,7 @@ def test_wrong_username(user, ghl_mock_info, login_mutation):
         password=DEFAULT_USER_PASSWORD,
     )
 
-    assert isinstance(response, ApplicationGraphQLError)
+    assert isinstance(response, GenericGraphQLError)
     assert response.original_error.code == AuthenticationError.code
     assert not Token.objects.filter(user=user).exists()
 
@@ -66,7 +66,7 @@ def test_wrong_password(user, ghl_mock_info, login_mutation):
         password="wrong{0}".format(DEFAULT_USER_PASSWORD),
     )
 
-    assert isinstance(response, ApplicationGraphQLError)
+    assert isinstance(response, GenericGraphQLError)
     assert response.original_error.code == AuthenticationError.code
     assert not Token.objects.filter(user=user).exists()
 

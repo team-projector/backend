@@ -1,5 +1,6 @@
 import graphene
-from jnt_django_graphene_toolbox.mutations import AuthSerializerMutation
+from jnt_django_graphene_toolbox.mutations import SerializerMutation
+from jnt_django_graphene_toolbox.security.permissions import AllowAuthenticated
 from rest_framework import serializers
 
 from apps.payroll.graphql.permissions import CanApproveDeclineWorkBreak
@@ -17,18 +18,17 @@ class InputSerializer(serializers.Serializer):
     )
 
 
-class ApproveWorkBreakMutation(AuthSerializerMutation):
+class ApproveWorkBreakMutation(SerializerMutation):
     """Approve work break mutation."""
 
     class Meta:
         serializer_class = InputSerializer
-
-    permission_classes = (CanApproveDeclineWorkBreak,)
+        permission_classes = (AllowAuthenticated, CanApproveDeclineWorkBreak)
 
     work_break = graphene.Field(WorkBreakType)
 
     @classmethod
-    def perform_mutate(
+    def mutate_and_get_payload(
         cls,
         root,
         info,  # noqa: WPS110

@@ -2,7 +2,8 @@ from typing import Any, Dict, Optional
 
 import graphene
 from graphql import ResolveInfo
-from jnt_django_graphene_toolbox.mutations import AuthSerializerMutation
+from jnt_django_graphene_toolbox.mutations import SerializerMutation
+from jnt_django_graphene_toolbox.security.permissions import AllowAuthenticated
 
 from apps.development.graphql.mutations.issues.inputs import BaseIssueInput
 from apps.development.graphql.types import IssueType
@@ -13,16 +14,17 @@ class InputSerializer(BaseIssueInput):
     """Ticket sync serializer."""
 
 
-class SyncIssueMutation(AuthSerializerMutation):
+class SyncIssueMutation(SerializerMutation):
     """Syncing issue mutation."""
 
     class Meta:
         serializer_class = InputSerializer
+        permission_classes = (AllowAuthenticated,)
 
     issue = graphene.Field(IssueType)
 
     @classmethod
-    def perform_mutate(  # type: ignore
+    def mutate_and_get_payload(  # type: ignore
         cls,
         root: Optional[object],
         info: ResolveInfo,  # noqa: WPS110ø

@@ -1,15 +1,14 @@
 import abc
 from dataclasses import dataclass
 
+import injector
 from django.contrib.auth import authenticate
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
-from apps.core import injector
-from apps.core.application.errors import BaseApplicationError
-from apps.core.application.use_cases import BaseUseCase
-from apps.users.application.interfaces import ITokenService
+from apps.core.services.errors import BaseServiceError
 from apps.users.models import Token
+from apps.users.services.token import TokenService
 
 
 @dataclass(frozen=True)
@@ -27,7 +26,7 @@ class LoginOutputDto:
     token: Token
 
 
-class LoginError(BaseApplicationError, metaclass=abc.ABCMeta):
+class LoginError(BaseServiceError, metaclass=abc.ABCMeta):
     """Base class for login errors."""
 
 
@@ -45,10 +44,15 @@ class AuthenticationError(LoginError):
     message = _("MSG__UNABLE_TO_LOGIN_WITH_PROVIDED_CREDENTIALS")
 
 
-class LoginUseCase(BaseUseCase[LoginInputDto, LoginOutputDto]):
-    """Login process."""
+class LoginService:
+    """Login service."""
 
-    def execute(self, input_dto: LoginInputDto) -> None:
+    @injector.inject
+    def __init__(self, token_service: TokenService):
+        """Initialize."""
+        self._token_service = token_service
+
+    def execute(self, input_dto: LoginInputDto) -> Token:
         """Main logic."""
         self._validate_input(input_dto)
 
@@ -63,10 +67,7 @@ class LoginUseCase(BaseUseCase[LoginInputDto, LoginOutputDto]):
         user.last_login = timezone.now()
         user.save(update_fields=("last_login",))
 
-        token_service = injector.get(ITokenService)
-        token = token_service.create_user_token(user)
-
-        self.presenter.present(LoginOutputDto(token=token))
+        return self._token_service.create_user_token(user)
 
     def _validate_input(self, input_dto: LoginInputDto) -> None:
         if not input_dto.username or not input_dto.password:

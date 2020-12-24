@@ -3,11 +3,10 @@ from datetime import timedelta
 from django.conf import settings
 from django.utils import timezone
 
-from apps.users.application.interfaces import ITokenService
 from apps.users.models import Token, User
 
 
-class TokenService(ITokenService):
+class TokenService:
     """Service for manage tokens."""
 
     def create_user_token(self, user: User) -> Token:

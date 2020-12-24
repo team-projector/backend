@@ -3,7 +3,8 @@ from typing import Any, Dict, Optional
 import graphene
 from graphql import ResolveInfo
 from jnt_django_graphene_toolbox.errors import GraphQLPermissionDenied
-from jnt_django_graphene_toolbox.mutations import AuthSerializerMutation
+from jnt_django_graphene_toolbox.mutations import SerializerMutation
+from jnt_django_graphene_toolbox.security.permissions import AllowAuthenticated
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 
@@ -57,16 +58,17 @@ class InputSerializer(serializers.ModelSerializer):
         return milestone
 
 
-class SyncMilestoneMutation(AuthSerializerMutation):
+class SyncMilestoneMutation(SerializerMutation):
     """Syncing milestone mutation."""
 
     class Meta:
         serializer_class = InputSerializer
+        permission_classes = (AllowAuthenticated,)
 
     milestone = graphene.Field(MilestoneType)
 
     @classmethod
-    def perform_mutate(  # type: ignore
+    def mutate_and_get_payload(  # type: ignore
         cls,
         root: Optional[object],
         info: ResolveInfo,  # noqa: WPS110ø

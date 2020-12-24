@@ -1,7 +1,6 @@
 from typing import Optional, Type, Union
 
 from graphql import GraphQLError, ResolveInfo
-from jnt_django_graphene_toolbox.errors import GraphQLPermissionDenied
 from jnt_django_graphene_toolbox.mutations import SerializerMutation
 from jnt_django_graphene_toolbox.mutations.serializer import (
     SerializerMutationOptions,
@@ -10,7 +9,7 @@ from rest_framework.serializers import Serializer
 
 from apps.core.application.errors import BaseApplicationError
 from apps.core.application.use_cases import BaseUseCase
-from apps.core.graphql.errors import ApplicationGraphQLError
+from apps.core.graphql.errors import GenericGraphQLError
 from apps.core.graphql.mutations import BaseMutationPresenter
 
 
@@ -20,7 +19,6 @@ class UseCaseMutationOptions(SerializerMutationOptions):
     use_case_class: Optional[Type[BaseUseCase]] = None
     serializer_class: Optional[Type[Serializer]] = None
     presenter_class: Optional[Type[BaseMutationPresenter]] = None
-    permission_classes = None
 
 
 class BaseUseCaseMutation(SerializerMutation):
@@ -32,7 +30,6 @@ class BaseUseCaseMutation(SerializerMutation):
     @classmethod
     def __init_subclass_with_meta__(  # noqa: WPS211
         cls,
-        permission_classes=None,
         use_case_class=None,
         presenter_class=None,
         _meta=None,
@@ -43,28 +40,11 @@ class BaseUseCaseMutation(SerializerMutation):
             _meta = UseCaseMutationOptions(cls)  # noqa: WPS122
 
         _meta.use_case_class = use_case_class
-        _meta.permission_classes = permission_classes
         _meta.presenter_class = presenter_class
         super().__init_subclass_with_meta__(_meta=_meta, **options)
 
     @classmethod
-    def check_premissions(
-        cls,
-        root: Optional[object],
-        info: ResolveInfo,  # noqa: WPS110
-        **input,  # noqa: WPS125
-    ) -> None:
-        """Check permissions."""
-        has_permission = all(
-            perm().has_mutation_permission(root, info, **input)
-            for perm in cls._meta.permission_classes
-        )
-
-        if not has_permission:
-            raise GraphQLPermissionDenied
-
-    @classmethod
-    def perform_mutate(
+    def mutate_and_get_payload(
         cls,
         root: Optional[object],
         info: ResolveInfo,  # noqa: WPS110
@@ -77,19 +57,9 @@ class BaseUseCaseMutation(SerializerMutation):
         try:
             use_case.execute(cls.get_input_dto(root, info, validated_data))
         except BaseApplicationError as err:
-            return ApplicationGraphQLError(err)
+            return GenericGraphQLError(err)
         else:
             return presenter.get_response()
-
-    @classmethod
-    def present(
-        cls,
-        root: Optional[object],
-        info: ResolveInfo,  # noqa: WPS110,
-        output_dto,
-    ) -> "BaseUseCaseMutation":
-        """Presents response."""
-        raise NotImplementedError
 
     @classmethod
     def get_input_dto(

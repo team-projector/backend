@@ -5,8 +5,8 @@ from social_core.backends.gitlab import GitLabOAuth2 as SocialGitLabOAuth2
 from social_core.utils import handle_http_errors
 
 from apps.core import injector
-from apps.users.application.interfaces import ITokenService
 from apps.users.models import User
+from apps.users.services.token import TokenService
 
 
 class GitLabOAuth2Backend(SocialGitLabOAuth2):
@@ -29,7 +29,7 @@ class GitLabOAuth2Backend(SocialGitLabOAuth2):
         if not user:
             return HttpResponseBadRequest("Invalid token")
 
-        token_service = injector.get(ITokenService)
+        token_service = injector.get(TokenService)
         token = token_service.create_user_token(user)
 
         user.last_login = timezone.now()

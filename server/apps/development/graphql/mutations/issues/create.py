@@ -4,12 +4,12 @@ from typing import Any, Dict, Optional
 import graphene
 from django.utils.translation import gettext_lazy as _
 from graphql import ResolveInfo
-from jnt_django_graphene_toolbox.mutations import AuthSerializerMutation
+from jnt_django_graphene_toolbox.mutations import SerializerMutation
+from jnt_django_graphene_toolbox.security.permissions import AllowAuthenticated
 from rest_framework import exceptions, serializers
 
 from apps.development.graphql.types import IssueType
 from apps.development.models import Milestone, Project
-from apps.development.services.errors import NoPersonalGitLabToken
 from apps.development.services.gl.issues.create import (
     NewIssueData,
     create_issue,
@@ -35,14 +35,6 @@ class InputSerializer(serializers.Serializer):
     estimate = serializers.IntegerField(required=False, allow_null=True)
     dueDate = serializers.DateField(source="due_date")  # noqa: N815, WPS115
 
-    def validate(self, attrs):
-        """Validates input parameters."""
-        attrs["author"] = self.context["request"].user
-        if not attrs["author"].gl_token:
-            raise NoPersonalGitLabToken
-
-        return attrs
-
     def validate_estimate(self, estimate) -> int:
         """Validate estimate."""
         estimate = estimate or 0
@@ -62,16 +54,17 @@ class InputSerializer(serializers.Serializer):
         return due_date
 
 
-class CreateIssueMutation(AuthSerializerMutation):
+class CreateIssueMutation(SerializerMutation):
     """Create issue mutation."""
 
     class Meta:
         serializer_class = InputSerializer
+        permission_classes = (AllowAuthenticated,)
 
     issue = graphene.Field(IssueType)
 
     @classmethod
-    def perform_mutate(  # type: ignore
+    def mutate_and_get_payload(  # type: ignore
         cls,
         root: Optional[object],
         info: ResolveInfo,  # noqa: WPS110ø

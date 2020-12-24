@@ -4,7 +4,8 @@ from typing import Dict, Optional
 import graphene
 from django.contrib.auth import get_user_model
 from graphql import ResolveInfo
-from jnt_django_graphene_toolbox.mutations import AuthSerializerMutation
+from jnt_django_graphene_toolbox.mutations import SerializerMutation
+from jnt_django_graphene_toolbox.security.permissions import AllowAuthenticated
 from jnt_django_graphene_toolbox.serializers.fields import EnumField
 from rest_framework import serializers
 
@@ -50,16 +51,17 @@ class InputSerializer(serializers.Serializer):
         )  # noqa: WPS601
 
 
-class CreateWorkBreakMutation(AuthSerializerMutation):
+class CreateWorkBreakMutation(SerializerMutation):
     """Create work break mutation."""
 
     class Meta:
         serializer_class = InputSerializer
+        permission_classes = (AllowAuthenticated,)
 
     work_break = graphene.Field(WorkBreakType)
 
     @classmethod
-    def perform_mutate(
+    def mutate_and_get_payload(
         cls,
         root: Optional[object],
         info: ResolveInfo,  # noqa: WPS110

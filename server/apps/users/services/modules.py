@@ -1,6 +1,6 @@
 import injector
 
-from apps.users.application.interfaces import ITokenService
+from apps.users.services.login import LoginService
 from apps.users.services.token import TokenService
 
 
@@ -9,4 +9,5 @@ class UserServicesModule(injector.Module):
 
     def configure(self, binder: injector.Binder) -> None:
         """Bind services."""
-        binder.bind(ITokenService, to=TokenService, scope=injector.singleton)
+        binder.bind(TokenService, scope=injector.singleton)
+        binder.bind(LoginService, scope=injector.singleton)

@@ -1,4 +1,3 @@
-import pytest
 from jnt_django_graphene_toolbox.errors import GraphQLPermissionDenied
 
 from apps.users.models import Token
@@ -28,5 +27,5 @@ def test_success(user, ghl_auth_mock_info, logout_mutation):
 
 def test_non_auth(user, ghl_mock_info, logout_mutation):
     """Test logout if user is not logged."""
-    with pytest.raises(GraphQLPermissionDenied):
-        logout_mutation(root=None, info=ghl_mock_info)
+    response = logout_mutation(root=None, info=ghl_mock_info)
+    assert isinstance(response, GraphQLPermissionDenied)
