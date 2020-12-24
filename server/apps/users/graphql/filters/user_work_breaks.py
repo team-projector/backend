@@ -1,8 +1,8 @@
 import django_filters
 from django.contrib.auth import get_user_model
 from django.db.models import QuerySet
-from jnt_django_graphene_toolbox.filters import OrderingFilter
 
+from apps.core.graphql.queries.filters import OrderingFilter
 from apps.development.models import Team, TeamMember
 
 User = get_user_model()
