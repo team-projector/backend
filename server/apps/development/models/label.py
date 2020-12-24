@@ -17,6 +17,7 @@ class Label(models.Model):
     class Meta:
         verbose_name = _("VN__LABEL")
         verbose_name_plural = _("VN__LABELS")
+        ordering = ("title",)
 
     title = models.CharField(
         max_length=DEFAULT_TITLE_LENGTH,
