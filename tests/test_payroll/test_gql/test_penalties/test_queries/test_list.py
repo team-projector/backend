@@ -7,7 +7,7 @@ from tests.test_payroll.factories import PenaltyFactory
 from tests.test_users.factories import UserFactory
 
 
-def test_query(user, gql_client_authenticated, ghl_raw):
+def test_query(user, gql_client_authenticated, gql_raw):
     """
     Test query.
 
@@ -16,7 +16,7 @@ def test_query(user, gql_client_authenticated, ghl_raw):
     """
     PenaltyFactory.create_batch(size=3, user=user)
 
-    response = gql_client_authenticated.execute(ghl_raw("all_penalties"))
+    response = gql_client_authenticated.execute(gql_raw("all_penalties"))
 
     assert "errors" not in response
     assert response["data"]["allPenalties"]["count"] == 3

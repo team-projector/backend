@@ -5,7 +5,7 @@ from tests.test_development.factories import IssueFactory
 KEY_ID = "id"
 
 
-def test_query(issue, ticket, gql_client, user, ghl_raw):
+def test_query(issue, ticket, gql_client, user, gql_raw):
     """
     Test query.
 
@@ -19,7 +19,7 @@ def test_query(issue, ticket, gql_client, user, ghl_raw):
     gql_client.set_user(user)
 
     response = gql_client.execute(
-        ghl_raw("update_issue"),
+        gql_raw("update_issue"),
         variable_values={KEY_ID: issue.pk, "ticket": ticket.pk},
     )
 

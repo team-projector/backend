@@ -5,11 +5,11 @@ from tests.test_development.factories import TeamFactory
 from tests.test_users.factories import UserFactory
 
 
-def test_query(user, gql_client_authenticated, ghl_raw):
+def test_query(user, gql_client_authenticated, gql_raw):
     """Test getting all teams raw query."""
     TeamFactory.create_batch(5, members=[user])
 
-    response = gql_client_authenticated.execute(ghl_raw("all_teams"))
+    response = gql_client_authenticated.execute(gql_raw("all_teams"))
 
     assert "errors" not in response
     assert response["data"]["allTeams"]["count"] == 5

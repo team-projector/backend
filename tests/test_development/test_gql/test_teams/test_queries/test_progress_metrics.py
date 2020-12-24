@@ -9,7 +9,7 @@ from tests.test_development.factories import TeamFactory, TeamMemberFactory
 GROUP_DAY = "day"
 
 
-def test_query(user, gql_client, ghl_raw):
+def test_query(user, gql_client, gql_raw):
     """Test team progress metrics raw query."""
     team = TeamFactory.create()
     TeamMemberFactory.create(
@@ -23,7 +23,7 @@ def test_query(user, gql_client, ghl_raw):
     date = datetime.now().date()
 
     response = gql_client.execute(
-        ghl_raw("team_progress_metrics"),
+        gql_raw("team_progress_metrics"),
         variable_values={
             "id": team.pk,
             "start": date,

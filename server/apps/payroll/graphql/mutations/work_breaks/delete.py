@@ -2,7 +2,7 @@ from typing import Optional
 
 import graphene
 from graphql import ResolveInfo
-from jnt_django_graphene_toolbox.mutations import SerializerMutation
+from jnt_django_graphene_toolbox.mutations import BaseSerializerMutation
 from jnt_django_graphene_toolbox.security.permissions import AllowAuthenticated
 from rest_framework import serializers
 
@@ -19,7 +19,7 @@ class InputSerializer(serializers.Serializer):
     )
 
 
-class DeleteWorkBreakMutation(SerializerMutation):
+class DeleteWorkBreakMutation(BaseSerializerMutation):
     """Delete work break after validation."""
 
     class Meta:

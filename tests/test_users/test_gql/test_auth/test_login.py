@@ -6,12 +6,12 @@ from apps.users.services.login import AuthenticationError
 from tests.fixtures.users import DEFAULT_USER_PASSWORD, DEFAULT_USERNAME
 
 
-def test_query(user, gql_client, ghl_raw):
+def test_query(user, gql_client, gql_raw):
     """Test login raw query."""
     assert not Token.objects.filter(user=user).exists()
 
     response = gql_client.execute(
-        ghl_raw("login"),
+        gql_raw("login"),
         variable_values={
             "login": DEFAULT_USERNAME,
             "password": DEFAULT_USER_PASSWORD,

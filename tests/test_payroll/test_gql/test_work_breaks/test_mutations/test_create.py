@@ -14,7 +14,7 @@ KEY_COMMENT = "comment"
 KEY_PAID_DAYS = "paid_days"
 
 
-def test_query(user, gql_client, ghl_raw):
+def test_query(user, gql_client, gql_raw):
     """Test create raw query."""
     gql_client.set_user(user)
 
@@ -28,7 +28,7 @@ def test_query(user, gql_client, ghl_raw):
     }
 
     response = gql_client.execute(
-        ghl_raw("create_work_break"),
+        gql_raw("create_work_break"),
         variable_values=create_variables,
     )
 

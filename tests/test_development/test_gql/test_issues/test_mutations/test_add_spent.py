@@ -18,7 +18,7 @@ def gl_project(db):
     return GlProjectFactory.create()
 
 
-def test_query(project_manager, gql_client, gl_mocker, ghl_raw, gl_project):
+def test_query(project_manager, gql_client, gl_mocker, gql_raw, gl_project):
     """Test add spent raw query."""
     project_manager.gl_token = "token"
     project_manager.save()
@@ -36,7 +36,7 @@ def test_query(project_manager, gql_client, gl_mocker, ghl_raw, gl_project):
     gql_client.set_user(project_manager)
 
     response = gql_client.execute(
-        ghl_raw("add_spend_time_issue"),
+        gql_raw("add_spend_time_issue"),
         variable_values={KEY_ID: issue.pk, "seconds": 60},
     )
 

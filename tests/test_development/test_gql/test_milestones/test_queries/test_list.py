@@ -10,7 +10,7 @@ from tests.test_development.factories import (
 )
 
 
-def test_query(user, gql_client_authenticated, ghl_raw):
+def test_query(user, gql_client_authenticated, gql_raw):
     """Test getting all milestones raw query."""
     project = ProjectFactory.create()
     ProjectMemberFactory.create(
@@ -20,7 +20,7 @@ def test_query(user, gql_client_authenticated, ghl_raw):
     )
     ProjectMilestoneFactory.create_batch(5, owner=project)
 
-    response = gql_client_authenticated.execute(ghl_raw("all_milestones"))
+    response = gql_client_authenticated.execute(gql_raw("all_milestones"))
 
     assert response["data"]["allMilestones"]["count"] == 5
 

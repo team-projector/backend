@@ -11,7 +11,7 @@ def test_raw_query(  # noqa: WPS211
     gl_mocker,
     user,
     gl_client,
-    ghl_raw,
+    gql_raw,
 ):
     """Test raw query."""
     merge_request = _prepare_sync_data(gl_mocker)
@@ -24,7 +24,7 @@ def test_raw_query(  # noqa: WPS211
     gql_client.set_user(user)
 
     response = gql_client.execute(
-        ghl_raw("sync_merge_request"),
+        gql_raw("sync_merge_request"),
         variable_values={"id": merge_request.pk},
     )
 

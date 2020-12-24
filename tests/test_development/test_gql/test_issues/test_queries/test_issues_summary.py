@@ -28,7 +28,7 @@ def milestone(project):
 def test_issues_summary_query(
     user,
     gql_client_authenticated,
-    ghl_raw,
+    gql_raw,
     milestone,
 ):
     """Test getting issues summary raw query."""
@@ -45,7 +45,7 @@ def test_issues_summary_query(
     )
 
     response = gql_client_authenticated.execute(
-        ghl_raw("issues_summary"),
+        gql_raw("issues_summary"),
         variable_values={"id": user.pk},
     )
 
@@ -56,7 +56,7 @@ def test_issues_summary_query(
 def test_issues_summary_as_developer(
     user,
     gql_client_authenticated,
-    ghl_raw,
+    gql_raw,
     milestone,
 ):
     """Test issues summary as developer."""
@@ -73,7 +73,7 @@ def test_issues_summary_as_developer(
     )
 
     response = gql_client_authenticated.execute(
-        ghl_raw("issues_summary"),
+        gql_raw("issues_summary"),
         variable_values={"id": user.pk},
     )
 

@@ -5,13 +5,13 @@ from tests.test_development.factories import (
 )
 
 
-def test_query(project_manager, gql_client, ticket, ghl_raw):
+def test_query(project_manager, gql_client, ticket, gql_raw):
     """Test update ticket raw query."""
     gql_client.set_user(project_manager)
 
     new_title = "new_{0}".format(ticket.title)
     response = gql_client.execute(
-        ghl_raw("update_ticket"),
+        gql_raw("update_ticket"),
         variable_values={
             "id": ticket.pk,
             "title": new_title,

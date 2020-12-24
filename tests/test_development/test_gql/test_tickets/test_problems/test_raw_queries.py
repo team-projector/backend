@@ -4,7 +4,7 @@ from apps.development.services.ticket.problems import PROBLEM_OVER_DUE_DATE
 from tests.test_development.factories import IssueFactory, TicketFactory
 
 
-def test_list(user, gql_client, ghl_raw):
+def test_list(user, gql_client, gql_raw):
     """Test getting all tickets with problems."""
     for ticket in TicketFactory.create_batch(5, due_date=timezone.now()):
         IssueFactory(
@@ -15,7 +15,7 @@ def test_list(user, gql_client, ghl_raw):
 
     gql_client.set_user(user)
 
-    response = gql_client.execute(ghl_raw("all_tickets"))
+    response = gql_client.execute(gql_raw("all_tickets"))
 
     assert "errors" not in response
     assert response["data"]["allTickets"]["count"] == 5
@@ -24,7 +24,7 @@ def test_list(user, gql_client, ghl_raw):
         assert edge["node"]["problems"] == [PROBLEM_OVER_DUE_DATE]
 
 
-def test_retreive(user, gql_client, ghl_raw):
+def test_retreive(user, gql_client, gql_raw):
     """Test getting ticket with problems."""
     issue = IssueFactory(
         ticket=TicketFactory(due_date=timezone.now()),
@@ -35,7 +35,7 @@ def test_retreive(user, gql_client, ghl_raw):
     gql_client.set_user(user)
 
     response = gql_client.execute(
-        ghl_raw("ticket"),
+        gql_raw("ticket"),
         variable_values={"id": issue.ticket_id},
     )
 

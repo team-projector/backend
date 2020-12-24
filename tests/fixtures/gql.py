@@ -43,6 +43,6 @@ def gql_client() -> GraphQLClient:
 
 
 @pytest.fixture()
-def ghl_raw(request) -> GhlRawQueryProvider:
+def gql_raw(request) -> GhlRawQueryProvider:
     """Ghl raw query provider."""
     return GhlRawQueryProvider(request.fspath.dirname)

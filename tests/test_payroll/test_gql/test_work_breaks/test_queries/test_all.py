@@ -2,13 +2,13 @@ from apps.payroll.models import WorkBreak
 from tests.test_payroll.factories import WorkBreakFactory
 
 
-def test_query(user, gql_client, ghl_raw):
+def test_query(user, gql_client, gql_raw):
     """Test create raw query."""
     gql_client.set_user(user)
 
     work_break = WorkBreakFactory.create(user=user)
 
-    response = gql_client.execute(ghl_raw("all_work_breaks"))
+    response = gql_client.execute(gql_raw("all_work_breaks"))
 
     assert response["data"]["breaks"]["count"] == 1
 

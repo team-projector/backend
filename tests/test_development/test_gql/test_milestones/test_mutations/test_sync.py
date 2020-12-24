@@ -10,7 +10,7 @@ from tests.test_users.factories.user import UserFactory
 KEY_ID = "id"
 
 
-def test_query(make_group_manager, gql_client, gl_mocker, user, ghl_raw):
+def test_query(make_group_manager, gql_client, gl_mocker, user, gql_raw):
     """
     Test query.
 
@@ -27,7 +27,7 @@ def test_query(make_group_manager, gql_client, gl_mocker, user, ghl_raw):
 
     gql_client.set_user(user)
     response = gql_client.execute(
-        ghl_raw("sync_milestone"),
+        gql_raw("sync_milestone"),
         variable_values={KEY_ID: milestone.pk},
     )
 

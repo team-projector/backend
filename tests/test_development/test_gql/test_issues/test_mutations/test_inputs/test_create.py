@@ -50,16 +50,6 @@ def test_estimate_as_none(user, project, context):
     assert serializer.validated_data.get(estimate_field) == 0
 
 
-def test_no_valid_data(user, project, context):
-    """Test no valid data."""
-    serializer = InputSerializer(
-        data=_source_data(user, project),
-        context=context,
-    )
-
-    assert not serializer.is_valid()
-
-
 @pytest.mark.parametrize(
     ("field", "field_value"),
     [

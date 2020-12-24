@@ -2,7 +2,7 @@ from typing import Any, Dict, Optional
 
 import graphene
 from graphql import ResolveInfo
-from jnt_django_graphene_toolbox.mutations import SerializerMutation
+from jnt_django_graphene_toolbox.mutations import BaseSerializerMutation
 from jnt_django_graphene_toolbox.security.permissions import AllowAuthenticated
 from rest_framework import serializers
 
@@ -24,7 +24,7 @@ class InputSerializer(serializers.ModelSerializer):
     )
 
 
-class SyncMergeRequestMutation(SerializerMutation):
+class SyncMergeRequestMutation(BaseSerializerMutation):
     """Syncing merge request mutation."""
 
     class Meta:

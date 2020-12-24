@@ -2,11 +2,11 @@ from apps.development.models.choices.project_state import ProjectState
 from tests.test_development.factories import ProjectGroupFactory
 
 
-def test_raw_query(user, gql_client_authenticated, ghl_raw):
+def test_raw_query(user, gql_client_authenticated, gql_raw):
     """Test getting all project groups raw query."""
     _create_project_groups()
     response = gql_client_authenticated.execute(
-        ghl_raw("project_groups_summary"),
+        gql_raw("project_groups_summary"),
     )
 
     assert "errors" not in response

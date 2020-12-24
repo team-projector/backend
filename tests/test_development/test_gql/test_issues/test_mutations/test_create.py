@@ -15,7 +15,7 @@ def test_raw_query(
     project,
     gql_client,
     gl_mocker,
-    ghl_raw,
+    gql_raw,
 ):
     """Test raw query."""
     user.gl_token = "token"
@@ -33,7 +33,7 @@ def test_raw_query(
     gql_client.set_user(user)
 
     response = gql_client.execute(
-        ghl_raw("create_issue"),
+        gql_raw("create_issue"),
         variable_values={
             "title": "Test issue",
             "project": project.pk,

@@ -7,14 +7,14 @@ from tests.test_payroll.factories import WorkBreakFactory
 from tests.test_users.factories import UserFactory
 
 
-def test_query(user, gql_client, ghl_raw):
+def test_query(user, gql_client, gql_raw):
     """Test raw query."""
     gql_client.set_user(user)
 
     work_break = WorkBreakFactory.create(user=user)
 
     response = gql_client.execute(
-        ghl_raw("work_break"),
+        gql_raw("work_break"),
         variable_values={"id": work_break.pk},
     )
 

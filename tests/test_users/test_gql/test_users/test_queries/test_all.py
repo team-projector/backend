@@ -9,12 +9,12 @@ from tests.test_users.factories import UserFactory
 UserPaidData = namedtuple("UserPaidData", ("user", "salary", "work_break"))
 
 
-def test_raw_query(user, gql_client, ghl_raw):
+def test_raw_query(user, gql_client, gql_raw):
     """Test getting all users raw query."""
     UserFactory.create(roles=0)
     gql_client.set_user(user)
 
-    response = gql_client.execute(ghl_raw("all_users"))
+    response = gql_client.execute(gql_raw("all_users"))
 
     assert "errors" not in response
     assert response["data"]["users"]["count"] == 1
@@ -31,13 +31,13 @@ def test_success(user, ghl_auth_mock_info, all_users_query):
     assert response.edges[0].node == user
 
 
-def test_metrics_some_users(user, gql_client, ghl_raw):
+def test_metrics_some_users(user, gql_client, gql_raw):
     """Test getting all users raw query."""
     user_paid_data = _get_user_paid_data(date(2020, 10, 10), 3, user)
     user1_paid_data = _get_user_paid_data(date(2020, 10, 15), 5)
 
     gql_client.set_user(user)
-    response = gql_client.execute(ghl_raw("all_users"))
+    response = gql_client.execute(gql_raw("all_users"))
 
     assert "errors" not in response
 

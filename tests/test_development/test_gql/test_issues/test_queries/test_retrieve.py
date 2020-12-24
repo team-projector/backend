@@ -7,14 +7,14 @@ from jnt_django_graphene_toolbox.errors import (
 from tests.test_development.factories import IssueFactory
 
 
-def test_query(user, gql_client, ghl_raw):
+def test_query(user, gql_client, gql_raw):
     """Test getting issue raw query."""
     issue = IssueFactory(user=user)
 
     gql_client.set_user(user)
 
     response = gql_client.execute(
-        ghl_raw("issue"),
+        gql_raw("issue"),
         variable_values={"id": issue.pk},
     )
 

@@ -3,13 +3,13 @@ from jnt_django_graphene_toolbox.errors import GraphQLPermissionDenied
 from apps.users.models import Token
 
 
-def test_query(user, gql_client, ghl_raw):
+def test_query(user, gql_client, gql_raw):
     """Test logout raw query."""
     gql_client.set_user(user)
 
     assert Token.objects.filter(user=user).exists()
 
-    response = gql_client.execute(ghl_raw("logout"))
+    response = gql_client.execute(gql_raw("logout"))
 
     assert "errors" not in response
     assert response["data"]["logout"]["status"] == "success"

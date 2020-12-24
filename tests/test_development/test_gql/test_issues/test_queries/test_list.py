@@ -10,11 +10,11 @@ from tests.test_development.factories import (
 from tests.test_users.factories import UserFactory
 
 
-def test_query(user, gql_client_authenticated, ghl_raw):
+def test_query(user, gql_client_authenticated, gql_raw):
     """Test getting all issues raw query."""
     IssueFactory.create_batch(5, user=user)
 
-    response = gql_client_authenticated.execute(ghl_raw("all_issues"))
+    response = gql_client_authenticated.execute(gql_raw("all_issues"))
 
     assert "errors" not in response
     assert response["data"]["allIssues"]["count"] == 5
@@ -53,7 +53,7 @@ def test_unauth(ghl_mock_info, all_issues_query):
 def test_list_as_watcher_by_team(
     user,
     gql_client_authenticated,
-    ghl_raw,
+    gql_raw,
     roles,
     count,
 ):
@@ -75,7 +75,7 @@ def test_list_as_watcher_by_team(
     )
 
     response = gql_client_authenticated.execute(
-        ghl_raw("all_issues"),
+        gql_raw("all_issues"),
         variable_values={"team": team.pk},
     )
 

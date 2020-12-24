@@ -5,11 +5,11 @@ from apps.development.models.project import ProjectState
 from tests.test_development.factories import ProjectFactory
 
 
-def test_query(user, gql_client_authenticated, ghl_raw):
+def test_query(user, gql_client_authenticated, gql_raw):
     """Test getting all projects raw query."""
     ProjectFactory.create_batch(3)
 
-    response = gql_client_authenticated.execute(ghl_raw("all_projects"))
+    response = gql_client_authenticated.execute(gql_raw("all_projects"))
 
     assert "errors" not in response
     assert response["data"]["allProjects"]["count"] == 3

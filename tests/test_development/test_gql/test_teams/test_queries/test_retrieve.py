@@ -11,14 +11,14 @@ TEAM_QUERY = "team"
 KEY_ID = "id"
 
 
-def test_query(user, gql_client, ghl_raw):
+def test_query(user, gql_client, gql_raw):
     """Test retrieve team raw query."""
     team = TeamFactory.create(members=[user])
 
     gql_client.set_user(user)
 
     response = gql_client.execute(
-        ghl_raw(TEAM_QUERY),
+        gql_raw(TEAM_QUERY),
         variable_values={KEY_ID: team.pk},
     )
 
@@ -26,14 +26,14 @@ def test_query(user, gql_client, ghl_raw):
     assert response["data"]["team"][KEY_ID] == str(team.pk)
 
 
-def test_query_found(user, gql_client, ghl_raw):
+def test_query_found(user, gql_client, gql_raw):
     """Test retrieve team raw query."""
     team = TeamFactory.create(members=[user])
 
     gql_client.set_user(user)
 
     response = gql_client.execute(
-        ghl_raw(TEAM_QUERY),
+        gql_raw(TEAM_QUERY),
         variable_values={KEY_ID: team.pk + 1},
     )
 
@@ -76,7 +76,7 @@ def test_not_member(user, ghl_auth_mock_info, team_query):
         )
 
 
-def test_get_team_with_members(user, gql_client, ghl_raw):
+def test_get_team_with_members(user, gql_client, gql_raw):
     """Test retrieve team with members, filter inactive."""
     inactive_user = UserFactory.create(is_active=False)
     team = TeamFactory.create(members=[user, inactive_user])
@@ -84,7 +84,7 @@ def test_get_team_with_members(user, gql_client, ghl_raw):
     gql_client.set_user(user)
 
     response = gql_client.execute(
-        ghl_raw("team_with_members"),
+        gql_raw("team_with_members"),
         variable_values={KEY_ID: team.pk},
     )
 

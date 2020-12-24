@@ -1,7 +1,7 @@
 from typing import Optional, Type, Union
 
 from graphql import GraphQLError, ResolveInfo
-from jnt_django_graphene_toolbox.mutations import SerializerMutation
+from jnt_django_graphene_toolbox.mutations import BaseSerializerMutation
 from jnt_django_graphene_toolbox.mutations.serializer import (
     SerializerMutationOptions,
 )
@@ -21,7 +21,7 @@ class UseCaseMutationOptions(SerializerMutationOptions):
     presenter_class: Optional[Type[BaseMutationPresenter]] = None
 
 
-class BaseUseCaseMutation(SerializerMutation):
+class BaseUseCaseMutation(BaseSerializerMutation):
     """Base class for mutations based on use cases."""
 
     class Meta:

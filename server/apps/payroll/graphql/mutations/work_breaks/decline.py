@@ -1,5 +1,5 @@
 import graphene
-from jnt_django_graphene_toolbox.mutations import SerializerMutation
+from jnt_django_graphene_toolbox.mutations import BaseSerializerMutation
 from jnt_django_graphene_toolbox.security.permissions import AllowAuthenticated
 from rest_framework import serializers
 
@@ -19,7 +19,7 @@ class InputSerializer(serializers.Serializer):
     decline_reason = serializers.CharField()
 
 
-class DeclineWorkBreakMutation(SerializerMutation):
+class DeclineWorkBreakMutation(BaseSerializerMutation):
     """Decline work break mutation."""
 
     class Meta:

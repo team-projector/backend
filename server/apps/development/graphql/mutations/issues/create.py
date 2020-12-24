@@ -4,7 +4,7 @@ from typing import Any, Dict, Optional
 import graphene
 from django.utils.translation import gettext_lazy as _
 from graphql import ResolveInfo
-from jnt_django_graphene_toolbox.mutations import SerializerMutation
+from jnt_django_graphene_toolbox.mutations import BaseSerializerMutation
 from jnt_django_graphene_toolbox.security.permissions import AllowAuthenticated
 from rest_framework import exceptions, serializers
 
@@ -35,6 +35,12 @@ class InputSerializer(serializers.Serializer):
     estimate = serializers.IntegerField(required=False, allow_null=True)
     dueDate = serializers.DateField(source="due_date")  # noqa: N815, WPS115
 
+    def validate(self, attrs):
+        """Validates input parameters."""
+        attrs["author"] = self.context["request"].user
+
+        return attrs
+
     def validate_estimate(self, estimate) -> int:
         """Validate estimate."""
         estimate = estimate or 0
@@ -54,7 +60,7 @@ class InputSerializer(serializers.Serializer):
         return due_date
 
 
-class CreateIssueMutation(SerializerMutation):
+class CreateIssueMutation(BaseSerializerMutation):
     """Create issue mutation."""
 
     class Meta:

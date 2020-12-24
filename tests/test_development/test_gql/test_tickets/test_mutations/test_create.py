@@ -23,7 +23,7 @@ def ticket():
     return TicketFactory(milestone=ProjectMilestoneFactory())
 
 
-def test_query(project_manager, gql_client, ghl_raw):
+def test_query(project_manager, gql_client, gql_raw):
     """Test create ticket raw query."""
     gql_client.set_user(project_manager)
 
@@ -32,7 +32,7 @@ def test_query(project_manager, gql_client, ghl_raw):
     issues = IssueFactory.create_batch(size=2, user=project_manager)
 
     response = gql_client.execute(
-        ghl_raw("create_ticket"),
+        gql_raw("create_ticket"),
         variable_values={
             "title": TICKET_TITLE,
             "type": TicketType.FEATURE,

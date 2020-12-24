@@ -6,19 +6,19 @@ from tests.test_development.factories import TeamFactory
 from tests.test_payroll.factories import WorkBreakFactory
 
 
-def test_query(user, gql_client, ghl_raw):
+def test_query(user, gql_client, gql_raw):
     """Test retrieve team raw query."""
     TeamFactory.create(members=[user])
 
     gql_client.set_user(user)
 
-    response = gql_client.execute(ghl_raw("team_work_breaks"))
+    response = gql_client.execute(gql_raw("team_work_breaks"))
 
     assert "errors" not in response
     assert response["data"]["teamWorkBreaks"]["count"] == 1
 
 
-def test_query_with_dates(user, gql_client, ghl_raw):
+def test_query_with_dates(user, gql_client, gql_raw):
     """
     Test query with dates.
 
@@ -48,7 +48,7 @@ def test_query_with_dates(user, gql_client, ghl_raw):
 
     gql_client.set_user(user)
 
-    response = gql_client.execute(ghl_raw("team_work_breaks"))
+    response = gql_client.execute(gql_raw("team_work_breaks"))
 
     assert "errors" not in response
 

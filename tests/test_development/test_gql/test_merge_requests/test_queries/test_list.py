@@ -10,12 +10,12 @@ from tests.test_development.factories import (
 from tests.test_users.factories.user import UserFactory
 
 
-def test_query(user, gql_client_authenticated, ghl_raw):
+def test_query(user, gql_client_authenticated, gql_raw):
     """Test getting merge requests via a raw query."""
     MergeRequestFactory.create_batch(2, user=user)
 
     response = gql_client_authenticated.execute(
-        ghl_raw("all_merge_requests"),
+        gql_raw("all_merge_requests"),
     )
 
     assert "errors" not in response
@@ -59,15 +59,15 @@ def test_merge_requests_no_teamlead_or_owner(
 def test_user_is_prefetched(
     user,
     gql_client_authenticated,
-    ghl_raw,
+    gql_raw,
 ):
     """Test no n+1 for merge request users."""
     MergeRequestFactory(user=user)
 
     initial_q = len(connection.queries)
-    gql_client_authenticated.execute(ghl_raw("all_merge_requests"))
+    gql_client_authenticated.execute(gql_raw("all_merge_requests"))
     response_q = len(connection.queries) - initial_q
 
-    gql_client_authenticated.execute(ghl_raw("all_merge_requests_with_user"))
+    gql_client_authenticated.execute(gql_raw("all_merge_requests_with_user"))
 
     assert len(connection.queries) == initial_q + response_q * 2

@@ -2,7 +2,7 @@ from typing import Dict, Optional
 
 import graphene
 from graphql import ResolveInfo
-from jnt_django_graphene_toolbox.mutations import SerializerMutation
+from jnt_django_graphene_toolbox.mutations import BaseSerializerMutation
 from rest_framework import serializers
 
 from apps.users.graphql.types import TokenType
@@ -16,7 +16,7 @@ class InputSerializer(serializers.Serializer):
     state = serializers.CharField()
 
 
-class CompleteGitlabAuthMutation(SerializerMutation):
+class CompleteGitlabAuthMutation(BaseSerializerMutation):
     """Complete login mutation after redirection from Gitlab."""
 
     class Meta:

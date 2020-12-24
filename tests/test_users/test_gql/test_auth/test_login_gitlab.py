@@ -15,7 +15,7 @@ def _gitlab_login(override_config) -> None:
         yield
 
 
-def test_query(user, gql_client, ghl_raw):
+def test_query(user, gql_client, gql_raw):
     """Test raw query."""
     context = {
         "session": {},
@@ -26,7 +26,7 @@ def test_query(user, gql_client, ghl_raw):
     }
 
     response = gql_client.execute(
-        ghl_raw("login_gitlab"),
+        gql_raw("login_gitlab"),
         extra_context=context,
     )
 

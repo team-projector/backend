@@ -2,12 +2,12 @@ import pytest
 from jnt_django_graphene_toolbox.errors import GraphQLNotFound
 
 
-def test_query(user, gql_client, ghl_raw):
+def test_query(user, gql_client, gql_raw):
     """Test getting user raw query."""
     gql_client.set_user(user)
 
     response = gql_client.execute(
-        ghl_raw("user"),
+        gql_raw("user"),
         variable_values={"id": user.id},
     )
 

@@ -21,7 +21,7 @@ KEY_FROM_DATE = "from_date"
 KEY_TO_DATE = "to_date"
 
 
-def test_query(user, gql_client, ghl_raw):
+def test_query(user, gql_client, gql_raw):
     """Test update raw query."""
     gql_client.set_user(user)
 
@@ -47,7 +47,7 @@ def test_query(user, gql_client, ghl_raw):
     }
 
     response = gql_client.execute(
-        ghl_raw("update_work_break"),
+        gql_raw("update_work_break"),
         variable_values=update_variables,
     )
 
