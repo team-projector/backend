@@ -9,15 +9,19 @@ from tests.test_development.factories import (
 )
 from tests.test_users.factories import UserFactory
 
+ALL_ISSUES_QUERY = "all_issues"
+ERRORS_FIELD = "errors"
+COUNT_FIELD = "count"
+
 
 def test_query(user, gql_client_authenticated, gql_raw):
     """Test getting all issues raw query."""
     IssueFactory.create_batch(5, user=user)
 
-    response = gql_client_authenticated.execute(gql_raw("all_issues"))
+    response = gql_client_authenticated.execute(gql_raw(ALL_ISSUES_QUERY))
 
-    assert "errors" not in response
-    assert response["data"]["allIssues"]["count"] == 5
+    assert ERRORS_FIELD not in response
+    assert response["data"]["allIssues"][COUNT_FIELD] == 5
 
 
 def test_query_with_order_by(user, gql_client_authenticated, gql_raw):
@@ -25,24 +29,26 @@ def test_query_with_order_by(user, gql_client_authenticated, gql_raw):
     IssueFactory.create_batch(5, user=user)
 
     response = gql_client_authenticated.execute(
-        gql_raw("all_issues"),
+        gql_raw(ALL_ISSUES_QUERY),
         variable_values={"orderBy": "due_date"},
     )
 
-    assert "errors" not in response
-    assert response["data"]["allIssues"]["count"] == 5
+    assert ERRORS_FIELD not in response
+    assert response["data"]["allIssues"][COUNT_FIELD] == 5
 
 
 def test_query_with_order_by_not_valid(
-    user, gql_client_authenticated, gql_raw,
+    user,
+    gql_client_authenticated,
+    gql_raw,
 ):
     """Test not valid ordering."""
     response = gql_client_authenticated.execute(
-        gql_raw("all_issues"),
+        gql_raw(ALL_ISSUES_QUERY),
         variable_values={"orderBy": "dueDate"},
     )
 
-    assert "errors" in response
+    assert ERRORS_FIELD in response
 
 
 def test_not_owned_issue(ghl_auth_mock_info, all_issues_query):
@@ -104,5 +110,5 @@ def test_list_as_watcher_by_team(
         variable_values={"team": team.pk},
     )
 
-    assert "errors" not in response
-    assert response["data"]["allIssues"]["count"] == count
+    assert ERRORS_FIELD not in response
+    assert response["data"]["allIssues"][COUNT_FIELD] == count
