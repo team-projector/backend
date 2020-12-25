@@ -36,8 +36,8 @@ def projects(db):
         ("-title", (0, 1, 2)),
         ("state", (1, 0, 2)),
         ("-state", (2, 0, 1)),
-        ("fullTitle", (2, 1, 0)),
-        ("-fullTitle", (0, 1, 2)),
+        ("full_title", (2, 1, 0)),
+        ("-full_title", (0, 1, 2)),
     ],
 )
 def test_order_by(projects, order_by, indexes):
