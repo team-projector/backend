@@ -18,6 +18,7 @@ class UserSkillLevel(models.Model):
         )
         verbose_name = _("VN__USER_SKILL_LEVEL")
         verbose_name_plural = _("VN__USER_SKILL_LEVELS")
+        ordering = ("user__login",)
 
     confirm_date = models.DateTimeField()
 

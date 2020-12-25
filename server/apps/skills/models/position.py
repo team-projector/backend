@@ -10,6 +10,7 @@ class Position(models.Model):
     class Meta:
         verbose_name = _("VN__POSITION")
         verbose_name_plural = _("VN__POSITIONS")
+        ordering = ("title",)
 
     title = models.CharField(
         max_length=DEFAULT_TITLE_LENGTH,

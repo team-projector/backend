@@ -10,5 +10,6 @@ class Token(BaseToken):
     class Meta:
         verbose_name = _("VN__TOKEN")
         verbose_name_plural = _("VN__TOKENS")
+        ordering = ("-created",)
 
     user = models.ForeignKey(settings.AUTH_USER_MODEL, models.CASCADE)

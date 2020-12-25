@@ -21,6 +21,7 @@ class TeamMember(models.Model):
         verbose_name = _("VN__TEAM_MEMBER")
         verbose_name_plural = _("VN__TEAM_MEMBERS")
         unique_together = ("team", "user")
+        ordering = ("user__login",)
 
     roles = BitField(flags=TeamMemberRole.choices, default=0)
 

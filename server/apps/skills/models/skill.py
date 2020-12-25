@@ -11,6 +11,7 @@ class Skill(models.Model):
     class Meta:
         verbose_name = _("VN__SKILL")
         verbose_name_plural = _("VN__SKILLS")
+        ordering = ("title",)
 
     title = models.CharField(
         max_length=DEFAULT_TITLE_LENGTH,

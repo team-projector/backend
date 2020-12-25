@@ -26,6 +26,7 @@ class ProjectMember(Timestamps):
         verbose_name = _("VN__PROJECT_MEMBER")
         verbose_name_plural = _("VN__PROJECT_MEMBERS")
         unique_together = ("user", "object_id", "content_type")
+        ordering = ("user__login",)
 
     roles = BitField(flags=ProjectMemberRole.choices, default=0)
 
