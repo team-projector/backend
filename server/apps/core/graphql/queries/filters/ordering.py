@@ -1,9 +1,7 @@
 from typing import List
 
 from django.db import models
-from jnt_django_graphene_toolbox.filters import (
-    OrderingFilter as BaseOrderingFilter,
-)
+from django_filters import OrderingFilter as BaseOrderingFilter
 
 ORDER_FIELD = "-id"
 

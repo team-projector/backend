@@ -66,7 +66,7 @@ def test_by_due_date_asc(user):
     ]
 
     queryset = IssuesFilterSet(
-        data={KEY_ORDERING: "dueDate"},
+        data={KEY_ORDERING: "due_date"},
         queryset=Issue.objects.all(),
     ).qs
 
@@ -92,7 +92,7 @@ def test_by_due_date_desc(user):
     ]
 
     queryset = IssuesFilterSet(
-        data={KEY_ORDERING: "-dueDate"},
+        data={KEY_ORDERING: "-due_date"},
         queryset=Issue.objects.all(),
     ).qs
 
