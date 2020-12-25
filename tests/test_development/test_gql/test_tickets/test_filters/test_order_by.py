@@ -18,7 +18,7 @@ def test_by_due_date_asc(db):
     ]
 
     queryset = TicketsFilterSet(
-        data={KEY_ORDERING: "dueDate"},
+        data={KEY_ORDERING: "due_date"},
         queryset=Ticket.objects.all(),
     ).qs
 
@@ -35,7 +35,7 @@ def test_by_due_date_desc(db):
     ]
 
     queryset = TicketsFilterSet(
-        data={KEY_ORDERING: "-dueDate"},
+        data={KEY_ORDERING: "-due_date"},
         queryset=Ticket.objects.all(),
     ).qs
 
@@ -92,7 +92,7 @@ def test_by_due_date_and_title(db):
     ]
 
     queryset = TicketsFilterSet(
-        data={KEY_ORDERING: "dueDate,title"},
+        data={KEY_ORDERING: "due_date,title"},
         queryset=Ticket.objects.all(),
     ).qs
 
