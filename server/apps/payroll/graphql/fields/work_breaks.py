@@ -1,8 +1,11 @@
 import django_filters
+import graphene
 from django.db.models import Exists, OuterRef, QuerySet
 
+from apps.core.graphql.fields import BaseModelConnectionField
 from apps.core.graphql.queries.filters import OrderingFilter
 from apps.development.models import Team, TeamMember
+from apps.payroll.graphql.types import WorkBreakType
 from apps.payroll.models import WorkBreak
 from apps.payroll.models.mixins.approved import ApprovedState
 from apps.payroll.services.work_break.allowed import (
@@ -72,3 +75,19 @@ class WorkBreakFilterSet(django_filters.FilterSet):
     user = django_filters.ModelChoiceFilter(queryset=User.objects.all())
 
     order_by = OrderingFilter(fields=("from_date",))
+
+
+class WorkBreaksConnectionField(BaseModelConnectionField):
+    """Handler for workbreaks collections."""
+
+    filterset_class = WorkBreakFilterSet
+
+    def __init__(self):
+        """Initialize."""
+        super().__init__(
+            WorkBreakType,
+            approving=graphene.Boolean(),
+            user=graphene.ID(),
+            team=graphene.ID(),
+            order_by=graphene.String(),  # "from_date"
+        )
