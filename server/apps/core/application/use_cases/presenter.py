@@ -1,12 +1,9 @@
 import abc
-from typing import Generic, TypeVar
-
-TOutputDto = TypeVar("TOutputDto")
 
 
-class BasePresenter(Generic[TOutputDto], abc.ABC):
+class BasePresenter(abc.ABC):
     """Abstract class for all presenters."""
 
     @abc.abstractmethod
-    def present(self, output_dto: TOutputDto) -> None:
+    def present(self, output_dto) -> None:
         """Process output dto."""

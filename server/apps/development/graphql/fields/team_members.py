@@ -1,8 +1,10 @@
 from typing import List
 
 import django_filters
+import graphene
 from django.db.models import QuerySet
 
+from apps.core.graphql.fields import BaseModelConnectionField
 from apps.core.graphql.queries.filters import OrderingFilter
 from apps.development.models import TeamMember
 from apps.development.models.team_member import TeamMemberRole
@@ -47,3 +49,17 @@ class TeamMembersFilterSet(django_filters.FilterSet):
 
     roles = TeamMemberRolesFilter()
     order_by = OrderingFilter(fields=("user__name",))
+
+
+class TeamMembersConnectionField(BaseModelConnectionField):
+    """Handler for team members collections."""
+
+    filterset_class = TeamMembersFilterSet
+
+    def __init__(self):
+        """Initialize."""
+        super().__init__(
+            "development.TeamMemberType",
+            roles=graphene.String(),
+            order_by=graphene.String(),  # "user__name"
+        )

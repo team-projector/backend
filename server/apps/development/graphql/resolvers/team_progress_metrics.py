@@ -1,4 +1,7 @@
-from apps.core.graphql.helpers.generics import get_object_or_not_found
+from jnt_django_graphene_toolbox.helpers.generics import (
+    get_object_or_not_found,
+)
+
 from apps.development.models import Team
 from apps.development.services.team.allowed import (
     check_allow_get_metrics_by_user,

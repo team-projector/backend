@@ -1,9 +1,11 @@
 from typing import List
 
 import django_filters
+import graphene
 from django.db.models import Exists, OuterRef, QuerySet
 from jnt_django_graphene_toolbox.filters import SearchFilter
 
+from apps.core.graphql.fields import BaseModelConnectionField
 from apps.core.graphql.queries.filters import OrderingFilter
 from apps.development.models import Team, TeamMember
 from apps.development.models.team_member import TeamMemberRole
@@ -59,3 +61,19 @@ class TeamsFilterSet(django_filters.FilterSet):
     roles = TeamRolesFilter()
     order_by = OrderingFilter(fields=("title",))
     q = SearchFilter(fields=("title",))  # noqa: WPS111
+
+
+class TeamsConnectionField(BaseModelConnectionField):
+    """Handler for users collections."""
+
+    filterset_class = TeamsFilterSet
+
+    def __init__(self):
+        """Initialize."""
+        super().__init__(
+            "development.TeamType",
+            title=graphene.String(),
+            roles=graphene.String(),
+            q=graphene.String(),
+            order_by=graphene.String(),  # "title"
+        )

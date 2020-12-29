@@ -1,14 +1,14 @@
-from jnt_django_graphene_toolbox.security.permissions import AllowAny
-from jnt_django_graphene_toolbox.types import BaseDjangoObjectType
+import graphene
 
+from apps.core.graphql.types import BaseModelObjectType
 from apps.users.models import Token
 
 
-class TokenType(BaseDjangoObjectType):
+class TokenType(BaseModelObjectType):
     """Token type."""
 
     class Meta:
         model = Token
-        name = "Token"
 
-    permission_classes = (AllowAny,)
+    key = graphene.String()
+    created = graphene.DateTime()

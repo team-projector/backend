@@ -3,16 +3,12 @@ query ($team: ID, $user: ID, $offset: Int, $first: Int) {
     count
     edges {
       node {
-        id
-        name
-        workBreaks {
-          edges {
-            node {
-              id
-              fromDate
-            }
-          }
+        user {
+          id
+          name
         }
+        id
+        fromDate
       }
     }
   }

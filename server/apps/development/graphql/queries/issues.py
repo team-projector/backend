@@ -19,6 +19,7 @@ class IssuesQueries(graphene.ObjectType):
     )
     issues_summary = graphene.Field(
         IssuesSummaryType,
+        resolver=resolve_issues_summary,
         due_date=graphene.Date(),
         user=graphene.ID(),
         team=graphene.ID(),
@@ -27,5 +28,4 @@ class IssuesQueries(graphene.ObjectType):
         project=graphene.ID(),
         milestone=graphene.ID(),
         ticket=graphene.ID(),
-        resolver=resolve_issues_summary,
     )

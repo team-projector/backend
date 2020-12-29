@@ -1,7 +1,3 @@
-import pytest
-from jnt_django_graphene_toolbox.errors import GraphQLNotFound
-
-
 def test_query(user, gql_client, gql_raw):
     """Test getting user raw query."""
     gql_client.set_user(user)
@@ -27,9 +23,10 @@ def test_inactive(user, ghl_auth_mock_info, user_query):
     user.is_active = False
     user.save(update_fields=["is_active"])
 
-    with pytest.raises(GraphQLNotFound):
-        user_query(
-            root=None,
-            info=ghl_auth_mock_info,
-            id=user.id,
-        )
+    response = user_query(
+        root=None,
+        info=ghl_auth_mock_info,
+        id=user.id,
+    )
+
+    assert response is None

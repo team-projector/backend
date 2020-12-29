@@ -1,4 +1,4 @@
-from apps.development.graphql.filters import TeamMembersFilterSet
+from apps.development.graphql.fields.team_members import TeamMembersFilterSet
 from apps.development.models import TeamMember
 from tests.test_development.factories import TeamFactory, TeamMemberFactory
 from tests.test_users.factories.user import UserFactory

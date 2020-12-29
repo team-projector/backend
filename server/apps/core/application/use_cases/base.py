@@ -1,13 +1,13 @@
 import abc
-from typing import Generic, TypeVar
+from typing import TypeVar
 
 TInputDto = TypeVar("TInputDto")
 TOutputDto = TypeVar("TOutputDto")
 
 
-class BaseUseCase(Generic[TInputDto, TOutputDto], abc.ABC):
+class BaseUseCase(abc.ABC):
     """Base class for use cases."""
 
     @abc.abstractmethod
-    def execute(self, input_dto: TInputDto) -> None:
+    def execute(self, input_dto) -> None:
         """Main logic here."""

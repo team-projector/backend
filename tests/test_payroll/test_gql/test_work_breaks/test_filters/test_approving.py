@@ -1,4 +1,4 @@
-from apps.payroll.graphql.filters import WorkBreakFilterSet
+from apps.payroll.graphql.fields.work_breaks import WorkBreakFilterSet
 from apps.payroll.models import WorkBreak
 from apps.payroll.models.mixins.approved import ApprovedState
 from tests.test_payroll.factories import WorkBreakFactory

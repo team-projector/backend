@@ -4,8 +4,8 @@ import pytest
 from django.utils import timezone
 
 from apps.core.gitlab import GITLAB_DATE_FORMAT
-from apps.payroll.graphql.mutations.work_breaks.create import InputSerializer
 from apps.payroll.models.work_break import WorkBreak, WorkBreakReason
+from apps.payroll.use_cases.work_breaks.create import InputDtoSerializer
 
 CURRENT_YEAR = timezone.now().year
 
@@ -85,7 +85,7 @@ def test_fill_paid_days(user, from_date, to_date, paid_days):
         KEY_USER: user.pk,
     }
 
-    serializer = InputSerializer(data=input_data)
+    serializer = InputDtoSerializer(data=input_data)
 
     assert serializer.is_valid()
     assert serializer.validated_data[KEY_PAID_DAYS] == paid_days
@@ -102,7 +102,7 @@ def test_not_fill_paid_days(user):
         KEY_PAID_DAYS: 30,
     }
 
-    serializer = InputSerializer(data=input_data)
+    serializer = InputDtoSerializer(data=input_data)
 
     assert serializer.is_valid()
     assert serializer.validated_data[KEY_PAID_DAYS] == 30

@@ -1,39 +1,31 @@
 import graphene
 from django.db.models import QuerySet
-from jnt_django_graphene_toolbox.connection_fields import (
-    DataSourceConnectionField,
-)
-from jnt_django_graphene_toolbox.connections import DataSourceConnection
-from jnt_django_graphene_toolbox.relay_nodes import DatasourceRelayNode
-from jnt_django_graphene_toolbox.types import BaseDjangoObjectType
 
-from apps.development.graphql.filters import TeamMembersFilterSet
-from apps.development.graphql.types.team_member import TeamMemberType
+from apps.core.graphql.types import BaseModelObjectType
+from apps.development.graphql.fields import TeamMembersConnectionField
 from apps.development.graphql.types.team_metrics import TeamMetricsType
 from apps.development.models import Team
 from apps.development.services.team.allowed import filter_allowed_for_user
 from apps.development.services.team.metrics.main import get_team_metrics
 
 
-class TeamType(BaseDjangoObjectType):
+class TeamType(BaseModelObjectType):
     """Team type."""
 
     class Meta:
         model = Team
-        interfaces = (DatasourceRelayNode,)
-        connection_class = DataSourceConnection
-        name = "Team"
 
+    title = graphene.String()
     metrics = graphene.Field(TeamMetricsType)
-    members = DataSourceConnectionField(
-        TeamMemberType,
-        filterset_class=TeamMembersFilterSet,
-    )
+    members = TeamMembersConnectionField()
 
     @classmethod
     def get_queryset(cls, queryset, info) -> QuerySet:  # noqa: WPS110
         """Get teams."""
-        return filter_allowed_for_user(queryset, info.context.user)
+        return filter_allowed_for_user(
+            queryset,
+            info.context.user if info.context.user.is_authenticated else None,
+        )
 
     def resolve_metrics(self, info, **kwargs):  # noqa: WPS110
         """Get team metrics."""

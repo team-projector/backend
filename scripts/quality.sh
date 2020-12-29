@@ -14,7 +14,11 @@ run_checkers() {
   #  DJANGO_ENV=production python manage.py check --deploy --fail-level WARNING
 
   # Running code-quality check:
-  xenon --max-absolute A --max-modules A --max-average A server
+  xenon --max-absolute A \
+        --max-modules A \
+        --max-average A \
+        --exclude server/apps/core/graphql/fields/model_connection.py,server/apps/core/graphql/types/model.py \
+        server
 
   # Check that all migrations worked fine:
   DJANGO_ENV=build python manage.py makemigrations --dry-run --check

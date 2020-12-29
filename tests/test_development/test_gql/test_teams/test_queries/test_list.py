@@ -1,6 +1,3 @@
-import pytest
-from jnt_django_graphene_toolbox.errors import GraphQLPermissionDenied
-
 from tests.test_development.factories import TeamFactory
 from tests.test_users.factories import UserFactory
 
@@ -26,11 +23,12 @@ def test_not_team_member(user, ghl_auth_mock_info, all_teams_query):
 
 def test_unauth(user, ghl_mock_info, all_teams_query):
     """Test not auth query."""
-    with pytest.raises(GraphQLPermissionDenied):
-        all_teams_query(
-            root=None,
-            info=ghl_mock_info,
-        )
+    response = all_teams_query(
+        root=None,
+        info=ghl_mock_info,
+    )
+
+    assert not response.length
 
 
 def test_some_teams(user, ghl_auth_mock_info, all_teams_query):

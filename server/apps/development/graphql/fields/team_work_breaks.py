@@ -1,16 +1,17 @@
 import django_filters
-from django.contrib.auth import get_user_model
+import graphene
 from django.db.models import QuerySet
 
+from apps.core.graphql.fields import BaseModelConnectionField
 from apps.core.graphql.queries.filters import OrderingFilter
 from apps.development.models import Team, TeamMember
-
-User = get_user_model()
+from apps.payroll.graphql.types import WorkBreakType
+from apps.users.models import User
 
 
 def filter_allowed_for_user(
     queryset: QuerySet,
-    user: User,  # type: ignore
+    user: User,
 ):
     """Filter work breaks for user."""
     users = TeamMember.objects.filter(
@@ -18,7 +19,7 @@ def filter_allowed_for_user(
         roles=TeamMember.roles.LEADER,
     ).values_list("team__members", flat=True)
 
-    return queryset.filter(id__in=(*users, user.id))  # type: ignore
+    return queryset.filter(user_id__in=(*users, user.id))
 
 
 class UserFilter(django_filters.ModelChoiceFilter):
@@ -60,7 +61,7 @@ class TeamFilter(django_filters.ModelChoiceFilter):
         return queryset.filter(id__in=users)
 
 
-class UserWorkBreaksFilterSet(django_filters.FilterSet):
+class TeamWorkBreaksFilterSet(django_filters.FilterSet):
     """Set of filters for UserWorkBreak."""
 
     class Meta:
@@ -77,3 +78,20 @@ class UserWorkBreaksFilterSet(django_filters.FilterSet):
         queryset = super().filter_queryset(queryset)
 
         return filter_allowed_for_user(queryset, self.request.user)
+
+
+class TeamWorkBreaksConnectionField(BaseModelConnectionField):
+    """Handler for users collections."""
+
+    filterset_class = TeamWorkBreaksFilterSet
+
+    def __init__(self):
+        """Initialize."""
+        super().__init__(
+            WorkBreakType,
+            name=graphene.String(),
+            email=graphene.String(),
+            user=graphene.ID(),
+            team=graphene.ID(),
+            order_by=graphene.String(),  # "name", "email"
+        )
