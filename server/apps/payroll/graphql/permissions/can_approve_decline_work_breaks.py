@@ -1,8 +1,10 @@
 from typing import Optional
 
 from graphql import ResolveInfo
+from jnt_django_graphene_toolbox.helpers.generics import (
+    get_object_or_not_found,
+)
 
-from apps.core.graphql.helpers.generics import get_object_or_not_found
 from apps.development.models import TeamMember
 from apps.payroll.models import WorkBreak
 from apps.users.services.user.relations import (

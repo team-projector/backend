@@ -2,9 +2,7 @@ from typing import List
 
 import graphene
 from django.db.models import QuerySet
-from jnt_django_graphene_toolbox.connections import DataSourceConnection
-from jnt_django_graphene_toolbox.relay_nodes import DatasourceRelayNode
-from jnt_django_graphene_toolbox.types import BaseDjangoObjectType
+from jnt_django_graphene_toolbox import connections, relay_nodes, types
 
 from apps.core import graphql
 from apps.development.graphql.interfaces import WorkItem
@@ -12,21 +10,25 @@ from apps.development.graphql.types.issue_metrics import IssueMetricsType
 from apps.development.models import Issue
 from apps.development.services.issue import allowed, metrics
 from apps.development.services.issue.problems import get_issue_problems
+from apps.users.graphql.fields import UsersConnectionField
+from apps.users.graphql.types import UserType
 
 
-class IssueType(BaseDjangoObjectType):
+class IssueType(types.BaseDjangoObjectType):
     """Issue type."""
 
     class Meta:
         model = Issue
         filter_fields: List[str] = []
-        interfaces = (DatasourceRelayNode, WorkItem)
-        connection_class = DataSourceConnection
+        interfaces = (relay_nodes.DatasourceRelayNode, WorkItem)
+        connection_class = connections.DataSourceConnection
         name = "Issue"
 
     metrics = graphene.Field(IssueMetricsType)
     problems = graphene.List(graphene.String)
     time_spent = graphene.Field(graphene.Int)
+    author = graphene.Field(UserType)
+    participants = UsersConnectionField()
 
     @classmethod
     def get_queryset(cls, queryset, info) -> QuerySet:  # noqa: WPS110

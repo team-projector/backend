@@ -72,8 +72,8 @@ def test_work_break_not_team_lead(
     update_variables = {
         KEY_ID: work_break.pk,
         KEY_USER: ghl_auth_mock_info.context.user.id,
-        KEY_FROM_DATE: timezone.now(),
-        KEY_TO_DATE: timezone.now(),
+        KEY_FROM_DATE: _date_strftime(timezone.now()),
+        KEY_TO_DATE: _date_strftime(timezone.now() + timedelta(minutes=10)),
         KEY_REASON: WorkBreakReason.DAYOFF,
         KEY_COMMENT: "test comment",
     }
@@ -120,8 +120,8 @@ def test_update_work_break_another_user(
     update_variables = {
         KEY_ID: work_break.pk,
         KEY_USER: ghl_auth_mock_info.context.user.id,
-        KEY_FROM_DATE: timezone.now(),
-        KEY_TO_DATE: timezone.now(),
+        KEY_FROM_DATE: _date_strftime(timezone.now()),
+        KEY_TO_DATE: _date_strftime(timezone.now() + timedelta(minutes=10)),
         KEY_REASON: WorkBreakReason.DAYOFF,
         KEY_COMMENT: "test comment",
     }

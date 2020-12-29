@@ -3,6 +3,7 @@ from functools import partial
 from django.db.models.query import QuerySet
 from graphene import Int, NonNull
 from graphene.relay import ConnectionField, PageInfo
+from graphene.relay.connection import IterableConnectionField
 from graphene.utils import str_converters
 from graphene_django.settings import graphene_settings
 from graphene_django.utils import maybe_queryset
@@ -47,7 +48,10 @@ class BaseModelConnectionField(ConnectionField):  # noqa: WPS214
     @property
     def type(self):  # noqa: WPS125
         """Returns connection field type."""
-        _type = super().type  # noqa: WPS122
+        _type = super(  # noqa: WPS122 WPS608
+            IterableConnectionField,
+            self,
+        ).type
         non_null = False
         if isinstance(_type, NonNull):
             _type = _type.of_type  # noqa: WPS122

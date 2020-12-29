@@ -26,7 +26,7 @@ class WorkBreakType(BaseModelObjectType):
     comment = graphene.String()
     paid = graphene.Boolean()
     user = graphene.Field(UserType)
-    paid_days = graphene.Field(UserType)
+    paid_days = graphene.Int()
     reason = graphene.Field(graphene.Enum.from_enum(WorkBreakReason))
 
     @classmethod

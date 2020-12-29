@@ -5,6 +5,7 @@ from jnt_django_graphene_toolbox.types import BitField
 from apps.core.graphql import get_fields_from_info
 from apps.core.graphql.fields import BaseModelConnectionField
 from apps.core.graphql.types.model import BaseModelObjectType
+from apps.skills.graphql.types import PositionType
 from apps.users.graphql.fields import UserWorkBreaksConnectionField
 from apps.users.graphql.types.user_metrics import UserMetricsType
 from apps.users.models import User
@@ -22,9 +23,10 @@ class UserType(BaseModelObjectType):
     login = graphene.String()
     last_login = graphene.DateTime()
     email = graphene.String()
-    position = graphene.String()
+    position = graphene.Field(PositionType)
     is_active = graphene.Boolean()
     hour_rate = graphene.Float()
+    tax_rate = graphene.Float()
     annual_paid_work_breaks_days = graphene.Float()
     roles = BitField()
     gl_avatar = graphene.String()

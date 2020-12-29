@@ -1,15 +1,13 @@
-from jnt_django_graphene_toolbox.connections import DataSourceConnection
-from jnt_django_graphene_toolbox.relay_nodes import DatasourceRelayNode
-from jnt_django_graphene_toolbox.types import BaseDjangoObjectType
+import graphene
 
+from apps.core.graphql.types import BaseModelObjectType
 from apps.skills.models import Position
 
 
-class PositionType(BaseDjangoObjectType):
+class PositionType(BaseModelObjectType):
     """Position type."""
 
     class Meta:
         model = Position
-        interfaces = (DatasourceRelayNode,)
-        connection_class = DataSourceConnection
-        name = "Position"
+
+    title = graphene.String()

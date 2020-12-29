@@ -7,7 +7,6 @@ from jnt_django_graphene_toolbox.filters import SearchFilter
 
 from apps.core.graphql.fields import BaseModelConnectionField
 from apps.core.graphql.queries.filters import OrderingFilter
-from apps.development.graphql.types import TeamType
 from apps.development.models import Team, TeamMember
 from apps.development.models.team_member import TeamMemberRole
 from apps.development.services.team_members.filters import filter_by_roles
@@ -72,7 +71,7 @@ class TeamsConnectionField(BaseModelConnectionField):
     def __init__(self):
         """Initialize."""
         super().__init__(
-            TeamType,
+            "development.TeamType",
             title=graphene.String(),
             roles=graphene.String(),
             q=graphene.String(),

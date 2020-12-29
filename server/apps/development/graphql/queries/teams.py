@@ -1,6 +1,6 @@
 import graphene
-from jnt_django_graphene_toolbox.relay_nodes import DatasourceRelayNode
 
+from apps.core.graphql.nodes import ModelRelayNode
 from apps.development.graphql.fields import (
     TeamsConnectionField,
     TeamWorkBreaksConnectionField,
@@ -15,7 +15,7 @@ from apps.development.graphql.types import (
 class TeamsQueries(graphene.ObjectType):
     """Class represents list of available fields for team queries."""
 
-    team = DatasourceRelayNode.Field(TeamType)
+    team = ModelRelayNode.Field(TeamType)
     all_teams = TeamsConnectionField()
     team_progress_metrics = graphene.Field(
         graphene.List(TeamMemberProgressMetricsType),

@@ -19,7 +19,7 @@ def filter_allowed_for_user(
         roles=TeamMember.roles.LEADER,
     ).values_list("team__members", flat=True)
 
-    return queryset.filter(id__in=(*users, user.id))  # type: ignore
+    return queryset.filter(user_id__in=(*users, user.id))  # type: ignore
 
 
 class UserFilter(django_filters.ModelChoiceFilter):

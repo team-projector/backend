@@ -1,54 +1,70 @@
-from typing import Optional
+from typing import Dict, Optional
 
 import graphene
-from django.contrib.auth import get_user_model
 from graphql import ResolveInfo
-from jnt_django_graphene_toolbox.mutations import BaseSerializerMutation
 from jnt_django_graphene_toolbox.security.permissions import AllowAuthenticated
-from jnt_django_graphene_toolbox.serializers.fields import EnumField
-from rest_framework import serializers
 
-from apps.core.graphql.helpers.persisters import update_from_validated_data
-from apps.payroll.graphql.permissions import CanManageWorkBreak
+from apps.core.graphql.mutations import BaseUseCaseMutation
 from apps.payroll.graphql.types import WorkBreakType
-from apps.payroll.models.work_break import WorkBreak, WorkBreakReason
-
-User = get_user_model()
-
-
-class InputSerializer(serializers.Serializer):
-    """InputSerializer."""
-
-    id = serializers.PrimaryKeyRelatedField(  # noqa: A003, WPS125
-        queryset=WorkBreak.objects.all(),
-        source="work_break",
-    )
-    comment = serializers.CharField()
-    from_date = serializers.DateField()
-    to_date = serializers.DateField()
-    reason = EnumField(enum=WorkBreakReason)
-    user = serializers.PrimaryKeyRelatedField(queryset=User.objects.all())
-    paid_days = serializers.IntegerField(min_value=0, required=False)
+from apps.payroll.models.work_break import WorkBreakReason
+from apps.payroll.use_cases.work_breaks import UpdateWorkBreakUseCase
+from apps.payroll.use_cases.work_breaks.update import (
+    UpdateWorkBreakData,
+    UpdateWorkBreakInputDto,
+    UpdateWorkBreakOutputDto,
+)
 
 
-class UpdateWorkBreakMutation(BaseSerializerMutation):
+class UpdateWorkBreakMutation(BaseUseCaseMutation):
     """Update work break after validation."""
 
     class Meta:
-        serializer_class = InputSerializer
-        permission_classes = (AllowAuthenticated, CanManageWorkBreak)
+        use_case_class = UpdateWorkBreakUseCase
+        permission_classes = (AllowAuthenticated,)
+
+    class Arguments:
+        id = graphene.ID(required=True)  # noqa: WPS125
+        comment = graphene.String(required=True)
+        from_date = graphene.Date(required=True)
+        to_date = graphene.Date(required=True)
+        reason = graphene.Argument(
+            graphene.Enum.from_enum(WorkBreakReason),
+            required=True,
+        )
+        user = graphene.ID(required=True)
+        paid_days = graphene.Int()
 
     work_break = graphene.Field(WorkBreakType)
 
     @classmethod
-    def mutate_and_get_payload(
+    def get_input_dto(
         cls,
         root: Optional[object],
         info: ResolveInfo,  # noqa: WPS110
-        validated_data,
-    ) -> "UpdateWorkBreakMutation":
-        """Perform mutation implementation."""
-        work_break = validated_data.pop("work_break")
-        update_from_validated_data(work_break, validated_data)
+        **kwargs,
+    ):
+        """Prepare use case input data."""
+        return UpdateWorkBreakInputDto(
+            user=info.context.user,
+            data=UpdateWorkBreakData(
+                work_break=kwargs["id"],
+                comment=kwargs["comment"],
+                from_date=kwargs["from_date"],
+                to_date=kwargs["to_date"],
+                reason=kwargs["reason"],
+                user=kwargs["user"],
+                paid_days=kwargs.get("paid_days"),
+            ),
+        )
 
-        return cls(work_break=work_break)
+    @classmethod
+    def get_response_data(
+        cls,
+        root: Optional[object],
+        info: ResolveInfo,  # noqa: WPS110
+        output_dto: UpdateWorkBreakOutputDto,
+    ) -> Dict[str, object]:
+        """Prepare response data."""
+        return {
+            "work_break": output_dto.work_break,
+        }

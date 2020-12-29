@@ -2,7 +2,7 @@ import pytest
 from jnt_django_graphene_toolbox.errors import GraphQLPermissionDenied
 
 from apps.development.models import TeamMember
-from apps.payroll.graphql.filters import WorkBreakFilterSet
+from apps.payroll.graphql.fields.work_breaks import WorkBreakFilterSet
 from apps.payroll.models import WorkBreak
 from tests.test_payroll.factories import WorkBreakFactory
 from tests.test_users.factories.user import UserFactory

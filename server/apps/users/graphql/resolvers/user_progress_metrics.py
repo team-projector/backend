@@ -1,7 +1,9 @@
 from django.contrib.auth import get_user_model
 from django.db.models import QuerySet
+from jnt_django_graphene_toolbox.helpers.generics import (
+    get_object_or_not_found,
+)
 
-from apps.core.graphql.helpers.generics import get_object_or_not_found
 from apps.development.models import TeamMember
 from apps.development.services.team_members.filters import filter_by_roles
 from apps.users.models import User

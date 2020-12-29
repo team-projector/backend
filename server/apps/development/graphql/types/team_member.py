@@ -1,19 +1,20 @@
+import graphene
 from django.db.models import QuerySet
-from jnt_django_graphene_toolbox.connections import DataSourceConnection
-from jnt_django_graphene_toolbox.relay_nodes import DatasourceRelayNode
-from jnt_django_graphene_toolbox.types import BaseDjangoObjectType
+from jnt_django_graphene_toolbox.types import BitField
 
+from apps.core.graphql.types import BaseModelObjectType
 from apps.development.models import TeamMember
+from apps.users.graphql.types import UserType
 
 
-class TeamMemberType(BaseDjangoObjectType):
+class TeamMemberType(BaseModelObjectType):
     """Team member type."""
 
     class Meta:
         model = TeamMember
-        interfaces = (DatasourceRelayNode,)
-        connection_class = DataSourceConnection
-        name = "TeamMember"
+
+    roles = BitField()
+    user = graphene.Field(UserType)
 
     @classmethod
     def get_queryset(

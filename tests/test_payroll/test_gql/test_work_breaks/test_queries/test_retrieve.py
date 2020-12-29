@@ -1,6 +1,3 @@
-import pytest
-from jnt_django_graphene_toolbox.errors import GraphQLNotFound
-
 from apps.development.models import TeamMember
 from tests.test_development.factories import TeamFactory, TeamMemberFactory
 from tests.test_payroll.factories import WorkBreakFactory
@@ -30,12 +27,13 @@ def test_not_team_lead(ghl_auth_mock_info, work_break_query):
     """
     work_break = WorkBreakFactory.create()
 
-    with pytest.raises(GraphQLNotFound):
-        work_break_query(
-            root=None,
-            info=ghl_auth_mock_info,
-            id=work_break.pk,
-        )
+    response = work_break_query(
+        root=None,
+        info=ghl_auth_mock_info,
+        id=work_break.pk,
+    )
+
+    assert response is None
 
 
 def test_as_team_lead(ghl_auth_mock_info, work_break_query):
