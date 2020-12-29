@@ -44,7 +44,7 @@ class CreateWorkBreakMutation(BaseUseCaseMutation):
     ):
         """Prepare use case input data."""
         return CreateWorkBreakInputDto(
-            user=info.context.user,
+            user=info.context.user,  # type: ignore
             data=CreateWorkBreakData(
                 comment=kwargs["comment"],
                 from_date=kwargs["from_date"],

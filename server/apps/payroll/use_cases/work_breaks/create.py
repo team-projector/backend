@@ -15,8 +15,8 @@ class CreateWorkBreakData:
     """Update workbreak data."""
 
     comment: str
-    from_date: datetime.date
-    to_date: datetime.date
+    from_date: date
+    to_date: date
     reason: WorkBreakReason
     user: int
     paid_days: Optional[int]

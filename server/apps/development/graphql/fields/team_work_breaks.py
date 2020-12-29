@@ -11,7 +11,7 @@ from apps.users.models import User
 
 def filter_allowed_for_user(
     queryset: QuerySet,
-    user: User,  # type: ignore
+    user: User,
 ):
     """Filter work breaks for user."""
     users = TeamMember.objects.filter(
@@ -19,7 +19,7 @@ def filter_allowed_for_user(
         roles=TeamMember.roles.LEADER,
     ).values_list("team__members", flat=True)
 
-    return queryset.filter(user_id__in=(*users, user.id))  # type: ignore
+    return queryset.filter(user_id__in=(*users, user.id))
 
 
 class UserFilter(django_filters.ModelChoiceFilter):

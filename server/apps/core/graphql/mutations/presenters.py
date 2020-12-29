@@ -14,7 +14,7 @@ class MutationPresenter(BasePresenter):
 
     def __init__(self):
         """Initialize."""
-        self.output_dto: Optional = None
+        self.output_dto: Optional[object] = None
 
     def present(self, output_dto: TOutputDto) -> None:
         """Save output dto."""

@@ -1,12 +1,13 @@
 from functools import partial
+from typing import Dict, Optional, Type
 
-from django.db.models.query import QuerySet
+import django_filters
+from django.db import models
 from graphene import Int, NonNull
 from graphene.relay import ConnectionField, PageInfo
-from graphene.relay.connection import IterableConnectionField
+from graphene.relay import connection as relay_connection
 from graphene.utils import str_converters
-from graphene_django.settings import graphene_settings
-from graphene_django.utils import maybe_queryset
+from graphene_django import settings, utils
 from graphql_relay.connection.arrayconnection import (
     connection_from_list_slice,
     cursor_to_offset,
@@ -22,18 +23,18 @@ from apps.core.graphql.types import BaseModelObjectType
 class BaseModelConnectionField(ConnectionField):  # noqa: WPS214
     """Base class for model collections."""
 
-    filterset_class = None
+    filterset_class: Optional[Type[django_filters.FilterSet]] = None
 
     def __init__(self, graphene_type, *args, **kwargs):
         """Initialize."""
         self.on = kwargs.pop("on", False)
         self.max_limit = kwargs.pop(
             "max_limit",
-            graphene_settings.RELAY_CONNECTION_MAX_LIMIT,
+            settings.graphene_settings.RELAY_CONNECTION_MAX_LIMIT,
         )
         self.enforce_first_or_last = kwargs.pop(
             "enforce_first_or_last",
-            graphene_settings.RELAY_CONNECTION_ENFORCE_FIRST_OR_LAST,
+            settings.graphene_settings.RELAY_CONNECTION_ENFORCE_FIRST_OR_LAST,
         )
         kwargs.setdefault("offset", Int())
         if isinstance(graphene_type, str):
@@ -49,7 +50,7 @@ class BaseModelConnectionField(ConnectionField):  # noqa: WPS214
     def type(self):  # noqa: WPS125
         """Returns connection field type."""
         _type = super(  # noqa: WPS122 WPS608
-            IterableConnectionField,
+            relay_connection.IterableConnectionField,
             self,
         ).type
         non_null = False
@@ -134,9 +135,9 @@ class BaseModelConnectionField(ConnectionField):  # noqa: WPS214
             # input offset starts at 1 while the graphene offset starts at 0
             args["after"] = offset_to_cursor(offset - 1)
 
-        iterable = maybe_queryset(iterable)
+        iterable = utils.maybe_queryset(iterable)
 
-        if isinstance(iterable, QuerySet):
+        if isinstance(iterable, models.QuerySet):
             list_length = iterable.count()
         else:
             list_length = len(iterable)
@@ -258,7 +259,7 @@ class BaseModelConnectionField(ConnectionField):  # noqa: WPS214
             parent_resolver,
             self.connection_type,
             self.get_manager(),
-            self.get_queryset_resolver(),
+            self.get_queryset_resolver(),  # type: ignore
             self.max_limit,
             self.enforce_first_or_last,
         )
@@ -267,7 +268,7 @@ class BaseModelConnectionField(ConnectionField):  # noqa: WPS214
         """Returns queryset resolver."""
         return self.resolve_queryset
 
-    def get_manager(self):  # noqa: CCE001
+    def get_manager(self) -> models.Manager:  # noqa: CCE001
         """Return manager."""
         if self.on:
             return getattr(self.model, self.on)
@@ -275,7 +276,7 @@ class BaseModelConnectionField(ConnectionField):  # noqa: WPS214
         return self.model._default_manager  # noqa: WPS437
 
     @classmethod
-    def _filter_kwargs(cls, args):
+    def _filter_kwargs(cls, args) -> Dict[str, object]:
         kwargs = {}
         for arg_key, arg_value in args.items():
             if arg_key in args:

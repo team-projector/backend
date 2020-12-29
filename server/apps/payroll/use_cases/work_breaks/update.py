@@ -1,5 +1,5 @@
 from dataclasses import asdict, dataclass
-from datetime import datetime
+from datetime import date
 from typing import Optional
 
 from rest_framework import serializers
@@ -26,8 +26,8 @@ class UpdateWorkBreakData:
 
     work_break: int
     comment: str
-    from_date: datetime.date
-    to_date: datetime.date
+    from_date: date
+    to_date: date
     reason: WorkBreakReason
     user: int
     paid_days: Optional[int]
@@ -92,7 +92,7 @@ class UpdateWorkBreakUseCase(BaseUseCase):
 
     def _check_permissions(self, user: User, work_break: WorkBreak):
         is_team_leader = is_related_with_another_by_team_roles(
-            user,  # type:ignore
+            user,
             work_break.user,
             [TeamMember.roles.LEADER],
         )
