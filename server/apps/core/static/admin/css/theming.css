@@ -33,8 +33,10 @@
     font-size: 12px;
 }
 
-#header ul li {
-    position: static;
+@media (min-width: 1025px) {
+    div.breadcrumbs {
+        margin-top: 5px;
+    }
 }
 
 /* LINKS */
