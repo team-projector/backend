@@ -89,8 +89,6 @@ class TeamWorkBreaksConnectionField(BaseModelConnectionField):
         """Initialize."""
         super().__init__(
             WorkBreakType,
-            name=graphene.String(),
-            email=graphene.String(),
             user=graphene.ID(),
             team=graphene.ID(),
             order_by=graphene.String(),  # "name", "email"
