@@ -22,7 +22,7 @@ class CreateWorkBreakData:
 
 
 @dataclass(frozen=True)
-class CreateWorkBreakInputDto:
+class InputDto:
     """Update workbreak input dto."""
 
     user: User
@@ -30,7 +30,7 @@ class CreateWorkBreakInputDto:
 
 
 @dataclass(frozen=True)
-class CreateWorkBreakOutputDto:
+class OutputDto:
     """Update workbreak output dto."""
 
     work_break: WorkBreak
@@ -77,14 +77,14 @@ class InputDtoSerializer(serializers.Serializer):
         )  # noqa: WPS601
 
 
-class CreateWorkBreakUseCase(BaseUseCase):
+class UseCase(BaseUseCase):
     """Usecase for create workbreaks."""
 
     def __init__(self, presenter: BasePresenter):
         """Initialize."""
         self._presenter = presenter
 
-    def execute(self, input_dto: CreateWorkBreakInputDto) -> None:
+    def execute(self, input_dto: InputDto) -> None:
         """Main logic here."""
         validated_data = self.validate_input(
             input_dto.data,
@@ -105,7 +105,7 @@ class CreateWorkBreakUseCase(BaseUseCase):
         work_break.save()
 
         self._presenter.present(
-            CreateWorkBreakOutputDto(
+            OutputDto(
                 work_break=work_break,
             ),
         )

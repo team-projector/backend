@@ -1,2 +1,2 @@
+from .create import UseCase
 from .update import UpdateWorkBreakUseCase
-from .create import CreateWorkBreakUseCase

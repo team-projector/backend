@@ -7,11 +7,11 @@ from jnt_django_graphene_toolbox.security.permissions import AllowAuthenticated
 from apps.core.graphql.mutations import BaseUseCaseMutation
 from apps.payroll.graphql.types import WorkBreakType
 from apps.payroll.models.work_break import WorkBreakReason
-from apps.payroll.use_cases.work_breaks import CreateWorkBreakUseCase
+from apps.payroll.use_cases.work_breaks import UseCase
 from apps.payroll.use_cases.work_breaks.create import (
     CreateWorkBreakData,
-    CreateWorkBreakInputDto,
-    CreateWorkBreakOutputDto,
+    InputDto,
+    OutputDto,
 )
 
 
@@ -19,7 +19,7 @@ class CreateWorkBreakMutation(BaseUseCaseMutation):
     """Create work break mutation."""
 
     class Meta:
-        use_case_class = CreateWorkBreakUseCase
+        use_case_class = UseCase
         permission_classes = (AllowAuthenticated,)
 
     class Arguments:
@@ -43,7 +43,7 @@ class CreateWorkBreakMutation(BaseUseCaseMutation):
         **kwargs,
     ):
         """Prepare use case input data."""
-        return CreateWorkBreakInputDto(
+        return InputDto(
             user=info.context.user,  # type: ignore
             data=CreateWorkBreakData(
                 comment=kwargs["comment"],
@@ -60,7 +60,7 @@ class CreateWorkBreakMutation(BaseUseCaseMutation):
         cls,
         root: Optional[object],
         info: ResolveInfo,  # noqa: WPS110
-        output_dto: CreateWorkBreakOutputDto,
+        output_dto: OutputDto,
     ) -> Dict[str, object]:
         """Prepare response data."""
         return {
