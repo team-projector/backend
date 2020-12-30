@@ -5,7 +5,6 @@ from django.db.models import QuerySet
 from apps.core.graphql.fields import BaseModelConnectionField
 from apps.core.graphql.queries.filters import OrderingFilter
 from apps.development.models import Team, TeamMember
-from apps.payroll.graphql.types import WorkBreakType
 from apps.users.models import User
 
 
@@ -88,8 +87,8 @@ class TeamWorkBreaksConnectionField(BaseModelConnectionField):
     def __init__(self):
         """Initialize."""
         super().__init__(
-            WorkBreakType,
+            "payroll.WorkBreakType",
             user=graphene.ID(),
             team=graphene.ID(),
-            order_by=graphene.String(),  # "name", "email"
+            order_by=graphene.String(),
         )

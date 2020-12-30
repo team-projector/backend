@@ -1,3 +1,5 @@
+from .project_metrics import ProjectMetricsType
+from .team import TeamType
 from .gitlab_service_status import GitlabServiceStatusType
 from .gitlab_status import GitlabStatusType
 from .issue import IssueType
@@ -14,7 +16,6 @@ from .milestone_metrics import MilestoneMetricsType
 from .project import ProjectType
 from .project_group import ProjectGroupType
 from .project_issues_summary import ProjectIssuesSummary
-from .team import TeamType
 from .team_member import TeamMemberType
 from .team_member_progress_metrics import TeamMemberProgressMetricsType
 from .team_metrics import TeamMetricsType
@@ -24,4 +25,3 @@ from .tickets_summary import TicketsSummaryType
 from .milestones_summary import MilestonesSummaryType
 from .projects_summary import ProjectsSummaryType
 from .project_groups_summary import ProjectGroupsSummaryType
-from .project_metrics import ProjectMetricsType

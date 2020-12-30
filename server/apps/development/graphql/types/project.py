@@ -11,11 +11,8 @@ from apps.development.graphql.interfaces import MilestoneOwner
 from apps.development.graphql.resolvers.project_milestones import (
     resolve_project_milestones,
 )
-from apps.development.graphql.types import (
-    MilestoneType,
-    ProjectMetricsType,
-    TeamType,
-)
+from apps.development.graphql.types import ProjectMetricsType, TeamType
+from apps.development.graphql.types.milestone import MilestoneType
 from apps.development.models import Project
 from apps.development.services.project.metrics import get_project_metrics
 
