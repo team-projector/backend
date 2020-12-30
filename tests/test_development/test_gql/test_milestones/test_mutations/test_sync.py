@@ -1,4 +1,5 @@
-from jnt_django_graphene_toolbox.errors import GraphQLInputError
+from jnt_django_graphene_toolbox.errors import GraphQLPermissionDenied
+from jnt_django_graphene_toolbox.errors.permission_denied import ACCESS_DENIED
 
 from apps.development.models.milestone import Milestone, MilestoneState
 from tests.test_development.factories import ProjectGroupMilestoneFactory
@@ -108,11 +109,8 @@ def test_without_access(
         id=milestone.id,
     )
 
-    assert isinstance(resolve, GraphQLInputError)
-
-    extensions = resolve.extensions  # noqa: WPS441
-    assert len(extensions["fieldErrors"]) == 1
-    assert extensions["fieldErrors"][0]["fieldName"] == KEY_ID
+    assert isinstance(resolve, GraphQLPermissionDenied)
+    assert resolve.extensions == {"code": ACCESS_DENIED}
 
 
 def _prepare_sync_data(gl_mocker, group, gl_group) -> Milestone:
