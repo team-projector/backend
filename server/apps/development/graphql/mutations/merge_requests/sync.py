@@ -1,52 +1,46 @@
-from typing import Any, Dict, Optional
+from typing import Dict, Optional
 
 import graphene
 from graphql import ResolveInfo
-from jnt_django_graphene_toolbox.mutations import BaseSerializerMutation
 from jnt_django_graphene_toolbox.security.permissions import AllowAuthenticated
-from rest_framework import serializers
 
+from apps.core.graphql.mutations import BaseUseCaseMutation
 from apps.development.graphql.types import MergeRequestType
-from apps.development.models import MergeRequest
-from apps.development.tasks import sync_project_merge_request_task
+from apps.development.use_cases.merge_requests import (
+    sync as merge_request_sync,
+)
 
 
-class InputSerializer(serializers.ModelSerializer):
-    """InputSerializer."""
-
-    class Meta:
-        model = MergeRequest
-        fields = ("id",)
-
-    id = serializers.PrimaryKeyRelatedField(  # noqa:WPS125, A003
-        queryset=MergeRequest.objects.all(),
-        source="merge_request",
-    )
-
-
-class SyncMergeRequestMutation(BaseSerializerMutation):
+class SyncMergeRequestMutation(BaseUseCaseMutation):
     """Syncing merge request mutation."""
 
     class Meta:
-        serializer_class = InputSerializer
+        use_case_class = merge_request_sync.UseCase
         permission_classes = (AllowAuthenticated,)
+
+    class Arguments:
+        id = graphene.ID(required=True)  # noqa: WPS125
 
     merge_request = graphene.Field(MergeRequestType)
 
     @classmethod
-    def mutate_and_get_payload(  # type: ignore
+    def get_input_dto(
         cls,
         root: Optional[object],
-        info: ResolveInfo,  # noqa: WPS110ø
-        validated_data: Dict[str, Any],
-    ) -> "SyncMergeRequestMutation":
-        """Syncing merge request."""
-        merge_request = validated_data.pop("merge_request")
+        info: ResolveInfo,  # noqa: WPS110
+        **kwargs,
+    ):
+        """Prepare use case input data."""
+        return merge_request_sync.InputDto(merge_request=kwargs["id"])
 
-        if merge_request.project:
-            sync_project_merge_request_task(
-                merge_request.project.gl_id,
-                merge_request.gl_iid,
-            )
-
-        return cls(merge_request=merge_request)
+    @classmethod
+    def get_response_data(
+        cls,
+        root: Optional[object],
+        info: ResolveInfo,  # noqa: WPS110
+        output_dto: merge_request_sync.OutputDto,
+    ) -> Dict[str, object]:
+        """Prepare response data."""
+        return {
+            "merge_request": output_dto.merge_request,
+        }
