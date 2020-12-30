@@ -75,11 +75,10 @@ class SpentTimeFilterSet(django_filters.FilterSet):
         fields = "__all__"
 
     user = django_filters.ModelChoiceFilter(queryset=User.objects.all())
-    project = ProjectFilter()
-    team = TeamFilter()
-    state = StateFilter()
     salary = django_filters.ModelChoiceFilter(queryset=Salary.objects.all())
-
+    team = TeamFilter()
+    project = ProjectFilter()
+    state = StateFilter()
     order_by = OrderingFilter(fields=("date", "created_at"))
 
 

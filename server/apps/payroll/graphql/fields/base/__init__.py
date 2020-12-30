@@ -1,1 +1,1 @@
-from .workbreaks import BaseWorkBreaksConnectionField, WorkBreakFilterSet
+from .work_breaks import BaseWorkBreaksConnectionField, WorkBreakFilterSet

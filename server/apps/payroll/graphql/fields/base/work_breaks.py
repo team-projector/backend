@@ -73,7 +73,7 @@ class WorkBreakFilterSet(django_filters.FilterSet):
 
     class Meta:
         model = WorkBreak
-        fields = ["to_date", "from_date"]
+        fields = "__all__"
 
     approving = ApprovingFilter()
     from_date = FromDateFilter()
