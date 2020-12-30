@@ -1,80 +1,61 @@
-from datetime import datetime
-from typing import Any, Dict, Optional
+from typing import Dict, Optional
 
 import graphene
-from django.utils.translation import gettext_lazy as _
 from graphql import ResolveInfo
-from jnt_django_graphene_toolbox.mutations import BaseSerializerMutation
 from jnt_django_graphene_toolbox.security.permissions import AllowAuthenticated
-from rest_framework import exceptions, serializers
 
+from apps.core.graphql.mutations import BaseUseCaseMutation
 from apps.development.graphql.types import IssueType
-from apps.development.models import Milestone, Project
-from apps.development.services.gl.issues.create import (
-    NewIssueData,
-    create_issue,
-)
-from apps.users.models import User
+from apps.development.use_cases.issues import create as issue_create
 
 
-class InputSerializer(serializers.Serializer):
-    """Create issue input serializer."""
-
-    title = serializers.CharField()
-    project = serializers.PrimaryKeyRelatedField(queryset=Project.objects)
-    milestone = serializers.PrimaryKeyRelatedField(
-        queryset=Milestone.objects,
-        required=False,
-        allow_null=True,
-    )
-    user = serializers.PrimaryKeyRelatedField(queryset=User.objects)
-    labels = serializers.ListField(
-        child=serializers.CharField(),
-        required=False,
-    )
-    estimate = serializers.IntegerField(required=False, allow_null=True)
-    dueDate = serializers.DateField(source="due_date")  # noqa: N815, WPS115
-
-    def validate(self, attrs):
-        """Validates input parameters."""
-        attrs["author"] = self.context["request"].user
-
-        return attrs
-
-    def validate_estimate(self, estimate) -> int:
-        """Validate estimate."""
-        estimate = estimate or 0
-
-        if estimate < 0:
-            raise exceptions.ValidationError(_("MSG__ESTIMATE_MUST_BE_MORE_0"))
-
-        return estimate
-
-    def validate_dueDate(self, due_date):  # noqa: N802
-        """Validate due date. Date should not be in the past."""
-        if due_date < datetime.now().date():
-            raise exceptions.ValidationError(
-                _("MSG__DUE_DATE_SHOULD_NOT_BE_IN_THE_PAST"),
-            )
-
-        return due_date
-
-
-class CreateIssueMutation(BaseSerializerMutation):
+class CreateIssueMutation(BaseUseCaseMutation):
     """Create issue mutation."""
 
     class Meta:
-        serializer_class = InputSerializer
+        use_case_class = issue_create.UseCase
         permission_classes = (AllowAuthenticated,)
+
+    class Arguments:
+        title = graphene.String(required=True)
+        project = graphene.ID(required=True)
+        milestone = graphene.ID()
+        user = graphene.ID(required=True)
+        labels = graphene.List(graphene.String)
+        estimate = graphene.Int()
+        due_date = graphene.Date(required=True)
 
     issue = graphene.Field(IssueType)
 
     @classmethod
-    def mutate_and_get_payload(  # type: ignore
+    def get_input_dto(
         cls,
         root: Optional[object],
-        info: ResolveInfo,  # noqa: WPS110ø
-        validated_data: Dict[str, Any],
-    ) -> "CreateIssueMutation":
-        """Create issue."""
-        return cls(issue=create_issue(NewIssueData(**validated_data)))
+        info: ResolveInfo,  # noqa: WPS110
+        **kwargs,
+    ):
+        """Prepare use case input data."""
+        return issue_create.InputDto(
+            user=info.context.user,  # type: ignore
+            data=issue_create.IssueCreateData(
+                title=kwargs["title"],
+                project=kwargs["project"],
+                milestone=kwargs.get("milestone"),
+                user=kwargs["user"],
+                labels=kwargs.get("labels"),
+                estimate=kwargs.get("estimate"),
+                due_date=kwargs["due_date"],
+            ),
+        )
+
+    @classmethod
+    def get_response_data(
+        cls,
+        root: Optional[object],
+        info: ResolveInfo,  # noqa: WPS110
+        output_dto: issue_create.OutputDto,
+    ) -> Dict[str, object]:
+        """Prepare response data."""
+        return {
+            "issue": output_dto.issue,
+        }
