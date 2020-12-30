@@ -69,7 +69,7 @@ class UseCase(BaseUseCase):
         issue.save()
 
         transaction.on_commit(
-            lambda: propagate_ticket_to_related_issues_task(issue).delay(
+            lambda: propagate_ticket_to_related_issues_task.delay(
                 issue_id=issue.pk,
             ),
         )

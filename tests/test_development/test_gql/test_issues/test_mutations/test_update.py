@@ -1,6 +1,7 @@
 from jnt_django_graphene_toolbox.errors import GraphQLPermissionDenied
 from jnt_django_graphene_toolbox.errors.permission_denied import ACCESS_DENIED
 
+from tests.helpers.db import trigger_on_commit
 from tests.test_development.factories import IssueFactory
 
 KEY_ID = "id"
@@ -91,6 +92,7 @@ def test_ticket_propagation(
         id=issue.pk,
         ticket=ticket.id,
     )
+    trigger_on_commit()
 
     issue.refresh_from_db()
     child_issue.refresh_from_db()
