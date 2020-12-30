@@ -1,4 +1,5 @@
-from jnt_django_graphene_toolbox.errors import GraphQLInputError
+from jnt_django_graphene_toolbox.errors import GraphQLPermissionDenied
+from jnt_django_graphene_toolbox.errors.permission_denied import ACCESS_DENIED
 
 from tests.test_development.factories import IssueFactory
 
@@ -56,11 +57,8 @@ def test_without_access(
         ticket=ticket.id,
     )
 
-    assert isinstance(resolve, GraphQLInputError)
-
-    extensions = resolve.extensions
-    assert len(extensions["fieldErrors"]) == 1
-    assert extensions["fieldErrors"][0]["fieldName"] == KEY_ID
+    assert isinstance(resolve, GraphQLPermissionDenied)
+    assert resolve.extensions == {"code": ACCESS_DENIED}
 
 
 def test_ticket_propagation(
