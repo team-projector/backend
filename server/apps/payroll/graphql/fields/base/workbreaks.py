@@ -1,7 +1,6 @@
 import django_filters
 import graphene
 from django.db.models import Exists, OuterRef, QuerySet
-from django_filters import DateFilter
 
 from apps.core.graphql.fields import BaseModelConnectionField
 from apps.core.graphql.queries.filters import OrderingFilter
@@ -39,6 +38,36 @@ class ApprovingFilter(django_filters.BooleanFilter):
         )
 
 
+class FromDateFilter(django_filters.DateFilter):
+    """Filter work breaks by from date."""
+
+    def filter(  # noqa: A003, WPS125
+        self,
+        queryset,
+        value,  # noqa: WPS110
+    ) -> QuerySet:
+        """Do filtering."""
+        if not value:
+            return queryset
+
+        return queryset.filter(to_date__gte=value)
+
+
+class ToDateFilter(django_filters.DateFilter):
+    """Filter work breaks by to date."""
+
+    def filter(  # noqa: A003, WPS125
+        self,
+        queryset,
+        value,  # noqa: WPS110
+    ) -> QuerySet:
+        """Do filtering."""
+        if not value:
+            return queryset
+
+        return queryset.filter(from_date__lte=value)
+
+
 class WorkBreakFilterSet(django_filters.FilterSet):
     """Set of filters for Work Break."""
 
@@ -47,8 +76,8 @@ class WorkBreakFilterSet(django_filters.FilterSet):
         fields = "__all__"
 
     approving = ApprovingFilter()
-    from_date = DateFilter()
-    to_date = DateFilter()
+    from_date = FromDateFilter()
+    to_date = ToDateFilter()
     order_by = OrderingFilter(fields=("from_date",))
 
 
