@@ -280,7 +280,7 @@ class BaseModelConnectionField(ConnectionField):  # noqa: WPS214
         kwargs = {}
         for arg_key, arg_value in args.items():
             if arg_key in args:
-                if arg_key == "order_by":
+                if arg_key == "order_by" and isinstance(arg_value, str):
                     arg_value = str_converters.to_snake_case(arg_value)
                 kwargs[arg_key] = arg_value
         return kwargs

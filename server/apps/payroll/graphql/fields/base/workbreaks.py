@@ -73,12 +73,21 @@ class WorkBreakFilterSet(django_filters.FilterSet):
 
     class Meta:
         model = WorkBreak
-        fields = "__all__"
+        fields = ["to_date", "from_date"]
 
     approving = ApprovingFilter()
     from_date = FromDateFilter()
     to_date = ToDateFilter()
-    order_by = OrderingFilter(fields=("from_date",))
+    order_by = OrderingFilter(fields=("from_date", "to_date"))
+
+
+class WorkBreakSort(graphene.Enum):
+    """Allowed sortings."""
+
+    FROM_DATE_ASC = "from_date"  # noqa: WPS115
+    FROM_DATE_DESC = "-from_date"  # noqa: WPS115
+    TO_DATE_ASC = "to_date"  # noqa: WPS115
+    TO_DATE_DESC = "-to_date"  # noqa: WPS115
 
 
 class BaseWorkBreaksConnectionField(BaseModelConnectionField):
@@ -94,5 +103,5 @@ class BaseWorkBreaksConnectionField(BaseModelConnectionField):
             approving=graphene.Boolean(),
             from_date=graphene.Date(),
             to_date=graphene.Date(),
-            order_by=graphene.String(),
+            order_by=graphene.Argument(graphene.List(WorkBreakSort)),
         )
