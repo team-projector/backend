@@ -1,6 +1,7 @@
 import django_filters
 import graphene
 from django.db.models import QuerySet
+from django_filters import DateFilter
 
 from apps.core.graphql.fields import BaseModelConnectionField
 from apps.core.graphql.queries.filters import OrderingFilter
@@ -79,6 +80,7 @@ class SpentTimeFilterSet(django_filters.FilterSet):
     team = TeamFilter()
     project = ProjectFilter()
     state = StateFilter()
+    date = DateFilter()
     order_by = OrderingFilter(fields=("date", "created_at"))
 
 
