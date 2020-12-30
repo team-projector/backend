@@ -118,16 +118,16 @@ class UseCase(BaseUseCase):
         )
 
     def _prepare_new_issue_request_body(self, issue_data) -> Dict[str, object]:
-        new_issue_data = {
+        request_body = {
             "title": issue_data["title"],
             "assignee_ids": [issue_data["user"].gl_id],
             "due_date": str(issue_data["due_date"]),
         }
 
         if issue_data["milestone"]:
-            new_issue_data["milestone_id"] = issue_data["milestone"].gl_id
+            request_body["milestone_id"] = issue_data["milestone"].gl_id
 
         if issue_data["labels"]:
-            new_issue_data["labels"] = ",".join(issue_data["labels"])
+            request_body["labels"] = ",".join(issue_data["labels"])
 
-        return issue_data
+        return request_body
