@@ -7,6 +7,7 @@ from jnt_django_graphene_toolbox.types import BaseDjangoObjectType
 from apps.development.graphql.interfaces import WorkItem
 from apps.payroll.models import Penalty
 from apps.payroll.services.salary.allowed import filter_allowed_for_user
+from apps.users.graphql.types import UserType
 
 
 class PenaltyType(BaseDjangoObjectType):
@@ -19,6 +20,7 @@ class PenaltyType(BaseDjangoObjectType):
         name = "Penalty"
 
     owner = graphene.Field(WorkItem)
+    user = graphene.Field(UserType)
 
     @classmethod
     def get_queryset(cls, queryset, info) -> QuerySet:  # noqa: WPS110

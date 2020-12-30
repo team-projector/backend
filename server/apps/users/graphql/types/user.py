@@ -26,6 +26,7 @@ class UserType(BaseModelObjectType):
     position = graphene.Field(PositionType)
     is_active = graphene.Boolean()
     hour_rate = graphene.Float()
+    customer_hour_rate = graphene.Float()
     tax_rate = graphene.Float()
     annual_paid_work_breaks_days = graphene.Float()
     roles = BitField()

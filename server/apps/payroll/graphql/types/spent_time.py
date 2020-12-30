@@ -7,6 +7,7 @@ from jnt_django_graphene_toolbox.types import BaseDjangoObjectType
 from apps.development.graphql.interfaces import WorkItem
 from apps.payroll.models import SpentTime
 from apps.payroll.services.spent_time.allowed import filter_allowed_for_user
+from apps.users.graphql.types import UserType
 
 
 class SpentTimeType(BaseDjangoObjectType):
@@ -19,6 +20,7 @@ class SpentTimeType(BaseDjangoObjectType):
         name = "SpentTime"
 
     owner = graphene.Field(WorkItem)
+    user = graphene.Field(UserType)
 
     @classmethod
     def get_queryset(cls, queryset, info) -> QuerySet:  # noqa: WPS110
