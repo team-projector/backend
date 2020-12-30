@@ -2,7 +2,7 @@ import pytest
 from jnt_django_graphene_toolbox.errors import GraphQLPermissionDenied
 
 from apps.development.models import TeamMember
-from apps.payroll.graphql.filters import SalaryFilterSet
+from apps.payroll.graphql.fields.all_salaries import SalaryFilterSet
 from apps.payroll.models.salary import Salary
 from tests.test_development.factories import TeamFactory
 from tests.test_payroll.factories import SalaryFactory

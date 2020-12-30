@@ -1,6 +1,8 @@
 import django_filters
+import graphene
 from django.db.models import QuerySet
 
+from apps.core.graphql.fields import BaseModelConnectionField
 from apps.development.models import Team
 from apps.payroll.models import Salary
 from apps.payroll.services.salary.allowed import (
@@ -35,7 +37,21 @@ class SalaryFilterSet(django_filters.FilterSet):
 
     class Meta:
         model = Salary
-        fields = ("user", "team")
+        fields = "__all__"
 
     user = django_filters.ModelChoiceFilter(queryset=User.objects.all())
     team = TeamFilter()
+
+
+class AllSalariesConnectionField(BaseModelConnectionField):
+    """Handler for workbreaks collections."""
+
+    filterset_class = SalaryFilterSet
+
+    def __init__(self):
+        """Initialize."""
+        super().__init__(
+            "payroll.SalaryType",
+            user=graphene.ID(),
+            team=graphene.ID(),
+        )

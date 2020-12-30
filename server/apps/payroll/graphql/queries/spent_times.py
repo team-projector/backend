@@ -1,21 +1,14 @@
 import graphene
-from jnt_django_graphene_toolbox.connection_fields import (
-    DataSourceConnectionField,
-)
 
-from apps.payroll.graphql.filters import SpentTimeFilterSet
+from apps.payroll.graphql.fields import AllSpentTimesConnectionField
 from apps.payroll.graphql.resolvers import resolve_spent_times_summary
-from apps.payroll.graphql.types import SpentTimesSummaryType, SpentTimeType
+from apps.payroll.graphql.types import SpentTimesSummaryType
 
 
 class TimeExpensesQueries(graphene.ObjectType):
     """Class represents list of available fields for spent times queries."""
 
-    all_spent_times = DataSourceConnectionField(
-        SpentTimeType,
-        filterset_class=SpentTimeFilterSet,
-    )
-
+    all_spent_times = AllSpentTimesConnectionField()
     spent_times_summary = graphene.Field(
         SpentTimesSummaryType,
         project=graphene.ID(),

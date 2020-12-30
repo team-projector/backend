@@ -1,6 +1,8 @@
 import django_filters
+import graphene
 from django.db.models import QuerySet
 
+from apps.core.graphql.fields import BaseModelConnectionField
 from apps.core.graphql.queries.filters import OrderingFilter
 from apps.development.models import Project, Team, TeamMember
 from apps.payroll.models import Salary, SpentTime
@@ -70,7 +72,7 @@ class SpentTimeFilterSet(django_filters.FilterSet):
 
     class Meta:
         model = SpentTime
-        fields = ("date", "user", "salary", "team", "state")
+        fields = "__all__"
 
     user = django_filters.ModelChoiceFilter(queryset=User.objects.all())
     project = ProjectFilter()
@@ -79,3 +81,21 @@ class SpentTimeFilterSet(django_filters.FilterSet):
     salary = django_filters.ModelChoiceFilter(queryset=Salary.objects.all())
 
     order_by = OrderingFilter(fields=("date", "created_at"))
+
+
+class AllSpentTimesConnectionField(BaseModelConnectionField):
+    """Handler for all spent time collections."""
+
+    filterset_class = SpentTimeFilterSet
+
+    def __init__(self):
+        """Initialize."""
+        super().__init__(
+            "payroll.SpentTimeType",
+            user=graphene.ID(),
+            project=graphene.ID(),
+            team=graphene.ID(),
+            state=graphene.String(),
+            salary=graphene.ID(),
+            order_by=graphene.String(),
+        )

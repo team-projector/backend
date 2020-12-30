@@ -1,4 +1,4 @@
-from apps.payroll.graphql.filters import BonusFilterSet
+from apps.payroll.graphql.fields.all_bonuses import BonusFilterSet
 from apps.payroll.models import Bonus
 from tests.test_development.factories import TeamFactory, TeamMemberFactory
 from tests.test_payroll.factories import BonusFactory, SalaryFactory
