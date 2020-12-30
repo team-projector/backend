@@ -1,3 +1,5 @@
+from typing import Optional
+
 from django.db.models import QuerySet
 from jnt_django_graphene_toolbox.errors import GraphQLPermissionDenied
 
@@ -6,8 +8,14 @@ from apps.development.services.team_members.filters import filter_by_roles
 from apps.users.models import User
 
 
-def filter_allowed_for_user(queryset: QuerySet, user: User) -> QuerySet:
+def filter_allowed_for_user(
+    queryset: QuerySet,
+    user: Optional[User],
+) -> QuerySet:
     """Get salaries for user."""
+    if not user:
+        return queryset.none()
+
     users = filter_by_roles(
         TeamMember.objects.filter(user=user),
         [TeamMember.roles.LEADER],
