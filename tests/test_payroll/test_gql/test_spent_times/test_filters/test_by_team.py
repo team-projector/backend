@@ -1,6 +1,6 @@
 from jnt_django_toolbox.helpers.time import seconds
 
-from apps.payroll.graphql.filters import SpentTimeFilterSet
+from apps.payroll.graphql.fields.all_spent_times import SpentTimeFilterSet
 from apps.payroll.models import SpentTime
 from tests.test_development.factories import (
     IssueFactory,

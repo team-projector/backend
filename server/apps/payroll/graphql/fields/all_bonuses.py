@@ -2,7 +2,7 @@ import django_filters
 import graphene
 
 from apps.core.graphql.fields import BaseModelConnectionField
-from apps.payroll.graphql.filters.team import TeamFilter
+from apps.payroll.graphql.fields.filters import TeamFilter
 from apps.payroll.models import Bonus, Salary
 from apps.users.models import User
 

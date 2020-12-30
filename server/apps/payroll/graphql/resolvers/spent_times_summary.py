@@ -1,4 +1,4 @@
-from apps.payroll.graphql.filters import SpentTimeFilterSet
+from apps.payroll.graphql.fields.all_spent_times import SpentTimeFilterSet
 from apps.payroll.models import SpentTime
 from apps.payroll.services import spent_time as spent_time_service
 from apps.payroll.services.spent_time.allowed import filter_allowed_for_user
