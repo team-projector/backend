@@ -1,2 +1,3 @@
 from .all_work_breaks import AllWorkBreaksConnectionField
 from .all_bonuses import AllBonusesConnectionField
+from .all_penalties import AllPenaltiesConnectionField

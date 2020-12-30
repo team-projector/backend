@@ -1,6 +1,3 @@
-import pytest
-from jnt_django_graphene_toolbox.errors import GraphQLPermissionDenied
-
 from apps.development.models import TeamMember
 from tests.test_development.factories import TeamFactory, TeamMemberFactory
 from tests.test_payroll.factories import PenaltyFactory
@@ -29,11 +26,12 @@ def test_unauth(ghl_mock_info, all_penalties_query):
     :param ghl_mock_info:
     :param all_penalties_query:
     """
-    with pytest.raises(GraphQLPermissionDenied):
-        all_penalties_query(
-            root=None,
-            info=ghl_mock_info,
-        )
+    response = all_penalties_query(
+        root=None,
+        info=ghl_mock_info,
+    )
+
+    assert not response.length
 
 
 def test_not_allowed_for_user(user, all_penalties_query, ghl_auth_mock_info):

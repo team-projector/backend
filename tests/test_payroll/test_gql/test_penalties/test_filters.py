@@ -1,4 +1,4 @@
-from apps.payroll.graphql.filters import PenaltyFilterSet
+from apps.payroll.graphql.fields.all_penalties import PenaltyFilterSet
 from apps.payroll.models import Penalty
 from tests.test_development.factories import TeamFactory, TeamMemberFactory
 from tests.test_payroll.factories import PenaltyFactory, SalaryFactory
