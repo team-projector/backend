@@ -63,7 +63,7 @@ class TeamsFilterSet(django_filters.FilterSet):
     q = SearchFilter(fields=("title",))  # noqa: WPS111
 
 
-class TeamsConnectionField(BaseModelConnectionField):
+class AllTeamsConnectionField(BaseModelConnectionField):
     """Handler for users collections."""
 
     filterset_class = TeamsFilterSet

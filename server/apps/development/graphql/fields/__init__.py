@@ -1,3 +1,2 @@
-from .team_work_breaks import TeamWorkBreaksConnectionField
-from .teams import TeamsConnectionField
+from .all_teams import AllTeamsConnectionField
 from .team_members import TeamMembersConnectionField

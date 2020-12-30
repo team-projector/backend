@@ -1,2 +1,2 @@
-from .users import UsersConnectionField
+from .users import AllUsersConnectionField
 from .user_work_breaks import UserWorkBreaksConnectionField

@@ -16,7 +16,7 @@ class UserFilterSet(django_filters.FilterSet):
     order_by = OrderingFilter(fields=("login", "name"))
 
 
-class UsersConnectionField(BaseModelConnectionField):
+class AllUsersConnectionField(BaseModelConnectionField):
     """Handler for users collections."""
 
     filterset_class = UserFilterSet

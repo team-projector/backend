@@ -1,4 +1,4 @@
-from apps.payroll.graphql.fields.work_breaks import WorkBreakFilterSet
+from apps.payroll.graphql.fields.all_work_breaks import AllWorkBreakFilterSet
 from apps.payroll.models import WorkBreak
 from apps.payroll.models.mixins.approved import ApprovedState
 from tests.test_payroll.factories import WorkBreakFactory
@@ -31,7 +31,7 @@ def test_approving_list(
     )
     WorkBreakFactory.create_batch(3, user=UserFactory.create())
 
-    queryset = WorkBreakFilterSet(
+    queryset = AllWorkBreakFilterSet(
         data={"approving": True},
         queryset=WorkBreak.objects.all(),
         request=ghl_auth_mock_info.context,
@@ -39,7 +39,7 @@ def test_approving_list(
 
     assert queryset.count() == 5
 
-    queryset = WorkBreakFilterSet(
+    queryset = AllWorkBreakFilterSet(
         data={"approving": False},
         queryset=WorkBreak.objects.all(),
         request=ghl_auth_mock_info.context,
@@ -75,7 +75,7 @@ def test_approving_list_not_teamlead(
     )
     WorkBreakFactory.create_batch(3, user=UserFactory.create())
 
-    queryset = WorkBreakFilterSet(
+    queryset = AllWorkBreakFilterSet(
         data={"approving": True},
         queryset=WorkBreak.objects.all(),
         request=ghl_auth_mock_info.context,

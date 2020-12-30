@@ -1,16 +1,13 @@
 import django_filters
 import graphene
 from django.db.models import Exists, OuterRef, QuerySet
+from django_filters import DateFilter
 
 from apps.core.graphql.fields import BaseModelConnectionField
 from apps.core.graphql.queries.filters import OrderingFilter
-from apps.development.models import Team, TeamMember
-from apps.payroll.graphql.types import WorkBreakType
+from apps.development.models import TeamMember
 from apps.payroll.models import WorkBreak
 from apps.payroll.models.mixins.approved import ApprovedState
-from apps.payroll.services.work_break.allowed import (
-    check_allow_filtering_by_team,
-)
 from apps.users.models import User
 
 
@@ -42,52 +39,31 @@ class ApprovingFilter(django_filters.BooleanFilter):
         )
 
 
-class TeamFilter(django_filters.ModelChoiceFilter):
-    """Filter work breaks by team."""
-
-    def __init__(self) -> None:
-        """Initialize self."""
-        super().__init__(queryset=Team.objects.all())
-
-    def filter(  # noqa: A003, WPS125
-        self,
-        queryset,
-        value,  # noqa: WPS110
-    ) -> QuerySet:
-        """Do filtering."""
-        if not value:
-            return queryset
-
-        check_allow_filtering_by_team(value, self.parent.request.user)
-
-        return queryset.filter(user__teams=value)
-
-
 class WorkBreakFilterSet(django_filters.FilterSet):
     """Set of filters for Work Break."""
 
     class Meta:
         model = WorkBreak
-        fields = ("approving", "team", "user")
+        fields = "__all__"
 
     approving = ApprovingFilter()
-    team = TeamFilter()
-    user = django_filters.ModelChoiceFilter(queryset=User.objects.all())
-
+    from_date = DateFilter()
+    to_date = DateFilter()
     order_by = OrderingFilter(fields=("from_date",))
 
 
-class WorkBreaksConnectionField(BaseModelConnectionField):
+class BaseWorkBreaksConnectionField(BaseModelConnectionField):
     """Handler for workbreaks collections."""
 
     filterset_class = WorkBreakFilterSet
 
-    def __init__(self):
+    def __init__(self, **kwargs):
         """Initialize."""
         super().__init__(
-            WorkBreakType,
+            "payroll.WorkBreakType",
+            **kwargs,
             approving=graphene.Boolean(),
-            user=graphene.ID(),
-            team=graphene.ID(),
-            order_by=graphene.String(),  # "from_date"
+            from_date=graphene.Date(),
+            to_date=graphene.Date(),
+            order_by=graphene.String(),
         )

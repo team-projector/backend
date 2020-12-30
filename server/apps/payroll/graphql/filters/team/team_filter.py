@@ -17,7 +17,7 @@ class TeamFilter(django_filters.ModelChoiceFilter):
         team,
     ) -> QuerySet:
         """Do filtering."""
-        if team:
-            queryset = queryset.filter(user__teams=team)
+        if not team:
+            return queryset
 
-        return queryset
+        return queryset.filter(user__teams=team)

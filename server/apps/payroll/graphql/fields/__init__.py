@@ -1,1 +1,1 @@
-from .work_breaks import WorkBreaksConnectionField
+from .all_work_breaks import AllWorkBreaksConnectionField

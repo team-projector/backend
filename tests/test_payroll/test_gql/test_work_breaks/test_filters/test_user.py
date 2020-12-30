@@ -1,4 +1,4 @@
-from apps.payroll.graphql.fields.work_breaks import WorkBreakFilterSet
+from apps.payroll.graphql.fields.all_work_breaks import AllWorkBreakFilterSet
 from apps.payroll.models import WorkBreak
 from tests.test_payroll.factories import WorkBreakFactory
 
@@ -15,7 +15,7 @@ def test_filter_by_user(team_leader, team_developer):
         WorkBreakFactory.create(user=team_developer),
     ]
 
-    queryset = WorkBreakFilterSet(
+    queryset = AllWorkBreakFilterSet(
         data={"user": team_leader.pk},
         queryset=WorkBreak.objects.all(),
     ).qs
@@ -23,7 +23,7 @@ def test_filter_by_user(team_leader, team_developer):
     assert queryset.count() == 1
     assert queryset.first() == work_breaks[0]
 
-    queryset = WorkBreakFilterSet(
+    queryset = AllWorkBreakFilterSet(
         data={"user": team_developer.pk},
         queryset=WorkBreak.objects.all(),
     ).qs
