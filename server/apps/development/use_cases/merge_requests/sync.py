@@ -8,20 +8,20 @@ from apps.development.tasks import sync_project_merge_request_task
 
 
 @dataclass(frozen=True)
-class SyncMergeRequestInputDto:
+class InputDto:
     """Sync merge request input dto."""
 
     merge_request: int
 
 
 @dataclass(frozen=True)
-class SyncMergeRequestOutputDto:
+class OutputDto:
     """Sync merge request output dto."""
 
     merge_request: MergeRequest
 
 
-class InputDtoSerializer((serializers.Serializer)):
+class InputDtoSerializer(serializers.Serializer):
     """InputSerializer."""
 
     merge_request = serializers.PrimaryKeyRelatedField(
@@ -29,14 +29,14 @@ class InputDtoSerializer((serializers.Serializer)):
     )
 
 
-class SyncMergeRequestUseCase(BaseUseCase):
+class UseCase(BaseUseCase):
     """Usecase for updating merge requests."""
 
     def __init__(self, presenter: BasePresenter):
         """Initialize."""
         self._presenter = presenter
 
-    def execute(self, input_dto: SyncMergeRequestInputDto) -> None:
+    def execute(self, input_dto: InputDto) -> None:
         """Main logic here."""
         validated_data = self.validate_input(input_dto, InputDtoSerializer)
 
@@ -48,7 +48,7 @@ class SyncMergeRequestUseCase(BaseUseCase):
             )
 
         self._presenter.present(
-            SyncMergeRequestOutputDto(
+            OutputDto(
                 merge_request=merge_request,
             ),
         )

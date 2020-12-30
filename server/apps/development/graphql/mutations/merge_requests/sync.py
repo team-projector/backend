@@ -6,14 +6,16 @@ from jnt_django_graphene_toolbox.security.permissions import AllowAuthenticated
 
 from apps.core.graphql.mutations import BaseUseCaseMutation
 from apps.development.graphql.types import MergeRequestType
-from apps.development.use_cases.merge_requests import sync
+from apps.development.use_cases.merge_requests import (
+    sync as merge_request_sync,
+)
 
 
 class SyncMergeRequestMutation(BaseUseCaseMutation):
     """Syncing merge request mutation."""
 
     class Meta:
-        use_case_class = sync.SyncMergeRequestUseCase
+        use_case_class = merge_request_sync.UseCase
         permission_classes = (AllowAuthenticated,)
 
     class Arguments:
@@ -29,14 +31,14 @@ class SyncMergeRequestMutation(BaseUseCaseMutation):
         **kwargs,
     ):
         """Prepare use case input data."""
-        return sync.SyncMergeRequestInputDto(merge_request=kwargs["id"])
+        return merge_request_sync.InputDto(merge_request=kwargs["id"])
 
     @classmethod
     def get_response_data(
         cls,
         root: Optional[object],
         info: ResolveInfo,  # noqa: WPS110
-        output_dto: sync.SyncMergeRequestOutputDto,
+        output_dto: merge_request_sync.OutputDto,
     ) -> Dict[str, object]:
         """Prepare response data."""
         return {
