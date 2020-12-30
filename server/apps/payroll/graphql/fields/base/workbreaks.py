@@ -4,13 +4,9 @@ from django.db.models import Exists, OuterRef, QuerySet
 
 from apps.core.graphql.fields import BaseModelConnectionField
 from apps.core.graphql.queries.filters import OrderingFilter
-from apps.development.models import Team, TeamMember
-from apps.payroll.graphql.types import WorkBreakType
+from apps.development.models import TeamMember
 from apps.payroll.models import WorkBreak
 from apps.payroll.models.mixins.approved import ApprovedState
-from apps.payroll.services.work_break.allowed import (
-    check_allow_filtering_by_team,
-)
 from apps.users.models import User
 
 
@@ -42,12 +38,8 @@ class ApprovingFilter(django_filters.BooleanFilter):
         )
 
 
-class TeamFilter(django_filters.ModelChoiceFilter):
-    """Filter work breaks by team."""
-
-    def __init__(self) -> None:
-        """Initialize self."""
-        super().__init__(queryset=Team.objects.all())
+class FromDateFilter(django_filters.DateFilter):
+    """Filter work breaks by from date."""
 
     def filter(  # noqa: A003, WPS125
         self,
@@ -58,9 +50,22 @@ class TeamFilter(django_filters.ModelChoiceFilter):
         if not value:
             return queryset
 
-        check_allow_filtering_by_team(value, self.parent.request.user)
+        return queryset.filter(to_date__gte=value)
 
-        return queryset.filter(user__teams=value)
+
+class ToDateFilter(django_filters.DateFilter):
+    """Filter work breaks by to date."""
+
+    def filter(  # noqa: A003, WPS125
+        self,
+        queryset,
+        value,  # noqa: WPS110
+    ) -> QuerySet:
+        """Do filtering."""
+        if not value:
+            return queryset
+
+        return queryset.filter(from_date__lte=value)
 
 
 class WorkBreakFilterSet(django_filters.FilterSet):
@@ -68,26 +73,35 @@ class WorkBreakFilterSet(django_filters.FilterSet):
 
     class Meta:
         model = WorkBreak
-        fields = ("approving", "team", "user")
+        fields = ["to_date", "from_date"]
 
     approving = ApprovingFilter()
-    team = TeamFilter()
-    user = django_filters.ModelChoiceFilter(queryset=User.objects.all())
+    from_date = FromDateFilter()
+    to_date = ToDateFilter()
+    order_by = OrderingFilter(fields=("from_date", "to_date"))
 
-    order_by = OrderingFilter(fields=("from_date",))
+
+class WorkBreakSort(graphene.Enum):
+    """Allowed sortings."""
+
+    FROM_DATE_ASC = "from_date"  # noqa: WPS115
+    FROM_DATE_DESC = "-from_date"  # noqa: WPS115
+    TO_DATE_ASC = "to_date"  # noqa: WPS115
+    TO_DATE_DESC = "-to_date"  # noqa: WPS115
 
 
-class WorkBreaksConnectionField(BaseModelConnectionField):
+class BaseWorkBreaksConnectionField(BaseModelConnectionField):
     """Handler for workbreaks collections."""
 
     filterset_class = WorkBreakFilterSet
 
-    def __init__(self):
+    def __init__(self, **kwargs):
         """Initialize."""
         super().__init__(
-            WorkBreakType,
+            "payroll.WorkBreakType",
+            **kwargs,
             approving=graphene.Boolean(),
-            user=graphene.ID(),
-            team=graphene.ID(),
-            order_by=graphene.String(),  # "from_date"
+            from_date=graphene.Date(),
+            to_date=graphene.Date(),
+            order_by=graphene.Argument(graphene.List(WorkBreakSort)),
         )

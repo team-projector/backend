@@ -10,7 +10,7 @@ from apps.development.graphql.types.issue_metrics import IssueMetricsType
 from apps.development.models import Issue
 from apps.development.services.issue import allowed, metrics
 from apps.development.services.issue.problems import get_issue_problems
-from apps.users.graphql.fields import UsersConnectionField
+from apps.users.graphql.fields import AllUsersConnectionField
 from apps.users.graphql.types import UserType
 
 
@@ -28,7 +28,7 @@ class IssueType(types.BaseDjangoObjectType):
     problems = graphene.List(graphene.String)
     time_spent = graphene.Field(graphene.Int)
     author = graphene.Field(UserType)
-    participants = UsersConnectionField()
+    participants = AllUsersConnectionField()
 
     @classmethod
     def get_queryset(cls, queryset, info) -> QuerySet:  # noqa: WPS110

@@ -2,7 +2,7 @@ import pytest
 from jnt_django_graphene_toolbox.errors import GraphQLPermissionDenied
 
 from apps.development.models import TeamMember
-from apps.payroll.graphql.fields.work_breaks import WorkBreakFilterSet
+from apps.payroll.graphql.fields.all_work_breaks import AllWorkBreakFilterSet
 from apps.payroll.models import WorkBreak
 from tests.test_payroll.factories import WorkBreakFactory
 from tests.test_users.factories.user import UserFactory
@@ -33,7 +33,7 @@ def test_filter_by_team(
 
     ghl_auth_mock_info.context.user = team_leader
 
-    queryset = WorkBreakFilterSet(
+    queryset = AllWorkBreakFilterSet(
         data={"team": team.pk},
         queryset=WorkBreak.objects.all(),
         request=ghl_auth_mock_info.context,
@@ -63,7 +63,7 @@ def test_filter_by_team_not_allowed(
     WorkBreakFactory.create_batch(size=5, user=team_developer)
 
     with pytest.raises(GraphQLPermissionDenied):
-        WorkBreakFilterSet(  # noqa: WPS428
+        AllWorkBreakFilterSet(  # noqa: WPS428
             data={"team": team.id},
             queryset=WorkBreak.objects.all(),
             request=ghl_auth_mock_info.context,
