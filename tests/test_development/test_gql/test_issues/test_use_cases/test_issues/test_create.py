@@ -2,7 +2,7 @@ from datetime import datetime, timedelta
 
 import pytest
 
-from apps.development.graphql.mutations.issues.create import InputSerializer
+from apps.development.use_cases.issues.create import InputDtoSerializer
 from tests.test_development.factories import ProjectFactory
 
 
@@ -23,13 +23,12 @@ def test_valid_data(user, project, context):
     user.gl_token = "token"
     user.save()
 
-    serializer = InputSerializer(
+    serializer = InputDtoSerializer(
         data=_source_data(user, project),
         context=context,
     )
 
     assert serializer.is_valid()
-    assert serializer.validated_data.get("author") == user
 
 
 def test_estimate_as_none(user, project, context):
@@ -41,7 +40,7 @@ def test_estimate_as_none(user, project, context):
 
     source_data = _source_data(user, project)
     source_data[estimate_field] = None
-    serializer = InputSerializer(
+    serializer = InputDtoSerializer(
         data=source_data,
         context=context,
     )
@@ -54,7 +53,7 @@ def test_estimate_as_none(user, project, context):
     ("field", "field_value"),
     [
         ("estimate", -1),
-        ("dueDate", str((datetime.now() - timedelta(days=2)).date())),
+        ("due_date", str((datetime.now() - timedelta(days=2)).date())),
     ],
 )
 def test_no_valid_fields(user, project, context, field, field_value):
@@ -64,7 +63,7 @@ def test_no_valid_fields(user, project, context, field, field_value):
 
     source_data = _source_data(user, project)
     source_data[field] = field_value
-    serializer = InputSerializer(
+    serializer = InputDtoSerializer(
         data=source_data,
         context=context,
     )
@@ -80,5 +79,7 @@ def _source_data(user, project):
         "project": project.pk,
         "user": user.pk,
         "estimate": 100,
-        "dueDate": str(datetime.now().date()),
+        "labels": None,
+        "due_date": str(datetime.now().date()),
+        "milestone": None,
     }
