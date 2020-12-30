@@ -3,7 +3,9 @@ from typing import Iterable
 from django.db.models import Exists, OuterRef, QuerySet
 from jnt_django_graphene_toolbox.errors import GraphQLPermissionDenied
 
+from apps.core.application.errors import AccessDeniedApplicationError
 from apps.development.models import (
+    Issue,
     Project,
     ProjectGroup,
     ProjectMember,
@@ -77,3 +79,16 @@ def filter_by_team_member_role(queryset: QuerySet, user: User) -> QuerySet:
         allowed_users.add(member)
 
     return queryset.filter(user__in=allowed_users)
+
+
+def check_permissions(user: User, issue: Issue):
+    """Checks user permissions for issue and raises an appropriate error."""
+    allowed_for_user = filter_allowed_for_user(
+        Issue.objects.filter(id=issue.id),
+        user,
+    )
+
+    if allowed_for_user.exists():
+        return
+
+    raise AccessDeniedApplicationError

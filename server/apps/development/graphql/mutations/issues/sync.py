@@ -1,41 +1,47 @@
-from typing import Any, Dict, Optional
+from typing import Dict, Optional
 
 import graphene
 from graphql import ResolveInfo
-from jnt_django_graphene_toolbox.mutations import BaseSerializerMutation
 from jnt_django_graphene_toolbox.security.permissions import AllowAuthenticated
 
-from apps.development.graphql.mutations.issues.inputs import BaseIssueInput
+from apps.core.graphql.mutations import BaseUseCaseMutation
 from apps.development.graphql.types import IssueType
-from apps.development.tasks import sync_project_issue_task
+from apps.development.use_cases.issues import sync as issue_sync
 
 
-class InputSerializer(BaseIssueInput):
-    """Ticket sync serializer."""
-
-
-class SyncIssueMutation(BaseSerializerMutation):
-    """Syncing issue mutation."""
+class SyncIssueMutation(BaseUseCaseMutation):
+    """Syncing merge request mutation."""
 
     class Meta:
-        serializer_class = InputSerializer
+        use_case_class = issue_sync.UseCase
         permission_classes = (AllowAuthenticated,)
+
+    class Arguments:
+        id = graphene.ID(required=True)  # noqa: WPS125
 
     issue = graphene.Field(IssueType)
 
     @classmethod
-    def mutate_and_get_payload(  # type: ignore
+    def get_input_dto(
         cls,
         root: Optional[object],
-        info: ResolveInfo,  # noqa: WPS110ø
-        validated_data: Dict[str, Any],
-    ) -> "SyncIssueMutation":
-        """Syncing issue."""
-        issue = validated_data.pop("issue")
-
-        sync_project_issue_task(
-            issue.project.gl_id,
-            issue.gl_iid,
+        info: ResolveInfo,  # noqa: WPS110
+        **kwargs,
+    ):
+        """Prepare use case input data."""
+        return issue_sync.InputDto(
+            user=info.context.user,  # type: ignore
+            data=issue_sync.IssueSyncData(issue=kwargs["id"]),
         )
 
-        return cls(issue=issue)
+    @classmethod
+    def get_response_data(
+        cls,
+        root: Optional[object],
+        info: ResolveInfo,  # noqa: WPS110
+        output_dto: issue_sync.OutputDto,
+    ) -> Dict[str, object]:
+        """Prepare response data."""
+        return {
+            "issue": output_dto.issue,
+        }

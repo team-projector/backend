@@ -47,8 +47,4 @@ class UseCase(BaseUseCase):
                 merge_request.gl_iid,
             )
 
-        self._presenter.present(
-            OutputDto(
-                merge_request=merge_request,
-            ),
-        )
+        self._presenter.present(OutputDto(merge_request=merge_request))
