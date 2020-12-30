@@ -1,10 +1,9 @@
-from dataclasses import asdict, dataclass
+from dataclasses import dataclass
 from datetime import date, datetime
 from typing import Dict, Optional
 
 from rest_framework import serializers
 
-from apps.core.application.errors import InvalidInputApplicationError
 from apps.core.application.use_cases import BasePresenter, BaseUseCase
 from apps.payroll.models.work_break import WorkBreak, WorkBreakReason
 from apps.users.models import User
@@ -87,11 +86,10 @@ class CreateWorkBreakUseCase(BaseUseCase):
 
     def execute(self, input_dto: CreateWorkBreakInputDto) -> None:
         """Main logic here."""
-        serializer = InputDtoSerializer(data=asdict(input_dto.data))
-        if not serializer.is_valid():
-            raise InvalidInputApplicationError(serializer.errors)
-
-        validated_data = serializer.validated_data
+        validated_data = self.validate_input(
+            input_dto.data,
+            InputDtoSerializer,
+        )
 
         work_break = WorkBreak()
         work_break.comment = validated_data["comment"]
