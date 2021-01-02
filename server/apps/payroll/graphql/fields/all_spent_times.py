@@ -90,7 +90,7 @@ class AllSpentTimesConnectionField(BaseModelConnectionField):
     def __init__(self):
         """Initialize."""
         super().__init__(
-            "payroll.SpentTimeType",
+            "apps.payroll.graphql.types.SpentTimeType",
             user=graphene.ID(),
             project=graphene.ID(),
             team=graphene.ID(),

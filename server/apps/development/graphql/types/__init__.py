@@ -9,8 +9,9 @@ from .issues_project_summary import IssuesProjectSummary
 from .issues_summary import IssuesSummaryType
 from .issues_team_summary import IssuesTeamSummary
 from .label import LabelType
-from .merge_request import MergeRequestType
+from .merge_request_metrics import MergeRequestMetricsType
 from .merge_requests_summary import MergeRequestsSummaryType
+from .merge_request import MergeRequestType
 from .milestone import MilestoneType
 from .milestone_metrics import MilestoneMetricsType
 from .project import ProjectType

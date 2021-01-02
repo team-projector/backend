@@ -1,15 +1,12 @@
 import graphene
 from django.db import models
-from jnt_django_graphene_toolbox.connections import DataSourceConnection
 from jnt_django_graphene_toolbox.relay_nodes import DatasourceRelayNode
-from jnt_django_graphene_toolbox.types import BaseDjangoObjectType
 
 from apps.core import graphql
+from apps.core.graphql.types import BaseModelObjectType
 from apps.development import models as development_models
-from apps.development.graphql.interfaces import WorkItem
-from apps.development.graphql.types.merge_request_metrics import (
-    MergeRequestMetricsType,
-)
+from apps.development.graphql import fields, interfaces
+from apps.development.graphql.types import MergeRequestMetricsType
 from apps.development.services.merge_request.allowed import (
     filter_allowed_for_user,
 )
@@ -19,17 +16,35 @@ from apps.development.services.merge_request.metrics import (
 from apps.development.services.merge_request.problems import (
     get_merge_request_problems,
 )
+from apps.users.graphql.fields import UsersConnectionField
 
 
-class MergeRequestType(BaseDjangoObjectType):
+class MergeRequestType(BaseModelObjectType):
     """Merge request type."""
 
     class Meta:
         model = development_models.MergeRequest
-        interfaces = (DatasourceRelayNode, WorkItem)
-        connection_class = DataSourceConnection
-        name = "MergeRequest"
+        interfaces = (DatasourceRelayNode, interfaces.WorkItem)
 
+    gl_url = graphene.String()
+    gl_last_sync = graphene.DateTime()
+    title = graphene.String()
+    time_estimate = graphene.Int()
+    total_time_spent = graphene.Int()
+    state = graphene.Field(
+        graphene.Enum.from_enum(
+            development_models.merge_request.MergeRequestState,
+        ),
+    )
+    created_at = graphene.DateTime()
+    updated_at = graphene.DateTime()
+    closed_at = graphene.DateTime()
+    labels = fields.LabelsConnectionField()
+    project = graphene.Field("apps.development.graphql.types.ProjectType")
+    user = graphene.Field("apps.users.graphql.types.UserType")
+    author = graphene.Field("apps.users.graphql.types.UserType")
+    milestone = graphene.Field("apps.development.graphql.types.MilestoneType")
+    participants = UsersConnectionField()
     metrics = graphene.Field(MergeRequestMetricsType)
     problems = graphene.List(graphene.String)
 

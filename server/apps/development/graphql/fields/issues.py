@@ -1,8 +1,9 @@
 import django_filters
-from django.contrib.auth import get_user_model
+import graphene
 from django.db.models import QuerySet
 from jnt_django_graphene_toolbox.filters import SearchFilter
 
+from apps.core.graphql.fields import BaseModelConnectionField
 from apps.core.graphql.queries.filters import OrderingFilter
 from apps.development.models import (
     Issue,
@@ -12,14 +13,14 @@ from apps.development.models import (
     TeamMember,
     Ticket,
 )
+from apps.development.models.issue import IssueState
 from apps.development.services.issue.allowed import check_allow_project_manager
 from apps.development.services.issue.problems import (
     annotate_issue_problems,
     exclude_issue_problems,
     filter_issue_problems,
 )
-
-User = get_user_model()
+from apps.users.models import User
 
 
 class TicketFilter(django_filters.ModelChoiceFilter):
@@ -115,16 +116,7 @@ class IssuesFilterSet(django_filters.FilterSet):
 
     class Meta:
         model = Issue
-        fields = (
-            "state",
-            "due_date",
-            "user",
-            "team",
-            "problems",
-            "project",
-            "milestone",
-            "ticket",
-        )
+        fields = "__all__"
 
     milestone = MilestoneFilter()
     problems = ProblemsFilter()
@@ -143,3 +135,26 @@ class IssuesFilterSet(django_filters.FilterSet):
         ),
     )
     q = SearchFilter(fields=("title", "=gl_url"))  # noqa: WPS111
+
+
+class IssuesConnectionField(BaseModelConnectionField):
+    """Handler for labels collections."""
+
+    filterset_class = IssuesFilterSet
+
+    def __init__(self):
+        """Initialize."""
+        super().__init__(
+            "apps.development.graphql.types.IssueType",
+            order_by=graphene.String(),
+            user=graphene.ID(),
+            milestone=graphene.ID(),
+            problems=graphene.Boolean(),
+            project=graphene.ID(),
+            team=graphene.ID(),
+            ticket=graphene.ID(),
+            q=graphene.String(),
+            state=graphene.Argument(
+                graphene.Enum.from_enum(IssueState),
+            ),
+        )

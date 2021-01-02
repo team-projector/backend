@@ -1,18 +1,14 @@
-from typing import List
+import graphene
 
-from jnt_django_graphene_toolbox.connections import DataSourceConnection
-from jnt_django_graphene_toolbox.relay_nodes import DatasourceRelayNode
-from jnt_django_graphene_toolbox.types import BaseDjangoObjectType
-
+from apps.core.graphql.types import BaseModelObjectType
 from apps.development.models import Label
 
 
-class LabelType(BaseDjangoObjectType):
+class LabelType(BaseModelObjectType):
     """Label type."""
 
     class Meta:
         model = Label
-        interfaces = (DatasourceRelayNode,)
-        connection_class = DataSourceConnection
-        filter_fields: List[str] = []
-        name = "Label"
+
+    title = graphene.String()
+    color = graphene.String()

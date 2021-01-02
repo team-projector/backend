@@ -71,7 +71,7 @@ class AllTeamsConnectionField(BaseModelConnectionField):
     def __init__(self):
         """Initialize."""
         super().__init__(
-            "development.TeamType",
+            "apps.development.graphql.types.TeamType",
             title=graphene.String(),
             roles=graphene.String(),
             q=graphene.String(),

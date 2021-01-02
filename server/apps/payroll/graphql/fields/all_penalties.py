@@ -27,7 +27,7 @@ class AllPenaltiesConnectionField(BaseModelConnectionField):
     def __init__(self):
         """Initialize."""
         super().__init__(
-            "payroll.PenaltyType",
+            "apps.payroll.graphql.types.PenaltyType",
             user=graphene.ID(),
             salary=graphene.ID(),
             team=graphene.ID(),

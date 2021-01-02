@@ -1,4 +1,6 @@
-from apps.development.graphql.filters import MergeRequestFilterSet
+from apps.development.graphql.fields.merge_requests import (
+    MergeRequestFilterSet,
+)
 from apps.development.models import MergeRequest
 from apps.development.services.merge_request.allowed import (
     filter_allowed_for_user,

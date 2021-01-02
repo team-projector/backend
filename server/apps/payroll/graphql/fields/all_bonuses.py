@@ -27,7 +27,7 @@ class AllBonusesConnectionField(BaseModelConnectionField):
     def __init__(self):
         """Initialize."""
         super().__init__(
-            "payroll.BonusType",
+            "apps.payroll.graphql.types.BonusType",
             user=graphene.ID(),
             salary=graphene.ID(),
             team=graphene.ID(),

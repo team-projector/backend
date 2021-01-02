@@ -1,10 +1,7 @@
 import graphene
-from jnt_django_graphene_toolbox.connection_fields import (
-    DataSourceConnectionField,
-)
-from jnt_django_graphene_toolbox.relay_nodes import DatasourceRelayNode
 
-from apps.development.graphql.filters import MilestonesFilterSet
+from apps.core.graphql.nodes import ModelRelayNode
+from apps.development.graphql.fields import AllMilestonesConnectionField
 from apps.development.graphql.resolvers import resolve_milestones_summary
 from apps.development.graphql.types import MilestonesSummaryType, MilestoneType
 
@@ -12,13 +9,8 @@ from apps.development.graphql.types import MilestonesSummaryType, MilestoneType
 class MilestonesQueries(graphene.ObjectType):
     """Class represents list of available fields for milestone queries."""
 
-    milestone = DatasourceRelayNode.Field(MilestoneType)
-
-    all_milestones = DataSourceConnectionField(
-        MilestoneType,
-        filterset_class=MilestonesFilterSet,
-    )
-
+    milestone = ModelRelayNode.Field(MilestoneType)
+    all_milestones = AllMilestonesConnectionField()
     milestones_summary = graphene.Field(
         MilestonesSummaryType,
         resolver=resolve_milestones_summary,

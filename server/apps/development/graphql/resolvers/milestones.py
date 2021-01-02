@@ -1,6 +1,6 @@
 from django.db.models import QuerySet
 
-from apps.development.graphql.filters import MilestonesFilterSet
+from apps.development.graphql.fields import MilestonesFilterSet
 from apps.development.models import Milestone
 
 

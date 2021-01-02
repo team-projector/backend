@@ -98,7 +98,7 @@ class BaseWorkBreaksConnectionField(BaseModelConnectionField):
     def __init__(self, **kwargs):
         """Initialize."""
         super().__init__(
-            "payroll.WorkBreakType",
+            "apps.payroll.graphql.types.WorkBreakType",
             **kwargs,
             approving=graphene.Boolean(),
             from_date=graphene.Date(),

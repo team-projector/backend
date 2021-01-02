@@ -25,7 +25,7 @@ class BaseModelConnectionField(ConnectionField):  # noqa: WPS214
 
     filterset_class: Optional[Type[django_filters.FilterSet]] = None
 
-    def __init__(self, graphene_type, *args, **kwargs):
+    def __init__(self, *args, **kwargs):
         """Initialize."""
         self.on = kwargs.pop("on", False)
         self.max_limit = kwargs.pop(
@@ -37,14 +37,8 @@ class BaseModelConnectionField(ConnectionField):  # noqa: WPS214
             settings.graphene_settings.RELAY_CONNECTION_ENFORCE_FIRST_OR_LAST,
         )
         kwargs.setdefault("offset", Int())
-        if isinstance(graphene_type, str):
-            app_name, class_name = graphene_type.split(".")
-            graphene_type = "apps.{0}.graphql.types.{1}".format(
-                app_name,
-                class_name,
-            )
 
-        super().__init__(graphene_type, *args, **kwargs)
+        super().__init__(*args, **kwargs)
 
     @property
     def type(self):  # noqa: WPS125
