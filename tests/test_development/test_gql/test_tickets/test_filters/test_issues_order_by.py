@@ -2,7 +2,7 @@ from datetime import datetime, timedelta
 
 import pytest
 
-from apps.development.graphql.filters import TicketIssuesFilterSet
+from apps.development.graphql.fields.issues import IssuesFilterSet
 from apps.development.models.issue import Issue, IssueState
 from tests.test_development.factories import IssueFactory
 from tests.test_users.factories import UserFactory
@@ -56,7 +56,7 @@ def issues(user):
 )
 def test_by_user_state(issues, order_by, indexes):
     """Test order by user state."""
-    queryset = TicketIssuesFilterSet(
+    queryset = IssuesFilterSet(
         data={"order_by": order_by},
         queryset=Issue.objects.all(),
     ).qs

@@ -1,10 +1,7 @@
 import graphene
-from jnt_django_graphene_toolbox.connection_fields import (
-    DataSourceConnectionField,
-)
-from jnt_django_graphene_toolbox.relay_nodes import DatasourceRelayNode
 
-from apps.development.graphql.filters import IssuesFilterSet
+from apps.core.graphql.nodes import ModelRelayNode
+from apps.development.graphql.fields import AllIssuesConnectionField
 from apps.development.graphql.resolvers import resolve_issues_summary
 from apps.development.graphql.types import IssuesSummaryType, IssueType
 
@@ -12,11 +9,8 @@ from apps.development.graphql.types import IssuesSummaryType, IssueType
 class IssuesQueries(graphene.ObjectType):
     """Class represents list of available fields for issue queries."""
 
-    issue = DatasourceRelayNode.Field(IssueType)
-    all_issues = DataSourceConnectionField(
-        IssueType,
-        filterset_class=IssuesFilterSet,
-    )
+    issue = ModelRelayNode.Field(IssueType)
+    all_issues = AllIssuesConnectionField()
     issues_summary = graphene.Field(
         IssuesSummaryType,
         resolver=resolve_issues_summary,

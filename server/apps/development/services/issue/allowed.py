@@ -23,7 +23,10 @@ def check_allow_project_manager(user: User) -> None:
         )
 
 
-def filter_allowed_for_user(queryset: QuerySet, user: User) -> QuerySet:
+def filter_allowed_for_user(
+    queryset: QuerySet,
+    user: User,
+) -> QuerySet:
     """Get allowed issues for user."""
     team_member_issues = filter_by_team_member_role(queryset, user)
 
@@ -34,7 +37,7 @@ def filter_allowed_for_user(queryset: QuerySet, user: User) -> QuerySet:
     return queryset.filter(id__in=team_member_issues | project_member_issues)
 
 
-def get_allowed_projects(user) -> Iterable[Project]:
+def get_allowed_projects(user: User) -> Iterable[Project]:
     """Get allowed projects for user."""
     members = ProjectMember.objects.filter(
         user=user,
@@ -62,7 +65,10 @@ def get_projects_from_group(group: ProjectGroup) -> Iterable[Project]:
     return set(projects)
 
 
-def filter_by_team_member_role(queryset: QuerySet, user: User) -> QuerySet:
+def filter_by_team_member_role(
+    queryset: QuerySet,
+    user: User,
+) -> QuerySet:
     """
     Get allowed issues for user from teams.
 

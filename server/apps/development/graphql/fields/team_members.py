@@ -55,11 +55,12 @@ class TeamMembersConnectionField(BaseModelConnectionField):
     """Handler for team members collections."""
 
     filterset_class = TeamMembersFilterSet
+    auth_required = True
 
     def __init__(self):
         """Initialize."""
         super().__init__(
-            "development.TeamMemberType",
+            "apps.development.graphql.types.TeamMemberType",
             roles=graphene.String(),
             order_by=graphene.String(),  # "user__name"
         )

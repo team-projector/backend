@@ -1,10 +1,12 @@
 import django_filters
+import graphene
 from django.db import models
 from jnt_django_graphene_toolbox.filters import SearchFilter
 
+from apps.core.graphql.fields import BaseModelConnectionField
 from apps.core.graphql.queries.filters import OrderingFilter
 from apps.development.models import Project
-from apps.development.models.milestone import Milestone
+from apps.development.models.milestone import Milestone, MilestoneState
 
 
 class ProjectFilter(django_filters.ModelChoiceFilter):
@@ -32,8 +34,27 @@ class MilestonesFilterSet(django_filters.FilterSet):
 
     class Meta:
         model = Milestone
-        fields = ("state",)
+        fields = "__all__"
 
     project = ProjectFilter()
     q = SearchFilter(fields=("title", "=gl_url"))  # noqa: WPS111
     order_by = OrderingFilter(fields=("due_date",))
+
+
+class MilestonesConnectionField(BaseModelConnectionField):
+    """Handler for labels collections."""
+
+    filterset_class = MilestonesFilterSet
+    auth_required = True
+
+    def __init__(self):
+        """Initialize."""
+        super().__init__(
+            "apps.development.graphql.types.MilestoneType",
+            order_by=graphene.String(),
+            project=graphene.ID(),
+            q=graphene.String(),
+            state=graphene.Argument(
+                graphene.Enum.from_enum(MilestoneState),
+            ),
+        )

@@ -14,6 +14,7 @@ class TeamType(BaseModelObjectType):
 
     class Meta:
         model = Team
+        auth_required = True
 
     title = graphene.String()
     metrics = graphene.Field(TeamMetricsType)
@@ -22,10 +23,7 @@ class TeamType(BaseModelObjectType):
     @classmethod
     def get_queryset(cls, queryset, info) -> QuerySet:  # noqa: WPS110
         """Get teams."""
-        return filter_allowed_for_user(
-            queryset,
-            info.context.user if info.context.user.is_authenticated else None,
-        )
+        return filter_allowed_for_user(queryset, info.context.user)
 
     def resolve_metrics(self, info, **kwargs):  # noqa: WPS110
         """Get team metrics."""

@@ -1,3 +1,5 @@
+from jnt_django_graphene_toolbox.errors import GraphQLPermissionDenied
+
 from tests.test_payroll.factories import BonusFactory
 from tests.test_users.factories import UserFactory
 
@@ -37,8 +39,7 @@ def test_unauth(db, ghl_mock_info, bonus_query, user):
         info=ghl_mock_info,
         id=bonus.pk,
     )
-
-    assert response is None
+    assert isinstance(response, GraphQLPermissionDenied)
 
 
 def test_not_found(ghl_auth_mock_info, bonus_query):

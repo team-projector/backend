@@ -23,11 +23,12 @@ class AllBonusesConnectionField(BaseModelConnectionField):
     """Handler for workbreaks collections."""
 
     filterset_class = BonusFilterSet
+    auth_required = True
 
     def __init__(self):
         """Initialize."""
         super().__init__(
-            "payroll.BonusType",
+            "apps.payroll.graphql.types.BonusType",
             user=graphene.ID(),
             salary=graphene.ID(),
             team=graphene.ID(),

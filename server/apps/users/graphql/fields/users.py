@@ -16,15 +16,16 @@ class UserFilterSet(django_filters.FilterSet):
     order_by = OrderingFilter(fields=("login", "name"))
 
 
-class AllUsersConnectionField(BaseModelConnectionField):
+class UsersConnectionField(BaseModelConnectionField):
     """Handler for users collections."""
 
     filterset_class = UserFilterSet
+    auth_required = True
 
     def __init__(self):
         """Initialize."""
         super().__init__(
-            "users.UserType",
+            "apps.users.graphql.types.UserType",
             is_active=graphene.Boolean(),
             order_by=graphene.String(),  # "login", "name"
         )

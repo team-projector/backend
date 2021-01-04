@@ -167,7 +167,7 @@ def test_resolve_milestones(user, client, ghl_auth_mock_info):
 
     client.user = user
 
-    parent = ProjectType.get_node(ghl_auth_mock_info, obj_id=project.id)
+    parent = ProjectType.get_node(ghl_auth_mock_info, project.id)
     parent.parent_type = None
 
     milestones = ProjectType.resolve_milestones(

@@ -1,4 +1,4 @@
-from apps.development.graphql.filters import MilestonesFilterSet
+from apps.development.graphql.fields import MilestonesFilterSet
 from apps.development.models import Milestone
 from apps.development.services.milestone.gl.manager import MilestoneGlManager
 from tests.test_development.factories import ProjectGroupMilestoneFactory

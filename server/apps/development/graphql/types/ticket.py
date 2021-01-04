@@ -1,16 +1,13 @@
 import graphene
 from django.db.models import QuerySet
-from jnt_django_graphene_toolbox.connection_fields import (
-    DataSourceConnectionField,
-)
-from jnt_django_graphene_toolbox.connections import DataSourceConnection
-from jnt_django_graphene_toolbox.relay_nodes import DatasourceRelayNode
-from jnt_django_graphene_toolbox.types import BaseDjangoObjectType
 
 from apps.core import graphql
-from apps.development.graphql.filters import TicketIssuesFilterSet
-from apps.development.graphql.types import IssueType, TicketMetricsType
+from apps.core.graphql.types import BaseModelObjectType
+from apps.development.graphql.fields import IssuesConnectionField
+from apps.development.graphql.types import MilestoneType, TicketMetricsType
 from apps.development.models import Ticket
+from apps.development.models.ticket import TicketState
+from apps.development.models.ticket import TicketType as ModelTicketType
 from apps.development.services.ticket import allowed, metrics
 from apps.development.services.ticket.problems import (
     annotate_ticket_problems,
@@ -18,22 +15,30 @@ from apps.development.services.ticket.problems import (
 )
 
 
-class TicketType(BaseDjangoObjectType):
+class TicketType(BaseModelObjectType):
     """Class represents list of available fields for ticket queries."""
 
     class Meta:
         model = Ticket
-        interfaces = (DatasourceRelayNode,)
-        connection_class = DataSourceConnection
-        name = "Ticket"
+        auth_required = True
 
+    created_at = graphene.DateTime()
     metrics = graphene.Field(TicketMetricsType)
-    type = graphene.String()  # noqa: WPS125, A003
     problems = graphene.List(graphene.String)
-    issues = DataSourceConnectionField(
-        IssueType,
-        filterset_class=TicketIssuesFilterSet,
+    issues = IssuesConnectionField()
+    type = graphene.Field(  # noqa: WPS125, A003
+        graphene.Enum.from_enum(ModelTicketType),
     )
+    title = graphene.String()
+    start_date = graphene.Date()
+    due_date = graphene.Date()
+    url = graphene.String()
+    role = graphene.String()
+    estimate = graphene.Int()
+    state = graphene.Field(
+        graphene.Enum.from_enum(TicketState),
+    )
+    milestone = graphene.Field(MilestoneType)
 
     @classmethod
     def get_queryset(cls, queryset, info) -> QuerySet:  # noqa: WPS110

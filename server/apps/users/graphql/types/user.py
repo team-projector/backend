@@ -18,6 +18,7 @@ class UserType(BaseModelObjectType):
 
     class Meta:
         model = User
+        auth_required = True
 
     name = graphene.String()
     login = graphene.String()
@@ -32,7 +33,7 @@ class UserType(BaseModelObjectType):
     roles = BitField()
     gl_avatar = graphene.String()
     daily_work_hours = graphene.Int()
-    teams = BaseModelConnectionField("development.TeamType")
+    teams = BaseModelConnectionField("apps.development.graphql.types.TeamType")
     metrics = graphene.Field(UserMetricsType)
     problems = graphene.List(graphene.String)
     work_breaks = UserWorkBreaksConnectionField()

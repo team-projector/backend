@@ -94,11 +94,12 @@ class BaseWorkBreaksConnectionField(BaseModelConnectionField):
     """Handler for workbreaks collections."""
 
     filterset_class = WorkBreakFilterSet
+    auth_required = True
 
     def __init__(self, **kwargs):
         """Initialize."""
         super().__init__(
-            "payroll.WorkBreakType",
+            "apps.payroll.graphql.types.WorkBreakType",
             **kwargs,
             approving=graphene.Boolean(),
             from_date=graphene.Date(),

@@ -1,4 +1,4 @@
-from apps.development.graphql.filters import IssuesFilterSet
+from apps.development.graphql.fields.issues import IssuesFilterSet
 from apps.development.models.issue import Issue
 from tests.test_development.factories import IssueFactory, ProjectFactory
 

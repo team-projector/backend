@@ -14,6 +14,7 @@ from graphql_relay.connection.arrayconnection import (
     get_offset_with_default,
     offset_to_cursor,
 )
+from jnt_django_graphene_toolbox.errors import GraphQLPermissionDenied
 from promise import Promise
 from rest_framework.exceptions import ValidationError
 
@@ -24,8 +25,9 @@ class BaseModelConnectionField(ConnectionField):  # noqa: WPS214
     """Base class for model collections."""
 
     filterset_class: Optional[Type[django_filters.FilterSet]] = None
+    auth_required: bool = False
 
-    def __init__(self, graphene_type, *args, **kwargs):
+    def __init__(self, *args, **kwargs):
         """Initialize."""
         self.on = kwargs.pop("on", False)
         self.max_limit = kwargs.pop(
@@ -37,14 +39,8 @@ class BaseModelConnectionField(ConnectionField):  # noqa: WPS214
             settings.graphene_settings.RELAY_CONNECTION_ENFORCE_FIRST_OR_LAST,
         )
         kwargs.setdefault("offset", Int())
-        if isinstance(graphene_type, str):
-            app_name, class_name = graphene_type.split(".")
-            graphene_type = "apps.{0}.graphql.types.{1}".format(
-                app_name,
-                class_name,
-            )
 
-        super().__init__(graphene_type, *args, **kwargs)
+        super().__init__(*args, **kwargs)
 
     @property
     def type(self):  # noqa: WPS125
@@ -190,6 +186,9 @@ class BaseModelConnectionField(ConnectionField):  # noqa: WPS214
         **args,
     ):
         """Return connection resolver."""
+        if cls.auth_required and not info.context.user.is_authenticated:
+            return GraphQLPermissionDenied()
+
         first = args.get("first")
         last = args.get("last")
         offset = args.get("offset")

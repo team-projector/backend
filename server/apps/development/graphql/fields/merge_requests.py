@@ -1,8 +1,11 @@
 import django_filters
+import graphene
 from django.db.models import QuerySet
 
+from apps.core.graphql.fields import BaseModelConnectionField
 from apps.core.graphql.queries.filters import OrderingFilter
 from apps.development.models import MergeRequest, Project, Team, TeamMember
+from apps.development.models.merge_request import MergeRequestState
 from apps.users.models import User
 
 
@@ -42,3 +45,23 @@ class MergeRequestFilterSet(django_filters.FilterSet):
     team = TeamFilter()
 
     order_by = OrderingFilter(fields=("title", "created_at", "closed_at"))
+
+
+class MergeRequestsConnectionField(BaseModelConnectionField):
+    """Handler for labels collections."""
+
+    filterset_class = MergeRequestFilterSet
+    auth_required = True
+
+    def __init__(self):
+        """Initialize."""
+        super().__init__(
+            "apps.development.graphql.types.MergeRequestType",
+            order_by=graphene.String(),
+            user=graphene.ID(),
+            project=graphene.ID(),
+            state=graphene.Argument(
+                graphene.Enum.from_enum(MergeRequestState),
+            ),
+            team=graphene.ID(),
+        )

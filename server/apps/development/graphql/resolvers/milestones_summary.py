@@ -1,5 +1,5 @@
 from apps.core.graphql import get_fields_from_info
-from apps.development.graphql.filters import MilestonesFilterSet
+from apps.development.graphql.fields import MilestonesFilterSet
 from apps.development.models import Milestone
 from apps.development.services.milestone.allowed import filter_allowed_for_user
 from apps.development.services.milestone.summary import (
