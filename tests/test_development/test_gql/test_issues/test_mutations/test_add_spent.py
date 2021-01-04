@@ -68,12 +68,7 @@ def test_user_without_gl_token(
     isinstance(resolve, GraphQLInputError)
 
     extensions = resolve.extensions  # noqa: WPS441
-    assert len(extensions[FIELD_FIELD_ERRORS]) == 1
-    assert extensions[FIELD_FIELD_ERRORS][0]["fieldName"] == "nonFieldErrors"
-    assert (
-        extensions[FIELD_FIELD_ERRORS][0]["messages"][0]
-        == NoPersonalGitLabToken.default_detail
-    )
+    assert extensions["code"] == NoPersonalGitLabToken.code
 
 
 def test_bad_time(issue, user, ghl_auth_mock_info, add_spent_issue_mutation):

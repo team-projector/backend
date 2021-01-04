@@ -1,8 +1,10 @@
 from django.utils.translation import gettext_lazy as _
-from rest_framework.exceptions import ValidationError
+
+from apps.core.application.errors import BaseApplicationError
 
 
-class NoPersonalGitLabToken(ValidationError):
+class NoPersonalGitLabToken(BaseApplicationError):
     """No personal gitlab token."""
 
-    default_detail = _("MSG__NO_PERSONAL_GL_TOKEN")
+    code = "gl_token_is_missing"
+    message = _("MSG__NO_PERSONAL_GL_TOKEN")
