@@ -120,7 +120,8 @@ class BaseModelObjectType(graphene.ObjectType):
     @classmethod
     def get_node(cls, info: ResolveInfo, id):  # noqa: WPS110 WPS125
         """Get node by id."""
-        if cls._meta.auth_required and not info.context.user.is_authenticated:
+        user = info.context.user
+        if cls._meta.auth_required and not user.is_authenticated:
             return GraphQLPermissionDenied()
 
         queryset = cls.get_queryset(cls._meta.model.objects, info)
