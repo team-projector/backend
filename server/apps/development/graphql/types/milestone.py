@@ -22,11 +22,13 @@ class MilestoneType(BaseModelObjectType):
 
     class Meta:
         model = Milestone
+        auth_required = True
 
     metrics = graphene.Field(MilestoneMetricsType)
     owner = graphene.Field(MilestoneOwner)
     problems = graphene.List(graphene.String)
     gl_url = graphene.String()
+    gl_iid = graphene.Int()
     gl_last_sync = graphene.String()
     created_at = graphene.DateTime()
     title = graphene.String()

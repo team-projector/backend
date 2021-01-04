@@ -14,6 +14,7 @@ class BonusType(BaseModelObjectType):
 
     class Meta:
         model = Bonus
+        auth_required = True
 
     owner = graphene.Field(WorkItem)
     user = graphene.Field(UserType)
@@ -27,7 +28,4 @@ class BonusType(BaseModelObjectType):
     @classmethod
     def get_queryset(cls, queryset, info) -> QuerySet:  # noqa: WPS110
         """Get bonuses."""
-        return filter_allowed_for_user(
-            queryset,
-            info.context.user if info.context.user.is_authenticated else None,
-        )
+        return filter_allowed_for_user(queryset, info.context.user)

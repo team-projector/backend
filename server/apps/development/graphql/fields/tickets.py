@@ -26,6 +26,7 @@ class TicketsConnectionField(BaseModelConnectionField):
     """Handler for labels collections."""
 
     filterset_class = TicketsFilterSet
+    auth_required = True
 
     def __init__(self):
         """Initialize."""

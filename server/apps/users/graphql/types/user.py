@@ -18,6 +18,7 @@ class UserType(BaseModelObjectType):
 
     class Meta:
         model = User
+        auth_required = True
 
     name = graphene.String()
     login = graphene.String()

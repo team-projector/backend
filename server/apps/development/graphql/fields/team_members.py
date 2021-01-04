@@ -55,6 +55,7 @@ class TeamMembersConnectionField(BaseModelConnectionField):
     """Handler for team members collections."""
 
     filterset_class = TeamMembersFilterSet
+    auth_required = True
 
     def __init__(self):
         """Initialize."""

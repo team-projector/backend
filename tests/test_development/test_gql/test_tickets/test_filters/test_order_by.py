@@ -1,6 +1,6 @@
 from datetime import datetime, timedelta
 
-from apps.development.graphql.filters import TicketsFilterSet
+from apps.development.graphql.fields.tickets import TicketsFilterSet
 from apps.development.models import Ticket
 from apps.development.models.ticket import TicketState
 from tests.helpers import lists

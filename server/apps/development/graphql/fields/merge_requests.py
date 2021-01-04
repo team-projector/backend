@@ -51,6 +51,7 @@ class MergeRequestsConnectionField(BaseModelConnectionField):
     """Handler for labels collections."""
 
     filterset_class = MergeRequestFilterSet
+    auth_required = True
 
     def __init__(self):
         """Initialize."""

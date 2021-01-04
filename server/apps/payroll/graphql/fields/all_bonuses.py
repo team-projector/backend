@@ -23,6 +23,7 @@ class AllBonusesConnectionField(BaseModelConnectionField):
     """Handler for workbreaks collections."""
 
     filterset_class = BonusFilterSet
+    auth_required = True
 
     def __init__(self):
         """Initialize."""

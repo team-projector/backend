@@ -86,6 +86,7 @@ class AllSpentTimesConnectionField(BaseModelConnectionField):
     """Handler for all spent time collections."""
 
     filterset_class = SpentTimeFilterSet
+    auth_required = True
 
     def __init__(self):
         """Initialize."""

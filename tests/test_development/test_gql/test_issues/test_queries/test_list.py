@@ -21,7 +21,7 @@ def test_query(user, gql_client_authenticated, gql_raw):
     response = gql_client_authenticated.execute(gql_raw(ALL_ISSUES_QUERY))
 
     assert ERRORS_FIELD not in response
-    assert response["data"]["allIssues"][COUNT_FIELD] == 5
+    assert _all_issues_data(response)[COUNT_FIELD] == 5
 
 
 def test_query_with_order_by(user, gql_client_authenticated, gql_raw):
@@ -34,7 +34,7 @@ def test_query_with_order_by(user, gql_client_authenticated, gql_raw):
     )
 
     assert ERRORS_FIELD not in response
-    assert response["data"]["allIssues"][COUNT_FIELD] == 5
+    assert _all_issues_data(response)[COUNT_FIELD] == 5
 
 
 def test_query_with_order_by_not_valid(
@@ -48,7 +48,7 @@ def test_query_with_order_by_not_valid(
         variable_values={"orderBy": "dueDate"},
     )
 
-    assert ERRORS_FIELD in response
+    assert not _all_issues_data(response)["count"]
 
 
 def test_not_owned_issue(ghl_auth_mock_info, all_issues_query):
@@ -66,11 +66,12 @@ def test_not_owned_issue(ghl_auth_mock_info, all_issues_query):
 
 def test_unauth(ghl_mock_info, all_issues_query):
     """Test unauth issues list."""
-    with pytest.raises(GraphQLPermissionDenied):
-        all_issues_query(
-            root=None,
-            info=ghl_mock_info,
-        )
+    response = all_issues_query(
+        root=None,
+        info=ghl_mock_info,
+    )
+
+    assert isinstance(response, GraphQLPermissionDenied)
 
 
 @pytest.mark.parametrize(
@@ -111,4 +112,8 @@ def test_list_as_watcher_by_team(
     )
 
     assert ERRORS_FIELD not in response
-    assert response["data"]["allIssues"][COUNT_FIELD] == count
+    assert _all_issues_data(response)[COUNT_FIELD] == count
+
+
+def _all_issues_data(response):
+    return response["data"]["allIssues"]

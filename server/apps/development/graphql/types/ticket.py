@@ -20,6 +20,7 @@ class TicketType(BaseModelObjectType):
 
     class Meta:
         model = Ticket
+        auth_required = True
 
     created_at = graphene.DateTime()
     metrics = graphene.Field(TicketMetricsType)

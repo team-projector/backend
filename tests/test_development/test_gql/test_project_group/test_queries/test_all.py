@@ -19,11 +19,12 @@ def test_not_permissions(db, ghl_mock_info, all_project_groups_query):
     """Test permissions."""
     ProjectGroupFactory.create_batch(3)
 
-    with pytest.raises(GraphQLPermissionDenied):
-        all_project_groups_query(
-            root=None,
-            info=ghl_mock_info,
-        )
+    response = all_project_groups_query(
+        root=None,
+        info=ghl_mock_info,
+    )
+
+    assert isinstance(response, GraphQLPermissionDenied)
 
 
 @pytest.mark.parametrize(

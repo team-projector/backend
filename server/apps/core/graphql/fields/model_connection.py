@@ -14,6 +14,7 @@ from graphql_relay.connection.arrayconnection import (
     get_offset_with_default,
     offset_to_cursor,
 )
+from jnt_django_graphene_toolbox.errors import GraphQLPermissionDenied
 from promise import Promise
 from rest_framework.exceptions import ValidationError
 
@@ -24,6 +25,7 @@ class BaseModelConnectionField(ConnectionField):  # noqa: WPS214
     """Base class for model collections."""
 
     filterset_class: Optional[Type[django_filters.FilterSet]] = None
+    auth_required: bool = False
 
     def __init__(self, *args, **kwargs):
         """Initialize."""
@@ -184,6 +186,9 @@ class BaseModelConnectionField(ConnectionField):  # noqa: WPS214
         **args,
     ):
         """Return connection resolver."""
+        if cls.auth_required and not info.context.user.is_authenticated:
+            return GraphQLPermissionDenied()
+
         first = args.get("first")
         last = args.get("last")
         offset = args.get("offset")

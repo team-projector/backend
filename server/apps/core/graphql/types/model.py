@@ -6,6 +6,7 @@ from graphene import Connection
 from graphene.types.objecttype import ObjectTypeOptions
 from graphene_django.utils import is_valid_django_model
 from graphql import ResolveInfo
+from jnt_django_graphene_toolbox.errors import GraphQLPermissionDenied
 
 from apps.core.graphql.connections import ModelConnection
 from apps.core.graphql.nodes import ModelRelayNode
@@ -16,6 +17,7 @@ class ModelObjectTypeOptions(ObjectTypeOptions):
 
     model: Optional[Model] = None
     connection: Optional[graphene.Connection] = None
+    auth_required: bool = False
 
 
 class BaseModelObjectType(graphene.ObjectType):
@@ -28,6 +30,7 @@ class BaseModelObjectType(graphene.ObjectType):
         name=None,
         connection_class=None,
         use_connection=None,
+        auth_required=False,
         interfaces=(),
         _meta=None,
         **options,
@@ -79,6 +82,7 @@ class BaseModelObjectType(graphene.ObjectType):
 
         _meta.model = model
         _meta.connection = connection
+        _meta.auth_required = auth_required
 
         super().__init_subclass_with_meta__(
             name=name,
@@ -116,6 +120,9 @@ class BaseModelObjectType(graphene.ObjectType):
     @classmethod
     def get_node(cls, info: ResolveInfo, id):  # noqa: WPS110 WPS125
         """Get node by id."""
+        if cls._meta.auth_required and not info.context.user.is_authenticated:
+            return GraphQLPermissionDenied()
+
         queryset = cls.get_queryset(cls._meta.model.objects, info)
         try:
             return queryset.get(pk=id)

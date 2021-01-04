@@ -12,6 +12,7 @@ class TeamMemberType(BaseModelObjectType):
 
     class Meta:
         model = TeamMember
+        auth_required = True
 
     roles = BitField()
     user = graphene.Field(UserType)

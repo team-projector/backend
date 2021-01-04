@@ -1,4 +1,4 @@
-from apps.development.graphql.filters import TicketsFilterSet
+from apps.development.graphql.fields.tickets import TicketsFilterSet
 from apps.development.models import Ticket
 from tests.test_development.factories import (
     ProjectMilestoneFactory,

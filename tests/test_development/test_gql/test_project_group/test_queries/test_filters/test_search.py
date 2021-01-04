@@ -1,6 +1,8 @@
 import pytest
 
-from apps.development.graphql.filters import ProjectGroupsFilterSet
+from apps.development.graphql.fields.project_groups import (
+    ProjectGroupsFilterSet,
+)
 from apps.development.models import ProjectGroup
 from tests.test_development.factories import ProjectGroupFactory
 

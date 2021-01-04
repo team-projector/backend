@@ -1,8 +1,4 @@
-import pytest
-from jnt_django_graphene_toolbox.errors import (
-    GraphQLNotFound,
-    GraphQLPermissionDenied,
-)
+from jnt_django_graphene_toolbox.errors import GraphQLPermissionDenied
 
 from tests.test_development.factories import TicketFactory
 
@@ -35,19 +31,19 @@ def test_unauth(db, ghl_mock_info, ticket_query):
     """Test unauth ticket retrieving."""
     ticket = TicketFactory.create()
 
-    with pytest.raises(GraphQLPermissionDenied):
-        ticket_query(
-            root=None,
-            info=ghl_mock_info,
-            id=ticket.pk,
-        )
+    response = ticket_query(
+        root=None,
+        info=ghl_mock_info,
+        id=ticket.pk,
+    )
+    assert isinstance(response, GraphQLPermissionDenied)
 
 
 def test_not_found(ghl_auth_mock_info, ticket_query):
     """Test not found ticket retrieving."""
-    with pytest.raises(GraphQLNotFound):
-        ticket_query(
-            root=None,
-            info=ghl_auth_mock_info,
-            id=1,
-        )
+    response = ticket_query(
+        root=None,
+        info=ghl_auth_mock_info,
+        id=1,
+    )
+    assert response is None

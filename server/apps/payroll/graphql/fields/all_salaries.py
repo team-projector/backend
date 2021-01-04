@@ -47,6 +47,7 @@ class AllSalariesConnectionField(BaseModelConnectionField):
     """Handler for workbreaks collections."""
 
     filterset_class = SalaryFilterSet
+    auth_required = True
 
     def __init__(self):
         """Initialize."""

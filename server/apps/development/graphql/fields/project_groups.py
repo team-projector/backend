@@ -7,7 +7,7 @@ from jnt_django_graphene_toolbox.filters import (
 
 from apps.core.graphql.fields import BaseModelConnectionField
 from apps.core.graphql.queries.filters import OrderingFilter
-from apps.development.models import Project
+from apps.development.models import ProjectGroup
 from apps.development.models.choices.project_state import ProjectState
 
 
@@ -15,7 +15,7 @@ class ProjectGroupsFilterSet(django_filters.FilterSet):
     """Set of filters for project groups."""
 
     class Meta:
-        model = Project
+        model = ProjectGroup
         fields = "__all__"
 
     state = EnumMultipleFilter(enum=ProjectState)
@@ -27,11 +27,12 @@ class ProjectGroupsConnectionField(BaseModelConnectionField):
     """Handler for labels collections."""
 
     filterset_class = ProjectGroupsFilterSet
+    auth_required = True
 
     def __init__(self):
         """Initialize."""
         super().__init__(
-            "apps.development.graphql.types.MilestoneType",
+            "apps.development.graphql.types.ProjectGroupType",
             order_by=graphene.String(),
             title=graphene.String(),
             q=graphene.String(),

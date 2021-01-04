@@ -9,6 +9,7 @@ class LabelType(BaseModelObjectType):
 
     class Meta:
         model = Label
+        auth_required = True
 
     title = graphene.String()
     color = graphene.String()

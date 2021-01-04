@@ -15,15 +15,16 @@ def test_query(user, gql_client_authenticated, gql_raw):
     assert response["data"]["allProjects"]["count"] == 3
 
 
-def test_not_permissions(db, ghl_mock_info, all_projects_query):
+def test_unauth(db, ghl_mock_info, all_projects_query):
     """Test permissions."""
     ProjectFactory.create_batch(3)
 
-    with pytest.raises(GraphQLPermissionDenied):
-        all_projects_query(
-            root=None,
-            info=ghl_mock_info,
-        )
+    response = all_projects_query(
+        root=None,
+        info=ghl_mock_info,
+    )
+
+    assert isinstance(response, GraphQLPermissionDenied)
 
 
 @pytest.mark.parametrize(

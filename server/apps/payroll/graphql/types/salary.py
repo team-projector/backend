@@ -14,6 +14,7 @@ class SalaryType(BaseModelObjectType):
 
     class Meta:
         model = Salary
+        auth_required = True
 
     owner = graphene.Field(WorkItem)
     user = graphene.Field(UserType)
@@ -36,7 +37,4 @@ class SalaryType(BaseModelObjectType):
     @classmethod
     def get_queryset(cls, queryset, info) -> QuerySet:  # noqa: WPS110
         """Get salaries."""
-        return filter_allowed_for_user(
-            queryset,
-            info.context.user if info.context.user.is_authenticated else None,
-        )
+        return filter_allowed_for_user(queryset, info.context.user)

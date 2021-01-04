@@ -120,6 +120,7 @@ class IssuesFilterSet(django_filters.FilterSet):
 
     milestone = MilestoneFilter()
     problems = ProblemsFilter()
+    due_date = django_filters.DateFilter()
     project = django_filters.ModelChoiceFilter(queryset=Project.objects.all())
     team = TeamFilter()
     ticket = TicketFilter()
@@ -141,6 +142,7 @@ class IssuesConnectionField(BaseModelConnectionField):
     """Handler for labels collections."""
 
     filterset_class = IssuesFilterSet
+    auth_required = True
 
     def __init__(self):
         """Initialize."""
@@ -149,6 +151,7 @@ class IssuesConnectionField(BaseModelConnectionField):
             order_by=graphene.String(),
             user=graphene.ID(),
             milestone=graphene.ID(),
+            due_date=graphene.Date(),
             problems=graphene.Boolean(),
             project=graphene.ID(),
             team=graphene.ID(),

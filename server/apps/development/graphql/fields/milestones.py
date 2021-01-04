@@ -45,6 +45,7 @@ class MilestonesConnectionField(BaseModelConnectionField):
     """Handler for labels collections."""
 
     filterset_class = MilestonesFilterSet
+    auth_required = True
 
     def __init__(self):
         """Initialize."""

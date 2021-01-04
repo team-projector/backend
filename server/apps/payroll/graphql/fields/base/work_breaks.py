@@ -94,6 +94,7 @@ class BaseWorkBreaksConnectionField(BaseModelConnectionField):
     """Handler for workbreaks collections."""
 
     filterset_class = WorkBreakFilterSet
+    auth_required = True
 
     def __init__(self, **kwargs):
         """Initialize."""

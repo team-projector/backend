@@ -14,6 +14,7 @@ class WorkBreakType(BaseModelObjectType):
 
     class Meta:
         model = WorkBreak
+        auth_required = True
 
     created_at = graphene.DateTime()
     updated_at = graphene.DateTime()

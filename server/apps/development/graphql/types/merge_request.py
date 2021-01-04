@@ -25,6 +25,7 @@ class MergeRequestType(BaseModelObjectType):
     class Meta:
         model = development_models.MergeRequest
         interfaces = (DatasourceRelayNode, interfaces.WorkItem)
+        auth_required = True
 
     gl_url = graphene.String()
     gl_last_sync = graphene.DateTime()

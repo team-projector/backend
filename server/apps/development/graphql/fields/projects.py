@@ -27,6 +27,7 @@ class ProjectsConnectionField(BaseModelConnectionField):
     """Handler for projects collections."""
 
     filterset_class = ProjectsFilterSet
+    auth_required = True
 
     def __init__(self):
         """Initialize."""
@@ -36,6 +37,6 @@ class ProjectsConnectionField(BaseModelConnectionField):
             q=graphene.String(),
             title=graphene.String(),
             state=graphene.Argument(
-                graphene.Enum.from_enum(ProjectState),
+                graphene.List(graphene.Enum.from_enum(ProjectState)),
             ),
         )

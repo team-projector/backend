@@ -1,3 +1,5 @@
+from jnt_django_graphene_toolbox.errors import GraphQLPermissionDenied
+
 from apps.development.models.note import NoteType
 from apps.payroll.services.spent_time.updater import adjust_spent_times
 from tests.test_development.factories import IssueFactory, IssueNoteFactory
@@ -29,8 +31,7 @@ def test_unauth(ghl_mock_info, all_spent_times_query):
         root=None,
         info=ghl_mock_info,
     )
-
-    assert not response.length
+    assert isinstance(response, GraphQLPermissionDenied)
 
 
 def test_empty_filter_by_salary(

@@ -23,6 +23,7 @@ class AllPenaltiesConnectionField(BaseModelConnectionField):
     """Handler for workbreaks collections."""
 
     filterset_class = PenaltyFilterSet
+    auth_required = True
 
     def __init__(self):
         """Initialize."""

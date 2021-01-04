@@ -1,7 +1,7 @@
 import pytest
 from jnt_django_graphene_toolbox.errors import GraphQLPermissionDenied
 
-from apps.development.graphql.filters import IssuesFilterSet
+from apps.development.graphql.fields.issues import IssuesFilterSet
 from apps.development.models.issue import Issue
 from apps.users.models import User
 from tests.test_development.factories import (

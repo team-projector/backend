@@ -23,6 +23,7 @@ class ProjectGroupType(BaseModelObjectType):
     class Meta:
         model = ProjectGroup
         interfaces = (DatasourceRelayNode, MilestoneOwner)
+        auth_required = True
 
     gl_url = graphene.String()
     gl_last_sync = graphene.DateTime()

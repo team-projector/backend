@@ -19,6 +19,7 @@ class IssueType(BaseModelObjectType):
     class Meta:
         model = Issue
         interfaces = (ModelRelayNode, interfaces.WorkItem)
+        auth_required = True
 
     metrics = graphene.Field(IssueMetricsType)
     problems = graphene.List(graphene.String)
