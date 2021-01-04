@@ -62,7 +62,7 @@ class UseCase(BaseUseCase):
         check_permissions(input_dto.user, issue)
 
         add_spent_time(
-            input_dto.user,  # type:ignore
+            input_dto.user,
             validated_data["issue"],
             validated_data["seconds"],
         )
