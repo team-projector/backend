@@ -1,42 +1,44 @@
-from typing import Optional
+from typing import Dict, Optional
 
 import graphene
 from graphql import ResolveInfo
-from jnt_django_graphene_toolbox.mutations import BaseSerializerMutation
 from jnt_django_graphene_toolbox.security.permissions import AllowAuthenticated
-from rest_framework import serializers
 
+from apps.core.graphql.mutations import BaseUseCaseMutation
 from apps.payroll.graphql.permissions import CanManageWorkBreak
-from apps.payroll.models import WorkBreak
+from apps.payroll.use_cases.work_breaks import delete as work_break_delete
 
 
-class InputSerializer(serializers.Serializer):
-    """DeleteWorkBreakInput serializer."""
-
-    id = serializers.PrimaryKeyRelatedField(  # noqa: A003, WPS125
-        queryset=WorkBreak.objects.all(),
-        source="work_break",
-    )
-
-
-class DeleteWorkBreakMutation(BaseSerializerMutation):
-    """Delete work break after validation."""
+class DeleteWorkBreakMutation(BaseUseCaseMutation):
+    """Delete work break mutation."""
 
     class Meta:
-        serializer_class = InputSerializer
+        use_case_class = work_break_delete.UseCase
         permission_classes = (AllowAuthenticated, CanManageWorkBreak)
+
+    class Arguments:
+        id = graphene.ID(required=True)  # noqa: WPS125
 
     ok = graphene.Boolean()
 
     @classmethod
-    def mutate_and_get_payload(
+    def get_input_dto(
         cls,
         root: Optional[object],
         info: ResolveInfo,  # noqa: WPS110
-        validated_data,
-    ) -> "DeleteWorkBreakMutation":
-        """Perform mutation implementation."""
-        work_break = validated_data["work_break"]
-        work_break.delete()
+        **kwargs,
+    ):
+        """Prepare use case input data."""
+        return work_break_delete.InputDto(work_break=kwargs["id"])
 
-        return cls(ok=True)
+    @classmethod
+    def get_response_data(
+        cls,
+        root: Optional[object],
+        info: ResolveInfo,  # noqa: WPS110
+        output_dto,
+    ) -> Dict[str, object]:
+        """Prepare response data."""
+        return {
+            "ok": True,
+        }
