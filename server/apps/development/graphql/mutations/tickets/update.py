@@ -1,103 +1,75 @@
-from typing import Any, Dict, Optional
+from typing import Dict, Optional
 
 import graphene
 from graphql import ResolveInfo
-from jnt_django_graphene_toolbox.mutations import BaseSerializerMutation
-from rest_framework import exceptions, serializers
-from rest_framework.fields import Field
 
-from apps.core.graphql.helpers.persisters import update_from_validated_data
+from apps.core.graphql.mutations import BaseUseCaseMutation
 from apps.core.graphql.security.permissions import AllowProjectManager
-from apps.development.graphql.mutations.tickets.inputs.base import (
-    TicketBaseInput,
-)
 from apps.development.graphql.types import TicketType
-from apps.development.models import Issue, Ticket
-from apps.development.services.issue.allowed import filter_allowed_for_user
-
-ISSUES_PARAM_ERROR = 'Please, choose one parameter: "attachIssues" or "issues"'
-KEY_ATTACH_ISSUES = "attach_issues"
+from apps.development.models import ticket
+from apps.development.use_cases.tickets import update as ticket_update
 
 
-class InputSerializer(TicketBaseInput):
-    """InputSerializer."""
-
-    class Meta(TicketBaseInput.Meta):
-        fields = ["id", *TicketBaseInput.Meta.fields, KEY_ATTACH_ISSUES]
-
-    attach_issues = serializers.PrimaryKeyRelatedField(
-        many=True,
-        required=False,
-        write_only=True,
-        queryset=Issue.objects,
-    )
-
-    id = serializers.PrimaryKeyRelatedField(  # noqa:WPS125, A003
-        queryset=Ticket.objects.all(),
-    )
-
-    @property
-    def validated_data(self):
-        """Validated data changing."""
-        validated_data = super().validated_data
-        validated_data["ticket"] = validated_data.pop("id", None)
-        return validated_data
-
-    def get_fields(self) -> Dict[str, Field]:
-        """Returns serializer fields."""
-        fields = super().get_fields()
-
-        for field in fields.values():
-            field.required = False
-
-        if self.context:
-            issues_qs = filter_allowed_for_user(
-                Issue.objects.all(),
-                self.context["request"].user,
-            )
-            fields[KEY_ATTACH_ISSUES].child_relation.queryset = issues_qs
-
-        return fields
-
-    def validate(self, attrs):
-        """Validates input parameters."""
-        if attrs.get("issues") and attrs.get(KEY_ATTACH_ISSUES):
-            raise exceptions.ValidationError(ISSUES_PARAM_ERROR)
-
-        return attrs
-
-
-class UpdateTicketMutation(BaseSerializerMutation):
+class UpdateTicketMutation(BaseUseCaseMutation):
     """Update ticket mutation."""
 
     class Meta:
-        serializer_class = InputSerializer
+        use_case_class = ticket_update.UseCase
         permission_classes = (AllowProjectManager,)
+
+    class Arguments:
+        id = graphene.ID(required=True)  # noqa: WPS125
+        title = graphene.String()
+        start_date = graphene.Date()
+        due_date = graphene.Date()
+        type = graphene.Argument(  # noqa: WPS125
+            graphene.Enum.from_enum(ticket.TicketType),
+        )
+        state = graphene.Argument(graphene.Enum.from_enum(ticket.TicketState))
+        issues = graphene.List(graphene.ID)
+        attach_issues = graphene.List(graphene.ID)
+        role = graphene.String()
+        url = graphene.String()
+        estimate = graphene.Int()
+        milestone = graphene.ID()
 
     ticket = graphene.Field(TicketType)
 
     @classmethod
-    def mutate_and_get_payload(  # type: ignore
+    def get_input_dto(
         cls,
         root: Optional[object],
-        info: ResolveInfo,  # noqa: WPS110ø
-        validated_data: Dict[str, Any],
-    ) -> "UpdateTicketMutation":
-        """Overrideable mutation operation."""
-        ticket = validated_data.pop("ticket")
-        attach_issues = validated_data.pop(KEY_ATTACH_ISSUES, None)
-        issues = validated_data.pop("issues", None)
+        info: ResolveInfo,  # noqa: WPS110
+        **kwargs,
+    ):
+        """Prepare use case input data."""
+        return ticket_update.InputDto(
+            user=info.context.user,  # type: ignore
+            data=ticket_update.TicketUpdateData(
+                ticket=kwargs["id"],
+                title=kwargs.get("title"),
+                start_date=kwargs.get("start_date"),
+                due_date=kwargs.get("due_date"),
+                type=kwargs.get("type"),
+                state=kwargs.get("state"),
+                issues=kwargs.get("issues", []),
+                attach_issues=kwargs.get("attach_issues", []),
+                role=kwargs.get("role"),
+                url=kwargs.get("url"),
+                estimate=kwargs.get("estimate", 0),
+                milestone=kwargs.get("milestone"),
+            ),
+            fields_to_update=list(kwargs.keys()),
+        )
 
-        update_from_validated_data(ticket, validated_data)
-
-        if attach_issues:
-            ticket.issues.add(*attach_issues)
-
-        if issues is not None:
-            Issue.objects.filter(ticket=ticket).exclude(
-                id__in=[issue.pk for issue in issues],
-            ).update(ticket=None)
-
-            ticket.issues.add(*issues)
-
-        return cls(ticket=ticket)
+    @classmethod
+    def get_response_data(
+        cls,
+        root: Optional[object],
+        info: ResolveInfo,  # noqa: WPS110
+        output_dto: ticket_update.OutputDto,
+    ) -> Dict[str, object]:
+        """Prepare response data."""
+        return {
+            "ticket": output_dto.ticket,
+        }
