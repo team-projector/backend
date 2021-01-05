@@ -1,8 +1,8 @@
 import graphene
 from django.db import models
-from jnt_django_graphene_toolbox.relay_nodes import DatasourceRelayNode
 
 from apps.core import graphql
+from apps.core.graphql.nodes import ModelRelayNode
 from apps.core.graphql.types import BaseModelObjectType
 from apps.development import models as development_models
 from apps.development.graphql import fields, interfaces
@@ -24,7 +24,7 @@ class MergeRequestType(BaseModelObjectType):
 
     class Meta:
         model = development_models.MergeRequest
-        interfaces = (DatasourceRelayNode, interfaces.WorkItem)
+        interfaces = (ModelRelayNode, interfaces.WorkItem)
         auth_required = True
 
     gl_url = graphene.String()

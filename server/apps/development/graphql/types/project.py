@@ -1,6 +1,6 @@
 import graphene
-from jnt_django_graphene_toolbox.relay_nodes import DatasourceRelayNode
 
+from apps.core.graphql.nodes import ModelRelayNode
 from apps.core.graphql.types import BaseModelObjectType
 from apps.development.graphql.fields.milestones import (
     MilestonesConnectionField,
@@ -20,7 +20,7 @@ class ProjectType(BaseModelObjectType):
 
     class Meta:
         model = Project
-        interfaces = (DatasourceRelayNode, MilestoneOwner)
+        interfaces = (ModelRelayNode, MilestoneOwner)
         auth_required = True
 
     gl_url = graphene.String()
