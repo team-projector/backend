@@ -1,6 +1,6 @@
 import datetime
 from dataclasses import dataclass
-from typing import Dict, List, Optional
+from typing import Dict, Iterable, List, Optional
 
 from django.core.validators import URLValidator
 from jnt_django_graphene_toolbox.serializers.fields.char import CharField
@@ -160,9 +160,29 @@ class UseCase(BaseUseCase):
         )
 
         ticket = validated_data.pop("ticket")
-        attach_issues = validated_data.pop("attach_issues", None)
-        issues = validated_data.pop(_ISSUES_FIELD, None)
 
+        for field in _MUTABLE_FIELDS:
+            if field not in input_dto.fields_to_update:
+                continue
+            setattr(ticket, field, validated_data[field])
+
+        ticket.save()
+
+        self._handle_issues(
+            ticket=ticket,
+            issues=validated_data.get(_ISSUES_FIELD),
+            attach_issues=validated_data.get("attach_issues"),
+            input_dto=input_dto,
+        )
+        self._presenter.present(OutputDto(ticket=ticket))
+
+    def _handle_issues(
+        self,
+        ticket: Ticket,
+        issues: Iterable[Issue],
+        attach_issues: Iterable[Issue],
+        input_dto: InputDto,
+    ):
         if attach_issues:
             ticket.issues.add(*attach_issues)
 
@@ -172,11 +192,3 @@ class UseCase(BaseUseCase):
             ).update(ticket=None)
 
             ticket.issues.add(*issues)
-
-        for field in _MUTABLE_FIELDS:
-            if field not in input_dto.fields_to_update:
-                continue
-            setattr(ticket, field, validated_data[field])
-
-        ticket.save()
-        self._presenter.present(OutputDto(ticket=ticket))
