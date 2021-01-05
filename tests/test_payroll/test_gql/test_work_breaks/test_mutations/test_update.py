@@ -90,42 +90,6 @@ def test_work_break_not_team_lead(
     assert work_break.comment == "django"
 
 
-def test_update_minimal(
-    ghl_auth_mock_info,
-    user,
-    update_work_break_mutation,
-):
-    """
-    Test update work break another user.
-
-    :param ghl_auth_mock_info:
-    :param update_work_break_mutation:
-    """
-    team = TeamFactory.create()
-    TeamMemberFactory.create(
-        team=team,
-        user=user,
-        roles=TeamMember.roles.LEADER,
-    )
-
-    user.roles = User.roles.TEAM_LEADER
-    user.save()
-
-    work_break = WorkBreakFactory.create(user=user, comment=COMMENT_CREATED)
-
-    update_variables = {
-        KEY_ID: work_break.pk,
-        KEY_REASON: WorkBreakReason.DAYOFF,
-    }
-
-    response = update_work_break_mutation(
-        root=None,
-        info=ghl_auth_mock_info,
-        **update_variables,
-    )
-    assert isinstance(response, GraphQLPermissionDenied)
-
-
 def test_update_work_break_another_user(
     ghl_auth_mock_info,
     update_work_break_mutation,
