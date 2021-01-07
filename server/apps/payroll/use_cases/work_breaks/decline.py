@@ -2,9 +2,13 @@ from dataclasses import dataclass
 
 from rest_framework import serializers
 
+from apps.core.application.errors import AccessDeniedApplicationError
 from apps.core.application.use_cases import BasePresenter, BaseUseCase
 from apps.payroll.models.work_break import WorkBreak
 from apps.payroll.services import work_break as work_break_service
+from apps.payroll.services.work_break.allowed import (
+    can_approve_decline_work_breaks,
+)
 from apps.users.models import User
 
 
@@ -55,6 +59,10 @@ class UseCase(BaseUseCase):
         )
 
         work_break = validated_data["work_break"]
+
+        if not can_approve_decline_work_breaks(work_break, input_dto.user):
+            raise AccessDeniedApplicationError()
+
         work_break_service.Manager(work_break).decline(
             approved_by=input_dto.user,
             decline_reason=validated_data["decline_reason"],

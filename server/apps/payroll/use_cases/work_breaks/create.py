@@ -11,7 +11,7 @@ from apps.users.models import User
 
 @dataclass(frozen=True)
 class CreateWorkBreakData:
-    """Update workbreak data."""
+    """Update work break data."""
 
     comment: str
     from_date: date

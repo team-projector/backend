@@ -2,7 +2,6 @@ from typing import Dict, Optional
 
 import graphene
 from graphql import ResolveInfo
-from jnt_django_graphene_toolbox.security.permissions import AllowAuthenticated
 
 from apps.core.graphql.mutations import BaseUseCaseMutation
 from apps.payroll.graphql.types import WorkBreakType
@@ -20,7 +19,7 @@ class UpdateWorkBreakMutation(BaseUseCaseMutation):
 
     class Meta:
         use_case_class = UpdateWorkBreakUseCase
-        permission_classes = (AllowAuthenticated,)
+        auth_required = True
 
     class Arguments:
         id = graphene.ID(required=True)  # noqa: WPS125

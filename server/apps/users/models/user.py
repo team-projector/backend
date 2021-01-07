@@ -154,6 +154,11 @@ class User(AbstractBaseUser, PermissionsMixin):
         """Returns object string representation."""
         return self.login
 
+    @property
+    def is_project_manager(self) -> bool:
+        """Returns True if user has a manager role."""
+        return self.is_authenticated and self.roles.MANAGER
+
     def get_short_name(self):
         """Return the short name for the user."""
         return self.login

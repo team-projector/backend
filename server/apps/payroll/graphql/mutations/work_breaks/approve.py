@@ -1,12 +1,14 @@
 import graphene
+from jnt_django_graphene_toolbox.errors import GraphQLPermissionDenied
 from jnt_django_graphene_toolbox.mutations import BaseSerializerMutation
-from jnt_django_graphene_toolbox.security.permissions import AllowAuthenticated
 from rest_framework import serializers
 
-from apps.payroll.graphql.permissions import CanApproveDeclineWorkBreak
 from apps.payroll.graphql.types import WorkBreakType
 from apps.payroll.models import WorkBreak
 from apps.payroll.services import work_break as work_break_service
+from apps.payroll.services.work_break.allowed import (
+    can_approve_decline_work_breaks,
+)
 
 
 class InputSerializer(serializers.Serializer):
@@ -23,7 +25,7 @@ class ApproveWorkBreakMutation(BaseSerializerMutation):
 
     class Meta:
         serializer_class = InputSerializer
-        permission_classes = (AllowAuthenticated, CanApproveDeclineWorkBreak)
+        auth_required = True
 
     work_break = graphene.Field(WorkBreakType)
 
@@ -36,6 +38,10 @@ class ApproveWorkBreakMutation(BaseSerializerMutation):
     ) -> "ApproveWorkBreakMutation":
         """Perform mutation implementation."""
         work_break = validated_data["work_break"]
+
+        if not can_approve_decline_work_breaks(work_break, info.context.user):
+            raise GraphQLPermissionDenied()
+
         work_break_service.Manager(work_break).approve(
             approved_by=info.context.user,
         )

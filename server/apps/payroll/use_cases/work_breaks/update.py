@@ -6,15 +6,12 @@ from rest_framework import serializers
 
 from apps.core.application.errors import AccessDeniedApplicationError
 from apps.core.application.use_cases import BasePresenter, BaseUseCase
-from apps.development.models import TeamMember
 from apps.payroll.models.work_break import WorkBreak, WorkBreakReason
+from apps.payroll.services.work_break.allowed import can_manage_work_break
 from apps.payroll.use_cases.work_breaks.create import (
     InputDtoSerializer as CreateWorkBreakInputDtoSerializer,
 )
 from apps.users.models import User
-from apps.users.services.user.relations import (
-    is_related_with_another_by_team_roles,
-)
 
 
 @dataclass(frozen=True)
@@ -68,7 +65,8 @@ class UpdateWorkBreakUseCase(BaseUseCase):
         )
 
         work_break = validated_data["work_break"]
-        self._check_permissions(input_dto.user, work_break)
+        if not can_manage_work_break(work_break, input_dto.user):
+            raise AccessDeniedApplicationError()
 
         work_break.comment = validated_data["comment"]
         work_break.from_date = validated_data["from_date"]
@@ -86,14 +84,3 @@ class UpdateWorkBreakUseCase(BaseUseCase):
                 work_break=work_break,
             ),
         )
-
-    def _check_permissions(self, user: User, work_break: WorkBreak):
-        is_team_leader = is_related_with_another_by_team_roles(
-            user,
-            work_break.user,
-            [TeamMember.roles.LEADER],
-        )
-        if is_team_leader or work_break.user == user:
-            return
-
-        raise AccessDeniedApplicationError

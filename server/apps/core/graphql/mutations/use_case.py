@@ -5,7 +5,6 @@ from jnt_django_graphene_toolbox.errors import (
     GraphQLInputError,
     GraphQLPermissionDenied,
 )
-from jnt_django_graphene_toolbox.mutations import BaseMutation
 from jnt_django_graphene_toolbox.mutations.serializer import (
     SerializerMutationOptions,
 )
@@ -18,6 +17,7 @@ from apps.core.application.errors import (
 from apps.core.application.use_cases import BaseUseCase
 from apps.core.graphql.errors import GenericGraphQLError
 from apps.core.graphql.mutations import MutationPresenter
+from apps.core.graphql.mutations.base import BaseMutation
 
 
 class UseCaseMutationOptions(SerializerMutationOptions):

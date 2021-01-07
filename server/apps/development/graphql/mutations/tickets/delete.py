@@ -2,10 +2,11 @@ from typing import Optional
 
 import graphene
 from graphql import ResolveInfo
+from jnt_django_graphene_toolbox.errors import GraphQLPermissionDenied
 from jnt_django_graphene_toolbox.mutations import BaseSerializerMutation
 from rest_framework import serializers
 
-from apps.core.graphql.security.permissions import AllowProjectManager
+from apps.core.graphql.mutations.base import BaseMutation
 from apps.development.models import Ticket
 
 
@@ -24,12 +25,12 @@ class InputSerializer(serializers.Serializer):
         return validated_data
 
 
-class DeleteTicketMutation(BaseSerializerMutation):
+class DeleteTicketMutation(BaseMutation, BaseSerializerMutation):
     """Delete ticket."""
 
     class Meta:
         serializer_class = InputSerializer
-        permission_classes = (AllowProjectManager,)
+        auth_required = True
 
     ok = graphene.Boolean()
 
@@ -41,6 +42,9 @@ class DeleteTicketMutation(BaseSerializerMutation):
         validated_data,
     ) -> "DeleteTicketMutation":
         """Perform mutation implementation."""
+        if not info.context.user.is_project_manager:
+            raise GraphQLPermissionDenied()
+
         validated_data["ticket"].delete()
 
         return cls(ok=True)
