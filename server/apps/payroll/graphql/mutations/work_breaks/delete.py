@@ -2,10 +2,8 @@ from typing import Dict, Optional
 
 import graphene
 from graphql import ResolveInfo
-from jnt_django_graphene_toolbox.security.permissions import AllowAuthenticated
 
 from apps.core.graphql.mutations import BaseUseCaseMutation
-from apps.payroll.graphql.permissions import CanManageWorkBreak
 from apps.payroll.use_cases.work_breaks import delete as work_break_delete
 
 
@@ -14,7 +12,7 @@ class DeleteWorkBreakMutation(BaseUseCaseMutation):
 
     class Meta:
         use_case_class = work_break_delete.UseCase
-        permission_classes = (AllowAuthenticated, CanManageWorkBreak)
+        auth_required = True
 
     class Arguments:
         id = graphene.ID(required=True)  # noqa: WPS125
@@ -29,7 +27,12 @@ class DeleteWorkBreakMutation(BaseUseCaseMutation):
         **kwargs,
     ):
         """Prepare use case input data."""
-        return work_break_delete.InputDto(work_break=kwargs["id"])
+        return work_break_delete.InputDto(
+            user=info.context.user,  # type: ignore
+            data=work_break_delete.WorkBreakDeleteData(
+                work_break=kwargs["id"],
+            ),
+        )
 
     @classmethod
     def get_response_data(

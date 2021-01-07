@@ -4,7 +4,6 @@ import graphene
 from graphql import ResolveInfo
 
 from apps.core.graphql.mutations import BaseUseCaseMutation
-from apps.core.graphql.security.permissions import AllowProjectManager
 from apps.development.graphql.types import TicketType
 from apps.development.models import ticket
 from apps.development.use_cases.tickets import update as ticket_update
@@ -15,7 +14,7 @@ class UpdateTicketMutation(BaseUseCaseMutation):
 
     class Meta:
         use_case_class = ticket_update.UseCase
-        permission_classes = (AllowProjectManager,)
+        auth_required = True
 
     class Arguments:
         id = graphene.ID(required=True)  # noqa: WPS125

@@ -2,10 +2,10 @@ from typing import Dict, Optional
 
 import graphene
 from graphql import ResolveInfo
+from jnt_django_graphene_toolbox.errors import GraphQLPermissionDenied
 from jnt_django_graphene_toolbox.mutations import BaseSerializerMutation
 from rest_framework.fields import Field
 
-from apps.core.graphql.security.permissions import AllowProjectManager
 from apps.development.graphql.mutations.tickets.inputs.base import (
     TicketBaseInput,
 )
@@ -30,7 +30,7 @@ class CreateTicketMutation(BaseSerializerMutation):
 
     class Meta:
         serializer_class = InputSerializer
-        permission_classes = (AllowProjectManager,)
+        auth_required = True
 
     ticket = graphene.Field(TicketType)
 
@@ -42,6 +42,9 @@ class CreateTicketMutation(BaseSerializerMutation):
         validated_data: Dict[str, object],
     ) -> "CreateTicketMutation":
         """Overrideable mutation operation."""
+        if not info.context.user.is_project_manager:  # type: ignore
+            raise GraphQLPermissionDenied()
+
         issues = validated_data.pop("issues", None)
         ticket = Ticket.objects.create(**validated_data)
 

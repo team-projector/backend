@@ -1,8 +1,7 @@
 import graphene
-from jnt_django_graphene_toolbox.mutations import BaseMutation
-from jnt_django_graphene_toolbox.security.permissions import AllowAuthenticated
 
 from apps.core import injector
+from apps.core.graphql.mutations.base import BaseMutation
 from apps.users.services.auth.logout import LogoutInputDto, LogoutService
 
 
@@ -10,7 +9,7 @@ class LogoutMutation(BaseMutation):
     """Logout mutation."""
 
     class Meta:
-        permission_classes = (AllowAuthenticated,)
+        auth_required = True
 
     status = graphene.String()
 

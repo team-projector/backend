@@ -32,8 +32,11 @@ class Command(BaseCommand):
         }
 
         for project in tqdm(**data_for_sync):
+            gl_work_item = project_provider.get_gl_project(project)
+            if not gl_work_item:
+                continue
             _milestones_syncer.sync_all_milestones(
-                gl_work_item=project_provider.get_gl_project(project),
+                gl_work_item=gl_work_item,
                 work_item=project,
             )
 
@@ -47,6 +50,9 @@ class Command(BaseCommand):
         }
 
         for group in tqdm(**data_for_sync):
+            gl_work_item = group_provider.get_gl_group(group)
+            if not gl_work_item:
+                continue
             _milestones_syncer.sync_all_milestones(
                 gl_work_item=group_provider.get_gl_group(group),
                 work_item=group,

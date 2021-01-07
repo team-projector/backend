@@ -6,7 +6,7 @@ from django.core.validators import URLValidator
 from jnt_django_graphene_toolbox.serializers.fields.char import CharField
 from rest_framework import serializers
 
-from apps.core.application.use_cases import BasePresenter, BaseUseCase
+from apps.core import application
 from apps.core.consts import DEFAULT_TITLE_LENGTH
 from apps.core.drf.fields.choices_field import ChoicesField
 from apps.development import services
@@ -145,15 +145,18 @@ class InputDtoSerializer(serializers.ModelSerializer):
         return attrs
 
 
-class UseCase(BaseUseCase):
+class UseCase(application.use_cases.BaseUseCase):
     """Usecase for updating tickets."""
 
-    def __init__(self, presenter: BasePresenter):
+    def __init__(self, presenter: application.use_cases.BasePresenter):
         """Initialize."""
         self._presenter = presenter
 
     def execute(self, input_dto: InputDto) -> None:
         """Main logic here."""
+        if not input_dto.user.is_project_manager:
+            raise application.errors.AccessDeniedApplicationError()
+
         validated_data = self.validate_input(
             input_dto.data,
             InputDtoSerializer,

@@ -2,10 +2,8 @@ from typing import Dict, Optional
 
 import graphene
 from graphql import ResolveInfo
-from jnt_django_graphene_toolbox.security.permissions import AllowAuthenticated
 
 from apps.core.graphql.mutations import BaseUseCaseMutation
-from apps.payroll.graphql.permissions import CanApproveDeclineWorkBreak
 from apps.payroll.graphql.types import WorkBreakType
 from apps.payroll.use_cases.work_breaks import decline as work_break_decline
 
@@ -15,7 +13,7 @@ class DeclineWorkBreakMutation(BaseUseCaseMutation):
 
     class Meta:
         use_case_class = work_break_decline.UseCase
-        permission_classes = (AllowAuthenticated, CanApproveDeclineWorkBreak)
+        auth_required = True
 
     class Arguments:
         id = graphene.ID(required=True)  # noqa: WPS125

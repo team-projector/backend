@@ -3,7 +3,11 @@ from jnt_django_graphene_toolbox.errors import GraphQLPermissionDenied
 
 from apps.development.models import Team, TeamMember
 from apps.development.services.team_members.filters import filter_by_roles
+from apps.payroll.models import WorkBreak
 from apps.users.models import User
+from apps.users.services.user.relations import (
+    is_related_with_another_by_team_roles,
+)
 
 
 def filter_allowed_for_user(
@@ -30,3 +34,20 @@ def check_allow_filtering_by_team(team: Team, user: User) -> None:
 
     if not allowed_members:
         raise GraphQLPermissionDenied("You can't filter by team")
+
+
+def can_approve_decline_work_breaks(work_break: WorkBreak, user: User):
+    """Check if user can approve or decline work breaks."""
+    return is_related_with_another_by_team_roles(
+        user,
+        work_break.user,
+        [TeamMember.roles.LEADER],
+    )
+
+
+def can_manage_work_break(work_break: WorkBreak, user: User):
+    """Check if user can edit work breaks."""
+    return (
+        can_approve_decline_work_breaks(work_break, user)
+        or work_break.user == user
+    )
