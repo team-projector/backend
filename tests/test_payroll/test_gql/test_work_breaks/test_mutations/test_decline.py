@@ -54,6 +54,7 @@ def test_not_team_lead(ghl_auth_mock_info, decline_work_break_mutation):
         root=None,
         info=ghl_auth_mock_info,
         id=work_break.pk,
+        decline_reason="foobar",
     )
 
     assert isinstance(response, GraphQLPermissionDenied)
@@ -94,6 +95,7 @@ def test_other_team_teamlead(  # noqa: WPS211
         root=None,
         info=ghl_auth_mock_info,
         id=work_break.id,
+        decline_reason="foobar",
     )
     assert isinstance(response, GraphQLPermissionDenied)
 
@@ -111,6 +113,7 @@ def test_owner(ghl_auth_mock_info, decline_work_break_mutation):
         root=None,
         info=ghl_auth_mock_info,
         id=work_break.pk,
+        decline_reason="foobar",
     )
     assert isinstance(response, GraphQLPermissionDenied)
 

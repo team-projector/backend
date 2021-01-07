@@ -42,7 +42,7 @@ class CreateTicketMutation(BaseSerializerMutation):
         validated_data: Dict[str, object],
     ) -> "CreateTicketMutation":
         """Overrideable mutation operation."""
-        if not info.context.user.is_project_manager:
+        if not info.context.user.is_project_manager:  # type: ignore
             raise GraphQLPermissionDenied()
 
         issues = validated_data.pop("issues", None)

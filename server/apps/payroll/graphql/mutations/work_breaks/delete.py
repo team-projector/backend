@@ -28,7 +28,7 @@ class DeleteWorkBreakMutation(BaseUseCaseMutation):
     ):
         """Prepare use case input data."""
         return work_break_delete.InputDto(
-            user=info.context.user,
+            user=info.context.user,  # type: ignore
             data=work_break_delete.WorkBreakDeleteData(
                 work_break=kwargs["id"],
             ),

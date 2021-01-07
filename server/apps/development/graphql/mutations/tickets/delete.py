@@ -42,7 +42,7 @@ class DeleteTicketMutation(BaseMutation, BaseSerializerMutation):
         validated_data,
     ) -> "DeleteTicketMutation":
         """Perform mutation implementation."""
-        if not info.context.user.is_project_manager:
+        if not info.context.user.is_project_manager:  # type: ignore
             raise GraphQLPermissionDenied()
 
         validated_data["ticket"].delete()
