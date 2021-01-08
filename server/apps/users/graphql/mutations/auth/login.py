@@ -1,8 +1,9 @@
-from typing import Dict, Optional
+from typing import Optional
 
 import graphene
 from graphql import ResolveInfo
-from jnt_django_graphene_toolbox.mutations import BaseSerializerMutation
+from jnt_django_graphene_toolbox.errors import GraphQLInputError
+from jnt_django_graphene_toolbox.mutations import BaseMutation
 from rest_framework import serializers
 
 from apps.core import injector
@@ -11,18 +12,19 @@ from apps.users.graphql.types import TokenType
 from apps.users.services.auth.login import LoginInputDto, LoginService
 
 
-class LoginInputSerializer(serializers.Serializer):
+class InputSerializer(serializers.Serializer):
     """InputSerializer."""
 
     login = serializers.CharField()
     password = serializers.CharField()
 
 
-class LoginMutation(ErrorHandlerMixin, BaseSerializerMutation):
+class LoginMutation(ErrorHandlerMixin, BaseMutation):
     """Login mutation returns token."""
 
-    class Meta:
-        serializer_class = LoginInputSerializer
+    class Arguments:
+        login = graphene.String(required=True)
+        password = graphene.String(required=True)
 
     token = graphene.Field(TokenType)
 
@@ -31,14 +33,19 @@ class LoginMutation(ErrorHandlerMixin, BaseSerializerMutation):
         cls,
         root: Optional[object],
         info: ResolveInfo,  # noqa: WPS110
-        validated_data: Dict[str, str],
+        **kwargs,
     ) -> "LoginMutation":
         """Login user."""
+        serializer = InputSerializer(data=kwargs)
+        if not serializer.is_valid():
+            return GraphQLInputError(serializer.errors)
+
         service = injector.get(LoginService)
+
         token = service.execute(
             LoginInputDto(
-                username=validated_data["login"],
-                password=validated_data["password"],
+                username=serializer.validated_data["login"],
+                password=serializer.validated_data["password"],
             ),
         )
         return cls(token=token)

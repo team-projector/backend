@@ -1,8 +1,9 @@
-from typing import Dict, Optional
+from typing import Optional
 
 import graphene
 from graphql import ResolveInfo
-from jnt_django_graphene_toolbox.mutations import BaseSerializerMutation
+from jnt_django_graphene_toolbox.errors import GraphQLInputError
+from jnt_django_graphene_toolbox.mutations import BaseMutation
 from rest_framework import serializers
 
 from apps.core import injector
@@ -17,11 +18,12 @@ class InputSerializer(serializers.Serializer):
     state = serializers.CharField()
 
 
-class CompleteGitlabAuthMutation(BaseSerializerMutation):
+class CompleteGitlabAuthMutation(BaseMutation):
     """Complete login mutation after redirection from Gitlab."""
 
-    class Meta:
-        serializer_class = InputSerializer
+    class Arguments:
+        code = graphene.String(required=True)
+        state = graphene.String(required=True)
 
     token = graphene.Field(TokenType)
 
@@ -30,9 +32,13 @@ class CompleteGitlabAuthMutation(BaseSerializerMutation):
         cls,
         root: Optional[object],
         info: ResolveInfo,  # noqa: WPS110
-        validated_data: Dict[str, str],
+        **kwargs,
     ) -> "CompleteGitlabAuthMutation":
         """After successful login return class with token."""
+        serializer = InputSerializer(data=kwargs)
+        if not serializer.is_valid():
+            return GraphQLInputError(serializer.errors)
+
         service = injector.get(SocialLoginService)
-        token = service.complete_login(info.context, validated_data)
+        token = service.complete_login(info.context, serializer.validated_data)
         return cls(token=token)
