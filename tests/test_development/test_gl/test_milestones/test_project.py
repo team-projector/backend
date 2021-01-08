@@ -19,7 +19,7 @@ def test_all(db, gl_mocker):
     :param gl_mocker:
     """
     project, gl_project = initializers.init_project()
-    gl_milestone = GlProjectMilestoneFactory.create()
+    gl_milestone = GlProjectMilestoneFactory.create(group_id=None)
 
     gl_mock.mock_project_endpoints(
         gl_mocker,
@@ -66,6 +66,45 @@ def test_inheriting_milestones(db, gl_mocker):
             project.milestones.filter(projectmilestone__is_inherited=True),
         )
         == [group_milestone]
+    )
+
+
+def test_owner(db, gl_mocker):
+    """
+    Test inheriting milestones.
+
+    :param db:
+    :param gl_mocker:
+    """
+    project, gl_project = initializers.init_project()
+    gl_milestone1 = GlProjectMilestoneFactory.create(
+        project_id=gl_project["id"],
+        group_id=None,
+    )
+    gl_milestone2 = GlProjectMilestoneFactory.create(project_id=None)
+    group_milestone = ProjectGroupMilestoneFactory.create(
+        gl_id=gl_milestone2[KEY_ID],
+    )
+
+    gl_mock.mock_project_endpoints(
+        gl_mocker,
+        gl_project,
+        milestones=[gl_milestone1, gl_milestone2],
+    )
+
+    MilestoneGlManager().sync_project_milestones(project)
+
+    assert (
+        list(
+            project.milestones.filter(projectmilestone__is_inherited=True),
+        )
+        == [group_milestone]
+    )
+    assert (
+        project.milestones.filter(
+            projectmilestone__is_inherited=False,
+        ).count()
+        == 1
     )
 
 

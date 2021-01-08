@@ -114,10 +114,12 @@ class _WorkItemMilestonesSyncer:
         work_item: Union[gl.Project, gl.Group],
         milestone: Union[gl.ProjectMilestone, gl.GroupMilestone],
     ):
-        if isinstance(work_item, gl.Project):
-            return milestone.project_id == work_item.id
+        group_id = getattr(milestone, "group_id", None)
 
-        return milestone.group_id == work_item.id
+        if isinstance(work_item, gl.Project):
+            return group_id is None
+
+        return group_id == work_item.id
 
 
 _milestones_syncer = _WorkItemMilestonesSyncer()
