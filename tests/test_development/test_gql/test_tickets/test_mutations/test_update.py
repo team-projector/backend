@@ -5,9 +5,9 @@ from tests.test_development.factories import (
 )
 
 
-def test_query(project_manager, gql_client, ticket, gql_raw):
+def test_query(manager, gql_client, ticket, gql_raw):
     """Test update ticket raw query."""
-    gql_client.set_user(project_manager)
+    gql_client.set_user(manager)
 
     new_title = "new_{0}".format(ticket.title)
     response = gql_client.execute(
@@ -30,14 +30,14 @@ def test_query(project_manager, gql_client, ticket, gql_raw):
 
 
 def test_attach_issues(
-    project_manager,
+    manager,
     ghl_auth_mock_info,
     update_ticket_mutation,
     ticket,
 ):
     """Test attach issues."""
-    attached_issue = IssueFactory(ticket=ticket, user=project_manager)
-    issue = IssueFactory(user=project_manager)
+    attached_issue = IssueFactory.create(ticket=ticket, user=manager)
+    issue = IssueFactory.create(user=manager)
 
     update_ticket_mutation(
         root=None,
@@ -53,13 +53,13 @@ def test_attach_issues(
 
 
 def test_clear_issues(
-    project_manager,
+    manager,
     ghl_auth_mock_info,
     update_ticket_mutation,
     ticket,
 ):
     """Test clear issues."""
-    issue = IssueFactory(ticket=ticket, user=project_manager)
+    issue = IssueFactory.create(ticket=ticket, user=manager)
 
     update_ticket_mutation(
         root=None,
@@ -73,7 +73,7 @@ def test_clear_issues(
 
 
 def test_update_state(
-    project_manager,
+    manager,
     ghl_auth_mock_info,
     update_ticket_mutation,
     ticket,
@@ -94,13 +94,13 @@ def test_update_state(
 
 
 def test_update_milestone(
-    project_manager,
+    manager,
     ghl_auth_mock_info,
     update_ticket_mutation,
     ticket,
 ):
     """Test update milestone."""
-    new_milestone = ProjectMilestoneFactory()
+    new_milestone = ProjectMilestoneFactory.create()
     update_ticket_mutation(
         root=None,
         info=ghl_auth_mock_info,
@@ -114,7 +114,7 @@ def test_update_milestone(
 
 
 def test_not_update_url(
-    project_manager,
+    manager,
     ghl_auth_mock_info,
     update_ticket_mutation,
     ticket,
@@ -140,7 +140,7 @@ def test_not_update_url(
 
 
 def test_update_estimate(
-    project_manager,
+    manager,
     ghl_auth_mock_info,
     update_ticket_mutation,
     ticket,
