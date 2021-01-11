@@ -1,50 +1,47 @@
-from typing import Optional
+from typing import Dict, Optional
 
 import graphene
 from graphql import ResolveInfo
-from jnt_django_graphene_toolbox.errors import GraphQLPermissionDenied
-from jnt_django_graphene_toolbox.mutations import BaseSerializerMutation
-from rest_framework import serializers
 
-from apps.core.graphql.mutations.base import BaseMutation
-from apps.development.models import Ticket
+from apps.core.graphql.mutations import BaseUseCaseMutation
+from apps.development.use_cases.tickets import delete as ticket_delete
 
 
-class InputSerializer(serializers.Serializer):
-    """InputSerializer."""
-
-    id = serializers.PrimaryKeyRelatedField(  # noqa: WPS125, A003
-        queryset=Ticket.objects.all(),
-    )
-
-    @property
-    def validated_data(self):
-        """Validated data changing."""
-        validated_data = super().validated_data
-        validated_data["ticket"] = validated_data.pop("id", None)
-        return validated_data
-
-
-class DeleteTicketMutation(BaseMutation, BaseSerializerMutation):
-    """Delete ticket."""
+class DeleteTicketMutation(BaseUseCaseMutation):
+    """Delete ticket mutation."""
 
     class Meta:
-        serializer_class = InputSerializer
+        use_case_class = ticket_delete.UseCase
         auth_required = True
+
+    class Arguments:
+        id = graphene.ID(required=True)  # noqa: WPS125
 
     ok = graphene.Boolean()
 
     @classmethod
-    def mutate_and_get_payload(
+    def get_input_dto(
         cls,
         root: Optional[object],
         info: ResolveInfo,  # noqa: WPS110
-        validated_data,
-    ) -> "DeleteTicketMutation":
-        """Perform mutation implementation."""
-        if not info.context.user.is_project_manager:  # type: ignore
-            raise GraphQLPermissionDenied()
+        **kwargs,
+    ):
+        """Prepare use case input data."""
+        return ticket_delete.InputDto(
+            user=info.context.user,  # type: ignore
+            data=ticket_delete.TicketDeleteData(
+                ticket=kwargs["id"],
+            ),
+        )
 
-        validated_data["ticket"].delete()
-
-        return cls(ok=True)
+    @classmethod
+    def get_response_data(
+        cls,
+        root: Optional[object],
+        info: ResolveInfo,  # noqa: WPS110
+        output_dto,
+    ) -> Dict[str, object]:
+        """Prepare response data."""
+        return {
+            "ok": True,
+        }
