@@ -41,6 +41,13 @@ class MilestonesFilterSet(django_filters.FilterSet):
     order_by = OrderingFilter(fields=("due_date",))
 
 
+class MilestoneSort(graphene.Enum):
+    """Allowed sort fields."""
+
+    DUE_DATE_ASC = "due_date"  # noqa: WPS115
+    DUE_DATE_DESC = "-due_date"  # noqa: WPS115
+
+
 class MilestonesConnectionField(BaseModelConnectionField):
     """Handler for labels collections."""
 
@@ -51,7 +58,7 @@ class MilestonesConnectionField(BaseModelConnectionField):
         """Initialize."""
         super().__init__(
             "apps.development.graphql.types.MilestoneType",
-            order_by=graphene.String(),
+            order_by=graphene.Argument(graphene.List(MilestoneSort)),
             project=graphene.ID(),
             q=graphene.String(),
             state=graphene.Argument(

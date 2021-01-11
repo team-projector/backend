@@ -63,6 +63,13 @@ class TeamsFilterSet(django_filters.FilterSet):
     q = SearchFilter(fields=("title",))  # noqa: WPS111
 
 
+class TeamSort(graphene.Enum):
+    """Allowed sort fields."""
+
+    TITLE_ASC = "title"  # noqa: WPS115
+    TITLE_DESC = "-title"  # noqa: WPS115
+
+
 class AllTeamsConnectionField(BaseModelConnectionField):
     """Handler for users collections."""
 
@@ -76,5 +83,5 @@ class AllTeamsConnectionField(BaseModelConnectionField):
             title=graphene.String(),
             roles=graphene.String(),
             q=graphene.String(),
-            order_by=graphene.String(),  # "title"
+            order_by=graphene.Argument(graphene.List(TeamSort)),
         )

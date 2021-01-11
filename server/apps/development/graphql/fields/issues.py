@@ -138,6 +138,23 @@ class IssuesFilterSet(django_filters.FilterSet):
     q = SearchFilter(fields=("title", "=gl_url"))  # noqa: WPS111
 
 
+class IssueSort(graphene.Enum):
+    """Allowed sort fields."""
+
+    DUE_DATE_ASC = "due_date"  # noqa: WPS115
+    DUE_DATE_DESC = "-due_date"  # noqa: WPS115
+    TITLE_ASC = "title"  # noqa: WPS115
+    TITLE_DESC = "-title"  # noqa: WPS115
+    CREATED_AT_ASC = "created_at"  # noqa: WPS115
+    CREATED_AT_DESC = "-created_at"  # noqa: WPS115
+    CLOSED_AT_ASC = "closed_at"  # noqa: WPS115
+    CLOSED_AT_DESC = "-closed_at"  # noqa: WPS115
+    USER_ASC = "user"  # noqa: WPS115
+    USER_DESC = "-user"  # noqa: WPS115
+    STATE_ASC = "state"  # noqa: WPS115
+    STATE_DESC = "-state"  # noqa: WPS115
+
+
 class IssuesConnectionField(BaseModelConnectionField):
     """Handler for labels collections."""
 
@@ -148,7 +165,7 @@ class IssuesConnectionField(BaseModelConnectionField):
         """Initialize."""
         super().__init__(
             "apps.development.graphql.types.IssueType",
-            order_by=graphene.String(),
+            order_by=graphene.Argument(graphene.List(IssueSort)),
             user=graphene.ID(),
             milestone=graphene.ID(),
             due_date=graphene.Date(),

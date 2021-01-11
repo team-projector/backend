@@ -47,6 +47,17 @@ class MergeRequestFilterSet(django_filters.FilterSet):
     order_by = OrderingFilter(fields=("title", "created_at", "closed_at"))
 
 
+class MergeRequestSort(graphene.Enum):
+    """Allowed sort fields."""
+
+    TITLE_ASC = "title"  # noqa: WPS115
+    TITLE_DESC = "-title"  # noqa: WPS115
+    CREATED_AT_ASC = "created_at"  # noqa: WPS115
+    CREATED_AT_DESC = "-created_at"  # noqa: WPS115
+    CLOSED_AT_ASC = "closed_at"  # noqa: WPS115
+    CLOSED_AT_DESC = "-closed_at"  # noqa: WPS115
+
+
 class MergeRequestsConnectionField(BaseModelConnectionField):
     """Handler for labels collections."""
 
@@ -57,7 +68,7 @@ class MergeRequestsConnectionField(BaseModelConnectionField):
         """Initialize."""
         super().__init__(
             "apps.development.graphql.types.MergeRequestType",
-            order_by=graphene.String(),
+            order_by=graphene.Argument(graphene.List(MergeRequestSort)),
             user=graphene.ID(),
             project=graphene.ID(),
             state=graphene.Argument(

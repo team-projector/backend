@@ -30,7 +30,7 @@ def test_query_with_order_by(user, gql_client_authenticated, gql_raw):
 
     response = gql_client_authenticated.execute(
         gql_raw(ALL_ISSUES_QUERY),
-        variable_values={"orderBy": "due_date"},
+        variable_values={"orderBy": ["DUE_DATE_ASC"]},
     )
 
     assert ERRORS_FIELD not in response
@@ -45,10 +45,10 @@ def test_query_with_order_by_not_valid(
     """Test not valid ordering."""
     response = gql_client_authenticated.execute(
         gql_raw(ALL_ISSUES_QUERY),
-        variable_values={"orderBy": "dueDate"},
+        variable_values={"orderBy": ["dueDate"]},
     )
-
-    assert not _all_issues_data(response)["count"]
+    assert ERRORS_FIELD in response
+    assert len(response["errors"]) == 1
 
 
 def test_not_owned_issue(ghl_auth_mock_info, all_issues_query):

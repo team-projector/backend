@@ -16,6 +16,15 @@ class UserFilterSet(django_filters.FilterSet):
     order_by = OrderingFilter(fields=("login", "name"))
 
 
+class UserSort(graphene.Enum):
+    """Allowed sort fields."""
+
+    LOGIN_ASC = "login"  # noqa: WPS115
+    LOGIN_DESC = "-login"  # noqa: WPS115
+    NAME_ASC = "name"  # noqa: WPS115
+    NAME_DESC = "-name"  # noqa: WPS115
+
+
 class UsersConnectionField(BaseModelConnectionField):
     """Handler for users collections."""
 
@@ -27,5 +36,5 @@ class UsersConnectionField(BaseModelConnectionField):
         super().__init__(
             "apps.users.graphql.types.UserType",
             is_active=graphene.Boolean(),
-            order_by=graphene.String(),  # "login", "name"
+            order_by=graphene.Argument(graphene.List(UserSort)),
         )
