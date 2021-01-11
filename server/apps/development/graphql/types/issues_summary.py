@@ -1,7 +1,6 @@
 import graphene
 
 from apps.development.graphql.fields.all_teams import TeamSort
-from apps.development.graphql.fields.projects import ProjectSort
 from apps.development.graphql.resolvers.issues_summary import (
     resolve_issues_project_summaries,
     resolve_issues_team_summaries,
