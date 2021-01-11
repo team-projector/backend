@@ -23,6 +23,17 @@ class ProjectGroupsFilterSet(django_filters.FilterSet):
     order_by = OrderingFilter(fields=("title", "state", "full_title"))
 
 
+class ProjectGroupSort(graphene.Enum):
+    """Allowed sort fields."""
+
+    TITLE_ASC = "title"  # noqa: WPS115
+    TITLE_DESC = "-title"  # noqa: WPS115
+    STATE_ASC = "state"  # noqa: WPS115
+    STATE_DESC = "-state"  # noqa: WPS115
+    FULL_TITLE_ASC = "full_title"  # noqa: WPS115
+    FULL_TITLE_DESC = "-full_title"  # noqa: WPS115
+
+
 class ProjectGroupsConnectionField(BaseModelConnectionField):
     """Handler for labels collections."""
 
@@ -33,7 +44,7 @@ class ProjectGroupsConnectionField(BaseModelConnectionField):
         """Initialize."""
         super().__init__(
             "apps.development.graphql.types.ProjectGroupType",
-            order_by=graphene.String(),
+            order_by=graphene.Argument(graphene.List(ProjectGroupSort)),
             title=graphene.String(),
             q=graphene.String(),
             state=graphene.Argument(

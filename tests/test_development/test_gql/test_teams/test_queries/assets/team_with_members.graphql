@@ -1,6 +1,6 @@
 query ($id: ID!) {
   team(id: $id) {
-    members(orderBy: "user__name") {
+    members(orderBy: [USER_NAME_ASC]) {
       count
       edges {
         node {

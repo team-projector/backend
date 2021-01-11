@@ -51,6 +51,13 @@ class TeamMembersFilterSet(django_filters.FilterSet):
     order_by = OrderingFilter(fields=("user__name",))
 
 
+class TeamMemberSort(graphene.Enum):
+    """Allowed sort fields."""
+
+    USER_NAME_ASC = "user__name"  # noqa: WPS115
+    USER_NAME_DESC = "-user__name"  # noqa: WPS115
+
+
 class TeamMembersConnectionField(BaseModelConnectionField):
     """Handler for team members collections."""
 
@@ -62,5 +69,5 @@ class TeamMembersConnectionField(BaseModelConnectionField):
         super().__init__(
             "apps.development.graphql.types.TeamMemberType",
             roles=graphene.String(),
-            order_by=graphene.String(),  # "user__name"
+            order_by=graphene.Argument(graphene.List(TeamMemberSort)),
         )

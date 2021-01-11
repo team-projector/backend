@@ -84,6 +84,15 @@ class SpentTimeFilterSet(django_filters.FilterSet):
     order_by = OrderingFilter(fields=("date", "created_at"))
 
 
+class SpentTimeSort(graphene.Enum):
+    """Allowed sort fields."""
+
+    DATE_ASC = "date"  # noqa: WPS115
+    DATE_DESC = "-date"  # noqa: WPS115
+    CREATED_AT_ASC = "created_at"  # noqa: WPS115
+    CREATED_AT_DESC = "-created_at"  # noqa: WPS115
+
+
 class AllSpentTimesConnectionField(BaseModelConnectionField):
     """Handler for all spent time collections."""
 
@@ -99,5 +108,5 @@ class AllSpentTimesConnectionField(BaseModelConnectionField):
             team=graphene.ID(),
             state=graphene.String(),
             salary=graphene.ID(),
-            order_by=graphene.String(),
+            order_by=graphene.Argument(graphene.List(SpentTimeSort)),
         )

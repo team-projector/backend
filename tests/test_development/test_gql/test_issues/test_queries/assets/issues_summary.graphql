@@ -1,7 +1,7 @@
 query ($user: ID, $team: ID, $dueDate: Date) {
   issues: issuesSummary(user: $user, team: $team, dueDate: $dueDate, state: "OPENED") {
     count
-    projects(orderBy: "-issues__remains") {
+    projects(orderBy: [ISSUES_REMAINS_DESC]) {
       issues {
         openedCount
         percentage
