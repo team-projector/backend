@@ -23,13 +23,13 @@ def ticket():
     return TicketFactory(milestone=ProjectMilestoneFactory())
 
 
-def test_query(project_manager, gql_client, gql_raw):
+def test_query(manager, gql_client, gql_raw):
     """Test create ticket raw query."""
-    gql_client.set_user(project_manager)
+    gql_client.set_user(manager)
 
-    milestone = ProjectMilestoneFactory()
+    milestone = ProjectMilestoneFactory.create()
 
-    issues = IssueFactory.create_batch(size=2, user=project_manager)
+    issues = IssueFactory.create_batch(size=2, user=manager)
 
     response = gql_client.execute(
         gql_raw("create_ticket"),
@@ -58,7 +58,7 @@ def test_query(project_manager, gql_client, gql_raw):
 
 
 def test_invalid_parameters(
-    project_manager,
+    manager,
     ghl_auth_mock_info,
     create_ticket_mutation,
 ):
@@ -100,11 +100,11 @@ def test_without_permissions(user, ghl_auth_mock_info, create_ticket_mutation):
         milestone=milestone.pk,
     )
 
-    isinstance(resolve, GraphQLPermissionDenied)
+    assert isinstance(resolve, GraphQLPermissionDenied)
 
 
 def test_role_url_is_null(
-    project_manager,
+    manager,
     ghl_auth_mock_info,
     create_ticket_mutation,
 ):

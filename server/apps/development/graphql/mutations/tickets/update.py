@@ -55,7 +55,7 @@ class UpdateTicketMutation(BaseUseCaseMutation):
                 attach_issues=kwargs.get("attach_issues", []),
                 role=kwargs.get("role"),
                 url=kwargs.get("url"),
-                estimate=kwargs.get("estimate", 0),
+                estimate=kwargs.get("estimate") or 0,
                 milestone=kwargs.get("milestone"),
             ),
             fields_to_update=list(kwargs.keys()),

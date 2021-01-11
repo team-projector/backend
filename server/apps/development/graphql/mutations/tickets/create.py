@@ -2,53 +2,69 @@ from typing import Dict, Optional
 
 import graphene
 from graphql import ResolveInfo
-from jnt_django_graphene_toolbox.errors import GraphQLPermissionDenied
-from jnt_django_graphene_toolbox.mutations import BaseSerializerMutation
-from rest_framework.fields import Field
 
-from apps.development.graphql.mutations.tickets.inputs.base import (
-    TicketBaseInput,
-)
+from apps.core.graphql.mutations import BaseUseCaseMutation
 from apps.development.graphql.types import TicketType
-from apps.development.models import Ticket
+from apps.development.models import ticket
+from apps.development.use_cases.tickets import create as ticket_create
 
 
-class InputSerializer(TicketBaseInput):
-    """InputSerializer."""
-
-    def get_fields(self) -> Dict[str, Field]:
-        """Returns serializer fields."""
-        fields = super().get_fields()
-
-        fields["milestone"].required = True
-        fields["milestone"].allow_null = False
-        return fields
-
-
-class CreateTicketMutation(BaseSerializerMutation):
+class CreateTicketMutation(BaseUseCaseMutation):
     """Create ticket mutation."""
 
     class Meta:
-        serializer_class = InputSerializer
+        use_case_class = ticket_create.UseCase
         auth_required = True
+
+    class Arguments:
+        title = graphene.String()
+        start_date = graphene.Date()
+        due_date = graphene.Date()
+        type = graphene.Argument(  # noqa: WPS125
+            graphene.Enum.from_enum(ticket.TicketType),
+        )
+        state = graphene.Argument(graphene.Enum.from_enum(ticket.TicketState))
+        issues = graphene.List(graphene.ID)
+        attach_issues = graphene.List(graphene.ID)
+        role = graphene.String()
+        url = graphene.String()
+        estimate = graphene.Int()
+        milestone = graphene.ID(required=True)
 
     ticket = graphene.Field(TicketType)
 
     @classmethod
-    def mutate_and_get_payload(
+    def get_input_dto(
         cls,
         root: Optional[object],
         info: ResolveInfo,  # noqa: WPS110
-        validated_data: Dict[str, object],
-    ) -> "CreateTicketMutation":
-        """Overrideable mutation operation."""
-        if not info.context.user.is_project_manager:  # type: ignore
-            raise GraphQLPermissionDenied()
+        **kwargs,
+    ):
+        """Prepare use case input data."""
+        return ticket_create.InputDto(
+            user=info.context.user,  # type: ignore
+            data=ticket_create.TicketCreateData(
+                title=kwargs.get("title"),
+                start_date=kwargs.get("start_date"),
+                due_date=kwargs.get("due_date"),
+                type=kwargs.get("type"),
+                state=kwargs.get("state"),
+                issues=kwargs.get("issues", []),
+                role=kwargs.get("role"),
+                url=kwargs.get("url"),
+                estimate=kwargs.get("estimate") or 0,
+                milestone=kwargs.get("milestone"),
+            ),
+        )
 
-        issues = validated_data.pop("issues", None)
-        ticket = Ticket.objects.create(**validated_data)
-
-        if issues:
-            ticket.issues.add(*issues)
-
-        return cls(ticket=ticket)
+    @classmethod
+    def get_response_data(
+        cls,
+        root: Optional[object],
+        info: ResolveInfo,  # noqa: WPS110
+        output_dto: ticket_create.OutputDto,
+    ) -> Dict[str, object]:
+        """Prepare response data."""
+        return {
+            "ticket": output_dto.ticket,
+        }

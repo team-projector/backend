@@ -24,13 +24,13 @@ def test_without_permissions(
 
 
 def test_both_params_attach_and_issues(
-    project_manager,
+    manager,
     ghl_auth_mock_info,
     update_ticket_mutation,
     ticket,
 ):
     """Test both attach and rewrite issues."""
-    issue = IssueFactory(user=project_manager)
+    issue = IssueFactory(user=manager)
 
     resolve = update_ticket_mutation(
         root=None,

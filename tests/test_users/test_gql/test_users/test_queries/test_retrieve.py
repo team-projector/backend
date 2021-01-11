@@ -1,21 +1,23 @@
-def test_query(user, gql_client, gql_raw):
+def test_query(gql_client_authenticated, project_manager, gql_raw):
     """Test getting user raw query."""
-    gql_client.set_user(user)
-
-    response = gql_client.execute(
+    response = gql_client_authenticated.execute(
         gql_raw("user"),
-        variable_values={"id": user.id},
+        variable_values={"id": project_manager.id},
     )
 
     assert "errors" not in response
-    assert response["data"]["user"]["id"] == str(user.id)
+    assert response["data"]["user"]["id"] == str(project_manager.id)
 
 
-def test_success(user, ghl_auth_mock_info, user_query):
+def test_success(project_manager, ghl_auth_mock_info, user_query):
     """Test success user retrieving."""
-    response = user_query(root=None, info=ghl_auth_mock_info, id=user.id)
+    response = user_query(
+        root=None,
+        info=ghl_auth_mock_info,
+        id=project_manager.id,
+    )
 
-    assert response == user
+    assert response == project_manager
 
 
 def test_inactive(user, ghl_auth_mock_info, user_query):
