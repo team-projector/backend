@@ -1,49 +1,48 @@
+from typing import Dict, Optional
+
 import graphene
-from jnt_django_graphene_toolbox.errors import GraphQLPermissionDenied
-from jnt_django_graphene_toolbox.mutations import BaseSerializerMutation
-from rest_framework import serializers
+from graphql import ResolveInfo
 
+from apps.core.graphql.mutations import BaseUseCaseMutation
 from apps.payroll.graphql.types import WorkBreakType
-from apps.payroll.models import WorkBreak
-from apps.payroll.services import work_break as work_break_service
-from apps.payroll.services.work_break.allowed import (
-    can_approve_decline_work_breaks,
-)
+from apps.payroll.use_cases.work_breaks import approve as work_break_approve
 
 
-class InputSerializer(serializers.Serializer):
-    """InputSerializer."""
-
-    id = serializers.PrimaryKeyRelatedField(  # noqa: A003, WPS125
-        queryset=WorkBreak.objects.all(),
-        source="work_break",
-    )
-
-
-class ApproveWorkBreakMutation(BaseSerializerMutation):
+class ApproveWorkBreakMutation(BaseUseCaseMutation):
     """Approve work break mutation."""
 
     class Meta:
-        serializer_class = InputSerializer
+        use_case_class = work_break_approve.UseCase
         auth_required = True
+
+    class Arguments:
+        id = graphene.ID(required=True)  # noqa: WPS125
 
     work_break = graphene.Field(WorkBreakType)
 
     @classmethod
-    def mutate_and_get_payload(
+    def get_input_dto(
         cls,
-        root,
-        info,  # noqa: WPS110
-        validated_data,
-    ) -> "ApproveWorkBreakMutation":
-        """Perform mutation implementation."""
-        work_break = validated_data["work_break"]
-
-        if not can_approve_decline_work_breaks(work_break, info.context.user):
-            raise GraphQLPermissionDenied()
-
-        work_break_service.Manager(work_break).approve(
-            approved_by=info.context.user,
+        root: Optional[object],
+        info: ResolveInfo,  # noqa: WPS110
+        **kwargs,
+    ):
+        """Prepare use case input data."""
+        return work_break_approve.InputDto(
+            user=info.context.user,  # type: ignore
+            data=work_break_approve.ApproveWorkBreakData(
+                work_break=kwargs["id"],
+            ),
         )
 
-        return cls(work_break=work_break)
+    @classmethod
+    def get_response_data(
+        cls,
+        root: Optional[object],
+        info: ResolveInfo,  # noqa: WPS110
+        output_dto: work_break_approve.OutputDto,
+    ) -> Dict[str, object]:
+        """Prepare response data."""
+        return {
+            "work_break": output_dto.work_break,
+        }
