@@ -1,9 +1,11 @@
 import graphene
 from django.db import models
+from jnt_django_graphene_toolbox.helpers.selected_fields import (
+    is_field_selected,
+)
+from jnt_django_graphene_toolbox.nodes import ModelRelayNode
+from jnt_django_graphene_toolbox.types import BaseModelObjectType
 
-from apps.core import graphql
-from apps.core.graphql.nodes import ModelRelayNode
-from apps.core.graphql.types import BaseModelObjectType
 from apps.development import models as development_models
 from apps.development.graphql import fields, interfaces
 from apps.development.graphql.types import MergeRequestMetricsType
@@ -54,7 +56,7 @@ class MergeRequestType(BaseModelObjectType):
         """Get queryset."""
         queryset = filter_allowed_for_user(queryset, info.context.user)
 
-        if graphql.is_field_selected(info, "edges.node.user"):
+        if is_field_selected(info, "edges.node.user"):
             queryset = queryset.select_related("user")
 
         return queryset

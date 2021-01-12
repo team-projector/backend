@@ -1,6 +1,6 @@
 import graphene
+from jnt_django_graphene_toolbox.nodes import ModelRelayNode
 
-from apps.core.graphql.nodes import ModelRelayNode
 from apps.payroll.graphql.fields import AllSalariesConnectionField
 from apps.payroll.graphql.types import SalaryType
 

@@ -1,7 +1,7 @@
 import graphene
 from django.db.models import QuerySet
+from jnt_django_graphene_toolbox.types import BaseModelObjectType
 
-from apps.core.graphql.types import BaseModelObjectType
 from apps.development.graphql.interfaces import WorkItem
 from apps.payroll.models import Salary
 from apps.payroll.services.salary.allowed import filter_allowed_for_user

@@ -1,8 +1,7 @@
-from jnt_django_graphene_toolbox.serializers.fields.char import CharField
 from rest_framework import serializers
 
 
-class ChoicesField(CharField):
+class ChoicesField(serializers.CharField):
     """Custom choices field with validation."""
 
     def __init__(self, choices, **kwargs):

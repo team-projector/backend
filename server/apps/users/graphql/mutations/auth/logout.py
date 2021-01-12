@@ -1,7 +1,7 @@
 import graphene
+from jnt_django_graphene_toolbox.mutations import BaseMutation
 
 from apps.core import injector
-from apps.core.graphql.mutations.base import BaseMutation
 from apps.users.services.auth.logout import LogoutInputDto, LogoutService
 
 

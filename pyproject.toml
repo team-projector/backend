@@ -10,7 +10,7 @@ python-gitlab = "*"
 python-dateutil = "*"
 python-decouple = "*"
 django = "3.*"
-djangorestframework = "3.11.*"
+djangorestframework = "*"
 django-cors-headers = "*"
 django-split-settings = "*"
 django-extensions = "*"
@@ -38,7 +38,7 @@ uvicorn = "*"
 django-constance = {extras = ["database"], version = "*"}
 python-memcached = "*"
 premailer = "*"
-injector = "^0.18.4"
+injector = "*"
 
 [tool.poetry.dev-dependencies]
 pytest = "5.*" # problem with integrity

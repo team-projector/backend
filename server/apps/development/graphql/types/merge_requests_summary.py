@@ -1,11 +1,8 @@
 import graphene
-from jnt_django_graphene_toolbox.security.mixins.node import AuthNode
 
 
-class MergeRequestsSummaryType(AuthNode, graphene.ObjectType):
+class MergeRequestsSummaryType(graphene.ObjectType):
     """Merge requests summary type."""
-
-    auth_required = True
 
     count = graphene.Int()
     opened_count = graphene.Int()

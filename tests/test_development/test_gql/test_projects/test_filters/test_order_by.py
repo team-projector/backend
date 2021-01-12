@@ -9,7 +9,7 @@ from tests.test_development.factories import ProjectFactory
 
 @pytest.fixture()
 def projects(db):
-    """Generate projects."""
+    """Generate project groups."""
     return (
         ProjectFactory.create(
             title="C",
@@ -29,6 +29,12 @@ def projects(db):
     )
 
 
+@pytest.fixture()
+def sort_filter():
+    """Returns sorter."""
+    return ProjectsFilterSet.declared_filters["order_by"]
+
+
 @pytest.mark.parametrize(
     ("order_by", "indexes"),
     [
@@ -40,12 +46,11 @@ def projects(db):
         ("-full_title", (0, 1, 2)),
     ],
 )
-def test_order_by(projects, order_by, indexes):
+def test_order_by(projects, order_by, indexes, sort_filter):
     """Test order by."""
-    filter_set = ProjectsFilterSet(
-        {"order_by": order_by},
+    queryset = sort_filter.filter(
         Project.objects.all(),
+        [order_by],
     )
 
-    assert filter_set.is_valid()
-    assert list(filter_set.qs) == lists.sub_list(projects, indexes)
+    assert list(queryset) == lists.sub_list(projects, indexes)

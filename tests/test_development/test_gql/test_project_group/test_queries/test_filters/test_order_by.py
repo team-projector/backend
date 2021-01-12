@@ -31,6 +31,12 @@ def groups(db):
     )
 
 
+@pytest.fixture()
+def sort_filter():
+    """Returns sorter."""
+    return ProjectGroupsFilterSet.declared_filters["order_by"]
+
+
 @pytest.mark.parametrize(
     ("order_by", "indexes"),
     [
@@ -42,12 +48,11 @@ def groups(db):
         ("-full_title", (0, 1, 2)),
     ],
 )
-def test_order_by(groups, order_by, indexes):
+def test_order_by(groups, order_by, indexes, sort_filter):
     """Test order by."""
-    filter_set = ProjectGroupsFilterSet(
-        {"order_by": order_by},
+    queryset = sort_filter.filter(
         ProjectGroup.objects.all(),
+        [order_by],
     )
 
-    assert filter_set.is_valid()
-    assert list(filter_set.qs) == lists.sub_list(groups, indexes)
+    assert list(queryset) == lists.sub_list(groups, indexes)

@@ -1,6 +1,6 @@
 import graphene
+from jnt_django_graphene_toolbox.types import BaseModelObjectType
 
-from apps.core.graphql.types import BaseModelObjectType
 from apps.skills.models import Position
 
 

@@ -1,13 +1,13 @@
 import graphene
 from django.db.models import QuerySet
+from jnt_django_graphene_toolbox.types import BaseModelObjectType
 
-from apps.core.graphql.types import BaseModelObjectType
 from apps.development.graphql.interfaces import MilestoneOwner
+from apps.development.graphql.types.enums import MilestoneState
 from apps.development.graphql.types.milestone_metrics import (
     MilestoneMetricsType,
 )
 from apps.development.models import Milestone
-from apps.development.models.milestone import MilestoneState
 from apps.development.services.milestone.allowed import filter_allowed_for_user
 from apps.development.services.milestone.metrics import (
     get_milestone_metrics_for_user,
@@ -34,7 +34,7 @@ class MilestoneType(BaseModelObjectType):
     title = graphene.String()
     description = graphene.String()
     start_date = graphene.Date()
-    state = graphene.Field(graphene.Enum.from_enum(MilestoneState))
+    state = graphene.Field(MilestoneState)
     due_date = graphene.Date()
     budget = graphene.Float()
 

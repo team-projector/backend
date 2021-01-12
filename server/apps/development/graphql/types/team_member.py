@@ -1,8 +1,8 @@
 import graphene
 from django.db.models import QuerySet
-from jnt_django_graphene_toolbox.types import BitField
+from jnt_django_graphene_toolbox.fields import BitField
+from jnt_django_graphene_toolbox.types import BaseModelObjectType
 
-from apps.core.graphql.types import BaseModelObjectType
 from apps.development.models import TeamMember
 from apps.users.graphql.types import UserType
 

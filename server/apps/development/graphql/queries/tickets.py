@@ -1,6 +1,6 @@
 import graphene
+from jnt_django_graphene_toolbox.nodes import ModelRelayNode
 
-from apps.core.graphql.nodes import ModelRelayNode
 from apps.development.graphql.fields import AllTicketsConnectionField
 from apps.development.graphql.resolvers.tickets_summary import (
     resolve_tickets_summary,

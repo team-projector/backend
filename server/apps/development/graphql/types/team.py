@@ -1,7 +1,7 @@
 import graphene
 from django.db.models import QuerySet
+from jnt_django_graphene_toolbox.types import BaseModelObjectType
 
-from apps.core.graphql.types import BaseModelObjectType
 from apps.development.graphql.fields import TeamMembersConnectionField
 from apps.development.graphql.types.team_metrics import TeamMetricsType
 from apps.development.models import Team

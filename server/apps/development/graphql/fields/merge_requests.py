@@ -1,11 +1,11 @@
 import django_filters
 import graphene
 from django.db.models import QuerySet
+from jnt_django_graphene_toolbox.fields import BaseModelConnectionField
 
-from apps.core.graphql.fields import BaseModelConnectionField
 from apps.core.graphql.queries.filters import OrderingFilter
+from apps.development.graphql.types.enums import MergeRequestState
 from apps.development.models import MergeRequest, Project, Team, TeamMember
-from apps.development.models.merge_request import MergeRequestState
 from apps.users.models import User
 
 
@@ -71,8 +71,6 @@ class MergeRequestsConnectionField(BaseModelConnectionField):
             order_by=graphene.Argument(graphene.List(MergeRequestSort)),
             user=graphene.ID(),
             project=graphene.ID(),
-            state=graphene.Argument(
-                graphene.Enum.from_enum(MergeRequestState),
-            ),
+            state=graphene.Argument(MergeRequestState),
             team=graphene.ID(),
         )

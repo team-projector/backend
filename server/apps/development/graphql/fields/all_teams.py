@@ -3,9 +3,9 @@ from typing import List
 import django_filters
 import graphene
 from django.db.models import Exists, OuterRef, QuerySet
+from jnt_django_graphene_toolbox.fields import BaseModelConnectionField
 from jnt_django_graphene_toolbox.filters import SearchFilter
 
-from apps.core.graphql.fields import BaseModelConnectionField
 from apps.core.graphql.queries.filters import OrderingFilter
 from apps.development.models import Team, TeamMember
 from apps.development.models.team_member import TeamMemberRole

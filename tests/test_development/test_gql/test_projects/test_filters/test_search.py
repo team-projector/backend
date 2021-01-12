@@ -4,7 +4,11 @@ from apps.development.graphql.fields.projects import ProjectsFilterSet
 from apps.development.models import Project
 from tests.test_development.factories import ProjectFactory
 
-KEY_SEARCH = "q"
+
+@pytest.fixture()
+def search_filter():
+    """Returns sorter."""
+    return ProjectsFilterSet.declared_filters["q"]
 
 
 @pytest.fixture()
@@ -17,58 +21,44 @@ def projects(db):
     )
 
 
-def test_search_empty(projects):
-    """Test search no parameter."""
-    filter_set = ProjectsFilterSet(
-        {KEY_SEARCH: ""},
-        Project.objects.all(),
-    )
+def test_search_empty(projects, search_filter):
+    """Test empty search."""
+    queryset = search_filter.filter(Project.objects.all(), "")
 
-    assert filter_set.is_valid()
-    assert filter_set.qs.count() == 3
+    assert queryset.count() == 3
 
 
-def test_search_not_found(projects):
+def test_search_not_found(projects, search_filter):
     """Test search not found."""
-    filter_set = ProjectsFilterSet(
-        {KEY_SEARCH: "d"},
-        Project.objects.all(),
-    )
+    queryset = search_filter.filter(Project.objects.all(), "d")
 
-    assert filter_set.is_valid()
-    assert not filter_set.qs.exists()
+    assert not queryset.exists()
 
 
-def test_search_by_title(projects):
+def test_search_by_title(projects, search_filter):
     """Test search by title."""
-    filter_set = ProjectsFilterSet(
-        {KEY_SEARCH: "b"},
-        Project.objects.all(),
-    )
+    queryset = search_filter.filter(Project.objects.all(), "b")
 
-    assert filter_set.is_valid()
-    assert filter_set.qs.count() == 1
-    assert filter_set.qs.first() == projects[1]
+    assert queryset.count() == 1
+    assert queryset.first() == projects[1]
 
 
-def test_search_by_gl_url(projects):
+def test_search_by_gl_url(projects, search_filter):
     """Test search by gl_url."""
-    filter_set = ProjectsFilterSet(
-        {KEY_SEARCH: projects[2].gl_url},
+    queryset = search_filter.filter(
         Project.objects.all(),
+        projects[2].gl_url,
     )
 
-    assert filter_set.is_valid()
-    assert filter_set.qs.count() == 1
-    assert filter_set.qs.first() == projects[2]
+    assert queryset.count() == 1
+    assert queryset.first() == projects[2]
 
 
-def test_search_by_gl_url_not_found(projects):
+def test_search_by_gl_url_not_found(projects, search_filter):
     """Test search by gl_url not found."""
-    filter_set = ProjectsFilterSet(
-        {KEY_SEARCH: "http://gl.com/d"},
+    queryset = search_filter.filter(
         Project.objects.all(),
+        "http://gl.com/d",
     )
 
-    assert filter_set.is_valid()
-    assert not filter_set.qs.exists()
+    assert not queryset.exists()

@@ -135,7 +135,7 @@ def test_not_update_url(
 
     ticket.refresh_from_db()
 
-    assert TicketState.PLANNING == ticket.state
+    assert ticket.state == TicketState.PLANNING
     assert not ticket.url
 
 

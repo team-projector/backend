@@ -2,8 +2,8 @@ import django_filters
 import graphene
 from django.db.models import QuerySet
 from django_filters import DateFilter
+from jnt_django_graphene_toolbox.fields import BaseModelConnectionField
 
-from apps.core.graphql.fields import BaseModelConnectionField
 from apps.core.graphql.queries.filters import OrderingFilter
 from apps.development.models import Project, Team, TeamMember
 from apps.payroll.models import Salary, SpentTime

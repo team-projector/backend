@@ -1,6 +1,6 @@
 import graphene
+from jnt_django_graphene_toolbox.nodes import ModelRelayNode
 
-from apps.core.graphql.nodes import ModelRelayNode
 from apps.development.graphql.fields import AllTeamsConnectionField
 from apps.development.graphql.resolvers import resolve_team_progress_metrics
 from apps.development.graphql.types import (

@@ -1,4 +1,4 @@
-from apps.core.graphql.fields import BaseModelConnectionField
+from jnt_django_graphene_toolbox.fields import BaseModelConnectionField
 
 
 class LabelsConnectionField(BaseModelConnectionField):

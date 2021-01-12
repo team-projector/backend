@@ -1,13 +1,15 @@
 import graphene
 from django.db.models import QuerySet
+from jnt_django_graphene_toolbox.helpers.selected_fields import (
+    is_field_selected,
+)
+from jnt_django_graphene_toolbox.nodes import ModelRelayNode
+from jnt_django_graphene_toolbox.types import BaseModelObjectType
 
-from apps.core import graphql
-from apps.core.graphql.nodes import ModelRelayNode
-from apps.core.graphql.types import BaseModelObjectType
 from apps.development.graphql import fields, interfaces
 from apps.development.graphql.types import IssueMetricsType
+from apps.development.graphql.types.enums import IssueState
 from apps.development.models import Issue
-from apps.development.models.issue import IssueState
 from apps.development.services.issue import allowed, metrics
 from apps.development.services.issue.problems import get_issue_problems
 from apps.users.graphql.fields import UsersConnectionField
@@ -32,7 +34,7 @@ class IssueType(BaseModelObjectType):
     description = graphene.String()
     time_estimate = graphene.Int()
     total_time_spent = graphene.Int()
-    state = graphene.Field(graphene.Enum.from_enum(IssueState))
+    state = graphene.Field(IssueState)
     created_at = graphene.DateTime()
     updated_at = graphene.DateTime()
     closed_at = graphene.DateTime()
@@ -53,7 +55,7 @@ class IssueType(BaseModelObjectType):
 
         queryset = allowed.filter_allowed_for_user(queryset, info.context.user)
 
-        if graphql.is_field_selected(info, "edges.node.user"):
+        if is_field_selected(info, "edges.node.user"):
             queryset = queryset.select_related("user")
 
         return queryset

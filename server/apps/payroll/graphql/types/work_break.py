@@ -1,7 +1,7 @@
 import graphene
 from django.db.models import QuerySet
+from jnt_django_graphene_toolbox.types import BaseModelObjectType
 
-from apps.core.graphql.types import BaseModelObjectType
 from apps.payroll.models import WorkBreak
 from apps.payroll.models.mixins.approved import ApprovedState
 from apps.payroll.models.work_break import WorkBreakReason

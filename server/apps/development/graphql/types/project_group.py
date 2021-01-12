@@ -1,17 +1,17 @@
 import graphene
+from jnt_django_graphene_toolbox.nodes import ModelRelayNode
+from jnt_django_graphene_toolbox.types import BaseModelObjectType
 
-from apps.core.graphql.nodes import ModelRelayNode
-from apps.core.graphql.types import BaseModelObjectType
 from apps.development.graphql.fields.milestones import (
     MilestonesConnectionField,
 )
 from apps.development.graphql.interfaces import MilestoneOwner
 from apps.development.graphql.types import TeamType
+from apps.development.graphql.types.enums import ProjectState
 from apps.development.graphql.types.project_group_metrics import (
     ProjectGroupMetricsType,
 )
 from apps.development.models import ProjectGroup
-from apps.development.models.choices.project_state import ProjectState
 from apps.development.services.project_group.metrics import (
     get_project_group_metrics,
 )
@@ -33,7 +33,7 @@ class ProjectGroupType(BaseModelObjectType):
     is_active = graphene.Boolean()
     milestones = MilestonesConnectionField()
     team = graphene.Field(TeamType)
-    state = graphene.Field(graphene.Enum.from_enum(ProjectState))
+    state = graphene.Field(ProjectState)
 
     metrics = graphene.Field(ProjectGroupMetricsType)
 
