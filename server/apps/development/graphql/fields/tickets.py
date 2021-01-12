@@ -3,8 +3,8 @@ import graphene
 from jnt_django_graphene_toolbox.fields import BaseModelConnectionField
 from jnt_django_graphene_toolbox.filters import SortHandler
 
+from apps.development.graphql.types.enums import TicketState
 from apps.development.models import Milestone, Ticket
-from apps.development.models.ticket import TicketState
 
 
 class TicketSort(graphene.Enum):
@@ -27,6 +27,7 @@ class TicketsFilterSet(django_filters.FilterSet):
         model = Ticket
         fields = "__all__"
 
+    state = django_filters.CharFilter()
     milestone = django_filters.ModelChoiceFilter(
         queryset=Milestone.objects.all(),
     )
@@ -45,5 +46,5 @@ class TicketsConnectionField(BaseModelConnectionField):
             "apps.development.graphql.types.TicketType",
             order_by=graphene.Argument(graphene.List(TicketSort)),
             milestone=graphene.ID(),
-            state=graphene.Argument(graphene.Enum.from_enum(TicketState)),
+            state=graphene.Argument(TicketState),
         )

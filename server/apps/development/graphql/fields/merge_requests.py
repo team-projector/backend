@@ -49,8 +49,9 @@ class MergeRequestFilterSet(django_filters.FilterSet):
 
     class Meta:
         model = MergeRequest
-        fields = ("state", "user", "team", "project")
+        fields = "__all__"
 
+    state = django_filters.CharFilter()
     user = django_filters.ModelChoiceFilter(queryset=User.objects.all())
     project = django_filters.ModelChoiceFilter(queryset=Project.objects.all())
     team = TeamFilter()

@@ -27,8 +27,9 @@ class ProjectsFilterSet(django_filters.FilterSet):
 
     class Meta:
         model = Project
-        fields = ("title",)
+        fields = "__all__"
 
+    title = django_filters.CharFilter()
     state = EnumMultipleFilter(enum=ProjectState)
     q = SearchFilter(fields=("title", "=gl_url"))  # noqa: WPS111
     order_by = SortHandler(ProjectSort)

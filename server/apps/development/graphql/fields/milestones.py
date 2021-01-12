@@ -43,6 +43,7 @@ class MilestonesFilterSet(django_filters.FilterSet):
         model = Milestone
         fields = "__all__"
 
+    state = django_filters.CharFilter()
     project = ProjectFilter()
     q = SearchFilter(fields=("title", "=gl_url"))  # noqa: WPS111
     order_by = SortHandler(MilestoneSort)

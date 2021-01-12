@@ -135,6 +135,7 @@ class IssuesFilterSet(django_filters.FilterSet):
         fields = "__all__"
 
     milestone = MilestoneFilter()
+    state = django_filters.CharFilter()
     problems = ProblemsFilter()
     due_date = django_filters.DateFilter()
     project = django_filters.ModelChoiceFilter(queryset=Project.objects.all())
