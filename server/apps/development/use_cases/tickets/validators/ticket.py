@@ -1,11 +1,11 @@
 from typing import Dict
 
 from django.core.validators import URLValidator
+from jnt_django_toolbox.helpers import dicts
 from rest_framework import serializers
 
 from apps.core.consts import DEFAULT_TITLE_LENGTH
 from apps.core.drf.fields.choices_field import ChoicesField
-from apps.core.utils import dicts
 from apps.development.models import (
     TICKET_ROLE_MAX_LENGTH,
     Issue,
