@@ -1030,7 +1030,7 @@ django = ">=3"
 
 [[package]]
 name = "jnt-django-graphene-toolbox"
-version = "0.2.3"
+version = "0.2.4"
 description = ""
 category = "main"
 optional = false
@@ -2456,8 +2456,8 @@ jnt-django-admin-tools = [
     {file = "jnt_django_admin_tools-0.9.26-py3-none-any.whl", hash = "sha256:61708d3ae9e001c009b8496ba8f45c5bf62eab7ed32734d309b18ae42fa31d93"},
 ]
 jnt-django-graphene-toolbox = [
-    {file = "jnt-django-graphene-toolbox-0.2.3.tar.gz", hash = "sha256:7f6bf79df9d3d0b7b8df070c7c97131422d2c094c37bc48bdfcb757795332734"},
-    {file = "jnt_django_graphene_toolbox-0.2.3-py3-none-any.whl", hash = "sha256:f98525c19b0ff757bde671f34413317806b1d01ee58c05e7f38815530addabe4"},
+    {file = "jnt-django-graphene-toolbox-0.2.4.tar.gz", hash = "sha256:70ac133daf53709733b058defecd6a3f4e8c1002f3a32f15121fc9ca12d3bd97"},
+    {file = "jnt_django_graphene_toolbox-0.2.4-py3-none-any.whl", hash = "sha256:33d6e4253dd8e1121c3e4a7de49c9d380eb49d729ee9da11a4e09fbd4b635acf"},
 ]
 jnt-django-toolbox = [
     {file = "jnt-django-toolbox-0.1.49.tar.gz", hash = "sha256:9184d1d7240512669b144be6414582f85b2df89284d2df7b2b20a79bd4e4d173"},

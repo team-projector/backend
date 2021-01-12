@@ -37,18 +37,17 @@ def test_query_with_order_by(user, gql_client_authenticated, gql_raw):
     assert _all_issues_data(response)[COUNT_FIELD] == 5
 
 
-def test_query_with_order_by_not_valid(
-    user,
-    gql_client_authenticated,
-    gql_raw,
-):
-    """Test not valid ordering."""
+def test_query_with_not_filter_args(user, gql_client_authenticated, gql_raw):
+    """Test getting all issues raw query with non filter args."""
+    IssueFactory.create_batch(5, user=user)
+
     response = gql_client_authenticated.execute(
         gql_raw(ALL_ISSUES_QUERY),
-        variable_values={"orderBy": ["dueDate"]},
+        variable_values={"offset": 2},
     )
-    assert ERRORS_FIELD in response
-    assert len(response["errors"]) == 1
+
+    assert ERRORS_FIELD not in response
+    assert len(_all_issues_data(response)["edges"]) == 3
 
 
 def test_not_owned_issue(ghl_auth_mock_info, all_issues_query):
