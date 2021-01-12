@@ -108,5 +108,6 @@ class AllSpentTimesConnectionField(BaseModelConnectionField):
             team=graphene.ID(),
             state=graphene.String(),
             salary=graphene.ID(),
+            date=graphene.Date(),
             order_by=graphene.Argument(graphene.List(SpentTimeSort)),
         )

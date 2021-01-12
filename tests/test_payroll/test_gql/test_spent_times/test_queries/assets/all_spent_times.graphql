@@ -1,9 +1,40 @@
-query {
-  allSpentTimes {
+query ($team: ID, $user: ID, $salary: ID, $offset: Int, $first: Int, $state: String, $orderBy: [SpentTimeSort]) {
+  allSpentTimes(team: $team, user: $user, salary: $salary, offset: $offset, first: $first, state: $state, orderBy: $orderBy) {
     count
     edges {
       node {
         id
+        createdAt
+        date
+        user {
+          name
+          glAvatar
+          position {
+            title
+          }
+        }
+        owner {
+          __typename
+          title
+          user {
+            id
+            name
+            glAvatar
+          }
+          glUrl
+          project {
+            title
+            group {
+              title
+            }
+          }
+        }
+        timeSpent
+        sum
+        salary {
+          id
+          createdAt
+        }
       }
     }
   }
