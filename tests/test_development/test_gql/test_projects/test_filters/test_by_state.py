@@ -8,7 +8,7 @@ from tests.test_development.factories import ProjectFactory
 
 @pytest.fixture()
 def projects(db):
-    """Generate projects."""
+    """Generate project groups."""
     return (
         ProjectFactory.create(title="C", state=ProjectState.DEVELOPING),
         ProjectFactory.create(title="B", state=ProjectState.ARCHIVED),
@@ -16,36 +16,39 @@ def projects(db):
     )
 
 
-def test_filter_empty(projects):
+@pytest.fixture()
+def state_filter():
+    """Returns state filter."""
+    return ProjectsFilterSet.declared_filters["state"]
+
+
+def test_filter_empty(projects, state_filter):
     """Test filter empty."""
-    filter_set = ProjectsFilterSet(
-        {"state": ""},
+    queryset = state_filter.filter(
         Project.objects.all(),
+        [],
     )
 
-    assert filter_set.is_valid()
-    assert filter_set.qs.count() == 3
+    assert queryset.count() == 3
 
 
-def test_archived(projects):
+def test_archived(projects, state_filter):
     """Test search by one parameter."""
-    filter_set = ProjectsFilterSet(
-        {"state": [ProjectState.ARCHIVED]},
+    queryset = state_filter.filter(
         Project.objects.all(),
+        [ProjectState.ARCHIVED],
     )
 
-    assert filter_set.is_valid()
-    assert filter_set.qs.count() == 1
-    assert filter_set.qs.first() == projects[1]
+    assert queryset.count() == 1
+    assert queryset.first() == projects[1]
 
 
-def test_archived_developing(projects):
+def test_archived_developing(projects, state_filter):
     """Test search by two parameters."""
-    filter_set = ProjectsFilterSet(
-        {"state": [ProjectState.ARCHIVED, ProjectState.DEVELOPING]},
+    queryset = state_filter.filter(
         Project.objects.all(),
+        [ProjectState.ARCHIVED, ProjectState.DEVELOPING],
     )
 
-    assert filter_set.is_valid()
-    assert filter_set.qs.count() == 2
-    assert set(filter_set.qs) == {projects[0], projects[1]}
+    assert queryset.count() == 2
+    assert set(queryset) == {projects[0], projects[1]}

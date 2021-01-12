@@ -1,7 +1,7 @@
 import graphene
+from jnt_django_graphene_toolbox.nodes import ModelRelayNode
+from jnt_django_graphene_toolbox.types import BaseModelObjectType
 
-from apps.core.graphql.nodes import ModelRelayNode
-from apps.core.graphql.types import BaseModelObjectType
 from apps.development.graphql.fields.milestones import (
     MilestonesConnectionField,
 )
@@ -10,8 +10,8 @@ from apps.development.graphql.resolvers.project_milestones import (
     resolve_project_milestones,
 )
 from apps.development.graphql.types import ProjectMetricsType
+from apps.development.graphql.types.enums import ProjectState
 from apps.development.models import Project
-from apps.development.models.choices.project_state import ProjectState
 from apps.development.services.project.metrics import get_project_metrics
 
 
@@ -29,7 +29,7 @@ class ProjectType(BaseModelObjectType):
     title = graphene.String()
     full_title = graphene.String()
     is_active = graphene.Boolean()
-    state = graphene.Field(graphene.Enum.from_enum(ProjectState))
+    state = graphene.Field(ProjectState)
     group = graphene.Field("apps.development.graphql.types.ProjectGroupType")
     milestones = MilestonesConnectionField()
     metrics = graphene.Field(ProjectMetricsType)

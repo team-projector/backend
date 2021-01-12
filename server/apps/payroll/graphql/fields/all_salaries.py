@@ -1,8 +1,8 @@
 import django_filters
 import graphene
 from django.db.models import QuerySet
+from jnt_django_graphene_toolbox.fields import BaseModelConnectionField
 
-from apps.core.graphql.fields import BaseModelConnectionField
 from apps.development.models import Team
 from apps.payroll.models import Salary
 from apps.payroll.services.salary.allowed import (

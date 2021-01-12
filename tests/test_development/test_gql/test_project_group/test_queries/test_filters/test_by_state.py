@@ -18,36 +18,39 @@ def groups(db):
     )
 
 
-def test_filter_empty(groups):
+@pytest.fixture()
+def state_filter():
+    """Returns state filter."""
+    return ProjectGroupsFilterSet.declared_filters["state"]
+
+
+def test_filter_empty(groups, state_filter):
     """Test filter empty."""
-    filter_set = ProjectGroupsFilterSet(
-        {"state": ""},
+    queryset = state_filter.filter(
         ProjectGroup.objects.all(),
+        [],
     )
 
-    assert filter_set.is_valid()
-    assert filter_set.qs.count() == 3
+    assert queryset.count() == 3
 
 
-def test_archived(groups):
+def test_archived(groups, state_filter):
     """Test search by one parameter."""
-    filter_set = ProjectGroupsFilterSet(
-        {"state": [ProjectState.ARCHIVED]},
+    queryset = state_filter.filter(
         ProjectGroup.objects.all(),
+        [ProjectState.ARCHIVED],
     )
 
-    assert filter_set.is_valid()
-    assert filter_set.qs.count() == 1
-    assert filter_set.qs.first() == groups[1]
+    assert queryset.count() == 1
+    assert queryset.first() == groups[1]
 
 
-def test_archived_developing(groups):
+def test_archived_developing(groups, state_filter):
     """Test search by two parameters."""
-    filter_set = ProjectGroupsFilterSet(
-        {"state": [ProjectState.ARCHIVED, ProjectState.DEVELOPING]},
+    queryset = state_filter.filter(
         ProjectGroup.objects.all(),
+        [ProjectState.ARCHIVED, ProjectState.DEVELOPING],
     )
 
-    assert filter_set.is_valid()
-    assert filter_set.qs.count() == 2
-    assert set(filter_set.qs) == {groups[0], groups[1]}
+    assert queryset.count() == 2
+    assert set(queryset) == {groups[0], groups[1]}

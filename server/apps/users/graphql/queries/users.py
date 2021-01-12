@@ -1,6 +1,6 @@
 import graphene
+from jnt_django_graphene_toolbox.nodes import ModelRelayNode
 
-from apps.core.graphql.nodes import ModelRelayNode
 from apps.users.graphql.fields import AllUsersConnectionField
 from apps.users.graphql.resolvers import (
     resolve_me_user,

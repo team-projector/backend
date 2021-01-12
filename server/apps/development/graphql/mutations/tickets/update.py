@@ -42,6 +42,10 @@ class UpdateTicketMutation(BaseUseCaseMutation):
         **kwargs,
     ):
         """Prepare use case input data."""
+        fields_to_update = list(kwargs.keys())
+        fields_to_update.remove("id")
+        fields_to_update.append("ticket")
+
         return ticket_update.InputDto(
             user=info.context.user,  # type: ignore
             data=ticket_update.TicketUpdateData(
@@ -58,7 +62,7 @@ class UpdateTicketMutation(BaseUseCaseMutation):
                 estimate=kwargs.get("estimate") or 0,
                 milestone=kwargs.get("milestone"),
             ),
-            fields_to_update=list(kwargs.keys()),
+            fields_to_update=fields_to_update,
         )
 
     @classmethod

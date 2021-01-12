@@ -1,12 +1,13 @@
 import django_filters
 import graphene
 from django.db import models
+from jnt_django_graphene_toolbox.fields import BaseModelConnectionField
 from jnt_django_graphene_toolbox.filters import SearchFilter
 
-from apps.core.graphql.fields import BaseModelConnectionField
 from apps.core.graphql.queries.filters import OrderingFilter
+from apps.development.graphql.types.enums import MilestoneState
 from apps.development.models import Project
-from apps.development.models.milestone import Milestone, MilestoneState
+from apps.development.models.milestone import Milestone
 
 
 class ProjectFilter(django_filters.ModelChoiceFilter):
@@ -61,7 +62,5 @@ class MilestonesConnectionField(BaseModelConnectionField):
             order_by=graphene.Argument(graphene.List(MilestoneSort)),
             project=graphene.ID(),
             q=graphene.String(),
-            state=graphene.Argument(
-                graphene.Enum.from_enum(MilestoneState),
-            ),
+            state=graphene.Argument(MilestoneState),
         )

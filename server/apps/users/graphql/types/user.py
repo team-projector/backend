@@ -1,10 +1,14 @@
 import graphene
 from django.db.models import QuerySet
-from jnt_django_graphene_toolbox.types import BitField
+from jnt_django_graphene_toolbox.fields import (
+    BaseModelConnectionField,
+    BitField,
+)
+from jnt_django_graphene_toolbox.helpers.selected_fields import (
+    get_fields_from_info,
+)
+from jnt_django_graphene_toolbox.types import BaseModelObjectType
 
-from apps.core.graphql import get_fields_from_info
-from apps.core.graphql.fields import BaseModelConnectionField
-from apps.core.graphql.types.model import BaseModelObjectType
 from apps.skills.graphql.types import PositionType
 from apps.users.graphql.fields import UserWorkBreaksConnectionField
 from apps.users.graphql.types.user_metrics import UserMetricsType

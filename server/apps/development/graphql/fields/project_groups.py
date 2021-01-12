@@ -1,14 +1,14 @@
 import django_filters
 import graphene
+from jnt_django_graphene_toolbox.fields import BaseModelConnectionField
 from jnt_django_graphene_toolbox.filters import (
     EnumMultipleFilter,
     SearchFilter,
 )
 
-from apps.core.graphql.fields import BaseModelConnectionField
 from apps.core.graphql.queries.filters import OrderingFilter
+from apps.development.graphql.types.enums import ProjectState
 from apps.development.models import ProjectGroup
-from apps.development.models.choices.project_state import ProjectState
 
 
 class ProjectGroupsFilterSet(django_filters.FilterSet):
@@ -47,7 +47,5 @@ class ProjectGroupsConnectionField(BaseModelConnectionField):
             order_by=graphene.Argument(graphene.List(ProjectGroupSort)),
             title=graphene.String(),
             q=graphene.String(),
-            state=graphene.Argument(
-                graphene.List(graphene.Enum.from_enum(ProjectState)),
-            ),
+            state=graphene.Argument(graphene.List(ProjectState)),
         )

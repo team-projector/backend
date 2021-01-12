@@ -1,10 +1,11 @@
 import django_filters
 import graphene
 from django.db.models import QuerySet
+from jnt_django_graphene_toolbox.fields import BaseModelConnectionField
 from jnt_django_graphene_toolbox.filters import SearchFilter
 
-from apps.core.graphql.fields import BaseModelConnectionField
 from apps.core.graphql.queries.filters import OrderingFilter
+from apps.development.graphql.types.enums import IssueState
 from apps.development.models import (
     Issue,
     Milestone,
@@ -13,7 +14,6 @@ from apps.development.models import (
     TeamMember,
     Ticket,
 )
-from apps.development.models.issue import IssueState
 from apps.development.services.issue.allowed import check_allow_project_manager
 from apps.development.services.issue.problems import (
     annotate_issue_problems,
@@ -174,7 +174,5 @@ class IssuesConnectionField(BaseModelConnectionField):
             team=graphene.ID(),
             ticket=graphene.ID(),
             q=graphene.String(),
-            state=graphene.Argument(
-                graphene.Enum.from_enum(IssueState),
-            ),
+            state=graphene.Argument(IssueState),
         )

@@ -1,8 +1,10 @@
 import graphene
 from django.db.models import QuerySet
+from jnt_django_graphene_toolbox.helpers.selected_fields import (
+    is_field_selected,
+)
+from jnt_django_graphene_toolbox.types import BaseModelObjectType
 
-from apps.core import graphql
-from apps.core.graphql.types import BaseModelObjectType
 from apps.development.graphql.fields import IssuesConnectionField
 from apps.development.graphql.types import MilestoneType, TicketMetricsType
 from apps.development.models import Ticket
@@ -43,7 +45,7 @@ class TicketType(BaseModelObjectType):
     @classmethod
     def get_queryset(cls, queryset, info) -> QuerySet:  # noqa: WPS110
         """Get tickets."""
-        if graphql.is_field_selected(info, "edges.node.problems"):
+        if is_field_selected(info, "edges.node.problems"):
             queryset = annotate_ticket_problems(queryset)
 
         return queryset

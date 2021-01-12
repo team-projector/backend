@@ -1,4 +1,7 @@
-from apps.core.graphql import get_fields_from_info
+from jnt_django_graphene_toolbox.helpers.selected_fields import (
+    get_fields_from_info,
+)
+
 from apps.development.graphql.fields.tickets import TicketsFilterSet
 from apps.development.models import Ticket
 from apps.development.services.ticket.summary import TicketsSummaryProvider

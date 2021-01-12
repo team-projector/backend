@@ -5,13 +5,13 @@ from apps.development.graphql.resolvers.issues_summary import (
     resolve_issues_project_summaries,
     resolve_issues_team_summaries,
 )
+from apps.development.graphql.types.enums import ProjectState
 from apps.development.graphql.types.issues_project_summary import (
     IssuesProjectSummary,
 )
 from apps.development.graphql.types.issues_team_summary import (
     IssuesTeamSummary,
 )
-from apps.development.models.project import ProjectState
 
 
 class IssueSummaryProjectSort(graphene.Enum):
@@ -32,9 +32,7 @@ class IssuesSummaryType(graphene.ObjectType):
     projects = graphene.List(
         IssuesProjectSummary,
         order_by=graphene.Argument(graphene.List(IssueSummaryProjectSort)),
-        state=graphene.Argument(
-            graphene.Enum.from_enum(ProjectState),
-        ),
+        state=graphene.Argument(ProjectState),
         resolver=resolve_issues_project_summaries,
     )
     teams = graphene.List(

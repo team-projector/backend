@@ -1,10 +1,10 @@
 from typing import Optional
 
 from graphql import ResolveInfo
+from jnt_django_graphene_toolbox.mutations import BaseMutation
 
 from apps.core.errors import BaseError
 from apps.core.graphql.errors import GenericGraphQLError
-from apps.core.graphql.mutations.base import BaseMutation
 
 
 class ErrorHandlerMixin(BaseMutation):

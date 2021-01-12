@@ -2,9 +2,9 @@ from typing import Optional
 
 import graphene
 from graphql import ResolveInfo
+from jnt_django_graphene_toolbox.mutations import BaseMutation
 
 from apps.core import injector
-from apps.core.graphql.mutations.base import BaseMutation
 from apps.users.services.auth.social_login import SocialLoginService
 
 

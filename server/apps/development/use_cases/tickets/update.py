@@ -1,4 +1,3 @@
-import dataclasses
 import datetime
 from dataclasses import dataclass
 from typing import Dict, Iterable, List, Optional
@@ -10,6 +9,7 @@ from apps.core.application.errors import (
     InvalidInputApplicationError,
 )
 from apps.core.application.use_cases import BasePresenter, BaseUseCase
+from apps.core.utils import dataclasses
 from apps.development.models import (
     Issue,
     Milestone,
@@ -118,8 +118,12 @@ class UseCase(BaseUseCase):
             raise AccessDeniedApplicationError()
 
         validator = InputDtoSerializer(
-            data=dataclasses.asdict(input_dto.data),
+            data=dataclasses.to_dict(
+                input_dto.data,
+                input_dto.fields_to_update,
+            ),
             context={"user": input_dto.user},
+            partial=True,
         )
         if not validator.is_valid():
             raise InvalidInputApplicationError(validator.errors)

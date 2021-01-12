@@ -1,11 +1,11 @@
 from typing import Dict
 
 from django.core.validators import URLValidator
-from jnt_django_graphene_toolbox.serializers.fields.char import CharField
 from rest_framework import serializers
 
 from apps.core.consts import DEFAULT_TITLE_LENGTH
 from apps.core.drf.fields.choices_field import ChoicesField
+from apps.core.utils import dicts
 from apps.development.models import (
     TICKET_ROLE_MAX_LENGTH,
     Issue,
@@ -18,7 +18,7 @@ from apps.development.services.issue.allowed import filter_allowed_for_user
 class BaseTicketValidator(serializers.Serializer):
     """BaseTicketValidator."""
 
-    title = CharField(max_length=DEFAULT_TITLE_LENGTH)
+    title = serializers.CharField(max_length=DEFAULT_TITLE_LENGTH)
     start_date = serializers.DateField(allow_null=True)
     due_date = serializers.DateField(allow_null=True)
     type = ChoicesField(  # noqa: WPS125, A003
@@ -35,8 +35,11 @@ class BaseTicketValidator(serializers.Serializer):
         queryset=Issue.objects,
         allow_null=True,
     )
-    role = CharField(max_length=TICKET_ROLE_MAX_LENGTH)
-    url = CharField(validators=(URLValidator(),))
+    role = serializers.CharField(
+        max_length=TICKET_ROLE_MAX_LENGTH,
+        allow_null=True,
+    )
+    url = serializers.CharField(validators=(URLValidator(),), allow_null=True)
     estimate = serializers.IntegerField(min_value=0)
 
     def get_fields(self) -> Dict[str, serializers.Field]:
@@ -53,3 +56,11 @@ class BaseTicketValidator(serializers.Serializer):
         fields["issues"].child_relation.queryset = issues_qs
 
         return fields
+
+    def to_internal_value(self, validated_data):
+        """Returns python dict."""
+        value_data = super().to_internal_value(validated_data)
+        dicts.set_value_if_none(value_data, "role", "")
+        dicts.set_value_if_none(value_data, "url", "")
+
+        return value_data
