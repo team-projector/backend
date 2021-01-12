@@ -4,8 +4,8 @@ import django_filters
 import graphene
 from django.db.models import QuerySet
 from jnt_django_graphene_toolbox.fields import BaseModelConnectionField
+from jnt_django_graphene_toolbox.filters import SortHandler
 
-from apps.core.graphql.queries.filters import OrderingFilter
 from apps.development.models import TeamMember
 from apps.development.models.team_member import TeamMemberRole
 from apps.development.services.team_members.filters import filter_by_roles
@@ -40,6 +40,13 @@ class TeamMemberRolesFilter(django_filters.CharFilter):
         ]
 
 
+class TeamMemberSort(graphene.Enum):
+    """Allowed sort fields."""
+
+    USER_NAME_ASC = "user__name"  # noqa: WPS115
+    USER_NAME_DESC = "-user__name"  # noqa: WPS115
+
+
 class TeamMembersFilterSet(django_filters.FilterSet):
     """Set of filters for Team Member."""
 
@@ -48,14 +55,7 @@ class TeamMembersFilterSet(django_filters.FilterSet):
         fields = ("roles",)
 
     roles = TeamMemberRolesFilter()
-    order_by = OrderingFilter(fields=("user__name",))
-
-
-class TeamMemberSort(graphene.Enum):
-    """Allowed sort fields."""
-
-    USER_NAME_ASC = "user__name"  # noqa: WPS115
-    USER_NAME_DESC = "-user__name"  # noqa: WPS115
+    order_by = SortHandler(TeamMemberSort)
 
 
 class TeamMembersConnectionField(BaseModelConnectionField):
