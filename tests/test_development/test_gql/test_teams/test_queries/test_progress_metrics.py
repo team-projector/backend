@@ -104,3 +104,15 @@ def test_metrics_developer(
             end=date,
             group=GROUP_DAY,
         )
+
+
+def test_unauth(user, ghl_mock_info, team_progress_metrics_query):
+    """Test unauth request."""
+    team = TeamFactory.create(members=[user])
+
+    with pytest.raises(GraphQLPermissionDenied):
+        team_progress_metrics_query(
+            None,
+            info=ghl_mock_info,
+            team=team.id,
+        )
