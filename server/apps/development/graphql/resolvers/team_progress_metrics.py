@@ -2,7 +2,7 @@ from jnt_django_graphene_toolbox.helpers.generics import (
     get_object_or_not_found,
 )
 
-from apps.core.graphql.resolvers import auth_required
+from apps.core.graphql.security.authentication import auth_required
 from apps.development.models import Team
 from apps.development.services.team.allowed import (
     check_allow_get_metrics_by_user,

@@ -2,7 +2,7 @@ import pytest
 from django.contrib.auth.models import AnonymousUser
 from jnt_django_graphene_toolbox.errors import GraphQLPermissionDenied
 
-from apps.core.graphql.resolvers import auth_required
+from apps.core.graphql.security.authentication import auth_required
 
 
 @pytest.fixture()
