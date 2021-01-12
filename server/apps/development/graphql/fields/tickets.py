@@ -1,25 +1,10 @@
 import django_filters
 import graphene
 from jnt_django_graphene_toolbox.fields import BaseModelConnectionField
+from jnt_django_graphene_toolbox.filters import SortHandler
 
-from apps.core.graphql.queries.filters import OrderingFilter
 from apps.development.models import Milestone, Ticket
 from apps.development.models.ticket import TicketState
-
-
-class TicketsFilterSet(django_filters.FilterSet):
-    """Set of filters for Ticket."""
-
-    class Meta:
-        model = Ticket
-        fields = "__all__"
-
-    milestone = django_filters.ModelChoiceFilter(
-        queryset=Milestone.objects.all(),
-    )
-    order_by = OrderingFilter(
-        fields=("due_date", "start_date", "title", "state"),
-    )
 
 
 class TicketSort(graphene.Enum):
@@ -33,6 +18,19 @@ class TicketSort(graphene.Enum):
     TITLE_DESC = "-title"  # noqa: WPS115
     STATE_ASC = "state"  # noqa: WPS115
     STATE_DESC = "-state"  # noqa: WPS115
+
+
+class TicketsFilterSet(django_filters.FilterSet):
+    """Set of filters for Ticket."""
+
+    class Meta:
+        model = Ticket
+        fields = "__all__"
+
+    milestone = django_filters.ModelChoiceFilter(
+        queryset=Milestone.objects.all(),
+    )
+    order_by = SortHandler(TicketSort)
 
 
 class TicketsConnectionField(BaseModelConnectionField):

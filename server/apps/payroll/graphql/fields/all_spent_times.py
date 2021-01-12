@@ -3,8 +3,8 @@ import graphene
 from django.db.models import QuerySet
 from django_filters import DateFilter
 from jnt_django_graphene_toolbox.fields import BaseModelConnectionField
+from jnt_django_graphene_toolbox.filters import SortHandler
 
-from apps.core.graphql.queries.filters import OrderingFilter
 from apps.development.models import Project, Team, TeamMember
 from apps.payroll.models import Salary, SpentTime
 from apps.users.models import User
@@ -68,6 +68,15 @@ class StateFilter(django_filters.CharFilter):
         )
 
 
+class SpentTimeSort(graphene.Enum):
+    """Allowed sort fields."""
+
+    DATE_ASC = "date"  # noqa: WPS115
+    DATE_DESC = "-date"  # noqa: WPS115
+    CREATED_AT_ASC = "created_at"  # noqa: WPS115
+    CREATED_AT_DESC = "-created_at"  # noqa: WPS115
+
+
 class SpentTimeFilterSet(django_filters.FilterSet):
     """Set of filters for Spent Time."""
 
@@ -81,16 +90,7 @@ class SpentTimeFilterSet(django_filters.FilterSet):
     project = ProjectFilter()
     state = StateFilter()
     date = DateFilter()
-    order_by = OrderingFilter(fields=("date", "created_at"))
-
-
-class SpentTimeSort(graphene.Enum):
-    """Allowed sort fields."""
-
-    DATE_ASC = "date"  # noqa: WPS115
-    DATE_DESC = "-date"  # noqa: WPS115
-    CREATED_AT_ASC = "created_at"  # noqa: WPS115
-    CREATED_AT_DESC = "-created_at"  # noqa: WPS115
+    order_by = SortHandler(SpentTimeSort)
 
 
 class AllSpentTimesConnectionField(BaseModelConnectionField):

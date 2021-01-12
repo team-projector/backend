@@ -2,8 +2,8 @@ import django_filters
 import graphene
 from django.db.models import Exists, OuterRef, QuerySet
 from jnt_django_graphene_toolbox.fields import BaseModelConnectionField
+from jnt_django_graphene_toolbox.filters import SortHandler
 
-from apps.core.graphql.queries.filters import OrderingFilter
 from apps.development.models import TeamMember
 from apps.payroll.models import WorkBreak
 from apps.payroll.models.mixins.approved import ApprovedState
@@ -68,6 +68,15 @@ class ToDateFilter(django_filters.DateFilter):
         return queryset.filter(from_date__lte=value)
 
 
+class WorkBreakSort(graphene.Enum):
+    """Allowed sortings."""
+
+    FROM_DATE_ASC = "from_date"  # noqa: WPS115
+    FROM_DATE_DESC = "-from_date"  # noqa: WPS115
+    TO_DATE_ASC = "to_date"  # noqa: WPS115
+    TO_DATE_DESC = "-to_date"  # noqa: WPS115
+
+
 class WorkBreakFilterSet(django_filters.FilterSet):
     """Set of filters for Work Break."""
 
@@ -78,16 +87,7 @@ class WorkBreakFilterSet(django_filters.FilterSet):
     approving = ApprovingFilter()
     from_date = FromDateFilter()
     to_date = ToDateFilter()
-    order_by = OrderingFilter(fields=("from_date", "to_date"))
-
-
-class WorkBreakSort(graphene.Enum):
-    """Allowed sortings."""
-
-    FROM_DATE_ASC = "from_date"  # noqa: WPS115
-    FROM_DATE_DESC = "-from_date"  # noqa: WPS115
-    TO_DATE_ASC = "to_date"  # noqa: WPS115
-    TO_DATE_DESC = "-to_date"  # noqa: WPS115
+    order_by = SortHandler(WorkBreakSort)
 
 
 class BaseWorkBreaksConnectionField(BaseModelConnectionField):

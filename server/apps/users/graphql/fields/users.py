@@ -1,19 +1,9 @@
 import django_filters
 import graphene
 from jnt_django_graphene_toolbox.fields import BaseModelConnectionField
+from jnt_django_graphene_toolbox.filters import SortHandler
 
-from apps.core.graphql.queries.filters import OrderingFilter
 from apps.users.models import User
-
-
-class UserFilterSet(django_filters.FilterSet):
-    """Set of filters for User."""
-
-    class Meta:
-        model = User
-        fields = ("is_active",)
-
-    order_by = OrderingFilter(fields=("login", "name"))
 
 
 class UserSort(graphene.Enum):
@@ -23,6 +13,16 @@ class UserSort(graphene.Enum):
     LOGIN_DESC = "-login"  # noqa: WPS115
     NAME_ASC = "name"  # noqa: WPS115
     NAME_DESC = "-name"  # noqa: WPS115
+
+
+class UserFilterSet(django_filters.FilterSet):
+    """Set of filters for User."""
+
+    class Meta:
+        model = User
+        fields = ("is_active",)
+
+    order_by = SortHandler(UserSort)
 
 
 class UsersConnectionField(BaseModelConnectionField):

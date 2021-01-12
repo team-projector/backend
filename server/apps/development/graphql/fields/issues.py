@@ -2,9 +2,8 @@ import django_filters
 import graphene
 from django.db.models import QuerySet
 from jnt_django_graphene_toolbox.fields import BaseModelConnectionField
-from jnt_django_graphene_toolbox.filters import SearchFilter
+from jnt_django_graphene_toolbox.filters import SearchFilter, SortHandler
 
-from apps.core.graphql.queries.filters import OrderingFilter
 from apps.development.graphql.types.enums import IssueState
 from apps.development.models import (
     Issue,
@@ -111,33 +110,6 @@ class TeamFilter(django_filters.ModelChoiceFilter):
         return queryset.filter(user__in=users)
 
 
-class IssuesFilterSet(django_filters.FilterSet):
-    """Set of filters for Issues."""
-
-    class Meta:
-        model = Issue
-        fields = "__all__"
-
-    milestone = MilestoneFilter()
-    problems = ProblemsFilter()
-    due_date = django_filters.DateFilter()
-    project = django_filters.ModelChoiceFilter(queryset=Project.objects.all())
-    team = TeamFilter()
-    ticket = TicketFilter()
-    user = django_filters.ModelChoiceFilter(queryset=User.objects.all())
-    order_by = OrderingFilter(
-        fields=(
-            "due_date",
-            "title",
-            "created_at",
-            "closed_at",
-            "user",
-            "state",
-        ),
-    )
-    q = SearchFilter(fields=("title", "=gl_url"))  # noqa: WPS111
-
-
 class IssueSort(graphene.Enum):
     """Allowed sort fields."""
 
@@ -153,6 +125,24 @@ class IssueSort(graphene.Enum):
     USER_DESC = "-user"  # noqa: WPS115
     STATE_ASC = "state"  # noqa: WPS115
     STATE_DESC = "-state"  # noqa: WPS115
+
+
+class IssuesFilterSet(django_filters.FilterSet):
+    """Set of filters for Issues."""
+
+    class Meta:
+        model = Issue
+        fields = "__all__"
+
+    milestone = MilestoneFilter()
+    problems = ProblemsFilter()
+    due_date = django_filters.DateFilter()
+    project = django_filters.ModelChoiceFilter(queryset=Project.objects.all())
+    team = TeamFilter()
+    ticket = TicketFilter()
+    user = django_filters.ModelChoiceFilter(queryset=User.objects.all())
+    order_by = SortHandler(IssueSort)
+    q = SearchFilter(fields=("title", "=gl_url"))  # noqa: WPS111
 
 
 class IssuesConnectionField(BaseModelConnectionField):

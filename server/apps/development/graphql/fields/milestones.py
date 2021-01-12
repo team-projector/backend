@@ -2,9 +2,8 @@ import django_filters
 import graphene
 from django.db import models
 from jnt_django_graphene_toolbox.fields import BaseModelConnectionField
-from jnt_django_graphene_toolbox.filters import SearchFilter
+from jnt_django_graphene_toolbox.filters import SearchFilter, SortHandler
 
-from apps.core.graphql.queries.filters import OrderingFilter
 from apps.development.graphql.types.enums import MilestoneState
 from apps.development.models import Project
 from apps.development.models.milestone import Milestone
@@ -30,6 +29,13 @@ class ProjectFilter(django_filters.ModelChoiceFilter):
         return queryset
 
 
+class MilestoneSort(graphene.Enum):
+    """Allowed sort fields."""
+
+    DUE_DATE_ASC = "due_date"  # noqa: WPS115
+    DUE_DATE_DESC = "-due_date"  # noqa: WPS115
+
+
 class MilestonesFilterSet(django_filters.FilterSet):
     """Set of filters for Milestone."""
 
@@ -39,14 +45,7 @@ class MilestonesFilterSet(django_filters.FilterSet):
 
     project = ProjectFilter()
     q = SearchFilter(fields=("title", "=gl_url"))  # noqa: WPS111
-    order_by = OrderingFilter(fields=("due_date",))
-
-
-class MilestoneSort(graphene.Enum):
-    """Allowed sort fields."""
-
-    DUE_DATE_ASC = "due_date"  # noqa: WPS115
-    DUE_DATE_DESC = "-due_date"  # noqa: WPS115
+    order_by = SortHandler(MilestoneSort)
 
 
 class MilestonesConnectionField(BaseModelConnectionField):
