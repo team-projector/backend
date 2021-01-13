@@ -1,4 +1,8 @@
-from apps.development.graphql.fields.all_teams import TeamsFilterSet
+from apps.development.graphql.fields.all_teams import (
+    AllTeamsConnectionField,
+    TeamsFilterSet,
+    TeamSort,
+)
 from apps.development.models import Team, TeamMember
 from tests.helpers import lists
 from tests.test_development.factories import TeamFactory, TeamMemberFactory
@@ -163,16 +167,9 @@ def test_order_by_title(user, make_team_leader):
     make_team_leader(teams[1], user)
     make_team_leader(teams[2], user)
 
-    queryset = TeamsFilterSet(
-        data={"order_by": "title"},
-        queryset=Team.objects.all(),
-    ).qs
-
-    assert list(queryset) == lists.sub_list(teams, (0, 2, 1))
-
-    queryset = TeamsFilterSet(
-        data={"order_by": "-title"},
-        queryset=Team.objects.all(),
-    ).qs
+    queryset = AllTeamsConnectionField.sort_handler.filter(
+        Team.objects.all(),
+        [TeamSort.TITLE_DESC.value],
+    )
 
     assert list(queryset) == lists.sub_list(teams, (1, 2, 0))

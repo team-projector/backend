@@ -31,20 +31,19 @@ class TicketsFilterSet(django_filters.FilterSet):
     milestone = django_filters.ModelChoiceFilter(
         queryset=Milestone.objects.all(),
     )
-    order_by = SortHandler(TicketSort)
 
 
 class TicketsConnectionField(BaseModelConnectionField):
     """Handler for labels collections."""
 
-    filterset_class = TicketsFilterSet
     auth_required = True
+    sort_handler = SortHandler(TicketSort)
+    filterset_class = TicketsFilterSet
 
     def __init__(self):
         """Initialize."""
         super().__init__(
             "apps.development.graphql.types.TicketType",
-            order_by=graphene.Argument(graphene.List(TicketSort)),
             milestone=graphene.ID(),
             state=graphene.Argument(TicketState),
         )

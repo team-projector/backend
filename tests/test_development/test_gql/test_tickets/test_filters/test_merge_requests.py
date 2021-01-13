@@ -1,5 +1,7 @@
 from apps.development.graphql.fields.merge_requests import (
     MergeRequestFilterSet,
+    MergeRequestsConnectionField,
+    MergeRequestSort,
 )
 from apps.development.models import MergeRequest, TeamMember
 from apps.development.models.merge_request import MergeRequestState
@@ -127,10 +129,10 @@ def test_ordering(user):
         for title in ("agent", "cloud", "bar")
     ]
 
-    queryset = MergeRequestFilterSet(
-        data={"order_by": "title"},
-        queryset=MergeRequest.objects.all(),
-    ).qs
+    queryset = MergeRequestsConnectionField.sort_handler.filter(
+        MergeRequest.objects.all(),
+        [MergeRequestSort.TITLE_ASC.value],
+    )
     assert list(queryset) == lists.sub_list(merge_requests, (0, 2, 1))
 
 
@@ -145,8 +147,8 @@ def test_ordering_desc(user):
         for title in ("agent", "cloud", "bar")
     ]
 
-    queryset = MergeRequestFilterSet(
-        data={"order_by": "-title"},
-        queryset=MergeRequest.objects.all(),
-    ).qs
+    queryset = MergeRequestsConnectionField.sort_handler.filter(
+        MergeRequest.objects.all(),
+        [MergeRequestSort.TITLE_DESC.value],
+    )
     assert list(queryset) == lists.sub_list(merge_requests, (1, 2, 0))

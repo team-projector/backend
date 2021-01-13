@@ -87,14 +87,14 @@ class WorkBreakFilterSet(django_filters.FilterSet):
     approving = ApprovingFilter()
     from_date = FromDateFilter()
     to_date = ToDateFilter()
-    order_by = SortHandler(WorkBreakSort)
 
 
 class BaseWorkBreaksConnectionField(BaseModelConnectionField):
     """Handler for workbreaks collections."""
 
-    filterset_class = WorkBreakFilterSet
     auth_required = True
+    sort_handler = SortHandler(WorkBreakSort)
+    filterset_class = WorkBreakFilterSet
 
     def __init__(self, **kwargs):
         """Initialize."""
@@ -104,5 +104,4 @@ class BaseWorkBreaksConnectionField(BaseModelConnectionField):
             approving=graphene.Boolean(),
             from_date=graphene.Date(),
             to_date=graphene.Date(),
-            order_by=graphene.Argument(graphene.List(WorkBreakSort)),
         )

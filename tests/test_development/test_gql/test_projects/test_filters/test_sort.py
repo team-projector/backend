@@ -1,6 +1,6 @@
 import pytest
 
-from apps.development.graphql.fields.projects import ProjectsFilterSet
+from apps.development.graphql.fields.projects import ProjectsConnectionField
 from apps.development.models import Project
 from apps.development.models.choices.project_state import ProjectState
 from tests.helpers import lists
@@ -32,7 +32,7 @@ def projects(db):
 @pytest.fixture()
 def sort_filter():
     """Returns sorter."""
-    return ProjectsFilterSet.declared_filters["order_by"]
+    return ProjectsConnectionField.sort_handler
 
 
 @pytest.mark.parametrize(

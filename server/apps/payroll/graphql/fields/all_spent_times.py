@@ -90,14 +90,14 @@ class SpentTimeFilterSet(django_filters.FilterSet):
     project = ProjectFilter()
     state = StateFilter()
     date = DateFilter()
-    order_by = SortHandler(SpentTimeSort)
 
 
 class AllSpentTimesConnectionField(BaseModelConnectionField):
     """Handler for all spent time collections."""
 
-    filterset_class = SpentTimeFilterSet
     auth_required = True
+    sort_handler = SortHandler(SpentTimeSort)
+    filterset_class = SpentTimeFilterSet
 
     def __init__(self):
         """Initialize."""
@@ -109,5 +109,4 @@ class AllSpentTimesConnectionField(BaseModelConnectionField):
             state=graphene.String(),
             salary=graphene.ID(),
             date=graphene.Date(),
-            order_by=graphene.Argument(graphene.List(SpentTimeSort)),
         )

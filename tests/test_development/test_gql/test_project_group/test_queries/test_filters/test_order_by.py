@@ -1,7 +1,7 @@
 import pytest
 
 from apps.development.graphql.fields.project_groups import (
-    ProjectGroupsFilterSet,
+    ProjectGroupsConnectionField,
 )
 from apps.development.models import ProjectGroup
 from apps.development.models.choices.project_state import ProjectState
@@ -34,7 +34,7 @@ def groups(db):
 @pytest.fixture()
 def sort_filter():
     """Returns sorter."""
-    return ProjectGroupsFilterSet.declared_filters["order_by"]
+    return ProjectGroupsConnectionField.sort_handler
 
 
 @pytest.mark.parametrize(

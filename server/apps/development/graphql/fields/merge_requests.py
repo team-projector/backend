@@ -56,20 +56,18 @@ class MergeRequestFilterSet(django_filters.FilterSet):
     project = django_filters.ModelChoiceFilter(queryset=Project.objects.all())
     team = TeamFilter()
 
-    order_by = SortHandler(MergeRequestSort)
-
 
 class MergeRequestsConnectionField(BaseModelConnectionField):
     """Handler for labels collections."""
 
-    filterset_class = MergeRequestFilterSet
     auth_required = True
+    sort_handler = SortHandler(MergeRequestSort)
+    filterset_class = MergeRequestFilterSet
 
     def __init__(self):
         """Initialize."""
         super().__init__(
             "apps.development.graphql.types.MergeRequestType",
-            order_by=graphene.Argument(graphene.List(MergeRequestSort)),
             user=graphene.ID(),
             project=graphene.ID(),
             state=graphene.Argument(MergeRequestState),
