@@ -62,18 +62,19 @@ class TeamsFilterSet(django_filters.FilterSet):
 
     class Meta:
         model = Team
-        fields = ("title", "roles")
+        fields = "__all__"
 
     roles = TeamRolesFilter()
-    order_by = SortHandler(TeamSort)
+    title = django_filters.CharFilter()
     q = SearchFilter(fields=("title",))  # noqa: WPS111
 
 
 class AllTeamsConnectionField(BaseModelConnectionField):
     """Handler for users collections."""
 
-    filterset_class = TeamsFilterSet
     auth_required = True
+    sort_handler = SortHandler(TeamSort)
+    filterset_class = TeamsFilterSet
 
     def __init__(self):
         """Initialize."""
@@ -82,5 +83,4 @@ class AllTeamsConnectionField(BaseModelConnectionField):
             title=graphene.String(),
             roles=graphene.String(),
             q=graphene.String(),
-            order_by=graphene.Argument(graphene.List(TeamSort)),
         )

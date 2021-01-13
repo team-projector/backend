@@ -55,19 +55,18 @@ class TeamMembersFilterSet(django_filters.FilterSet):
         fields = ("roles",)
 
     roles = TeamMemberRolesFilter()
-    order_by = SortHandler(TeamMemberSort)
 
 
 class TeamMembersConnectionField(BaseModelConnectionField):
     """Handler for team members collections."""
 
-    filterset_class = TeamMembersFilterSet
     auth_required = True
+    sort_handler = SortHandler(TeamMemberSort)
+    filterset_class = TeamMembersFilterSet
 
     def __init__(self):
         """Initialize."""
         super().__init__(
             "apps.development.graphql.types.TeamMemberType",
             roles=graphene.String(),
-            order_by=graphene.Argument(graphene.List(TeamMemberSort)),
         )

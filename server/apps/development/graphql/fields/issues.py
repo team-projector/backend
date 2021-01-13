@@ -142,21 +142,20 @@ class IssuesFilterSet(django_filters.FilterSet):
     team = TeamFilter()
     ticket = TicketFilter()
     user = django_filters.ModelChoiceFilter(queryset=User.objects.all())
-    order_by = SortHandler(IssueSort)
     q = SearchFilter(fields=("title", "=gl_url"))  # noqa: WPS111
 
 
 class IssuesConnectionField(BaseModelConnectionField):
     """Handler for labels collections."""
 
-    filterset_class = IssuesFilterSet
     auth_required = True
+    sort_handler = SortHandler(IssueSort)
+    filterset_class = IssuesFilterSet
 
     def __init__(self):
         """Initialize."""
         super().__init__(
             "apps.development.graphql.types.IssueType",
-            order_by=graphene.Argument(graphene.List(IssueSort)),
             user=graphene.ID(),
             milestone=graphene.ID(),
             due_date=graphene.Date(),
