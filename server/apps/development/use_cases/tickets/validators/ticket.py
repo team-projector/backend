@@ -38,8 +38,13 @@ class BaseTicketValidator(serializers.Serializer):
     role = serializers.CharField(
         max_length=TICKET_ROLE_MAX_LENGTH,
         allow_null=True,
+        allow_blank=True,
     )
-    url = serializers.CharField(validators=(URLValidator(),), allow_null=True)
+    url = serializers.CharField(
+        validators=(URLValidator(),),
+        allow_null=True,
+        allow_blank=True,
+    )
     estimate = serializers.IntegerField(min_value=0)
 
     def get_fields(self) -> Dict[str, serializers.Field]:
