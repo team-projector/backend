@@ -7,8 +7,11 @@ from jnt_django_graphene_toolbox.filters import (
     SortHandler,
 )
 
-from apps.development.graphql.types.enums import ProjectState
+from apps.development.graphql.types.enums import (
+    ProjectState as GQLProjectState,
+)
 from apps.development.models import Project
+from apps.development.models.choices.project_state import ProjectState
 
 
 class ProjectSort(graphene.Enum):
@@ -48,5 +51,5 @@ class ProjectsConnectionField(BaseModelConnectionField):
             order_by=graphene.Argument(graphene.List(ProjectSort)),
             q=graphene.String(),
             title=graphene.String(),
-            state=graphene.Argument(graphene.List(ProjectState)),
+            state=graphene.Argument(graphene.List(GQLProjectState)),
         )
