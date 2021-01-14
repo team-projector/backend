@@ -22,7 +22,7 @@ def test_query(ghl_auth_mock_info, project_groups_summary_query):
     """Test summary."""
     _create_project_groups()
     response = project_groups_summary_query(
-        root=None,
+        parent=None,
         info=ghl_auth_mock_info,
     )
 

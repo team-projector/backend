@@ -18,14 +18,14 @@ def tickets(db):
     )
 
 
-def test_raw_query(gql_client, tickets, gql_raw):
+def test_raw_query(gql_client_authenticated, tickets, gql_raw):
     """
     Test raw query.
 
-    :param gql_client:
+    :param gql_client_authenticated:
     :param tickets:
     """
-    response = gql_client.execute(gql_raw("tickets_summary"))
+    response = gql_client_authenticated.execute(gql_raw("tickets_summary"))
 
     assert "errors" not in response
 

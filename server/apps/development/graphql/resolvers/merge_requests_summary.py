@@ -1,3 +1,4 @@
+from apps.core.graphql.security.authentication import auth_required
 from apps.development.graphql.fields.merge_requests import (
     MergeRequestFilterSet,
 )
@@ -12,6 +13,8 @@ from apps.development.services.merge_request.summary import (
 
 def resolve_merge_requests_summary(parent, info, **kwargs):  # noqa: WPS110
     """Resolve merge requests summary."""
+    auth_required(info)
+
     queryset = filter_allowed_for_user(
         MergeRequest.objects.all(),
         info.context.user,

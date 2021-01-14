@@ -50,7 +50,7 @@ def test_issues_summary(user, ghl_auth_mock_info):
     checkers.check_summary(summary, count=5, opened_count=5)
 
 
-def test_issues_project_summaries(user):
+def test_issues_project_summaries(user, ghl_auth_mock_info):
     """
     Test issues project summaries.
 
@@ -69,7 +69,7 @@ def test_issues_project_summaries(user):
 
     issues = resolve_issues_project_summaries(
         dict2obj({"queryset": Issue.objects.all()}),
-        None,
+        ghl_auth_mock_info,
     )[0].issues
 
     assert issues.opened_count == 5
@@ -77,7 +77,7 @@ def test_issues_project_summaries(user):
     assert issues.remains == 500
 
 
-def test_issues_team_summaries(user):
+def test_issues_team_summaries(user, ghl_auth_mock_info):
     """
     Test issues team summaries.
 
@@ -99,7 +99,7 @@ def test_issues_team_summaries(user):
 
     issues = resolve_issues_team_summaries(
         dict2obj({"queryset": Issue.objects.all()}),
-        None,
+        ghl_auth_mock_info,
     )[0].issues
 
     assert issues.opened_count == 5
