@@ -1,5 +1,5 @@
-query ($team: ID, $user: ID, $salary: ID, $offset: Int, $first: Int, $state: String, $sort: [SpentTimeSort]) {
-  allSpentTimes(team: $team, user: $user, salary: $salary, offset: $offset, first: $first, state: $state, sort: $sort) {
+query ($team: ID, $user: ID, $salary: ID, $offset: Int, $first: Int, $state: String, $sort: [SpentTimeSort], $date: Date) {
+  allSpentTimes(team: $team, user: $user, salary: $salary, offset: $offset, first: $first, state: $state, sort: $sort, date: $date) {
     count
     edges {
       node {
