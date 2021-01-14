@@ -1,5 +1,3 @@
-from datetime import timedelta
-
 from jnt_django_graphene_toolbox.errors import GraphQLPermissionDenied
 
 from apps.development.models.note import NoteType
@@ -75,30 +73,6 @@ def test_filter_by_salary(user, ghl_auth_mock_info, all_spent_times_query):
 
     assert response.length == 1
     assert response.edges[0].node.id == spent_time.id
-
-
-def test_filter_by_date(user, ghl_auth_mock_info, all_spent_times_query):
-    """Test filter by date."""
-    spent = 1000
-    issue = IssueFactory.create(user=user)
-    date_in_past = (issue.created_at - timedelta(days=2)).date()
-    IssueNoteFactory.create(
-        content_object=issue,
-        type=NoteType.TIME_SPEND,
-        data={"spent": spent, "date": date_in_past},
-        user=issue.user,
-    )
-    _create_spents(issue, 1)
-    assert issue.time_spents.count() == 2
-
-    response = all_spent_times_query(
-        root=None,
-        info=ghl_auth_mock_info,
-        date=date_in_past,
-    )
-
-    assert response.length == 1
-    assert response.iterable.first().time_spent == spent
 
 
 def _create_spents(issue, size=3):
