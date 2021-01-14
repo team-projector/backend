@@ -27,11 +27,11 @@ class _SortProjectSummaries:
     def sort(
         self,
         summaries: List[IssuesProjectSummary],
-        order_by: Optional[str],
+        sort: Optional[str],
     ):
-        if order_by == "issues__remains":
+        if sort == "issues__remains":
             return sorted(summaries, key=self._get_remains)
-        elif order_by == "-issues__remains":
+        elif sort == "-issues__remains":
             return sorted(summaries, key=self._get_remains, reverse=True)
         return sorted(summaries, key=self._get_min_due_date)
 
@@ -68,13 +68,13 @@ class IssuesProjectSummaryProvider:
     def __init__(
         self,
         queryset: models.QuerySet,
-        order_by: Optional[str],
+        sort: Optional[str],
         is_active: Optional[bool],
         state: Optional[str],
     ):
         """Initialize self."""
         self.queryset = queryset
-        self.order_by = order_by
+        self.sort = sort
         self.is_active = is_active
         self.state = state
 
@@ -85,7 +85,7 @@ class IssuesProjectSummaryProvider:
         total_issues_count = self._get_total_issues_count(summaries_qs)
 
         summaries = self._get_summaries(summaries_qs, total_issues_count)
-        return sort_project_summaries(summaries, self.order_by)
+        return sort_project_summaries(summaries, self.sort)
 
     def _get_summaries(
         self,
@@ -207,14 +207,14 @@ class IssuesProjectSummaryProvider:
 
 def get_project_summaries(
     queryset: models.QuerySet,
-    order_by: Optional[str] = None,
+    sort: Optional[str] = None,
     is_active: Optional[bool] = None,
     state: Optional[str] = None,
 ) -> List[IssuesProjectSummary]:
     """Get summaries for project."""
     provider = IssuesProjectSummaryProvider(
         queryset,
-        order_by,
+        sort,
         is_active,
         state,
     )

@@ -26,13 +26,13 @@ def resolve_project_milestones(
 
 def _handle_within_summary(project: Project, **kwargs):
     """Handle project milestones within issues project summary."""
-    ordering = kwargs.get("order_by")
+    sort = kwargs.get("sort")
 
-    if ordering not in {"due_date", "-due_date"}:
+    if sort not in {"due_date", "-due_date"}:
         return project.active_milestones
 
     return sorted(
         project.active_milestones,
         key=lambda milestone: milestone.due_date or datetime.max.date(),
-        reverse=ordering == "-due_date",
+        reverse=sort == "-due_date",
     )

@@ -31,12 +31,12 @@ class IssuesSummaryType(graphene.ObjectType):
     problems_count = graphene.Int()
     projects = graphene.List(
         IssuesProjectSummary,
-        order_by=graphene.Argument(graphene.List(IssueSummaryProjectSort)),
+        sort=graphene.Argument(graphene.List(IssueSummaryProjectSort)),
         state=graphene.Argument(ProjectState),
         resolver=resolve_issues_project_summaries,
     )
     teams = graphene.List(
         IssuesTeamSummary,
-        order_by=graphene.Argument(graphene.List(TeamSort)),
+        sort=graphene.Argument(graphene.List(TeamSort)),
         resolver=resolve_issues_team_summaries,
     )

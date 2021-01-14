@@ -20,7 +20,7 @@ class IssuesTeamSummary:
 
     team: Team
     issues: TeamIssuesSummary
-    order_by: str
+    sort: str
 
 
 class IssuesTeamSummaryProvider:
@@ -29,11 +29,11 @@ class IssuesTeamSummaryProvider:
     def __init__(
         self,
         queryset: models.QuerySet,
-        order_by: Optional[str],
+        sort: Optional[str],
     ):
         """Initialize self."""
         self.queryset = queryset
-        self.order_by = order_by
+        self.sort = sort
 
     def execute(self) -> List[IssuesTeamSummary]:
         """Calculate and return summary."""
@@ -157,9 +157,9 @@ class IssuesTeamSummaryProvider:
 
 def get_team_summaries(
     queryset: models.QuerySet,
-    order_by: Optional[str] = None,
+    sort: Optional[str] = None,
 ) -> List[IssuesTeamSummary]:
     """Get summaries for team."""
-    provider = IssuesTeamSummaryProvider(queryset, order_by)
+    provider = IssuesTeamSummaryProvider(queryset, sort)
 
     return provider.execute()
