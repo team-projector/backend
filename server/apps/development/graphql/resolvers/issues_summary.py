@@ -1,3 +1,4 @@
+from apps.core.graphql.security.authentication import auth_required
 from apps.development.graphql.fields.issues import IssuesFilterSet
 from apps.development.models import Issue
 from apps.development.services.issue.allowed import filter_allowed_for_user
@@ -14,6 +15,8 @@ def resolve_issues_summary(
     **kwargs,
 ):
     """Resolve issues summary."""
+    auth_required(info)
+
     queryset = filter_allowed_for_user(Issue.objects.all(), info.context.user)
     filterset = IssuesFilterSet(
         data=kwargs,
@@ -30,6 +33,8 @@ def resolve_issues_project_summaries(
     **kwargs,
 ):
     """Resolve issues project summaries."""
+    auth_required(info)
+
     return get_project_summaries(parent.queryset, **kwargs)
 
 
@@ -39,4 +44,6 @@ def resolve_issues_team_summaries(
     **kwargs,
 ):
     """Resolve issues team summaries."""
+    auth_required(info)
+
     return get_team_summaries(parent.queryset, **kwargs)

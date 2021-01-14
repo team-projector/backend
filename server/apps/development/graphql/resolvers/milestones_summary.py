@@ -2,6 +2,7 @@ from jnt_django_graphene_toolbox.helpers.selected_fields import (
     get_fields_from_info,
 )
 
+from apps.core.graphql.security.authentication import auth_required
 from apps.development.graphql.fields import MilestonesFilterSet
 from apps.development.models import Milestone
 from apps.development.services.milestone.allowed import filter_allowed_for_user
@@ -16,6 +17,8 @@ def resolve_milestones_summary(
     **kwargs,
 ):
     """Resolve issues summary."""
+    auth_required(info)
+
     filterset = MilestonesFilterSet(
         data=kwargs,
         queryset=filter_allowed_for_user(
