@@ -34,20 +34,20 @@ class ProjectGroupsFilterSet(django_filters.FilterSet):
 
     state = EnumMultipleFilter(enum=ProjectState)
     q = SearchFilter(fields=("title", "=gl_url"))  # noqa: WPS111
-    order_by = SortHandler(ProjectGroupSort)
+    title = django_filters.CharFilter()
 
 
 class ProjectGroupsConnectionField(BaseModelConnectionField):
     """Handler for labels collections."""
 
-    filterset_class = ProjectGroupsFilterSet
     auth_required = True
+    sort_handler = SortHandler(ProjectGroupSort)
+    filterset_class = ProjectGroupsFilterSet
 
     def __init__(self):
         """Initialize."""
         super().__init__(
             "apps.development.graphql.types.ProjectGroupType",
-            order_by=graphene.Argument(graphene.List(ProjectGroupSort)),
             title=graphene.String(),
             q=graphene.String(),
             state=graphene.Argument(graphene.List(GQLProjectState)),

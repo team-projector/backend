@@ -46,20 +46,19 @@ class MilestonesFilterSet(django_filters.FilterSet):
     state = django_filters.CharFilter()
     project = ProjectFilter()
     q = SearchFilter(fields=("title", "=gl_url"))  # noqa: WPS111
-    order_by = SortHandler(MilestoneSort)
 
 
 class MilestonesConnectionField(BaseModelConnectionField):
     """Handler for labels collections."""
 
-    filterset_class = MilestonesFilterSet
     auth_required = True
+    sort_handler = SortHandler(MilestoneSort)
+    filterset_class = MilestonesFilterSet
 
     def __init__(self):
         """Initialize."""
         super().__init__(
             "apps.development.graphql.types.MilestoneType",
-            order_by=graphene.Argument(graphene.List(MilestoneSort)),
             project=graphene.ID(),
             q=graphene.String(),
             state=graphene.Argument(MilestoneState),

@@ -1,13 +1,22 @@
 from datetime import datetime, timedelta
 
-from apps.development.graphql.fields.issues import IssuesFilterSet
+import pytest
+
+from apps.development.graphql.fields.issues import (
+    IssuesConnectionField,
+    IssueSort,
+)
 from apps.development.models.issue import Issue
 from tests.test_development.factories import IssueFactory
 
-KEY_ORDERING = "order_by"
+
+@pytest.fixture()
+def sort_handler():
+    """Returns sort handler."""
+    return IssuesConnectionField.sort_handler
 
 
-def test_by_title_asc(user):
+def test_by_title_asc(user, sort_handler):
     """
     Test order by title asc.
 
@@ -19,15 +28,15 @@ def test_by_title_asc(user):
         IssueFactory.create(title="cloud", user=user),
     ]
 
-    queryset = IssuesFilterSet(
-        data={KEY_ORDERING: "title"},
-        queryset=Issue.objects.all(),
-    ).qs
+    queryset = sort_handler.filter(
+        Issue.objects.all(),
+        [IssueSort.TITLE_ASC.value],
+    )
 
     assert list(queryset) == issues
 
 
-def test_by_title_desc(user):
+def test_by_title_desc(user, sort_handler):
     """
     Test order by title desc.
 
@@ -39,15 +48,14 @@ def test_by_title_desc(user):
         IssueFactory.create(title="cloud", user=user),
     ]
 
-    queryset = IssuesFilterSet(
-        data={KEY_ORDERING: "-title"},
-        queryset=Issue.objects.all(),
-    ).qs
-
+    queryset = sort_handler.filter(
+        Issue.objects.all(),
+        [IssueSort.TITLE_DESC.value],
+    )
     assert list(queryset) == issues[::-1]
 
 
-def test_by_due_date_asc(user):
+def test_by_due_date_asc(user, sort_handler):
     """
     Test order by due date asc.
 
@@ -65,15 +73,15 @@ def test_by_due_date_asc(user):
         ),
     ]
 
-    queryset = IssuesFilterSet(
-        data={KEY_ORDERING: "due_date"},
-        queryset=Issue.objects.all(),
-    ).qs
+    queryset = sort_handler.filter(
+        Issue.objects.all(),
+        [IssueSort.DUE_DATE_ASC.value],
+    )
 
     assert list(queryset) == issues
 
 
-def test_by_due_date_desc(user):
+def test_by_due_date_desc(user, sort_handler):
     """
     Test order by due date desc.
 
@@ -91,9 +99,9 @@ def test_by_due_date_desc(user):
         ),
     ]
 
-    queryset = IssuesFilterSet(
-        data={KEY_ORDERING: "-due_date"},
-        queryset=Issue.objects.all(),
-    ).qs
+    queryset = sort_handler.filter(
+        Issue.objects.all(),
+        [IssueSort.DUE_DATE_DESC.value],
+    )
 
     assert list(queryset) == issues[::-1]

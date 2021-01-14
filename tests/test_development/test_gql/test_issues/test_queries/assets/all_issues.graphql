@@ -1,5 +1,5 @@
-query ($milestone: ID, $ticket: ID, $team: ID, $user: ID, $project: ID, $dueDate: Date, $state: IssueState, $problems: Boolean, $orderBy: [IssueSort], $offset: Int, $first: Int, $q: String) {
-  allIssues(milestone: $milestone, ticket: $ticket, team: $team, user: $user, project: $project, dueDate: $dueDate, state: $state, problems: $problems, orderBy: $orderBy, offset: $offset, first: $first, q: $q) {
+query ($milestone: ID, $ticket: ID, $team: ID, $user: ID, $project: ID, $dueDate: Date, $state: IssueState, $problems: Boolean, $sort: [IssueSort], $offset: Int, $first: Int, $q: String) {
+  allIssues(milestone: $milestone, ticket: $ticket, team: $team, user: $user, project: $project, dueDate: $dueDate, state: $state, problems: $problems, sort: $sort, offset: $offset, first: $first, q: $q) {
     count
     edges {
       node {

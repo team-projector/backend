@@ -20,21 +20,21 @@ class UserFilterSet(django_filters.FilterSet):
 
     class Meta:
         model = User
-        fields = ("is_active",)
+        fields = "__all__"
 
-    order_by = SortHandler(UserSort)
+    is_active = django_filters.BooleanFilter()
 
 
 class UsersConnectionField(BaseModelConnectionField):
     """Handler for users collections."""
 
-    filterset_class = UserFilterSet
     auth_required = True
+    sort_handler = SortHandler(UserSort)
+    filterset_class = UserFilterSet
 
     def __init__(self):
         """Initialize."""
         super().__init__(
             "apps.users.graphql.types.UserType",
             is_active=graphene.Boolean(),
-            order_by=graphene.Argument(graphene.List(UserSort)),
         )
