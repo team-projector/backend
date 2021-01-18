@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-12-17 12:14+0300\n"
+"POT-Creation-Date: 2021-01-18 16:06+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -45,6 +45,12 @@ msgstr "Управление"
 
 msgid "VN__UTILS"
 msgstr "Утилиты"
+
+msgid "MSG__INVALID_INPUT"
+msgstr ""
+
+msgid "MSG__OPERATION_NOT_PERMITTED"
+msgstr ""
 
 msgid "VN__CORE"
 msgstr "Основные приложения"
@@ -108,12 +114,6 @@ msgstr "Вы должны выбрать хотя бы одну роль"
 
 msgid "VN__DEVELOPMENT"
 msgstr "Разработка"
-
-msgid "MSG__ESTIMATE_MUST_BE_MORE_0"
-msgstr "Время выполнения задачи должно быть больше 0"
-
-msgid "MSG__DUE_DATE_SHOULD_NOT_BE_IN_THE_PAST"
-msgstr "Дата выполнения не должна быть в прошлом"
 
 msgid "CH__DEVELOPING"
 msgstr "Разработка"
@@ -402,6 +402,16 @@ msgstr " "
 
 msgid "MSG__NO_PERSONAL_GL_TOKEN"
 msgstr "Пожалуйсте, укажите персональый gitlab token"
+
+msgid "MSG__ESTIMATE_MUST_BE_MORE_0"
+msgstr "Время выполнения задачи должно быть больше 0"
+
+msgid "MSG__DUE_DATE_SHOULD_NOT_BE_IN_THE_PAST"
+msgstr "Дата выполнения не должна быть в прошлом"
+
+#, python-brace-format
+msgid "MSG__ISSUE_WAS_ATTACHED_TO_TICKET {ticket}"
+msgstr "Задача была добавлена в тикет {ticket}."
 
 msgid "Yes"
 msgstr "Да"
@@ -745,11 +755,11 @@ msgstr "Оповещать о статусах сборки проекта"
 msgid "HT__NOTIFY_PIPELINE_STATUS"
 msgstr " "
 
-msgid "MSG__UNABLE_TO_LOGIN_WITH_PROVIDED_CREDENTIALS"
-msgstr "Невозможно авторизоваться с представленным данными"
-
 msgid "MSG__MUST_INCLUDE_LOGIN_AND_PASSWORD"
 msgstr "Необходимо предоставить логин и пароль"
+
+msgid "MSG__UNABLE_TO_LOGIN_WITH_PROVIDED_CREDENTIALS"
+msgstr "Невозможно авторизоваться с представленным данными"
 
 msgid "MSG__AUTHENTICATION_ERROR"
 msgstr "Ошибка авторизации"

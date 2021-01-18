@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-12-17 12:14+0300\n"
+"POT-Creation-Date: 2021-01-18 16:06+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -43,6 +43,12 @@ msgstr "Management"
 
 msgid "VN__UTILS"
 msgstr "Utils"
+
+msgid "MSG__INVALID_INPUT"
+msgstr ""
+
+msgid "MSG__OPERATION_NOT_PERMITTED"
+msgstr ""
 
 msgid "VN__CORE"
 msgstr "Core"
@@ -106,12 +112,6 @@ msgstr "You must choose at least one role"
 
 msgid "VN__DEVELOPMENT"
 msgstr "Development"
-
-msgid "MSG__ESTIMATE_MUST_BE_MORE_0"
-msgstr "Estimate must be more 0"
-
-msgid "MSG__DUE_DATE_SHOULD_NOT_BE_IN_THE_PAST"
-msgstr "Due date should not be in the past"
 
 msgid "CH__DEVELOPING"
 msgstr "Developing"
@@ -400,6 +400,16 @@ msgstr " "
 
 msgid "MSG__NO_PERSONAL_GL_TOKEN"
 msgstr "Please fill personal gitlab token in profile"
+
+msgid "MSG__ESTIMATE_MUST_BE_MORE_0"
+msgstr "Estimate must be more 0"
+
+msgid "MSG__DUE_DATE_SHOULD_NOT_BE_IN_THE_PAST"
+msgstr "Due date should not be in the past"
+
+#, python-brace-format
+msgid "MSG__ISSUE_WAS_ATTACHED_TO_TICKET {ticket}"
+msgstr "Issue was attached to ticket {ticket}."
 
 msgid "Yes"
 msgstr "Yes"
@@ -743,11 +753,11 @@ msgstr "Notify pipeline status"
 msgid "HT__NOTIFY_PIPELINE_STATUS"
 msgstr "Notify pipeline status"
 
-msgid "MSG__UNABLE_TO_LOGIN_WITH_PROVIDED_CREDENTIALS"
-msgstr "Unable login with provided credentials"
-
 msgid "MSG__MUST_INCLUDE_LOGIN_AND_PASSWORD"
 msgstr "Must include login and password"
+
+msgid "MSG__UNABLE_TO_LOGIN_WITH_PROVIDED_CREDENTIALS"
+msgstr "Unable login with provided credentials"
 
 msgid "MSG__AUTHENTICATION_ERROR"
 msgstr "Authentication error"

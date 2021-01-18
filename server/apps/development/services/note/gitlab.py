@@ -1,5 +1,7 @@
 from typing import Optional
 
+from apps.core.gitlab import get_gitlab_client
+from apps.development.models import Issue
 from apps.development.services.note.gl.parsers import (
     CommentParser,
     MovedFromParser,
@@ -7,6 +9,7 @@ from apps.development.services.note.gl.parsers import (
     SpendResetParser,
 )
 from apps.development.services.note.gl.parsers.base import NoteReadResult
+from apps.users.models import User
 
 _notes_parsers = [
     SpendAddedParser(),
@@ -24,3 +27,13 @@ def read_note(gl_note, work_item) -> Optional[NoteReadResult]:
             return parse_data
 
     return None
+
+
+def add_issue_note(user: User, issue: Issue, message: str) -> None:
+    """Add note to issue."""
+    gl = get_gitlab_client(user.gl_token)
+
+    gl_project = gl.projects.get(issue.project.gl_id)
+    gl_issue = gl_project.issues.get(issue.gl_iid)
+
+    gl_issue.notes.create({"body": message})

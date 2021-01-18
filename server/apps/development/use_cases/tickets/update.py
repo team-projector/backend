@@ -2,6 +2,7 @@ import datetime
 from dataclasses import dataclass
 from typing import Dict, Iterable, List, Optional
 
+from django.utils.translation import gettext_lazy as _
 from rest_framework import serializers
 
 from apps.core.application.errors import (
@@ -17,6 +18,7 @@ from apps.development.models import (
     TicketState,
     TicketType,
 )
+from apps.development.tasks import add_issue_note_task
 from apps.development.use_cases.tickets.validators.ticket import (
     BaseTicketValidator,
 )
@@ -139,11 +141,18 @@ class UseCase(BaseUseCase):
 
         ticket.save()
 
+        attach_issues = validated_data.get("attach_issues")
+
         self._handle_issues(
             ticket=ticket,
             issues=validated_data.get(_ISSUES_FIELD),
-            attach_issues=validated_data.get("attach_issues"),
+            attach_issues=attach_issues,
             input_dto=input_dto,
+        )
+        self._add_issue_note(
+            input_dto.user,
+            attach_issues,
+            ticket,
         )
         self._presenter.present(OutputDto(ticket=ticket))
 
@@ -163,3 +172,19 @@ class UseCase(BaseUseCase):
             ).update(ticket=None)
 
             ticket.issues.add(*issues)
+
+    def _add_issue_note(self, user, issues, ticket) -> None:
+        """Generate tasks for create issue notes."""
+        if not issues or not user.gl_token:
+            return
+
+        note_message = _("MSG__ISSUE_WAS_ATTACHED_TO_TICKET {ticket}").format(
+            ticket="[{0}]({1})".format(ticket.title.title(), ticket.site_url),
+        )
+
+        for issue in issues:
+            add_issue_note_task.delay(
+                user_id=user.pk,
+                issue_id=issue.pk,
+                message=note_message,
+            )
