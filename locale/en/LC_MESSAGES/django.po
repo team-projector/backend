@@ -45,10 +45,10 @@ msgid "VN__UTILS"
 msgstr "Utils"
 
 msgid "MSG__INVALID_INPUT"
-msgstr ""
+msgstr "Invalid input"
 
 msgid "MSG__OPERATION_NOT_PERMITTED"
-msgstr ""
+msgstr "Operation not permitted"
 
 msgid "VN__CORE"
 msgstr "Core"

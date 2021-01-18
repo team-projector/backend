@@ -47,10 +47,10 @@ msgid "VN__UTILS"
 msgstr "Утилиты"
 
 msgid "MSG__INVALID_INPUT"
-msgstr ""
+msgstr "Ошибка выходных данных"
 
 msgid "MSG__OPERATION_NOT_PERMITTED"
-msgstr ""
+msgstr "Действие не разрешено"
 
 msgid "VN__CORE"
 msgstr "Основные приложения"
