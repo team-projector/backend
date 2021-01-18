@@ -34,3 +34,4 @@ from .projects import (
     mock_delete_project_hook,
 )
 from .users import register_user
+from .notes import mock_create_note_issue_endpoint
