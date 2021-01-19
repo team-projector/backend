@@ -20,7 +20,7 @@ class CreateTicketMutation(BaseUseCaseMutation):
         title = graphene.String()
         start_date = graphene.Date()
         due_date = graphene.Date()
-        type = graphene.Argument(  # noqa: A003 WPS125
+        type = graphene.Argument(  # noqa: WPS125
             graphene.Enum.from_enum(ticket.TicketType),
         )
         state = graphene.Argument(graphene.Enum.from_enum(ticket.TicketState))

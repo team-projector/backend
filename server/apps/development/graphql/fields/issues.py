@@ -35,7 +35,7 @@ class TicketFilter(django_filters.ModelChoiceFilter):
         """
         super().__init__(queryset=Ticket.objects.all())
 
-    def filter(  # noqa: A003, WPS125
+    def filter(  # noqa: WPS125
         self,
         queryset,
         value,  # noqa: WPS110
@@ -56,7 +56,7 @@ class MilestoneFilter(django_filters.ModelChoiceFilter):
         """Initialize self."""
         super().__init__(queryset=Milestone.objects.all())
 
-    def filter(  # noqa: A003, WPS125
+    def filter(  # noqa: WPS125
         self,
         queryset,
         value,  # noqa: WPS110
@@ -73,7 +73,7 @@ class MilestoneFilter(django_filters.ModelChoiceFilter):
 class ProblemsFilter(django_filters.BooleanFilter):
     """Filter issues by problem."""
 
-    def filter(  # noqa: A003, WPS125
+    def filter(  # noqa: WPS125
         self,
         queryset,
         value,  # noqa: WPS110
@@ -99,7 +99,7 @@ class TeamFilter(django_filters.ModelChoiceFilter):
         """Initialize self."""
         super().__init__(queryset=Team.objects.all())
 
-    def filter(  # noqa: A003, WPS125
+    def filter(  # noqa: WPS125
         self,
         queryset,
         value,  # noqa: WPS110
@@ -129,63 +129,6 @@ class IssueSort(graphene.Enum):
     STATE_DESC = "-state"  # noqa: WPS115
 
 
-class AuthorFilter(django_filters.ModelChoiceFilter):
-    """Filter issues by author."""
-
-    def __init__(self) -> None:
-        """Initialize author filter."""
-        super().__init__(queryset=User.objects.all())
-
-    def filter(  # noqa: A003, WPS125
-        self,
-        queryset,
-        value,  # noqa: WPS110
-    ) -> QuerySet:
-        """Do filtering by author."""
-        if not value:
-            return queryset
-
-        return queryset.filter(author=value)
-
-
-class AssignedFilter(django_filters.ModelChoiceFilter):
-    """Filter issues by assignee."""
-
-    def __init__(self) -> None:
-        """Initialize assigned filter."""
-        super().__init__(queryset=User.objects.all())
-
-    def filter(  # noqa: A003, WPS125
-        self,
-        queryset,
-        value,  # noqa: WPS110
-    ) -> QuerySet:
-        """Do filtering by user (assignee)."""
-        if not value:
-            return queryset
-
-        return queryset.filter(user=value)
-
-
-class ParticipantFilter(django_filters.ModelChoiceFilter):
-    """Filter issues by participant."""
-
-    def __init__(self) -> None:
-        """Initialize participant filter."""
-        super().__init__(queryset=User.objects.all())
-
-    def filter(  # noqa: A003, WPS125
-        self,
-        queryset,
-        value,  # noqa: WPS110
-    ) -> QuerySet:
-        """Do filtering by participant."""
-        if not value:
-            return queryset
-
-        return queryset.filter(participants__id=value.pk)
-
-
 class IssuesFilterSet(django_filters.FilterSet):
     """Set of filters for Issues."""
 
@@ -201,9 +144,18 @@ class IssuesFilterSet(django_filters.FilterSet):
     team = TeamFilter()
     ticket = TicketFilter()
     q = SearchFilter(fields=("title", "=gl_url"))  # noqa: WPS111
-    created_by = AuthorFilter()
-    assigned_to = AssignedFilter()
-    participated_by = ParticipantFilter()
+    created_by = django_filters.ModelChoiceFilter(
+        queryset=User.objects.all(),
+        field_name="author",
+    )
+    assigned_to = django_filters.ModelChoiceFilter(
+        queryset=User.objects.all(),
+        field_name="user",
+    )
+    participated_by = django_filters.ModelChoiceFilter(
+        queryset=User.objects.all(),
+        field_name="participants",
+    )
 
 
 class IssuesConnectionField(BaseModelConnectionField):

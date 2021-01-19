@@ -19,7 +19,7 @@ class PenaltyType(BaseModelObjectType):
     owner = graphene.Field(WorkItem)
     user = graphene.Field(UserType)
     comment = graphene.String()
-    sum = graphene.Float()  # noqa: A003 WPS125
+    sum = graphene.Float()  # noqa: WPS125
     created_by = graphene.Field(UserType)
     salary = graphene.Field(SalaryType)
     created_at = graphene.DateTime()

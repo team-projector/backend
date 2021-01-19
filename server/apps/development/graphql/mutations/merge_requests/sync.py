@@ -18,7 +18,7 @@ class SyncMergeRequestMutation(BaseUseCaseMutation):
         auth_required = True
 
     class Arguments:
-        id = graphene.ID(required=True)  # noqa: A003 WPS125
+        id = graphene.ID(required=True)  # noqa: WPS125
 
     merge_request = graphene.Field(MergeRequestType)
 

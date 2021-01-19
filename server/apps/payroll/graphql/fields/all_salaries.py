@@ -18,7 +18,7 @@ class TeamFilter(django_filters.ModelChoiceFilter):
         """Initialize self."""
         super().__init__(queryset=Team.objects.all())
 
-    def filter(  # noqa: A003, WPS125
+    def filter(  # noqa: WPS125
         self,
         queryset,
         value,  # noqa: WPS110

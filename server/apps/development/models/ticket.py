@@ -38,7 +38,7 @@ class Ticket(Timestamps):
         verbose_name_plural = _("VN__TICKETS")
         ordering = ("-created_at",)
 
-    type = EnumField(  # noqa: WPS125, A003
+    type = EnumField(  # noqa: WPS125
         enum=TicketType,
         default=TicketType.FEATURE,
         blank=True,

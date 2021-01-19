@@ -22,7 +22,7 @@ class UpdateWorkBreakMutation(BaseUseCaseMutation):
         auth_required = True
 
     class Arguments:
-        id = graphene.ID(required=True)  # noqa: A003 WPS125
+        id = graphene.ID(required=True)  # noqa: WPS125
         comment = graphene.String(required=True)
         from_date = graphene.Date(required=True)
         to_date = graphene.Date(required=True)

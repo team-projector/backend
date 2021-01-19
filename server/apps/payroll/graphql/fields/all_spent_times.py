@@ -17,7 +17,7 @@ class TeamFilter(django_filters.ModelChoiceFilter):
         """Initialize self."""
         super().__init__(queryset=Team.objects.all())
 
-    def filter(  # noqa: A003, WPS125
+    def filter(  # noqa: WPS125
         self,
         queryset,
         value,  # noqa: WPS110
@@ -37,7 +37,7 @@ class ProjectFilter(django_filters.ModelChoiceFilter):
         """Initialize self."""
         super().__init__(queryset=Project.objects.all())
 
-    def filter(  # noqa: A003, WPS125
+    def filter(  # noqa: WPS125
         self,
         queryset,
         value,  # noqa: WPS110
@@ -54,7 +54,7 @@ class ProjectFilter(django_filters.ModelChoiceFilter):
 class StateFilter(django_filters.CharFilter):
     """Filter spent times by state."""
 
-    def filter(  # noqa: A003, WPS125
+    def filter(  # noqa: WPS125
         self,
         queryset,
         value,  # noqa: WPS110
