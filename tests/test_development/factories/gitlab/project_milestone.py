@@ -8,7 +8,7 @@ from tests.helpers.gitlab import gl_format_date, gl_format_datetime
 class GlProjectMilestoneFactory(factory.DictFactory):
     """Gitlab project milestone factory."""
 
-    id = factory.Faker("random_int")  # noqa: WPS125, A003
+    id = factory.Faker("random_int")  # noqa: WPS125
     iid = factory.Faker("random_int")
     web_url = factory.Faker("url")
     group_id = factory.Faker("random_int")

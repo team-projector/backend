@@ -13,7 +13,7 @@ from apps.users.models import User
 class ApprovingFilter(django_filters.BooleanFilter):
     """Filter work breaks by approved state."""
 
-    def filter(  # noqa: A003, WPS125
+    def filter(  # noqa: WPS125
         self,
         queryset,
         value,  # noqa: WPS110
@@ -41,7 +41,7 @@ class ApprovingFilter(django_filters.BooleanFilter):
 class FromDateFilter(django_filters.DateFilter):
     """Filter work breaks by from date."""
 
-    def filter(  # noqa: A003, WPS125
+    def filter(  # noqa: WPS125
         self,
         queryset,
         value,  # noqa: WPS110
@@ -56,7 +56,7 @@ class FromDateFilter(django_filters.DateFilter):
 class ToDateFilter(django_filters.DateFilter):
     """Filter work breaks by to date."""
 
-    def filter(  # noqa: A003, WPS125
+    def filter(  # noqa: WPS125
         self,
         queryset,
         value,  # noqa: WPS110

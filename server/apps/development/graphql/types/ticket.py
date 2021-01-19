@@ -28,7 +28,7 @@ class TicketType(BaseModelObjectType):
     metrics = graphene.Field(TicketMetricsType)
     problems = graphene.List(graphene.String)
     issues = IssuesConnectionField()
-    type = graphene.Field(  # noqa: WPS125, A003
+    type = graphene.Field(  # noqa: WPS125
         graphene.Enum.from_enum(ModelTicketType),
     )
     title = graphene.String()

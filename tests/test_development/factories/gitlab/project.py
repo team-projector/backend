@@ -4,7 +4,7 @@ import factory
 class GlProjectFactory(factory.DictFactory):
     """Gitlab project factory."""
 
-    id = factory.Faker("random_int")  # noqa: WPS125, A003
+    id = factory.Faker("random_int")  # noqa: WPS125
     description = factory.Faker("word")
     name = factory.Sequence(lambda seq: "Project {0}".format(seq))
     web_url = factory.Faker("url")

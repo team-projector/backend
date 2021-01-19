@@ -21,7 +21,7 @@ class BaseTicketValidator(serializers.Serializer):
     title = serializers.CharField(max_length=DEFAULT_TITLE_LENGTH)
     start_date = serializers.DateField(allow_null=True)
     due_date = serializers.DateField(allow_null=True)
-    type = ChoicesField(  # noqa: WPS125, A003
+    type = ChoicesField(  # noqa: WPS125
         choices=TicketType.values,
         allow_blank=True,
     )

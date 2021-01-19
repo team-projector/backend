@@ -44,7 +44,7 @@ class Note(models.Model):
     updated_at = models.DateTimeField(null=True, blank=True)
     body = models.TextField()
 
-    type = EnumField(  # noqa: WPS125, A003
+    type = EnumField(  # noqa: WPS125
         enum=NoteType,
         verbose_name=_("VN__TYPE"),
         help_text=_("HT__TYPE"),

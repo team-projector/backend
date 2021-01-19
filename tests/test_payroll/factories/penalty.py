@@ -17,5 +17,5 @@ class PenaltyFactory(factory.django.DjangoModelFactory):
         after_now=False,
         tzinfo=pytz.UTC,
     )
-    sum = factory.Faker("random_int")  # noqa: WPS125, A003
+    sum = factory.Faker("random_int")  # noqa: WPS125
     created_by = factory.SubFactory(UserFactory)

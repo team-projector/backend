@@ -33,7 +33,7 @@ class TicketFilter(django_filters.ModelChoiceFilter):
         """
         super().__init__(queryset=Ticket.objects.all())
 
-    def filter(  # noqa: A003, WPS125
+    def filter(  # noqa: WPS125
         self,
         queryset,
         value,  # noqa: WPS110
@@ -54,7 +54,7 @@ class MilestoneFilter(django_filters.ModelChoiceFilter):
         """Initialize self."""
         super().__init__(queryset=Milestone.objects.all())
 
-    def filter(  # noqa: A003, WPS125
+    def filter(  # noqa: WPS125
         self,
         queryset,
         value,  # noqa: WPS110
@@ -71,7 +71,7 @@ class MilestoneFilter(django_filters.ModelChoiceFilter):
 class ProblemsFilter(django_filters.BooleanFilter):
     """Filter issues by problem."""
 
-    def filter(  # noqa: A003, WPS125
+    def filter(  # noqa: WPS125
         self,
         queryset,
         value,  # noqa: WPS110
@@ -97,7 +97,7 @@ class TeamFilter(django_filters.ModelChoiceFilter):
         """Initialize self."""
         super().__init__(queryset=Team.objects.all())
 
-    def filter(  # noqa: A003, WPS125
+    def filter(  # noqa: WPS125
         self,
         queryset,
         value,  # noqa: WPS110
@@ -141,8 +141,19 @@ class IssuesFilterSet(django_filters.FilterSet):
     project = django_filters.ModelChoiceFilter(queryset=Project.objects.all())
     team = TeamFilter()
     ticket = TicketFilter()
-    user = django_filters.ModelChoiceFilter(queryset=User.objects.all())
     q = SearchFilter(fields=("title", "=gl_url"))  # noqa: WPS111
+    created_by = django_filters.ModelChoiceFilter(
+        queryset=User.objects.all(),
+        field_name="author",
+    )
+    assigned_to = django_filters.ModelChoiceFilter(
+        queryset=User.objects.all(),
+        field_name="user",
+    )
+    participated_by = django_filters.ModelChoiceFilter(
+        queryset=User.objects.all(),
+        field_name="participants",
+    )
 
 
 class IssuesConnectionField(BaseModelConnectionField):
@@ -156,7 +167,6 @@ class IssuesConnectionField(BaseModelConnectionField):
         """Initialize."""
         super().__init__(
             "apps.development.graphql.types.IssueType",
-            user=graphene.ID(),
             milestone=graphene.ID(),
             due_date=graphene.Date(),
             problems=graphene.Boolean(),
@@ -165,4 +175,7 @@ class IssuesConnectionField(BaseModelConnectionField):
             ticket=graphene.ID(),
             q=graphene.String(),
             state=graphene.Argument(IssueState),
+            created_by=graphene.ID(),
+            assigned_to=graphene.ID(),
+            participated_by=graphene.ID(),
         )
