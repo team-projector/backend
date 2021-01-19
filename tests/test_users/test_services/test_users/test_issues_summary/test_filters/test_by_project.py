@@ -1,5 +1,5 @@
 from apps.development.models.issue import Issue
-from apps.users.graphql.resolvers.user_issues_summary import (
+from apps.users.services.user.summary.provider import (
     UserIssuesSummaryFilterSet,
 )
 from tests.test_development.factories import IssueFactory
