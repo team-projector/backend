@@ -3,7 +3,7 @@ from graphql import ResolveInfo
 from apps.core.graphql.security.authentication import auth_required
 from apps.users.models import User
 from apps.users.services.user.summary.provider import UserIssuesSummary
-from apps.users.services.user.summary.user_issues import (
+from apps.users.services.user.summary.issues import (
     get_user_issues_summary,
 )
 

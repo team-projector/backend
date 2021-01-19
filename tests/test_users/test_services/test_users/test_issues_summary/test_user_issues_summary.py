@@ -1,5 +1,5 @@
 from apps.development.models import Issue
-from apps.users.services.user.summary.user_issues import (
+from apps.users.services.user.summary.issues import (
     get_user_issues_summary,
 )
 from tests.test_development.factories import IssueFactory
