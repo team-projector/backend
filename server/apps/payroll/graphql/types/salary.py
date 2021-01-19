@@ -27,7 +27,7 @@ class SalaryType(BaseModelObjectType):
     taxes = graphene.Float()
     bonus = graphene.Float()
     penalty = graphene.Float()
-    sum = graphene.Float()  # noqa: WPS125
+    sum = graphene.Float()  # noqa: A003 WPS125
     total = graphene.Float()
     payed = graphene.Boolean()
     comment = graphene.String()

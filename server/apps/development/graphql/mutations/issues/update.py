@@ -16,7 +16,7 @@ class UpdateIssueMutation(BaseUseCaseMutation):
         auth_required = True
 
     class Arguments:
-        id = graphene.ID(required=True)  # noqa: WPS125
+        id = graphene.ID(required=True)  # noqa: A003 WPS125
         ticket = graphene.ID(required=True)
 
     issue = graphene.Field(IssueType)

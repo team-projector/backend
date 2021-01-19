@@ -16,7 +16,7 @@ class ApproveWorkBreakMutation(BaseUseCaseMutation):
         auth_required = True
 
     class Arguments:
-        id = graphene.ID(required=True)  # noqa: WPS125
+        id = graphene.ID(required=True)  # noqa: A003 WPS125
 
     work_break = graphene.Field(WorkBreakType)
 

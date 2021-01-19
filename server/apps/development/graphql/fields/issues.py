@@ -21,6 +21,8 @@ from apps.development.services.issue.problems import (
 )
 from apps.users.models import User
 
+# TODO: move filters
+
 
 class TicketFilter(django_filters.ModelChoiceFilter):
     """Filter issues by ticket."""
@@ -127,6 +129,63 @@ class IssueSort(graphene.Enum):
     STATE_DESC = "-state"  # noqa: WPS115
 
 
+class AuthorFilter(django_filters.ModelChoiceFilter):
+    """Filter issues by author."""
+
+    def __init__(self) -> None:
+        """Initialize author filter."""
+        super().__init__(queryset=User.objects.all())
+
+    def filter(  # noqa: A003, WPS125
+        self,
+        queryset,
+        value,  # noqa: WPS110
+    ) -> QuerySet:
+        """Do filtering by author."""
+        if not value:
+            return queryset
+
+        return queryset.filter(author=value)
+
+
+class AssignedFilter(django_filters.ModelChoiceFilter):
+    """Filter issues by assignee."""
+
+    def __init__(self) -> None:
+        """Initialize assigned filter."""
+        super().__init__(queryset=User.objects.all())
+
+    def filter(  # noqa: A003, WPS125
+        self,
+        queryset,
+        value,  # noqa: WPS110
+    ) -> QuerySet:
+        """Do filtering by user (assignee)."""
+        if not value:
+            return queryset
+
+        return queryset.filter(user=value)
+
+
+class ParticipantFilter(django_filters.ModelChoiceFilter):
+    """Filter issues by participant."""
+
+    def __init__(self) -> None:
+        """Initialize participant filter."""
+        super().__init__(queryset=User.objects.all())
+
+    def filter(  # noqa: A003, WPS125
+        self,
+        queryset,
+        value,  # noqa: WPS110
+    ) -> QuerySet:
+        """Do filtering by participant."""
+        if not value:
+            return queryset
+
+        return queryset.filter(participants__id=value.pk)
+
+
 class IssuesFilterSet(django_filters.FilterSet):
     """Set of filters for Issues."""
 
@@ -141,8 +200,10 @@ class IssuesFilterSet(django_filters.FilterSet):
     project = django_filters.ModelChoiceFilter(queryset=Project.objects.all())
     team = TeamFilter()
     ticket = TicketFilter()
-    user = django_filters.ModelChoiceFilter(queryset=User.objects.all())
     q = SearchFilter(fields=("title", "=gl_url"))  # noqa: WPS111
+    created_by = AuthorFilter()
+    assigned_to = AssignedFilter()
+    participated_by = ParticipantFilter()
 
 
 class IssuesConnectionField(BaseModelConnectionField):
@@ -156,7 +217,6 @@ class IssuesConnectionField(BaseModelConnectionField):
         """Initialize."""
         super().__init__(
             "apps.development.graphql.types.IssueType",
-            user=graphene.ID(),
             milestone=graphene.ID(),
             due_date=graphene.Date(),
             problems=graphene.Boolean(),
@@ -165,4 +225,7 @@ class IssuesConnectionField(BaseModelConnectionField):
             ticket=graphene.ID(),
             q=graphene.String(),
             state=graphene.Argument(IssueState),
+            created_by=graphene.ID(),
+            assigned_to=graphene.ID(),
+            participated_by=graphene.ID(),
         )

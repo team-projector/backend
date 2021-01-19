@@ -16,7 +16,7 @@ class DeclineWorkBreakMutation(BaseUseCaseMutation):
         auth_required = True
 
     class Arguments:
-        id = graphene.ID(required=True)  # noqa: WPS125
+        id = graphene.ID(required=True)  # noqa: A003 WPS125
         decline_reason = graphene.String(required=True)
 
     work_break = graphene.Field(WorkBreakType)

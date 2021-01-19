@@ -16,7 +16,7 @@ class AddSpentToIssueMutation(BaseUseCaseMutation):
         auth_required = True
 
     class Arguments:
-        id = graphene.ID(required=True)  # noqa: WPS125
+        id = graphene.ID(required=True)  # noqa: A003 WPS125
         seconds = graphene.Int(required=True)
 
     issue = graphene.Field(IssueType)
