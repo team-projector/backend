@@ -11,7 +11,8 @@ from jnt_django_graphene_toolbox.types import BaseModelObjectType
 
 from apps.skills.graphql.types import PositionType
 from apps.users.graphql.fields import UserWorkBreaksConnectionField
-from apps.users.graphql.types.user_metrics import UserMetricsType
+from apps.users.graphql.resolvers import resolve_user_issues_summary
+from apps.users.graphql.types import UserIssuesSummaryType, UserMetricsType
 from apps.users.models import User
 from apps.users.services.user.metrics.main import UserMetricsProvider
 from apps.users.services.user.problems import get_user_problems
@@ -41,6 +42,12 @@ class UserType(BaseModelObjectType):
     metrics = graphene.Field(UserMetricsType)
     problems = graphene.List(graphene.String)
     work_breaks = UserWorkBreaksConnectionField()
+    issues_summary = graphene.Field(
+        UserIssuesSummaryType,
+        resolver=resolve_user_issues_summary,
+        project=graphene.ID(),
+        due_date=graphene.Date(),
+    )
 
     @classmethod
     def get_queryset(
