@@ -17,7 +17,7 @@ class ProjectFilter(django_filters.ModelChoiceFilter):
         kwargs.setdefault("queryset", Project.objects.all())
         super().__init__(*args, **kwargs)
 
-    def filter(  # noqa: A003 WPS125
+    def filter(  # noqa: WPS125
         self,
         queryset,
         project,

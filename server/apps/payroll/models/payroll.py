@@ -14,7 +14,7 @@ class Payroll(Timestamps):
         verbose_name_plural = _("VN__PAYROLLS")
         ordering = ("-created_at",)
 
-    sum = MoneyField(  # noqa: WPS125, A003
+    sum = MoneyField(  # noqa: WPS125
         default=0,
         verbose_name=_("VN__SUM"),
         help_text=_("HT__SUM"),

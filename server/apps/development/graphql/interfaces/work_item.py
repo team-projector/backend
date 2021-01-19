@@ -7,7 +7,7 @@ from apps.users.graphql.types import UserType
 class WorkItem(graphene.Interface):
     """Work item interface."""
 
-    id = graphene.ID(required=True)  # noqa: WPS125, A003
+    id = graphene.ID(required=True)  # noqa: WPS125
     title = graphene.String()
     gl_id = graphene.Int()
     gl_url = graphene.String()
