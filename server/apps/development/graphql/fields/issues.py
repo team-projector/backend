@@ -21,8 +21,6 @@ from apps.development.services.issue.problems import (
 )
 from apps.users.models import User
 
-# TODO: move filters
-
 
 class TicketFilter(django_filters.ModelChoiceFilter):
     """Filter issues by ticket."""
