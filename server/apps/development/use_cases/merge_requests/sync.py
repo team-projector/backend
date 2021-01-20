@@ -2,7 +2,7 @@ from dataclasses import dataclass
 
 from rest_framework import serializers
 
-from apps.core.application.use_cases import BasePresenter, BaseUseCase
+from apps.core.application.use_cases import BaseUseCase
 from apps.development.models import MergeRequest
 from apps.development.tasks import sync_project_merge_request_task
 
@@ -29,14 +29,10 @@ class InputDtoValidator(serializers.Serializer):
     )
 
 
-class UseCase(BaseUseCase):
+class UseCase(BaseUseCase[InputDto, OutputDto]):
     """Usecase for updating merge requests."""
 
-    def __init__(self, presenter: BasePresenter):
-        """Initialize."""
-        self._presenter = presenter
-
-    def execute(self, input_dto: InputDto) -> None:
+    def execute(self, input_dto: InputDto) -> OutputDto:
         """Main logic here."""
         validated_data = self.validate_input(input_dto, InputDtoValidator)
 
@@ -47,4 +43,4 @@ class UseCase(BaseUseCase):
                 merge_request.gl_iid,
             )
 
-        self._presenter.present(OutputDto(merge_request=merge_request))
+        return OutputDto(merge_request=merge_request)

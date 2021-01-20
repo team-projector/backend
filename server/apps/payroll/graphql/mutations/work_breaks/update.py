@@ -6,19 +6,14 @@ from graphql import ResolveInfo
 from apps.core.graphql.mutations import BaseUseCaseMutation
 from apps.payroll.graphql.types import WorkBreakType
 from apps.payroll.models.work_break import WorkBreakReason
-from apps.payroll.use_cases.work_breaks import UpdateWorkBreakUseCase
-from apps.payroll.use_cases.work_breaks.update import (
-    UpdateWorkBreakData,
-    UpdateWorkBreakInputDto,
-    UpdateWorkBreakOutputDto,
-)
+from apps.payroll.use_cases.work_breaks import update as work_break_update
 
 
 class UpdateWorkBreakMutation(BaseUseCaseMutation):
     """Update work break after validation."""
 
     class Meta:
-        use_case_class = UpdateWorkBreakUseCase
+        use_case_class = work_break_update.UseCase
         auth_required = True
 
     class Arguments:
@@ -43,9 +38,9 @@ class UpdateWorkBreakMutation(BaseUseCaseMutation):
         **kwargs,
     ):
         """Prepare use case input data."""
-        return UpdateWorkBreakInputDto(
+        return work_break_update.InputDto(
             user=info.context.user,  # type: ignore
-            data=UpdateWorkBreakData(
+            data=work_break_update.UpdateWorkBreakData(
                 work_break=kwargs["id"],
                 comment=kwargs["comment"],
                 from_date=kwargs["from_date"],
@@ -61,7 +56,7 @@ class UpdateWorkBreakMutation(BaseUseCaseMutation):
         cls,
         root: Optional[object],
         info: ResolveInfo,  # noqa: WPS110
-        output_dto: UpdateWorkBreakOutputDto,
+        output_dto: work_break_update.OutputDto,
     ) -> Dict[str, object]:
         """Prepare response data."""
         return {

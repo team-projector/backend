@@ -1,11 +1,11 @@
 import abc
 import dataclasses
-from typing import TypeVar
+from typing import Dict, Generic, TypeVar
 
 from apps.core.application.errors import InvalidInputApplicationError
 
-TInputDto = TypeVar("TInputDto")
-TOutputDto = TypeVar("TOutputDto")
+TInput = TypeVar("TInput")
+TOutput = TypeVar("TOutput")
 
 
 class Empty:
@@ -19,14 +19,14 @@ class Empty:
 empty = Empty()
 
 
-class BaseUseCase(abc.ABC):
+class BaseUseCase(Generic[TInput, TOutput], metaclass=abc.ABCMeta):
     """Base class for use cases."""
 
     @abc.abstractmethod
-    def execute(self, input_dto) -> None:
+    def execute(self, input_dto: TInput) -> TOutput:
         """Main logic here."""
 
-    def validate_input(self, input_data, validator_class):
+    def validate_input(self, input_data, validator_class) -> Dict[str, object]:
         """
         Validate input data.
 

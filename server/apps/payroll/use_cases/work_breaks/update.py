@@ -5,7 +5,7 @@ from typing import Optional
 from rest_framework import serializers
 
 from apps.core.application.errors import AccessDeniedApplicationError
-from apps.core.application.use_cases import BasePresenter, BaseUseCase
+from apps.core.application.use_cases import BaseUseCase
 from apps.payroll.models.work_break import WorkBreak, WorkBreakReason
 from apps.payroll.services.work_break.allowed import can_manage_work_break
 from apps.payroll.use_cases.work_breaks.create import (
@@ -28,7 +28,7 @@ class UpdateWorkBreakData:
 
 
 @dataclass(frozen=True)
-class UpdateWorkBreakInputDto:
+class InputDto:
     """Update workbreak input dto."""
 
     user: User
@@ -36,7 +36,7 @@ class UpdateWorkBreakInputDto:
 
 
 @dataclass(frozen=True)
-class UpdateWorkBreakOutputDto:
+class OutputDto:
     """Update workbreak output dto."""
 
     work_break: WorkBreak
@@ -50,14 +50,10 @@ class InputDtoValidator(CreateWorkBreakInputDtoValidator):
     )
 
 
-class UpdateWorkBreakUseCase(BaseUseCase):
+class UseCase(BaseUseCase[InputDto, OutputDto]):
     """Usecase for updating workbreaks."""
 
-    def __init__(self, presenter: BasePresenter):
-        """Initialize."""
-        self._presenter = presenter
-
-    def execute(self, input_dto: UpdateWorkBreakInputDto) -> None:
+    def execute(self, input_dto: InputDto) -> OutputDto:
         """Main logic here."""
         validated_data = self.validate_input(input_dto.data, InputDtoValidator)
 
@@ -76,8 +72,4 @@ class UpdateWorkBreakUseCase(BaseUseCase):
 
         work_break.save()
 
-        self._presenter.present(
-            UpdateWorkBreakOutputDto(
-                work_break=work_break,
-            ),
-        )
+        return OutputDto(work_break=work_break)

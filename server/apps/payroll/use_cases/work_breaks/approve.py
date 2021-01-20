@@ -3,7 +3,7 @@ from dataclasses import dataclass
 from rest_framework import serializers
 
 from apps.core.application.errors import AccessDeniedApplicationError
-from apps.core.application.use_cases import BasePresenter, BaseUseCase
+from apps.core.application.use_cases import BaseUseCase
 from apps.payroll.models.work_break import WorkBreak
 from apps.payroll.services import work_break as work_break_service
 from apps.payroll.services.work_break.allowed import (
@@ -42,14 +42,10 @@ class InputDtoValidator(serializers.Serializer):
     )
 
 
-class UseCase(BaseUseCase):
+class UseCase(BaseUseCase[InputDto, OutputDto]):
     """Usecase for create workbreaks."""
 
-    def __init__(self, presenter: BasePresenter):
-        """Initialize."""
-        self._presenter = presenter
-
-    def execute(self, input_dto: InputDto) -> None:
+    def execute(self, input_dto: InputDto) -> OutputDto:
         """Main logic here."""
         validated_data = self.validate_input(input_dto.data, InputDtoValidator)
         work_break = validated_data["work_break"]
@@ -61,8 +57,4 @@ class UseCase(BaseUseCase):
             approved_by=input_dto.user,
         )
 
-        self._presenter.present(
-            OutputDto(
-                work_break=work_break,
-            ),
-        )
+        return OutputDto(work_break=work_break)

@@ -6,19 +6,14 @@ from graphql import ResolveInfo
 from apps.core.graphql.mutations import BaseUseCaseMutation
 from apps.payroll.graphql.types import WorkBreakType
 from apps.payroll.models.work_break import WorkBreakReason
-from apps.payroll.use_cases.work_breaks import UseCase
-from apps.payroll.use_cases.work_breaks.create import (
-    CreateWorkBreakData,
-    InputDto,
-    OutputDto,
-)
+from apps.payroll.use_cases.work_breaks import create as work_break_create
 
 
 class CreateWorkBreakMutation(BaseUseCaseMutation):
     """Create work break mutation."""
 
     class Meta:
-        use_case_class = UseCase
+        use_case_class = work_break_create.UseCase
         auth_required = True
 
     class Arguments:
@@ -42,9 +37,9 @@ class CreateWorkBreakMutation(BaseUseCaseMutation):
         **kwargs,
     ):
         """Prepare use case input data."""
-        return InputDto(
+        return work_break_create.InputDto(
             user=info.context.user,  # type: ignore
-            data=CreateWorkBreakData(
+            data=work_break_create.CreateWorkBreakData(
                 comment=kwargs["comment"],
                 from_date=kwargs["from_date"],
                 to_date=kwargs["to_date"],
@@ -59,7 +54,7 @@ class CreateWorkBreakMutation(BaseUseCaseMutation):
         cls,
         root: Optional[object],
         info: ResolveInfo,  # noqa: WPS110
-        output_dto: OutputDto,
+        output_dto: work_break_create.OutputDto,
     ) -> Dict[str, object]:
         """Prepare response data."""
         return {

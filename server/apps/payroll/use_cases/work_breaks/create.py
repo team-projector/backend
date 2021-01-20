@@ -4,7 +4,7 @@ from typing import Dict, Optional
 
 from rest_framework import serializers
 
-from apps.core.application.use_cases import BasePresenter, BaseUseCase
+from apps.core.application.use_cases import BaseUseCase
 from apps.payroll.models.work_break import WorkBreak, WorkBreakReason
 from apps.users.models import User
 
@@ -77,14 +77,10 @@ class InputDtoValidator(serializers.Serializer):
         )  # noqa: WPS601
 
 
-class UseCase(BaseUseCase):
+class UseCase(BaseUseCase[InputDto, OutputDto]):
     """Usecase for create workbreaks."""
 
-    def __init__(self, presenter: BasePresenter):
-        """Initialize."""
-        self._presenter = presenter
-
-    def execute(self, input_dto: InputDto) -> None:
+    def execute(self, input_dto: InputDto) -> OutputDto:
         """Main logic here."""
         validated_data = self.validate_input(input_dto.data, InputDtoValidator)
 
@@ -101,8 +97,4 @@ class UseCase(BaseUseCase):
 
         work_break.save()
 
-        self._presenter.present(
-            OutputDto(
-                work_break=work_break,
-            ),
-        )
+        return OutputDto(work_break=work_break)

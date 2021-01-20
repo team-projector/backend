@@ -2,7 +2,7 @@ from dataclasses import dataclass
 
 from rest_framework import serializers
 
-from apps.core.application.use_cases import BasePresenter, BaseUseCase
+from apps.core.application.use_cases import BaseUseCase
 from apps.development.models import Issue
 from apps.development.services.errors import NoPersonalGitLabToken
 from apps.development.services.issue.allowed import check_permissions
@@ -40,14 +40,10 @@ class InputDtoValidator(serializers.Serializer):
     seconds = serializers.IntegerField(min_value=1)
 
 
-class UseCase(BaseUseCase):
+class UseCase(BaseUseCase[InputDto, OutputDto]):
     """Usecase for updating issues."""
 
-    def __init__(self, presenter: BasePresenter):
-        """Initialize."""
-        self._presenter = presenter
-
-    def execute(self, input_dto: InputDto) -> None:
+    def execute(self, input_dto: InputDto) -> OutputDto:
         """Main logic here."""
         gl_token = input_dto.user.gl_token
         if not gl_token:
@@ -64,4 +60,4 @@ class UseCase(BaseUseCase):
             validated_data["seconds"],
         )
 
-        self._presenter.present(OutputDto(issue=issue))
+        return OutputDto(issue=issue)

@@ -3,7 +3,7 @@ from dataclasses import dataclass
 from rest_framework import serializers
 
 from apps.core.application.errors import AccessDeniedApplicationError
-from apps.core.application.use_cases import BasePresenter, BaseUseCase
+from apps.core.application.use_cases import BaseUseCase
 from apps.payroll.models.work_break import WorkBreak
 from apps.payroll.services.work_break.allowed import can_manage_work_break
 from apps.users.models import User
@@ -24,6 +24,11 @@ class InputDto:
     user: User
 
 
+@dataclass(frozen=True)
+class OutputDto:
+    """Delete work break output dto."""
+
+
 class InputDtoValidator(serializers.Serializer):
     """InputSerializer."""
 
@@ -32,14 +37,10 @@ class InputDtoValidator(serializers.Serializer):
     )
 
 
-class UseCase(BaseUseCase):
+class UseCase(BaseUseCase[InputDto, OutputDto]):
     """Use case for declining work breaks."""
 
-    def __init__(self, presenter: BasePresenter):
-        """Initialize."""
-        self._presenter = presenter
-
-    def execute(self, input_dto: InputDto) -> None:
+    def execute(self, input_dto: InputDto) -> OutputDto:
         """Main logic here."""
         validated_data = self.validate_input(input_dto.data, InputDtoValidator)
 
@@ -48,3 +49,5 @@ class UseCase(BaseUseCase):
             raise AccessDeniedApplicationError()
 
         work_break.delete()
+
+        return OutputDto()

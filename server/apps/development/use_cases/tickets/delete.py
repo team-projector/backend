@@ -3,7 +3,7 @@ from dataclasses import dataclass
 from rest_framework import serializers
 
 from apps.core.application.errors import AccessDeniedApplicationError
-from apps.core.application.use_cases import BasePresenter, BaseUseCase
+from apps.core.application.use_cases import BaseUseCase
 from apps.development.models import Ticket
 from apps.users.models import User
 
@@ -23,6 +23,11 @@ class InputDto:
     user: User
 
 
+@dataclass(frozen=True)
+class OutputDto:
+    """Delete ticket output dto."""
+
+
 class InputDtoValidator(serializers.Serializer):
     """InputSerializer."""
 
@@ -31,17 +36,15 @@ class InputDtoValidator(serializers.Serializer):
     )
 
 
-class UseCase(BaseUseCase):
+class UseCase(BaseUseCase[InputDto, OutputDto]):
     """Use case for declining tickets."""
 
-    def __init__(self, presenter: BasePresenter):
-        """Initialize."""
-        self._presenter = presenter
-
-    def execute(self, input_dto: InputDto) -> None:
+    def execute(self, input_dto: InputDto) -> OutputDto:
         """Main logic here."""
         if not input_dto.user.is_project_manager:
             raise AccessDeniedApplicationError()
 
         validated_data = self.validate_input(input_dto.data, InputDtoValidator)
         validated_data["ticket"].delete()
+
+        return OutputDto()
