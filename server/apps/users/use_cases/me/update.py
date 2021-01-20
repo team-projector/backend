@@ -3,12 +3,7 @@ from typing import Dict, Union
 
 from rest_framework import serializers
 
-from apps.core.application.use_cases import (
-    BasePresenter,
-    BaseUseCase,
-    Empty,
-    empty,
-)
+from apps.core.application.use_cases import BaseUseCase, Empty, empty
 from apps.users.models import User
 
 
@@ -59,14 +54,10 @@ class InputDtoValidator(serializers.Serializer):
     )
 
 
-class UseCase(BaseUseCase):
+class UseCase(BaseUseCase[InputDto, OutputDto]):
     """Usecase for updating issues."""
 
-    def __init__(self, presenter: BasePresenter):
-        """Initialize."""
-        self._presenter = presenter
-
-    def execute(self, input_dto: InputDto) -> None:
+    def execute(self, input_dto: InputDto) -> OutputDto:
         """Main logic here."""
         validated_data = self.validate_input(input_dto.data, InputDtoValidator)
 
@@ -75,13 +66,12 @@ class UseCase(BaseUseCase):
 
         user.save()
 
-        self._presenter.present(OutputDto(user=user))
+        return OutputDto(user=user)
 
     def _update_user(
         self,
         user: User,
-        validated_data: Dict[str, Union[str, Empty]],
+        validated_data: Dict[str, object],
     ) -> None:
         for attr_name, attr_value in validated_data.items():
-            if attr_value != empty:
-                setattr(user, attr_name, attr_value or "")
+            setattr(user, attr_name, attr_value or "")

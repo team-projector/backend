@@ -4,7 +4,7 @@ from jnt_django_graphene_toolbox.errors import GraphQLPermissionDenied
 from rest_framework import serializers
 
 from apps.core.application.errors import AccessDeniedApplicationError
-from apps.core.application.use_cases import BasePresenter, BaseUseCase
+from apps.core.application.use_cases import BaseUseCase
 from apps.development.models import Milestone, Project, ProjectGroup
 from apps.development.services.milestone.allowed import filter_allowed_for_user
 from apps.development.tasks import (
@@ -44,14 +44,10 @@ class InputDtoValidator(serializers.Serializer):
     )
 
 
-class UseCase(BaseUseCase):
+class UseCase(BaseUseCase[InputDto, OutputDto]):
     """Usecase for updating milestones."""
 
-    def __init__(self, presenter: BasePresenter):
-        """Initialize."""
-        self._presenter = presenter
-
-    def execute(self, input_dto: InputDto) -> None:
+    def execute(self, input_dto: InputDto) -> OutputDto:
         """Main logic here."""
         validated_data = self.validate_input(input_dto.data, InputDtoValidator)
 
@@ -69,7 +65,7 @@ class UseCase(BaseUseCase):
                 milestone.gl_id,
             )
 
-        self._presenter.present(OutputDto(milestone=milestone))
+        return OutputDto(milestone=milestone)
 
     def _check_permissions(self, user: User, milestone: Milestone):
         try:

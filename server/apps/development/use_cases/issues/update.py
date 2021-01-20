@@ -4,7 +4,7 @@ from django.db import transaction
 from rest_framework import serializers
 
 from apps.core.application.errors import AccessDeniedApplicationError
-from apps.core.application.use_cases import BasePresenter, BaseUseCase
+from apps.core.application.use_cases import BaseUseCase
 from apps.development.models import Issue, Ticket
 from apps.development.services.issue.allowed import filter_allowed_for_user
 from apps.development.tasks import propagate_ticket_to_related_issues_task
@@ -48,14 +48,10 @@ class InputDtoValidator(serializers.Serializer):
     )
 
 
-class UseCase(BaseUseCase):
+class UseCase(BaseUseCase[InputDto, OutputDto]):
     """Usecase for updating issues."""
 
-    def __init__(self, presenter: BasePresenter):
-        """Initialize."""
-        self._presenter = presenter
-
-    def execute(self, input_dto: InputDto) -> None:
+    def execute(self, input_dto: InputDto) -> OutputDto:
         """Main logic here."""
         validated_data = self.validate_input(input_dto.data, InputDtoValidator)
 
@@ -71,7 +67,7 @@ class UseCase(BaseUseCase):
             ),
         )
 
-        self._presenter.present(OutputDto(issue=issue))
+        return OutputDto(issue=issue)
 
     def _check_permissions(self, user: User, issue: Issue):
         allowed_for_user = filter_allowed_for_user(

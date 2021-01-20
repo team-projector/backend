@@ -5,7 +5,7 @@ from typing import Dict, List, Optional
 from django.utils.translation import gettext_lazy as _
 from rest_framework import serializers
 
-from apps.core.application.use_cases import BasePresenter, BaseUseCase
+from apps.core.application.use_cases import BaseUseCase
 from apps.core.gitlab import get_gitlab_client
 from apps.development.models import Issue, Milestone, Project
 from apps.development.services.errors import NoPersonalGitLabToken
@@ -79,14 +79,10 @@ class InputDtoValidator(serializers.Serializer):
         return due_date
 
 
-class UseCase(BaseUseCase):
+class UseCase(BaseUseCase[InputDto, OutputDto]):
     """Usecase for updating issues."""
 
-    def __init__(self, presenter: BasePresenter):
-        """Initialize."""
-        self._presenter = presenter
-
-    def execute(self, input_dto: InputDto) -> None:
+    def execute(self, input_dto: InputDto) -> OutputDto:
         """Main logic here."""
         gl_token = input_dto.user.gl_token
         if not gl_token:
@@ -110,9 +106,7 @@ class UseCase(BaseUseCase):
             gl_issue,
         )
 
-        self._presenter.present(
-            OutputDto(issue=Issue.objects.get(gl_id=gl_issue.id)),
-        )
+        return OutputDto(issue=Issue.objects.get(gl_id=gl_issue.id))
 
     def _prepare_new_issue_request_body(self, issue_data) -> Dict[str, object]:
         request_body = {

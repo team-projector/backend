@@ -9,7 +9,7 @@ from apps.core.application.errors import (
     AccessDeniedApplicationError,
     InvalidInputApplicationError,
 )
-from apps.core.application.use_cases import BasePresenter, BaseUseCase
+from apps.core.application.use_cases import BaseUseCase
 from apps.development.models import Milestone, Ticket, TicketState, TicketType
 from apps.development.use_cases.tickets.validators.ticket import (
     BaseTicketValidator,
@@ -73,14 +73,10 @@ class InputDtoValidator(BaseTicketValidator):
     )
 
 
-class UseCase(BaseUseCase):
+class UseCase(BaseUseCase[InputDto, OutputDto]):
     """Usecase for updating tickets."""
 
-    def __init__(self, presenter: BasePresenter):
-        """Initialize."""
-        self._presenter = presenter
-
-    def execute(self, input_dto: InputDto) -> None:
+    def execute(self, input_dto: InputDto) -> OutputDto:
         """Main logic here."""
         if not input_dto.user.is_project_manager:
             raise AccessDeniedApplicationError()
@@ -101,4 +97,4 @@ class UseCase(BaseUseCase):
         ticket.save()
         ticket.issues.add(*validated_data.get(_ISSUES_FIELD))
 
-        self._presenter.present(OutputDto(ticket=ticket))
+        return OutputDto(ticket=ticket)

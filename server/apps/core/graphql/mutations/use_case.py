@@ -17,7 +17,6 @@ from apps.core.application.errors import (
 )
 from apps.core.application.use_cases import BaseUseCase
 from apps.core.graphql.errors import GenericGraphQLError
-from apps.core.graphql.mutations import MutationPresenter
 
 
 class UseCaseMutationOptions(SerializerMutationOptions):
@@ -54,11 +53,12 @@ class BaseUseCaseMutation(BaseMutation):
         **kwargs,
     ) -> Union["BaseUseCaseMutation", GraphQLError]:
         """Overrideable mutation operation."""
-        presenter = MutationPresenter()
-        use_case = cls._meta.use_case_class(presenter)
+        use_case = cls._meta.use_case_class()
 
         try:
-            use_case.execute(cls.get_input_dto(root, info, **kwargs))
+            output_dto = use_case.execute(
+                cls.get_input_dto(root, info, **kwargs),
+            )
         except InvalidInputApplicationError as err:
             return GraphQLInputError(err.errors)
         except AccessDeniedApplicationError:
@@ -67,7 +67,7 @@ class BaseUseCaseMutation(BaseMutation):
             return GenericGraphQLError(err)
         else:
             return cls(
-                **cls.get_response_data(root, info, presenter.output_dto),
+                **cls.get_response_data(root, info, output_dto),
             )
 
     @classmethod
