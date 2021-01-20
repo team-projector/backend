@@ -82,14 +82,6 @@ class UseCase(BaseUseCase):
         user: User,
         validated_data: Dict[str, Union[str, Empty]],
     ) -> None:
-        name = validated_data.get("name", empty)
-        if name != empty:
-            user.name = name or ""
-
-        email = validated_data.get("email", empty)
-        if email != empty:
-            user.email = email or ""
-
-        gl_token = validated_data.get("gl_token", empty)
-        if gl_token != empty:
-            user.gl_token = gl_token or ""
+        for attr_name, attr_value in validated_data.items():
+            if attr_value != empty:
+                setattr(user, attr_name, attr_value or "")
