@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from typing import Union
+from typing import Dict, Union
 
 from rest_framework import serializers
 
@@ -71,7 +71,17 @@ class UseCase(BaseUseCase):
         validated_data = self.validate_input(input_dto.data, InputDtoValidator)
 
         user = input_dto.user
+        self._update_user(user, validated_data)
 
+        user.save()
+
+        self._presenter.present(OutputDto(user=user))
+
+    def _update_user(
+        self,
+        user: User,
+        validated_data: Dict[str, Union[str, Empty]],
+    ) -> None:
         name = validated_data.get("name", empty)
         if name != empty:
             user.name = name or ""
@@ -83,7 +93,3 @@ class UseCase(BaseUseCase):
         gl_token = validated_data.get("gl_token", empty)
         if gl_token != empty:
             user.gl_token = gl_token or ""
-
-        user.save()
-
-        self._presenter.present(OutputDto(user=user))
