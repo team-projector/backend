@@ -1,2 +1,2 @@
 from .presenter import BasePresenter
-from .base import BaseUseCase
+from .base import BaseUseCase, empty, Empty

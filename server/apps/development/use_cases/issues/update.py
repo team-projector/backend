@@ -34,7 +34,7 @@ class OutputDto:
     issue: Issue
 
 
-class InputDtoSerializer(serializers.Serializer):
+class InputDtoValidator(serializers.Serializer):
     """InputSerializer."""
 
     class Meta:
@@ -57,10 +57,7 @@ class UseCase(BaseUseCase):
 
     def execute(self, input_dto: InputDto) -> None:
         """Main logic here."""
-        validated_data = self.validate_input(
-            input_dto.data,
-            InputDtoSerializer,
-        )
+        validated_data = self.validate_input(input_dto.data, InputDtoValidator)
 
         issue = validated_data["issue"]
         self._check_permissions(input_dto.user, issue)

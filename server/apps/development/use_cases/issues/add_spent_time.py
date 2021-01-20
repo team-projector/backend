@@ -33,7 +33,7 @@ class OutputDto:
     issue: Issue
 
 
-class InputDtoSerializer(serializers.Serializer):
+class InputDtoValidator(serializers.Serializer):
     """InputSerializer."""
 
     issue = serializers.PrimaryKeyRelatedField(queryset=Issue.objects.all())
@@ -53,10 +53,7 @@ class UseCase(BaseUseCase):
         if not gl_token:
             raise NoPersonalGitLabToken
 
-        validated_data = self.validate_input(
-            input_dto.data,
-            InputDtoSerializer,
-        )
+        validated_data = self.validate_input(input_dto.data, InputDtoValidator)
 
         issue = validated_data["issue"]
         check_permissions(input_dto.user, issue)

@@ -34,7 +34,7 @@ class OutputDto:
     work_break: WorkBreak
 
 
-class InputDtoSerializer(serializers.Serializer):
+class InputDtoValidator(serializers.Serializer):
     """InputSerializer."""
 
     work_break = serializers.PrimaryKeyRelatedField(
@@ -51,10 +51,7 @@ class UseCase(BaseUseCase):
 
     def execute(self, input_dto: InputDto) -> None:
         """Main logic here."""
-        validated_data = self.validate_input(
-            input_dto.data,
-            InputDtoSerializer,
-        )
+        validated_data = self.validate_input(input_dto.data, InputDtoValidator)
         work_break = validated_data["work_break"]
 
         if not can_approve_decline_work_breaks(work_break, input_dto.user):

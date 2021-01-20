@@ -21,7 +21,7 @@ class OutputDto:
     merge_request: MergeRequest
 
 
-class InputDtoSerializer(serializers.Serializer):
+class InputDtoValidator(serializers.Serializer):
     """InputSerializer."""
 
     merge_request = serializers.PrimaryKeyRelatedField(
@@ -38,7 +38,7 @@ class UseCase(BaseUseCase):
 
     def execute(self, input_dto: InputDto) -> None:
         """Main logic here."""
-        validated_data = self.validate_input(input_dto, InputDtoSerializer)
+        validated_data = self.validate_input(input_dto, InputDtoValidator)
 
         merge_request = validated_data["merge_request"]
         if merge_request.project:

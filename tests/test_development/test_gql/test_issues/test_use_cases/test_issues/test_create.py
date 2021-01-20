@@ -2,7 +2,7 @@ from datetime import datetime, timedelta
 
 import pytest
 
-from apps.development.use_cases.issues.create import InputDtoSerializer
+from apps.development.use_cases.issues.create import InputDtoValidator
 from tests.test_development.factories import ProjectFactory
 
 
@@ -23,7 +23,7 @@ def test_valid_data(user, project, context):
     user.gl_token = "token"
     user.save()
 
-    serializer = InputDtoSerializer(
+    serializer = InputDtoValidator(
         data=_source_data(user, project),
         context=context,
     )
@@ -40,7 +40,7 @@ def test_estimate_as_none(user, project, context):
 
     source_data = _source_data(user, project)
     source_data[estimate_field] = None
-    serializer = InputDtoSerializer(
+    serializer = InputDtoValidator(
         data=source_data,
         context=context,
     )
@@ -63,7 +63,7 @@ def test_no_valid_fields(user, project, context, field, field_value):
 
     source_data = _source_data(user, project)
     source_data[field] = field_value
-    serializer = InputDtoSerializer(
+    serializer = InputDtoValidator(
         data=source_data,
         context=context,
     )
