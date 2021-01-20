@@ -36,7 +36,7 @@ class OutputDto:
     work_break: WorkBreak
 
 
-class InputDtoSerializer(serializers.Serializer):
+class InputDtoValidator(serializers.Serializer):
     """InputSerializer."""
 
     comment = serializers.CharField()
@@ -86,10 +86,7 @@ class UseCase(BaseUseCase):
 
     def execute(self, input_dto: InputDto) -> None:
         """Main logic here."""
-        validated_data = self.validate_input(
-            input_dto.data,
-            InputDtoSerializer,
-        )
+        validated_data = self.validate_input(input_dto.data, InputDtoValidator)
 
         work_break = WorkBreak()
         work_break.comment = validated_data["comment"]

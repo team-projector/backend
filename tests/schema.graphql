@@ -1,0 +1,995 @@
+schema {
+  query: Query
+  mutation: Mutation
+}
+
+type AddSpentToIssueMutation {
+  issue: Issue
+}
+
+type ApproveWorkBreakMutation {
+  workBreak: WorkBreak
+}
+
+enum ApprovedState {
+  CREATED
+  APPROVED
+  DECLINED
+}
+
+scalar BitField
+
+type Bonus implements ModelRelayNode {
+  id: ID!
+  owner: WorkItem
+  user: User
+  comment: String
+  sum: Float
+  createdBy: User
+  salary: Salary
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+type BonusTypeConnection {
+  pageInfo: PageInfo!
+  edges: [BonusTypeEdge]!
+  count: Int
+}
+
+type BonusTypeEdge {
+  node: Bonus
+  cursor: String!
+}
+
+type CompleteGitlabAuthMutation {
+  token: Token
+}
+
+type CreateIssueMutation {
+  issue: Issue
+}
+
+type CreateTicketMutation {
+  ticket: Ticket
+}
+
+type CreateWorkBreakMutation {
+  workBreak: WorkBreak
+}
+
+scalar Date
+
+scalar DateTime
+
+type DeclineWorkBreakMutation {
+  workBreak: WorkBreak
+}
+
+type DeleteTicketMutation {
+  ok: Boolean
+}
+
+type DeleteWorkBreakMutation {
+  ok: Boolean
+}
+
+type DjangoDebug {
+  sql: [DjangoDebugSQL]
+}
+
+type DjangoDebugSQL {
+  vendor: String!
+  alias: String!
+  sql: String
+  duration: Float!
+  rawSql: String!
+  params: String!
+  startTime: Float!
+  stopTime: Float!
+  isSlow: Boolean!
+  isSelect: Boolean!
+  transId: String
+  transStatus: String
+  isoLevel: String
+  encoding: String
+}
+
+type GitlabServiceStatusType {
+  name: String
+  time: DateTime
+}
+
+type GitlabStatusType {
+  services: [GitlabServiceStatusType]
+  lastIssues: [Issue]
+  lastSync: DateTime
+}
+
+type Issue implements ModelRelayNode, WorkItem {
+  id: ID!
+  title: String
+  glId: Int
+  glUrl: String
+  glLastSync: DateTime
+  glIid: Int
+  project: Project
+  labels(offset: Int, before: String, after: String, first: Int, last: Int): LabelTypeConnection
+  user: User
+  metrics: IssueMetricsType
+  problems: [String]
+  timeSpent: Int
+  author: User
+  participants(isActive: Boolean, offset: Int, sort: [UserSort], before: String, after: String, first: Int, last: Int): UserTypeConnection
+  description: String
+  timeEstimate: Int
+  totalTimeSpent: Int
+  state: IssueState
+  createdAt: DateTime
+  updatedAt: DateTime
+  closedAt: DateTime
+  dueDate: Date
+  isMerged: Boolean
+  milestone: Milestone
+  ticket: Ticket
+  mergeRequests(user: ID, project: ID, state: MergeRequestState, team: ID, offset: Int, sort: [MergeRequestSort], before: String, after: String, first: Int, last: Int): MergeRequestTypeConnection
+}
+
+type IssueMetricsType {
+  remains: Int
+  efficiency: Float
+  payroll: Float
+  paid: Float
+}
+
+enum IssueSort {
+  DUE_DATE_ASC
+  DUE_DATE_DESC
+  TITLE_ASC
+  TITLE_DESC
+  CREATED_AT_ASC
+  CREATED_AT_DESC
+  CLOSED_AT_ASC
+  CLOSED_AT_DESC
+  USER_ASC
+  USER_DESC
+  STATE_ASC
+  STATE_DESC
+}
+
+enum IssueState {
+  OPENED
+  CLOSED
+}
+
+enum IssueSummaryProjectSort {
+  ISSUES_REMAINS_ASC
+  ISSUES_REMAINS_DESC
+}
+
+type IssueTeamMetricsType {
+  count: Int
+  openedCount: Int
+  openedEstimated: Int
+}
+
+type IssueTypeConnection {
+  pageInfo: PageInfo!
+  edges: [IssueTypeEdge]!
+  count: Int
+}
+
+type IssueTypeEdge {
+  node: Issue
+  cursor: String!
+}
+
+type IssueUserMetricsType {
+  closedSpent: Float
+  openedSpent: Float
+  payrollClosed: Float
+  payrollOpened: Float
+  payroll: Float
+  taxesClosed: Float
+  taxesOpened: Float
+  taxes: Float
+  openedCount: Int
+}
+
+type IssuesProjectSummary {
+  project: Project
+  issues: ProjectIssuesSummary
+}
+
+type IssuesSpentTimesSummaryType {
+  spent: Int
+  closedSpent: Int
+  openedSpent: Int
+}
+
+type IssuesSummaryType {
+  count: Int
+  openedCount: Int
+  closedCount: Int
+  timeSpent: Int
+  problemsCount: Int
+  projects(sort: [IssueSummaryProjectSort], state: ProjectState): [IssuesProjectSummary]
+  teams(sort: [TeamSort]): [IssuesTeamSummary]
+}
+
+type IssuesTeamSummary {
+  team: Team
+  issues: ProjectIssuesSummary
+}
+
+type Label implements ModelRelayNode {
+  id: ID!
+  title: String
+  color: String
+}
+
+type LabelTypeConnection {
+  pageInfo: PageInfo!
+  edges: [LabelTypeEdge]!
+  count: Int
+}
+
+type LabelTypeEdge {
+  node: Label
+  cursor: String!
+}
+
+type LoginGitlabMutation {
+  redirectUrl: String
+}
+
+type LoginMutation {
+  token: Token
+}
+
+type LogoutMutation {
+  status: String
+}
+
+type MergeRequest implements ModelRelayNode, WorkItem {
+  id: ID!
+  title: String
+  glId: Int
+  glUrl: String
+  glLastSync: DateTime
+  glIid: Int
+  project: Project
+  labels(offset: Int, before: String, after: String, first: Int, last: Int): LabelTypeConnection
+  user: User
+  timeEstimate: Int
+  totalTimeSpent: Int
+  state: MergeRequestState
+  createdAt: DateTime
+  updatedAt: DateTime
+  closedAt: DateTime
+  author: User
+  milestone: Milestone
+  participants(isActive: Boolean, offset: Int, sort: [UserSort], before: String, after: String, first: Int, last: Int): UserTypeConnection
+  metrics: MergeRequestMetricsType
+  problems: [String]
+}
+
+type MergeRequestMetricsType {
+  remains: Int
+  efficiency: Float
+  payroll: Float
+  paid: Float
+}
+
+enum MergeRequestSort {
+  TITLE_ASC
+  TITLE_DESC
+  CREATED_AT_ASC
+  CREATED_AT_DESC
+  CLOSED_AT_ASC
+  CLOSED_AT_DESC
+}
+
+enum MergeRequestState {
+  OPENED
+  MERGED
+  CLOSED
+}
+
+type MergeRequestTeamMetricsType {
+  count: Int
+  openedCount: Int
+  openedEstimated: Int
+}
+
+type MergeRequestTypeConnection {
+  pageInfo: PageInfo!
+  edges: [MergeRequestTypeEdge]!
+  count: Int
+}
+
+type MergeRequestTypeEdge {
+  node: MergeRequest
+  cursor: String!
+}
+
+type MergeRequestUserMetricsType {
+  closedSpent: Float
+  openedSpent: Float
+  payrollClosed: Float
+  payrollOpened: Float
+  payroll: Float
+  taxesClosed: Float
+  taxesOpened: Float
+  taxes: Float
+  openedCount: Int
+}
+
+type MergeRequestsSpentTimesSummaryType {
+  spent: Int
+  closedSpent: Int
+  openedSpent: Int
+  mergedSpent: Int
+}
+
+type MergeRequestsSummaryType {
+  count: Int
+  openedCount: Int
+  closedCount: Int
+  mergedCount: Int
+}
+
+type Milestone implements ModelRelayNode {
+  id: ID!
+  metrics: MilestoneMetricsType
+  owner: MilestoneOwner
+  problems: [String]
+  glUrl: String
+  glIid: Int
+  glLastSync: String
+  createdAt: DateTime
+  title: String
+  description: String
+  startDate: Date
+  state: MilestoneState
+  dueDate: Date
+  budget: Float
+}
+
+type MilestoneMetricsType {
+  budgetSpent: Float
+  payroll: Float
+  budgetRemains: Int
+  profit: Int
+  timeEstimate: Int
+  timeSpent: Int
+  timeRemains: Int
+  issuesCount: Int
+  issuesOpenedCount: Int
+  issuesClosedCount: Int
+  efficiency: Float
+}
+
+interface MilestoneOwner {
+  id: ID!
+  title: String
+  fullTitle: String
+  glId: Int
+  glUrl: String
+  glLastSync: DateTime
+  glAvatar: String
+}
+
+enum MilestoneSort {
+  DUE_DATE_ASC
+  DUE_DATE_DESC
+}
+
+enum MilestoneState {
+  ACTIVE
+  CLOSED
+}
+
+type MilestoneTypeConnection {
+  pageInfo: PageInfo!
+  edges: [MilestoneTypeEdge]!
+  count: Int
+}
+
+type MilestoneTypeEdge {
+  node: Milestone
+  cursor: String!
+}
+
+type MilestonesSummaryType {
+  count: Int
+  activeCount: Int
+  closedCount: Int
+}
+
+interface ModelRelayNode {
+  id: ID!
+}
+
+type Mutation {
+  completeGitlabAuth(code: String!, state: String!): CompleteGitlabAuthMutation
+  loginGitlab: LoginGitlabMutation
+  login(login: String!, password: String!): LoginMutation
+  logout: LogoutMutation
+  updateMe(input: UpdateMeInput): UpdateMeMutation
+  approveWorkBreak(id: ID!): ApproveWorkBreakMutation
+  createWorkBreak(comment: String!, fromDate: Date!, paidDays: Int, reason: WorkBreakReason!, toDate: Date!, user: ID!): CreateWorkBreakMutation
+  declineWorkBreak(declineReason: String!, id: ID!): DeclineWorkBreakMutation
+  deleteWorkBreak(id: ID!): DeleteWorkBreakMutation
+  updateWorkBreak(comment: String!, fromDate: Date!, id: ID!, paidDays: Int, reason: WorkBreakReason!, toDate: Date!, user: ID!): UpdateWorkBreakMutation
+  syncMilestone(id: ID!): SyncMilestoneMutation
+  createTicket(attachIssues: [ID], dueDate: Date, estimate: Int, issues: [ID], milestone: ID!, role: String, startDate: Date, state: TicketState, title: String, type: TicketType, url: String): CreateTicketMutation
+  deleteTicket(id: ID!): DeleteTicketMutation
+  updateTicket(attachIssues: [ID], dueDate: Date, estimate: Int, id: ID!, issues: [ID], milestone: ID, role: String, startDate: Date, state: TicketState, title: String, type: TicketType, url: String): UpdateTicketMutation
+  addSpendTimeIssue(id: ID!, seconds: Int!): AddSpentToIssueMutation
+  syncIssue(id: ID!): SyncIssueMutation
+  updateIssue(id: ID!, ticket: ID!): UpdateIssueMutation
+  createIssue(dueDate: Date!, estimate: Int, labels: [String], milestone: ID, project: ID!, title: String!, user: ID!): CreateIssueMutation
+  syncMergeRequest(id: ID!): SyncMergeRequestMutation
+}
+
+type PageInfo {
+  hasNextPage: Boolean!
+  hasPreviousPage: Boolean!
+  startCursor: String
+  endCursor: String
+}
+
+type Penalty implements ModelRelayNode {
+  id: ID!
+  owner: WorkItem
+  user: User
+  comment: String
+  sum: Float
+  createdBy: User
+  salary: Salary
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+type PenaltyTypeConnection {
+  pageInfo: PageInfo!
+  edges: [PenaltyTypeEdge]!
+  count: Int
+}
+
+type PenaltyTypeEdge {
+  node: Penalty
+  cursor: String!
+}
+
+type Position implements ModelRelayNode {
+  id: ID!
+  title: String
+}
+
+type Project implements ModelRelayNode, MilestoneOwner {
+  id: ID!
+  title: String
+  fullTitle: String
+  glId: Int
+  glUrl: String
+  glLastSync: DateTime
+  glAvatar: String
+  isActive: Boolean
+  state: ProjectState
+  group: ProjectGroup
+  milestones(project: ID, q: String, state: MilestoneState, offset: Int, sort: [MilestoneSort], before: String, after: String, first: Int, last: Int): MilestoneTypeConnection
+  metrics: ProjectMetricsType
+  team: Team
+}
+
+type ProjectGroup implements ModelRelayNode, MilestoneOwner {
+  id: ID!
+  title: String
+  fullTitle: String
+  glId: Int
+  glUrl: String
+  glLastSync: DateTime
+  glAvatar: String
+  isActive: Boolean
+  milestones(project: ID, q: String, state: MilestoneState, offset: Int, sort: [MilestoneSort], before: String, after: String, first: Int, last: Int): MilestoneTypeConnection
+  team: Team
+  state: ProjectState
+  metrics: ProjectGroupMetricsType
+}
+
+type ProjectGroupMetricsType {
+  budget: Float
+  budgetSpent: Float
+  budgetRemains: Float
+  payroll: Float
+  profit: Float
+}
+
+enum ProjectGroupSort {
+  TITLE_ASC
+  TITLE_DESC
+  STATE_ASC
+  STATE_DESC
+  FULL_TITLE_ASC
+  FULL_TITLE_DESC
+}
+
+type ProjectGroupTypeConnection {
+  pageInfo: PageInfo!
+  edges: [ProjectGroupTypeEdge]!
+  count: Int
+}
+
+type ProjectGroupTypeEdge {
+  node: ProjectGroup
+  cursor: String!
+}
+
+type ProjectGroupsSummaryType {
+  count: Int
+  archivedCount: Int
+  supportingCount: Int
+  developingCount: Int
+}
+
+type ProjectIssuesSummary {
+  openedCount: Int
+  percentage: Float
+  remains: Int
+}
+
+type ProjectMetricsType {
+  budget: Float
+  budgetSpent: Float
+  budgetRemains: Float
+  payroll: Float
+  profit: Float
+}
+
+enum ProjectSort {
+  TITLE_ASC
+  TITLE_DESC
+  STATE_ASC
+  STATE_DESC
+  FULL_TITLE_ASC
+  FULL_TITLE_DESC
+}
+
+enum ProjectState {
+  DEVELOPING
+  SUPPORTING
+  ARCHIVED
+}
+
+type ProjectTypeConnection {
+  pageInfo: PageInfo!
+  edges: [ProjectTypeEdge]!
+  count: Int
+}
+
+type ProjectTypeEdge {
+  node: Project
+  cursor: String!
+}
+
+type ProjectsSummaryType {
+  count: Int
+  archivedCount: Int
+  supportingCount: Int
+  developingCount: Int
+}
+
+type Query {
+  user(id: ID!): User
+  allUsers(isActive: Boolean, offset: Int, sort: [UserSort], before: String, after: String, first: Int, last: Int): UserTypeConnection
+  userProgressMetrics(user: ID!, start: Date!, end: Date!, group: String!): [UserProgressMetricsType]
+  me: User
+  bonus(id: ID!): Bonus
+  allBonuses(user: ID, salary: ID, team: ID, offset: Int, before: String, after: String, first: Int, last: Int): BonusTypeConnection
+  workBreak(id: ID!): WorkBreak
+  allWorkBreaks(user: ID, team: ID, approving: Boolean, fromDate: Date, toDate: Date, offset: Int, sort: [WorkBreakSort], before: String, after: String, first: Int, last: Int): WorkBreakTypeConnection
+  allSpentTimes(user: ID, project: ID, team: ID, state: String, salary: ID, date: Date, offset: Int, sort: [SpentTimeSort], before: String, after: String, first: Int, last: Int): SpentTimeTypeConnection
+  spentTimesSummary(project: ID, team: ID, user: ID, state: String, date: Date, salary: ID): SpentTimesSummaryType
+  penalty(id: ID!): Penalty
+  allPenalties(user: ID, salary: ID, team: ID, offset: Int, before: String, after: String, first: Int, last: Int): PenaltyTypeConnection
+  salary(id: ID!): Salary
+  allSalaries(user: ID, team: ID, offset: Int, before: String, after: String, first: Int, last: Int): SalaryTypeConnection
+  allProjectGroups(title: String, q: String, state: [ProjectState], offset: Int, sort: [ProjectGroupSort], before: String, after: String, first: Int, last: Int): ProjectGroupTypeConnection
+  projectGroupsSummary: ProjectGroupsSummaryType
+  gitlabStatus: GitlabStatusType
+  team(id: ID!): Team
+  allTeams(title: String, roles: String, q: String, offset: Int, sort: [TeamSort], before: String, after: String, first: Int, last: Int): TeamTypeConnection
+  teamProgressMetrics(team: ID!, start: Date!, end: Date!, group: String!): [TeamMemberProgressMetricsType]
+  project(id: ID!): Project
+  allProjects(q: String, title: String, state: [ProjectState], offset: Int, sort: [ProjectSort], before: String, after: String, first: Int, last: Int): ProjectTypeConnection
+  projectsSummary: ProjectsSummaryType
+  milestone(id: ID!): Milestone
+  allMilestones(project: ID, q: String, state: MilestoneState, offset: Int, sort: [MilestoneSort], before: String, after: String, first: Int, last: Int): MilestoneTypeConnection
+  milestonesSummary: MilestonesSummaryType
+  allMergeRequests(user: ID, project: ID, state: MergeRequestState, team: ID, offset: Int, sort: [MergeRequestSort], before: String, after: String, first: Int, last: Int): MergeRequestTypeConnection
+  mergeRequestsSummary(user: ID, team: ID, project: ID, state: String): MergeRequestsSummaryType
+  ticket(id: ID!): Ticket
+  allTickets(milestone: ID, state: TicketState, offset: Int, sort: [TicketSort], before: String, after: String, first: Int, last: Int): TicketTypeConnection
+  ticketsSummary(milestone: ID): TicketsSummaryType
+  issue(id: ID!): Issue
+  allIssues(milestone: ID, dueDate: Date, problems: Boolean, project: ID, team: ID, ticket: ID, q: String, state: IssueState, createdBy: ID, assignedTo: ID, participatedBy: ID, offset: Int, sort: [IssueSort], before: String, after: String, first: Int, last: Int): IssueTypeConnection
+  issuesSummary(dueDate: Date, user: ID, team: ID, state: String, problems: Boolean, project: ID, milestone: ID, ticket: ID): IssuesSummaryType
+  _debug: DjangoDebug
+}
+
+type Salary implements ModelRelayNode {
+  id: ID!
+  owner: WorkItem
+  user: User
+  createdAt: DateTime
+  periodFrom: DateTime
+  periodTo: DateTime
+  chargedTime: Int
+  hourRate: Float
+  taxRate: Float
+  taxes: Float
+  bonus: Float
+  penalty: Float
+  sum: Float
+  total: Float
+  payed: Boolean
+  comment: String
+  createdBy: User
+  position: Position
+}
+
+type SalaryTypeConnection {
+  pageInfo: PageInfo!
+  edges: [SalaryTypeEdge]!
+  count: Int
+}
+
+type SalaryTypeEdge {
+  node: Salary
+  cursor: String!
+}
+
+type SpentTime implements ModelRelayNode {
+  id: ID!
+  owner: WorkItem
+  user: User
+  sum: Float
+  createdBy: User
+  salary: Salary
+  createdAt: DateTime
+  updatedAt: DateTime
+  date: Date
+  customerSum: Float
+  hourRate: Float
+  taxRate: Float
+  customerRate: Float
+  timeSpent: Float
+}
+
+enum SpentTimeSort {
+  DATE_ASC
+  DATE_DESC
+  CREATED_AT_ASC
+  CREATED_AT_DESC
+}
+
+type SpentTimeTypeConnection {
+  pageInfo: PageInfo!
+  edges: [SpentTimeTypeEdge]!
+  count: Int
+}
+
+type SpentTimeTypeEdge {
+  node: SpentTime
+  cursor: String!
+}
+
+type SpentTimesSummaryType {
+  spent: Int
+  openedSpent: Int
+  closedSpent: Int
+  issues: IssuesSpentTimesSummaryType
+  mergeRequests: MergeRequestsSpentTimesSummaryType
+}
+
+type SyncIssueMutation {
+  issue: Issue
+}
+
+type SyncMergeRequestMutation {
+  mergeRequest: MergeRequest
+}
+
+type SyncMilestoneMutation {
+  milestone: Milestone
+}
+
+type Team implements ModelRelayNode {
+  id: ID!
+  title: String
+  metrics: TeamMetricsType
+  members(roles: String, offset: Int, sort: [TeamMemberSort], before: String, after: String, first: Int, last: Int): TeamMemberTypeConnection
+}
+
+type TeamMember implements ModelRelayNode {
+  id: ID!
+  roles: BitField
+  user: User
+}
+
+type TeamMemberProgressMetricsType {
+  user: User
+  metrics: [UserProgressMetricsType]
+}
+
+enum TeamMemberSort {
+  USER_NAME_ASC
+  USER_NAME_DESC
+}
+
+type TeamMemberTypeConnection {
+  pageInfo: PageInfo!
+  edges: [TeamMemberTypeEdge]!
+  count: Int
+}
+
+type TeamMemberTypeEdge {
+  node: TeamMember
+  cursor: String!
+}
+
+type TeamMetricsType {
+  problemsCount: Int
+  issues: IssueTeamMetricsType
+  mergeRequests: MergeRequestTeamMetricsType
+}
+
+enum TeamSort {
+  TITLE_ASC
+  TITLE_DESC
+}
+
+type TeamTypeConnection {
+  pageInfo: PageInfo!
+  edges: [TeamTypeEdge]!
+  count: Int
+}
+
+type TeamTypeEdge {
+  node: Team
+  cursor: String!
+}
+
+type Ticket implements ModelRelayNode {
+  id: ID!
+  createdAt: DateTime
+  metrics: TicketMetricsType
+  problems: [String]
+  issues(milestone: ID, dueDate: Date, problems: Boolean, project: ID, team: ID, ticket: ID, q: String, state: IssueState, createdBy: ID, assignedTo: ID, participatedBy: ID, offset: Int, sort: [IssueSort], before: String, after: String, first: Int, last: Int): IssueTypeConnection
+  type: TicketType
+  title: String
+  startDate: Date
+  dueDate: Date
+  url: String
+  role: String
+  estimate: Int
+  state: TicketState
+  milestone: Milestone
+}
+
+type TicketMetricsType {
+  timeEstimate: Int
+  timeSpent: Int
+  timeRemains: Int
+  issuesCount: Int
+  issuesClosedCount: Int
+  issuesOpenedCount: Int
+  efficiency: Float
+  budgetEstimate: Float
+  budgetSpent: Float
+  budgetRemains: Float
+  payroll: Float
+  profit: Float
+  openedTimeRemains: Int
+}
+
+enum TicketSort {
+  DUE_DATE_ASC
+  DUE_DATE_DESC
+  START_DATE_ASC
+  START_DATE_DESC
+  TITLE_ASC
+  TITLE_DESC
+  STATE_ASC
+  STATE_DESC
+}
+
+enum TicketState {
+  CREATED
+  PLANNING
+  DOING
+  TESTING
+  ACCEPTING
+  DONE
+}
+
+enum TicketType {
+  FEATURE
+  IMPROVEMENT
+  BUG_FIXING
+}
+
+type TicketTypeConnection {
+  pageInfo: PageInfo!
+  edges: [TicketTypeEdge]!
+  count: Int
+}
+
+type TicketTypeEdge {
+  node: Ticket
+  cursor: String!
+}
+
+type TicketsSummaryType {
+  count: Int
+  createdCount: Int
+  planningCount: Int
+  doingCount: Int
+  testingCount: Int
+  acceptingCount: Int
+  doneCount: Int
+}
+
+type Token implements ModelRelayNode {
+  id: ID!
+  key: String
+  created: DateTime
+}
+
+type UpdateIssueMutation {
+  issue: Issue
+}
+
+input UpdateMeInput {
+  name: String
+  email: String
+  glToken: String
+}
+
+type UpdateMeMutation {
+  me: User
+}
+
+type UpdateTicketMutation {
+  ticket: Ticket
+}
+
+type UpdateWorkBreakMutation {
+  workBreak: WorkBreak
+}
+
+type User implements ModelRelayNode {
+  id: ID!
+  name: String
+  login: String
+  lastLogin: DateTime
+  email: String
+  glToken: String
+  position: Position
+  isActive: Boolean
+  hourRate: Float
+  customerHourRate: Float
+  taxRate: Float
+  annualPaidWorkBreaksDays: Float
+  roles: BitField
+  glAvatar: String
+  dailyWorkHours: Int
+  teams(offset: Int, before: String, after: String, first: Int, last: Int): TeamTypeConnection
+  metrics: UserMetricsType
+  problems: [String]
+  workBreaks(approving: Boolean, fromDate: Date, toDate: Date, offset: Int, sort: [WorkBreakSort], before: String, after: String, first: Int, last: Int): WorkBreakTypeConnection
+}
+
+type UserMetricsType {
+  payrollClosed: Float
+  payrollOpened: Float
+  payroll: Float
+  paidWorkBreaksDays: Int
+  bonus: Float
+  penalty: Float
+  openedSpent: Float
+  closedSpent: Float
+  taxesClosed: Float
+  taxesOpened: Float
+  taxes: Float
+  issues: IssueUserMetricsType
+  mergeRequests: MergeRequestUserMetricsType
+  lastSalaryDate: Date
+}
+
+type UserProgressMetricsType {
+  start: Date
+  end: Date
+  timeEstimate: Int
+  timeSpent: Int
+  timeRemains: Int
+  issuesCount: Int
+  loading: Int
+  efficiency: Float
+  payroll: Float
+  paid: Float
+  plannedWorkHours: Int
+}
+
+enum UserSort {
+  LOGIN_ASC
+  LOGIN_DESC
+  NAME_ASC
+  NAME_DESC
+}
+
+type UserTypeConnection {
+  pageInfo: PageInfo!
+  edges: [UserTypeEdge]!
+  count: Int
+}
+
+type UserTypeEdge {
+  node: User
+  cursor: String!
+}
+
+type WorkBreak implements ModelRelayNode {
+  id: ID!
+  createdAt: DateTime
+  updatedAt: DateTime
+  approvedAt: DateTime
+  fromDate: Date
+  toDate: Date
+  approvedBy: User
+  approveState: ApprovedState
+  declineReason: String
+  comment: String
+  paid: Boolean
+  user: User
+  paidDays: Int
+  reason: WorkBreakReason
+}
+
+enum WorkBreakReason {
+  DAYOFF
+  VACATION
+  DISEASE
+}
+
+enum WorkBreakSort {
+  FROM_DATE_ASC
+  FROM_DATE_DESC
+  TO_DATE_ASC
+  TO_DATE_DESC
+}
+
+type WorkBreakTypeConnection {
+  pageInfo: PageInfo!
+  edges: [WorkBreakTypeEdge]!
+  count: Int
+}
+
+type WorkBreakTypeEdge {
+  node: WorkBreak
+  cursor: String!
+}
+
+interface WorkItem {
+  id: ID!
+  title: String
+  glId: Int
+  glUrl: String
+  glLastSync: DateTime
+  glIid: Int
+  project: Project
+  labels(offset: Int, before: String, after: String, first: Int, last: Int): LabelTypeConnection
+  user: User
+}

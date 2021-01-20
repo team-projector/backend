@@ -8,6 +8,17 @@ TInputDto = TypeVar("TInputDto")
 TOutputDto = TypeVar("TOutputDto")
 
 
+class Empty:
+    """Represents not filled value."""
+
+    def __deepcopy__(self, memodict):
+        """No copy, but himself."""
+        return self
+
+
+empty = Empty()
+
+
 class BaseUseCase(abc.ABC):
     """Base class for use cases."""
 
@@ -21,7 +32,13 @@ class BaseUseCase(abc.ABC):
 
         Raise exception if data is invalid.
         """
-        validator = validator_class(data=dataclasses.asdict(input_data))
+        to_validate = {
+            data_key: data_value
+            for data_key, data_value in dataclasses.asdict(input_data).items()
+            if data_value != empty
+        }
+
+        validator = validator_class(data=to_validate)
         if not validator.is_valid():
             raise InvalidInputApplicationError(validator.errors)
 

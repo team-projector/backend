@@ -23,7 +23,7 @@ class InputDto:
     user: User
 
 
-class InputDtoSerializer(serializers.Serializer):
+class InputDtoValidator(serializers.Serializer):
     """InputSerializer."""
 
     ticket = serializers.PrimaryKeyRelatedField(
@@ -43,8 +43,5 @@ class UseCase(BaseUseCase):
         if not input_dto.user.is_project_manager:
             raise AccessDeniedApplicationError()
 
-        validated_data = self.validate_input(
-            input_dto.data,
-            InputDtoSerializer,
-        )
+        validated_data = self.validate_input(input_dto.data, InputDtoValidator)
         validated_data["ticket"].delete()

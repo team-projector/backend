@@ -64,7 +64,7 @@ class OutputDto:
     ticket: Ticket
 
 
-class InputDtoSerializer(BaseTicketValidator):
+class InputDtoValidator(BaseTicketValidator):
     """InputSerializer."""
 
     milestone = serializers.PrimaryKeyRelatedField(
@@ -85,7 +85,7 @@ class UseCase(BaseUseCase):
         if not input_dto.user.is_project_manager:
             raise AccessDeniedApplicationError()
 
-        validator = InputDtoSerializer(
+        validator = InputDtoValidator(
             data=dataclasses.asdict(input_dto.data),
             context={"user": input_dto.user},
         )

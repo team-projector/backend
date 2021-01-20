@@ -9,7 +9,7 @@ from apps.core.application.use_cases import BasePresenter, BaseUseCase
 from apps.payroll.models.work_break import WorkBreak, WorkBreakReason
 from apps.payroll.services.work_break.allowed import can_manage_work_break
 from apps.payroll.use_cases.work_breaks.create import (
-    InputDtoSerializer as CreateWorkBreakInputDtoSerializer,
+    InputDtoValidator as CreateWorkBreakInputDtoValidator,
 )
 from apps.users.models import User
 
@@ -42,7 +42,7 @@ class UpdateWorkBreakOutputDto:
     work_break: WorkBreak
 
 
-class InputDtoSerializer(CreateWorkBreakInputDtoSerializer):
+class InputDtoValidator(CreateWorkBreakInputDtoValidator):
     """InputSerializer."""
 
     work_break = serializers.PrimaryKeyRelatedField(
@@ -59,10 +59,7 @@ class UpdateWorkBreakUseCase(BaseUseCase):
 
     def execute(self, input_dto: UpdateWorkBreakInputDto) -> None:
         """Main logic here."""
-        validated_data = self.validate_input(
-            input_dto.data,
-            InputDtoSerializer,
-        )
+        validated_data = self.validate_input(input_dto.data, InputDtoValidator)
 
         work_break = validated_data["work_break"]
         if not can_manage_work_break(work_break, input_dto.user):

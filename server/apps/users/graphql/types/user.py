@@ -29,6 +29,7 @@ class UserType(BaseModelObjectType):
     login = graphene.String()
     last_login = graphene.DateTime()
     email = graphene.String()
+    gl_token = graphene.String()
     position = graphene.Field(PositionType)
     is_active = graphene.Boolean()
     hour_rate = graphene.Float()

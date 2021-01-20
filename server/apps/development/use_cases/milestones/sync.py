@@ -36,7 +36,7 @@ class OutputDto:
     milestone: Milestone
 
 
-class InputDtoSerializer(serializers.Serializer):
+class InputDtoValidator(serializers.Serializer):
     """InputSerializer."""
 
     milestone = serializers.PrimaryKeyRelatedField(
@@ -53,10 +53,7 @@ class UseCase(BaseUseCase):
 
     def execute(self, input_dto: InputDto) -> None:
         """Main logic here."""
-        validated_data = self.validate_input(
-            input_dto.data,
-            InputDtoSerializer,
-        )
+        validated_data = self.validate_input(input_dto.data, InputDtoValidator)
 
         milestone = validated_data["milestone"]
         self._check_permissions(input_dto.user, milestone)

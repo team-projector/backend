@@ -41,7 +41,7 @@ class OutputDto:
     issue: Issue
 
 
-class InputDtoSerializer(serializers.Serializer):
+class InputDtoValidator(serializers.Serializer):
     """InputSerializer."""
 
     title = serializers.CharField()
@@ -94,10 +94,7 @@ class UseCase(BaseUseCase):
 
         gl_client = get_gitlab_client(gl_token)
 
-        validated_data = self.validate_input(
-            input_dto.data,
-            InputDtoSerializer,
-        )
+        validated_data = self.validate_input(input_dto.data, InputDtoValidator)
 
         gl_project = gl_client.projects.get(validated_data["project"].gl_id)
         gl_issue = gl_project.issues.create(

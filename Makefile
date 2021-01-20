@@ -7,6 +7,9 @@ make_messages:
 compile_messages:
 	@./manage.py compilemessages
 
+generate_graphql_schema:
+	@./manage.py graphql_schema --schema server.gql.schema --out tests/schema.graphql
+
 pre_commit:
 	@ pre-commit
 
