@@ -10,7 +10,6 @@ from apps.payroll.models import Salary
 from apps.payroll.services.salary.calculator import SalaryCalculator
 from apps.payroll.services.salary.notifications import is_payed
 from apps.payroll.tasks import send_salary_report_task
-from apps.users.admin.filters import UserFilter
 
 
 @admin.register(Salary)
@@ -18,7 +17,7 @@ class SalaryAdmin(BaseModelAdmin):
     """A class represents Salary model for admin dashboard."""
 
     list_display = ("user", "created_by", "created_at", "total", "payed")
-    list_filter = (UserFilter,)
+    list_filter = ("user",)
     search_fields = ("user__login", "user__email")
 
     def get_urls(self):

@@ -2,7 +2,6 @@ from django.contrib import admin
 
 from apps.core.admin.base import BaseModelAdmin
 from apps.payroll.models import SpentTime
-from apps.users.admin.filters import UserFilter
 
 
 @admin.register(SpentTime)
@@ -18,4 +17,4 @@ class SpentTimeAdmin(BaseModelAdmin):
         "time_spent",
     )
     search_fields = ("user__login", "user__email")
-    list_filter = (UserFilter,)
+    list_filter = ("user",)
