@@ -2,7 +2,6 @@ from django.contrib import admin
 
 from apps.core.admin.base import BaseModelAdmin
 from apps.payroll.models import WorkBreak
-from apps.users.admin.filters import UserFilter
 
 
 @admin.register(WorkBreak)
@@ -17,7 +16,7 @@ class WorkBreakAdmin(BaseModelAdmin):
         "approve_state",
         "paid_days",
     )
-    list_filter = (UserFilter,)
+    list_filter = ("user",)
     search_fields = ("user__login", "user__email")
     fieldsets = (
         (

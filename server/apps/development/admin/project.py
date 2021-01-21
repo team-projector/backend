@@ -2,7 +2,6 @@ from django.contrib import admin
 
 from apps.core.admin.base import BaseModelAdmin
 from apps.core.admin.mixins import ForceSyncEntityMixin
-from apps.development.admin.filters import TeamFilter
 from apps.development.admin.inlines import MilestoneInline, ProjectMemberInline
 from apps.development.models import Project
 from apps.development.tasks import sync_project_task
@@ -20,7 +19,7 @@ class ProjectAdmin(ForceSyncEntityMixin, BaseModelAdmin):
         "gl_url",
         "gl_last_sync",
     )
-    list_filter = ("state", "is_active", TeamFilter)
+    list_filter = ("state", "is_active", "team")
     search_fields = ("title", "group__title", "gl_url")
     inlines = (ProjectMemberInline, MilestoneInline)
 

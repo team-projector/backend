@@ -1,11 +1,11 @@
 from django.contrib.contenttypes.admin import GenericTabularInline
-from jnt_admin_tools.mixins import AdminAutocompleteFieldsMixin
+from jnt_admin_tools.mixins import AutocompleteFieldsAdminMixin
 
 from apps.core.admin.mixins import AdminFieldsOverridesMixin
 
 
 class BaseGenericTabularInline(
-    AdminAutocompleteFieldsMixin,
+    AutocompleteFieldsAdminMixin,
     AdminFieldsOverridesMixin,
     GenericTabularInline,
 ):

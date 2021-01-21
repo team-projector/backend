@@ -1,27 +1,22 @@
 from typing import Dict
 from urllib.parse import urlencode, urlparse
 
-from django.contrib import admin
 from django.http import HttpRequest
 from django.shortcuts import redirect
-from jnt_admin_tools.mixins import (
-    AdminAutocompleteFieldsMixin,
-    AdminClickableLinksMixin,
+from jnt_admin_tools.admin.base import BaseModelAdmin as JntBaseModelAdmin
+
+from apps.core.admin.mixins import (
+    AdminFieldsOverridesMixin,
+    AutoChangelistAutocompleteFilterMixin,
 )
 
-from apps.core.admin.mixins import AdminFieldsOverridesMixin
 
-
-class BaseModelAdmin(  # noqa: WPS215
-    AdminAutocompleteFieldsMixin,
+class BaseModelAdmin(
     AdminFieldsOverridesMixin,
-    AdminClickableLinksMixin,
-    admin.ModelAdmin,
+    AutoChangelistAutocompleteFilterMixin,
+    JntBaseModelAdmin,
 ):
     """A base class for admin dashboard."""
-
-    class Media:
-        """Media."""
 
     list_per_page = 20
 

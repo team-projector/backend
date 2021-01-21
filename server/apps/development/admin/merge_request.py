@@ -2,7 +2,6 @@ from django.contrib import admin
 
 from apps.core.admin.base import BaseModelAdmin
 from apps.core.admin.mixins import ForceSyncEntityMixin
-from apps.development.admin.filters import ProjectFilter
 from apps.development.admin.inlines import NoteInline
 from apps.development.models import MergeRequest
 from apps.development.tasks import sync_project_merge_request_task
@@ -23,7 +22,7 @@ class MergeRequestAdmin(
         "created_at",
         "gl_last_sync",
     )
-    list_filter = (ProjectFilter,)
+    list_filter = ("project",)
     search_fields = ("title", "gl_id")
     sortable_by = ("gl_last_sync", "created_at")
     ordering = ("-gl_last_sync",)

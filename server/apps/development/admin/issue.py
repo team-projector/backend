@@ -2,12 +2,6 @@ from django.contrib import admin
 
 from apps.core.admin.base import BaseModelAdmin
 from apps.core.admin.mixins import ForceSyncEntityMixin
-from apps.development.admin.filters import (
-    MilestoneFilter,
-    ProjectFilter,
-    TicketFilter,
-    UserFilter,
-)
 from apps.development.admin.inlines import NoteInline
 from apps.development.models import Issue
 from apps.development.tasks import (
@@ -29,10 +23,10 @@ class IssueAdmin(ForceSyncEntityMixin, BaseModelAdmin):
         "gl_last_sync",
     )
     list_filter = (
-        ProjectFilter,
-        MilestoneFilter,
-        TicketFilter,
-        UserFilter,
+        "project",
+        "milestone",
+        "ticket",
+        "user",
         "state",
     )
     search_fields = ("title", "gl_id")

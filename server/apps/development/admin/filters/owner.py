@@ -68,8 +68,6 @@ class OwnerFilter(AutocompleteFilter):
             required=False,
         )
 
-        self._add_media(model_admin)
-
         self.rendered_widget = field.widget.render(
             name=self.parameter_name,
             value=self.used_parameters.get(self.parameter_name, ""),

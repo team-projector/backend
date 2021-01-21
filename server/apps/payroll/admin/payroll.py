@@ -10,7 +10,6 @@ from django.utils.html import mark_safe
 from apps.core.admin.base import BaseModelAdmin
 from apps.payroll.admin.filters import HasSalaryFilter
 from apps.payroll.models import Payroll
-from apps.users.admin.filters import UserFilter
 
 
 @admin.register(Payroll)
@@ -18,7 +17,7 @@ class PayrollAdmin(BaseModelAdmin):
     """A class represents Payroll model for admin dashboard."""
 
     list_display = ("user", "created_by", "created_at", "sum")
-    list_filter = (UserFilter, HasSalaryFilter)
+    list_filter = ("user", HasSalaryFilter)
     search_fields = ("user__login", "user__email")
     readonly_fields = ("inheritance",)
 
