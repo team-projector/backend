@@ -82,18 +82,29 @@ class IssuesSummaryProvider:
 
         filters_map = {
             "due_date": "date",
-            "user": "user",
             "team": "user__teams",
             "project": "issues__project",
             "state": "issues__state",
             "milestone": "issues__milestone",
             "ticket": "issues__ticket",
+            "craeted_by": "issues__author",
+            "assigned_to": "issues__user",
+            "participated_by": "issues__participants",
         }
 
         for option, lookup in filters_map.items():
             option_value = self._options.get(option)
             if option_value:
                 queryset = queryset.filter(**{lookup: option_value})
+
+        users = []
+        for user_field in ("craeted_by", "assigned_to", "participated_by"):
+            user_value = self._options.get(user_field)
+            if user_value:
+                users.append(user_value)
+
+        if users:
+            queryset = queryset.filter(user__in=users)
 
         return (
             queryset.aggregate(total_time_spent=Sum("time_spent"))[
