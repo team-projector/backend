@@ -1,5 +1,5 @@
 query ($user: ID, $team: ID, $dueDate: Date) {
-  issues: issuesSummary(user: $user, team: $team, dueDate: $dueDate, state: "OPENED") {
+  issues: issuesSummary(assignedTo: $user, team: $team, dueDate: $dueDate, state: "OPENED") {
     count
     projects(sort: [ISSUES_REMAINS_DESC]) {
       issues {
