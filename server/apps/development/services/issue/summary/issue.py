@@ -97,6 +97,17 @@ class IssuesSummaryProvider:
             if option_value:
                 queryset = queryset.filter(**{lookup: option_value})
 
+        queryset = self._filter_spents_by_user(queryset)
+
+        return (
+            queryset.aggregate(total_time_spent=Sum("time_spent"))[
+                "total_time_spent"
+            ]
+            or 0
+        )
+
+    def _filter_spents_by_user(self, queryset: QuerySet) -> QuerySet:
+        """Filter queryset with spents by user."""
         users = []
         for user_field in ("craeted_by", "assigned_to", "participated_by"):
             user_value = self._options.get(user_field)
@@ -106,12 +117,7 @@ class IssuesSummaryProvider:
         if users:
             queryset = queryset.filter(user__in=users)
 
-        return (
-            queryset.aggregate(total_time_spent=Sum("time_spent"))[
-                "total_time_spent"
-            ]
-            or 0
-        )
+        return queryset
 
     def _get_problems_count(self) -> int:
         """
