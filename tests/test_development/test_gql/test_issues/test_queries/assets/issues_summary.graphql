@@ -36,6 +36,7 @@ query ($assignedTo: ID, $createdBy: ID, $participatedBy: ID, $project: ID, $dueD
       }
       __typename
     }
+    timeSpent
     __typename
   }
 }

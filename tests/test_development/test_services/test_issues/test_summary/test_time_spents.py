@@ -58,7 +58,7 @@ def test_by_user(user):
     summary = get_issues_summary(
         Issue.objects.filter(user=user),
         due_date=datetime.now().date(),
-        user=user,
+        assigned_to=user,
     )
 
     checkers.check_summary(summary, count=5, opened_count=5, time_spent=100)
