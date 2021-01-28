@@ -153,9 +153,10 @@ class ProjectGroupGlManager:
         """Deactivate not found groups."""
         project_groups_for_update = ProjectGroup.objects.exclude(
             gl_id__in=gl_group_ids,
-            is_active=True,
         )
-        project_groups_for_update.update(is_active=False)
+        project_groups_for_update.filter(
+            is_active=True,
+        ).update(is_active=False)
         self._deactivate_projects()
 
     def _deactivate_projects(self) -> None:
