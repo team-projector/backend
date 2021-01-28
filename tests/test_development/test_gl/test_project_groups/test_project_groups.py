@@ -101,3 +101,23 @@ def test_single_group_with_parent(db):
     group = ProjectGroupGlManager().update_group(dict2obj(gl_group), parent)
 
     gl_checkers.check_group(group, gl_group, parent)
+
+
+def test_deactivate_group(db, gl_mocker):
+    """Test deactivate group."""
+    project_group = ProjectGroupFactory.create(is_active=True)
+
+    parent_gl_group = GlGroupFactory.create()
+    child_gl_group = GlGroupFactory(parent_id=parent_gl_group[KEY_ID])
+
+    gl_mock.register_groups(gl_mocker, [parent_gl_group, child_gl_group])
+
+    ProjectGroupGlManager().sync_groups()
+
+    parent_group = ProjectGroup.objects.get(gl_id=parent_gl_group[KEY_ID])
+    gl_checkers.check_group(parent_group, parent_gl_group)
+    child_group = ProjectGroup.objects.get(gl_id=child_gl_group[KEY_ID])
+    gl_checkers.check_group(child_group, child_gl_group, parent_group)
+
+    project_group.refresh_from_db(fields=("is_active",))
+    assert not project_group.is_active

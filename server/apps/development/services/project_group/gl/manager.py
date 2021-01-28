@@ -5,7 +5,7 @@ from typing import Dict, Iterable, List, Optional
 from django.utils import timezone
 from gitlab.v4 import objects as gl
 
-from apps.development.models import ProjectGroup
+from apps.development.models import Project, ProjectGroup
 from apps.development.services.project_group.gl.provider import (
     ProjectGroupGlProvider,
 )
@@ -91,6 +91,8 @@ class ProjectGroupGlManager:
                 gl_groups_map,
             )
 
+        self._deactivate_not_found_groups(gl_groups_map.keys())
+
     def sync_group(
         self,
         gl_group: gl.Group,
@@ -146,3 +148,19 @@ class ProjectGroupGlManager:
 
         nodes = _GlGroupForest(gl_groups).filter_nodes(filter_ids=filter_ids)
         return [node.group for node in nodes]
+
+    def _deactivate_not_found_groups(self, gl_group_ids) -> None:
+        """Deactivate not found groups."""
+        project_groups_for_update = ProjectGroup.objects.exclude(
+            gl_id__in=gl_group_ids,
+            is_active=True,
+        )
+        project_groups_for_update.update(is_active=False)
+        self._deactivate_projects()
+
+    def _deactivate_projects(self) -> None:
+        """Deactivate projects by not active group."""
+        Project.objects.filter(
+            is_active=True,
+            group__is_active=False,
+        ).update(is_active=False)
