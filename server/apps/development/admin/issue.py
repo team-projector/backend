@@ -23,16 +23,19 @@ class IssueAdmin(ForceSyncEntityMixin, BaseModelAdmin):
         "gl_last_sync",
     )
     list_filter = (
+        "state",
         "project",
         "milestone",
         "ticket",
         "user",
-        "state",
+        "author",
+        "participants",
     )
     search_fields = ("title", "gl_id")
     sortable_by = ("gl_last_sync", "created_at")
     ordering = ("-gl_last_sync",)
     inlines = (NoteInline,)
+    date_hierarchy = "due_date"
 
     def sync_handler(self, issue):
         """Syncing issue."""

@@ -17,10 +17,12 @@ class AutoAutocompleteFilter(AutocompleteFilter):
         model,
         model_admin,
         field_name,
+        is_multiple=False,
     ):
         """Init autocomplete filter."""
         self.field_name = field_name
         self.title = field_name
+        self.is_multiple = is_multiple
         super().__init__(request, lookup_params, model, model_admin)
 
 
@@ -36,6 +38,12 @@ class AutoChangelistAutocompleteFilterMixin(admin.ModelAdmin):
         """Update list filter."""
         if self._list_filter_is_foreign(list_filter):
             return partial(AutoAutocompleteFilter, field_name=list_filter)
+        elif self._list_filter_is_m2m(list_filter):
+            return partial(
+                AutoAutocompleteFilter,
+                field_name=list_filter,
+                is_multiple=True,
+            )
 
         return list_filter
 
@@ -52,3 +60,17 @@ class AutoChangelistAutocompleteFilterMixin(admin.ModelAdmin):
             return False
 
         return isinstance(model_field, models.ForeignKey)
+
+    def _list_filter_is_m2m(self, list_filter) -> bool:
+        """Check list filter field is ManyToMaany."""
+        if not isinstance(list_filter, str):
+            return False
+
+        try:
+            model_field = self.model._meta.get_field(  # noqa: WPS437
+                list_filter,
+            )
+        except FieldDoesNotExist:
+            return False
+
+        return isinstance(model_field, models.ManyToManyField)
