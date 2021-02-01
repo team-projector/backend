@@ -1,0 +1,30 @@
+query(
+    $assignedTo: ID!
+    $createdBy: ID
+    $participatedBy: ID
+    $project: ID
+    $dueDate: Date
+) {
+    summary: issuesSummary(
+        assignedTo: $assignedTo
+        createdBy: $createdBy
+        participatedBy: $participatedBy
+        project: $project
+        dueDate: $dueDate
+    ) {
+        count
+        closedCount
+        openedCount
+        problemsCount
+        timeSpent
+    }
+    user(id: $assignedTo) {
+      login
+      email
+      issuesSummary(project: $project, dueDate: $dueDate) {
+            assignedCount
+            createdCount
+            participationCount
+        }
+    }
+}
