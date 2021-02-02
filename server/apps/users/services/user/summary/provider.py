@@ -39,17 +39,15 @@ class UserIssuesSummaryProvider:
     def get_summary(self) -> UserIssuesSummary:
         """Get user issues summary."""
         queryset = self.filter_queryset(self.get_queryset())
+        queryset = queryset.annotate(
+            participation_user=self._count(participants=self._user),
+        )
 
-        # TODO: think to merge at one query.
-        summary_result = {
-            **queryset.aggregate(
-                assigned_count=self._count(user=self._user),
-                created_count=self._count(author=self._user),
-            ),
-            **queryset.aggregate(
-                participation_count=self._count(participants=self._user),
-            ),
-        }
+        summary_result = queryset.aggregate(
+            assigned_count=self._count(user=self._user),
+            created_count=self._count(author=self._user),
+            participation_count=self._count(participation_user=1),
+        )
 
         return UserIssuesSummary(**summary_result)
 
