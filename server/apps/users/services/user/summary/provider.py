@@ -38,23 +38,20 @@ class UserIssuesSummaryProvider:
 
     def get_summary(self) -> UserIssuesSummary:
         """Get user issues summary."""
-        aggregations = {
-            "assigned_count": models.Count(
-                "id",
-                filter=models.Q(user=self._user),
+        queryset = self.filter_queryset(self.get_queryset())
+
+        # TODO: think to merge at one query.
+        summary_result = {
+            **queryset.aggregate(
+                assigned_count=self._count(user=self._user),
+                created_count=self._count(author=self._user),
             ),
-            "created_count": models.Count(
-                "id",
-                filter=models.Q(author=self._user),
-            ),
-            "participation_count": models.Count(
-                "id",
-                filter=models.Q(participants=self._user),
+            **queryset.aggregate(
+                participation_count=self._count(participants=self._user),
             ),
         }
 
-        queryset = self.filter_queryset(self.get_queryset())
-        return UserIssuesSummary(**queryset.aggregate(**aggregations))
+        return UserIssuesSummary(**summary_result)
 
     def get_queryset(self) -> models.QuerySet:
         """Get queryset."""
@@ -66,3 +63,7 @@ class UserIssuesSummaryProvider:
             data=self._kwargs,
             queryset=queryset,
         ).qs
+
+    def _count(self, **filters) -> models.Count:
+        """Count values by filters."""
+        return models.Count("id", filter=models.Q(**filters))

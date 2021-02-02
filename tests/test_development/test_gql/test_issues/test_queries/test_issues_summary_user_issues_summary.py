@@ -11,6 +11,7 @@ from tests.test_development.factories import (
     ProjectMemberFactory,
     ProjectMilestoneFactory,
 )
+from tests.test_users.factories import UserFactory
 
 
 @pytest.fixture()
@@ -70,6 +71,7 @@ def test_issues_summary_query(
 
 def _create_issues(user, issue_data, due_date) -> None:
     """Prepare test data."""
+    user1 = UserFactory.create()
     assignee1 = IssueFactory.create(user=user, due_date=due_date, **issue_data)
     assignee1.participants.add(user)
 
@@ -78,23 +80,25 @@ def _create_issues(user, issue_data, due_date) -> None:
         due_date=due_date + timedelta(days=1),
         **issue_data,
     )
-    assignee2.participants.add(user)
+    assignee2.participants.add(user, user1)
 
-    IssueFactory.create(author=user, due_date=due_date, **issue_data)
+    IssueFactory.create(user=user, due_date=due_date, **issue_data)
 
     participant = IssueFactory.create(
+        user=user,
         due_date=due_date - timedelta(days=1),
         **issue_data,
     )
     participant.participants.add(user)
 
-    IssueFactory.create(**issue_data)
+    issue = IssueFactory.create(**issue_data, user=user, due_date=due_date)
+    issue.participants.add(user, user1)
 
 
 def _assert_issues_summary(issues_summary) -> None:
     """Assert issues summary."""
-    assert issues_summary["count"] == 1
-    assert issues_summary["openedCount"] == 1
+    assert issues_summary["count"] == 3
+    assert issues_summary["openedCount"] == 3
     assert not issues_summary["closedCount"]
     assert not issues_summary["problemsCount"]
 
