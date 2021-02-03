@@ -38,23 +38,28 @@ class UserIssuesSummaryProvider:
 
     def get_summary(self) -> UserIssuesSummary:
         """Get user issues summary."""
-        aggregations = {
-            "assigned_count": models.Count(
-                "id",
-                filter=models.Q(user=self._user),
-            ),
-            "created_count": models.Count(
-                "id",
-                filter=models.Q(author=self._user),
-            ),
-            "participation_count": models.Count(
-                "id",
-                filter=models.Q(participants=self._user),
-            ),
-        }
-
         queryset = self.filter_queryset(self.get_queryset())
-        return UserIssuesSummary(**queryset.aggregate(**aggregations))
+
+        participants = Issue.participants.through.objects.filter(
+            user=self._user,
+            issue_id=models.OuterRef("pk"),
+        ).values("pk")
+
+        queryset = queryset.annotate(
+            has_participant=models.Case(
+                models.When(models.Exists(participants), then=1),
+                default=0,
+                output_field=models.IntegerField(),
+            ),
+        )
+
+        return UserIssuesSummary(
+            **queryset.aggregate(
+                assigned_count=self._count(user=self._user),
+                created_count=self._count(author=self._user),
+                participation_count=models.Sum("has_participant"),
+            ),
+        )
 
     def get_queryset(self) -> models.QuerySet:
         """Get queryset."""
@@ -66,3 +71,7 @@ class UserIssuesSummaryProvider:
             data=self._kwargs,
             queryset=queryset,
         ).qs
+
+    def _count(self, **filters) -> models.Count:
+        """Count values by filters."""
+        return models.Count("id", filter=models.Q(**filters))
