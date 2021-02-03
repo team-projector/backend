@@ -5,7 +5,7 @@ from apps.development.models.note import NoteType
 
 
 class Command(BaseCommand):
-    """Cleanup labels."""
+    """Check empty spends."""
 
     def handle(self, *args, **options):  # noqa: WPS110
         """Handle command."""
