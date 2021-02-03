@@ -22,6 +22,7 @@ class Command(BaseCommand):
                 "{0} -> {1} [object.pk={2}][note.pk={3}]".format(
                     note.content_type,
                     note.content_object,
-                    note.object_id, note.pk,
+                    note.object_id,
+                    note.pk,
                 ),
             )
