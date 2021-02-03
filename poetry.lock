@@ -1082,7 +1082,7 @@ description = ""
 name = "jnt-django-toolbox"
 optional = false
 python-versions = ">=3.8,<4.0"
-version = "0.1.49"
+version = "0.1.51"
 
 [package.dependencies]
 dateparser = "*"
@@ -2576,8 +2576,8 @@ jnt-django-graphene-toolbox = [
     {file = "jnt_django_graphene_toolbox-0.2.5-py3-none-any.whl", hash = "sha256:290554f588a720f60fc6fd7a228d6d5dcc23edc90e5f99b141bda5c7f41ac844"},
 ]
 jnt-django-toolbox = [
-    {file = "jnt-django-toolbox-0.1.49.tar.gz", hash = "sha256:9184d1d7240512669b144be6414582f85b2df89284d2df7b2b20a79bd4e4d173"},
-    {file = "jnt_django_toolbox-0.1.49-py3-none-any.whl", hash = "sha256:dd78304c816c07ade09f471b8bde8c3f095460c2593720ce87b93925bdbc2f32"},
+    {file = "jnt-django-toolbox-0.1.51.tar.gz", hash = "sha256:cbef1225d5d560b5fc5aeb5b789d7d88c96fb188cd7d7068f7dbb6457485bf66"},
+    {file = "jnt_django_toolbox-0.1.51-py3-none-any.whl", hash = "sha256:d2a135abe554dea95f778c6dc2aadb7fc2bcf2cc9bc64c5b59e7630893989606"},
 ]
 kombu = [
     {file = "kombu-4.6.11-py2.py3-none-any.whl", hash = "sha256:be48cdffb54a2194d93ad6533d73f69408486483d189fe9f5990ee24255b0e0a"},

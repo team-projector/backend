@@ -43,13 +43,13 @@ class UserIssuesSummaryProvider:
             participation_user=self._count(participants=self._user),
         )
 
-        summary_result = queryset.aggregate(
-            assigned_count=self._count(user=self._user),
-            created_count=self._count(author=self._user),
-            participation_count=self._count(participation_user=1),
+        return UserIssuesSummary(
+            **queryset.aggregate(
+                assigned_count=self._count(user=self._user),
+                created_count=self._count(author=self._user),
+                participation_count=models.Sum("participation_user"),
+            ),
         )
-
-        return UserIssuesSummary(**summary_result)
 
     def get_queryset(self) -> models.QuerySet:
         """Get queryset."""
