@@ -39,15 +39,25 @@ class UserIssuesSummaryProvider:
     def get_summary(self) -> UserIssuesSummary:
         """Get user issues summary."""
         queryset = self.filter_queryset(self.get_queryset())
+
+        participants = Issue.participants.through.objects.filter(
+            user=self._user,
+            issue_id=models.OuterRef("pk"),
+        ).values("pk")
+
         queryset = queryset.annotate(
-            participation_user=self._count(participants=self._user),
+            has_participant=models.Case(
+                models.When(models.Exists(participants), then=1),
+                default=0,
+                output_field=models.IntegerField(),
+            ),
         )
 
         return UserIssuesSummary(
             **queryset.aggregate(
                 assigned_count=self._count(user=self._user),
                 created_count=self._count(author=self._user),
-                participation_count=models.Sum("participation_user"),
+                participation_count=models.Sum("has_participant"),
             ),
         )
 
