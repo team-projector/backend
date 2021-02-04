@@ -2,6 +2,7 @@ from .issue import IssueFactory
 from .issue_note import IssueNoteFactory
 from .label import LabelFactory
 from .merge_request import MergeRequestFactory
+from .merge_request_note import MergeRequestNoteFactory
 from .milestone import MilestoneFactory
 from .project import ProjectFactory
 from .project_group import ProjectGroupFactory
