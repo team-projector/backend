@@ -1,6 +1,8 @@
 from collections import defaultdict
 from typing import DefaultDict, Iterable, List, Union
 
+from django.contrib.contenttypes.models import ContentType
+
 from apps.core.gitlab import parse_gl_date
 from apps.development.models import Issue, MergeRequest
 from apps.development.models.note import Note, NoteType
@@ -37,6 +39,23 @@ def adjust_spent_times(work_item: Union[Issue, MergeRequest]) -> None:
             note=note,
             base=work_item,
         )
+
+
+def adjust_spents_times() -> None:
+    """Adjust spents times."""
+    trackable_content_types = (
+        ContentType.objects.get_for_model(Issue),
+        ContentType.objects.get_for_model(MergeRequest),
+    )
+
+    notes = Note.objects.filter(
+        type__in=TIME_SPENTS_NOTES,
+        time_spend__isnull=True,
+        content_type__in=trackable_content_types,
+    )
+
+    for note in notes:
+        adjust_spent_times(note.content_object)
 
 
 def _get_notes_for_processing(

@@ -1,1 +1,2 @@
 from .salaries import send_salary_report_task
+from .adjust_spent_times import adjust_spents_times_task
