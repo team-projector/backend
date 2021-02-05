@@ -1,0 +1,29 @@
+query ($user: ID!, $start: Date!, $end: Date!) {
+  days: workCalendar(user: $user, start: $start, end: $end) {
+    date
+    metrics {
+      timeEstimate
+      timeSpent
+      plannedWorkHours
+      loading
+      payroll
+      paid
+      issuesCount
+    }
+    issues {
+      dueDate
+      title
+      timeEstimate
+      timeSpent
+      state
+      labels {
+        edges {
+          node {
+            id
+            title
+          }
+        }
+      }
+    }
+  }
+}
