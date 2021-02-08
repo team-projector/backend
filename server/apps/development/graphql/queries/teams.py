@@ -7,6 +7,7 @@ from apps.development.graphql.types import (
     TeamMemberProgressMetricsType,
     TeamType,
 )
+from apps.users.services.user.metrics.progress.main import GroupProgressMetrics
 
 
 class TeamsQueries(graphene.ObjectType):
@@ -20,5 +21,8 @@ class TeamsQueries(graphene.ObjectType):
         team=graphene.ID(required=True),
         start=graphene.Date(required=True),
         end=graphene.Date(required=True),
-        group=graphene.String(required=True),
+        group=graphene.Argument(
+            graphene.Enum.from_enum(GroupProgressMetrics),
+            required=True,
+        ),
     )

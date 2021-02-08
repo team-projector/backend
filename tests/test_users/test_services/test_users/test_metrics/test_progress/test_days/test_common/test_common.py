@@ -6,14 +6,13 @@ from jnt_django_toolbox.helpers.time import seconds
 
 from apps.development.models.issue import IssueState
 from apps.users.services.user.metrics import get_progress_metrics
+from apps.users.services.user.metrics.progress import GroupProgressMetrics
 from tests.test_development.factories import IssueFactory
 from tests.test_payroll.factories import IssueSpentTimeFactory
 from tests.test_users.factories.user import UserFactory
 from tests.test_users.test_services.test_users.test_metrics.test_progress.test_days import (  # noqa: E501
     checkers,
 )
-
-METRICS_GROUP_DAY = "day"
 
 
 def test_simple(user):
@@ -60,7 +59,7 @@ def test_simple(user):
 
     start = datetime.now().date() - timedelta(days=5)
     end = datetime.now().date() + timedelta(days=5)
-    metrics = get_progress_metrics(user, start, end, METRICS_GROUP_DAY)
+    metrics = get_progress_metrics(user, start, end, GroupProgressMetrics.DAY)
 
     assert len(metrics) == (end - start).days + 1
     checkers.check_user_progress_metrics(
@@ -112,7 +111,7 @@ def test_negative_remains(user):
 
     start = datetime.now().date() - timedelta(days=5)
     end = datetime.now().date() + timedelta(days=5)
-    metrics = get_progress_metrics(user, start, end, METRICS_GROUP_DAY)
+    metrics = get_progress_metrics(user, start, end, GroupProgressMetrics.DAY)
 
     assert len(metrics) == (end - start).days + 1
     checkers.check_user_progress_metrics(
@@ -170,7 +169,7 @@ def test_loading_day_already_has_spends(user):
 
     start = datetime.now().date() - timedelta(days=5)
     end = datetime.now().date() + timedelta(days=5)
-    metrics = get_progress_metrics(user, start, end, METRICS_GROUP_DAY)
+    metrics = get_progress_metrics(user, start, end, GroupProgressMetrics.DAY)
 
     assert len(metrics) == (end - start).days + 1
     checkers.check_user_progress_metrics(
@@ -230,7 +229,7 @@ def test_not_in_range(user):
 
     start = datetime.now().date() - timedelta(days=3)
     end = datetime.now().date() + timedelta(days=3)
-    metrics = get_progress_metrics(user, start, end, METRICS_GROUP_DAY)
+    metrics = get_progress_metrics(user, start, end, GroupProgressMetrics.DAY)
 
     assert len(metrics) == (end - start).days + 1
     checkers.check_user_progress_metrics(
@@ -285,7 +284,7 @@ def test_another_user(user):
 
     start = datetime.now().date() - timedelta(days=5)
     end = datetime.now().date() + timedelta(days=5)
-    metrics = get_progress_metrics(user, start, end, METRICS_GROUP_DAY)
+    metrics = get_progress_metrics(user, start, end, GroupProgressMetrics.DAY)
 
     assert len(metrics) == (end - start).days + 1
     checkers.check_user_progress_metrics(
@@ -324,7 +323,7 @@ def test_not_loading_over_daily_work_hours(user):
 
     start = datetime.now().date() - timedelta(days=1)
     end = datetime.now().date() + timedelta(days=1)
-    metrics = get_progress_metrics(user, start, end, METRICS_GROUP_DAY)
+    metrics = get_progress_metrics(user, start, end, GroupProgressMetrics.DAY)
 
     assert len(metrics) == (end - start).days + 1
     checkers.check_user_progress_metrics(

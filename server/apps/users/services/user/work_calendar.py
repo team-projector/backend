@@ -6,6 +6,7 @@ from django.db import models
 
 from apps.development.models import Issue
 from apps.users.services.user.metrics import get_progress_metrics
+from apps.users.services.user.metrics.progress.main import GroupProgressMetrics
 from apps.users.services.user.metrics.progress.provider import (
     UserProgressMetrics,
 )
@@ -22,7 +23,12 @@ class WorkCalendar:
 
 def get_work_calendar(user, start_date, end_date) -> List[WorkCalendar]:
     """Get work calendar."""
-    user_metrics = get_progress_metrics(user, start_date, end_date, "day")
+    user_metrics = get_progress_metrics(
+        user,
+        start_date,
+        end_date,
+        GroupProgressMetrics.DAY,
+    )
 
     return [
         WorkCalendar(

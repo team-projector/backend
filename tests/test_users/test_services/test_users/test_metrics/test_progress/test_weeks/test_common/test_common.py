@@ -6,6 +6,7 @@ from jnt_django_toolbox.helpers.date import begin_of_week
 from jnt_django_toolbox.helpers.time import seconds
 
 from apps.users.services.user.metrics import get_progress_metrics
+from apps.users.services.user.metrics.progress import GroupProgressMetrics
 from tests.test_development.factories import IssueFactory
 from tests.test_payroll.factories import IssueSpentTimeFactory
 from tests.test_users.factories.user import UserFactory
@@ -13,7 +14,6 @@ from tests.test_users.test_services.test_users.test_metrics.test_progress.test_w
     checkers,
 )
 
-METRICS_GROUP_WEEK = "week"
 FIELD_TIME_SPENT = "time_spent"
 KEY_SPENT = "spent"
 
@@ -67,7 +67,7 @@ def test_simple(user):
         user,
         monday - timedelta(days=5),
         monday + timedelta(days=5),
-        METRICS_GROUP_WEEK,
+        GroupProgressMetrics.WEEK,
     )
 
     assert len(metrics) == 2
@@ -127,7 +127,7 @@ def test_many_weeks(user):
         user,
         monday - timedelta(days=5),
         monday + timedelta(days=5),
-        METRICS_GROUP_WEEK,
+        GroupProgressMetrics.WEEK,
     )
 
     assert len(metrics) == 2
@@ -190,7 +190,7 @@ def test_not_in_range(user):
         user,
         monday,
         monday + timedelta(weeks=1, days=5),
-        METRICS_GROUP_WEEK,
+        GroupProgressMetrics.WEEK,
     )
 
     assert len(metrics) == 2
@@ -252,7 +252,7 @@ def test_another_user(user):
         user,
         monday - timedelta(days=5),
         monday + timedelta(days=5),
-        METRICS_GROUP_WEEK,
+        GroupProgressMetrics.WEEK,
     )
 
     assert len(metrics) == 2
@@ -324,7 +324,7 @@ def test_many_issues(user):
         user,
         monday - timedelta(days=5),
         monday + timedelta(days=5),
-        METRICS_GROUP_WEEK,
+        GroupProgressMetrics.WEEK,
     )
 
     assert len(metrics) == 2

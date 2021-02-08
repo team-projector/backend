@@ -12,6 +12,7 @@ from apps.users.graphql.types import (
     UserType,
     WorkCalendarType,
 )
+from apps.users.services.user.metrics.progress.main import GroupProgressMetrics
 
 
 class UsersQueries(graphene.ObjectType):
@@ -25,7 +26,10 @@ class UsersQueries(graphene.ObjectType):
         user=graphene.ID(required=True),
         start=graphene.Date(required=True),
         end=graphene.Date(required=True),
-        group=graphene.String(required=True),
+        group=graphene.Argument(
+            graphene.Enum.from_enum(GroupProgressMetrics),
+            required=True,
+        ),
     )
 
     me = graphene.Field(UserType, resolver=resolve_me_user)

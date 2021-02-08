@@ -12,18 +12,19 @@ from apps.development.services.team.metrics.progress.day import (
 from apps.development.services.team.metrics.progress.week import (
     WeekMetricsProvider,
 )
+from apps.users.services.user.metrics.progress.main import GroupProgressMetrics
 
 
 def create_provider(
     team: Team,
     start: date,
     end: date,
-    group: str,
+    group: GroupProgressMetrics,
 ) -> ProgressMetricsProvider:
     """Create progress metrics provider."""
-    if group == "day":
+    if group == GroupProgressMetrics.DAY:
         return DayMetricsProvider(team, start, end)
-    elif group == "week":
+    elif group == GroupProgressMetrics.WEEK:
         return WeekMetricsProvider(team, start, end)
 
     raise ValueError("Bad group '{0}'".format(group))
@@ -36,7 +37,7 @@ def get_progress_metrics(
     team: Team,
     start: date,
     end: date,
-    grp: str,
+    grp: GroupProgressMetrics,
 ) -> TeamMemberProgressMetricsList:
     """Get progress metrics for team member."""
     provider = create_provider(team, start, end, grp)

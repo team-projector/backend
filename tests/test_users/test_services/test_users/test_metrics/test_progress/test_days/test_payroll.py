@@ -6,13 +6,12 @@ from jnt_django_toolbox.helpers.time import seconds
 
 from apps.development.models.issue import IssueState
 from apps.users.services.user.metrics import get_progress_metrics
+from apps.users.services.user.metrics.progress import GroupProgressMetrics
 from tests.test_development.factories import IssueFactory
 from tests.test_payroll.factories import IssueSpentTimeFactory, SalaryFactory
 from tests.test_users.test_services.test_users.test_metrics.test_progress.test_days import (  # noqa: E501
     checkers,
 )
-
-METRICS_GROUP_DAY = "day"
 
 
 def test_opened(user):
@@ -61,7 +60,7 @@ def test_opened(user):
 
     start = monday - timedelta(days=5)
     end = monday + timedelta(days=5)
-    metrics = get_progress_metrics(user, start, end, METRICS_GROUP_DAY)
+    metrics = get_progress_metrics(user, start, end, GroupProgressMetrics.DAY)
 
     checkers.check_user_progress_payroll_metrics(
         metrics,
@@ -130,7 +129,7 @@ def test_paid(user):
         user,
         monday - timedelta(days=5),
         monday + timedelta(days=5),
-        METRICS_GROUP_DAY,
+        GroupProgressMetrics.DAY,
     )
 
     checkers.check_user_progress_payroll_metrics(
@@ -198,7 +197,7 @@ def test_closed(user):
         user,
         monday - timedelta(days=5),
         monday + timedelta(days=5),
-        METRICS_GROUP_DAY,
+        GroupProgressMetrics.DAY,
     )
 
     checkers.check_user_progress_payroll_metrics(
@@ -278,7 +277,7 @@ def test_complex(user):
         user,
         monday - timedelta(days=5),
         monday + timedelta(days=5),
-        METRICS_GROUP_DAY,
+        GroupProgressMetrics.DAY,
     )
 
     checkers.check_user_progress_payroll_metrics(

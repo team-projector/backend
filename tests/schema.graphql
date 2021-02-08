@@ -106,6 +106,11 @@ type GitlabStatusType {
   lastSync: DateTime
 }
 
+enum GroupProgressMetrics {
+  DAY
+  WEEK
+}
+
 type Issue implements ModelRelayNode, WorkItem {
   id: ID!
   title: String
@@ -584,7 +589,7 @@ type ProjectsSummaryType {
 type Query {
   user(id: ID!): User
   allUsers(isActive: Boolean, offset: Int, sort: [UserSort], before: String, after: String, first: Int, last: Int): UserTypeConnection
-  userProgressMetrics(user: ID!, start: Date!, end: Date!, group: String!): [UserProgressMetricsType]
+  userProgressMetrics(user: ID!, start: Date!, end: Date!, group: GroupProgressMetrics!): [UserProgressMetricsType]
   me: User
   workCalendar(user: ID!, start: Date!, end: Date!): [WorkCalendarType]
   bonus(id: ID!): Bonus
@@ -602,7 +607,7 @@ type Query {
   gitlabStatus: GitlabStatusType
   team(id: ID!): Team
   allTeams(title: String, roles: String, q: String, offset: Int, sort: [TeamSort], before: String, after: String, first: Int, last: Int): TeamTypeConnection
-  teamProgressMetrics(team: ID!, start: Date!, end: Date!, group: String!): [TeamMemberProgressMetricsType]
+  teamProgressMetrics(team: ID!, start: Date!, end: Date!, group: GroupProgressMetrics!): [TeamMemberProgressMetricsType]
   project(id: ID!): Project
   allProjects(q: String, title: String, state: [ProjectState], offset: Int, sort: [ProjectSort], before: String, after: String, first: Int, last: Int): ProjectTypeConnection
   projectsSummary: ProjectsSummaryType
