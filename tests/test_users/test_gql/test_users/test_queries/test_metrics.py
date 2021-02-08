@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from apps.users.services.user.metrics.progress.main import GroupProgressMetrics
+from apps.users.services.user.metrics.progress import GroupProgressMetrics
 
 
 def test_success_query(user, gql_client, gql_raw):

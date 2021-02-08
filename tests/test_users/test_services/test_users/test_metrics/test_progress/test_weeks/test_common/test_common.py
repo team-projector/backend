@@ -6,7 +6,7 @@ from jnt_django_toolbox.helpers.date import begin_of_week
 from jnt_django_toolbox.helpers.time import seconds
 
 from apps.users.services.user.metrics import get_progress_metrics
-from apps.users.services.user.metrics.progress.main import GroupProgressMetrics
+from apps.users.services.user.metrics.progress import GroupProgressMetrics
 from tests.test_development.factories import IssueFactory
 from tests.test_payroll.factories import IssueSpentTimeFactory
 from tests.test_users.factories.user import UserFactory

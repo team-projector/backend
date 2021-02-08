@@ -8,7 +8,7 @@ from jnt_django_toolbox.helpers.time import seconds
 from apps.core.services.week import get_first_week_day
 from apps.development.models.issue import IssueState
 from apps.users.services.user.metrics import get_progress_metrics
-from apps.users.services.user.metrics.progress.main import GroupProgressMetrics
+from apps.users.services.user.metrics.progress import GroupProgressMetrics
 from tests.test_development.factories import IssueFactory
 from tests.test_payroll.factories import IssueSpentTimeFactory, SalaryFactory
 from tests.test_users.test_services.test_users.test_metrics.test_progress.test_weeks import (  # noqa: E501

@@ -4,7 +4,7 @@ import pytest
 from jnt_django_graphene_toolbox.errors import GraphQLPermissionDenied
 
 from apps.development.models import TeamMember
-from apps.users.services.user.metrics.progress.main import GroupProgressMetrics
+from apps.users.services.user.metrics.progress import GroupProgressMetrics
 from tests.test_development.factories import TeamFactory, TeamMemberFactory
 
 
