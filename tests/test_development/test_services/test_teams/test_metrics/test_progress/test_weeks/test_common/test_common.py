@@ -10,6 +10,7 @@ from apps.development.models.issue import IssueState
 from apps.development.services.team.metrics.progress import (
     get_progress_metrics,
 )
+from apps.users.services.user.metrics.progress.main import GroupProgressMetrics
 from tests.test_development.factories import IssueFactory
 from tests.test_payroll.factories import IssueSpentTimeFactory
 from tests.test_users.test_services.test_users.test_metrics.test_progress.test_weeks import (  # noqa: E501
@@ -18,7 +19,6 @@ from tests.test_users.test_services.test_users.test_metrics.test_progress.test_w
 
 KEY_TIME_SPENT = "time_spent"
 KEY_SPENT = "spent"
-METRICS_GROUP_WEEK = "week"
 
 
 @pytest.fixture()
@@ -74,7 +74,7 @@ def test_simple(team, team_developer, team_leader, issue):
         team,
         monday - timedelta(days=5),
         monday + timedelta(days=5),
-        METRICS_GROUP_WEEK,
+        GroupProgressMetrics.WEEK,
     )
 
     assert len(metrics) == 2
@@ -138,7 +138,7 @@ def test_many_weeks(team, team_developer, issue):
         team,
         monday - timedelta(days=5),
         monday + timedelta(days=5),
-        METRICS_GROUP_WEEK,
+        GroupProgressMetrics.WEEK,
     )
 
     developer_metrics = next(
@@ -204,7 +204,7 @@ def test_not_in_range(team, team_developer, issue):
         team,
         monday,
         monday + timedelta(weeks=1, days=5),
-        METRICS_GROUP_WEEK,
+        GroupProgressMetrics.WEEK,
     )
 
     developer_metrics = next(
@@ -265,7 +265,7 @@ def test_another_user(team, team_developer, another_user, issue):
 
     start = monday - timedelta(days=5)
     end = monday + timedelta(days=5)
-    metrics = get_progress_metrics(team, start, end, METRICS_GROUP_WEEK)
+    metrics = get_progress_metrics(team, start, end, GroupProgressMetrics.WEEK)
 
     developer_metrics = next(
         metric.metrics for metric in metrics if metric.user == team_developer
@@ -338,7 +338,7 @@ def test_many_issues(team, team_developer, issue):
         team,
         monday - timedelta(days=5),
         monday + timedelta(days=5),
-        METRICS_GROUP_WEEK,
+        GroupProgressMetrics.WEEK,
     )
 
     developer_metrics = next(

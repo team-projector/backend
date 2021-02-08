@@ -9,6 +9,7 @@ from apps.development.models import TeamMember
 from apps.development.services.team_members.filters import filter_by_roles
 from apps.users.models import User
 from apps.users.services.user.metrics import get_progress_metrics
+from apps.users.services.user.metrics.progress.main import GroupProgressMetrics
 
 
 def filter_allowed_for_user(queryset: QuerySet, user: User) -> QuerySet:
@@ -37,5 +38,5 @@ def resolve_user_progress_metrics(parent, info, **kwargs):  # noqa: WPS110
         user,
         kwargs["start"],
         kwargs["end"],
-        kwargs["group"],
+        GroupProgressMetrics(kwargs["group"]),
     )

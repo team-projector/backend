@@ -8,13 +8,12 @@ from jnt_django_toolbox.helpers.time import seconds
 from apps.core.services.week import get_first_week_day
 from apps.development.models.issue import IssueState
 from apps.users.services.user.metrics import get_progress_metrics
+from apps.users.services.user.metrics.progress.main import GroupProgressMetrics
 from tests.test_development.factories import IssueFactory
 from tests.test_payroll.factories import IssueSpentTimeFactory, SalaryFactory
 from tests.test_users.test_services.test_users.test_metrics.test_progress.test_weeks import (  # noqa: E501
     checkers,
 )
-
-METRICS_GROUP_WEEK = "week"
 
 
 def test_opened(user):
@@ -64,7 +63,7 @@ def test_opened(user):
         user,
         monday - timedelta(days=5),
         monday + timedelta(days=5),
-        METRICS_GROUP_WEEK,
+        GroupProgressMetrics.WEEK,
     )
 
     checkers.check_user_progress_payroll_metrics(
@@ -132,7 +131,7 @@ def test_paid(user):
         user,
         monday - timedelta(days=5),
         monday + timedelta(days=5),
-        METRICS_GROUP_WEEK,
+        GroupProgressMetrics.WEEK,
     )
 
     checkers.check_user_progress_payroll_metrics(
@@ -193,7 +192,7 @@ def test_closed(user):
         user,
         monday - timedelta(days=5),
         monday + timedelta(days=5),
-        METRICS_GROUP_WEEK,
+        GroupProgressMetrics.WEEK,
     )
 
     checkers.check_user_progress_payroll_metrics(
@@ -269,7 +268,7 @@ def test_complex(user):
         user,
         monday - timedelta(days=5),
         monday + timedelta(days=5),
-        METRICS_GROUP_WEEK,
+        GroupProgressMetrics.WEEK,
     )
 
     checkers.check_user_progress_payroll_metrics(
@@ -331,7 +330,7 @@ def test_first_week_day(user):
         user,
         sunday - timedelta(days=5),
         sunday + timedelta(days=5),
-        METRICS_GROUP_WEEK,
+        GroupProgressMetrics.WEEK,
     )
 
     checkers.check_user_progress_payroll_metrics(

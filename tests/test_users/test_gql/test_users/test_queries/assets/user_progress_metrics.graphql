@@ -1,0 +1,15 @@
+query ($id: ID!, $start: Date!, $end: Date!, $group: GroupProgressMetrics!) {
+  userProgressMetrics(user: $id, start: $start, end: $end, group: $group) {
+    start
+    end
+    timeSpent
+    timeEstimate
+    timeRemains
+    issuesCount
+    loading
+    efficiency
+    paid
+    payroll
+    plannedWorkHours
+  }
+}
