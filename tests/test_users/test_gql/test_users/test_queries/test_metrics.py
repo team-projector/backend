@@ -6,7 +6,6 @@ from apps.users.services.user.metrics.progress.main import GroupProgressMetrics
 def test_success_query(user, gql_client, gql_raw):
     """Test user progress metrics raw query."""
     gql_client.set_user(user)
-
     date = datetime.now().date()
 
     response = gql_client.execute(
@@ -15,7 +14,7 @@ def test_success_query(user, gql_client, gql_raw):
             "id": user.pk,
             "start": date,
             "end": date,
-            "group": GroupProgressMetrics.WEEK.name,
+            "group": GroupProgressMetrics.DAY.name,
         },
     )
 
