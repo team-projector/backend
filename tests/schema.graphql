@@ -586,6 +586,7 @@ type Query {
   allUsers(isActive: Boolean, offset: Int, sort: [UserSort], before: String, after: String, first: Int, last: Int): UserTypeConnection
   userProgressMetrics(user: ID!, start: Date!, end: Date!, group: String!): [UserProgressMetricsType]
   me: User
+  workCalendar(user: ID!, start: Date!, end: Date!): [WorkCalendarType]
   bonus(id: ID!): Bonus
   allBonuses(user: ID, salary: ID, team: ID, offset: Int, before: String, after: String, first: Int, last: Int): BonusTypeConnection
   workBreak(id: ID!): WorkBreak
@@ -615,7 +616,7 @@ type Query {
   ticketsSummary(milestone: ID): TicketsSummaryType
   issue(id: ID!): Issue
   allIssues(milestone: ID, dueDate: Date, problems: Boolean, project: ID, team: ID, ticket: ID, q: String, state: IssueState, createdBy: ID, assignedTo: ID, participatedBy: ID, offset: Int, sort: [IssueSort], before: String, after: String, first: Int, last: Int): IssueTypeConnection
-  issuesSummary(dueDate: Date, user: ID, team: ID, state: String, problems: Boolean, project: ID, milestone: ID, ticket: ID): IssuesSummaryType
+  issuesSummary(dueDate: Date, team: ID, state: String, problems: Boolean, project: ID, milestone: ID, ticket: ID, participatedBy: ID, createdBy: ID, assignedTo: ID): IssuesSummaryType
   _debug: DjangoDebug
 }
 
@@ -890,6 +891,13 @@ type User implements ModelRelayNode {
   metrics: UserMetricsType
   problems: [String]
   workBreaks(approving: Boolean, fromDate: Date, toDate: Date, offset: Int, sort: [WorkBreakSort], before: String, after: String, first: Int, last: Int): WorkBreakTypeConnection
+  issuesSummary(project: ID, dueDate: Date): UserIssuesSummaryType
+}
+
+type UserIssuesSummaryType {
+  assignedCount: Int
+  createdCount: Int
+  participationCount: Int
 }
 
 type UserMetricsType {
@@ -980,6 +988,12 @@ type WorkBreakTypeConnection {
 type WorkBreakTypeEdge {
   node: WorkBreak
   cursor: String!
+}
+
+type WorkCalendarType {
+  date: Date
+  metrics: UserProgressMetricsType
+  issues: [Issue]
 }
 
 interface WorkItem {

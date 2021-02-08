@@ -5,8 +5,13 @@ from apps.users.graphql.fields import AllUsersConnectionField
 from apps.users.graphql.resolvers import (
     resolve_me_user,
     resolve_user_progress_metrics,
+    resolve_work_calendar,
 )
-from apps.users.graphql.types import UserProgressMetricsType, UserType
+from apps.users.graphql.types import (
+    UserProgressMetricsType,
+    UserType,
+    WorkCalendarType,
+)
 
 
 class UsersQueries(graphene.ObjectType):
@@ -24,3 +29,10 @@ class UsersQueries(graphene.ObjectType):
     )
 
     me = graphene.Field(UserType, resolver=resolve_me_user)
+    work_calendar = graphene.Field(
+        graphene.List(WorkCalendarType),
+        resolver=resolve_work_calendar,
+        user=graphene.ID(required=True),
+        start=graphene.Date(required=True),
+        end=graphene.Date(required=True),
+    )
