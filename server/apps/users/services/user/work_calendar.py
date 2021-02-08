@@ -12,7 +12,7 @@ from apps.users.services.user.metrics.progress.provider import (
 
 
 @dataclass
-class WorkCalendarData:
+class WorkCalendar:
     """Work calendar data."""
 
     date: date
@@ -20,12 +20,12 @@ class WorkCalendarData:
     issues: models.QuerySet
 
 
-def get_work_calendar(user, start_date, end_date) -> List[WorkCalendarData]:
+def get_work_calendar(user, start_date, end_date) -> List[WorkCalendar]:
     """Get work calendar."""
     user_metrics = get_progress_metrics(user, start_date, end_date, "day")
 
     return [
-        WorkCalendarData(
+        WorkCalendar(
             date=metrics.start,
             metrics=metrics,
             issues=Issue.objects.filter(user=user, due_date=metrics.start),
