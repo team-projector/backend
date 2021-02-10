@@ -114,5 +114,26 @@ def test_list_as_watcher_by_team(
     assert _all_issues_data(response)[COUNT_FIELD] == count
 
 
+def test_query_by_participiant(user, gql_client_authenticated, gql_raw):
+    """Test getting all issues by participiant."""
+    IssueFactory.create_batch(3, user=user)
+    issues = IssueFactory.create_batch(4)
+    for issue in issues:
+        issue.participants.add(user, UserFactory.create())
+
+    response = gql_client_authenticated.execute(
+        gql_raw(ALL_ISSUES_QUERY),
+        variable_values={"participatedBy": user.pk},
+    )
+
+    assert ERRORS_FIELD not in response
+    assert _all_issues_data(response)[COUNT_FIELD] == 4
+
+    issues_ids = [str(issue.pk) for issue in issues]
+
+    for edge in _all_issues_data(response)["edges"]:
+        assert edge["node"]["id"] in issues_ids
+
+
 def _all_issues_data(response):
     return response["data"]["allIssues"]
