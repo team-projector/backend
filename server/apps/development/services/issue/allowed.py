@@ -34,7 +34,13 @@ def filter_allowed_for_user(
         project__in=get_allowed_projects(user),
     )
 
-    return queryset.filter(id__in=team_member_issues | project_member_issues)
+    participated_issues = queryset.filter(participants=user)
+
+    return queryset.filter(
+        id__in=team_member_issues
+        | project_member_issues
+        | participated_issues,
+    )
 
 
 def get_allowed_projects(user: User) -> Iterable[Project]:
