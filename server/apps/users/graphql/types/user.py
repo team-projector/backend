@@ -9,13 +9,13 @@ from jnt_django_graphene_toolbox.helpers.selected_fields import (
 )
 from jnt_django_graphene_toolbox.types import BaseModelObjectType
 
+from apps.core import injector
 from apps.skills.graphql.types import PositionType
 from apps.users.graphql.fields import UserWorkBreaksConnectionField
 from apps.users.graphql.resolvers import resolve_user_issues_summary
 from apps.users.graphql.types import UserIssuesSummaryType, UserMetricsType
+from apps.users.logic.services import IUserMetricsService, IUserProblemsService
 from apps.users.models import User
-from apps.users.services.user.metrics.main import UserMetricsProvider
-from apps.users.services.user.problems import get_user_problems
 
 
 class UserType(BaseModelObjectType):
@@ -65,9 +65,10 @@ class UserType(BaseModelObjectType):
 
     def resolve_metrics(self, info, **kwargs):  # noqa: WPS110
         """Get user metrics."""
-        provider = UserMetricsProvider(get_fields_from_info(info))
-        return provider.get_metrics(self)
+        service = injector.get(IUserMetricsService)
+        return service.get_metrics(self, get_fields_from_info(info))
 
     def resolve_problems(self, info, **kwargs):  # noqa: WPS110
         """Get user problems."""
-        return get_user_problems(self)
+        service = injector.get(IUserProblemsService)
+        return service.get_problems(self)

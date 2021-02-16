@@ -4,11 +4,11 @@ from typing import Dict, List
 from constance import config
 from jnt_django_toolbox.helpers.time import seconds
 
-from apps.users.models import User
-from apps.users.services.user.metrics.progress import provider
-from apps.users.services.user.metrics.progress.day.stats import (
+from apps.users.logic.services.user.progress import provider
+from apps.users.logic.services.user.progress.day.stats import (
     UserDayStatsProvider,
 )
+from apps.users.models import User
 
 KEY_REMAINING = "remaining"
 

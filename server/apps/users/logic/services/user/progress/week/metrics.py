@@ -1,10 +1,10 @@
 from datetime import date, timedelta
 
-from apps.users.models import User
-from apps.users.services.user.metrics.progress import provider
-from apps.users.services.user.metrics.progress.week.stats import (
+from apps.users.logic.services.user.progress import provider
+from apps.users.logic.services.user.progress.week.stats import (
     UserWeekStatsProvider,
 )
+from apps.users.models import User
 
 
 class UserWeekMetricsGenerator:

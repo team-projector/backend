@@ -2,8 +2,10 @@ from datetime import date
 from typing import List
 
 from apps.development.models import Team
+from apps.users.logic.services.user.progress.provider import (
+    UserProgressMetricsList,
+)
 from apps.users.models import User
-from apps.users.services.user.metrics import UserProgressMetricsList
 
 
 class TeamMemberProgressMetrics:

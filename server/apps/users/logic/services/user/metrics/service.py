@@ -9,29 +9,28 @@ from apps.core.models.fields import MoneyField
 from apps.development.models.issue import IssueState
 from apps.development.models.merge_request import MergeRequestState
 from apps.payroll.models import Bonus, Penalty, SpentTime
-from apps.users.models import User
-from apps.users.services.user.metrics import (
-    last_salary_date_resolver,
-    paid_work_breaks_days_resolver,
+from apps.users.logic.services.user.metrics import (
+    IUserMetricsService,
+    resolvers,
 )
+from apps.users.models import User
 
 KEY_METRICS_TAXES = "taxes"
 FIELD_SUM = "sum"
 FIELD_TIME_SPENT = "time_spent"
 
 
-class UserMetricsProvider:
+class UserMetricsService(IUserMetricsService):
     """Merge Request user metrics."""
 
-    def __init__(self, fields: Tuple[str, ...] = ()):
+    def __init__(self):
         """Inits object with fields."""
-        self._fields = fields
         self._bonus: Optional[Decimal] = None
         self._penalty: Optional[Decimal] = None
 
-    def get_metrics(self, user: User):
+    def get_metrics(self, user: User, fields: Tuple[str, ...] = ()):
         """Calculate and return metrics."""
-        metrics = self._get_time_spent_aggregations(user)
+        metrics = self._get_time_spent_aggregations(user, fields)
         return_metrics = recursive_dict()
 
         for field, metric in metrics.items():
@@ -49,50 +48,54 @@ class UserMetricsProvider:
                 Decimal("1.00"),
             )
 
-        self._fill_metrics(user, return_metrics)
+        self._fill_metrics(user, return_metrics, fields)
 
         return return_metrics
 
-    def _fill_metrics(self, user, metrics) -> None:
+    def _fill_metrics(self, user, metrics, fields) -> None:
         """Fill metrics."""
         metric_request_map = {
             "bonus": self._get_bonus,
             "penalty": self._get_penalty,
-            "paid_work_breaks_days": paid_work_breaks_days_resolver,
-            "last_salary_date": last_salary_date_resolver,
+            "paid_work_breaks_days": resolvers.paid_work_breaks_days_resolver,
+            "last_salary_date": resolvers.last_salary_date_resolver,
+            "issues.opened_count": resolvers.opened_issues_count_resolver,
+            "merge_requests.opened_count": resolvers.opened_merge_requests_count_resolver,  # noqa: E501
         }
 
         for requested_field, func in metric_request_map.items():
-            if not self._is_metric_requested(requested_field):
+            if not self._is_metric_requested(requested_field, fields):
                 continue
 
-            metrics[requested_field] = func(user)
+            deep_set(metrics, requested_field, func(user))
 
-    def _get_time_spent_aggregations(self, user: User):
+    def _get_time_spent_aggregations(self, user: User, fields):
         """
         Get time spent aggregations.
 
         :param user:
         :type user: User
         """
-        ret = SpentTime.objects.filter(
+        aggregations = SpentTime.objects.filter(
             salary__isnull=True,
             user=user,
         ).aggregate(
             **{
                 key: aggr
                 for key, aggr in _aggregations().items()
-                if self._is_metric_requested(key)
+                if self._is_metric_requested(key, fields)
             },
         )
 
         for metric in ("taxes_opened", "taxes_closed"):
-            if ret.get(metric) is None:
+            if aggregations.get(metric) is None:
                 continue
 
-            ret[metric] = Decimal(ret[metric]).quantize(Decimal("1.00"))
+            aggregations[metric] = Decimal(aggregations[metric]).quantize(
+                Decimal("1.00"),
+            )
 
-        return ret
+        return aggregations
 
     def _get_bonus(self, user) -> Decimal:
         """Returns overall not paid bonus sum for user."""
@@ -116,18 +119,18 @@ class UserMetricsProvider:
         ).aggregate(total=Coalesce(models.Sum(FIELD_SUM), 0))["total"]
         return self._penalty
 
-    def _is_metric_requested(self, metric: str):
+    def _is_metric_requested(self, metric: str, fields):
         """
         Is metric requested.
 
         :param metric:
         :type metric: str
         """
-        if not self._fields:
+        if not fields:
             return True
 
         try:
-            deep_get(self._fields, metric)
+            deep_get(fields, metric)
         except KeyError:
             return False
         else:
@@ -139,8 +142,10 @@ class _Aggregations:
 
     issue_opened = models.Q(issues__state=IssueState.OPENED)
     issue_closed = models.Q(issues__state=IssueState.CLOSED)
-    mreq_opened = models.Q(mergerequests__state=MergeRequestState.OPENED)
-    mreq_closed = models.Q(
+    merge_request_opened = models.Q(
+        mergerequests__state=MergeRequestState.OPENED,
+    )
+    merge_request_closed = models.Q(
         mergerequests__state__in=(
             MergeRequestState.CLOSED,
             MergeRequestState.MERGED,
@@ -174,13 +179,13 @@ class _Aggregations:
                 0,
             ),
             "merge_requests.opened_spent": Coalesce(
-                models.Sum(FIELD_TIME_SPENT, filter=self.mreq_opened),
+                models.Sum(FIELD_TIME_SPENT, filter=self.merge_request_opened),
                 0,
             ),
             "opened_spent": Coalesce(
                 models.Sum(
                     FIELD_TIME_SPENT,
-                    filter=self.issue_opened | self.mreq_opened,
+                    filter=self.issue_opened | self.merge_request_opened,
                 ),
                 0,
             ),
@@ -213,16 +218,16 @@ class _Aggregations:
             (
                 "merge_requests.",
                 _WorkItemFilters(
-                    self.mreq_opened,
-                    self.mreq_closed,
-                    self.mreq_opened | self.mreq_closed,
+                    self.merge_request_opened,
+                    self.merge_request_closed,
+                    self.merge_request_opened | self.merge_request_closed,
                 ),
             ),
             (
                 "",
                 _WorkItemFilters(
-                    self.issue_opened | self.mreq_opened,
-                    self.issue_closed | self.mreq_closed,
+                    self.issue_opened | self.merge_request_opened,
+                    self.issue_closed | self.merge_request_closed,
                     None,
                 ),
             ),

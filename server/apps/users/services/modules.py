@@ -6,7 +6,7 @@ from apps.users.services.auth.social_login import SocialLoginService
 from apps.users.services.token import TokenService
 
 
-class UserServicesModule(injector.Module):
+class InfrastructureUserServicesModule(injector.Module):
     """Setup di for user services."""
 
     def configure(self, binder: injector.Binder) -> None:

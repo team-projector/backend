@@ -5,8 +5,8 @@ from django.db import models
 
 from apps.development.models import Issue
 from apps.development.models.issue import IssueState
-from apps.users.services.user.metrics.progress import provider
-from apps.users.services.user.metrics.progress.day.metrics import (
+from apps.users.logic.services.user.progress import provider
+from apps.users.logic.services.user.progress.day.metrics import (
     UserDaysMetricsGenerator,
 )
 

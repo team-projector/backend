@@ -1,7 +1,9 @@
 from datetime import date, timedelta
 from typing import Dict
 
-from apps.users.services.user.metrics import UserProgressMetricsList
+from apps.users.logic.services.user.progress.provider import (
+    UserProgressMetricsList,
+)
 
 
 def check_user_progress_metrics(  # noqa: WPS210 WPS211

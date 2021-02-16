@@ -2,7 +2,9 @@ from datetime import date, datetime, timedelta
 
 from django.utils import timezone
 
-from apps.users.services.user import metrics
+from apps.users.logic.services.user.metrics.resolvers import (
+    paid_work_breaks_days_resolver,
+)
 from tests.test_payroll.factories import WorkBreakFactory
 
 
@@ -21,7 +23,7 @@ def test_paid_work_breaks_days(user, ghl_auth_mock_info):
         from_date=now - timedelta(days=5),
         paid_days=5,
     )
-    paid_work_breaks_days = metrics.paid_work_breaks_days_resolver(user)
+    paid_work_breaks_days = paid_work_breaks_days_resolver(user)
     assert paid_work_breaks_days == 5
 
 
@@ -39,7 +41,7 @@ def test_paid_work_breaks_days_not_paid_not_count(user, ghl_auth_mock_info):
         to_date=now,
         from_date=now - timedelta(days=5),
     )
-    paid_work_breaks_days = metrics.paid_work_breaks_days_resolver(user)
+    paid_work_breaks_days = paid_work_breaks_days_resolver(user)
     assert paid_work_breaks_days == 0
 
 
@@ -60,7 +62,7 @@ def test_paid_work_breaks_days_not_this_year(
         to_date=now - timedelta(days=370),
         from_date=now - timedelta(days=375),
     )
-    paid_work_breaks_days = metrics.paid_work_breaks_days_resolver(user)
+    paid_work_breaks_days = paid_work_breaks_days_resolver(user)
     assert paid_work_breaks_days == 0
 
 
@@ -79,7 +81,7 @@ def test_paid_work_breaks_lower_boundary_of_year(user, ghl_auth_mock_info):
         from_date=date(now.year - 1, 12, 25),
         paid_days=2,
     )
-    paid_work_breaks_days = metrics.paid_work_breaks_days_resolver(user)
+    paid_work_breaks_days = paid_work_breaks_days_resolver(user)
     assert paid_work_breaks_days == 2
 
 
@@ -98,5 +100,5 @@ def test_paid_work_breaks_upper_boundary_of_year(user, ghl_auth_mock_info):
         from_date=date(now.year, 12, 25),
         paid_days=7,
     )
-    paid_work_breaks_days = metrics.paid_work_breaks_days_resolver(user)
+    paid_work_breaks_days = paid_work_breaks_days_resolver(user)
     assert paid_work_breaks_days == 7

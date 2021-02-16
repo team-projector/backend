@@ -1,5 +1,7 @@
 from apps.development.models.issue import IssueState
-from apps.users.services.user import metrics
+from apps.users.logic.services.user.metrics.resolvers import (
+    opened_merge_requests_count_resolver,
+)
 from tests.test_development.factories import MergeRequestFactory
 from tests.test_users.factories.user import UserFactory
 
@@ -13,8 +15,8 @@ def test_mr_opened_count(user, ghl_auth_mock_info):
     """
     MergeRequestFactory.create_batch(5, user=user)
 
-    expected = metrics.mr_opened_count_resolver(None, ghl_auth_mock_info)
-    assert expected == 5
+    metrics = opened_merge_requests_count_resolver(user)
+    assert metrics == 5
 
 
 def test_mr_opened_count_exists_closed(user, ghl_auth_mock_info):
@@ -27,8 +29,8 @@ def test_mr_opened_count_exists_closed(user, ghl_auth_mock_info):
     MergeRequestFactory.create_batch(2, user=user)
     MergeRequestFactory.create_batch(5, user=user, state=IssueState.CLOSED)
 
-    expected = metrics.mr_opened_count_resolver(None, ghl_auth_mock_info)
-    assert expected == 2
+    metrics = opened_merge_requests_count_resolver(user)
+    assert metrics == 2
 
 
 def test_mr_opened_count_another_user(user, ghl_auth_mock_info):
@@ -41,5 +43,5 @@ def test_mr_opened_count_another_user(user, ghl_auth_mock_info):
     MergeRequestFactory.create_batch(2, user=user)
     MergeRequestFactory.create_batch(5, user=UserFactory.create())
 
-    expected = metrics.mr_opened_count_resolver(None, ghl_auth_mock_info)
-    assert expected == 2
+    metrics = opened_merge_requests_count_resolver(user)
+    assert metrics == 2

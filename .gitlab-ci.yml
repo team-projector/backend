@@ -25,12 +25,12 @@ build:
   script:
     - ./scripts/ci_build_images.sh
 
-quality:
+lint:
   stage: test
   image: $DOCKER_TEST_IMAGE
   script:
     - cd /app
-    - make check_quality
+    - make lint
 
 test:
   stage: test

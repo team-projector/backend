@@ -1,7 +1,7 @@
 from jnt_django_toolbox.helpers.time import seconds
 
 from apps.users.graphql.types.user import UserType
-from apps.users.services.user.problems.checkers import (
+from apps.users.logic.services.user.problems import (
     PROBLEM_NOT_ENOUGH_TASKS,
     PROBLEM_PAYROLL_OPENED_OVERFLOW,
 )

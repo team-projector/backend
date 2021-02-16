@@ -1,11 +1,10 @@
 from jnt_django_toolbox.helpers.time import seconds
 
 from apps.development.models.issue import IssueState
-from apps.users.services.user.problems import get_user_problems
 from tests.test_development.factories import IssueFactory
 
 
-def test_no_problems(user):
+def test_no_problems(user, user_problems_service):
     """Test if user has"t any problem."""
     IssueFactory.create(
         user=user,
@@ -21,4 +20,4 @@ def test_no_problems(user):
         state=IssueState.OPENED,
     )
 
-    assert not get_user_problems(user)
+    assert not user_problems_service.get_problems(user)

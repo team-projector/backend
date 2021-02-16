@@ -2,8 +2,8 @@ from datetime import datetime, timedelta
 
 import pytest
 
-from apps.users.services.user.metrics import get_progress_metrics
-from apps.users.services.user.metrics.progress.provider import (
+from apps.users.logic.services.user.progress.main import get_progress_metrics
+from apps.users.logic.services.user.progress.provider import (
     ProgressMetricsProvider,
 )
 

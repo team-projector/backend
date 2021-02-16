@@ -5,7 +5,7 @@ from graphql import ResolveInfo
 
 from apps.core.graphql.mutations import BaseUseCaseMutation
 from apps.users.graphql.types import UserType
-from apps.users.use_cases.me import update as me_update
+from apps.users.logic.use_cases.me import update as me_update
 
 
 class UpdateMeInput(graphene.InputObjectType):

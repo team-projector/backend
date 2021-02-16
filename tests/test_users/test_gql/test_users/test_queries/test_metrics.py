@@ -1,31 +1,23 @@
-from datetime import datetime
-
-from apps.users.services.user.metrics.progress import GroupProgressMetrics
+from tests.test_development.factories import IssueFactory
 
 
 def test_success_query(user, gql_client, gql_raw):
-    """Test user progress metrics raw query."""
+    """Test user metrics raw query."""
     gql_client.set_user(user)
-    date = datetime.now().date()
+    user.roles.MANAGER = True
+    user.save()
+
+    IssueFactory.create(user=user)
 
     response = gql_client.execute(
-        gql_raw("user_progress_metrics"),
+        gql_raw("user_metrics"),
         variable_values={
             "id": user.pk,
-            "start": date,
-            "end": date,
-            "group": GroupProgressMetrics.DAY.name,
         },
     )
 
     assert "errors" not in response
 
-    progress_metrics = response["data"]["userProgressMetrics"]
+    metrics = response["data"]["user"]["metrics"]
 
-    assert len(progress_metrics) == 1
-
-    metrics = progress_metrics[0]
-
-    assert metrics["start"] == date.strftime("%Y-%m-%d")  # noqa: WPS323
-    assert metrics["end"] == date.strftime("%Y-%m-%d")  # noqa: WPS323
-    assert not metrics["issuesCount"]
+    assert metrics["issues"]["openedCount"] == 1
