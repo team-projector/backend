@@ -1,3 +1,4 @@
+from apps.development.graphql.types.enums import ProjectState
 from tests.test_development.factories import IssueFactory
 from tests.test_development.test_services.test_issues.test_allowed import (
     helpers,
@@ -29,4 +30,18 @@ def test_exclude_another_developer(team, team_developer, make_team_developer):
     helpers.check_allowed_for_user(
         team_developer,
         IssueFactory.create_batch(2, user=team_developer),
+    )
+
+
+def test_exclude_archived_projects(team_developer):
+    """Test exclude archived projects."""
+    IssueFactory.create_batch(1, user=team_developer, project__state=ProjectState.ARCHIVED)
+
+    helpers.check_allowed_for_user(
+        team_developer,
+        IssueFactory.create_batch(
+            2,
+            user=team_developer,
+            project__state=ProjectState.DEVELOPING,
+        ),
     )
