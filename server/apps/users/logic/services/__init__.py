@@ -1,2 +1,2 @@
-from .user.problems import IUserProblemsService, UserProblemsService
-from .user.metrics import IUserMetricsService, UserMetricsService
+from .user.problems.service import IUserProblemsService, UserProblemsService
+from .user.metrics.service import IUserMetricsService, UserMetricsService
