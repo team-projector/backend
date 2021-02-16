@@ -4,6 +4,7 @@ from django.db.models import Exists, OuterRef, QuerySet
 from jnt_django_graphene_toolbox.errors import GraphQLPermissionDenied
 
 from apps.core.application.errors import AccessDeniedApplicationError
+from apps.development.graphql.types.enums import ProjectState
 from apps.development.models import (
     Issue,
     Project,
@@ -36,6 +37,8 @@ def filter_allowed_for_user(
 
     participated_issues = queryset.filter(participants=user)
     author_issues = queryset.filter(author=user)
+
+    queryset = queryset.exclude(project__state=ProjectState.ARCHIVED)
 
     return queryset.filter(
         id__in=team_member_issues

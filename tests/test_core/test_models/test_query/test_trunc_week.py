@@ -16,8 +16,8 @@ ONE_WEEK = timedelta(weeks=1)
     params=[
         0,
         1,
-        "1",
         "0",
+        "1",
     ],
 )
 def user(user, request):
