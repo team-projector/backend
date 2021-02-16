@@ -620,7 +620,7 @@ type Query {
   allTickets(milestone: ID, state: TicketState, offset: Int, sort: [TicketSort], before: String, after: String, first: Int, last: Int): TicketTypeConnection
   ticketsSummary(milestone: ID): TicketsSummaryType
   issue(id: ID!): Issue
-  allIssues(milestone: ID, dueDate: Date, problems: Boolean, project: ID, team: ID, ticket: ID, q: String, state: IssueState, createdBy: ID, assignedTo: ID, participatedBy: ID, offset: Int, sort: [IssueSort], before: String, after: String, first: Int, last: Int): IssueTypeConnection
+  allIssues(milestone: ID, dueDate: Date, problems: Boolean, project: ID, team: ID, ticket: ID, q: String, state: IssueState, createdBy: ID, assignedTo: ID, participatedBy: ID, createdByForOther: ID, offset: Int, sort: [IssueSort], before: String, after: String, first: Int, last: Int): IssueTypeConnection
   issuesSummary(dueDate: Date, team: ID, state: String, problems: Boolean, project: ID, milestone: ID, ticket: ID, participatedBy: ID, createdBy: ID, assignedTo: ID): IssuesSummaryType
   _debug: DjangoDebug
 }
@@ -773,7 +773,7 @@ type Ticket implements ModelRelayNode {
   createdAt: DateTime
   metrics: TicketMetricsType
   problems: [String]
-  issues(milestone: ID, dueDate: Date, problems: Boolean, project: ID, team: ID, ticket: ID, q: String, state: IssueState, createdBy: ID, assignedTo: ID, participatedBy: ID, offset: Int, sort: [IssueSort], before: String, after: String, first: Int, last: Int): IssueTypeConnection
+  issues(milestone: ID, dueDate: Date, problems: Boolean, project: ID, team: ID, ticket: ID, q: String, state: IssueState, createdBy: ID, assignedTo: ID, participatedBy: ID, createdByForOther: ID, offset: Int, sort: [IssueSort], before: String, after: String, first: Int, last: Int): IssueTypeConnection
   type: TicketType
   title: String
   startDate: Date
@@ -901,8 +901,11 @@ type User implements ModelRelayNode {
 
 type UserIssuesSummaryType {
   assignedCount: Int
+  assignedOpenedCount: Int
   createdCount: Int
+  createdOpenedCount: Int
   participationCount: Int
+  participationOpenedCount: Int
 }
 
 type UserMetricsType {

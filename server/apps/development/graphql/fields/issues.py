@@ -84,5 +84,5 @@ class IssuesConnectionField(BaseModelConnectionField):
             created_by=graphene.ID(),
             assigned_to=graphene.ID(),
             participated_by=graphene.ID(),
-            createdByForOther=graphene.ID(),
+            created_by_for_other=graphene.ID(),
         )

@@ -2,6 +2,8 @@ from apps.development.graphql.fields.issues import IssuesFilterSet
 from apps.development.models.issue import Issue
 from tests.test_development.factories import IssueFactory
 
+CREATED_BY_FOR_OTHER = "created_by_for_other"
+
 
 def test_success(user):
     """Test success query."""
@@ -9,7 +11,7 @@ def test_success(user):
     IssueFactory.create_batch(2, user=user)
 
     filter_set = IssuesFilterSet(
-        data={"created_by_for_other": user.pk},
+        data={CREATED_BY_FOR_OTHER: user.pk},
         queryset=Issue.objects.all(),
     )
 
@@ -24,7 +26,7 @@ def test_empty(user):
     IssueFactory.create_batch(2, user=user)
 
     filter_set = IssuesFilterSet(
-        data={"created_by_for_other": user.pk},
+        data={CREATED_BY_FOR_OTHER: user.pk},
         queryset=Issue.objects.all(),
     )
 
@@ -39,7 +41,22 @@ def test_all_another_issues(user):
     IssueFactory.create_batch(3)
 
     filter_set = IssuesFilterSet(
-        data={"created_by_for_other": user.pk},
+        data={CREATED_BY_FOR_OTHER: user.pk},
+        queryset=Issue.objects.all(),
+    )
+
+    assert filter_set.is_valid()
+    assert not filter_set.qs.exists()
+
+
+def test_user_as_participant(user):
+    """Test user as participiant."""
+    issues = IssueFactory.create_batch(3)
+    for issue in issues:
+        issue.participants.add(user)
+
+    filter_set = IssuesFilterSet(
+        data={CREATED_BY_FOR_OTHER: user.pk},
         queryset=Issue.objects.all(),
     )
 
