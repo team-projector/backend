@@ -1,8 +1,8 @@
-from apps.users.services.user.metrics.main import UserMetricsProvider
+from apps.users.logic.services.user.metrics import UserMetricsService
 from tests.test_payroll.factories import PenaltyFactory, SalaryFactory
 from tests.test_users.factories.user import UserFactory
 
-calculator = UserMetricsProvider
+calculator = UserMetricsService
 
 
 def test_penalty(user):

@@ -8,7 +8,7 @@ from jnt_django_toolbox.helpers.time import seconds
 from apps.development.services.team.metrics.progress import (
     get_progress_metrics,
 )
-from apps.users.services.user.metrics.progress import GroupProgressMetrics
+from apps.users.logic.services.user.progress import GroupProgressMetrics
 from tests.test_development.factories import IssueFactory
 from tests.test_payroll.factories import IssueSpentTimeFactory
 from tests.test_users.factories.user import UserFactory

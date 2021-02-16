@@ -2,9 +2,11 @@ from apps.development.services.team.metrics.progress.base import (
     ProgressMetricsProvider,
     UserProgressMetricsList,
 )
+from apps.users.logic.services.user.progress.main import (
+    GroupProgressMetrics,
+    get_progress_metrics,
+)
 from apps.users.models import User
-from apps.users.services.user.metrics import get_progress_metrics
-from apps.users.services.user.metrics.progress.main import GroupProgressMetrics
 
 
 class WeekMetricsProvider(ProgressMetricsProvider):

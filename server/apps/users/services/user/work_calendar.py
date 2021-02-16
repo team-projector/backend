@@ -5,9 +5,11 @@ from typing import List
 from django.db import models
 
 from apps.development.models import Issue
-from apps.users.services.user.metrics import get_progress_metrics
-from apps.users.services.user.metrics.progress.main import GroupProgressMetrics
-from apps.users.services.user.metrics.progress.provider import (
+from apps.users.logic.services.user.progress.main import (
+    GroupProgressMetrics,
+    get_progress_metrics,
+)
+from apps.users.logic.services.user.progress.provider import (
     UserProgressMetrics,
 )
 

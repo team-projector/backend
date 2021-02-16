@@ -1,13 +1,13 @@
 import pytest
 
-from apps.users.services.user.metrics.main import UserMetricsProvider
+from apps.users.logic.services.user.metrics import UserMetricsService
 from tests.test_payroll.factories import BonusFactory, SalaryFactory
 from tests.test_payroll.test_gql.test_user_metrics.test_provider import (
     checkers,
 )
 from tests.test_users.factories.user import UserFactory
 
-calculator = UserMetricsProvider
+calculator = UserMetricsService
 
 
 @pytest.fixture()

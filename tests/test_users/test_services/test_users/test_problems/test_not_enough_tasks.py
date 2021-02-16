@@ -2,12 +2,11 @@ from jnt_django_toolbox.helpers.time import seconds
 
 from apps.development.models.issue import IssueState
 from apps.development.models.merge_request import MergeRequestState
-from apps.users.services.user.problems import get_user_problems
-from apps.users.services.user.problems.checkers import PROBLEM_NOT_ENOUGH_TASKS
+from apps.users.logic.services.user.problems import PROBLEM_NOT_ENOUGH_TASKS
 from tests.test_development.factories import IssueFactory, MergeRequestFactory
 
 
-def test_issues(user):
+def test_issues(user, user_problems_service):
     """Test if not enough issues."""
     IssueFactory.create(
         user=user,
@@ -30,12 +29,12 @@ def test_issues(user):
         state=IssueState.CLOSED,
     )
 
-    assert get_user_problems(user) == [
+    assert user_problems_service.get_problems(user) == [
         PROBLEM_NOT_ENOUGH_TASKS,
     ]
 
 
-def test_merge_requests(user):
+def test_merge_requests(user, user_problems_service):
     """Test if not enough merge requests."""
     MergeRequestFactory.create(
         user=user,
@@ -65,10 +64,12 @@ def test_merge_requests(user):
         state=MergeRequestState.MERGED,
     )
 
-    assert get_user_problems(user) == [PROBLEM_NOT_ENOUGH_TASKS]
+    assert user_problems_service.get_problems(user) == [
+        PROBLEM_NOT_ENOUGH_TASKS,
+    ]
 
 
-def test_complex(user):
+def test_complex(user, user_problems_service):
     """Test if not enough merge requests and issues."""
     IssueFactory.create(
         user=user,
@@ -84,4 +85,6 @@ def test_complex(user):
         state=MergeRequestState.OPENED,
     )
 
-    assert get_user_problems(user) == [PROBLEM_NOT_ENOUGH_TASKS]
+    assert user_problems_service.get_problems(user) == [
+        PROBLEM_NOT_ENOUGH_TASKS,
+    ]

@@ -5,8 +5,10 @@ from django.utils import timezone
 from jnt_django_toolbox.helpers.time import seconds
 
 from apps.development.models.issue import IssueState
-from apps.users.services.user import metrics
-from apps.users.services.user.metrics.main import UserMetricsProvider
+from apps.users.logic.services.user.metrics import UserMetricsService
+from apps.users.logic.services.user.metrics.resolvers import (
+    last_salary_date_resolver,
+)
 from tests.test_development.factories import IssueFactory
 from tests.test_payroll.factories import (
     BonusFactory,
@@ -19,7 +21,7 @@ from tests.test_payroll.test_gql.test_user_metrics.test_provider import (
 )
 from tests.test_users.factories.user import UserFactory
 
-calculator = UserMetricsProvider
+calculator = UserMetricsService
 
 
 @pytest.fixture()
@@ -46,7 +48,7 @@ def test_last_salary_date(user, ghl_auth_mock_info):
     )
     salary = SalaryFactory(user=user, period_to=timezone.now())
 
-    last_salary_date = metrics.last_salary_date_resolver(user)
+    last_salary_date = last_salary_date_resolver(user)
     assert last_salary_date == salary.period_to.date()
 
 

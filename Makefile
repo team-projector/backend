@@ -1,5 +1,5 @@
-check_quality:
-	@./scripts/quality.sh
+lint:
+	@./scripts/lint.sh
 
 make_messages:
 	@./manage.py makemessages --ignore=.venv/* -l en -l ru --no-location

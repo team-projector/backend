@@ -7,7 +7,7 @@ from apps.development.graphql.types import (
     TeamMemberProgressMetricsType,
     TeamType,
 )
-from apps.users.services.user.metrics.progress.main import GroupProgressMetrics
+from apps.users.logic.services.user.progress.main import GroupProgressMetrics
 
 
 class TeamsQueries(graphene.ObjectType):

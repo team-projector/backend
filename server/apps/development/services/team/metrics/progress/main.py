@@ -12,7 +12,7 @@ from apps.development.services.team.metrics.progress.day import (
 from apps.development.services.team.metrics.progress.week import (
     WeekMetricsProvider,
 )
-from apps.users.services.user.metrics.progress.main import GroupProgressMetrics
+from apps.users.logic.services.user.progress.main import GroupProgressMetrics
 
 
 def create_provider(

@@ -10,7 +10,7 @@ from apps.development.models.issue import IssueState
 from apps.development.services.team.metrics.progress import (
     get_progress_metrics,
 )
-from apps.users.services.user.metrics.progress import GroupProgressMetrics
+from apps.users.logic.services.user.progress import GroupProgressMetrics
 from tests.test_development.factories import IssueFactory
 from tests.test_payroll.factories import IssueSpentTimeFactory
 from tests.test_users.test_services.test_users.test_metrics.test_progress.test_weeks import (  # noqa: E501

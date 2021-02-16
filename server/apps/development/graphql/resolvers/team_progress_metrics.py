@@ -10,7 +10,7 @@ from apps.development.services.team.allowed import (
 from apps.development.services.team.metrics.progress import (
     get_progress_metrics,
 )
-from apps.users.services.user.metrics.progress.main import GroupProgressMetrics
+from apps.users.logic.services.user.progress.main import GroupProgressMetrics
 
 
 def resolve_team_progress_metrics(parent, info, **kwargs):  # noqa: WPS110

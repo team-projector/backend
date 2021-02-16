@@ -2,7 +2,7 @@ import pytest
 from jnt_django_toolbox.helpers.time import seconds
 
 from apps.development.models.issue import IssueState
-from apps.users.services.user.metrics.main import UserMetricsProvider
+from apps.users.logic.services.user.metrics import UserMetricsService
 from tests.test_development.factories import IssueFactory, MergeRequestFactory
 from tests.test_payroll.factories import (
     IssueSpentTimeFactory,
@@ -13,7 +13,7 @@ from tests.test_payroll.test_gql.test_user_metrics.test_provider import (
 )
 from tests.test_users.factories.user import UserFactory
 
-calculator = UserMetricsProvider
+calculator = UserMetricsService
 
 
 @pytest.fixture()

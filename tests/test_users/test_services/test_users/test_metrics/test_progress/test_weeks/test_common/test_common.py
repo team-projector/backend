@@ -5,8 +5,8 @@ from django.utils import timezone
 from jnt_django_toolbox.helpers.date import begin_of_week
 from jnt_django_toolbox.helpers.time import seconds
 
-from apps.users.services.user.metrics import get_progress_metrics
-from apps.users.services.user.metrics.progress import GroupProgressMetrics
+from apps.users.logic.services.user.progress import GroupProgressMetrics
+from apps.users.logic.services.user.progress.main import get_progress_metrics
 from tests.test_development.factories import IssueFactory
 from tests.test_payroll.factories import IssueSpentTimeFactory
 from tests.test_users.factories.user import UserFactory

@@ -1,0 +1,4 @@
+from .last_salary_date import last_salary_date_resolver
+from .paid_work_breaks_days import paid_work_breaks_days_resolver
+from .opened_issues_count import opened_issues_count_resolver
+from .opened_merge_requests_count import opened_merge_requests_count_resolver

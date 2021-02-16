@@ -3,13 +3,11 @@ from django.db.models.functions import Coalesce
 from django.utils.timezone import now
 
 from apps.payroll.models import WorkBreak
+from apps.users.models import User
 
 
-def paid_work_breaks_days_resolver(user) -> int:
+def paid_work_breaks_days_resolver(user: User) -> int:
     """Returns overall paid work break days for user."""
-    if not user.is_authenticated:
-        return 0
-
     current_year = now().year
 
     return WorkBreak.objects.filter(

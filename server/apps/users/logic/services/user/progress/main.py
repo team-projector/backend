@@ -1,17 +1,17 @@
 from datetime import date
 from enum import Enum
 
-from apps.users.models import User
-from apps.users.services.user.metrics.progress.day.provider import (
+from apps.users.logic.services.user.progress.day.provider import (
     DayMetricsProvider,
 )
-from apps.users.services.user.metrics.progress.provider import (
+from apps.users.logic.services.user.progress.provider import (
     ProgressMetricsProvider,
     UserProgressMetricsList,
 )
-from apps.users.services.user.metrics.progress.week.provider import (
+from apps.users.logic.services.user.progress.week.provider import (
     WeekMetricsProvider,
 )
+from apps.users.models import User
 
 
 class GroupProgressMetrics(Enum):

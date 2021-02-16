@@ -12,7 +12,7 @@ from apps.users.graphql.types import (
     UserType,
     WorkCalendarType,
 )
-from apps.users.services.user.metrics.progress.main import GroupProgressMetrics
+from apps.users.logic.services.user.progress.main import GroupProgressMetrics
 
 
 class UsersQueries(graphene.ObjectType):

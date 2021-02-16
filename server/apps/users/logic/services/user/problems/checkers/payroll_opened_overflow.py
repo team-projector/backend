@@ -4,8 +4,10 @@ from jnt_django_toolbox.consts.time import SECONDS_PER_HOUR
 
 from apps.development.models.issue import IssueState
 from apps.payroll.models import SpentTime
+from apps.users.logic.services.user.problems.checkers.base import (
+    BaseProblemChecker,
+)
 from apps.users.models import User
-from apps.users.services.user.problems.checkers.base import BaseProblemChecker
 
 PROBLEM_PAYROLL_OPENED_OVERFLOW = "PAYROLL_OPENED_OVERFLOW"
 PROBLEM_PAYROLL_OVERFLOW_RATIO = 1.5

@@ -43,4 +43,4 @@ def auth_required(info: ResolveInfo) -> None:  # noqa: WPS110
     user = getattr(info.context, "user", None) or AnonymousUser
 
     if any([not user.is_active, user.is_anonymous]):
-        raise GraphQLPermissionDenied()
+        raise GraphQLPermissionDenied

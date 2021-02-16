@@ -7,9 +7,9 @@ from jnt_django_graphene_toolbox.helpers.generics import (
 from apps.core.graphql.security.authentication import auth_required
 from apps.development.models import TeamMember
 from apps.development.services.team_members.filters import filter_by_roles
+from apps.users.logic.services.user.progress import GroupProgressMetrics
+from apps.users.logic.services.user.progress.main import get_progress_metrics
 from apps.users.models import User
-from apps.users.services.user.metrics import get_progress_metrics
-from apps.users.services.user.metrics.progress.main import GroupProgressMetrics
 
 
 def filter_allowed_for_user(queryset: QuerySet, user: User) -> QuerySet:

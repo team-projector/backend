@@ -6,8 +6,10 @@ from apps.development.models.merge_request import (
     MergeRequest,
     MergeRequestState,
 )
+from apps.users.logic.services.user.problems.checkers.base import (
+    BaseProblemChecker,
+)
 from apps.users.models import User
-from apps.users.services.user.problems.checkers.base import BaseProblemChecker
 
 PROBLEM_NOT_ENOUGH_TASKS = "NOT_ENOUGH_TASKS"
 
