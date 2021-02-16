@@ -35,7 +35,11 @@ def test_exclude_another_developer(team, team_developer, make_team_developer):
 
 def test_exclude_archived_projects(team_developer):
     """Test exclude archived projects."""
-    IssueFactory.create_batch(1, user=team_developer, project__state=ProjectState.ARCHIVED)
+    IssueFactory.create_batch(
+        1,
+        user=team_developer,
+        project__state=ProjectState.ARCHIVED,
+    )
 
     helpers.check_allowed_for_user(
         team_developer,
