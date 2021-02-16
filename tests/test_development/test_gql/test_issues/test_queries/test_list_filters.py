@@ -23,5 +23,22 @@ def test_query_by_participated(user, gql_client_authenticated, gql_raw):
         assert edge["node"]["id"] in issues_ids
 
 
+def test_created_by_for_other(user, gql_client_authenticated, gql_raw):
+    """Test created_by_for_other from raw graphql."""
+    issue = IssueFactory.create(author=user)
+    IssueFactory.create_batch(2, user=user)
+
+    response = gql_client_authenticated.execute(
+        gql_raw("all_issues"),
+        variable_values={"createdByForOther": user.pk},
+    )
+
+    assert "errors" not in response
+    assert _all_issues_data(response)["count"] == 1
+
+    edge = _all_issues_data(response)["edges"][0]
+    assert edge["node"]["id"] == str(issue.pk)
+
+
 def _all_issues_data(response):
     return response["data"]["allIssues"]

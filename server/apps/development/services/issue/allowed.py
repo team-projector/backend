@@ -36,13 +36,15 @@ def filter_allowed_for_user(
     )
 
     participated_issues = queryset.filter(participants=user)
+    author_issues = queryset.filter(author=user)
 
     queryset = queryset.exclude(project__state=ProjectState.ARCHIVED)
 
     return queryset.filter(
         id__in=team_member_issues
         | project_member_issues
-        | participated_issues,
+        | participated_issues
+        | author_issues,
     )
 
 
