@@ -8,5 +8,7 @@ class UserIssuesSummaryType(graphene.ObjectType):
     assigned_opened_count = graphene.Int()
     created_count = graphene.Int()
     created_opened_count = graphene.Int()
+    created_by_for_other_count = graphene.Int()
+    created_by_for_other_opened_count = graphene.Int()
     participation_count = graphene.Int()
     participation_opened_count = graphene.Int()

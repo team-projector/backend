@@ -23,6 +23,11 @@ def assert_user_issue_summary(
         issues_summary.participation_count,
         issues_summary.participation_opened_count,
     )
+    _assert_created_by_for_other(
+        user,
+        issues_summary.created_by_for_other_count,
+        issues_summary.created_by_for_other_opened_count,
+    )
 
 
 def _assert_assigned(user, total, opened) -> None:
@@ -35,6 +40,13 @@ def _assert_assigned(user, total, opened) -> None:
 def _assert_created(user, total, opened) -> None:
     """Assert created by."""
     issues = Issue.objects.filter(author=user)
+    assert issues.count() == total
+    assert issues.filter(state=IssueState.OPENED).count() == opened
+
+
+def _assert_created_by_for_other(user, total, opened) -> None:
+    """Assert created_by_for_other."""
+    issues = Issue.objects.filter(author=user).exclude(user=user)
     assert issues.count() == total
     assert issues.filter(state=IssueState.OPENED).count() == opened
 

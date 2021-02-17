@@ -1,5 +1,5 @@
-query ($assignedTo: ID, $createdBy: ID, $participatedBy: ID, $project: ID, $dueDate: Date, $team: ID) {
-  issues: issuesSummary(assignedTo: $assignedTo, createdBy: $createdBy, participatedBy: $participatedBy, project: $project, dueDate: $dueDate, team: $team) {
+query ($assignedTo: ID, $createdBy: ID, $participatedBy: ID, $project: ID, $dueDate: Date, $team: ID, $createdByForOther: ID) {
+  issues: issuesSummary(assignedTo: $assignedTo, createdBy: $createdBy, participatedBy: $participatedBy, project: $project, dueDate: $dueDate, team: $team, createdByForOther: $createdByForOther) {
     count
     projects(sort: [ISSUES_REMAINS_DESC]) {
       issues {

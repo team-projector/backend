@@ -621,7 +621,7 @@ type Query {
   ticketsSummary(milestone: ID): TicketsSummaryType
   issue(id: ID!): Issue
   allIssues(milestone: ID, dueDate: Date, problems: Boolean, project: ID, team: ID, ticket: ID, q: String, state: IssueState, createdBy: ID, assignedTo: ID, participatedBy: ID, createdByForOther: ID, offset: Int, sort: [IssueSort], before: String, after: String, first: Int, last: Int): IssueTypeConnection
-  issuesSummary(dueDate: Date, team: ID, state: String, problems: Boolean, project: ID, milestone: ID, ticket: ID, participatedBy: ID, createdBy: ID, assignedTo: ID): IssuesSummaryType
+  issuesSummary(dueDate: Date, team: ID, state: String, problems: Boolean, project: ID, milestone: ID, ticket: ID, participatedBy: ID, createdBy: ID, assignedTo: ID, createdByForOther: ID): IssuesSummaryType
   _debug: DjangoDebug
 }
 
@@ -904,6 +904,8 @@ type UserIssuesSummaryType {
   assignedOpenedCount: Int
   createdCount: Int
   createdOpenedCount: Int
+  createdByForOtherCount: Int
+  createdByForOtherOpenedCount: Int
   participationCount: Int
   participationOpenedCount: Int
 }
