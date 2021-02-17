@@ -24,4 +24,5 @@ class IssuesQueries(graphene.ObjectType):
         participated_by=graphene.ID(),
         created_by=graphene.ID(),
         assigned_to=graphene.ID(),
+        created_by_for_other=graphene.ID(),
     )
