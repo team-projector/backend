@@ -36,10 +36,10 @@ def check_taxes(
 
 def check_spent(  # noqa: WPS218
     metrics,
-    issues_closed_spent=0.0,
-    issues_opened_spent=0.0,
-    mr_closed_spent=0.0,
-    mr_opened_spent=0.0,
+    issues_closed_spent=0,
+    issues_opened_spent=0,
+    mr_closed_spent=0,
+    mr_opened_spent=0,
 ) -> None:
     """
     Check spent.

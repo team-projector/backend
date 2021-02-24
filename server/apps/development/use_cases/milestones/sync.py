@@ -75,6 +75,6 @@ class UseCase(BaseUseCase[InputDto, OutputDto]):
             )
         except GraphQLPermissionDenied:  # noqa:WPS329
             raise AccessDeniedApplicationError
-        else:
-            if not allowed_milestone_qs.exists():
-                raise AccessDeniedApplicationError
+
+        if not allowed_milestone_qs.exists():
+            raise AccessDeniedApplicationError

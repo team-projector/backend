@@ -1,6 +1,5 @@
-import dataclasses
 import datetime
-from dataclasses import dataclass
+from dataclasses import asdict, dataclass
 from typing import List, Optional
 
 from rest_framework import serializers
@@ -82,7 +81,7 @@ class UseCase(BaseUseCase[InputDto, OutputDto]):
             raise AccessDeniedApplicationError()
 
         validator = InputDtoValidator(
-            data=dataclasses.asdict(input_dto.data),
+            data=asdict(input_dto.data),
             context={"user": input_dto.user},
         )
         if not validator.is_valid():

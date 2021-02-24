@@ -1,5 +1,4 @@
 from django.contrib import admin
-from django.contrib.admin import helpers
 from django.db import transaction
 from django.shortcuts import redirect, render
 from django.urls import path, reverse
@@ -51,7 +50,7 @@ class SalaryAdmin(BaseModelAdmin):
         context = self.admin_site.each_context(request)
         context["title"] = "Generate salaries"
         context["form"] = form
-        context["adminform"] = helpers.AdminForm(
+        context["adminform"] = admin.helpers.AdminForm(
             form,
             [(None, {"fields": form.base_fields})],
             self.get_prepopulated_fields(request),

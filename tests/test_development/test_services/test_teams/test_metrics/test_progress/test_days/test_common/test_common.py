@@ -20,7 +20,10 @@ from tests.test_users.test_services.test_users.test_metrics.test_progress.test_d
 @pytest.fixture()
 def issue(team_developer):
     """Create issue."""
-    return IssueFactory.create(user=team_developer, due_date=datetime.now())
+    return IssueFactory.create(
+        user=team_developer,
+        due_date=datetime.now(),
+    )
 
 
 def test_simple(team, team_developer, team_leader):
@@ -399,8 +402,8 @@ def test_another_user_in_team(  # noqa: WPS211
     checkers.check_user_progress_metrics(
         developer_metrics,
         spents={
-            timezone.now() - timedelta(days=2, hours=3): timedelta(hours=2),
-            timezone.now() - timedelta(days=1, hours=3): -timedelta(hours=3),
+            timezone.now() - timedelta(hours=47): timedelta(hours=2),
+            timezone.now() - timedelta(hours=27): -timedelta(hours=3),
         },
         loadings={timezone.now(): timedelta(hours=4)},
         issues_counts={timezone.now(): 1},

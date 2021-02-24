@@ -5,11 +5,11 @@ from tests.helpers.checkers import assert_instance_fields
 def check_ticket_metrics(  # noqa: WPS211
     metrics: TicketMetrics,
     issues_count: int = 0,
-    budget_estimate: float = 0.0,
-    budget_spent: float = 0.0,
-    budget_remains: float = 0.0,
-    payroll: float = 0.0,
-    profit: float = 0.0,
+    budget_estimate: float = 0,
+    budget_spent: float = 0,
+    budget_remains: float = 0,
+    payroll: float = 0,
+    profit: float = 0,
 ):
     """Check ticket metrics."""
     assert_instance_fields(

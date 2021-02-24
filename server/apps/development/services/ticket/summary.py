@@ -1,7 +1,6 @@
 from typing import Dict
 
 from django.db import models
-from django.db.models import Aggregate
 
 from apps.development.models.ticket import TicketState
 
@@ -33,7 +32,7 @@ class TicketsSummaryProvider:
 
         return self._queryset.aggregate(**aggregations)
 
-    def _get_fields_expressions(self) -> Dict[str, Aggregate]:
+    def _get_fields_expressions(self) -> Dict[str, models.Aggregate]:
         """
         Get fields expressions.
 

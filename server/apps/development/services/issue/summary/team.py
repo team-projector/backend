@@ -11,7 +11,7 @@ class TeamIssuesSummary:
     """Team issues summary."""
 
     opened_count: int = 0
-    percentage: float = 0.0
+    percentage: float = 0
     remains: int = 0
 
 
@@ -111,7 +111,7 @@ class IssuesTeamSummaryProvider:
             self.queryset.annotate(
                 time_remains=models.Case(
                     models.When(
-                        models.Q(
+                        models.Q(  # noqa: WPS465
                             time_estimate__gt=models.F("total_time_spent"),
                         )
                         & ~models.Q(state=IssueState.CLOSED),

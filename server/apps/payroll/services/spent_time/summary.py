@@ -1,17 +1,16 @@
 from django.db import models
-from django.db.models import QuerySet
 from django.db.models.functions import Coalesce
 
 
 class _AggregationService:
-    def aggregate_payrolls(self, spent_times: QuerySet):
+    def aggregate_payrolls(self, spent_times: models.QuerySet):
         """Get total sum payroll and paid."""
         return self.annotate_payrolls(spent_times).aggregate(
             total_payroll=Coalesce(models.Sum("sum"), 0),
             total_paid=Coalesce(models.Sum("paid"), 0),
         )
 
-    def summaries(self, spent_times: QuerySet):
+    def summaries(self, spent_times: models.QuerySet):
         """Get spent time summaries."""
         from apps.development.models import issue  # noqa: WPS433
         from apps.development.models.merge_request import (  # noqa: WPS433
@@ -36,7 +35,7 @@ class _AggregationService:
 
     def annotate_payrolls(
         self,
-        spent_times: QuerySet,
+        spent_times: models.QuerySet,
     ) -> models.QuerySet:
         """Get total sum paid."""
         return spent_times.annotate(
@@ -138,7 +137,7 @@ class SpentTimesSummaryProvider:
 
     def __init__(
         self,
-        queryset: QuerySet,
+        queryset: models.QuerySet,
     ):
         """Initialize spent times summary provider."""
         self.queryset = queryset
@@ -165,6 +164,6 @@ class SpentTimesSummaryProvider:
         return SpentTimesSummary(issues_summaries, merges_summaries)
 
 
-def get_summary(queryset: QuerySet) -> SpentTimesSummary:
+def get_summary(queryset: models.QuerySet) -> SpentTimesSummary:
     """Get summary about spent times."""
     return SpentTimesSummaryProvider(queryset).execute()

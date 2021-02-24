@@ -1,3 +1,5 @@
+import math
+
 import pytest
 from jnt_django_toolbox.helpers.time import seconds
 
@@ -213,7 +215,7 @@ def test_efficiency(user):
     ]
 
     metrics = get_issue_metrics(issues[0])
-    assert metrics.efficiency == 2.0
+    assert math.isclose(metrics.efficiency, 2.0)
 
     metrics = get_issue_metrics(issues[1])
     assert metrics.remains == -seconds(hours=4)

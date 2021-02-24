@@ -15,7 +15,7 @@ class ProjectGroupMetrics(IssuesContainerMetrics):
     budget: float = 0
     budget_spent: float = 0
     budget_remains: float = 0
-    payroll: float = 0.0
+    payroll: float = 0
     profit: float = 0
 
 

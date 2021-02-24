@@ -1,7 +1,6 @@
 import django_filters
 import graphene
 from django.db.models import QuerySet
-from django_filters import DateFilter
 from jnt_django_graphene_toolbox.fields import BaseModelConnectionField
 from jnt_django_graphene_toolbox.filters import SortHandler
 
@@ -89,7 +88,7 @@ class SpentTimeFilterSet(django_filters.FilterSet):
     team = TeamFilter()
     project = ProjectFilter()
     state = StateFilter()
-    date = DateFilter()
+    date = django_filters.DateFilter()
 
 
 class AllSpentTimesConnectionField(BaseModelConnectionField):

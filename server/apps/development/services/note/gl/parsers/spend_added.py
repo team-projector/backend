@@ -10,11 +10,11 @@ from apps.development.services.note.gl.parsers.base import (
 )
 
 RE_SPEND_FULL: Pattern[str] = re.compile(
-    r"^(?P<action>(added|subtracted)) (?P<spent>.+) "
+    r"^(?P<action>(added|subtracted)) (?P<spent>.+) "  # noqa: WPS360
     + r"of time spent at (?P<date>\d{4}-\d{2}-\d{2})$",
 )
 RE_SPEND_SHORT: Pattern[str] = re.compile(
-    r"^(?P<action>(added|subtracted)) (?P<spent>.+) of time spent$",
+    r"^(?P<action>(added|subtracted)) (?P<spent>.+) of time spent$",  # noqa: WPS360,E501
 )
 
 

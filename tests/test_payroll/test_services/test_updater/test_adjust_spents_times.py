@@ -27,7 +27,10 @@ def user_note(user, request):
     return request.param.create(
         type=NoteType.TIME_SPEND,
         user=user,
-        data={"date": str(datetime.now().date()), "spent": seconds(hours=2)},
+        data={
+            "date": str(datetime.now().date()),
+            "spent": seconds(hours=2),
+        },
     )
 
 
@@ -93,7 +96,10 @@ def test_not_trackable_note(user):
         content_object=user,
         type=NoteType.TIME_SPEND,
         user=user,
-        data={"date": str(datetime.now().date()), "spent": seconds(hours=2)},
+        data={
+            "date": str(datetime.now().date()),
+            "spent": seconds(hours=2),
+        },
     )
 
     spent_times = SpentTime.objects.all()

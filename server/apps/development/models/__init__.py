@@ -10,4 +10,4 @@ from .project_member import ProjectMember
 from .project_milestone import ProjectMilestone
 from .team import Team
 from .team_member import TeamMember
-from .ticket import Ticket, TicketType, TicketState, TICKET_ROLE_MAX_LENGTH
+from .ticket import TICKET_ROLE_MAX_LENGTH, Ticket, TicketState, TicketType

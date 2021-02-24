@@ -1,3 +1,5 @@
+import math
+
 from constance.test import override_config
 from django.core import mail
 
@@ -117,7 +119,7 @@ def test_another_field_changed(admin_rf, salary_admin):
     db.trigger_on_commit()
     salary.refresh_from_db()
 
-    assert salary.sum == 10.0
+    assert math.isclose(salary.sum, 10.0)
     assert not mail.outbox
 
 
@@ -144,6 +146,6 @@ def test_another_field_changed_and_payed(admin_rf, salary_admin):
     db.trigger_on_commit()
     salary.refresh_from_db()
 
-    assert salary.sum == 10.0
+    assert math.isclose(salary.sum, 10.0)
     assert salary.payed
     assert len(mail.outbox) == 1
