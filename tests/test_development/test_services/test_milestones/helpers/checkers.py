@@ -4,11 +4,11 @@ from tests.helpers.checkers import assert_instance_fields
 
 def check_milestone_metrics(  # noqa: WPS211
     metrics: MilestoneMetrics,
-    budget: float = 0.0,
-    payroll: float = 0.0,
-    profit: float = 0.0,
-    budget_remains: float = 0.0,
-    budget_spent: float = 0.0,
+    budget: float = 0,
+    payroll: float = 0,
+    profit: float = 0,
+    budget_remains: float = 0,
+    budget_spent: float = 0,
     issues_count: int = 0,
     issues_opened_count: int = 0,
     issues_closed_count: int = 0,

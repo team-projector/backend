@@ -133,8 +133,8 @@ class UserMetricsService(IUserMetricsService):
             deep_get(fields, metric)
         except KeyError:
             return False
-        else:
-            return True
+
+        return True
 
 
 class _Aggregations:

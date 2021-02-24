@@ -17,7 +17,7 @@ class ErrorHandlerMixin(BaseMutation):
     def handle_error(
         cls,
         root: Optional[object],
-        info: ResolveInfo,  # noqa: WPS110,
+        info: ResolveInfo,  # noqa: WPS110
         err: Exception,
     ):
         """Handle error."""

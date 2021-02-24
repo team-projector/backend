@@ -1,3 +1,5 @@
+import math
+
 from jnt_django_toolbox.helpers.time import seconds
 
 from apps.development.models.merge_request import MergeRequestState
@@ -204,7 +206,7 @@ def test_efficiency(user):
     ]
 
     metrics = get_merge_request_metrics(merge_requests[0])
-    assert metrics.efficiency == 2.0
+    assert math.isclose(metrics.efficiency, 2.0)
 
     metrics = get_merge_request_metrics(merge_requests[1])
     assert metrics.remains == -seconds(hours=4)

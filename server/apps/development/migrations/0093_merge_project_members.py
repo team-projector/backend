@@ -2,6 +2,7 @@
 
 from django.db import migrations
 from django.db.models import Count
+
 from apps.development.models.project_member import ProjectMemberRole
 
 

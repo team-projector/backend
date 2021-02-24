@@ -2,7 +2,6 @@ from datetime import timedelta
 
 from django.db.models import Sum
 from django.utils import timezone
-from django.utils.timezone import make_aware
 from jnt_django_toolbox.helpers.date import begin_of_week, date2datetime
 from jnt_django_toolbox.helpers.time import seconds
 
@@ -30,7 +29,9 @@ def test_efficiency_more100(user):
         due_date=monday + timedelta(days=1),
         time_estimate=seconds(hours=15),
         state=IssueState.CLOSED,
-        closed_at=make_aware(date2datetime(monday + timedelta(days=1))),
+        closed_at=timezone.make_aware(
+            date2datetime(monday + timedelta(days=1)),
+        ),
     )
 
     IssueSpentTimeFactory.create(
@@ -92,7 +93,9 @@ def test_efficiency_less100(user):
         time_estimate=seconds(hours=3),
         state=IssueState.CLOSED,
         due_date=monday + timedelta(days=1),
-        closed_at=make_aware(date2datetime(monday + timedelta(days=1))),
+        closed_at=timezone.make_aware(
+            date2datetime(monday + timedelta(days=1)),
+        ),
     )
 
     IssueSpentTimeFactory.create(
@@ -154,7 +157,9 @@ def test_efficiency_zero_estimate(user):
         state=IssueState.CLOSED,
         time_estimate=0,
         due_date=monday + timedelta(days=1),
-        closed_at=make_aware(date2datetime(monday + timedelta(days=1))),
+        closed_at=timezone.make_aware(
+            date2datetime(monday + timedelta(days=1)),
+        ),
     )
 
     IssueSpentTimeFactory.create(
@@ -215,7 +220,9 @@ def test_efficiency_zero_spend(user):
         total_time_spent=0,
         state=IssueState.CLOSED,
         due_date=monday + timedelta(days=1),
-        closed_at=make_aware(date2datetime(monday + timedelta(days=1))),
+        closed_at=timezone.make_aware(
+            date2datetime(monday + timedelta(days=1)),
+        ),
     )
 
     metrics = get_progress_metrics(

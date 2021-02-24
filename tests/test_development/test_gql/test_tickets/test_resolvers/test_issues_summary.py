@@ -1,3 +1,4 @@
+import math
 from datetime import datetime
 
 from jnt_django_toolbox.helpers.objects import dict2obj
@@ -73,7 +74,7 @@ def test_issues_project_summaries(user, ghl_auth_mock_info):
     )[0].issues
 
     assert issues.opened_count == 5
-    assert issues.percentage == 1.0
+    assert math.isclose(issues.percentage, 1.0)
     assert issues.remains == 500
 
 
@@ -103,5 +104,5 @@ def test_issues_team_summaries(user, ghl_auth_mock_info):
     )[0].issues
 
     assert issues.opened_count == 5
-    assert issues.percentage == 1.0
+    assert math.isclose(issues.percentage, 1.0)
     assert issues.remains == 500

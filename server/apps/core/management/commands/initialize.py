@@ -42,5 +42,5 @@ class Command(BaseCommand):
             User.objects.get_by_natural_key(username)
         except User.DoesNotExist:
             return True
-        else:
-            return False
+
+        return False

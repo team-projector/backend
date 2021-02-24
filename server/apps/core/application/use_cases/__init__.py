@@ -1,1 +1,1 @@
-from .base import BaseUseCase, empty, Empty
+from .base import BaseUseCase, Empty, empty

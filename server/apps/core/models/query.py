@@ -10,8 +10,7 @@ def _generate_trunc_week_template() -> str:
         expression,
         get_first_week_day(),
     )
-
-    return """
+    template = """
     DATE(case
     when {days_passed} < 0 then
         {expression} - (({days_passed} + 7) * interval '1 day')
@@ -20,7 +19,9 @@ def _generate_trunc_week_template() -> str:
     else
         {expression}
     end)
-    """.format(
+    """
+
+    return template.format(
         expression=expression,
         days_passed=days_passed,
     )

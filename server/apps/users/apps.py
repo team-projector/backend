@@ -12,11 +12,11 @@ class AppConfig(BaseAppConfig):
 
     def ready(self):
         """Trigger on app ready."""
-        from apps.users.services.modules import (  # noqa: WPS433
-            InfrastructureUserServicesModule,
-        )
         from apps.users.logic.modules import (  # noqa: WPS433
             ApplicationUserServicesModule,
+        )
+        from apps.users.services.modules import (  # noqa: WPS433
+            InfrastructureUserServicesModule,
         )
 
         super().ready()

@@ -39,7 +39,10 @@ def test_time_spend(user):
     IssueNoteFactory.create(
         type=NoteType.TIME_SPEND,
         user=user,
-        data={"date": str(datetime.now().date()), "spent": seconds(hours=2)},
+        data={
+            "date": str(datetime.now().date()),
+            "spent": seconds(hours=2),
+        },
     )
 
     assert SpentTime.objects.count() == 0
