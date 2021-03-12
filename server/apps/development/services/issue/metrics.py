@@ -1,5 +1,4 @@
 from django.db import models
-from django.db.models import Sum
 from django.db.models.functions import Coalesce
 
 from apps.development.models import Issue
@@ -42,7 +41,7 @@ def get_user_time_spent(issue: Issue, user: User) -> int:
     """Get time spent for issue."""
     return (
         issue.time_spents.filter(user=user).aggregate(
-            total_user_time_spent=Sum("time_spent"),
+            total_user_time_spent=models.Sum("time_spent"),
         )["total_user_time_spent"]
         or 0
     )
@@ -57,7 +56,7 @@ class IssuesContainerMetrics:
     issues_count: int = 0
     issues_closed_count: int = 0
     issues_opened_count: int = 0
-    efficiency: float = 0.0
+    efficiency: float = 0
 
 
 class IssuesContainerMetricsProvider:

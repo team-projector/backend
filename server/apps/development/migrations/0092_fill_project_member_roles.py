@@ -1,4 +1,5 @@
 from django.db import migrations
+
 from apps.development.models.project_member import ProjectMemberRole
 
 

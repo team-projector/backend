@@ -65,10 +65,10 @@ class BaseUseCaseMutation(BaseMutation):
             return GraphQLPermissionDenied()
         except BaseApplicationError as err:
             return GenericGraphQLError(err)
-        else:
-            return cls(
-                **cls.get_response_data(root, info, output_dto),
-            )
+
+        return cls(
+            **cls.get_response_data(root, info, output_dto),
+        )
 
     @classmethod
     def get_input_dto(

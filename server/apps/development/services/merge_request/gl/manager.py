@@ -7,7 +7,6 @@ from gitlab.v4 import objects as gl
 
 from apps.core.gitlab.parsers import parse_gl_datetime
 from apps.development import models
-from apps.development.models import MergeRequest
 from apps.development.services.gl.work_item_manager import (
     BaseWorkItemGlManager,
 )
@@ -66,7 +65,7 @@ class MergeRequestGlManager(BaseWorkItemGlManager):
         project: models.Project,
         gl_project: gl.Project,
         gl_merge_request: gl.MergeRequest,
-    ) -> MergeRequest:
+    ) -> models.MergeRequest:
         """Load full info for merge request for project."""
         time_stats = gl_merge_request.time_stats()
 

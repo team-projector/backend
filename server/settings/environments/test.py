@@ -16,3 +16,6 @@ CONSTANCE_BACKEND = "constance.backends.memory.MemoryBackend"
 CONSTANCE_DATABASE_CACHE_BACKEND = (
     "django.core.cache.backends.dummy.DummyCache"
 )
+CACHES = {
+    "default": {"BACKEND": CONSTANCE_DATABASE_CACHE_BACKEND},
+}

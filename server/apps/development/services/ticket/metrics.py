@@ -17,7 +17,7 @@ class TicketMetrics(IssuesContainerMetrics):
     budget_estimate: float = 0
     budget_spent: float = 0
     budget_remains: float = 0
-    payroll: float = 0.0
+    payroll: float = 0
     profit: float = 0
     opened_time_remains: int = 0
 

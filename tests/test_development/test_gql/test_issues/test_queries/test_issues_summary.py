@@ -79,3 +79,38 @@ def test_issues_summary_as_developer(
 
     assert "errors" not in response
     assert response["data"]["issues"]["count"] == 5
+
+
+def test_issues_summary_created_by_for_other(
+    user,
+    gql_client_authenticated,
+    gql_raw,
+    milestone,
+):
+    """Test issues summary as developer."""
+    ProjectMemberFactory.create(
+        user=user,
+        roles=ProjectMember.roles.DEVELOPER,
+        owner=milestone.owner,
+    )
+    IssueFactory.create_batch(
+        2,
+        author=user,
+        project=milestone.owner,
+        milestone=milestone,
+    )
+    IssueFactory.create_batch(
+        1,
+        author=user,
+        user=user,
+        project=milestone.owner,
+        milestone=milestone,
+    )
+
+    response = gql_client_authenticated.execute(
+        gql_raw("issues_summary"),
+        variable_values={"createdByForOther": user.pk},
+    )
+
+    assert "errors" not in response
+    assert response["data"]["issues"]["count"] == 2

@@ -15,6 +15,8 @@ class UserIssuesSummary:
     assigned_opened_count: int = 0
     created_count: int = 0
     created_opened_count: int = 0
+    created_by_for_other_count: int = 0
+    created_by_for_other_opened_count: int = 0
     participation_count: int = 0
     participation_opened_count: int = 0
 
@@ -81,6 +83,10 @@ class UserIssuesSummaryProvider:
                     author=self._user,
                     state=IssueState.OPENED,
                 ),
+                created_by_for_other_count=self._count_for_other(),
+                created_by_for_other_opened_count=self._count_for_other(
+                    opened=True,
+                ),
                 participation_count=models.Sum("has_participant"),
                 participation_opened_count=models.Sum(
                     "has_participant_opened",
@@ -102,3 +108,12 @@ class UserIssuesSummaryProvider:
     def _count(self, **filters) -> models.Count:
         """Count values by filters."""
         return models.Count("id", filter=models.Q(**filters))
+
+    def _count_for_other(self, opened=False) -> models.Count:
+        """Count values for created by for other."""
+        query = models.Q(author=self._user)
+        query &= ~models.Q(user=self._user)
+        if opened:
+            query &= models.Q(state=IssueState.OPENED)
+
+        return models.Count("id", filter=query)

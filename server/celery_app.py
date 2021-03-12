@@ -21,8 +21,8 @@ def setup_periodic_tasks(sender, **kwargs):
     """Add periodic tasks."""
     # TODO implement mechanism for registration periodic tasks
     from apps.development.tasks import sync_all_task  # noqa: WPS433
-    from apps.users.tasks import clear_expired_tokens_task  # noqa: WPS433
     from apps.payroll.tasks import adjust_spents_times_task  # noqa: WPS433
+    from apps.users.tasks import clear_expired_tokens_task  # noqa: WPS433
 
     sender.add_periodic_task(
         60 * 60,

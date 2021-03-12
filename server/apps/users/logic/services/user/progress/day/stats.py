@@ -39,7 +39,7 @@ class UserDayStatsProvider:
                 due_date_truncated=TruncDay("due_date"),
                 time_remains=models.Case(
                     models.When(
-                        models.Q(
+                        models.Q(  # noqa: WPS465
                             time_estimate__gt=models.F("total_time_spent"),
                         )
                         & ~models.Q(state=IssueState.CLOSED),
