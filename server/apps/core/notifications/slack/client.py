@@ -67,7 +67,7 @@ class SlackClient:
         https://api.slack.com/methods/users.lookupByEmail
         """
         with suppress(TypeError, SlackApiError):
-            return self._client.im_open(
+            return self._client.conversations_open(
                 user=self._client.users_lookupByEmail(email=email)
                 .get("user")
                 .get("id"),
