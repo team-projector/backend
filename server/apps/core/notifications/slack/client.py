@@ -68,7 +68,9 @@ class SlackClient:
         """
         with suppress(TypeError, SlackApiError):
             return self._client.conversations_open(
-                user=self._client.users_lookupByEmail(email=email)
-                .get("user")
-                .get("id"),
+                users=[
+                    self._client.users_lookupByEmail(email=email)
+                    .get("user")
+                    .get("id"),
+                ],
             ).get("channel")
