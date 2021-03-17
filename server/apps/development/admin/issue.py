@@ -2,6 +2,7 @@ from django.contrib import admin
 
 from apps.core.admin.base import BaseModelAdmin
 from apps.core.admin.mixins import ForceSyncEntityMixin
+from apps.development.admin import filters
 from apps.development.admin.inlines import NoteInline
 from apps.development.models import Issue
 from apps.development.tasks import (
@@ -30,6 +31,8 @@ class IssueAdmin(ForceSyncEntityMixin, BaseModelAdmin):
         "user",
         "author",
         "participants",
+        filters.TeamFilter,
+        filters.ProblemsFilter,
     )
     search_fields = ("title", "gl_id")
     sortable_by = ("gl_last_sync", "created_at")
