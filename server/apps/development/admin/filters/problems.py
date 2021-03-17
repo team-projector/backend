@@ -1,3 +1,5 @@
+from typing import Optional
+
 from django.contrib import admin
 from django.db import models
 from django.utils.translation import gettext_lazy as _
@@ -29,7 +31,8 @@ class ProblemsFilter(admin.SimpleListFilter):
 
         return problem_filter.filter(queryset, self._get_current_value())
 
-    def _get_current_value(self):
+    def _get_current_value(self) -> Optional[bool]:
+        """Get current value."""
         current_value = self.value()
         values_map = {
             YES_VALUE: True,
