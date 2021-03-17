@@ -19,3 +19,13 @@ def all_issues_query(ghl_queries):
     :param ghl_queries:
     """
     return ghl_queries.fields["allIssues"].resolver
+
+
+@pytest.fixture(scope="session")
+def issues_summary_query(ghl_queries):
+    """
+    Issues summary query.
+
+    :param ghl_queries:
+    """
+    return ghl_queries.fields["issuesSummary"].resolver
