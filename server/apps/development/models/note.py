@@ -1,8 +1,8 @@
-from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
 from django.core.serializers.json import DjangoJSONEncoder
 from django.db import models
 from django.utils.translation import gettext_lazy as _
+from jnt_admin_tools.db.fields import GenericForeignKey
 from jnt_django_toolbox.models.fields import EnumField
 
 from apps.users.models import User
