@@ -12,7 +12,7 @@ from apps.core.admin.mixins import (
 )
 
 
-class BaseModelAdmin(
+class BaseModelAdmin(  # noqa: WPS215
     AdminFieldsOverridesMixin,
     AutoChangelistAutocompleteFilterMixin,
     GenericForeignKeyAdminMixin,
