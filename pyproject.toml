@@ -39,7 +39,6 @@ django-constance = {extras = ["database"], version = "*"}
 python-memcached = "*"
 premailer = "*"
 injector = "*"
-pip = "^21.1.2"
 
 [tool.poetry.dev-dependencies]
 pytest = "5.*" # problem with integrity
