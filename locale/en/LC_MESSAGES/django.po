@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-03-17 03:34+0300\n"
+"POT-Creation-Date: 2021-06-03 10:22+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -326,6 +326,12 @@ msgstr "Parent"
 msgid "HT__PARENT"
 msgstr "Parent"
 
+msgid "VN__PROJECT_GROUP_MILESTONE"
+msgstr "Project group milestone"
+
+msgid "VN__PROJECT_GROUP_MILESTONES"
+msgstr "Project group milestones"
+
 msgid "CH__DEVELOPER"
 msgstr "Developer"
 
@@ -340,6 +346,12 @@ msgstr "Project members"
 
 msgid "VN__PROJECT_MEMBERS"
 msgstr "Project members"
+
+msgid "VN__PROJECT_MILESTONE"
+msgstr "Project milestone"
+
+msgid "VN__PROJECT_MILESTONES"
+msgstr "Project milestones"
 
 msgid "VN__TEAMS"
 msgstr "Teams"
