@@ -5,11 +5,11 @@ description = ""
 authors = ["junte"]
 
 [tool.poetry.dependencies]
-python = "^3.8"
+python = "^3.9"
 python-gitlab = "*"
 python-dateutil = "*"
 python-decouple = "*"
-django = "3.*"
+django = "3.1.*"
 djangorestframework = "*"
 django-cors-headers = "*"
 django-split-settings = "*"

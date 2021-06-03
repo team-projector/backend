@@ -1,5 +1,5 @@
 import graphene
-from django.db.models import QuerySet
+from django.db import models
 from jnt_django_graphene_toolbox.fields import (
     BaseModelConnectionField,
     BitField,
@@ -11,11 +11,10 @@ from jnt_django_graphene_toolbox.types import BaseModelObjectType
 
 from apps.core import injector
 from apps.skills.graphql.types import PositionType
-from apps.users.graphql.fields import UserWorkBreaksConnectionField
-from apps.users.graphql.resolvers import resolve_user_issues_summary
-from apps.users.graphql.types import UserIssuesSummaryType, UserMetricsType
+from apps.users.graphql import fields, resolvers, types
 from apps.users.logic.services import IUserMetricsService, IUserProblemsService
 from apps.users.models import User
+from apps.users.models.user import UserRole
 
 
 class UserType(BaseModelObjectType):
@@ -36,16 +35,16 @@ class UserType(BaseModelObjectType):
     customer_hour_rate = graphene.Float()
     tax_rate = graphene.Float()
     annual_paid_work_breaks_days = graphene.Float()
-    roles = BitField()
+    roles = BitField(UserRole)
     gl_avatar = graphene.String()
     daily_work_hours = graphene.Int()
     teams = BaseModelConnectionField("apps.development.graphql.types.TeamType")
-    metrics = graphene.Field(UserMetricsType)
+    metrics = graphene.Field(types.UserMetricsType)
     problems = graphene.List(graphene.String)
-    work_breaks = UserWorkBreaksConnectionField()
+    work_breaks = fields.UserWorkBreaksConnectionField()
     issues_summary = graphene.Field(
-        UserIssuesSummaryType,
-        resolver=resolve_user_issues_summary,
+        types.UserIssuesSummaryType,
+        resolver=resolvers.resolve_user_issues_summary,
         project=graphene.ID(),
         due_date=graphene.Date(),
     )
@@ -53,9 +52,9 @@ class UserType(BaseModelObjectType):
     @classmethod
     def get_queryset(
         cls,
-        queryset: QuerySet,
+        queryset: models.QuerySet,
         info,  # noqa: WPS110
-    ) -> QuerySet:
+    ) -> models.QuerySet:
         """Get queryset."""
         # TODO fix it (team members case)
         if issubclass(queryset.model, User):

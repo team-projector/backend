@@ -3,7 +3,8 @@ from urllib.parse import urlencode, urlparse
 
 from django.http import HttpRequest
 from django.shortcuts import redirect
-from jnt_admin_tools.admin.base import BaseModelAdmin as JntBaseModelAdmin
+from jnt_admin_tools.mixins import GenericForeignKeyAdminMixin
+from jnt_admin_tools.mixins.base import BaseModelAdmin as JntBaseModelAdmin
 
 from apps.core.admin.mixins import (
     AdminFieldsOverridesMixin,
@@ -11,9 +12,10 @@ from apps.core.admin.mixins import (
 )
 
 
-class BaseModelAdmin(
+class BaseModelAdmin(  # noqa: WPS215
     AdminFieldsOverridesMixin,
     AutoChangelistAutocompleteFilterMixin,
+    GenericForeignKeyAdminMixin,
     JntBaseModelAdmin,
 ):
     """A base class for admin dashboard."""

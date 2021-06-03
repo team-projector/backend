@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils.translation import gettext_lazy as _
 
 
 class ProjectGroupMilestone(models.Model):
@@ -6,6 +7,8 @@ class ProjectGroupMilestone(models.Model):
 
     class Meta:
         unique_together = ("milestone", "project_group")
+        verbose_name = _("VN__PROJECT_GROUP_MILESTONE")
+        verbose_name_plural = _("VN__PROJECT_GROUP_MILESTONES")
 
     is_inherited = models.BooleanField(default=False)
     milestone = models.ForeignKey("development.Milestone", models.CASCADE)

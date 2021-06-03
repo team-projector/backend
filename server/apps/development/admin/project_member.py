@@ -10,3 +10,4 @@ class ProjectMemberAdmin(BaseModelAdmin):
 
     list_display = ("id", "content_type", "owner", "user")
     search_fields = ("user__login", "user__email")
+    fields = ("roles", "user", "owner")

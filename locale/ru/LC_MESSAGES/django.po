@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-03-17 03:34+0300\n"
+"POT-Creation-Date: 2021-06-03 10:22+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -328,6 +328,12 @@ msgstr "Родитель"
 msgid "HT__PARENT"
 msgstr " "
 
+msgid "VN__PROJECT_GROUP_MILESTONE"
+msgstr "Этап разработки для группы"
+
+msgid "VN__PROJECT_GROUP_MILESTONES"
+msgstr "Этапы разработки для групп"
+
 msgid "CH__DEVELOPER"
 msgstr "Разработчик"
 
@@ -342,6 +348,12 @@ msgstr "Участник проекта"
 
 msgid "VN__PROJECT_MEMBERS"
 msgstr "Участники проекта"
+
+msgid "VN__PROJECT_MILESTONE"
+msgstr "Этап разработки проекта"
+
+msgid "VN__PROJECT_MILESTONES"
+msgstr "Этапы разработки для проектов"
 
 msgid "VN__TEAMS"
 msgstr "Команды"
