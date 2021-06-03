@@ -4,6 +4,7 @@ from jnt_django_graphene_toolbox.fields import BitField
 from jnt_django_graphene_toolbox.types import BaseModelObjectType
 
 from apps.development.models import TeamMember
+from apps.development.models.team_member import TeamMemberRole
 from apps.users.graphql.types import UserType
 
 
@@ -14,7 +15,7 @@ class TeamMemberType(BaseModelObjectType):
         model = TeamMember
         auth_required = True
 
-    roles = BitField()
+    roles = BitField(TeamMemberRole)
     user = graphene.Field(UserType)
 
     @classmethod

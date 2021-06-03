@@ -16,6 +16,7 @@ from apps.users.graphql.resolvers import resolve_user_issues_summary
 from apps.users.graphql.types import UserIssuesSummaryType, UserMetricsType
 from apps.users.logic.services import IUserMetricsService, IUserProblemsService
 from apps.users.models import User
+from apps.users.models.user import UserRole
 
 
 class UserType(BaseModelObjectType):
@@ -36,7 +37,7 @@ class UserType(BaseModelObjectType):
     customer_hour_rate = graphene.Float()
     tax_rate = graphene.Float()
     annual_paid_work_breaks_days = graphene.Float()
-    roles = BitField()
+    roles = BitField(UserRole)
     gl_avatar = graphene.String()
     daily_work_hours = graphene.Int()
     teams = BaseModelConnectionField("apps.development.graphql.types.TeamType")

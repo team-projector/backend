@@ -1,6 +1,7 @@
 import logging
 from typing import Optional
 
+from gitlab import GitlabGetError
 from gitlab.v4 import objects as gl
 from rest_framework import status
 from urllib3.exceptions import NewConnectionError
@@ -22,7 +23,7 @@ class ProjectGlProvider(BaseGlProvider):
             return self.gl_client.projects.get(id=project.gl_id)
         except NewConnectionError:
             logger.exception("Connection timed out.")
-        except gl.GitlabGetError as error:
+        except GitlabGetError as error:
             if error.response_code == status.HTTP_404_NOT_FOUND:
                 project.is_active = False
                 project.save(update_fields=("is_active",))
