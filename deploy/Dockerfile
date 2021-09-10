@@ -81,7 +81,7 @@ FROM base as test
 
 RUN apt-get update \
     && apt-get install --no-install-recommends -y \
-                      gcc=4:8.3.* \
+                      gcc=4:* \
                       libc6-dev=2.* \
     && poetry install --no-ansi \
     && apt-get remove --purge -y gcc libc6-dev \
