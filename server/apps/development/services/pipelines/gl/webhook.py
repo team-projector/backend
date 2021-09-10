@@ -1,4 +1,5 @@
 import logging
+import re
 from typing import Optional
 
 from constance import config
@@ -35,16 +36,20 @@ class PipelineGLWebhook(BaseGLWebhook):
         slack.send_blocks_template(
             user,
             "slack/pipeline_status_changed.json",
-            {
-                "gitlab_address": config.GITLAB_ADDRESS,
-                "pipeline": pipeline,
-                "project": body["project"],
-                "commit": body["commit"],
-                "merge_request": body["merge_request"],
-                "gl_user": body["user"],
-            },
+            self.get_context(body),
             icon_emoji=":gitlab:",
         )
+
+    def get_context(self, body):
+        """Get context for template."""
+        return {
+            "gitlab_address": config.GITLAB_ADDRESS,
+            "pipeline": body["object_attributes"],
+            "project": body["project"],
+            "commit": body["commit"],
+            "merge_request": self._extract_merge_request(body),
+            "gl_user": body["user"],
+        }
 
     def _get_user(self, source) -> Optional[User]:
         """
@@ -58,3 +63,35 @@ class PipelineGLWebhook(BaseGLWebhook):
             return user
 
         return None
+
+    def _extract_merge_request(self, body):
+        """
+        Example message.
+
+        "Closes #713 See merge request junte/team-projector/backend!576"
+        """
+        if body["merge_request"]:
+            return body["merge_request"]
+
+        body_commit = body["commit"]
+        if not body_commit or not body_commit["message"]:
+            return None
+
+        commit_message = body_commit["message"]
+        merge_request_ids = re.findall(
+            re.compile(r"See merge request .+!([\d]+)"),
+            commit_message,
+        )
+
+        if not merge_request_ids:
+            return None
+
+        merge_request_url = "{0}/-/merge_requests/{1}".format(
+            body["project"]["web_url"],
+            merge_request_ids[0],
+        )
+
+        return {
+            "url": merge_request_url,
+            "title": "See merge request {0}".format(merge_request_ids[0]),
+        }
