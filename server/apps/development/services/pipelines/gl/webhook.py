@@ -10,6 +10,9 @@ from apps.users.models import User
 
 logger = logging.getLogger(__name__)
 
+MERGE_REQUEST_ID_RE = re.compile(r"See merge request .+!([\d]+)")
+MERGE_REQUEST_TITLE_RE = re.compile(r"\\nResolve\s(.*\")\\n")
+
 
 class PipelineGLWebhook(BaseGLWebhook):
     """Pipeline GitLab webhook handler."""
@@ -66,28 +69,49 @@ class PipelineGLWebhook(BaseGLWebhook):
 
     def _extract_merge_request(self, body) -> ty.Optional[ty.Dict[str, str]]:
         """Closes #713 See merge request junte/team-projector/backend!576."""
-        if body["merge_request"]:
-            return body["merge_request"]
-
         body_commit = body["commit"]
-        if not body_commit or not body_commit["message"]:
+        need_extract = not (
+            body["merge_request"]
+            or not body_commit
+            or not body_commit["message"]
+        )
+
+        if not need_extract:
             return None
 
-        commit_message = body_commit["message"]
-        merge_request_ids = re.findall(
-            re.compile(r"See merge request .+!([\d]+)"),
+        merge_request_id = self._get_merge_request_url(body_commit["message"])
+
+        if not merge_request_id:
+            return None
+
+        return {
+            "url": "{0}/-/merge_requests/{1}".format(
+                body["project"]["web_url"],
+                merge_request_id,
+            ),
+            "title": self._get_merge_request_title(
+                body_commit["message"],
+                merge_request_id,
+            ),
+        }
+
+    def _get_merge_request_url(self, commit_message: str) -> ty.Optional[str]:
+        merge_request_ids = re.findall(MERGE_REQUEST_ID_RE, commit_message)
+
+        return merge_request_ids[0] if merge_request_ids else None
+
+    def _get_merge_request_title(
+        self,
+        commit_message: str,
+        merge_request_id: str,
+    ) -> str:
+        merge_request_titles = re.findall(
+            MERGE_REQUEST_TITLE_RE,
             commit_message,
         )
 
-        if not merge_request_ids:
-            return None
-
-        merge_request_url = "{0}/-/merge_requests/{1}".format(
-            body["project"]["web_url"],
-            merge_request_ids[0],
+        return (
+            merge_request_titles[0]
+            if merge_request_titles
+            else "See merge request {0}".format(merge_request_id)
         )
-
-        return {
-            "url": merge_request_url,
-            "title": "See merge request {0}".format(merge_request_ids[0]),
-        }
