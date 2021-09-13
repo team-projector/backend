@@ -25,13 +25,13 @@ COPY pyproject.toml poetry.lock ./
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 RUN apt-get update \
     && apt-get install --no-install-recommends -y \
-                      gcc=4:8.3.* \
+                      gcc=4:* \
                       libc6-dev=2.* \
-                      binutils=2.31.* \
-                      gettext=0.19.* \
-                      nginx=1.14.* \
-                      make=4.2.* \
-                      curl=7.64.* \
+                      binutils=2.* \
+                      gettext=0.* \
+                      nginx=1.* \
+                      make=4.* \
+                      curl=7.* \
     && curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/${POETRY_VERSION}/get-poetry.py | python \
     && poetry install --no-dev --no-ansi \
     && apt-get remove --purge -y gcc binutils curl libc6-dev \
@@ -81,7 +81,7 @@ FROM base as test
 
 RUN apt-get update \
     && apt-get install --no-install-recommends -y \
-                      gcc=4:8.3.* \
+                      gcc=4:* \
                       libc6-dev=2.* \
     && poetry install --no-ansi \
     && apt-get remove --purge -y gcc libc6-dev \
