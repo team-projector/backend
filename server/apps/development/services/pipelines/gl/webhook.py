@@ -1,6 +1,6 @@
 import logging
 import re
-from typing import Optional
+import typing as ty
 
 from constance import config
 
@@ -40,7 +40,7 @@ class PipelineGLWebhook(BaseGLWebhook):
             icon_emoji=":gitlab:",
         )
 
-    def get_context(self, body):
+    def get_context(self, body) -> ty.Dict[str, object]:
         """Get context for template."""
         return {
             "gitlab_address": config.GITLAB_ADDRESS,
@@ -51,7 +51,7 @@ class PipelineGLWebhook(BaseGLWebhook):
             "gl_user": body["user"],
         }
 
-    def _get_user(self, source) -> Optional[User]:
+    def _get_user(self, source) -> ty.Optional[User]:
         """
         Get user.
 
@@ -64,12 +64,8 @@ class PipelineGLWebhook(BaseGLWebhook):
 
         return None
 
-    def _extract_merge_request(self, body):
-        """
-        Example message.
-
-        "Closes #713 See merge request junte/team-projector/backend!576"
-        """
+    def _extract_merge_request(self, body) -> ty.Optional[ty.Dict[str, str]]:
+        """Closes #713 See merge request junte/team-projector/backend!576."""
         if body["merge_request"]:
             return body["merge_request"]
 
