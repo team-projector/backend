@@ -5,7 +5,7 @@ set -o errexit
 _CELERY_OPTS="-A server.celery_app worker"
 if [ "${CELERY_CONCURRENCY:-}" != "" ]
 then
-  _CELERY_OPTS="${_CELERY_OPTS} --concurrency ${CELERY_CONCURRENCY} --events"
+  _CELERY_OPTS="${_CELERY_OPTS} --concurrency ${CELERY_CONCURRENCY} --events -l DEBUG"
 fi
 
 if [ "${CELERY_QUEUES:-}" != "" ]
