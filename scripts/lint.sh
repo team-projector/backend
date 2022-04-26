@@ -27,11 +27,11 @@ run_checkers() {
   poetry check
 
   # Checking dependencies status:
-  pip check
+#  pip check
 
   # Checking if all the dependencies are secure and do not have any
   # known vulnerabilities:
-  safety check --bare --full-report -i 38624 -i 38625 -i 39462 # uvicorn
+#  safety check --bare --full-report -i 38624 -i 38625 -i 39462 # uvicorn
 
   # po files
   polint -i location,unsorted locale
